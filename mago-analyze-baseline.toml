@@ -3692,303 +3692,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Helper\CategoryHelper::getModerators`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>|bool|list{int|null}|null` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #1 of `phpMyFAQ\Instance\Search\Elasticsearch::index`: expected `array<array-key, string>`, but provided type `array{'answer': string, 'category_id': mixed, 'id': int|null, 'keywords': string, 'lang': string, 'question': string, 'solution_id': int|null}` is less specific.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #1 of `phpMyFAQ\Instance\Search\OpenSearch::index`: expected `array<array-key, string>`, but provided type `array{'answer': string, 'category_id': mixed, 'id': int|null, 'keywords': string, 'lang': string, 'question': string, 'solution_id': int|null}` is less specific.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Search\SearchResultSet::reviewResultSet`: expected `array<array-key, stdClass>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Category\Permission::add`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>|bool|list{int|null}|null` is less specific.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `fopen`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Administration\Faq::setStickyFaqOrder`: expected `array<array-key, mixed>`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\FaqEntity::setEmail`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Faq\Import::isCSVFile`: expected `Symfony\Component\HttpFoundation\File\UploadedFile`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Filter::filterArray`: expected `array<array-key, mixed>`, but found `mixed`.'
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Notification::sendOpenQuestionAnswered`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `mixed`.'
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Question::updateQuestionAnswer`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 13
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`nonnull`)."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 55
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Category\Relation::add`: expected `array<array-key, mixed>`, but possibly received `array<array-key, mixed>|bool|list{int|null}|null`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Category\Relation::add`: expected `array<array-key, mixed>`, but possibly received `bool|list{0?: int|null}`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\Instance\Search\Elasticsearch::update`: expected `array<array-key, string>`, but possibly received `array{'answer': string, 'category_id': int|null, 'id': int|null, 'keywords': string, 'lang': string, 'question': string, 'solution_id': int|null}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\Instance\Search\OpenSearch::update`: expected `array<array-key, string>`, but possibly received `array{'answer': string, 'category_id': int|null, 'id': int|null, 'keywords': string, 'lang': string, 'question': string, 'solution_id': int|null}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but possibly received `null|scalar`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-invalid-array-access"
-message = "Cannot perform array access on value of type `bool`."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-invalid-iterator"
-message = "The expression provided to `foreach` (type `array<array-key, mixed>|true`) might not be iterable at runtime."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Administration\Changelog::add` is possibly `null`, but parameter type `int` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Administration\Revision::create` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Category\Relation::add` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Category\Relation::deleteByFAQ` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\FaqEntity::setId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\FaqEntity::setRevisionId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\FaqEntity::setSolutionId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\SeoEntity::setReferenceId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Faq::delete` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Faq::hasTranslation` is possibly `null`, but parameter type `int` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Helper\CategoryHelper::getModerators` is possibly `null`, but parameter type `array<array-key, int>` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Question::delete` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Question::updateQuestionAnswer` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Tags::create` is possibly `null`, but parameter type `int` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Tags::deleteByRecordId` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Visits::logViews` is possibly `null`, but parameter type `int` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Category\Permission::add` is possibly `null`, but parameter type `array<array-key, int>` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Category\Relation::add` is possibly `null`, but parameter type `int` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Faq\Permission::add` is possibly `null`, but parameter type `int` does not accept it.'
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Faq\Permission::delete` is possibly `null`, but parameter type `int` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Question::updateQuestionAnswer` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-argument"
-message = 'Argument #5 of method `phpMyFAQ\Administration\Changelog::add` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-array-access"
-message = "Cannot perform array access on possibly `null` value."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-null-operand"
-message = "Possibly null right operand used in string concatenation (type `int|null`)."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
-code = "possibly-undefined-int-array-index"
-message = "Possibly undefined array key `0` accessed on `list{0?: int|null}`."
-count = 2
+count = 8
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FormController.php"
@@ -5480,12 +5186,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/SearchController.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Search\SearchResultSet::reviewResultSet`: expected `array<array-key, stdClass>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/SearchController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Link\Util\TitleSlugifier::slug`: expected `string`, but found `mixed`.'
 count = 1
@@ -5795,12 +5495,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/PushController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/QuestionController.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Search\SearchResultSet::reviewResultSet`: expected `array<array-key, stdClass>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/QuestionController.php"
@@ -9524,6 +9218,30 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Search/Elasticsearch.php"
+code = "possibly-invalid-argument"
+message = '''Possible argument type mismatch for argument #1 of `Elastic\Elasticsearch\Traits\ClientEndpointsTrait::index`: expected `array{'body': array<array-key, mixed>|string, 'error_trace'?: bool, 'filter_path'?: array<array-key, string>|string, 'human'?: bool, 'id'?: string, 'if_primary_term'?: int, 'if_seq_no'?: int, 'include_source_on_error'?: bool, 'index': string, 'op_type'?: string, 'pipeline'?: string, 'pretty'?: bool, 'refresh'?: string, 'require_alias'?: bool, 'require_data_stream'?: bool, 'routing'?: string, 'source'?: string, 'timeout'?: int|string, 'version'?: int, 'version_type'?: string, 'wait_for_active_shards'?: string}|null`, but possibly received `array{'body': array{'answer': string, 'category_id': int|null|string, 'content_type': string('faq'), 'id': int|null|string, 'keywords': int|null|string, 'lang': int|null|string, 'question': int|null|string}, 'id': int|null|string, 'index': string}`.'''
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Search/Elasticsearch.php"
+code = "possibly-invalid-argument"
+message = '''Possible argument type mismatch for argument #1 of `Elastic\Elasticsearch\Traits\ClientEndpointsTrait::update`: expected `array{'_source'?: array<array-key, string>|string, '_source_excludes'?: array<array-key, string>|string, '_source_includes'?: array<array-key, string>|string, 'body': array<array-key, mixed>|string, 'error_trace'?: bool, 'filter_path'?: array<array-key, string>|string, 'human'?: bool, 'id': string, 'if_primary_term'?: int, 'if_seq_no'?: int, 'include_source_on_error'?: bool, 'index': string, 'lang'?: string, 'pretty'?: bool, 'refresh'?: string, 'require_alias'?: bool, 'retry_on_conflict'?: int, 'routing'?: string, 'source'?: string, 'timeout'?: int|string, 'wait_for_active_shards'?: string}|null`, but possibly received `array{'body': array{'doc': array{'answer': string, 'category_id': int|null|string, 'content_type': string('faq'), 'id': int|null|string, 'keywords': int|null|string, 'lang': int|null|string, 'question': int|null|string}}, 'id': int|null|string, 'index': string}`.'''
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Search/Elasticsearch.php"
+code = "possibly-invalid-argument"
+message = "Possible argument type mismatch for argument #1 of `strip_tags`: expected `string`, but possibly received `int|null|string`."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Search/Elasticsearch.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `strip_tags` is possibly `null`, but parameter type `string` does not accept it."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Search/Elasticsearch.php"
 code = "redundant-null-coalesce"
 message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
 count = 1
@@ -9603,8 +9321,32 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
 code = "possibly-invalid-argument"
+message = '''Possible argument type mismatch for argument #1 of `OpenSearch\Client::index`: expected `array{'body'?: mixed, 'error_trace'?: bool, 'filter_path'?: mixed, 'human'?: bool, 'id'?: string, 'if_primary_term'?: int, 'if_seq_no'?: int, 'index'?: string, 'op_type'?: mixed, 'pipeline'?: string, 'pretty'?: bool, 'refresh'?: mixed, 'require_alias'?: bool, 'routing'?: mixed, 'source'?: string, 'timeout'?: string, 'version'?: int, 'version_type'?: mixed, 'wait_for_active_shards'?: mixed}`, but possibly received `array{'body': array{'answer': string, 'category_id': int|null|string, 'content_type': string('faq'), 'id': int|null|string, 'keywords': int|null|string, 'lang': int|null|string, 'question': int|null|string}, 'id': int|null|string, 'index': string}`.'''
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
+code = "possibly-invalid-argument"
+message = '''Possible argument type mismatch for argument #1 of `OpenSearch\Client::update`: expected `array{'_source'?: mixed, '_source_excludes'?: mixed, '_source_includes'?: mixed, 'body'?: mixed, 'error_trace'?: bool, 'filter_path'?: mixed, 'human'?: bool, 'id'?: string, 'if_primary_term'?: int, 'if_seq_no'?: int, 'index'?: string, 'lang'?: string, 'pretty'?: bool, 'refresh'?: mixed, 'require_alias'?: bool, 'retry_on_conflict'?: int, 'routing'?: mixed, 'source'?: string, 'timeout'?: string, 'wait_for_active_shards'?: mixed}`, but possibly received `array{'body': array{'doc': array{'answer': string, 'category_id': int|null|string, 'content_type': string('faq'), 'id': int|null|string, 'keywords': int|null|string, 'lang': int|null|string, 'question': int|null|string}}, 'id': int|null|string, 'index': string}`.'''
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
+code = "possibly-invalid-argument"
 message = '''Possible argument type mismatch for argument #1 of `OpenSearch\Namespaces\IndicesNamespace::create`: expected `array{'body'?: mixed, 'cluster_manager_timeout'?: string, 'error_trace'?: bool, 'filter_path'?: mixed, 'human'?: bool, 'index'?: string, 'master_timeout'?: string, 'pretty'?: bool, 'source'?: string, 'timeout'?: string, 'wait_for_active_shards'?: mixed}`, but possibly received `array<string, mixed>`.'''
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
+code = "possibly-invalid-argument"
+message = "Possible argument type mismatch for argument #1 of `strip_tags`: expected `string`, but possibly received `int|null|string`."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
+code = "possibly-null-argument"
+message = "Argument #1 of function `strip_tags` is possibly `null`, but parameter type `string` does not accept it."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
@@ -10166,242 +9908,62 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "array-to-string-conversion"
-message = "Potential array in middle operand of string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 10
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$headers`: expected `array<array-key, int|string>`, but got `array{'BCC'?: truthy-string, 'CC'?: truthy-string, 'Content-Disposition'?: string, 'Content-Transfer-Encoding'?: string('7bit'), 'Content-Type'?: truthy-string, 'Date': string, 'Disposition-Notification-To'?: non-empty-string, 'From'?: truthy-string, 'MIME-Version': string('1.0'), 'Message-ID': string, 'Reply-To': null|truthy-string, 'Return-Path': truthy-string}`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$headers`: expected `array<array-key, int|string>`, but got `array{'BCC'?: truthy-string, 'CC'?: truthy-string, 'Content-Disposition'?: string, 'Content-Transfer-Encoding'?: string('7bit'), 'Content-Type'?: truthy-string, 'Date': string, 'Disposition-Notification-To'?: non-empty-string, 'From'?: truthy-string, 'MIME-Version': string('1.0'), 'Message-ID': string, 'Reply-To': null|truthy-string, 'Return-Path'?: truthy-string, 'Sender': null|truthy-string, 'Subject': string, 'X-MSMail-Priority': string, 'X-Mailer': string}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$headers`: expected `array<array-key, int|string>`, but got `array{'BCC'?: truthy-string, 'CC'?: truthy-string, 'Content-Disposition'?: string, 'Content-Transfer-Encoding'?: string('7bit'), 'Content-Type'?: truthy-string, 'Date': string, 'Disposition-Notification-To'?: non-empty-string, 'From'?: truthy-string, 'MIME-Version': string('1.0'), 'Message-ID': string, 'Reply-To': null|truthy-string, 'Return-Path'?: truthy-string, 'Sender': null|truthy-string, 'Subject': string, 'X-MSMail-Priority'?: string, 'X-Mailer': string, 'X-Originating-IP': null|string, 'X-Priority': int}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$headers`: expected `array<array-key, int|string>`, but got `array{'BCC'?: truthy-string, 'CC'?: truthy-string, 'Content-Disposition'?: string, 'Content-Transfer-Encoding'?: string('7bit'), 'Content-Type'?: truthy-string, 'Date': string, 'Disposition-Notification-To'?: non-empty-string, 'From'?: truthy-string, 'MIME-Version': string('1.0'), 'Message-ID': string, 'Reply-To': null|truthy-string, 'Return-Path'?: truthy-string, 'Sender': null|truthy-string, 'Subject': string, 'X-MSMail-Priority'?: string, 'X-Mailer': string, 'X-Originating-IP': null|string}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$headers`: expected `array<array-key, int|string>`, but got `array{'BCC'?: truthy-string, 'CC'?: truthy-string, 'Content-Disposition'?: string, 'Content-Transfer-Encoding'?: string('7bit'), 'Content-Type'?: truthy-string, 'Date': string, 'Disposition-Notification-To'?: non-empty-string, 'From'?: truthy-string, 'MIME-Version': string('1.0'), 'Message-ID': string, 'Reply-To': null|truthy-string, 'Return-Path'?: truthy-string, 'Sender': null|truthy-string, 'Subject': string, 'X-Mailer': string}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$headers`: expected `array<array-key, int|string>`, but got `array{'BCC'?: truthy-string, 'CC'?: truthy-string, 'Content-Disposition'?: string, 'Content-Transfer-Encoding'?: string('7bit'), 'Content-Type'?: truthy-string, 'Date': string, 'Disposition-Notification-To'?: non-empty-string, 'From'?: truthy-string, 'MIME-Version': string('1.0'), 'Message-ID': string, 'Reply-To': null|truthy-string, 'Return-Path'?: truthy-string, 'Sender': null|truthy-string, 'Subject': string}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$headers`: expected `array<array-key, int|string>`, but got `array{'BCC'?: truthy-string, 'CC'?: truthy-string, 'Content-Disposition'?: string, 'Content-Transfer-Encoding'?: string('7bit'), 'Content-Type'?: truthy-string, 'Date': string, 'Disposition-Notification-To'?: non-empty-string, 'From'?: truthy-string, 'MIME-Version': string('1.0'), 'Message-ID': string, 'Reply-To': null|truthy-string, 'Return-Path'?: truthy-string, 'Sender': null|truthy-string}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$headers`: expected `array<array-key, int|string>`, but got `array{'BCC'?: truthy-string, 'CC'?: truthy-string, 'Content-Disposition'?: string, 'Content-Transfer-Encoding'?: string('7bit'), 'Content-Type'?: truthy-string, 'Date': string, 'Disposition-Notification-To'?: non-empty-string, 'From'?: truthy-string, 'MIME-Version': string('1.0'), 'Message-ID': string, 'Reply-To': null|truthy-string, 'Return-Path'?: truthy-string, 'Sender': truthy-string}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$headers`: expected `array<array-key, int|string>`, but got `array{'BCC'?: truthy-string, 'CC'?: truthy-string, 'Content-Disposition'?: string, 'Content-Transfer-Encoding'?: string('7bit'), 'Content-Type'?: truthy-string, 'Date': string, 'Disposition-Notification-To'?: non-empty-string, 'From'?: truthy-string, 'MIME-Version': string('1.0'), 'Message-ID': string, 'Reply-To': null|truthy-string}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Queue\Message\SendMailMessage::__construct`: expected `string`, but provided type `array-key` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Mail::enqueueForDelivery`: expected `array<string, int|string>`, but provided type `array<array-key, int|string>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Mail::sendPreparedEnvelope`: expected `array<string, int|string>`, but provided type `array<array-key, int|string>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "less-specific-return-statement"
-message = 'Returned type `object` is less specific than the declared return type `phpMyFAQ\Mail\Builtin|phpMyFAQ\Mail\Smtp` for function `phpMyFAQ\Mail::getMUA`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_key_first`: expected `array<('K.array_key_first() extends array-key), mixed>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `mixed`."
-count = 9
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `file_get_contents`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Mail::addEmailTo`: expected `array<array-key, string>`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Mail::setEmailTo`: expected `array<array-key, string>`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Mail\Smtp::setAuthConfig`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Mail\Smtp::setAuthConfig`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Mail\Smtp::setAuthConfig`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 8
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 22
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Mail.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `nonnull` cannot be reliably used in string concatenation."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "mixed-operand"
-message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
-count = 15
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Mail::getTime`. Saw type `nonnull`.'
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "possibly-false-argument"
-message = "Argument #1 of function `base64_encode` is possibly `false`, but parameter type `string` does not accept it."
+file = "phpmyfaq/src/phpMyFAQ/Mail/Builtin.php"
+code = "array-to-string-conversion"
+message = "Potential array in right operand of string concatenation."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "possibly-false-argument"
-message = "Argument #3 of function `str_replace` is possibly `false`, but parameter type `array<array-key, string>|string` does not accept it."
+file = "phpmyfaq/src/phpMyFAQ/Mail/Builtin.php"
+code = "incompatible-parameter-type"
+message = 'Parameter `$headers` of `phpMyFAQ\Mail\Builtin::send()` expects type `array<string, int|null|string>` but parent `phpMyFAQ\Mail\MailUserAgentInterface::send()` expects type `array<array-key, string>`'
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
+file = "phpmyfaq/src/phpMyFAQ/Mail/Builtin.php"
 code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #2 of `phpMyFAQ\Mail\Builtin::send`: expected `array<array-key, string>`, but possibly received `array<string, int|string>`.'
+message = "Possible argument type mismatch for argument #3 of `str_replace`: expected `array<array-key, string>|string`, but possibly received `int|null|string`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #2 of `phpMyFAQ\Mail\MailProviderInterface::send`: expected `array<string, string>`, but possibly received `array<string, int|string>`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #2 of `phpMyFAQ\Mail\Smtp::send`: expected `array<array-key, string>`, but possibly received `array<string, int|string>`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "possibly-undefined-string-array-index"
-message = "Possibly undefined array key 'From' accessed on `array{'BCC'?: truthy-string, 'CC'?: truthy-string, 'Content-Disposition'?: string, 'Content-Transfer-Encoding'?: string('7bit'), 'Content-Type'?: truthy-string, 'Date': string, 'Disposition-Notification-To'?: non-empty-string, 'From'?: truthy-string, 'MIME-Version': string('1.0'), 'Message-ID': string, 'Reply-To': null|truthy-string, 'Return-Path'?: truthy-string}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "possibly-undefined-string-array-index"
-message = "Possibly undefined array key 'From' accessed on `array{'BCC'?: truthy-string, 'CC'?: truthy-string, 'Content-Disposition'?: string, 'Content-Transfer-Encoding'?: string('7bit'), 'Content-Type'?: truthy-string, 'Date': string, 'Disposition-Notification-To'?: non-empty-string, 'From'?: truthy-string, 'MIME-Version': string('1.0'), 'Message-ID': string}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "reference-constraint-violation"
-message = "Invalid modification of by-reference parameter `$target`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail.php"
-code = "unknown-class-instantiation"
-message = "Cannot determine the concrete class for instantiation."
+file = "phpmyfaq/src/phpMyFAQ/Mail/Builtin.php"
+code = "possibly-null-argument"
+message = "Argument #3 of function `str_replace` is possibly `null`, but parameter type `array<array-key, string>|string` does not accept it."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Mail/Builtin.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
-count = 2
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Provider/MailgunProvider.php"
+code = "incompatible-parameter-type"
+message = 'Parameter `$headers` of `phpMyFAQ\Mail\Provider\MailgunProvider::send()` expects type `array<string, string>` but parent `phpMyFAQ\Mail\MailProviderInterface::send()` expects type `array<string, int|null|string>`'
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Mail/Provider/MailgunProvider.php"
 code = "reference-to-undefined-variable"
 message = "Reference created from a previously undefined variable `$matches`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Provider/SendGridProvider.php"
+code = "incompatible-parameter-type"
+message = 'Parameter `$headers` of `phpMyFAQ\Mail\Provider\SendGridProvider::send()` expects type `array<string, string>` but parent `phpMyFAQ\Mail\MailProviderInterface::send()` expects type `array<string, int|null|string>`'
 count = 1
 
 [[issues]]
@@ -10412,8 +9974,86 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Mail/Provider/SesProvider.php"
+code = "incompatible-parameter-type"
+message = 'Parameter `$headers` of `phpMyFAQ\Mail\Provider\SesProvider::send()` expects type `array<string, string>` but parent `phpMyFAQ\Mail\MailProviderInterface::send()` expects type `array<string, int|null|string>`'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Provider/SesProvider.php"
 code = "reference-to-undefined-variable"
 message = "Reference created from a previously undefined variable `$matches`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Smtp.php"
+code = "incompatible-parameter-type"
+message = 'Parameter `$headers` of `phpMyFAQ\Mail\Smtp::send()` expects type `array<string, int|null|string>` but parent `phpMyFAQ\Mail\MailUserAgentInterface::send()` expects type `array<array-key, string>`'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Smtp.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Symfony\Component\Mime\Email::bcc`: expected `Symfony\Component\Mime\Address|string`, but possibly received `int|null|string`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Smtp.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Symfony\Component\Mime\Email::cc`: expected `Symfony\Component\Mime\Address|string`, but possibly received `int|null|string`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Smtp.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Symfony\Component\Mime\Email::from`: expected `Symfony\Component\Mime\Address|string`, but possibly received `array<array-key, string>|string`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Smtp.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Symfony\Component\Mime\Email::replyTo`: expected `Symfony\Component\Mime\Address|string`, but possibly received `int|null|string`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Smtp.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `Symfony\Component\Mime\Email::subject`: expected `string`, but possibly received `int|null|string`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Smtp.php"
+code = "possibly-invalid-argument"
+message = "Possible argument type mismatch for argument #3 of `str_replace`: expected `array<array-key, string>|string`, but possibly received `int|null|string`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Smtp.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `Symfony\Component\Mime\Email::bcc` is possibly `null`, but parameter type `Symfony\Component\Mime\Address|string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Smtp.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `Symfony\Component\Mime\Email::cc` is possibly `null`, but parameter type `Symfony\Component\Mime\Address|string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Smtp.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `Symfony\Component\Mime\Email::replyTo` is possibly `null`, but parameter type `Symfony\Component\Mime\Address|string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Smtp.php"
+code = "possibly-null-argument"
+message = 'Argument #1 of method `Symfony\Component\Mime\Email::subject` is possibly `null`, but parameter type `string` does not accept it.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail/Smtp.php"
+code = "possibly-null-argument"
+message = "Argument #3 of function `str_replace` is possibly `null`, but parameter type `array<array-key, string>|string` does not accept it."
 count = 1
 
 [[issues]]
@@ -11540,6 +11180,18 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
+code = "less-specific-return-statement"
+message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, stdClass>` for function `phpMyFAQ\Search::search`.'
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search.php"
+code = "less-specific-return-statement"
+message = 'Returned type `array<array-key, stdClass>` is less specific than the declared return type `array<int, stdClass>` for function `phpMyFAQ\Search::search`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 5
@@ -12075,12 +11727,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
 code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Search\SearchResultSet::reviewResultSet`: expected `array<array-key, stdClass>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
-code = "less-specific-nested-argument-type"
 message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Tags::setGroups`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>` is less specific.'
 count = 1
 
@@ -12118,7 +11764,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 10
+count = 9
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
@@ -12137,12 +11783,6 @@ file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
 code = "mixed-operand"
 message = "Right operand in `&&` operation has `mixed` type."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Seo.php"
@@ -12292,7 +11932,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/FaqSearchTool.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/FaqSearchTool.php"
@@ -12305,12 +11945,6 @@ file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/FaqSearchTool.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/FaqSearchTool.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/McpSdkRuntime.php"

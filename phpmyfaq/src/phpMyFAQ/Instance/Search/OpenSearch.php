@@ -188,7 +188,7 @@ readonly class OpenSearch
     /**
      * Indexing of a FAQ
      *
-     * @param string[] $faq
+     * @param array<string, int|string|null> $faq
      */
     public function index(array $faq): array
     {
@@ -265,7 +265,7 @@ readonly class OpenSearch
     /**
      * Updates a FAQ document
      *
-     * @param string[] $faq
+     * @param array<string, int|string|null> $faq
      * @return string[]
      */
     public function update(array $faq): array

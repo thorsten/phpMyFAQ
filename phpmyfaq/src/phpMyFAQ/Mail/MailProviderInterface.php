@@ -22,7 +22,7 @@ namespace phpMyFAQ\Mail;
 interface MailProviderInterface
 {
     /**
-     * @param array<string, string> $headers
+     * @param array<string, int|string|null> $headers
      */
     public function send(string $recipients, array $headers, string $body): int;
 }

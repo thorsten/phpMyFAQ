@@ -52,7 +52,7 @@ class Smtp implements MailUserAgentInterface
     }
 
     /**
-     * @param string[] $headers
+     * @param array<string, int|string|null> $headers
      * @throws TransportExceptionInterface
      */
     public function send(string $recipients, array $headers, string $body): int

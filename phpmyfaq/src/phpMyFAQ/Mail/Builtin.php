@@ -30,7 +30,7 @@ class Builtin implements MailUserAgentInterface
      * Send the message using an email through the PHP built-in mail() function.
      *
      * @param string $recipients Recipients of the e-mail as a comma-separated list of RFC 2822 compliant items
-     * @param array<string> $headers Headers of the e-mail
+     * @param array<string, int|string|null> $headers Headers of the e-mail
      * @param string $body Body of the e-mail
      */
     public function send(string $recipients, array $headers, string $body): int

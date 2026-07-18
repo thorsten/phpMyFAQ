@@ -56,12 +56,15 @@ use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Visits;
+use stdClass;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
+/* @mago-expect lint:cyclomatic-complexity - the create/update endpoints validate every field inline; split planned with the admin API rework */
 final class FaqController extends AbstractAdministrationApiController
 {
     public function __construct(
@@ -83,6 +86,7 @@ final class FaqController extends AbstractAdministrationApiController
      * @throws \phpMyFAQ\Core\Exception
      * @throws Exception
      */
+    /* @mago-expect lint:halstead - validates and persists the full FAQ payload in one endpoint */
     #[Route(path: 'faq/create', name: 'admin.api.faq.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
@@ -98,36 +102,40 @@ final class FaqController extends AbstractAdministrationApiController
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
 
-        $data = json_decode($request->getContent())->data;
+        $data = $this->getJsonObject($request)->data ?? null;
+        if (!$data instanceof stdClass) {
+            return $this->json(['error' => 'The request body must contain a data object.'], Response::HTTP_BAD_REQUEST);
+        }
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'pmf-csrf-token',
-            requestToken: $data->{'pmf-csrf-token'},
+            requestToken: (string) ($data->{'pmf-csrf-token'} ?? ''),
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         // Collect FAQ data
-        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
+        $question = Filter::filterVar($data->question ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        $categories = is_array($data->{'categories[]'})
-            ? Filter::filterArray($data->{'categories[]'})
-            : [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
+        $rawCategories = $data->{'categories[]'} ?? null;
+        $categories = is_array($rawCategories)
+            ? array_map(static fn(mixed $categoryId): int => (int) $categoryId, $rawCategories)
+            : [(int) Filter::filterVar($rawCategories, FILTER_VALIDATE_INT)];
 
-        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
-        $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
-        $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
-        $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
-        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $email = Filter::filterEmail($data->email, default: '');
-        $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS);
-        $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
-        $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $language = Filter::filterVar($data->lang ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
+        $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
+        $content = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $email = (string) Filter::filterEmail($data->email ?? '', default: '');
+        $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS, 'n');
+        $changed = Filter::filterVar($data->changed ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $notes = Filter::filterVar($data->notes ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $serpTitle = Filter::filterVar($data->serpTitle ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $serpDescription = Filter::filterVar($data->serpDescription ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         // Permissions
         $permissions = $faqPermission->createPermissionArray();
@@ -144,12 +152,12 @@ final class FaqController extends AbstractAdministrationApiController
             ->setActive($active === 'yes')
             ->setSticky($sticky !== 'no')
             ->setQuestion(Filter::removeAttributes(html_entity_decode(
-                (string) $question,
+                $question,
                 ENT_QUOTES | ENT_HTML5,
                 encoding: 'UTF-8',
             )))
             ->setAnswer(Filter::removeAttributes(html_entity_decode(
-                (string) $content,
+                $content,
                 ENT_QUOTES | ENT_HTML5,
                 encoding: 'UTF-8',
             )))
@@ -163,32 +171,28 @@ final class FaqController extends AbstractAdministrationApiController
         // Add a new record and get that ID
         $faqData = $this->faq->create($faqData);
 
-        if ($faqData->getId()) {
+        $faqId = $faqData->getId();
+        if ($faqId) {
             // Create ChangeLog entry
-            $this->changelog->add(
-                $faqData->getId(),
-                $this->currentUser->getUserId(),
-                nl2br((string) $changed),
-                $faqData->getLanguage(),
-            );
+            $this->changelog->add($faqId, $this->currentUser->getUserId(), nl2br($changed), $faqData->getLanguage());
 
             // Create the visit entry
-            $this->visits->logViews($faqData->getId());
+            $this->visits->logViews($faqId);
 
             $categoryRelation = new Relation($this->configuration, $category);
-            $categoryRelation->add($categories, $faqData->getId(), $faqData->getLanguage());
+            $categoryRelation->add($categories, $faqId, $faqData->getLanguage());
 
             // Insert the tags
             if ($tags !== '') {
-                $this->tags->create($faqData->getId(), explode(separator: ',', string: trim((string) $tags)));
+                $this->tags->create($faqId, explode(separator: ',', string: trim($tags)));
             }
 
             // Add user permissions
-            $faqPermission->add(FaqPermission::USER, $faqData->getId(), $permissions['restricted_user']);
+            $faqPermission->add(FaqPermission::USER, $faqId, $permissions['restricted_user']);
             $categoryPermission->add(CategoryPermission::USER, $categories, $permissions['restricted_user']);
             // Add group permission
             if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
-                $faqPermission->add(FaqPermission::GROUP, $faqData->getId(), $permissions['restricted_groups']);
+                $faqPermission->add(FaqPermission::GROUP, $faqId, $permissions['restricted_groups']);
                 $categoryPermission->add(CategoryPermission::GROUP, $categories, $permissions['restricted_groups']);
             }
 
@@ -196,14 +200,14 @@ final class FaqController extends AbstractAdministrationApiController
             $seoEntity = new SeoEntity();
             $seoEntity
                 ->setSeoType(SeoType::FAQ)
-                ->setReferenceId($faqData->getId())
+                ->setReferenceId($faqId)
                 ->setReferenceLanguage($faqData->getLanguage())
                 ->setTitle($serpTitle)
                 ->setDescription($serpDescription);
             $this->seo->create($seoEntity);
 
             // Open question answered
-            $openQuestionId = Filter::filterVar($data->openQuestionId, FILTER_VALIDATE_INT);
+            $openQuestionId = (int) Filter::filterVar($data->openQuestionId ?? null, FILTER_VALIDATE_INT);
             if (0 !== $openQuestionId) {
                 if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
                     // deletes question
@@ -212,14 +216,14 @@ final class FaqController extends AbstractAdministrationApiController
 
                 if (!$this->configuration->get(item: 'records.enableDeleteQuestion')) {
                     // adds this faq record id to the related open question
-                    $this->question->updateQuestionAnswer($openQuestionId, $faqData->getId(), $categories[0]);
+                    $this->question->updateQuestionAnswer($openQuestionId, $faqId, $categories[0] ?? 0);
                 }
 
                 $url = sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $categories[0],
-                    $faqData->getId(),
+                    $categories[0] ?? 0,
+                    $faqId,
                     $faqData->getLanguage(),
                     TitleSlugifier::slug($faqData->getQuestion()),
                 );
@@ -227,8 +231,8 @@ final class FaqController extends AbstractAdministrationApiController
 
                 // notify the user who added the question
                 try {
-                    $notifyEmail = Filter::filterVar($data->notifyEmail, FILTER_SANITIZE_EMAIL);
-                    $notifyUser = Filter::filterVar($data->notifyUser, FILTER_SANITIZE_SPECIAL_CHARS, '');
+                    $notifyEmail = (string) Filter::filterVar($data->notifyEmail ?? '', FILTER_SANITIZE_EMAIL, '');
+                    $notifyUser = Filter::filterVar($data->notifyUser ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
                     $this->notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
                 } catch (Exception|TransportExceptionInterface $e) {
                     $this->configuration
@@ -251,13 +255,13 @@ final class FaqController extends AbstractAdministrationApiController
             if ($this->configuration->get(item: 'search.enableElasticsearch')) {
                 $elasticsearch = new Elasticsearch($this->configuration);
                 $elasticsearch->index([
-                    'id' => $faqData->getId(),
+                    'id' => $faqId,
                     'lang' => $faqData->getLanguage(),
                     'solution_id' => $faqData->getSolutionId(),
                     'question' => $faqData->getQuestion(),
                     'answer' => $faqData->getAnswer(),
                     'keywords' => $faqData->getKeywords(),
-                    'category_id' => $categories[0],
+                    'category_id' => $categories[0] ?? 0,
                 ]);
             }
 
@@ -265,13 +269,13 @@ final class FaqController extends AbstractAdministrationApiController
             if ($this->configuration->get(item: 'search.enableOpenSearch')) {
                 $openSearch = new OpenSearch($this->configuration);
                 $openSearch->index([
-                    'id' => $faqData->getId(),
+                    'id' => $faqId,
                     'lang' => $faqData->getLanguage(),
                     'solution_id' => $faqData->getSolutionId(),
                     'question' => $faqData->getQuestion(),
                     'answer' => $faqData->getAnswer(),
                     'keywords' => $faqData->getKeywords(),
-                    'category_id' => $categories[0],
+                    'category_id' => $categories[0] ?? 0,
                 ]);
             }
 
@@ -283,8 +287,8 @@ final class FaqController extends AbstractAdministrationApiController
                     $faqUrl = sprintf(
                         '%scontent/%d/%d/%s/%s.html',
                         $this->configuration->getDefaultUrl(),
-                        $categories[0],
-                        $faqData->getId(),
+                        $categories[0] ?? 0,
+                        $faqId,
                         $faqData->getLanguage(),
                         TitleSlugifier::slug($faqData->getQuestion()),
                     );
@@ -292,7 +296,7 @@ final class FaqController extends AbstractAdministrationApiController
                         Translation::getString('msgPushNewFaq'),
                         $faqData->getQuestion(),
                         $faqUrl,
-                        'new-faq-' . $faqData->getId(),
+                        'new-faq-' . $faqId,
                     );
                 } catch (\Throwable $e) {
                     $this->configuration->getLogger()->error('Send web push notification failed: ' . $e->getMessage());
@@ -312,6 +316,7 @@ final class FaqController extends AbstractAdministrationApiController
      * @throws \phpMyFAQ\Core\Exception
      * @throws Exception
      */
+    /* @mago-expect lint:halstead - validates and persists the full FAQ payload in one endpoint */
     #[Route(path: 'faq/update', name: 'admin.api.faq.update', methods: ['POST', 'PUT'])]
     public function update(Request $request): JsonResponse
     {
@@ -326,41 +331,45 @@ final class FaqController extends AbstractAdministrationApiController
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
 
-        $data = json_decode($request->getContent())->data;
+        $data = $this->getJsonObject($request)->data ?? null;
+        if (!$data instanceof stdClass) {
+            return $this->json(['error' => 'The request body must contain a data object.'], Response::HTTP_BAD_REQUEST);
+        }
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'pmf-csrf-token',
-            requestToken: $data->{'pmf-csrf-token'},
+            requestToken: (string) ($data->{'pmf-csrf-token'} ?? ''),
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         // Collect FAQ data
-        $faqId = Filter::filterVar($data->faqId, FILTER_VALIDATE_INT);
-        $solutionId = Filter::filterVar($data->solutionId, FILTER_VALIDATE_INT);
-        $revisionId = Filter::filterVar($data->revisionId, FILTER_VALIDATE_INT);
-        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
-        $categories = is_array($data->{'categories[]'})
-            ? Filter::filterArray($data->{'categories[]'})
-            : [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
+        $faqId = (int) Filter::filterVar($data->faqId ?? null, FILTER_VALIDATE_INT);
+        $solutionId = (int) Filter::filterVar($data->solutionId ?? null, FILTER_VALIDATE_INT);
+        $revisionId = (int) Filter::filterVar($data->revisionId ?? null, FILTER_VALIDATE_INT);
+        $question = Filter::filterVar($data->question ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $rawCategories = $data->{'categories[]'} ?? null;
+        $categories = is_array($rawCategories)
+            ? array_map(static fn(mixed $categoryId): int => (int) $categoryId, $rawCategories)
+            : [(int) Filter::filterVar($rawCategories, FILTER_VALIDATE_INT)];
 
-        $faqLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
-        $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
-        $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
-        $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
-        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $email = Filter::filterEmail($data->email, default: '');
-        $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS);
-        $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
-        $date = Filter::filterVar($data->date, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $revision = Filter::filterVar($data->revision ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
-        $recordDateHandling = Filter::filterVar($data->recordDateHandling, FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqLang = Filter::filterVar($data->lang ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
+        $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
+        $content = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $email = (string) Filter::filterEmail($data->email ?? '', default: '');
+        $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS, 'n');
+        $changed = Filter::filterVar($data->changed ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $date = Filter::filterVar($data->date ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $notes = Filter::filterVar($data->notes ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $revision = Filter::filterVar($data->revision ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
+        $recordDateHandling = Filter::filterVar($data->recordDateHandling ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $serpTitle = Filter::filterVar($data->serpTitle ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $serpDescription = Filter::filterVar($data->serpDescription ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($question === '' && $content === '') {
             return $this->json(['error' => Translation::get(key: 'msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
@@ -374,7 +383,7 @@ final class FaqController extends AbstractAdministrationApiController
             $this->logging->log($this->currentUser, AdminLogType::FAQ_PUBLISH->value . ':' . $faqId);
         }
 
-        if ('yes' === $revision && $this->configuration->get(item: 'records.enableAutoRevisions')) {
+        if ('yes' === $revision && true === $this->configuration->get(item: 'records.enableAutoRevisions')) {
             $faqRevision = new Revision($this->configuration);
             $faqRevision->create($faqId, $faqLang);
             ++$revisionId;
@@ -389,12 +398,12 @@ final class FaqController extends AbstractAdministrationApiController
             ->setActive($active === 'yes')
             ->setSticky($sticky !== 'no')
             ->setQuestion(Filter::removeAttributes(html_entity_decode(
-                (string) $question,
+                $question,
                 ENT_QUOTES | ENT_HTML5,
                 encoding: 'UTF-8',
             )))
             ->setAnswer(Filter::removeAttributes(html_entity_decode(
-                (string) $content,
+                $content,
                 ENT_QUOTES | ENT_HTML5,
                 encoding: 'UTF-8',
             )))
@@ -416,49 +425,41 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         // Create ChangeLog entry
-        $this->changelog->add(
-            $faqData->getId(),
-            $this->currentUser->getUserId(),
-            (string) $changed,
-            $faqData->getLanguage(),
-            $revisionId,
-        );
+        $this->changelog->add($faqId, $this->currentUser->getUserId(), $changed, $faqLang, $revisionId);
 
         // Create the visit entry
-        $this->visits->logViews($faqData->getId());
+        $this->visits->logViews($faqId);
 
         // save or update the FAQ record
-        if ($this->faq->hasTranslation($faqData->getId(), $faqData->getLanguage())) {
+        if ($this->faq->hasTranslation($faqId, $faqLang)) {
             $faqData = $this->faq->update($faqData);
         }
 
-        if (!$this->faq->hasTranslation($faqData->getId(), $faqData->getLanguage())) {
+        if (!$this->faq->hasTranslation($faqId, $faqLang)) {
             $faqData = $this->faq->create($faqData);
         }
 
-        if ($categories === null) {
-            $categories = [];
-        }
+        $faqId = $faqData->getId() ?? $faqId;
 
         $categoryRelation = new Relation($this->configuration, $category);
-        $categoryRelation->deleteByFaq($faqData->getId(), $faqData->getLanguage());
-        $categoryRelation->add($categories, $faqData->getId(), $faqData->getLanguage());
+        $categoryRelation->deleteByFaq($faqId, $faqLang);
+        $categoryRelation->add($categories, $faqId, $faqLang);
 
         // Insert the tags
         if ($tags !== '') {
-            $this->tags->create($faqData->getId(), explode(separator: ',', string: trim((string) $tags)));
+            $this->tags->create($faqId, explode(separator: ',', string: trim($tags)));
         }
 
         if ($tags === '') {
-            $this->tags->deleteByRecordId($faqData->getId());
+            $this->tags->deleteByRecordId($faqId);
         }
 
         // Update the SEO data
         $seoEntity = new SeoEntity();
         $seoEntity
             ->setSeoType(SeoType::FAQ)
-            ->setReferenceId($faqData->getId())
-            ->setReferenceLanguage($faqData->getLanguage())
+            ->setReferenceId($faqId)
+            ->setReferenceLanguage($faqLang)
             ->setTitle($serpTitle)
             ->setDescription($serpDescription);
 
@@ -473,12 +474,12 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         // Add user permissions
-        $faqPermission->delete(FaqPermission::USER, $faqData->getId());
-        $faqPermission->add(FaqPermission::USER, $faqData->getId(), $permissions['restricted_user']);
+        $faqPermission->delete(FaqPermission::USER, $faqId);
+        $faqPermission->add(FaqPermission::USER, $faqId, $permissions['restricted_user']);
         // Add group permission
         if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
-            $faqPermission->delete(FaqPermission::GROUP, $faqData->getId());
-            $faqPermission->add(FaqPermission::GROUP, $faqData->getId(), $permissions['restricted_groups']);
+            $faqPermission->delete(FaqPermission::GROUP, $faqId);
+            $faqPermission->add(FaqPermission::GROUP, $faqId, $permissions['restricted_groups']);
         }
 
         // If Elasticsearch is enabled, update an active or delete inactive FAQ document
@@ -486,13 +487,13 @@ final class FaqController extends AbstractAdministrationApiController
             $elasticsearch = new Elasticsearch($this->configuration);
             if ('yes' === $active) {
                 $elasticsearch->update([
-                    'id' => $faqData->getId(),
-                    'lang' => $faqData->getLanguage(),
+                    'id' => $faqId,
+                    'lang' => $faqLang,
                     'solution_id' => $faqData->getSolutionId(),
                     'question' => $faqData->getQuestion(),
                     'answer' => $faqData->getAnswer(),
                     'keywords' => $faqData->getKeywords(),
-                    'category_id' => $categories[0],
+                    'category_id' => $categories[0] ?? 0,
                 ]);
             }
         }
@@ -502,13 +503,13 @@ final class FaqController extends AbstractAdministrationApiController
             $openSearch = new OpenSearch($this->configuration);
             if ('yes' === $active) {
                 $openSearch->update([
-                    'id' => $faqData->getId(),
-                    'lang' => $faqData->getLanguage(),
+                    'id' => $faqId,
+                    'lang' => $faqLang,
                     'solution_id' => $faqData->getSolutionId(),
                     'question' => $faqData->getQuestion(),
                     'answer' => $faqData->getAnswer(),
                     'keywords' => $faqData->getKeywords(),
-                    'category_id' => $categories[0],
+                    'category_id' => $categories[0] ?? 0,
                 ]);
             }
         }
@@ -575,17 +576,21 @@ final class FaqController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::FAQ_APPROVE);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        $faqIds = Filter::filterArray($data->faqIds);
-        $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
+        $rawFaqIds = $data->faqIds ?? null;
+        $faqIds = is_array($rawFaqIds) ? array_map(static fn(mixed $faqId): int => (int) $faqId, $rawFaqIds) : [];
+        $faqLanguage = Filter::filterVar($data->faqLanguage ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $checked = Filter::filterVar($data->checked ?? false, FILTER_VALIDATE_BOOLEAN, false);
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'pmf-csrf-token', requestToken: $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'pmf-csrf-token',
+            requestToken: (string) ($data->csrf ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (!in_array($faqIds, [false, [], null], strict: true)) {
+        if ($faqIds !== []) {
             $faq = new FaqAdministration($this->configuration);
             $success = false;
 
@@ -594,7 +599,7 @@ final class FaqController extends AbstractAdministrationApiController
                     continue;
                 }
 
-                $success = $faq->updateRecordFlag((int) $faqId, $faqLanguage, $checked ?? false, type: 'active');
+                $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked, type: 'active');
             }
 
             if ($success) {
@@ -616,17 +621,21 @@ final class FaqController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        $faqIds = Filter::filterArray($data->faqIds);
-        $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
+        $rawFaqIds = $data->faqIds ?? null;
+        $faqIds = is_array($rawFaqIds) ? array_map(static fn(mixed $faqId): int => (int) $faqId, $rawFaqIds) : [];
+        $faqLanguage = Filter::filterVar($data->faqLanguage ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $checked = Filter::filterVar($data->checked ?? false, FILTER_VALIDATE_BOOLEAN, false);
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'pmf-csrf-token', requestToken: $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'pmf-csrf-token',
+            requestToken: (string) ($data->csrf ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (!in_array($faqIds, [false, [], null], strict: true)) {
+        if ($faqIds !== []) {
             $faq = new FaqAdministration($this->configuration);
             $success = false;
 
@@ -635,7 +644,7 @@ final class FaqController extends AbstractAdministrationApiController
                     continue;
                 }
 
-                $success = $faq->updateRecordFlag((int) $faqId, $faqLanguage, $checked ?? false, type: 'sticky');
+                $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked, type: 'sticky');
             }
 
             if ($success) {
@@ -658,12 +667,15 @@ final class FaqController extends AbstractAdministrationApiController
 
         $faq = new Faq($this->configuration);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        $faqId = Filter::filterVar($data->faqId, FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $faqId = (int) Filter::filterVar($data->faqId ?? null, FILTER_VALIDATE_INT);
+        $faqLanguage = Filter::filterVar($data->faqLanguage ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'pmf-csrf-token', requestToken: $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'pmf-csrf-token',
+            requestToken: (string) ($data->csrf ?? ''),
+        )) {
             return $this->json([
                 'error' => 'CSRF Token - ' . Translation::getString(key: 'msgNoPermission'),
             ], Response::HTTP_UNAUTHORIZED);
@@ -688,9 +700,12 @@ final class FaqController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'pmf-csrf-token', requestToken: $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'pmf-csrf-token',
+            requestToken: (string) ($data->csrf ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -699,9 +714,9 @@ final class FaqController extends AbstractAdministrationApiController
         $faqSearch->setCategory(new Category($this->configuration));
 
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
-        $searchString = Filter::filterVar($data->search, FILTER_SANITIZE_SPECIAL_CHARS);
+        $searchString = Filter::filterVar($data->search ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!is_null($searchString)) {
+        if (is_string($searchString)) {
             $searchResult = $faqSearch->search($searchString, allLanguages: false);
 
             $searchResultSet->reviewResultSet($searchResult);
@@ -727,13 +742,21 @@ final class FaqController extends AbstractAdministrationApiController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'order-stickyfaqs', requestToken: $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'order-stickyfaqs',
+            requestToken: (string) ($data->csrf ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (!$this->adminFaq->setStickyFaqOrder($data->faqIds, $currentUser, $currentGroups)) {
+        $faqIds = $data->faqIds ?? null;
+        if (!is_array($faqIds)) {
+            return $this->json(['error' => 'No FAQ IDs provided.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!$this->adminFaq->setStickyFaqOrder($faqIds, $currentUser, $currentGroups)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -749,13 +772,13 @@ final class FaqController extends AbstractAdministrationApiController
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
         $file = $request->files->get(key: 'file');
-        if ($file === null) {
+        if (!$file instanceof UploadedFile) {
             return $this->json(['error' => 'Bad request: There is no file submitted.'], Response::HTTP_BAD_REQUEST);
         }
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'importfaqs',
-            requestToken: $request->request->get(key: 'csrf'),
+            requestToken: (string) $request->request->get(key: 'csrf'),
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
@@ -765,7 +788,11 @@ final class FaqController extends AbstractAdministrationApiController
         $errors = [];
 
         if (0 === $file->getError() && $faqImport->isCSVFile($file)) {
-            $handle = fopen(filename: $file->getRealPath(), mode: 'r');
+            $handle = fopen(filename: (string) $file->getRealPath(), mode: 'r');
+            if ($handle === false) {
+                return $this->json(['error' => 'The uploaded file could not be read.'], Response::HTTP_BAD_REQUEST);
+            }
+
             $csvData = $faqImport->parseCSV($handle);
 
             if (!$faqImport->validateCSV($csvData)) {

@@ -49,7 +49,8 @@ class Mail
     /**
      * Attached filed.
      */
-    public mixed $attachments = [];
+    /** @var array<int, array<string, string>> */
+    public array $attachments = [];
 
     /**
      * Body of the e-mail.
@@ -92,6 +93,7 @@ class Mail
      *
      * @var array<string|int>
      */
+    /** @var array<string, int|string|null> */
     public array $headers = [];
 
     /**
@@ -138,17 +140,20 @@ class Mail
     /**
      * Recipients of the e-mail as <BCC>.
      */
-    private mixed $bcc = [];
+    /** @var array<string, string|null> */
+    private array $bcc = [];
 
     /**
      * Recipients of the e-mail as <CC>.
      */
-    private mixed $cc = [];
+    /** @var array<string, string|null> */
+    private array $cc = [];
 
     /**
      * Recipients of the e-mail as <From>.
      */
-    private mixed $from = [];
+    /** @var array<string, string|null> */
+    private array $from = [];
 
     /**
      * Mailer string.
@@ -158,27 +163,32 @@ class Mail
     /**
      * Recipient of the optional notification.
      */
-    private mixed $notifyTo = [];
+    /** @var array<string, string|null> */
+    private array $notifyTo = [];
 
     /**
      * Recipient of the e-mail as <Reply-To>.
      */
-    private mixed $replyTo = [];
+    /** @var array<string, string|null> */
+    private array $replyTo = [];
 
     /**
      * Recipient of the e-mail as <Return-Path>.
      */
-    private mixed $returnPath = [];
+    /** @var array<string, string|null> */
+    private array $returnPath = [];
 
     /**
      * Recipient of the e-mail as <Sender>.
      */
-    private mixed $sender = [];
+    /** @var array<string, string|null> */
+    private array $sender = [];
 
     /**
      * Recipients of the e-mail as <TO:>.
      */
-    private mixed $to = [];
+    /** @var array<string, string|null> */
+    private array $to = [];
 
     private readonly Configuration $configuration;
 
@@ -194,7 +204,7 @@ class Mail
         $this->boundary = self::createBoundary();
         $this->messageId =
             '<'
-            . Request::createFromGlobals()->server->get(key: 'REQUEST_TIME')
+            . (string) Request::createFromGlobals()->server->get(key: 'REQUEST_TIME')
             . '.'
             . md5(microtime())
             . '@'
@@ -255,10 +265,10 @@ class Mail
     /**
      * Set just one e-mail address into an array.
      *
-     * @param array<string> $target Target array.
-     * @param string        $targetAlias Alias Target alias.
-     * @param string        $address User e-mail address.
-     * @param string|null   $name Username (optional).
+     * @param array<string, string|null> $target Target array.
+     * @param string $targetAlias Alias Target alias.
+     * @param string $address User e-mail address.
+     * @param string|null $name Username (optional).
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
@@ -280,10 +290,10 @@ class Mail
     /**
      * Add an e-mail address to an array.
      *
-     * @param array<string> $target Target array.
-     * @param string        $targetAlias Alias Target alias.
-     * @param string        $address User e-mail address.
-     * @param string|null   $name Username (optional).
+     * @param array<string, string|null> $target Target array.
+     * @param string $targetAlias Alias Target alias.
+     * @param string $address User e-mail address.
+     * @param string|null $name Username (optional).
      * @return bool True if successful, false otherwise.
      */
     private function addEmailTo(array &$target, string $targetAlias, string $address, ?string $name = null): bool
@@ -307,7 +317,8 @@ class Mail
             $name = str_replace(search: ["\n", "\r"], replace: '', subject: $name);
 
             // Encode any special characters in the displayed name
-            $name = iconv_mime_encode($targetAlias, $name);
+            $encodedName = iconv_mime_encode($targetAlias, $name);
+            $name = $encodedName === false ? $name : $encodedName;
 
             // Wrap the displayed name in quotes (to fix problems with commas etc.),
             // and escape any existing quotes
@@ -444,7 +455,7 @@ class Mail
     }
 
     /**
-     * @param array<string, string|int> $headers
+     * @param array<string, int|string|null> $headers
      * @throws Exception|TransportExceptionInterface
      */
     public function sendPreparedEnvelope(string $recipients, array $headers, string $body): int
@@ -518,7 +529,7 @@ class Mail
         $this->headers['MIME-Version'] = '1.0';
 
         // Reply-To
-        $this->headers['Reply-To'] = $this->headers['From'];
+        $this->headers['Reply-To'] = $this->headers['From'] ?? null;
         foreach ($this->replyTo as $address => $name) {
             $this->headers['Reply-To'] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
         }
@@ -533,7 +544,7 @@ class Mail
         }
 
         // Sender
-        $this->headers['Sender'] = $this->headers['From'];
+        $this->headers['Sender'] = $this->headers['From'] ?? null;
         foreach ($this->sender as $address => $name) {
             $this->headers['Sender'] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
         }
@@ -583,7 +594,7 @@ class Mail
      */
     public static function getTime(): int
     {
-        return Request::createFromGlobals()->server->get(key: 'REQUEST_TIME') ?? time();
+        return (int) (Request::createFromGlobals()->server->get(key: 'REQUEST_TIME') ?? time());
     }
 
     /**
@@ -651,7 +662,7 @@ class Mail
                 $lines[] =
                     'Content-Disposition: ' . $attachment['disposition'] . '; filename="' . $attachment['name'] . '"';
                 $lines[] = '';
-                $lines[] = chunk_split(base64_encode(file_get_contents($attachment['path'])));
+                $lines[] = chunk_split(base64_encode((string) file_get_contents($attachment['path'])));
             }
 
             // Close the boundary delimiter
@@ -720,14 +731,15 @@ class Mail
      */
     public static function getMUA(string $mua): Builtin|Smtp
     {
-        $className = ucfirst(str_replace(search: '-', replace: '', subject: $mua));
-        $class = 'phpMyFAQ\Mail\\' . $className;
-
-        return new $class();
+        return match ($mua) {
+            'smtp' => new Smtp(),
+            'built-in', 'builtin' => new Builtin(),
+            default => throw new \InvalidArgumentException(sprintf('Unknown mail user agent "%s".', $mua)),
+        };
     }
 
     /**
-     * @param array<string, string|int> $headers
+     * @param array<string, int|string|null> $headers
      * @throws Exception|TransportExceptionInterface
      */
     private function sendViaSmtpAgent(string $recipients, array $headers, string $body): int
@@ -736,11 +748,11 @@ class Mail
 
         if (method_exists($mua, method: 'setAuthConfig')) {
             $mua->setAuthConfig(
-                $this->configuration->get(item: 'mail.remoteSMTPServer'),
-                $this->configuration->get(item: 'mail.remoteSMTPUsername'),
-                $this->configuration->get(item: 'mail.remoteSMTPPassword'),
+                (string) $this->configuration->get(item: 'mail.remoteSMTPServer'),
+                (string) $this->configuration->get(item: 'mail.remoteSMTPUsername'),
+                (string) $this->configuration->get(item: 'mail.remoteSMTPPassword'),
                 (int) $this->configuration->get(item: 'mail.remoteSMTPPort'),
-                (bool) $this->configuration->get(item: 'mail.remoteSMTPDisableTLSPeerVerification'),
+                true === $this->configuration->get(item: 'mail.remoteSMTPDisableTLSPeerVerification'),
             );
         }
 
@@ -751,7 +763,7 @@ class Mail
     }
 
     /**
-     * @param array<string, string|int> $headers
+     * @param array<string, int|string|null> $headers
      */
     private function enqueueForDelivery(string $recipients, array $headers, string $body): bool
     {

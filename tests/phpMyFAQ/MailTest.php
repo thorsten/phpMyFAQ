@@ -557,8 +557,8 @@ class MailTest extends TestCase
 
     public function testGetMuaThrowsErrorForUnknownAgentClass(): void
     {
-        $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Class "phpMyFAQ\\Mail\\Invalidagent" not found');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown mail user agent "invalid-agent".');
 
         Mail::getMUA('invalid-agent');
     }

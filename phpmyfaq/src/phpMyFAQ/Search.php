@@ -74,6 +74,7 @@ class Search
      *
      * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
+     * @return array<int, \stdClass>
      * @throws Exception
      */
     public function search(string $searchTerm, bool $allLanguages = true): array
