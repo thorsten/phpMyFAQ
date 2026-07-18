@@ -34,7 +34,7 @@ class TenantContextResolver
         }
 
         $configDir = defined('PMF_CONFIG_DIR') ? PMF_CONFIG_DIR : '';
-        $tablePrefix = Database::getTablePrefix() ?? '';
+        $tablePrefix = Database::getTablePrefix();
 
         $tenantId = $this->readIntEnv('PMF_TENANT_ID') ?? 0;
         $plan = $this->readStringEnv('PMF_TENANT_PLAN') ?? 'free';

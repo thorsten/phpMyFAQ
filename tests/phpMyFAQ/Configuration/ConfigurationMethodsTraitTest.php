@@ -54,25 +54,20 @@ class ConfigurationMethodsTraitTest extends TestCase
         $this->subject = new class() {
             use ConfigurationMethodsTrait;
 
-            public array $config = [];
+            public function &__get(string $name): mixed
+            {
+                return $this->{$name};
+            }
 
-            public Logger $logger;
+            public function __set(string $name, mixed $value): void
+            {
+                $this->{$name} = $value;
+            }
 
-            public PluginManager $pluginManager;
-
-            public ConfigurationRepository $configurationRepository;
-
-            public LayoutSettings $layoutSettings;
-
-            public MailSettings $mailSettings;
-
-            public UrlSettings $urlSettings;
-
-            public LdapSettings $ldapSettings;
-
-            public SearchSettings $searchSettings;
-
-            public SecuritySettings $securitySettings;
+            public function __isset(string $name): bool
+            {
+                return isset($this->{$name});
+            }
         };
 
         $this->subject->configurationRepository = $this->configurationRepository;
@@ -334,8 +329,8 @@ class ConfigurationMethodsTraitTest extends TestCase
 
         $this->subject->setLdapConfig($ldapConfig);
 
-        $this->assertSame($servers, $this->subject->config['core.ldapServer']);
-        $this->assertSame($config, $this->subject->config['core.ldapConfig']);
+        $this->assertSame($servers, $this->subject->getLdapServer());
+        $this->assertSame($config, $this->subject->getLdapConfig());
     }
 
     public function testGetLdapMapping(): void
@@ -361,7 +356,7 @@ class ConfigurationMethodsTraitTest extends TestCase
 
     public function testGetLdapConfigReturnsArrayFromConfig(): void
     {
-        $this->subject->config['core.ldapConfig'] = ['key' => 'val'];
+        $this->subject->ldapConfig = ['key' => 'val'];
         $this->assertSame(['key' => 'val'], $this->subject->getLdapConfig());
     }
 
@@ -372,7 +367,7 @@ class ConfigurationMethodsTraitTest extends TestCase
 
     public function testGetLdapServerReturnsArrayFromConfig(): void
     {
-        $this->subject->config['core.ldapServer'] = [['host' => 'ldap.test']];
+        $this->subject->ldapServer = [['host' => 'ldap.test']];
         $this->assertSame([['host' => 'ldap.test']], $this->subject->getLdapServer());
     }
 

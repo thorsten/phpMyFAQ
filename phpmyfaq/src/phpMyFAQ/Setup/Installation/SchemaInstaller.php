@@ -147,7 +147,7 @@ class SchemaInstaller implements DriverInterface
     public function dropTables(string $prefix = ''): bool
     {
         if ($prefix === '') {
-            $prefix = Database::getTablePrefix() ?? '';
+            $prefix = Database::getTablePrefix();
         }
 
         foreach ($this->schema->getTableNames() as $tableName) {

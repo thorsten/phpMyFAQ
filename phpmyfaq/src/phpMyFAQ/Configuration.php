@@ -20,7 +20,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
-use Monolog\Logger;
 use phpMyFAQ\Configuration\ConfigurationRepository;
 use phpMyFAQ\Configuration\LayoutSettings;
 use phpMyFAQ\Configuration\LdapSettings;
@@ -30,7 +29,6 @@ use phpMyFAQ\Configuration\SecuritySettings;
 use phpMyFAQ\Configuration\UrlSettings;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Plugin\PluginException;
-use phpMyFAQ\Plugin\PluginManager;
 
 /**
  * Class Configuration
@@ -41,29 +39,9 @@ class Configuration
 {
     use ConfigurationMethodsTrait;
 
-    private array $config = [];
-
-    private Logger $logger;
-
     private static ?Configuration $configuration = null;
 
     protected string $tableName = 'faqconfig';
-
-    private PluginManager $pluginManager;
-
-    private ConfigurationRepository $configurationRepository;
-
-    private LdapSettings $ldapSettings;
-
-    private MailSettings $mailSettings;
-
-    private SearchSettings $searchSettings;
-
-    private SecuritySettings $securitySettings;
-
-    private LayoutSettings $layoutSettings;
-
-    private UrlSettings $urlSettings;
 
     public function __construct(DatabaseDriver $databaseDriver)
     {
@@ -90,6 +68,6 @@ class Configuration
 
     public static function getConfigurationInstance(): Configuration
     {
-        return self::$configuration;
+        return self::$configuration ?? throw new \LogicException('Configuration has not been initialized yet.');
     }
 }

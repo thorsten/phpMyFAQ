@@ -35,7 +35,7 @@ class Database
     private static string $dbType = '';
 
     /** @var string|null Table prefix */
-    private static ?string $tablePrefix = null;
+    private static string $tablePrefix = '';
 
     /**
      * Database factory.
@@ -142,7 +142,7 @@ class Database
     /**
      * Returns the table prefix.
      */
-    public static function getTablePrefix(): ?string
+    public static function getTablePrefix(): string
     {
         return self::$tablePrefix;
     }

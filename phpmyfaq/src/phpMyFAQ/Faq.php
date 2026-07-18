@@ -152,46 +152,53 @@ class Faq
 
         $faqHelper = new FaqHelper($this->configuration);
         foreach ($rows as $row) {
+            $faqId = (int) $row->id;
+            $faqLanguage = (string) $row->lang;
+            $faqCategoryId = (int) $row->category_id;
+            $question = (string) $row->thema;
+            $answer = (string) $row->record_content;
+            $updated = (string) $row->updated;
+            $created = (string) $row->created;
             $visits = (int) ($row->visits ?? 0);
 
             $url = sprintf(
                 '%scontent/%d/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
-                $row->category_id,
-                $row->id,
-                $row->lang,
-                TitleSlugifier::slug($row->thema),
+                $faqCategoryId,
+                $faqId,
+                $faqLanguage,
+                TitleSlugifier::slug($question),
             );
             $oLink = new Link($url, $this->configuration);
-            $oLink->setTitle($row->thema);
-            $oLink->text = $row->thema;
-            $oLink->tooltip = $row->thema;
+            $oLink->setTitle($question);
+            $oLink->text = $question;
+            $oLink->tooltip = $question;
 
             if ($preview) {
                 $faqData[] = [
-                    'record_id' => $row->id,
-                    'record_lang' => $row->lang,
-                    'category_id' => $row->category_id,
-                    'record_title' => $row->thema,
-                    'record_preview' => $faqHelper->renderAnswerPreview($row->record_content, 25),
+                    'record_id' => $faqId,
+                    'record_lang' => $faqLanguage,
+                    'category_id' => $faqCategoryId,
+                    'record_title' => $question,
+                    'record_preview' => $faqHelper->renderAnswerPreview($answer, 25),
                     'record_link' => $oLink->toString(),
-                    'record_updated' => $row->updated,
+                    'record_updated' => $updated,
                     'visits' => $visits,
-                    'record_created' => $row->created,
+                    'record_created' => $created,
                 ];
             }
 
             if (!$preview) {
                 $faqData[] = [
-                    'faq_id' => $row->id,
-                    'faq_lang' => $row->lang,
-                    'category_id' => $row->category_id,
-                    'question' => $row->thema,
-                    'answer' => $row->record_content,
+                    'faq_id' => $faqId,
+                    'faq_lang' => $faqLanguage,
+                    'category_id' => $faqCategoryId,
+                    'question' => $question,
+                    'answer' => $answer,
                     'link' => $oLink->toString(),
-                    'updated' => $row->updated,
+                    'updated' => $updated,
                     'visits' => $visits,
-                    'created' => $row->created,
+                    'created' => $created,
                 ];
             }
         }
@@ -218,7 +225,7 @@ class Faq
         ?int $page = null,
     ): array {
         $numPerPage = (int) $this->configuration->get(item: 'records.numberOfRecordsPerPage');
-        $page ??= Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
+        $page ??= (int) Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
         $page = max(1, (int) $page);
         $title = '';
         [$currentTable, $orderColumn] = $this->normalizeCategoryOrder($orderBy);
@@ -239,6 +246,7 @@ class Faq
 
         $items = [];
         if ($num > 0) {
+            /* @mago-expect analysis:mixed-assignment - DB layer query results are untyped by design */
             $result = $this->faqRepository->queryRenderableFaqsByCategoryId(
                 $categoryId,
                 $order,
@@ -251,20 +259,22 @@ class Faq
             $renderedItems = [];
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof stdClass) {
                     break;
                 }
 
+                $faqId = (int) $row->id;
+                $question = (string) $row->question;
                 $visits = (int) ($row->visits ?? 0);
 
-                $title = Strings::htmlentities($row->question);
+                $title = Strings::htmlentities($question);
                 $url = sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $row->category_id,
-                    $row->id,
-                    $row->lang,
-                    TitleSlugifier::slug($row->question),
+                    (int) $row->category_id,
+                    $faqId,
+                    (string) $row->lang,
+                    TitleSlugifier::slug($question),
                 );
 
                 $oLink = new Link($url, $this->configuration);
@@ -274,15 +284,14 @@ class Faq
                 $oLink->class = 'text-decoration-none';
 
                 // If random FAQs are activated, we don't need sticky FAQs
-                if (true === $this->configuration->get(item: 'records.randomSort')) {
-                    $row->sticky = 0;
-                }
+                $isSticky =
+                    (int) ($row->sticky ?? 0) !== 0 && true !== $this->configuration->get(item: 'records.randomSort');
 
-                $renderedItems[$row->id] = [
+                $renderedItems[$faqId] = [
                     'anchor' => $oLink->toHtmlAnchor(),
                     'preview' => Utils::chopString(strip_tags((string) $row->answer), 20),
                     'views' => $this->plurals->get(key: 'plmsgViews', number: $visits),
-                    'sticky' => (bool) $row->sticky,
+                    'sticky' => $isSticky,
                 ];
             }
 
@@ -355,8 +364,9 @@ class Faq
         $records = $this->normalizeFaqIds($faqIds);
         $orderExpression = $this->normalizeFaqOrderBy($orderBy);
         $sortDirection = $this->normalizeSortDirection($sortBy);
-        $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
+        $page = (int) Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
 
+        /* @mago-expect analysis:mixed-assignment - DB layer query results are untyped by design */
         $result = $this->faqRepository->queryRenderableFaqsByIds(
             $records,
             $orderExpression,
@@ -367,7 +377,7 @@ class Faq
         );
 
         $num = $this->configuration->getDb()->numRows($result);
-        $numberPerPage = $this->configuration->get(item: 'records.numberOfRecordsPerPage');
+        $numberPerPage = (int) $this->configuration->get(item: 'records.numberOfRecordsPerPage');
 
         $first = $usePagination && $page > 1 ? ($page * $numberPerPage) - $numberPerPage : 0;
 
@@ -379,7 +389,7 @@ class Faq
             $faqHelper = new FaqHelper($this->configuration);
             while (!$usePagination || $displayedCounter < $numberPerPage) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof stdClass) {
                     break;
                 }
 
@@ -390,24 +400,25 @@ class Faq
 
                 ++$displayedCounter;
 
-                if ($lastFaqId === $row->id) {
+                $faqId = (int) $row->id;
+                if ($lastFaqId === $faqId) {
                     continue; // Don't show multiple FAQs
                 }
 
                 $rowResult = new stdClass();
 
-                $title = $row->question;
+                $title = (string) $row->question;
                 $url = sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $row->category_id,
-                    $row->id,
-                    $row->lang,
-                    TitleSlugifier::slug($row->question),
+                    (int) $row->category_id,
+                    $faqId,
+                    (string) $row->lang,
+                    TitleSlugifier::slug($title),
                 );
 
                 $oLink = new Link($url, $this->configuration);
-                $oLink->setTitle($row->question);
+                $oLink->setTitle($title);
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
 
@@ -415,9 +426,12 @@ class Faq
                 $rowResult->question = Utils::chopString(Strings::htmlentities($title), 15);
                 $rowResult->path = '';
                 $rowResult->url = $oLink->toString();
-                $rowResult->answerPreview = Strings::htmlentities($faqHelper->renderAnswerPreview($row->answer, 20));
+                $rowResult->answerPreview = Strings::htmlentities($faqHelper->renderAnswerPreview(
+                    (string) $row->answer,
+                    20,
+                ));
 
-                $lastFaqId = $row->id;
+                $lastFaqId = $faqId;
                 $searchResults[] = $rowResult;
             }
         }
@@ -437,9 +451,11 @@ class Faq
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
         $defaultLanguage = $this->configuration->getDefaultLanguage();
 
+        /* @mago-expect analysis:mixed-assignment - DB layer query results are untyped by design */
         $result = $this->getFaqResult($faqId, $currentLanguage, $faqRevisionId, $isAdmin);
 
         if (0 === $this->configuration->getDb()->numRows($result)) {
+            /* @mago-expect analysis:mixed-assignment - DB layer query results are untyped by design */
             $result = $this->getFaqResult($faqId, $defaultLanguage, $faqRevisionId, $isAdmin);
         }
 
@@ -464,19 +480,19 @@ class Faq
         ];
 
         $row = $this->configuration->getDb()->fetchObject($result);
-        if ($row) {
+        if ($row instanceof stdClass) {
             $question = nl2br((string) $row->thema);
-            $answer = $row->content;
+            $answer = (string) $row->content;
             $active = 'yes' === $row->active;
-            $expired = date(format: 'YmdHis') > $row->date_end;
+            $expired = date(format: 'YmdHis') > (string) $row->date_end;
 
             if (!$isAdmin) {
                 if (!$active) {
-                    $answer = Translation::get(key: 'err_inactiveArticle');
+                    $answer = Translation::getString(key: 'err_inactiveArticle');
                 }
 
                 if ($expired) {
-                    $answer = Translation::get(key: 'err_expiredArticle');
+                    $answer = Translation::getString(key: 'err_expiredArticle');
                 }
             }
 
@@ -493,7 +509,7 @@ class Faq
                 'author' => $row->author,
                 'email' => $row->email,
                 'comment' => $row->comment,
-                'date' => Date::createIsoDate($row->updated),
+                'date' => Date::createIsoDate((string) $row->updated),
                 'dateStart' => $row->date_start,
                 'dateEnd' => $row->date_end,
                 'notes' => $row->notes,
@@ -543,32 +559,33 @@ class Faq
 
         $faqHelper = new FaqHelper($this->configuration);
         foreach ($rows as $row) {
+            $question = (string) $row->question;
             $visits = (int) ($row->visits ?? 0);
 
             $url = sprintf(
                 '%scontent/%d/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
-                $row->category_id,
-                $row->id,
-                $row->lang,
-                TitleSlugifier::slug($row->question),
+                (int) $row->category_id,
+                (int) $row->id,
+                (string) $row->lang,
+                TitleSlugifier::slug($question),
             );
 
             $oLink = new Link($url, $this->configuration);
-            $oLink->setTitle($row->question);
-            $oLink->text = $row->question;
-            $oLink->tooltip = $row->question;
+            $oLink->setTitle($question);
+            $oLink->text = $question;
+            $oLink->tooltip = $question;
 
             $faqRecords[] = [
                 'record_id' => (int) $row->id,
-                'record_lang' => $row->lang,
+                'record_lang' => (string) $row->lang,
                 'category_id' => (int) $row->category_id,
-                'record_title' => $row->question,
-                'record_preview' => $faqHelper->renderAnswerPreview($row->answer, 25),
+                'record_title' => $question,
+                'record_preview' => $faqHelper->renderAnswerPreview((string) $row->answer, 25),
                 'record_link' => $oLink->toString(),
-                'record_updated' => Date::createIsoDate($row->updated) . ':00',
-                'visits' => (int) $visits,
-                'record_created' => $row->created,
+                'record_updated' => Date::createIsoDate((string) $row->updated) . ':00',
+                'visits' => $visits,
+                'record_created' => (string) $row->created,
             ];
         }
 
@@ -594,18 +611,19 @@ class Faq
             $this->groupSupport,
         );
 
-        if ($row) {
+        if ($row instanceof stdClass) {
+            $question = (string) $row->question;
             $url = sprintf(
                 '%scontent/%d/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
-                $row->category_id,
-                $row->id,
-                $row->lang,
-                TitleSlugifier::slug($row->question),
+                (int) $row->category_id,
+                (int) $row->id,
+                (string) $row->lang,
+                TitleSlugifier::slug($question),
             );
 
             $link = new Link($url, $this->configuration);
-            $link->setTitle($row->question);
+            $link->setTitle($question);
 
             return [
                 'id' => (int) $row->id,
@@ -615,7 +633,7 @@ class Faq
                 'active' => $row->active,
                 'sticky' => (int) $row->sticky,
                 'keywords' => $row->keywords,
-                'question' => $row->question,
+                'question' => $question,
                 'answer' => $row->answer,
                 'author' => $row->author,
                 'email' => $row->email,
@@ -644,7 +662,8 @@ class Faq
         }
 
         // Only assign a new solutionId if none was provided (or invalid)
-        if (is_null($faqEntity->getSolutionId()) || $faqEntity->getSolutionId() <= 0) {
+        $solutionId = $faqEntity->getSolutionId();
+        if ($solutionId === null || $solutionId <= 0) {
             $faqEntity->setSolutionId($this->getNextSolutionId());
         }
 
@@ -745,18 +764,18 @@ class Faq
             'solution_id' => $solutionId,
         ];
 
-        if ($row) {
+        if ($row instanceof \stdClass) {
             $question = nl2br((string) $row->thema);
-            $content = $row->content;
+            $content = (string) $row->content;
             $active = 'yes' === $row->active;
-            $expired = date(format: 'YmdHis') > $row->date_end;
+            $expired = date(format: 'YmdHis') > (string) $row->date_end;
 
             if (!$active) {
-                $content = Translation::get(key: 'err_inactiveArticle');
+                $content = Translation::getString(key: 'err_inactiveArticle');
             }
 
             if ($expired) {
-                $content = Translation::get(key: 'err_expiredArticle');
+                $content = Translation::getString(key: 'err_expiredArticle');
             }
 
             $this->faqRecord = [
@@ -772,7 +791,7 @@ class Faq
                 'author' => $row->author,
                 'email' => $row->email,
                 'comment' => $row->comment,
-                'date' => Date::createIsoDate($row->updated),
+                'date' => Date::createIsoDate((string) $row->updated),
                 'dateStart' => $row->date_start,
                 'dateEnd' => $row->date_end,
                 'notes' => $row->notes,
@@ -795,7 +814,7 @@ class Faq
      * Returns an array with all data from all FAQ records.
      *
      * @param int        $sortType  Sorting type
-     * @param array|null $condition Condition
+     * @param array<string, mixed>|null $condition Condition
      * @param ?string    $sortOrder Sorting order
      */
     public function getAllFaqs(
@@ -821,16 +840,16 @@ class Faq
         );
 
         foreach ($rows as $row) {
-            $content = $row->content;
+            $content = (string) $row->content;
             $active = 'yes' === $row->active;
-            $expired = date(format: 'YmdHis') > $row->date_end;
+            $expired = date(format: 'YmdHis') > (string) $row->date_end;
 
             if (!$active) {
-                $content = Translation::get(key: 'err_inactiveArticle');
+                $content = Translation::getString(key: 'err_inactiveArticle');
             }
 
             if ($expired) {
-                $content = Translation::get(key: 'err_expiredArticle');
+                $content = Translation::getString(key: 'err_expiredArticle');
             }
 
             $this->faqRecords[] = [
@@ -847,7 +866,7 @@ class Faq
                 'author' => $row->author,
                 'email' => $row->email,
                 'comment' => $row->comment,
-                'updated' => Date::createIsoDate($row->updated, 'Y-m-d H:i:s'),
+                'updated' => Date::createIsoDate((string) $row->updated, 'Y-m-d H:i:s'),
                 'dateStart' => $row->date_start,
                 'dateEnd' => $row->date_end,
                 'created' => $row->created,
@@ -864,12 +883,12 @@ class Faq
     public function getQuestion(int $faqId): string
     {
         if (array_key_exists('id', $this->faqRecord) && $this->faqRecord['id'] === $faqId) {
-            return $this->faqRecord['title'];
+            return (string) $this->faqRecord['title'];
         }
 
         $question = $this->faqRepository->fetchQuestion($faqId, $this->configuration->getLanguage()->getLanguage());
 
-        return $question ?? Translation::get(key: 'no_cats') ?? '';
+        return $question ?? Translation::getString(key: 'no_cats');
     }
 
     /**
@@ -880,7 +899,7 @@ class Faq
     public function getKeywords(int $faqId): string
     {
         if (array_key_exists('id', $this->faqRecord) && $this->faqRecord['id'] === $faqId) {
-            return $this->faqRecord['keywords'];
+            return (string) $this->faqRecord['keywords'];
         }
 
         $keywords = $this->faqRepository->fetchKeywords($faqId, $this->configuration->getLanguage()->getLanguage());
@@ -902,13 +921,14 @@ class Faq
 
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = $queryHelper->getQuery($queryType, $categoryId, $downwards, $lang, $date);
+        /* @mago-expect analysis:mixed-assignment - DB layer query results are untyped by design */
         $result = $this->configuration->getDb()->query($query);
 
         if ($this->configuration->getDb()->numRows($result) > 0) {
             $i = 0;
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof stdClass) {
                     break;
                 }
 
@@ -950,23 +970,24 @@ class Faq
 
         $oldId = 0;
         foreach ($rows as $row) {
-            if ($oldId !== $row->id) {
-                $data['question'] = $row->thema;
+            $faqId = (int) $row->id;
+            if ($oldId !== $faqId) {
+                $question = (string) $row->thema;
+                $data['question'] = $question;
 
-                $title = $row->thema;
                 $url = sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $row->category_id,
-                    $row->id,
-                    $row->lang,
-                    TitleSlugifier::slug($row->thema),
+                    (int) $row->category_id,
+                    $faqId,
+                    (string) $row->lang,
+                    TitleSlugifier::slug($question),
                 );
                 $oLink = new Link($url, $this->configuration);
-                $oLink->setTitle($row->thema);
-                $oLink->tooltip = $title;
+                $oLink->setTitle($question);
+                $oLink->tooltip = $question;
                 $data['url'] = $oLink->toString();
-                $data['id'] = (int) $row->id;
+                $data['id'] = $faqId;
                 $data['order'] = (int) $row->sticky_order;
                 $data['category_id'] = (int) $row->category_id;
                 $data['lang'] = (string) $row->lang;
@@ -974,7 +995,7 @@ class Faq
                 $sticky[] = $data;
             }
 
-            $oldId = $row->id;
+            $oldId = $faqId;
         }
 
         // Sort stickyData by order if activated
@@ -990,7 +1011,7 @@ class Faq
      */
     private function sortStickyArrayByOrder(array $first, array $second): int
     {
-        return $first['order'] - $second['order'];
+        return (int) $first['order'] - (int) $second['order'];
     }
 
     /**

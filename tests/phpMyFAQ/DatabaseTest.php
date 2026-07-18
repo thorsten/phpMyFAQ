@@ -32,7 +32,7 @@ class DatabaseTest extends TestCase
 
         $this->setStaticPropertyValue('databaseDriver', null);
         $this->setStaticPropertyValue('dbType', '');
-        $this->setStaticPropertyValue('tablePrefix', null);
+        $this->setStaticPropertyValue('tablePrefix', '');
     }
 
     protected function tearDown(): void

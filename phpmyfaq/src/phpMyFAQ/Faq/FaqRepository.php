@@ -38,13 +38,11 @@ final class FaqRepository implements FaqRepositoryInterface
         $query = sprintf('SELECT MAX(solution_id) AS solution_id FROM %sfaqdata', Database::getTablePrefix());
 
         $result = $this->configuration->getDb()->query($query);
-        $row = false;
         if ($result) {
             $row = $this->configuration->getDb()->fetchObject($result);
-        }
-
-        if ($row) {
-            $latestId = $row->solution_id;
+            if ($row instanceof \stdClass) {
+                $latestId = (int) $row->solution_id;
+            }
         }
 
         if ($latestId < PMF_SOLUTION_ID_START_VALUE) {
@@ -199,11 +197,11 @@ final class FaqRepository implements FaqRepositoryInterface
         $question = null;
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
-            $question = $row->question;
+            $question = (string) $row->question;
         }
 
         return $question;
@@ -226,7 +224,7 @@ final class FaqRepository implements FaqRepositoryInterface
 
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return $row instanceof \stdClass ? $row->keywords : null;
+        return $row instanceof \stdClass ? (string) $row->keywords : null;
     }
 
     public function getFaqResult(
@@ -343,10 +341,10 @@ final class FaqRepository implements FaqRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return is_object($row) ? $row : null;
+        return $row instanceof \stdClass ? $row : null;
     }
 
-    public function fetchRowBySolutionId(int $solutionId, int $userId, array $groups, bool $groupSupport): ?object
+    public function fetchRowBySolutionId(int $solutionId, int $userId, array $groups, bool $groupSupport): ?\stdClass
     {
         $queryHelper = new QueryHelper($userId, $groups);
         $query = sprintf(
@@ -390,7 +388,10 @@ final class FaqRepository implements FaqRepositoryInterface
                 AND (fdu.user_id IS NOT NULL OR fdg.group_id IS NOT NULL)
                 LIMIT 1', Database::getTablePrefix(), $solutionId);
             $restrictionResult = $this->configuration->getDb()->query($restrictionQuery);
-            $hasRestriction = $restrictionResult && $this->configuration->getDb()->fetchObject($restrictionResult);
+            $hasRestriction =
+                $restrictionResult !== false
+                && $restrictionResult !== null
+                && $this->configuration->getDb()->fetchObject($restrictionResult) instanceof \stdClass;
 
             if (!$hasRestriction) {
                 $fallbackQuery = sprintf(
@@ -403,9 +404,12 @@ final class FaqRepository implements FaqRepositoryInterface
             }
         }
 
-        return is_object($row) ? $row : null;
+        return $row instanceof \stdClass ? $row : null;
     }
 
+    /**
+     * @return list<\stdClass>
+     */
     public function fetchAvailableFaqsByCategoryId(
         int $categoryId,
         string $orderTable,
@@ -471,6 +475,9 @@ final class FaqRepository implements FaqRepositoryInterface
         return $this->fetchAllRows($this->configuration->getDb()->query($query));
     }
 
+    /**
+     * @return list<\stdClass>
+     */
     public function fetchFaqsByIds(
         string $records,
         bool $onlyActive,
@@ -534,6 +541,9 @@ final class FaqRepository implements FaqRepositoryInterface
         return $this->fetchAllRows($this->configuration->getDb()->query($query));
     }
 
+    /**
+     * @return list<\stdClass>
+     */
     public function fetchStickyFaqs(int $userId, array $groups, bool $groupSupport): array
     {
         $queryHelper = new QueryHelper($userId, $groups);
@@ -591,6 +601,9 @@ final class FaqRepository implements FaqRepositoryInterface
         return $this->fetchAllRows($this->configuration->getDb()->query($query));
     }
 
+    /**
+     * @return list<\stdClass>
+     */
     public function fetchAllFaqs(
         ?array $condition,
         string $orderBy,
@@ -966,9 +979,8 @@ final class FaqRepository implements FaqRepositoryInterface
             if (is_array($data)) {
                 $where .= ' IN (';
                 $separator = '';
-                /** @var mixed $value */
                 foreach ($data as $value) {
-                    $where .= $separator . "'" . $this->configuration->getDb()->escape($value) . "'";
+                    $where .= $separator . "'" . $this->configuration->getDb()->escape((string) $value) . "'";
                     $separator = ', ';
                 }
 
@@ -984,7 +996,7 @@ final class FaqRepository implements FaqRepositoryInterface
             }
 
             if (!is_array($data) && $data !== 'IS NOT NULL' && $data !== 'IS NULL') {
-                $where .= " = '" . $this->configuration->getDb()->escape($data) . "'";
+                $where .= " = '" . $this->configuration->getDb()->escape((string) $data) . "'";
             }
 
             if ($num > 0) {
@@ -998,14 +1010,14 @@ final class FaqRepository implements FaqRepositoryInterface
     /**
      * Collects every row of a database result into an array of objects.
      *
-     * @return object[]
+     * @return list<\stdClass>
      */
     private function fetchAllRows(mixed $result): array
     {
         $rows = [];
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 

@@ -67,7 +67,7 @@ class ConfigurationRepository
     }
 
     /**
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function fetchAll(): array
     {
@@ -90,7 +90,7 @@ class ConfigurationRepository
     }
 
     /**
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function getFaqDataContents(): array
     {

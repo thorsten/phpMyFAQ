@@ -210,7 +210,7 @@ final class CategoryController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
 
         $parentId = (int) Filter::filterVar($request->request->get(key: 'parent_id'), FILTER_VALIDATE_INT);
-        $categoryId = $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqcategories', 'id');
+        $categoryId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
         $categoryLang = Filter::filterVar($request->request->get(key: 'lang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $uploadedFile = $request->files->get('image') ?? [];

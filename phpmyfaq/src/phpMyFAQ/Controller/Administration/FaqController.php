@@ -172,7 +172,7 @@ final class FaqController extends AbstractAdministrationController
             'isActive' => null,
             'isInActive' => 'checked',
             'nextSolutionId' => $this->faq->getNextSolutionId(),
-            'nextFaqId' => $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqdata', 'id'),
+            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
     }
 
@@ -242,7 +242,7 @@ final class FaqController extends AbstractAdministrationController
             'isActive' => null,
             'isInActive' => 'checked',
             'nextSolutionId' => $this->faq->getNextSolutionId(),
-            'nextFaqId' => $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqdata', 'id'),
+            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
     }
 
@@ -370,7 +370,7 @@ final class FaqController extends AbstractAdministrationController
             'isActive' => $faqData['active'] === 'yes' ? 'checked' : null,
             'isInActive' => $faqData['active'] !== 'yes' ? 'checked' : null,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
-            'nextFaqId' => $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqdata', 'id'),
+            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
     }
 
@@ -442,7 +442,7 @@ final class FaqController extends AbstractAdministrationController
             'isActive' => null,
             'isInActive' => null,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
-            'nextFaqId' => $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqdata', 'id'),
+            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
     }
 
@@ -514,7 +514,7 @@ final class FaqController extends AbstractAdministrationController
             'isActive' => null,
             'isInActive' => null,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
-            'nextFaqId' => $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqdata', 'id'),
+            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
     }
 
@@ -597,7 +597,7 @@ final class FaqController extends AbstractAdministrationController
             'isActive' => null,
             'isInActive' => null,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
-            'nextFaqId' => $this->configuration->getDb()->nextId((Database::getTablePrefix() ?? '') . 'faqdata', 'id'),
+            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
     }
 

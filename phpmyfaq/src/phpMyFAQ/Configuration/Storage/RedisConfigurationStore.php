@@ -43,7 +43,7 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
     }
 
     /**
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function fetchAll(): array
     {

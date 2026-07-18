@@ -66,7 +66,7 @@ final class FilesystemConfigurationCache
     /**
      * Returns the cached configuration rows, or null on a cache miss.
      *
-     * @return array<int, object>|null
+     * @return array<int, \stdClass>|null
      */
     public function read(): ?array
     {

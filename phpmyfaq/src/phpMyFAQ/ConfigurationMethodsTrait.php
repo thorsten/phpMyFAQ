@@ -24,18 +24,79 @@ use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
+use phpMyFAQ\Configuration\ConfigurationRepository;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
+use phpMyFAQ\Configuration\LayoutSettings;
 use phpMyFAQ\Configuration\LdapConfiguration;
+use phpMyFAQ\Configuration\LdapSettings;
+use phpMyFAQ\Configuration\MailSettings;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
+use phpMyFAQ\Configuration\SearchSettings;
+use phpMyFAQ\Configuration\SecuritySettings;
+use phpMyFAQ\Configuration\UrlSettings;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Plugin\PluginConfigurationInterface;
 use phpMyFAQ\Plugin\PluginException;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\Translation\TranslationProviderFactory;
 use phpMyFAQ\Translation\TranslationProviderInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 trait ConfigurationMethodsTrait
 {
+    /**
+     * Configuration store: string values from the faqconfig table plus the
+     * runtime objects registered under `core.*` keys.
+     *
+     * @var array<string, mixed>
+     */
+    private array $config = [];
+
+    private Logger $logger;
+
+    private PluginManager $pluginManager;
+
+    private ConfigurationRepository $configurationRepository;
+
+    private LdapSettings $ldapSettings;
+
+    /** @var array<string, mixed> LDAP runtime configuration built from ldap.php */
+    private array $ldapConfig = [];
+
+    /** @var array<int, array<string, mixed>> LDAP server definitions built from ldap.php */
+    private array $ldapServer = [];
+
+    private MailSettings $mailSettings;
+
+    private SearchSettings $searchSettings;
+
+    private SecuritySettings $securitySettings;
+
+    private LayoutSettings $layoutSettings;
+
+    private UrlSettings $urlSettings;
+
+    /**
+     * Returns the runtime object registered under the given `core.*` key,
+     * checked against the expected class, or fails loudly when it was never
+     * registered.
+     *
+     * @template T of object
+     * @param class-string<T> $expectedClass
+     * @return T
+     */
+    private function runtimeObject(string $key, string $expectedClass): object
+    {
+        /* @mago-expect analysis:mixed-assignment - the config store is mixed by design; validated below */
+        $object = $this->config[$key] ?? null;
+        if (!$object instanceof $expectedClass) {
+            throw new \LogicException(sprintf('No %s registered under "%s".', $expectedClass, $key));
+        }
+
+        return $object;
+    }
+
     public function setDatabase(DatabaseDriver $databaseDriver): void
     {
         $this->config['core.database'] = $databaseDriver;
@@ -76,7 +137,7 @@ trait ConfigurationMethodsTrait
      */
     public function getDb(): DatabaseDriver
     {
-        return $this->config['core.database'];
+        return $this->runtimeObject('core.database', DatabaseDriver::class);
     }
 
     /**
@@ -92,7 +153,7 @@ trait ConfigurationMethodsTrait
      */
     public function getInstance(): Instance
     {
-        return $this->config['core.instance'];
+        return $this->runtimeObject('core.instance', Instance::class);
     }
 
     /**
@@ -108,7 +169,7 @@ trait ConfigurationMethodsTrait
      */
     public function getLanguage(): Language
     {
-        return $this->config['core.language'];
+        return $this->runtimeObject('core.language', Language::class);
     }
 
     /**
@@ -136,7 +197,7 @@ trait ConfigurationMethodsTrait
      */
     public function getVersion(): string
     {
-        return $this->config['main.currentVersion'];
+        return (string) $this->config['main.currentVersion'];
     }
 
     /**
@@ -144,7 +205,7 @@ trait ConfigurationMethodsTrait
      */
     public function getTitle(): string
     {
-        return $this->config['main.titleFAQ'];
+        return (string) $this->config['main.titleFAQ'];
     }
 
     /**
@@ -152,7 +213,7 @@ trait ConfigurationMethodsTrait
      */
     public function getAdminEmail(): string
     {
-        return $this->config['main.administrationMail'];
+        return (string) $this->config['main.administrationMail'];
     }
 
     public function getTemplateSet(): string
@@ -183,7 +244,7 @@ trait ConfigurationMethodsTrait
 
     public function getRootPath(): string
     {
-        return PMF_ROOT_DIR;
+        return (string) PMF_ROOT_DIR;
     }
 
     /**
@@ -209,15 +270,18 @@ trait ConfigurationMethodsTrait
     }
 
     /**
-     * Fetches and returns all configuration items into an array.
+     * Fetches and returns all configuration items into an array. The result
+     * also carries the runtime objects registered under `core.*` keys.
      *
-     * @return string[]
+     * @return array<string, mixed>
      */
     public function getAll(): array
     {
         $rows = $this->configurationRepository->fetchAll();
         foreach ($rows as $row) {
-            $this->config[$row->config_name] = $row->config_value;
+            $this->config[(string) $row->config_name] = $row->config_value === null
+                ? null
+                : (string) $row->config_value;
         }
 
         return $this->config;
@@ -228,8 +292,8 @@ trait ConfigurationMethodsTrait
      */
     public function setLdapConfig(LdapConfiguration $ldapConfiguration): void
     {
-        $this->config['core.ldapServer'] = $this->ldapSettings->buildServers($ldapConfiguration);
-        $this->config['core.ldapConfig'] = $this->ldapSettings->buildConfig();
+        $this->ldapServer = $this->ldapSettings->buildServers($ldapConfiguration);
+        $this->ldapConfig = $this->ldapSettings->buildConfig();
     }
 
     /**
@@ -245,7 +309,7 @@ trait ConfigurationMethodsTrait
     /**
      * Returns the LDAP options configuration.
      *
-     * @return string[]
+     * @return array<string, mixed>
      */
     public function getLdapOptions(): array
     {
@@ -255,7 +319,7 @@ trait ConfigurationMethodsTrait
     /**
      * Returns the LDAP group configuration.
      *
-     * @return array<string, string|array>
+     * @return array<string, mixed>
      */
     public function getLdapGroupConfig(): array
     {
@@ -265,21 +329,21 @@ trait ConfigurationMethodsTrait
     /**
      * Returns the LDAP configuration.
      *
-     * @return string[]
+     * @return array<string, mixed>
      */
     public function getLdapConfig(): array
     {
-        return $this->config['core.ldapConfig'] ?? [];
+        return $this->ldapConfig;
     }
 
     /**
      * Returns the LDAP server(s).
      *
-     * @return string[]
+     * @return array<int, array<string, mixed>>
      */
     public function getLdapServer(): array
     {
-        return $this->config['core.ldapServer'] ?? [];
+        return $this->ldapServer;
     }
 
     public function isLdapActive(): bool
@@ -315,7 +379,7 @@ trait ConfigurationMethodsTrait
      */
     public function getElasticsearch(): Client
     {
-        return $this->config['core.elasticsearch'];
+        return $this->runtimeObject('core.elasticsearch', Client::class);
     }
 
     public function setOpenSearch(\OpenSearch\Client $osClient): void
@@ -325,7 +389,7 @@ trait ConfigurationMethodsTrait
 
     public function getOpenSearch(): \OpenSearch\Client
     {
-        return $this->config['core.opensearch'];
+        return $this->runtimeObject('core.opensearch', \OpenSearch\Client::class);
     }
 
     /**
@@ -341,7 +405,7 @@ trait ConfigurationMethodsTrait
      */
     public function getElasticsearchConfig(): ElasticsearchConfiguration
     {
-        return $this->config['core.elasticsearchConfig'];
+        return $this->runtimeObject('core.elasticsearchConfig', ElasticsearchConfiguration::class);
     }
 
     public function setOpenSearchConfig(OpenSearchConfiguration $openSearchConfiguration): void
@@ -351,7 +415,7 @@ trait ConfigurationMethodsTrait
 
     public function getOpenSearchConfig(): OpenSearchConfiguration
     {
-        return $this->config['core.openSearchConfig'];
+        return $this->runtimeObject('core.openSearchConfig', OpenSearchConfiguration::class);
     }
 
     /**
@@ -378,7 +442,10 @@ trait ConfigurationMethodsTrait
             $this->initializeTranslationProvider();
         }
 
-        return $this->config['core.translationProvider'] ?? null;
+        /* @mago-expect analysis:mixed-assignment - the config store is mixed by design; validated below */
+        $provider = $this->config['core.translationProvider'] ?? null;
+
+        return $provider instanceof TranslationProviderInterface ? $provider : null;
     }
 
     /**
@@ -388,9 +455,14 @@ trait ConfigurationMethodsTrait
     {
         try {
             // Get HTTP client from service container if available
+            /* @mago-expect analysis:mixed-assignment - the config store is mixed by design; validated below */
             $container = $this->config['core.container'] ?? null;
-            if ($container && $container->has('phpmyfaq.http-client')) {
+            if ($container instanceof ContainerInterface && $container->has('phpmyfaq.http-client')) {
                 $httpClient = $container->get('phpmyfaq.http-client');
+                if (!$httpClient instanceof HttpClientInterface) {
+                    return;
+                }
+
                 $provider = TranslationProviderFactory::create($this, $httpClient);
                 if ($provider !== null) {
                     $this->config['core.translationProvider'] = $provider;
@@ -432,7 +504,7 @@ trait ConfigurationMethodsTrait
     /**
      * Updates all configuration items.
      *
-     * @param string[] $newConfigs Array with new configuration values
+     * @param array<string, string|null> $newConfigs Array with new configuration values
      */
     public function update(array $newConfigs): bool
     {
@@ -462,7 +534,7 @@ trait ConfigurationMethodsTrait
         foreach ($newConfigs as $name => $value) {
             if (
                 !(
-                    !hash_equals((string) $name, user_string: 'main.phpMyFAQToken')
+                    !hash_equals($name, user_string: 'main.phpMyFAQToken')
                     && !in_array($name, $runtimeConfigs, strict: true)
                     && !in_array($name, $protectedConfigs, strict: true)
                 )
@@ -470,7 +542,7 @@ trait ConfigurationMethodsTrait
                 continue;
             }
 
-            $this->configurationRepository->updateConfigValue((string) $name, $value ?? '');
+            $this->configurationRepository->updateConfigValue($name, $value ?? '');
             if (array_key_exists($name, $this->config) && $this->config[$name] !== null) {
                 unset($this->config[$name]);
             }
@@ -491,15 +563,15 @@ trait ConfigurationMethodsTrait
         $contentItems = $this->configurationRepository->getFaqDataContents();
 
         foreach ($contentItems as $contentItem) {
-            if (!str_contains((string) $contentItem->content, $oldUrl)) {
+            $content = (string) $contentItem->content;
+            if (!str_contains($content, $oldUrl)) {
                 continue;
             }
 
-            $newContent = str_replace($oldUrl, $newUrl, $contentItem->content);
             $this->configurationRepository->updateFaqDataContentById(
                 (int) $contentItem->id,
                 (string) $contentItem->lang,
-                $newContent,
+                str_replace($oldUrl, $newUrl, $content),
             );
         }
 
@@ -535,7 +607,7 @@ trait ConfigurationMethodsTrait
 
     public function getPluginManager(): PluginManager
     {
-        return $this->config['core.pluginManager'];
+        return $this->runtimeObject('core.pluginManager', PluginManager::class);
     }
 
     public function triggerEvent(string $eventName, mixed $data = null): void
