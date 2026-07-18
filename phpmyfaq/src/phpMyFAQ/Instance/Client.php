@@ -49,7 +49,7 @@ class Client extends Instance
     {
         parent::__construct($configuration);
 
-        $this->clientFolder = PMF_ROOT_DIR . '/multisite/';
+        $this->clientFolder = (string) PMF_ROOT_DIR . '/multisite/';
     }
 
     /**
@@ -191,8 +191,8 @@ class Client extends Instance
         }
 
         $sourcePrefix = Database::getTablePrefix();
-        $targetPrefix = $sourcePrefix ?? '';
-        $seedRows = $this->collectSeedRows($sourcePrefix ?? '');
+        $targetPrefix = $sourcePrefix;
+        $seedRows = $this->collectSeedRows($sourcePrefix);
         $sourceDatabase = $credentials['database'];
 
         try {
@@ -354,13 +354,17 @@ class Client extends Instance
         }
     }
 
+    /**
+     * @return array{server: string, port: int|null, user: string, password: string, database: string}|null
+     */
     private function getDatabaseCredentials(): ?array
     {
-        $databaseFile = PMF_CONFIG_DIR . '/database.php';
+        $databaseFile = (string) PMF_CONFIG_DIR . '/database.php';
         if (!file_exists($databaseFile)) {
             return null;
         }
 
+        /** @var array<string, mixed> $DB populated by the included configuration file */
         $DB = [];
         include $databaseFile;
 
@@ -384,6 +388,8 @@ class Client extends Instance
 
     /**
      * Reads seed data from source database before switching to the tenant database.
+     *
+     * @return array<string, array<array-key, mixed>>
      */
     private function collectSeedRows(string $prefix): array
     {
@@ -402,6 +408,9 @@ class Client extends Instance
         return $rows;
     }
 
+    /**
+     * @param array<string, array<array-key, mixed>> $seedRows
+     */
     private function insertSeedRows(string $prefix, array $seedRows): void
     {
         $this->insertRows($prefix . 'faqconfig', $seedRows['faqconfig'] ?? []);
@@ -427,8 +436,14 @@ class Client extends Instance
     private function insertRows(string $table, array $rows): void
     {
         foreach ($rows as $row) {
+            if (!is_array($row) && !is_object($row)) {
+                continue;
+            }
+
             $rowData = (array) $row;
-            $quotedColumns = array_map($this->quoteIdentifier(...), array_keys($rowData));
+            $quotedColumns = array_map(fn(int|string $column): string => $this->quoteIdentifier(
+                (string) $column,
+            ), array_keys($rowData));
             $values = array_map(fn(mixed $value): string => $value === null
                 ? 'NULL'
                 : sprintf("'%s'", $this->configuration->getDb()->escape((string) $value)), array_values($rowData));

@@ -5384,117 +5384,15 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "array-to-string-conversion"
-message = "Potentially casting `array` to `string`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::format`: expected `string`, but found `mixed`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\SeoEntity::setReferenceLanguage`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Link\Util\TitleSlugifier::slug`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Mail::safeEmail`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Service\Gravatar::getImage`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Strings::htmlentities`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\User::getUserVisibilityByEmail`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Utils::parseUrl`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `str_repeat`: expected `non-negative-int`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
+code = "ambiguous-object-property-access"
+message = "Cannot statically verify property access on a generic `object` type."
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 8
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-operand"
-message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 4
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/KeycloakAuthenticationController.php"
@@ -8156,117 +8054,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "impossible-condition"
-message = "Redundant ternary operator: condition is always falsy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "impossible-key-check"
-message = "Impossible condition: variable `$DB` (type `array{}`) can never have the key `'server'`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "invalid-argument"
-message = "Invalid argument type for argument #1 of `array_map`: expected `(callable(array-key): string)|(callable(array-key, ('S.array_map() extends mixed)): string)|null`, but found `(closure(string): string)`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
 code = "invalid-type-cast"
-message = "Casting `mixed` to `array`."
+message = "Object of type `object` cast to `array`. Property visibility (public, protected, private) affects the resulting array."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseDriver::connect`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Database\DatabaseDriver::connect`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Instance\Client::insertRows`: expected `array<array-key, mixed>`, but found `nonnull`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Database\DatabaseDriver::connect`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #4 of `phpMyFAQ\Database\DatabaseDriver::connect`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #5 of `phpMyFAQ\Database\DatabaseDriver::connect`: expected `int|null`, but found `mixed`.'
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "no-value"
-message = "Argument #2 passed to function `array_key_exists` has type `never`, meaning it cannot produce a value."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "redundant-key-check"
-message = "Redundant condition: variable `$DB` (type `never`) will never have the key `'db'`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "redundant-key-check"
-message = "Redundant condition: variable `$DB` (type `never`) will never have the key `'password'`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "redundant-key-check"
-message = "Redundant condition: variable `$DB` (type `never`) will never have the key `'user'`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 3
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Database.php"

@@ -25,6 +25,7 @@ use phpMyFAQ\Captcha\Helper\CaptchaHelperInterface;
 use phpMyFAQ\Category;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Date;
+use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\SeoType;
@@ -100,10 +101,10 @@ final class FaqController extends AbstractFrontController
         $faqData = $faqCreationService->prepareAddFaqData($selectedQuestion, $selectedCategory);
 
         // Add Twig filter
-        $this->addFilter(new TwigFilter('repeat', static fn($string, $times): string => str_repeat(
-            (string) $string,
-            $times,
-        )));
+        $this->addFilter(new TwigFilter('repeat', static fn(
+            mixed $string,
+            mixed $times,
+        ): string => str_repeat((string) $string, max(0, (int) $times))));
 
         // Prepare template variables
         $templateVars = [
@@ -151,11 +152,16 @@ final class FaqController extends AbstractFrontController
         ];
 
         // Collect data for displaying form
-        foreach ($faqData['formData'] as $input) {
+        $formData = is_array($faqData['formData'] ?? null) ? $faqData['formData'] : [];
+        foreach ($formData as $input) {
+            if (!is_object($input)) {
+                continue;
+            }
+
             $active = sprintf('id%d_active', (int) $input->input_id);
             $label = sprintf('id%d_label', (int) $input->input_id);
             $required = sprintf('id%d_required', (int) $input->input_id);
-            $templateVars[$active] = (bool) $input->input_active;
+            $templateVars[$active] = (int) $input->input_active !== 0;
             $templateVars[$label] = $input->input_label;
             $templateVars[$required] = (int) $input->input_required !== 0 ? 'required' : '';
         }
@@ -184,10 +190,16 @@ final class FaqController extends AbstractFrontController
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
-        $slug = TitleSlugifier::slug($faqData['question']);
+        $slug = TitleSlugifier::slug((string) $faqData['question']);
 
         // Redirect to the canonical FAQ URL
-        $url = sprintf('/content/%d/%d/%s/%s.html', $faqData['category_id'], $faqData['id'], $faqData['lang'], $slug);
+        $url = sprintf(
+            '/content/%d/%d/%s/%s.html',
+            (int) $faqData['category_id'],
+            (int) $faqData['id'],
+            (string) $faqData['lang'],
+            $slug,
+        );
 
         return new RedirectResponse($url, Response::HTTP_MOVED_PERMANENTLY);
     }
@@ -215,7 +227,7 @@ final class FaqController extends AbstractFrontController
         }
 
         $row = $this->configuration->getDb()->fetchObject($result);
-        if (!$row) {
+        if (!$row instanceof \stdClass) {
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
@@ -225,7 +237,7 @@ final class FaqController extends AbstractFrontController
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
-        $slug = TitleSlugifier::slug($row->thema);
+        $slug = TitleSlugifier::slug((string) $row->thema);
 
         // Redirect to the canonical FAQ URL
         $url = sprintf('/content/%d/%d/%s/%s.html', $categoryId, $faqId, $faqLang, $slug);
@@ -361,7 +373,7 @@ final class FaqController extends AbstractFrontController
         $faqServices->setQuestion($question);
 
         // Author visibility (GDPR)
-        $author = $this->currentUser->getUserVisibilityByEmail($faq->faqRecord['email'])
+        $author = $this->currentUser->getUserVisibilityByEmail((string) $faq->faqRecord['email'])
             ? $faq->faqRecord['author']
             : 'n/a';
 
@@ -371,7 +383,7 @@ final class FaqController extends AbstractFrontController
         $seoEntity
             ->setSeoType(SeoType::FAQ)
             ->setReferenceId((int) $faq->faqRecord['id'])
-            ->setReferenceLanguage($faq->faqRecord['lang']);
+            ->setReferenceLanguage((string) $faq->faqRecord['lang']);
         $seoData = $seo->get($seoEntity);
 
         // Date formatter
@@ -383,17 +395,17 @@ final class FaqController extends AbstractFrontController
             'title' => sprintf('%s - %s', $seoData->getTitle() ?? $question, $this->configuration->getTitle()),
             'metaDescription' => $seoData->getDescription(),
             'solutionId' => $faq->faqRecord['solution_id'],
-            'solutionIdLink' => './solution_id_' . $faq->faqRecord['solution_id'] . '.html',
+            'solutionIdLink' => './solution_id_' . (string) ($faq->faqRecord['solution_id'] ?? '') . '.html',
             'breadcrumb' => $this->category->getPathWithStartpage($categoryId, '/', true),
             'question' => $question,
             'answer' => $answer,
             'attachmentList' => $attachmentList,
-            'faqDate' => $date->format($faq->faqRecord['created']),
-            'faqLastChangeDate' => $date->format($faq->faqRecord['date']),
+            'faqDate' => $date->format((string) $faq->faqRecord['created']),
+            'faqLastChangeDate' => $date->format((string) $faq->faqRecord['date']),
             'faqAuthor' => $author,
             'msgPdf' => Translation::get(key: 'msgPDF'),
             'msgPrintFaq' => Translation::get(key: 'msgPrintArticle'),
-            'enableSendToFriend' => (bool) $this->configuration->get('main.enableSendToFriend'),
+            'enableSendToFriend' => true === $this->configuration->get('main.enableSendToFriend'),
             'msgShareText' => Translation::get(key: 'msgShareText'),
             'msgShareViaWhatsapp' => Translation::get(key: 'msgShareViaWhatsapp'),
             'msgShareFAQ' => Translation::get(key: 'msgShareFAQ'),
@@ -412,16 +424,18 @@ final class FaqController extends AbstractFrontController
             'msgNewContentName' => Translation::get(key: 'msgNewContentName'),
             'msgNewContentMail' => Translation::get(key: 'msgNewContentMail'),
             'defaultContentMail' => $this->currentUser->getUserId() > 0
-                ? (string) $this->currentUser->getUserData('email')
+            && is_string($contentMail = $this->currentUser->getUserData('email'))
+                ? $contentMail
                 : '',
             'defaultContentName' => $this->currentUser->getUserId() > 0
-                ? (string) $this->currentUser->getUserData('display_name')
+            && is_string($contentName = $this->currentUser->getUserData('display_name'))
+                ? $contentName
                 : '',
             'msgYourComment' => Translation::get(key: 'msgYourComment'),
             'msgCancel' => Translation::get(key: 'ad_gen_cancel'),
             'msgNewContentSubmit' => Translation::get(key: 'msgNewContentSubmit'),
             'csrfTokenAddComment' => Token::getInstance($this->session)->getTokenString('add-comment'),
-            'enableCommentEditor' => (bool) $this->configuration->get('main.enableCommentEditor'),
+            'enableCommentEditor' => true === $this->configuration->get('main.enableCommentEditor'),
             'captchaFieldset' => $this->captchaHelper->renderCaptcha(
                 $this->captcha,
                 'writecomment',
@@ -497,9 +511,9 @@ final class FaqController extends AbstractFrontController
     /**
      * Prepares comment data for the Twig macro
      *
-     * @param array $comments Array of Comment objects
+     * @param array<array-key, mixed> $comments Array of Comment objects
      * @throws \Exception
-     * @return array
+     * @return array<string, array<array-key, mixed>>
      */
     private function prepareCommentsData(array $comments): array
     {
@@ -509,6 +523,10 @@ final class FaqController extends AbstractFrontController
         $formattedDates = [];
 
         foreach ($comments as $comment) {
+            if (!$comment instanceof Comment) {
+                continue;
+            }
+
             $commentId = $comment->getId();
             $preparedComments[] = [
                 'id' => $commentId,
