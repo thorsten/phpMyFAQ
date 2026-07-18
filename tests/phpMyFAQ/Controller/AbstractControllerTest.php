@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Twig\Extension\ExtensionInterface;
 use Twig\TwigFilter;
@@ -462,7 +462,7 @@ class AbstractControllerTest extends TestCase
             }
         };
 
-        $session = $this->createMock(SessionInterface::class);
+        $session = $this->createMock(FlashBagAwareSessionInterface::class);
 
         $firstConfiguration = $this->createMock(Configuration::class);
         $firstConfiguration->expects($this->once())->method('getTemplateSet')->willReturn('default');
@@ -510,7 +510,7 @@ class AbstractControllerTest extends TestCase
     public function testConstructionReusesTheSharedKernelContainer(): void
     {
         $sharedContainer = $this->createMock(ContainerInterface::class);
-        $session = $this->createMock(SessionInterface::class);
+        $session = $this->createMock(FlashBagAwareSessionInterface::class);
         $sharedContainer
             ->method('get')
             ->willReturnCallback(function (string $id) use ($session) {

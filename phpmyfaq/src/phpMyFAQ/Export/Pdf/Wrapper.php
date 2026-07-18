@@ -74,9 +74,20 @@ class Wrapper
     public array $faq = [];
 
     /**
-     * Configuration.
+     * Configuration. Optional until injected via setConfig(); rendering requires it.
      */
     protected ?Configuration $config = null;
+
+    /**
+     * Returns the configuration or fails loudly when setConfig() was not called
+     * before rendering started.
+     */
+    private function config(): Configuration
+    {
+        return (
+            $this->config ?? throw new \LogicException('Wrapper::setConfig() must be called before rendering a PDF.')
+        );
+    }
 
     /**
      * Question.
@@ -292,7 +303,7 @@ class Wrapper
     public function setCustomHeader(): void
     {
         $this->customHeader = html_entity_decode(
-            (string) $this->config->get(item: 'main.customPdfHeader'),
+            (string) $this->config()->get(item: 'main.customPdfHeader'),
             ENT_QUOTES,
             encoding: 'utf-8',
         );
@@ -307,13 +318,13 @@ class Wrapper
         // Set a custom footer
         $this->setCustomFooter();
 
-        $date = new Date($this->config);
+        $date = new Date($this->config());
 
         $footer = sprintf(
-            $this->config->get(item: 'spam.mailAddressInExport') ? '© %d %s <%s> | %s' : '© %d %s %s| %s',
+            $this->config()->get(item: 'spam.mailAddressInExport') ? '© %d %s <%s> | %s' : '© %d %s %s| %s',
             date(format: 'Y'),
-            $this->config->get(item: 'main.metaPublisher'),
-            $this->config->get(item: 'spam.mailAddressInExport') ? $this->config->getAdminEmail() : '',
+            $this->config()->get(item: 'main.metaPublisher'),
+            $this->config()->get(item: 'spam.mailAddressInExport') ? $this->config()->getAdminEmail() : '',
             $date->format(date(format: 'Y-m-d H:i')),
         );
 
@@ -340,7 +351,7 @@ class Wrapper
         if (!$this->enableBookmarks) {
             $this->engine->setY(-15);
             $this->engine->setFont($this->currentFont, '', 8);
-            $baseUrl = $this->config->getDefaultUrl() . 'content';
+            $baseUrl = $this->config()->getDefaultUrl() . 'content';
             if ($this->faq !== []) {
                 if (array_key_exists($this->category, $this->categories)) {
                     $baseUrl .= '/' . $this->categories[$this->category]['id'];
@@ -371,7 +382,7 @@ class Wrapper
      */
     public function setCustomFooter(): void
     {
-        $this->customFooter = $this->config->get(item: 'main.customPdfFooter') ?? '';
+        $this->customFooter = $this->config()->get(item: 'main.customPdfFooter') ?? '';
     }
 
     /**
@@ -383,7 +394,7 @@ class Wrapper
 
         // Title
         $this->engine->setFont($this->currentFont, 'B', 24);
-        $this->engine->multiCell(w: 0, h: 0, txt: $this->config->getTitle(), border: 0, align: 'C');
+        $this->engine->multiCell(w: 0, h: 0, txt: $this->config()->getTitle(), border: 0, align: 'C');
         $this->engine->ln();
 
         // TOC

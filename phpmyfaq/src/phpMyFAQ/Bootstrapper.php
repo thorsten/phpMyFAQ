@@ -39,6 +39,19 @@ class Bootstrapper
     private ?Request $request = null;
 
     /**
+     * Returns the configuration or fails loudly when boot() has not connected
+     * the database yet.
+     */
+    private function config(): Configuration
+    {
+        return (
+            $this->faqConfig ?? throw new \LogicException(
+                'Bootstrapper: the database must be connected before the configuration is available.',
+            )
+        );
+    }
+
+    /**
      * Executes the full bootstrap sequence.
      *
      * @throws DatabaseConnectionException
@@ -75,7 +88,8 @@ class Bootstrapper
         PhpConfigurator::registerErrorHandlers();
 
         // 9. Request
-        $this->request = Request::createFromGlobals();
+        $request = Request::createFromGlobals();
+        $this->request = $request;
 
         // 10. Output buffering
         ob_start();
@@ -85,34 +99,33 @@ class Bootstrapper
             $this->connectDatabase($databaseFile);
 
             // 12. Session configuration
-            PhpConfigurator::configureSession($this->faqConfig);
+            PhpConfigurator::configureSession($this->config());
 
             // 13. LDAP
             $this->configureLdap();
 
             // 14. Elasticsearch
             if (
-                $this->faqConfig->get('search.enableElasticsearch')
-                && file_exists(PMF_CONFIG_DIR . '/elasticsearch.php')
+                $this->config()->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR . '/elasticsearch.php')
             ) {
-                SearchClientFactory::configureElasticsearch($this->faqConfig, PMF_CONFIG_DIR);
+                SearchClientFactory::configureElasticsearch($this->config(), PMF_CONFIG_DIR);
             }
 
             // 15. OpenSearch
-            if ($this->faqConfig->get('search.enableOpenSearch') && file_exists(PMF_CONFIG_DIR . '/opensearch.php')) {
-                SearchClientFactory::configureOpenSearch($this->faqConfig, PMF_CONFIG_DIR);
+            if ($this->config()->get('search.enableOpenSearch') && file_exists(PMF_CONFIG_DIR . '/opensearch.php')) {
+                SearchClientFactory::configureOpenSearch($this->config(), PMF_CONFIG_DIR);
             }
 
             // 16. Attachments directory
-            if (strtolower((string) $this->faqConfig->get('storage.type')) !== 's3') {
+            if (strtolower((string) $this->config()->get('storage.type')) !== 's3') {
                 ConfigDirectoryResolver::resolveAttachmentsDir(
-                    (string) $this->faqConfig->get('records.attachmentsPath'),
+                    (string) $this->config()->get('records.attachmentsPath'),
                     dirname(__DIR__, levels: 2),
                 );
             }
 
             // 17. Proxy header fix
-            $this->fixProxyHeaders();
+            $this->fixProxyHeaders($request);
         }
 
         return $this;
@@ -141,8 +154,9 @@ class Bootstrapper
         try {
             $dbConfig = new DatabaseConfiguration($databaseFile);
             Database::setTablePrefix($dbConfig->getPrefix());
-            $this->db = Database::factory($dbConfig->getType());
-            $this->db->connect(
+            $db = Database::factory($dbConfig->getType());
+            $this->db = $db;
+            $db->connect(
                 $dbConfig->getServer(),
                 $dbConfig->getUser(),
                 $dbConfig->getPassword(),
@@ -150,7 +164,7 @@ class Bootstrapper
                 $dbConfig->getPort(),
             );
 
-            $this->switchToTenantSchema($dbConfig);
+            $this->switchToTenantSchema($db, $dbConfig);
         } catch (Exception|RuntimeException $exception) {
             throw new DatabaseConnectionException(
                 message: 'Database connection failed: ' . $exception->getMessage(),
@@ -159,7 +173,7 @@ class Bootstrapper
             );
         }
 
-        $this->faqConfig = new Configuration($this->db);
+        $this->faqConfig = new Configuration($db);
         try {
             $this->faqConfig->getAll();
         } catch (Exception $exception) {
@@ -176,7 +190,7 @@ class Bootstrapper
      *
      * @throws RuntimeException
      */
-    private function switchToTenantSchema(DatabaseConfiguration $dbConfig): void
+    private function switchToTenantSchema(DatabaseDriver $db, DatabaseConfiguration $dbConfig): void
     {
         $schema = $dbConfig->getSchema();
         if ($schema === null || $schema === '') {
@@ -193,7 +207,7 @@ class Bootstrapper
         try {
             if (str_contains($dbType, 'mysql')) {
                 $quotedSchema = sprintf('`%s`', str_replace(search: '`', replace: '``', subject: $schema));
-                $result = $this->db->query(sprintf('USE %s', $quotedSchema));
+                $result = $db->query(sprintf('USE %s', $quotedSchema));
                 if ($result === false) {
                     throw new RuntimeException('Failed to switch to tenant schema for MySQL.');
                 }
@@ -202,7 +216,7 @@ class Bootstrapper
 
             if (str_contains($dbType, 'pgsql')) {
                 $quotedSchema = sprintf('"%s"', str_replace(search: '"', replace: '""', subject: $schema));
-                $result = $this->db->query(sprintf('SET search_path TO %s', $quotedSchema));
+                $result = $db->query(sprintf('SET search_path TO %s', $quotedSchema));
                 if ($result === false) {
                     throw new RuntimeException('Failed to switch to tenant schema for PostgreSQL.');
                 }
@@ -219,23 +233,23 @@ class Bootstrapper
 
     private function configureLdap(): void
     {
-        if ($this->faqConfig->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && extension_loaded('ldap')) {
+        if ($this->config()->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && extension_loaded('ldap')) {
             $ldapConfig = new LdapConfiguration(PMF_CONFIG_DIR . '/ldap.php');
-            $this->faqConfig->setLdapConfig($ldapConfig);
+            $this->config()->setLdapConfig($ldapConfig);
         }
     }
 
-    private function fixProxyHeaders(): void
+    private function fixProxyHeaders(Request $request): void
     {
-        if ($this->request?->server->has('HTTP_HOST')) {
+        if ($request->server->has('HTTP_HOST')) {
             return;
         }
 
-        if ($this->request->server->has('HTTP_X_FORWARDED_SERVER')) {
-            $this->request->server->set('HTTP_HOST', $this->request->server->get('HTTP_X_FORWARDED_SERVER'));
+        if ($request->server->has('HTTP_X_FORWARDED_SERVER')) {
+            $request->server->set('HTTP_HOST', $request->server->get('HTTP_X_FORWARDED_SERVER'));
             return;
         }
 
-        $this->request->server->set('HTTP_HOST', $this->request->server->get('HTTP_X_FORWARDED_HOST'));
+        $request->server->set('HTTP_HOST', $request->server->get('HTTP_X_FORWARDED_HOST'));
     }
 }

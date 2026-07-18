@@ -28,7 +28,7 @@ use phpMyFAQ\Category\Tree\TreeBuilder;
 final class CategoryTreeFacade
 {
     public function __construct(
-        private ?TreeBuilder $treeBuilder = new TreeBuilder(),
+        private TreeBuilder $treeBuilder = new TreeBuilder(),
     ) {
     }
 

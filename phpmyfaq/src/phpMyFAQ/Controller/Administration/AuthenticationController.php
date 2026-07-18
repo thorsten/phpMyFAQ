@@ -77,7 +77,7 @@ final class AuthenticationController extends AbstractAdministrationController im
             try {
                 $this->currentUser = $userAuthentication->authenticate($username, $password);
                 if ($userAuthentication->hasTwoFactorAuthentication()) {
-                    $session = $this->container->get(id: 'session');
+                    $session = $this->session;
                     $session->set('2fa_pending_user_id', $this->currentUser->getUserId());
                     $session->set('2fa_failed_attempts', 0);
                     $this->adminLog->log(
@@ -229,7 +229,7 @@ final class AuthenticationController extends AbstractAdministrationController im
         $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
-        $session = $this->container->get(id: 'session');
+        $session = $this->session;
         $pendingUserId = $session->get('2fa_pending_user_id');
 
         if ($pendingUserId === null || (int) $pendingUserId !== $userId) {

@@ -23,6 +23,7 @@ use Elastic\Elasticsearch\Client;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\MissingParameterException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
+use Elastic\Elasticsearch\Response\Elasticsearch as ElasticsearchResponse;
 use Http\Promise\Promise;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
@@ -259,6 +260,19 @@ class Elasticsearch
     }
 
     /**
+     * Unwraps a synchronous Elasticsearch response. The client is configured
+     * for synchronous requests, so receiving a Promise is a programming error.
+     */
+    private function unwrapResponse(ElasticsearchResponse|Promise $response): ElasticsearchResponse
+    {
+        if (!$response instanceof ElasticsearchResponse) {
+            throw new \RuntimeException('Unexpected asynchronous Elasticsearch response.');
+        }
+
+        return $response;
+    }
+
+    /**
      * Deletes the Elasticsearch index.
      *
      * @throws Exception
@@ -266,12 +280,11 @@ class Elasticsearch
     public function dropIndex(): object
     {
         try {
-            return $this->client
+            return $this->unwrapResponse($this->client
                 ->indices()
                 ->delete([
                     'index' => $this->elasticsearchConfiguration->getIndex(),
-                ])
-                ->asObject();
+                ]))->asObject();
         } catch (ClientResponseException|MissingParameterException|ServerResponseException $exception) {
             throw new Exception($exception->getMessage());
         }
@@ -299,7 +312,7 @@ class Elasticsearch
         ];
 
         try {
-            return $this->client->index($params)->asObject();
+            return $this->unwrapResponse($this->client->index($params))->asObject();
         } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
             $this->configuration->getLogger()->error('Index error.', [$e->getMessage()]);
             return null;
@@ -355,14 +368,13 @@ class Elasticsearch
         }
 
         // Send the last batch if it exists
-        $responses = null;
         try {
-            $responses = $this->client->bulk($params);
+            $responses = $this->unwrapResponse($this->client->bulk($params));
         } catch (ClientResponseException|ServerResponseException $e) {
             return ['error' => $e->getMessage()];
         }
 
-        if ($responses !== null && $responses->getStatusCode() === 200) {
+        if ($responses->getStatusCode() === 200) {
             return ['success' => $responses];
         }
 
@@ -394,7 +406,7 @@ class Elasticsearch
         ];
 
         try {
-            return $this->client->update($params)->asArray();
+            return $this->unwrapResponse($this->client->update($params))->asArray();
         } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
             return ['error' => $e->getMessage()];
         }
@@ -413,7 +425,7 @@ class Elasticsearch
         ];
 
         try {
-            return $this->client->delete($params)->asArray();
+            return $this->unwrapResponse($this->client->delete($params))->asArray();
         } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
             return ['error' => $e->getMessage()];
         }
@@ -425,7 +437,7 @@ class Elasticsearch
     public function isAvailable(): bool
     {
         try {
-            return $this->client->ping()->asBool();
+            return $this->unwrapResponse($this->client->ping())->asBool();
         } catch (ClientResponseException|ServerResponseException $e) {
             $this->configuration->getLogger()->error('Elasticsearch ping failed.', [$e->getMessage()]);
             return false;
@@ -462,7 +474,7 @@ class Elasticsearch
         ];
 
         try {
-            return $this->client->index($params)->asObject();
+            return $this->unwrapResponse($this->client->index($params))->asObject();
         } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
             $this->configuration->getLogger()->error('Index custom page error.', [$e->getMessage()]);
             return null;
@@ -500,7 +512,7 @@ class Elasticsearch
         ];
 
         try {
-            return $this->client->update($params)->asArray();
+            return $this->unwrapResponse($this->client->update($params))->asArray();
         } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
             // If document doesn't exist, try to create it
             if (str_contains($e->getMessage(), 'document_missing_exception')) {
@@ -525,7 +537,7 @@ class Elasticsearch
         ];
 
         try {
-            return $this->client->delete($params)->asArray();
+            return $this->unwrapResponse($this->client->delete($params))->asArray();
         } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
             return ['error' => $e->getMessage()];
         }
@@ -584,13 +596,13 @@ class Elasticsearch
         $responses = null;
         if (($params['body'] ?? []) !== []) {
             try {
-                $responses = $this->client->bulk($params);
+                $responses = $this->unwrapResponse($this->client->bulk($params));
             } catch (ClientResponseException|ServerResponseException $e) {
                 return ['error' => $e->getMessage()];
             }
         }
 
-        if ($responses !== null && $responses->getStatusCode() === 200) {
+        if ($responses instanceof ElasticsearchResponse && $responses->getStatusCode() === 200) {
             return ['success' => $responses];
         }
 

@@ -90,6 +90,18 @@ class User
     public ?UserData $userdata = null;
 
     /**
+     * Returns the user-data container, creating it on first use.
+     */
+    public function userData(): UserData
+    {
+        if (!$this->userdata instanceof UserData) {
+            $this->userdata = new UserData($this->configuration);
+        }
+
+        return $this->userdata;
+    }
+
+    /**
      * Public array that contains error messages.
      * @var array<string>
      */
@@ -97,7 +109,7 @@ class User
 
     /**
      * authentication container.
-     * @var array<string, Auth|AuthDriverInterface>
+     * @var array<string, Auth&AuthDriverInterface>
      */
     protected array $authContainer = [];
 
@@ -153,7 +165,7 @@ class User
      * @throws Core\Exception
      */
     public function __construct(
-        protected ?Configuration $configuration,
+        protected Configuration $configuration,
     ) {
         $basicPermission = Permission::create(
             $this->configuration->get(item: 'security.permLevel'),
@@ -226,10 +238,10 @@ class User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param Auth|AuthDriverInterface $authDriver Driver object
+     * @param Auth&AuthDriverInterface $authDriver Driver object
      * @param string              $name       Auth name
      */
-    public function addAuth(Auth|AuthDriverInterface $authDriver, string $name): bool
+    public function addAuth(Auth&AuthDriverInterface $authDriver, string $name): bool
     {
         $this->authContainer[$name] = $authDriver;
         return true;
@@ -653,7 +665,7 @@ class User
     /**
      * Returns the data aof the auth container.
      *
-     * @return AuthDriverInterface[]
+     * @return array<string, Auth&AuthDriverInterface>
      */
     public function getAuthContainer(): array
     {
@@ -780,13 +792,10 @@ class User
      */
     public function setUserData(array $data): bool
     {
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->configuration);
-        }
+        $userData = $this->userData();
+        $userData->load($this->getUserId());
 
-        $this->userdata->load($this->getUserId());
-
-        return $this->userdata->set(array_keys($data), array_values($data));
+        return $userData->set(array_keys($data), array_values($data));
     }
 
     /**

@@ -24,6 +24,11 @@ use phpMyFAQ\Database;
 trait CurrentUserAccountStateTrait
 {
     /**
+     * Returns the user ID of the composing user class.
+     */
+    abstract public function getUserId(): int;
+
+    /**
      * Returns true if the user is a local user, otherwise false.
      */
     public function isLocalUser(): bool

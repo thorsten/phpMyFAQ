@@ -18,12 +18,11 @@ class FormsHelperTest extends TestCase
     {
         parent::setUp();
         $this->helper = new FormsHelper();
-        Translation::create()
+        $this->translation = Translation::create()
             ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
-            ->setCurrentLanguage('en')
-            ->setMultiByteLanguage();
-        $this->translation = new Translation();
+            ->setCurrentLanguage('en');
+        $this->translation->setMultiByteLanguage();
     }
 
     public function testEmptyDataReturnsEmptyArray(): void

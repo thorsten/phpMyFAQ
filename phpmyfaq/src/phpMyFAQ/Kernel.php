@@ -73,10 +73,14 @@ class Kernel implements HttpKernelInterface
             return;
         }
 
-        $this->container = $this->buildContainer();
-        ContainerRegistry::set($this->container);
-        $this->routes = $this->loadRoutes();
-        $this->httpKernel = $this->createHttpKernel();
+        $container = $this->buildContainer();
+        $this->container = $container;
+        ContainerRegistry::set($container);
+
+        $routes = $this->loadRoutes($container);
+        $this->routes = $routes;
+
+        $this->httpKernel = $this->createHttpKernel($container, $routes);
         $this->booted = true;
     }
 
@@ -89,6 +93,10 @@ class Kernel implements HttpKernelInterface
         // Mark API context on the request for exception listeners
         if ($this->routingContext === 'api' || $this->routingContext === 'admin-api') {
             $request->attributes->set('_api_context', true);
+        }
+
+        if ($this->httpKernel === null) {
+            throw new \LogicException('The Kernel booted without creating an HttpKernel.');
         }
 
         return $this->httpKernel->handle($request, $type, $catch);
@@ -170,9 +178,9 @@ class Kernel implements HttpKernelInterface
         return $containerBuilder;
     }
 
-    private function loadRoutes(): RouteCollection
+    private function loadRoutes(ContainerInterface $container): RouteCollection
     {
-        $configuration = $this->container?->get(id: 'phpmyfaq.configuration');
+        $configuration = $container->get(id: 'phpmyfaq.configuration');
 
         $cacheEnabled = filter_var(Environment::get('ROUTING_CACHE_ENABLED', 'true'), FILTER_VALIDATE_BOOLEAN);
         $cacheDir = Environment::get('ROUTING_CACHE_DIR', PMF_ROOT_DIR . '/cache/routes');
@@ -189,59 +197,60 @@ class Kernel implements HttpKernelInterface
         return $builder->build($this->routingContext);
     }
 
-    private function createHttpKernel(): HttpKernel
+    private function createHttpKernel(ContainerInterface $container, RouteCollection $routes): HttpKernel
     {
-        $dispatcher = $this->container->get('phpmyfaq.event_dispatcher');
+        $dispatcher = $container->get('phpmyfaq.event_dispatcher');
 
         if (!$dispatcher instanceof EventDispatcher) {
             $dispatcher = new EventDispatcher();
         }
 
-        $this->registerEventListeners($dispatcher);
+        $this->registerEventListeners($dispatcher, $container, $routes);
 
-        $controllerResolver = new ContainerControllerResolver($this->container);
+        $controllerResolver = new ContainerControllerResolver($container);
         $requestStack = new RequestStack();
         $argumentResolver = new ArgumentResolver();
 
         return new HttpKernel($dispatcher, $controllerResolver, $requestStack, $argumentResolver);
     }
 
-    private function registerEventListeners(EventDispatcher $dispatcher): void
-    {
+    private function registerEventListeners(
+        EventDispatcher $dispatcher,
+        ContainerInterface $container,
+        RouteCollection $routes,
+    ): void {
         // Language listener — initializes Strings and translations (priority 300, runs before router
         // so that the 404/error pages rendered from an exception still have translations available)
-        $languageListener = new LanguageListener($this->container);
+        $languageListener = new LanguageListener($container);
         $dispatcher->addListener(KernelEvents::REQUEST, [$languageListener, 'onKernelRequest'], 300);
 
         // Router listener — matches request to route (priority 256)
-        $routerListener = new RouterListener($this->routes);
+        $routerListener = new RouterListener($routes);
         $dispatcher->addListener(KernelEvents::REQUEST, [$routerListener, 'onKernelRequest'], 256);
 
         if (
             $this->routingContext === 'api'
-            && $this->container->has('phpmyfaq.configuration')
-            && $this->container->has('phpmyfaq.http.rate-limiter')
+            && $container->has('phpmyfaq.configuration')
+            && $container->has('phpmyfaq.http.rate-limiter')
         ) {
             $apiRateLimiterListener = new ApiRateLimiterListener(
-                $this->container->get('phpmyfaq.configuration'),
-                $this->container->get('phpmyfaq.http.rate-limiter'),
+                $container->get('phpmyfaq.configuration'),
+                $container->get('phpmyfaq.http.rate-limiter'),
             );
             $dispatcher->addListener(KernelEvents::REQUEST, [$apiRateLimiterListener, 'onKernelRequest'], 150);
         }
 
         // API exception listener — converts exceptions to RFC 7807 JSON (priority 0)
-        $configuration = $this->container->has('phpmyfaq.configuration')
-            ? $this->container->get('phpmyfaq.configuration')
-            : null;
+        $configuration = $container->has('phpmyfaq.configuration') ? $container->get('phpmyfaq.configuration') : null;
         $apiExceptionListener = new ApiExceptionListener($configuration);
         $dispatcher->addListener(KernelEvents::EXCEPTION, [$apiExceptionListener, 'onKernelException'], 0);
 
         // Web exception listener — handles web (non-API) exceptions (priority -10, after API listener)
-        $webExceptionListener = new WebExceptionListener($this->container);
+        $webExceptionListener = new WebExceptionListener($container);
         $dispatcher->addListener(KernelEvents::EXCEPTION, [$webExceptionListener, 'onKernelException'], -10);
 
         // Controller container listener — injects shared container into controllers
-        $controllerContainerListener = new ControllerContainerListener($this->container);
+        $controllerContainerListener = new ControllerContainerListener($container);
         $dispatcher->addListener(KernelEvents::CONTROLLER, [$controllerContainerListener, 'onKernelController'], 0);
     }
 }

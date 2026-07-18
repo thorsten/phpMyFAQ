@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\PermissionTranslationTwigExtension;
@@ -113,7 +114,7 @@ final class GroupController extends AbstractAdministrationController
             'auto_join' => $groupAutoJoin,
         ];
 
-        $groupId = $this->user->perm->addGroup($groupData);
+        $groupId = $this->user->perm instanceof MediumPermission ? $this->user->perm->addGroup($groupData) : 0;
         $message = '';
         if ($groupId === 0) {
             $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get(key: 'ad_adus_dberr'));

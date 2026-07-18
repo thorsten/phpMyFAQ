@@ -27,6 +27,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Auth\AuthDriverInterface;
 use phpMyFAQ\Core\Exception;
 use SensitiveParameter;
 
@@ -62,7 +63,7 @@ class Auth
      * Constructor.
      */
     public function __construct(
-        protected ?Configuration $configuration,
+        protected Configuration $configuration,
     ) {
     }
 
@@ -97,7 +98,7 @@ class Auth
      *
      * @throws Exception If the auth class cannot be found
      */
-    public function selectAuth(string $method): Auth
+    public function selectAuth(string $method): Auth&AuthDriverInterface
     {
         $method = ucfirst(strtolower($method));
         $authClass = '\\phpMyFAQ\\Auth\\Auth' . $method;

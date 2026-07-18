@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
+use Elastic\Elasticsearch\Response\Elasticsearch as ElasticsearchResponse;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\CustomPage;
@@ -119,13 +120,14 @@ final class ElasticsearchController extends AbstractController
 
         $indexName = $elasticsearchConfiguration->getIndex();
         try {
+            $statsResponse = $this->configuration->getElasticsearch()->indices()->stats(['index' => $indexName]);
+            if (!$statsResponse instanceof ElasticsearchResponse) {
+                throw new \RuntimeException('Unexpected asynchronous Elasticsearch response.');
+            }
+
             return $this->json([
                 'index' => $indexName,
-                'stats' => $this->configuration
-                    ->getElasticsearch()
-                    ->indices()
-                    ->stats(['index' => $indexName])
-                    ->asArray(),
+                'stats' => $statsResponse->asArray(),
             ], Response::HTTP_OK);
         } catch (ClientResponseException|ServerResponseException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);

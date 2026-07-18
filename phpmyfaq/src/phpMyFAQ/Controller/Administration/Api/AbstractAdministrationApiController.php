@@ -25,13 +25,18 @@ use phpMyFAQ\Controller\AbstractController;
 
 class AbstractAdministrationApiController extends AbstractController
 {
-    protected ?AdminLog $adminLog = null;
+    protected AdminLog $adminLog;
 
     #[Override]
     protected function initializeFromContainer(): void
     {
         parent::initializeFromContainer();
 
-        $this->adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
+        $adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
+        if (!$adminLog instanceof AdminLog) {
+            throw new \LogicException('AdminLog service not found in container.');
+        }
+
+        $this->adminLog = $adminLog;
     }
 }

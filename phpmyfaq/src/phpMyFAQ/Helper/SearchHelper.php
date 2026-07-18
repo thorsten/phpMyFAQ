@@ -121,7 +121,7 @@ class SearchHelper extends AbstractHelper
                 $link = new Link($currentUrl, $this->configuration);
                 $link->setTitle($result->question);
                 $faq = new stdClass();
-                $faq->category = $this->Category->getPath((int) $result->category_id ?? 0);
+                $faq->category = $this->category()->getPath((int) $result->category_id ?? 0);
                 $faq->question = Utils::chopString($question, 15);
                 $faq->url = $link->toString();
 
@@ -257,9 +257,9 @@ class SearchHelper extends AbstractHelper
 
                 // Handle FAQ results
                 // Set language for the current category to fetch the correct category name
-                $this->Category->setLanguage($resultSet->lang);
+                $this->category()->setLanguage($resultSet->lang);
 
-                $categoryInfo = $this->Category->getCategoriesFromFaq((int) $resultSet->id);
+                $categoryInfo = $this->category()->getCategoriesFromFaq((int) $resultSet->id);
                 $categoryInfo = array_values($categoryInfo); //Reset the array keys
                 $question = Utils::chopString(Strings::htmlentities($resultSet->question), 15);
                 $answerPreview = Strings::htmlentities($faqHelper->renderAnswerPreview($resultSet->answer, 20));
@@ -301,7 +301,7 @@ class SearchHelper extends AbstractHelper
                 $oLink->setTitle($resultSet->question);
 
                 $path = ($categoryInfo[0]['id'] ?? null) !== null
-                    ? $this->Category->getPath($categoryInfo[0]['id'])
+                    ? $this->category()->getPath($categoryInfo[0]['id'])
                     : '';
 
                 $result->renderedScore = $this->renderScore($resultSet->score * 33);

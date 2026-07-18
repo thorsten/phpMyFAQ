@@ -724,8 +724,9 @@ final class FaqRepository implements FaqRepositoryInterface
         );
 
         // Conditionally add the updated field
-        if ($faqEntity->getUpdatedDate() instanceof DateTime) {
-            $query .= sprintf(", updated = '%s'", $faqEntity->getUpdatedDate()->format('YmdHis'));
+        $updatedDate = $faqEntity->getUpdatedDate();
+        if ($updatedDate instanceof DateTime) {
+            $query .= sprintf(", updated = '%s'", $updatedDate->format('YmdHis'));
         }
 
         $query .= sprintf(

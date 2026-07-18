@@ -70,8 +70,9 @@ class Translation
     public static function get(string $key): string|array|null
     {
         try {
-            self::$translation->checkInit();
-            self::$translation->checkLanguageLoaded();
+            $translation = self::getInstance();
+            $translation->checkInit();
+            $translation->checkLanguageLoaded();
 
             // Check if the key uses the plugin namespace format: plugin.PluginName.messageKey
             if (str_starts_with($key, 'plugin.')) {
@@ -82,25 +83,25 @@ class Translation
 
                     // Try the current language first
                     $currentTranslation =
-                        self::$translation->pluginTranslations[$pluginName][self::$translation->currentLanguage][$messageKey]
+                        $translation->pluginTranslations[$pluginName][$translation->currentLanguage][$messageKey]
                         ?? null;
                     if ($currentTranslation !== null) {
                         return $currentTranslation;
                     }
 
                     return (
-                        self::$translation->pluginTranslations[$pluginName][self::$translation->defaultLanguage][$messageKey]
+                        $translation->pluginTranslations[$pluginName][$translation->defaultLanguage][$messageKey]
                         ?? null
                     );
                 }
             }
 
-            $currentLanguageTranslations = self::$translation->loadedLanguages[self::$translation->currentLanguage];
+            $currentLanguageTranslations = $translation->loadedLanguages[$translation->currentLanguage];
             if (array_key_exists($key, $currentLanguageTranslations) && $currentLanguageTranslations[$key] !== '') {
                 return $currentLanguageTranslations[$key];
             }
 
-            return self::$translation->loadedLanguages[self::$translation->defaultLanguage][$key] ?? null;
+            return $translation->loadedLanguages[$translation->defaultLanguage][$key] ?? null;
         } catch (Exception) {
             Configuration::getConfigurationInstance()
                 ->getLogger()
@@ -128,8 +129,9 @@ class Translation
     public static function has(string $key): bool
     {
         try {
-            self::$translation->checkInit();
-            self::$translation->checkLanguageLoaded();
+            $translation = self::getInstance();
+            $translation->checkInit();
+            $translation->checkLanguageLoaded();
 
             // Check plugin namespace
             if (str_starts_with($key, 'plugin.')) {
@@ -137,25 +139,25 @@ class Translation
 
                 if (count($parts) === 3) {
                     [$namespace, $pluginName, $messageKey] = $parts;
-                    $currentLanguagePluginTranslations = self::$translation->pluginTranslations[$pluginName][self::$translation->currentLanguage]
+                    $currentLanguagePluginTranslations = $translation->pluginTranslations[$pluginName][$translation->currentLanguage]
                     ?? [];
                     if (array_key_exists($messageKey, $currentLanguagePluginTranslations)) {
                         return true;
                     }
 
-                    $defaultLanguagePluginTranslations = self::$translation->pluginTranslations[$pluginName][self::$translation->defaultLanguage]
+                    $defaultLanguagePluginTranslations = $translation->pluginTranslations[$pluginName][$translation->defaultLanguage]
                     ?? [];
                     return array_key_exists($messageKey, $defaultLanguagePluginTranslations);
                 }
             }
 
             // Original core logic
-            $currentLanguageTranslations = self::$translation->loadedLanguages[self::$translation->currentLanguage];
+            $currentLanguageTranslations = $translation->loadedLanguages[$translation->currentLanguage];
             if (array_key_exists($key, $currentLanguageTranslations)) {
                 return true;
             }
 
-            $defaultLanguageTranslations = self::$translation->loadedLanguages[self::$translation->defaultLanguage];
+            $defaultLanguageTranslations = $translation->loadedLanguages[$translation->defaultLanguage];
             if (array_key_exists($key, $defaultLanguageTranslations)) {
                 return true;
             }
@@ -173,10 +175,11 @@ class Translation
      */
     public static function getAll(): array
     {
-        self::$translation->checkInit();
-        self::$translation->checkLanguageLoaded();
+        $translation = self::getInstance();
+        $translation->checkInit();
+        $translation->checkLanguageLoaded();
 
-        return self::$translation?->loadedLanguages[self::$translation?->currentLanguage];
+        return $translation->loadedLanguages[$translation->currentLanguage];
     }
 
     /**
@@ -184,10 +187,10 @@ class Translation
      */
     public function setTranslationsDir(string $translationsDir): Translation
     {
-        self::$translation->translationsDir = $translationsDir;
-        self::$translation->checkTranslationsDirectory();
+        $this->translationsDir = $translationsDir;
+        $this->checkTranslationsDirectory();
 
-        return self::$translation;
+        return $this;
     }
 
     /**
@@ -195,11 +198,11 @@ class Translation
      */
     public function setDefaultLanguage(string $defaultLanguage): Translation
     {
-        self::$translation->defaultLanguage = $defaultLanguage;
-        self::$translation->checkDefaultLanguage();
-        self::$translation->checkDefaultLanguageLoaded();
+        $this->defaultLanguage = $defaultLanguage;
+        $this->checkDefaultLanguage();
+        $this->checkDefaultLanguageLoaded();
 
-        return self::$translation;
+        return $this;
     }
 
     public function getDefaultLanguage(): string
@@ -212,16 +215,16 @@ class Translation
      */
     public function setCurrentLanguage(string $currentLanguage): Translation
     {
-        self::$translation->checkInit();
-        self::$translation->currentLanguage = $currentLanguage;
-        self::$translation->checkLanguageLoaded();
+        $this->checkInit();
+        $this->currentLanguage = $currentLanguage;
+        $this->checkLanguageLoaded();
 
-        return self::$translation;
+        return $this;
     }
 
     public function getCurrentLanguage(): string
     {
-        return self::$translation?->currentLanguage;
+        return $this->currentLanguage;
     }
 
     /**
@@ -340,7 +343,7 @@ class Translation
      */
     protected function checkDefaultLanguageLoaded(): void
     {
-        $this->ensureLanguageLoaded(self::$translation?->defaultLanguage);
+        $this->ensureLanguageLoaded($this->defaultLanguage);
     }
 
     /**
@@ -348,7 +351,7 @@ class Translation
      */
     protected function checkLanguageLoaded(): void
     {
-        $this->ensureLanguageLoaded(self::$translation?->currentLanguage);
+        $this->ensureLanguageLoaded($this->currentLanguage);
     }
 
     /**
@@ -356,14 +359,12 @@ class Translation
      */
     private function ensureLanguageLoaded(string $language): void
     {
-        $loadedLanguages = &self::$translation->loadedLanguages;
-
-        if (array_key_exists($language, $loadedLanguages) && $loadedLanguages[$language] !== []) {
+        if (array_key_exists($language, $this->loadedLanguages) && $this->loadedLanguages[$language] !== []) {
             return;
         }
 
-        self::$translation->checkCurrentLanguage();
-        $loadedLanguages[$language] = require self::$translation->filename($language);
+        $this->checkCurrentLanguage();
+        $this->loadedLanguages[$language] = require $this->filename($language);
     }
 
     /**
@@ -372,8 +373,8 @@ class Translation
      */
     protected function checkTranslationsDirectory(): void
     {
-        if (!is_dir(self::$translation?->translationsDir)) {
-            throw new Exception('The directory ' . self::$translation->translationsDir . ' was not found!');
+        if (!is_dir($this->translationsDir)) {
+            throw new Exception('The directory ' . $this->translationsDir . ' was not found!');
         }
     }
 
@@ -383,8 +384,8 @@ class Translation
      */
     protected function checkDefaultLanguage(): void
     {
-        if (!file_exists(static::filename(self::$translation?->defaultLanguage))) {
-            throw new Exception('Default language "' . self::$translation->defaultLanguage . '"not found!');
+        if (!file_exists($this->filename($this->defaultLanguage))) {
+            throw new Exception('Default language "' . $this->defaultLanguage . '"not found!');
         }
     }
 
@@ -394,7 +395,7 @@ class Translation
      */
     protected function checkInit(): void
     {
-        if (!self::$translation?->isReady) {
+        if (!$this->isReady) {
             $this->performInit();
         }
     }
@@ -406,11 +407,10 @@ class Translation
      */
     private function performInit(): void
     {
-        self::$translation->checkTranslationsDirectory();
-        self::$translation->checkDefaultLanguage();
+        $this->checkTranslationsDirectory();
+        $this->checkDefaultLanguage();
 
-        self::$translation->currentLanguage = self::$translation->getCurrentLanguage();
-        self::$translation->isReady = true;
+        $this->isReady = true;
     }
 
     /**
@@ -418,8 +418,8 @@ class Translation
      */
     protected function checkCurrentLanguage(): void
     {
-        if (!file_exists(self::$translation->filename(self::$translation?->currentLanguage))) {
-            self::$translation->currentLanguage = self::$translation?->defaultLanguage;
+        if (!file_exists($this->filename($this->currentLanguage))) {
+            $this->currentLanguage = $this->defaultLanguage;
         }
     }
 
@@ -428,9 +428,7 @@ class Translation
      */
     protected function filename(string $language): string
     {
-        return (
-            self::$translation?->translationsDir . DIRECTORY_SEPARATOR . 'language_' . strtolower($language) . '.php'
-        );
+        return $this->translationsDir . DIRECTORY_SEPARATOR . 'language_' . strtolower($language) . '.php';
     }
 
     /**
@@ -439,9 +437,11 @@ class Translation
      */
     private static function fetchTranslationFile(): array
     {
+        $translation = self::getInstance();
+
         $LANG_CONF = [];
-        include self::$translation->filename(language: 'en');
-        include self::$translation->filename(self::$translation?->currentLanguage);
+        include $translation->filename(language: 'en');
+        include $translation->filename($translation->currentLanguage);
 
         return $LANG_CONF;
     }

@@ -464,7 +464,7 @@ final class UserControllerTest extends TestCase
                 'twofactor_enabled' => 0,
                 'last_modified' => '20260101010101',
             ]);
-        $userService->userdata = $userData;
+        $userService->method('userData')->willReturn($userData);
         $userService->method('getUserById')->willReturn(true);
         $userService->method('getUserId')->willReturn(1);
         $userService->method('getStatus')->willReturn('protected');

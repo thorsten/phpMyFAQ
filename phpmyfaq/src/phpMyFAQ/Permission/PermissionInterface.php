@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Permission;
 
+use phpMyFAQ\User\CurrentUser;
+
 interface PermissionInterface
 {
     /**
@@ -32,4 +34,92 @@ interface PermissionInterface
      * @param mixed $right  Rights
      */
     public function hasPermission(int $userId, mixed $right): bool;
+
+    /**
+     * Gives the user a new user-right.
+     * Returns true on success, otherwise false.
+     */
+    public function grantUserRight(int $userId, int $rightId): bool;
+
+    /**
+     * Returns an associative array with all data stored in the database
+     * for the specified right, keyed by field name.
+     *
+     * @return array<string, bool>
+     */
+    public function getRightData(int $rightId): array;
+
+    /**
+     * Returns the right-ID for the given right-name, or 0 if unknown.
+     */
+    public function getRightId(string $name): int;
+
+    /**
+     * Returns true if the user owns the right given by ID as a direct
+     * user-right (group rights are not taken into account).
+     */
+    public function checkUserRight(int $userId, int $rightId): bool;
+
+    /**
+     * Returns an array with the IDs of all rights the user owns.
+     *
+     * @return array<int>
+     */
+    public function getAllUserRights(int $userId): array;
+
+    /**
+     * Returns the number of user-rights the given user owns.
+     */
+    public function getUserRightsCount(CurrentUser $currentUser): int;
+
+    /**
+     * Returns an array with the IDs of all direct user-rights the user
+     * owns. Group rights are not taken into account.
+     *
+     * @return array<int>
+     */
+    public function getUserRights(int $userId): array;
+
+    /**
+     * Adds a new right and returns its ID, or 0 when the right exists.
+     *
+     * @param array<string> $rightData
+     */
+    public function addRight(array $rightData): int;
+
+    /**
+     * Validates the given right data, replacing missing or invalid
+     * fields with defaults.
+     *
+     * @param array<string> $rightData
+     * @return array<string, int>
+     */
+    public function checkRightData(array $rightData): array;
+
+    /**
+     * Renames a right, only used for updates.
+     */
+    public function renameRight(string $oldName, string $newName): bool;
+
+    /**
+     * Returns all rights stored in the database as complete right-data
+     * arrays.
+     *
+     * @return array<int, array>
+     */
+    public function getAllRightsData(string $order = 'ASC'): array;
+
+    /**
+     * Refuses all user rights.
+     * Returns true on success, otherwise false.
+     */
+    public function refuseAllUserRights(int $userId): bool;
+
+    /**
+     * Returns an array with the IDs of all groups the user belongs to;
+     * empty for permission levels without group support.
+     *
+     * @return array<int>
+     */
+    public function getUserGroups(int $userId): array;
 }

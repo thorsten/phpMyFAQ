@@ -68,10 +68,66 @@ class AdminMenuBuilderTest extends TestCase
                 return in_array((string) $right, array_column($this->rights, 'name'), true);
             }
 
-            public function getAllRightsData(): array
+            public function getAllRightsData(string $order = 'ASC'): array
             {
                 return $this->rights;
             }
+
+            public function grantUserRight(int $userId, int $rightId): bool
+            {
+                return false;
+            }
+
+            public function getRightData(int $rightId): array
+            {
+                return [];
+            }
+
+            public function getRightId(string $name): int
+            {
+                return 0;
+            }
+
+            public function checkUserRight(int $userId, int $rightId): bool
+            {
+                return false;
+            }
+
+            public function getUserRightsCount(\phpMyFAQ\User\CurrentUser $currentUser): int
+            {
+                return 0;
+            }
+
+            public function getUserRights(int $userId): array
+            {
+                return [];
+            }
+
+            public function addRight(array $rightData): int
+            {
+                return 0;
+            }
+
+            public function checkRightData(array $rightData): array
+            {
+                return $rightData;
+            }
+
+            public function renameRight(string $oldName, string $newName): bool
+            {
+                return false;
+            }
+
+            public function refuseAllUserRights(int $userId): bool
+            {
+                return false;
+            }
+
+            public function getUserGroups(int $userId): array
+            {
+                return [];
+            }
+
 
             public function getAllUserRights(int $userId): array
             {

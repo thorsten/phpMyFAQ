@@ -44,6 +44,17 @@ class PdoSqlsrv implements DatabaseDriver
     private ?PDO $pdo = null;
 
     /**
+     * Returns the active connection or fails loudly when connect() has not
+     * been called yet or the connection was already closed.
+     *
+     * @throws Exception
+     */
+    private function pdo(): PDO
+    {
+        return $this->pdo ?? throw new Exception(message: 'There is no open database connection.');
+    }
+
+    /**
      * The query log string.
      */
     private string $sqlLog = '';
@@ -75,7 +86,7 @@ class PdoSqlsrv implements DatabaseDriver
         $dsn = 'sqlsrv:Server=' . $host . ($port ? ',' . $port : '') . (';Database=' . $database);
         try {
             $this->pdo = new PDO($dsn, $user, $password);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $pdoException) {
             throw new Exception($pdoException->getMessage());
         }
@@ -88,7 +99,7 @@ class PdoSqlsrv implements DatabaseDriver
      */
     public function error(): string
     {
-        return $this->pdo->errorInfo()[2] ?? '';
+        return $this->pdo?->errorInfo()[2] ?? '';
     }
 
     /**
@@ -246,7 +257,7 @@ class PdoSqlsrv implements DatabaseDriver
      */
     private function getOne(string $query): string
     {
-        $statement = $this->pdo->prepare($query);
+        $statement = $this->pdo()->prepare($query);
         $statement->execute();
 
         $row = $statement->fetch(PDO::FETCH_NUM);
@@ -266,7 +277,7 @@ class PdoSqlsrv implements DatabaseDriver
     {
         $query = sprintf('SELECT MAX(%s) AS current_id FROM %s', $column, $table);
 
-        $statement = $this->pdo->prepare($query);
+        $statement = $this->pdo()->prepare($query);
         $statement->execute();
 
         $current = $statement->fetch(PDO::FETCH_NUM);
@@ -289,13 +300,13 @@ class PdoSqlsrv implements DatabaseDriver
         }
 
         try {
-            $result = $this->pdo->query($query);
+            $result = $this->pdo()->query($query);
         } catch (PDOException $pdoException) {
             throw new Exception($pdoException->getMessage());
         }
 
         if (false === $result) {
-            $this->sqlLog .= $this->pdo->errorCode() . ': ' . $this->error();
+            $this->sqlLog .= $this->pdo()->errorCode() . ': ' . $this->error();
         }
 
         $this->lastStatement = $result instanceof PDOStatement ? $result : null;
@@ -318,7 +329,7 @@ class PdoSqlsrv implements DatabaseDriver
         }
 
         try {
-            $statement = $this->pdo->prepare($query);
+            $statement = $this->pdo()->prepare($query);
             if ($statement === false) {
                 throw new Exception('Cannot prepare query: ' . $query);
             }
@@ -349,7 +360,7 @@ class PdoSqlsrv implements DatabaseDriver
      */
     public function prepare(string $query, array $options = []): PDOStatement|false
     {
-        return $this->pdo->prepare($query, $options);
+        return $this->pdo()->prepare($query, $options);
     }
 
     /**
@@ -368,7 +379,7 @@ class PdoSqlsrv implements DatabaseDriver
      */
     public function clientVersion(): string
     {
-        return $this->pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
+        return $this->pdo()->getAttribute(PDO::ATTR_CLIENT_VERSION);
     }
 
     /**
@@ -376,7 +387,7 @@ class PdoSqlsrv implements DatabaseDriver
      */
     public function serverVersion(): string
     {
-        return $this->pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
+        return $this->pdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
 
     /**
@@ -397,7 +408,7 @@ class PdoSqlsrv implements DatabaseDriver
      */
     public function lastInsertId(): int|string
     {
-        return (int) $this->pdo->lastInsertId();
+        return (int) $this->pdo()->lastInsertId();
     }
 
     public function now(): string

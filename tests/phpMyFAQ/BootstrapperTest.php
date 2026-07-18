@@ -98,7 +98,7 @@ class BootstrapperTest extends TestCase
         $dbMock->expects($this->never())->method('query');
         $this->setPrivateProperty($bootstrapper, 'db', $dbMock);
 
-        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbConfig]);
+        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbMock, $dbConfig]);
 
         // No exception means early return worked
         $this->assertTrue(true);
@@ -114,7 +114,7 @@ class BootstrapperTest extends TestCase
         $dbMock->expects($this->never())->method('query');
         $this->setPrivateProperty($bootstrapper, 'db', $dbMock);
 
-        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbConfig]);
+        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbMock, $dbConfig]);
 
         $this->assertTrue(true);
     }
@@ -130,7 +130,7 @@ class BootstrapperTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid tenant schema identifier.');
-        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbConfig]);
+        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbMock, $dbConfig]);
     }
 
     public function testSwitchToTenantSchemaMysql(): void
@@ -144,7 +144,7 @@ class BootstrapperTest extends TestCase
         $dbMock->expects($this->once())->method('query')->with('USE `tenant_db`')->willReturn(true);
         $this->setPrivateProperty($bootstrapper, 'db', $dbMock);
 
-        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbConfig]);
+        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbMock, $dbConfig]);
 
         $this->assertTrue(true);
     }
@@ -162,7 +162,7 @@ class BootstrapperTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Failed to switch to tenant schema');
-        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbConfig]);
+        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbMock, $dbConfig]);
     }
 
     public function testSwitchToTenantSchemaPgsql(): void
@@ -176,7 +176,7 @@ class BootstrapperTest extends TestCase
         $dbMock->expects($this->once())->method('query')->with('SET search_path TO "tenant_schema"')->willReturn(true);
         $this->setPrivateProperty($bootstrapper, 'db', $dbMock);
 
-        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbConfig]);
+        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbMock, $dbConfig]);
 
         $this->assertTrue(true);
     }
@@ -194,7 +194,7 @@ class BootstrapperTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Failed to switch to tenant schema');
-        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbConfig]);
+        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbMock, $dbConfig]);
     }
 
     public function testSwitchToTenantSchemaSqlServerDoesNothing(): void
@@ -209,7 +209,7 @@ class BootstrapperTest extends TestCase
         $dbMock->expects($this->never())->method('query');
         $this->setPrivateProperty($bootstrapper, 'db', $dbMock);
 
-        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbConfig]);
+        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbMock, $dbConfig]);
 
         $this->assertTrue(true);
     }
@@ -225,7 +225,7 @@ class BootstrapperTest extends TestCase
         $dbMock->expects($this->once())->method('query')->with('USE `tenant_db`')->willReturn(true);
         $this->setPrivateProperty($bootstrapper, 'db', $dbMock);
 
-        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbConfig]);
+        $this->invokePrivateMethod($bootstrapper, 'switchToTenantSchema', [$dbMock, $dbConfig]);
 
         $this->assertTrue(true);
     }
@@ -250,7 +250,7 @@ class BootstrapperTest extends TestCase
         $request = Request::create('/', 'GET', [], [], [], ['HTTP_HOST' => 'example.com']);
         $this->setPrivateProperty($bootstrapper, 'request', $request);
 
-        $this->invokePrivateMethod($bootstrapper, 'fixProxyHeaders', []);
+        $this->invokePrivateMethod($bootstrapper, 'fixProxyHeaders', [$request]);
 
         // HTTP_HOST should remain unchanged
         $this->assertEquals('example.com', $request->server->get('HTTP_HOST'));
@@ -264,7 +264,7 @@ class BootstrapperTest extends TestCase
         $request->server->remove('HTTP_HOST');
         $this->setPrivateProperty($bootstrapper, 'request', $request);
 
-        $this->invokePrivateMethod($bootstrapper, 'fixProxyHeaders', []);
+        $this->invokePrivateMethod($bootstrapper, 'fixProxyHeaders', [$request]);
 
         $this->assertEquals('proxy.example.com', $request->server->get('HTTP_HOST'));
     }
@@ -276,7 +276,7 @@ class BootstrapperTest extends TestCase
         $request->server->remove('HTTP_HOST');
         $this->setPrivateProperty($bootstrapper, 'request', $request);
 
-        $this->invokePrivateMethod($bootstrapper, 'fixProxyHeaders', []);
+        $this->invokePrivateMethod($bootstrapper, 'fixProxyHeaders', [$request]);
 
         $this->assertEquals('forwarded.example.com', $request->server->get('HTTP_HOST'));
     }
@@ -333,7 +333,7 @@ class BootstrapperTest extends TestCase
         $this->assertNotEquals('s3', strtolower((string) $faqConfig->get('storage.type')));
 
         // 17. Proxy header fix
-        $this->invokePrivateMethod($bootstrapper, 'fixProxyHeaders', []);
+        $this->invokePrivateMethod($bootstrapper, 'fixProxyHeaders', [$request]);
 
         $this->assertEquals('example.com', $request->server->get('HTTP_HOST'));
     }

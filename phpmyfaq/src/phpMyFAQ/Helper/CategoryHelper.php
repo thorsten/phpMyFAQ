@@ -26,6 +26,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
@@ -138,7 +139,7 @@ class CategoryHelper extends AbstractHelper
                 ),
                 'image' => $image,
                 'faqCount' => $faqCount,
-                'faqCountLabel' => $this->plurals->get(key: 'plmsgEntries', number: $faqCount),
+                'faqCountLabel' => $this->plurals()->get(key: 'plmsgEntries', number: $faqCount),
                 'hasFaqs' => $hasFaqs,
                 'avatarColor' => sprintf('hsl(%d, 55%%, 45%%)', abs(crc32((string) $node['name'])) % 360),
                 'children' => $this->buildCategoryNodes(
@@ -205,7 +206,7 @@ class CategoryHelper extends AbstractHelper
                 '<li data-category-id="%d">%s <span class="badge text-bg-primary">%s</span>%s',
                 $node['id'],
                 $name,
-                $this->plurals->get(key: 'plmsgEntries', number: $number),
+                $this->plurals()->get(key: 'plmsgEntries', number: $number),
                 $descriptionHtml,
             );
             $html .= sprintf('<ul>%s</ul>', $this->buildCategoryList(
@@ -303,7 +304,7 @@ class CategoryHelper extends AbstractHelper
                 $seen[$emailCategoryOwner] = true;
             }
 
-            if ($groupId > 0) {
+            if ($groupId > 0 && $user->perm instanceof MediumPermission) {
                 $moderators = $user->perm->getGroupMembers($groupId);
                 foreach ($moderators as $moderator) {
                     $user->getUserById($moderator);

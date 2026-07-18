@@ -69,13 +69,24 @@ class Strings
     }
 
     /**
+     * Returns the initialized implementation, bootstrapping with the default
+     * language when init() has not been called yet.
+     */
+    private static function instance(): Mbstring|StringBasic
+    {
+        self::init();
+
+        return self::$instance ?? throw new \LogicException('Strings could not be initialized.');
+    }
+
+    /**
      * Get string character count.
      *
      * @param string $str String
      */
     public static function strlen(string $str): int
     {
-        return self::$instance->strlen($str);
+        return self::instance()->strlen($str);
     }
 
     /**
@@ -87,7 +98,7 @@ class Strings
      */
     public static function substr(string $string, int $start, ?int $length = 0): string
     {
-        return self::$instance->substr($string, $start, $length);
+        return self::instance()->substr($string, $start, $length);
     }
 
     /**
@@ -97,7 +108,7 @@ class Strings
      */
     public static function strtolower(string $str): string
     {
-        return self::$instance->strtolower($str);
+        return self::instance()->strtolower($str);
     }
 
     /**
@@ -107,7 +118,7 @@ class Strings
      */
     public static function strtoupper(string $str): string
     {
-        return self::$instance->strtoupper($str);
+        return self::instance()->strtoupper($str);
     }
 
     /**
@@ -119,7 +130,7 @@ class Strings
      */
     public static function strstr(string $haystack, string $needle, bool $part = false): string|false
     {
-        return self::$instance->strstr($haystack, $needle, $part);
+        return self::instance()->strstr($haystack, $needle, $part);
     }
 
     /**
@@ -132,7 +143,7 @@ class Strings
         int $flags = 0,
         int $offset = 0,
     ): int { // phpcs:ignore
-        return self::$instance->preg_match($pattern, $subject, $matches, $flags, $offset);
+        return self::instance()->preg_match($pattern, $subject, $matches, $flags, $offset);
     }
 
     /**
@@ -145,7 +156,7 @@ class Strings
         int $flags = 0,
         int $offset = 0,
     ): int { // phpcs:ignore
-        return self::$instance->preg_match_all($pattern, $subject, $matches, $flags, $offset);
+        return self::instance()->preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
 
     /**
@@ -153,7 +164,7 @@ class Strings
      */
     public static function preg_split(string $pattern, string $subject, int $limit = -1, int $flags = 0): array|bool
     { // phpcs:ignore
-        return self::$instance->preg_split($pattern, $subject, $limit, $flags);
+        return self::instance()->preg_split($pattern, $subject, $limit, $flags);
     }
 
     /**
@@ -166,7 +177,7 @@ class Strings
         int $limit = -1,
         int &$count = 0,
     ): string|array|null {
-        return self::$instance->preg_replace_callback($pattern, $callback, $subject, $limit, $count);
+        return self::instance()->preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
 
     /**
@@ -184,7 +195,7 @@ class Strings
         int $limit = -1,
         int &$count = 0,
     ): string|array|null {
-        return self::$instance->preg_replace($pattern, $replacement, $subject, $limit, $count);
+        return self::instance()->preg_replace($pattern, $replacement, $subject, $limit, $count);
     }
 
     /**

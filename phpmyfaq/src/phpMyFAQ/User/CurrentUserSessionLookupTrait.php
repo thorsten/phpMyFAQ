@@ -93,7 +93,7 @@ trait CurrentUserSessionLookupTrait
         }
 
         // create a new CurrentUser object
-        $user = new self($configuration);
+        $user = new CurrentUser($configuration);
         $user->getUserById($sessionWrapper->get(CurrentUser::SESSION_CURRENT_USER));
 
         // user object is timed out
@@ -151,7 +151,7 @@ trait CurrentUserSessionLookupTrait
         }
 
         // create a new CurrentUser object
-        $user = new self($configuration);
+        $user = new CurrentUser($configuration);
         $user->getUserByCookie($request->cookies->get(UserSession::COOKIE_NAME_REMEMBER_ME));
 
         if (-1 === $user->getUserId()) {

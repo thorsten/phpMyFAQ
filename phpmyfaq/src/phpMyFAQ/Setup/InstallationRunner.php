@@ -53,6 +53,28 @@ class InstallationRunner
 
     private ?DatabaseDriver $db = null;
 
+    /**
+     * Returns the configuration created by the database-connection step or
+     * fails loudly when the steps run out of order.
+     */
+    private function configuration(): Configuration
+    {
+        return $this->configuration() ?? throw new \LogicException(
+            'The database connection step must run before the configuration is available.',
+        );
+    }
+
+    /**
+     * Returns the connected database driver or fails loudly when the steps
+     * run out of order.
+     */
+    private function db(): DatabaseDriver
+    {
+        return $this->db() ?? throw new \LogicException(
+            'The database connection step must run before the database is available.',
+        );
+    }
+
     public function __construct(
         private readonly System $system,
     ) {
@@ -145,7 +167,10 @@ class InstallationRunner
             try {
                 $esHosts = array_values($input->esSetup['hosts']);
                 $esClient = ClientBuilder::create()->setHosts($esHosts)->build();
-                if (!$esClient->ping()->asBool()) {
+                $pingResponse = $esClient->ping();
+                if (
+                    !$pingResponse instanceof \Elastic\Elasticsearch\Response\Elasticsearch || !$pingResponse->asBool()
+                ) {
                     throw new Exception('Elasticsearch Installation Error: Server did not respond to ping.');
                 }
             } catch (Exception $e) {
@@ -236,7 +261,7 @@ class InstallationRunner
         }
 
         try {
-            $connected = $this->db->connect(
+            $connected = $this->db()->connect(
                 $databaseConfiguration->getServer(),
                 $databaseConfiguration->getUser(),
                 $databaseConfiguration->getPassword(),
@@ -250,10 +275,10 @@ class InstallationRunner
 
         if ($connected === false || $connected === null) {
             Installer::cleanFailedInstallationFiles();
-            throw new Exception(sprintf('Database Installation Error: %s', $this->db->error()));
+            throw new Exception(sprintf('Database Installation Error: %s', $this->db()->error()));
         }
 
-        $this->configuration = new Configuration($this->db);
+        $this->configuration = new Configuration($this->db());
     }
 
     /**
@@ -264,7 +289,7 @@ class InstallationRunner
     private function stepCreateDatabaseTables(InstallationInput $input): void
     {
         try {
-            $databaseInstaller = InstanceDatabase::factory($this->configuration, $input->dbSetup['dbType']);
+            $databaseInstaller = InstanceDatabase::factory($this->configuration(), $input->dbSetup['dbType']);
             $result = $databaseInstaller->createTables($input->dbSetup['dbPrefix'] ?? '');
         } catch (Exception $exception) {
             Installer::cleanFailedInstallationFiles();
@@ -286,10 +311,10 @@ class InstallationRunner
      */
     private function stepInsertStopwords(InstallationInput $input): void
     {
-        $stopWords = new Stopwords($this->configuration);
+        $stopWords = new Stopwords($this->configuration());
         $stopWords->executeInsertQueries($input->dbSetup['dbPrefix'] ?? '');
 
-        $this->system->setDatabase($this->db);
+        $this->system->setDatabase($this->db());
     }
 
     /**
@@ -299,17 +324,17 @@ class InstallationRunner
     {
         $seeder = new DefaultDataSeeder();
         $seeder->applyPersonalSettings($input->realname, $input->getEmail(), $input->language, $input->permLevel);
-        $seeder->seedConfig($this->configuration);
+        $seeder->seedConfig($this->configuration());
 
-        $link = new Link('', $this->configuration);
-        $this->configuration->update(['main.referenceURL' => $link->getSystemUri('/setup/index.php')]);
+        $link = new Link('', $this->configuration());
+        $this->configuration()->update(['main.referenceURL' => $link->getSystemUri('/setup/index.php')]);
         try {
             $salt = bin2hex(random_bytes(32));
         } catch (\Random\RandomException $e) {
             throw new Exception(sprintf('Installation Error: Could not generate security salt: %s', $e->getMessage()));
         }
 
-        $this->configuration->add('security.salt', $salt);
+        $this->configuration()->add('security.salt', $salt);
     }
 
     /**
@@ -319,7 +344,7 @@ class InstallationRunner
      */
     private function stepCreateAdminUser(InstallationInput $input): void
     {
-        $user = new User($this->configuration);
+        $user = new User($this->configuration());
         if (!$user->createUser($input->getLoginName(), $input->getPassword(), '', 1)) {
             Installer::cleanFailedInstallationFiles();
             throw new Exception(sprintf(
@@ -359,7 +384,7 @@ class InstallationRunner
      */
     private function stepGrantPermissions(InstallationInput $input): void
     {
-        $user = new User($this->configuration);
+        $user = new User($this->configuration());
         $user->getUserById(1, true);
 
         $seeder = new DefaultDataSeeder();
@@ -373,7 +398,7 @@ class InstallationRunner
      */
     private function stepInsertFormInputs(): void
     {
-        $forms = new Forms($this->configuration);
+        $forms = new Forms($this->configuration());
         $seeder = new DefaultDataSeeder();
         foreach ($seeder->getFormInputs() as $formInput) {
             $forms->insertInputIntoDatabase($formInput);
@@ -389,7 +414,7 @@ class InstallationRunner
     {
         $instanceSetup = new Setup();
         $instanceSetup->setRootDir($input->rootDir);
-        $instanceSetup->createAnonymousUser($this->configuration);
+        $instanceSetup->createAnonymousUser($this->configuration());
     }
 
     /**
@@ -397,17 +422,17 @@ class InstallationRunner
      */
     private function stepCreateInstance(): void
     {
-        $link = new Link('', $this->configuration);
+        $link = new Link('', $this->configuration());
         $instanceEntity = new InstanceEntity();
         $instanceEntity
             ->setUrl($link->getSystemUri())
             ->setInstance($link->getSystemRelativeUri('setup/index.php'))
             ->setComment('phpMyFAQ ' . System::getVersion());
 
-        $faqInstance = new Instance($this->configuration);
+        $faqInstance = new Instance($this->configuration());
         $faqInstance->create($instanceEntity);
 
-        $main = new Main($this->configuration);
+        $main = new Main($this->configuration());
         $main->createMain($faqInstance);
     }
 
@@ -419,27 +444,27 @@ class InstallationRunner
         if ($input->esEnabled && is_file($input->rootDir . '/content/core/config/elasticsearch.php')) {
             $elasticsearchConfiguration = new ElasticsearchConfiguration($input->rootDir
             . '/content/core/config/elasticsearch.php');
-            $this->configuration->setElasticsearchConfig($elasticsearchConfiguration);
+            $this->configuration()->setElasticsearchConfig($elasticsearchConfiguration);
 
             $esClient = ClientBuilder::create()->setHosts($elasticsearchConfiguration->getHosts())->build();
-            $this->configuration->setElasticsearch($esClient);
+            $this->configuration()->setElasticsearch($esClient);
 
-            $elasticsearch = new Elasticsearch($this->configuration);
+            $elasticsearch = new Elasticsearch($this->configuration());
             $elasticsearch->createIndex();
         }
 
         if ($input->osEnabled && is_file($input->rootDir . '/content/core/config/opensearch.php')) {
             $openSearchConfiguration = new OpenSearchConfiguration($input->rootDir
             . '/content/core/config/opensearch.php');
-            $this->configuration->setOpenSearchConfig($openSearchConfiguration);
+            $this->configuration()->setOpenSearchConfig($openSearchConfiguration);
 
             $osClient = new SymfonyClientFactory()->create($this->buildOpenSearchClientOptions(
                 $openSearchConfiguration->getHosts()[0],
                 $input->osSetup,
             ));
-            $this->configuration->setOpenSearch($osClient);
+            $this->configuration()->setOpenSearch($osClient);
 
-            $openSearch = new OpenSearch($this->configuration);
+            $openSearch = new OpenSearch($this->configuration());
             $openSearch->createIndex();
         }
     }
@@ -484,11 +509,11 @@ class InstallationRunner
      */
     private function stepAdjustHtaccess(InstallationInput $input): void
     {
-        if (realpath($input->rootDir) !== realpath($this->configuration->getRootPath())) {
+        if (realpath($input->rootDir) !== realpath($this->configuration()->getRootPath())) {
             return;
         }
 
-        $environmentConfigurator = new EnvironmentConfigurator($this->configuration);
+        $environmentConfigurator = new EnvironmentConfigurator($this->configuration());
         $environmentConfigurator->adjustRewriteBaseHtaccess();
     }
 }

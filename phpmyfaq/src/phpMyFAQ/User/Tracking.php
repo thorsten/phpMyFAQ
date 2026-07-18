@@ -45,7 +45,7 @@ class Tracking
     private function __construct(
         private readonly Configuration $configuration,
         private readonly Request $request,
-        private readonly ?UserSession $userSession = null,
+        private readonly UserSession $userSession,
         private readonly ?Closure $networkFactory = null,
         private readonly ?string $trackingDirectory = null,
     ) {

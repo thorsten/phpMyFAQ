@@ -279,7 +279,7 @@ class KernelTest extends TestCase
         $containerProp->setValue($kernel, $container);
 
         $loadMethod = $reflection->getMethod('loadRoutes');
-        $routes = $loadMethod->invoke($kernel);
+        $routes = $loadMethod->invoke($kernel, $container);
 
         $this->assertInstanceOf(RouteCollection::class, $routes);
     }
@@ -299,7 +299,7 @@ class KernelTest extends TestCase
             $containerProp->setValue($kernel, $container);
 
             $loadMethod = $reflection->getMethod('loadRoutes');
-            $routes = $loadMethod->invoke($kernel);
+            $routes = $loadMethod->invoke($kernel, $container);
 
             $this->assertInstanceOf(RouteCollection::class, $routes);
         } finally {
@@ -327,7 +327,7 @@ class KernelTest extends TestCase
             $containerProp->setValue($kernel, $container);
 
             $loadMethod = $reflection->getMethod('loadRoutes');
-            $routes = $loadMethod->invoke($kernel);
+            $routes = $loadMethod->invoke($kernel, $container);
 
             $this->assertInstanceOf(RouteCollection::class, $routes);
         } finally {
@@ -381,7 +381,7 @@ class KernelTest extends TestCase
         $routesProp->setValue($kernel, new RouteCollection());
 
         $createMethod = $reflection->getMethod('createHttpKernel');
-        $httpKernel = $createMethod->invoke($kernel);
+        $httpKernel = $createMethod->invoke($kernel, $container, new RouteCollection());
 
         $this->assertInstanceOf(HttpKernel::class, $httpKernel);
     }
@@ -408,7 +408,7 @@ class KernelTest extends TestCase
         $routesProp->setValue($kernel, new RouteCollection());
 
         $createMethod = $reflection->getMethod('createHttpKernel');
-        $httpKernel = $createMethod->invoke($kernel);
+        $httpKernel = $createMethod->invoke($kernel, $container, new RouteCollection());
 
         $this->assertInstanceOf(HttpKernel::class, $httpKernel);
     }
@@ -430,7 +430,7 @@ class KernelTest extends TestCase
 
         $dispatcher = new EventDispatcher();
         $registerMethod = $reflection->getMethod('registerEventListeners');
-        $registerMethod->invoke($kernel, $dispatcher);
+        $registerMethod->invoke($kernel, $dispatcher, $container, new RouteCollection());
 
         $requestListeners = $dispatcher->getListeners('kernel.request');
         $exceptionListeners = $dispatcher->getListeners('kernel.exception');
@@ -461,7 +461,7 @@ class KernelTest extends TestCase
 
         $dispatcher = new EventDispatcher();
         $registerMethod = $reflection->getMethod('registerEventListeners');
-        $registerMethod->invoke($kernel, $dispatcher);
+        $registerMethod->invoke($kernel, $dispatcher, $container, new RouteCollection());
 
         $requestListeners = $dispatcher->getListeners('kernel.request');
 
@@ -503,7 +503,7 @@ class KernelTest extends TestCase
 
         $dispatcher = new EventDispatcher();
         $registerMethod = $reflection->getMethod('registerEventListeners');
-        $registerMethod->invoke($kernel, $dispatcher);
+        $registerMethod->invoke($kernel, $dispatcher, $container, new RouteCollection());
 
         $requestListeners = $dispatcher->getListeners('kernel.request');
         $exceptionListeners = $dispatcher->getListeners('kernel.exception');
@@ -542,7 +542,7 @@ class KernelTest extends TestCase
 
         $dispatcher = new EventDispatcher();
         $registerMethod = $reflection->getMethod('registerEventListeners');
-        $registerMethod->invoke($kernel, $dispatcher);
+        $registerMethod->invoke($kernel, $dispatcher, $container, new RouteCollection());
 
         $requestListeners = $dispatcher->getListeners('kernel.request');
         $this->assertCount(2, $requestListeners);
@@ -565,7 +565,7 @@ class KernelTest extends TestCase
 
         $dispatcher = new EventDispatcher();
         $registerMethod = $reflection->getMethod('registerEventListeners');
-        $registerMethod->invoke($kernel, $dispatcher);
+        $registerMethod->invoke($kernel, $dispatcher, $container, new RouteCollection());
 
         $exceptionListeners = $dispatcher->getListeners('kernel.exception');
         $this->assertCount(2, $exceptionListeners);
@@ -668,7 +668,7 @@ class TestableKernel extends Kernel
 
         // Create the HttpKernel (uses the real createHttpKernel)
         $createMethod = $reflection->getMethod('createHttpKernel');
-        $httpKernel = $createMethod->invoke($this);
+        $httpKernel = $createMethod->invoke($this, $container, new RouteCollection());
 
         $httpKernelProp = $reflection->getProperty('httpKernel');
         $httpKernelProp->setValue($this, $httpKernel);

@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\User;
 
+use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\AuthDriverInterface;
 use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Configuration;
@@ -614,7 +615,7 @@ class CurrentUser extends User
 
     /**
      * Sorts the auth container array.
-     * @param AuthDriverInterface[] $authContainer
+     * @param array<string, Auth&AuthDriverInterface> $authContainer
      * @return AuthDriverInterface[]
      */
     protected function sortAuthContainer(array $authContainer): array

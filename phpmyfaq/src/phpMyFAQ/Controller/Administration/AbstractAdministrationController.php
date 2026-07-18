@@ -36,14 +36,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractAdministrationController extends AbstractController
 {
-    protected ?AdminLog $adminLog = null;
+    protected AdminLog $adminLog;
 
     #[\Override]
     protected function initializeFromContainer(): void
     {
         parent::initializeFromContainer();
 
-        $this->adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
+        $adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
+        if (!$adminLog instanceof AdminLog) {
+            throw new \LogicException('AdminLog service not found in container.');
+        }
+
+        $this->adminLog = $adminLog;
     }
 
     /**
@@ -72,6 +77,10 @@ abstract class AbstractAdministrationController extends AbstractController
     protected function getHeader(Request $request): array
     {
         $adminHelper = $this->container->get(id: 'phpmyfaq.admin.helper');
+        if (!$adminHelper instanceof AdminMenuBuilder) {
+            throw new \LogicException('AdminMenuBuilder service not found in container.');
+        }
+
         $adminHelper->setUser($this->currentUser);
 
         $secLevelEntries = $this->getSecondLevelEntries($adminHelper);

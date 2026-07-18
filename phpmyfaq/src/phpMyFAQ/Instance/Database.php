@@ -54,7 +54,7 @@ class Database
      * @param string        $type Database management system type
      * @throws Exception
      */
-    public static function factory(Configuration $configuration, string $type): ?DriverInterface
+    public static function factory(Configuration $configuration, string $type): DriverInterface
     {
         try {
             $dialect = DialectFactory::createForType(strtolower($type));

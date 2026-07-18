@@ -114,7 +114,7 @@ class UserSession
             "UPDATE %sfaqsessions SET time = %d, user_id = %d WHERE sid = %d AND ip = '%s'",
             Database::getTablePrefix(),
             $request->server->get('REQUEST_TIME'),
-            $this->currentUser->getUserId(),
+            $this->currentUser instanceof CurrentUser ? $this->currentUser->getUserId() : 0,
             $sessionIdToCheck,
             $ipAddress,
         );

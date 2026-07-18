@@ -92,7 +92,7 @@ class RegistrationHelper extends AbstractHelper
             ];
         }
 
-        $user->userdata->set(['display_name', 'email', 'is_visible'], [$fullName, $email, $isVisible ? 1 : 0]);
+        $user->userData()->set(['display_name', 'email', 'is_visible'], [$fullName, $email, $isVisible ? 1 : 0]);
         $user->setStatus('blocked');
 
         $isNowActive = !$this->configuration->get(item: 'spam.manualActivation') && $user->activateUser();

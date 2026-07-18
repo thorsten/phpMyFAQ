@@ -120,6 +120,7 @@ final class PushControllerTest extends TestCase
                     'phpmyfaq.configuration' => $this->configuration,
                     'phpmyfaq.user.current_user' => $currentUser,
                     'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $this->createStub(\phpMyFAQ\Administration\AdminLog::class),
                     default => null,
                 };
             });

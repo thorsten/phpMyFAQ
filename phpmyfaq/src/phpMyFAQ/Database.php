@@ -43,7 +43,7 @@ class Database
      * @param string $type Database management system type
      * @throws Exception
      */
-    public static function factory(string $type): ?DatabaseDriver
+    public static function factory(string $type): DatabaseDriver
     {
         self::$dbType = $type;
 
@@ -53,8 +53,9 @@ class Database
         }
 
         if (class_exists($class)) {
-            self::$databaseDriver = new $class();
-            return self::$databaseDriver;
+            $databaseDriver = new $class();
+            self::$databaseDriver = $databaseDriver;
+            return $databaseDriver;
         }
 
         throw new Exception('Invalid Database Type: ' . $type);
@@ -63,7 +64,7 @@ class Database
     /**
      * Returns the single instance.
      */
-    public static function getInstance(): ?DatabaseDriver
+    public static function getInstance(): DatabaseDriver
     {
         if (null === self::$databaseDriver) {
             self::$databaseDriver = self::factory(self::$dbType !== '' ? self::$dbType : 'sqlite3');
@@ -88,8 +89,10 @@ class Database
      */
     public static function checkOnEmptyTable(string $tableName): bool
     {
+        $databaseDriver = self::getInstance();
+
         return (
-            self::$databaseDriver->numRows(self::$databaseDriver->query(sprintf(
+            $databaseDriver->numRows($databaseDriver->query(sprintf(
                 'SELECT * FROM %s%s',
                 self::getTablePrefix(),
                 $tableName,

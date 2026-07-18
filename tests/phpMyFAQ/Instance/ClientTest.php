@@ -65,6 +65,9 @@ class ClientTest extends TestCase
 
     public function testCreateClientTables(): void
     {
+        // Instance\Database::factory() reads the static Database type; set it
+        // explicitly instead of relying on leftover state from earlier tests.
+        Database::factory('pdo_pgsql');
         $prefix = 'test_';
         $dbMock = $this->createMock(DatabaseDriver::class);
         $this->configuration->method('getDb')->willReturn($dbMock);
@@ -180,6 +183,7 @@ class ClientTest extends TestCase
 
     public function testCreateClientDatabaseWithPrefixMode(): void
     {
+        Database::factory('pdo_pgsql');
         $prefix = 'tenant_';
         $dbMock = $this->createMock(DatabaseDriver::class);
         $this->configuration->method('getDb')->willReturn($dbMock);

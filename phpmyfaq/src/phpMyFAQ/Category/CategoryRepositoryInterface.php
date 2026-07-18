@@ -89,4 +89,35 @@ interface CategoryRepositoryInterface
      * Checks if a category has a link to a specific FAQ.
      */
     public function hasLinkToFaq(int $faqId, int $categoryId): bool;
+
+    /**
+     * Returns a page of categories, optionally filtered by language,
+     * activity, and the user's group permissions.
+     *
+     * @param array<int> $groups
+     * @return array<array-key, mixed>
+     */
+    /* @mago-expect lint:excessive-parameter-list - mirrors CategoryRepository::findCategoriesPaginated() */
+    public function findCategoriesPaginated(
+        ?string $language = null,
+        int $limit = 25,
+        int $offset = 0,
+        string $sortField = 'id',
+        string $sortOrder = 'ASC',
+        bool $activeOnly = false,
+        array $groups = [-1],
+        int $userId = -1,
+    ): array;
+
+    /**
+     * Returns the total number of categories matching the given filters.
+     *
+     * @param array<int> $groups
+     */
+    public function countCategories(
+        ?string $language = null,
+        bool $activeOnly = false,
+        array $groups = [-1],
+        int $userId = -1,
+    ): int;
 }

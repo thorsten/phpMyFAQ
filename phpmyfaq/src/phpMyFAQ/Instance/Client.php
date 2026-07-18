@@ -78,6 +78,19 @@ class Client extends Instance
         $this->filesystem = $fileSystem;
     }
 
+    /**
+     * Returns the Filesystem or fails loudly when setFileSystem() was not
+     * called before a filesystem operation.
+     */
+    private function filesystem(): Filesystem
+    {
+        return (
+            $this->filesystem ?? throw new \LogicException(
+                'Client::setFileSystem() must be called before filesystem operations.',
+            )
+        );
+    }
+
     public function createClient(Instance $instance): void
     {
         $instance->addConfig('isMaster', 'false');
@@ -94,7 +107,7 @@ class Client extends Instance
             return false;
         }
 
-        return $this->filesystem->createDirectory($this->buildClientFolderPath($hostname));
+        return $this->filesystem()->createDirectory($this->buildClientFolderPath($hostname));
     }
 
     /**
@@ -527,8 +540,8 @@ class Client extends Instance
      */
     public function copyConstantsFile(string $destination): bool
     {
-        return $this->filesystem->copy(
-            $this->filesystem->getRootPath() . '/content/core/config/constants.php',
+        return $this->filesystem()->copy(
+            $this->filesystem()->getRootPath() . '/content/core/config/constants.php',
             $destination,
         );
     }
@@ -553,10 +566,10 @@ class Client extends Instance
             return;
         }
 
-        $sourceTpl = $this->filesystem->getRootPath() . '/assets/templates/' . $templateDir;
+        $sourceTpl = $this->filesystem()->getRootPath() . '/assets/templates/' . $templateDir;
         $destTpl = $destination . '/assets/templates/';
 
-        $this->filesystem->recursiveCopy($sourceTpl, $destTpl);
+        $this->filesystem()->recursiveCopy($sourceTpl, $destTpl);
     }
 
     /**
@@ -574,7 +587,7 @@ class Client extends Instance
             return false;
         }
 
-        return $this->filesystem->moveDirectory(
+        return $this->filesystem()->moveDirectory(
             $this->buildClientFolderPath($sourceHost),
             $this->buildClientFolderPath($destinationHost),
         );
@@ -594,7 +607,7 @@ class Client extends Instance
             return false;
         }
 
-        return $this->filesystem->deleteDirectory($this->buildClientFolderPath($sourceHost));
+        return $this->filesystem()->deleteDirectory($this->buildClientFolderPath($sourceHost));
     }
 
     public function isValidClientUrl(string $clientUrl): bool

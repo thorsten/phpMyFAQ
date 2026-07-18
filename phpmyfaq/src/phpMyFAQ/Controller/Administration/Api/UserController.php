@@ -28,6 +28,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\MailHelper;
 use phpMyFAQ\Permission;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -158,7 +159,7 @@ final class UserController extends AbstractAdministrationApiController
 
         $userData = [];
 
-        $data = $this->currentUserService->userdata->get(field: '*');
+        $data = $this->currentUserService->userData()->get(field: '*');
         if (is_array($data)) {
             $userData = $data;
             $userData['userId'] = $this->currentUserService->getUserId();
@@ -339,7 +340,7 @@ final class UserController extends AbstractAdministrationApiController
 
         // Remove the user from groups
         if ('basic' !== $this->configuration->get(item: 'security.permLevel')) {
-            $permissions = Permission::create(permLevel: 'medium', configuration: $this->configuration);
+            $permissions = new MediumPermission($this->configuration);
             $permissions->removeFromAllGroups($userId);
         }
 
@@ -415,7 +416,7 @@ final class UserController extends AbstractAdministrationApiController
                 return $this->json($errorMessage, Response::HTTP_BAD_REQUEST);
             }
 
-            $newUser->userdata->set(['display_name', 'email', 'is_visible'], [$userRealName, $userEmail, 0]);
+            $newUser->userData()->set(['display_name', 'email', 'is_visible'], [$userRealName, $userEmail, 0]);
             $newUser->setStatus(status: 'active');
             $newUser->setSuperAdmin((bool) $userIsSuperAdmin);
 
@@ -520,7 +521,7 @@ final class UserController extends AbstractAdministrationApiController
             $this->adminLog->log($this->currentUser, AdminLogType::USER_SUPERADMIN_REVOKED->value . ':' . $userId);
         }
 
-        if (!$user->userdata->set(array_keys($userData), array_values($userData)) || !$user->setStatus($userStatus)) {
+        if (!$user->userData()->set(array_keys($userData), array_values($userData)) || !$user->setStatus($userStatus)) {
             return $this->json(['error' => 'ad_msg_mysqlerr'], Response::HTTP_BAD_REQUEST);
         }
 

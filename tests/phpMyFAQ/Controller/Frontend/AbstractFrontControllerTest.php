@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(AbstractFrontController::class)]
@@ -81,7 +81,7 @@ final class AbstractFrontControllerTest extends TestCase
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(false);
 
-        $session = $this->createStub(SessionInterface::class);
+        $session = $this->createStub(FlashBagAwareSessionInterface::class);
 
         $container = $this->createStub(ContainerInterface::class);
         $container

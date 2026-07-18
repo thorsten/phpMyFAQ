@@ -35,6 +35,7 @@ use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Language\LanguageCodes;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -163,9 +164,9 @@ final class CategoryController extends AbstractAdministrationController
         $parentId = (int) Filter::filterVar($request->attributes->get(key: 'parentId'), FILTER_VALIDATE_INT);
 
         $templateVars = [];
-        if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
+        if ($this->currentUser->perm instanceof MediumPermission) {
             $templateVars = [
-                'groupsOptions' => $this->currentUser?->perm->getAllGroupsOptions([], $this->currentUser),
+                'groupsOptions' => $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser),
             ];
         }
 
@@ -411,15 +412,10 @@ final class CategoryController extends AbstractAdministrationController
 
         $allGroupsOptions = '';
         $restrictedGroupOptions = '';
-        if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
-            $allGroupsOptions = $this->currentUser?->perm->getAllGroupsOptions(
-                [$categoryEntity->getGroupId()],
-                $this->currentUser,
-            );
-            $restrictedGroupOptions = $this->currentUser->perm->getAllGroupsOptions(
-                $groupPermission,
-                $this->currentUser,
-            );
+        $permission = $this->currentUser->perm;
+        if ($permission instanceof MediumPermission) {
+            $allGroupsOptions = $permission->getAllGroupsOptions([$categoryEntity->getGroupId()], $this->currentUser);
+            $restrictedGroupOptions = $permission->getAllGroupsOptions($groupPermission, $this->currentUser);
         }
 
         return $this->render(file: '@admin/content/category.edit.twig', context: [
@@ -815,8 +811,8 @@ final class CategoryController extends AbstractAdministrationController
             'ad_entry_userpermission' => Translation::get(key: 'ad_entry_userpermission'),
             'ad_categ_add' => Translation::get(key: 'ad_categ_add'),
             'ad_entry_restricted_groups' => Translation::get(key: 'ad_entry_restricted_groups'),
-            'restricted_groups' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser?->perm->getAllGroupsOptions([], $this->currentUser)
+            'restricted_groups' => $this->currentUser->perm instanceof MediumPermission
+                ? $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser)
                 : '',
             'buttonCancel' => Translation::get(key: 'ad_gen_cancel'),
         ];

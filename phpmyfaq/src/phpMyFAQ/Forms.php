@@ -36,7 +36,7 @@ readonly class Forms
         private Configuration $configuration,
         ?FormsRepositoryInterface $formsRepository = null,
     ) {
-        $this->translation = new Translation();
+        $this->translation = Translation::getInstance();
         $this->formsRepository = $formsRepository ?? new FormsRepository($this->configuration);
     }
 

@@ -41,7 +41,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Twig\Error\LoaderError;
 use Twig\Extension\ExtensionInterface;
@@ -58,13 +58,13 @@ use Twig\TwigFilter;
 #[OA\License(name: 'Mozilla Public Licence 2.0', url: 'https://www.mozilla.org/MPL/2.0/')]
 abstract class AbstractController
 {
-    protected ?ContainerInterface $container = null;
+    protected ContainerInterface $container;
 
     protected Configuration $configuration;
 
     protected CurrentUser $currentUser;
 
-    protected SessionInterface $session;
+    protected FlashBagAwareSessionInterface $session;
 
     /** @var ExtensionInterface[] */
     private array $twigExtensions = [];
@@ -103,10 +103,6 @@ abstract class AbstractController
      */
     protected function initializeFromContainer(): void
     {
-        if ($this->container === null) {
-            throw new LogicException('Container is not initialized.');
-        }
-
         $configuration = $this->container->get(id: 'phpmyfaq.configuration');
         if (!$configuration instanceof Configuration) {
             throw new LogicException('Configuration service not found in container.');
@@ -122,7 +118,7 @@ abstract class AbstractController
         $this->currentUser = $currentUser;
 
         $session = $this->container->get(id: 'session');
-        if (!$session instanceof SessionInterface) {
+        if (!$session instanceof FlashBagAwareSessionInterface) {
             throw new LogicException('Session service not found in container.');
         }
 
@@ -423,7 +419,7 @@ abstract class AbstractController
 
     protected function getRateLimiter(): ?RateLimiter
     {
-        if ($this->container === null || !$this->container->has('phpmyfaq.http.rate-limiter')) {
+        if (!$this->container->has('phpmyfaq.http.rate-limiter')) {
             return null;
         }
 

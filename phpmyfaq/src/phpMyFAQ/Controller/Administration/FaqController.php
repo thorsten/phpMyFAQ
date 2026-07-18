@@ -40,6 +40,7 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Question;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
@@ -157,8 +158,8 @@ final class FaqController extends AbstractAdministrationController
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
-            'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser?->perm->getAllGroupsOptions([-1], $this->currentUser)
+            'groupPermissionOptions' => $this->currentUser->perm instanceof MediumPermission
+                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
@@ -227,8 +228,8 @@ final class FaqController extends AbstractAdministrationController
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
-            'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser?->perm->getAllGroupsOptions([-1], $this->currentUser)
+            'groupPermissionOptions' => $this->currentUser->perm instanceof MediumPermission
+                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
@@ -355,8 +356,8 @@ final class FaqController extends AbstractAdministrationController
             'attachments' => $attachmentList,
             'allGroups' => $allGroups,
             'restrictedGroups' => $restrictedGroups,
-            'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser?->perm->getAllGroupsOptions([-1], $this->currentUser)
+            'groupPermissionOptions' => $this->currentUser->perm instanceof MediumPermission
+                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => $allUsers,
             'restrictedUsers' => $restrictedUsers,
@@ -427,8 +428,8 @@ final class FaqController extends AbstractAdministrationController
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
-            'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser?->perm->getAllGroupsOptions([-1], $this->currentUser)
+            'groupPermissionOptions' => $this->currentUser->perm instanceof MediumPermission
+                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
@@ -499,8 +500,8 @@ final class FaqController extends AbstractAdministrationController
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
-            'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser?->perm->getAllGroupsOptions([-1], $this->currentUser)
+            'groupPermissionOptions' => $this->currentUser->perm instanceof MediumPermission
+                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,
@@ -582,8 +583,8 @@ final class FaqController extends AbstractAdministrationController
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
-            'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
-                ? $this->currentUser?->perm->getAllGroupsOptions([-1], $this->currentUser)
+            'groupPermissionOptions' => $this->currentUser->perm instanceof MediumPermission
+                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
             'restrictedUsers' => false,

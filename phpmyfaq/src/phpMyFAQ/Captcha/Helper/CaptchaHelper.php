@@ -27,7 +27,7 @@ class CaptchaHelper
 
     private static Configuration $configuration;
 
-    public static function getInstance(Configuration $configuration): ?CaptchaHelperInterface
+    public static function getInstance(Configuration $configuration): CaptchaHelperInterface
     {
         self::$configuration = $configuration;
         self::$captchaHelper = new BuiltinCaptchaAbstractHelper(self::$configuration);

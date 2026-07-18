@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -195,7 +195,7 @@ final class AbstractApiControllerTest extends TestCase
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(false);
 
-        $session = $this->createStub(SessionInterface::class);
+        $session = $this->createStub(FlashBagAwareSessionInterface::class);
 
         $container = $this->createStub(ContainerInterface::class);
         $container

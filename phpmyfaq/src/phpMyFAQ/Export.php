@@ -32,11 +32,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Export
 {
-    protected ?Faq $faq = null;
+    protected Faq $faq;
 
-    protected ?Category $category = null;
+    protected Category $category;
 
-    protected ?Configuration $config = null;
+    protected Configuration $config;
 
     /**
      * Factory.

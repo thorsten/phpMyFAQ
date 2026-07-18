@@ -28,7 +28,7 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
 {
     public function __construct(
         private Configuration $configuration,
-        private ?LoggerInterface $logger = new NullLogger(),
+        private LoggerInterface $logger = new NullLogger(),
     ) {
     }
 

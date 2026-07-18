@@ -34,6 +34,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+/* @mago-expect lint:kan-defect - permission-level guards on every endpoint raise the score; split planned with the admin API rework */
 final class GroupController extends AbstractAdministrationApiController
 {
     /**
@@ -46,17 +47,16 @@ final class GroupController extends AbstractAdministrationApiController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $groupList = $currentUser->perm instanceof MediumPermission
-            ? $currentUser->perm->getAllGroups($currentUser)
-            : [];
-
         $groups = [];
-        foreach ($groupList as $groupId) {
-            $data = $currentUser->perm->getGroupData((int) $groupId);
-            $groups[] = [
-                'group_id' => $data['group_id'],
-                'name' => $data['name'],
-            ];
+        $permission = $currentUser->perm;
+        if ($permission instanceof MediumPermission) {
+            foreach ($permission->getAllGroups($currentUser) as $groupId) {
+                $data = $permission->getGroupData((int) $groupId);
+                $groups[] = [
+                    'group_id' => $data['group_id'],
+                    'name' => $data['name'],
+                ];
+            }
         }
 
         return $this->json($groups, Response::HTTP_OK);
@@ -96,6 +96,10 @@ final class GroupController extends AbstractAdministrationApiController
 
         $groupId = (int) $request->attributes->get('groupId');
 
+        if (!$currentUser->perm instanceof MediumPermission) {
+            return $this->json(['error' => 'Group permissions are not enabled.'], Response::HTTP_BAD_REQUEST);
+        }
+
         return $this->json($currentUser->perm->getGroupData($groupId), Response::HTTP_OK);
     }
 
@@ -110,6 +114,10 @@ final class GroupController extends AbstractAdministrationApiController
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
         $groupId = (int) $request->attributes->get('groupId');
+
+        if (!$currentUser->perm instanceof MediumPermission) {
+            return $this->json(['error' => 'Group permissions are not enabled.'], Response::HTTP_BAD_REQUEST);
+        }
 
         $members = [];
         foreach ($currentUser->perm->getGroupMembers($groupId) as $groupMember) {
@@ -134,6 +142,10 @@ final class GroupController extends AbstractAdministrationApiController
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
         $groupId = (int) $request->attributes->get('groupId');
+
+        if (!$currentUser->perm instanceof MediumPermission) {
+            return $this->json(['error' => 'Group permissions are not enabled.'], Response::HTTP_BAD_REQUEST);
+        }
 
         return $this->json($currentUser->perm->getGroupRights($groupId), Response::HTTP_OK);
     }

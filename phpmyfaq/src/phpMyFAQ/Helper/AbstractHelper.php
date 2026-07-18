@@ -52,7 +52,23 @@ abstract class AbstractHelper
 
     public function getCategory(): Category
     {
-        return $this->Category;
+        return $this->category();
+    }
+
+    /**
+     * Returns the category or fails loudly when setCategory() was not called.
+     */
+    protected function category(): Category
+    {
+        return $this->Category ?? throw new \LogicException('setCategory() must be called before use.');
+    }
+
+    /**
+     * Returns the plurals helper or fails loudly when setPlurals() was not called.
+     */
+    protected function plurals(): Plurals
+    {
+        return $this->plurals ?? throw new \LogicException('setPlurals() must be called before use.');
     }
 
     public function setCategoryRelation(Relation $categoryRelation): AbstractHelper

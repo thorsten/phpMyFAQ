@@ -30,6 +30,7 @@ use SensitiveParameter;
  *
  * @package phpMyFAQ\Database
  */
+/* @mago-expect lint:too-many-methods - implements the full DatabaseDriver contract like the other PDO drivers */
 class PdoSqlite implements DatabaseDriver
 {
     /**
@@ -41,6 +42,17 @@ class PdoSqlite implements DatabaseDriver
      * The connection object.
      */
     private ?PDO $pdo = null;
+
+    /**
+     * Returns the active connection or fails loudly when connect() has not
+     * been called yet or the connection was already closed.
+     *
+     * @throws Exception
+     */
+    private function pdo(): PDO
+    {
+        return $this->pdo ?? throw new Exception(message: 'There is no open database connection.');
+    }
 
     /**
      * The query log string.
@@ -83,7 +95,7 @@ class PdoSqlite implements DatabaseDriver
         $dsn = 'sqlite:' . $host;
         try {
             $this->pdo = new PDO($dsn);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $pdoException) {
             throw new Exception($pdoException->getMessage());
         }
@@ -96,7 +108,7 @@ class PdoSqlite implements DatabaseDriver
      */
     public function error(): string
     {
-        return $this->pdo->errorInfo()[2] ?? '';
+        return $this->pdo?->errorInfo()[2] ?? '';
     }
 
     /**
@@ -171,7 +183,7 @@ class PdoSqlite implements DatabaseDriver
                 $inner = rtrim($sql, characters: " \t\n\r\0\x0B;");
                 $countSql = 'SELECT COUNT(*) AS c FROM (' . $inner . ') AS _pmf_cnt';
 
-                $stmt = $this->pdo->prepare($countSql);
+                $stmt = $this->pdo()->prepare($countSql);
                 if ($stmt === false) {
                     return 0;
                 }
@@ -286,7 +298,11 @@ class PdoSqlite implements DatabaseDriver
      */
     private function getOne(string $query): string
     {
-        $statement = $this->pdo->prepare($query);
+        $statement = $this->pdo()->prepare($query);
+        if ($statement === false) {
+            throw new Exception(message: 'Failed to prepare the SQLite statement.');
+        }
+
         $statement->execute();
 
         $row = $statement->fetch(PDO::FETCH_NUM);
@@ -339,7 +355,7 @@ class PdoSqlite implements DatabaseDriver
         }
 
         if (false === $result) {
-            $this->sqlLog .= $this->pdo->errorCode() . ': ' . $this->error();
+            $this->sqlLog .= ($this->pdo()->errorCode() ?? '') . ': ' . $this->error();
         }
 
         $this->lastStatement = $result instanceof PDOStatement ? $result : null;
@@ -362,7 +378,7 @@ class PdoSqlite implements DatabaseDriver
         }
 
         try {
-            $statement = $this->pdo->prepare($query);
+            $statement = $this->pdo()->prepare($query);
             if ($statement === false) {
                 throw new Exception('Cannot prepare query: ' . $query);
             }
@@ -394,7 +410,7 @@ class PdoSqlite implements DatabaseDriver
      */
     public function prepare(string $query, array $options = []): PDOStatement|false
     {
-        return $this->pdo->prepare($query, $options);
+        return $this->pdo()->prepare($query, $options);
     }
 
     /**
@@ -413,7 +429,7 @@ class PdoSqlite implements DatabaseDriver
      */
     public function clientVersion(): string
     {
-        return $this->pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
+        return $this->pdo()->getAttribute(PDO::ATTR_CLIENT_VERSION);
     }
 
     /**
@@ -421,7 +437,7 @@ class PdoSqlite implements DatabaseDriver
      */
     public function serverVersion(): string
     {
-        return $this->pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
+        return $this->pdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
 
     /**

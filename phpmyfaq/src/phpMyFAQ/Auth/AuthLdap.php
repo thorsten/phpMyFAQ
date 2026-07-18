@@ -38,7 +38,7 @@ use SensitiveParameter;
  */
 class AuthLdap extends Auth implements AuthDriverInterface
 {
-    private ?LdapCore $ldapCore = null;
+    private LdapCore $ldapCore;
     private readonly ?Closure $userFactory;
     private readonly ?Closure $mediumPermissionFactory;
 
@@ -64,7 +64,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         $this->configuration = $configuration;
         $this->ldapServer = $this->configuration->getLdapServer();
         $this->multipleServers = $this->configuration->get(item: 'ldap.ldap_use_multiple_servers');
-        $this->ldapCore = $ldapCore;
+        $this->ldapCore = $ldapCore ?? new LdapCore($configuration);
         $this->userFactory = $userFactory;
         $this->mediumPermissionFactory = $mediumPermissionFactory;
 
@@ -74,7 +74,6 @@ class AuthLdap extends Auth implements AuthDriverInterface
             throw new AuthException('An error occurred while contacting LDAP: No configuration found.');
         }
 
-        $this->ldapCore ??= new LdapCore($this->configuration);
         $this->connect($this->activeServer);
     }
 
@@ -220,7 +219,6 @@ class AuthLdap extends Auth implements AuthDriverInterface
         }
 
         // Check user in LDAP
-        $this->ldapCore ??= new LdapCore($this->configuration);
         $this->ldapCore->connect(
             $this->ldapServer[$this->activeServer]['ldap_server'],
             $this->ldapServer[$this->activeServer]['ldap_port'],
@@ -295,7 +293,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
             $this->ldapServer[$activeServer]['ldap_password'],
         );
 
-        if ($this->ldapCore?->error) {
+        if ($this->ldapCore->error) {
             $this->configuration->getLogger()->error($this->ldapCore->error);
             $this->errors[] = $this->ldapCore->error;
         }

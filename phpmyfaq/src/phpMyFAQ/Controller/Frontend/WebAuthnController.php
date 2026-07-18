@@ -67,7 +67,7 @@ final class WebAuthnController extends AbstractController
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         $csrfToken = Filter::filterVar($data->csrfToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('webauthn-prepare', $csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('webauthn-prepare', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -100,9 +100,7 @@ final class WebAuthnController extends AbstractController
                 $username,
                 (string) $this->user->getUserId(),
             ),
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString(
-                'webauthn-register',
-            ),
+            'csrfToken' => Token::getInstance($this->session)->getTokenString('webauthn-register'),
         ], Response::HTTP_OK);
     }
 
@@ -120,13 +118,17 @@ final class WebAuthnController extends AbstractController
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         $csrfToken = Filter::filterVar($data->csrfToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('webauthn-register', $csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('webauthn-register', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $register = Filter::filterVar($data->register, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $webAuthnUser = $this->authWebAuthn->getUserFromSession();
+        if ($webAuthnUser === null) {
+            return $this->json(['error' => Translation::get(key: 'ad_auth_fail')], Response::HTTP_BAD_REQUEST);
+        }
+
         $webAuthnUser->setWebAuthnKeys($this->authWebAuthn->register($register, $webAuthnUser->getWebAuthnKeys()));
 
         try {
