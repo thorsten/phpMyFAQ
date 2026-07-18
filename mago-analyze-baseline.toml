@@ -1209,7 +1209,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthLdap.php"
 code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\User::setUserData`: expected `array<array-key, string>`, but possibly received `array{'display_name': bool|string, 'email': bool|string}`.'''
+message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\User::setUserData`: expected `array<string, int|string>`, but possibly received `array{'display_name': bool|string, 'email': bool|string}`.'''
 count = 1
 
 [[issues]]
@@ -3543,7 +3543,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
 code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #1 of `phpMyFAQ\User::setUserData`: expected `array<array-key, string>`, but provided type `array{'display_name': string(''), 'email': nonnull}` is less specific.'''
+message = '''Argument type mismatch for argument #1 of `phpMyFAQ\User::setUserData`: expected `array<string, int|string>`, but provided type `array{'display_name': string(''), 'email': nonnull}` is less specific.'''
 count = 1
 
 [[issues]]
@@ -4040,63 +4040,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth::getEncryptionContainer`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `mixed`.'
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 10
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 22
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
-code = "possibly-false-argument"
-message = 'Argument #1 of method `Symfony\Component\HttpFoundation\Response::__construct` is possibly `false`, but parameter type `null|string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Administration\Report::sanitize`: expected `int|string`, but possibly received `array<array-key, string>|int|null|string`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\User::setUserData`: expected `array<array-key, string>`, but possibly received `array{'secret': string(''), 'twofactor_enabled': int(0)}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Administration\Report::sanitize` is possibly `null`, but parameter type `int|string` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
-code = "possibly-null-operand"
-message = "Possibly null right operand used in string concatenation (type `int|null`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AuthenticationController.php"
@@ -5265,7 +5211,7 @@ count = 4
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
 code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #1 of `phpMyFAQ\User::setUserData`: expected `array<array-key, string>`, but provided type `array{'display_name': string, 'email'?: mixed, 'is_visible': int(0)|int(1), 'twofactor_enabled'?: int(0)|int(1)}` is less specific.'''
+message = '''Argument type mismatch for argument #1 of `phpMyFAQ\User::setUserData`: expected `array<string, int|string>`, but provided type `array{'display_name': string, 'email'?: mixed, 'is_visible': int(0)|int(1), 'twofactor_enabled'?: int(0)|int(1)}` is less specific.'''
 count = 1
 
 [[issues]]
@@ -5285,18 +5231,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
 code = "mixed-property-access"
 message = "Attempting to access a property on a non-object type (`truthy-mixed`)."
 count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\User::setUserData`: expected `array<array-key, string>`, but possibly received `array{'is_visible': int(0)|int(1), 'secret': string, 'twofactor_enabled': int(0)|int(1)}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\User::setUserData`: expected `array<array-key, string>`, but possibly received `array{'secret': string, 'twofactor_enabled': int(0)}`.'''
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/VotingController.php"
@@ -12506,63 +12440,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\User\CurrentUser::getSessionInfo` is declared to return `array<array-key, string>` but possibly returns 'false' (inferred as `array<array-key, mixed>|false|null`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array<array-key, mixed>|false|null` is less specific than the declared return type `array<array-key, string>` for function `phpMyFAQ\User\CurrentUser::getSessionInfo` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `date`: expected `int|null`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Auth\AuthDriverInterface::isValidLogin`: expected `array<array-key, string>|null`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Auth\AuthDriverInterface::checkCredentials`: expected `array<array-key, string>|null`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\User\UserSession::setCookie`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-array-assignment"
-message = "Unsafe array assignment on type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
@@ -12572,105 +12452,9 @@ count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-operand"
-message = "Left operand in `&&` operation has `mixed` type."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-operand"
-message = "Left operand in binary operation has type `mixed`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-operand"
-message = "Right operand in binary operation has type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\User\CurrentUser::sessionAge`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\User\CurrentUser::getSessionInfo` is declared to return `array<array-key, string>` but possibly returns a nullable value (inferred as `array<array-key, mixed>|false|null`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "possibly-false-argument"
-message = "Argument #1 of function `str_contains` is possibly `false`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "possibly-false-argument"
-message = "Argument #1 of function `strpos` is possibly `false`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "possibly-false-argument"
-message = "Argument #1 of function `substr` is possibly `false`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "possibly-false-argument"
-message = 'Argument #1 of method `phpMyFAQ\Auth\AuthDriverInterface::checkCredentials` is possibly `false`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "possibly-false-argument"
-message = 'Argument #1 of method `phpMyFAQ\Auth\AuthDriverInterface::isValidLogin` is possibly `false`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "possibly-false-argument"
-message = 'Argument #1 of method `phpMyFAQ\User::getUserByLogin` is possibly `false`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "possibly-false-operand"
-message = "Left operand in arithmetic operation might be `false` (type `false|non-negative-int`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "possibly-false-operand"
-message = "Possibly false left operand used in string concatenation (type `false|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
 code = "possibly-false-operand"
 message = "Possibly false right operand used in string concatenation (type `false|string`)."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "property-type-coercion"
-message = 'A value of a less specific type `array<array-key, phpMyFAQ\Auth\AuthDriverInterface>` is being assigned to property `$$authContainer` (array<string, phpMyFAQ\Auth&phpMyFAQ\Auth\AuthDriverInterface>).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "undefined-variable"
-message = "Undefined variable: `$optData`."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUserAccountStateTrait.php"
@@ -12700,6 +12484,12 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUserSessionLookupTrait.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\User::getUserById`: expected `int`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User/CurrentUserSessionLookupTrait.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]

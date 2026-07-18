@@ -137,8 +137,8 @@ class CurrentUser extends User
 
         // Check if the login is an email address and convert it to a username if needed
         if (
-            $this->configuration->get(item: 'security.loginWithEmailAddress')
-            && Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
+            true === $this->configuration->get(item: 'security.loginWithEmailAddress')
+            && is_string(Filter::filterVar($login, FILTER_VALIDATE_EMAIL))
         ) {
             $userId = $this->getUserIdByEmail($login);
             $this->getUserById($userId);
@@ -152,9 +152,10 @@ class CurrentUser extends User
         }
 
         // Extract domain if LDAP is active and ldap_use_domain_prefix is true
+        $optData = [];
         if (
             $this->configuration->isLdapActive()
-            && $this->configuration->get(item: 'ldap.ldap_use_domain_prefix')
+            && true === $this->configuration->get(item: 'ldap.ldap_use_domain_prefix')
             && '' !== $password
             && ($pos = strpos($login, needle: '\\')) !== false
         ) {
@@ -164,22 +165,23 @@ class CurrentUser extends User
 
         // Handle SSO authentication
         if (
-            $this->configuration->get(item: 'security.ssoSupport')
-            && $request->server->get('REMOTE_USER')
+            true === $this->configuration->get(item: 'security.ssoSupport')
+            && '' !== (string) $request->server->get('REMOTE_USER')
             && '' === $password
         ) {
-            $login = strtok($login, token: chr(64) . '\\');
+            $ssoLogin = strtok($login, token: chr(64) . '\\');
+            $login = $ssoLogin === false ? $login : $ssoLogin;
         }
 
         // Attempt to authenticate a user by login and password
         $this->authContainer = $this->sortAuthContainer($this->authContainer);
         foreach ($this->authContainer as $authSource => $auth) {
-            if ($auth->isValidLogin($login, $optData ?? []) === 0) {
+            if ($auth->isValidLogin($login, $optData) === 0) {
                 continue; // Login does not exist, try the next auth method
             }
 
             try {
-                $credentialsAreValid = $auth->checkCredentials($login, $password, $optData ?? []);
+                $credentialsAreValid = $auth->checkCredentials($login, $password, $optData);
             } catch (AuthException) {
                 // Drivers signal a wrong password by throwing; treat it as a failed
                 // attempt so the fall-through failure handling counts it for lockout.
@@ -207,7 +209,7 @@ class CurrentUser extends User
                 $this->userSession->setCookie(
                     UserSession::COOKIE_NAME_REMEMBER_ME,
                     $rememberMeToken,
-                    $request->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME,
+                    (int) $request->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME,
                 );
             }
 
@@ -227,8 +229,8 @@ class CurrentUser extends User
         $this->setLoginAttempt();
 
         if (
-            $this->configuration->get(item: 'security.loginWithEmailAddress')
-            && !Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
+            true === $this->configuration->get(item: 'security.loginWithEmailAddress')
+            && !is_string(Filter::filterVar($login, FILTER_VALIDATE_EMAIL))
         ) {
             throw new UserException(parent::ERROR_USER_INCORRECT_LOGIN);
         }
@@ -295,8 +297,8 @@ class CurrentUser extends User
             return 0;
         }
 
-        $requestTime = Request::createFromGlobals()->server->get('REQUEST_TIME');
-        $sessionTimestamp = $this->sessionWrapper->get(self::SESSION_ID_TIMESTAMP);
+        $requestTime = (int) Request::createFromGlobals()->server->get('REQUEST_TIME');
+        $sessionTimestamp = (int) $this->sessionWrapper->get(self::SESSION_ID_TIMESTAMP);
         return ($requestTime - $sessionTimestamp) / 60;
     }
 
@@ -305,7 +307,7 @@ class CurrentUser extends User
      * in the user table. The array has the following keys:
      * session_id, session_timestamp and ip.
      *
-     * @return array<string>
+     * @return array<array-key, mixed>
      */
     public function getSessionInfo(): array
     {
@@ -325,7 +327,9 @@ class CurrentUser extends User
             return [];
         }
 
-        return $this->configuration->getDb()->fetchArray($res);
+        $sessionInfo = $this->configuration->getDb()->fetchArray($res);
+
+        return is_array($sessionInfo) ? $sessionInfo : [];
     }
 
     /**
@@ -342,9 +346,9 @@ class CurrentUser extends User
         // renew the session-ID; API and CLI logins run without an active PHP session
         $oldSessionId = session_id();
         if (session_status() === PHP_SESSION_ACTIVE && session_regenerate_id(true)) {
-            $sessionPath = session_save_path();
+            $sessionPath = (string) session_save_path();
             if (str_contains($sessionPath, ';')) {
-                $sessionPath = substr($sessionPath, strpos($sessionPath, needle: ';') + 1);
+                $sessionPath = substr($sessionPath, (int) strpos($sessionPath, needle: ';') + 1);
             }
 
             $sessionFilename = $sessionPath . '/sess_' . $oldSessionId;
@@ -359,7 +363,7 @@ class CurrentUser extends User
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
         );
 
-        $requestTime = Request::createFromGlobals()->server->get('REQUEST_TIME');
+        $requestTime = (int) Request::createFromGlobals()->server->get('REQUEST_TIME');
 
         // save session information in the user table
         $update = sprintf(
@@ -570,7 +574,7 @@ class CurrentUser extends User
             WHERE
                 user_id = %d",
             Database::getTablePrefix(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME'),
+            (int) Request::createFromGlobals()->server->get('REQUEST_TIME'),
             Request::createFromGlobals()->getClientIp(),
             $this->getUserId(),
         );
@@ -603,7 +607,7 @@ class CurrentUser extends User
                 login_attempts > %d",
             Database::getTablePrefix(),
             $this->getUserId(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME'),
+            (int) Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $this->lockoutTime,
             self::MAX_FAILED_LOGIN_ATTEMPTS,
         );
@@ -616,7 +620,7 @@ class CurrentUser extends User
     /**
      * Sorts the auth container array.
      * @param array<string, Auth&AuthDriverInterface> $authContainer
-     * @return AuthDriverInterface[]
+     * @return array<string, Auth&AuthDriverInterface>
      */
     protected function sortAuthContainer(array $authContainer): array
     {

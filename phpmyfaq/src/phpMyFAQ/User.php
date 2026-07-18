@@ -781,7 +781,7 @@ class User
     /**
      * Adds user data.
      *
-     * @param array<string> $data Array with user data
+     * @param array<string, int|string> $data Array with user data
      */
     public function setUserData(array $data): bool
     {

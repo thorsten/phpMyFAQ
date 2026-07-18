@@ -41,6 +41,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
+/* @mago-expect lint:cyclomatic-complexity - each endpoint validates its full payload inline; split planned with the admin API rework */
 final class UserController extends AbstractAdministrationApiController
 {
     public function __construct(
@@ -71,7 +72,8 @@ final class UserController extends AbstractAdministrationApiController
                 $user->status = $currentUser->getStatus();
                 $user->isSuperAdmin = $currentUser->isSuperAdmin();
                 $user->isVisible = $currentUser->getUserData(field: 'is_visible');
-                $user->displayName = Report::sanitize($currentUser->getUserData(field: 'display_name'));
+                $displayName = $currentUser->getUserData(field: 'display_name');
+                $user->displayName = Report::sanitize(is_string($displayName) ? $displayName : '');
                 $user->userName = Report::sanitize($currentUser->getLogin());
                 $user->email = $currentUser->getUserData(field: 'email');
                 $user->authSource = $currentUser->getUserAuthSource();
@@ -121,7 +123,9 @@ final class UserController extends AbstractAdministrationApiController
                     $currentUser->getStatus(),
                     $currentUser->isSuperAdmin() ? 'true' : 'false',
                     $currentUser->getUserData(field: 'is_visible') ? 'true' : 'false',
-                    Report::sanitize($currentUser->getUserData(field: 'display_name')),
+                    Report::sanitize(
+                        is_string($displayName = $currentUser->getUserData(field: 'display_name')) ? $displayName : '',
+                    ),
                     Report::sanitize($currentUser->getLogin()),
                     $currentUser->getUserData(field: 'email'),
                     $currentUser->getUserAuthSource(),
@@ -134,7 +138,7 @@ final class UserController extends AbstractAdministrationApiController
 
         rewind($handle);
 
-        $content = stream_get_contents($handle);
+        $content = (string) stream_get_contents($handle);
 
         fclose($handle);
 
@@ -203,14 +207,17 @@ final class UserController extends AbstractAdministrationApiController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $data = json_decode($request->getContent());
-        if (!Token::getInstance($this->session)->verifyToken(page: 'activate-user', requestToken: $data->csrfToken)) {
+        $data = $this->getJsonObject($request);
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'activate-user',
+            requestToken: (string) ($data->csrfToken ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
+        $userId = (int) Filter::filterVar($data->userId ?? null, FILTER_VALIDATE_INT);
 
-        if (!$currentUser->getUserById((int) $userId, allowBlockedUsers: true)) {
+        if (!$currentUser->getUserById($userId, allowBlockedUsers: true)) {
             return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         }
 
@@ -243,10 +250,10 @@ final class UserController extends AbstractAdministrationApiController
     {
         $this->userHasUserPermission();
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        $userId = Filter::filterVar($data->userId ?? null, FILTER_VALIDATE_INT);
-        $csrfToken = Filter::filterVar($data->csrf ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
+        $userId = (int) Filter::filterVar($data->userId ?? null, FILTER_VALIDATE_INT);
+        $csrfToken = Filter::filterVar($data->csrf ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $newPassword = is_string($data->newPassword ?? null) ? $data->newPassword : '';
         $retypedPassword = is_string($data->passwordRepeat ?? null) ? $data->passwordRepeat : '';
 
@@ -254,7 +261,7 @@ final class UserController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($userId === null || $userId <= 0) {
+        if ($userId <= 0) {
             return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         }
 
@@ -285,7 +292,7 @@ final class UserController extends AbstractAdministrationApiController
 
         $auth = new Auth($this->configuration);
         $authSource = $auth->selectAuth($targetUser->getAuthSource(key: 'name') ?? '');
-        $authSource->getEncryptionContainer($targetUser->getAuthData(key: 'encType'));
+        $authSource->getEncryptionContainer((string) ($targetUser->getAuthData(key: 'encType') ?? ''));
 
         if (hash_equals($newPassword, $retypedPassword)) {
             if (!$targetUser->changePassword($newPassword)) {
@@ -311,15 +318,18 @@ final class UserController extends AbstractAdministrationApiController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'delete-user', requestToken: $data->csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'delete-user',
+            requestToken: (string) ($data->csrfToken ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
+        $userId = Filter::filterVar($data->userId ?? null, FILTER_VALIDATE_INT);
 
-        if ($userId === null) {
+        if (!is_int($userId)) {
             return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         }
 
@@ -358,26 +368,29 @@ final class UserController extends AbstractAdministrationApiController
     {
         $this->userHasUserPermission();
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'add-user', requestToken: $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'add-user',
+            requestToken: (string) ($data->csrf ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $errorMessage = [];
 
-        $userName = Filter::filterVar($data->userName, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $userRealName = trim(strip_tags((string) $data->realName));
-        $userEmail = Filter::filterEmail($data->email);
-        $automaticPassword = Filter::filterVar($data->automaticPassword, FILTER_VALIDATE_BOOLEAN);
-        $userPassword = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $userPasswordConfirm = Filter::filterVar($data->passwordConfirm, FILTER_SANITIZE_SPECIAL_CHARS);
-        $userIsSuperAdmin = Filter::filterVar($data->isSuperAdmin, FILTER_VALIDATE_BOOLEAN);
+        $userName = Filter::filterVar($data->userName ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $userRealName = trim(strip_tags((string) ($data->realName ?? '')));
+        $userEmail = (string) Filter::filterEmail($data->email ?? '', default: '');
+        $automaticPassword = (bool) Filter::filterVar($data->automaticPassword ?? false, FILTER_VALIDATE_BOOLEAN);
+        $userPassword = Filter::filterVar($data->password ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $userPasswordConfirm = Filter::filterVar($data->passwordConfirm ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $userIsSuperAdmin = (bool) Filter::filterVar($data->isSuperAdmin ?? false, FILTER_VALIDATE_BOOLEAN);
 
         // Only SuperAdmins may grant the SuperAdmin flag. Reject the request when a
         // non-SuperAdmin attempts to set it, to prevent privilege escalation through
         // mass-assignment of is_superadmin on user creation.
-        if (!$this->currentUser->isSuperAdmin() && (bool) $userIsSuperAdmin) {
+        if (!$this->currentUser->isSuperAdmin() && $userIsSuperAdmin) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
@@ -395,14 +408,11 @@ final class UserController extends AbstractAdministrationApiController
             $errorMessage[] = Translation::get(key: 'ad_user_error_noRealName');
         }
 
-        if (is_null($userEmail)) {
+        if ($userEmail === '') {
             $errorMessage[] = Translation::get(key: 'ad_user_error_noEmail');
         }
 
-        if (
-            !$automaticPassword
-            && (strlen((string) $userPassword) <= 7 || strlen((string) $userPasswordConfirm) <= 7)
-        ) {
+        if (!$automaticPassword && (strlen($userPassword) <= 7 || strlen($userPasswordConfirm) <= 7)) {
             $errorMessage[] = Translation::get(key: 'ad_passwd_fail');
         }
 
@@ -418,7 +428,7 @@ final class UserController extends AbstractAdministrationApiController
 
             $newUser->userData()->set(['display_name', 'email', 'is_visible'], [$userRealName, $userEmail, 0]);
             $newUser->setStatus(status: 'active');
-            $newUser->setSuperAdmin((bool) $userIsSuperAdmin);
+            $newUser->setSuperAdmin($userIsSuperAdmin);
 
             $mailHelper = new MailHelper($this->configuration);
             try {
@@ -443,27 +453,31 @@ final class UserController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::USER_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'update-user-data',
-            requestToken: $data->csrfToken,
+            requestToken: (string) ($data->csrfToken ?? ''),
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT, default: 0);
+        $userId = (int) Filter::filterVar($data->userId ?? null, FILTER_VALIDATE_INT, default: 0);
         if ($userId === 0) {
             return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         }
 
         $userData = [];
-        $userData['display_name'] = trim(strip_tags((string) $data->display_name));
-        $userData['email'] = Filter::filterEmail($data->email);
-        $userData['last_modified'] = Filter::filterVar($data->last_modified, FILTER_SANITIZE_SPECIAL_CHARS);
-        $userStatus = Filter::filterVar($data->user_status, FILTER_SANITIZE_SPECIAL_CHARS, default: 'active');
-        $isSuperAdmin = Filter::filterVar($data->is_superadmin, FILTER_SANITIZE_SPECIAL_CHARS);
-        $deleteTwoFactor = (bool) Filter::filterVar($data->overwrite_twofactor, FILTER_VALIDATE_BOOLEAN);
+        $userData['display_name'] = trim(strip_tags((string) ($data->display_name ?? '')));
+        $userData['email'] = (string) Filter::filterEmail($data->email ?? '', default: '');
+        $userData['last_modified'] = Filter::filterVar($data->last_modified ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $userStatus = Filter::filterVar(
+            $data->user_status ?? 'active',
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            default: 'active',
+        );
+        $isSuperAdmin = Filter::filterVar($data->is_superadmin ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $deleteTwoFactor = (bool) Filter::filterVar($data->overwrite_twofactor ?? false, FILTER_VALIDATE_BOOLEAN);
 
         $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
 
@@ -545,16 +559,16 @@ final class UserController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::USER_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'update-user-rights',
-            requestToken: $data->csrfToken,
+            requestToken: (string) ($data->csrfToken ?? ''),
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT, default: 0);
+        $userId = (int) Filter::filterVar($data->userId ?? null, FILTER_VALIDATE_INT, default: 0);
 
         if (0 === (int) $userId) {
             return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
