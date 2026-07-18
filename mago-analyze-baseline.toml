@@ -5839,6 +5839,12 @@ message = "Attempting to access a method on a non-object type (`mixed`)."
 count = 8
 
 [[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/PdfController.php"
+code = "less-specific-argument"
+message = '''Argument type mismatch for argument #1 of `phpMyFAQ\Export\Pdf::generateFile`: expected `array<string, mixed>`, but provided type `array{'category_id': int, ...}` is less specific.'''
+count = 1
+
+[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
@@ -7244,117 +7250,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "array-to-string-conversion"
-message = "Potential array in left operand of string concatenation."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `League\CommonMark\MarkdownConverter::convert`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::createIsoDate`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::format`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Export\Pdf\Wrapper::SetAuthor`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Export\Pdf\Wrapper::SetTitle`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Export\Pdf\Wrapper::setCategory`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Export\Pdf\Wrapper::setQuestion`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\User::getUserVisibilityByEmail`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 15
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-operand"
-message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "mixed-operand"
-message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "possibly-null-operand"
-message = "Possibly null left operand used in string concatenation (type `array<array-key, string>|null|string`)."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "redundant-condition"
-message = "This condition (type `true`) will always evaluate to true."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfDocument.php"
@@ -8248,120 +8146,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Helper/RegistrationHelper.php"
 code = "possibly-null-argument"
 message = 'Argument #1 of method `phpMyFAQ\Utils::resolveMarkers` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Category::getPath`: expected `int`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Category::setLanguage`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Faq::getSolutionIdFromId`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Helper\FaqHelper::renderAnswerPreview`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Helper\SearchHelper::renderScore`: expected `float`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Link::setTitle`: expected `string`, but found `mixed`.'
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Link\Util\TitleSlugifier::slug`: expected `string`, but found `mixed`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Strings::htmlentities`: expected `string`, but found `mixed`.'
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Faq::getSolutionIdFromId`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #5 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-operand"
-message = "Left operand in `&&` operation has `mixed` type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-operand"
-message = "Left operand in binary operation has type `mixed`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-operand"
-message = "Right operand in `<=` comparison has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-operand"
-message = "Right operand in `>` comparison has `mixed` type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "mixed-operand"
-message = "Right operand in binary operation has type `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SearchHelper.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
 count = 1
 
 [[issues]]

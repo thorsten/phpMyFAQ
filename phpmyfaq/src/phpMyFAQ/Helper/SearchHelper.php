@@ -68,7 +68,7 @@ class SearchHelper extends AbstractHelper
     public function createAutoCompleteResult(SearchResultSet $searchResultSet): array
     {
         $results = [];
-        $maxResults = $this->configuration->get(item: 'records.numberOfRecordsPerPage');
+        $maxResults = (int) $this->configuration->get(item: 'records.numberOfRecordsPerPage');
         $numOfResults = $searchResultSet->getNumberOfResults();
 
         if (0 < $numOfResults) {
@@ -78,20 +78,22 @@ class SearchHelper extends AbstractHelper
                     continue;
                 }
 
+                $resultQuestion = (string) $result->question;
+                $question = html_entity_decode($resultQuestion, ENT_QUOTES | ENT_XML1 | ENT_HTML5, encoding: 'UTF-8');
+
                 // Check if this is a custom page result
                 $isCustomPage = ($result->content_type ?? null) === 'page';
 
                 if ($isCustomPage) {
                     // Build the link to the custom page
-                    $currentUrl = sprintf('%spage/%s.html', $this->configuration->getDefaultUrl(), $result->slug);
-
-                    $question = html_entity_decode(
-                        (string) $result->question,
-                        ENT_QUOTES | ENT_XML1 | ENT_HTML5,
-                        encoding: 'UTF-8',
+                    $currentUrl = sprintf(
+                        '%spage/%s.html',
+                        $this->configuration->getDefaultUrl(),
+                        (string) $result->slug,
                     );
+
                     $link = new Link($currentUrl, $this->configuration);
-                    $link->setTitle($result->question);
+                    $link->setTitle($resultQuestion);
                     $faq = new stdClass();
                     $faq->category = ''; // Custom pages don't have categories
                     $faq->question = Utils::chopString($question, 15);
@@ -106,22 +108,17 @@ class SearchHelper extends AbstractHelper
                 $currentUrl = sprintf(
                     '%scontent/%d/%d/%s/%s.html?highlight=%s',
                     $this->configuration->getDefaultUrl(),
-                    $result->category_id,
-                    $result->id,
-                    $result->lang,
-                    TitleSlugifier::slug($result->question),
+                    (int) $result->category_id,
+                    (int) $result->id,
+                    (string) $result->lang,
+                    TitleSlugifier::slug($resultQuestion),
                     urlencode($this->searchTerm),
                 );
 
-                $question = html_entity_decode(
-                    (string) $result->question,
-                    ENT_QUOTES | ENT_XML1 | ENT_HTML5,
-                    encoding: 'UTF-8',
-                );
                 $link = new Link($currentUrl, $this->configuration);
-                $link->setTitle($result->question);
+                $link->setTitle($resultQuestion);
                 $faq = new stdClass();
-                $faq->category = $this->category()->getPath((int) $result->category_id ?? 0);
+                $faq->category = $this->category()->getPath((int) $result->category_id);
                 $faq->question = Utils::chopString($question, 15);
                 $faq->url = $link->toString();
 
@@ -141,7 +138,7 @@ class SearchHelper extends AbstractHelper
      */
     public function renderAdminSuggestionResult(SearchResultSet $searchResultSet): array
     {
-        $confPerPage = $this->configuration->get(item: 'records.numberOfRecordsPerPage');
+        $confPerPage = (int) $this->configuration->get(item: 'records.numberOfRecordsPerPage');
         $numOfResults = $searchResultSet->getNumberOfResults();
         $results = [];
 
@@ -152,22 +149,25 @@ class SearchHelper extends AbstractHelper
                     continue;
                 }
 
-                if (($result->solution_id ?? null) === null) {
+                $faqId = (int) $result->id;
+                $faqLanguage = (string) $result->lang;
+
+                $solutionId = (int) ($result->solution_id ?? 0);
+                if ($solutionId === 0) {
                     $faq = new Faq($this->configuration);
-                    $solutionId = $faq->getSolutionIdFromId($result->id, $result->lang);
+                    $solutionId = $faq->getSolutionIdFromId($faqId, $faqLanguage);
                 }
-                $solutionId ??= $result->solution_id;
 
                 // Build the link to the faq record
                 $currentUrl = sprintf('%ssolution_id_%d.html', $this->configuration->getDefaultUrl(), $solutionId);
                 $adminUrl = sprintf(
                     '%sadmin/faq/edit/%d/%s',
                     $this->configuration->getDefaultUrl(),
-                    $result->id,
-                    $result->lang,
+                    $faqId,
+                    $faqLanguage,
                 );
 
-                $results[] = ['url' => $currentUrl, 'question' => $result->question, 'adminUrl' => $adminUrl];
+                $results[] = ['url' => $currentUrl, 'question' => (string) $result->question, 'adminUrl' => $adminUrl];
                 ++$i;
             }
         }
@@ -184,7 +184,7 @@ class SearchHelper extends AbstractHelper
     public function getSearchResult(SearchResultSet $searchResultSet, int $currentPage): array
     {
         $results = [];
-        $confPerPage = $this->configuration->get(item: 'records.numberOfRecordsPerPage');
+        $confPerPage = (int) $this->configuration->get(item: 'records.numberOfRecordsPerPage');
         $numOfResults = $searchResultSet->getNumberOfResults();
 
         $lastPage = $currentPage * $confPerPage;
@@ -198,7 +198,7 @@ class SearchHelper extends AbstractHelper
             foreach ($searchResultSet->getResultSet() as $resultSet) {
                 $result = new stdClass();
 
-                if ($displayedCounter >= (int) $confPerPage) {
+                if ($displayedCounter >= $confPerPage) {
                     break;
                 }
 
@@ -214,8 +214,8 @@ class SearchHelper extends AbstractHelper
 
                 if ($isCustomPage) {
                     // Handle custom page results
-                    $question = Utils::chopString(Strings::htmlentities($resultSet->question), 15);
-                    $answerPreview = $faqHelper->renderAnswerPreview($resultSet->answer, 20);
+                    $question = Utils::chopString(Strings::htmlentities((string) $resultSet->question), 15);
+                    $answerPreview = $faqHelper->renderAnswerPreview((string) $resultSet->answer, 20);
 
                     $searchTerm = str_replace(
                         search: ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
@@ -226,7 +226,7 @@ class SearchHelper extends AbstractHelper
                     $searchItems = explode(' ', $searchTerm);
 
                     if (
-                        $this->configuration->get(item: 'search.enableHighlighting')
+                        true === $this->configuration->get(item: 'search.enableHighlighting')
                         && Strings::strlen($searchItems[0]) > 1
                     ) {
                         foreach ($searchItems as $searchItem) {
@@ -240,12 +240,18 @@ class SearchHelper extends AbstractHelper
                     }
 
                     // Build the link to the custom page
-                    $currentUrl = sprintf('%spage/%s.html', $this->configuration->getDefaultUrl(), $resultSet->slug);
+                    $currentUrl = sprintf(
+                        '%spage/%s.html',
+                        $this->configuration->getDefaultUrl(),
+                        (string) $resultSet->slug,
+                    );
 
                     $oLink = new Link($currentUrl, $this->configuration);
-                    $oLink->setTitle($resultSet->question);
+                    $oLink->setTitle((string) $resultSet->question);
 
-                    $result->renderedScore = $this->renderScore($resultSet->score * 33);
+                    $result->renderedScore = $this->renderScore(
+                        (is_numeric($resultSet->score ?? null) ? (float) $resultSet->score : 0.0) * 33,
+                    );
                     $result->question = $question;
                     $result->path = ''; // Custom pages don't have category paths
                     $result->url = $oLink->toString();
@@ -257,12 +263,15 @@ class SearchHelper extends AbstractHelper
 
                 // Handle FAQ results
                 // Set language for the current category to fetch the correct category name
-                $this->category()->setLanguage($resultSet->lang);
+                $this->category()->setLanguage((string) $resultSet->lang);
 
                 $categoryInfo = $this->category()->getCategoriesFromFaq((int) $resultSet->id);
                 $categoryInfo = array_values($categoryInfo); //Reset the array keys
-                $question = Utils::chopString(Strings::htmlentities($resultSet->question), 15);
-                $answerPreview = Strings::htmlentities($faqHelper->renderAnswerPreview($resultSet->answer, 20));
+                $question = Utils::chopString(Strings::htmlentities((string) $resultSet->question), 15);
+                $answerPreview = Strings::htmlentities($faqHelper->renderAnswerPreview(
+                    (string) $resultSet->answer,
+                    20,
+                ));
 
                 $searchTerm = str_replace(
                     search: ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
@@ -273,7 +282,7 @@ class SearchHelper extends AbstractHelper
                 $searchItems = explode(' ', $searchTerm);
 
                 if (
-                    $this->configuration->get(item: 'search.enableHighlighting')
+                    true === $this->configuration->get(item: 'search.enableHighlighting')
                     && Strings::strlen($searchItems[0]) > 1
                 ) {
                     foreach ($searchItems as $searchItem) {
@@ -290,21 +299,23 @@ class SearchHelper extends AbstractHelper
                 $currentUrl = sprintf(
                     '%scontent/%d/%d/%s/%s.html?highlight=%s',
                     $this->configuration->getDefaultUrl(),
-                    $resultSet->category_id,
-                    $resultSet->id,
-                    $resultSet->lang,
-                    TitleSlugifier::slug($resultSet->question),
+                    (int) $resultSet->category_id,
+                    (int) $resultSet->id,
+                    (string) $resultSet->lang,
+                    TitleSlugifier::slug((string) $resultSet->question),
                     urlencode($searchTerm),
                 );
 
                 $oLink = new Link($currentUrl, $this->configuration);
-                $oLink->setTitle($resultSet->question);
+                $oLink->setTitle((string) $resultSet->question);
 
                 $path = ($categoryInfo[0]['id'] ?? null) !== null
-                    ? $this->category()->getPath($categoryInfo[0]['id'])
+                    ? $this->category()->getPath((int) $categoryInfo[0]['id'])
                     : '';
 
-                $result->renderedScore = $this->renderScore($resultSet->score * 33);
+                $result->renderedScore = $this->renderScore(
+                    (is_numeric($resultSet->score ?? null) ? (float) $resultSet->score : 0.0) * 33,
+                );
                 $result->question = $question;
                 $result->path = $path;
                 $result->url = $oLink->toString();
@@ -349,24 +360,25 @@ class SearchHelper extends AbstractHelper
                     continue;
                 }
 
-                if ($recordId === $result->id) {
+                if ($recordId === (int) $result->id) {
                     continue;
                 }
 
                 ++$counter;
 
+                $relatedQuestion = Strings::htmlentities((string) $result->question);
                 $url = sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $result->category_id,
-                    $result->id,
-                    $result->lang,
-                    TitleSlugifier::slug($result->question),
+                    (int) $result->category_id,
+                    (int) $result->id,
+                    (string) $result->lang,
+                    TitleSlugifier::slug((string) $result->question),
                 );
                 $link = new Link($url, $this->configuration);
-                $link->setTitle(Strings::htmlentities($result->question));
-                $link->text = Strings::htmlentities($result->question);
-                $link->tooltip = Strings::htmlentities($result->question);
+                $link->setTitle($relatedQuestion);
+                $link->text = $relatedQuestion;
+                $link->tooltip = $relatedQuestion;
                 $link->class = 'text-decoration-none';
                 $html .= '<li><i class="bi bi-question-circle"></i> ' . $link->toHtmlAnchor() . '</li>';
             }
