@@ -75,7 +75,7 @@ class FaqEntity
 
     public function getLanguage(): string
     {
-        return $this->language;
+        return $this->language ?? '';
     }
 
     public function setLanguage(string $language): FaqEntity
@@ -97,7 +97,7 @@ class FaqEntity
 
     public function getRevisionId(): int
     {
-        return $this->revisionId;
+        return $this->revisionId ?? 0;
     }
 
     public function setRevisionId(int $revisionId): FaqEntity
@@ -108,7 +108,7 @@ class FaqEntity
 
     public function isActive(): bool
     {
-        return $this->active;
+        return $this->active ?? false;
     }
 
     public function setActive(bool $active): FaqEntity
@@ -119,7 +119,7 @@ class FaqEntity
 
     public function isSticky(): bool
     {
-        return $this->sticky;
+        return $this->sticky ?? false;
     }
 
     public function setSticky(bool $sticky): FaqEntity
@@ -130,7 +130,7 @@ class FaqEntity
 
     public function getKeywords(): string
     {
-        return $this->keywords;
+        return $this->keywords ?? '';
     }
 
     public function setKeywords(string $keywords): FaqEntity
@@ -141,7 +141,7 @@ class FaqEntity
 
     public function getQuestion(): string
     {
-        return $this->question;
+        return $this->question ?? '';
     }
 
     public function setQuestion(string $question): FaqEntity
@@ -152,7 +152,7 @@ class FaqEntity
 
     public function getAnswer(): string
     {
-        return $this->answer;
+        return $this->answer ?? '';
     }
 
     public function setAnswer(string $answer): FaqEntity
@@ -163,7 +163,7 @@ class FaqEntity
 
     public function getAuthor(): string
     {
-        return $this->author;
+        return $this->author ?? '';
     }
 
     public function setAuthor(string $author): FaqEntity
@@ -174,7 +174,7 @@ class FaqEntity
 
     public function getEmail(): string
     {
-        return $this->email;
+        return $this->email ?? '';
     }
 
     public function setEmail(string $email): FaqEntity
@@ -185,7 +185,7 @@ class FaqEntity
 
     public function isComment(): bool
     {
-        return $this->comment;
+        return $this->comment ?? false;
     }
 
     public function setComment(bool $comment): FaqEntity
@@ -196,7 +196,7 @@ class FaqEntity
 
     public function getNotes(): string
     {
-        return $this->notes;
+        return $this->notes ?? '';
     }
 
     public function setNotes(string $notes): FaqEntity
@@ -263,6 +263,8 @@ class FaqEntity
 
     public function getJson(): string
     {
-        return json_encode(get_object_vars($this));
+        $json = json_encode(get_object_vars($this));
+
+        return $json === false ? '{}' : $json;
     }
 }

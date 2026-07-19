@@ -40,7 +40,7 @@ readonly class StatisticsHelper
         $numberOfDays = 0;
         $first = PHP_INT_MAX;
         $last = 0;
-        $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
+        $dir = opendir((string) PMF_ROOT_DIR . '/content/core/data');
         if ($dir === false) {
             $result = new stdClass();
             $result->numberOfDays = 0;
@@ -87,20 +87,24 @@ readonly class StatisticsHelper
         $requestTime = $request->server->get('REQUEST_TIME');
         $date = 0;
 
-        if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $firstDate))) {
-            $fp = fopen(
-                filename: PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $firstDate),
-                mode: 'r',
-            );
+        $trackingFile =
+            (string) PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $firstDate);
+        if (is_file($trackingFile)) {
+            $fp = fopen(filename: $trackingFile, mode: 'r');
+            if ($fp === false) {
+                return Translation::getString('ad_sess_noentry');
+            }
+
             while (($data = fgetcsv($fp, length: 1024, separator: ';', enclosure: '"', escape: '\\')) !== false) {
-                $date = array_key_exists(7, $data) && 10 === strlen($data[7]) ? $data[7] : $requestTime;
+                $field = $data[7] ?? null;
+                $date = is_string($field) && 10 === strlen($field) ? $field : $requestTime;
             }
 
             fclose($fp);
             return $this->date->format(date(format: 'Y-m-d H:i', timestamp: (int) $date));
         }
 
-        return Translation::get(key: 'ad_sess_noentry');
+        return Translation::getString('ad_sess_noentry');
     }
 
     public function getLastTrackingDate(int $lastDate): string
@@ -108,15 +112,18 @@ readonly class StatisticsHelper
         $request = Request::createFromGlobals();
         $requestTime = $request->server->get('REQUEST_TIME');
 
-        if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate))) {
-            $fp = fopen(
-                filename: PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate),
-                mode: 'r',
-            );
+        $trackingFile =
+            (string) PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate);
+        if (is_file($trackingFile)) {
+            $fp = fopen(filename: $trackingFile, mode: 'r');
+            if ($fp === false) {
+                return Translation::getString('ad_sess_noentry');
+            }
 
             $date = null;
             while (($data = fgetcsv($fp, length: 1024, separator: ';', enclosure: '"', escape: '\\')) !== false) {
-                $date = array_key_exists(7, $data) && 10 === strlen($data[7]) ? $data[7] : $requestTime;
+                $field = $data[7] ?? null;
+                $date = is_string($field) && 10 === strlen($field) ? $field : $requestTime;
             }
 
             fclose($fp);
@@ -128,18 +135,22 @@ readonly class StatisticsHelper
             return $this->date->format(date(format: 'Y-m-d H:i', timestamp: (int) $date));
         }
 
-        return Translation::get(key: 'ad_sess_noentry');
+        return Translation::getString('ad_sess_noentry');
     }
 
     /**
      * Returns all tracking dates.
      *
-     * @return string[]
+     * @return int[]
      */
     public function getAllTrackingDates(): array
     {
-        $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
+        $dir = opendir((string) PMF_ROOT_DIR . '/content/core/data');
         $trackingDates = [];
+        if ($dir === false) {
+            return $trackingDates;
+        }
+
         while (false !== ($dat = readdir($dir))) {
             if (!($dat !== '.' && $dat !== '..' && strlen($dat) === 16 && !is_dir($dat))) {
                 continue;
@@ -156,7 +167,7 @@ readonly class StatisticsHelper
 
     public function deleteTrackingFiles(string $month): bool
     {
-        $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
+        $dir = opendir((string) PMF_ROOT_DIR . '/content/core/data');
         $first = PHP_INT_MAX;
         $last = 0;
         if ($dir === false) {
@@ -211,8 +222,8 @@ readonly class StatisticsHelper
 
     public function renderMonthSelector(): string
     {
-        $oldValue = mktime(hour: 0, minute: 0, second: 0, month: 1, day: 1, year: 1970);
-        $renderedHtml = sprintf('<option value="" selected>%s</option>', Translation::get(key: 'ad_stat_choose'));
+        $oldValue = (int) mktime(hour: 0, minute: 0, second: 0, month: 1, day: 1, year: 1970);
+        $renderedHtml = sprintf('<option value="" selected>%s</option>', Translation::getString('ad_stat_choose'));
 
         $trackingDates = $this->getAllTrackingDates();
         foreach ($trackingDates as $trackingDate) {
@@ -241,7 +252,7 @@ readonly class StatisticsHelper
             return sprintf(
                 '%s<option value="" selected>%s</option>',
                 $renderedHtml,
-                Translation::get(key: 'ad_stat_choose'),
+                Translation::getString('ad_stat_choose'),
             );
         }
 
@@ -250,7 +261,7 @@ readonly class StatisticsHelper
             if (
                 date(format: 'Y-m-d', timestamp: (int) $trackingDate) === date(
                     format: 'Y-m-d',
-                    timestamp: $request->server->get('REQUEST_TIME'),
+                    timestamp: (int) $request->server->get('REQUEST_TIME'),
                 )
             ) {
                 $renderedHtml .= ' selected';

@@ -111,7 +111,7 @@ class Setup
     /**
      * Creates the file /content/core/config/database.php.
      *
-     * @param  int[]|string[] $data   Array with database credentials
+     * @param  array<string, mixed> $data   Array with database credentials
      * @param  string         $folder Folder
      * @throws Exception
      */
@@ -178,7 +178,7 @@ $DB[\'server\'] = \''
     /**
      * Creates the file /content/core/config/ldap.php.
      *
-     * @param  int[]|string[] $data   Array with LDAP credentials
+     * @param  array<string, mixed> $data   Array with LDAP credentials
      * @param  string         $folder Folder
      */
     public function createLdapFile(array $data, string $folder = '/content/core/config'): int|bool
@@ -187,19 +187,19 @@ $DB[\'server\'] = \''
             $this->rootDir . $folder . '/config/ldap.php',
             '<?php
 $PMF_LDAP[\'ldap_server\'] = \''
-            . $data['ldapServer']
+            . (string) ($data['ldapServer'] ?? '')
             . "';\n"
             . "\$PMF_LDAP['ldap_port'] = '"
-            . $data['ldapPort']
+            . (string) ($data['ldapPort'] ?? '')
             . "';\n"
             . "\$PMF_LDAP['ldap_user'] = '"
-            . $data['ldapUser']
+            . (string) ($data['ldapUser'] ?? '')
             . "';\n"
             . "\$PMF_LDAP['ldap_password'] = '"
-            . $data['ldapPassword']
+            . (string) ($data['ldapPassword'] ?? '')
             . "';\n"
             . "\$PMF_LDAP['ldap_base'] = '"
-            . $data['ldapBase']
+            . (string) ($data['ldapBase'] ?? '')
             . "';",
             LOCK_EX,
         );
@@ -208,7 +208,7 @@ $PMF_LDAP[\'ldap_server\'] = \''
     /**
      * Creates the file /content/core/config/elasticsearch.php
      *
-     * @param  int[]|string[] $data   Array with Elasticsearch credentials
+     * @param  array<string, mixed> $data   Array with Elasticsearch credentials
      * @param  string         $folder Folder
      */
     public function createElasticsearchFile(array $data, string $folder = '/content/core/config'): int|bool
@@ -217,10 +217,13 @@ $PMF_LDAP[\'ldap_server\'] = \''
             $this->rootDir . $folder . '/config/elasticsearch.php',
             '<?php
 $PMF_ES[\'hosts\'] = [\''
-            . implode("'], ['", $data['hosts'])
+            . implode("'], ['", array_map(
+                static fn(mixed $host): string => (string) $host,
+                is_array($data['hosts'] ?? null) ? $data['hosts'] : [],
+            ))
             . "'];\n"
             . "\$PMF_ES['index'] = '"
-            . $data['index']
+            . (string) ($data['index'] ?? '')
             . "';\n",
             LOCK_EX,
         );
@@ -229,7 +232,7 @@ $PMF_ES[\'hosts\'] = [\''
     /**
      * Creates the file /content/core/config/opensearch.php
      *
-     * @param  int[]|string[] $data   Array with OpenSearch credentials
+     * @param  array<string, mixed> $data   Array with OpenSearch credentials
      * @param  string         $folder Folder
      */
     public function createOpenSearchFile(array $data, string $folder = '/content/core/config'): int|bool
@@ -238,10 +241,13 @@ $PMF_ES[\'hosts\'] = [\''
             $this->rootDir . $folder . '/config/opensearch.php',
             '<?php
 $PMF_OS[\'hosts\'] = [\''
-            . implode("'], ['", $data['hosts'])
+            . implode("'], ['", array_map(
+                static fn(mixed $host): string => (string) $host,
+                is_array($data['hosts'] ?? null) ? $data['hosts'] : [],
+            ))
             . "'];\n"
             . "\$PMF_OS['index'] = '"
-            . $data['index']
+            . (string) ($data['index'] ?? '')
             . "';\n",
             LOCK_EX,
         );

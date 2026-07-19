@@ -327,7 +327,7 @@ class OpenSearchTest extends TestCase
             ->method('delete')
             ->with([
                 'index' => 'phpmyfaq_os_test',
-                'id' => 42,
+                'id' => '42',
             ])
             ->willReturn(['result' => 'deleted']);
 

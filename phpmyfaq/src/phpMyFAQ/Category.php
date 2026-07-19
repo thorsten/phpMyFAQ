@@ -232,6 +232,8 @@ class Category
     /**
      * Returns all categories with ordered category IDs according to the user
      * and group permissions.
+     *
+     * @return array<int, array<string, mixed>>
      */
     public function getOrderedCategories(bool $withPermission = true, bool $withInactive = false): array
     {
@@ -653,6 +655,9 @@ class Category
         return $this->getCategoryRepository()->delete($categoryId, $categoryLang);
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getCategoryLanguagesTranslated(int $categoryId): array
     {
         return $this->getCategoryRepository()->getCategoryLanguagesTranslated($categoryId);

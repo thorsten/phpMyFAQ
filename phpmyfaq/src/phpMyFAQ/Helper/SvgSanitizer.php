@@ -229,36 +229,41 @@ class SvgSanitizer
         while ($decoded !== $previous && $maxIterations-- > 0) {
             $previous = $decoded;
             // Decode decimal entities (&#106; → j)
-            $decoded = preg_replace_callback(
-                '/&#(\d+);/',
-                static fn(array $matches): string => mb_chr((int) $matches[1], encoding: 'UTF-8'),
-                $decoded,
-            );
+            $decoded =
+                preg_replace_callback(
+                    '/&#(\d+);/',
+                    static fn(array $matches): string => mb_chr((int) $matches[1], encoding: 'UTF-8'),
+                    $decoded,
+                ) ?? '';
             // Decode hex entities (&#x6A; → j)
-            $decoded = preg_replace_callback(
-                '/&#x([0-9a-fA-F]+);/',
-                static fn(array $matches): string => mb_chr(hexdec($matches[1]), encoding: 'UTF-8'),
-                $decoded,
-            );
+            $decoded =
+                preg_replace_callback(
+                    '/&#x([0-9a-fA-F]+);/',
+                    static fn(array $matches): string => mb_chr((int) hexdec($matches[1]), encoding: 'UTF-8'),
+                    $decoded,
+                ) ?? '';
             // Decode named HTML entities (&amp; → &, &lt; → <, etc.)
             $decoded = html_entity_decode($decoded, ENT_QUOTES | ENT_HTML5, encoding: 'UTF-8');
         }
 
         // Safety net: if the loop exited due to iteration limit, do a final
         // numeric/hex entity decode pass to catch any remaining entities
-        $decoded = preg_replace_callback(
-            '/&#(\d+);/',
-            static fn(array $matches): string => mb_chr((int) $matches[1], encoding: 'UTF-8'),
-            $decoded,
-        );
-        $decoded = preg_replace_callback(
-            '/&#x([0-9a-fA-F]+);/',
-            static fn(array $matches): string => mb_chr(hexdec($matches[1]), encoding: 'UTF-8'),
-            $decoded,
-        );
+        $decoded =
+            preg_replace_callback(
+                '/&#(\d+);/',
+                static fn(array $matches): string => mb_chr((int) $matches[1], encoding: 'UTF-8'),
+                $decoded,
+            ) ?? '';
+        $decoded =
+            preg_replace_callback(
+                '/&#x([0-9a-fA-F]+);/',
+                static fn(array $matches): string => mb_chr((int) hexdec($matches[1]), encoding: 'UTF-8'),
+                $decoded,
+            ) ?? '';
 
         // Strip null bytes and control characters that could break regex matching
-        return preg_replace('/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/', replacement: '', subject: $decoded);
+        // Fail closed: a regex failure must never leak partially decoded content
+        return preg_replace('/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/', replacement: '', subject: $decoded) ?? '';
     }
 
     /**
@@ -277,52 +282,57 @@ class SvgSanitizer
         // Second: Remove dangerous element tags with their content
         foreach (self::DANGEROUS_ELEMENTS as $element) {
             // Remove opening and closing tags with content
-            $sanitized = preg_replace(
-                '/<'
-                . preg_quote($element, delimiter: '/')
-                . '\b[^>]*>.*?<\/'
-                . preg_quote($element, delimiter: '/')
-                . '>/is',
-                replacement: '',
-                subject: $sanitized,
-            );
+            $sanitized =
+                preg_replace(
+                    '/<'
+                    . preg_quote($element, delimiter: '/')
+                    . '\b[^>]*>.*?<\/'
+                    . preg_quote($element, delimiter: '/')
+                    . '>/is',
+                    replacement: '',
+                    subject: $sanitized,
+                ) ?? '';
 
             // Remove self-closing tags
-            $sanitized = preg_replace(
-                '/<' . preg_quote($element, delimiter: '/') . '\b[^>]*\/>/is',
-                replacement: '',
-                subject: $sanitized,
-            );
+            $sanitized =
+                preg_replace(
+                    '/<' . preg_quote($element, delimiter: '/') . '\b[^>]*\/>/is',
+                    replacement: '',
+                    subject: $sanitized,
+                ) ?? '';
 
             // Remove unclosed tags
-            $sanitized = preg_replace(
-                '/<' . preg_quote($element, delimiter: '/') . '\b[^>]*>/is',
-                replacement: '',
-                subject: $sanitized,
-            );
+            $sanitized =
+                preg_replace(
+                    '/<' . preg_quote($element, delimiter: '/') . '\b[^>]*>/is',
+                    replacement: '',
+                    subject: $sanitized,
+                ) ?? '';
         }
 
         // Third: Remove dangerous patterns using regex
         foreach (self::DANGEROUS_PATTERNS as $pattern) {
-            $sanitized = preg_replace($pattern, replacement: '', subject: $sanitized);
+            $sanitized = preg_replace($pattern, replacement: '', subject: $sanitized) ?? '';
         }
 
         // Fourth: Additional cleanup for remaining event handlers
-        $sanitized = preg_replace('/\s+on\w+\s*=\s*[^\s>]+/i', replacement: '', subject: $sanitized);
+        $sanitized = preg_replace('/\s+on\w+\s*=\s*[^\s>]+/i', replacement: '', subject: $sanitized) ?? '';
 
         // Fifth: Clean up any remaining dangerous URIs in attributes
-        $sanitized = preg_replace(
-            '/(href|xlink:href|src)\s*=\s*(["\'])[\s]*(javascript|vbscript|data)\s*:[^\2]*?\2/i',
-            replacement: '',
-            subject: $sanitized,
-        );
+        $sanitized =
+            preg_replace(
+                '/(href|xlink:href|src)\s*=\s*(["\'])[\s]*(javascript|vbscript|data)\s*:[^\2]*?\2/i',
+                replacement: '',
+                subject: $sanitized,
+            ) ?? '';
 
         // Sixth: Remove CDATA sections with script content
-        $sanitized = preg_replace('/<!\[CDATA\[.*?<script.*?\]\]>/is', replacement: '', subject: $sanitized);
+        $sanitized = preg_replace('/<!\[CDATA\[.*?<script.*?\]\]>/is', replacement: '', subject: $sanitized) ?? '';
 
         // Normalize whitespace (optional, for cleaner output)
-        $sanitized = preg_replace('/\s+/', replacement: ' ', subject: $sanitized);
+        $sanitized = preg_replace('/\s+/', replacement: ' ', subject: $sanitized) ?? '';
 
-        return preg_replace('/>\s+</', replacement: '><', subject: $sanitized);
+        // Fail closed: a regex failure must never leak unsanitized SVG content
+        return preg_replace('/>\s+</', replacement: '><', subject: $sanitized) ?? '';
     }
 }

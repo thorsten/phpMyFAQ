@@ -42,14 +42,13 @@ class AuthLdap extends Auth implements AuthDriverInterface
     private readonly ?Closure $userFactory;
     private readonly ?Closure $mediumPermissionFactory;
 
-    /** @var string[] Array of LDAP servers */
+    /** @var array<int, array<string, mixed>> Array of LDAP servers */
     private readonly array $ldapServer;
 
     /** @var int Active LDAP server */
     private int $activeServer = 0;
 
-    /** @var bool */
-    private readonly mixed $multipleServers;
+    private readonly bool $multipleServers;
 
     /**
      * @inheritDoc
@@ -63,14 +62,14 @@ class AuthLdap extends Auth implements AuthDriverInterface
     ) {
         $this->configuration = $configuration;
         $this->ldapServer = $this->configuration->getLdapServer();
-        $this->multipleServers = $this->configuration->get(item: 'ldap.ldap_use_multiple_servers');
+        $this->multipleServers = true === $this->configuration->get(item: 'ldap.ldap_use_multiple_servers');
         $this->ldapCore = $ldapCore ?? new LdapCore($configuration);
         $this->userFactory = $userFactory;
         $this->mediumPermissionFactory = $mediumPermissionFactory;
 
         parent::__construct($this->configuration);
 
-        if (0 === (is_countable($this->ldapServer) ? count($this->ldapServer) : 0)) {
+        if ([] === $this->ldapServer) {
             throw new AuthException('An error occurred while contacting LDAP: No configuration found.');
         }
 
@@ -98,14 +97,19 @@ class AuthLdap extends Auth implements AuthDriverInterface
         $user->setAuthSource(AuthenticationSourceType::AUTH_LDAP->value);
 
         // Set user information from LDAP
+        $completeName = $this->ldapCore->getCompleteName($login);
+        $mail = $this->ldapCore->getMail($login);
         $user->setUserData([
-            'display_name' => $this->ldapCore->getCompleteName($login) ?? '',
-            'email' => $this->ldapCore->getMail($login) ?? '',
+            'display_name' => is_string($completeName) ? $completeName : '',
+            'email' => is_string($mail) ? $mail : '',
         ]);
 
         // Handle group assignments if enabled
         $ldapGroupConfig = $this->configuration->getLdapGroupConfig();
-        if ($ldapGroupConfig['auto_assign'] && $this->configuration->get(item: 'security.permLevel') === 'medium') {
+        if (
+            true === ($ldapGroupConfig['auto_assign'] ?? false)
+            && $this->configuration->get(item: 'security.permLevel') === 'medium'
+        ) {
             $this->assignUserToGroups($login, $user->getUserId());
         }
 
@@ -129,15 +133,16 @@ class AuthLdap extends Auth implements AuthDriverInterface
         }
 
         $mediumPermission = $this->createMediumPermission();
-        $groupMapping = $ldapGroupConfig['group_mapping'];
+        $groupMappingRaw = $ldapGroupConfig['group_mapping'] ?? [];
+        $groupMapping = is_array($groupMappingRaw) ? $groupMappingRaw : [];
 
         foreach ($userGroups as $userGroup) {
             $groupName = $this->extractGroupNameFromDn($userGroup);
 
             // Check if there's a specific mapping for this AD group
             $faqGroupName = $groupName;
-            if (count($groupMapping) > 0 && array_key_exists($groupName, $groupMapping)) {
-                $faqGroupName = $groupMapping[$groupName];
+            if (array_key_exists($groupName, $groupMapping)) {
+                $faqGroupName = (string) $groupMapping[$groupName];
             }
 
             // Find or create the group
@@ -200,8 +205,8 @@ class AuthLdap extends Auth implements AuthDriverInterface
         if ($this->multipleServers) {
             $key = array_key_first($this->ldapServer);
             if ($key !== null) {
-                $this->connect($key);
                 $this->activeServer = (int) $key;
+                $this->connect($this->activeServer);
             }
         }
 
@@ -215,20 +220,22 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         if (!$usesDomainPrefix) {
             $this->connect($this->activeServer);
-            $bindLogin = $this->ldapCore->getDn($login);
+            $userDn = $this->ldapCore->getDn($login);
+            $bindLogin = is_string($userDn) && $userDn !== '' ? $userDn : $login;
         }
 
         // Check user in LDAP
+        $server = $this->ldapServer[$this->activeServer] ?? [];
         $this->ldapCore->connect(
-            $this->ldapServer[$this->activeServer]['ldap_server'],
-            $this->ldapServer[$this->activeServer]['ldap_port'],
-            $this->ldapServer[$this->activeServer]['ldap_base'],
+            (string) ($server['ldap_server'] ?? ''),
+            (int) ($server['ldap_port'] ?? 389),
+            (string) ($server['ldap_base'] ?? ''),
             $bindLogin,
             htmlspecialchars_decode($password),
         );
 
         if (!$this->ldapCore->bind($bindLogin, htmlspecialchars_decode($password))) {
-            throw new AuthException($this->ldapCore->error);
+            throw new AuthException($this->ldapCore->error ?? 'LDAP bind failed.');
         }
 
         // Check AD group membership restrictions if enabled
@@ -239,8 +246,9 @@ class AuthLdap extends Auth implements AuthDriverInterface
                 throw new AuthException('Unable to retrieve user group memberships');
             }
 
-            $allowedGroups = $ldapGroupConfig['allowed_groups'];
-            if (count($allowedGroups) > 0) {
+            $allowedGroupsRaw = $ldapGroupConfig['allowed_groups'] ?? [];
+            $allowedGroups = is_array($allowedGroupsRaw) ? $allowedGroupsRaw : [];
+            if ($allowedGroups !== []) {
                 $hasAllowedGroup = false;
                 foreach ($userGroups as $userGroup) {
                     foreach ($allowedGroups as $allowedGroup) {
@@ -273,8 +281,8 @@ class AuthLdap extends Auth implements AuthDriverInterface
         if ($this->multipleServers) {
             $key = array_key_first($this->ldapServer);
             if ($key !== null) {
-                $this->connect($key);
                 $this->activeServer = (int) $key;
+                $this->connect($this->activeServer);
             }
         }
 
@@ -285,12 +293,13 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
     private function connect(int $activeServer = 0): void
     {
+        $server = $this->ldapServer[$activeServer] ?? [];
         $this->ldapCore->connect(
-            $this->ldapServer[$activeServer]['ldap_server'],
-            $this->ldapServer[$activeServer]['ldap_port'],
-            $this->ldapServer[$activeServer]['ldap_base'],
-            $this->ldapServer[$activeServer]['ldap_user'],
-            $this->ldapServer[$activeServer]['ldap_password'],
+            (string) ($server['ldap_server'] ?? ''),
+            (int) ($server['ldap_port'] ?? 389),
+            (string) ($server['ldap_base'] ?? ''),
+            (string) ($server['ldap_user'] ?? ''),
+            (string) ($server['ldap_password'] ?? ''),
         );
 
         if ($this->ldapCore->error) {
@@ -302,7 +311,10 @@ class AuthLdap extends Auth implements AuthDriverInterface
     private function createUser(): User
     {
         if ($this->userFactory instanceof Closure) {
-            return ($this->userFactory)();
+            $user = ($this->userFactory)();
+            if ($user instanceof User) {
+                return $user;
+            }
         }
 
         return new User($this->configuration);
@@ -311,7 +323,10 @@ class AuthLdap extends Auth implements AuthDriverInterface
     private function createMediumPermission(): MediumPermission
     {
         if ($this->mediumPermissionFactory instanceof Closure) {
-            return ($this->mediumPermissionFactory)();
+            $mediumPermission = ($this->mediumPermissionFactory)();
+            if ($mediumPermission instanceof MediumPermission) {
+                return $mediumPermission;
+            }
         }
 
         return new MediumPermission($this->configuration);

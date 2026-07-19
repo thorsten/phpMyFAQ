@@ -109,16 +109,17 @@ class InstallationRunner
      */
     private function stepValidateConnectivity(InstallationInput $input): void
     {
-        Database::setTablePrefix($input->dbSetup['dbPrefix'] ?? '');
-        $db = Database::factory($input->dbSetup['dbType']);
+        Database::setTablePrefix((string) ($input->dbSetup['dbPrefix'] ?? ''));
+        $db = Database::factory((string) ($input->dbSetup['dbType'] ?? ''));
 
         try {
+            $dbPort = $input->dbSetup['dbPort'] ?? null;
             $connected = $db->connect(
-                $input->dbSetup['dbServer'],
-                $input->dbSetup['dbUser'],
-                $input->dbSetup['dbPassword'],
-                $input->dbSetup['dbDatabaseName'],
-                $input->dbSetup['dbPort'],
+                (string) ($input->dbSetup['dbServer'] ?? ''),
+                (string) ($input->dbSetup['dbUser'] ?? ''),
+                (string) ($input->dbSetup['dbPassword'] ?? ''),
+                (string) ($input->dbSetup['dbDatabaseName'] ?? ''),
+                $dbPort === null || $dbPort === '' ? null : (int) $dbPort,
             );
         } catch (\Throwable $e) {
             throw new Exception(sprintf('Database Connection Error: %s', $e->getMessage()), 0, $e);
@@ -143,11 +144,11 @@ class InstallationRunner
 
             $ldap = new Ldap($configuration);
             $ldapConnection = $ldap->connect(
-                $input->ldapSetup['ldapServer'],
-                $input->ldapSetup['ldapPort'],
-                $input->ldapSetup['ldapBase'],
-                $input->ldapSetup['ldapUser'],
-                $input->ldapSetup['ldapPassword'],
+                (string) ($input->ldapSetup['ldapServer'] ?? ''),
+                (int) ($input->ldapSetup['ldapPort'] ?? 389),
+                (string) ($input->ldapSetup['ldapBase'] ?? ''),
+                (string) ($input->ldapSetup['ldapUser'] ?? ''),
+                (string) ($input->ldapSetup['ldapPassword'] ?? ''),
             );
 
             if (!$ldapConnection) {
@@ -165,7 +166,8 @@ class InstallationRunner
             $classLoader->register();
 
             try {
-                $esHosts = array_values($input->esSetup['hosts']);
+                $esHostsRaw = $input->esSetup['hosts'] ?? [];
+                $esHosts = array_values(is_array($esHostsRaw) ? $esHostsRaw : [(string) $esHostsRaw]);
                 $esClient = ClientBuilder::create()->setHosts($esHosts)->build();
                 $pingResponse = $esClient->ping();
                 if (
@@ -186,7 +188,8 @@ class InstallationRunner
         // Validate OpenSearch connection if enabled
         if ($input->osEnabled && $input->osSetup !== []) {
             try {
-                $osHosts = array_values($input->osSetup['hosts']);
+                $osHostsRaw = $input->osSetup['hosts'] ?? [];
+                $osHosts = array_values(is_array($osHostsRaw) ? $osHostsRaw : [(string) $osHostsRaw]);
                 $osClient = new SymfonyClientFactory()->create($this->buildOpenSearchClientOptions(
                     $osHosts[0],
                     $input->osSetup,
@@ -254,7 +257,7 @@ class InstallationRunner
     {
         $databaseConfiguration = new DatabaseConfiguration($input->rootDir . '/content/core/config/database.php');
         try {
-            $this->db = Database::factory($input->dbSetup['dbType']);
+            $this->db = Database::factory((string) ($input->dbSetup['dbType'] ?? ''));
         } catch (Exception $exception) {
             Installer::cleanFailedInstallationFiles();
             throw new Exception(sprintf('Database Installation Error: %s', $exception->getMessage()));
@@ -289,8 +292,11 @@ class InstallationRunner
     private function stepCreateDatabaseTables(InstallationInput $input): void
     {
         try {
-            $databaseInstaller = InstanceDatabase::factory($this->configuration(), $input->dbSetup['dbType']);
-            $result = $databaseInstaller->createTables($input->dbSetup['dbPrefix'] ?? '');
+            $databaseInstaller = InstanceDatabase::factory(
+                $this->configuration(),
+                (string) ($input->dbSetup['dbType'] ?? ''),
+            );
+            $result = $databaseInstaller->createTables((string) ($input->dbSetup['dbPrefix'] ?? ''));
         } catch (Exception $exception) {
             Installer::cleanFailedInstallationFiles();
             throw new Exception(sprintf('Database Installation Error: %s', $exception->getMessage()));
@@ -300,8 +306,8 @@ class InstallationRunner
             Installer::cleanFailedInstallationFiles();
             throw new Exception(sprintf(
                 'Database Installation Error: Failed to create tables for database type "%s" with prefix "%s".',
-                $input->dbSetup['dbType'],
-                $input->dbSetup['dbPrefix'] ?? '',
+                (string) ($input->dbSetup['dbType'] ?? ''),
+                (string) ($input->dbSetup['dbPrefix'] ?? ''),
             ));
         }
     }
@@ -312,7 +318,7 @@ class InstallationRunner
     private function stepInsertStopwords(InstallationInput $input): void
     {
         $stopWords = new Stopwords($this->configuration());
-        $stopWords->executeInsertQueries($input->dbSetup['dbPrefix'] ?? '');
+        $stopWords->executeInsertQueries((string) ($input->dbSetup['dbPrefix'] ?? ''));
 
         $this->system->setDatabase($this->db());
     }

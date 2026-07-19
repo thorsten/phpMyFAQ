@@ -45,7 +45,7 @@ class CategoryHelper extends AbstractHelper
     {
         [$categoryTree, $normalizedCategoryNumbers, $aggregatedNumbers] = $this->gatherCategoryData();
 
-        if ((is_countable($categoryTree) ? count($categoryTree) : 0) > 0) {
+        if ([] !== $categoryTree) {
             return sprintf('<ul class="pmf-category-overview">%s</ul>', $this->buildCategoryList(
                 $categoryTree,
                 $parentId,
@@ -57,7 +57,7 @@ class CategoryHelper extends AbstractHelper
         $languagesAvailable = $this->getCategory()->getCategoryLanguagesTranslated($parentId);
         return sprintf(
             '<p>%s</p><ul class="pmf-category-overview">%s</ul>',
-            Translation::get(key: 'msgCategoryMissingButTranslationAvailable'),
+            Translation::getString('msgCategoryMissingButTranslationAvailable'),
             $this->buildAvailableCategoryTranslationsList($languagesAvailable),
         );
     }
@@ -66,7 +66,7 @@ class CategoryHelper extends AbstractHelper
      * Gathers the raw category tree and FAQ-count arrays shared by the HTML
      * renderer and the structured-data builder.
      *
-     * @return array{0: array<int, array>, 1: array<int, array>, 2: array<int, int>}
+     * @return array{0: array<int, array<string, mixed>>, 1: array<int, array<string, mixed>>, 2: array<int, int>}
      */
     private function gatherCategoryData(): array
     {
@@ -90,7 +90,7 @@ class CategoryHelper extends AbstractHelper
     {
         [$categoryTree, $normalizedCategoryNumbers, $aggregatedNumbers] = $this->gatherCategoryData();
 
-        if ((is_countable($categoryTree) ? count($categoryTree) : 0) === 0) {
+        if ([] === $categoryTree) {
             return [];
         }
 
@@ -100,9 +100,9 @@ class CategoryHelper extends AbstractHelper
     /**
      * Recursively builds the nested category node array.
      *
-     * @param array<int, array> $categoryTree
-     * @param array<int, int>   $aggregatedNumbers
-     * @param array<int, array> $categoryNumbers
+     * @param array<int, array<string, mixed>> $categoryTree
+     * @param array<int, int> $aggregatedNumbers
+     * @param array<int, array<string, mixed>> $categoryNumbers
      * @return array<int, array<string, mixed>>
      */
     public function buildCategoryNodes(
@@ -129,13 +129,13 @@ class CategoryHelper extends AbstractHelper
 
             $nodes[] = [
                 'id' => (int) $node['id'],
-                'name' => $node['name'],
+                'name' => (string) ($node['name'] ?? ''),
                 'description' => $description === '' ? null : $description,
                 'url' => sprintf(
                     '%scategory/%d/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $node['id'],
-                    TitleSlugifier::slug($node['name']),
+                    (int) $node['id'],
+                    TitleSlugifier::slug((string) ($node['name'] ?? '')),
                 ),
                 'image' => $image,
                 'faqCount' => $faqCount,
@@ -157,9 +157,9 @@ class CategoryHelper extends AbstractHelper
     /**
      * Builds a category list
      *
-     * @param array<int, array> $categoryTree
-     * @param array<int, array> $aggregatedNumbers
-     * @param array<int, array> $categoryNumbers
+     * @param array<int, array<string, mixed>> $categoryTree
+     * @param array<int, int> $aggregatedNumbers
+     * @param array<int, array<string, mixed>> $categoryNumbers
      */
     public function buildCategoryList(
         array $categoryTree,
@@ -169,33 +169,26 @@ class CategoryHelper extends AbstractHelper
     ): string {
         $html = '';
         foreach ($categoryTree as $categoryId => $node) {
-            if ($node['parent_id'] !== $parentId) {
+            if ((int) ($node['parent_id'] ?? 0) !== $parentId) {
                 continue;
             }
 
-            $number = 0;
-            foreach ($aggregatedNumbers as $key => $numFaqs) {
-                if ($key !== $node['id']) {
-                    continue;
-                }
+            $nodeId = (int) ($node['id'] ?? 0);
+            $number = $aggregatedNumbers[$nodeId] ?? 0;
 
-                $number = $numFaqs;
-                break;
-            }
-
-            $name = $node['name'];
-            if ($categoryNumbers[$categoryId]['faqs'] > 0) {
+            $name = (string) ($node['name'] ?? '');
+            if ((int) ($categoryNumbers[$categoryId]['faqs'] ?? 0) > 0) {
                 $url = sprintf(
                     '%scategory/%d/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $node['id'],
+                    $nodeId,
                     TitleSlugifier::slug($name),
                 );
 
                 $link = new Link($url, $this->configuration);
-                $link->setTitle($node['name']);
-                $link->text = $node['name'];
-                $link->tooltip = is_null($node['description']) ? '' : $node['description'];
+                $link->setTitle((string) ($node['name'] ?? ''));
+                $link->text = (string) ($node['name'] ?? '');
+                $link->tooltip = is_null($node['description'] ?? null) ? '' : (string) $node['description'];
                 $name = $link->toHtmlAnchor();
             }
 
@@ -204,14 +197,14 @@ class CategoryHelper extends AbstractHelper
 
             $html .= sprintf(
                 '<li data-category-id="%d">%s <span class="badge text-bg-primary">%s</span>%s',
-                $node['id'],
+                $nodeId,
                 $name,
                 $this->plurals()->get(key: 'plmsgEntries', number: $number),
                 $descriptionHtml,
             );
             $html .= sprintf('<ul>%s</ul>', $this->buildCategoryList(
                 $categoryTree,
-                $node['id'],
+                $nodeId,
                 $aggregatedNumbers,
                 $categoryNumbers,
             ));
@@ -245,21 +238,21 @@ class CategoryHelper extends AbstractHelper
     /**
      * Normalizes the category tree with the number of FAQs per category
      *
-     * @param array<int, array> $categoryTree
-     * @param array<int, array> $categoryNumbers
-     * @return array<int, array>
+     * @param array<int, array<string, mixed>> $categoryTree
+     * @param array<int, array<string, mixed>> $categoryNumbers
+     * @return array<int, array<string, mixed>>
      */
     public function normalizeCategoryTree(array $categoryTree, array $categoryNumbers): array
     {
         $normalizedCategoryTree = [];
 
         foreach ($categoryTree as $categoryId => $category) {
-            $normalizedCategoryTree[$category['id']] = [
+            $normalizedCategoryTree[(int) ($category['id'] ?? 0)] = [
                 'category_id' => $categoryId,
-                'parent_id' => (int) $category['parent_id'],
-                'name' => $category['name'],
-                'description' => $category['description'],
-                'faqs' => $categoryNumbers[$categoryId]['faqs'] ?? 0,
+                'parent_id' => (int) ($category['parent_id'] ?? 0),
+                'name' => (string) ($category['name'] ?? ''),
+                'description' => $category['description'] ?? null,
+                'faqs' => (int) ($categoryNumbers[$categoryId]['faqs'] ?? 0),
             ];
         }
 

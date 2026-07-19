@@ -92,6 +92,9 @@ class Relation
         return $matrix;
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function getCategoryWithFaqs(): array
     {
         $categoryTree = [];
@@ -256,6 +259,9 @@ class Relation
 
     /**
      * Calculates the aggregated numbers of FAQs
+     *
+     * @param array<int, array<string, mixed>> $categories
+     * @return array<int, int>
      */
     public function getAggregatedFaqNumbers(array $categories): array
     {

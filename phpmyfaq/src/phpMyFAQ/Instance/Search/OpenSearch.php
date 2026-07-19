@@ -94,7 +94,7 @@ readonly class OpenSearch
     /**
      * Returns the basic phpMyFAQ index structure as a raw array.
      *
-     * @return array<string, mixed>
+     * @return array{index: string, body: array<string, mixed>}
      */
     private function getParams(): array
     {
@@ -141,25 +141,16 @@ readonly class OpenSearch
     public function putMapping(): bool
     {
         $response = $this->getMapping();
+        $indexMapping = $response[$this->openSearchConfiguration->getIndex()] ?? null;
+        $currentMappings = is_array($indexMapping) ? $indexMapping['mappings'] ?? null : null;
 
-        if (
-            0
-            === (
-                is_countable($response[$this->openSearchConfiguration->getIndex()]['mappings'])
-                    ? count($response[$this->openSearchConfiguration->getIndex()]['mappings'])
-                    : 0
-            )
-        ) {
+        if (!is_array($currentMappings) || $currentMappings === []) {
             $params = [
                 'index' => $this->openSearchConfiguration->getIndex(),
                 'body' => $this->mappings,
             ];
 
-            $response = $this->client->indices()->putMapping($params);
-
-            if (($response['acknowledged'] ?? false) === true) {
-                return true;
-            }
+            $this->client->indices()->putMapping($params);
         }
 
         return true;
@@ -194,14 +185,14 @@ readonly class OpenSearch
     {
         $params = [
             'index' => $this->openSearchConfiguration->getIndex(),
-            'id' => $faq['solution_id'],
+            'id' => (string) ($faq['solution_id'] ?? ''),
             'body' => [
-                'id' => $faq['id'],
-                'lang' => $faq['lang'],
-                'question' => $faq['question'],
-                'answer' => strip_tags($faq['answer']),
-                'keywords' => $faq['keywords'],
-                'category_id' => $faq['category_id'],
+                'id' => (int) ($faq['id'] ?? 0),
+                'lang' => (string) ($faq['lang'] ?? ''),
+                'question' => (string) ($faq['question'] ?? ''),
+                'answer' => strip_tags((string) ($faq['answer'] ?? '')),
+                'keywords' => (string) ($faq['keywords'] ?? ''),
+                'category_id' => (int) ($faq['category_id'] ?? 0),
                 'content_type' => 'faq',
             ],
         ];
@@ -221,24 +212,24 @@ readonly class OpenSearch
         $i = 1;
 
         foreach ($faqs as $faq) {
-            if ('no' === $faq['active']) {
+            if ('no' === ($faq['active'] ?? 'no')) {
                 continue;
             }
 
             $params['body'][] = [
                 'index' => [
                     '_index' => $this->openSearchConfiguration->getIndex(),
-                    '_id' => $faq['solution_id'],
+                    '_id' => (string) ($faq['solution_id'] ?? ''),
                 ],
             ];
 
             $params['body'][] = [
-                'id' => $faq['id'],
-                'lang' => $faq['lang'],
-                'question' => $faq['title'],
-                'answer' => strip_tags((string) $faq['content']),
-                'keywords' => $faq['keywords'],
-                'category_id' => $faq['category_id'],
+                'id' => (int) ($faq['id'] ?? 0),
+                'lang' => (string) ($faq['lang'] ?? ''),
+                'question' => (string) ($faq['title'] ?? ''),
+                'answer' => strip_tags((string) ($faq['content'] ?? '')),
+                'keywords' => (string) ($faq['keywords'] ?? ''),
+                'category_id' => (int) ($faq['category_id'] ?? 0),
                 'content_type' => 'faq',
             ];
 
@@ -266,21 +257,21 @@ readonly class OpenSearch
      * Updates a FAQ document
      *
      * @param array<string, int|string|null> $faq
-     * @return string[]
+     * @return array<array-key, mixed>
      */
     public function update(array $faq): array
     {
         $params = [
             'index' => $this->openSearchConfiguration->getIndex(),
-            'id' => $faq['solution_id'],
+            'id' => (string) ($faq['solution_id'] ?? ''),
             'body' => [
                 'doc' => [
-                    'id' => $faq['id'],
-                    'lang' => $faq['lang'],
-                    'question' => $faq['question'],
-                    'answer' => strip_tags($faq['answer']),
-                    'keywords' => $faq['keywords'],
-                    'category_id' => $faq['category_id'],
+                    'id' => (int) ($faq['id'] ?? 0),
+                    'lang' => (string) ($faq['lang'] ?? ''),
+                    'question' => (string) ($faq['question'] ?? ''),
+                    'answer' => strip_tags((string) ($faq['answer'] ?? '')),
+                    'keywords' => (string) ($faq['keywords'] ?? ''),
+                    'category_id' => (int) ($faq['category_id'] ?? 0),
                     'content_type' => 'faq',
                 ],
             ],
@@ -292,13 +283,13 @@ readonly class OpenSearch
     /**
      * Deletes a FAQ document
      *
-     * @return string[]
+     * @return array<array-key, mixed>
      */
     public function delete(int $solutionId): array
     {
         $params = [
             'index' => $this->openSearchConfiguration->getIndex(),
-            'id' => $solutionId,
+            'id' => (string) $solutionId,
         ];
 
         return $this->client->delete($params);
@@ -327,21 +318,21 @@ readonly class OpenSearch
         // Only index active pages
         if (($page['active'] ?? null) === 'n') {
             // Delete from index if it exists (in case it was previously active)
-            return $this->deleteCustomPage((int) $page['id'], $page['lang']);
+            return $this->deleteCustomPage((int) ($page['id'] ?? 0), (string) ($page['lang'] ?? ''));
         }
 
         $params = [
             'index' => $this->openSearchConfiguration->getIndex(),
-            'id' => 'page_' . $page['id'] . '_' . $page['lang'],
+            'id' => 'page_' . (string) ($page['id'] ?? '') . '_' . (string) ($page['lang'] ?? ''),
             'body' => [
-                'id' => $page['id'],
-                'lang' => $page['lang'],
-                'question' => $page['page_title'],
-                'answer' => strip_tags($page['content']),
+                'id' => (int) ($page['id'] ?? 0),
+                'lang' => (string) ($page['lang'] ?? ''),
+                'question' => (string) ($page['page_title'] ?? ''),
+                'answer' => strip_tags((string) ($page['content'] ?? '')),
                 'keywords' => '',
                 'category_id' => 0,
                 'content_type' => 'page',
-                'slug' => $page['slug'],
+                'slug' => (string) ($page['slug'] ?? ''),
             ],
         ];
 
@@ -357,28 +348,28 @@ readonly class OpenSearch
      * Updates a custom page document
      *
      * @param array<string, mixed> $page
-     * @return array<string, mixed>
+     * @return array<array-key, mixed>
      */
     public function updateCustomPage(array $page): array
     {
         // Only index active pages - delete from index if inactive
         if (($page['active'] ?? null) === 'n') {
-            return $this->deleteCustomPage((int) $page['id'], $page['lang']);
+            return $this->deleteCustomPage((int) ($page['id'] ?? 0), (string) ($page['lang'] ?? ''));
         }
 
         $params = [
             'index' => $this->openSearchConfiguration->getIndex(),
-            'id' => 'page_' . $page['id'] . '_' . $page['lang'],
+            'id' => 'page_' . (string) ($page['id'] ?? '') . '_' . (string) ($page['lang'] ?? ''),
             'body' => [
                 'doc' => [
-                    'id' => $page['id'],
-                    'lang' => $page['lang'],
-                    'question' => $page['page_title'],
-                    'answer' => strip_tags($page['content']),
+                    'id' => (int) ($page['id'] ?? 0),
+                    'lang' => (string) ($page['lang'] ?? ''),
+                    'question' => (string) ($page['page_title'] ?? ''),
+                    'answer' => strip_tags((string) ($page['content'] ?? '')),
                     'keywords' => '',
                     'category_id' => 0,
                     'content_type' => 'page',
-                    'slug' => $page['slug'],
+                    'slug' => (string) ($page['slug'] ?? ''),
                 ],
             ],
         ];
@@ -398,7 +389,7 @@ readonly class OpenSearch
     /**
      * Deletes a custom page document
      *
-     * @return array<string, mixed>
+     * @return array<array-key, mixed>
      */
     public function deleteCustomPage(int $pageId, string $lang): array
     {
@@ -426,26 +417,26 @@ readonly class OpenSearch
         $i = 1;
 
         foreach ($pages as $page) {
-            if ('n' === $page['active']) {
+            if ('n' === ($page['active'] ?? 'n')) {
                 continue;
             }
 
             $params['body'][] = [
                 'index' => [
                     '_index' => $this->openSearchConfiguration->getIndex(),
-                    '_id' => 'page_' . $page['id'] . '_' . $page['lang'],
+                    '_id' => 'page_' . (string) ($page['id'] ?? '') . '_' . (string) ($page['lang'] ?? ''),
                 ],
             ];
 
             $params['body'][] = [
-                'id' => $page['id'],
-                'lang' => $page['lang'],
-                'question' => $page['page_title'],
-                'answer' => strip_tags($page['content']),
+                'id' => (int) ($page['id'] ?? 0),
+                'lang' => (string) ($page['lang'] ?? ''),
+                'question' => (string) ($page['page_title'] ?? ''),
+                'answer' => strip_tags((string) ($page['content'] ?? '')),
                 'keywords' => '',
                 'category_id' => 0,
                 'content_type' => 'page',
-                'slug' => $page['slug'],
+                'slug' => (string) ($page['slug'] ?? ''),
             ];
 
             if (($i % 1000) === 0) {
