@@ -70,7 +70,8 @@ class Utils
      */
     public static function makeShorterText(string $string, int $characters): string
     {
-        $string = Strings::preg_replace(pattern: '/\s+/u', replacement: ' ', subject: $string);
+        $condensed = Strings::preg_replace(pattern: '/\s+/u', replacement: ' ', subject: $string);
+        $string = is_string($condensed) ? $condensed : $string;
         $arrStr = explode(separator: ' ', string: $string);
 
         if (count($arrStr) > $characters) {
@@ -217,7 +218,7 @@ class Utils
             'onafterscriptexecute',
         ];
 
-        return Strings::preg_replace_callback(
+        $highlighted = Strings::preg_replace_callback(
             '/('
             . $highlight
             . '="[^"]*")|'
@@ -232,6 +233,8 @@ class Utils
             ['phpMyFAQ\Utils', 'highlightNoLinks'],
             $string,
         );
+
+        return is_string($highlighted) ? $highlighted : $string;
     }
 
     /**
@@ -294,7 +297,7 @@ class Utils
                 return '<a href="' . $url . '">' . $url . '</a>';
             },
             $string,
-        );
+        ) ?? $string;
     }
 
     /**

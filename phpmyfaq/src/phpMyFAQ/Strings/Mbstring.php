@@ -116,22 +116,35 @@ class Mbstring extends AbstractString
 
     /**
      * Match a regexp.
+     *
+     * @param array<array-key, mixed>|null $matches
+     * @return int|false
      */
-    public function preg_match(string $pattern, string $subject, &$matches = null, int $flags = 0, int $offset = 0): int
-    {
+    public function preg_match(
+        string $pattern,
+        string $subject,
+        &$matches = null,
+        int $flags = 0,
+        int $offset = 0,
+    ): int|false {
         return preg_match($this->appendU($pattern), $subject, $matches, $flags, $offset);
     }
 
     /**
      * Match a regexp globally.
      *
-     * @param string[][] $matches
+     * @param array<array-key, mixed>|null $matches
      * @param int $flags
      * @param int $offset
-     *
+     * @return int|false
      */
-    public function preg_match_all(string $pattern, string $subject, array &$matches, $flags = 0, $offset = 0): int
-    {
+    public function preg_match_all(
+        string $pattern,
+        string $subject,
+        &$matches = null,
+        $flags = 0,
+        $offset = 0,
+    ): int|false {
         return preg_match_all($this->appendU($pattern), $subject, $matches, $flags, $offset);
     }
 
@@ -151,6 +164,7 @@ class Mbstring extends AbstractString
      * Search and replace by a regexp using a callback.
      *
      * @param string|string[] $pattern
+     * @param callable(array<array-key, string>): string $callback
      * @param string|string[] $subject
      *
      * @return string|string[]|null

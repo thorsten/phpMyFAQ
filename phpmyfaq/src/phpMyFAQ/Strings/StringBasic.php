@@ -74,11 +74,11 @@ class StringBasic extends AbstractString
     /**
      * Get a part of string.
      *
-     * @param string $str String
-     * @param int    $start Start
-     * @param null   $length Length
+     * @param string   $str String
+     * @param int      $start Start
+     * @param int|null $length Length
      */
-    public function substr(string $str, int $start, $length = null): string
+    public function substr(string $str, int $start, ?int $length = null): string
     {
         $length = null === $length ? strlen($str) : $length;
 
@@ -92,7 +92,7 @@ class StringBasic extends AbstractString
      * @param string $needle   Needle
      * @param int    $offset   Offset
      */
-    public function strpos(string $haystack, string $needle, int $offset = 0): int
+    public function strpos(string $haystack, string $needle, int $offset = 0): int|false
     {
         return strpos($haystack, $needle, $offset);
     }
@@ -134,6 +134,9 @@ class StringBasic extends AbstractString
      *
      * @return int|false
      */
+    /**
+     * @param array<array-key, mixed>|null $matches
+     */
     public function preg_match(
         string $pattern,
         string $subject,
@@ -147,13 +150,16 @@ class StringBasic extends AbstractString
     /**
      * Match a regexp globally.
      *
-     * @param string[][] $matches
+     * @param array<array-key, mixed>|null $matches
      * @return int|false
+     */
+    /**
+     * @param array<array-key, mixed>|null $matches
      */
     public function preg_match_all(
         string $pattern,
         string $subject,
-        &$matches,
+        &$matches = null,
         int $flags = 0,
         int $offset = 0,
     ): int|false { /* phpcs:ignore */
@@ -172,8 +178,9 @@ class StringBasic extends AbstractString
      * Search and replace by a regexp using a callback.
      *
      * @param string|string[] $pattern
+     * @param callable(array<array-key, string>): string $callback
      * @param string|string[] $subject
-     * @return string|string[]
+     * @return string|string[]|null
      */
     public function preg_replace_callback(
         string|array $pattern,
@@ -181,7 +188,7 @@ class StringBasic extends AbstractString
         string|array $subject,
         int $limit = -1,
         int &$count = 0,
-    ): string|array {
+    ): string|array|null {
         return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
 

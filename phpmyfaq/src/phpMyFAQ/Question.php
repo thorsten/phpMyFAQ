@@ -80,14 +80,14 @@ readonly class Question
         foreach ($rows as $row) {
             $question = new QuestionEntity();
             $question
-                ->setId($row['id'])
-                ->setLanguage($row['lang'])
-                ->setUsername($row['username'])
-                ->setEmail($row['email'])
-                ->setCategoryId($row['category_id'])
-                ->setQuestion($row['question'])
-                ->setCreated(Date::createIsoDate($row['created']))
-                ->setAnswerId($row['answer_id'])
+                ->setId((int) $row['id'])
+                ->setLanguage((string) $row['lang'])
+                ->setUsername((string) $row['username'])
+                ->setEmail((string) $row['email'])
+                ->setCategoryId((int) $row['category_id'])
+                ->setQuestion((string) $row['question'])
+                ->setCreated(Date::createIsoDate((string) $row['created']))
+                ->setAnswerId((int) $row['answer_id'])
                 ->setIsVisible($row['is_visible'] === 'Y');
 
             $questions[] = $question;

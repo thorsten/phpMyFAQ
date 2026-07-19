@@ -135,6 +135,8 @@ class Strings
 
     /**
      * Match a regexp.
+     *
+     * @param array<array-key, mixed>|null $matches
      */
     public static function preg_match(
         string $pattern,
@@ -143,11 +145,13 @@ class Strings
         int $flags = 0,
         int $offset = 0,
     ): int { // phpcs:ignore
-        return self::instance()->preg_match($pattern, $subject, $matches, $flags, $offset);
+        return (int) self::instance()->preg_match($pattern, $subject, $matches, $flags, $offset);
     }
 
     /**
      * Match a regexp globally.
+     *
+     * @param array<array-key, mixed>|null $matches
      */
     public static function preg_match_all(
         string $pattern,
@@ -156,7 +160,7 @@ class Strings
         int $flags = 0,
         int $offset = 0,
     ): int { // phpcs:ignore
-        return self::instance()->preg_match_all($pattern, $subject, $matches, $flags, $offset);
+        return (int) self::instance()->preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
 
     /**
@@ -169,6 +173,9 @@ class Strings
 
     /**
      * Search and replace by a regexp using a callback.
+     *
+     * @param callable(array<array-key, string>): string $callback
+     * @param string|string[] $subject
      */
     public static function preg_replace_callback(
         string $pattern,

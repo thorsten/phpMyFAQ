@@ -3934,7 +3934,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Database/DatabaseHelper.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/DatabaseHelper.php"
@@ -4544,6 +4544,12 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Glossary.php"
+code = "less-specific-nested-argument-type"
+message = 'Argument type mismatch for argument #3 of `phpMyFAQ\Strings::preg_replace_callback`: expected `array<array-key, string>|string`, but provided type `array<array-key, mixed>|null|string` is less specific.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Glossary.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Glossary::fetchAll`. Saw type `nonnull`.'
 count = 1
@@ -4563,7 +4569,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Glossary.php"
 code = "possibly-null-argument"
-message = 'Argument #3 of method `phpMyFAQ\Strings::preg_replace_callback` is possibly `null`, but parameter type `array<array-key, mixed>|string` does not accept it.'
+message = 'Argument #3 of method `phpMyFAQ\Strings::preg_replace_callback` is possibly `null`, but parameter type `array<array-key, string>|string` does not accept it.'
 count = 1
 
 [[issues]]
@@ -5355,12 +5361,6 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
 code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
-code = "mixed-assignment"
 message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 1
 
@@ -5614,54 +5614,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Push/WebPushService.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Push\WebPushService::getVapidPublicKey`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Date::createIsoDate`: expected `string`, but possibly received `int|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Entity\QuestionEntity::setAnswerId`: expected `int`, but possibly received `int|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Entity\QuestionEntity::setCategoryId`: expected `int`, but possibly received `int|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Entity\QuestionEntity::setEmail`: expected `string`, but possibly received `int|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Entity\QuestionEntity::setId`: expected `int`, but possibly received `int|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Entity\QuestionEntity::setLanguage`: expected `string`, but possibly received `int|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Entity\QuestionEntity::setQuestion`: expected `string`, but possibly received `int|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Entity\QuestionEntity::setUsername`: expected `string`, but possibly received `int|string`.'
 count = 1
 
 [[issues]]
@@ -6362,57 +6314,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Session\Token::getSessionToken`: expected `string`, but found `null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Session\Token::getTokenString`: expected `string`, but found `null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$cookieToken` (null|string)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$sessionToken` (null|string)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Session\Token::getSessionToken` is declared to return `string` but possibly returns a nullable value (inferred as `null|string`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Session\Token::getTokenString` is declared to return `string` but possibly returns a nullable value (inferred as `null|string`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `hash_equals`: expected `string`, but possibly received `scalar`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
-code = "possibly-null-argument"
-message = "Argument #1 of function `hash_equals` is possibly `null`, but parameter type `string` does not accept it."
-count = 1
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/AbstractSetup.php"
@@ -6850,132 +6754,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Storage/StorageFactory.php"
 code = "mixed-operand"
 message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Strings::preg_match_all` is declared to return `int` but possibly returns 'false' (inferred as `false|int`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Strings::preg_match` is declared to return `int` but possibly returns 'false' (inferred as `false|int`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Strings::preg_match_all`: expected `int`, but found `false|int`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Strings::preg_match`: expected `int`, but found `false|int`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #3 of `phpMyFAQ\Strings\Mbstring::preg_replace_callback`: expected `array<array-key, string>|string`, but provided type `array<array-key, mixed>|string` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #3 of `phpMyFAQ\Strings\StringBasic::preg_replace_callback`: expected `array<array-key, string>|string`, but provided type `array<array-key, mixed>|string` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Strings\StringBasic::preg_match_all`: expected `array<array-key, array<array-key, string>>`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #3 of `phpMyFAQ\Strings\StringBasic::substr`: expected `null`, but possibly received `int|null`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings/Mbstring.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Strings\Mbstring::preg_match_all` is declared to return `int` but possibly returns 'false' (inferred as `false|int`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings/Mbstring.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Strings\Mbstring::preg_match` is declared to return `int` but possibly returns 'false' (inferred as `false|int`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings/Mbstring.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Strings\Mbstring::preg_match_all`: expected `int`, but found `false|int`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings/Mbstring.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Strings\Mbstring::preg_match`: expected `int`, but found `false|int`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings/Mbstring.php"
-code = "less-specific-nested-argument-type"
-message = "Argument type mismatch for argument #2 of `preg_replace_callback`: expected `(callable(array<array-key, string>): string)`, but provided type `(callable(...mixed=): mixed)` is less specific."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings/StringBasic.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Strings\StringBasic::strpos` is declared to return `int` but possibly returns 'false' (inferred as `false|non-negative-int`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings/StringBasic.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Strings\StringBasic::preg_replace_callback`: expected `array<array-key, string>|string`, but found `array<array-key, string>|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings/StringBasic.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Strings\StringBasic::strpos`: expected `int`, but found `false|non-negative-int`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings/StringBasic.php"
-code = "less-specific-nested-argument-type"
-message = "Argument type mismatch for argument #2 of `preg_replace_callback`: expected `(callable(array<array-key, string>): string)`, but provided type `(callable(...mixed=): mixed)` is less specific."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings/StringBasic.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Strings\StringBasic::preg_replace_callback` is declared to return `array<array-key, string>|string` but possibly returns a nullable value (inferred as `array<array-key, string>|null|string`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings/StringBasic.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is always identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Strings/StringBasic.php"
-code = "redundant-condition"
-message = "Redundant ternary operator: condition is always truthy."
 count = 1
 
 [[issues]]
@@ -7499,54 +7277,6 @@ file = "phpmyfaq/src/phpMyFAQ/User/UserSession.php"
 code = "redundant-null-coalesce"
 message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Utils.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Utils::makeShorterText`: expected `string`, but found `array<array-key, string>|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Utils.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Utils::parseUrl`: expected `string`, but found `null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Utils.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Utils::setHighlightedString`: expected `string`, but found `array<array-key, mixed>|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Utils.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Utils::makeShorterText` is declared to return `string` but possibly returns a nullable value (inferred as `array<array-key, string>|null|string`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Utils.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Utils::parseUrl` is declared to return `string` but possibly returns a nullable value (inferred as `null|string`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Utils.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Utils::setHighlightedString` is declared to return `string` but possibly returns a nullable value (inferred as `array<array-key, mixed>|null|string`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Utils.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `explode`: expected `string`, but possibly received `array<array-key, string>|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Utils.php"
-code = "possibly-null-argument"
-message = "Argument #2 of function `explode` is possibly `null`, but parameter type `string` does not accept it."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Visits.php"

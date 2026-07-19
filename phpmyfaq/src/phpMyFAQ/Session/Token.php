@@ -73,8 +73,10 @@ class Token
     {
         $this->page = (string) ($data['page'] ?? '');
         $this->expiry = (int) ($data['expiry'] ?? 0);
-        $this->sessionToken = $data['sessionToken'] ?? null;
-        $this->cookieToken = $data['cookieToken'] ?? null;
+        $sessionToken = $data['sessionToken'] ?? null;
+        $this->sessionToken = is_string($sessionToken) ? $sessionToken : null;
+        $cookieToken = $data['cookieToken'] ?? null;
+        $this->cookieToken = is_string($cookieToken) ? $cookieToken : null;
     }
 
     public function getPage(): string
@@ -101,7 +103,7 @@ class Token
 
     public function getSessionToken(): string
     {
-        return $this->sessionToken;
+        return $this->sessionToken ?? '';
     }
 
     public function setSessionToken(#[\SensitiveParameter] string $sessionToken): Token
@@ -155,7 +157,7 @@ class Token
     {
         $token = $this->getSession($page) ?? $this->setSession($page, $expiry);
 
-        return $token->sessionToken;
+        return $token->sessionToken ?? '';
     }
 
     public function verifyToken(
@@ -165,7 +167,10 @@ class Token
         #[\SensitiveParameter]
         bool $removeToken = false,
     ): bool {
-        $requestToken ??= Request::createFromGlobals()->request->get(self::PMF_SESSION_NAME) ?? null;
+        if ($requestToken === null) {
+            $postedToken = Request::createFromGlobals()->request->get(self::PMF_SESSION_NAME);
+            $requestToken = $postedToken === null ? null : (string) $postedToken;
+        }
 
         if (is_null($requestToken)) {
             return false;
@@ -181,7 +186,9 @@ class Token
 
         // check the hash matches the Session / Cookie
         $sessionConfirm = hash_equals($token->getSessionToken(), $requestToken);
-        $cookieConfirm = hash_equals($token->getCookieToken(), $this->getCookie($page));
+        // A token without a cookie counterpart is malformed state - fail closed
+        $storedCookieToken = $token->getCookieToken();
+        $cookieConfirm = $storedCookieToken !== null && hash_equals($storedCookieToken, $this->getCookie($page));
 
         // remove the token
         if ($removeToken) {
