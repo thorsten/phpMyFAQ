@@ -85,14 +85,14 @@ class InstallationInputValidator
 
     /**
      * @param array<string, mixed>|null $setup
-     * @return array<string, string|int|null>
+     * @return array<string, mixed>
      * @throws Exception
      */
     private function validateDatabaseInput(?array $setup): array
     {
         $dbSetup = [];
 
-        $dbSetup['dbPrefix'] = Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $dbSetup['dbPrefix'] = (string) Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if ('' !== $dbSetup['dbPrefix']) {
             Database::setTablePrefix($dbSetup['dbPrefix']);
         }
@@ -172,7 +172,7 @@ class InstallationInputValidator
     }
 
     /**
-     * @return array<string, string|int|null>
+     * @return array<string, mixed>
      * @throws Exception
      */
     private function validateLdapInput(): array
@@ -206,7 +206,7 @@ class InstallationInputValidator
     }
 
     /**
-     * @return array<string, string|array<string>>
+     * @return array<string, mixed>
      * @throws Exception
      */
     private function validateElasticsearchInput(): array
@@ -240,7 +240,7 @@ class InstallationInputValidator
     }
 
     /**
-     * @return array<string, string|array<string>>
+     * @return array<string, mixed>
      * @throws Exception
      */
     private function validateOpenSearchInput(): array

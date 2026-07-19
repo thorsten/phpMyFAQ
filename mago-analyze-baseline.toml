@@ -3044,32 +3044,14 @@ count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Database::getTablePrefix`: expected `string`, but found `null|string`.'
+code = "unfulfilled-expect"
+message = "This pragma was not used and may be removed."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database.php"
-code = "less-specific-return-statement"
-message = 'Returned type `object` is less specific than the declared return type `phpMyFAQ\Database\DatabaseDriver` for function `phpMyFAQ\Database::factory`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Database::getTablePrefix` is declared to return `string` but possibly returns a nullable value (inferred as `null|string`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database.php"
-code = "property-type-coercion"
-message = "Property type coercion"
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database.php"
-code = "unknown-class-instantiation"
-message = "Cannot determine the concrete class for instantiation."
+code = "unsafe-instantiation"
+message = 'Potentially unsafe instantiation: `class-string<phpMyFAQ\Database\DatabaseDriver>` may contain the interface `phpMyFAQ\Database\DatabaseDriver` itself, which cannot be instantiated.'
 count = 1
 
 [[issues]]
@@ -3178,36 +3160,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "redundant-null-coalesce"
 message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Date.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Date::getTrackingFileDateEnd` is declared to return `int` but possibly returns 'false' (inferred as `false|int`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Date.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Date::getTrackingFileDateStart` is declared to return `int` but possibly returns 'false' (inferred as `false|int`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Date.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Date::getTrackingFileDateEnd`: expected `int`, but found `false|int`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Date.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Date::getTrackingFileDateStart`: expected `int`, but found `false|int`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Date.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `DateTime::format`: expected `string`, but found `mixed`."
 count = 1
 
 [[issues]]
@@ -3548,24 +3500,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
-code = "incompatible-return-type"
-message = 'Return type `array<int, object>` of `phpMyFAQ\Form\FormsRepository::fetchformdatabyformid()` is incompatible with parent return type `array<int, stdClass>` of `phpMyFAQ\Form\FormsRepositoryInterface::fetchformdatabyformid()`'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
-code = "incompatible-return-type"
-message = 'Return type `array<int, object>` of `phpMyFAQ\Form\FormsRepository::fetchtranslationsbyformandinput()` is incompatible with parent return type `array<int, stdClass>` of `phpMyFAQ\Form\FormsRepositoryInterface::fetchtranslationsbyformandinput()`'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseDriver::escape`: expected `string`, but found `mixed`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
@@ -3581,6 +3515,18 @@ file = "phpmyfaq/src/phpMyFAQ/Forms.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
 count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Forms.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Form\FormsRepositoryInterface::buildInsertQuery`: expected `array<string, mixed>`, but provided type `array<array-key, mixed>` is less specific.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Forms.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Form\FormsRepositoryInterface::insertInput`: expected `array<string, mixed>`, but provided type `array<array-key, mixed>` is less specific.'
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Forms.php"
@@ -4190,38 +4136,8 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
-code = "less-specific-nested-argument-type"
-message = "Argument type mismatch for argument #2 of `implode`: expected `array<array-key, Stringable|null|scalar>|null`, but provided type `array<array-key, mixed>` is less specific."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
 code = "mixed-assignment"
 message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #1 of `str_contains`: expected `string`, but possibly received `array<array-key, string>|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `str_replace`: expected `array<array-key, string>|string`, but possibly received `list{string, float|int|string}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
-code = "possibly-null-argument"
-message = "Argument #1 of function `str_contains` is possibly `null`, but parameter type `string` does not accept it."
 count = 1
 
 [[issues]]
@@ -4388,33 +4304,9 @@ count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Push/WebPushService.php"
-code = "invalid-return-statement"
-message = '''Invalid return type for function `phpMyFAQ\Push\WebPushService::generateVapidKeys`: expected `array{'privateKey': string, 'publicKey': string}`, but found `array<array-key, mixed>`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/WebPushService.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Push\PushSubscriptionRepository::deleteByEndpoint`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/WebPushService.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/WebPushService.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/WebPushService.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Push\WebPushService::getVapidPublicKey`. Saw type `nonnull`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
@@ -4492,19 +4384,7 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/SendMailHandler.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/SendMailHandler.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/SendMailHandler.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Queue/Message/ExportMessage.php"
@@ -5060,36 +4940,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationInputValidator.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array{'dbDatabaseName': mixed, 'dbPassword': mixed, 'dbPort': mixed, 'dbPrefix': mixed, 'dbServer': mixed, 'dbType': string, 'dbUser': mixed}` is less specific than the declared return type `array<string, int|null|string>` for function `phpMyFAQ\Setup\InstallationInputValidator::validateDatabaseInput` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationInputValidator.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array{'hosts': mixed, 'index': mixed}` is less specific than the declared return type `array<string, array<array-key, string>|string>` for function `phpMyFAQ\Setup\InstallationInputValidator::validateElasticsearchInput` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationInputValidator.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array{'hosts': mixed, 'index': mixed}` is less specific than the declared return type `array<string, array<array-key, string>|string>` for function `phpMyFAQ\Setup\InstallationInputValidator::validateOpenSearchInput` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationInputValidator.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array{'ldapBase': mixed, 'ldapPassword': mixed, 'ldapPort': mixed, 'ldapServer': mixed, 'ldapUser': mixed}` is less specific than the declared return type `array<string, int|null|string>` for function `phpMyFAQ\Setup\InstallationInputValidator::validateLdapInput` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationInputValidator.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database::setTablePrefix`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationInputValidator.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 9
@@ -5102,8 +4952,20 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationRunner.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `phpMyFAQ\Setup\InstallationRunner::buildOpenSearchClientOptions`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationRunner.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationRunner.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 2
 
 [[issues]]
@@ -5354,18 +5216,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\StopWords::getByLang`: expected `array<array-key, string>`, but found `list<stdClass>|null`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Strings::htmlentities`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
@@ -5378,20 +5228,8 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\StopWords::getByLang` is declared to return `array<array-key, string>` but possibly returns a nullable value (inferred as `list<stdClass>|null`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
-code = "possibly-false-argument"
-message = "Argument #2 of function `explode` is possibly `false`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `explode`: expected `string`, but possibly received `array{}|false|string`."
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
@@ -5558,33 +5396,15 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/GoogleTranslationProvider.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array<array-key, mixed>|list<mixed>` is less specific than the declared return type `array<array-key, string>` for function `phpMyFAQ\Translation\Provider\GoogleTranslationProvider::doTranslateBatch` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/GoogleTranslationProvider.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `array_map`: expected `array<('K.array_map() extends array-key), ('V.array_map() extends mixed)>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/GoogleTranslationProvider.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/GoogleTranslationProvider.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/GoogleTranslationProvider.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Translation\Provider\GoogleTranslationProvider::doTranslate`. Saw type `nonnull`.'
-count = 1
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/LibreTranslationProvider.php"

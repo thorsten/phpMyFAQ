@@ -34,7 +34,7 @@ class Database
     /** @var string Database type. */
     private static string $dbType = '';
 
-    /** @var string|null Table prefix */
+    /** @var string Table prefix */
     private static string $tablePrefix = '';
 
     /**
@@ -52,7 +52,8 @@ class Database
             $class = 'phpMyFAQ\Database\Pdo' . ucfirst(substr($type, offset: 4));
         }
 
-        if (class_exists($class)) {
+        if (class_exists($class) && is_subclass_of($class, DatabaseDriver::class)) {
+            /* @mago-expect analysis:unknown-class-instantiation - the driver class is resolved from the configured type */
             $databaseDriver = new $class();
             self::$databaseDriver = $databaseDriver;
             return $databaseDriver;

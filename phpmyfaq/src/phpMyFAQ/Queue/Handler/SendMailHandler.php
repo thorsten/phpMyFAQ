@@ -34,7 +34,15 @@ final readonly class SendMailHandler
 
     public function __invoke(SendMailMessage $message): void
     {
-        $mail = $this->mailFactory instanceof Closure ? ($this->mailFactory)() : new Mail($this->configuration);
+        $mail = null;
+        if ($this->mailFactory instanceof Closure) {
+            $createdMail = ($this->mailFactory)();
+            if ($createdMail instanceof Mail) {
+                $mail = $createdMail;
+            }
+        }
+
+        $mail ??= new Mail($this->configuration);
 
         $envelope = $message->metadata['envelope'] ?? null;
         if (
@@ -46,7 +54,12 @@ final readonly class SendMailHandler
             && is_array($envelope['headers'])
             && is_string($envelope['body'])
         ) {
-            $mail->sendPreparedEnvelope($envelope['recipients'], $envelope['headers'], $envelope['body']);
+            $headers = [];
+            foreach ($envelope['headers'] as $headerName => $headerValue) {
+                $headers[(string) $headerName] = is_int($headerValue) || is_string($headerValue) ? $headerValue : null;
+            }
+
+            $mail->sendPreparedEnvelope($envelope['recipients'], $headers, $envelope['body']);
 
             return;
         }

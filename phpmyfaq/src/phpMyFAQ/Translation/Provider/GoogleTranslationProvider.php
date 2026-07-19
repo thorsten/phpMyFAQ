@@ -64,7 +64,11 @@ class GoogleTranslationProvider extends AbstractTranslationProvider
             ]);
 
             $data = $response->toArray();
-            return $data['data']['translations'][0]['translatedText'] ?? '';
+            $payload = $data['data'] ?? [];
+            $translations = is_array($payload) ? $payload['translations'] ?? [] : [];
+            $firstTranslation = is_array($translations) ? $translations[0] ?? [] : [];
+
+            return is_array($firstTranslation) ? (string) ($firstTranslation['translatedText'] ?? '') : '';
         } catch (Exception|TransportExceptionInterface $e) {
             throw new ApiException('Google Translation API error: ' . $e->getMessage());
         }
@@ -93,7 +97,15 @@ class GoogleTranslationProvider extends AbstractTranslationProvider
             ]);
 
             $data = $response->toArray();
-            return array_map(static fn($translation) => $translation['translatedText'], $data['data']['translations']);
+            $payload = $data['data'] ?? [];
+            $translations = is_array($payload) ? $payload['translations'] ?? [] : [];
+
+            return array_map(
+                static fn(mixed $translation): string => is_array($translation)
+                    ? (string) ($translation['translatedText'] ?? '')
+                    : '',
+                is_array($translations) ? array_values($translations) : [],
+            );
         } catch (Exception|TransportExceptionInterface $e) {
             throw new ApiException('Google Translation API error: ' . $e->getMessage());
         }

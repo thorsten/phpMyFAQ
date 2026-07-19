@@ -127,7 +127,7 @@ class StopWords
      * Retrieve all the stop words by a certain language.
      *
      * @param  string|null $lang      Language to retrieve stop words by
-     * @return string[]
+     * @return array<array-key, string|\stdClass> Strings when $wordsOnly is true, otherwise row objects
      */
     public function getByLang(?string $lang = null, bool $wordsOnly = false): array
     {
@@ -143,7 +143,7 @@ class StopWords
         $stopWords = [];
 
         if (!$wordsOnly) {
-            return $this->configuration->getDb()->fetchAll($result);
+            return $this->configuration->getDb()->fetchAll($result) ?? [];
         }
 
         while (true) {
@@ -152,7 +152,7 @@ class StopWords
                 break;
             }
 
-            $stopWords[] = Strings::htmlentities($row->stopword);
+            $stopWords[] = Strings::htmlentities((string) $row->stopword);
         }
 
         return $stopWords;
@@ -237,16 +237,17 @@ class StopWords
     private function getBannedWords(): array
     {
         $bannedTrimmedWords = [];
-        $bannedWordsFile = PMF_SRC_DIR . '/blockedwords.txt';
-        $bannedWords = [];
+        $bannedWordsFile = (string) PMF_SRC_DIR . '/blockedwords.txt';
 
         // Read the dictionary
+        $bannedWordsContent = '';
         if (file_exists($bannedWordsFile) && is_readable($bannedWordsFile)) {
-            $bannedWords = file_get_contents($bannedWordsFile);
+            $fileContent = file_get_contents($bannedWordsFile);
+            $bannedWordsContent = $fileContent === false ? '' : $fileContent;
         }
 
         // Trim it
-        foreach (explode("\n", $bannedWords) as $word) {
+        foreach (explode("\n", $bannedWordsContent) as $word) {
             $bannedTrimmedWords[] = trim($word);
         }
 

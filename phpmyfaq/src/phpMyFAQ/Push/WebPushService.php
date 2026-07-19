@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Push;
 
+use Minishlink\WebPush\MessageSentReport;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\VAPID;
 use Minishlink\WebPush\WebPush;
@@ -53,7 +54,7 @@ readonly class WebPushService
      */
     public function getVapidPublicKey(): string
     {
-        return $this->configuration->get('push.vapidPublicKey') ?? '';
+        return (string) ($this->configuration->get('push.vapidPublicKey') ?? '');
     }
 
     /**
@@ -63,7 +64,12 @@ readonly class WebPushService
      */
     public static function generateVapidKeys(): array
     {
-        return VAPID::createVapidKeys();
+        $vapidKeys = VAPID::createVapidKeys();
+
+        return [
+            'publicKey' => (string) ($vapidKeys['publicKey'] ?? ''),
+            'privateKey' => (string) ($vapidKeys['privateKey'] ?? ''),
+        ];
     }
 
     /**
@@ -162,7 +168,7 @@ readonly class WebPushService
             }
 
             foreach ($webPush->flush() as $report) {
-                if (!$report->isSubscriptionExpired()) {
+                if (!$report instanceof MessageSentReport || !$report->isSubscriptionExpired()) {
                     continue;
                 }
 

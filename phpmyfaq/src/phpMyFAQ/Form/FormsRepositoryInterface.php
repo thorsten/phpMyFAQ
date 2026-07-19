@@ -48,7 +48,13 @@ interface FormsRepositoryInterface
         string $langCode,
     ): bool;
 
+    /**
+     * @param array<string, mixed> $input
+     */
     public function insertInput(array $input): bool;
 
+    /**
+     * @param array<string, mixed> $input
+     */
     public function buildInsertQuery(array $input): string;
 }

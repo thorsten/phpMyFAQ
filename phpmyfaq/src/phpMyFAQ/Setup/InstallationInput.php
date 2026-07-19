@@ -24,10 +24,10 @@ use SensitiveParameter;
 readonly class InstallationInput
 {
     /**
-     * @param array<string, string|int|null> $dbSetup
-     * @param array<string, string|int|null> $ldapSetup
-     * @param array<string, string|array<string>>     $esSetup
-     * @param array<string, string|array<string>>     $osSetup
+     * @param array<string, mixed> $dbSetup
+     * @param array<string, mixed> $ldapSetup
+     * @param array<string, mixed>     $esSetup
+     * @param array<string, mixed>     $osSetup
      */
     /* @mago-expect lint:excessive-parameter-list - mirrors the installation form fields as one immutable input */
     public function __construct(

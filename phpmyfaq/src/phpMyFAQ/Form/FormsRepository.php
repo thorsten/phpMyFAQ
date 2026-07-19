@@ -31,7 +31,7 @@ readonly class FormsRepository implements FormsRepositoryInterface
     }
 
     /**
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function fetchFormDataByFormId(int $formId): array
     {
@@ -78,7 +78,7 @@ readonly class FormsRepository implements FormsRepositoryInterface
     }
 
     /**
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function fetchTranslationsByFormAndInput(int $formId, int $inputId): array
     {
@@ -162,12 +162,18 @@ readonly class FormsRepository implements FormsRepositoryInterface
         return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
+    /**
+     * @param array<string, mixed> $input
+     */
     public function insertInput(array $input): bool
     {
         $query = $this->buildInsertQuery($input);
         return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
+    /**
+     * @param array<string, mixed> $input
+     */
     public function buildInsertQuery(array $input): string
     {
         return sprintf(
@@ -176,9 +182,9 @@ readonly class FormsRepository implements FormsRepositoryInterface
             Database::getTablePrefix(),
             (int) $input['form_id'],
             (int) $input['input_id'],
-            $this->coreConfiguration->getDb()->escape($input['input_type']),
-            $this->coreConfiguration->getDb()->escape($input['input_label']),
-            $this->coreConfiguration->getDb()->escape($input['input_lang']),
+            $this->coreConfiguration->getDb()->escape((string) $input['input_type']),
+            $this->coreConfiguration->getDb()->escape((string) $input['input_label']),
+            $this->coreConfiguration->getDb()->escape((string) $input['input_lang']),
             (int) $input['input_active'],
             (int) $input['input_required'],
         );

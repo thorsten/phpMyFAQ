@@ -88,7 +88,14 @@ readonly class Date
             $month = Strings::substr($file, start: 10, length: 2);
             $year = Strings::substr($file, start: 12, length: 4);
 
-            return gmmktime(hour: 0, minute: 0, second: 0, month: (int) $month, day: (int) $day, year: (int) $year);
+            return (int) gmmktime(
+                hour: 0,
+                minute: 0,
+                second: 0,
+                month: (int) $month,
+                day: (int) $day,
+                year: (int) $year,
+            );
         }
 
         return -1;
@@ -104,7 +111,14 @@ readonly class Date
             $month = Strings::substr($file, start: 10, length: 2);
             $year = Strings::substr($file, start: 12, length: 4);
 
-            return gmmktime(hour: 23, minute: 59, second: 59, month: (int) $month, day: (int) $day, year: (int) $year);
+            return (int) gmmktime(
+                hour: 23,
+                minute: 59,
+                second: 59,
+                month: (int) $month,
+                day: (int) $day,
+                year: (int) $year,
+            );
         }
 
         return -1;
@@ -117,7 +131,7 @@ readonly class Date
     {
         try {
             $dateTime = new DateTime($unformattedDate);
-            return $dateTime->format($this->configuration->get(item: 'main.dateFormat'));
+            return $dateTime->format((string) $this->configuration->get(item: 'main.dateFormat'));
         } catch (Exception $exception) {
             $this->configuration->getLogger()->error($exception->getMessage());
             return '';

@@ -90,6 +90,9 @@ class Pagination
         return $this->renderLayout(implode(separator: '&nbsp;&nbsp;', array: $content));
     }
 
+    /**
+     * @return string[]
+     */
     protected function renderPageNumbers(int $pages): array
     {
         $content = [];
@@ -133,6 +136,10 @@ class Pagination
     }
 
     /* @mago-expect lint:halstead - renders the full pagination control in one method */
+    /**
+     * @param string[] $content
+     * @return string[]
+     */
     protected function addNavigationButtons(array $content, int $pages): array
     {
         if (1 < $this->currentPage) {
@@ -171,11 +178,12 @@ class Pagination
         }
 
         $urlToParse = '%s%s%s=%d';
-        $cleanedUrl = Strings::preg_replace(
+        $replacedUrl = Strings::preg_replace(
             ['/[?&](amp;|)' . $this->urlConfig->pageParamName . '=(\d+)/'],
             replacement: '',
             subject: $url,
         );
+        $cleanedUrl = is_string($replacedUrl) ? $replacedUrl : $url;
         $separator = str_contains($cleanedUrl, needle: '?') ? '&' : '?';
         return sprintf($urlToParse, $cleanedUrl, $separator, $this->urlConfig->pageParamName, $page);
     }
@@ -183,7 +191,7 @@ class Pagination
     protected function renderLink(string $tpl, string $url, string|int|float $linkText): string
     {
         $search = [self::TPL_VAR_LINK_URL, self::TPL_VAR_LINK_TEXT];
-        $replace = [$url, $linkText];
+        $replace = [$url, (string) $linkText];
 
         return str_replace($search, $replace, $tpl);
     }
