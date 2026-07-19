@@ -49,6 +49,11 @@ interface DatabaseDriver
 
     /**
      * This function sends a query to the database.
+     *
+     * Returns a driver-specific result handle (object or resource) on success,
+     * `true` for result-less statements, or `false`/`null` on failure.
+     *
+     * @return object|resource|bool|null
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed;
 
@@ -59,6 +64,7 @@ interface DatabaseDriver
      * carries user input.
      *
      * @param array<int, string|int|float|null> $params
+     * @return object|resource|bool|null
      */
     public function queryPrepared(string $query, array $params): mixed;
 

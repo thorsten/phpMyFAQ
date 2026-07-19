@@ -111,7 +111,7 @@ final class UpdateController extends AbstractController
 
         $dateTime = new DateTime();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
-        $branch = $this->configuration->get(item: 'upgrade.releaseEnvironment');
+        $branch = (string) $this->configuration->get(item: 'upgrade.releaseEnvironment');
 
         try {
             $versions = $this->adminApi->getVersions();

@@ -182,6 +182,16 @@ trait ConfigurationMethodsTrait
     }
 
     /**
+     * Returns the registered service container, or null when none is set.
+     */
+    public function getServiceContainer(): ?\Psr\Container\ContainerInterface
+    {
+        $container = $this->config['core.container'] ?? null;
+
+        return $container instanceof \Psr\Container\ContainerInterface ? $container : null;
+    }
+
+    /**
      * Returns the default language.
      */
     public function getDefaultLanguage(): string

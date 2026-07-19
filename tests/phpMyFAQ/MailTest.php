@@ -352,7 +352,6 @@ class MailTest extends TestCase
                 return match ($item) {
                     'mail.remoteSMTP' => false,
                     'mail.useQueue' => true,
-                    'core.container' => 'not-a-container',
                     default => null,
                 };
             });
@@ -654,10 +653,10 @@ class MailTest extends TestCase
                 return match ($item) {
                     'mail.remoteSMTP' => false,
                     'mail.useQueue' => true,
-                    'core.container' => $container,
                     default => null,
                 };
             });
+        $configuration->method('getServiceContainer')->willReturn($container);
         $configuration->method('getVersion')->willReturn('4.2.0-alpha');
         $configuration->method('getAdminEmail')->willReturn('admin@example.com');
         $configuration->method('getTitle')->willReturn('phpMyFAQ');
@@ -682,7 +681,6 @@ class MailTest extends TestCase
             ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
-                'core.container' => 'not-a-container',
                 default => null,
             });
         $invalidContainerConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
@@ -705,9 +703,9 @@ class MailTest extends TestCase
             ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
-                'core.container' => $missingBusContainer,
                 default => null,
             });
+        $missingBusConfiguration->method('getServiceContainer')->willReturn($missingBusContainer);
         $missingBusConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
         $missingBusConfiguration->method('getAdminEmail')->willReturn('admin@example.com');
         $missingBusConfiguration->method('getTitle')->willReturn('phpMyFAQ');
@@ -728,9 +726,9 @@ class MailTest extends TestCase
             ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
-                'core.container' => $wrongBusContainer,
                 default => null,
             });
+        $wrongBusConfiguration->method('getServiceContainer')->willReturn($wrongBusContainer);
         $wrongBusConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
         $wrongBusConfiguration->method('getAdminEmail')->willReturn('admin@example.com');
         $wrongBusConfiguration->method('getTitle')->willReturn('phpMyFAQ');
@@ -759,9 +757,9 @@ class MailTest extends TestCase
             ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
-                'core.container' => $successContainer,
                 default => null,
             });
+        $successConfiguration->method('getServiceContainer')->willReturn($successContainer);
         $successConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
         $successConfiguration->method('getAdminEmail')->willReturn('admin@example.com');
         $successConfiguration->method('getTitle')->willReturn('phpMyFAQ');
@@ -777,9 +775,9 @@ class MailTest extends TestCase
             ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
-                'core.container' => $successContainer,
                 default => null,
             });
+        $noRecipientConfiguration->method('getServiceContainer')->willReturn($successContainer);
         $noRecipientConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
         $noRecipientConfiguration->method('getAdminEmail')->willReturn('admin@example.com');
         $noRecipientConfiguration->method('getTitle')->willReturn('phpMyFAQ');
@@ -806,9 +804,9 @@ class MailTest extends TestCase
             ->method('get')
             ->willReturnCallback(static fn(string $item): mixed => match ($item) {
                 'mail.remoteSMTP' => false,
-                'core.container' => $throwingContainer,
                 default => null,
             });
+        $throwingConfiguration->method('getServiceContainer')->willReturn($throwingContainer);
         $throwingConfiguration->method('getVersion')->willReturn('4.2.0-alpha');
         $throwingConfiguration->method('getAdminEmail')->willReturn('admin@example.com');
         $throwingConfiguration->method('getTitle')->willReturn('phpMyFAQ');
@@ -834,7 +832,6 @@ class MailTest extends TestCase
                 return match ($item) {
                     'mail.remoteSMTP' => false,
                     'mail.useQueue' => false,
-                    'core.container' => $container,
                     default => null,
                 };
             });

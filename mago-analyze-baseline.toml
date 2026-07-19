@@ -4,12 +4,6 @@ variant = "loose"
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
 count = 2
 
 [[issues]]
@@ -34,31 +28,13 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Backup/BackupRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Backup/BackupRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
@@ -79,22 +55,10 @@ message = "Redundant type assertion: `$row` is already `array<array-key, mixed>`
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Changelog.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Changelog.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/DashboardLayout.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/DashboardLayout.php"
@@ -106,12 +70,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
@@ -137,18 +95,6 @@ file = "phpmyfaq/src/phpMyFAQ/Administration/RatingStatistics.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
 count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/RatingStatistics.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/RecentUsers.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
@@ -176,12 +122,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/ReportRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/ReportRepository.php"
 code = "redundant-comparison"
 message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
 count = 1
@@ -196,18 +136,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Administration/ReportRepository.php"
 code = "redundant-type-comparison"
 message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Revision.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Revision.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
@@ -233,18 +161,6 @@ file = "phpmyfaq/src/phpMyFAQ/Administration/Session.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/SessionRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/SessionRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/TranslationStatistics.php"
@@ -302,12 +218,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 1
@@ -320,18 +230,6 @@ count = 8
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractMimeType.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentCollection.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AttachmentFactory.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
@@ -412,7 +310,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Auth/ApiKeyAuthenticator.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/ApiKeyAuthenticator.php"
@@ -425,12 +323,6 @@ file = "phpmyfaq/src/phpMyFAQ/Auth/AuthChain.php"
 code = "redundant-type-comparison"
 message = 'Redundant type assertion: `$this->oauth2Authenticator` is already `(callable(Symfony\Component\HttpFoundation\Request): int|null)`.'
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthDatabase.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthKeycloak.php"
@@ -578,56 +470,20 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/AccessTokenRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/AccessTokenRepository.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/AuthCodeRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/AuthCodeRepository.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/ClientRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/ClientRepository.php"
 code = "redundant-null-coalesce"
 message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/RefreshTokenRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/ScopeRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/UserRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
@@ -673,18 +529,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 6
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bookmark/BookmarkRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bookmark/BookmarkRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 3
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bootstrap/ConfigDirectoryResolver.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
@@ -704,12 +548,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bootstrapper.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bootstrapper.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 2
@@ -719,12 +557,6 @@ file = "phpmyfaq/src/phpMyFAQ/Cache/CacheSettingsResolver.php"
 code = "invalid-type-cast"
 message = "Non numeric string of type `string` implicitly cast to `float`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
@@ -775,21 +607,15 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 13
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/CategoryRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 4
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Image.php"
 code = "possibly-false-operand"
 message = "Left operand in `<` comparison might be `false` (type `false|int`)."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/Language/CategoryLanguageService.php"
+code = "unfulfilled-expect"
+message = "This pragma was not used and may be removed."
 count = 1
 
 [[issues]]
@@ -811,24 +637,6 @@ message = "Assigning `nonnull` type to a variable may lead to unexpected behavio
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Order.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Order.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Permission.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
 code = "impossible-condition"
 message = "This condition (type `false`) will always evaluate to false."
@@ -838,19 +646,13 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 8
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
 code = "redundant-type-comparison"
 message = "Redundant type assertion: `$category` is already `array<string, mixed>`."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Startpage.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Tree/TreeBuilder.php"
@@ -889,12 +691,6 @@ message = 'Parameter #2 of `phpMyFAQ\Category\Tree\TreeBuilder::getbrothers()` i
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Chat.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 13
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Command/CreateHashesCommand.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -928,19 +724,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Command/SeedTestDataCommand.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 15
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 2
+count = 10
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
@@ -952,18 +736,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
 code = "redundant-logical-operation"
 message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/ConfigurationRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/ConfigurationRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
@@ -1022,18 +794,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/DatabaseConfigurationStore.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/DatabaseConfigurationStore.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/DatabaseConfigurationStore.php"
 code = "redundant-logical-operation"
 message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
 count = 1
@@ -1081,6 +841,12 @@ message = "Reference created from a previously undefined variable `$queryParams`
 count = 1
 
 [[issues]]
+file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/AbstractController.php"
 code = "impossible-null-type-comparison"
 message = 'Impossible condition: variable `$currentUser` (type `phpMyFAQ\User\CurrentUser`) will always be `null`.'
@@ -1108,7 +874,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ApiKeyController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 7
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ApiKeyController.php"
@@ -1426,7 +1192,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UpdateController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UpdateController.php"
@@ -2005,18 +1771,6 @@ message = "Property `$seoRepository` is written to but never read."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 10
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage/CustomPageRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 4
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database.php"
 code = "unfulfilled-expect"
 message = "This pragma was not used and may be removed."
@@ -2032,7 +1786,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Database/DatabaseHelper.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/PdoMysql.php"
@@ -2092,7 +1846,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
@@ -2227,6 +1981,12 @@ message = "Reference created from a previously undefined variable `$matches`."
 count = 1
 
 [[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq.php"
+code = "unfulfilled-expect"
+message = "This pragma was not used and may be removed."
+count = 1
+
+[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqCreationService.php"
 code = "array-to-string-conversion"
 message = "Potentially casting `array` to `string`."
@@ -2248,7 +2008,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 14
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
@@ -2260,12 +2020,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Faq/Permission.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Permission.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
@@ -2287,12 +2041,6 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Statistics.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Filesystem/Filesystem.php"
 code = "possibly-false-operand"
 message = "Left operand in arithmetic operation might be `false` (type `false|non-negative-int`)."
@@ -2309,18 +2057,6 @@ file = "phpmyfaq/src/phpMyFAQ/Form/FormsHelper.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Forms.php"
@@ -2365,27 +2101,9 @@ message = '''Redundant condition: variable `$this` (type `$this(phpMyFAQ\Glossar
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Glossary/GlossaryRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Glossary/GlossaryRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 3
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Helper/FaqHelper.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
 
 [[issues]]
@@ -2419,18 +2137,6 @@ message = "Variable `$matches` might not have been defined on all execution path
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 2
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
 code = "invalid-type-cast"
 message = "Object of type `object` cast to `array`. Property visibility (public, protected, private) affects the resulting array."
@@ -2438,72 +2144,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/Mysqli.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/PdoMysql.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/PdoPgsql.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/PdoSqlite.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/PdoSqlsrv.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/Pgsql.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/Sqlite3.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/Sqlsrv.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/Stopwords.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
@@ -2560,7 +2200,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Language.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Language/LanguageCodes.php"
@@ -2644,7 +2284,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Mail.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Mail.php"
@@ -2681,18 +2321,6 @@ file = "phpmyfaq/src/phpMyFAQ/News.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
@@ -2746,13 +2374,13 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 7
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 7
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
@@ -2765,30 +2393,6 @@ file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
 code = "possibly-null-array-access"
 message = "Cannot perform array access on possibly `null` value."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/GroupCategoryPermissionRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/GroupCategoryPermissionRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermissionRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 10
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermissionRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 11
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermissionRepository.php"
@@ -2836,30 +2440,12 @@ count = 7
 file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 4
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Push/WebPushService.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
 count = 4
 
 [[issues]]
@@ -2920,7 +2506,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Queue/Transport/DatabaseTransport.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Queue/Worker.php"
@@ -2980,13 +2566,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
@@ -3053,18 +2633,6 @@ file = "phpmyfaq/src/phpMyFAQ/Search/Database/Sqlsrv.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
@@ -3200,18 +2768,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
 code = "redundant-comparison"
 message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
 count = 1
@@ -3314,18 +2870,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Installation/SchemaInstaller.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Installation/SchemaInstaller.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Installation/SchemaInstaller.php"
 code = "redundant-null-coalesce"
 message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
 count = 1
@@ -3398,12 +2942,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
 code = "redundant-comparison"
 message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
 count = 1
@@ -3428,18 +2966,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Operations/SqlOperation.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Operations/SqlOperation.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Operations/SqlOperation.php"
 code = "reference-to-undefined-variable"
 message = "Reference created from a previously undefined variable `$matches`."
 count = 7
@@ -3460,7 +2986,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Setup/Update.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Update.php"
@@ -3503,24 +3029,6 @@ file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
 code = "redundant-null-coalesce"
 message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Sitemap.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
@@ -3566,18 +3074,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
 code = "possibly-undefined-variable"
 message = "Variable `$query` might not have been defined on all execution paths leading to this point."
 count = 1
@@ -3592,7 +3088,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Tenant/TenantQuotaEnforcer.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Translation.php"
@@ -3686,15 +3182,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 12
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 7
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
@@ -3746,27 +3236,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
 code = "possibly-false-operand"
 message = "Possibly false right operand used in string concatenation (type `false|string`)."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUserAccountStateTrait.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUserAccountStateTrait.php"
@@ -3850,13 +3322,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 12
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
@@ -3868,7 +3334,7 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User/UserSession.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/UserSession.php"
@@ -3893,15 +3359,3 @@ file = "phpmyfaq/src/phpMyFAQ/Visits.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Visits/VisitsRepository.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Visits/VisitsRepository.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 3

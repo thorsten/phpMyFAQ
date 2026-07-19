@@ -237,8 +237,7 @@ class Sqlsrv implements DatabaseDriver
     /**
      * This function sends a query to the database.
      *
-     *
-     * @return mixed $result
+     * @return resource|bool
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {

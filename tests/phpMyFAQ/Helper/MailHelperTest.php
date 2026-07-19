@@ -68,10 +68,10 @@ final class MailHelperTest extends TestCase
                 return match ($item) {
                     'mail.remoteSMTP' => false,
                     'mail.useQueue' => true,
-                    'core.container' => $container,
                     default => null,
                 };
             });
+        $configuration->method('getServiceContainer')->willReturn($container);
         $configuration->method('getVersion')->willReturn('4.2.0-alpha');
         $configuration->method('getAdminEmail')->willReturn('admin@example.com');
         $configuration->method('getTitle')->willReturn('phpMyFAQ');

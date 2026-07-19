@@ -770,8 +770,8 @@ class Mail
     private function enqueueForDelivery(string $recipients, array $headers, string $body): bool
     {
         try {
-            $container = $this->configuration->get('core.container');
-            if (!is_object($container) || !method_exists($container, 'has') || !method_exists($container, 'get')) {
+            $container = $this->configuration->getServiceContainer();
+            if (!$container instanceof \Psr\Container\ContainerInterface) {
                 return false;
             }
 
