@@ -30,14 +30,14 @@ class ConfigDirectoryResolver
     {
         if (defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
             if (!defined('PMF_CONFIG_DIR')) {
-                define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR);
+                define('PMF_CONFIG_DIR', (string) constant('PMF_MULTI_INSTANCE_CONFIG_DIR'));
             }
 
             return;
         }
 
         if (!defined('PMF_CONFIG_DIR')) {
-            define('PMF_CONFIG_DIR', PMF_ROOT_DIR . '/content/core/config');
+            define('PMF_CONFIG_DIR', (string) PMF_ROOT_DIR . '/content/core/config');
         }
 
         // For backward compatibility, we also define PMF_LEGACY_CONFIG_DIR if not already defined,
@@ -45,7 +45,7 @@ class ConfigDirectoryResolver
         // This can be removed if we drop support updates from phpMyFAQ 3.x versions that still use the old config
         // location.
         if (!defined('PMF_LEGACY_CONFIG_DIR')) {
-            define('PMF_LEGACY_CONFIG_DIR', PMF_ROOT_DIR . '/config');
+            define('PMF_LEGACY_CONFIG_DIR', (string) PMF_ROOT_DIR . '/config');
         }
     }
 
@@ -65,9 +65,9 @@ class ConfigDirectoryResolver
             || str_contains($requestUri, '/update')
             || str_contains($requestUri, '/update/');
 
-        $legacyConfigDir = defined('PMF_LEGACY_CONFIG_DIR') ? PMF_LEGACY_CONFIG_DIR : null;
+        $legacyConfigDir = defined('PMF_LEGACY_CONFIG_DIR') ? (string) PMF_LEGACY_CONFIG_DIR : null;
 
-        $configExists = file_exists(PMF_CONFIG_DIR . '/database.php');
+        $configExists = file_exists((string) PMF_CONFIG_DIR . '/database.php');
         $legacyExists = $legacyConfigDir !== null && file_exists($legacyConfigDir . '/database.php');
 
         if (!$configExists && !$legacyExists) {
@@ -81,7 +81,7 @@ class ConfigDirectoryResolver
         }
 
         if ($configExists) {
-            return PMF_CONFIG_DIR . '/database.php';
+            return (string) PMF_CONFIG_DIR . '/database.php';
         }
 
         return $legacyConfigDir . '/database.php';
@@ -92,13 +92,19 @@ class ConfigDirectoryResolver
      */
     public static function loadConfigConstants(): void
     {
-        if (file_exists(PMF_CONFIG_DIR . '/constants.php')) {
-            require_once PMF_CONFIG_DIR . '/constants.php';
+        $constantsFile = (string) PMF_CONFIG_DIR . '/constants.php';
+        if (file_exists($constantsFile)) {
+            require_once $constantsFile;
             return;
         }
 
-        if (defined('PMF_LEGACY_CONFIG_DIR') && file_exists(PMF_LEGACY_CONFIG_DIR . '/constants.php')) {
-            require_once PMF_LEGACY_CONFIG_DIR . '/constants.php';
+        if (!defined('PMF_LEGACY_CONFIG_DIR')) {
+            return;
+        }
+
+        $legacyConstantsFile = (string) PMF_LEGACY_CONFIG_DIR . '/constants.php';
+        if (file_exists($legacyConstantsFile)) {
+            require_once $legacyConstantsFile;
         }
     }
 

@@ -1208,39 +1208,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/WebAuthn/PublicKeyConverter.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/WebAuthn/PublicKeyConverter.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/WebAuthn/PublicKeyConverter.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/WebAuthn/PublicKeyConverter.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/WebAuthn/PublicKeyConverter.php"
-code = "mixed-operand"
-message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/WebAuthn/PublicKeyConverter.php"
-code = "mixed-operand"
-message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bookmark/BookmarkFormatter.php"
@@ -1268,15 +1238,9 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bootstrap/ConfigDirectoryResolver.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bootstrap/ConfigDirectoryResolver.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Bootstrap\PMF_MULTI_INSTANCE_CONFIG_DIR`.'
-count = 1
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bootstrap/PhpConfigurator.php"

@@ -39,6 +39,10 @@ class PublicKeyConverter
     {
         $cosePubKey = CBOREncoder::decode($binary);
 
+        if (!is_array($cosePubKey)) {
+            return null;
+        }
+
         if (!array_key_exists(3, $cosePubKey) || $cosePubKey[3] === null) { /* cose_alg */
             return null;
         }
@@ -78,9 +82,20 @@ class PublicKeyConverter
                     throw new Exception('Cannot decode key response for key type EC2');
                 }
 
-                $x = $cosePubKey[-2]->get_byte_string();
-                $y = $cosePubKey[-3]->get_byte_string();
-                if (strlen((string) $x) !== 32 || strlen((string) $y) !== 32) {
+                $xEntry = $cosePubKey[-2];
+                $yEntry = $cosePubKey[-3];
+                if (
+                    !is_object($xEntry)
+                    || !method_exists($xEntry, 'get_byte_string')
+                    || !is_object($yEntry)
+                    || !method_exists($yEntry, 'get_byte_string')
+                ) {
+                    throw new Exception('Cannot decode key response for x or y coordinate');
+                }
+
+                $x = (string) $xEntry->get_byte_string();
+                $y = (string) $yEntry->get_byte_string();
+                if (strlen($x) !== 32 || strlen($y) !== 32) {
                     throw new Exception('Cannot decode key response for x or y coordinate');
                 }
 
@@ -94,8 +109,19 @@ class PublicKeyConverter
                     throw new Exception('RSA Modulus missing');
                 }
 
-                $e = new BigInteger(bin2hex((string) $cosePubKey[-2]->get_byte_string()), 16);
-                $n = new BigInteger(bin2hex((string) $cosePubKey[-1]->get_byte_string()), 16);
+                $exponentEntry = $cosePubKey[-2];
+                $modulusEntry = $cosePubKey[-1];
+                if (
+                    !is_object($exponentEntry)
+                    || !method_exists($exponentEntry, 'get_byte_string')
+                    || !is_object($modulusEntry)
+                    || !method_exists($modulusEntry, 'get_byte_string')
+                ) {
+                    throw new Exception('Cannot decode key response for RSA exponent or modulus');
+                }
+
+                $e = new BigInteger(bin2hex((string) $exponentEntry->get_byte_string()), 16);
+                $n = new BigInteger(bin2hex((string) $modulusEntry->get_byte_string()), 16);
                 return (string) PublicKeyLoader::load(['e' => $e, 'n' => $n]);
             default:
                 return null;
