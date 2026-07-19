@@ -128,104 +128,8 @@ count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "impossible-type-comparison"
-message = "Impossible type assertion: `$row` of type `string` can never be `array<array-key, mixed>`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "invalid-argument"
-message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "invalid-array-index"
-message = "Invalid index type `string('level')` used for array access on `string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "invalid-array-index"
-message = "Invalid index type `string('parent_id')` used for array access on `string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$categories`: expected `array<array-key, int>`, but got `array<array-key, int|non-empty-array<array-key, mixed>>`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$categoryName`: expected `array<array-key, string>`, but got `array<array-key, non-empty-array<array-key, mixed>|string>`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Administration\Category::buildAdminCategoryTree`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "mixed-array-assignment"
-message = "Unsafe array assignment on type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `array<array-key, mixed>` is being assigned to property `$$groups` (array<array-key, int>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `array<int, mixed>` is being assigned to property `$$moderators` (array<int, int>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `array<int, mixed>` is being assigned to property `$$owner` (array<int, int>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "no-value"
-message = 'Argument #1 passed to method `phpMyFAQ\Administration\Category::getLevelOf` has type `never`, meaning it cannot produce a value.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "no-value"
-message = "Argument #2 passed to function `array_key_exists` has type `never`, meaning it cannot produce a value."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Database\DatabaseDriver::escape` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "possibly-null-argument"
-message = "Argument #2 of function `preg_match` is possibly `null`, but parameter type `string` does not accept it."
 count = 1
 
 [[issues]]
@@ -236,14 +140,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "redundant-condition"
-message = "This condition (type `true`) will always evaluate to true."
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is always falsy and right operand is not evaluated."
+code = "redundant-type-comparison"
+message = "Redundant type assertion: `$row` is already `array<array-key, mixed>`."
 count = 1
 
 [[issues]]
@@ -1640,81 +1544,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Captcha\BuiltinCaptcha::getCaptchaImage` is declared to return `string` but possibly returns 'false' (inferred as `false|string`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$ip`: expected `string`, but got `null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$userAgent`: expected `string`, but got `null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Captcha\BuiltinCaptcha::getCaptchaImage`: expected `string`, but found `false|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "mixed-operand"
-message = "Left operand in binary operation has type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$timestamp` (int)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "possibly-false-argument"
-message = "Argument #6 of function `imagefilledrectangle` is possibly `false`, but parameter type `int` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "possibly-false-argument"
-message = "Argument #6 of function `imagestring` is possibly `false`, but parameter type `int` does not accept it."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "possibly-false-argument"
-message = "Argument #6 of function `imagettftext` is possibly `false`, but parameter type `int` does not accept it."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Captcha\BuiltinCaptcha::validateCaptchaCode` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
@@ -2690,51 +2522,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #1 of `phpMyFAQ\User::setUserData`: expected `array<string, int|string>`, but provided type `array{'display_name': string(''), 'email': nonnull}` is less specific.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Filesystem\Filesystem::__construct`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Instance\Client::deleteClientFolder`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 8
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "possibly-false-argument"
-message = "Argument #3 of function `substr` is possibly `false`, but parameter type `int|null` does not accept it."
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
@@ -3248,18 +3044,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "invalid-array-index"
-message = "Invalid index type `string('lang')` used for array access on `string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "invalid-array-index"
-message = "Invalid index type `string('name')` used for array access on `string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
 code = "invalid-return-statement"
 message = '''Invalid return type for function `phpMyFAQ\Controller\Administration\CategoryController::getBaseTemplateVars`: expected `array<string, string>`, but found `array{'ad_categ_add': array<array-key, string>|null|string, 'ad_entry_restricted_groups': array<array-key, string>|null|string, 'ad_entry_restricted_users': array<array-key, string>|null|string, 'ad_entry_userpermission': array<array-key, string>|null|string, 'buttonCancel': array<array-key, string>|null|string, 'csrfTokenInput': string, 'msgAccessAllUsers': array<array-key, string>|null|string, 'permLevel': mixed, 'restricted_groups': string, 'userSelection': array<array-key, mixed>}`.'''
 count = 1
@@ -3268,6 +3052,12 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
 code = "less-specific-argument"
 message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category::buildAdminCategoryTree`: expected `array<int, array<string, mixed>>`, but provided type `array<int, array<array-key, mixed>>` is less specific.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `phpMyFAQ\Language\LanguageCodes::get`: expected `string`, but found `nonnull`.'
 count = 1
 
 [[issues]]
@@ -3578,62 +3368,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `property_exists`: expected `class-string|object`, but found `mixed`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Controller\Api\CategoryController::createCategoryPermission`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Controller\Api\CategoryController::createCategory`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Controller\Api\CategoryController::createOrder`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Entity\CategoryEntity::setParentId`: expected `int`, but possibly received `int|true`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #2 of `phpMyFAQ\Category\Order::add`: expected `int`, but possibly received `int|true`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\CategoryEntity::setActive` is possibly `null`, but parameter type `bool` does not accept it.'
 count = 1
 
 [[issues]]
@@ -8252,33 +7994,21 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationExecutor.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationExecutor.php"
-code = "less-specific-return-statement"
-message = '''Returned type `array<array-key, array{'migration': phpMyFAQ\Setup\Migration\MigrationInterface, 'operations': array<int, array<string, mixed>>}>` is less specific than the declared return type `array<string, array{'migration': phpMyFAQ\Setup\Migration\MigrationInterface, 'operations': array<int, array<string, mixed>>}>` for function `phpMyFAQ\Setup\Migration\MigrationExecutor::collectOperations`.'''
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationExecutor.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Setup\Migration\MigrationExecutor::truncateQuery`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationExecutor.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 11
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationExecutor.php"
 code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 9
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationExecutor.php"
+code = "redundant-null-coalesce"
+message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationRegistry.php"
@@ -8434,7 +8164,13 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Setup/Update.php"
 code = "invalid-iterator"
 message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 3
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Update.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Setup\Migration\MigrationExecutor::generateDryRunReport`: expected `array<string, phpMyFAQ\Setup\Migration\MigrationInterface>`, but provided type `array<array-key, phpMyFAQ\Setup\Migration\MigrationInterface>` is less specific.'
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Update.php"
@@ -8452,13 +8188,13 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Setup/Update.php"
 code = "mixed-array-access"
 message = "Unsafe array access on type `mixed`."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Update.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Update.php"
@@ -8726,39 +8462,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/System.php"
-code = "invalid-method-access"
-message = "Attempting to access a method on a non-object type (`string`)."
-count = 8
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/System.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `RecursiveDirectoryIterator::__construct`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/System.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `file_get_contents`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/System.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `str_replace`: expected `array<array-key, string>|string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/System.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/System.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #1 of `extension_loaded`: expected `non-empty-string`, but possibly received `string`."
-count = 3
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/System.php"

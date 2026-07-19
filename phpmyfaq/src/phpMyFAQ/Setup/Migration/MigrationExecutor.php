@@ -134,7 +134,7 @@ class MigrationExecutor
     /**
      * Collects operations from migrations without executing them.
      *
-     * @param MigrationInterface[] $migrations
+     * @param array<string, MigrationInterface> $migrations
      * @return array<string, array{migration: MigrationInterface, operations: array<int, array<string, mixed>>}>
      */
     public function collectOperations(array $migrations): array
@@ -176,8 +176,11 @@ class MigrationExecutor
     /**
      * Generates a dry-run report for the given migrations.
      *
-     * @param MigrationInterface[] $migrations
-     * @return array<string, mixed>
+     * @param array<string, MigrationInterface> $migrations
+     * @return array{
+     *     migrations: array<array-key, array<string, mixed>>,
+     *     summary: array{migrationCount: int, totalOperations: int, operationsByType: array<string, int>}
+     * }
      */
     public function generateDryRunReport(array $migrations): array
     {
@@ -219,28 +222,38 @@ class MigrationExecutor
     /**
      * Formats the dry-run report as a human-readable string.
      *
-     * @param array<string, mixed> $report
+     * @param array{
+     *     migrations: array<array-key, array<string, mixed>>,
+     *     summary: array{migrationCount: int, totalOperations: int, operationsByType: array<string, int>}
+     * } $report
      */
     public function formatDryRunReport(array $report): string
     {
         $output = "=== Migration Dry-Run Report ===\n\n";
 
         foreach ($report['migrations'] as $version => $migrationData) {
+            $description = (string) ($migrationData['description'] ?? '');
             $output .= "Version: {$version}\n";
-            $output .= "Description: {$migrationData['description']}\n\n";
+            $output .= "Description: {$description}\n\n";
 
             // Group operations by type
             $byType = [];
-            foreach ($migrationData['operations'] as $op) {
-                $byType[$op['type']][] = $op;
+            $operations = $migrationData['operations'] ?? [];
+            foreach (is_array($operations) ? $operations : [] as $op) {
+                if (!is_array($op)) {
+                    continue;
+                }
+
+                $byType[(string) ($op['type'] ?? '')][] = $op;
             }
 
             // SQL Operations
             if (($byType['sql'] ?? []) !== []) {
                 $output .= '--- SQL Operations (' . count($byType['sql']) . ") ---\n";
                 foreach ($byType['sql'] as $i => $op) {
-                    $output .= ($i + 1) . ". {$op['description']}\n";
-                    $output .= '   ' . $this->truncateQuery($op['query']) . "\n";
+                    $opDescription = (string) ($op['description'] ?? '');
+                    $output .= ($i + 1) . ". {$opDescription}\n";
+                    $output .= '   ' . $this->truncateQuery((string) ($op['query'] ?? '')) . "\n";
                 }
                 $output .= "\n";
             }
@@ -255,7 +268,8 @@ class MigrationExecutor
             if ($configOps !== []) {
                 $output .= '--- Configuration Changes (' . count($configOps) . ") ---\n";
                 foreach ($configOps as $i => $op) {
-                    $output .= ($i + 1) . ". {$op['description']}\n";
+                    $opDescription = (string) ($op['description'] ?? '');
+                    $output .= ($i + 1) . ". {$opDescription}\n";
                 }
                 $output .= "\n";
             }
@@ -265,7 +279,8 @@ class MigrationExecutor
             if ($fileOps !== []) {
                 $output .= '--- File Operations (' . count($fileOps) . ") ---\n";
                 foreach ($fileOps as $i => $op) {
-                    $output .= ($i + 1) . ". {$op['description']}\n";
+                    $opDescription = (string) ($op['description'] ?? '');
+                    $output .= ($i + 1) . ". {$opDescription}\n";
                 }
                 $output .= "\n";
             }
@@ -274,7 +289,8 @@ class MigrationExecutor
             if (($byType['permission_grant'] ?? []) !== []) {
                 $output .= '--- Permission Changes (' . count($byType['permission_grant']) . ") ---\n";
                 foreach ($byType['permission_grant'] as $i => $op) {
-                    $output .= ($i + 1) . ". {$op['description']}\n";
+                    $opDescription = (string) ($op['description'] ?? '');
+                    $output .= ($i + 1) . ". {$opDescription}\n";
                 }
                 $output .= "\n";
             }

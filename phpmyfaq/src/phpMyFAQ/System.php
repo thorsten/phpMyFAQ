@@ -89,7 +89,7 @@ class System
     /**
      * Array of required PHP extensions.
      *
-     * @var array<string>
+     * @var array<non-empty-string>
      */
     private array $requiredExtensions = [
         'curl',
@@ -115,7 +115,7 @@ class System
     /**
      * Supported databases for phpMyFAQ.
      *
-     * @var array<string, array<int, string>>
+     * @var array<non-empty-string, array<int, string>>
      */
     private array $supportedDatabases = [
         'pdo_mysql' => [
@@ -324,7 +324,7 @@ class System
         $templates = [];
         $systemFolder = ['admin', 'setup', 'error'];
 
-        foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/templates/') as $item) {
+        foreach (new DirectoryIterator((string) PMF_ROOT_DIR . '/assets/templates/') as $item) {
             $basename = $item->getBasename();
             if ($item->isDot()) {
                 continue;
@@ -370,7 +370,7 @@ class System
     /**
      * Returns the supported databases.
      *
-     * @return array<string, array<int, string>>
+     * @return array<non-empty-string, array<int, string>>
      */
     public function getSupportedDatabases(): array
     {
@@ -441,7 +441,7 @@ class System
      */
     public function checkInstallation(): bool
     {
-        return !is_file(PMF_ROOT_DIR . '/content/core/config/database.php');
+        return !is_file((string) PMF_ROOT_DIR . '/content/core/config/database.php');
     }
 
     /**
@@ -461,7 +461,7 @@ class System
     {
         $dateTime = new DateTime();
         $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(PMF_ROOT_DIR),
+            new RecursiveDirectoryIterator((string) PMF_ROOT_DIR),
             RecursiveIteratorIterator::SELF_FIRST,
         );
 
@@ -480,7 +480,7 @@ class System
 
         try {
             foreach ($files as $file) {
-                if (!$file->isFile() || !$file->isReadable()) {
+                if (!$file instanceof \SplFileInfo || !$file->isFile() || !$file->isReadable()) {
                     continue;
                 }
 
@@ -500,7 +500,7 @@ class System
                     continue;
                 }
 
-                $current = str_replace(PMF_ROOT_DIR, replace: '', subject: (string) $file->getPathname());
+                $current = str_replace((string) PMF_ROOT_DIR, replace: '', subject: (string) $file->getPathname());
 
                 if (array_key_exists($current, $ignoredFiles)) {
                     continue;

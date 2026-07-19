@@ -284,6 +284,12 @@ final class CategoryController extends AbstractApiController
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        if (!$data instanceof \stdClass) {
+            return $this->json([
+                'stored' => false,
+                'error' => 'The request body must be a JSON object.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
@@ -294,24 +300,24 @@ final class CategoryController extends AbstractApiController
 
         $categoryPermission = $this->createCategoryPermission();
 
-        $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $parentId = Filter::filterVar($data->{'parent-id'}, FILTER_VALIDATE_INT);
+        $languageCode = Filter::filterVar($data->language ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $parentId = Filter::filterVar($data->{'parent-id'} ?? null, FILTER_VALIDATE_INT);
         $parentCategoryName = null;
 
         if (property_exists($data, 'parent-category-name') && $data->{'parent-category-name'} !== null) {
             $parentCategoryName = Filter::filterVar($data->{'parent-category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
         }
 
-        $name = Filter::filterVar($data->{'category-name'}, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $description = Filter::filterVar($data->{'description'}, FILTER_SANITIZE_SPECIAL_CHARS);
+        $name = Filter::filterVar($data->{'category-name'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $description = Filter::filterVar($data->{'description'} ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
         $userId = property_exists($data, 'user-id') && $data->{'user-id'} !== null
             ? Filter::filterVar($data->{'user-id'}, FILTER_VALIDATE_INT)
             : 1;
         $groupId = property_exists($data, 'group-id') && $data->{'group-id'} !== null
             ? Filter::filterVar($data->{'group-id'}, FILTER_VALIDATE_INT)
             : -1;
-        $active = Filter::filterVar($data->{'is-active'}, FILTER_VALIDATE_BOOLEAN);
-        $showOnHome = Filter::filterVar($data->{'show-on-homepage'}, FILTER_VALIDATE_BOOLEAN);
+        $active = Filter::filterVar($data->{'is-active'} ?? false, FILTER_VALIDATE_BOOLEAN);
+        $showOnHome = Filter::filterVar($data->{'show-on-homepage'} ?? false, FILTER_VALIDATE_BOOLEAN);
 
         // Check if the parent category name can be mapped
         if (!is_null($parentCategoryName)) {
@@ -335,17 +341,19 @@ final class CategoryController extends AbstractApiController
             return $this->json($result, Response::HTTP_BAD_REQUEST);
         }
 
+        $parentId = (int) $parentId;
+
         $categoryEntity = new CategoryEntity();
         $categoryEntity
             ->setLang($languageCode)
             ->setParentId($parentId)
             ->setName($name)
             ->setDescription($description)
-            ->setUserId($userId)
-            ->setGroupId($groupId)
-            ->setActive($active)
+            ->setUserId((int) $userId)
+            ->setGroupId((int) $groupId)
+            ->setActive((bool) $active)
             ->setImage(image: '')
-            ->setShowHome($showOnHome);
+            ->setShowHome((bool) $showOnHome);
 
         $categoryId = $category->create($categoryEntity);
 
@@ -381,7 +389,10 @@ final class CategoryController extends AbstractApiController
     private function createCategory(array $currentGroups): Category
     {
         if (is_callable($this->categoryFactory)) {
-            return ($this->categoryFactory)($currentGroups);
+            $category = ($this->categoryFactory)($currentGroups);
+            if ($category instanceof Category) {
+                return $category;
+            }
         }
 
         return new Category($this->configuration, $currentGroups, withPermission: true);
@@ -390,7 +401,10 @@ final class CategoryController extends AbstractApiController
     private function createCategoryPermission(): CategoryPermission
     {
         if (is_callable($this->categoryPermissionFactory)) {
-            return ($this->categoryPermissionFactory)();
+            $categoryPermission = ($this->categoryPermissionFactory)();
+            if ($categoryPermission instanceof CategoryPermission) {
+                return $categoryPermission;
+            }
         }
 
         return new CategoryPermission($this->configuration);
@@ -399,7 +413,10 @@ final class CategoryController extends AbstractApiController
     private function createOrder(): Order
     {
         if (is_callable($this->orderFactory)) {
-            return ($this->orderFactory)();
+            $categoryOrder = ($this->orderFactory)();
+            if ($categoryOrder instanceof Order) {
+                return $categoryOrder;
+            }
         }
 
         return new Order($this->configuration);

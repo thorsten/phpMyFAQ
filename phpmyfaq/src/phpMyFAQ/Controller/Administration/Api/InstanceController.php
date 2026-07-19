@@ -55,18 +55,18 @@ final class InstanceController extends AbstractController
     {
         $this->userHasPermission(PermissionType::INSTANCE_ADD);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('add-instance', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('add-instance', (string) ($data->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $url = Filter::filterVar($data->url, FILTER_SANITIZE_SPECIAL_CHARS);
-        $instance = Filter::filterVar($data->instance, FILTER_SANITIZE_SPECIAL_CHARS);
-        $comment = Filter::filterVar($data->comment, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterEmail($data->email);
-        $admin = Filter::filterVar($data->admin, FILTER_SANITIZE_SPECIAL_CHARS);
-        $password = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS);
+        $url = Filter::filterVar($data->url ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
+        $instance = Filter::filterVar($data->instance ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
+        $comment = Filter::filterVar($data->comment ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterEmail($data->email ?? null);
+        $admin = Filter::filterVar($data->admin ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
+        $password = Filter::filterVar($data->password ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (
             $url === ''
@@ -86,6 +86,13 @@ final class InstanceController extends AbstractController
             return $this->json(['error' => 'Cannot create instance.'], Response::HTTP_BAD_REQUEST);
         }
 
+        $url = (string) $url;
+        $instance = (string) $instance;
+        $comment = (string) $comment;
+        $email = (string) $email;
+        $admin = (string) $admin;
+        $password = (string) $password;
+
         $url = 'https://' . $url . '.' . $request->getHost();
         if (!Filter::filterVar($url, FILTER_VALIDATE_URL)) {
             return $this->json(['error' => 'Cannot create instance: wrong URL'], Response::HTTP_BAD_REQUEST);
@@ -104,23 +111,23 @@ final class InstanceController extends AbstractController
 
         $faqInstanceClient = new Client($this->configuration);
         $faqInstanceClient->createClient($this->instance);
-        $faqInstanceClient->setFileSystem(new Filesystem(PMF_ROOT_DIR));
+        $faqInstanceClient->setFileSystem(new Filesystem((string) PMF_ROOT_DIR));
 
         $urlParts = parse_url($data->getUrl());
         $hostname = $urlParts['host'] ?? '';
 
         if ($faqInstanceClient->createClientFolder($hostname)) {
-            $clientDir = PMF_ROOT_DIR . '/multisite/' . $hostname;
+            $clientDir = (string) PMF_ROOT_DIR . '/multisite/' . $hostname;
             $clientSetup = new Setup();
             $clientSetup->setRootDir($clientDir);
-            $databaseConfiguration = new DatabaseConfiguration(PMF_CONFIG_DIR . '/database.php');
+            $databaseConfiguration = new DatabaseConfiguration((string) PMF_CONFIG_DIR . '/database.php');
             $dbSetup = [
                 'dbServer' => $databaseConfiguration->getServer(),
                 'dbPort' => $databaseConfiguration->getPort(),
                 'dbUser' => $databaseConfiguration->getUser(),
                 'dbPassword' => $databaseConfiguration->getPassword(),
                 'dbDatabaseName' => $databaseConfiguration->getDatabase(),
-                'dbPrefix' => substr($hostname, offset: 0, length: strpos($hostname, needle: '.')),
+                'dbPrefix' => substr($hostname, offset: 0, length: (int) strpos($hostname, needle: '.')),
                 'dbType' => $databaseConfiguration->getType(),
             ];
 
@@ -175,9 +182,9 @@ final class InstanceController extends AbstractController
     {
         $this->userHasPermission(PermissionType::INSTANCE_DELETE);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('delete-instance', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('delete-instance', (string) ($data->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -191,7 +198,11 @@ final class InstanceController extends AbstractController
                 return $this->json(['error' => $instanceId], Response::HTTP_BAD_REQUEST);
             }
 
-            if (1 !== $instanceId && $client->deleteClientFolder($clientData->url) && $client->delete($instanceId)) {
+            if (
+                1 !== $instanceId
+                && $client->deleteClientFolder((string) $clientData->url)
+                && $client->delete($instanceId)
+            ) {
                 return $this->json(['deleted' => $instanceId], Response::HTTP_OK);
             }
 

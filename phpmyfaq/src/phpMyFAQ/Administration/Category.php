@@ -32,12 +32,13 @@ class Category
 {
     private ?string $language = null;
 
-    /** @var array<int> */
+    /** @var array<int, array<array-key, mixed>> */
     public array $categories = [];
 
-    /** @var array<string> */
+    /** @var array<int, array<array-key, mixed>> */
     public array $categoryName = [];
 
+    /** @var array<int, array<int, array<array-key, mixed>>> */
     private array $children = [];
 
     private int $user = -1;
@@ -45,10 +46,10 @@ class Category
     /** @var int[] */
     private array $groups = [-1];
 
-    /** @var array<int, int>> */
+    /** @var array<int, int> */
     private array $owner = [];
 
-    /** @var array<int, int>> */
+    /** @var array<int, int> */
     private array $moderators = [];
 
     public function __construct(
@@ -66,11 +67,9 @@ class Category
         $categories = [];
         $languageCheck = '';
 
-        if ($this->getLanguage() !== null && preg_match("/^[a-z\-]{2,}$/", $this->getLanguage())) {
-            $languageCheck .= sprintf(
-                "AND fc.lang = '%s'",
-                $this->configuration->getDb()->escape($this->getLanguage()),
-            );
+        $language = $this->getLanguage();
+        if ($language !== null && preg_match("/^[a-z\-]{2,}$/", $language)) {
+            $languageCheck .= sprintf("AND fc.lang = '%s'", $this->configuration->getDb()->escape($language));
         }
 
         // Centralize permission WHERE clause
@@ -120,8 +119,8 @@ class Category
                 $this->categoryName[(int) $row['id']] = $row;
                 $this->categories[(int) $row['id']] = $row;
                 $this->children[(int) $row['parent_id']][(int) $row['id']] = &$this->categoryName[(int) $row['id']];
-                $this->owner[(int) $row['id']] = &$row['user_id'];
-                $this->moderators[(int) $row['id']] = &$row['group_id'];
+                $this->owner[(int) $row['id']] = (int) $row['user_id'];
+                $this->moderators[(int) $row['id']] = (int) $row['group_id'];
 
                 $categories[(int) $row['id']] = [
                     'id' => (int) $row['id'],
@@ -153,18 +152,21 @@ class Category
 
     /**
      * Creates the category tree for the admin category overview.
+     *
+     * @param array<int, array<array-key, mixed>> $categories
+     * @return array<int, array<array-key, mixed>>
      */
     public function buildAdminCategoryTree(array $categories, int $parentId = 0): array
     {
         $result = [];
 
         foreach ($categories as $category) {
-            if ($category['parent_id'] !== $parentId) {
+            if ((int) ($category['parent_id'] ?? 0) !== $parentId) {
                 continue;
             }
 
-            $categoryId = $category['id'];
-            $children = $this->buildAdminCategoryTree($categories, $categoryId);
+            $categoryId = (int) ($category['id'] ?? 0);
+            $this->buildAdminCategoryTree($categories, $categoryId);
             $result[$categoryId] = [];
         }
 
@@ -199,6 +201,9 @@ class Category
         return $this->groups;
     }
 
+    /**
+     * @param int[] $groups
+     */
     public function setGroups(array $groups): Category
     {
         $this->groups = $groups;

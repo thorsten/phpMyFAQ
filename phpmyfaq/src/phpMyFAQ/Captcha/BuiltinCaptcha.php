@@ -93,14 +93,11 @@ class BuiltinCaptcha implements CaptchaInterface
 
     private GdImage $gdImage;
 
-    /** @var string */
-    private readonly mixed $userAgent;
+    private readonly string $userAgent;
 
-    /** @var int */
-    private readonly mixed $timestamp;
+    private readonly int $timestamp;
 
-    /** @var string */
-    private readonly mixed $ip;
+    private readonly string $ip;
 
     /**
      * Constructor.
@@ -109,10 +106,10 @@ class BuiltinCaptcha implements CaptchaInterface
         private readonly Configuration $configuration,
     ) {
         $request = Request::createFromGlobals();
-        $this->userAgent = $request->headers->get('user-agent');
-        $this->ip = $request->getClientIp();
+        $this->userAgent = (string) $request->headers->get('user-agent');
+        $this->ip = (string) $request->getClientIp();
         $this->font = $this->getFont();
-        $this->timestamp = $request->server->get('REQUEST_TIME');
+        $this->timestamp = (int) $request->server->get('REQUEST_TIME');
     }
 
     /**
@@ -120,7 +117,7 @@ class BuiltinCaptcha implements CaptchaInterface
      */
     private function getFont(): string
     {
-        return PMF_ROOT_DIR . '/assets/fonts/captcha.ttf';
+        return (string) PMF_ROOT_DIR . '/assets/fonts/captcha.ttf';
     }
 
     public function isUserIsLoggedIn(): bool
@@ -162,7 +159,9 @@ class BuiltinCaptcha implements CaptchaInterface
         ob_start();
         imagejpeg(image: $this->gdImage, file: null, quality: $this->quality);
 
-        return ob_get_clean();
+        $image = ob_get_clean();
+
+        return $image === false ? '' : $image;
     }
 
     /**
@@ -190,7 +189,7 @@ class BuiltinCaptcha implements CaptchaInterface
             y1: 0,
             x2: $this->width,
             y2: $this->height,
-            color: $colorAllocate,
+            color: $colorAllocate === false ? 0 : $colorAllocate,
         );
     }
 
@@ -309,7 +308,7 @@ class BuiltinCaptcha implements CaptchaInterface
             WHERE 
                 captcha_time < %d',
             Database::getTablePrefix(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME') - 604_800,
+            (int) Request::createFromGlobals()->server->get('REQUEST_TIME') - 604_800,
         );
 
         $db->query($delete);
@@ -409,6 +408,7 @@ class BuiltinCaptcha implements CaptchaInterface
             } while ($foreColor['b'] === $this->backgroundColor['b']);
 
             $colorOne = imagecolorallocate($this->gdImage, $foreColor['r'], $foreColor['g'], $foreColor['b']);
+            $colorOne = $colorOne === false ? 0 : $colorOne;
 
             // Add the letter
             if (function_exists('imagettftext')) {
@@ -420,6 +420,7 @@ class BuiltinCaptcha implements CaptchaInterface
             if (!function_exists('imagettftext')) {
                 $size = 5;
                 $c3 = imagecolorallocate(image: $this->gdImage, red: 0, green: 0, blue: 255);
+                $c3 = $c3 === false ? 0 : $c3;
                 $x = 20;
                 $y = 12;
                 $s = 30;
@@ -442,7 +443,7 @@ class BuiltinCaptcha implements CaptchaInterface
         }
 
         if ($this->configuration->get(item: 'spam.enableCaptchaCode')) {
-            return $this->validateCaptchaCode($code);
+            return $this->validateCaptchaCode($code ?? '');
         }
 
         return true;
