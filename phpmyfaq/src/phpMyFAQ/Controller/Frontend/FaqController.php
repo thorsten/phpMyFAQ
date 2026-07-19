@@ -155,7 +155,7 @@ final class FaqController extends AbstractFrontController
         // Collect data for displaying form
         $formData = is_array($faqData['formData'] ?? null) ? $faqData['formData'] : [];
         foreach ($formData as $input) {
-            if (!is_object($input)) {
+            if (!$input instanceof \stdClass) {
                 continue;
             }
 

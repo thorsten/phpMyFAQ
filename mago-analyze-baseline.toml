@@ -14,12 +14,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
@@ -73,24 +67,12 @@ message = "Redundant condition: variable `$row` (type `stdClass`) is already kno
 count = 3
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/RatingStatistics.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 6
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Report.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 11
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/ReportRepository.php"
 code = "redundant-comparison"
 message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
@@ -125,12 +107,6 @@ file = "phpmyfaq/src/phpMyFAQ/Administration/Revision.php"
 code = "redundant-type-comparison"
 message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Session.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/TranslationStatistics.php"
@@ -697,6 +673,12 @@ message = "Redundant condition: variable `$row` (type `stdClass`) is already kno
 count = 1
 
 [[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/FilesystemConfigurationCache.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `has-property<'config_name'>`."
+count = 1
+
+[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
 code = "invalid-type-cast"
 message = "Non numeric string of type `string` implicitly cast to `float`."
@@ -725,6 +707,12 @@ file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
 code = "redundant-logical-operation"
 message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
 count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
+code = "redundant-type-comparison"
+message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `has-property<'config_name'>`."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
@@ -848,12 +836,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ExportController.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ExportController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
@@ -911,12 +893,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
@@ -1118,12 +1094,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
@@ -1139,12 +1109,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PasswordChangeController
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
@@ -1346,12 +1310,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `has-property<'name'>&has-property<'question'>&has-property<'answer'>` type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
@@ -1383,7 +1341,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
 code = "redundant-type-comparison"
-message = "Redundant condition: variable `$data` (type `has-property<'name'>`) is already known to be `has-property<'question'>`."
+message = "Redundant condition: variable `$data` (type `stdClass&has-property<'name'>`) is already known to be `has-property<'question'>`."
 count = 1
 
 [[issues]]
@@ -1481,12 +1439,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
 code = "redundant-type-comparison"
 message = "Redundant condition: variable `$childNodes` (type `array<array-key, int>`) is already known to be `countable`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
@@ -1792,18 +1744,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Filter.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsHelper.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Forms.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
 count = 3
 
 [[issues]]
@@ -2126,12 +2066,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
@@ -2207,12 +2141,6 @@ file = "phpmyfaq/src/phpMyFAQ/Queue/Worker.php"
 code = "redundant-docblock-type"
 message = "Redundant docblock type for variable `$messageClass`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Rating.php"
-code = "ambiguous-object-property-access"
-message = "Cannot statically verify property access on a generic `object` type."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Relation.php"

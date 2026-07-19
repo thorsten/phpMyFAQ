@@ -81,7 +81,7 @@ final class FaqController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        if (!is_object($data)) {
+        if (!$data instanceof \stdClass) {
             throw new Exception('Invalid request payload');
         }
 

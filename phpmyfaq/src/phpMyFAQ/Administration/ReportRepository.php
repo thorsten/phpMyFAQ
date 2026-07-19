@@ -32,7 +32,7 @@ readonly class ReportRepository
     /**
      * Fetches all FAQ data with related information for reporting.
      *
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function fetchAllReportData(): array
     {

@@ -31,7 +31,7 @@ readonly class RatingRepository implements RatingRepositoryInterface
     ) {
     }
 
-    public function fetchByRecordId(int $id): ?object
+    public function fetchByRecordId(int $id): ?\stdClass
     {
         $sql = <<<SQL
                 SELECT

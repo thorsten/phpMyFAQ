@@ -240,7 +240,7 @@ readonly class PushSubscriptionRepository
         return (bool) $db->fetchObject($result);
     }
 
-    private function mapRowToEntity(object $row): PushSubscriptionEntity
+    private function mapRowToEntity(\stdClass $row): PushSubscriptionEntity
     {
         $entity = new PushSubscriptionEntity();
 

@@ -98,7 +98,7 @@ final class FilesystemConfigurationCache
     }
 
     /**
-     * @param array<int, object> $rows
+     * @param array<int, \stdClass> $rows
      */
     public function warm(array $rows): void
     {

@@ -29,7 +29,7 @@ use phpMyFAQ\User\CurrentUser;
 class Bookmark
 {
     /**
-     * @var array<int, object>|null
+     * @var array<int, \stdClass>|null
      */
     private ?array $bookmarkCache = null;
 
@@ -98,7 +98,7 @@ class Bookmark
     /**
      * Gets all bookmarks from the current user.
      *
-     * @return array<int, object> List of DB result objects each containing ->faqid
+     * @return array<int, \stdClass> List of DB result objects each containing ->faqid
      */
     public function getAll(): array
     {

@@ -37,7 +37,7 @@ readonly class BackupRepository
     }
 
     /**
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function getAll(): array
     {
@@ -50,7 +50,7 @@ readonly class BackupRepository
         return is_array($data) ? $data : [];
     }
 
-    public function findByFilename(string $filename): ?object
+    public function findByFilename(string $filename): ?\stdClass
     {
         if ($filename === '') {
             return null;
@@ -67,7 +67,7 @@ readonly class BackupRepository
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            return is_object($row) ? $row : null;
+            return $row instanceof \stdClass ? $row : null;
         }
 
         return null;

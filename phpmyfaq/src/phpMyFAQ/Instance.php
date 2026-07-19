@@ -111,7 +111,7 @@ class Instance
     /**
      * Returns the instance.
      */
-    public function getById(int $id): object
+    public function getById(int $id): \stdClass
     {
         $query = 'SELECT * FROM %sfaqinstances WHERE id = %d';
         $select = sprintf($query, Database::getTablePrefix(), $id);

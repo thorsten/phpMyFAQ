@@ -166,7 +166,7 @@ final class ExportController extends AbstractController
      *
      * @param array<int, list<mixed>> $text
      */
-    private function buildReportResponse(Report $report, object $data, array $text): Response
+    private function buildReportResponse(Report $report, \stdClass $data, array $text): Response
     {
         foreach ($report->getReportingData() as $reportData) {
             $i = (int) $reportData['faq_id'];
@@ -270,7 +270,7 @@ final class ExportController extends AbstractController
     /**
      * Returns true when the report payload requests the given field.
      */
-    private function hasDataField(object $payload, string $field): bool
+    private function hasDataField(\stdClass $payload, string $field): bool
     {
         return property_exists($payload, $field) && $payload->{$field} !== null;
     }

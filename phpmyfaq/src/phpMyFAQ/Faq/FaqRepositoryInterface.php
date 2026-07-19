@@ -112,7 +112,7 @@ interface FaqRepositoryInterface
      * Returns the raw rows.
      *
      * @param int[] $groups
-     * @return object[]
+     * @return \stdClass[]
      */
     public function fetchAvailableFaqsByCategoryId(
         int $categoryId,
@@ -129,7 +129,7 @@ interface FaqRepositoryInterface
      * and filtered by permissions. Returns the raw rows.
      *
      * @param int[] $groups
-     * @return object[]
+     * @return \stdClass[]
      */
     public function fetchFaqsByIds(
         string $records,
@@ -144,7 +144,7 @@ interface FaqRepositoryInterface
      * permissions. Returns the raw rows.
      *
      * @param int[] $groups
-     * @return object[]
+     * @return \stdClass[]
      */
     public function fetchStickyFaqs(int $userId, array $groups, bool $groupSupport): array;
 
@@ -154,7 +154,7 @@ interface FaqRepositoryInterface
      *
      * @param array<string, mixed>|null $condition
      * @param int[]                     $groups
-     * @return object[]
+     * @return \stdClass[]
      */
     public function fetchAllFaqs(
         ?array $condition,

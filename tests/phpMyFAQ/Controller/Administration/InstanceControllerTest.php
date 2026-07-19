@@ -297,7 +297,7 @@ final class InstanceControllerTest extends TestCase
 
 final class TestInstanceClient extends Client
 {
-    public object $currentInstance;
+    public \stdClass $currentInstance;
     public bool $updateReturnValue = true;
     /** @var array<int, array{0:string,1:string}> */
     public static array $moveClientFolderCalls = [];
@@ -306,7 +306,7 @@ final class TestInstanceClient extends Client
 
     public function setFileSystem(\phpMyFAQ\Filesystem\Filesystem $fileSystem): void {}
 
-    public function getById(int $id): object
+    public function getById(int $id): \stdClass
     {
         return $this->currentInstance;
     }

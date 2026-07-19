@@ -95,7 +95,7 @@ readonly class SessionRepository
     /**
      * Fetches all sessions within a time range.
      *
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function getSessionsByDateRange(int $firstHour, int $lastHour): array
     {

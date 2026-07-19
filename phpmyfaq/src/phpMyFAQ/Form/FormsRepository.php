@@ -121,7 +121,7 @@ readonly class FormsRepository implements FormsRepositoryInterface
         return (bool) $this->coreConfiguration->getDb()->query($query);
     }
 
-    public function fetchDefaultInputData(int $formId, int $inputId): ?object
+    public function fetchDefaultInputData(int $formId, int $inputId): ?\stdClass
     {
         $query = sprintf(
             'SELECT input_type, input_active, input_required FROM %sfaqforms WHERE input_id=%d AND form_id=%d '

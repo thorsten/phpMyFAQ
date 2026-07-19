@@ -65,7 +65,10 @@ final class FormsHelper
             $filteredEntries[] = $fallbackCandidate;
         }
 
-        usort($filteredEntries, static fn(object $a, object $b): int => (int) $a->input_id <=> (int) $b->input_id);
+        usort(
+            $filteredEntries,
+            static fn(\stdClass $a, \stdClass $b): int => (int) $a->input_id <=> (int) $b->input_id,
+        );
         return $filteredEntries;
     }
 }

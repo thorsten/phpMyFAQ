@@ -49,7 +49,7 @@ readonly class BookmarkRepository implements BookmarkRepositoryInterface
     }
 
     /**
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function getAll(): array
     {

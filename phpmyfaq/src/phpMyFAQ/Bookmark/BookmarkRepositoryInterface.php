@@ -26,7 +26,7 @@ interface BookmarkRepositoryInterface
     /**
      * Return all bookmark rows for the current user.
      *
-     * @return array<int, object>
+     * @return array<int, \stdClass>
      */
     public function getAll(): array;
 

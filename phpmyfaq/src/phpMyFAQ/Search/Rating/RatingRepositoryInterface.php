@@ -26,9 +26,9 @@ interface RatingRepositoryInterface
     /**
      * Fetches the voting data for a given FAQ record.
      *
-     * @return object|null Returns an object with 'voting' and 'usr' properties, or null if not found
+     * @return \stdClass|null Returns a row with 'voting' and 'usr' properties, or null if not found
      */
-    public function fetchByRecordId(int $id): ?object;
+    public function fetchByRecordId(int $id): ?\stdClass;
 
     /**
      * Checks if a vote from this IP is allowed (not within 5 minutes).

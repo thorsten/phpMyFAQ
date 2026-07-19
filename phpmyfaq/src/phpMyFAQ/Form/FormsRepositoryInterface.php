@@ -36,7 +36,7 @@ interface FormsRepositoryInterface
 
     public function deleteTranslation(int $formId, int $inputId, string $lang): bool;
 
-    public function fetchDefaultInputData(int $formId, int $inputId): ?object;
+    public function fetchDefaultInputData(int $formId, int $inputId): ?\stdClass;
 
     public function insertTranslationRow(
         int $formId,

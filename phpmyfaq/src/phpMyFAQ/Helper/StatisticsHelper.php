@@ -35,7 +35,7 @@ readonly class StatisticsHelper
     ) {
     }
 
-    public function getTrackingFilesStatistics(): object
+    public function getTrackingFilesStatistics(): stdClass
     {
         $numberOfDays = 0;
         $first = PHP_INT_MAX;

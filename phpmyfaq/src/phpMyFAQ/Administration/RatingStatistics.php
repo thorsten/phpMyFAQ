@@ -117,7 +117,7 @@ readonly class RatingStatistics
         };
     }
 
-    private function mapRowToRating(object $row): array
+    private function mapRowToRating(\stdClass $row): array
     {
         $question = Strings::htmlspecialchars(trim((string) $row->question));
         $url = sprintf(

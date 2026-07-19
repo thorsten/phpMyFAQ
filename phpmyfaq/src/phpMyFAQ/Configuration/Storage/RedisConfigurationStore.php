@@ -134,7 +134,7 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
     }
 
     /**
-     * @param array<int, object> $rows
+     * @param array<int, \stdClass> $rows
      */
     public function warmFromRows(array $rows): bool
     {
