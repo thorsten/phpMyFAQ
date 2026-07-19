@@ -2720,45 +2720,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OpenQuestionController.php"
-code = "impossible-assignment"
-message = "Invalid assignment: the right-hand side has type `never` and cannot produce a value."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OpenQuestionController.php"
-code = "invalid-array-access"
-message = 'Cannot access array index on object `phpMyFAQ\Entity\QuestionEntity` that does not implement `ArrayAccess`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OpenQuestionController.php"
-code = "invalid-array-index"
-message = 'Invalid index type `null|string` used for array access on `phpMyFAQ\Entity\QuestionEntity`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OpenQuestionController.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OpenQuestionController.php"
-code = "possibly-null-array-index"
-message = "Possibly using `null` as an array index to access elementof variable $a."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OpenQuestionController.php"
-code = "possibly-null-array-index"
-message = "Possibly using `null` as an array index to access elementof variable $b."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OpenQuestionController.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/PdfController.php"
@@ -2776,24 +2740,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/QuestionController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/QuestionController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/QuestionController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Category::getCategoryData` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/QuestionController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Entity\QuestionEntity::setCategoryId` is possibly `null`, but parameter type `int` does not accept it.'
 count = 1
 
 [[issues]]

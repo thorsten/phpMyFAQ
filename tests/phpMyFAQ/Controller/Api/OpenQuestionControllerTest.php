@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use Exception;
+use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Question;
@@ -136,9 +137,9 @@ class OpenQuestionControllerTest extends TestCase
             ->method('getAll')
             ->with(true)
             ->willReturn([
-                ['id' => 1, 'username' => 'Alice', 'created' => '20240101', 'categoryId' => 5],
-                ['id' => 3, 'username' => 'Charlie', 'created' => '20240103', 'categoryId' => 3],
-                ['id' => 2, 'username' => 'Bob', 'created' => '20240102', 'categoryId' => 4],
+                self::createQuestionEntity(1, 'Alice', '20240101', 5),
+                self::createQuestionEntity(3, 'Charlie', '20240103', 3),
+                self::createQuestionEntity(2, 'Bob', '20240102', 4),
             ]);
 
         $controller = new OpenQuestionController($question);
@@ -160,5 +161,25 @@ class OpenQuestionControllerTest extends TestCase
         $this->assertSame('id', $data['meta']['sorting']['field']);
         $this->assertSame('desc', $data['meta']['sorting']['order']);
         $this->assertSame(3, $data['meta']['pagination']['total']);
+    }
+
+    private static function createQuestionEntity(
+        int $id,
+        string $username,
+        string $created,
+        int $categoryId,
+    ): QuestionEntity {
+        $questionEntity = new QuestionEntity();
+        $questionEntity
+            ->setId($id)
+            ->setUsername($username)
+            ->setCreated($created)
+            ->setCategoryId($categoryId)
+            ->setLanguage('en')
+            ->setQuestion('Question ' . $id)
+            ->setAnswerId(0)
+            ->setIsVisible(true);
+
+        return $questionEntity;
     }
 }

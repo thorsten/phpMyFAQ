@@ -93,10 +93,24 @@ final class QuestionController extends AbstractApiController
         $this->userHasPermission(PermissionType::QUESTION_ADD);
 
         $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
-        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $email = Filter::filterVar($data->email, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        if (!$data instanceof \stdClass) {
+            return $this->json([
+                'stored' => false,
+                'error' => 'The request body must be a JSON object.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $categoryId = Filter::filterVar($data->{'category-id'} ?? null, FILTER_VALIDATE_INT);
+        if (!is_int($categoryId)) {
+            return $this->json([
+                'stored' => false,
+                'error' => 'Invalid category id.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $question = Filter::filterVar($data->question ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $email = Filter::filterVar($data->email ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $visibility = $this->configuration->get(item: 'records.enableVisibilityQuestions') ? 'Y' : 'N';
 

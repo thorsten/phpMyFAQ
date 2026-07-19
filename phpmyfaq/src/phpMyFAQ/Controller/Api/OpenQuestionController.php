@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
+use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Question;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -139,17 +140,29 @@ final class OpenQuestionController extends AbstractApiController
             defaultOrder: 'asc',
         );
 
-        // Get all open questions
-        $allQuestions = $this->question->getAll($onlyPublic);
-        $total = is_countable($allQuestions) ? count($allQuestions) : 0;
+        // Get all open questions as serializable rows; entities would otherwise
+        // encode as empty JSON objects and cannot be sorted by array key.
+        $allQuestions = array_map(static fn(QuestionEntity $questionEntity): array => [
+            'id' => $questionEntity->getId(),
+            'username' => $questionEntity->getUsername(),
+            'created' => $questionEntity->getCreated(),
+            'categoryId' => $questionEntity->getCategoryId(),
+            'question' => $questionEntity->getQuestion(),
+            'language' => $questionEntity->getLanguage(),
+            'answerId' => $questionEntity->getAnswerId(),
+            'isVisible' => $questionEntity->isVisible(),
+        ], $this->question->getAll($onlyPublic));
+        $total = count($allQuestions);
 
         // Apply sorting if needed
-        if ($sort->getField()) {
-            usort($allQuestions, static function ($a, $b) use ($sort) {
-                $field = $sort->getField();
-                $aVal = $a[$field] ?? '';
-                $bVal = $b[$field] ?? '';
-                $result = $aVal <=> $bVal;
+        $sortField = $sort->getField();
+        if ($sortField !== null && $sortField !== '') {
+            usort($allQuestions, static function (array $a, array $b) use ($sort, $sortField): int {
+                $aVal = $a[$sortField] ?? '';
+                $bVal = $b[$sortField] ?? '';
+                $result = is_numeric($aVal) && is_numeric($bVal)
+                    ? (float) $aVal <=> (float) $bVal
+                    : (string) $aVal <=> (string) $bVal;
                 return $sort->getOrderSql() === 'DESC' ? -$result : $result;
             });
         }
