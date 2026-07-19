@@ -170,6 +170,15 @@ readonly class DatabaseTransport
         }
 
         $decoded = json_decode($rawHeaders, associative: true);
-        return is_array($decoded) ? $decoded : [];
+        if (!is_array($decoded)) {
+            return [];
+        }
+
+        $headers = [];
+        foreach ($decoded as $headerName => $headerValue) {
+            $headers[(string) $headerName] = $headerValue;
+        }
+
+        return $headers;
     }
 }

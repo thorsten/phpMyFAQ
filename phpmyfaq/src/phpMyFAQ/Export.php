@@ -60,6 +60,8 @@ class Export
      */
     public static function getExportTimestamp(): string
     {
-        return date(format: 'Y-m-d-H-i-s', timestamp: Request::createFromGlobals()->server->get(key: 'REQUEST_TIME'));
+        $requestTime = Request::createFromGlobals()->server->get(key: 'REQUEST_TIME');
+
+        return date(format: 'Y-m-d-H-i-s', timestamp: is_numeric($requestTime) ? (int) $requestTime : time());
     }
 }

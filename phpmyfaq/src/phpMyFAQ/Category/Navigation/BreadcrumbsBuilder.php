@@ -59,12 +59,12 @@ final class BreadcrumbsBuilder
         $segments = [
             [
                 'id' => -1,
-                'name' => $startPageName ?? Translation::get('msgHome'),
+                'name' => $startPageName ?? Translation::getString('msgHome'),
                 'description' => $startPageDescription,
             ],
             [
                 'id' => 0,
-                'name' => $allCategoriesName ?? Translation::get('msgShowAllCategories'),
+                'name' => $allCategoriesName ?? Translation::getString('msgShowAllCategories'),
                 'description' => $allCategoriesDescription,
             ],
         ];

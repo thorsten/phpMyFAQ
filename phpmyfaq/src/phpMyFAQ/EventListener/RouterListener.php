@@ -67,7 +67,12 @@ readonly class RouterListener
             );
         }
 
-        $request->attributes->add($parameters);
+        $normalizedParameters = [];
+        foreach ($parameters as $parameterName => $parameterValue) {
+            $normalizedParameters[(string) $parameterName] = $parameterValue;
+        }
+
+        $request->attributes->add($normalizedParameters);
     }
 
     /**

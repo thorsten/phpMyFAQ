@@ -62,7 +62,24 @@ readonly class DashboardLayout
             return [];
         }
 
-        return is_array($config) ? $config : [];
+        if (!is_array($config)) {
+            return [];
+        }
+
+        $layout = [];
+        foreach ($config as $entry) {
+            if (!is_array($entry)) {
+                continue;
+            }
+
+            $layout[] = [
+                'key' => (string) ($entry['key'] ?? ''),
+                'position' => (int) ($entry['position'] ?? 0),
+                'visible' => (bool) ($entry['visible'] ?? true),
+            ];
+        }
+
+        return $layout;
     }
 
     /**

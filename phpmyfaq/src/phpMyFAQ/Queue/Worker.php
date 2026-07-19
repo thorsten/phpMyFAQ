@@ -117,7 +117,11 @@ class Worker
         }
 
         $messageClass = (string) $decoded['class'];
-        $payload = is_array($decoded['payload'] ?? null) ? $decoded['payload'] : [];
+        $rawPayload = is_array($decoded['payload'] ?? null) ? $decoded['payload'] : [];
+        $payload = [];
+        foreach ($rawPayload as $payloadKey => $payloadValue) {
+            $payload[(string) $payloadKey] = $payloadValue;
+        }
 
         if (!class_exists($messageClass)) {
             throw new RuntimeException('Queue job references unknown message class: ' . $messageClass);

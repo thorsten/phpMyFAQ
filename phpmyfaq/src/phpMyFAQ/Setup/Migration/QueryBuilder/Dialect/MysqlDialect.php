@@ -121,6 +121,9 @@ class MysqlDialect implements DialectInterface
         return "ALTER TABLE {$tableName} MODIFY {$columnName} {$newType}";
     }
 
+    /**
+     * @param string[] $columns
+     */
     public function createIndex(string $indexName, string $tableName, array $columns, bool $ifNotExists = false): string
     {
         if ($ifNotExists) {

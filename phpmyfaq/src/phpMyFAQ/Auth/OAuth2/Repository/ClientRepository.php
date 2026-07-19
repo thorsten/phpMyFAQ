@@ -45,8 +45,13 @@ final class ClientRepository extends AbstractRepository implements ClientReposit
             return null;
         }
 
+        $clientIdentifier = (string) $row->client_id;
+        if ($clientIdentifier === '') {
+            return null;
+        }
+
         $entity = new ClientEntity();
-        $entity->setIdentifier((string) $row->client_id);
+        $entity->setIdentifier($clientIdentifier);
         $entity->secret = $row->client_secret !== null ? (string) $row->client_secret : null;
         $entity->setName((string) ($row->name ?? $row->client_id));
         $entity->setRedirectUri((string) ($row->redirect_uri ?? ''));

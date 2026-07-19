@@ -273,7 +273,7 @@ final class UpdateController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $this->update->version = $this->configuration->get('main.currentVersion');
+        $this->update->version = (string) $this->configuration->get('main.currentVersion');
 
         try {
             if ($this->update->applyUpdates()) {

@@ -67,7 +67,7 @@ abstract class AbstractFrontController extends AbstractController
     }
 
     /**
-     * @return string[]
+     * @return array<string, mixed>
      * @throws \Exception
      */
     protected function getHeader(Request $request): array

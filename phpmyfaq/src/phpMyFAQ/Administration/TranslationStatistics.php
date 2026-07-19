@@ -120,7 +120,7 @@ readonly class TranslationStatistics
         $PMF_LANG = [];
         include $file;
 
-        return array_keys($PMF_LANG);
+        return array_map(strval(...), array_keys($PMF_LANG));
     }
 
     /**

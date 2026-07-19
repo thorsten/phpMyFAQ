@@ -117,6 +117,9 @@ class TwigWrapper
         $this->twigEnvironment->addFunction($twigFunction);
     }
 
+    /**
+     * @param class-string<ExtensionInterface> $class
+     */
     public function getExtension(string $class): ExtensionInterface
     {
         return $this->twigEnvironment->getExtension($class);

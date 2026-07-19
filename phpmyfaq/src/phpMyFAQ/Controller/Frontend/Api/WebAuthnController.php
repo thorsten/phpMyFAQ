@@ -228,6 +228,9 @@ final class WebAuthnController extends AbstractController
 
         $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $loginData = $data->login;
+        if (!$loginData instanceof \stdClass) {
+            throw new Exception('Missing login data');
+        }
 
         $this->user->getUserByLogin($login);
 

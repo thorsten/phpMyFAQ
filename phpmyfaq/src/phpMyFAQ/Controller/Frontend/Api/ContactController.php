@@ -52,7 +52,7 @@ final class ContactController extends AbstractController
     {
         $data = json_decode($request->getContent());
 
-        if (!$data) {
+        if (!$data instanceof \stdClass) {
             throw new Exception('Invalid JSON data');
         }
 

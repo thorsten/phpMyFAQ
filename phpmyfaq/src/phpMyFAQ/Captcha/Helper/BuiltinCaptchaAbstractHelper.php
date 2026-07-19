@@ -45,8 +45,6 @@ class BuiltinCaptchaAbstractHelper extends AbstractHelper implements CaptchaHelp
 
     /**
      * Renders the captcha check.
-     *
-     * @param BuiltinCaptcha $captcha
      */
     public function renderCaptcha(
         CaptchaInterface $captcha,
@@ -54,6 +52,10 @@ class BuiltinCaptchaAbstractHelper extends AbstractHelper implements CaptchaHelp
         string $label = '',
         bool $auth = false,
     ): string {
+        if (!$captcha instanceof BuiltinCaptcha) {
+            return '';
+        }
+
         $html = '';
 
         if (true === $this->configuration->get(item: 'spam.enableCaptchaCode') && !$auth) {

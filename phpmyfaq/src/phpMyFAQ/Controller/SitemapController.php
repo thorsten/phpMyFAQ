@@ -101,7 +101,7 @@ final class SitemapController extends AbstractController
 
         $gzipped = gzencode($xml, level: 9);
 
-        $response = new Response($gzipped);
+        $response = new Response($gzipped === false ? '' : $gzipped);
         $response->headers->set('Content-Type', 'application/x-gzip');
         $response->headers->set('Content-Encoding', 'gzip');
         $response->headers->set('Content-Disposition', 'attachment; filename="sitemap.xml.gz"');

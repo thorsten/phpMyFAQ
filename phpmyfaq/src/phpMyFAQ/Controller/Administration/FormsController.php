@@ -92,7 +92,7 @@ final class FormsController extends AbstractAdministrationController
         // Twig filter for language codes
         // Isn't separated as TwigExtension because of a special function and handling of 'default'
         // value in this context
-        $twigFilter = new TwigFilter('languageCode', static function ($string): ?string {
+        $twigFilter = new TwigFilter('languageCode', static function (string $string): ?string {
             if ($string === 'default') {
                 return $string;
             }

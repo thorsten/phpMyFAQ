@@ -35,7 +35,7 @@ final class RobotsController extends AbstractController
 
         $response->headers->set(key: 'Content-Type', values: 'text/plain');
         $response->setStatusCode(Response::HTTP_OK);
-        $response->setContent($this->configuration->get(item: 'seo.contentRobotsText'));
+        $response->setContent((string) $this->configuration->get(item: 'seo.contentRobotsText'));
 
         return $response;
     }

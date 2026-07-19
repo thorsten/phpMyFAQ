@@ -116,7 +116,7 @@ final class NewsController extends AbstractAdministrationController
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, mixed>
      * @throws \Exception
      * @todo move to Twig translation filter
      */

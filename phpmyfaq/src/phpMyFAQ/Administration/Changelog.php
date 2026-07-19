@@ -56,7 +56,7 @@ readonly class Changelog
             $db->escape($lang),
             $revisionId,
             $userId,
-            Request::createFromGlobals()->server->get('REQUEST_TIME'),
+            (int) Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $db->escape($text),
         );
 

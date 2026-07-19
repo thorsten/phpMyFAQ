@@ -35,7 +35,7 @@ readonly class MailSettings
     {
         $sender = $this->coreConfiguration->get(item: 'mail.noReplySenderAddress');
         if ($sender === '' || $sender === null) {
-            return $this->coreConfiguration->get(item: 'main.administrationMail');
+            return (string) $this->coreConfiguration->get(item: 'main.administrationMail');
         }
 
         return (string) $sender;

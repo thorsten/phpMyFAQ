@@ -140,7 +140,7 @@ final class QuestionController extends AbstractController
             $questionEntity
                 ->setUsername($author)
                 ->setEmail($email)
-                ->setCategoryId($selectedCategory)
+                ->setCategoryId((int) $selectedCategory)
                 ->setLanguage($language)
                 ->setQuestion($userQuestion)
                 ->setIsVisible($visibility === 'Y');

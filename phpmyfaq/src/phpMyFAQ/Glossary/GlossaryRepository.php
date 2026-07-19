@@ -60,6 +60,9 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
         return $items;
     }
 
+    /**
+     * @return array{id:int, language:string, item:string, definition:string}|array{}
+     */
     public function fetch(int $id, string $language): array
     {
         $databaseDriver = $this->configuration->getDb();
@@ -73,19 +76,17 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
             return [];
         }
 
-        $item = [];
         $row = $databaseDriver->fetchObject($result);
-        while ($row) {
-            $item = [
-                'id' => (int) $row->id,
-                'language' => (string) $row->lang,
-                'item' => stripslashes((string) $row->item),
-                'definition' => stripslashes((string) $row->definition),
-            ];
-            $row = $databaseDriver->fetchObject($result);
+        if (!is_object($row)) {
+            return [];
         }
 
-        return $item;
+        return [
+            'id' => (int) $row->id,
+            'language' => (string) $row->lang,
+            'item' => stripslashes((string) $row->item),
+            'definition' => stripslashes((string) $row->definition),
+        ];
     }
 
     public function create(string $language, string $item, string $definition): bool

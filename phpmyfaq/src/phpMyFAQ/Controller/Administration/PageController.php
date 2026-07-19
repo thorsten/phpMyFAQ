@@ -213,7 +213,7 @@ final class PageController extends AbstractAdministrationController
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, mixed>
      * @throws \Exception
      */
     private function getBaseTemplateVars(): array

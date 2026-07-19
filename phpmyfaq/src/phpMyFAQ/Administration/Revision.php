@@ -69,7 +69,7 @@ readonly class Revision
     /**
      * Gets all revisions from a given FAQ ID and FAQ language
      *
-     * @return array<string[]>
+     * @return list<array{revision_id: int, updated: string, author: string}>
      */
     public function get(int $faqId, string $faqLanguage, string $faqAuthor): array
     {
@@ -99,9 +99,9 @@ readonly class Revision
                 }
 
                 $revisionData[] = [
-                    'revision_id' => $row->revision_id,
-                    'updated' => $faqId === 0 ? date(format: 'YmdHis') : $row->updated,
-                    'author' => $faqId === 0 ? ucfirst($faqAuthor) : $row->author,
+                    'revision_id' => (int) $row->revision_id,
+                    'updated' => $faqId === 0 ? date(format: 'YmdHis') : (string) $row->updated,
+                    'author' => $faqId === 0 ? ucfirst($faqAuthor) : (string) $row->author,
                 ];
             }
         }

@@ -42,7 +42,7 @@ class Sqlite3 extends SearchDatabase implements DatabaseInterface
     #[Override]
     public function search(string $searchTerm): mixed
     {
-        if (is_numeric($searchTerm) && $this->configuration->get(item: 'search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && (bool) $this->configuration->get(item: 'search.searchForSolutionId')) {
             parent::search($searchTerm);
 
             return $this->resultSet;

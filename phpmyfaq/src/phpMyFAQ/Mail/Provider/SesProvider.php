@@ -37,12 +37,12 @@ final class SesProvider implements MailProviderInterface
     }
 
     /**
-     * @param array<string, string> $headers
+     * @param array<string, int|string|null> $headers
      * @throws Exception
      */
     public function send(string $recipients, array $headers, string $body): int
     {
-        $source = $this->extractEmailAddress($headers['From'] ?? '');
+        $source = $this->extractEmailAddress((string) ($headers['From'] ?? ''));
         if ($source === '') {
             throw new Exception('Missing valid From header for SES provider.');
         }

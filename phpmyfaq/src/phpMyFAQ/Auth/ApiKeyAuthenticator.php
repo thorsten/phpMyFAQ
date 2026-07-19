@@ -103,7 +103,9 @@ final class ApiKeyAuthenticator
 
     public function getAuthenticatedUserId(): ?int
     {
-        return $this->authenticatedApiKeyStorage['user_id'] ?? null;
+        $userId = $this->authenticatedApiKeyStorage['user_id'] ?? null;
+
+        return $userId === null ? null : (int) $userId;
     }
 
     /**

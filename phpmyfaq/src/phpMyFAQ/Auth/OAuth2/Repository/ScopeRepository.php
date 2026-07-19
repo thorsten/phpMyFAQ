@@ -44,8 +44,13 @@ final class ScopeRepository extends AbstractRepository implements ScopeRepositor
             return null;
         }
 
+        $scopeIdentifier = (string) $row->scope_id;
+        if ($scopeIdentifier === '') {
+            return null;
+        }
+
         $scope = new ScopeEntity();
-        $scope->setIdentifier((string) $row->scope_id);
+        $scope->setIdentifier($scopeIdentifier);
 
         return $scope;
     }

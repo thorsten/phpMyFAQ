@@ -31,16 +31,17 @@ class MultisiteConfigurationLocator
 
         $parsed = parse_url($protocol . '://' . $host . $scriptName);
 
-        if (($parsed['host'] ?? '') !== '') {
+        $parsedHost = (string) ($parsed['host'] ?? '');
+        if ($parsedHost !== '') {
             // 1. Try an exact hostname match (existing behavior)
-            $configDir = rtrim($configurationDirectory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $parsed['host'];
+            $configDir = rtrim($configurationDirectory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $parsedHost;
 
             if (is_dir($configDir)) {
                 return $configDir;
             }
 
             // 2. Try subdomain-based tenant matching
-            $tenantName = self::extractTenantFromSubdomain($parsed['host']);
+            $tenantName = self::extractTenantFromSubdomain($parsedHost);
             if ($tenantName !== null) {
                 $configDir = rtrim($configurationDirectory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $tenantName;
 

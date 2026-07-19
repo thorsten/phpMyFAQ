@@ -53,7 +53,10 @@ readonly class ConfigUpdateOperation implements OperationInterface
 
     public function execute(): bool
     {
-        return $this->configuration->update([$this->key => $this->value]);
+        $value = $this->value;
+        $normalizedValue = is_scalar($value) || $value instanceof \Stringable ? (string) $value : '';
+
+        return $this->configuration->update([$this->key => $normalizedValue]);
     }
 
     public function toArray(): array

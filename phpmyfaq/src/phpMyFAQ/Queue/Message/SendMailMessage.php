@@ -44,11 +44,17 @@ final readonly class SendMailMessage implements QueueMessageInterface
 
     public static function fromArray(array $payload): self
     {
+        $rawMetadata = is_array($payload['metadata'] ?? null) ? $payload['metadata'] : [];
+        $metadata = [];
+        foreach ($rawMetadata as $metadataKey => $metadataValue) {
+            $metadata[(string) $metadataKey] = $metadataValue;
+        }
+
         return new self(
             recipient: (string) ($payload['recipient'] ?? ''),
             subject: (string) ($payload['subject'] ?? ''),
             body: (string) ($payload['body'] ?? ''),
-            metadata: is_array($payload['metadata'] ?? null) ? $payload['metadata'] : [],
+            metadata: $metadata,
         );
     }
 }

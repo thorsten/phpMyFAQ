@@ -49,21 +49,11 @@ class PhpMyFaqMcpServer implements McpServerRuntimeInterface
     ) {
         $detectionEnabled = (bool) $this->configuration->get(item: 'main.languageDetection');
         $configLang = (string) $this->configuration->get(item: 'main.language');
-        if ($detectionEnabled) {
-            $language->setLanguageWithDetection($configLang);
-            $this->configuration->setLanguage($language);
-            $this->initializeServer($runtime);
-            return;
-        }
+        $detectionEnabled
+            ? $language->setLanguageWithDetection($configLang)
+            : $language->setLanguageFromConfiguration($configLang);
 
-        $language->setLanguageFromConfiguration($configLang);
         $this->configuration->setLanguage($language);
-
-        $this->initializeServer($runtime);
-    }
-
-    private function initializeServer(?McpServerRuntimeInterface $runtime = null): void
-    {
         $this->runtime = $runtime ?? new McpSdkRuntime(
             new FaqSearchTool($this->configuration, $this->search, $this->faq),
             $this->createServerInfo(),

@@ -135,12 +135,13 @@ class AdminLog
      */
     public function verifyIntegrity(): bool
     {
-        if ($this->hash === null) {
+        $storedHash = $this->hash;
+        if ($storedHash === null) {
             return false;
         }
 
         $calculatedHash = $this->calculateHash();
 
-        return hash_equals($this->hash, $calculatedHash);
+        return hash_equals($storedHash, $calculatedHash);
     }
 }

@@ -757,7 +757,11 @@ final class FaqController extends AbstractAdministrationApiController
             return $this->json(['error' => 'No FAQ IDs provided.'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!$this->adminFaq->setStickyFaqOrder($faqIds, $currentUser, $currentGroups)) {
+        if (!$this->adminFaq->setStickyFaqOrder(
+            array_values(array_map(intval(...), $faqIds)),
+            $currentUser,
+            $currentGroups,
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

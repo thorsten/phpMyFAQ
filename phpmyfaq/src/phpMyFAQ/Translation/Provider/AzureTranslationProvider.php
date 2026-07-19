@@ -84,7 +84,7 @@ class AzureTranslationProvider extends AbstractTranslationProvider
             ]);
 
             $data = $response->toArray();
-            return array_map(static fn($item) => $item['translations'][0]['text'] ?? '', $data);
+            return array_map(static fn($item): string => (string) ($item['translations'][0]['text'] ?? ''), $data);
         } catch (\Exception $e) {
             throw new ApiException('Azure Translator API error: ' . $e->getMessage());
         }

@@ -77,9 +77,9 @@ readonly class Session
         $rows = $this->sessionRepository->getSessionsByDateRange($firstHour, $lastHour);
 
         foreach ($rows as $row) {
-            $sessions[$row->sid] = [
-                'ip' => $row->ip,
-                'time' => $row->time,
+            $sessions[(int) $row->sid] = [
+                'ip' => (string) $row->ip,
+                'time' => (string) $row->time,
             ];
         }
 

@@ -103,6 +103,7 @@ class Search
      *
      * @param string $searchTerm Text to auto complete
      * @throws Exception
+     * @return \stdClass[]
      */
     public function autoComplete(string $searchTerm): array
     {

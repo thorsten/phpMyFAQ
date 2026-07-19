@@ -75,7 +75,7 @@ class UpdateCommand extends Command
                 return Command::FAILURE;
             }
 
-            $symfonyStyle->success(message: strtr(string: 'phpMyFAQ was successfully updated to version version: on date:.', replace_pairs: [
+            $symfonyStyle->success(message: strtr('phpMyFAQ was successfully updated to version version: on date:.', [
                 'version:' => System::getVersion(),
                 'date:' => new DateTime()->format(format: 'Y-m-d H:i:s'),
             ]));

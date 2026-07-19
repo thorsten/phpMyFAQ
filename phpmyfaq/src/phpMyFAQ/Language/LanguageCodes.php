@@ -333,7 +333,9 @@ class LanguageCodes
      */
     public static function getSupported(string $key): ?string
     {
-        return static::$supportedLanguageCodes[strtolower($key)] ?? null;
+        $supported = static::$supportedLanguageCodes[strtolower($key)] ?? null;
+
+        return is_string($supported) ? $supported : null;
     }
 
     public static function getKey(string $value): false|int|string

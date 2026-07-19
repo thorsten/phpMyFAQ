@@ -99,7 +99,7 @@ class LanguageHelper
             // Check if the file is related to a (real) language before using it
             $isValidLanguage = LanguageCodes::get($languageFile);
             if ($isValidLanguage !== null) {
-                $languages[strtolower($languageFile)] = LanguageCodes::get($languageFile);
+                $languages[strtolower($languageFile)] = $isValidLanguage;
             }
         }
 

@@ -191,7 +191,7 @@ class InstallationRunner
                 $osHostsRaw = $input->osSetup['hosts'] ?? [];
                 $osHosts = array_values(is_array($osHostsRaw) ? $osHostsRaw : [(string) $osHostsRaw]);
                 $osClient = new SymfonyClientFactory()->create($this->buildOpenSearchClientOptions(
-                    $osHosts[0],
+                    (string) ($osHosts[0] ?? ''),
                     $input->osSetup,
                 ));
 

@@ -149,7 +149,7 @@ final class ChatSseController extends AbstractController
                     }
 
                     ($this->sleep ?? static function (int $seconds): void {
-                        sleep($seconds);
+                        sleep(max(0, $seconds));
                     })(2);
                 }
             },

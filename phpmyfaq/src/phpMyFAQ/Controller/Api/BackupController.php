@@ -110,7 +110,8 @@ final class BackupController extends AbstractController
         // Create ZipArchive of the content-folder
         if ($backupType === BackupType::BACKUP_TYPE_CONTENT) {
             $backupFile = $backup->createContentFolderBackup();
-            $response = new Response(file_get_contents($backupFile));
+            $backupContent = file_get_contents($backupFile);
+            $response = new Response($backupContent === false ? '' : $backupContent);
 
             $backupFileName = sprintf('content_%s.zip', date('dmY_H-i'));
 

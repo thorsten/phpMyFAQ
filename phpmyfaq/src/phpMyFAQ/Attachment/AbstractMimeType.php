@@ -190,6 +190,8 @@ abstract class AbstractMimeType
      */
     public static function guessByExt(string $ext): string
     {
-        return self::$list[$ext] ?? 'application/octet-stream';
+        $mimeType = self::$list[$ext] ?? null;
+
+        return is_string($mimeType) ? $mimeType : 'application/octet-stream';
     }
 }

@@ -153,6 +153,11 @@ final readonly class OidcClient
             ));
         }
 
-        return $payload;
+        $normalizedPayload = [];
+        foreach ($payload as $payloadKey => $payloadValue) {
+            $normalizedPayload[(string) $payloadKey] = $payloadValue;
+        }
+
+        return $normalizedPayload;
     }
 }

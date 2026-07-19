@@ -63,6 +63,8 @@ final class AdminCategoryTreePresenter
 
     /**
      * Returns the symbol for a category based on its position among its siblings.
+     *
+     * @param array<int, array<int, mixed>> $childrenMap
      */
     private function getSymbol(array $childrenMap, int $categoryId, int $parentId): string
     {

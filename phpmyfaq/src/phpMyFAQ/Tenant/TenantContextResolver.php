@@ -33,7 +33,7 @@ class TenantContextResolver
             $hostname = 'localhost';
         }
 
-        $configDir = defined('PMF_CONFIG_DIR') ? PMF_CONFIG_DIR : '';
+        $configDir = defined('PMF_CONFIG_DIR') ? (string) PMF_CONFIG_DIR : '';
         $tablePrefix = Database::getTablePrefix();
 
         $tenantId = $this->readIntEnv('PMF_TENANT_ID') ?? 0;

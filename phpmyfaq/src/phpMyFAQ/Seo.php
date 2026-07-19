@@ -75,7 +75,7 @@ readonly class Seo
 
     public function getMetaRobots(string $action): string
     {
-        return match ($action) {
+        return (string) match ($action) {
             'main' => $this->configuration->get(item: 'seo.metaTagsHome'),
             'faq' => $this->configuration->get(item: 'seo.metaTagsFaqs'),
             'show' => $this->configuration->get(item: 'seo.metaTagsCategories'),

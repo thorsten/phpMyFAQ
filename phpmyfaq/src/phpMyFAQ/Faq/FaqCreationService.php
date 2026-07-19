@@ -67,7 +67,7 @@ final class FaqCreationService
         // Load question data if a question ID is provided
         if ($selectedQuestion !== null) {
             $questionData = $this->question->get($selectedQuestion);
-            $question = $questionData['question'];
+            $question = (string) ($questionData['question'] ?? '');
             if (Strings::strlen($question) !== 0) {
                 $readonly = ' readonly';
             }

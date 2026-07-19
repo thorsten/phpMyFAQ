@@ -74,7 +74,7 @@ final class PasswordHasher
 
     private function legacyHash(string $login, #[SensitiveParameter] string $password): string
     {
-        $salt = $this->configuration->get('security.salt') . $login;
+        $salt = (string) $this->configuration->get('security.salt') . $login;
         return hash('sha256', $password . $salt);
     }
 }

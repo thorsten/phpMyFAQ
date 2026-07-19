@@ -123,6 +123,9 @@ class SqliteDialect implements DialectInterface
         throw new RuntimeException('SQLite does not support modifying columns. Use table rebuild pattern.');
     }
 
+    /**
+     * @param string[] $columns
+     */
     public function createIndex(string $indexName, string $tableName, array $columns, bool $ifNotExists = false): string
     {
         $columnList = implode(', ', $columns);

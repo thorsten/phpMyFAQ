@@ -48,7 +48,7 @@ class GoogleRecaptchaAbstractHelper extends AbstractHelper implements CaptchaHel
             $html .= '        <script src="https://www.google.com/recaptcha/api.js" async defer></script>';
             $html .= sprintf(
                 '<div class="g-recaptcha" data-sitekey="%s"></div>',
-                $this->configuration->get(item: 'security.googleReCaptchaV2SiteKey'),
+                (string) $this->configuration->get(item: 'security.googleReCaptchaV2SiteKey'),
             );
             $html .= '    </div>';
             $html .= '</div>';

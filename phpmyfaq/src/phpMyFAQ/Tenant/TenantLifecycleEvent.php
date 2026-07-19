@@ -25,6 +25,7 @@ class TenantLifecycleEvent extends Event
 {
     public function __construct(
         private readonly int $tenantId,
+        /** @var array<string, mixed> */
         private readonly array $context = [],
     ) {
     }

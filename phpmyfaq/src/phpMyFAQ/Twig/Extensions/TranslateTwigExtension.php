@@ -28,6 +28,8 @@ class TranslateTwigExtension extends AbstractExtension
     #[AsTwigFilter(name: 'translate')]
     public static function translate(string $translationKey): string
     {
-        return Translation::get($translationKey) ?? $translationKey;
+        $translation = Translation::get($translationKey);
+
+        return is_string($translation) ? $translation : $translationKey;
     }
 }

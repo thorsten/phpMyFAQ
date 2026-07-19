@@ -84,7 +84,10 @@ class AuthHttp extends Auth implements AuthDriverInterface
      */
     public function checkCredentials(string $login, #[SensitiveParameter] $password, ?array $optionalData = null): bool
     {
-        if ($this->request->server->get('PHP_AUTH_USER') === null && $this->request->server->get('PHP_AUTH_PW')) {
+        if (
+            $this->request->server->get('PHP_AUTH_USER') === null
+            && (string) $this->request->server->get('PHP_AUTH_PW') !== ''
+        ) {
             return false;
         }
 

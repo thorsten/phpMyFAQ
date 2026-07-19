@@ -59,8 +59,13 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
             return null;
         }
 
+        $userIdentifier = (string) $row->user_id;
+        if ($userIdentifier === '') {
+            return null;
+        }
+
         $user = new UserEntity();
-        $user->setIdentifier((string) $row->user_id);
+        $user->setIdentifier($userIdentifier);
 
         return $user;
     }

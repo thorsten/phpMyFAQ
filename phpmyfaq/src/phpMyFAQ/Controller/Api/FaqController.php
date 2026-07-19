@@ -787,7 +787,7 @@ final class FaqController extends AbstractApiController
         $this->faqMetaData
             ->setFaqId((int) $faqEntity->getId())
             ->setFaqLanguage($languageCode)
-            ->setCategories($categories)
+            ->setCategories(array_map(intval(...), $categories))
             ->save();
 
         return $this->json(['stored' => true], Response::HTTP_CREATED);

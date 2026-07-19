@@ -118,6 +118,8 @@ interface DialectInterface
 
     /**
      * Returns the CREATE INDEX syntax.
+     *
+     * @param string[] $columns
      */
     public function createIndex(
         string $indexName,

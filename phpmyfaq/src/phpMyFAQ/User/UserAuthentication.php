@@ -102,7 +102,8 @@ class UserAuthentication
         try {
             if (!$this->currentUser->login($username, $password)) {
                 $this->recordFailedLogin();
-                throw new UserException(Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed');
+                $authFailMessage = Translation::get(key: 'ad_auth_fail');
+                throw new UserException(is_string($authFailMessage) ? $authFailMessage : 'Authentication failed');
             }
 
             if ($this->currentUser->getUserData('twofactor_enabled')) {

@@ -98,7 +98,7 @@ final readonly class StorageFactory
         if ($root === null || $root === '') {
             $root = defined('PMF_ATTACHMENTS_DIR') && PMF_ATTACHMENTS_DIR !== false
                 ? (string) PMF_ATTACHMENTS_DIR
-                : PMF_ROOT_DIR . '/content/user/attachments';
+                : (string) PMF_ROOT_DIR . '/content/user/attachments';
         }
 
         /* @mago-expect lint:no-error-control-operator - mkdir may race a concurrent request; the re-check handles it */

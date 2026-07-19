@@ -38,7 +38,7 @@ final readonly class MailgunProvider implements MailProviderInterface
     }
 
     /**
-     * @param array<string, string> $headers
+     * @param array<string, int|string|null> $headers
      * @throws Exception
      * @throws TransportExceptionInterface
      */
@@ -54,7 +54,7 @@ final readonly class MailgunProvider implements MailProviderInterface
             throw new Exception('Mailgun domain is not configured.');
         }
 
-        $fromAddress = $this->extractEmailAddress($headers['From'] ?? '');
+        $fromAddress = $this->extractEmailAddress((string) ($headers['From'] ?? ''));
         if ($fromAddress === '') {
             throw new Exception('Missing valid From header for Mailgun provider.');
         }

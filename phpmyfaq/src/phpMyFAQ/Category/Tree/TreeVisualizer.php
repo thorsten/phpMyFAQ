@@ -44,7 +44,7 @@ final readonly class TreeVisualizer
 
             $brothers = $this->treePathResolver->getBrothers($categoryName, $childrenMap, (int) $ascendantId);
             $last = end($brothers);
-            $tree[$i] = $ascendantId === $last ? 'space' : 'vertical';
+            $tree[(int) $i] = $ascendantId === $last ? 'space' : 'vertical';
         }
 
         return $tree;

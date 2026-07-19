@@ -125,6 +125,9 @@ class SqlServerDialect implements DialectInterface
         return "ALTER TABLE {$tableName} ALTER COLUMN {$columnName} {$newType}";
     }
 
+    /**
+     * @param string[] $columns
+     */
     public function createIndex(string $indexName, string $tableName, array $columns, bool $ifNotExists = false): string
     {
         $columnList = implode(', ', $columns);

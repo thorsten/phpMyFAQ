@@ -42,10 +42,16 @@ final readonly class ExportMessage implements QueueMessageInterface
 
     public static function fromArray(array $payload): self
     {
+        $rawOptions = is_array($payload['options'] ?? null) ? $payload['options'] : [];
+        $options = [];
+        foreach ($rawOptions as $optionKey => $optionValue) {
+            $options[(string) $optionKey] = $optionValue;
+        }
+
         return new self(
             format: (string) ($payload['format'] ?? ''),
             userId: (int) ($payload['userId'] ?? 0),
-            options: is_array($payload['options'] ?? null) ? $payload['options'] : [],
+            options: $options,
         );
     }
 }

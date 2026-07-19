@@ -137,7 +137,7 @@ readonly class ApiExceptionListener
         );
 
         $response = new Response(
-            content: json_encode($problemDetails->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
+            content: (string) json_encode($problemDetails->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
             status: $status,
         );
         $response->headers->set('Content-Type', 'application/problem+json');

@@ -60,6 +60,11 @@ final readonly class OidcDiscoveryService
             ));
         }
 
-        return OidcDiscoveryDocument::fromArray($payload);
+        $normalizedPayload = [];
+        foreach ($payload as $payloadKey => $payloadValue) {
+            $normalizedPayload[(string) $payloadKey] = $payloadValue;
+        }
+
+        return OidcDiscoveryDocument::fromArray($normalizedPayload);
     }
 }
