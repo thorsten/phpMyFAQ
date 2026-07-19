@@ -77,13 +77,14 @@ class FilterRequest
             $value = null;
 
             // Check filter array parameter first (e.g., ?filter[category_id]=5)
-            if (is_array($queryParams['filter'] ?? null) && array_key_exists($filterName, $queryParams['filter'])) {
-                $value = self::parseFilterValue($queryParams['filter'][$filterName], $filterType);
+            $filterParams = $queryParams['filter'] ?? null;
+            if (is_array($filterParams) && array_key_exists($filterName, $filterParams)) {
+                $value = self::parseFilterValue($filterParams[$filterName], (string) $filterType);
             }
 
             // Check direct parameter - this takes precedence (e.g., ?active=true)
             if (array_key_exists($filterName, $queryParams)) {
-                $directValue = self::parseFilterValue($queryParams[$filterName], $filterType);
+                $directValue = self::parseFilterValue($queryParams[$filterName], (string) $filterType);
                 if ($directValue !== null) {
                     $value = $directValue;
                 }
@@ -157,7 +158,7 @@ class FilterRequest
             return null;
         }
 
-        $value = Filter::filterVar($value, FILTER_SANITIZE_SPECIAL_CHARS);
+        $value = (string) Filter::filterVar($value, FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Validate date format YYYY-MM-DD
         if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
@@ -183,7 +184,7 @@ class FilterRequest
             return null;
         }
 
-        $value = Filter::filterVar($value, FILTER_SANITIZE_SPECIAL_CHARS);
+        $value = (string) Filter::filterVar($value, FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Try to parse as datetime
         try {

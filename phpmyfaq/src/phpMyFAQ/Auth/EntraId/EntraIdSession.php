@@ -60,7 +60,9 @@ class EntraIdSession extends AbstractSession
      */
     public function getCurrentSessionKey(): ?string
     {
-        return $this->currentSessionKey ?? $this->session->get(self::ENTRA_ID_SESSION_KEY);
+        $sessionKey = $this->currentSessionKey ?? $this->session->get(self::ENTRA_ID_SESSION_KEY);
+
+        return $sessionKey === null ? null : (string) $sessionKey;
     }
 
     /**
@@ -91,11 +93,13 @@ class EntraIdSession extends AbstractSession
     {
         $request = Request::createFromGlobals();
 
+        $cookieDomain = parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST);
+
         Cookie::create($name)
-            ->withValue($sessionId ?? '')
-            ->withExpires($request->server->get('REQUEST_TIME') + $timeout)
+            ->withValue($sessionId === null ? '' : (string) $sessionId)
+            ->withExpires((int) $request->server->get('REQUEST_TIME') + $timeout)
             ->withPath(dirname((string) $request->server->get('SCRIPT_NAME')))
-            ->withDomain(parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST))
+            ->withDomain(is_string($cookieDomain) ? $cookieDomain : null)
             ->withSameSite($strict ? 'strict' : '')
             ->withSecure($request->isSecure())
             ->withHttpOnly();

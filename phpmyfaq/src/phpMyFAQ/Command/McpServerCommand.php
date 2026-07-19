@@ -85,19 +85,26 @@ class McpServerCommand extends Command
     private function showServerInfo(SymfonyStyle $symfonyStyle): void
     {
         $serverInfo = $this->phpMyFaqMcpServer->getServerInfo();
+        $capabilities = $serverInfo['capabilities'] ?? [];
+        $capabilities = is_array($capabilities) ? $capabilities : [];
 
-        $symfonyStyle->title($serverInfo['name']);
+        $symfonyStyle->title((string) ($serverInfo['name'] ?? ''));
         $symfonyStyle->definitionList(
-            ['Version' => $serverInfo['version']],
-            ['Description' => $serverInfo['description']],
-            ['Capabilities' => implode(separator: ', ', array: array_keys(array_filter($serverInfo['capabilities'])))],
+            ['Version' => $serverInfo['version'] ?? ''],
+            ['Description' => $serverInfo['description'] ?? ''],
+            ['Capabilities' => implode(separator: ', ', array: array_keys(array_filter($capabilities)))],
         );
 
         $symfonyStyle->section(message: 'Available Tools');
 
         $toolsTable = [];
-        foreach ($serverInfo['tools'] as $tool) {
-            $toolsTable[] = [$tool['name'], $tool['description']];
+        $tools = $serverInfo['tools'] ?? [];
+        foreach (is_array($tools) ? $tools : [] as $tool) {
+            if (!is_array($tool)) {
+                continue;
+            }
+
+            $toolsTable[] = [(string) ($tool['name'] ?? ''), (string) ($tool['description'] ?? '')];
         }
 
         $symfonyStyle->table(['Name', 'Description'], $toolsTable);

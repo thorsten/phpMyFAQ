@@ -63,11 +63,11 @@ final readonly class OidcDiscoveryDocument
         }
 
         return new self(
-            issuer: trim($data['issuer']),
-            authorizationEndpoint: trim($data['authorization_endpoint']),
-            tokenEndpoint: trim($data['token_endpoint']),
-            userInfoEndpoint: trim($data['userinfo_endpoint']),
-            jwksUri: trim($data['jwks_uri']),
+            issuer: trim((string) $data['issuer']),
+            authorizationEndpoint: trim((string) $data['authorization_endpoint']),
+            tokenEndpoint: trim((string) $data['token_endpoint']),
+            userInfoEndpoint: trim((string) $data['userinfo_endpoint']),
+            jwksUri: trim((string) $data['jwks_uri']),
             endSessionEndpoint: $endSessionEndpoint !== '' ? $endSessionEndpoint : null,
         );
     }

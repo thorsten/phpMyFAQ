@@ -48,7 +48,7 @@ class CategoryTreeNavigator
     /**
      * Builds tree structure for a category.
      *
-     * @return array<string, mixed>
+     * @return array<array-key, mixed>
      */
     private function buildTree(CategoryCache $categoryCache, int $categoryId): array
     {
@@ -62,7 +62,7 @@ class CategoryTreeNavigator
     /**
      * Recursively transforms tree structure into a flat list.
      *
-     * @param array<string, mixed> $tree
+     * @param array<array-key, mixed> $tree
      * @param array<array<string, mixed>> $entries
      */
     private function transformRecursive(CategoryCache $categoryCache, array $tree, int $indent, array &$entries): void
@@ -75,6 +75,7 @@ class CategoryTreeNavigator
         $categoryId = (int) $tree['id'];
         $parentId = (int) ($tree['parent_id'] ?? 0);
         $children = $tree['children'] ?? [];
+        $children = is_array($children) ? $children : [];
         $numChildren = count($children);
 
         $symbol = $this->getSymbol($categoryCache, $categoryId, $parentId, $numChildren);
@@ -98,6 +99,10 @@ class CategoryTreeNavigator
         $entries[] = $entry;
 
         foreach ($children as $child) {
+            if (!is_array($child)) {
+                continue;
+            }
+
             $this->transformRecursive($categoryCache, $child, $indent + 1, $entries);
         }
     }
@@ -159,7 +164,7 @@ class CategoryTreeNavigator
 
             $entry = $categoryCache->getTreeTabEntry($lineIndex);
             if ($entry !== null && array_key_exists('numChildren', $entry)) {
-                $numChildren = $entry['numChildren'];
+                $numChildren = (int) $entry['numChildren'];
                 if ($numChildren > 0) {
                     $this->expand($categoryCache, $ascendants[$i]);
                     continue;

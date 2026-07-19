@@ -94,7 +94,12 @@ final readonly class OidcIdTokenValidator
             throw new RuntimeException(sprintf('OIDC id_token %s is not valid', $context));
         }
 
-        return $payload;
+        $normalizedPayload = [];
+        foreach ($payload as $claimName => $claimValue) {
+            $normalizedPayload[(string) $claimName] = $claimValue;
+        }
+
+        return $normalizedPayload;
     }
 
     /**
@@ -249,7 +254,12 @@ final readonly class OidcIdTokenValidator
             throw new RuntimeException('OIDC JWKS response is not valid');
         }
 
-        return $payload;
+        $normalizedPayload = [];
+        foreach ($payload as $jwksKey => $jwksValue) {
+            $normalizedPayload[(string) $jwksKey] = $jwksValue;
+        }
+
+        return $normalizedPayload;
     }
 
     /**
@@ -273,11 +283,12 @@ final readonly class OidcIdTokenValidator
                 continue;
             }
 
-            return $key;
+            return self::normalizeKey($key);
         }
 
-        if ($keyId === '' && is_array($keys[0])) {
-            return $keys[0];
+        $firstKey = $keys[0] ?? null;
+        if ($keyId === '' && is_array($firstKey)) {
+            return self::normalizeKey($firstKey);
         }
 
         throw new RuntimeException('OIDC JWKS key could not be resolved');
@@ -396,9 +407,23 @@ final readonly class OidcIdTokenValidator
     private function getCurrentTimestamp(): int
     {
         if ($this->currentTimeProvider instanceof Closure) {
-            return ($this->currentTimeProvider)();
+            return (int) ($this->currentTimeProvider)();
         }
 
         return time();
+    }
+
+    /**
+     * @param array<array-key, mixed> $key
+     * @return array<string, mixed>
+     */
+    private static function normalizeKey(array $key): array
+    {
+        $normalizedKey = [];
+        foreach ($key as $keyName => $keyValue) {
+            $normalizedKey[(string) $keyName] = $keyValue;
+        }
+
+        return $normalizedKey;
     }
 }

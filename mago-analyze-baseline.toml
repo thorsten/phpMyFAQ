@@ -332,38 +332,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Api/Filtering/FilterRequest.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Api\Filtering\FilterRequest::parseFilterValue`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Api/Filtering/FilterRequest.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Api/Filtering/FilterRequest.php"
 code = "mixed-assignment"
 message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Api/Filtering/FilterRequest.php"
-code = "possibly-null-argument"
-message = "Argument #1 of method `DateTime::__construct` is possibly `null`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Api/Filtering/FilterRequest.php"
-code = "possibly-null-argument"
-message = "Argument #2 of function `explode` is possibly `null`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Api/Filtering/FilterRequest.php"
-code = "possibly-null-argument"
-message = "Argument #2 of function `preg_match` is possibly `null`, but parameter type `string` does not accept it."
 count = 1
 
 [[issues]]
@@ -770,32 +746,8 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/EntraIdSession.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Symfony\Component\HttpFoundation\Cookie::withExpires`: expected `DateTimeInterface|int|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/EntraIdSession.php"
-code = "mixed-operand"
-message = "Left operand in binary operation has type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/EntraIdSession.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Auth\EntraId\EntraIdSession::getCurrentSessionKey`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/EntraIdSession.php"
-code = "possibly-false-argument"
-message = 'Argument #1 of method `Symfony\Component\HttpFoundation\Cookie::withDomain` is possibly `false`, but parameter type `null|string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/EntraIdSession.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `Symfony\Component\HttpFoundation\Cookie::withValue`: expected `null|string`, but possibly received `int|string`.'
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
@@ -961,12 +913,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/Oidc/OidcDiscoveryDocument.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `trim`: expected `string`, but found `mixed`."
-count = 5
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/Oidc/OidcDiscoveryService.php"
 code = "less-specific-argument"
 message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Auth\Oidc\OidcDiscoveryDocument::fromArray`: expected `array<string, mixed>`, but provided type `array<array-key, mixed>` is less specific.'
@@ -980,33 +926,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/Oidc/OidcIdTokenValidator.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<string, mixed>` for function `phpMyFAQ\Auth\Oidc\OidcIdTokenValidator::decodeSegment`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/Oidc/OidcIdTokenValidator.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<string, mixed>` for function `phpMyFAQ\Auth\Oidc\OidcIdTokenValidator::fetchJwks`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/Oidc/OidcIdTokenValidator.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<string, mixed>` for function `phpMyFAQ\Auth\Oidc\OidcIdTokenValidator::findKey`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/Oidc/OidcIdTokenValidator.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/Oidc/OidcIdTokenValidator.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Auth\Oidc\OidcIdTokenValidator::getCurrentTimestamp`. Saw type `mixed`.'
-count = 1
+count = 11
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/PasswordHasher.php"
@@ -1088,33 +1010,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bootstrap/SearchClientFactory.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\ConfigurationMethodsTrait::setElasticsearch`: expected `Elastic\Elasticsearch\Client`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bootstrap/SearchClientFactory.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bootstrap/SearchClientFactory.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bootstrap/SearchClientFactory.php"
-code = "mixed-operand"
-message = "Left operand in `<` comparison has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bootstrap/SearchClientFactory.php"
-code = "mixed-operand"
-message = "Left operand in `>=` comparison has `mixed` type."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bootstrapper.php"
@@ -1250,44 +1148,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `nonnull`, which is not iterable."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Category\Navigation\CategoryTreeNavigator::buildTree`: expected `array<string, mixed>`, but found `array<int, string>`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Category\Navigation\CategoryTreeNavigator::transformRecursive`: expected `array<string, mixed>`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
 code = "mixed-assignment"
 message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
-code = "mixed-operand"
-message = "Left operand in `>` comparison has `mixed` type."
 count = 1
 
 [[issues]]
@@ -1412,33 +1280,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Command/McpServerCommand.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Command/McpServerCommand.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Symfony\Component\Console\Style\SymfonyStyle::title`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Command/McpServerCommand.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_filter`: expected `array<('K.array_filter() extends array-key), ('V.array_filter() extends mixed)>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Command/McpServerCommand.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Command/McpServerCommand.php"
 code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Command/SeedTestDataCommand.php"

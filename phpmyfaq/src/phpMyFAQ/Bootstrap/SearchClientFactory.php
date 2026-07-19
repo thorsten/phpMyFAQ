@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Bootstrap;
 
+use Elastic\Elasticsearch\Client;
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Exception\AuthenticationException;
 use OpenSearch\SymfonyClientFactory;
@@ -41,9 +42,15 @@ class SearchClientFactory
         ?callable $httpClientFactory = null,
     ): void {
         try {
-            $http =
-                $httpClient
-                ?? ($httpClientFactory !== null ? $httpClientFactory() : HttpClient::create(['verify_peer' => false]));
+            $http = $httpClient;
+            if ($http === null && $httpClientFactory !== null) {
+                $createdHttpClient = $httpClientFactory();
+                if ($createdHttpClient instanceof HttpClientInterface) {
+                    $http = $createdHttpClient;
+                }
+            }
+
+            $http ??= HttpClient::create(['verify_peer' => false]);
             $deadline = time() + $timeoutSeconds;
             do {
                 try {
@@ -79,9 +86,15 @@ class SearchClientFactory
         self::waitForHealthy($esBaseUri, (int) ($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15), $httpClient);
 
         try {
-            $esClient = $clientFactory !== null
-                ? $clientFactory($esBaseUri)
-                : ClientBuilder::create()->setHosts([$esBaseUri])->build();
+            $esClient = null;
+            if ($clientFactory !== null) {
+                $createdClient = $clientFactory($esBaseUri);
+                if ($createdClient instanceof Client) {
+                    $esClient = $createdClient;
+                }
+            }
+
+            $esClient ??= ClientBuilder::create()->setHosts([$esBaseUri])->build();
             $faqConfig->setElasticsearch($esClient);
             $faqConfig->setElasticsearchConfig($esConfig);
         } catch (AuthenticationException $exception) {
