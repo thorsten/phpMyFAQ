@@ -71,16 +71,16 @@ class RemoteApiClient
                 $content = $response->toArray();
                 return [
                     'installed' => $this->configuration->getVersion(),
-                    'stable' => $content['stable'],
-                    'development' => $content['development'],
-                    'nightly' => $content['nightly'],
+                    'stable' => (string) ($content['stable'] ?? ''),
+                    'development' => (string) ($content['development'] ?? ''),
+                    'nightly' => (string) ($content['nightly'] ?? ''),
                 ];
             } catch (
                 ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $exception
             ) {
                 throw new Exception(
                     'phpMyFAQ Verification API is not available: ' . $exception->getMessage(),
-                    $exception->getCode(),
+                    (int) $exception->getCode(),
                     $exception,
                 );
             }
@@ -121,7 +121,7 @@ class RemoteApiClient
         ) {
             throw new Exception(
                 'phpMyFAQ Verification API is not available: ' . $exception->getMessage(),
-                $exception->getCode(),
+                (int) $exception->getCode(),
                 $exception,
             );
         }
@@ -136,10 +136,27 @@ class RemoteApiClient
      */
     public function getVerificationIssues(): array
     {
-        return array_diff(
-            json_decode(json: $this->system->createHashes(), associative: true, depth: 512, flags: JSON_THROW_ON_ERROR),
-            json_decode(json: (string) $this->remoteHashes, associative: true, depth: 512, flags: JSON_THROW_ON_ERROR),
+        $localHashes = json_decode(
+            json: $this->system->createHashes(),
+            associative: true,
+            depth: 512,
+            flags: JSON_THROW_ON_ERROR,
         );
+        $remoteHashes = json_decode(
+            json: (string) $this->remoteHashes,
+            associative: true,
+            depth: 512,
+            flags: JSON_THROW_ON_ERROR,
+        );
+
+        $issues = array_diff(is_array($localHashes) ? $localHashes : [], is_array($remoteHashes) ? $remoteHashes : []);
+
+        $verificationIssues = [];
+        foreach ($issues as $issueKey => $issueValue) {
+            $verificationIssues[$issueKey] = (string) $issueValue;
+        }
+
+        return $verificationIssues;
     }
 
     public function setHttpClient(HttpClientInterface $httpClient): void

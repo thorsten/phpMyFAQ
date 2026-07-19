@@ -101,6 +101,7 @@ final class DashboardController extends AbstractController
             return null;
         }
 
+        /* @mago-expect analysis:less-specific-return-statement - the cache payload keys are re-validated by consumers */
         return $cached['payload'];
     }
 
@@ -114,6 +115,7 @@ final class DashboardController extends AbstractController
     {
         $cached = $this->cache->getItem($key)->get();
         if (is_array($cached) && array_key_exists('payload', $cached) && is_array($cached['payload'])) {
+            /* @mago-expect analysis:less-specific-return-statement - the cache payload keys are re-validated by consumers */
             return $cached['payload'];
         }
 
@@ -156,7 +158,7 @@ final class DashboardController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $releaseEnvironment = $this->configuration->get(item: 'upgrade.releaseEnvironment');
+        $releaseEnvironment = (string) $this->configuration->get(item: 'upgrade.releaseEnvironment');
         $cacheKey = 'dashboard.versions.' . $releaseEnvironment;
 
         $fresh = $this->getFreshCache($cacheKey);
@@ -261,7 +263,12 @@ final class DashboardController extends AbstractController
                     $data['news'] = array_slice($data['news'], offset: 0, length: 5);
                 }
 
-                $this->storeCache($cacheKey, $data);
+                $payload = [];
+                foreach ($data as $payloadKey => $payloadValue) {
+                    $payload[(string) $payloadKey] = $payloadValue;
+                }
+
+                $this->storeCache($cacheKey, $payload);
 
                 return $this->json($data);
             }

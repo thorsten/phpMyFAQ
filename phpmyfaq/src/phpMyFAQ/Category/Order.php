@@ -72,6 +72,7 @@ readonly class Order
      * Stores the category tree in the database.
      *
      * @param stdClass[] $categoryTree
+     * @param string[] $insertQueries
      */
     public function setCategoryTree(
         array $categoryTree,
@@ -98,13 +99,15 @@ readonly class Order
                     $position,
                 );
 
-                if (
-                    property_exists($category, 'children')
-                    && is_array($category->children)
-                    && $category->children !== []
-                ) {
+                $children = property_exists($category, 'children') && is_array($category->children)
+                    ? array_values(array_filter(
+                        $category->children,
+                        static fn(mixed $child): bool => $child instanceof stdClass,
+                    ))
+                    : [];
+                if ($children !== []) {
                     // Pass the same reference of $insertQueries to the recursive call
-                    $this->setCategoryTree($category->children, $id, 1, $insertQueries);
+                    $this->setCategoryTree($children, $id, 1, $insertQueries);
                 }
 
                 ++$position;
@@ -122,7 +125,7 @@ readonly class Order
     /**
      * Returns the category tree.
      *
-     * @param array<array{category_id: string, parent_id: string}> $categories
+     * @param array<array-key, array{category_id: int|string, parent_id: int|string, position?: int|string}> $categories
      * @param array<int, bool> $visited Array to track visited category IDs to prevent infinite recursion
      */
     public function getCategoryTree(array $categories, int $parentId = 0, array &$visited = []): array
@@ -167,8 +170,14 @@ readonly class Order
                 return (int) $parentId;
             }
 
-            if (property_exists($category, 'children') && is_array($category->children) && $category->children !== []) {
-                $foundParentId = $this->getParentId($category->children, $categoryId, (int) $category->id);
+            $children = property_exists($category, 'children') && is_array($category->children)
+                ? array_values(array_filter(
+                    $category->children,
+                    static fn(mixed $child): bool => $child instanceof stdClass,
+                ))
+                : [];
+            if ($children !== []) {
+                $foundParentId = $this->getParentId($children, $categoryId, (int) $category->id);
                 if ($foundParentId !== null) {
                     return $foundParentId;
                 }
@@ -258,7 +267,11 @@ readonly class Order
                 break;
             }
 
-            $categories[] = $row;
+            $categories[] = [
+                'category_id' => (int) $row['category_id'],
+                'parent_id' => (int) $row['parent_id'],
+                'position' => (int) $row['position'],
+            ];
         }
 
         return $categories;

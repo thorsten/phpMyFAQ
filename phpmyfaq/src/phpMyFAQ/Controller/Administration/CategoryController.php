@@ -176,7 +176,9 @@ final class CategoryController extends AbstractAdministrationController
             ...$this->getBaseTemplateVars(),
             'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
             'parentId' => $parentId,
-            'categoryNameLangCode' => LanguageCodes::get($this->adminCategory->categoryName[$parentId]['lang'] ?? 'en'),
+            'categoryNameLangCode' => LanguageCodes::get(
+                (string) ($this->adminCategory->categoryName[$parentId]['lang'] ?? 'en'),
+            ),
             'userAllowed' => $this->categoryPermission->get(CategoryPermission::USER, [$parentId])[0] ?? -1,
             'groupsAllowed' => $this->categoryPermission->get(CategoryPermission::GROUP, [$parentId]),
             'categoryName' => $this->adminCategory->categoryName[$parentId]['name'],
@@ -466,8 +468,10 @@ final class CategoryController extends AbstractAdministrationController
 
         $translations = [];
         foreach ($category->getCategoryTree() as $cat) {
-            $existing = $categoryLanguageService->getExistingTranslations($this->configuration, (int) $cat['id']); // [code => name]
-            $translations[$cat['id']] = array_keys($existing);
+            $categoryTreeId = (int) ($cat['id'] ?? 0);
+            // [code => name]
+            $existing = $categoryLanguageService->getExistingTranslations($this->configuration, $categoryTreeId);
+            $translations[$categoryTreeId] = array_keys($existing);
         }
 
         // Build language codes list: current first
@@ -802,7 +806,7 @@ final class CategoryController extends AbstractAdministrationController
 
     /**
      * @throws \Exception
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     private function getBaseTemplateVars(): array
     {

@@ -283,7 +283,7 @@ class Category
 
     /**
      * Gets all categories and write them in an array.
-     * @return array<int, array>
+     * @return array<int, array<string, mixed>>
      */
     public function getAllCategories(): array
     {
@@ -699,6 +699,8 @@ class Category
 
     /**
      * Returns the category tree as an array.
+     *
+     * @return array<int, array<string, mixed>>
      */
     public function getCategoryTree(): array
     {

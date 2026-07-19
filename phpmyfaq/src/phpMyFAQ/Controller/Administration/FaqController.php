@@ -293,7 +293,7 @@ final class FaqController extends AbstractAdministrationController
         $attachmentList = AttachmentFactory::fetchByRecordId($this->configuration, $faqId);
 
         $faqRevision = new Revision($this->configuration);
-        $revisions = $faqRevision->get($faqId, $faqLanguage, $faqData['author']);
+        $revisions = $faqRevision->get($faqId, $faqLanguage, (string) $faqData['author']);
 
         $faqUrl = sprintf(
             '%scontent/%d/%d/%s/%s.html',
@@ -301,7 +301,7 @@ final class FaqController extends AbstractAdministrationController
             $category->getCategoryIdFromFaq($faqId),
             $faqId,
             $faqLanguage,
-            TitleSlugifier::slug($faqData['title']),
+            TitleSlugifier::slug((string) $faqData['title']),
         );
 
         // User permissions
@@ -338,7 +338,7 @@ final class FaqController extends AbstractAdministrationController
             'currentRevision' => sprintf(
                 '%s 1.%d',
                 Translation::getString(key: 'msgRevision'),
-                $selectedRevisionId ?? $faqData['revision_id'],
+                $selectedRevisionId ?? (int) $faqData['revision_id'],
             ),
             'numberOfRevisions' => count($revisions),
             'faqId' => $faqId,
@@ -404,7 +404,7 @@ final class FaqController extends AbstractAdministrationController
 
         $this->faq->getFaq($faqId, null, true);
         $faqData = $this->faq->faqRecord;
-        $faqData['title'] = 'Copy of ' . $faqData['title'];
+        $faqData['title'] = 'Copy of ' . (string) $faqData['title'];
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
@@ -476,7 +476,7 @@ final class FaqController extends AbstractAdministrationController
 
         $this->faq->getFaq($faqId, null, true);
         $faqData = $this->faq->faqRecord;
-        $faqData['title'] = 'Translation of ' . $faqData['title'];
+        $faqData['title'] = 'Translation of ' . (string) $faqData['title'];
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
@@ -604,7 +604,7 @@ final class FaqController extends AbstractAdministrationController
 
     /**
      * @throws \Exception
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     private function getBaseTemplateVars(): array
     {

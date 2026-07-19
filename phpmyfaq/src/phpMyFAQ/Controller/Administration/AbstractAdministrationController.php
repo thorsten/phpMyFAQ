@@ -71,7 +71,7 @@ abstract class AbstractAdministrationController extends AbstractController
     }
 
     /**
-     * @return string[]
+     * @return array<string, mixed>
      * @throws Exception
      */
     protected function getHeader(Request $request): array
@@ -130,6 +130,9 @@ abstract class AbstractAdministrationController extends AbstractController
         ] + $pageFlags;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getSecondLevelEntries(AdminMenuBuilder $adminHelper): array
     {
         $secLevelEntries = [];
@@ -307,6 +310,9 @@ abstract class AbstractAdministrationController extends AbstractController
         return $secLevelEntries;
     }
 
+    /**
+     * @return array<string, bool>
+     */
     private function getPageFlags(Request $request): array
     {
         $userPage = false;
@@ -403,9 +409,10 @@ abstract class AbstractAdministrationController extends AbstractController
 
     private function getGravatarImage(): string
     {
-        if ($this->currentUser->isLoggedIn() && $this->configuration->get(item: 'main.enableGravatarSupport')) {
+        if ($this->currentUser->isLoggedIn() && (bool) $this->configuration->get(item: 'main.enableGravatarSupport')) {
+            $email = $this->currentUser->getUserData('email');
             $gravatar = new Gravatar();
-            return $gravatar->getImage($this->currentUser->getUserData('email'), [
+            return $gravatar->getImage(is_string($email) ? $email : '', [
                 'size' => '24',
                 'class' => 'img-profile rounded-circle',
             ]);
@@ -434,7 +441,10 @@ abstract class AbstractAdministrationController extends AbstractController
     protected function getFooter(): array
     {
         return [
-            'msgModalSessionWarning' => sprintf(Translation::get(key: 'ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING),
+            'msgModalSessionWarning' => sprintf(
+                Translation::getString('ad_session_expiring'),
+                PMF_AUTH_TIMEOUT_WARNING,
+            ),
             'msgPoweredBy' => System::getPoweredByPlainString(),
             'documentationUrl' => System::getDocumentationUrl(),
             'phpMyFaqUrl' => System::PHPMYFAQ_URL,

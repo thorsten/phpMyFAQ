@@ -43,7 +43,7 @@ readonly class Report
     /**
      * Generates a huge array for the report.
      *
-     * @return array<int, array>
+     * @return array<int, array<string, mixed>>
      */
     public function getReportingData(): array
     {
@@ -52,26 +52,27 @@ readonly class Report
 
         $lastId = 0;
         foreach ($rows as $row) {
-            if ($row->id === $lastId) {
-                ++$report[$row->id]['faq_translations'];
+            $rowId = (int) $row->id;
+            if ($rowId === $lastId) {
+                ++$report[$rowId]['faq_translations'];
             }
 
-            $report[$row->id] = [
-                'faq_id' => $row->id,
-                'faq_language' => $row->lang,
-                'category_id' => $row->category_id,
-                'category_parent' => $row->parent_id,
-                'category_name' => $row->category_name,
+            $report[$rowId] = [
+                'faq_id' => (int) $row->id,
+                'faq_language' => (string) $row->lang,
+                'category_id' => $row->category_id === null ? null : (int) $row->category_id,
+                'category_parent' => $row->parent_id === null ? null : (int) $row->parent_id,
+                'category_name' => $row->category_name === null ? null : (string) $row->category_name,
                 'faq_translations' => 0,
-                'faq_sticky' => $row->sticky,
-                'faq_question' => $row->question,
-                'faq_org_author' => $row->original_author,
-                'faq_updated' => Date::createIsoDate($row->updated),
-                'faq_visits' => $row->visits,
-                'faq_last_author' => $row->last_author,
+                'faq_sticky' => (int) $row->sticky,
+                'faq_question' => (string) $row->question,
+                'faq_org_author' => (string) $row->original_author,
+                'faq_updated' => Date::createIsoDate((string) $row->updated),
+                'faq_visits' => $row->visits === null ? null : (int) $row->visits,
+                'faq_last_author' => $row->last_author === null ? null : (string) $row->last_author,
             ];
 
-            $lastId = $row->id;
+            $lastId = $rowId;
         }
 
         return $report;
@@ -92,13 +93,16 @@ readonly class Report
         if (extension_loaded(extension: 'mbstring')) {
             $detected = mb_detect_encoding($outputString);
 
-            if ($detected !== 'ASCII') {
-                $outputString = mb_convert_encoding($outputString, to_encoding: 'UTF-16', from_encoding: $detected);
+            if ($detected !== false && $detected !== 'ASCII') {
+                $converted = mb_convert_encoding($outputString, to_encoding: 'UTF-16', from_encoding: $detected);
+                $outputString = is_string($converted) ? $converted : $outputString;
             }
         }
 
         $toBeRemoved = ['=', '+', '-', 'HYPERLINK'];
-        return str_replace(search: $toBeRemoved, replace: '', subject: $outputString);
+        $sanitized = str_replace(search: $toBeRemoved, replace: '', subject: $outputString);
+
+        return is_string($sanitized) ? $sanitized : '';
     }
 
     /**
@@ -107,7 +111,7 @@ readonly class Report
     public static function sanitize(int|string $value): string|int
     {
         if (preg_match(pattern: '/[=\+\-\@\|]/', subject: (string) $value)) {
-            return '"' . str_replace(search: '"', replace: '""', subject: $value) . '"';
+            return '"' . str_replace(search: '"', replace: '""', subject: (string) $value) . '"';
         }
 
         return $value;

@@ -206,33 +206,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array<array-key, mixed>` is less specific than the declared return type `array<array-key, string>` for function `phpMyFAQ\Administration\RemoteApiClient::getVerificationIssues` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array{'development': mixed, 'installed': string, 'nightly': mixed, 'stable': mixed}` is less specific than the declared return type `array<array-key, string>` for function `phpMyFAQ\Administration\RemoteApiClient::getVersions` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_diff`: expected `array<('K.array_diff() extends array-key), ('V.array_diff() extends mixed)>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `array_diff`: expected `array<array-key, mixed>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `Exception::__construct`: expected `int`, but possibly received `int|string`."
-count = 2
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Report.php"
@@ -242,50 +218,14 @@ count = 11
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Report.php"
-code = "array-to-string-conversion"
-message = "Potential array in middle operand of string concatenation."
+code = "redundant-condition"
+message = "Redundant ternary operator: condition is always truthy."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Report.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Administration\Report::convertEncoding`: expected `string`, but found `array<array-key, string>|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Report.php"
-code = "less-specific-return-statement"
-message = '''Returned type `array{0?: array{'category_id'?: mixed, 'category_name'?: mixed, 'category_parent'?: mixed, 'faq_id'?: mixed, 'faq_language'?: mixed, 'faq_last_author'?: mixed, 'faq_org_author'?: mixed, 'faq_question'?: mixed, 'faq_sticky'?: mixed, 'faq_translations': non-negative-int, 'faq_updated'?: string, 'faq_visits'?: mixed}, ...<array-key, array{'category_id'?: mixed, 'category_name'?: mixed, 'category_parent'?: mixed, 'faq_id'?: mixed, 'faq_language'?: mixed, 'faq_last_author'?: mixed, 'faq_org_author'?: mixed, 'faq_question'?: mixed, 'faq_sticky'?: mixed, 'faq_translations': non-negative-int, 'faq_updated'?: string, 'faq_visits'?: mixed}>}|array{0?: array{'faq_translations': int(1)}}` is less specific than the declared return type `array<int, array<array-key, mixed>>` for function `phpMyFAQ\Administration\Report::getReportingData`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Report.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::createIsoDate`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Report.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Report.php"
-code = "possibly-false-argument"
-message = "Argument #3 of function `mb_convert_encoding` is possibly `false`, but parameter type `array<array-key, string>|null|string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Report.php"
-code = "possibly-false-argument"
-message = "Argument #3 of function `str_replace` is possibly `false`, but parameter type `array<array-key, string>|string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Report.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #3 of `str_replace`: expected `array<array-key, string>|string`, but possibly received `int|string`."
+code = "redundant-type-comparison"
+message = "Redundant type assertion: `$sanitized` is already `string`."
 count = 1
 
 [[issues]]
@@ -1352,33 +1292,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Order.php"
-code = "invalid-return-statement"
-message = '''Invalid return type for function `phpMyFAQ\Category\Order::getAllCategories`: expected `array<int, array{'category_id': int, 'parent_id': int, 'position': int}>`, but found `list<non-empty-array<array-key, mixed>>`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Order.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\Order::getParentId`: expected `array<array-key, stdClass>`, but provided type `non-empty-array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Order.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category\Order::setCategoryTree`: expected `array<array-key, stdClass>`, but provided type `non-empty-array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Order.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseDriver::query`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Order.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Order.php"
@@ -1760,38 +1676,8 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AbstractAdministrationController.php"
-code = "invalid-return-statement"
-message = '''Invalid return type for function `phpMyFAQ\Controller\Administration\AbstractAdministrationController::getHeader`: expected `array<array-key, string>`, but found `array{'allowUserLayoutMode': bool, 'baseHref': truthy-string, 'csrfTokenLogout': string, 'currentYear': string, 'defaultLayoutMode': string, 'gravatarImage': string, 'hasGravatarSupport': mixed, 'isSessionTimeoutCounterEnabled': mixed, 'layoutMode': string('light'), 'menuBackup': array<array-key, string>|null|string, 'menuConfiguration': array<array-key, string>|null|string, 'menuContent': array<array-key, string>|null|string, 'menuImportsExports': array<array-key, string>|null|string, 'menuStatistics': array<array-key, string>|null|string, 'menuUsers': array<array-key, string>|null|string, 'metaLanguage': array<array-key, string>|null|string, 'metaRobots': mixed, 'msgChangePassword': array<array-key, string>|null|string, 'msgLogout': array<array-key, string>|null|string, 'msgSessionExpiration': array<array-key, string>|null|string, 'pageDirection': array<array-key, string>|null|string, 'pageTitle': truthy-string, 'pluginScripts': array<array-key, string>, 'pluginStylesheets': array<array-key, string>, 'renderedLanguageSelection': string, 'secondLevelEntries': array<array-key, mixed>, 'templateSetName': string, 'userHasAccessPermission': bool, 'userName': array<array-key, string>|int|null|string, 'version': string, ...}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AbstractAdministrationController.php"
 code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AbstractAdministrationController.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Service\Gravatar::getImage`: expected `string`, but possibly received `array<array-key, string>|int|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AbstractAdministrationController.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #1 of `sprintf`: expected `string`, but possibly received `array<array-key, string>|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AbstractAdministrationController.php"
-code = "possibly-null-argument"
-message = "Argument #1 of function `sprintf` is possibly `null`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AbstractAdministrationController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Service\Gravatar::getImage` is possibly `null`, but parameter type `string` does not accept it.'
+message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
@@ -1916,30 +1802,6 @@ count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Controller\Administration\Api\DashboardController::storeCache`: expected `array<string, mixed>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<string, mixed>|null` for function `phpMyFAQ\Controller\Administration\Api\DashboardController::getFreshCache`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<string, mixed>|null` for function `phpMyFAQ\Controller\Administration\Api\DashboardController::getStaleCache`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_key_exists`: expected `bool|float|int|string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 7
@@ -1954,18 +1816,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
-code = "mixed-operand"
-message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
-code = "mixed-operand"
-message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
 count = 1
 
 [[issues]]
@@ -2342,45 +2192,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "invalid-return-statement"
-message = '''Invalid return type for function `phpMyFAQ\Controller\Administration\CategoryController::getBaseTemplateVars`: expected `array<string, string>`, but found `array{'ad_categ_add': array<array-key, string>|null|string, 'ad_entry_restricted_groups': array<array-key, string>|null|string, 'ad_entry_restricted_users': array<array-key, string>|null|string, 'ad_entry_userpermission': array<array-key, string>|null|string, 'buttonCancel': array<array-key, string>|null|string, 'csrfTokenInput': string, 'msgAccessAllUsers': array<array-key, string>|null|string, 'permLevel': mixed, 'restricted_groups': string, 'userSelection': array<array-key, mixed>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Category::buildAdminCategoryTree`: expected `array<int, array<string, mixed>>`, but provided type `array<int, array<array-key, mixed>>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Language\LanguageCodes::get`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
 code = "mixed-assignment"
 message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\Category\Order::getCategoryTree`: expected `array<array-key, array{'category_id': string, 'parent_id': string}>`, but possibly received `array<int, array{'category_id': int, 'parent_id': int, 'position': int}>`.'''
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
@@ -2417,36 +2231,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/DashboardController.php"
 code = "mixed-operand"
 message = "Left operand in binary operation has type `mixed`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
-code = "invalid-return-statement"
-message = '''Invalid return type for function `phpMyFAQ\Controller\Administration\FaqController::getBaseTemplateVars`: expected `array<string, string>`, but found `array{'ad_admin_notes': array<array-key, string>|null|string, 'ad_admin_notes_hint': array<array-key, string>|null|string, 'ad_att_addto': array<array-key, string>|null|string, 'ad_att_addto_2': array<array-key, string>|null|string, 'ad_att_att': array<array-key, string>|null|string, 'ad_att_butt': array<array-key, string>|null|string, 'ad_changerev': array<array-key, string>|null|string, 'ad_entry_allowComments': array<array-key, string>|null|string, 'ad_entry_changed': array<array-key, string>|null|string, 'ad_entry_changelog': array<array-key, string>|null|string, 'ad_entry_changelog_history': array<array-key, string>|null|string, 'ad_entry_new_revision': array<array-key, string>|null|string, 'ad_entry_not_visibility': array<array-key, string>|null|string, 'ad_entry_restricted_groups': array<array-key, string>|null|string, 'ad_entry_restricted_users': array<array-key, string>|null|string, 'ad_entry_save': array<array-key, string>|null|string, 'ad_entry_solution_id': array<array-key, string>|null|string, 'ad_entry_status': array<array-key, string>|null|string, 'ad_entry_userpermission': array<array-key, string>|null|string, 'ad_entry_visibility': array<array-key, string>|null|string, 'ad_gen_no': array<array-key, string>|null|string, 'ad_gen_reset': array<array-key, string>|null|string, 'ad_gen_yes': array<array-key, string>|null|string, 'ad_view_faq': array<array-key, string>|null|string, 'canBeNewRevision': bool, 'csrfToken': string, 'csrfTokenDeleteAttachment': string, 'csrfTokenUploadAttachment': string, 'defaultUrl': string, 'hasPermissionForAddAttachments': bool, 'hasPermissionForDeleteAttachments': bool, 'hasPermissionForTranslateFaqs': bool, 'isBasicPermission': bool, 'isEditorEnabled': mixed, 'isMarkdownEditorEnabled': mixed, 'maxAttachmentSize': mixed}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Link\Util\TitleSlugifier::slug`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Administration\Revision::get`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FaqController.php"
-code = "mixed-operand"
-message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FormsController.php"
@@ -3557,12 +3341,6 @@ file = "phpmyfaq/src/phpMyFAQ/Export/Json.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Export\Pdf\Wrapper::setCategories`: expected `array<int, array<string, mixed>>`, but provided type `array<int, array<array-key, mixed>>` is less specific.'
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
