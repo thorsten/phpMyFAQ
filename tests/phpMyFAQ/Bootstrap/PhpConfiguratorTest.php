@@ -103,8 +103,18 @@ class PhpConfiguratorTest extends TestCase
         $previousExceptionHandler = set_exception_handler(static function (): void {});
         restore_exception_handler();
 
-        $this->assertSame('\\phpMyFAQ\\Core\\Error::errorHandler', $previousErrorHandler);
-        $this->assertSame('\\phpMyFAQ\\Core\\Error::exceptionHandler', $previousExceptionHandler);
+        $this->assertInstanceOf(\Closure::class, $previousErrorHandler);
+        $errorHandlerReflection = new \ReflectionFunction($previousErrorHandler);
+        $this->assertSame('errorHandler', $errorHandlerReflection->getName());
+        $this->assertSame(\phpMyFAQ\Core\Error::class, $errorHandlerReflection->getClosureCalledClass()?->getName());
+
+        $this->assertInstanceOf(\Closure::class, $previousExceptionHandler);
+        $exceptionHandlerReflection = new \ReflectionFunction($previousExceptionHandler);
+        $this->assertSame('exceptionHandler', $exceptionHandlerReflection->getName());
+        $this->assertSame(
+            \phpMyFAQ\Core\Error::class,
+            $exceptionHandlerReflection->getClosureCalledClass()?->getName(),
+        );
     }
 
     public function testConfigureSessionDefaultsToFilesHandler(): void

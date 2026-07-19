@@ -53,6 +53,10 @@ class VanillaFile extends AbstractFile
             return $this->copyToSimple((string) $entry);
         }
 
+        if (!$entry instanceof AbstractFile) {
+            return false;
+        }
+
         $entry->setMode(self::MODE_WRITE);
         while (!$this->eof()) {
             $entry->putChunk($this->getChunk());
@@ -66,6 +70,8 @@ class VanillaFile extends AbstractFile
      */
     public function getChunk(): string
     {
-        return fread($this->handle, self::CHUNK_SIZE);
+        $chunk = fread($this->handle, self::CHUNK_SIZE);
+
+        return $chunk === false ? '' : $chunk;
     }
 }

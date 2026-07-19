@@ -53,7 +53,7 @@ class AdminMenuBuilder
         bool $checkPerm = true,
     ): string {
         $renderedCaption = Translation::get($caption);
-        if ($renderedCaption === null) {
+        if (!is_string($renderedCaption)) {
             $renderedCaption = 'No string for ' . $caption;
         }
 
@@ -99,7 +99,7 @@ class AdminMenuBuilder
             return true;
         }
 
-        return $restrictions !== '' && ($this->permission[$restrictions] ?? false);
+        return $restrictions !== '' && (bool) ($this->permission[$restrictions] ?? false);
     }
 
     /**
@@ -328,7 +328,7 @@ class AdminMenuBuilder
                 '<option value="%s"%s>%s</option>',
                 $value,
                 $value === $current ? ' selected' : '',
-                $label,
+                (string) $label,
             );
         }
 
@@ -359,7 +359,7 @@ class AdminMenuBuilder
             '<option value="%s"%s>%s</option>',
             $value,
             $value === $current ? ' selected' : '',
-            Translation::get($label),
+            Translation::getString($label),
         );
     }
 }

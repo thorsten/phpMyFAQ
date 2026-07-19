@@ -14,21 +14,15 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminMenuBuilder.php"
+code = "array-to-string-conversion"
+message = "Potentially casting `array` to `string`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/AdminMenuBuilder.php"
 code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
+message = "Casting `mixed` to `bool`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminMenuBuilder.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminMenuBuilder.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
@@ -505,30 +499,6 @@ message = "Possibly false right operand used in string concatenation (type `fals
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/File/VanillaFile.php"
-code = "ambiguous-object-method-access"
-message = "Cannot statically verify method call on a generic `object` type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/File/VanillaFile.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Attachment\Filesystem\File\VanillaFile::getChunk` is declared to return `string` but possibly returns 'false' (inferred as `false|string`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/File/VanillaFile.php"
-code = "invalid-method-access"
-message = "Attempting to access a method on a non-object type (`string`)."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/File/VanillaFile.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Attachment\Filesystem\File\VanillaFile::getChunk`: expected `string`, but found `false|string`.'
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth.php"
 code = "less-specific-return-statement"
 message = 'Returned type `object` is less specific than the declared return type `phpMyFAQ\Auth&phpMyFAQ\Auth\AuthDriverInterface` for function `phpMyFAQ\Auth::selectAuth`.'
@@ -562,30 +532,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthChain.php"
 code = "redundant-type-comparison"
 message = 'Redundant type assertion: `$this->oauth2Authenticator` is already `(callable(Symfony\Component\HttpFoundation\Request): int|null)`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthDatabase.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth\AuthDatabase::rehash`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthDatabase.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth\PasswordHasher::needsRehash`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthDatabase.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth\PasswordHasher::verify`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthDatabase.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Auth\PasswordHasher::verify`: expected `string`, but found `mixed`.'
 count = 1
 
 [[issues]]
@@ -956,32 +902,8 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bootstrap/PhpConfigurator.php"
-code = "possibly-false-argument"
-message = "Argument #2 of function `explode` is possibly `false`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bootstrap/PhpConfigurator.php"
 code = "possibly-false-operand"
 message = "Possibly false right operand used in string concatenation (type `false|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bootstrap/PhpConfigurator.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `set_error_handler`: expected `(callable(...mixed=): mixed)|null`, but possibly received `string('\phpMyFAQ\Core\Error::errorHandler')`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bootstrap/PhpConfigurator.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `set_exception_handler`: expected `(callable(...mixed=): mixed)|null`, but possibly received `string('\phpMyFAQ\Core\Error::exceptionHandler')`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bootstrap/PhpConfigurator.php"
-code = "possibly-null-argument"
-message = "Argument #1 of function `call_user_func` is possibly `null`, but parameter type `(callable(...string): void)|string` does not accept it."
 count = 1
 
 [[issues]]
@@ -1738,30 +1660,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
 code = "redundant-logical-operation"
 message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/LdapController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Ldap::connect`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/LdapController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Ldap::connect`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/LdapController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #4 of `phpMyFAQ\Ldap::connect`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/LdapController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #5 of `phpMyFAQ\Ldap::connect`: expected `string`, but found `nonnull`.'
 count = 1
 
 [[issues]]
@@ -2954,21 +2852,9 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Export\Pdf\Engine\TcpdfDocument::setImageResolver`: expected `(callable(string, string): array{0: string, 1: string}|null)|null`, but provided type `(callable(...mixed=): mixed)` is less specific.'
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"

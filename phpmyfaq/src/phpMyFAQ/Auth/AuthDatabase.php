@@ -183,12 +183,15 @@ class AuthDatabase extends Auth implements AuthDriverInterface
                 break;
             }
 
-            if (!$this->passwordHasher->verify($user['login'], $password, $user['pass'])) {
+            $login = (string) $user['login'];
+            $passwordHash = (string) $user['pass'];
+
+            if (!$this->passwordHasher->verify($login, $password, $passwordHash)) {
                 continue;
             }
 
-            if ($this->passwordHasher->needsRehash($user['pass'])) {
-                $this->rehash($user['login'], $password);
+            if ($this->passwordHasher->needsRehash($passwordHash)) {
+                $this->rehash($login, $password);
             }
 
             return true;

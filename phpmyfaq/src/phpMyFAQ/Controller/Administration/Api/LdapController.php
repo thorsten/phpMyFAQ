@@ -89,11 +89,11 @@ final class LdapController extends AbstractController
         foreach ($servers as $index => $server) {
             $ldap = new Ldap($this->configuration);
             $connected = $ldap->connect(
-                $server['ldap_server'] ?? '',
+                (string) ($server['ldap_server'] ?? ''),
                 (int) ($server['ldap_port'] ?? 389),
-                $server['ldap_base'] ?? '',
-                $server['ldap_user'] ?? '',
-                $server['ldap_password'] ?? '',
+                (string) ($server['ldap_base'] ?? ''),
+                (string) ($server['ldap_user'] ?? ''),
+                (string) ($server['ldap_password'] ?? ''),
             );
 
             $serverResults[] = [

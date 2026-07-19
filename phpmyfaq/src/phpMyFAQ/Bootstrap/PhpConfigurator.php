@@ -33,7 +33,7 @@ class PhpConfigurator
      */
     public static function fixIncludePath(): void
     {
-        $includePaths = explode(PATH_SEPARATOR, ini_get('include_path'));
+        $includePaths = explode(PATH_SEPARATOR, (string) ini_get('include_path'));
         if (!in_array('.', $includePaths, strict: true)) {
             set_include_path('.' . PATH_SEPARATOR . get_include_path());
         }
@@ -54,8 +54,8 @@ class PhpConfigurator
      */
     public static function registerErrorHandlers(): void
     {
-        set_error_handler('\\phpMyFAQ\\Core\\Error::errorHandler');
-        set_exception_handler('\\phpMyFAQ\\Core\\Error::exceptionHandler');
+        set_error_handler(\phpMyFAQ\Core\Error::errorHandler(...));
+        set_exception_handler(\phpMyFAQ\Core\Error::exceptionHandler(...));
     }
 
     /**
@@ -85,6 +85,10 @@ class PhpConfigurator
                     ini_set('session.save_handler', value: 'files');
                     break;
                 case 'redis':
+                    if (self::$redisConfigurator === null) {
+                        throw new RuntimeException('No Redis session configurator is registered.');
+                    }
+
                     call_user_func(self::$redisConfigurator, $redisDsn);
                     break;
                 default:

@@ -250,6 +250,9 @@ final readonly class TcpdfEngine implements PdfEngineInterface
         $this->document->setFooterRenderer($renderer);
     }
 
+    /**
+     * @param callable(string, string): (array{0: string, 1: string}|null) $resolver
+     */
     public function onImageResolve(callable $resolver): void
     {
         $this->document->setImageResolver($resolver);
@@ -259,8 +262,8 @@ final readonly class TcpdfEngine implements PdfEngineInterface
     {
         // Note: this file lives one directory deeper (Engine/) than the original
         // Wrapper, so the fallback paths carry one extra "../" to resolve identically.
-        $pmfRootDir = defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR : __DIR__ . '/../../../../';
-        $pmfSrcDir = defined('PMF_SRC_DIR') ? PMF_SRC_DIR : __DIR__ . '/../../../';
+        $pmfRootDir = defined('PMF_ROOT_DIR') ? (string) PMF_ROOT_DIR : __DIR__ . '/../../../../';
+        $pmfSrcDir = defined('PMF_SRC_DIR') ? (string) PMF_SRC_DIR : __DIR__ . '/../../../';
 
         self::defineIfMissing('K_TCPDF_EXTERNAL_CONFIG', true);
         self::defineIfMissing('K_PATH_URL', '');
@@ -269,7 +272,7 @@ final readonly class TcpdfEngine implements PdfEngineInterface
         self::defineIfMissing('K_PATH_CACHE', $pmfRootDir . '/content/user/images/');
         self::defineIfMissing('K_PATH_URL_CACHE', K_PATH_CACHE);
         self::defineIfMissing('K_PATH_IMAGES', $pmfRootDir . '/content/user/images/');
-        self::defineIfMissing('K_BLANK_IMAGE', K_PATH_IMAGES . '_blank.png');
+        self::defineIfMissing('K_BLANK_IMAGE', (string) constant('K_PATH_IMAGES') . '_blank.png');
         self::defineIfMissing('PDF_PAGE_FORMAT', 'A4');
         self::defineIfMissing('PDF_PAGE_ORIENTATION', 'P');
         self::defineIfMissing('PDF_CREATOR', 'TCPDF');

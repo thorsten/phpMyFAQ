@@ -143,6 +143,8 @@ interface PdfEngineInterface
     /**
      * Image resolver. Receives ($file, $type) and returns [resolvedFile, resolvedType]
      * to draw, or null to skip the image entirely.
+     *
+     * @param callable(string, string): (array{0: string, 1: string}|null) $resolver
      */
     public function onImageResolve(callable $resolver): void;
 }
