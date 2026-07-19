@@ -145,13 +145,17 @@ final class OAuth2Controller extends AbstractApiController
 
         $contentType = $result['headers']['Content-Type'] ?? '';
         if (str_contains($contentType, 'application/json')) {
-            $data = json_decode((string) $result['body'], associative: true);
+            $data = json_decode(is_string($result['body'] ?? null) ? $result['body'] : '', associative: true);
             if (is_array($data)) {
                 return $this->json($data, $result['status'], $result['headers'] ?? []);
             }
         }
 
-        return new Response((string) $result['body'], $result['status'], $result['headers'] ?? []);
+        return new Response(
+            is_string($result['body'] ?? null) ? $result['body'] : '',
+            $result['status'],
+            $result['headers'] ?? [],
+        );
     }
 
     private function getAuthorizationServer(): OAuth2AuthorizationServer

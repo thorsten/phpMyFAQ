@@ -394,11 +394,11 @@ final class CategoryController extends AbstractAdministrationController
         $restrictedGroups = !$allGroups;
 
         $header =
-            Translation::get(key: 'ad_categ_edit_1')
+            Translation::getString(key: 'ad_categ_edit_1')
             . ' "'
             . $categoryEntity->getName()
             . '" '
-            . Translation::get(key: 'ad_categ_edit_2');
+            . Translation::getString(key: 'ad_categ_edit_2');
 
         $allGroupsOptions = '';
         $restrictedGroupOptions = '';

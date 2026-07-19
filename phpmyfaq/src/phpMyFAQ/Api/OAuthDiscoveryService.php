@@ -37,9 +37,11 @@ final readonly class OAuthDiscoveryService
 
         return [
             'enabled' => $this->isEnabled(),
-            'issuer' => (string) $document['issuer'],
-            'authorizationEndpoint' => (string) $document['authorization_endpoint'],
-            'tokenEndpoint' => (string) $document['token_endpoint'],
+            'issuer' => is_string($document['issuer'] ?? null) ? $document['issuer'] : '',
+            'authorizationEndpoint' => is_string($document['authorization_endpoint'] ?? null)
+                ? $document['authorization_endpoint']
+                : '',
+            'tokenEndpoint' => is_string($document['token_endpoint'] ?? null) ? $document['token_endpoint'] : '',
             'grantTypesSupported' => $document['grant_types_supported'],
             'responseTypesSupported' => $document['response_types_supported'],
             'tokenEndpointAuthMethodsSupported' => $document['token_endpoint_auth_methods_supported'],

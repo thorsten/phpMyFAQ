@@ -138,7 +138,7 @@ class Wrapper
         }
 
         // Set font
-        $metaLanguage = (string) (Translation::get(key: 'metaLanguage') ?? '');
+        $metaLanguage = Translation::getString(key: 'metaLanguage');
         if ($metaLanguage !== '' && array_key_exists($metaLanguage, $this->fontFiles)) {
             $this->currentFont = (string) $this->fontFiles[$metaLanguage];
         }
@@ -345,7 +345,7 @@ class Wrapper
         $this->engine->cell(
             w: 0,
             h: 10,
-            txt: Translation::get(key: 'ad_gen_page') . ' ' . $this->engine->getAliasNumPage() . ' / '
+            txt: Translation::getString(key: 'ad_gen_page') . ' ' . $this->engine->getAliasNumPage() . ' / '
                 . $this->engine->getAliasNbPages(),
             border: 0,
             ln: 0,

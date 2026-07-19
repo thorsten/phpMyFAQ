@@ -148,7 +148,7 @@ final readonly class AttachmentService
      */
     public function getAttachmentErrorMessage(AttachmentException $attachmentException): string
     {
-        return Translation::get(key: 'msgAttachmentInvalid') . ' (' . $attachmentException->getMessage() . ')';
+        return Translation::getString(key: 'msgAttachmentInvalid') . ' (' . $attachmentException->getMessage() . ')';
     }
 
     /**

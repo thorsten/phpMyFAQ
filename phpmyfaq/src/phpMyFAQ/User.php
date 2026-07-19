@@ -774,7 +774,7 @@ class User
      * Returns the data of the current user.
      *
      * @param string $field Field
-     * @return array<string>|string|int|null
+     * @return ($field is '*' ? array<string, mixed> : string|int|null)
      */
     public function getUserData(string $field = '*'): mixed
     {

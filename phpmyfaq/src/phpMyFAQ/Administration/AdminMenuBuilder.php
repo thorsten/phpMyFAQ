@@ -328,7 +328,7 @@ class AdminMenuBuilder
                 '<option value="%s"%s>%s</option>',
                 $value,
                 $value === $current ? ' selected' : '',
-                (string) $label,
+                is_string($label) ? $label : '',
             );
         }
 

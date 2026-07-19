@@ -119,7 +119,14 @@ class UserAuthentication
 
             $this->currentUser->setLoggedIn(false);
             throw new UserException(
-                (Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed') . ' (' . $username . ')',
+                (
+                    ($authFailMessage = Translation::getString(key: 'ad_auth_fail')) !== ''
+                        ? $authFailMessage
+                        : 'Authentication failed'
+                )
+                . ' ('
+                . $username
+                . ')',
             );
         } catch (AuthException $authException) {
             $this->recordFailedLogin();
