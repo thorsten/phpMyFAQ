@@ -175,10 +175,6 @@ final class UpdateController extends AbstractController
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        if ($pathToPackage === false) {
-            return $this->json(['error' => Translation::get(key: 'downloadFailure')], Response::HTTP_BAD_GATEWAY);
-        }
-
         if (!$this->upgrade->isNightly()) {
             $result = $this->upgrade->verifyPackage($pathToPackage, $versionNumber);
             if ($result === false) {

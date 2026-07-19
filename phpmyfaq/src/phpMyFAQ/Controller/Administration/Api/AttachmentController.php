@@ -154,7 +154,7 @@ final class AttachmentController extends AbstractAdministrationApiController
 
             $recordId = Filter::filterVar($request->request->get('record_id'), FILTER_VALIDATE_INT);
 
-            if ($recordId === null || $recordId === false) {
+            if ($recordId === null) {
                 return $this->json([
                     'error' => Translation::get(key: 'msgNoImagesForUpload'),
                 ], Response::HTTP_BAD_REQUEST);

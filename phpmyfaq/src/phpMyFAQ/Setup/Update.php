@@ -128,12 +128,6 @@ class Update extends AbstractSetup
                 $isDir = $file->isDir();
                 $isFile = $file->isFile();
             }
-            if ($filePath === false) {
-                continue;
-            }
-            if ($filePath === null) {
-                continue;
-            }
             if ($filePath === '') {
                 continue;
             }

@@ -282,8 +282,10 @@ class File extends AbstractAttachment implements AttachmentInterface
 
     private function usesCloudStorage(): bool
     {
-        $configuration = Configuration::getConfigurationInstance();
-        if ($configuration === null) {
+        try {
+            $configuration = Configuration::getConfigurationInstance();
+        } catch (\LogicException) {
+            // No configuration bootstrapped (CLI scripts, isolated tests): default to local storage.
             return false;
         }
 

@@ -139,7 +139,7 @@ class Category
 
             // Ensure level is set for each entry in categoryName
             foreach ($this->categoryName as $cid => $row) {
-                if (!(is_array($row) && array_key_exists('id', $row))) {
+                if (!array_key_exists('id', $row)) {
                     continue;
                 }
 

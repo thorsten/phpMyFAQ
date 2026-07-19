@@ -117,7 +117,7 @@ class AuthSso extends Auth implements AuthDriverInterface
 
         if (count($remote) <= 1) {
             $remote = explode('@', (string) $this->request->server->get('REMOTE_USER'));
-            $user = is_array($remote) && count($remote) > 1 ? $remote[0] : $this->request->server->get('REMOTE_USER');
+            $user = count($remote) > 1 ? $remote[0] : $this->request->server->get('REMOTE_USER');
         }
 
         return $user === $login;

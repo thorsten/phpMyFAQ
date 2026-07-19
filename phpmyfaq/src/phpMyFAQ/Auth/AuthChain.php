@@ -73,7 +73,7 @@ final class AuthChain
             return $this->authenticatedUserIdStorage !== null;
         }
 
-        if (is_callable($this->oauth2Authenticator)) {
+        if ($this->oauth2Authenticator !== null) {
             $userId = ($this->oauth2Authenticator)($request);
             if ($userId !== null) {
                 $this->authenticatedUserIdStorage = $userId;

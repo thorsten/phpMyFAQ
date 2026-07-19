@@ -272,10 +272,6 @@ class Relation
 
         // Build children map and initialize aggregated counts
         foreach ($categories as $category) {
-            if (!is_array($category)) {
-                continue;
-            }
-
             $categoryId = (int) ($category['category_id'] ?? 0);
             $parentId = (int) ($category['parent_id'] ?? 0);
 
@@ -295,10 +291,6 @@ class Relation
         $processedCategories = [];
 
         foreach ($categories as $category) {
-            if (!is_array($category)) {
-                continue;
-            }
-
             $categoryId = (int) ($category['category_id'] ?? 0);
 
             if (!array_key_exists($categoryId, $processedCategories)) {

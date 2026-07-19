@@ -156,7 +156,7 @@ readonly class DatabaseConfigurationStore implements ConfigurationStoreInterface
         }
 
         foreach ($rows as $row) {
-            if (!(is_object($row) && property_exists($row, 'config_name') && property_exists($row, 'config_value'))) {
+            if (!property_exists($row, 'config_name') || !property_exists($row, 'config_value')) {
                 continue;
             }
 

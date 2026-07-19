@@ -47,7 +47,8 @@ abstract class AbstractFrontController extends AbstractController
     {
         parent::initializeFromContainer();
 
-        if ($this->container === null) {
+        /* @mago-expect lint:no-isset - typed property may be uninitialized */
+        if (!isset($this->container)) {
             throw new LogicException('Container is not initialized.');
         }
 

@@ -87,7 +87,7 @@ class SearchResultSet
             && isset($this->currentUser->perm) // @mago-expect lint:no-isset - typed property may be uninitialized
         ) {
             $permission = $this->currentUser->perm;
-            if (is_object($permission) && method_exists($permission, 'getUserGroups')) {
+            if (method_exists($permission, 'getUserGroups')) {
                 $currentGroupIds = $permission->getUserGroups($this->currentUser->getUserId());
             }
         }
@@ -98,7 +98,7 @@ class SearchResultSet
             // check permissions for groups
             if ('medium' === $this->configuration->get(item: 'security.permLevel')) {
                 $groupPermissions = $this->faqPermission->get(Permission::GROUP, (int) $result->id);
-                $groupIds = is_array($currentGroupIds) ? $currentGroupIds : [-1];
+                $groupIds = $currentGroupIds;
                 foreach ($groupPermissions as $groupPermission) {
                     if (!in_array($groupPermission, $groupIds, strict: true)) {
                         continue;

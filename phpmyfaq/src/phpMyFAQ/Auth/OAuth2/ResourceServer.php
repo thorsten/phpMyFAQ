@@ -56,7 +56,7 @@ final class ResourceServer
             return null;
         }
 
-        if (is_callable($this->tokenValidator)) {
+        if ($this->tokenValidator !== null) {
             return ($this->tokenValidator)($request);
         }
 

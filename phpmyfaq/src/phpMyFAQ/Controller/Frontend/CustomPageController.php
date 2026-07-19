@@ -48,7 +48,7 @@ final class CustomPageController extends AbstractFrontController
     {
         $slug = (string) $request->attributes->get('slug', '');
 
-        if ($slug === null || $slug === '') {
+        if ($slug === '') {
             return $this->render('404.twig', [
                 ...$this->getHeader($request),
             ]);

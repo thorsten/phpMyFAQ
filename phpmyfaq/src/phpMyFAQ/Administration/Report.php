@@ -100,9 +100,7 @@ readonly class Report
         }
 
         $toBeRemoved = ['=', '+', '-', 'HYPERLINK'];
-        $sanitized = str_replace(search: $toBeRemoved, replace: '', subject: $outputString);
-
-        return is_string($sanitized) ? $sanitized : '';
+        return str_replace(search: $toBeRemoved, replace: '', subject: $outputString);
     }
 
     /**

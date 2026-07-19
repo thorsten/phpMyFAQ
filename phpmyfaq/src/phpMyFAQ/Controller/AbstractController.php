@@ -313,7 +313,7 @@ abstract class AbstractController
 
         $currentUser = $this->currentUser;
         if (
-            !$currentUser?->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
+            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::GROUP_EDIT->value)
@@ -333,7 +333,7 @@ abstract class AbstractController
 
         $currentUser = $this->currentUser;
         if (
-            !$currentUser?->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
+            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value)
         ) {

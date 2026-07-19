@@ -58,7 +58,8 @@ class Glossary
     public function insertItemsIntoContent(string $content = ''): string
     {
         // Lazy init in case a test created a mock without running the constructor
-        if (!property_exists($this, 'glossaryHelper') || $this->glossaryHelper === null) {
+        /* @mago-expect lint:no-isset - typed property may be uninitialized in constructor-less mocks */
+        if (!isset($this->glossaryHelper)) {
             $this->glossaryHelper = new GlossaryHelper();
         }
 
@@ -90,7 +91,8 @@ class Glossary
      */
     public function setTooltip(array $matches): string
     {
-        if (!property_exists($this, 'glossaryHelper') || $this->glossaryHelper === null) {
+        /* @mago-expect lint:no-isset - typed property may be uninitialized in constructor-less mocks */
+        if (!isset($this->glossaryHelper)) {
             $this->glossaryHelper = new GlossaryHelper();
         }
 

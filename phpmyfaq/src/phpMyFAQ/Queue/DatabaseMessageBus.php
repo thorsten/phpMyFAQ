@@ -21,7 +21,6 @@ namespace phpMyFAQ\Queue;
 
 use phpMyFAQ\Queue\Message\QueueMessageInterface;
 use phpMyFAQ\Queue\Transport\DatabaseTransport;
-use RuntimeException;
 
 final readonly class DatabaseMessageBus
 {
@@ -42,10 +41,6 @@ final readonly class DatabaseMessageBus
             'class' => $message::class,
             'payload' => $payload,
         ], JSON_THROW_ON_ERROR);
-
-        if (!is_string($encodedBody)) {
-            throw new RuntimeException('Unable to encode queue message payload.');
-        }
 
         return $this->databaseTransport->enqueue($encodedBody, $headers, $queue);
     }

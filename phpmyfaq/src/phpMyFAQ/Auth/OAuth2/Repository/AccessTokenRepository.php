@@ -37,6 +37,7 @@ final class AccessTokenRepository extends AbstractRepository implements AccessTo
         $token->setClient($clientEntity);
 
         foreach ($scopes as $scope) {
+            /* @mago-expect analysis:impossible-condition - callers may pass untyped arrays; skipping garbage is test-pinned */
             if (!$scope instanceof ScopeEntityInterface) {
                 continue;
             }

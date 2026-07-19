@@ -103,7 +103,7 @@ class Category
         $this->getOrderedCategories($withPermission);
 
         foreach ($this->categoryCache->getCategoryNames() as $categoryName) {
-            if (!(is_array($categoryName) && array_key_exists('id', $categoryName))) {
+            if (!array_key_exists('id', $categoryName)) {
                 continue;
             }
 

@@ -218,7 +218,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
         $db = $this->configuration->getDb();
 
         foreach ($this->conditions as $column => $value) {
-            if (!is_string($column) || !preg_match('/^[A-Za-z_][A-Za-z0-9_.]*$/', $column)) {
+            if (!preg_match('/^[A-Za-z_][A-Za-z0-9_.]*$/', $column)) {
                 continue;
             }
 

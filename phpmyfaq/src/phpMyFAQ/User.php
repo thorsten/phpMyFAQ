@@ -828,7 +828,7 @@ class User
 
         $userData = $this->userdata->fetchAll('keycloak_sub', $keycloakSub);
 
-        if (!is_array($userData) || !array_key_exists('user_id', $userData)) {
+        if (!array_key_exists('user_id', $userData)) {
             return 0;
         }
 

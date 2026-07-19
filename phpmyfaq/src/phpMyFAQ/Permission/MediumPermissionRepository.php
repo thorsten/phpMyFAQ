@@ -38,7 +38,7 @@ readonly class MediumPermissionRepository
      */
     public function getGroupRights(int $groupId): array
     {
-        if ($groupId <= 0 || !is_numeric($groupId)) {
+        if ($groupId <= 0) {
             return [];
         }
 
@@ -396,7 +396,7 @@ readonly class MediumPermissionRepository
      */
     public function getGroupName(int $groupId): string
     {
-        if ($groupId <= 0 || !is_numeric($groupId)) {
+        if ($groupId <= 0) {
             return '-';
         }
 

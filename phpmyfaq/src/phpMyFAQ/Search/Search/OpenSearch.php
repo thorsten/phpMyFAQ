@@ -65,10 +65,6 @@ class OpenSearch extends AbstractSearch implements SearchInterface
     private function mapHits(array $searchParams): array
     {
         $result = $this->client->search($searchParams);
-        if (!is_array($result)) {
-            return [];
-        }
-
         $hits = $result['hits']['hits'] ?? null;
         if (!is_array($hits)) {
             return [];
