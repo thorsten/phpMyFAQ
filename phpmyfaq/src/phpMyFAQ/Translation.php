@@ -33,7 +33,7 @@ class Translation
     /** @var string The current language */
     protected string $currentLanguage = '';
 
-    /** @var string[][] The loaded languages */
+    /** @var array<string, array<string, string|array<int, string>>> The loaded languages */
     protected array $loadedLanguages = [];
 
     /** @var array<string, array<string, array<string, string>>> Plugin translations: [pluginName][language][key] */
@@ -171,7 +171,7 @@ class Translation
     /**
      * Returns all translations from the current language.
      * @throws Exception
-     * @return array<string, string>
+     * @return array<string, string|array<int, string>>
      */
     public static function getAll(): array
     {
@@ -364,7 +364,29 @@ class Translation
         }
 
         $this->checkCurrentLanguage();
-        $this->loadedLanguages[$language] = require $this->filename($language);
+        $loaded = require $this->filename($language);
+        $translations = [];
+        if (is_array($loaded)) {
+            foreach ($loaded as $translationKey => $translationValue) {
+                if (is_string($translationValue)) {
+                    $translations[(string) $translationKey] = $translationValue;
+                    continue;
+                }
+
+                if (!is_array($translationValue)) {
+                    continue;
+                }
+
+                $pluralForms = [];
+                foreach ($translationValue as $pluralIndex => $pluralForm) {
+                    $pluralForms[(int) $pluralIndex] = (string) $pluralForm;
+                }
+
+                $translations[(string) $translationKey] = $pluralForms;
+            }
+        }
+
+        $this->loadedLanguages[$language] = $translations;
     }
 
     /**

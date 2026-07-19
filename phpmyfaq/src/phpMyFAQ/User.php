@@ -814,7 +814,7 @@ class User
 
         $userData = $this->userdata->fetchAll('email', $email);
 
-        return $userData['user_id'];
+        return (int) ($userData['user_id'] ?? 0);
     }
 
     /**
@@ -848,7 +848,7 @@ class User
 
         $userData = $this->userdata->fetchAll('email', $email);
 
-        return !array_key_exists('is_visible', $userData) || $userData['is_visible'];
+        return !array_key_exists('is_visible', $userData) || (bool) $userData['is_visible'];
     }
 
     /**

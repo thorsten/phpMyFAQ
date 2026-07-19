@@ -67,8 +67,8 @@ abstract class AbstractSetup
         }
 
         if (
-            !is_readable(PMF_ROOT_DIR . '/content/core/config/database.php')
-            && !is_readable(PMF_ROOT_DIR . '/config/database.php')
+            !is_readable((string) PMF_ROOT_DIR . '/content/core/config/database.php')
+            && !is_readable((string) PMF_ROOT_DIR . '/config/database.php')
         ) {
             throw new Exception(
                 'Sorry, but the database configuration file is not readable. Please check the permissions.',

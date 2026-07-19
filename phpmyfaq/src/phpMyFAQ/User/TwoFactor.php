@@ -46,7 +46,7 @@ class TwoFactor
         $this->endroidQrCodeProvider = new EndroidQrCodeProvider();
         $this->twoFactorAuth = new TwoFactorAuth(
             $this->endroidQrCodeProvider,
-            $this->configuration->get(item: 'main.titleFAQ'),
+            (string) $this->configuration->get(item: 'main.titleFAQ'),
             6,
             30,
             Algorithm::Sha1,
@@ -78,7 +78,9 @@ class TwoFactor
      */
     public function getSecret(CurrentUser $currentUser): ?string
     {
-        return $currentUser->getUserData('secret');
+        $secret = $currentUser->getUserData('secret');
+
+        return is_string($secret) ? $secret : null;
     }
 
     /**

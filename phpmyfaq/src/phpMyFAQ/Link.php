@@ -417,7 +417,9 @@ class Link
     {
         $url = $this->toString();
         /* @mago-expect lint:no-literal-password - false positive */
-        return strtok($url, token: '?');
+        $urlWithoutQueryString = strtok($url, token: '?');
+
+        return $urlWithoutQueryString === false ? '' : $urlWithoutQueryString;
     }
 
     /**

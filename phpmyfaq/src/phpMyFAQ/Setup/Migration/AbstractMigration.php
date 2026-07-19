@@ -162,6 +162,8 @@ abstract readonly class AbstractMigration implements MigrationInterface
 
     /**
      * Helper to create an index.
+     *
+     * @param string|string[] $columns
      */
     protected function createIndex(string $table, string $indexName, string|array $columns): string
     {
@@ -412,6 +414,6 @@ abstract readonly class AbstractMigration implements MigrationInterface
             'description' => $this->getDescription(),
             'class' => static::class,
         ];
-        return hash('sha256', json_encode($data));
+        return hash('sha256', (string) json_encode($data));
     }
 }

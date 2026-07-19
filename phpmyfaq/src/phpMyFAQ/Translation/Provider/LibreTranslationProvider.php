@@ -46,9 +46,9 @@ class LibreTranslationProvider extends AbstractTranslationProvider
      */
     private function getApiUrl(): string
     {
-        $baseUrl = $this->configuration->get('translation.libreTranslateUrl');
+        $baseUrl = (string) $this->configuration->get('translation.libreTranslateUrl');
 
-        if ((string) $baseUrl === '') {
+        if ($baseUrl === '') {
             throw new ApiException('LibreTranslate server URL not configured');
         }
 
@@ -80,7 +80,7 @@ class LibreTranslationProvider extends AbstractTranslationProvider
             ]);
 
             $data = $response->toArray();
-            return $data['translatedText'] ?? '';
+            return (string) ($data['translatedText'] ?? '');
         } catch (Exception $e) {
             throw new ApiException('LibreTranslate API error: ' . $e->getMessage());
         }

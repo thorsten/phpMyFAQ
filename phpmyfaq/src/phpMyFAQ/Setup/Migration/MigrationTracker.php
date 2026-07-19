@@ -164,11 +164,11 @@ class MigrationTracker
             }
 
             $migrations[] = [
-                'version' => $row->version,
-                'applied_at' => $row->applied_at,
+                'version' => (string) $row->version,
+                'applied_at' => (string) $row->applied_at,
                 'execution_time_ms' => (int) $row->execution_time_ms,
-                'checksum' => $row->checksum,
-                'description' => $row->description,
+                'checksum' => $row->checksum === null ? null : (string) $row->checksum,
+                'description' => $row->description === null ? null : (string) $row->description,
             ];
         }
 
@@ -202,7 +202,7 @@ class MigrationTracker
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
 
-        return $row instanceof \stdClass ? $row->version : null;
+        return $row instanceof \stdClass ? (string) $row->version : null;
     }
 
     /**

@@ -35,6 +35,10 @@ final class LinkQueryParser
         }
 
         $parsed = parse_url($url);
+        if (!is_array($parsed)) {
+            return $parameters;
+        }
+
         if (array_key_exists('query', $parsed) && is_string($parsed['query'])) {
             $rawQuery = str_replace(search: ['&amp;', '#38;', 'amp;'], replace: '&', subject: $parsed['query']);
             $tmp = [];

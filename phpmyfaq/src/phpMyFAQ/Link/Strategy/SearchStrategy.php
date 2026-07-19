@@ -31,6 +31,7 @@ final class SearchStrategy implements StrategyInterface
         $hasSearch = array_key_exists(Link::LINK_GET_ACTION_SEARCH, $params);
         $isTag = !$hasSearch && array_key_exists(Link::LINK_GET_TAGGING_ID, $params);
 
+        $url = '';
         if ($isTag) {
             $url = Link::LINK_TAGS . $params[Link::LINK_GET_TAGGING_ID];
             if (array_key_exists(Link::LINK_GET_PAGE, $params)) {
@@ -47,15 +48,15 @@ final class SearchStrategy implements StrategyInterface
                     Link::LINK_SEARCHPART_SEPARATOR
                     . Link::LINK_GET_ACTION_SEARCH
                     . '='
-                    . $params[Link::LINK_GET_ACTION_SEARCH];
+                    . (string) $params[Link::LINK_GET_ACTION_SEARCH];
                 if (array_key_exists(Link::LINK_GET_PAGE, $params)) {
-                    $url .= Link::LINK_AMPERSAND . Link::LINK_GET_PAGE . '=' . $params[Link::LINK_GET_PAGE];
+                    $url .= Link::LINK_AMPERSAND . Link::LINK_GET_PAGE . '=' . (string) $params[Link::LINK_GET_PAGE];
                 }
             }
         }
 
         if (array_key_exists(Link::LINK_GET_LANGS, $params)) {
-            $url .= Link::LINK_AMPERSAND . Link::LINK_GET_LANGS . '=' . $params[Link::LINK_GET_LANGS];
+            $url .= Link::LINK_AMPERSAND . Link::LINK_GET_LANGS . '=' . (string) $params[Link::LINK_GET_LANGS];
         }
 
         return $url;

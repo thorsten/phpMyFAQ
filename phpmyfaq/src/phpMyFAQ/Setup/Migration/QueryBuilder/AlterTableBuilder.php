@@ -158,7 +158,7 @@ class AlterTableBuilder
         foreach ($this->alterations as $alt) {
             switch ($alt['action']) {
                 case 'ADD':
-                    $type = $alt['type'];
+                    $type = (string) $alt['type'];
                     if (!$alt['nullable']) {
                         $type .= ' NOT NULL';
                     }
@@ -179,7 +179,11 @@ class AlterTableBuilder
                     break;
 
                 case 'MODIFY':
-                    $statements[] = $this->dialect->modifyColumn($this->tableName, $alt['column'], $alt['type']);
+                    $statements[] = $this->dialect->modifyColumn(
+                        $this->tableName,
+                        $alt['column'],
+                        (string) $alt['type'],
+                    );
                     break;
 
                 case 'DROP':
@@ -217,7 +221,7 @@ class AlterTableBuilder
         foreach ($this->alterations as $alt) {
             switch ($alt['action']) {
                 case 'ADD':
-                    $type = $alt['type'];
+                    $type = (string) $alt['type'];
                     if (!$alt['nullable']) {
                         $type .= ' NOT NULL';
                     }

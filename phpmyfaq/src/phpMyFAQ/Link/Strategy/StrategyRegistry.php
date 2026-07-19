@@ -27,6 +27,9 @@ final class StrategyRegistry
     /** @var array<string, StrategyInterface> */
     private array $strategies = [];
 
+    /**
+     * @param array<string, StrategyInterface>|null $initial
+     */
     public function __construct(?array $initial = null)
     {
         if ($initial) {
