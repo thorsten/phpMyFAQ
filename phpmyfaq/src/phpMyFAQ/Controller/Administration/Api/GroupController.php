@@ -53,8 +53,8 @@ final class GroupController extends AbstractAdministrationApiController
             foreach ($permission->getAllGroups($currentUser) as $groupId) {
                 $data = $permission->getGroupData((int) $groupId);
                 $groups[] = [
-                    'group_id' => $data['group_id'],
-                    'name' => $data['name'],
+                    'group_id' => (int) ($data['group_id'] ?? 0),
+                    'name' => (string) ($data['name'] ?? ''),
                 ];
             }
         }
@@ -194,7 +194,10 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!Token::getInstance($this->session)->verifyToken('save-category-restrictions', $data['csrfToken'] ?? '')) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            'save-category-restrictions',
+            (string) ($data['csrfToken'] ?? ''),
+        )) {
             return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
         }
 
@@ -239,7 +242,7 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!Token::getInstance($this->session)->verifyToken('update-group', $data['csrfToken'] ?? '')) {
+        if (!Token::getInstance($this->session)->verifyToken('update-group', (string) ($data['csrfToken'] ?? ''))) {
             return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
         }
 
@@ -282,7 +285,7 @@ final class GroupController extends AbstractAdministrationApiController
 
         $groupData = [
             'name' => $name,
-            'description' => Filter::filterVar($data['description'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''),
+            'description' => (string) Filter::filterVar($data['description'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''),
             'auto_join' => $autoJoin,
         ];
 
@@ -295,9 +298,9 @@ final class GroupController extends AbstractAdministrationApiController
         return $this->json([
             'success' => sprintf(
                 '%s %s %s',
-                Translation::get('ad_msg_savedsuc_1'),
+                Translation::getString('ad_msg_savedsuc_1'),
                 $currentUser->perm->getGroupName($groupId),
-                Translation::get('ad_msg_savedsuc_2'),
+                Translation::getString('ad_msg_savedsuc_2'),
             ),
         ], Response::HTTP_OK);
     }
@@ -315,7 +318,10 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!Token::getInstance($this->session)->verifyToken('update-group-members', $data['csrfToken'] ?? '')) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            'update-group-members',
+            (string) ($data['csrfToken'] ?? ''),
+        )) {
             return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
         }
 
@@ -384,9 +390,9 @@ final class GroupController extends AbstractAdministrationApiController
         return $this->json([
             'success' => sprintf(
                 '%s %s %s',
-                Translation::get('ad_msg_savedsuc_1'),
+                Translation::getString('ad_msg_savedsuc_1'),
                 $currentUser->perm->getGroupName($groupId),
-                Translation::get('ad_msg_savedsuc_2'),
+                Translation::getString('ad_msg_savedsuc_2'),
             ),
         ], Response::HTTP_OK);
     }
@@ -404,7 +410,10 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!Token::getInstance($this->session)->verifyToken('update-group-permissions', $data['csrfToken'] ?? '')) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            'update-group-permissions',
+            (string) ($data['csrfToken'] ?? ''),
+        )) {
             return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
         }
 
@@ -459,9 +468,9 @@ final class GroupController extends AbstractAdministrationApiController
         return $this->json([
             'success' => sprintf(
                 '%s %s %s',
-                Translation::get('ad_msg_savedsuc_1'),
+                Translation::getString('ad_msg_savedsuc_1'),
                 $currentUser->perm->getGroupName($groupId),
-                Translation::get('ad_msg_savedsuc_2'),
+                Translation::getString('ad_msg_savedsuc_2'),
             ),
         ], Response::HTTP_OK);
     }
@@ -479,7 +488,7 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!Token::getInstance($this->session)->verifyToken('delete-group', $data['csrfToken'] ?? '')) {
+        if (!Token::getInstance($this->session)->verifyToken('delete-group', (string) ($data['csrfToken'] ?? ''))) {
             return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
         }
 

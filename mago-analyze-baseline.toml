@@ -2324,24 +2324,6 @@ count = 8
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
-code = "mismatched-array-index"
-message = "Invalid array key type: `string('group_id')` is not a valid key for this array."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
-code = "mismatched-array-index"
-message = "Invalid array key type: `string('name')` is not a valid key for this array."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `nonnull`.'
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 5
@@ -2360,21 +2342,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Permission\MediumPermission::changeGroup`: expected `array<array-key, string>`, but possibly received `array{'auto_join': bool, 'description': string, 'name': string}`.'''
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
@@ -3069,7 +3039,7 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
 code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\Permission\MediumPermission::addGroup`: expected `array<array-key, string>`, but possibly received `array{'auto_join': null|string, 'description': null|string, 'name': non-empty-string|null|string('')}`.'''
+message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\Permission\MediumPermission::addGroup`: expected `array<string, bool|int|string>`, but possibly received `array{'auto_join': null|string, 'description': null|string, 'name': non-empty-string|null|string('')}`.'''
 count = 1
 
 [[issues]]
@@ -3878,27 +3848,9 @@ count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #1 of `phpMyFAQ\User::setUserData`: expected `array<string, int|string>`, but provided type `array{'display_name': string, 'email'?: mixed, 'is_visible': int(0)|int(1), 'twofactor_enabled'?: int(0)|int(1)}` is less specific.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`truthy-mixed`)."
-count = 6
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/VotingController.php"
@@ -6431,72 +6383,6 @@ file = "phpmyfaq/src/phpMyFAQ/Permission/GroupCategoryPermissionRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
-code = "invalid-return-statement"
-message = '''Invalid return type for function `phpMyFAQ\Permission\MediumPermission::checkGroupData`: expected `array<array-key, int|string>`, but found `array{'auto_join': int, 'description': bool|string, 'name': bool|string, ...<array-key, string>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Permission\MediumPermissionRepository::addGroup`: expected `array<string, int|string>`, but provided type `array<array-key, int|string>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Permission\MediumPermissionRepository::changeGroup`: expected `array<string, int|string>`, but provided type `array<array-key, int|string>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, string>` for function `phpMyFAQ\Permission\MediumPermission::getGroupData`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Permission\BasicPermission::checkUserRight`: expected `int`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Permission\GroupCategoryPermissionRepository::checkUserGroupRightForCategory`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Permission\MediumPermission::checkUserGroupRight`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\Permission\MediumPermission::addGroup`: expected `array<array-key, string>`, but possibly received `array{'auto_join': false, 'description': non-empty-string, 'name': string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$groupData['description']` (type `string`) is already known to be `string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermission.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$groupData['name']` (type `string`) is already known to be `string`."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermissionRepository.php"

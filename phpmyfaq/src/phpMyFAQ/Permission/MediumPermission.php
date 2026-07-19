@@ -98,12 +98,14 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $right = $this->getRightId($right->value);
         }
 
+        $rightId = (int) $right;
+
         // check user right and group right
-        if ($this->checkUserGroupRight($userId, $right)) {
+        if ($this->checkUserGroupRight($userId, $rightId)) {
             return true;
         }
 
-        return $this->checkUserRight($userId, $right);
+        return $this->checkUserRight($userId, $rightId);
     }
 
     /**
@@ -140,11 +142,11 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      * new group. The associative array $groupData contains the
      * data for the new group.
      *
-     * @param array<string> $groupData Array of group data
+     * @param array<string, int|string|bool> $groupData Array of group data
      */
     public function addGroup(array $groupData): int
     {
-        if ($this->getGroupId($groupData['name']) > 0) {
+        if ($this->getGroupId((string) ($groupData['name'] ?? '')) > 0) {
             return 0;
         }
 
@@ -175,34 +177,27 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      * by the default values in $this->defaultGroupData.
      * Returns the corrected $groupData associative array.
      *
-     * @param array<string> $groupData Array of group data
+     * @param array<string, int|string|bool> $groupData Array of group data
      *
-     * @return array<string|int>
+     * @return array<string, int|string>
      */
     public function checkGroupData(array $groupData): array
     {
-        if (!array_key_exists('name', $groupData) || !is_string($groupData['name'])) {
-            $groupData['name'] = $this->defaultGroupData['name'];
-        }
+        $name = $groupData['name'] ?? null;
+        $description = $groupData['description'] ?? null;
 
-        if (!array_key_exists('description', $groupData) || !is_string($groupData['description'])) {
-            $groupData['description'] = $this->defaultGroupData['description'];
-        }
-
-        if (!array_key_exists('auto_join', $groupData)) {
-            $groupData['auto_join'] = $this->defaultGroupData['auto_join'];
-        }
-
-        $groupData['auto_join'] = (int) $groupData['auto_join'];
-
-        return $groupData;
+        return [
+            'name' => is_string($name) ? $name : (string) $this->defaultGroupData['name'],
+            'description' => is_string($description) ? $description : (string) $this->defaultGroupData['description'],
+            'auto_join' => (int) ($groupData['auto_join'] ?? $this->defaultGroupData['auto_join']),
+        ];
     }
 
     /**
      * Changes the group data of the given group.
      *
      * @param int $groupId Group ID
-     * @param array<string> $groupData Array of group data
+     * @param array<string, int|string|bool> $groupData Array of group data
      */
     public function changeGroup(int $groupId, array $groupData): bool
     {
@@ -414,7 +409,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      *
      * @param int $groupId Group ID
      *
-     * @return array<int, string>
+     * @return array<array-key, mixed>
      */
     public function getGroupData(int $groupId): array
     {
@@ -532,13 +527,15 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $right = $this->getRightId($right->value);
         }
 
+        $rightId = (int) $right;
+
         // Check direct user right (always global, no category restriction)
-        if ($this->checkUserRight($userId, $right)) {
+        if ($this->checkUserRight($userId, $rightId)) {
             return true;
         }
 
         // Check group right with category restrictions
-        return $this->categoryPermissionRepository->checkUserGroupRightForCategory($userId, $right, $categoryId);
+        return $this->categoryPermissionRepository->checkUserGroupRightForCategory($userId, $rightId, $categoryId);
     }
 
     /**

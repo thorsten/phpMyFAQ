@@ -521,8 +521,7 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         $controller = $this->createController();
         $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Invalid JSON data');
+        $this->expectException(\JsonException::class);
 
         $controller->requestUserRemoval(new Request([], [], [], [], [], [], ''));
     }

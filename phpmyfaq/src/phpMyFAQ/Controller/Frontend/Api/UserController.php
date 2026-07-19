@@ -54,20 +54,20 @@ final class UserController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'} ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->session)->verifyToken('ucp', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $userId = Filter::filterVar($data->userid, FILTER_VALIDATE_INT);
-        $userName = trim(strip_tags((string) $data->name));
-        $email = Filter::filterEmail($data->email);
-        $isVisible = Filter::filterVar($data->{'is_visible'}, FILTER_SANITIZE_SPECIAL_CHARS);
-        $password = trim((string) Filter::filterVar($data->faqpassword, FILTER_SANITIZE_SPECIAL_CHARS));
-        $confirm = trim((string) Filter::filterVar($data->faqpassword_confirm, FILTER_SANITIZE_SPECIAL_CHARS));
+        $userId = Filter::filterVar($data->userid ?? null, FILTER_VALIDATE_INT);
+        $userName = trim(strip_tags((string) ($data->name ?? '')));
+        $email = Filter::filterEmail($data->email ?? null);
+        $isVisible = Filter::filterVar($data->{'is_visible'} ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
+        $password = trim((string) Filter::filterVar($data->faqpassword ?? null, FILTER_SANITIZE_SPECIAL_CHARS));
+        $confirm = trim((string) Filter::filterVar($data->faqpassword_confirm ?? null, FILTER_SANITIZE_SPECIAL_CHARS));
         $twoFactorEnabled = Filter::filterVar($data->twofactor_enabled ?? 'off', FILTER_SANITIZE_SPECIAL_CHARS);
         $secret = Filter::filterVar($data->secret ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
@@ -101,7 +101,7 @@ final class UserController extends AbstractController
                 'is_visible' => $isVisible === 'on' ? 1 : 0,
             ];
             if (!$isWebAuthnUser) {
-                $userData['email'] = $email;
+                $userData['email'] = is_string($email) ? $email : '';
                 $userData['twofactor_enabled'] = $twoFactorEnabled === 'on' ? 1 : 0;
             }
 
@@ -211,11 +211,7 @@ final class UserController extends AbstractController
     #[Route(path: 'user/request-removal', name: 'api.private.user.request-removal', methods: ['POST'])]
     public function requestUserRemoval(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent());
-
-        if (!$data) {
-            throw new Exception('Invalid JSON data');
-        }
+        $data = $this->getJsonObject($request);
 
         if (($data->{'pmf-csrf-token'} ?? null) === null) {
             throw new Exception('Missing CSRF token');
@@ -226,11 +222,11 @@ final class UserController extends AbstractController
             throw new Exception('Invalid CSRF token');
         }
 
-        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
-        $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
-        $loginName = trim((string) Filter::filterVar($data->loginname, FILTER_SANITIZE_SPECIAL_CHARS));
-        $email = trim((string) Filter::filterEmail($data->email));
-        $question = trim((string) Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS));
+        $userId = Filter::filterVar($data->userId ?? null, FILTER_VALIDATE_INT);
+        $author = trim((string) Filter::filterVar($data->name ?? null, FILTER_SANITIZE_SPECIAL_CHARS));
+        $loginName = trim((string) Filter::filterVar($data->loginname ?? null, FILTER_SANITIZE_SPECIAL_CHARS));
+        $email = trim((string) Filter::filterEmail($data->email ?? null));
+        $question = trim((string) Filter::filterVar($data->question ?? null, FILTER_SANITIZE_SPECIAL_CHARS));
 
         // Validate User ID, Username and email
         if ($userId === null) {
