@@ -44,34 +44,34 @@ readonly class Migration400Alpha extends AbstractMigration
     {
         // Copy database configuration
         if (defined('PMF_LEGACY_CONFIG_DIR') && defined('PMF_CONFIG_DIR')) {
-            $recorder->copyFile(PMF_LEGACY_CONFIG_DIR . '/database.php', PMF_CONFIG_DIR . '/database.php');
+            $legacyConfigDir = (string) PMF_LEGACY_CONFIG_DIR;
+            $configDir = (string) PMF_CONFIG_DIR;
+            $recorder->copyFile($legacyConfigDir . '/database.php', $configDir . '/database.php');
 
             // Copy Azure configuration, if available
-            $recorder->copyFile(PMF_LEGACY_CONFIG_DIR . '/azure.php', PMF_CONFIG_DIR . '/azure.php', true);
+            $recorder->copyFile($legacyConfigDir . '/azure.php', $configDir . '/azure.php', true);
 
             // Copy Elasticsearch configuration, if available
-            $recorder->copyFile(
-                PMF_LEGACY_CONFIG_DIR . '/elasticsearch.php',
-                PMF_CONFIG_DIR . '/elasticsearch.php',
-                true,
-            );
+            $recorder->copyFile($legacyConfigDir . '/elasticsearch.php', $configDir . '/elasticsearch.php', true);
 
             // Copy LDAP configuration, if available
-            $recorder->copyFile(PMF_LEGACY_CONFIG_DIR . '/ldap.php', PMF_CONFIG_DIR . '/ldap.php', true);
+            $recorder->copyFile($legacyConfigDir . '/ldap.php', $configDir . '/ldap.php', true);
         }
 
         if (defined('PMF_ROOT_DIR')) {
+            $rootDir = (string) PMF_ROOT_DIR;
+
             // Copy data directory
-            $recorder->copyDirectory(PMF_ROOT_DIR . '/data', PMF_ROOT_DIR . '/content/core');
+            $recorder->copyDirectory($rootDir . '/data', $rootDir . '/content/core');
 
             // Copy logs directory
-            $recorder->copyDirectory(PMF_ROOT_DIR . '/logs', PMF_ROOT_DIR . '/content/core');
+            $recorder->copyDirectory($rootDir . '/logs', $rootDir . '/content/core');
 
             // Copy attachments directory
-            $recorder->copyDirectory(PMF_ROOT_DIR . '/attachments', PMF_ROOT_DIR . '/content/user');
+            $recorder->copyDirectory($rootDir . '/attachments', $rootDir . '/content/user');
 
             // Copy images directory
-            $recorder->copyDirectory(PMF_ROOT_DIR . '/images', PMF_ROOT_DIR . '/content/user');
+            $recorder->copyDirectory($rootDir . '/images', $rootDir . '/content/user');
         }
 
         // Online Update configuration

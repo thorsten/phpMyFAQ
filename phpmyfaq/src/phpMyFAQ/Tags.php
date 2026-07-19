@@ -345,7 +345,7 @@ class Tags
     /**
      * Returns the FAQ record IDs where all tags are included.
      *
-     * @param array<int, int> $arrayOfTags Array of Tags
+     * @param array<int, string> $arrayOfTags Array of tag names
      * @return array<int, int>
      */
     public function getFaqsByIntersectionTags(array $arrayOfTags): array

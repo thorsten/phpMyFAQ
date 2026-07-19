@@ -23,7 +23,7 @@ use phpMyFAQ\Configuration;
 
 class MigrationRegistry
 {
-    /** @var array<string, class-string<MigrationInterface>> */
+    /** @var array<string, class-string> */
     private array $migrationClasses = [];
 
     /** @var array<string, MigrationInterface>|null */
@@ -90,7 +90,13 @@ class MigrationRegistry
                 continue;
             }
 
-            $this->migrations[$version] = new $className($this->configuration);
+            /* @mago-expect analysis:unknown-class-instantiation - the registry instantiates version-keyed migration classes dynamically */
+            $migration = new $className($this->configuration);
+            if (!$migration instanceof MigrationInterface) {
+                continue;
+            }
+
+            $this->migrations[$version] = $migration;
         }
 
         // Sort by version
@@ -121,7 +127,7 @@ class MigrationRegistry
     /**
      * Returns migrations that need to be applied to get from $currentVersion to the latest.
      *
-     * @return MigrationInterface[]
+     * @return array<string, MigrationInterface>
      */
     public function getPendingMigrations(string $currentVersion): array
     {

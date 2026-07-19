@@ -30,7 +30,7 @@ interface MailUserAgentInterface
      * Send the message using an e-mail.
      *
      * @param string $recipients Recipients of the e-mail as a comma-separated list of RFC 2822 compliant elements
-     * @param array<string> $headers Headers of the e-mail
+     * @param array<string, int|string|null> $headers Headers of the e-mail
      * @param string $body Body of the e-mail
      * @return int The number of successful recipients. Can be 0 which indicates failure
      */

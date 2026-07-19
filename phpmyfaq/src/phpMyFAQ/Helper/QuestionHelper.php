@@ -49,30 +49,30 @@ class QuestionHelper extends AbstractHelper
 
         $smartAnswer .= '<ul>';
         foreach ($searchResultSet->getResultSet() as $result) {
+            $question = (string) ($result->question ?? '');
             $url = sprintf(
                 '%scontent/%d/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
-                $result->category_id,
-                $result->id,
-                $result->lang,
-                TitleSlugifier::slug($result->question),
+                (int) ($result->category_id ?? 0),
+                (int) ($result->id ?? 0),
+                (string) ($result->lang ?? ''),
+                TitleSlugifier::slug($question),
             );
             $link = new Link($url, $this->configuration);
-            $link->text = Utils::chopString($result->question, 15);
-            $link->setTitle($result->question);
+            $link->text = Utils::chopString($question, 15);
+            $link->setTitle($question);
 
             $faqHelper = new FaqHelper($this->configuration);
             $smartAnswer .= sprintf(
                 '<li>%s<br><small class="pmf-search-preview">%s...</small></li>',
                 $link->toHtmlAnchor(),
-                $faqHelper->renderAnswerPreview($result->answer, 10),
+                $faqHelper->renderAnswerPreview((string) ($result->answer ?? ''), 10),
             );
         }
 
         return $smartAnswer . '</ul>';
     }
 
-    /* @mago-expect lint:halstead - renders the full question form in one method; split planned with the forms rework */
     public function getOpenQuestions(): stdClass
     {
         $date = new Date($this->configuration);
@@ -90,7 +90,7 @@ class QuestionHelper extends AbstractHelper
         $row = $db->fetchObject($result);
 
         $openQuestions = new stdClass();
-        $openQuestions->numberInvisibleQuestions = $row instanceof \stdClass ? $row->num : 0;
+        $openQuestions->numberInvisibleQuestions = $row instanceof \stdClass ? (int) $row->num : 0;
 
         $query = sprintf(
             "SELECT * FROM %sfaqquestions WHERE lang = '%s' AND is_visible = 'Y' ORDER BY created ASC",
@@ -100,28 +100,31 @@ class QuestionHelper extends AbstractHelper
 
         $result = $db->query($query);
 
-        if ($result && $this->configuration->getDb()->numRows($result) > 0) {
+        if ($result !== false && $this->configuration->getDb()->numRows($result) > 0) {
             $openQuestions->numberQuestions = $this->configuration->getDb()->numRows($result);
+            $questions = [];
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if (!$row instanceof \stdClass) {
                     break;
                 }
 
                 $question = new stdClass();
-                $question->id = $row->id;
-                $question->lang = $row->lang;
-                $question->date = $date->format(Date::createIsoDate($row->created));
-                $question->email = $mail->safeEmail($row->email);
-                $question->userName = $row->username;
-                $question->categoryId = $row->category_id;
+                $question->id = (int) $row->id;
+                $question->lang = (string) $row->lang;
+                $question->date = $date->format(Date::createIsoDate((string) $row->created));
+                $question->email = $mail->safeEmail((string) $row->email);
+                $question->userName = (string) $row->username;
+                $question->categoryId = (int) $row->category_id;
                 $question->categoryName = $this->getCategory()->getCategoryName((int) $row->category_id);
-                $question->question = $row->question;
-                $question->answerId = $row->answer_id;
+                $question->question = (string) $row->question;
+                $question->answerId = (int) $row->answer_id;
                 $question->slug = TitleSlugifier::slug($question->question);
 
-                $openQuestions->questions[] = $question;
+                $questions[] = $question;
             }
+
+            $openQuestions->questions = $questions;
         }
 
         return $openQuestions;

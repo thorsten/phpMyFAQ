@@ -50,6 +50,9 @@ final class SearchService
 
     private SearchResultSet $searchResultSet;
 
+    /**
+     * @param int[] $currentGroups
+     */
     public function __construct(
         private readonly Configuration $configuration,
         private readonly CurrentUser $currentUser,
@@ -101,19 +104,23 @@ final class SearchService
         if ($inputTag !== '') {
             $tagSearchData = $this->handleTagSearch($inputTag, $page, $allLanguages);
             $tagSearch = true;
-            $numOfResults = $tagSearchData['numOfResults'];
+            $numOfResults = (int) ($tagSearchData['numOfResults'] ?? 0);
             $searchResults = $tagSearchData['searchResults'];
-            $relTags = $tagSearchData['relTags'];
-            $tags = $tagSearchData['tags'];
-            $baseUrl = $tagSearchData['baseUrl'];
+            $relTags = (string) ($tagSearchData['relTags'] ?? '');
+            $tagsData = $tagSearchData['tags'] ?? [];
+            $tags = [];
+            foreach (is_array($tagsData) ? $tagsData : [] as $tagId => $tagName) {
+                $tags[(int) $tagId] = (string) $tagName;
+            }
+            $baseUrl = (string) ($tagSearchData['baseUrl'] ?? '');
         }
 
         // Handle fulltext search
         if ($inputSearchTerm !== '') {
             $fulltextData = $this->handleFulltextSearch($inputSearchTerm, (int) $inputCategory, $allLanguages, $page);
             $searchResults = $fulltextData['searchResults'];
-            $numOfResults = $fulltextData['numOfResults'];
-            $baseUrl = $fulltextData['baseUrl'];
+            $numOfResults = (int) ($fulltextData['numOfResults'] ?? 0);
+            $baseUrl = (string) ($fulltextData['baseUrl'] ?? '');
         }
 
         // Change category value
@@ -198,7 +205,7 @@ final class SearchService
                 continue;
             }
 
-            $tags[$tagId] = $this->tags->getTagNameById((int) $tagId);
+            $tags[(int) $tagId] = $this->tags->getTagNameById((int) $tagId);
         }
 
         $recordIds = $this->tags->getFaqsByIntersectionTags($tags);
@@ -335,7 +342,7 @@ final class SearchService
     /**
      * Gets formatted search results using SearchHelper.
      *
-     * @return array<int, array<string, mixed>>
+     * @return \stdClass[]
      */
     private function getFormattedSearchResults(string $searchTerm, int $page): array
     {
@@ -372,7 +379,7 @@ final class SearchService
             is_numeric($inputSearchTerm)
             && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm
             && 0 < $numOfResults
-            && $this->configuration->get('search.searchForSolutionId')
+            && (bool) $this->configuration->get('search.searchForSolutionId')
         );
     }
 

@@ -82,7 +82,7 @@ class Update extends AbstractSetup
         $this->migrationExecutor = new MigrationExecutor(
             $this->configuration,
             $this->migrationTracker,
-            new Filesystem(PMF_ROOT_DIR),
+            new Filesystem((string) PMF_ROOT_DIR),
         );
     }
 
@@ -181,7 +181,7 @@ class Update extends AbstractSetup
             $basePath = substr($basePath, offset: 0, length: -strlen('update'));
         }
 
-        $htaccessPath = PMF_ROOT_DIR . '/.htaccess';
+        $htaccessPath = (string) PMF_ROOT_DIR . '/.htaccess';
 
         $htaccessUpdater = new HtaccessUpdater();
         return $htaccessUpdater->updateRewriteBase($htaccessPath, $basePath);
@@ -245,12 +245,13 @@ class Update extends AbstractSetup
         $report = $this->migrationExecutor->generateDryRunReport($migrations);
 
         foreach ($report['migrations'] as $migrationData) {
-            foreach ($migrationData['operations'] as $operation) {
-                if ($operation['type'] !== 'sql') {
+            $operations = $migrationData['operations'] ?? [];
+            foreach (is_array($operations) ? $operations : [] as $operation) {
+                if (!is_array($operation) || ($operation['type'] ?? null) !== 'sql') {
                     continue;
                 }
 
-                $this->dryRunQueries[] = $operation['query'];
+                $this->dryRunQueries[] = (string) ($operation['query'] ?? '');
             }
         }
     }
@@ -292,8 +293,8 @@ class Update extends AbstractSetup
     {
         switch (Database::getType()) {
             case 'mysqli':
-                $this->configuration->getDb()->getTableNames(Database::getTablePrefix());
-                foreach ($this->configuration->getDb()->tableNames as $tableName) {
+                $tableNames = $this->configuration->getDb()->getTableNames(Database::getTablePrefix());
+                foreach ($tableNames as $tableName) {
                     $this->queries[] = 'OPTIMIZE TABLE ' . $tableName;
                 }
 

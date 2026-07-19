@@ -85,9 +85,11 @@ class SearchResultSet
         if (
             'basic' !== $this->configuration->get(item: 'security.permLevel')
             && isset($this->currentUser->perm) // @mago-expect lint:no-isset - typed property may be uninitialized
-            && method_exists($this->currentUser->perm, 'getUserGroups')
         ) {
-            $currentGroupIds = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
+            $permission = $this->currentUser->perm;
+            if (is_object($permission) && method_exists($permission, 'getUserGroups')) {
+                $currentGroupIds = $permission->getUserGroups($this->currentUser->getUserId());
+            }
         }
 
         foreach ($this->rawResultSet as $result) {
@@ -96,8 +98,9 @@ class SearchResultSet
             // check permissions for groups
             if ('medium' === $this->configuration->get(item: 'security.permLevel')) {
                 $groupPermissions = $this->faqPermission->get(Permission::GROUP, (int) $result->id);
+                $groupIds = is_array($currentGroupIds) ? $currentGroupIds : [-1];
                 foreach ($groupPermissions as $groupPermission) {
-                    if (!in_array($groupPermission, $currentGroupIds, strict: true)) {
+                    if (!in_array($groupPermission, $groupIds, strict: true)) {
                         continue;
                     }
 
@@ -114,12 +117,12 @@ class SearchResultSet
             }
 
             // check on duplicates
-            if (array_key_exists($result->id, $duplicateResults)) {
-                ++$duplicateResults[$result->id];
+            $resultId = (int) $result->id;
+            if (array_key_exists($resultId, $duplicateResults)) {
                 continue;
             }
 
-            $duplicateResults[$result->id] = 1;
+            $duplicateResults[$resultId] = true;
 
             if (!property_exists($result, 'score') || $result->score === null) {
                 $result->score = $this->getScore($result);
@@ -145,18 +148,18 @@ class SearchResultSet
 
     public function getScore(stdClass $object): float
     {
-        $score = 0;
+        $score = 0.0;
 
-        if (property_exists($object, 'relevance_thema') && $object->relevance_thema !== null) {
-            $score += $object->relevance_thema;
+        if (property_exists($object, 'relevance_thema') && is_numeric($object->relevance_thema)) {
+            $score += (float) $object->relevance_thema;
         }
 
-        if (property_exists($object, 'relevance_content') && $object->relevance_content !== null) {
-            $score += $object->relevance_content;
+        if (property_exists($object, 'relevance_content') && is_numeric($object->relevance_content)) {
+            $score += (float) $object->relevance_content;
         }
 
-        if (property_exists($object, 'relevance_keywords') && $object->relevance_keywords !== null) {
-            $score += $object->relevance_keywords;
+        if (property_exists($object, 'relevance_keywords') && is_numeric($object->relevance_keywords)) {
+            $score += (float) $object->relevance_keywords;
         }
 
         return round(($score / 3) * 100);

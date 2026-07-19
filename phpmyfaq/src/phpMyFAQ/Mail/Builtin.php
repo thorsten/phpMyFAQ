@@ -47,7 +47,7 @@ class Builtin implements MailUserAgentInterface
             && !ini_get('safe_mode')
             && array_key_exists('Return-Path', $headers)
         ) {
-            $sender = str_replace(['<', '>'], replace: '', subject: $headers['Return-Path']);
+            $sender = str_replace(['<', '>'], replace: '', subject: (string) $headers['Return-Path']);
             unset($headers['Return-Path']);
         }
 

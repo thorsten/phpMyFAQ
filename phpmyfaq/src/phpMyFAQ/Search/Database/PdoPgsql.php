@@ -55,7 +55,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
     #[\Override]
     public function search(string $searchTerm): mixed
     {
-        if (is_numeric($searchTerm) && true === $this->configuration->get(item: 'search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && (bool) $this->configuration->get(item: 'search.searchForSolutionId')) {
             parent::search($searchTerm);
 
             return $this->resultSet;

@@ -55,15 +55,15 @@ final class MediaBrowserController extends AbstractController
             )], Response::HTTP_BAD_REQUEST);
         }
 
-        $data = json_decode($request->getContent());
-        $action = Filter::filterVar($data->action, FILTER_SANITIZE_SPECIAL_CHARS);
+        $data = $this->getJsonObject($request);
+        $action = Filter::filterVar($data->action ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($action === 'fileRemove') {
-            if (!Token::getInstance($this->session)->verifyToken('media-browser', $data->csrfToken)) {
+            if (!Token::getInstance($this->session)->verifyToken('media-browser', (string) ($data->csrfToken ?? ''))) {
                 return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
-            $file = basename(Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS, ''));
+            $file = basename((string) Filter::filterVar($data->name ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''));
             $allowedDir = realpath(PMF_CONTENT_DIR . '/user/images');
             $targetPath = realpath(PMF_CONTENT_DIR . '/user/images/' . $file);
 
@@ -88,20 +88,20 @@ final class MediaBrowserController extends AbstractController
         $files = [];
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_CONTENT_DIR . '/user/images'));
         foreach ($iterator as $file) {
-            if ($file->isDir()) {
+            if (!$file instanceof \SplFileInfo || $file->isDir()) {
                 continue;
             }
 
-            if (!in_array(strtolower((string) $file->getExtension()), $allowedExtensions, strict: true)) {
+            if (!in_array(strtolower($file->getExtension()), $allowedExtensions, strict: true)) {
                 continue;
             }
 
             $files[] = [
                 'file' => $file->getFilename(),
-                'size' => Utils::formatBytes($file->getSize()),
+                'size' => Utils::formatBytes((int) $file->getSize()),
                 'isImage' => true,
                 'thumb' => $file->getFilename(),
-                'changed' => date(format: 'Y-m-d H:i:s', timestamp: $file->getMTime()),
+                'changed' => date(format: 'Y-m-d H:i:s', timestamp: (int) $file->getMTime()),
             ];
         }
 

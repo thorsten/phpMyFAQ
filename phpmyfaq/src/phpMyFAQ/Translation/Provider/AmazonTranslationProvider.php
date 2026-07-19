@@ -46,12 +46,12 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
      */
     protected function doTranslate(string $text, string $sourceLang, string $targetLang): string
     {
-        $configuredRegion = $this->configuration->get('translation.amazonRegion');
+        $configuredRegion = (string) ($this->configuration->get('translation.amazonRegion') ?? '');
         $region = $configuredRegion !== '' ? $configuredRegion : 'us-east-1';
-        $accessKeyId = $this->configuration->get('translation.amazonAccessKeyId');
-        $secretAccessKey = $this->configuration->get('translation.amazonSecretAccessKey');
+        $accessKeyId = (string) ($this->configuration->get('translation.amazonAccessKeyId') ?? '');
+        $secretAccessKey = (string) ($this->configuration->get('translation.amazonSecretAccessKey') ?? '');
 
-        if ((string) $accessKeyId === '' || (string) $secretAccessKey === '') {
+        if ($accessKeyId === '' || $secretAccessKey === '') {
             throw new ApiException('Amazon Translate API credentials not configured');
         }
 
@@ -67,6 +67,9 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
             'SourceLanguageCode' => $sourceLang,
             'TargetLanguageCode' => $targetLang,
         ]);
+        if ($payload === false) {
+            throw new ApiException('Cannot encode the Amazon Translate API request payload');
+        }
 
         // AWS Signature V4
         $headers = $this->getAwsSignedHeaders('POST', $payload, $region, $accessKeyId, $secretAccessKey);
@@ -85,11 +88,11 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
 
             $data = json_decode(json: $response->getContent(), associative: true);
 
-            if (!array_key_exists('TranslatedText', $data)) {
+            if (!is_array($data) || !array_key_exists('TranslatedText', $data)) {
                 throw new ApiException('Invalid response from Amazon Translate API');
             }
 
-            return $data['TranslatedText'];
+            return (string) $data['TranslatedText'];
         } catch (TransportExceptionInterface $e) {
             throw new ApiException('Amazon Translate API request failed: ' . $e->getMessage(), 0, $e);
         }
@@ -98,10 +101,10 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
     /**
      * Performs batch translation (Amazon Translate doesn't have a native batch API, so we loop).
      *
-     * @param array $texts Array of texts to translate
+     * @param array<string> $texts Array of texts to translate
      * @param string $sourceLang Source language code
      * @param string $targetLang Target language code
-     * @return array Array of translated texts
+     * @return array<string> Array of translated texts
      * @throws ApiException
      */
     protected function doTranslateBatch(array $texts, string $sourceLang, string $targetLang): array
@@ -177,7 +180,7 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
      * Get a list of supported languages.
      * Amazon Translate supports 75+ languages.
      *
-     * @return array Array of supported language codes
+     * @return array<string> Array of supported language codes
      */
     public function getSupportedLanguages(): array
     {

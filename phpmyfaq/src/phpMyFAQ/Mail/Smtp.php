@@ -63,28 +63,27 @@ class Smtp implements MailUserAgentInterface
             && !ini_get(option: 'safe_mode')
             && array_key_exists('Return-Path', $headers)
         ) {
-            $sender = str_replace(search: ['<', '>'], replace: '', subject: $headers['Return-Path']);
+            $sender = str_replace(search: ['<', '>'], replace: '', subject: (string) $headers['Return-Path']);
             unset($headers['Return-Path']);
         }
 
         $email = new Email()
             ->from($sender === '' ? $this->user : $sender)
             ->to($recipients)
-            ->subject($headers['Subject'])
+            ->subject((string) ($headers['Subject'] ?? ''))
             ->text($body)
             ->html($body);
 
         if (array_key_exists('CC', $headers) || array_key_exists('Cc', $headers)) {
-            $cc = $headers['CC'] ?? $headers['Cc'];
-            $email->cc($cc);
+            $email->cc((string) ($headers['CC'] ?? $headers['Cc'] ?? ''));
         }
 
         if (array_key_exists('Bcc', $headers)) {
-            $email->bcc($headers['Bcc']);
+            $email->bcc((string) $headers['Bcc']);
         }
 
         if (array_key_exists('Reply-To', $headers)) {
-            $email->replyTo($headers['Reply-To']);
+            $email->replyTo((string) $headers['Reply-To']);
         }
 
         $this->mailer->send($email);

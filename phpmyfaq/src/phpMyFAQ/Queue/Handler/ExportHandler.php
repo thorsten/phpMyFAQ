@@ -44,7 +44,15 @@ final readonly class ExportHandler
 
     public function __invoke(ExportMessage $message): void
     {
-        $user = $this->userFactory instanceof Closure ? ($this->userFactory)() : new User($this->configuration);
+        $user = null;
+        if ($this->userFactory instanceof Closure) {
+            $createdUser = ($this->userFactory)();
+            if ($createdUser instanceof User) {
+                $user = $createdUser;
+            }
+        }
+
+        $user ??= new User($this->configuration);
         if (!$user->getUserById($message->userId)) {
             throw new RuntimeException(sprintf('Export requested by unknown user ID %d', $message->userId));
         }
@@ -53,15 +61,37 @@ final readonly class ExportHandler
             throw new RuntimeException(sprintf('User ID %d does not have export permission', $message->userId));
         }
 
-        $faq = $this->faqFactory instanceof Closure ? ($this->faqFactory)() : new Faq($this->configuration);
-        $category = $this->categoryFactory instanceof Closure
-            ? ($this->categoryFactory)()
-            : new Category($this->configuration);
+        $faq = null;
+        if ($this->faqFactory instanceof Closure) {
+            $createdFaq = ($this->faqFactory)();
+            if ($createdFaq instanceof Faq) {
+                $faq = $createdFaq;
+            }
+        }
 
-        $exporter = $this->exportFactory instanceof Closure
-            ? ($this->exportFactory)($faq, $category, $message->format)
-            : Export::create($faq, $category, $this->configuration, $message->format);
-        $content = $exporter->generate(
+        $faq ??= new Faq($this->configuration);
+
+        $category = null;
+        if ($this->categoryFactory instanceof Closure) {
+            $createdCategory = ($this->categoryFactory)();
+            if ($createdCategory instanceof Category) {
+                $category = $createdCategory;
+            }
+        }
+
+        $category ??= new Category($this->configuration);
+
+        $exporter = null;
+        if ($this->exportFactory instanceof Closure) {
+            // The factory seam is duck-typed on purpose so tests can inject lightweight fakes
+            $createdExporter = ($this->exportFactory)($faq, $category, $message->format);
+            if (is_object($createdExporter) && method_exists($createdExporter, 'generate')) {
+                $exporter = $createdExporter;
+            }
+        }
+
+        $exporter ??= Export::create($faq, $category, $this->configuration, $message->format);
+        $content = (string) $exporter->generate(
             categoryId: (int) ($message->options['categoryId'] ?? 0),
             downwards: (bool) ($message->options['downwards'] ?? true),
             language: (string) ($message->options['language'] ?? ''),
@@ -71,7 +101,7 @@ final readonly class ExportHandler
             throw new RuntimeException('Export generated empty content');
         }
 
-        $exportDir = PMF_ROOT_DIR . '/content/user/exports';
+        $exportDir = (string) PMF_ROOT_DIR . '/content/user/exports';
         if (
             !is_dir($exportDir)
             && !mkdir(directory: $exportDir, permissions: 0o775, recursive: true)
@@ -91,7 +121,15 @@ final readonly class ExportHandler
         $email = $user->getUserData('email');
         if (is_string($email) && $email !== '') {
             try {
-                $mail = $this->mailFactory instanceof Closure ? ($this->mailFactory)() : new Mail($this->configuration);
+                $mail = null;
+                if ($this->mailFactory instanceof Closure) {
+                    $createdMail = ($this->mailFactory)();
+                    if ($createdMail instanceof Mail) {
+                        $mail = $createdMail;
+                    }
+                }
+
+                $mail ??= new Mail($this->configuration);
                 $mail->addTo($email);
                 $mail->subject = 'Your phpMyFAQ export is ready';
                 $mail->message = sprintf(

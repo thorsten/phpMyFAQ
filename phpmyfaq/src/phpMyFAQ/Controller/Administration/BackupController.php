@@ -28,6 +28,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use SodiumException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -124,7 +125,7 @@ final class BackupController extends AbstractAdministrationController
             'adminHeaderRestore' => Translation::get(key: 'ad_csv_rest'),
         ];
 
-        if (!$file) {
+        if (!$file instanceof UploadedFile) {
             $templateVars = [
                 ...$templateVars,
                 'errorMessageUpload' => Translation::get(key: 'ad_csv_no'),
@@ -168,7 +169,8 @@ final class BackupController extends AbstractAdministrationController
         $fileName = $file->getClientOriginalName();
 
         try {
-            $verification = $backup->verifyBackup(file_get_contents($file->getPathname()), $fileName);
+            $backupContent = file_get_contents($file->getPathname());
+            $verification = $backupContent !== false && $backup->verifyBackup($backupContent, $fileName);
             if (!$verification) {
                 $templateVars = [
                     ...$templateVars,
@@ -211,7 +213,7 @@ final class BackupController extends AbstractAdministrationController
                 ...$templateVars,
                 'errorMessageVersionMisMatch' => sprintf(
                     '%s (Version check failure: "%s" found, "%s" expected)',
-                    Translation::get(key: 'ad_csv_no'),
+                    Translation::getString('ad_csv_no'),
                     $parseResult->versionFound,
                     $parseResult->versionExpected,
                 ),
@@ -259,9 +261,9 @@ final class BackupController extends AbstractAdministrationController
             'successMessage' => sprintf(
                 '%d %s %d %s',
                 $executeResult->queriesOk,
-                Translation::get(key: 'ad_csv_of'),
+                Translation::getString('ad_csv_of'),
                 $executeResult->queriesOk,
-                Translation::get(key: 'ad_csv_suc'),
+                Translation::getString('ad_csv_suc'),
             ),
         ];
 

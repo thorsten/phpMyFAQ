@@ -66,8 +66,9 @@ class Bootstrapper
         Environment::init();
 
         // 3. Multisite support
-        if (file_exists(PMF_ROOT_DIR . '/multisite/multisite.php') && 'cli' !== PHP_SAPI) {
-            require PMF_ROOT_DIR . '/multisite/multisite.php';
+        $multisiteFile = (string) PMF_ROOT_DIR . '/multisite/multisite.php';
+        if (file_exists($multisiteFile) && 'cli' !== PHP_SAPI) {
+            require $multisiteFile;
         }
 
         // 4. Config directories
@@ -81,7 +82,7 @@ class Bootstrapper
 
         // 7. Translation directory
         if (!defined('PMF_TRANSLATION_DIR')) {
-            define('PMF_TRANSLATION_DIR', PMF_ROOT_DIR . '/translations');
+            define('PMF_TRANSLATION_DIR', (string) PMF_ROOT_DIR . '/translations');
         }
 
         // 8. Error handlers
@@ -104,16 +105,19 @@ class Bootstrapper
             // 13. LDAP
             $this->configureLdap();
 
+            $configDir = (string) PMF_CONFIG_DIR;
+
             // 14. Elasticsearch
             if (
-                $this->config()->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR . '/elasticsearch.php')
+                (bool) $this->config()->get('search.enableElasticsearch')
+                && file_exists($configDir . '/elasticsearch.php')
             ) {
-                SearchClientFactory::configureElasticsearch($this->config(), PMF_CONFIG_DIR);
+                SearchClientFactory::configureElasticsearch($this->config(), $configDir);
             }
 
             // 15. OpenSearch
-            if ($this->config()->get('search.enableOpenSearch') && file_exists(PMF_CONFIG_DIR . '/opensearch.php')) {
-                SearchClientFactory::configureOpenSearch($this->config(), PMF_CONFIG_DIR);
+            if ((bool) $this->config()->get('search.enableOpenSearch') && file_exists($configDir . '/opensearch.php')) {
+                SearchClientFactory::configureOpenSearch($this->config(), $configDir);
             }
 
             // 16. Attachments directory
@@ -233,8 +237,9 @@ class Bootstrapper
 
     private function configureLdap(): void
     {
-        if ($this->config()->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && extension_loaded('ldap')) {
-            $ldapConfig = new LdapConfiguration(PMF_CONFIG_DIR . '/ldap.php');
+        $ldapFile = (string) PMF_CONFIG_DIR . '/ldap.php';
+        if ($this->config()->isLdapActive() && file_exists($ldapFile) && extension_loaded('ldap')) {
+            $ldapConfig = new LdapConfiguration($ldapFile);
             $this->config()->setLdapConfig($ldapConfig);
         }
     }

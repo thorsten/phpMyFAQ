@@ -141,6 +141,7 @@ interface DatabaseDriver
      * Returns an array with all table names.
      *
      * @param string $prefix Table prefix
+     * @return string[]
      */
     public function getTableNames(string $prefix = ''): array;
 
