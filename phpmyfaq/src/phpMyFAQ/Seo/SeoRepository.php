@@ -51,8 +51,8 @@ class SeoRepository implements SeoRepositoryInterface
             $seoType,
             $seoEntity->getReferenceId(),
             $db->escape($seoEntity->getReferenceLanguage()),
-            $db->escape($seoEntity->getTitle()),
-            $db->escape($seoEntity->getDescription()),
+            $db->escape($seoEntity->getTitle() ?? ''),
+            $db->escape($seoEntity->getDescription() ?? ''),
         );
 
         return (bool) $db->query($query);
@@ -85,9 +85,9 @@ class SeoRepository implements SeoRepositoryInterface
 
                 $seoEntity
                     ->setId((int) $row->id)
-                    ->setTitle($row->title)
-                    ->setDescription($row->description)
-                    ->setCreated(new DateTime($row->created));
+                    ->setTitle((string) $row->title)
+                    ->setDescription((string) $row->description)
+                    ->setCreated(new DateTime((string) $row->created));
             }
         }
 
@@ -106,8 +106,8 @@ class SeoRepository implements SeoRepositoryInterface
             "UPDATE %sfaqseo SET title = '%s', description = '%s' "
             . "WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
-            $db->escape($seoEntity->getTitle()),
-            $db->escape($seoEntity->getDescription()),
+            $db->escape($seoEntity->getTitle() ?? ''),
+            $db->escape($seoEntity->getDescription() ?? ''),
             $seoType,
             $seoEntity->getReferenceId(),
             $db->escape($seoEntity->getReferenceLanguage()),

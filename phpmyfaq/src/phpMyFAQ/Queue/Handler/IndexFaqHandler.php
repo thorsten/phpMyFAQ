@@ -43,7 +43,15 @@ final readonly class IndexFaqHandler
             throw new RuntimeException('Elasticsearch is not configured');
         }
 
-        $faq = $this->faqFactory instanceof Closure ? ($this->faqFactory)() : new Faq($this->configuration);
+        $faq = null;
+        if ($this->faqFactory instanceof Closure) {
+            $createdFaq = ($this->faqFactory)();
+            if ($createdFaq instanceof Faq) {
+                $faq = $createdFaq;
+            }
+        }
+
+        $faq ??= new Faq($this->configuration);
         $faq->getFaq($message->faqId);
 
         if (
@@ -51,21 +59,33 @@ final readonly class IndexFaqHandler
             && $faq->faqRecord['active'] === 'yes'
             && $faq->faqRecord['content'] !== ''
         ) {
-            $category = $this->categoryFactory instanceof Closure
-                ? ($this->categoryFactory)()
-                : new Category($this->configuration);
+            $category = null;
+            if ($this->categoryFactory instanceof Closure) {
+                $createdCategory = ($this->categoryFactory)();
+                if ($createdCategory instanceof Category) {
+                    $category = $createdCategory;
+                }
+            }
+
+            $category ??= new Category($this->configuration);
             $categoryId = $category->getCategoryIdFromFaq($message->faqId);
 
-            $elasticsearch = $this->elasticsearchFactory instanceof Closure
-                ? ($this->elasticsearchFactory)()
-                : new Elasticsearch($this->configuration);
+            $elasticsearch = null;
+            if ($this->elasticsearchFactory instanceof Closure) {
+                $createdElasticsearch = ($this->elasticsearchFactory)();
+                if ($createdElasticsearch instanceof Elasticsearch) {
+                    $elasticsearch = $createdElasticsearch;
+                }
+            }
+
+            $elasticsearch ??= new Elasticsearch($this->configuration);
             $elasticsearch->index([
-                'id' => $faq->faqRecord['id'],
-                'lang' => $message->language !== '' ? $message->language : $faq->faqRecord['lang'],
-                'solution_id' => $faq->faqRecord['solution_id'],
-                'question' => $faq->faqRecord['title'],
-                'answer' => $faq->faqRecord['content'],
-                'keywords' => $faq->faqRecord['keywords'],
+                'id' => (int) $faq->faqRecord['id'],
+                'lang' => $message->language !== '' ? $message->language : (string) $faq->faqRecord['lang'],
+                'solution_id' => (int) $faq->faqRecord['solution_id'],
+                'question' => (string) $faq->faqRecord['title'],
+                'answer' => (string) $faq->faqRecord['content'],
+                'keywords' => (string) $faq->faqRecord['keywords'],
                 'category_id' => $categoryId,
             ]);
         }

@@ -105,7 +105,7 @@ class Instance
 
         $result = $this->configuration->getDb()->query($select);
 
-        return $this->configuration->getDb()->fetchAll($result);
+        return $this->configuration->getDb()->fetchAll($result) ?? [];
     }
 
     /**
@@ -118,7 +118,9 @@ class Instance
 
         $result = $this->configuration->getDb()->query($select);
 
-        return $this->configuration->getDb()->fetchObject($result);
+        $row = $this->configuration->getDb()->fetchObject($result);
+
+        return $row instanceof \stdClass ? $row : new \stdClass();
     }
 
     /**
@@ -208,10 +210,10 @@ class Instance
         $query = sprintf($query, Database::getTablePrefix(), $instanceId);
 
         $result = $this->configuration->getDb()->query($query);
-        $config = $this->configuration->getDb()->fetchAll($result);
+        $config = $this->configuration->getDb()->fetchAll($result) ?? [];
 
         foreach ($config as $items) {
-            $this->instanceConfig[$items->config_name] = $items->config_value;
+            $this->instanceConfig[(string) $items->config_name] = (string) $items->config_value;
         }
 
         return $this->instanceConfig;

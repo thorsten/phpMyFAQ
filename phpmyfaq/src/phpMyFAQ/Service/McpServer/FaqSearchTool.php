@@ -105,7 +105,7 @@ readonly class FaqSearchTool implements McpToolExecutorInterface
 
             $this->search->setCategoryId($categoryId !== null ? (int) $categoryId : null);
 
-            $searchResults = $this->search->search($query, (bool) $allLanguages);
+            $searchResults = $this->search->search((string) $query, (bool) $allLanguages);
 
             if ($searchResults === []) {
                 return $this->createResult($this->formatResultsAsJson([]));
@@ -120,7 +120,7 @@ readonly class FaqSearchTool implements McpToolExecutorInterface
                     'answer' => $searchResult->answer ?? '',
                     'category_id' => $searchResult->category_id ?? null,
                     'relevance_score' => $searchResult->score ?? 0.0,
-                    'url' => $this->buildFaqUrl($searchResult->id, $searchResult->lang),
+                    'url' => $this->buildFaqUrl((int) $searchResult->id, (string) $searchResult->lang),
                 ];
             }
 
@@ -157,7 +157,9 @@ readonly class FaqSearchTool implements McpToolExecutorInterface
                 'total_found' => 0,
             ];
 
-            return json_encode($jsonData);
+            $emptyJson = json_encode($jsonData);
+
+            return $emptyJson === false ? '{"results":[],"total_found":0}' : $emptyJson;
         }
 
         $jsonData = [
@@ -165,7 +167,9 @@ readonly class FaqSearchTool implements McpToolExecutorInterface
             'total_found' => count($results),
         ];
 
-        return json_encode($jsonData, JSON_PRETTY_PRINT);
+        $json = json_encode($jsonData, JSON_PRETTY_PRINT);
+
+        return $json === false ? '{"results":[],"total_found":0}' : $json;
     }
 
     private function buildFaqUrl(int $faqId, string $language): string
