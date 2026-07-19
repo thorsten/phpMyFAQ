@@ -112,7 +112,12 @@ final class AzureAuthenticationController extends AbstractFrontController
 
         try {
             $token = $oAuth->getOAuthToken($code);
-            $oAuth->setToken($token)->setAccessToken($token->access_token)->setRefreshToken($token->refresh_token);
+            $accessToken = $token->access_token ?? null;
+            $refreshToken = $token->refresh_token ?? null;
+            $oAuth
+                ->setToken($token)
+                ->setAccessToken($accessToken === null ? null : (string) $accessToken)
+                ->setRefreshToken($refreshToken === null ? null : (string) $refreshToken);
 
             if (!$auth->isValidLogin($oAuth->getMail())) {
                 return new Response('Login not valid.');
@@ -129,9 +134,9 @@ final class AzureAuthenticationController extends AbstractFrontController
             $user->updateSessionId(true);
             $user->saveToSession();
             $user->setTokenData([
-                'refresh_token' => $oAuth->getRefreshToken(),
-                'access_token' => $oAuth->getAccessToken(),
-                'code_verifier' => $entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER),
+                'refresh_token' => $oAuth->getRefreshToken() ?? '',
+                'access_token' => $oAuth->getAccessToken() ?? '',
+                'code_verifier' => (string) $entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER),
                 'jwt' => $oAuth->getToken(),
             ]);
             $user->setSuccess(true);
@@ -153,7 +158,17 @@ final class AzureAuthenticationController extends AbstractFrontController
     protected function buildAuthContext(): array
     {
         if ($this->authContextFactory instanceof \Closure) {
-            return ($this->authContextFactory)();
+            $authContext = ($this->authContextFactory)();
+            $entraAuth = is_array($authContext) ? $authContext[0] ?? null : null;
+            $entraOAuth = is_array($authContext) ? $authContext[1] ?? null : null;
+            $entraSession = is_array($authContext) ? $authContext[2] ?? null : null;
+            if (
+                $entraAuth instanceof AuthEntraId
+                && $entraOAuth instanceof OAuth
+                && $entraSession instanceof EntraIdSession
+            ) {
+                return [$entraAuth, $entraOAuth, $entraSession];
+            }
         }
 
         // Use a bridge session per request to preserve legacy Azure flow behavior.
@@ -172,7 +187,10 @@ final class AzureAuthenticationController extends AbstractFrontController
     protected function getCurrentUserService(): CurrentUser
     {
         if ($this->currentUserFactory instanceof \Closure) {
-            return ($this->currentUserFactory)();
+            $currentUser = ($this->currentUserFactory)();
+            if ($currentUser instanceof CurrentUser) {
+                return $currentUser;
+            }
         }
 
         return $this->currentUser;
@@ -189,6 +207,6 @@ final class AzureAuthenticationController extends AbstractFrontController
             return;
         }
 
-        require PMF_CONFIG_DIR . '/azure.php';
+        require (string) PMF_CONFIG_DIR . '/azure.php';
     }
 }

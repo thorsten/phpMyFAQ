@@ -105,15 +105,20 @@ class OAuth
             try {
                 /** @var stdClass $errorPayload */
                 $errorPayload = json_decode(json: $content, associative: null, depth: 512, flags: JSON_THROW_ON_ERROR);
-                $error = $errorPayload->error ?? 'oauth_error';
-                $description = $errorPayload->error_description ?? $content;
+                $error = (string) ($errorPayload->error ?? 'oauth_error');
+                $description = (string) ($errorPayload->error_description ?? $content);
                 throw new \RuntimeException(sprintf('OAuth token exchange failed (%s): %s', $error, $description));
             } catch (JsonException) {
                 throw new \RuntimeException(sprintf('OAuth token exchange failed: %s', $content));
             }
         }
 
-        return json_decode(json: $content, associative: null, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $token = json_decode(json: $content, associative: null, depth: 512, flags: JSON_THROW_ON_ERROR);
+        if (!$token instanceof stdClass) {
+            throw new \RuntimeException('OAuth token exchange returned an unexpected payload.');
+        }
+
+        return $token;
     }
 
     /**
@@ -138,7 +143,7 @@ class OAuth
 
     public function getToken(): stdClass
     {
-        return $this->token;
+        return $this->token ?? throw new \RuntimeException('No Entra ID token available.');
     }
 
     public function setToken(#[\SensitiveParameter] stdClass $token): OAuth
@@ -220,11 +225,11 @@ class OAuth
 
     public function getName(): string
     {
-        return $this->token->name ?? '';
+        return (string) ($this->token->name ?? '');
     }
 
     public function getMail(): string
     {
-        return $this->token->preferred_username ?? '';
+        return (string) ($this->token->preferred_username ?? '');
     }
 }

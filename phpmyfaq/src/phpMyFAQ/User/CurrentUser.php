@@ -533,7 +533,7 @@ class CurrentUser extends User
     }
 
     /**
-     * @param array<string> $token
+     * @param array{refresh_token: string, access_token: string, code_verifier: string, jwt: mixed} $token
      * @throws \JsonException
      */
     public function setTokenData(#[\SensitiveParameter] array $token): bool

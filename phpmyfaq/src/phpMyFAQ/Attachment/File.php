@@ -45,7 +45,9 @@ class File extends AbstractAttachment implements AttachmentInterface
     protected function buildFilePath(): string
     {
         $storagePath = $this->buildStoragePath();
-        $attachmentPath = defined('PMF_ATTACHMENTS_DIR') ? PMF_ATTACHMENTS_DIR : sys_get_temp_dir();
+        $attachmentPath = defined('PMF_ATTACHMENTS_DIR')
+            ? (string) constant('PMF_ATTACHMENTS_DIR')
+            : sys_get_temp_dir();
 
         return $attachmentPath . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $storagePath);
     }
@@ -103,9 +105,11 @@ class File extends AbstractAttachment implements AttachmentInterface
         clearstatcache();
         $attachmentDir = dirname($this->buildFilePath());
 
+        $attachmentsRoot = (string) PMF_ATTACHMENTS_DIR;
+
         return (
-            file_exists(PMF_ATTACHMENTS_DIR)
-            && is_dir(PMF_ATTACHMENTS_DIR)
+            file_exists($attachmentsRoot)
+            && is_dir($attachmentsRoot)
             && file_exists($attachmentDir)
             && is_dir($attachmentDir)
         );
@@ -124,8 +128,8 @@ class File extends AbstractAttachment implements AttachmentInterface
         $success = false;
 
         if (file_exists($filePath)) {
-            $this->realHash = md5_file($filePath);
-            $this->filesize = filesize($filePath);
+            $this->realHash = (string) md5_file($filePath);
+            $this->filesize = (int) filesize($filePath);
             $this->filename = $filename ?? basename($filePath);
 
             $this->saveMeta();
@@ -182,7 +186,7 @@ class File extends AbstractAttachment implements AttachmentInterface
         // Won't delete the file if there are still some records hanging on it
         $hasLinkedRecords = $this->linkedRecords();
         if (!$hasLinkedRecords && $this->encrypted) {
-            $success &= $this->getFile()->delete();
+            $success = $success && $this->getFile()->delete();
         }
 
         if (!$hasLinkedRecords && !$this->encrypted) {
@@ -249,7 +253,12 @@ class File extends AbstractAttachment implements AttachmentInterface
     private function getFile(string $mode = FilesystemFile::MODE_READ): EncryptedFile|VanillaFile
     {
         if ($this->encrypted) {
-            return new EncryptedFile($this->buildFilePath(), $mode, $this->key);
+            $encryptionKey = $this->key;
+            if ($encryptionKey === null) {
+                throw new AttachmentException('Cannot open an encrypted attachment without a key.');
+            }
+
+            return new EncryptedFile($this->buildFilePath(), $mode, $encryptionKey);
         }
 
         return new VanillaFile($this->buildFilePath(), $mode);

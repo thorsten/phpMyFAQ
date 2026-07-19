@@ -59,16 +59,19 @@ readonly class AdminLogRepository
                 break;
             }
 
+            $hash = $row->hash ?? null;
+            $previousHash = $row->previous_hash ?? null;
+
             $adminLog = new AdminLogEntity();
             $adminLog
                 ->setId((int) $row->id)
                 ->setTime((int) $row->time)
                 ->setUserId((int) $row->user)
-                ->setText($row->text)
-                ->setIp($row->ip)
-                ->setHash($row->hash ?? null)
-                ->setPreviousHash($row->previous_hash ?? null);
-            $data[$row->id] = $adminLog;
+                ->setText((string) $row->text)
+                ->setIp((string) $row->ip)
+                ->setHash($hash === null ? null : (string) $hash)
+                ->setPreviousHash($previousHash === null ? null : (string) $previousHash);
+            $data[(int) $row->id] = $adminLog;
         }
 
         return $data;
@@ -137,8 +140,11 @@ readonly class AdminLogRepository
 
         $result = $this->configuration->getDb()->query($query);
 
-        if ($result && ($row = $this->configuration->getDb()->fetchObject($result))) {
-            return $row->hash;
+        if ($result !== false) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if ($row instanceof \stdClass) {
+                return (string) $row->hash;
+            }
         }
 
         return null;

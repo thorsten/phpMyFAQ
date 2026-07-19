@@ -34,6 +34,7 @@ class Glossary
 
     private string $language = '';
 
+    /** @var array<string, array<int, array{id:int, language:string, item:string, definition:string}>> */
     private array $cachedItems = [];
 
     // Repository to access storage
@@ -70,12 +71,13 @@ class Glossary
             $quotedItem = preg_quote($item['item'], delimiter: '/');
             $pattern = '/(^|\W)(' . $quotedItem . ')(\W|$)/';
 
-            $content = Strings::preg_replace_callback(
+            $replaced = Strings::preg_replace_callback(
                 pattern: $pattern,
                 callback: $this->setTooltip(...),
                 subject: $content,
                 limit: 1,
             );
+            $content = is_string($replaced) ? $replaced : $content;
         }
 
         return $content;
@@ -84,7 +86,7 @@ class Glossary
     /**
      * Callback function for filtering HTML from URLs and images.
      *
-     * @param array $matches Matches
+     * @param array<array-key, string> $matches Matches
      */
     public function setTooltip(array $matches): string
     {
@@ -92,7 +94,7 @@ class Glossary
             $this->glossaryHelper = new GlossaryHelper();
         }
 
-        [$prefix, $item, $postfix] = $this->glossaryHelper->extractMatchParts($matches);
+        [$prefix, $item, $postfix] = $this->glossaryHelper->extractMatchParts(array_values($matches));
         if ($item === '') {
             return $matches[0];
         }

@@ -2,57 +2,15 @@ variant = "loose"
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, phpMyFAQ\Entity\AdminLog>` is less specific than the declared return type `array<int, phpMyFAQ\Entity\AdminLog>` for function `phpMyFAQ\Administration\AdminLogRepository::getAll`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\AdminLog::setHash`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\AdminLog::setIp`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\AdminLog::setPreviousHash`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\AdminLog::setText`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
-code = "mixed-operand"
-message = "Left operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Administration\AdminLogRepository::getLastHash`. Saw type `mixed`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/AdminMenuBuilder.php"
@@ -614,54 +572,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$filesize`: expected `int`, but got `false|non-negative-int`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$realHash`: expected `string`, but got `false|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Attachment\File::delete`: expected `bool`, but found `int<0, 1>|true`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `file_exists`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `is_dir`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
-code = "possibly-null-argument"
-message = 'Argument #3 of method `phpMyFAQ\Attachment\Filesystem\File\EncryptedFile::__construct` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
 code = "redundant-comparison"
 message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
 count = 1
@@ -669,7 +579,19 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
 code = "redundant-condition"
+message = "Redundant condition: variable `$success` (type `true`) will always evaluate to true."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
+code = "redundant-condition"
 message = "This condition (type `true`) will always evaluate to true."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
 count = 1
 
 [[issues]]
@@ -968,57 +890,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Auth\EntraId\OAuth::getToken`: expected `stdClass`, but found `null|stdClass`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "mixed-assignment"
-message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Auth\EntraId\OAuth::getMail`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Auth\EntraId\OAuth::getName`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Auth\EntraId\OAuth::getOAuthToken`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Auth\EntraId\OAuth::getToken` is declared to return `stdClass` but possibly returns a nullable value (inferred as `null|stdClass`).'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
@@ -3320,39 +3194,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AzureAuthenticationController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth\EntraId\OAuth::setAccessToken`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AzureAuthenticationController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth\EntraId\OAuth::setRefreshToken`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AzureAuthenticationController.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AzureAuthenticationController.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Controller\Frontend\AzureAuthenticationController::buildAuthContext`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AzureAuthenticationController.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Controller\Frontend\AzureAuthenticationController::getCurrentUserService`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AzureAuthenticationController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\User\CurrentUser::setTokenData`: expected `array<array-key, string>`, but possibly received `array{'access_token': null|string, 'code_verifier': mixed, 'jwt': stdClass, 'refresh_token': null|string}`.'''
-count = 1
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 7
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
@@ -3436,12 +3280,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/KeycloakAuthenticationController.php"
 code = "mixed-return-statement"
 message = 'Could not infer a precise return type for function `phpMyFAQ\Controller\Frontend\KeycloakAuthenticationController::getCurrentUserService`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/KeycloakAuthenticationController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\User\CurrentUser::setTokenData`: expected `array<array-key, string>`, but possibly received `array{'access_token': string, 'code_verifier': string, 'jwt': array{'id_token': string, 'userinfo': array<string, mixed>}, 'refresh_token': string}`.'''
 count = 1
 
 [[issues]]
@@ -4247,48 +4085,6 @@ file = "phpmyfaq/src/phpMyFAQ/Glossary.php"
 code = "impossible-null-type-comparison"
 message = 'Impossible condition: variable `$this->glossaryHelper` (type `phpMyFAQ\Glossary\GlossaryHelper`) can never be `null`.'
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Glossary.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Glossary::insertItemsIntoContent`: expected `string`, but found `array<array-key, mixed>|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Glossary.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Glossary\GlossaryHelper::extractMatchParts`: expected `array<int, string>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Glossary.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #3 of `phpMyFAQ\Strings::preg_replace_callback`: expected `array<array-key, string>|string`, but provided type `array<array-key, mixed>|null|string` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Glossary.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Glossary::fetchAll`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Glossary.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Glossary::setTooltip`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Glossary.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Glossary::insertItemsIntoContent` is declared to return `string` but possibly returns a nullable value (inferred as `array<array-key, mixed>|null|string`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Glossary.php"
-code = "possibly-null-argument"
-message = 'Argument #3 of method `phpMyFAQ\Strings::preg_replace_callback` is possibly `null`, but parameter type `array<array-key, string>|string` does not accept it.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Glossary.php"
