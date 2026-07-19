@@ -139,7 +139,7 @@ class Tracking
             $remoteAddress = $this->getRequestHeaders()->get('X-Forwarded-For');
         }
 
-        return preg_replace(pattern: '([^0-9a-z:.]+)i', replacement: '', subject: (string) $remoteAddress);
+        return preg_replace(pattern: '([^0-9a-z:.]+)i', replacement: '', subject: (string) $remoteAddress) ?? '';
     }
 
     private function isBanned(string $remoteAddress): bool
@@ -173,7 +173,7 @@ class Tracking
                 $this->userSession->getCurrentSessionId(),
                 CurrentUser::getCurrentUser($this->configuration)->getUserId(),
                 $remoteAddress,
-                $this->request->server->get('REQUEST_TIME'),
+                (int) $this->request->server->get('REQUEST_TIME'),
             );
 
             $this->configuration->getDb()->query($query);
@@ -193,9 +193,17 @@ class Tracking
             . ';'
             . $remoteAddress
             . ';'
-            . str_replace(search: ';', replace: ',', subject: $this->request->server->get('QUERY_STRING') ?? '')
+            . str_replace(
+                search: ';',
+                replace: ',',
+                subject: (string) ($this->request->server->get('QUERY_STRING') ?? ''),
+            )
             . ';'
-            . str_replace(search: ';', replace: ',', subject: $this->request->server->get('HTTP_REFERER') ?? '')
+            . str_replace(
+                search: ';',
+                replace: ',',
+                subject: (string) ($this->request->server->get('HTTP_REFERER') ?? ''),
+            )
             . ';'
             . str_replace(
                 search: ';',
@@ -203,7 +211,7 @@ class Tracking
                 subject: urldecode((string) $this->request->server->get('HTTP_USER_AGENT')),
             )
             . ';'
-            . $this->request->server->get('REQUEST_TIME')
+            . (int) $this->request->server->get('REQUEST_TIME')
             . ";\n";
 
         $file = $this->getTrackingDirectory() . '/tracking' . date(format: 'dmY');
@@ -236,7 +244,10 @@ class Tracking
     private function createNetwork(): Network
     {
         if ($this->networkFactory instanceof Closure) {
-            return ($this->networkFactory)();
+            $network = ($this->networkFactory)();
+            if ($network instanceof Network) {
+                return $network;
+            }
         }
 
         return new Network($this->configuration);
@@ -244,6 +255,6 @@ class Tracking
 
     private function getTrackingDirectory(): string
     {
-        return $this->trackingDirectory ?? PMF_ROOT_DIR . '/content/core/data';
+        return $this->trackingDirectory ?? (string) PMF_ROOT_DIR . '/content/core/data';
     }
 }

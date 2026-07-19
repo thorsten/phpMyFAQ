@@ -71,9 +71,10 @@ final class FaqController extends AbstractController
         $categoryPermission = new CategoryPermission($this->configuration);
         $faqPermission = new FaqPermission($this->configuration);
 
+        $defaultLanguage = (string) $this->configuration->get(item: 'main.language');
         $languageCode = $this->configuration->get(item: 'main.languageDetection')
-            ? $this->language->setLanguageWithDetection($this->configuration->get(item: 'main.language'))
-            : $this->language->setLanguageFromConfiguration($this->configuration->get(item: 'main.language'));
+            ? $this->language->setLanguageWithDetection($defaultLanguage)
+            : $this->language->setLanguageFromConfiguration($defaultLanguage);
 
         if (!$this->isAddingFaqsAllowed($this->currentUser)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
@@ -129,7 +130,7 @@ final class FaqController extends AbstractController
                 $data->rubrik = [$data->rubrik];
             }
 
-            $categories = Filter::filterArray($data->rubrik);
+            $categories = Filter::filterArray(is_array($data->rubrik) ? $data->rubrik : []);
         }
 
         if ($categories === []) {
@@ -175,7 +176,7 @@ final class FaqController extends AbstractController
             $faqEntity
                 ->setLanguage($languageCode)
                 ->setQuestion($questionText)
-                ->setActive($autoActivate)
+                ->setActive((bool) $autoActivate)
                 ->setSticky(false)
                 ->setAnswer($answer)
                 ->setKeywords($keywords)
@@ -220,9 +221,9 @@ final class FaqController extends AbstractController
             // Add user and group permissions
             $permissions = $categoryPermission->getAll($categories);
             foreach ($categories as $category) {
-                $faqPermission->add(FaqPermission::USER, $recordId, $permissions[$category]['user']);
+                $faqPermission->add(FaqPermission::USER, $recordId, $permissions[$category]['user'] ?? []);
                 if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
-                    $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions[$category]['group']);
+                    $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions[$category]['group'] ?? []);
                 }
             }
 

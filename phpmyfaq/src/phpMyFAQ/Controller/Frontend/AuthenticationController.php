@@ -57,7 +57,7 @@ final class AuthenticationController extends AbstractFrontController
 
         // Redirect to authenticate if SSO is enabled and the user is already authenticated
         if (
-            $this->configuration->get(item: 'security.ssoSupport')
+            (bool) $this->configuration->get(item: 'security.ssoSupport')
             && $request->server->get(key: 'REMOTE_USER') !== null
         ) {
             return new RedirectResponse(url: './authenticate');
@@ -137,8 +137,8 @@ final class AuthenticationController extends AbstractFrontController
         $this->session->getFlashBag()->add('success', Translation::get('ad_logout'));
 
         // SSO Logout
-        $ssoLogout = $this->configuration->get('security.ssoLogoutRedirect');
-        if ($this->configuration->get('security.ssoSupport') && (string) $ssoLogout !== '') {
+        $ssoLogout = (string) ($this->configuration->get('security.ssoLogoutRedirect') ?? '');
+        if ((bool) $this->configuration->get('security.ssoSupport') && $ssoLogout !== '') {
             $redirectResponse->isRedirect($ssoLogout);
             return $redirectResponse;
         }
@@ -183,7 +183,7 @@ final class AuthenticationController extends AbstractFrontController
 
         // Set username via SSO
         if (
-            $this->configuration->get(item: 'security.ssoSupport')
+            (bool) $this->configuration->get(item: 'security.ssoSupport')
             && $request->server->get(key: 'REMOTE_USER') !== null
         ) {
             $username = trim((string) $request->server->get(key: 'REMOTE_USER'));
@@ -191,7 +191,7 @@ final class AuthenticationController extends AbstractFrontController
         }
 
         // Login via local DB or LDAP or SSO
-        if ($username !== '' && ($password !== '' || $this->configuration->get('security.ssoSupport'))) {
+        if ($username !== '' && ($password !== '' || (bool) $this->configuration->get('security.ssoSupport'))) {
             $userAuthentication = new UserAuthentication(
                 $this->configuration,
                 $this->currentUser,
@@ -199,7 +199,7 @@ final class AuthenticationController extends AbstractFrontController
             );
             $userAuthentication->setRememberMe($rememberMe ?? false);
             try {
-                $this->currentUser = $userAuthentication->authenticate($username, $password);
+                $this->currentUser = $userAuthentication->authenticate($username, (string) $password);
 
                 // Check if two-factor authentication is enabled
                 if ($userAuthentication->hasTwoFactorAuthentication()) {
@@ -283,7 +283,7 @@ final class AuthenticationController extends AbstractFrontController
         }
 
         // Throttle brute-force guessing of the six-digit token
-        if ($this->session->get('2fa_failed_attempts', 0) >= 5) {
+        if ((int) $this->session->get('2fa_failed_attempts', 0) >= 5) {
             $this->session->remove('2fa_pending_user_id');
             $this->session->remove('2fa_failed_attempts');
             return new RedirectResponse('./login');
@@ -302,7 +302,7 @@ final class AuthenticationController extends AbstractFrontController
             }
         }
 
-        $this->session->set('2fa_failed_attempts', $this->session->get('2fa_failed_attempts', 0) + 1);
+        $this->session->set('2fa_failed_attempts', (int) $this->session->get('2fa_failed_attempts', 0) + 1);
 
         $this->session->getFlashBag()->add('error', Translation::get('msgTwofactorErrorToken'));
         return new RedirectResponse('./token?user-id=' . $userId);

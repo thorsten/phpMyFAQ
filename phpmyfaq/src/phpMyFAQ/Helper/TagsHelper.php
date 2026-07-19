@@ -36,13 +36,13 @@ class TagsHelper extends AbstractHelper
     /**
      * Renders the tag list.
      *
-     * @param array $tags Array of tags.
+     * @param array<int, string> $tags Array of tags.
      */
     public function renderTagList(array $tags): string
     {
         $tagList = '';
         foreach ($tags as $tagId => $tagName) {
-            $tagList .= $this->renderSearchTag($tagId, $tagName);
+            $tagList .= $this->renderSearchTag((int) $tagId, $tagName);
         }
 
         return $tagList;
@@ -56,7 +56,8 @@ class TagsHelper extends AbstractHelper
      */
     public function renderSearchTag(int $tagId, string $tagName): string
     {
-        $taggingIds = str_replace((string) $tagId, replace: '', subject: $this->getTaggingIds());
+        $currentIds = array_map(static fn(int $taggingId): string => (string) $taggingId, $this->getTaggingIds());
+        $taggingIds = str_replace((string) $tagId, replace: '', subject: $currentIds);
         $taggingIds = str_replace(' ', replace: '', subject: $taggingIds);
         $taggingIds = str_replace(',,', replace: ',', subject: $taggingIds);
         $taggingIds = trim(implode(separator: ',', array: $taggingIds), characters: ',');
@@ -78,22 +79,27 @@ class TagsHelper extends AbstractHelper
 
     /**
      * Returns all tag IDs as an array.
+     *
+     * @return int[]
      */
     public function getTaggingIds(): array
     {
-        return $this->taggingIds;
+        return $this->taggingIds ?? [];
     }
 
     /**
      * Sets the tag IDs.
      *
-     * @param array $taggingIds The tag IDs as array
+     * @param array<array-key, int|string> $taggingIds The tag IDs as array
      */
     public function setTaggingIds(array $taggingIds): void
     {
-        $this->taggingIds = array_filter(
-            $taggingIds,
-            static fn($tagId): bool => (bool) Filter::filterVar($tagId, FILTER_VALIDATE_INT),
+        $this->taggingIds = array_map(
+            static fn(int|string $tagId): int => (int) $tagId,
+            array_filter(
+                $taggingIds,
+                static fn(int|string $tagId): bool => (bool) Filter::filterVar($tagId, FILTER_VALIDATE_INT),
+            ),
         );
     }
 

@@ -167,7 +167,7 @@ class Permission
      * Returns all category permissions for users and groups.
      *
      * @param int[] $categories Array of category ids
-     * @return array Array of permissions with user and group IDs for each category
+     * @return array<int, array<string, int[]>> Array of permissions with user and group IDs for each category
      */
     public function getAll(array $categories): array
     {
@@ -194,7 +194,7 @@ class Permission
                 break;
             }
 
-            $permissions[$row->category_id][self::USER][] = (int) $row->permission;
+            $permissions[(int) $row->category_id][self::USER][] = (int) $row->permission;
         }
 
         $query = sprintf(
@@ -210,7 +210,7 @@ class Permission
                 break;
             }
 
-            $permissions[$row->category_id][self::GROUP][] = (int) $row->permission;
+            $permissions[(int) $row->category_id][self::GROUP][] = (int) $row->permission;
         }
 
         return $permissions;

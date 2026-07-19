@@ -120,7 +120,7 @@ class FaqHelper extends AbstractHelper
     public function cleanUpContent(string $content): string
     {
         $contentLength = strlen($content);
-        $allowedHosts = $this->configuration->getAllowedMediaHosts();
+        $allowedHosts = array_values($this->configuration->getAllowedMediaHosts());
         $allowedHosts[] = Request::createFromGlobals()->getHost();
         $forceHttpsUrls = filter_var($this->configuration->get(item: 'security.useSslOnly'), FILTER_VALIDATE_BOOLEAN);
         $htmlSanitizer = new HtmlSanitizer(new HtmlSanitizerConfig()
@@ -137,15 +137,16 @@ class FaqHelper extends AbstractHelper
 
         // Pre-encode whitespace in src/href attribute values, since Symfony HtmlSanitizer
         // rejects URLs containing unencoded spaces and strips the attribute entirely.
-        $content = preg_replace_callback(
-            '/\b(src|href)\s*=\s*"([^"]*)"/i',
-            static fn(array $matches): string => sprintf(
-                '%s="%s"',
-                $matches[1],
-                str_replace([' ', "\t"], ['%20', '%09'], $matches[2]),
-            ),
-            $content,
-        );
+        $content =
+            preg_replace_callback(
+                '/\b(src|href)\s*=\s*"([^"]*)"/i',
+                static fn(array $matches): string => sprintf(
+                    '%s="%s"',
+                    $matches[1],
+                    str_replace([' ', "\t"], ['%20', '%09'], $matches[2]),
+                ),
+                $content,
+            ) ?? $content;
 
         // Suppress HTML parser warnings during sanitization. Dom\HTMLDocument::createFromString()
         // emits tokenizer warnings for slightly malformed user-generated HTML content, and a
@@ -160,11 +161,12 @@ class FaqHelper extends AbstractHelper
             error_reporting($previousErrorReporting);
         }
 
-        $sanitizedContent = preg_replace(
+        $strippedContent = preg_replace(
             '/<iframe\b(?:(?!src)[^>])*>\s*<\/iframe>/i',
             replacement: '',
             subject: $sanitizedContent,
         );
+        $sanitizedContent = $strippedContent ?? $sanitizedContent;
 
         return preg_replace_callback(
             '/style\s*=\s*"([^"]*)"/i',
@@ -179,7 +181,7 @@ class FaqHelper extends AbstractHelper
                 return $newStyle !== '' && $newStyle !== '0' ? 'style="' . $newStyle . '"' : '';
             },
             (string) $sanitizedContent,
-        );
+        ) ?? (string) $sanitizedContent;
     }
 
     /**
@@ -202,28 +204,29 @@ class FaqHelper extends AbstractHelper
 
         $decodedAnswer = html_entity_decode($answer);
 
-        $result = preg_replace_callback(
-            $pattern,
-            function ($matches) use ($question, $link): string {
-                $baseUrl = $this->configuration->getDefaultUrl();
-                $categoryId = $matches[3];
-                $faqId = $matches[4];
-                $language = $matches[5] ?? $this->configuration->getLanguage()->getLanguage();
-                if ($language === '' || $language === '0') {
-                    $language = 'en';
-                }
+        $result =
+            preg_replace_callback(
+                $pattern,
+                function (array $matches) use ($question, $link): string {
+                    $baseUrl = $this->configuration->getDefaultUrl();
+                    $categoryId = (int) $matches[3];
+                    $faqId = (int) $matches[4];
+                    $language = $matches[5] ?? $this->configuration->getLanguage()->getLanguage();
+                    if ($language === '' || $language === '0') {
+                        $language = 'en';
+                    }
 
-                return sprintf(
-                    '%scontent/%d/%d/%s/%s.html',
-                    $baseUrl,
-                    $categoryId,
-                    $faqId,
-                    $language,
-                    $link->getSEOTitle($question),
-                );
-            },
-            $decodedAnswer,
-        );
+                    return sprintf(
+                        '%scontent/%d/%d/%s/%s.html',
+                        $baseUrl,
+                        $categoryId,
+                        $faqId,
+                        $language,
+                        $link->getSEOTitle($question),
+                    );
+                },
+                $decodedAnswer,
+            ) ?? $decodedAnswer;
 
         if ($result === $decodedAnswer && $decodedAnswer !== $answer) {
             $htmlEncodedPattern =
@@ -232,10 +235,10 @@ class FaqHelper extends AbstractHelper
 
             return preg_replace_callback(
                 $htmlEncodedPattern,
-                function ($matches) use ($question, $link): string {
+                function (array $matches) use ($question, $link): string {
                     $baseUrl = $this->configuration->getDefaultUrl();
-                    $categoryId = $matches[6];
-                    $faqId = $matches[9];
+                    $categoryId = (int) $matches[6];
+                    $faqId = (int) $matches[9];
                     $language = $matches[13] ?? $this->configuration->getLanguage()->getLanguage();
                     if ($language === '' || $language === '0') {
                         $language = 'en';
@@ -251,7 +254,7 @@ class FaqHelper extends AbstractHelper
                     );
                 },
                 $answer,
-            );
+            ) ?? $answer;
         }
 
         return $result;
