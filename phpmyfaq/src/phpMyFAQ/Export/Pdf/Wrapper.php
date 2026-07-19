@@ -60,6 +60,8 @@ class Wrapper
 
     /**
      * Categories.
+     *
+     * @var array<int, array<string, mixed>>
      */
     public array $categories = [];
 
@@ -70,6 +72,8 @@ class Wrapper
 
     /**
      * The current faq.
+     *
+     * @var array<string, mixed>
      */
     public array $faq = [];
 
@@ -244,7 +248,7 @@ class Wrapper
     /**
      * Setter for a category array.
      *
-     * @param array $categories Categories
+     * @param array<int, array<string, mixed>> $categories Categories
      */
     public function setCategories(array $categories): void
     {
@@ -264,7 +268,9 @@ class Wrapper
         // Set a custom header and footer
         $this->setCustomHeader();
 
-        $title = array_key_exists($this->category, $this->categories) ? $this->categories[$this->category]['name'] : '';
+        $title = array_key_exists($this->category, $this->categories)
+            ? (string) ($this->categories[$this->category]['name'] ?? '')
+            : '';
 
         $this->engine->setTextColor(0, 0, 0);
         $this->engine->setFont($this->currentFont, 'B', 14);
@@ -323,7 +329,7 @@ class Wrapper
         $footer = sprintf(
             $this->config()->get(item: 'spam.mailAddressInExport') ? '© %d %s <%s> | %s' : '© %d %s %s| %s',
             date(format: 'Y'),
-            $this->config()->get(item: 'main.metaPublisher'),
+            (string) $this->config()->get(item: 'main.metaPublisher'),
             $this->config()->get(item: 'spam.mailAddressInExport') ? $this->config()->getAdminEmail() : '',
             $date->format(date(format: 'Y-m-d H:i')),
         );
@@ -354,11 +360,11 @@ class Wrapper
             $baseUrl = $this->config()->getDefaultUrl() . 'content';
             if ($this->faq !== []) {
                 if (array_key_exists($this->category, $this->categories)) {
-                    $baseUrl .= '/' . $this->categories[$this->category]['id'];
+                    $baseUrl .= '/' . (int) ($this->categories[$this->category]['id'] ?? 0);
                 }
 
-                $baseUrl .= '/' . $this->faq['id'];
-                $baseUrl .= '/' . $this->faq['lang'];
+                $baseUrl .= '/' . (string) ($this->faq['id'] ?? '');
+                $baseUrl .= '/' . (string) ($this->faq['lang'] ?? '');
                 $baseUrl .= '/' . TitleSlugifier::slug($this->question) . '.html';
             }
 
@@ -382,7 +388,7 @@ class Wrapper
      */
     public function setCustomFooter(): void
     {
-        $this->customFooter = $this->config()->get(item: 'main.customPdfFooter') ?? '';
+        $this->customFooter = (string) ($this->config()->get(item: 'main.customPdfFooter') ?? '');
     }
 
     /**
@@ -399,7 +405,7 @@ class Wrapper
 
         // TOC
         $this->engine->setFont($this->currentFont, 'B', 16);
-        $this->engine->multiCell(w: 0, h: 0, txt: Translation::get(key: 'msgTableOfContent'), border: 0, align: 'C');
+        $this->engine->multiCell(w: 0, h: 0, txt: Translation::getString('msgTableOfContent'), border: 0, align: 'C');
         $this->engine->ln();
         $this->engine->setFont($this->currentFont, '', 12);
 
@@ -408,7 +414,7 @@ class Wrapper
             page: 1,
             numbersfont: $this->currentFont,
             filler: '.',
-            tocName: Translation::get(key: 'msgTableOfContent'),
+            tocName: Translation::getString('msgTableOfContent'),
             style: 'B',
             color: [128, 0, 0],
         );
@@ -425,6 +431,8 @@ class Wrapper
 
     /**
      * Sets the FAQ array.
+     *
+     * @param array<string, mixed> $faq
      */
     public function setFaq(array $faq): void
     {
@@ -473,7 +481,7 @@ class Wrapper
         $path = urldecode($path);
 
         $type = pathinfo($path, PATHINFO_EXTENSION);
-        $resolvedPath = $this->concatenatePaths(PMF_ROOT_DIR, $path);
+        $resolvedPath = $this->concatenatePaths((string) PMF_ROOT_DIR, $path);
         if ($resolvedPath === '' || !$this->isWithinRoot($resolvedPath)) {
             return null;
         }
@@ -532,7 +540,7 @@ class Wrapper
     private function isWithinRoot(string $resolvedPath): bool
     {
         $realPath = realpath($resolvedPath);
-        $realRoot = realpath(PMF_ROOT_DIR);
+        $realRoot = realpath((string) PMF_ROOT_DIR);
 
         if ($realPath === false || $realRoot === false) {
             return false;

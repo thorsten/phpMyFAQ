@@ -134,9 +134,9 @@ final class NewsController extends AbstractFrontController
     /**
      * Prepares comment data for the Twig macro
      *
-     * @param array $comments Array of Comment objects
+     * @param \phpMyFAQ\Entity\Comment[] $comments Array of Comment objects
      * @throws \Exception
-     * @return array
+     * @return array<string, array<array-key, mixed>>
      */
     private function prepareCommentsData(array $comments): array
     {

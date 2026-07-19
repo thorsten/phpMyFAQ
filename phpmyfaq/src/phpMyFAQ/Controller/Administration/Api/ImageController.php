@@ -26,6 +26,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Helper\SvgSanitizer as SvgSanitizer;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,21 +67,20 @@ final class ImageController extends AbstractController
         }
 
         $files = $request->files->get('files');
+        if (!is_array($files)) {
+            $files = $files === null ? [] : [$files];
+        }
 
         $uploadedFiles = [];
         $headers = [];
         foreach ($files as $file) {
-            if (!$file) {
+            if (!$file instanceof UploadedFile || !$file->isValid()) {
                 continue;
             }
-            if (!$file->isValid()) {
-                continue;
-            }
-            if (
-                $request->server->get('HTTP_ORIGIN') !== null
-                && $request->server->get('HTTP_ORIGIN') . '/' === $this->configuration->getDefaultUrl()
-            ) {
-                $headers = ['Access-Control-Allow-Origin' => $request->server->get('HTTP_ORIGIN')];
+
+            $httpOrigin = $request->server->get('HTTP_ORIGIN');
+            if ($httpOrigin !== null && (string) $httpOrigin . '/' === $this->configuration->getDefaultUrl()) {
+                $headers = ['Access-Control-Allow-Origin' => (string) $httpOrigin];
             }
 
             // Sanitize input

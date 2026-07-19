@@ -2348,39 +2348,21 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
-code = "less-specific-nested-argument-type"
-message = '''Argument type mismatch for argument #3 of `phpMyFAQ\Controller\AbstractController::json`: expected `array<array-key, string>`, but provided type `array{'Access-Control-Allow-Origin'?: mixed}` is less specific.'''
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`truthy-mixed`)."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
-code = "mixed-operand"
-message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
@@ -4075,48 +4057,6 @@ message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\User\C
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/NewsController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::format`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/NewsController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Mail::safeEmail`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/NewsController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Service\Gravatar::getImage`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/NewsController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Strings::htmlentities`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/NewsController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Utils::parseUrl`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/NewsController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/NewsController.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 8
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/PdfController.php"
 code = "less-specific-argument"
 message = '''Argument type mismatch for argument #1 of `phpMyFAQ\Export\Pdf::generateFile`: expected `array<string, mixed>`, but provided type `array{'category_id': int, ...}` is less specific.'''
@@ -4694,6 +4634,12 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Export\Pdf\Wrapper::setCategories`: expected `array<int, array<string, mixed>>`, but provided type `array<int, array<array-key, mixed>>` is less specific.'
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
@@ -4760,75 +4706,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Export\Pdf\Wrapper::concatenatePaths`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `realpath`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "mixed-operand"
-message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `nonnull` is being assigned to property `$$customFooter` (string)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #3 of `phpMyFAQ\Export\Pdf\Engine\PdfEngineInterface::multiCell`: expected `string`, but possibly received `array<array-key, string>|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #4 of `phpMyFAQ\Export\Pdf\Engine\PdfEngineInterface::addToc`: expected `string`, but possibly received `array<array-key, string>|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "possibly-null-argument"
-message = 'Argument #3 of method `phpMyFAQ\Export\Pdf\Engine\PdfEngineInterface::multiCell` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "possibly-null-argument"
-message = 'Argument #4 of method `phpMyFAQ\Export\Pdf\Engine\PdfEngineInterface::addToc` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
 code = "possibly-null-operand"
 message = "Possibly null left operand used in string concatenation (type `array<array-key, string>|null|string`)."
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
