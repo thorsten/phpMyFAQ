@@ -50,6 +50,13 @@ use Symfony\Component\HttpFoundation\Request;
 class CurrentUser extends User
 {
     use CurrentUserAccountStateTrait;
+
+    #[\Override]
+    protected function accountStateConfiguration(): Configuration
+    {
+        return $this->configuration;
+    }
+
     use CurrentUserSessionLookupTrait;
 
     public const string SESSION_CURRENT_USER = 'CURRENT_USER';

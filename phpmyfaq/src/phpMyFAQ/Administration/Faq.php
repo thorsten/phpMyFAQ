@@ -78,12 +78,12 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $categoryId,
-            $this->configuration->getDb()->escape($this->getLanguage()),
+            $this->configuration->getDb()->escape($this->getLanguage() ?? ''),
             $onlyInactive ? "AND fd.active = 'no'" : '',
             $onlyNew
                 ? sprintf("AND fd.created > '%s'", date(
                     format: 'Y-m-d H:i:s',
-                    timestamp: strtotime(datetime: '-1 month'),
+                    timestamp: (int) strtotime(datetime: '-1 month'),
                 ))
                 : '',
         );
@@ -196,8 +196,8 @@ class Faq
                 $data['url'] = sprintf(
                     '%sadmin/faq/edit/%d/%s',
                     $this->configuration->getDefaultUrl(),
-                    $row->id,
-                    $row->lang,
+                    (int) $row->id,
+                    (string) $row->lang,
                 );
                 $inactive[] = $data;
             }
@@ -247,7 +247,7 @@ class Faq
                 break;
             }
 
-            $key = $row->id . '-' . $row->lang;
+            $key = (int) $row->id . '-' . (string) $row->lang;
 
             if (($seen[$key] ?? false) === false) {
                 $seen[$key] = true;
@@ -258,8 +258,8 @@ class Faq
                 $data->url = sprintf(
                     '%sadmin/faq/edit/%d/%s',
                     $this->configuration->getDefaultUrl(),
-                    $row->id,
-                    $row->lang,
+                    (int) $row->id,
+                    (string) $row->lang,
                 );
                 $orphaned[] = $data;
             }
@@ -289,7 +289,7 @@ class Faq
         );
 
         // The "updated" column is stored as a YmdHis string, so a string comparison is valid.
-        $threshold = date('YmdHis', strtotime(sprintf('-%d days', $staleDays)));
+        $threshold = date('YmdHis', (int) strtotime(sprintf('-%d days', $staleDays)));
         $staleQuery = sprintf(
             'SELECT COUNT(*) AS num FROM %sfaqdata fd '
             . "WHERE fd.active = 'yes' AND fd.updated <> '' AND fd.updated < '%s'",
@@ -323,7 +323,8 @@ class Faq
     /**
      * Returns true if saving the order of the sticky faqs was successfully.
      *
-     * @param array $faqIds Order of record id's
+     * @param array<int|string> $faqIds Order of record id's
+     * @param int[] $currentGroups
      */
     public function setStickyFaqOrder(array $faqIds, int $currentUserId = -1, array $currentGroups = [-1]): bool
     {

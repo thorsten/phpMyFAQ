@@ -98,7 +98,7 @@ class UserSession
             Database::getTablePrefix(),
             $sessionIdToCheck,
             $ipAddress,
-            $request->server->get('REQUEST_TIME') - 86_400,
+            (int) $request->server->get('REQUEST_TIME') - 86_400,
         );
         $result = $this->configuration->getDb()->query($query);
 
@@ -113,7 +113,7 @@ class UserSession
         $query = sprintf(
             "UPDATE %sfaqsessions SET time = %d, user_id = %d WHERE sid = %d AND ip = '%s'",
             Database::getTablePrefix(),
-            $request->server->get('REQUEST_TIME'),
+            (int) $request->server->get('REQUEST_TIME'),
             $this->currentUser instanceof CurrentUser ? $this->currentUser->getUserId() : 0,
             $sessionIdToCheck,
             $ipAddress,
@@ -210,7 +210,7 @@ class UserSession
                     $this->getCurrentSessionId(),
                     $this->currentUser instanceof CurrentUser ? $this->currentUser->getUserId() : 0,
                     $remoteAddress,
-                    $request->server->get('REQUEST_TIME'),
+                    (int) $request->server->get('REQUEST_TIME'),
                 );
 
                 $this->configuration->getDb()->query($query);
@@ -225,9 +225,17 @@ class UserSession
                 . ';'
                 . $remoteAddress
                 . ';'
-                . str_replace(search: ';', replace: ',', subject: $request->server->get('QUERY_STRING') ?? '')
+                . str_replace(
+                    search: ';',
+                    replace: ',',
+                    subject: (string) ($request->server->get('QUERY_STRING') ?? ''),
+                )
                 . ';'
-                . str_replace(search: ';', replace: ',', subject: $request->server->get('HTTP_REFERER') ?? '')
+                . str_replace(
+                    search: ';',
+                    replace: ',',
+                    subject: (string) ($request->server->get('HTTP_REFERER') ?? ''),
+                )
                 . ';'
                 . str_replace(
                     search: ';',
@@ -235,7 +243,7 @@ class UserSession
                     subject: urldecode(string: (string) $request->server->get('HTTP_USER_AGENT')),
                 )
                 . ';'
-                . $request->server->get('REQUEST_TIME')
+                . (int) $request->server->get('REQUEST_TIME')
                 . ";\n";
 
             $file = $this->getTrackingDirectory() . '/tracking' . date(format: 'dmY');
@@ -265,7 +273,7 @@ class UserSession
         $request = $this->getRequest();
 
         $options = [
-            'expires' => $request->server->get('REQUEST_TIME') + $timeout,
+            'expires' => (int) $request->server->get('REQUEST_TIME') + $timeout,
             'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
             'domain' => parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST),
             'secure' => $request->isSecure(),
@@ -288,13 +296,18 @@ class UserSession
 
     private function createNetwork(): Network
     {
-        return $this->networkFactory instanceof Closure
-            ? ($this->networkFactory)($this->configuration)
-            : new Network($this->configuration);
+        if ($this->networkFactory instanceof Closure) {
+            $network = ($this->networkFactory)($this->configuration);
+            if ($network instanceof Network) {
+                return $network;
+            }
+        }
+
+        return new Network($this->configuration);
     }
 
     private function getTrackingDirectory(): string
     {
-        return $this->trackingDirectory ?? PMF_ROOT_DIR . '/content/core/data';
+        return $this->trackingDirectory ?? (string) PMF_ROOT_DIR . '/content/core/data';
     }
 }

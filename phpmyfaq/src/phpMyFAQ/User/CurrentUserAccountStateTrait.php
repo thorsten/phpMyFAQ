@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\User;
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 
 trait CurrentUserAccountStateTrait
@@ -27,6 +28,11 @@ trait CurrentUserAccountStateTrait
      * Returns the user ID of the composing user class.
      */
     abstract public function getUserId(): int;
+
+    /**
+     * Returns the configuration of the composing user class.
+     */
+    abstract protected function accountStateConfiguration(): Configuration;
 
     /**
      * Returns true if the user is a local user, otherwise false.
@@ -39,9 +45,10 @@ trait CurrentUserAccountStateTrait
             $this->getUserId(),
         );
 
-        $result = $this->configuration->getDb()->query($query);
+        $db = $this->accountStateConfiguration()->getDb();
+        $result = $db->query($query);
 
-        return (bool) $this->configuration->getDb()->fetchRow($result);
+        return (bool) $db->fetchRow($result);
     }
 
     public function isBlocked(): bool
@@ -52,8 +59,9 @@ trait CurrentUserAccountStateTrait
             $this->getUserId(),
         );
 
-        $result = $this->configuration->getDb()->query($query);
-        $row = $this->configuration->getDb()->fetchArray($result);
+        $db = $this->accountStateConfiguration()->getDb();
+        $result = $db->query($query);
+        $row = $db->fetchArray($result);
 
         return ($row['account_status'] ?? null) === 'blocked';
     }
