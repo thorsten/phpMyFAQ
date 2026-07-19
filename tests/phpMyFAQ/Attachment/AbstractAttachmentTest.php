@@ -208,9 +208,9 @@ class AbstractAttachmentTest extends TestCase
             $property->setValue($this->attachment, $value);
         }
 
-        // Set id property to null to simulate a new attachment
+        // Reset the id property to simulate a new attachment
         $idProperty = $reflection->getProperty('id');
-        $idProperty->setValue($this->attachment, null);
+        $idProperty->setValue($this->attachment, 0);
 
         // Mock database operations
         $this->mockDb->method('nextId')->willReturn(42);
@@ -255,7 +255,7 @@ class AbstractAttachmentTest extends TestCase
             $reflection->getProperty($prop)->setValue($this->attachment, $value);
         }
 
-        $reflection->getProperty('id')->setValue($this->attachment, null);
+        $reflection->getProperty('id')->setValue($this->attachment, 0);
 
         $this->mockDb
             ->expects($this->once())

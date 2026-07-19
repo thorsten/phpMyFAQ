@@ -62,15 +62,15 @@ final class NewsService
         }
 
         // Process content with glossary
-        $news['processedContent'] = $this->processContent($news['content'] ?? '');
-        $news['processedHeader'] = $this->processContent($news['header'] ?? '');
+        $news['processedContent'] = $this->processContent((string) ($news['content'] ?? ''));
+        $news['processedHeader'] = $this->processContent((string) ($news['header'] ?? ''));
 
         // Add an information link if available
-        if ((string) $news['link'] !== '') {
+        if ((string) ($news['link'] ?? '') !== '') {
             $news['processedContent'] .= $this->buildInformationLink(
-                $news['link'],
-                $news['target'],
-                $news['linkTitle'],
+                (string) ($news['link'] ?? ''),
+                (string) ($news['target'] ?? ''),
+                (string) ($news['linkTitle'] ?? ''),
             );
         }
 
@@ -93,7 +93,7 @@ final class NewsService
     {
         return sprintf(
             '</p><p>%s<a href="%s" target="%s">%s</a>',
-            Translation::get(key: 'msgInfo'),
+            Translation::getString('msgInfo'),
             Strings::htmlentities($link),
             $target,
             Strings::htmlentities($linkTitle),
@@ -112,7 +112,7 @@ final class NewsService
             return sprintf(
                 '<a href="./admin/news/edit/%d">%s</a>',
                 $newsId,
-                Translation::get(key: 'ad_menu_news_edit'),
+                Translation::getString('ad_menu_news_edit'),
             );
         }
 
@@ -129,12 +129,12 @@ final class NewsService
             || !$news['active']
             || !$news['allowComments']
         ) {
-            return Translation::get(key: 'msgWriteNoComment');
+            return Translation::getString('msgWriteNoComment');
         }
 
         return sprintf(
             '<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment">%s</a>',
-            Translation::get(key: 'newsWriteComment'),
+            Translation::getString('newsWriteComment'),
         );
     }
 
@@ -150,8 +150,8 @@ final class NewsService
         $date = new Date($this->configuration);
         return sprintf(
             '%s<span id="newsLastUpd">%s</span>',
-            Translation::get(key: 'msgLastUpdateArticle'),
-            $date->format($news['date']),
+            Translation::getString('msgLastUpdateArticle'),
+            $date->format((string) ($news['date'] ?? '')),
         );
     }
 
@@ -164,6 +164,6 @@ final class NewsService
             return '';
         }
 
-        return Translation::get(key: 'msgAuthor') . ': ' . $news['authorName'];
+        return Translation::getString('msgAuthor') . ': ' . (string) ($news['authorName'] ?? '');
     }
 }

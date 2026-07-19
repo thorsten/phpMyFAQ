@@ -29,6 +29,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,17 +45,18 @@ final class AttachmentController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);
 
-        $deleteData = json_decode($request->getContent());
+        $deleteData = $this->getJsonObject($request);
         try {
-            if (!$this->verifySessionCsrfToken('delete-attachment', (string) $deleteData->csrf)) {
+            if (!$this->verifySessionCsrfToken('delete-attachment', (string) ($deleteData->csrf ?? ''))) {
                 return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
-            $attId = Filter::filterVar($deleteData->attId, FILTER_VALIDATE_INT);
+            $attId = Filter::filterVar($deleteData->attId ?? null, FILTER_VALIDATE_INT);
             if (!$attId) {
                 return $this->json(['error' => 'Invalid attachment ID'], Response::HTTP_BAD_REQUEST);
             }
 
+            $attId = (int) $attId;
             $attachment = AttachmentFactory::create($attId);
             if ($attachment->delete()) {
                 $this->adminLog->log($this->currentUser, AdminLogType::ATTACHMENT_DELETE->value . ':' . $attId);
@@ -77,17 +79,18 @@ final class AttachmentController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);
 
-        $dataToCheck = json_decode($request->getContent());
+        $dataToCheck = $this->getJsonObject($request);
         try {
-            if (!$this->verifySessionCsrfToken('refresh-attachment', (string) $dataToCheck->csrf)) {
+            if (!$this->verifySessionCsrfToken('refresh-attachment', (string) ($dataToCheck->csrf ?? ''))) {
                 return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
-            $attId = Filter::filterVar($dataToCheck->attId, FILTER_VALIDATE_INT);
+            $attId = Filter::filterVar($dataToCheck->attId ?? null, FILTER_VALIDATE_INT);
             if (!$attId) {
                 return $this->json(['error' => 'Invalid attachment ID'], Response::HTTP_BAD_REQUEST);
             }
 
+            $attId = (int) $attId;
             $attachment = AttachmentFactory::create($attId);
             $result = [
                 'success' => Translation::get(key: 'msgAdminAttachmentRefreshed'),
@@ -130,13 +133,20 @@ final class AttachmentController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoImagesForUpload')], Response::HTTP_BAD_REQUEST);
         }
 
+        $files = is_array($files) ? $files : [$files];
         $uploadedFiles = [];
         $customFileNames = $request->request->all('customFileNames');
 
         foreach ($files as $index => $file) {
+            if (!$file instanceof UploadedFile) {
+                return $this->json([
+                    'error' => Translation::get(key: 'msgNoImagesForUpload'),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
             if (
                 !$file->isValid()
-                || $file->getSize() > $this->configuration->get(item: 'records.maxAttachmentSize')
+                || $file->getSize() > (int) $this->configuration->get(item: 'records.maxAttachmentSize')
                 || $file->getMimeType() === 'text/html'
             ) {
                 return $this->json(['error' => Translation::get(key: 'msgImageTooLarge')], Response::HTTP_BAD_REQUEST);
@@ -144,15 +154,15 @@ final class AttachmentController extends AbstractAdministrationApiController
 
             $recordId = Filter::filterVar($request->request->get('record_id'), FILTER_VALIDATE_INT);
 
-            if ($recordId === null) {
+            if ($recordId === null || $recordId === false) {
                 return $this->json([
                     'error' => Translation::get(key: 'msgNoImagesForUpload'),
                 ], Response::HTTP_BAD_REQUEST);
             }
 
             $attachment = AttachmentFactory::create();
-            $attachment->setRecordId($recordId);
-            $attachment->setRecordLang(Filter::filterVar(
+            $attachment->setRecordId((int) $recordId);
+            $attachment->setRecordLang((string) Filter::filterVar(
                 $request->request->get('record_lang'),
                 FILTER_SANITIZE_SPECIAL_CHARS,
                 '',

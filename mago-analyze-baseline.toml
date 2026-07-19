@@ -578,24 +578,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #5 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
@@ -608,75 +590,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-operand"
-message = "Left operand in `>` comparison has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$filename` (string)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$mimeType` (string)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$realHash` (string)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$recordLang` (string)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$virtualHash` (string)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Attachment\AbstractAttachment::getId`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Attachment\AbstractAttachment::saveMeta`. Saw type `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "possibly-false-argument"
-message = "Argument #2 of function `array_key_exists` is possibly `false`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
 code = "possibly-false-array-access"
 message = "Cannot perform array access on possibly `false` value."
 count = 8
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "possibly-null-argument"
-message = "Argument #2 of function `array_key_exists` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractMimeType.php"
@@ -2216,57 +2132,39 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `truthy-mixed`, which is not iterable."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `array_key_exists`: expected `bool|float|int|string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Attachment\File::save`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Attachment\Filename::compose`: expected `string`, but found `mixed`.'
+code = "impossible-type-comparison"
+message = "Impossible condition: variable `$recordId` (type `int`) can never be `false`."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 6
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
-code = "mixed-operand"
-message = "Left operand in `>` comparison has `mixed` type."
+code = "possibly-false-operand"
+message = "Left operand in `>` comparison might be `false` (type `false|int`)."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
-code = "mixed-operand"
-message = "Right operand in `>` comparison has `mixed` type."
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 4
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
+code = "redundant-logical-operation"
+message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
@@ -6344,36 +6242,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/News.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::createIsoDate`: expected `string`, but found `mixed`.'
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::format`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Link\Util\TitleSlugifier::slug`: expected `string`, but found `mixed`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
@@ -6425,84 +6293,6 @@ file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
 code = "redundant-type-comparison"
 message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "array-to-string-conversion"
-message = "Potential array in left operand of string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\News\NewsService::getCommentMessage`: expected `string`, but found `array<array-key, string>|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "less-specific-return-statement"
-message = '''Returned type `array{'processedContent': string, 'processedHeader': string, ...}` is less specific than the declared return type `array<string, mixed>` for function `phpMyFAQ\News\NewsService::getProcessedNews`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::format`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\News\NewsService::buildInformationLink`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\News\NewsService::processContent`: expected `string`, but found `nonnull`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\News\NewsService::buildInformationLink`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\News\NewsService::buildInformationLink`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "mixed-operand"
-message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\News\NewsService::getCommentMessage` is declared to return `string` but possibly returns a nullable value (inferred as `array<array-key, string>|null|string`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsService.php"
-code = "possibly-null-operand"
-message = "Possibly null left operand used in string concatenation (type `array<array-key, string>|null|string`)."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Pagination.php"

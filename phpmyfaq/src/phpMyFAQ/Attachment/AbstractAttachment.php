@@ -30,8 +30,10 @@ use phpMyFAQ\Tenant\TenantQuotaEnforcer;
  */
 abstract class AbstractAttachment implements AttachmentInterface
 {
-    /** @var mixed Attachment id. */
-    protected mixed $id = 0;
+    /**
+     * Attachment id.
+     */
+    protected int $id = 0;
 
     /**
      * The key to encrypt with.
@@ -96,9 +98,9 @@ abstract class AbstractAttachment implements AttachmentInterface
     /**
      * Constructor.
      *
-     * @param mixed $attachmentId attachment id
+     * @param int|null $attachmentId attachment id
      */
-    public function __construct(mixed $attachmentId = null)
+    public function __construct(?int $attachmentId = null)
     {
         $this->databaseDriver = Database::getInstance();
 
@@ -130,13 +132,13 @@ abstract class AbstractAttachment implements AttachmentInterface
             $assoc = $this->databaseDriver->fetchArray($result);
             if ($assoc !== null && $assoc !== []) {
                 $this->recordId = (int) $assoc['record_id'];
-                $this->recordLang = $assoc['record_lang'];
-                $this->realHash = $assoc['real_hash'];
-                $this->virtualHash = $assoc['virtual_hash'];
-                $this->filename = $assoc['filename'];
+                $this->recordLang = (string) $assoc['record_lang'];
+                $this->realHash = (string) $assoc['real_hash'];
+                $this->virtualHash = (string) $assoc['virtual_hash'];
+                $this->filename = (string) $assoc['filename'];
                 $this->filesize = (int) $assoc['filesize'];
                 $this->encrypted = (bool) $assoc['encrypted'];
-                $this->mimeType = $assoc['mime_type'];
+                $this->mimeType = (string) $assoc['mime_type'];
 
                 $hasMeta = true;
             }
@@ -216,7 +218,7 @@ abstract class AbstractAttachment implements AttachmentInterface
     {
         $attachmentTableName = sprintf('%sfaqattachment', Database::getTablePrefix());
 
-        if (null === $this->id || 0 === $this->id) {
+        if (0 === $this->id) {
             $this->getTenantQuotaEnforcer()->assertCanStoreAttachment($this->filesize);
             $this->id = $this->databaseDriver->nextId($attachmentTableName, 'id');
 
@@ -349,10 +351,13 @@ abstract class AbstractAttachment implements AttachmentInterface
         $result = $this->databaseDriver->query($sql);
 
         if ($result) {
-            $assoc = $this->databaseDriver->fetchArray($result);
+            $row = $this->databaseDriver->fetchArray($result);
+            if (is_array($row)) {
+                $assoc = $row;
+            }
         }
 
-        return array_key_exists('count', $assoc) && $assoc['count'] > 1;
+        return array_key_exists('count', $assoc) && (int) $assoc['count'] > 1;
     }
 
     /**

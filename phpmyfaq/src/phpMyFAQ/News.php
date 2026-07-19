@@ -69,13 +69,13 @@ readonly class News
             $entry->url = sprintf(
                 '%snews/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
-                $row->id,
-                $row->lang,
-                TitleSlugifier::slug($row->header),
+                (int) $row->id,
+                (string) $row->lang,
+                TitleSlugifier::slug((string) $row->header),
             );
             $entry->header = $row->header;
             $entry->content = strip_tags((string) $row->artikel);
-            $entry->date = $date->format($row->datum);
+            $entry->date = $date->format((string) $row->datum);
             $output[] = $entry;
         }
 
@@ -104,14 +104,14 @@ readonly class News
             $url = sprintf(
                 '%snews/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
-                $row->id,
-                $row->lang,
-                TitleSlugifier::slug($row->header),
+                (int) $row->id,
+                (string) $row->lang,
+                TitleSlugifier::slug((string) $row->header),
             );
             $item = [
                 'id' => (int) $row->id,
                 'lang' => $row->lang,
-                'date' => Date::createIsoDate($row->datum, DATE_ATOM),
+                'date' => Date::createIsoDate((string) $row->datum, DATE_ATOM),
                 'header' => $row->header,
                 'content' => $row->artikel,
                 'authorName' => $row->author_name,
@@ -160,14 +160,14 @@ readonly class News
             $url = sprintf(
                 '%snews/%d/%s/%s.html',
                 $this->configuration->getDefaultUrl(),
-                $row->id,
-                $row->lang,
-                TitleSlugifier::slug($row->header),
+                (int) $row->id,
+                (string) $row->lang,
+                TitleSlugifier::slug((string) $row->header),
             );
             $item = [
                 'id' => (int) $row->id,
                 'lang' => $row->lang,
-                'date' => Date::createIsoDate($row->datum, DATE_ATOM),
+                'date' => Date::createIsoDate((string) $row->datum, DATE_ATOM),
                 'header' => $row->header,
                 'content' => $row->artikel,
                 'authorName' => $row->author_name,
@@ -209,7 +209,7 @@ readonly class News
                 'id' => $header->id,
                 'lang' => $header->lang,
                 'header' => $header->header,
-                'date' => Date::createIsoDate($header->datum),
+                'date' => Date::createIsoDate((string) $header->datum),
                 'active' => $header->active,
             ];
         }
@@ -222,6 +222,7 @@ readonly class News
      *
      * @param int  $newsId ID of news
      * @param bool $admin Is admin
+     * @return array<string, mixed>
      */
     public function get(int $newsId, bool $admin = false): array
     {
@@ -240,7 +241,7 @@ readonly class News
         return [
             'id' => $row->id,
             'lang' => $row->lang,
-            'date' => Date::createIsoDate($row->datum),
+            'date' => Date::createIsoDate((string) $row->datum),
             'header' => $row->header,
             'content' => $content,
             'authorName' => $row->author_name,
