@@ -67,8 +67,8 @@ class SitemapXmlService
             }
 
             $urls[] = [
-                'loc' => $this->configuration->getDefaultUrl() . 'page/' . $page['slug'] . '.html',
-                'lastmod' => $page['updated'] ?? $page['created'],
+                'loc' => $this->configuration->getDefaultUrl() . 'page/' . (string) $page['slug'] . '.html',
+                'lastmod' => (string) ($page['updated'] ?? $page['created']),
                 'priority' => '0.80',
             ];
         }
@@ -91,7 +91,7 @@ class SitemapXmlService
         $urls = $this->collectUrls();
 
         $twigWrapper = new TwigWrapper(
-            PMF_ROOT_DIR . '/assets/templates',
+            (string) PMF_ROOT_DIR . '/assets/templates',
             false,
             $this->configuration->getTemplateSet(),
         );

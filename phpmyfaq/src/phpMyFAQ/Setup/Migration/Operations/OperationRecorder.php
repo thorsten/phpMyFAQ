@@ -98,7 +98,7 @@ class OperationRecorder
      */
     public function copyFile(string $source, string $destination, bool $onlyIfExists = true): self
     {
-        $filesystem = $this->filesystem ?? new Filesystem(PMF_ROOT_DIR);
+        $filesystem = $this->filesystem ?? new Filesystem((string) PMF_ROOT_DIR);
         $this->operations[] = new FileCopyOperation($filesystem, $source, $destination, $onlyIfExists);
         return $this;
     }
@@ -108,7 +108,7 @@ class OperationRecorder
      */
     public function copyDirectory(string $source, string $destination, bool $onlyIfExists = true): self
     {
-        $filesystem = $this->filesystem ?? new Filesystem(PMF_ROOT_DIR);
+        $filesystem = $this->filesystem ?? new Filesystem((string) PMF_ROOT_DIR);
         $this->operations[] = new DirectoryCopyOperation($filesystem, $source, $destination, $onlyIfExists);
         return $this;
     }
@@ -222,7 +222,7 @@ class OperationRecorder
      */
     public function toArray(): array
     {
-        return array_map(static fn(OperationInterface $op) => $op->toArray(), $this->operations);
+        return array_map(static fn(OperationInterface $op): array => $op->toArray(), array_values($this->operations));
     }
 
     /**

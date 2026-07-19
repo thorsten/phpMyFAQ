@@ -94,7 +94,7 @@ trait CurrentUserSessionLookupTrait
 
         // create a new CurrentUser object
         $user = new CurrentUser($configuration);
-        $user->getUserById($sessionWrapper->get(CurrentUser::SESSION_CURRENT_USER));
+        $user->getUserById((int) $sessionWrapper->get(CurrentUser::SESSION_CURRENT_USER));
 
         // user object is timed out
         if ($user->sessionIsTimedOut()) {
@@ -113,7 +113,7 @@ trait CurrentUserSessionLookupTrait
 
         // check ip
         if (
-            $configuration->get('security.ipCheck')
+            (bool) $configuration->get('security.ipCheck')
             && $sessionInfo['ip'] !== Request::createFromGlobals()->getClientIp()
         ) {
             return null;
@@ -152,7 +152,7 @@ trait CurrentUserSessionLookupTrait
 
         // create a new CurrentUser object
         $user = new CurrentUser($configuration);
-        $user->getUserByCookie($request->cookies->get(UserSession::COOKIE_NAME_REMEMBER_ME));
+        $user->getUserByCookie((string) $request->cookies->get(UserSession::COOKIE_NAME_REMEMBER_ME, ''));
 
         if (-1 === $user->getUserId()) {
             return null;

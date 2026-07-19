@@ -48,11 +48,12 @@ class PdoMysql extends SearchDatabase implements DatabaseInterface
     #[\Override]
     public function search(string $searchTerm): mixed
     {
-        if (is_numeric($searchTerm) && $this->configuration->get(item: 'search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && (bool) $this->configuration->get(item: 'search.searchForSolutionId')) {
             return parent::search($searchTerm);
         }
 
-        $relevance = $this->configuration->get(item: 'search.enableRelevance');
+        $relevance = (bool) $this->configuration->get(item: 'search.enableRelevance');
+        $orderBy = '';
         $columns = $this->getResultColumns();
         if ($this->relevanceSupport && $relevance) {
             $columns .= ', ' . $this->setRelevanceRanking($searchTerm);

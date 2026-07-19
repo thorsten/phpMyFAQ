@@ -3980,51 +3980,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/Mysqli.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #9 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/Mysqli.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/Mysqli.php"
 code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/Mysqli.php"
-code = "possibly-undefined-variable"
-message = "Variable `$orderBy` might not have been defined on all execution paths leading to this point."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoMysql.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #9 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoMysql.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoMysql.php"
-code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
+message = "Casting `mixed` to `bool`."
 count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoMysql.php"
-code = "possibly-undefined-variable"
-message = "Variable `$orderBy` might not have been defined on all execution paths leading to this point."
-count = 1
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoPgsql.php"
@@ -4054,31 +4018,13 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/Pgsql.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/Pgsql.php"
 code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/Pgsql.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Search\Database\Pgsql::getMatchingColumns`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/Pgsql.php"
-code = "possibly-false-argument"
-message = "Argument #1 of function `substr` is possibly `false`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/Pgsql.php"
-code = "possibly-undefined-variable"
-message = "Variable `$matchColumns` might not have been defined on all execution paths leading to this point."
-count = 1
+message = "Casting `mixed` to `bool`."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/Sqlite3.php"
@@ -4274,26 +4220,8 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Seo/SitemapXmlService.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `list<array{'lastmod': mixed, 'loc': string, 'priority': string('0.80')|string('1.00')}>` is less specific than the declared return type `array<int, array{'lastmod': string, 'loc': string, 'priority': string}>` for function `phpMyFAQ\Seo\SitemapXmlService::collectUrls` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Seo/SitemapXmlService.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Seo/SitemapXmlService.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Seo/SitemapXmlService.php"
-code = "mixed-operand"
-message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
 count = 1
 
 [[issues]]
@@ -4535,18 +4463,6 @@ file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Operations/FileCopyOperation.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `str_replace`: expected `array<array-key, string>|string`, but found `mixed`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Operations/OperationRecorder.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, array<string, mixed>>|list<array<string, mixed>>` is less specific than the declared return type `array<int, array<string, mixed>>` for function `phpMyFAQ\Setup\Migration\Operations\OperationRecorder::toArray`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Operations/OperationRecorder.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Filesystem\Filesystem::__construct`: expected `string`, but found `mixed`.'
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Operations/SqlOperation.php"
@@ -5024,12 +4940,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUserSessionLookupTrait.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\User::getUserById`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUserSessionLookupTrait.php"
 code = "mixed-assignment"
 message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 1
@@ -5037,13 +4947,13 @@ count = 1
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUserSessionLookupTrait.php"
 code = "mixed-operand"
-message = "Left operand in `&&` operation has `mixed` type."
+message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/CurrentUserSessionLookupTrait.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\User::getUserByCookie` is possibly `null`, but parameter type `string` does not accept it.'
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
