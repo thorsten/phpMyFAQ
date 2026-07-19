@@ -30,6 +30,7 @@ use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -150,13 +151,16 @@ final class PageController extends AbstractAdministrationApiController
 
         $data = json_decode($request->getContent());
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (json_last_error() !== JSON_ERROR_NONE || !$data instanceof stdClass) {
             return $this->json(['error' => 'Invalid JSON: ' . json_last_error_msg()], Response::HTTP_BAD_REQUEST);
         }
 
         $customPage = new CustomPage($this->configuration);
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'save-page', requestToken: $data->csrfToken ?? '')) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'save-page',
+            requestToken: (string) ($data->csrfToken ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -175,6 +179,9 @@ final class PageController extends AbstractAdministrationApiController
         $content = Filter::filterVar($data->content ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         $authorName = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $authorEmail = Filter::filterEmail($data->authorEmail);
+        if (!is_string($authorEmail) || $authorEmail === '') {
+            return $this->json(['error' => 'Missing required field: authorEmail'], Response::HTTP_BAD_REQUEST);
+        }
         $active = Filter::filterVar($data->active ?? false, FILTER_SANITIZE_SPECIAL_CHARS);
         $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $seoTitle = Filter::filterVar($data->seoTitle ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -182,8 +189,9 @@ final class PageController extends AbstractAdministrationApiController
         $seoRobots = Filter::filterVar($data->seoRobots ?? 'index,follow', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         // Check if this is a translation (pageId provided)
-        $isTranslation = ($data->pageId ?? null) !== null && $data->pageId > 0;
-        $translationPageId = $isTranslation ? Filter::filterVar($data->pageId, FILTER_VALIDATE_INT) : null;
+        $rawPageId = $data->pageId ?? null;
+        $isTranslation = $rawPageId !== null && (int) $rawPageId > 0;
+        $translationPageId = $isTranslation ? Filter::filterVar($rawPageId, FILTER_VALIDATE_INT) : null;
 
         // For translations, check if language already exists for this page ID
         if ($isTranslation) {
@@ -269,7 +277,7 @@ final class PageController extends AbstractAdministrationApiController
 
         $data = json_decode($request->getContent());
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (json_last_error() !== JSON_ERROR_NONE || !$data instanceof stdClass) {
             return $this->json(['error' => 'Invalid JSON: ' . json_last_error_msg()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -277,7 +285,7 @@ final class PageController extends AbstractAdministrationApiController
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'delete-page',
-            requestToken: $data->csrfToken ?? '',
+            requestToken: (string) ($data->csrfToken ?? ''),
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
@@ -312,7 +320,7 @@ final class PageController extends AbstractAdministrationApiController
 
         $data = json_decode($request->getContent());
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (json_last_error() !== JSON_ERROR_NONE || !$data instanceof stdClass) {
             return $this->json(['error' => 'Invalid JSON: ' . json_last_error_msg()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -320,7 +328,7 @@ final class PageController extends AbstractAdministrationApiController
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'update-page',
-            requestToken: $data->csrfToken ?? '',
+            requestToken: (string) ($data->csrfToken ?? ''),
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
@@ -346,6 +354,9 @@ final class PageController extends AbstractAdministrationApiController
         $content = Filter::filterVar($data->content ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         $authorName = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $authorEmail = Filter::filterEmail($data->authorEmail);
+        if (!is_string($authorEmail) || $authorEmail === '') {
+            return $this->json(['error' => 'Missing required field: authorEmail'], Response::HTTP_BAD_REQUEST);
+        }
         $active = Filter::filterVar($data->active ?? false, FILTER_SANITIZE_SPECIAL_CHARS);
         $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $seoTitle = Filter::filterVar($data->seoTitle ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -405,7 +416,7 @@ final class PageController extends AbstractAdministrationApiController
         $this->userHasPermission(PermissionType::PAGE_EDIT);
         $data = json_decode($request->getContent());
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (json_last_error() !== JSON_ERROR_NONE || !$data instanceof stdClass) {
             return $this->json(['error' => 'Invalid JSON: ' . json_last_error_msg()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -413,7 +424,7 @@ final class PageController extends AbstractAdministrationApiController
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'activate-page',
-            requestToken: $data->csrfToken ?? '',
+            requestToken: (string) ($data->csrfToken ?? ''),
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
@@ -465,13 +476,16 @@ final class PageController extends AbstractAdministrationApiController
 
         $data = json_decode($request->getContent());
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (json_last_error() !== JSON_ERROR_NONE || !$data instanceof stdClass) {
             return $this->json(['error' => 'Invalid JSON: ' . json_last_error_msg()], Response::HTTP_BAD_REQUEST);
         }
 
         $customPage = new CustomPage($this->configuration);
 
-        if (!Token::getInstance($this->session)->verifyToken(page: 'save-page', requestToken: $data->csrfToken ?? '')) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'save-page',
+            requestToken: (string) ($data->csrfToken ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

@@ -132,7 +132,7 @@ class Sqlsrv implements DatabaseDriver
 
         while (true) {
             $row = $this->fetchObject($result);
-            if ($row === false) {
+            if (!$row instanceof \stdClass) {
                 break;
             }
 
@@ -150,7 +150,8 @@ class Sqlsrv implements DatabaseDriver
         $errors = sqlsrv_errors();
 
         if (null !== $errors) {
-            return $errors[0]['SQLSTATE'] . ': ' . $errors[0]['message'];
+            $firstError = $errors[0] ?? [];
+            return (string) ($firstError['SQLSTATE'] ?? '') . ': ' . (string) ($firstError['message'] ?? '');
         }
 
         return '';
@@ -323,7 +324,9 @@ class Sqlsrv implements DatabaseDriver
         sqlsrv_fetch($result);
 
         $fieldIndex = 0;
-        return sqlsrv_get_field($result, $fieldIndex) + 1;
+        $currentId = sqlsrv_get_field($result, $fieldIndex);
+
+        return (is_numeric($currentId) ? (int) $currentId : 0) + 1;
     }
 
     /**
@@ -340,7 +343,7 @@ class Sqlsrv implements DatabaseDriver
             return '';
         }
 
-        return $clientInfo['DriverODBCVer'] . ' ' . $clientInfo['DriverVer'];
+        return (string) ($clientInfo['DriverODBCVer'] ?? '') . ' ' . (string) ($clientInfo['DriverVer'] ?? '');
     }
 
     /**
@@ -353,7 +356,8 @@ class Sqlsrv implements DatabaseDriver
         }
 
         $serverInfo = sqlsrv_server_info($this->conn);
-        return $serverInfo['SQLServerVersion'];
+
+        return (string) ($serverInfo['SQLServerVersion'] ?? '');
     }
 
     /**
@@ -474,11 +478,12 @@ class Sqlsrv implements DatabaseDriver
     {
         $error = '<h3>SQL Error:</h3>MS SQL Error information: <br/>';
         foreach ($errors as $entry) {
+            $entry = is_array($entry) ? $entry : [];
             $error .= sprintf(
                 'SQLSTATE: %s<br/>Code: %s<br/>Message: %s<br/>',
-                $entry['SQLSTATE'],
-                $entry['code'],
-                $entry['message'],
+                (string) ($entry['SQLSTATE'] ?? ''),
+                (string) ($entry['code'] ?? ''),
+                (string) ($entry['message'] ?? ''),
             );
         }
 

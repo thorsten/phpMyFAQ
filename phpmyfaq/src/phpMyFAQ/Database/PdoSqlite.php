@@ -129,8 +129,13 @@ class PdoSqlite implements DatabaseDriver
      */
     public function fetchArray(mixed $result): ?array
     {
+        if (!$result instanceof PDOStatement) {
+            return null;
+        }
+
         $row = $result->fetch(PDO::FETCH_ASSOC);
-        return $row === false || $row === null ? null : $row;
+
+        return is_array($row) ? $row : null;
     }
 
     /**
@@ -138,7 +143,13 @@ class PdoSqlite implements DatabaseDriver
      */
     public function fetchRow(mixed $result): mixed
     {
-        return $result->fetch(PDO::FETCH_NUM)[0] ?? false;
+        if (!$result instanceof PDOStatement) {
+            return false;
+        }
+
+        $row = $result->fetch(PDO::FETCH_NUM);
+
+        return is_array($row) ? $row[0] ?? false : false;
     }
 
     /**
@@ -150,11 +161,15 @@ class PdoSqlite implements DatabaseDriver
      */
     public function fetchAll(mixed $result): ?array
     {
-        if (false === $result) {
+        if (!$result instanceof PDOStatement) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
 
-        return $result->fetchAll(PDO::FETCH_OBJ);
+        /* @mago-expect lint:inline-variable-return - the variable carries the @var type for mago analyze */
+        /** @var list<\stdClass> $rows */
+        $rows = $result->fetchAll(PDO::FETCH_OBJ);
+
+        return $rows;
     }
 
     /**
@@ -167,6 +182,10 @@ class PdoSqlite implements DatabaseDriver
      */
     public function fetchObject(mixed $result): mixed
     {
+        if (!$result instanceof PDOStatement) {
+            return null;
+        }
+
         /** @var \stdClass|false $obj */
         $obj = $result->fetch(PDO::FETCH_OBJ);
 
@@ -178,9 +197,13 @@ class PdoSqlite implements DatabaseDriver
      */
     public function numRows(mixed $result): int
     {
+        if (!$result instanceof PDOStatement) {
+            return 0;
+        }
+
         try {
-            $sql = $result->queryString ?? '';
-            if (is_string($sql) && $sql !== '' && preg_match('/^\s*SELECT\b/i', $sql) === 1) {
+            $sql = $result->queryString;
+            if ($sql !== '' && preg_match('/^\s*SELECT\b/i', $sql) === 1) {
                 $inner = rtrim($sql, characters: " \t\n\r\0\x0B;");
                 $countSql = 'SELECT COUNT(*) AS c FROM (' . $inner . ') AS _pmf_cnt';
 
@@ -190,23 +213,20 @@ class PdoSqlite implements DatabaseDriver
                 }
 
                 // Re-bind the original parameters for prepared statements
-                $params = $result instanceof PDOStatement && $this->preparedParams->offsetExists($result)
-                    ? $this->preparedParams[$result]
-                    : [];
+                $params = $this->preparedParams->offsetExists($result) ? $this->preparedParams[$result] : [];
                 $stmt->execute($params);
 
                 $row = $stmt->fetch(PDO::FETCH_NUM);
                 return is_array($row) && array_key_exists(0, $row) ? (int) $row[0] : 0;
             }
         } catch (\Throwable $exception) {
-            $this->configuration
-                ->getLogger()
-                ->debug('SQLite numRows fallback after COUNT query failure: ' . $exception->getMessage());
+            // The driver has no logger; record the failure in the query log instead
+            $this->sqlLog .= '-- SQLite numRows COUNT fallback failed: ' . $exception->getMessage() . "\n";
         }
 
         // Fallback: for non-SELECT statements rely on rowCount (INSERT/UPDATE/DELETE)
         try {
-            return (int) $result->rowCount();
+            return $result->rowCount();
         } catch (\Throwable) {
             return 0;
         }
@@ -308,7 +328,7 @@ class PdoSqlite implements DatabaseDriver
 
         $row = $statement->fetch(PDO::FETCH_NUM);
 
-        return $row[0];
+        return is_array($row) ? (string) ($row[0] ?? '') : '';
     }
 
     /**
@@ -332,7 +352,7 @@ class PdoSqlite implements DatabaseDriver
 
         $current = $statement->fetch(PDO::FETCH_NUM);
 
-        return $current[0] + 1;
+        return is_array($current) ? (int) ($current[0] ?? 0) + 1 : 1;
     }
 
     /**
@@ -430,7 +450,7 @@ class PdoSqlite implements DatabaseDriver
      */
     public function clientVersion(): string
     {
-        return $this->pdo()->getAttribute(PDO::ATTR_CLIENT_VERSION);
+        return (string) $this->pdo()->getAttribute(PDO::ATTR_CLIENT_VERSION);
     }
 
     /**
@@ -438,7 +458,7 @@ class PdoSqlite implements DatabaseDriver
      */
     public function serverVersion(): string
     {
-        return $this->pdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
+        return (string) $this->pdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
 
     /**

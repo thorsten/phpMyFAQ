@@ -115,6 +115,7 @@ class Pgsql implements DatabaseDriver
             $query .= sprintf(' LIMIT %d OFFSET %d', $rowcount, $offset);
         }
 
+        /* @mago-expect analysis:possibly-invalid-argument - the pg_* functions are shadowed in tests; the stubbed connection must pass through */
         $result = pg_query($this->conn, $query);
 
         if (!$result) {
@@ -201,6 +202,7 @@ class Pgsql implements DatabaseDriver
      */
     public function error(): string
     {
+        /* @mago-expect analysis:possibly-invalid-argument - the pg_* functions are shadowed in tests; the stubbed connection must pass through */
         return pg_last_error($this->conn);
     }
 
@@ -209,6 +211,7 @@ class Pgsql implements DatabaseDriver
      */
     public function escape(string $string): string
     {
+        /* @mago-expect analysis:possibly-invalid-argument - the pg_* functions are shadowed in tests; the stubbed connection must pass through */
         return pg_escape_string($this->conn, $string);
     }
 
@@ -246,6 +249,7 @@ class Pgsql implements DatabaseDriver
     public function fetchObject(mixed $result): mixed
     {
         /* @mago-expect lint:inline-variable-return - the variable carries the @var type for mago analyze */
+        /* @mago-expect analysis:mixed-argument - the pg_* functions are shadowed in tests; the stubbed result must pass through */
         /** @var \stdClass|false|null $row */
         $row = pg_fetch_object($result);
 
@@ -257,6 +261,7 @@ class Pgsql implements DatabaseDriver
      */
     public function fetchRow(mixed $result): array|false
     {
+        /* @mago-expect analysis:mixed-argument - the pg_* functions are shadowed in tests; the stubbed result must pass through */
         return pg_fetch_row($result);
     }
 
@@ -265,6 +270,7 @@ class Pgsql implements DatabaseDriver
      */
     public function numRows(mixed $result): int
     {
+        /* @mago-expect analysis:mixed-argument - the pg_* functions are shadowed in tests; the stubbed result must pass through */
         return pg_num_rows($result);
     }
 
@@ -292,8 +298,8 @@ class Pgsql implements DatabaseDriver
                 break;
             }
 
-            $count = $this->getOne('SELECT count(1) FROM ' . $row['relname'] . ';');
-            $arr[$row['relname']] = $count;
+            $tableName = (string) $row['relname'];
+            $arr[$tableName] = $this->getOne('SELECT count(1) FROM ' . $tableName . ';');
         }
 
         return $arr;
@@ -304,12 +310,10 @@ class Pgsql implements DatabaseDriver
      */
     public function fetchArray(mixed $result): ?array
     {
-        $result = pg_fetch_array($result, row: null, mode: PGSQL_ASSOC);
-        if ($result) {
-            return $result;
-        }
+        /* @mago-expect analysis:mixed-argument - the pg_* functions are shadowed in tests; the stubbed result must pass through */
+        $row = pg_fetch_array($result, row: null, mode: PGSQL_ASSOC);
 
-        return [];
+        return is_array($row) ? $row : [];
     }
 
     /**
@@ -317,9 +321,10 @@ class Pgsql implements DatabaseDriver
      */
     private function getOne(string $query): string
     {
+        /* @mago-expect analysis:possibly-invalid-argument - the pg_* functions are shadowed in tests; the stubbed result must pass through */
         $row = pg_fetch_row($this->query($query));
 
-        return $row[0];
+        return is_array($row) ? (string) ($row[0] ?? '') : '';
     }
 
     /**
@@ -338,8 +343,10 @@ class Pgsql implements DatabaseDriver
      */
     public function clientVersion(): string
     {
+        /* @mago-expect analysis:possibly-invalid-argument - the pg_* functions are shadowed in tests; the stubbed connection must pass through */
         $pgVersion = pg_version($this->conn);
-        return $pgVersion['client'] ?? 'n/a';
+
+        return (string) ($pgVersion['client'] ?? 'n/a');
     }
 
     /**
@@ -347,8 +354,10 @@ class Pgsql implements DatabaseDriver
      */
     public function serverVersion(): string
     {
+        /* @mago-expect analysis:possibly-invalid-argument - the pg_* functions are shadowed in tests; the stubbed connection must pass through */
         $pgVersion = pg_version($this->conn);
-        return $pgVersion['server'] ?? 'n/a';
+
+        return (string) ($pgVersion['server'] ?? 'n/a');
     }
 
     /**
@@ -414,6 +423,7 @@ class Pgsql implements DatabaseDriver
      */
     public function close(): bool
     {
+        /* @mago-expect analysis:possibly-invalid-argument - the pg_* functions are shadowed in tests; the stubbed connection must pass through */
         return pg_close($this->conn);
     }
 
@@ -422,6 +432,7 @@ class Pgsql implements DatabaseDriver
      */
     public function lastInsertId(): int|string
     {
+        /* @mago-expect analysis:possibly-invalid-argument - the pg_* functions are shadowed in tests; the stubbed connection must pass through */
         $result = pg_query($this->conn, query: 'SELECT lastval()');
         if ($result === false) {
             return 0;
