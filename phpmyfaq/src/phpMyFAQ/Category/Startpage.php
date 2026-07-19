@@ -24,16 +24,17 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
 
-readonly class Startpage
+class Startpage
 {
-    private int $user;
+    private int $user = -1;
 
-    private array $groups;
+    /** @var int[] */
+    private array $groups = [-1];
 
-    private string $language;
+    private string $language = '';
 
     public function __construct(
-        private Configuration $configuration,
+        private readonly Configuration $configuration,
     ) {
     }
 
@@ -43,6 +44,9 @@ readonly class Startpage
         return $this;
     }
 
+    /**
+     * @param int[] $groups
+     */
     public function setGroups(array $groups): Startpage
     {
         $this->groups = $groups;
@@ -131,8 +135,8 @@ readonly class Startpage
                 break;
             }
 
-            $link = sprintf('./category/%d/%s.html', $row['id'], TitleSlugifier::slug($row['name']));
-            $image = '' === $row['image'] ? '' : 'content/user/images/' . $row['image'];
+            $link = sprintf('./category/%d/%s.html', (int) $row['id'], TitleSlugifier::slug((string) $row['name']));
+            $image = '' === $row['image'] ? '' : 'content/user/images/' . (string) $row['image'];
 
             $category = [
                 'url' => $link,

@@ -162,10 +162,10 @@ final class SearchController extends AbstractApiController
                 $data->link = sprintf(
                     '%sfaq/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
-                    $data->category_id,
-                    $data->id,
-                    $data->lang,
-                    TitleSlugifier::slug($data->question),
+                    (int) $data->category_id,
+                    (int) $data->id,
+                    (string) $data->lang,
+                    TitleSlugifier::slug((string) $data->question),
                 );
                 $allResults[] = $data;
             }
@@ -173,12 +173,14 @@ final class SearchController extends AbstractApiController
             $total = count($allResults);
 
             // Apply sorting if needed
-            if ($sort->getField()) {
-                usort($allResults, static function ($a, $b) use ($sort) {
-                    $field = $sort->getField();
-                    $aVal = $a->{$field} ?? '';
-                    $bVal = $b->{$field} ?? '';
-                    $result = $aVal <=> $bVal;
+            $sortField = $sort->getField();
+            if ($sortField !== null && $sortField !== '') {
+                usort($allResults, static function (object $a, object $b) use ($sort, $sortField): int {
+                    $aVal = $a->{$sortField} ?? '';
+                    $bVal = $b->{$sortField} ?? '';
+                    $result = is_numeric($aVal) && is_numeric($bVal)
+                        ? (float) $aVal <=> (float) $bVal
+                        : (string) $aVal <=> (string) $bVal;
                     return $sort->getOrderSql() === 'DESC' ? -$result : $result;
                 });
             }

@@ -59,7 +59,7 @@ final class AuthenticationController extends AbstractAdministrationController im
 
         // Set username via SSO
         if (
-            $this->configuration->get(item: 'security.ssoSupport')
+            (bool) $this->configuration->get(item: 'security.ssoSupport')
             && $request->server->get(key: 'REMOTE_USER') !== null
         ) {
             $username = trim((string) $request->server->get(key: 'REMOTE_USER'));
@@ -67,7 +67,7 @@ final class AuthenticationController extends AbstractAdministrationController im
         }
 
         // Login via local DB or LDAP or SSO
-        if ($username !== '' && ($password !== '' || $this->configuration->get(item: 'security.ssoSupport'))) {
+        if ($username !== '' && ($password !== '' || (bool) $this->configuration->get(item: 'security.ssoSupport'))) {
             $userAuthentication = new UserAuthentication(
                 $this->configuration,
                 $this->currentUser,
@@ -75,7 +75,7 @@ final class AuthenticationController extends AbstractAdministrationController im
             );
             $userAuthentication->setRememberMe($rememberMe ?? false);
             try {
-                $this->currentUser = $userAuthentication->authenticate($username, $password);
+                $this->currentUser = $userAuthentication->authenticate($username, (string) $password);
                 if ($userAuthentication->hasTwoFactorAuthentication()) {
                     $session = $this->session;
                     $session->set('2fa_pending_user_id', $this->currentUser->getUserId());
@@ -114,7 +114,7 @@ final class AuthenticationController extends AbstractAdministrationController im
     {
         // Redirect to authenticate if SSO is enabled and the user is already authenticated
         if (
-            $this->configuration->get(item: 'security.ssoSupport')
+            (bool) $this->configuration->get(item: 'security.ssoSupport')
             && $request->server->get(key: 'REMOTE_USER') !== null
         ) {
             return new RedirectResponse(url: './authenticate');
@@ -172,8 +172,8 @@ final class AuthenticationController extends AbstractAdministrationController im
         );
 
         $this->currentUser->deleteFromSession(deleteCookie: true);
-        $ssoLogout = $this->configuration->get(item: 'security.ssoLogoutRedirect');
-        if ($this->configuration->get(item: 'security.ssoSupport') && (string) $ssoLogout !== '') {
+        $ssoLogout = (string) ($this->configuration->get(item: 'security.ssoLogoutRedirect') ?? '');
+        if ((bool) $this->configuration->get(item: 'security.ssoSupport') && $ssoLogout !== '') {
             $redirectResponse->isRedirect($ssoLogout);
             $redirectResponse->send();
         }
@@ -236,7 +236,7 @@ final class AuthenticationController extends AbstractAdministrationController im
             return new RedirectResponse(url: './login');
         }
 
-        if ($session->get('2fa_failed_attempts', 0) >= 5) {
+        if ((int) $session->get('2fa_failed_attempts', 0) >= 5) {
             $session->remove('2fa_pending_user_id');
             $session->remove('2fa_failed_attempts');
             return new RedirectResponse(url: './login');
@@ -260,7 +260,7 @@ final class AuthenticationController extends AbstractAdministrationController im
             $this->adminLog->log($user, AdminLogType::AUTH_2FA_FAILED->value . ':' . $user->getLogin());
         }
 
-        $session->set('2fa_failed_attempts', $session->get('2fa_failed_attempts', 0) + 1);
+        $session->set('2fa_failed_attempts', (int) $session->get('2fa_failed_attempts', 0) + 1);
 
         return new RedirectResponse('./token?user-id=' . $userId);
     }

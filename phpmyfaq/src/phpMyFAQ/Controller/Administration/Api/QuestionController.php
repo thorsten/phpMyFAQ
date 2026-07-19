@@ -47,13 +47,20 @@ final class QuestionController extends AbstractController
     {
         $this->userHasPermission(PermissionType::QUESTION_DELETE);
 
-        $data = json_decode($request->getContent());
-
-        if (!Token::getInstance($this->session)->verifyToken('delete-questions', $data->data->{'pmf-csrf-token'})) {
+        $data = $this->getJsonObject($request);
+        $payload = $data->data ?? null;
+        if (!$payload instanceof \stdClass) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $questionIds = $data->data->{'questions[]'};
+        if (!Token::getInstance($this->session)->verifyToken(
+            'delete-questions',
+            (string) ($payload->{'pmf-csrf-token'} ?? ''),
+        )) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $questionIds = $payload->{'questions[]'} ?? null;
         $question = new Question($this->configuration);
 
         if (!is_null($questionIds)) {
@@ -81,15 +88,18 @@ final class QuestionController extends AbstractController
     {
         $this->userHasPermission(PermissionType::QUESTION_ADD);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('toggle-question-visibility', $data->csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            'toggle-question-visibility',
+            (string) ($data->csrfToken ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $questionId = (int) $data->questionId;
+        $questionId = (int) ($data->questionId ?? 0);
 
-        if (!is_null($questionId)) {
+        if ($questionId !== 0) {
             $isVisible = $this->question->getVisibility($questionId);
             $this->question->setVisibility($questionId, $isVisible === 'N' ? 'Y' : 'N');
             $translation = $isVisible === 'N'

@@ -69,15 +69,19 @@ final class CommentController extends AbstractController
     {
         $this->userSession->setCurrentUser($this->currentUser);
 
+        $defaultLanguage = (string) $this->configuration->get(item: 'main.language');
         $languageCode = $this->configuration->get(item: 'main.languageDetection')
-            ? $this->language->setLanguageWithDetection($this->configuration->get(item: 'main.language'))
-            : $this->language->setLanguageFromConfiguration($this->configuration->get(item: 'main.language'));
+            ? $this->language->setLanguageWithDetection($defaultLanguage)
+            : $this->language->setLanguageFromConfiguration($defaultLanguage);
 
         if (!$this->isCommentAllowed($this->currentUser)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        if (!$data instanceof \stdClass) {
+            throw new Exception('The request body must be a JSON object');
+        }
 
         if (($data->{'pmf-csrf-token'} ?? null) === null) {
             throw new Exception('Missing CSRF token');
@@ -85,7 +89,7 @@ final class CommentController extends AbstractController
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'add-comment',
-            requestToken: $data->{'pmf-csrf-token'},
+            requestToken: (string) $data->{'pmf-csrf-token'},
         )) {
             throw new Exception('Invalid CSRF token');
         }
@@ -102,7 +106,7 @@ final class CommentController extends AbstractController
             throw new Exception('Missing or empty comment text');
         }
 
-        $type = Filter::filterVar($data->type, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $type = Filter::filterVar($data->type ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($type === 'news') {
             throw new Exception('News comments not supported');
@@ -131,7 +135,7 @@ final class CommentController extends AbstractController
         $commentText = Filter::filterVar($data->comment_text, FILTER_SANITIZE_SPECIAL_CHARS, '');
         if ($enableCommentEditor && $isLoggedIn) {
             // Allow HTML for logged-in users when editor is enabled, using Symfony HtmlSanitizer
-            $commentText = Filter::removeAttributes($data->comment_text);
+            $commentText = Filter::removeAttributes((string) $data->comment_text);
         }
 
         $commentId = match ($type) {
@@ -186,7 +190,7 @@ final class CommentController extends AbstractController
                 }
 
                 $gravatarUrl = $this->gravatar->getImageUrl($commentEntity->getEmail(), [
-                    'size' => 50,
+                    'size' => '50',
                     'default' => 'mm',
                 ]);
 
