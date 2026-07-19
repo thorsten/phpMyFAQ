@@ -221,7 +221,7 @@ readonly class Backup
      */
     public function createContentFolderBackup(): string
     {
-        $zipFile = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'content.zip';
+        $zipFile = (string) PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'content.zip';
 
         $zipArchive = new ZipArchive();
         if (!$zipArchive->open($zipFile, ZipArchive::CREATE)) {
@@ -234,12 +234,16 @@ readonly class Backup
         );
 
         foreach ($files as $file) {
-            if ($file->isDir()) {
+            if (!$file instanceof \SplFileInfo || $file->isDir()) {
                 continue;
             }
 
             $filePath = $file->getRealPath();
-            $relativePath = substr((string) $filePath, strlen(PMF_CONTENT_DIR) + 1);
+            if ($filePath === false) {
+                continue;
+            }
+
+            $relativePath = substr($filePath, strlen((string) PMF_CONTENT_DIR) + 1);
             $zipArchive->addFile($filePath, $relativePath);
         }
 
@@ -378,7 +382,11 @@ readonly class Backup
         $lastErrorReason = null;
 
         foreach ($queries as $query) {
-            $alignedQuery = $this->databaseHelper::alignTablePrefix($query, $tablePrefix, Database::getTablePrefix());
+            $alignedQuery = $this->databaseHelper::alignTablePrefix(
+                (string) $query,
+                $tablePrefix,
+                Database::getTablePrefix(),
+            );
 
             $result = $databaseDriver->query($alignedQuery);
             if (!$result) {

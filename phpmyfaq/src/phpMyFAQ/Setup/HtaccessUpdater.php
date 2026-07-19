@@ -130,7 +130,7 @@ class HtaccessUpdater
             count: $count,
         );
 
-        if ($count > 0) {
+        if ($count > 0 && is_string($updated)) {
             return $updated;
         }
 
@@ -149,7 +149,7 @@ class HtaccessUpdater
             count: $count,
         );
 
-        if ($count > 0) {
+        if ($count > 0 && is_string($updated)) {
             return $updated;
         }
 

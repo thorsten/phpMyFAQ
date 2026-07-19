@@ -44,10 +44,22 @@ class SearchFactory
 
         if (str_starts_with($type, 'pdo_')) {
             $searchClass = sprintf('\phpMyFAQ\Search\%s\Pdo%s', $connector, ucfirst(substr(string: $type, offset: 4)));
-            return new $searchClass($configuration);
+
+            return self::instantiate($searchClass, $configuration);
         }
 
         $searchClass = sprintf('\phpMyFAQ\Search\%s\%s', $connector, ucfirst($type));
+
+        return self::instantiate($searchClass, $configuration);
+    }
+
+    private static function instantiate(string $searchClass, Configuration $configuration): SearchDatabase
+    {
+        if (!class_exists($searchClass) || !is_subclass_of($searchClass, SearchDatabase::class)) {
+            throw new \RuntimeException('Unknown search backend: ' . $searchClass);
+        }
+
+        /* @mago-expect analysis:unknown-class-instantiation - the backend class is resolved from the configured type */
         return new $searchClass($configuration);
     }
 
