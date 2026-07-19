@@ -108,6 +108,7 @@ final readonly class MailgunProvider implements MailProviderInterface
 
     private function extractEmailAddress(string $rawAddress): string
     {
+        $matches = [];
         if (preg_match('/<([^>]+)>/', $rawAddress, $matches) === 1) {
             return trim($matches[1]);
         }

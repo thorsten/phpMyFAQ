@@ -185,6 +185,7 @@ class SvgSanitizer
         $decoded = $this->decodeAllEntities($content);
 
         foreach (self::DANGEROUS_PATTERNS as $pattern) {
+            $matches = [];
             if (!preg_match($pattern, $decoded, $matches)) {
                 continue;
             }

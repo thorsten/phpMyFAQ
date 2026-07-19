@@ -102,7 +102,6 @@ final class TranslationController extends AbstractAdministrationApiController
                 'customPage' => $this->translationService->translateCustomPage($translationRequest),
                 'category' => $this->translationService->translateCategory($translationRequest),
                 'news' => $this->translationService->translateNews($translationRequest),
-                default => throw new TranslationException('Unsupported content type'),
             };
 
             if ($result->isSuccess()) {
@@ -111,7 +110,6 @@ final class TranslationController extends AbstractAdministrationApiController
                     'customPage' => AdminLogType::PAGE_TRANSLATE,
                     'category' => AdminLogType::CATEGORY_TRANSLATE,
                     'news' => AdminLogType::NEWS_TRANSLATE,
-                    default => throw new TranslationException('Unsupported content type'),
                 };
 
                 $this->adminLog->log($this->currentUser, $logType->value . ':' . $sourceLang . '->' . $targetLang);

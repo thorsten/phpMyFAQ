@@ -114,13 +114,15 @@ final readonly class MetaService
     private function extractThemeVariables(string $themeCss, string $selector): array
     {
         $pattern = sprintf('/%s\s*\{(?P<body>.*?)^\}/ms', preg_quote($selector, delimiter: '/'));
+        $matches = [];
         if (preg_match($pattern, $themeCss, $matches) !== 1) {
             return [];
         }
 
+        $variableMatches = [];
         preg_match_all(
             '/(?P<name>--[A-Za-z0-9\-]+)\s*:\s*(?P<value>[^;]+);/',
-            $matches['body'],
+            (string) $matches['body'],
             $variableMatches,
             PREG_SET_ORDER,
         );

@@ -71,7 +71,6 @@ class Encryption
             return $self;
         }
 
-        /* @mago-expect analysis:unknown-class-instantiation - the encryption class is resolved from the configured type */
         return new $encClass($configuration);
     }
 

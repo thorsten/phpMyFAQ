@@ -59,7 +59,6 @@ class SearchFactory
             throw new \RuntimeException('Unknown search backend: ' . $searchClass);
         }
 
-        /* @mago-expect analysis:unknown-class-instantiation - the backend class is resolved from the configured type */
         return new $searchClass($configuration);
     }
 

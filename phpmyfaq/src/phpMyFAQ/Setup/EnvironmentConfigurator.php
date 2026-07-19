@@ -51,6 +51,7 @@ readonly class EnvironmentConfigurator
     {
         $content = $this->readHtaccess();
 
+        $matches = [];
         if (preg_match('/^\s*RewriteBase\s+(\S+)/mi', $content, $matches) !== 1) {
             throw new Exception('RewriteBase directive not found in .htaccess file');
         }

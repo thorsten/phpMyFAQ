@@ -462,6 +462,7 @@ class Wrapper
         }
 
         if (str_starts_with($file, 'data:')) {
+            $matches = [];
             if (preg_match('#^data:[^;]+;base64,(.+)$#', $file, $matches)) {
                 $decoded = base64_decode($matches[1], strict: true);
                 if ($decoded !== false && $this->checkBase64Image($decoded)) {

@@ -319,6 +319,7 @@ class Translation
 
         foreach ($languageFiles as $languageFile) {
             // Extract language code from the filename: language_en.php -> en
+            $matches = [];
             if (!preg_match('/language_([a-z]{2,3}(_[a-z]{2})?)\.php$/i', basename($languageFile), $matches)) {
                 continue;
             }

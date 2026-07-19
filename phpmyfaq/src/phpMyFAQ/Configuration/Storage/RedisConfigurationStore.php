@@ -242,6 +242,7 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
 
             $database = 0;
             if (array_key_exists('query', $parsedUrl)) {
+                $queryParams = [];
                 parse_str($parsedUrl['query'], $queryParams);
                 $database = (int) ($queryParams['database'] ?? $queryParams['db'] ?? 0);
             }

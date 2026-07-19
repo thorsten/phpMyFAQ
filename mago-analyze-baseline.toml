@@ -103,12 +103,6 @@ message = "Redundant condition: variable `$row` (type `stdClass`) is already kno
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/TranslationStatistics.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$matches`."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Api/Filtering/FilterRequest.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -128,14 +122,8 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Api/MetaService.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$matches`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Api/MetaService.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$variableMatches`."
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
@@ -194,12 +182,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth.php"
-code = "unfulfilled-expect"
-message = "This pragma was not used and may be removed."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth.php"
 code = "unsafe-instantiation"
 message = 'Unsafe `new $class_name`: constructor of `phpMyFAQ\Auth` is not final and its signature might change in child classes, potentially leading to runtime errors.'
 count = 1
@@ -209,12 +191,6 @@ file = "phpmyfaq/src/phpMyFAQ/Auth/ApiKeyAuthenticator.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/ApiKeyAuthenticator.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$matches`."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthChain.php"
@@ -256,12 +232,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthLdap.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthLdap.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$matches`."
 count = 1
 
 [[issues]]
@@ -463,12 +433,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Language/CategoryLanguageService.php"
-code = "unfulfilled-expect"
-message = "This pragma was not used and may be removed."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/BreadcrumbsHtmlRenderer.php"
 code = "redundant-null-coalesce"
 message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
@@ -634,12 +598,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
 code = "redundant-type-comparison"
 message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `has-property<'config_name'>`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$queryParams`."
 count = 1
 
 [[issues]]
@@ -884,12 +842,6 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TranslationController.php"
-code = "match-arm-always-true"
-message = "This match arm is always true, making subsequent arms unreachable."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TranslationController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
@@ -899,12 +851,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TranslationControlle
 code = "mixed-assignment"
 message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TranslationController.php"
-code = "unreachable-match-default-arm"
-message = "This default arm is unreachable."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UpdateController.php"
@@ -1334,12 +1280,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database.php"
-code = "unfulfilled-expect"
-message = "This pragma was not used and may be removed."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database.php"
 code = "unsafe-instantiation"
 message = 'Potentially unsafe instantiation: `class-string<phpMyFAQ\Database\DatabaseDriver>` may contain the interface `phpMyFAQ\Database\DatabaseDriver` itself, which cannot be instantiated.'
 count = 1
@@ -1396,12 +1336,6 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "redundant-null-coalesce"
 message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Encryption.php"
-code = "unfulfilled-expect"
-message = "This pragma was not used and may be removed."
 count = 1
 
 [[issues]]
@@ -1489,18 +1423,6 @@ message = "Redundant `||` operation: left operand is evaluated and right operand
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$matches`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq.php"
-code = "unfulfilled-expect"
-message = "This pragma was not used and may be removed."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqCreationService.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
@@ -1577,12 +1499,6 @@ file = "phpmyfaq/src/phpMyFAQ/Helper/StatisticsHelper.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
-code = "possibly-undefined-variable"
-message = "Variable `$matches` might not have been defined on all execution paths leading to this point."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
@@ -1732,24 +1648,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Mail/Builtin.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail/Provider/MailgunProvider.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$matches`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail/Provider/SendGridProvider.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$matches`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail/Provider/SesProvider.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$matches`."
 count = 1
 
 [[issues]]
@@ -1915,12 +1813,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Routing/AttributeRouteLoader.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$matches`."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Routing/RouteCacheManager.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -2048,12 +1940,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchFactory.php"
-code = "unfulfilled-expect"
-message = "This pragma was not used and may be removed."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchFactory.php"
 code = "unsafe-instantiation"
 message = 'Unsafe `new $class_name`: constructor of `phpMyFAQ\Search\SearchDatabase` is not final and its signature might change in child classes, potentially leading to runtime errors.'
 count = 1
@@ -2173,12 +2059,6 @@ message = "Redundant `||` operation: left operand is evaluated and right operand
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/EnvironmentConfigurator.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$matches`."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Installation/SchemaInstaller.php"
 code = "redundant-null-coalesce"
 message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
@@ -2275,12 +2155,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Operations/SqlOperation.php"
-code = "reference-to-undefined-variable"
-message = "Reference created from a previously undefined variable `$matches`."
-count = 7
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Versions/Migration400Alpha.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
@@ -2366,12 +2240,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "possibly-undefined-variable"
-message = "Variable `$query` might not have been defined on all execution paths leading to this point."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
@@ -2387,12 +2255,6 @@ file = "phpmyfaq/src/phpMyFAQ/Translation.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation.php"
-code = "possibly-undefined-variable"
-message = "Variable `$matches` might not have been defined on all execution paths leading to this point."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Translation.php"

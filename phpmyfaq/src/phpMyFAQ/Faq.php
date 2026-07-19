@@ -924,7 +924,6 @@ class Faq
 
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = $queryHelper->getQuery($queryType, $categoryId, $downwards, $lang, $date);
-        /* @mago-expect analysis:mixed-assignment - DB layer query results are untyped by design */
         $result = $this->configuration->getDb()->query($query);
 
         if ($this->configuration->getDb()->numRows($result) > 0) {

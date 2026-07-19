@@ -166,6 +166,7 @@ class Tags
         foreach ($tags as $tag) {
             $tag = trim($tag);
             if (Strings::strlen($tag) > 0 && !in_array($tag, $registeredTags, strict: true)) {
+                $query = '';
                 $existingTagId = array_search(
                     Strings::strtolower($tag),
                     array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags),
@@ -205,7 +206,10 @@ class Tags
                     );
                 }
 
-                $this->configuration->getDb()->query((string) $query);
+                if ($query !== '') {
+                    $this->configuration->getDb()->query($query);
+                }
+
                 $registeredTags[] = $tag;
             }
         }

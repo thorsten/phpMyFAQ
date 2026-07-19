@@ -53,7 +53,6 @@ class Database
         }
 
         if (class_exists($class) && is_subclass_of($class, DatabaseDriver::class)) {
-            /* @mago-expect analysis:unknown-class-instantiation - the driver class is resolved from the configured type */
             $databaseDriver = new $class();
             self::$databaseDriver = $databaseDriver;
             return $databaseDriver;

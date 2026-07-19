@@ -164,6 +164,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     private function extractGroupNameFromDn(string $dn): string
     {
         // Extract CN from DN, e.g., "CN=Domain Users,CN=Users,DC=example,DC=com" -> "Domain Users"
+        $matches = [];
         if (preg_match('/CN=([^,]+)/i', $dn, $matches)) {
             return $matches[1];
         }

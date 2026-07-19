@@ -43,6 +43,7 @@ readonly class SqlOperation implements OperationInterface
 
         // Generate description from query
         $query = trim($this->query);
+        $matches = [];
         if (stripos(haystack: $query, needle: 'CREATE TABLE') === 0) {
             preg_match('/CREATE TABLE\s+(?:IF NOT EXISTS\s+)?(\S+)/i', $query, $matches);
             return sprintf('Create table %s', $matches[1] ?? 'unknown');

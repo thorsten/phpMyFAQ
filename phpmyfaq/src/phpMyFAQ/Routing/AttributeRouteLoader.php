@@ -127,6 +127,7 @@ class AttributeRouteLoader
 
         // Extract namespace
         $namespace = null;
+        $matches = [];
         if (preg_match('/namespace\s+([^;]+);/', $content, $matches)) {
             $namespace = $matches[1];
         }

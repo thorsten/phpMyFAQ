@@ -50,6 +50,7 @@ final class ApiKeyAuthenticator
         $this->authenticatedApiKeyStorage = null;
 
         $header = trim((string) $request->headers->get('Authorization', ''));
+        $matches = [];
         if (!preg_match('/^Bearer\s+(pmf_[A-Za-z0-9]+)$/', $header, $matches)) {
             return false;
         }
