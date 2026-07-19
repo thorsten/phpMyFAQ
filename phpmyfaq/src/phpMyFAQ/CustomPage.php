@@ -328,23 +328,26 @@ readonly class CustomPage
      */
     private function mapRowToEntity(stdClass $row): CustomPageEntity
     {
+        $seoTitle = $row->seo_title ?? null;
+        $seoDescription = $row->seo_description ?? null;
+
         $entity = new CustomPageEntity();
         $entity
             ->setId((int) $row->id)
-            ->setLanguage($row->lang)
-            ->setPageTitle($row->page_title)
-            ->setSlug($row->slug)
-            ->setContent($row->content)
-            ->setAuthorName($row->author_name)
-            ->setAuthorEmail($row->author_email)
+            ->setLanguage((string) $row->lang)
+            ->setPageTitle((string) $row->page_title)
+            ->setSlug((string) $row->slug)
+            ->setContent((string) $row->content)
+            ->setAuthorName((string) $row->author_name)
+            ->setAuthorEmail((string) $row->author_email)
             ->setActive($row->active === 'y')
-            ->setSeoTitle($row->seo_title ?? null)
-            ->setSeoDescription($row->seo_description ?? null)
-            ->setSeoRobots($row->seo_robots ?? 'index,follow')
-            ->setCreated(new DateTime($row->created));
+            ->setSeoTitle($seoTitle === null ? null : (string) $seoTitle)
+            ->setSeoDescription($seoDescription === null ? null : (string) $seoDescription)
+            ->setSeoRobots((string) ($row->seo_robots ?? 'index,follow'))
+            ->setCreated(new DateTime((string) $row->created));
 
         if (property_exists($row, 'updated') && $row->updated !== null) {
-            $entity->setUpdated(new DateTime($row->updated));
+            $entity->setUpdated(new DateTime((string) $row->updated));
         }
 
         return $entity;

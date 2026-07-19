@@ -67,6 +67,9 @@ final class FaqDisplayService
 
     private MarkdownConverter $markdownConverter;
 
+    /**
+     * @param int[] $currentGroups
+     */
     public function __construct(
         private readonly Configuration $configuration,
         private readonly CurrentUser $currentUser,
@@ -118,9 +121,9 @@ final class FaqDisplayService
         $question = $this->faq->getQuestion((int) $this->faq->faqRecord['id']);
 
         // Convert Markdown if enabled
-        $answer = $this->faq->faqRecord['content'];
+        $answer = (string) ($this->faq->faqRecord['content'] ?? '');
         if ((bool) $this->configuration->get('main.enableMarkdownEditor')) {
-            $answer = $this->markdownConverter->convert($this->faq->faqRecord['content'])->getContent();
+            $answer = $this->markdownConverter->convert($answer)->getContent();
         }
 
         // Cleanup and rewrite
@@ -131,7 +134,7 @@ final class FaqDisplayService
 
         // Apply highlighting if needed
         if ($this->shouldApplyHighlighting($highlight)) {
-            $processedHighlight = $this->processHighlight($highlight);
+            $processedHighlight = $this->processHighlight((string) $highlight);
             $searchItems = explode(' ', $processedHighlight);
 
             foreach ($searchItems as $searchItem) {
@@ -154,7 +157,7 @@ final class FaqDisplayService
         $question = $this->faq->getQuestion((int) $this->faq->faqRecord['id']);
 
         if ($this->shouldApplyHighlighting($highlight)) {
-            $processedHighlight = $this->processHighlight($highlight);
+            $processedHighlight = $this->processHighlight((string) $highlight);
             $searchItems = explode(' ', $processedHighlight);
 
             foreach ($searchItems as $searchItem) {
@@ -172,7 +175,7 @@ final class FaqDisplayService
     /**
      * Get attachment list for FAQ
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<int, array<string, string>>
      */
     public function getAttachmentList(int $faqId): array
     {
@@ -217,8 +220,8 @@ final class FaqDisplayService
 
         try {
             $searchResultSet->reviewResultSet($this->relation->getAllRelatedByQuestion(
-                $this->faq->faqRecord['title'],
-                $this->faq->faqRecord['keywords'],
+                (string) ($this->faq->faqRecord['title'] ?? ''),
+                (string) ($this->faq->faqRecord['keywords'] ?? ''),
             ));
         } catch (Exception) {
             return '';
@@ -233,7 +236,7 @@ final class FaqDisplayService
      */
     public function isExpired(): bool
     {
-        return date(format: 'YmdHis') > $this->faq->faqRecord['dateEnd'];
+        return date(format: 'YmdHis') > (string) ($this->faq->faqRecord['dateEnd'] ?? '');
     }
 
     /**
@@ -259,7 +262,7 @@ final class FaqDisplayService
     /**
      * Get available languages for FAQ
      *
-     * @return array<int, string>
+     * @return string[]
      */
     public function getAvailableLanguages(int $faqId): array
     {

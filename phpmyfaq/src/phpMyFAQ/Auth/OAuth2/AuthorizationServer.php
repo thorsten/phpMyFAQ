@@ -40,9 +40,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizationServer
 {
-    /** @var callable(Request): array{body: array<string, mixed>, status: int, headers?: array<string, string>}|null */
+    /** @var callable(Request): array{body: array<array-key, mixed>|string, status: int, headers?: array<string, string>}|null */
     private $tokenIssuer = null;
-    /** @var callable(Request, string, bool): array{body: mixed, status: int, headers?: array<string, string>}|null */
+    /** @var callable(Request, string, bool): array{body: array<array-key, mixed>|string, status: int, headers?: array<string, string>}|null */
     private $authorizationCompleter = null;
 
     public function __construct(
@@ -53,7 +53,7 @@ final class AuthorizationServer
     /**
      * Allows integration code to provide a token issuer implementation.
      *
-     * @param callable(Request): array{body: array<string, mixed>, status: int, headers?: array<string, string>} $issuer
+     * @param callable(Request): array{body: array<array-key, mixed>|string, status: int, headers?: array<string, string>} $issuer
      */
     public function setTokenIssuer(callable $issuer): void
     {
@@ -63,7 +63,7 @@ final class AuthorizationServer
     /**
      * Allows integration code to provide an authorization completer implementation.
      *
-     * @param callable(Request, string, bool): array{body: mixed, status: int, headers?: array<string, string>} $completer
+     * @param callable(Request, string, bool): array{body: array<array-key, mixed>|string, status: int, headers?: array<string, string>} $completer
      */
     public function setAuthorizationCompleter(callable $completer): void
     {
@@ -73,7 +73,7 @@ final class AuthorizationServer
     /**
      * Issues an OAuth2 access token response payload.
      *
-     * @return array{body: array<string, mixed>, status: int, headers?: array<string, string>}
+     * @return array{body: array<array-key, mixed>|string, status: int, headers?: array<string, string>}
      */
     public function issueToken(Request $request): array
     {
@@ -106,7 +106,7 @@ final class AuthorizationServer
 
             $headers = [];
             foreach ($leagueResponse->getHeaders() as $headerName => $values) {
-                $headers[$headerName] = implode(', ', $values);
+                $headers[(string) $headerName] = implode(', ', $values);
             }
 
             return [
@@ -170,6 +170,11 @@ final class AuthorizationServer
         return $value === true || $value === 'true' || $value === 1 || $value === '1';
     }
 
+    /**
+     * Completes an authorization request and returns the response payload.
+     *
+     * @return array{body: array<array-key, mixed>|string, status: int, headers?: array<string, string>}
+     */
     public function completeAuthorization(Request $request, string $userId, bool $approved): array
     {
         if (is_callable($this->authorizationCompleter)) {
@@ -180,6 +185,13 @@ final class AuthorizationServer
             $psrRequest = $this->toPsr7Request($request);
             $server = $this->buildLeagueAuthorizationServer();
             $authorizationRequest = $server->validateAuthorizationRequest($psrRequest);
+            if ($userId === '') {
+                throw new RuntimeException(
+                    'OAuth2 authorization requires an authenticated user id.',
+                    Response::HTTP_INTERNAL_SERVER_ERROR,
+                );
+            }
+
             $user = new UserEntity();
             $user->setIdentifier($userId);
             $authorizationRequest->setUser($user);
@@ -189,7 +201,7 @@ final class AuthorizationServer
 
             $headers = [];
             foreach ($response->getHeaders() as $headerName => $values) {
-                $headers[$headerName] = implode(', ', $values);
+                $headers[(string) $headerName] = implode(', ', $values);
             }
 
             $body = json_decode((string) $response->getBody(), associative: true);

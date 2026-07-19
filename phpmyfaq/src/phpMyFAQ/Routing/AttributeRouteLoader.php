@@ -27,7 +27,6 @@ use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
-use RegexIterator;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Route as SymfonyRoute;
 use Symfony\Component\Routing\RouteCollection;
@@ -59,7 +58,7 @@ class AttributeRouteLoader
 
         foreach ($files as $file) {
             $class = $this->getClassFromFile($file);
-            if (!$class) {
+            if (!$class || !class_exists($class)) {
                 continue;
             }
 
@@ -102,10 +101,12 @@ class AttributeRouteLoader
             RecursiveIteratorIterator::SELF_FIRST,
         );
 
-        $regexIterator = new RegexIterator($iterator, '/^.+\.php$/i', RegexIterator::GET_MATCH);
+        foreach ($iterator as $file) {
+            if (!$file instanceof \SplFileInfo || strtolower($file->getExtension()) !== 'php' || !$file->isFile()) {
+                continue;
+            }
 
-        foreach ($regexIterator as $file) {
-            $files[] = $file[0];
+            $files[] = $file->getPathname();
         }
 
         return $files;
@@ -162,6 +163,10 @@ class AttributeRouteLoader
 
             // Extract route properties
             $path = $routeAttribute->path;
+            if (!is_string($path)) {
+                return null;
+            }
+
             $name = $routeAttribute->name ?? '';
             $methods = $routeAttribute->methods;
             $defaults = $routeAttribute->defaults;
@@ -204,9 +209,9 @@ class AttributeRouteLoader
      */
     private function matchesContext(SymfonyRoute $route, string $context): bool
     {
-        $routeName = $route->getDefault('_route');
+        $routeName = (string) ($route->getDefault('_route') ?? '');
 
-        if (!$routeName) {
+        if ($routeName === '') {
             return true; // Allow routes without names
         }
 

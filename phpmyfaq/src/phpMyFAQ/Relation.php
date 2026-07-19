@@ -42,6 +42,7 @@ readonly class Relation
      *
      * @param string $question FAQ title
      * @param string $keywords FAQ keywords
+     * @return \stdClass[]
      */
     public function getAllRelatedByQuestion(string $question, string $keywords): array
     {
@@ -72,6 +73,6 @@ readonly class Relation
 
         $result = $searchDatabase->search($terms);
 
-        return $this->configuration->getDb()->fetchAll($result);
+        return $this->configuration->getDb()->fetchAll($result) ?? [];
     }
 }

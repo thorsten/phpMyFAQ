@@ -31,6 +31,7 @@ class AttachmentHelper
      * Returns a list of attached files.
      *
      * @param AbstractAttachment[] $attachmentList
+     * @return array<int, array<string, string>>
      */
     public function getAttachmentList(array $attachmentList): array
     {
@@ -42,7 +43,7 @@ class AttachmentHelper
             'icon' => $this->mapMimeTypeToIcon($attachment->getMimeType()),
             'url' => $attachment->buildUrl(),
             'filename' => $attachment->getFilename(),
-        ], $attachmentList);
+        ], array_values($attachmentList));
     }
 
     private function mapMimeTypeToIcon(string $mimeType): string

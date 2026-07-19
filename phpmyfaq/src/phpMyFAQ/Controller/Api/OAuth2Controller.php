@@ -46,7 +46,7 @@ final class OAuth2Controller extends AbstractApiController
             $result = $authorizationServer->issueToken($request);
             return $this->json($result['body'], $result['status'], $result['headers'] ?? []);
         } catch (\RuntimeException $exception) {
-            $statusCode = $exception->getCode();
+            $statusCode = (int) $exception->getCode();
             if ($statusCode < 400 || $statusCode > 599) {
                 $statusCode = Response::HTTP_SERVICE_UNAVAILABLE;
             }
@@ -110,7 +110,7 @@ final class OAuth2Controller extends AbstractApiController
                 $isApproved,
             );
         } catch (\RuntimeException $exception) {
-            $statusCode = $exception->getCode();
+            $statusCode = (int) $exception->getCode();
             if ($statusCode < 400 || $statusCode > 599) {
                 $statusCode = Response::HTTP_SERVICE_UNAVAILABLE;
             }
@@ -140,18 +140,18 @@ final class OAuth2Controller extends AbstractApiController
         }
 
         if (is_string($locationHeader)) {
-            return new RedirectResponse($locationHeader, $result['status'], $result['headers']);
+            return new RedirectResponse($locationHeader, $result['status'], $result['headers'] ?? []);
         }
 
         $contentType = $result['headers']['Content-Type'] ?? '';
         if (str_contains($contentType, 'application/json')) {
             $data = json_decode((string) $result['body'], associative: true);
             if (is_array($data)) {
-                return $this->json($data, $result['status'], $result['headers']);
+                return $this->json($data, $result['status'], $result['headers'] ?? []);
             }
         }
 
-        return new Response((string) $result['body'], $result['status'], $result['headers']);
+        return new Response((string) $result['body'], $result['status'], $result['headers'] ?? []);
     }
 
     private function getAuthorizationServer(): OAuth2AuthorizationServer

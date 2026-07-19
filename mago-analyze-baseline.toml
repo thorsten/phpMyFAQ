@@ -1106,21 +1106,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/AuthorizationServer.php"
-code = "less-specific-return-statement"
-message = '''Returned type `array{'body': array<array-key, mixed>|array{'error': mixed, 'error_description': mixed}, 'headers': array<array-key, string>, 'status': int}` is less specific than the declared return type `array{'body': array<string, mixed>, 'headers'?: array<string, string>, 'status': int}` for function `phpMyFAQ\Auth\OAuth2\AuthorizationServer::issueToken`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/AuthorizationServer.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/AuthorizationServer.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `League\OAuth2\Server\Entities\Traits\EntityTrait::setIdentifier`: expected `non-empty-string`, but possibly received `string`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/AccessTokenRepository.php"
@@ -3188,69 +3176,21 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `str_contains`: expected `string`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `Symfony\Component\HttpFoundation\RedirectResponse::__construct`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `Symfony\Component\HttpFoundation\Response::__construct`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Controller\AbstractController::json`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `Symfony\Component\HttpFoundation\RedirectResponse::__construct`: expected `array<array-key, mixed>`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `Symfony\Component\HttpFoundation\Response::__construct`: expected `Symfony\Component\HttpFoundation\ResponseHeaderBag|array<array-key, mixed>`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Controller\AbstractController::json`: expected `array<array-key, string>`, but found `mixed`.'
-count = 1
+code = "array-to-string-conversion"
+message = "Potentially casting `array` to `string`."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
-code = "mixed-assignment"
-message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::json`: expected `int`, but possibly received `int<400, 499>|string`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::json`: expected `int`, but possibly received `int<500, 599>|string`.'
-count = 2
+code = "redundant-logical-operation"
+message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OpenQuestionController.php"
@@ -4112,69 +4052,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `DateTime::__construct`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `DateTime::__construct`: expected `string`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CustomPageEntity::setAuthorEmail`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CustomPageEntity::setAuthorName`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CustomPageEntity::setContent`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CustomPageEntity::setLanguage`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CustomPageEntity::setPageTitle`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CustomPageEntity::setSeoDescription`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CustomPageEntity::setSeoRobots`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CustomPageEntity::setSeoTitle`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\CustomPageEntity::setSlug`: expected `string`, but found `mixed`.'
-count = 1
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
@@ -4658,75 +4538,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Search\SearchResultSet::reviewResultSet`: expected `array<array-key, stdClass>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Tags::setGroups`: expected `array<array-key, int>`, but provided type `array<array-key, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, mixed>` is less specific than the declared return type `array<int, array<string, mixed>>` for function `phpMyFAQ\Faq\FaqDisplayService::getAttachmentList`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array<array-key, string>` is less specific than the declared return type `array<int, string>` for function `phpMyFAQ\Faq\FaqDisplayService::getAvailableLanguages`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `League\CommonMark\MarkdownConverter::convert`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Helper\FaqHelper::cleanUpContent`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Relation::getAllRelatedByQuestion`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Relation::getAllRelatedByQuestion`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "mixed-operand"
-message = "Right operand in `>` comparison has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/FaqDisplayService.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Faq\FaqDisplayService::processHighlight` is possibly `null`, but parameter type `string` does not accept it.'
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
@@ -6392,62 +6206,14 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Relation.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Relation::getAllRelatedByQuestion`: expected `array<array-key, mixed>`, but found `list<stdClass>|null`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Relation.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Relation.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Relation::getAllRelatedByQuestion` is declared to return `array<array-key, mixed>` but possibly returns a nullable value (inferred as `list<stdClass>|null`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Routing/AttributeRouteLoader.php"
-code = "invalid-array-access"
-message = "Cannot access array index on object `RecursiveDirectoryIterator` that does not implement `ArrayAccess`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Routing/AttributeRouteLoader.php"
-code = "invalid-array-access"
-message = "Cannot access array index on object `SplFileInfo` that does not implement `ArrayAccess`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Routing/AttributeRouteLoader.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `str_starts_with`: expected `string`, but found `truthy-mixed`."
-count = 6
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Routing/AttributeRouteLoader.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Routing/AttributeRouteLoader.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #1 of `ReflectionClass::__construct`: expected `('T.reflectionclass extends object)|class-string<'T.reflectionclass extends object>`, but possibly received `truthy-string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Routing/AttributeRouteLoader.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `Symfony\Component\Routing\Route::__construct`: expected `string`, but possibly received `array<string, string>|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Routing/AttributeRouteLoader.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `Symfony\Component\Routing\Route::__construct` is possibly `null`, but parameter type `string` does not accept it.'
 count = 1
 
 [[issues]]
