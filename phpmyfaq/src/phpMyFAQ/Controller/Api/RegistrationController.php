@@ -34,7 +34,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class RegistrationController extends AbstractController
 {
-    /** @var null|callable(Configuration): RegistrationHelper */
+    /** @var null|callable(\phpMyFAQ\Configuration): RegistrationHelper */
     private $registrationHelperFactory = null;
 
     public function __construct()
@@ -46,6 +46,9 @@ final class RegistrationController extends AbstractController
         }
     }
 
+    /**
+     * @param callable(\phpMyFAQ\Configuration): RegistrationHelper $registrationHelperFactory
+     */
     public function setRegistrationHelperFactory(callable $registrationHelperFactory): void
     {
         $this->registrationHelperFactory = $registrationHelperFactory;
@@ -121,11 +124,17 @@ final class RegistrationController extends AbstractController
             : new RegistrationHelper($this->configuration);
 
         $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        if (!$data instanceof \stdClass) {
+            return $this->json([
+                'registered' => false,
+                'error' => 'The request body must be a JSON object.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
-        $userName = trim((string) Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS));
-        $fullName = trim((string) Filter::filterVar($data->fullname, FILTER_SANITIZE_SPECIAL_CHARS));
-        $email = trim((string) Filter::filterVar($data->email, FILTER_SANITIZE_EMAIL));
-        $isVisible = Filter::filterVar($data->{'is-visible'}, FILTER_SANITIZE_SPECIAL_CHARS);
+        $userName = trim((string) Filter::filterVar($data->username ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
+        $fullName = trim((string) Filter::filterVar($data->fullname ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
+        $email = trim((string) Filter::filterVar($data->email ?? '', FILTER_SANITIZE_EMAIL));
+        $isVisible = Filter::filterVar($data->{'is-visible'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         $isVisible = $isVisible === 'true';
 
         if (!$registrationHelper->isDomainAllowed($email)) {

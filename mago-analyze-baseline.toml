@@ -2540,50 +2540,14 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
-code = "invalid-return-statement"
-message = '''Invalid return type for function `phpMyFAQ\Controller\Administration\InstanceController::getBaseTemplateVars`: expected `array<string, string>`, but found `array{'ad_instance_add': array<array-key, string>|null|string, 'ad_instance_admin': array<array-key, string>|null|string, 'ad_instance_button': array<array-key, string>|null|string, 'ad_instance_email': array<array-key, string>|null|string, 'ad_instance_error_notwritable': array<array-key, string>|null|string, 'ad_instance_hint': array<array-key, string>|null|string, 'ad_instance_name': array<array-key, string>|null|string, 'ad_instance_password': array<array-key, string>|null|string, 'ad_instance_path': array<array-key, string>|null|string, 'ad_instance_url': array<array-key, string>|null|string, 'ad_menu_instances': array<array-key, string>|null|string, 'allInstances': array<array-key, stdClass>, 'csrfTokenAddInstance': string, 'csrfTokenDeleteInstance': string, 'mainConfig': array<array-key, string>, 'multisiteFolderIsWritable': bool, 'requestHost': string, 'userPermInstanceAdd': bool}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\InstanceEntity::setUrl`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Filesystem\Filesystem::__construct`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Instance\Client::deleteClientFolder`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Instance\Client::moveClientFolder`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
 code = "redundant-logical-operation"
 message = "Redundant `||` operation: left operand is always false and right operand is evaluated."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
-code = "too-many-arguments"
-message = 'Too many arguments provided for method `phpMyFAQ\Instance::getById`.'
 count = 1
 
 [[issues]]
@@ -2836,30 +2800,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/RegistrationController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/RegistrationController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/RegistrationController.php"
-code = "mixed-property-type-coercion"
-message = 'A value with a less specific type `(callable(...mixed=): mixed)` is being assigned to property `$$registrationHelperFactory` ((callable(unknown-ref(phpMyFAQ\Controller\Api\Configuration)): phpMyFAQ\Helper\RegistrationHelper)|null).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/RegistrationController.php"
-code = "non-existent-class-like"
-message = 'Cannot find class, interface, enum, or type alias `phpMyFAQ\Controller\Api\Configuration`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/RegistrationController.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `callable`: expected `unknown-ref(phpMyFAQ\Controller\Api\Configuration)`, but possibly received `phpMyFAQ\Configuration`.'
 count = 1
 
 [[issues]]
@@ -3290,33 +3230,21 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
-code = "invalid-iterator"
-message = "The expression provided to `foreach` is not iterable. It resolved to type `mixed`, which is not iterable."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `str_repeat`: expected `non-negative-int`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
-code = "mixed-operand"
-message = "Right operand in `||` operation has `mixed` type."
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 4
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SearchController.php"
@@ -5744,21 +5672,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Installer.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Instance\Setup::setRootDir`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Installer.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Installer.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/AbstractMigration.php"
@@ -6176,39 +6092,15 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/DeepLTranslationProvider.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array<array-key, mixed>|list<mixed>` is less specific than the declared return type `array<array-key, string>` for function `phpMyFAQ\Translation\Provider\DeepLTranslationProvider::doTranslateBatch` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/DeepLTranslationProvider.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `array_map`: expected `array<('K.array_map() extends array-key), ('V.array_map() extends mixed)>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/DeepLTranslationProvider.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/DeepLTranslationProvider.php"
 code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/DeepLTranslationProvider.php"
-code = "mixed-operand"
-message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/DeepLTranslationProvider.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Translation\Provider\DeepLTranslationProvider::doTranslate`. Saw type `nonnull`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/GoogleTranslationProvider.php"

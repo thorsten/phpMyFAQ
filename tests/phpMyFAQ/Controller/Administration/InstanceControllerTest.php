@@ -107,7 +107,7 @@ final class InstanceControllerTest extends TestCase
         $instance
             ->expects($this->once())
             ->method('getById')
-            ->with(7, 'array')
+            ->with(7)
             ->willReturn((object) [
                 'id' => 7,
                 'url' => 'https://demo.example.com',

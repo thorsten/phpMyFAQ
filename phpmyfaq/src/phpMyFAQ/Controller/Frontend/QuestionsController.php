@@ -80,7 +80,7 @@ final class QuestionsController extends AbstractFrontController
             'isCloseQuestionEnabled' => $this->configuration->get('records.enableCloseQuestion'),
             'userHasPermissionToAnswer' =>
                 $this->currentUser->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_ADD->value)
-                    || $this->configuration->get('records.allowNewFaqsForGuests'),
+                    || (bool) $this->configuration->get('records.allowNewFaqsForGuests'),
             'msgQuestionsWaiting' => Translation::get(key: 'msgQuestionsWaiting'),
             'msgNoQuestionsAvailable' => Translation::get(key: 'msgNoQuestionsAvailable'),
             'msg2answerFAQ' => Translation::get(key: 'msg2answerFAQ'),
@@ -114,10 +114,10 @@ final class QuestionsController extends AbstractFrontController
         $questionData = $questionService->prepareAskQuestionData($categoryId);
 
         // Add Twig filter
-        $this->addFilter(new TwigFilter('repeat', static fn($string, $times): string => str_repeat(
-            (string) $string,
+        $this->addFilter(new TwigFilter('repeat', static fn(
+            $string,
             $times,
-        )));
+        ): string => str_repeat((string) $string, max(0, (int) $times))));
 
         // Prepare template variables
         $templateVars = [
@@ -146,14 +146,15 @@ final class QuestionsController extends AbstractFrontController
         ];
 
         // Collect data for displaying form
-        foreach ($questionData['formData'] as $input) {
-            if ((int) $input->input_active === 0) {
+        $formData = $questionData['formData'] ?? [];
+        foreach (is_array($formData) ? $formData : [] as $input) {
+            if (!$input instanceof \stdClass || (int) $input->input_active === 0) {
                 continue;
             }
 
             $label = sprintf('id%d_label', (int) $input->input_id);
             $required = sprintf('id%d_required', (int) $input->input_id);
-            $templateVars[$label] = $input->input_label;
+            $templateVars[$label] = (string) $input->input_label;
             $templateVars[$required] = (int) $input->input_required !== 0 ? 'required' : '';
         }
 

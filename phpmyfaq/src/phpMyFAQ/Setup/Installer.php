@@ -49,12 +49,14 @@ class Installer extends Setup
      */
     public static function cleanFailedInstallationFiles(): void
     {
-        if (file_exists(PMF_ROOT_DIR . '/content/core/config/database.php')) {
-            unlink(PMF_ROOT_DIR . '/content/core/config/database.php');
+        $databaseFile = (string) PMF_ROOT_DIR . '/content/core/config/database.php';
+        if (file_exists($databaseFile)) {
+            unlink($databaseFile);
         }
 
-        if (file_exists(PMF_ROOT_DIR . '/content/core/config/ldap.php')) {
-            unlink(PMF_ROOT_DIR . '/content/core/config/ldap.php');
+        $ldapFile = (string) PMF_ROOT_DIR . '/content/core/config/ldap.php';
+        if (file_exists($ldapFile)) {
+            unlink($ldapFile);
         }
     }
 
@@ -96,7 +98,7 @@ class Installer extends Setup
     public function checkFilesystemPermissions(): ?string
     {
         $instanceSetup = new Setup();
-        $instanceSetup->setRootDir(PMF_ROOT_DIR);
+        $instanceSetup->setRootDir((string) PMF_ROOT_DIR);
 
         $dirs = [
             '/content/core/config',
@@ -194,7 +196,7 @@ class Installer extends Setup
             $basePath = substr($basePath, offset: 0, length: -strlen('setup'));
         }
 
-        $htaccessPath = PMF_ROOT_DIR . '/.htaccess';
+        $htaccessPath = (string) PMF_ROOT_DIR . '/.htaccess';
 
         $htaccessUpdater = new HtaccessUpdater();
         return $htaccessUpdater->updateRewriteBase($htaccessPath, $basePath);

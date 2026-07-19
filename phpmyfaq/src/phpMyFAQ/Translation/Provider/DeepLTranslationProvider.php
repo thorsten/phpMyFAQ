@@ -59,9 +59,9 @@ class DeepLTranslationProvider extends AbstractTranslationProvider
      */
     protected function doTranslate(string $text, string $sourceLang, string $targetLang): string
     {
-        $apiKey = $this->configuration->get('translation.deeplApiKey');
+        $apiKey = (string) ($this->configuration->get('translation.deeplApiKey') ?? '');
 
-        if ((string) $apiKey === '') {
+        if ($apiKey === '') {
             throw new ApiException('DeepL API key not configured');
         }
 
@@ -79,7 +79,10 @@ class DeepLTranslationProvider extends AbstractTranslationProvider
             ]);
 
             $data = $response->toArray();
-            return $data['translations'][0]['text'] ?? '';
+            $translations = $data['translations'] ?? [];
+            $firstTranslation = is_array($translations) ? $translations[0] ?? [] : [];
+
+            return is_array($firstTranslation) ? (string) ($firstTranslation['text'] ?? '') : '';
         } catch (DecodingExceptionInterface|Exception|TransportExceptionInterface $e) {
             throw new ApiException('DeepL API error: ' . $e->getMessage());
         }
@@ -90,9 +93,9 @@ class DeepLTranslationProvider extends AbstractTranslationProvider
      */
     protected function doTranslateBatch(array $texts, string $sourceLang, string $targetLang): array
     {
-        $apiKey = $this->configuration->get('translation.deeplApiKey');
+        $apiKey = (string) ($this->configuration->get('translation.deeplApiKey') ?? '');
 
-        if ((string) $apiKey === '') {
+        if ($apiKey === '') {
             throw new ApiException('DeepL API key not configured');
         }
 
@@ -110,7 +113,14 @@ class DeepLTranslationProvider extends AbstractTranslationProvider
             ]);
 
             $data = $response->toArray();
-            return array_map(static fn($t) => $t['text'], $data['translations']);
+            $translations = $data['translations'] ?? [];
+
+            return array_map(
+                static fn(mixed $translation): string => is_array($translation)
+                    ? (string) ($translation['text'] ?? '')
+                    : '',
+                is_array($translations) ? array_values($translations) : [],
+            );
         } catch (DecodingExceptionInterface|Exception|TransportExceptionInterface $e) {
             throw new ApiException('DeepL API error: ' . $e->getMessage());
         }

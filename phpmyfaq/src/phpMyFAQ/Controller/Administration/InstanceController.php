@@ -72,7 +72,7 @@ final class InstanceController extends AbstractAdministrationController
 
         $instanceId = (int) Filter::filterVar($request->attributes->get('id'), FILTER_VALIDATE_INT);
 
-        $instanceData = $this->instance->getById($instanceId, 'array');
+        $instanceData = $this->instance->getById($instanceId);
 
         return $this->render('@admin/configuration/instances.edit.twig', [
             ...$this->getHeader($request),
@@ -107,7 +107,7 @@ final class InstanceController extends AbstractAdministrationController
 
         $instanceId = (int) Filter::filterVar($request->attributes->get('id'), FILTER_VALIDATE_INT);
 
-        $fileSystem = new Filesystem(PMF_ROOT_DIR);
+        $fileSystem = new Filesystem((string) PMF_ROOT_DIR);
         $currentClient = clone $this->instanceClient;
         $currentClient->setFileSystem($fileSystem);
 
@@ -118,7 +118,8 @@ final class InstanceController extends AbstractAdministrationController
 
         // Collect updated data for database
         $instanceEntity = new InstanceEntity();
-        $instanceEntity->setUrl(Filter::filterVar($request->attributes->get('url'), FILTER_VALIDATE_URL));
+        $instanceUrl = Filter::filterVar($request->attributes->get('url'), FILTER_VALIDATE_URL);
+        $instanceEntity->setUrl(is_string($instanceUrl) ? $instanceUrl : '');
         $instanceEntity->setInstance(Filter::filterVar(
             $request->attributes->get('instance'),
             FILTER_SANITIZE_SPECIAL_CHARS,
@@ -160,8 +161,8 @@ final class InstanceController extends AbstractAdministrationController
 
         if ($updatedClient->update($instanceId, $instanceEntity)) {
             if ($moveInstance) {
-                $updatedClient->moveClientFolder($originalData->url, $instanceEntity->getUrl());
-                $updatedClient->deleteClientFolder($originalData->url);
+                $updatedClient->moveClientFolder((string) $originalData->url, $instanceEntity->getUrl());
+                $updatedClient->deleteClientFolder((string) $originalData->url);
             }
 
             $result = ['updateSuccess' => Translation::get(key: 'ad_config_saved')];
@@ -185,7 +186,7 @@ final class InstanceController extends AbstractAdministrationController
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, mixed>
      * @throws \Exception
      * @throws LoaderError
      * @throws Exception
@@ -199,12 +200,12 @@ final class InstanceController extends AbstractAdministrationController
 
         $mainConfig = [];
         foreach ($this->instance->getAll() as $site) {
-            $mainConfig[$site->id] = $this->instance->getInstanceConfig((int) $site->id)['isMaster'];
+            $mainConfig[(int) $site->id] = $this->instance->getInstanceConfig((int) $site->id)['isMaster'] ?? '';
         }
 
         return [
             'userPermInstanceAdd' => $userPermInstanceAdd,
-            'multisiteFolderIsWritable' => is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite'),
+            'multisiteFolderIsWritable' => is_writable((string) PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite'),
             'ad_instance_add' => Translation::get(key: 'ad_instance_add'),
             'allInstances' => $this->instance->getAll(),
             'csrfTokenDeleteInstance' => Token::getInstance($this->session)->getTokenString('delete-instance'),
