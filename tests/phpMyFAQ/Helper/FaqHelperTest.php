@@ -103,6 +103,24 @@ class FaqHelperTest extends TestCase
         $this->assertStringNotContainsString('<script', $actualOutput);
     }
 
+    public function testCleanUpContentWithProcessingInstructionDoesNotThrow(): void
+    {
+        $content = '<p>Before</p><?xml version="1.0"?><p>After <? echo "foo"; ?></p>';
+
+        // Mimics the production error handler, which converts warnings into exceptions
+        set_error_handler(static function (int $level, string $message): bool {
+            throw new \ErrorException($message, 0, $level);
+        }, E_WARNING);
+        try {
+            $actualOutput = $this->faqHelper->cleanUpContent($content);
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertStringContainsString('<p>Before</p>', $actualOutput);
+        $this->assertStringContainsString('After', $actualOutput);
+    }
+
     public function testCleanUpContentWithYoutubeContent(): void
     {
         $content = <<<'HTML'

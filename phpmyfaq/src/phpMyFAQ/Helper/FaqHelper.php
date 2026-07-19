@@ -168,15 +168,13 @@ class FaqHelper extends AbstractHelper
             ->allowMediaHosts($allowedHosts)
             ->allowLinkSchemes(['https', 'http', 'mailto', 'data']));
 
-        // Suppress tokenizer warnings from Dom\HTMLDocument::createFromString() for malformed legacy HTML.
+        // Suppress parse warnings (tokenizer and tree errors) from Dom\HTMLDocument::createFromString()
+        // for malformed legacy HTML — the parser recovers from these and still returns a document.
         // phpMyFAQ converts PHP warnings into exceptions globally, so we need a local handler here.
         $previousErrorHandler = set_error_handler(static function (int $level, string $message) use (
             &$previousErrorHandler,
         ): bool {
-            if (
-                $level === E_WARNING
-                && str_starts_with($message, 'Dom\\HTMLDocument::createFromString(): tree error ')
-            ) {
+            if ($level === E_WARNING && str_starts_with($message, 'Dom\\HTMLDocument::createFromString(): ')) {
                 return true;
             }
 
