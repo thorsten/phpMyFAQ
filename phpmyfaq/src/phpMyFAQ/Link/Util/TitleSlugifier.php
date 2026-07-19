@@ -104,19 +104,29 @@ final class TitleSlugifier
         // replace apostrophe and slash with underscore
         $itemTitle = str_replace(["'", '/', '&#39;', '&#039;'], replace: '_', subject: $itemTitle);
         // collapse multiple dashes to a space (will become '-')
-        $itemTitle = Strings::preg_replace(self::REGEX_MULTI_DASH, ' ', $itemTitle);
+        $itemTitle = self::replacePattern(self::REGEX_MULTI_DASH, ' ', $itemTitle);
         // replace single inner dashes with underscores (legacy: HD-Ready => hd_ready)
-        $itemTitle = Strings::preg_replace(self::REGEX_INNER_DASH, '_', $itemTitle);
+        $itemTitle = self::replacePattern(self::REGEX_INNER_DASH, '_', $itemTitle);
         // whitespace to '-'
-        $itemTitle = Strings::preg_replace(self::REGEX_WHITESPACE, '-', $itemTitle);
+        $itemTitle = self::replacePattern(self::REGEX_WHITESPACE, '-', $itemTitle);
         // strip punctuation
         $itemTitle = str_replace(self::PUNCTUATION, replace: '', subject: $itemTitle);
         // map umlauts and accents
         $itemTitle = str_replace(self::UMLAUTS, self::UMLAUTS_REPLACEMENTS, $itemTitle);
         // reduce multiple separators
-        $itemTitle = Strings::preg_replace('/_{2,}/m', '_', $itemTitle);
-        $itemTitle = Strings::preg_replace(self::REGEX_MULTI_DASH, '-', $itemTitle);
+        $itemTitle = self::replacePattern('/_{2,}/m', '_', $itemTitle);
+        $itemTitle = self::replacePattern(self::REGEX_MULTI_DASH, '-', $itemTitle);
         // trim edge separators
         return trim($itemTitle, characters: '-_');
+    }
+
+    /**
+     * Applies a regex replacement and keeps the input when the engine fails.
+     */
+    private static function replacePattern(string $pattern, string $replacement, string $subject): string
+    {
+        $replaced = Strings::preg_replace($pattern, $replacement, $subject);
+
+        return is_string($replaced) ? $replaced : $subject;
     }
 }

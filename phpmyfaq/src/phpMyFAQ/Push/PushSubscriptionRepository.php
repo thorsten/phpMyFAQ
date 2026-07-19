@@ -245,20 +245,22 @@ readonly class PushSubscriptionRepository
         $entity = new PushSubscriptionEntity();
 
         try {
-            $createdAt = new DateTimeImmutable($row->created_at);
+            $createdAt = new DateTimeImmutable((string) $row->created_at);
         } catch (\Exception) {
             // Fallback to current time if created_at is malformed
             $createdAt = new DateTimeImmutable();
         }
 
+        $contentEncoding = $row->content_encoding ?? null;
+
         $entity
             ->setId((int) $row->id)
             ->setUserId((int) $row->user_id)
-            ->setEndpoint($row->endpoint)
-            ->setEndpointHash($row->endpoint_hash)
-            ->setPublicKey($row->public_key)
-            ->setAuthToken($row->auth_token)
-            ->setContentEncoding($row->content_encoding)
+            ->setEndpoint((string) $row->endpoint)
+            ->setEndpointHash((string) $row->endpoint_hash)
+            ->setPublicKey((string) $row->public_key)
+            ->setAuthToken((string) $row->auth_token)
+            ->setContentEncoding($contentEncoding === null ? null : (string) $contentEncoding)
             ->setCreatedAt($createdAt);
 
         return $entity;

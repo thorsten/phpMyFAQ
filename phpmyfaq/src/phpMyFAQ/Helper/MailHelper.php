@@ -52,17 +52,22 @@ readonly class MailHelper
      */
     public function sendMailToNewUser(User $user, #[SensitiveParameter] string $password): bool
     {
+        $displayName = $user->getUserData('display_name');
+        $displayName = is_string($displayName) ? $displayName : '';
+        $email = $user->getUserData('email');
+        $email = is_string($email) ? $email : '';
+
         $text = sprintf(
             '<p>You have been registered as a new user:</p><p>Name: %s<br>Login name: %s<br>Password: %s</p>'
             . '<p><a href="%s">Check it out here</a></p>',
-            $user->getUserData('display_name'),
+            $displayName,
             $user->getLogin(),
             $password,
             $this->configuration->getDefaultUrl(),
         );
 
-        $this->mail->addTo($user->getUserData('email'), $user->getUserData('display_name'));
-        $this->mail->subject = Utils::resolveMarkers(Translation::get(key: 'emailRegSubject'), $this->configuration);
+        $this->mail->addTo($email, $displayName);
+        $this->mail->subject = Utils::resolveMarkers(Translation::getString('emailRegSubject'), $this->configuration);
         $this->mail->message = $text;
 
         return (bool) $this->mail->send();

@@ -4063,42 +4063,6 @@ message = 'Invalid return type for function `phpMyFAQ\Helper\LanguageHelper::get
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/MailHelper.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Mail::addTo`: expected `string`, but possibly received `array<array-key, string>|int|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/MailHelper.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Utils::resolveMarkers`: expected `string`, but possibly received `array<array-key, string>|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/MailHelper.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #2 of `phpMyFAQ\Mail::addTo`: expected `null|string`, but possibly received `array<array-key, string>|int|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/MailHelper.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|int|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/MailHelper.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Mail::addTo` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/MailHelper.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Utils::resolveMarkers` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Helper/QuestionHelper.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -4531,30 +4495,6 @@ message = "Redundant `&&` operation: left operand is evaluated and right operand
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Link/Util/TitleSlugifier.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #1 of `trim`: expected `string`, but possibly received `array<array-key, string>|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Link/Util/TitleSlugifier.php"
-code = "possibly-null-argument"
-message = "Argument #1 of function `trim` is possibly `null`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Link/Util/TitleSlugifier.php"
-code = "possibly-null-argument"
-message = "Argument #3 of function `str_replace` is possibly `null`, but parameter type `array<array-key, string>|string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Link/Util/TitleSlugifier.php"
-code = "possibly-null-argument"
-message = 'Argument #3 of method `phpMyFAQ\Strings::preg_replace` is possibly `null`, but parameter type `array<array-key, string>|string` does not accept it.'
-count = 3
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Mail.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -4846,49 +4786,13 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
-count = 8
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `DateTimeImmutable::__construct`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\PushSubscriptionEntity::setAuthToken`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\PushSubscriptionEntity::setContentEncoding`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\PushSubscriptionEntity::setEndpointHash`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\PushSubscriptionEntity::setEndpoint`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\PushSubscriptionEntity::setPublicKey`: expected `string`, but found `mixed`.'
-count = 1
+count = 7
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
@@ -5252,51 +5156,15 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Search\Rating\RatingRepository::fetchByRecordId` is declared to return `null|object` but possibly returns 'false' (inferred as `false|null|stdClass`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Search\Rating\RatingRepository::fetchByRecordId`: expected `null|object`, but found `false|null|stdClass`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #5 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #6 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
-code = "mixed-operand"
-message = "Left operand in binary operation has type `mixed`."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"

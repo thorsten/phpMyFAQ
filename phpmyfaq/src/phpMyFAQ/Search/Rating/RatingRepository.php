@@ -47,7 +47,9 @@ readonly class RatingRepository implements RatingRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
 
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            return $this->configuration->getDb()->fetchObject($result);
+            $row = $this->configuration->getDb()->fetchObject($result);
+
+            return $row instanceof \stdClass ? $row : null;
         }
 
         return null;
@@ -55,7 +57,7 @@ readonly class RatingRepository implements RatingRepositoryInterface
 
     public function isVoteAllowed(int $id, string $ip): bool
     {
-        $check = Request::createFromGlobals()->server->get('REQUEST_TIME') - 300;
+        $check = (int) Request::createFromGlobals()->server->get('REQUEST_TIME') - 300;
 
         $sql = <<<SQL
                 SELECT
@@ -115,7 +117,7 @@ readonly class RatingRepository implements RatingRepositoryInterface
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqvoting', 'id'),
             $vote->getFaqId(),
             $vote->getVote(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME'),
+            (int) Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $this->configuration->getDb()->escape($vote->getIp()),
         );
 
@@ -140,7 +142,7 @@ readonly class RatingRepository implements RatingRepositoryInterface
             $sql,
             Database::getTablePrefix(),
             $vote->getVote(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME'),
+            (int) Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $this->configuration->getDb()->escape($vote->getIp()),
             $vote->getFaqId(),
         );
