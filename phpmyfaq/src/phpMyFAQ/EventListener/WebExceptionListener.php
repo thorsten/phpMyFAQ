@@ -52,7 +52,7 @@ readonly class WebExceptionListener
         $loginPath = $baseUrl === '/' ? '/login' : $baseUrl . '/login';
 
         // Skip API requests — handled by ApiExceptionListener
-        if (str_starts_with($pathInfo, '/api/') || $request->attributes->get('_api_context', false)) {
+        if (str_starts_with($pathInfo, '/api/') || (bool) $request->attributes->get('_api_context', false)) {
             return;
         }
 
@@ -96,13 +96,23 @@ readonly class WebExceptionListener
             $controllerResolver = new ContainerControllerResolver($this->container);
             $argumentResolver = new ArgumentResolver();
             $controller = $controllerResolver->getController($request);
+            if ($controller === false) {
+                throw new \RuntimeException('No controller found for the 404 route.');
+            }
 
             if (is_array($controller) && $controller[0] instanceof AbstractController) {
                 $controller[0]->setContainer($this->container);
             }
 
+            /* @mago-expect analysis:less-specific-nested-argument-type - Symfony's resolver returns a generic callable */
             $arguments = $argumentResolver->getArguments($request, $controller);
-            return call_user_func_array($controller, $arguments);
+            /* @mago-expect analysis:less-specific-nested-argument-type - Symfony's resolver returns a generic callable */
+            $response = call_user_func_array($controller, $arguments);
+            if (!$response instanceof Response) {
+                throw new \RuntimeException('The 404 controller did not return a response.');
+            }
+
+            return $response;
         } catch (Throwable) {
             return $this->handleErrorResponse(
                 'Not Found: :message at line :line at :file',

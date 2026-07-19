@@ -88,6 +88,8 @@ readonly class Forms
 
     /**
      * Get translation strings of a given input
+     *
+     * @return array<int, \stdClass>
      */
     public function getTranslations(int $formId, int $inputId): array
     {
@@ -98,7 +100,7 @@ readonly class Forms
                 continue;
             }
 
-            $translation->input_label = Translation::get($translation->input_label);
+            $translation->input_label = Translation::get((string) $translation->input_label);
         }
 
         return $translations;
@@ -144,14 +146,19 @@ readonly class Forms
             return false;
         }
 
+        $languageKey = LanguageCodes::getKey($lang);
+        if ($languageKey === false) {
+            return false;
+        }
+
         return $this->formsRepository->insertTranslationRow(
             $formId,
             $inputId,
-            $inputData->input_type,
+            (string) $inputData->input_type,
             $translation,
             (int) $inputData->input_active,
             (int) $inputData->input_required,
-            LanguageCodes::getKey($lang),
+            (string) $languageKey,
         );
     }
 

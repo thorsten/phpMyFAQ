@@ -59,6 +59,7 @@ readonly class Import
         $languageCode = Filter::filterVar($record[4], FILTER_SANITIZE_SPECIAL_CHARS, '');
         $author = Filter::filterVar($record[5], FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterEmail($record[6]);
+        $email = is_string($email) ? $email : '';
         $isActive = Filter::filterVar($record[7], FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($record[8], FILTER_VALIDATE_BOOLEAN);
 
@@ -75,7 +76,7 @@ readonly class Import
             throw new Exception('It is not allowed, that the question title ' . $question . ' contains a hash.');
         }
 
-        $categories = [$categoryId];
+        $categories = [(int) $categoryId];
         $isActive = !is_null($isActive);
         $isSticky = !is_null($isSticky);
 
@@ -138,7 +139,7 @@ readonly class Import
     /**
      * Checks if the given csv-Data matches all requirements.
      *
-     *
+     * @param array<array-key, array<array-key, mixed>> $csvData
      */
     public function validateCSV(array $csvData): bool
     {

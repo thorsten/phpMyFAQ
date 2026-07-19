@@ -3644,38 +3644,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/EventListener/WebExceptionListener.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #1 of `call_user_func_array`: expected `(callable(...mixed): mixed)|string`, but provided type `(callable(...mixed=): mixed)|array{0: phpMyFAQ\Controller\AbstractController, 1: non-empty-string}|false` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/EventListener/WebExceptionListener.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #2 of `Symfony\Component\HttpKernel\Controller\ArgumentResolver::getArguments`: expected `(callable(...mixed=): mixed)`, but provided type `(callable(...mixed=): mixed)|array{0: phpMyFAQ\Controller\AbstractController, 1: non-empty-string}|false` is less specific.'
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/EventListener/WebExceptionListener.php"
 code = "mixed-operand"
-message = "Right operand in `||` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/EventListener/WebExceptionListener.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\EventListener\WebExceptionListener::handleNotFound`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/EventListener/WebExceptionListener.php"
-code = "possibly-false-argument"
-message = "Argument #1 of function `call_user_func_array` is possibly `false`, but parameter type `(callable(...mixed): mixed)|string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/EventListener/WebExceptionListener.php"
-code = "possibly-false-argument"
-message = 'Argument #2 of method `Symfony\Component\HttpKernel\Controller\ArgumentResolver::getArguments` is possibly `false`, but parameter type `(callable(...mixed=): mixed)` does not accept it.'
+message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
@@ -3824,39 +3800,9 @@ count = 14
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `count`: expected `Countable|array<array-key, mixed>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\FaqEntity::setEmail`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `array_key_exists`: expected `array<array-key, mixed>`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Faq\MetaData::setCategories`: expected `array<array-key, int>`, but possibly received `list{int|null}`.'
-count = 1
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Permission.php"
@@ -3932,6 +3878,18 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
+code = "incompatible-return-type"
+message = 'Return type `array<int, object>` of `phpMyFAQ\Form\FormsRepository::fetchformdatabyformid()` is incompatible with parent return type `array<int, stdClass>` of `phpMyFAQ\Form\FormsRepositoryInterface::fetchformdatabyformid()`'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
+code = "incompatible-return-type"
+message = 'Return type `array<int, object>` of `phpMyFAQ\Form\FormsRepository::fetchtranslationsbyformandinput()` is incompatible with parent return type `array<int, stdClass>` of `phpMyFAQ\Form\FormsRepositoryInterface::fetchtranslationsbyformandinput()`'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseDriver::escape`: expected `string`, but found `mixed`.'
 count = 3
@@ -3952,49 +3910,7 @@ count = 6
 file = "phpmyfaq/src/phpMyFAQ/Forms.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Forms.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Form\FormsHelper::filterAndSortFormData`: expected `array<array-key, stdClass>`, but provided type `array<int, object>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Forms.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Translation::get`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Forms.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Form\FormsRepositoryInterface::insertTranslationRow`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Forms.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Forms.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Forms.php"
-code = "possibly-false-argument"
-message = 'Argument #7 of method `phpMyFAQ\Form\FormsRepositoryInterface::insertTranslationRow` is possibly `false`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Forms.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #7 of `phpMyFAQ\Form\FormsRepositoryInterface::insertTranslationRow`: expected `string`, but possibly received `false|int|string`.'
-count = 1
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Forms.php"

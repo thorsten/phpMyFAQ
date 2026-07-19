@@ -22,14 +22,14 @@ namespace phpMyFAQ\Form;
 
 interface FormsRepositoryInterface
 {
-    /** @return array<int, object> */
+    /** @return array<int, \stdClass> */
     public function fetchFormDataByFormId(int $formId): array;
 
     public function updateInputActive(int $formId, int $inputId, int $activated): bool;
 
     public function updateInputRequired(int $formId, int $inputId, int $required): bool;
 
-    /** @return array<int, object> */
+    /** @return array<int, \stdClass> */
     public function fetchTranslationsByFormAndInput(int $formId, int $inputId): array;
 
     public function updateTranslation(string $label, int $formId, int $inputId, string $lang): bool;
