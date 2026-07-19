@@ -55,20 +55,29 @@ class RouteCacheManager
     {
         $cacheFile = $this->getCacheFile($context);
 
-        // In debug mode or if the cache doesn't exist, always reload
-        if ($this->debug || !file_exists($cacheFile)) {
-            $routes = $loader();
-
-            // Only write cache in production mode
-            if (!$this->debug) {
-                $this->writeCache($cacheFile, $routes);
+        // In debug mode always reload; otherwise use the cache when it holds
+        // a valid collection - a corrupted cache file falls through to reload.
+        if (!$this->debug && file_exists($cacheFile)) {
+            $cachedRoutes = $this->readCache($cacheFile);
+            if ($cachedRoutes instanceof RouteCollection) {
+                return $cachedRoutes;
             }
-
-            return $routes;
         }
 
-        // Load from cache
-        return $this->readCache($cacheFile);
+        $routes = $loader();
+        if (!$routes instanceof RouteCollection) {
+            throw new \RuntimeException(sprintf(
+                'Route loader for context "%s" did not return a RouteCollection.',
+                $context,
+            ));
+        }
+
+        // Only write cache in production mode
+        if (!$this->debug) {
+            $this->writeCache($cacheFile, $routes);
+        }
+
+        return $routes;
     }
 
     /**
@@ -188,10 +197,12 @@ class RouteCacheManager
      * Read route collection from a cache file.
      *
      * @param string $cacheFile The cache file path
-     * @return RouteCollection The cached routes
+     * @return RouteCollection|null The cached routes, or null if the file is corrupted
      */
-    private function readCache(string $cacheFile): RouteCollection
+    private function readCache(string $cacheFile): ?RouteCollection
     {
-        return include $cacheFile;
+        $routes = include $cacheFile;
+
+        return $routes instanceof RouteCollection ? $routes : null;
     }
 }

@@ -151,13 +151,13 @@ final class SetupController
     /**
      * Returns a Twig-rendered template as a response.
      *
-     * @param string[] $templateVars
+     * @param array<string, mixed> $templateVars
      * @throws Exception|LoaderError
      */
     public function render(string $pathToTwigFile, array $templateVars = [], ?Response $response = null): Response
     {
         $response ??= new Response();
-        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates', true);
+        $twigWrapper = new TwigWrapper((string) PMF_ROOT_DIR . '/assets/templates', true);
         $templateWrapper = $twigWrapper->loadTemplate($pathToTwigFile);
 
         $response->setContent($templateWrapper->render($templateVars));

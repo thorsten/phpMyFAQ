@@ -100,13 +100,15 @@ class LanguageDetector
 
     private function fetchFilteredLanguage(int $inputType, string $variable): ?string
     {
-        $lang = Filter::filterInput($inputType, variableName: $variable, filter: FILTER_SANITIZE_SPECIAL_CHARS);
+        $filteredLang = Filter::filterInput($inputType, variableName: $variable, filter: FILTER_SANITIZE_SPECIAL_CHARS);
+        $lang = is_string($filteredLang) ? $filteredLang : null;
         return Language::isASupportedLanguage($lang) ? $lang : null;
     }
 
     private function getSessionLanguage(): ?string
     {
-        $lang = $this->session->get(name: 'lang');
+        $sessionLang = $this->session->get(name: 'lang');
+        $lang = is_string($sessionLang) ? $sessionLang : null;
         return Language::isASupportedLanguage($lang) ? trim((string) $lang) : null;
     }
 

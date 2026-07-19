@@ -48,7 +48,8 @@ readonly class Plurals
     public function __construct()
     {
         $this->nPlurals = (int) Translation::get(key: 'nplurals');
-        $this->lang = Translation::get(key: 'metaLanguage') ?? 'en';
+        $metaLanguage = Translation::get(key: 'metaLanguage');
+        $this->lang = is_string($metaLanguage) ? $metaLanguage : 'en';
 
         $this->useDefaultPluralForm = $this->plural(language: $this->lang, number: 0) === -1;
     }
@@ -270,7 +271,12 @@ readonly class Plurals
     public function getMsgTemplate(string $key, int $number): string
     {
         $plural = $this->getPlural($number);
-        return Translation::get($key)[$plural] ?? Translation::get($key)[1];
+        $templates = Translation::get($key);
+        if (!is_array($templates)) {
+            return is_string($templates) ? $templates : '';
+        }
+
+        return (string) ($templates[$plural] ?? $templates[1] ?? '');
     }
 
     /**

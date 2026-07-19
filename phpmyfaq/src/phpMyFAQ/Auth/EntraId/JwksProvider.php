@@ -39,7 +39,9 @@ class JwksProvider
         $this->httpClient = $httpClient ?? HttpClient::create();
         $this->cacheDir =
             $cacheDir
-            ?? (defined('PMF_ROOT_DIR') ? PMF_ROOT_DIR . '/cache/jwks' : sys_get_temp_dir() . '/phpmyfaq-jwks');
+            ?? (
+                defined('PMF_ROOT_DIR') ? (string) PMF_ROOT_DIR . '/cache/jwks' : sys_get_temp_dir() . '/phpmyfaq-jwks'
+            );
     }
 
     /**
@@ -53,7 +55,7 @@ class JwksProvider
     }
 
     /**
-     * @return array{keys: array<int, array<string, mixed>>}
+     * @return array{keys: array<array-key, mixed>}
      */
     private function loadJwks(string $tenantId): array
     {
@@ -64,7 +66,7 @@ class JwksProvider
             if ($cached !== false) {
                 $decoded = json_decode($cached, associative: true);
                 if (is_array($decoded) && array_key_exists('keys', $decoded) && is_array($decoded['keys'])) {
-                    return $decoded;
+                    return ['keys' => $decoded['keys']];
                 }
             }
         }
@@ -87,7 +89,7 @@ class JwksProvider
 
         $this->writeCache($cacheFile, $body);
 
-        return $decoded;
+        return ['keys' => $decoded['keys']];
     }
 
     private function cacheFile(string $tenantId): string

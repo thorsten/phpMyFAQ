@@ -52,7 +52,7 @@ readonly class BasicPermissionRepository
      * database for the specified right.
      *
      * @param int $rightId Right ID
-     * @return array<string, bool|int|string>
+     * @return array<string, mixed>
      */
     public function getRightData(int $rightId): array
     {
@@ -75,11 +75,20 @@ readonly class BasicPermissionRepository
         }
 
         $rightData = $this->configuration->getDb()->fetchArray($res);
+        if (!is_array($rightData)) {
+            return [];
+        }
+
         $rightData['for_users'] = (bool) $rightData['for_users'];
         $rightData['for_groups'] = (bool) $rightData['for_groups'];
         $rightData['for_sections'] = (bool) $rightData['for_sections'];
 
-        return $rightData;
+        $normalizedRightData = [];
+        foreach ($rightData as $fieldName => $fieldValue) {
+            $normalizedRightData[(string) $fieldName] = $fieldValue;
+        }
+
+        return $normalizedRightData;
     }
 
     /**
@@ -271,7 +280,12 @@ readonly class BasicPermissionRepository
                     break;
                 }
 
-                $result[$i] = $row;
+                $normalizedRow = [];
+                foreach ($row as $fieldName => $fieldValue) {
+                    $normalizedRow[(string) $fieldName] = $fieldValue;
+                }
+
+                $result[$i] = $normalizedRow;
                 ++$i;
             }
         }

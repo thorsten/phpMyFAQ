@@ -83,7 +83,7 @@ class Language
                     break;
                 }
 
-                $output[] = $row->lang;
+                $output[] = (string) $row->lang;
             }
         }
 
@@ -136,7 +136,7 @@ class Language
         // If the language is not set, try to get it from session or use default
         if (self::$language === '') {
             $sessionLang = $this->session->get('lang');
-            if ($sessionLang !== null && self::isASupportedLanguage($sessionLang)) {
+            if (is_string($sessionLang) && self::isASupportedLanguage($sessionLang)) {
                 self::$language = $sessionLang;
             }
 

@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
+use Elastic\Elasticsearch\Response\Elasticsearch;
 use phpMyFAQ\Administration\TranslationStatistics;
 use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver;
 use phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore;
@@ -55,28 +56,24 @@ final class SystemInformationController extends AbstractAdministrationController
 
         $faqSystem = $this->system;
 
-        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
+        $esInformation = 'n/a';
+        if ((bool) $this->configuration->get(item: 'search.enableElasticsearch')) {
             try {
                 $esFullInformation = $this->configuration->getElasticsearch()->info();
-                $esInformation = $esFullInformation['version']['number'];
+                $esVersion = $esFullInformation instanceof Elasticsearch ? $esFullInformation['version'] : null;
+                $esInformation = is_array($esVersion) ? (string) ($esVersion['number'] ?? 'n/a') : 'n/a';
             } catch (ClientResponseException|ServerResponseException $e) {
                 $this->configuration->getLogger()->error('Error while fetching Elasticsearch information', [$e->getMessage()]);
-                $esInformation = 'n/a';
             }
         }
 
-        if (!$this->configuration->get(item: 'search.enableElasticsearch')) {
-            $esInformation = 'n/a';
-        }
-
-        $openSearchInformation = '';
-        if ($this->configuration->get(item: 'search.enableOpenSearch')) {
+        $openSearchInformation = 'n/a';
+        if ((bool) $this->configuration->get(item: 'search.enableOpenSearch')) {
             $openSearchFullInformation = $this->configuration->getOpenSearch()->info();
-            $openSearchInformation = $openSearchFullInformation['version']['number'];
-        }
-
-        if (!$this->configuration->get(item: 'search.enableOpenSearch')) {
-            $openSearchInformation = 'n/a';
+            $openSearchVersion = $openSearchFullInformation['version'] ?? null;
+            $openSearchInformation = is_array($openSearchVersion)
+                ? (string) ($openSearchVersion['number'] ?? 'n/a')
+                : 'n/a';
         }
 
         $redisInformation = 'n/a';

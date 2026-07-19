@@ -65,12 +65,13 @@ class Encryption
         $encType = ucfirst(strtolower($encType));
 
         $encClass = 'phpMyFAQ\\EncryptionTypes\\' . $encType;
-        if (!class_exists($encClass)) {
+        if (!class_exists($encClass) || !is_subclass_of($encClass, self::class)) {
             $self->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
 
             return $self;
         }
 
+        /* @mago-expect analysis:unknown-class-instantiation - the encryption class is resolved from the configured type */
         return new $encClass($configuration);
     }
 
@@ -99,7 +100,7 @@ class Encryption
      */
     public function setSalt(string $login): Encryption
     {
-        $this->salt = $this->configuration->get(item: 'security.salt') . $login;
+        $this->salt = (string) $this->configuration->get(item: 'security.salt') . $login;
         return $this;
     }
 }

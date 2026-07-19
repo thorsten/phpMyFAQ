@@ -680,21 +680,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/JwksProvider.php"
-code = "invalid-return-statement"
-message = '''Invalid return type for function `phpMyFAQ\Auth\EntraId\JwksProvider::loadJwks`: expected `array{'keys': array<int, array<string, mixed>>}`, but found `array{'keys': array<array-key, mixed>, ...}`.'''
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/JwksProvider.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/JwksProvider.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/JwksProvider.php"
@@ -1994,20 +1982,20 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SystemInformationController.php"
-code = "invalid-array-access"
-message = 'Cannot access array index on object `Http\Promise\Promise` that does not implement `ArrayAccess`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SystemInformationController.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SystemInformationController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SystemInformationController.php"
+code = "redundant-null-coalesce"
+message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
 count = 2
 
 [[issues]]
@@ -2563,24 +2551,6 @@ message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SetupController.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SetupController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Frontend\SetupController::render`: expected `array<array-key, string>`, but possibly received `array{'checkBasicError': string, 'configTableNotAvailable': bool, 'currentStep': int<1, 3>, 'currentYear': string, 'documentationUrl': string, 'installedVersion': string, 'newVersion': string}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SetupController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Frontend\SetupController::render`: expected `array<array-key, string>`, but possibly received `array{'checkBasicError': string, 'currentLanguage': string('en'), 'currentPath': non-empty-string, 'currentYear': string, 'documentationUrl': string, 'filePermissions': null|string, 'isElasticsearchEnabled': bool, 'isLdapEnabled': bool, 'newVersion': string, 'nonCriticalSettings': array<array-key, string>, 'setupType': string('Setup'), 'supportedDatabases': array<string, string>, 'supportedTranslations': array<array-key, mixed>}`.'''
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/WebAuthnController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -2642,33 +2612,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/DatabaseHelper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseDriver::escape`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/DatabaseHelper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Strings::substr`: expected `string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/DatabaseHelper.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `str_replace`: expected `array<array-key, string>|string`, but found `nonnull`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/DatabaseHelper.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/DatabaseHelper.php"
-code = "mixed-assignment"
-message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/PdoMysql.php"
@@ -2750,20 +2696,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Encryption.php"
-code = "less-specific-return-statement"
-message = 'Returned type `object` is less specific than the declared return type `phpMyFAQ\Encryption` for function `phpMyFAQ\Encryption::getInstance`.'
+code = "unfulfilled-expect"
+message = "This pragma was not used and may be removed."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Encryption.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Encryption.php"
-code = "unknown-class-instantiation"
-message = "Cannot determine the concrete class for instantiation."
+code = "unsafe-instantiation"
+message = 'Unsafe `new $class_name`: constructor of `phpMyFAQ\Encryption` is not final and its signature might change in child classes, potentially leading to runtime errors.'
 count = 1
 
 [[issues]]
@@ -3344,27 +3284,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Language.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array{}|list<mixed>` is less specific than the declared return type `array<array-key, string>` for function `phpMyFAQ\Language::isLanguageAvailable` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Language.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Language::isASupportedLanguage`: expected `null|string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Language.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Language.php"
-code = "mixed-property-type-coercion"
-message = "Mixed property type coercion"
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Language/LanguageCodes.php"
@@ -3374,44 +3296,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Language/LanguageDetector.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Language::isASupportedLanguage`: expected `null|string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Language/LanguageDetector.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Language/LanguageDetector.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Language\LanguageDetector::fetchFilteredLanguage`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Language/Plurals.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$lang`: expected `string`, but got `array<array-key, string>|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Language/Plurals.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Language\Plurals::getMsgTemplate`: expected `string`, but found `null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Language/Plurals.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Language\Plurals::getMsgTemplate` is declared to return `string` but possibly returns a nullable value (inferred as `null|string`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Language/Plurals.php"
-code = "possibly-null-array-access"
-message = "Cannot perform array access on possibly `null` value."
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
@@ -3650,45 +3542,27 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermission.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Permission\BasicPermission::getRightData`: expected `array<string, bool>`, but found `array<string, bool|int|string>`.'
+code = "incompatible-parameter-type"
+message = 'Parameter `$rightData` of `phpMyFAQ\Permission\BasicPermission::addright()` expects type `array<string, mixed>` but parent `phpMyFAQ\Permission\PermissionInterface::addright()` expects type `array<array-key, string>`'
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermission.php"
-code = "less-specific-return-statement"
-message = '''Returned type `array{'for_groups': int, 'for_sections': int, 'for_users': int, ...<array-key, bool|string>}` is less specific than the declared return type `array<string, int>` for function `phpMyFAQ\Permission\BasicPermission::checkRightData`.'''
+code = "incompatible-parameter-type"
+message = 'Parameter `$rightData` of `phpMyFAQ\Permission\MediumPermission::addright()` expects type `array<string, mixed>` but parent `phpMyFAQ\Permission\PermissionInterface::addright()` expects type `array<array-key, string>`'
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermission.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Permission\BasicPermission::checkUserRight`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
-code = "falsable-return-statement"
-message = '''Function `phpMyFAQ\Permission\BasicPermissionRepository::getRightData` is declared to return `array<string, bool|int|string>` but possibly returns 'false' (inferred as `array{'for_groups': bool, 'for_sections': bool, 'for_users': bool, ...}|array{'for_groups': bool, 'for_sections': bool, 'for_users': bool}|false`).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
-code = "less-specific-return-statement"
-message = '''Returned type `array{'for_groups': bool, 'for_sections': bool, 'for_users': bool, ...}|array{'for_groups': bool, 'for_sections': bool, 'for_users': bool}|false` is less specific than the declared return type `array<string, bool|int|string>` for function `phpMyFAQ\Permission\BasicPermissionRepository::getRightData`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
-code = "less-specific-return-statement"
-message = 'Returned type `array{0?: non-empty-array<array-key, mixed>, ...<non-negative-int, non-empty-array<array-key, mixed>>}|array{0?: non-empty-array<array-key, mixed>}` is less specific than the declared return type `array<int, array<string, mixed>>` for function `phpMyFAQ\Permission\BasicPermissionRepository::getAllRightsData`.'
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
+count = 7
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
@@ -3700,24 +3574,12 @@ count = 7
 file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
 code = "possibly-false-array-access"
 message = "Cannot perform array access on possibly `false` value."
-count = 7
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
 code = "possibly-null-array-access"
 message = "Cannot perform array access on possibly `null` value."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
-code = "possibly-undefined-string-array-index"
-message = "Possibly undefined array key accessed on `array{'for_groups': bool, 'for_users': bool, ...}|array{'for_groups': bool, 'for_users': bool}|false`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
-code = "possibly-undefined-string-array-index"
-message = "Possibly undefined array key accessed on `array{'for_users': bool, ...}|array{'for_users': bool}|false`."
 count = 1
 
 [[issues]]
@@ -3932,27 +3794,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Routing/RouteCacheManager.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Routing\RouteCacheManager::writeCache`: expected `Symfony\Component\Routing\RouteCollection`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Routing/RouteCacheManager.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Routing/RouteCacheManager.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Routing\RouteCacheManager::getRoutes`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Routing/RouteCacheManager.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Routing\RouteCacheManager::readCache`. Saw type `mixed`.'
-count = 1
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Routing/RouteCollectionBuilder.php"

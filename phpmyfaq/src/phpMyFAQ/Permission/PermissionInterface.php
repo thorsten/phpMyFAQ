@@ -45,7 +45,7 @@ interface PermissionInterface
      * Returns an associative array with all data stored in the database
      * for the specified right, keyed by field name.
      *
-     * @return array<string, bool>
+     * @return array<string, mixed>
      */
     public function getRightData(int $rightId): array;
 
@@ -91,8 +91,8 @@ interface PermissionInterface
      * Validates the given right data, replacing missing or invalid
      * fields with defaults.
      *
-     * @param array<string> $rightData
-     * @return array<string, int>
+     * @param array<string, mixed> $rightData
+     * @return array<string, mixed>
      */
     public function checkRightData(array $rightData): array;
 

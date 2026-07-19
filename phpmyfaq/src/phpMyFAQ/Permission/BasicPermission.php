@@ -75,7 +75,7 @@ class BasicPermission implements PermissionInterface
      * database for the specified right. The keys of the returned
      * array are the field names.
      *
-     * @return array<string, bool>
+     * @return array<string, mixed>
      */
     public function getRightData(int $rightId): array
     {
@@ -109,7 +109,7 @@ class BasicPermission implements PermissionInterface
             $right = $this->getRightId($right->value);
         }
 
-        return $this->checkUserRight($currentUser->getUserId(), $right);
+        return $this->checkUserRight($currentUser->getUserId(), (int) $right);
     }
 
     /**
@@ -179,18 +179,22 @@ class BasicPermission implements PermissionInterface
      * new right. The associative array right_data contains the right
      * data stored in the rights table.
      *
-     * @param array<string> $rightData Array if rights
+     * @param array<string, mixed> $rightData Array if rights
      */
     public function addRight(array $rightData): int
     {
-        if ($this->getRightId($rightData['name']) > 0) {
+        if ($this->getRightId((string) ($rightData['name'] ?? '')) > 0) {
             return 0;
         }
 
         $nextId = $this->repository->nextRightId();
-        $rightData = $this->checkRightData($rightData);
+        $checkedRightData = $this->checkRightData($rightData);
+        $rightRow = [];
+        foreach ($checkedRightData as $fieldName => $fieldValue) {
+            $rightRow[$fieldName] = is_int($fieldValue) ? $fieldValue : (string) $fieldValue;
+        }
 
-        if (!$this->repository->addRight($rightData, $nextId)) {
+        if (!$this->repository->addRight($rightRow, $nextId)) {
             return 0;
         }
 
@@ -203,9 +207,9 @@ class BasicPermission implements PermissionInterface
      * by the default values in $this->default_right_data.
      * Returns the corrected $right_data associative array.
      *
-     * @param array<string> $rightData Array of rights
+     * @param array<string, mixed> $rightData Array of rights
      *
-     * @return array<string, int>
+     * @return array<string, mixed>
      */
     public function checkRightData(array $rightData): array
     {

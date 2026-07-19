@@ -72,7 +72,7 @@ readonly class DatabaseHelper
         Strings::preg_match_all('/^' . $startPattern . "\s+(\w+)(\s+|$)/i", $query, $matches);
 
         if (($matches[1][0] ?? null) !== null) {
-            $oldTableFullName = $matches[1][0];
+            $oldTableFullName = (string) $matches[1][0];
             $newTableFullName = $newValue . Strings::substr($oldTableFullName, Strings::strlen($oldValue));
             $return = str_replace($oldTableFullName, $newTableFullName, $query);
         }
@@ -120,7 +120,7 @@ readonly class DatabaseHelper
                     continue;
                 }
 
-                $values[] = sprintf("'%s'", $this->configuration->getDb()->escape($val));
+                $values[] = sprintf("'%s'", $this->configuration->getDb()->escape((string) $val));
             }
 
             $queries[] = sprintf(
