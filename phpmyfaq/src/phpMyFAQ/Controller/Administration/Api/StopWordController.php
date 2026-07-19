@@ -55,13 +55,13 @@ final class StopWordController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        $stopWordId = Filter::filterVar($data->stopWordId, FILTER_VALIDATE_INT);
-        $stopWordsLang = Filter::filterVar($data->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $stopWordId = Filter::filterVar($data->stopWordId ?? null, FILTER_VALIDATE_INT);
+        $stopWordsLang = Filter::filterVar($data->stopWordsLang ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $stopWords = new StopWords($this->configuration);
-        if (!Token::getInstance($this->session)->verifyToken('stopwords', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('stopwords', (string) ($data->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -81,14 +81,14 @@ final class StopWordController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        $stopWordId = Filter::filterVar($data->stopWordId, FILTER_VALIDATE_INT);
-        $stopWordsLang = Filter::filterVar($data->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $stopWord = Filter::filterVar($data->stopWord, FILTER_SANITIZE_SPECIAL_CHARS);
+        $stopWordId = Filter::filterVar($data->stopWordId ?? null, FILTER_VALIDATE_INT);
+        $stopWordsLang = Filter::filterVar($data->stopWordsLang ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $stopWord = Filter::filterVar($data->stopWord ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $stopWords = new StopWords($this->configuration);
-        if (!Token::getInstance($this->session)->verifyToken('stopwords', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('stopwords', (string) ($data->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

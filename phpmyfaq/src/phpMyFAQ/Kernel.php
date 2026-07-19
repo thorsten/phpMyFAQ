@@ -32,6 +32,7 @@ use phpMyFAQ\EventListener\LanguageListener;
 use phpMyFAQ\EventListener\RouterListener;
 use phpMyFAQ\EventListener\WebExceptionListener;
 use phpMyFAQ\Form\FormsServiceProvider;
+use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Routing\RouteCacheManager;
 use phpMyFAQ\Routing\RouteCollectionBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -180,10 +181,11 @@ class Kernel implements HttpKernelInterface
 
     private function loadRoutes(ContainerInterface $container): RouteCollection
     {
-        $configuration = $container->get(id: 'phpmyfaq.configuration');
+        $configurationService = $container->get(id: 'phpmyfaq.configuration');
+        $configuration = $configurationService instanceof Configuration ? $configurationService : null;
 
         $cacheEnabled = filter_var(Environment::get('ROUTING_CACHE_ENABLED', 'true'), FILTER_VALIDATE_BOOLEAN);
-        $cacheDir = Environment::get('ROUTING_CACHE_DIR', PMF_ROOT_DIR . '/cache/routes');
+        $cacheDir = (string) Environment::get('ROUTING_CACHE_DIR', (string) PMF_ROOT_DIR . '/cache/routes');
 
         if ($cacheEnabled && !$this->debug && !Environment::isDebugMode()) {
             $cacheManager = new RouteCacheManager($cacheDir, Environment::isDebugMode());
@@ -233,16 +235,21 @@ class Kernel implements HttpKernelInterface
             && $container->has('phpmyfaq.configuration')
             && $container->has('phpmyfaq.http.rate-limiter')
         ) {
-            $apiRateLimiterListener = new ApiRateLimiterListener(
-                $container->get('phpmyfaq.configuration'),
-                $container->get('phpmyfaq.http.rate-limiter'),
-            );
-            $dispatcher->addListener(KernelEvents::REQUEST, [$apiRateLimiterListener, 'onKernelRequest'], 150);
+            $rateLimiterConfiguration = $container->get('phpmyfaq.configuration');
+            $rateLimiter = $container->get('phpmyfaq.http.rate-limiter');
+            if ($rateLimiterConfiguration instanceof Configuration && $rateLimiter instanceof RateLimiter) {
+                $apiRateLimiterListener = new ApiRateLimiterListener($rateLimiterConfiguration, $rateLimiter);
+                $dispatcher->addListener(KernelEvents::REQUEST, [$apiRateLimiterListener, 'onKernelRequest'], 150);
+            }
         }
 
         // API exception listener — converts exceptions to RFC 7807 JSON (priority 0)
-        $configuration = $container->has('phpmyfaq.configuration') ? $container->get('phpmyfaq.configuration') : null;
-        $apiExceptionListener = new ApiExceptionListener($configuration);
+        $configurationService = $container->has('phpmyfaq.configuration')
+            ? $container->get('phpmyfaq.configuration')
+            : null;
+        $apiExceptionListener = new ApiExceptionListener(
+            $configurationService instanceof Configuration ? $configurationService : null,
+        );
         $dispatcher->addListener(KernelEvents::EXCEPTION, [$apiExceptionListener, 'onKernelException'], 0);
 
         // Web exception listener — handles web (non-API) exceptions (priority -10, after API listener)

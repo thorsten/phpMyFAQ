@@ -24,6 +24,10 @@ use phpMyFAQ\Translation;
 
 final class FormsHelper
 {
+    /**
+     * @param \stdClass[] $formData
+     * @return \stdClass[]
+     */
     public function filterAndSortFormData(array $formData, Translation $translation): array
     {
         foreach ($formData as $input) {
@@ -31,7 +35,7 @@ final class FormsHelper
                 continue;
             }
 
-            $input->input_label = Translation::get($input->input_label);
+            $input->input_label = Translation::get((string) $input->input_label);
         }
 
         $filteredEntries = [];
@@ -61,7 +65,7 @@ final class FormsHelper
             $filteredEntries[] = $fallbackCandidate;
         }
 
-        usort($filteredEntries, static fn(object $a, object $b): int => $a->input_id <=> $b->input_id);
+        usort($filteredEntries, static fn(object $a, object $b): int => (int) $a->input_id <=> (int) $b->input_id);
         return $filteredEntries;
     }
 }

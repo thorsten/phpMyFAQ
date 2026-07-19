@@ -45,6 +45,8 @@ interface PluginInterface
 
     /**
      * Returns the dependencies of the plugin
+     *
+     * @return string[]
      */
     public function getDependencies(): array;
 

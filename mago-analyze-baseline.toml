@@ -2467,24 +2467,6 @@ message = "Attempting to access a property on a non-object type (`mixed`)."
 count = 4
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/StopWordController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/StopWordController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/StopWordController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 7
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `mixed`.'
@@ -2963,6 +2945,12 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Faq\MetaData::setCategories`: expected `array<array-key, int>`, but possibly received `list{int|null|true}`.'
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
@@ -4381,45 +4369,9 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 3
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/MetaData.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `array<array-key, mixed>` is being assigned to property `$$categories` (array<array-key, int>|null)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/MetaData.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Category\Relation::add` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/MetaData.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Visits::logViews` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/MetaData.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Category\Permission::add` is possibly `null`, but parameter type `array<array-key, int>` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/MetaData.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Category\Permission::get` is possibly `null`, but parameter type `array<array-key, int>` does not accept it.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/MetaData.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\Category\Relation::add` is possibly `null`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Faq/MetaData.php"
-code = "possibly-null-argument"
-message = 'Argument #3 of method `phpMyFAQ\Category\Relation::add` is possibly `null`, but parameter type `string` does not accept it.'
+file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
+code = "possibly-invalid-argument"
+message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Faq\MetaData::setCategories`: expected `array<array-key, int>`, but possibly received `list{int|null}`.'
 count = 1
 
 [[issues]]
@@ -4495,36 +4447,6 @@ message = "Cannot statically verify property access on a generic `object` type."
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsHelper.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Translation::get`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsHelper.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsHelper.php"
-code = "mixed-operand"
-message = "Left operand in spaceship comparison (`<=>`) has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsHelper.php"
-code = "mixed-operand"
-message = "Right operand in spaceship comparison (`<=>`) has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Form/FormsHelper.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 6
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Form/FormsRepository.php"
 code = "mixed-argument"
 message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseDriver::escape`: expected `string`, but found `mixed`.'
@@ -4547,6 +4469,12 @@ file = "phpmyfaq/src/phpMyFAQ/Forms.php"
 code = "ambiguous-object-property-access"
 message = "Cannot statically verify property access on a generic `object` type."
 count = 6
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Forms.php"
+code = "less-specific-argument"
+message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Form\FormsHelper::filterAndSortFormData`: expected `array<array-key, stdClass>`, but provided type `array<int, object>` is less specific.'
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Forms.php"
@@ -5102,60 +5030,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\EventListener\ApiExceptionListener::__construct`: expected `null|phpMyFAQ\Configuration`, but provided type `null|object` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\EventListener\ApiRateLimiterListener::__construct`: expected `phpMyFAQ\Configuration`, but provided type `null|object` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Routing\RouteCollectionBuilder::__construct`: expected `null|phpMyFAQ\Configuration`, but provided type `null|object` is less specific.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\EventListener\ApiRateLimiterListener::__construct`: expected `phpMyFAQ\Http\RateLimiter`, but provided type `null|object` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Routing\RouteCacheManager::__construct`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\EventListener\ApiRateLimiterListener::__construct` is possibly `null`, but parameter type `phpMyFAQ\Configuration` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
-code = "possibly-null-argument"
-message = 'Argument #2 of method `phpMyFAQ\EventListener\ApiRateLimiterListener::__construct` is possibly `null`, but parameter type `phpMyFAQ\Http\RateLimiter` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
 code = "write-only-property"
 message = "Property `$routes` is written to but never read."
 count = 1
@@ -5654,62 +5528,8 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "ambiguous-object-method-access"
-message = "Cannot statically verify method call on a generic `object` type."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "less-specific-argument"
-message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Plugin\PluginManager::isCompatible`: expected `phpMyFAQ\Plugin\PluginInterface`, but provided type `object` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array{}|list<mixed>` is less specific than the declared return type `array<array-key, string>` for function `phpMyFAQ\Plugin\PluginManager::getMissingDependencies` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `Symfony\Component\DependencyInjection\ContainerBuilder::register`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "mixed-operand"
-message = "Invalid left operand: type `mixed` cannot be reliably used in string concatenation."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "property-type-coercion"
-message = '''A value of a less specific type `array<array-key, array{'plugin': object, 'reason': string}>` is being assigned to property `$$incompatiblePlugins` (array<string, array{'plugin': phpMyFAQ\Plugin\PluginInterface, 'reason': string}>).'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "property-type-coercion"
-message = 'A value of a less specific type `array<array-key, object>` is being assigned to property `$$plugins` (array<array-key, phpMyFAQ\Plugin\PluginInterface>).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "unknown-class-instantiation"
-message = "Cannot determine the concrete class for instantiation."
+code = "unsafe-instantiation"
+message = 'Potentially unsafe instantiation: `class-string<phpMyFAQ\Plugin\PluginInterface>` may contain the interface `phpMyFAQ\Plugin\PluginInterface` itself, which cannot be instantiated.'
 count = 1
 
 [[issues]]

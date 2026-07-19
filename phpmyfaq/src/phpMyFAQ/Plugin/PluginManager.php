@@ -64,6 +64,12 @@ class PluginManager
      */
     public function registerPlugin(string $pluginClass): void
     {
+        // A plugin class that does not exist or does not implement the plugin
+        // contract must not take the whole application down.
+        if (!class_exists($pluginClass) || !is_subclass_of($pluginClass, PluginInterface::class)) {
+            return;
+        }
+
         $plugin = new $pluginClass();
         if (!$this->isCompatible($plugin)) {
             $this->incompatiblePlugins[$plugin->getName()] = [
@@ -87,13 +93,13 @@ class PluginManager
      */
     public function loadPlugins(): void
     {
-        $pluginDir = PMF_ROOT_DIR . '/content/plugins/';
+        $pluginDir = (string) PMF_ROOT_DIR . '/content/plugins/';
         // The manifest cache is skipped in debug mode and on development
         // versions, where plugin namespaces may change without a directory
         // mtime bump.
         $manifestFile = Environment::isDebugMode() || System::isDevelopmentVersion()
             ? null
-            : PMF_ROOT_DIR . '/cache/plugins/manifest.php';
+            : (string) PMF_ROOT_DIR . '/cache/plugins/manifest.php';
         $pluginDiscovery = new PluginDiscovery($pluginDir, $manifestFile);
 
         foreach ($pluginDiscovery->getClassMap() as $pluginFile => $fullClassName) {
