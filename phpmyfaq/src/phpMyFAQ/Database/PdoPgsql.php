@@ -118,7 +118,13 @@ class PdoPgsql implements DatabaseDriver
      */
     public function fetchArray(mixed $result): ?array
     {
-        return $result->fetch(PDO::FETCH_ASSOC);
+        if (!$result instanceof PDOStatement) {
+            return null;
+        }
+
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+
+        return is_array($row) ? $row : null;
     }
 
     /**
@@ -126,7 +132,13 @@ class PdoPgsql implements DatabaseDriver
      */
     public function fetchRow(mixed $result): mixed
     {
-        return $result->fetch(PDO::FETCH_NUM)[0] ?? false;
+        if (!$result instanceof PDOStatement) {
+            return false;
+        }
+
+        $row = $result->fetch(PDO::FETCH_NUM);
+
+        return is_array($row) ? $row[0] ?? false : false;
     }
 
     /**
@@ -138,11 +150,15 @@ class PdoPgsql implements DatabaseDriver
      */
     public function fetchAll(mixed $result): ?array
     {
-        if (false === $result) {
+        if (!$result instanceof PDOStatement) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
 
-        return $result->fetchAll(PDO::FETCH_OBJ);
+        /* @mago-expect lint:inline-variable-return - the variable carries the @var type for mago analyze */
+        /** @var list<\stdClass> $rows */
+        $rows = $result->fetchAll(PDO::FETCH_OBJ);
+
+        return $rows;
     }
 
     /**
@@ -155,6 +171,10 @@ class PdoPgsql implements DatabaseDriver
      */
     public function fetchObject(mixed $result): mixed
     {
+        if (!$result instanceof PDOStatement) {
+            return false;
+        }
+
         /* @mago-expect lint:inline-variable-return - the variable carries the @var type for mago analyze */
         /** @var \stdClass|false|null $row */
         $row = $result->fetch(PDO::FETCH_OBJ);
@@ -167,7 +187,7 @@ class PdoPgsql implements DatabaseDriver
      */
     public function numRows(mixed $result): int
     {
-        return $result->rowCount();
+        return $result instanceof PDOStatement ? $result->rowCount() : 0;
     }
 
     /**
@@ -255,14 +275,21 @@ class PdoPgsql implements DatabaseDriver
     /**
      * Returns just one row.
      */
+    /**
+     * @throws Exception
+     */
     private function getOne(string $query): string
     {
         $statement = $this->pdo()->prepare($query);
+        if ($statement === false) {
+            throw new Exception('Cannot prepare query: ' . $query);
+        }
+
         $statement->execute();
 
         $row = $statement->fetch(PDO::FETCH_NUM);
 
-        return $row[0];
+        return is_array($row) ? (string) ($row[0] ?? '') : '';
     }
 
     /**
@@ -278,11 +305,15 @@ class PdoPgsql implements DatabaseDriver
         $query = sprintf('SELECT MAX(%s) AS current_id FROM  %s', $column, $table);
 
         $statement = $this->pdo()->prepare($query);
+        if ($statement === false) {
+            throw new Exception('Cannot prepare query: ' . $query);
+        }
+
         $statement->execute();
 
         $current = $statement->fetch(PDO::FETCH_NUM);
 
-        return $current[0] + 1;
+        return is_array($current) ? (int) ($current[0] ?? 0) + 1 : 1;
     }
 
     /**
@@ -379,7 +410,7 @@ class PdoPgsql implements DatabaseDriver
      */
     public function clientVersion(): string
     {
-        return $this->pdo()->getAttribute(PDO::ATTR_CLIENT_VERSION);
+        return (string) $this->pdo()->getAttribute(PDO::ATTR_CLIENT_VERSION);
     }
 
     /**
@@ -387,7 +418,7 @@ class PdoPgsql implements DatabaseDriver
      */
     public function serverVersion(): string
     {
-        return $this->pdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
+        return (string) $this->pdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
 
     /**

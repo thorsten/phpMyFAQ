@@ -51,10 +51,8 @@ class Error
 
     /**
      * Exception handler.
-     *
-     * @param $exception
      */
-    public static function exceptionHandler($exception): void
+    public static function exceptionHandler(\Throwable $exception): void
     {
         $code = $exception->getCode();
         if ($code !== 404) {

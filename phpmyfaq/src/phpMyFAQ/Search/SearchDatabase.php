@@ -62,7 +62,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     /**
      * Conditions columns with their values.
      *
-     * @var array<string, array<int>|string>
+     * @var array<string, array<int>|int|string>
      */
     protected array $conditions = [];
 
@@ -248,7 +248,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     /**
      * Sets the part of the SQL query with the conditions.
      *
-     * @param array<string, array<int>|string> $conditions Array of columns
+     * @param array<string, array<int>|int|string> $conditions Array of columns
      */
     public function setConditions(array $conditions): SearchDatabase
     {
@@ -264,8 +264,9 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      */
     public function getMatchClause(string $searchTerm = ''): string
     {
-        $keys = Strings::preg_split("/\s+/", $searchTerm);
-        $numKeys = is_countable($keys) ? count($keys) : 0;
+        $splitTerms = Strings::preg_split("/\s+/", $searchTerm);
+        $keys = is_array($splitTerms) ? $splitTerms : [];
+        $numKeys = count($keys);
         $numMatch = count($this->matchingColumns);
         $where = '';
 
@@ -284,7 +285,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
                     "%s%s LIKE '%%%s%%' ESCAPE '|'",
                     $where,
                     $this->matchingColumns[$j],
-                    self::escapeLikeWildcards($this->configuration->getDb()->escape($keys[$i])),
+                    self::escapeLikeWildcards($this->configuration->getDb()->escape((string) $keys[$i])),
                 );
             }
 

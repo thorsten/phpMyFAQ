@@ -310,8 +310,8 @@ final class CategoryControllerTest extends TestCase
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertSame(['user' => ['1']], $payload['user']);
-        self::assertSame(['group' => ['1']], $payload['group']);
+        self::assertSame(['user' => [1]], $payload['user']);
+        self::assertSame(['group' => [1]], $payload['group']);
     }
 
     /**

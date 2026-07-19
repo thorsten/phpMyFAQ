@@ -30,9 +30,8 @@ use stdClass;
 abstract class AbstractSearch
 {
     /**
-     * ResultSet
-     *
-     * @var stdClass[]
+     * Result set: a database result handle for the SQL engines, or a list
+     * of stdClass hits for Elasticsearch/OpenSearch.
      */
     protected mixed $resultSet;
 

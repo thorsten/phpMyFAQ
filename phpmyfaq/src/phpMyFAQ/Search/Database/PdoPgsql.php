@@ -55,7 +55,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
     #[\Override]
     public function search(string $searchTerm): mixed
     {
-        if (is_numeric($searchTerm) && $this->configuration->get(item: 'search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && true === $this->configuration->get(item: 'search.searchForSolutionId')) {
             parent::search($searchTerm);
 
             return $this->resultSet;
@@ -115,7 +115,8 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
         $this->addedRelevanceColumns = [];
 
         foreach ($this->matchingColumns as $matchingColumn) {
-            $columnName = substr(string: strstr(haystack: $matchingColumn, needle: '.'), offset: 1);
+            $qualifiedSuffix = strstr(haystack: $matchingColumn, needle: '.');
+            $columnName = $qualifiedSuffix === false ? $matchingColumn : substr(string: $qualifiedSuffix, offset: 1);
 
             if (array_key_exists($columnName, $weight)) {
                 $column = sprintf(

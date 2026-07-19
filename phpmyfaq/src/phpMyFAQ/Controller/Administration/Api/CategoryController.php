@@ -55,11 +55,14 @@ final class CategoryController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::CATEGORY_DELETE);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('category', $data->csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('category', (string) ($data->csrfToken ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
+
+        $categoryId = (int) ($data->categoryId ?? 0);
+        $categoryLang = (string) ($data->language ?? '');
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
@@ -69,33 +72,24 @@ final class CategoryController extends AbstractAdministrationApiController
 
         $categoryRelation = new Relation($this->configuration, $category);
 
-        $this->categoryImage->setFileName($category->getCategoryData((int) $data->categoryId)->getImage() ?? '');
+        $this->categoryImage->setFileName($category->getCategoryData($categoryId)->getImage() ?? '');
 
-        $this->categoryOrder->remove((int) $data->categoryId);
+        $this->categoryOrder->remove($categoryId);
 
-        if (
-            (
-                is_countable($category->getCategoryLanguagesTranslated((int) $data->categoryId))
-                    ? count($category->getCategoryLanguagesTranslated((int) $data->categoryId))
-                    : 0
-            ) === 1
-        ) {
-            $this->categoryPermission->delete(Permission::USER, [(int) $data->categoryId]);
-            $this->categoryPermission->delete(Permission::GROUP, [(int) $data->categoryId]);
+        if (count($category->getCategoryLanguagesTranslated($categoryId)) === 1) {
+            $this->categoryPermission->delete(Permission::USER, [$categoryId]);
+            $this->categoryPermission->delete(Permission::GROUP, [$categoryId]);
             $this->categoryImage->delete();
         }
 
-        if (
-            $category->delete((int) $data->categoryId, $data->language)
-            && $categoryRelation->delete((int) $data->categoryId, $data->language)
-        ) {
-            $this->adminLog->log($this->currentUser, AdminLogType::CATEGORY_DELETE->value . ':' . $data->categoryId);
+        if ($category->delete($categoryId, $categoryLang) && $categoryRelation->delete($categoryId, $categoryLang)) {
+            $this->adminLog->log($this->currentUser, AdminLogType::CATEGORY_DELETE->value . ':' . $categoryId);
 
             return $this->json(['success' => Translation::get(key: 'ad_categ_deleted')], Response::HTTP_OK);
         }
 
         $this->configuration->getLogger()->error('Failed to delete category', [
-            'categoryId' => $data->categoryId,
+            'categoryId' => $categoryId,
             'sqlError' => $this->configuration->getDb()->error(),
         ]);
 
@@ -116,16 +110,16 @@ final class CategoryController extends AbstractAdministrationApiController
 
         $categoryData = $request->attributes->get('categories');
 
-        if (in_array($categoryData, [null, '', false], strict: true)) {
-            $categories = [-1]; // Access for all users and groups
-        }
-
+        // Access for all users and groups unless specific categories are requested
+        $categories = [-1];
         if (!in_array($categoryData, [null, '', false], strict: true)) {
-            $categories = explode(',', (string) $categoryData);
-        }
+            $rawCategories = explode(',', (string) $categoryData);
+            $validatedCategories = filter_var_array($rawCategories, FILTER_VALIDATE_INT);
+            if (!is_array($validatedCategories) || in_array(false, $validatedCategories, strict: true)) {
+                return $this->json(['error' => 'Only integer values are valid.'], Response::HTTP_BAD_REQUEST);
+            }
 
-        if (in_array(false, filter_var_array($categories, FILTER_VALIDATE_INT), strict: true)) {
-            return $this->json(['error' => 'Only integer values are valid.'], Response::HTTP_BAD_REQUEST);
+            $categories = array_map(static fn(mixed $categoryId): int => (int) $categoryId, $validatedCategories);
         }
 
         return $this->json([
@@ -156,24 +150,31 @@ final class CategoryController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('category', $data->csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('category', (string) ($data->csrfToken ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
+        $categoryId = (int) ($data->categoryId ?? 0);
+        $categoryTreeRaw = $data->categoryTree ?? [];
+        $categoryTree = array_values(array_filter(
+            is_array($categoryTreeRaw) ? $categoryTreeRaw : [],
+            static fn(mixed $node): bool => $node instanceof \stdClass,
+        ));
+
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $this->categoryOrder->setCategoryTree($data->categoryTree);
+        $this->categoryOrder->setCategoryTree($categoryTree);
 
-        $parentId = $this->categoryOrder->getParentId($data->categoryTree, (int) $data->categoryId);
+        $parentId = $this->categoryOrder->getParentId($categoryTree, $categoryId);
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $category->updateParentCategory((int) $data->categoryId, $parentId ?? 0);
+        $category->updateParentCategory($categoryId, $parentId ?? 0);
 
-        $this->adminLog->log($this->currentUser, AdminLogType::CATEGORY_REORDER->value . ':' . $data->categoryId);
+        $this->adminLog->log($this->currentUser, AdminLogType::CATEGORY_REORDER->value . ':' . $categoryId);
 
         return $this->json(['success' => Translation::get(key: 'ad_categ_save_order')], Response::HTTP_OK);
     }

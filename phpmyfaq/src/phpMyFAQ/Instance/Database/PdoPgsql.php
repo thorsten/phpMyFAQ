@@ -29,6 +29,7 @@ use phpMyFAQ\Instance\Database;
  */
 class PdoPgsql extends Database implements DriverInterface
 {
+    /** @var array<string, string> */
     private array $createTableStatements = [
         'faquser_user_id_seq' => 'CREATE SEQUENCE %sfaquser_user_id_seq START WITH 2',
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (

@@ -29,6 +29,7 @@ use phpMyFAQ\Instance\Database;
  */
 class PdoSqlsrv extends Database implements DriverInterface
 {
+    /** @var array<string, string> */
     private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
             id INTEGER NOT NULL,

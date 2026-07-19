@@ -2438,81 +2438,15 @@ count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `filter_var_array`: expected `array<array-key, mixed>`, but found `mixed`."
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Category\Order::getParentId`: expected `array<array-key, stdClass>`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Category\Order::setCategoryTree`: expected `array<array-key, stdClass>`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Category::delete`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Category\Permission::get`: expected `array<array-key, int>`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Category\Relation::delete`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `mixed`.'
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
 code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "mixed-operand"
-message = "Invalid right operand: type `mixed` cannot be reliably used in string concatenation."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "possibly-false-argument"
-message = "Argument #2 of function `in_array` is possibly `false`, but parameter type `array<array-key, mixed>` does not accept it."
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "possibly-null-argument"
-message = "Argument #2 of function `in_array` is possibly `null`, but parameter type `array<array-key, mixed>` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
-code = "possibly-undefined-variable"
-message = "Variable `$categories` might not have been defined on all execution paths leading to this point."
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CommentController.php"
@@ -4765,60 +4699,6 @@ message = 'Argument #1 of method `Symfony\Component\HttpFoundation\Response::__c
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Core/Error.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Strings::htmlentities`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Core/Error.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Core/Error.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Core/Error.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #4 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Core/Error.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #5 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Core/Error.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #6 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Core/Error.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Core/Error.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 9
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Core/Error.php"
-code = "mixed-operand"
-message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
-count = 4
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `DateTime::__construct`: expected `string`, but found `mixed`."
@@ -5036,75 +4916,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
-code = "invalid-method-access"
-message = "Attempting to access a method on a non-object type (`false`)."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
-code = "mixed-operand"
-message = "Left operand in binary operation has type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoPgsql::clientVersion`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoPgsql::fetchAll`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoPgsql::fetchArray`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoPgsql::getOne`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoPgsql::nextId`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoPgsql::numRows`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoPgsql::serverVersion`. Saw type `mixed`.'
-count = 1
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
@@ -5186,75 +5000,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
-code = "invalid-method-access"
-message = "Attempting to access a method on a non-object type (`false`)."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
-code = "mixed-method-access"
-message = "Attempting to access a method on a non-object type (`mixed`)."
 count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
-code = "mixed-operand"
-message = "Left operand in binary operation has type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoSqlsrv::clientVersion`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoSqlsrv::fetchAll`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoSqlsrv::fetchArray`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoSqlsrv::getOne`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoSqlsrv::nextId`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoSqlsrv::numRows`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Database\PdoSqlsrv::serverVersion`. Saw type `mixed`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
@@ -6614,21 +6362,9 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Database/PdoPgsql.php"
-code = "less-specific-argument"
-message = "Argument type mismatch for argument #1 of `str_starts_with`: expected `string`, but provided type `array-key` is less specific."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/PdoPgsql.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `sprintf`: expected `string`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/PdoPgsql.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Database/PdoSqlite.php"
@@ -6644,15 +6380,9 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Database/PdoSqlsrv.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `sprintf`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/PdoSqlsrv.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Database/Pgsql.php"
@@ -8084,26 +7814,8 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/Mysqli.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$resultSet` (array<array-key, stdClass>)."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/Mysqli.php"
 code = "possibly-undefined-variable"
 message = "Variable `$orderBy` might not have been defined on all execution paths leading to this point."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/Mysqli.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/Mysqli.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
 count = 1
 
 [[issues]]
@@ -8126,74 +7838,20 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoMysql.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$resultSet` (array<array-key, stdClass>)."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoMysql.php"
 code = "possibly-undefined-variable"
 message = "Variable `$orderBy` might not have been defined on all execution paths leading to this point."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoMysql.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoMysql.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoPgsql.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoPgsql.php"
-code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoPgsql.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$resultSet` (array<array-key, stdClass>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoPgsql.php"
-code = "possibly-false-argument"
-message = "Argument #1 of function `substr` is possibly `false`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoSqlite.php"
 code = "mixed-operand"
 message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoSqlite.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$resultSet` (array<array-key, stdClass>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoSqlsrv.php"
-code = "mixed-operand"
-message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/PdoSqlsrv.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$resultSet` (array<array-key, stdClass>)."
 count = 1
 
 [[issues]]
@@ -8206,12 +7864,6 @@ count = 3
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/Pgsql.php"
 code = "mixed-operand"
 message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/Pgsql.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$resultSet` (array<array-key, stdClass>)."
 count = 1
 
 [[issues]]
@@ -8239,21 +7891,9 @@ message = "Right operand in `&&` operation has `mixed` type."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/Sqlite3.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$resultSet` (array<array-key, stdClass>)."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Database/Sqlsrv.php"
 code = "mixed-operand"
 message = "Right operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Database/Sqlsrv.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$resultSet` (array<array-key, stdClass>)."
 count = 1
 
 [[issues]]
@@ -8348,30 +7988,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchDatabase.php"
-code = "impossible-type-comparison"
-message = "Impossible type assertion: `$value` of type `string` can never be `int`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchDatabase.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Database\DatabaseDriver::escape`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchDatabase.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `mixed` is being assigned to property `$$resultSet` (array<array-key, stdClass>)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchDatabase.php"
-code = "possibly-invalid-array-access"
-message = "Cannot perform array access on value of type `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchDatabase.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
@@ -8392,12 +8008,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchDatabase.php"
 code = "redundant-type-comparison"
 message = "Redundant type assertion: `$column` is already `string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchDatabase.php"
-code = "unreachable-match-arm"
-message = "This match arm is unreachable."
 count = 1
 
 [[issues]]
