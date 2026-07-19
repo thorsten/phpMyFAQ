@@ -32,7 +32,7 @@ class Tag
 
     public function getId(): int
     {
-        return $this->id;
+        return $this->id ?? 0;
     }
 
     public function setId(int $id): Tag
@@ -43,7 +43,7 @@ class Tag
 
     public function getName(): string
     {
-        return $this->name;
+        return $this->name ?? '';
     }
 
     public function setName(string $name): Tag

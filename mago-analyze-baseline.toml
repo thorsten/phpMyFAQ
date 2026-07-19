@@ -2024,21 +2024,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `mixed`.'
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #1 of `phpMyFAQ\Permission\MediumPermission::addGroup`: expected `array<string, bool|int|string>`, but possibly received `array{'auto_join': null|string, 'description': null|string, 'name': non-empty-string|null|string('')}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
-code = "possibly-invalid-argument"
-message = "Possible argument type mismatch for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but possibly received `array<array-key, string>|null|string`."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
@@ -2588,30 +2576,6 @@ count = 7
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
-code = "invalid-property-assignment-value"
-message = "Invalid type for property `$tooltip`: expected `null|string`, but got `array<array-key, string>|null|string`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
-code = "less-specific-nested-argument-type"
-message = 'Argument type mismatch for argument #2 of `phpMyFAQ\Controller\AbstractController::renderView`: expected `array<string, array<non-negative-int, array<string, mixed>>>`, but provided type `array<string, mixed>` is less specific.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Faq::getFaqsDataByCategoryId`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #3 of `phpMyFAQ\Faq::getFaqsDataByCategoryId`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
 code = "redundant-type-comparison"
 message = "Redundant condition: variable `$childNodes` (type `array<array-key, int>`) is already known to be `countable`."
 count = 1
@@ -2692,24 +2656,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SearchController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Language\Plurals::get`: expected `int`, but found `nonnull`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SearchController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Search\SearchService::shouldRedirectToSolutionId`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SearchController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `str_repeat`: expected `non-negative-int`, but found `mixed`."
 count = 1
 
 [[issues]]
@@ -2929,54 +2875,6 @@ message = "Argument #1 of function `hash_equals` is possibly `null`, but paramet
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Entity/CategoryEntity.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Entity\CategoryEntity::getActive`: expected `bool`, but found `bool|null`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Entity/CategoryEntity.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Entity\CategoryEntity::getLang`: expected `string`, but found `null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Entity/CategoryEntity.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Entity\CategoryEntity::getActive` is declared to return `bool` but possibly returns a nullable value (inferred as `bool|null`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Entity/CategoryEntity.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Entity\CategoryEntity::getLang` is declared to return `string` but possibly returns a nullable value (inferred as `null|string`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Entity/Tag.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Entity\Tag::getId`: expected `int`, but found `int|null`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Entity/Tag.php"
-code = "invalid-return-statement"
-message = 'Invalid return type for function `phpMyFAQ\Entity\Tag::getName`: expected `string`, but found `null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Entity/Tag.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Entity\Tag::getId` is declared to return `int` but possibly returns a nullable value (inferred as `int|null`).'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Entity/Tag.php"
-code = "nullable-return-statement"
-message = 'Function `phpMyFAQ\Entity\Tag::getName` is declared to return `string` but possibly returns a nullable value (inferred as `null|string`).'
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/EventListener/ApiExceptionListener.php"
 code = "possibly-false-argument"
 message = 'Argument #1 of method `Symfony\Component\HttpFoundation\Response::__construct` is possibly `false`, but parameter type `null|string` does not accept it.'
@@ -3044,39 +2942,21 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfDocument.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `TCPDF::Image`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfDocument.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #6 of `TCPDF::Image`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfDocument.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfDocument.php"
-code = "mixed-property-type-coercion"
-message = "A value with a less specific type `(callable(...mixed=): mixed)|null` is being assigned to property `$$imageResolver` ((callable(string, string): array<array-key, mixed>|null)|null)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfDocument.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Export\Pdf\Engine\TcpdfDocument::getTextColorRaw`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfDocument.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
+code = "less-specific-nested-argument-type"
+message = 'Argument type mismatch for argument #1 of `phpMyFAQ\Export\Pdf\Engine\TcpdfDocument::setImageResolver`: expected `(callable(string, string): array{0: string, 1: string}|null)|null`, but provided type `(callable(...mixed=): mixed)` is less specific.'
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
@@ -3488,21 +3368,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Database/Pgsql.php"
-code = "less-specific-argument"
-message = "Argument type mismatch for argument #1 of `str_starts_with`: expected `string`, but provided type `array-key` is less specific."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/Pgsql.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `sprintf`: expected `string`, but found `mixed`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Database/Pgsql.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Database/Sqlite3.php"
@@ -4052,18 +3920,6 @@ count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array{'category_id': mixed, 'created': mixed, 'email': mixed, 'id': mixed, 'is_visible': mixed, 'lang': mixed, 'question': mixed, 'username': mixed}` is less specific than the declared return type `array<string, int|string>` for function `phpMyFAQ\Question\QuestionRepository::getById` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
-code = "less-specific-nested-return-statement"
-message = '''Returned type `array{}|list<array{'answer_id': int, 'category_id': int, 'created': mixed, 'email': mixed, 'id': int, 'is_visible': mixed, 'lang': mixed, 'question': mixed, 'username': mixed}>` is less specific than the declared return type `array<int, array<string, int|string>>` for function `phpMyFAQ\Question\QuestionRepository::getAll` due to nested 'mixed'.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
@@ -4073,18 +3929,6 @@ file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
-code = "mixed-operand"
-message = "Left operand in `&&` operation has `mixed` type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Question/QuestionRepository.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Question\QuestionRepository::getVisibility`. Saw type `mixed`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Queue/DatabaseMessageBus.php"

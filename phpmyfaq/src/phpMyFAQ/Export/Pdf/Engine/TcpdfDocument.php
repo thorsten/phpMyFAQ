@@ -45,6 +45,9 @@ final class TcpdfDocument extends TCPDF
         $this->footerRenderer = $renderer;
     }
 
+    /**
+     * @param callable(string, string): (array{0: string, 1: string}|null)|null $resolver
+     */
     public function setImageResolver(?callable $resolver): void
     {
         $this->imageResolver = $resolver;
@@ -56,7 +59,7 @@ final class TcpdfDocument extends TCPDF
      */
     public function getTextColorRaw(): string
     {
-        return $this->TextColor;
+        return (string) $this->TextColor;
     }
 
     public function setTextColorRaw(string $color): void
@@ -134,6 +137,8 @@ final class TcpdfDocument extends TCPDF
         }
 
         [$resolvedFile, $resolvedType] = $resolved;
+        $resolvedFile = (string) $resolvedFile;
+        $resolvedType = (string) $resolvedType;
         parent::Image(
             $resolvedFile,
             $x,

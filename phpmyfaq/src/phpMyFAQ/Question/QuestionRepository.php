@@ -98,17 +98,21 @@ readonly class QuestionRepository
             AND
                 lang = '%s'", Database::getTablePrefix(), $questionId, $db->escape($language));
 
-        if (($result = $db->query($query)) && ($row = $db->fetchObject($result))) {
-            return [
-                'id' => $row->id,
-                'lang' => $row->lang,
-                'username' => $row->username,
-                'email' => $row->email,
-                'category_id' => $row->category_id,
-                'question' => $row->question,
-                'created' => $row->created,
-                'is_visible' => $row->is_visible,
-            ];
+        $result = $db->query($query);
+        if ($result !== false) {
+            $row = $db->fetchObject($result);
+            if ($row instanceof \stdClass) {
+                return [
+                    'id' => (int) $row->id,
+                    'lang' => (string) $row->lang,
+                    'username' => (string) $row->username,
+                    'email' => (string) $row->email,
+                    'category_id' => (int) $row->category_id,
+                    'question' => (string) $row->question,
+                    'created' => (string) $row->created,
+                    'is_visible' => (string) $row->is_visible,
+                ];
+            }
         }
 
         return $question;
@@ -152,14 +156,14 @@ readonly class QuestionRepository
 
                 $questions[] = [
                     'id' => (int) $row->id,
-                    'lang' => $row->lang,
-                    'username' => $row->username,
-                    'email' => $row->email,
+                    'lang' => (string) $row->lang,
+                    'username' => (string) $row->username,
+                    'email' => (string) $row->email,
                     'category_id' => (int) $row->category_id,
-                    'question' => $row->question,
-                    'created' => $row->created,
+                    'question' => (string) $row->question,
+                    'created' => (string) $row->created,
                     'answer_id' => (int) $row->answer_id,
-                    'is_visible' => $row->is_visible,
+                    'is_visible' => (string) $row->is_visible,
                 ];
             }
         }
@@ -187,7 +191,7 @@ readonly class QuestionRepository
         if ($db->numRows($result) > 0) {
             $row = $db->fetchObject($result);
 
-            return $row instanceof \stdClass ? $row->is_visible : '';
+            return $row instanceof \stdClass ? (string) $row->is_visible : '';
         }
 
         return '';

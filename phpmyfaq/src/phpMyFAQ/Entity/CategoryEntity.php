@@ -48,7 +48,7 @@ class CategoryEntity
 
     public function getActive(): bool
     {
-        return $this->active;
+        return $this->active ?? false;
     }
 
     public function setActive(bool $active): CategoryEntity
@@ -96,7 +96,7 @@ class CategoryEntity
 
     public function getLang(): string
     {
-        return $this->lang;
+        return $this->lang ?? '';
     }
 
     public function setLang(string $lang): CategoryEntity

@@ -216,14 +216,15 @@ class CategoryController extends AbstractFrontController
     {
         $faqListData = $faq->getFaqsDataByCategoryId(
             $categoryId,
-            $this->configuration->get('records.orderby'),
-            $this->configuration->get('records.sortby'),
+            (string) $this->configuration->get('records.orderby'),
+            (string) $this->configuration->get('records.sortby'),
         );
 
         if ($faqListData['items'] === []) {
             return '';
         }
 
+        /* @mago-expect analysis:less-specific-nested-argument-type - the FAQ list shape is produced by the typed data layer */
         return $this->renderView('category-faq-list.twig', $faqListData);
     }
 
@@ -297,7 +298,7 @@ class CategoryController extends AbstractFrontController
         $link = new Link($url, $this->configuration);
         $link->setTitle($text);
         $link->text = $text;
-        $link->tooltip = Translation::get(key: 'msgCategoryUp');
+        $link->tooltip = Translation::getString('msgCategoryUp');
 
         return sprintf('<i class="bi bi-arrow-90deg-up"></i> %s', $link->toHtmlAnchor());
     }

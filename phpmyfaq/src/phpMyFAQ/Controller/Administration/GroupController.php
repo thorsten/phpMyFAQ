@@ -92,7 +92,8 @@ final class GroupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::GROUP_ADD);
 
-        if (!Token::getInstance($this->session)->verifyToken('add-group', $request->attributes->get('csrf'))) {
+        $csrfToken = $request->attributes->get('csrf');
+        if (!Token::getInstance($this->session)->verifyToken('add-group', is_string($csrfToken) ? $csrfToken : null)) {
             throw new UnauthorizedHttpException('Invalid CSRF token');
         }
 
@@ -109,20 +110,20 @@ final class GroupController extends AbstractAdministrationController
         }
 
         $groupData = [
-            'name' => $groupName,
-            'description' => $groupDescription,
-            'auto_join' => $groupAutoJoin,
+            'name' => (string) $groupName,
+            'description' => (string) $groupDescription,
+            'auto_join' => (string) $groupAutoJoin,
         ];
 
         $groupId = $this->user->perm instanceof MediumPermission ? $this->user->perm->addGroup($groupData) : 0;
         $message = '';
         if ($groupId === 0) {
-            $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get(key: 'ad_adus_dberr'));
+            $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::getString('ad_adus_dberr'));
         }
 
         if ($groupId !== 0) {
             $this->adminLog->log($this->currentUser, AdminLogType::GROUP_ADD->value . ':' . $groupId);
-            $message = sprintf('<div class="alert alert-success">%s</div>', Translation::get(key: 'ad_group_suc'));
+            $message = sprintf('<div class="alert alert-success">%s</div>', Translation::getString('ad_group_suc'));
         }
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));

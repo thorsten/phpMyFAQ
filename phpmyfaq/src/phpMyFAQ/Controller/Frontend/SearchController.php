@@ -126,7 +126,10 @@ final class SearchController extends AbstractFrontController
         );
 
         // Check for solution ID redirect
-        if ($searchService->shouldRedirectToSolutionId($inputSearchTerm, $searchData['numberOfSearchResults'])) {
+        if ($searchService->shouldRedirectToSolutionId(
+            $inputSearchTerm,
+            (int) ($searchData['numberOfSearchResults'] ?? 0),
+        )) {
             $redirectResponse = new RedirectResponse($searchService->getSolutionIdRedirectUrl($inputSearchTerm));
             $redirectResponse->send();
             exit();
@@ -134,10 +137,10 @@ final class SearchController extends AbstractFrontController
 
         // Set up Twig extensions
         $this->addExtension(new AttributeExtension(TagNameTwigExtension::class));
-        $this->addFilter(new TwigFilter('repeat', static fn($string, $times): string => str_repeat(
-            (string) $string,
+        $this->addFilter(new TwigFilter('repeat', static fn(
+            $string,
             $times,
-        )));
+        ): string => str_repeat((string) $string, max(0, (int) $times))));
 
         // Determine page header
         $pageHeader = $searchData['tagSearch']
@@ -162,8 +165,14 @@ final class SearchController extends AbstractFrontController
             'msgPage' => Translation::get(key: 'msgPage'),
             'currentPage' => $searchData['currentPage'],
             'from' => Translation::get(key: 'msgVoteFrom'),
-            'msgSearchResults' => $this->plurals->get('plmsgSearchAmount', $searchData['numberOfSearchResults'] ?? 0),
-            'msgSearchResultsPagination' => $this->plurals->get('plmsgPagesTotal', $searchData['totalPages'] ?? 0),
+            'msgSearchResults' => $this->plurals->get(
+                'plmsgSearchAmount',
+                (int) ($searchData['numberOfSearchResults'] ?? 0),
+            ),
+            'msgSearchResultsPagination' => $this->plurals->get(
+                'plmsgPagesTotal',
+                (int) ($searchData['totalPages'] ?? 0),
+            ),
             'searchTerm' => $searchData['searchTerm'],
             'searchTags' => $searchData['searchTags'],
             'msgSearchWord' => Translation::get(key: 'msgSearchWord'),
