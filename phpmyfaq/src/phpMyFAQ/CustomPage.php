@@ -54,7 +54,7 @@ readonly class CustomPage
      * Get all custom pages for the current language.
      *
      * @param bool $activeOnly Filter by active status
-     * @return array<int, array>
+     * @return array<int, array<string, mixed>>
      */
     public function getAllPages(bool $activeOnly = false): array
     {
@@ -298,7 +298,7 @@ readonly class CustomPage
      * Map database row to array.
      *
      * @param stdClass $row Database row
-     * @return array Mapped data
+     * @return array<string, mixed> Mapped data
      */
     private function mapRowToArray(stdClass $row): array
     {

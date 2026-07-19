@@ -30,6 +30,7 @@ use phpMyFAQ\Instance\Database;
  */
 class Sqlsrv extends Database implements DriverInterface
 {
+    /** @var string[] */
     private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
             id INTEGER NOT NULL,

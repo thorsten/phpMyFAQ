@@ -315,7 +315,7 @@ class Elasticsearch
     /**
      * Bulk indexing of all FAQs
      *
-     * @param array<string, mixed> $faqs
+     * @param array<int, array<string, mixed>> $faqs
      * @return array<string, mixed>
      */
     public function bulkIndex(array $faqs): array

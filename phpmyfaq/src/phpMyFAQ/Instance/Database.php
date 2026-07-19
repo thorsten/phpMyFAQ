@@ -72,11 +72,6 @@ class Database
      */
     public static function getInstance(): ?DriverInterface
     {
-        if (!self::$driver instanceof DriverInterface) {
-            $className = self::class;
-            self::$driver = new $className();
-        }
-
         return self::$driver;
     }
 

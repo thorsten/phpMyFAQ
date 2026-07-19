@@ -49,11 +49,17 @@ final class PdfController extends AbstractController
         }
     }
 
+    /**
+     * @param callable(\phpMyFAQ\Configuration): Faq $faqFactory
+     */
     public function setFaqFactory(callable $faqFactory): void
     {
         $this->faqFactory = $faqFactory;
     }
 
+    /**
+     * @param callable(\phpMyFAQ\Configuration): Services $servicesFactory
+     */
     public function setServicesFactory(callable $servicesFactory): void
     {
         $this->servicesFactory = $servicesFactory;

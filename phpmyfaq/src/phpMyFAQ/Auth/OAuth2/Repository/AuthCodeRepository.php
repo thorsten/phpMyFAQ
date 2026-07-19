@@ -39,18 +39,20 @@ final class AuthCodeRepository extends AbstractRepository implements AuthCodeRep
             $authCodeEntity->getScopes(),
         );
 
+        $userIdentifier = $authCodeEntity->getUserIdentifier();
+
+        $userIdentifier = $userIdentifier === null ? null : (string) $userIdentifier;
+
+        $redirectUri = $authCodeEntity->getRedirectUri();
+
         $insert = sprintf(
             "INSERT INTO %s (identifier, client_id, user_id, redirect_uri, scopes, revoked, expires_at, created)
              VALUES ('%s', '%s', %s, %s, '%s', 0, '%s', %s)",
             $this->table('faqoauth_auth_codes'),
             $this->db()->escape($authCodeEntity->getIdentifier()),
             $this->db()->escape($authCodeEntity->getClient()->getIdentifier()),
-            $authCodeEntity->getUserIdentifier() === null
-                ? 'NULL'
-                : "'" . $this->db()->escape($authCodeEntity->getUserIdentifier()) . "'",
-            $authCodeEntity->getRedirectUri() === null
-                ? 'NULL'
-                : "'" . $this->db()->escape($authCodeEntity->getRedirectUri()) . "'",
+            $userIdentifier === null ? 'NULL' : "'" . $this->db()->escape($userIdentifier) . "'",
+            $redirectUri === null ? 'NULL' : "'" . $this->db()->escape($redirectUri) . "'",
             $this->db()->escape((string) json_encode($scopes)),
             $authCodeEntity->getExpiryDateTime()->format('Y-m-d H:i:s'),
             $this->db()->now(),

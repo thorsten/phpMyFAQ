@@ -68,7 +68,7 @@ class LanguageListener
         $configuration->setContainer($this->container);
 
         $detect = (bool) $configuration->get(item: 'main.languageDetection');
-        $configLang = $configuration->get(item: 'main.language');
+        $configLang = (string) $configuration->get(item: 'main.language');
 
         $currentLanguage = $detect
             ? $language->setLanguageWithDetection($configLang)

@@ -134,7 +134,10 @@ class AuthSso extends Auth implements AuthDriverInterface
     private function createLdapAuth(): AuthLdap
     {
         if ($this->ldapFactory instanceof Closure) {
-            return ($this->ldapFactory)();
+            $authLdap = ($this->ldapFactory)();
+            if ($authLdap instanceof AuthLdap) {
+                return $authLdap;
+            }
         }
 
         return new AuthLdap($this->configuration);
@@ -143,7 +146,10 @@ class AuthSso extends Auth implements AuthDriverInterface
     private function createUser(): User
     {
         if ($this->userFactory instanceof Closure) {
-            return ($this->userFactory)();
+            $user = ($this->userFactory)();
+            if ($user instanceof User) {
+                return $user;
+            }
         }
 
         return new User($this->configuration);

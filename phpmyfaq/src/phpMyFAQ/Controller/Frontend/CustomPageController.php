@@ -46,7 +46,7 @@ final class CustomPageController extends AbstractFrontController
     #[Route(path: '/page/{slug}.html', name: 'public.page', requirements: ['slug' => '[a-z0-9\-_]+'], methods: ['GET'])]
     public function show(Request $request): Response
     {
-        $slug = $request->attributes->get('slug');
+        $slug = (string) $request->attributes->get('slug', '');
 
         if ($slug === null || $slug === '') {
             return $this->render('404.twig', [

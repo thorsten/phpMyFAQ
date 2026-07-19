@@ -239,8 +239,9 @@ readonly class QueryHelper
         $aChildren = array_values($category->getChildren($categoryId));
 
         foreach ($aChildren as $aChild) {
-            $sqlWhereFilter .= ' OR fcr.category_id = ' . $aChild;
-            $sqlWhereFilter .= $this->getCategoryIdWhereSequence($aChild, $category);
+            $childCategoryId = (int) $aChild;
+            $sqlWhereFilter .= ' OR fcr.category_id = ' . $childCategoryId;
+            $sqlWhereFilter .= $this->getCategoryIdWhereSequence($childCategoryId, $category);
         }
 
         return $sqlWhereFilter;

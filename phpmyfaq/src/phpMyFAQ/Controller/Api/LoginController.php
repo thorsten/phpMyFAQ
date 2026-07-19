@@ -82,9 +82,15 @@ final class LoginController extends AbstractController
     public function login(Request $request): JsonResponse
     {
         $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        if (!$data instanceof \stdClass) {
+            return $this->json([
+                'loggedin' => false,
+                'error' => 'The request body must be a JSON object.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
-        $faqUsername = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $faqPassword = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $faqUsername = Filter::filterVar($data->username ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $faqPassword = Filter::filterVar($data->password ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $user = new CurrentUser($this->configuration);
         $userAuthentication = new UserAuthentication($this->configuration, $user, $this->getRateLimiter());

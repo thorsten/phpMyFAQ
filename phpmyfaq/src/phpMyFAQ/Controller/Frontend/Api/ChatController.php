@@ -104,7 +104,7 @@ final class ChatController extends AbstractController
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $recipientId = Filter::filterVar($data->recipientId ?? 0, FILTER_VALIDATE_INT);
         $message = trim((string) Filter::filterVar($data->message ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
-        $csrfToken = trim($data->csrfToken ?? '');
+        $csrfToken = trim((string) ($data->csrfToken ?? ''));
 
         if (!$this->verifySessionCsrfToken('send-chat-message', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
@@ -142,7 +142,7 @@ final class ChatController extends AbstractController
         $messageId = Filter::filterVar($request->attributes->get('messageId'), FILTER_VALIDATE_INT);
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        $csrfToken = trim($data->csrfToken ?? '');
+        $csrfToken = trim((string) ($data->csrfToken ?? ''));
 
         if (!$this->verifySessionCsrfToken('mark-chat-read', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);

@@ -58,11 +58,13 @@ class Faq
     /**
      * The current FAQ record.
      */
+    /** @var array<string, mixed> */
     public array $faqRecord = [];
 
     /**
      * All current FAQ records in an array.
      */
+    /** @var array<int, array<string, mixed>> */
     public array $faqRecords = [];
 
     /**

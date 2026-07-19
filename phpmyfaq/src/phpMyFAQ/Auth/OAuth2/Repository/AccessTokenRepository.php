@@ -44,7 +44,7 @@ final class AccessTokenRepository extends AbstractRepository implements AccessTo
             $token->addScope($scope);
         }
 
-        if ($userIdentifier !== null) {
+        if ($userIdentifier !== null && $userIdentifier !== '') {
             $token->setUserIdentifier($userIdentifier);
         }
 
@@ -58,15 +58,17 @@ final class AccessTokenRepository extends AbstractRepository implements AccessTo
             $accessTokenEntity->getScopes(),
         );
 
+        $tokenUserIdentifier = $accessTokenEntity->getUserIdentifier();
+
+        $tokenUserIdentifier = $tokenUserIdentifier === null ? null : (string) $tokenUserIdentifier;
+
         $insert = sprintf(
             "INSERT INTO %s (identifier, client_id, user_id, scopes, revoked, expires_at, created)
              VALUES ('%s', '%s', %s, '%s', 0, '%s', %s)",
             $this->table('faqoauth_access_tokens'),
             $this->db()->escape($accessTokenEntity->getIdentifier()),
             $this->db()->escape($accessTokenEntity->getClient()->getIdentifier()),
-            $accessTokenEntity->getUserIdentifier() === null
-                ? 'NULL'
-                : "'" . $this->db()->escape($accessTokenEntity->getUserIdentifier()) . "'",
+            $tokenUserIdentifier === null ? 'NULL' : "'" . $this->db()->escape($tokenUserIdentifier) . "'",
             $this->db()->escape((string) json_encode($scopes)),
             $this->db()->escape($accessTokenEntity->getExpiryDateTime()->format('Y-m-d H:i:s')),
             $this->db()->now(),

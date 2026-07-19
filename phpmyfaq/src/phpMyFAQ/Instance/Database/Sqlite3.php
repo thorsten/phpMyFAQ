@@ -30,6 +30,7 @@ use phpMyFAQ\Instance\Database;
  */
 class Sqlite3 extends Database implements DriverInterface
 {
+    /** @var string[] */
     private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
             id INTEGER NOT NULL,

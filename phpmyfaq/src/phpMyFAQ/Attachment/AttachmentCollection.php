@@ -69,7 +69,7 @@ class AttachmentCollection
         $result = $this->configuration->getDb()->query($query);
 
         if ($result) {
-            return $this->configuration->getDb()->fetchAll($result);
+            return $this->configuration->getDb()->fetchAll($result) ?? [];
         }
 
         return $breadCrumbs;

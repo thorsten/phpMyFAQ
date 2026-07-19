@@ -115,7 +115,11 @@ class RegistrationHelper extends AbstractHelper
         $mail->setReplyTo($email, $fullName);
         $mail->addTo($this->configuration->getAdminEmail());
 
-        $mail->subject = Utils::resolveMarkers(Translation::get(key: 'emailRegSubject'), $this->configuration);
+        $emailRegSubject = Translation::get(key: 'emailRegSubject');
+        $mail->subject = Utils::resolveMarkers(
+            is_string($emailRegSubject) ? $emailRegSubject : '',
+            $this->configuration,
+        );
         $mail->message = $text;
         $mail->send();
         unset($mail);

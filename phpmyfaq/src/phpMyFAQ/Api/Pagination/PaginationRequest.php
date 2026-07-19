@@ -139,7 +139,7 @@ class PaginationRequest
             $offset = ($page - 1) * $perPage;
         }
 
-        return new self($limit, $offset, $page, $perPage, $isPageBased, $isOffsetBased);
+        return new self((int) $limit, $offset, $page, (int) $perPage, $isPageBased, $isOffsetBased);
     }
 
     /**

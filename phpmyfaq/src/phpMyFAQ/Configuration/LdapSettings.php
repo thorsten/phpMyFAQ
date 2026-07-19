@@ -50,7 +50,15 @@ readonly class LdapSettings
             $key = 1;
             $configuredServers = $ldapConfiguration->getServers();
             while (array_key_exists($key, $configuredServers)) {
-                $servers[$key] = $configuredServers[$key];
+                $configuredServer = $configuredServers[$key];
+                $normalizedServer = [];
+                if (is_array($configuredServer)) {
+                    foreach ($configuredServer as $serverKey => $serverValue) {
+                        $normalizedServer[(string) $serverKey] = $serverValue;
+                    }
+                }
+
+                $servers[$key] = $normalizedServer;
                 ++$key;
             }
         }
@@ -82,10 +90,10 @@ readonly class LdapSettings
     public function getLdapMapping(): array
     {
         return [
-            'name' => $this->coreConfiguration->get(item: 'ldap.ldap_mapping.name'),
-            'username' => $this->coreConfiguration->get(item: 'ldap.ldap_mapping.username'),
-            'mail' => $this->coreConfiguration->get(item: 'ldap.ldap_mapping.mail'),
-            'memberOf' => $this->coreConfiguration->get(item: 'ldap.ldap_mapping.memberOf'),
+            'name' => (string) $this->coreConfiguration->get(item: 'ldap.ldap_mapping.name'),
+            'username' => (string) $this->coreConfiguration->get(item: 'ldap.ldap_mapping.username'),
+            'mail' => (string) $this->coreConfiguration->get(item: 'ldap.ldap_mapping.mail'),
+            'memberOf' => (string) $this->coreConfiguration->get(item: 'ldap.ldap_mapping.memberOf'),
         ];
     }
 

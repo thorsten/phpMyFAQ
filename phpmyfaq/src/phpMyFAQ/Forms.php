@@ -165,13 +165,16 @@ readonly class Forms
     /**
      * Inserts a given input into the database (Only used in install-routine)
      *
-     * @param array $input Input array
+     * @param array<string, mixed> $input Input array
      */
     public function insertInputIntoDatabase(array $input): bool
     {
         return $this->formsRepository->insertInput($input);
     }
 
+    /**
+     * @param array<string, mixed> $input
+     */
     public function getInsertQueries(array $input): string
     {
         return $this->formsRepository->buildInsertQuery($input);

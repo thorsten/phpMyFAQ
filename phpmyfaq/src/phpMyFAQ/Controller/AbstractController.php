@@ -197,7 +197,7 @@ abstract class AbstractController
     public function getTwigWrapper(): TwigWrapper
     {
         $twigWrapper = new TwigWrapper(
-            PMF_ROOT_DIR . '/assets/templates',
+            (string) PMF_ROOT_DIR . '/assets/templates',
             false,
             $this->configuration->getTemplateSet(),
         );
@@ -399,7 +399,7 @@ abstract class AbstractController
             $code = Filter::filterVar($data->{'g-recaptcha-response'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         }
 
-        return $captcha->checkCaptchaCode($code);
+        return $captcha->checkCaptchaCode((string) $code);
     }
 
     public function isApiEnabled(): bool

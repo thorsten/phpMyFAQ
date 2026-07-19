@@ -35,7 +35,7 @@ final readonly class MetaService
      *     version: string,
      *     title: string,
      *     language: string,
-     *     availableLanguages: array<string, string>,
+     *     availableLanguages: array<array-key, string>,
      *     enabledFeatures: array<string, bool>,
      *     publicLogoUrl: string,
      *     themeColors: array<string, array<string, string>>,
@@ -83,7 +83,7 @@ final readonly class MetaService
      */
     private function buildThemeColors(): array
     {
-        $themeCssPath = PMF_ROOT_DIR . '/assets/templates/default/theme.css';
+        $themeCssPath = (string) PMF_ROOT_DIR . '/assets/templates/default/theme.css';
         if (!is_readable($themeCssPath)) {
             return [
                 'light' => [],

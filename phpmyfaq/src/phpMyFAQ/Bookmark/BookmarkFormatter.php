@@ -72,8 +72,8 @@ readonly class BookmarkFormatter
             $this->configuration->getDefaultUrl(),
             $categoryId,
             (int) $faqData['id'],
-            $faqData['lang'],
-            Link\Util\TitleSlugifier::slug($faqData['title']),
+            (string) ($faqData['lang'] ?? ''),
+            Link\Util\TitleSlugifier::slug((string) ($faqData['title'] ?? '')),
         );
 
         $link = new Link($url, $this->configuration);

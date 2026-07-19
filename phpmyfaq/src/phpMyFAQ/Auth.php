@@ -103,12 +103,19 @@ class Auth
         $method = ucfirst(strtolower($method));
         $authClass = '\\phpMyFAQ\\Auth\\Auth' . $method;
 
-        if (!class_exists($authClass)) {
+        if (!class_exists($authClass) || !is_subclass_of($authClass, self::class)) {
             $this->errors[] = self::PMF_ERROR_USER_NO_AUTH_TYPE;
             throw new Exception(message: self::PMF_ERROR_USER_NO_AUTH_TYPE);
         }
 
-        return new $authClass($this->configuration);
+        /* @mago-expect analysis:unknown-class-instantiation - guarded by class_exists and is_subclass_of above */
+        $auth = new $authClass($this->configuration);
+        if (!$auth instanceof AuthDriverInterface) {
+            $this->errors[] = self::PMF_ERROR_USER_NO_AUTH_TYPE;
+            throw new Exception(message: self::PMF_ERROR_USER_NO_AUTH_TYPE);
+        }
+
+        return $auth;
     }
 
     /**

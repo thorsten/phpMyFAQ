@@ -29,6 +29,7 @@ use phpMyFAQ\Configuration;
  */
 class Stopwords
 {
+    /** @var string[] */
     private array $insertQueries = [
         "INSERT INTO %sfaqstopwords (id, lang, stopword) VALUES (0, 'cs', 'dnes')",
         "INSERT INTO %sfaqstopwords (id, lang, stopword) VALUES (1, 'cs', 'cz')",

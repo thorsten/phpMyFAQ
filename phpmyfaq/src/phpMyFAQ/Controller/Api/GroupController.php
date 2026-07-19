@@ -133,7 +133,7 @@ final class GroupController extends AbstractApiController
 
         // Apply sorting if needed
         if ($sort->getOrderSql() === 'DESC') {
-            usort($allGroups, static fn($a, $b) => ($b['group-id'] ?? 0) <=> ($a['group-id'] ?? 0));
+            usort($allGroups, static fn($a, $b) => (int) ($b['group-id'] ?? 0) <=> (int) ($a['group-id'] ?? 0));
         }
 
         // Apply pagination

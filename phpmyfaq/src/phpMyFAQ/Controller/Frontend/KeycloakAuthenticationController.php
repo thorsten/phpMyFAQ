@@ -362,7 +362,10 @@ final class KeycloakAuthenticationController extends AbstractFrontController
     private function getCurrentUserService(): CurrentUser
     {
         if ($this->currentUserFactory instanceof Closure) {
-            return ($this->currentUserFactory)();
+            $currentUser = ($this->currentUserFactory)();
+            if ($currentUser instanceof CurrentUser) {
+                return $currentUser;
+            }
         }
 
         return $this->currentUser;
@@ -371,7 +374,10 @@ final class KeycloakAuthenticationController extends AbstractFrontController
     private function createUser(): User
     {
         if ($this->userFactory instanceof Closure) {
-            return ($this->userFactory)();
+            $user = ($this->userFactory)();
+            if ($user instanceof User) {
+                return $user;
+            }
         }
 
         return new User($this->configuration);

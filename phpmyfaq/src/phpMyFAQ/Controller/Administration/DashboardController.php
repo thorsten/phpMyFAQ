@@ -81,7 +81,7 @@ final class DashboardController extends AbstractAdministrationController
             'adminDashboardInfoNumComments' => $faqTableInfo[Database::getTablePrefix() . 'faqcomments'],
             'adminDashboardInfoNumQuestions' => $faqTableInfo[Database::getTablePrefix() . 'faqquestions'],
             'adminDashboardInfoUser' => Translation::get(key: 'msgNews'),
-            'adminDashboardInfoNumUser' => $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1,
+            'adminDashboardInfoNumUser' => (int) $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1,
             'adminDashboardHeaderUsersOnline' => Translation::get(key: 'msgUserOnline'),
             'adminDashboardInfoNumUsersOnline' => $this->adminSession->getNumberOfOnlineUsers(windowSeconds: 600),
             'adminDashboardHeaderVisits' => Translation::get(key: 'ad_stat_report_visits'),
@@ -139,7 +139,8 @@ final class DashboardController extends AbstractAdministrationController
 
             $templateVars = [
                 ...$templateVars,
-                'showVersion' => $this->configuration->get(item: 'main.enableAutoUpdateHint') || $version === 'version',
+                'showVersion' =>
+                    (bool) $this->configuration->get(item: 'main.enableAutoUpdateHint') || $version === 'version',
             ];
         }
 
