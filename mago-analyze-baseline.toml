@@ -674,30 +674,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/AbstractFile.php"
-code = "invalid-method-access"
-message = "Attempting to access a method on a non-object type (`string`)."
-count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/AbstractFile.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `is_writable`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/AbstractFile.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `rmdir`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/AbstractFile.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `unlink`: expected `string`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/AbstractFile.php"
 code = "redundant-condition"
 message = "This condition (type `resource`) will always evaluate to true."
 count = 1
@@ -2468,51 +2444,9 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/SessionController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/SessionController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/SessionController.php"
-code = "mixed-operand"
-message = "Invalid middle operand: type `mixed` cannot be reliably used in string concatenation."
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/SessionController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/SessionController.php"
-code = "possibly-false-argument"
-message = "Argument #1 of function `fopen` is possibly `false`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/SessionController.php"
-code = "possibly-false-argument"
-message = 'Argument #1 of method `Symfony\Component\HttpFoundation\BinaryFileResponse::__construct` is possibly `false`, but parameter type `SplFileInfo|string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/SessionController.php"
-code = "possibly-false-argument"
-message = 'Argument #1 of method `phpMyFAQ\Administration\Session::getSessionsByDate` is possibly `false`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/SessionController.php"
-code = "possibly-false-argument"
-message = 'Argument #2 of method `phpMyFAQ\Administration\Session::getSessionsByDate` is possibly `false`, but parameter type `int` does not accept it.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/StatisticsController.php"
@@ -2972,62 +2906,8 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Helper\StatisticsHelper::getFirstTrackingDate`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Helper\StatisticsHelper::getLastTrackingDate`: expected `int`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #1 of `round`: expected `float|int`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `date`: expected `int|null`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "mixed-operand"
-message = "Right operand in binary operation has type `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "possibly-false-argument"
-message = 'Argument #1 of method `phpMyFAQ\Administration\Session::getSessionsByDate` is possibly `false`, but parameter type `int` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "possibly-false-argument"
-message = "Argument #2 of function `date` is possibly `false`, but parameter type `int|null` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "possibly-false-argument"
-message = "Argument #2 of function `explode` is possibly `false`, but parameter type `string` does not accept it."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "possibly-false-argument"
-message = "Argument #2 of function `strtotime` is possibly `false`, but parameter type `int|null` does not accept it."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "possibly-false-operand"
-message = "Left operand in arithmetic operation might be `false` (type `false|int`)."
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
@@ -3968,27 +3848,9 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/WebAuthnController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth\AuthWebAuthn::authenticate`: expected `stdClass`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/WebAuthnController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/WebAuthnController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/WebAuthnController.php"
-code = "non-existent-attribute-class"
-message = 'Attribute class `Symfony\Component\Routing\Annotation\Route` not found or could not be autoloaded.'
-count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/LlmsController.php"
@@ -4349,24 +4211,6 @@ file = "phpmyfaq/src/phpMyFAQ/Export.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #2 of `date`: expected `int|null`, but found `mixed`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Json.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Date::createIsoDate`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Json.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Strings::htmlspecialchars`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Json.php"
-code = "mixed-array-access"
-message = "Unsafe array access on type `mixed`."
-count = 8
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Json.php"

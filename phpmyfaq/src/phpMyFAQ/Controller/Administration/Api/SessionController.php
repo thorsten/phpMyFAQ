@@ -50,17 +50,21 @@ final class SessionController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $requestData = json_decode($request->getContent());
+        $requestData = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('export-sessions', $requestData->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('export-sessions', (string) ($requestData->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $firstHour = Filter::filterVar($requestData->firstHour, FILTER_SANITIZE_SPECIAL_CHARS);
-        $lastHour = Filter::filterVar($requestData->lastHour, FILTER_SANITIZE_SPECIAL_CHARS);
+        $firstHour = (string) Filter::filterVar($requestData->firstHour ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $lastHour = (string) Filter::filterVar($requestData->lastHour ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        $data = $this->adminSession->getSessionsByDate(strtotime((string) $firstHour), strtotime((string) $lastHour));
+        $data = $this->adminSession->getSessionsByDate((int) strtotime($firstHour), (int) strtotime($lastHour));
         $filePath = tempnam(sys_get_temp_dir(), prefix: 'csv_');
+        if ($filePath === false) {
+            return $this->json(['error' => 'Cannot create the export file.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
         $file = fopen($filePath, mode: 'w');
         if ($file) {
             foreach ($data as $row) {
@@ -74,7 +78,7 @@ final class SessionController extends AbstractAdministrationApiController
             $binaryFileResponse = new BinaryFileResponse($filePath);
             $binaryFileResponse->setContentDisposition(
                 ResponseHeaderBag::DISPOSITION_INLINE,
-                'sessions_' . $requestData->firstHour . '-' . $requestData->lastHour . '.csv',
+                'sessions_' . $firstHour . '-' . $lastHour . '.csv',
             );
             $binaryFileResponse->headers->set('Content-Type', 'text/csv');
             return $binaryFileResponse;

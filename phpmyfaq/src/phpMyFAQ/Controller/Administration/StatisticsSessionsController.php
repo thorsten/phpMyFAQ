@@ -72,13 +72,13 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
             'msgVisits' => Translation::get(key: 'ad_stat_vis'),
             'numberOfVisits' => $visitsPerDay,
             'msgVisitsPerDay' => Translation::get(key: 'ad_stat_vpd'),
-            'visitsPerDay' => $stats->numberOfDays !== 0
-                ? round($visitsPerDay / $stats->numberOfDays, precision: 2)
+            'visitsPerDay' => (int) $stats->numberOfDays !== 0
+                ? round($visitsPerDay / (int) $stats->numberOfDays, precision: 2)
                 : 0,
             'msgFirstDate' => Translation::get(key: 'ad_stat_fien'),
-            'firstDate' => $statisticsHelper->getFirstTrackingDate($stats->firstDate),
+            'firstDate' => $statisticsHelper->getFirstTrackingDate((int) $stats->firstDate),
             'msgLastDate' => Translation::get(key: 'ad_stat_laen'),
-            'lastDate' => $statisticsHelper->getLastTrackingDate($stats->lastDate),
+            'lastDate' => $statisticsHelper->getLastTrackingDate((int) $stats->lastDate),
             'msgSessionBrowse' => Translation::get(key: 'ad_stat_browse'),
             'renderedDaySelector' => $statisticsHelper->renderDaySelector(),
             'buttonOkay' => Translation::get(key: 'ad_stat_ok'),
@@ -89,7 +89,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
             'buttonDeleteMonth' => Translation::get(key: 'ad_stat_delete'),
             'csrfTokenExport' => Token::getInstance($this->session)->getTokenString(page: 'export-sessions'),
             'dateToday' => date(format: 'Y-m-d'),
-            'datePickerMinDate' => date(format: 'Y-m-d', timestamp: $stats->firstDate),
+            'datePickerMinDate' => date(format: 'Y-m-d', timestamp: (int) $stats->firstDate),
         ]);
     }
 
@@ -106,11 +106,11 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
         $day = (int) Filter::filterVar($request->getPayload()->get(key: 'day'), FILTER_VALIDATE_INT);
 
         if ($day === 0) {
-            $day = strtotime((string) $request->attributes->get(key: 'date'));
+            $day = (int) strtotime((string) $request->attributes->get(key: 'date'));
         }
 
-        $firstHour = strtotime(datetime: 'midnight', baseTimestamp: $day);
-        $lastHour = strtotime(datetime: 'tomorrow', baseTimestamp: $firstHour) - 1;
+        $firstHour = (int) strtotime(datetime: 'midnight', baseTimestamp: $day);
+        $lastHour = (int) strtotime(datetime: 'tomorrow', baseTimestamp: $firstHour) - 1;
 
         $sessionData = $this->adminSession->getSessionsByDate($firstHour, $lastHour);
 
@@ -139,10 +139,9 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
         $sessionId = (int) Filter::filterVar($request->attributes->get(key: 'sessionId'), FILTER_VALIDATE_INT);
 
         $time = $this->adminSession->getTimeFromSessionId($sessionId);
-        $trackingData = explode(
-            separator: "\n",
-            string: file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date(format: 'dmY', timestamp: $time)),
-        );
+        $trackingFile = (string) PMF_CONTENT_DIR . '/core/data/tracking' . date(format: 'dmY', timestamp: $time);
+        $trackingFileContent = file_get_contents($trackingFile);
+        $trackingData = explode(separator: "\n", string: $trackingFileContent === false ? '' : $trackingFileContent);
 
         return $this->render(file: '@admin/statistics/sessions.session.twig', context: [
             ...$this->getHeader($request),

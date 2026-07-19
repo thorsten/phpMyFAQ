@@ -33,7 +33,7 @@ use Random\RandomException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class WebAuthnController extends AbstractController
 {
@@ -65,13 +65,16 @@ final class WebAuthnController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        if (!$data instanceof \stdClass) {
+            return $this->json(['error' => 'The request body must be a JSON object.'], Response::HTTP_BAD_REQUEST);
+        }
 
         $csrfToken = Filter::filterVar($data->csrfToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance($this->session)->verifyToken('webauthn-prepare', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $username = Filter::filterVar($data->username ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if (!$this->user->getUserByLogin($username, raiseError: false)) {
             try {
@@ -116,13 +119,16 @@ final class WebAuthnController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        if (!$data instanceof \stdClass) {
+            return $this->json(['error' => 'The request body must be a JSON object.'], Response::HTTP_BAD_REQUEST);
+        }
 
         $csrfToken = Filter::filterVar($data->csrfToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance($this->session)->verifyToken('webauthn-register', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $register = Filter::filterVar($data->register, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $register = Filter::filterVar($data->register ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $webAuthnUser = $this->authWebAuthn->getUserFromSession();
         if ($webAuthnUser === null) {
@@ -159,7 +165,11 @@ final class WebAuthnController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        if (!$data instanceof \stdClass) {
+            return $this->json(['error' => 'The request body must be a JSON object.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $login = Filter::filterVar($data->username ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         try {
             $this->user->getUserByLogin($login);
@@ -185,12 +195,20 @@ final class WebAuthnController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $loginData = $data->login;
+        if (!$data instanceof \stdClass) {
+            return $this->json(['error' => 'The request body must be a JSON object.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $login = Filter::filterVar($data->username ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $loginData = $data->login ?? null;
 
         $this->user->getUserByLogin($login);
 
         $webAuthnKeys = $this->user->getWebAuthnKeys();
+
+        if (!$loginData instanceof \stdClass) {
+            return $this->json(['error' => Translation::get(key: 'ad_auth_fail')], Response::HTTP_BAD_REQUEST);
+        }
 
         if ($this->authWebAuthn->authenticate($loginData, $webAuthnKeys)) {
             $currentUser = new CurrentUser($this->configuration);

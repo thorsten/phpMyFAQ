@@ -184,7 +184,7 @@ abstract class AbstractFile extends AbstractEntry
         );
 
         foreach ($it as $file) {
-            if (in_array($file->getBasename(), ['.', '..'], strict: true)) {
+            if (!$file instanceof \SplFileInfo || in_array($file->getBasename(), ['.', '..'], strict: true)) {
                 continue;
             }
 

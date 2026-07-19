@@ -72,16 +72,20 @@ class Json extends Export
         );
 
         foreach ($faqData as $data) {
+            if (!is_array($data)) {
+                continue;
+            }
+
             $generated[] = [
                 'faq' => [
-                    'id' => $data['id'],
-                    'language' => $data['lang'],
-                    'category' => $this->category->getPath((int) $data['category_id'], separator: ' >> '),
-                    'keywords' => $data['keywords'],
-                    'question' => strip_tags((string) $data['topic']),
-                    'answer' => Strings::htmlspecialchars($data['content']),
-                    'author' => $data['author_name'],
-                    'last_modified' => Date::createIsoDate($data['lastmodified']),
+                    'id' => (int) ($data['id'] ?? 0),
+                    'language' => (string) ($data['lang'] ?? ''),
+                    'category' => $this->category->getPath((int) ($data['category_id'] ?? 0), separator: ' >> '),
+                    'keywords' => (string) ($data['keywords'] ?? ''),
+                    'question' => strip_tags((string) ($data['topic'] ?? '')),
+                    'answer' => Strings::htmlspecialchars((string) ($data['content'] ?? '')),
+                    'author' => (string) ($data['author_name'] ?? ''),
+                    'last_modified' => Date::createIsoDate((string) ($data['lastmodified'] ?? '')),
                 ],
             ];
         }
