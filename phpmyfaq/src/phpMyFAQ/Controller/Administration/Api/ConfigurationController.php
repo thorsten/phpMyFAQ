@@ -47,9 +47,9 @@ final class ConfigurationController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('configuration', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('configuration', (string) ($data->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -78,9 +78,12 @@ final class ConfigurationController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('activate-maintenance-mode', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken(
+            'activate-maintenance-mode',
+            (string) ($data->csrf ?? ''),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -103,9 +106,9 @@ final class ConfigurationController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('configuration', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('configuration', (string) ($data->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

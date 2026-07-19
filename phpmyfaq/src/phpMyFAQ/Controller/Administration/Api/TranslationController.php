@@ -50,8 +50,14 @@ final class TranslationController extends AbstractAdministrationApiController
         $this->userHasPermission(PermissionType::FAQ_TRANSLATE);
 
         $data = json_decode($request->getContent(), associative: true);
+        if (!is_array($data)) {
+            return $this->json([
+                'success' => false,
+                'error' => 'The request body must be a JSON object.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
-        if (!Token::getInstance($this->session)->verifyToken('translate', $data['pmf-csrf-token'] ?? '')) {
+        if (!Token::getInstance($this->session)->verifyToken('translate', (string) ($data['pmf-csrf-token'] ?? ''))) {
             return $this->json([
                 'success' => false,
                 'error' => 'CSRF - ' . Translation::getString(key: 'msgNoPermission'),
@@ -59,9 +65,9 @@ final class TranslationController extends AbstractAdministrationApiController
         }
 
         // Validate required fields
-        $contentType = $data['contentType'] ?? '';
-        $sourceLang = $data['sourceLang'] ?? '';
-        $targetLang = $data['targetLang'] ?? '';
+        $contentType = (string) ($data['contentType'] ?? '');
+        $sourceLang = (string) ($data['sourceLang'] ?? '');
+        $targetLang = (string) ($data['targetLang'] ?? '');
         $fields = $data['fields'] ?? [];
 
         if (
@@ -84,7 +90,12 @@ final class TranslationController extends AbstractAdministrationApiController
         }
 
         try {
-            $translationRequest = new TranslationRequest($contentType, $sourceLang, $targetLang, $fields);
+            $fieldValues = [];
+            foreach ($fields as $fieldName => $fieldValue) {
+                $fieldValues[(string) $fieldName] = (string) $fieldValue;
+            }
+
+            $translationRequest = new TranslationRequest($contentType, $sourceLang, $targetLang, $fieldValues);
 
             $result = match ($contentType) {
                 'faq' => $this->translationService->translateFaq($translationRequest),
