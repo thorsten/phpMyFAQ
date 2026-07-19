@@ -43,9 +43,9 @@ final class AdminLogController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::STATISTICS_ADMINLOG);
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('delete-adminlog', $data->csrfToken)) {
+        if (!Token::getInstance($this->session)->verifyToken('delete-adminlog', (string) ($data->csrfToken ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -66,9 +66,9 @@ final class AdminLogController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::STATISTICS_ADMINLOG);
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('export-adminlog', $data->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('export-adminlog', (string) ($data->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -106,6 +106,7 @@ final class AdminLogController extends AbstractAdministrationApiController
 
         rewind($handle);
         $content = stream_get_contents($handle);
+        $content = $content === false ? '' : $content;
         fclose($handle);
 
         $this->adminLog->log($this->currentUser, AdminLogType::DATA_EXPORT_LOGS->value);

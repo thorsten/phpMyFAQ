@@ -1681,30 +1681,6 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AdminLogController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AdminLogController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AdminLogController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AdminLogController.php"
-code = "possibly-false-argument"
-message = 'Argument #1 of method `Symfony\Component\HttpFoundation\Response::__construct` is possibly `false`, but parameter type `null|string` does not accept it.'
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ApiKeyController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -2063,30 +2039,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/SessionController.ph
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #2 of `phpMyFAQ\Session\Token::verifyToken`: expected `null|string`, but found `nonnull`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
@@ -2551,12 +2503,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 3
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/BookmarkController.php"
-code = "mixed-property-access"
-message = "Attempting to access a property on a non-object type (`mixed`)."
-count = 5
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/ChatController.php"
 code = "mixed-argument"
 message = "Invalid argument type for argument #1 of `trim`: expected `string`, but found `nonnull`."
@@ -2962,36 +2908,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SetupController.php"
 code = "possibly-invalid-argument"
 message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Controller\Frontend\SetupController::render`: expected `array<array-key, string>`, but possibly received `array{'checkBasicError': string, 'currentLanguage': string('en'), 'currentPath': non-empty-string, 'currentYear': string, 'documentationUrl': string, 'filePermissions': null|string, 'isElasticsearchEnabled': bool, 'isLdapEnabled': bool, 'newVersion': string, 'nonCriticalSettings': array<array-key, string>, 'setupType': string('Setup'), 'supportedDatabases': array<string, string>, 'supportedTranslations': array<array-key, mixed>}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/UserController.php"
-code = "possibly-invalid-argument"
-message = 'Possible argument type mismatch for argument #1 of `phpMyFAQ\Service\Gravatar::getImage`: expected `string`, but possibly received `array<array-key, string>|int|null|string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/UserController.php"
-code = "possibly-invalid-argument"
-message = '''Possible argument type mismatch for argument #2 of `phpMyFAQ\Service\Gravatar::getImage`: expected `array<array-key, string>`, but possibly received `array{'class': string('img-responsive rounded-circle'), 'size': int(125)}`.'''
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/UserController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\Service\Gravatar::getImage` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/UserController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\User\TwoFactor::getQrCode` is possibly `null`, but parameter type `string` does not accept it.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/UserController.php"
-code = "possibly-null-argument"
-message = 'Argument #1 of method `phpMyFAQ\User\TwoFactor::saveSecret` is possibly `null`, but parameter type `string` does not accept it.'
 count = 1
 
 [[issues]]

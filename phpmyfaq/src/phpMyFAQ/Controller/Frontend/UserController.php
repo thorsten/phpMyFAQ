@@ -201,9 +201,10 @@ final class UserController extends AbstractFrontController
 
         $gravatarImg = '';
         if ($this->configuration->get('main.enableGravatarSupport')) {
+            $email = $this->currentUser->getUserData('email');
             $gravatarImg = sprintf('<a target="_blank" href="https://www.gravatar.com">%s</a>', $this->gravatar->getImage(
-                $this->currentUser->getUserData('email'),
-                ['class' => 'img-responsive rounded-circle', 'size' => 125],
+                is_string($email) ? $email : '',
+                ['class' => 'img-responsive rounded-circle', 'size' => '125'],
             ));
         }
 
@@ -219,10 +220,10 @@ final class UserController extends AbstractFrontController
                     $this->configuration->getLogger()->error('Cannot generate 2FA secret: ' . $exception->getMessage());
                 }
 
-                $twoFactor->saveSecret($secret);
+                $twoFactor->saveSecret($secret ?? '');
             }
 
-            $qrCode = $twoFactor->getQrCode($secret);
+            $qrCode = $twoFactor->getQrCode($secret ?? '');
         } catch (TwoFactorAuthException|\Exception $exception) {
             $this->configuration->getLogger()->error('2FA error: ' . $exception->getMessage());
         }

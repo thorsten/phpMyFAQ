@@ -43,8 +43,8 @@ final class BookmarkController extends AbstractController
         $this->userIsAuthenticated();
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        $bookmarkId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
-        $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
+        $bookmarkId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT);
+        $csrfToken = Filter::filterVar($data->csrfToken ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->session)->verifyToken('add-bookmark', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
@@ -77,8 +77,8 @@ final class BookmarkController extends AbstractController
         $this->userIsAuthenticated();
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        $bookmarkId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
-        $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
+        $bookmarkId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT);
+        $csrfToken = Filter::filterVar($data->csrfToken ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->session)->verifyToken('delete-bookmark', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
@@ -111,7 +111,7 @@ final class BookmarkController extends AbstractController
         $this->userIsAuthenticated();
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrfToken = Filter::filterVar($data->csrfToken ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->session)->verifyToken('delete-all-bookmarks', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);

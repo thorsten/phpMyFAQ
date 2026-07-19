@@ -50,19 +50,19 @@ final class TagController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $postData = json_decode($request->getContent());
+        $postData = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('tags', $postData->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('tags', (string) ($postData->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $id = Filter::filterVar($postData->id, FILTER_VALIDATE_INT);
+        $id = Filter::filterVar($postData->id ?? null, FILTER_VALIDATE_INT);
 
-        if ($id === null) {
+        if (!is_int($id)) {
             return $this->json(['error' => Translation::get(key: 'msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
         }
 
-        $newTag = Filter::filterVar($postData->tag, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $newTag = Filter::filterVar($postData->tag ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $tag = new Tag();
         $tag->setId($id);
@@ -131,9 +131,9 @@ final class TagController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->getJsonObject($request);
 
-        if (!Token::getInstance($this->session)->verifyToken('tags', $data->csrfToken ?? '')) {
+        if (!Token::getInstance($this->session)->verifyToken('tags', (string) ($data->csrfToken ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
