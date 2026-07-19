@@ -73,15 +73,16 @@ final class CategoryPermissionContext
     }
 
     /**
-     * @param int[] $groups
+     * @param array<array-key, mixed> $groups
      */
     public function setGroups(array $groups): void
     {
-        if ($groups === []) {
-            $groups = [-1];
+        $normalizedGroups = [];
+        foreach ($groups as $group) {
+            $normalizedGroups[] = (int) $group;
         }
 
-        $this->groups = $groups;
+        $this->groups = $normalizedGroups === [] ? [-1] : $normalizedGroups;
     }
 
     public function setOwner(int $categoryId, int $userId): void

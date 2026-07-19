@@ -127,7 +127,7 @@ final readonly class AttachmentService
         // Read all rights, set false
         $allRights = $this->currentUser->perm->getAllRightsData();
         foreach ($allRights as $right) {
-            $permission[$right['name']] = false;
+            $permission[(string) $right['name']] = false;
         }
 
         // Check user rights, set true
@@ -137,7 +137,7 @@ final readonly class AttachmentService
                 continue;
             }
 
-            $permission[$allRight['name']] = true;
+            $permission[(string) $allRight['name']] = true;
         }
 
         return $permission;
@@ -156,6 +156,8 @@ final readonly class AttachmentService
      */
     public function getGenericErrorMessage(): string
     {
-        return Translation::get(key: 'msgAttachmentInvalid');
+        $message = Translation::get(key: 'msgAttachmentInvalid');
+
+        return is_string($message) ? $message : '';
     }
 }

@@ -43,7 +43,7 @@ readonly class SessionRepository
         $result = $this->configuration->getDb()->query($query);
         if ($result) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row !== null && property_exists($row, 'cnt')) {
+            if (is_object($row) && property_exists($row, 'cnt')) {
                 return (int) $row->cnt;
             }
         }
@@ -65,7 +65,7 @@ readonly class SessionRepository
         $result = $this->configuration->getDb()->query($query);
         if ($result) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row !== null && property_exists($row, 'cnt')) {
+            if (is_object($row) && property_exists($row, 'cnt')) {
                 return (int) $row->cnt;
             }
         }
@@ -84,7 +84,7 @@ readonly class SessionRepository
 
         if ($result) {
             $res = $this->configuration->getDb()->fetchObject($result);
-            if ($res !== null && property_exists($res, 'time')) {
+            if (is_object($res) && property_exists($res, 'time')) {
                 return (int) $res->time;
             }
         }

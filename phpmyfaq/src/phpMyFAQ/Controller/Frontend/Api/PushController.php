@@ -64,7 +64,8 @@ final class PushController extends AbstractController
             return $this->json(['error' => 'Invalid JSON payload'], Response::HTTP_BAD_REQUEST);
         }
 
-        $endpoint = Filter::filterVar($data->endpoint ?? '', FILTER_SANITIZE_URL);
+        $filteredEndpoint = Filter::filterVar($data->endpoint ?? '', FILTER_SANITIZE_URL);
+        $endpoint = is_string($filteredEndpoint) ? $filteredEndpoint : '';
         $publicKey = Filter::filterVar($data->publicKey ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $authToken = Filter::filterVar($data->authToken ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $contentEncoding = Filter::filterVar($data->contentEncoding ?? 'aesgcm', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -103,7 +104,8 @@ final class PushController extends AbstractController
             return $this->json(['error' => 'Invalid JSON payload'], Response::HTTP_BAD_REQUEST);
         }
 
-        $endpoint = Filter::filterVar($data->endpoint ?? '', FILTER_SANITIZE_URL);
+        $filteredEndpoint = Filter::filterVar($data->endpoint ?? '', FILTER_SANITIZE_URL);
+        $endpoint = is_string($filteredEndpoint) ? $filteredEndpoint : '';
 
         if ($endpoint === '') {
             return $this->json(['error' => 'Missing endpoint'], Response::HTTP_BAD_REQUEST);

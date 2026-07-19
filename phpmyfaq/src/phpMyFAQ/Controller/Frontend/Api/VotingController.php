@@ -50,7 +50,7 @@ final class VotingController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!$data) {
+        if (!$data instanceof \stdClass) {
             throw new Exception('Invalid JSON data');
         }
 
@@ -70,7 +70,8 @@ final class VotingController extends AbstractController
 
         $faqId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT, 0);
         $vote = Filter::filterVar($data->value, FILTER_VALIDATE_INT);
-        $userIp = Filter::filterVar($request->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP) ?? '';
+        $filteredIp = Filter::filterVar($request->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP);
+        $userIp = is_string($filteredIp) ? $filteredIp : '';
 
         if ($faqId <= 0) {
             throw new Exception('Missing FAQ ID');

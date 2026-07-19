@@ -294,8 +294,20 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         }
 
         $decoded = json_decode($groupMapping, associative: true);
+        if (!is_array($decoded)) {
+            return [];
+        }
 
-        return is_array($decoded) ? array_filter($decoded, is_string(...)) : [];
+        $mapping = [];
+        foreach ($decoded as $keycloakGroup => $faqGroup) {
+            if (!is_string($faqGroup)) {
+                continue;
+            }
+
+            $mapping[(string) $keycloakGroup] = $faqGroup;
+        }
+
+        return $mapping;
     }
 
     private function toBool(mixed $value): bool
@@ -331,7 +343,10 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
     private function createUser(): User
     {
         if ($this->userFactory instanceof Closure) {
-            return ($this->userFactory)();
+            $user = ($this->userFactory)();
+            if ($user instanceof User) {
+                return $user;
+            }
         }
 
         return new User($this->configuration);
@@ -340,7 +355,10 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
     private function createMediumPermission(): MediumPermission
     {
         if ($this->mediumPermissionFactory instanceof Closure) {
-            return ($this->mediumPermissionFactory)();
+            $mediumPermission = ($this->mediumPermissionFactory)();
+            if ($mediumPermission instanceof MediumPermission) {
+                return $mediumPermission;
+            }
         }
 
         return new MediumPermission($this->configuration);

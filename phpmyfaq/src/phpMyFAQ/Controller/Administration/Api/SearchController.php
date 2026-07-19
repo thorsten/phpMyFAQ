@@ -40,15 +40,15 @@ final class SearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $deleteData = json_decode($request->getContent());
+        $deleteData = $this->getJsonObject($request);
 
         $search = new Search($this->configuration);
 
-        if (!Token::getInstance($this->session)->verifyToken('delete-searchterm', $deleteData->csrf)) {
+        if (!Token::getInstance($this->session)->verifyToken('delete-searchterm', (string) ($deleteData->csrf ?? ''))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $searchId = Filter::filterVar($deleteData->searchTermId, FILTER_VALIDATE_INT);
+        $searchId = Filter::filterVar($deleteData->searchTermId ?? null, FILTER_VALIDATE_INT);
 
         if (!is_int($searchId)) {
             return $this->json(['error' => false], Response::HTTP_BAD_REQUEST);

@@ -123,9 +123,9 @@ readonly class RatingStatistics
         $url = sprintf(
             '%scontent/%d/%d/%s/%s.html',
             $this->configuration->getDefaultUrl(),
-            $row->category_id,
-            $row->id,
-            $row->lang,
+            (int) $row->category_id,
+            (int) $row->id,
+            (string) $row->lang,
             TitleSlugifier::slug($question),
         );
 

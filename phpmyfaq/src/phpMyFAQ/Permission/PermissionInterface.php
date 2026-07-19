@@ -83,7 +83,7 @@ interface PermissionInterface
     /**
      * Adds a new right and returns its ID, or 0 when the right exists.
      *
-     * @param array<string> $rightData
+     * @param array<string, mixed> $rightData
      */
     public function addRight(array $rightData): int;
 

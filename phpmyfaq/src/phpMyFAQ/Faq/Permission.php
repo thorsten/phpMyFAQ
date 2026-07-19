@@ -175,11 +175,15 @@ class Permission
 
         if ($restrictedUsers === []) {
             if (is_string($data->restricted_users ?? null)) {
-                $restrictedUsers = [Filter::filterVar($data->restricted_users, FILTER_VALIDATE_INT)];
+                $filteredUser = Filter::filterVar($data->restricted_users, FILTER_VALIDATE_INT);
+                $restrictedUsers = is_int($filteredUser) ? [$filteredUser] : [];
             }
 
             if (is_array($data->restricted_users ?? null)) {
-                $restrictedUsers = Filter::filterArray($data->restricted_users, FILTER_VALIDATE_INT);
+                $filteredUsers = Filter::filterArray($data->restricted_users, FILTER_VALIDATE_INT);
+                $restrictedUsers = is_array($filteredUsers)
+                    ? array_values(array_filter($filteredUsers, is_int(...)))
+                    : [];
             }
         }
 
@@ -194,11 +198,15 @@ class Permission
 
         if ($restrictedGroups === []) {
             if (is_string($data->restricted_groups ?? null)) {
-                $restrictedGroups = [Filter::filterVar($data->restricted_groups, FILTER_VALIDATE_INT)];
+                $filteredGroup = Filter::filterVar($data->restricted_groups, FILTER_VALIDATE_INT);
+                $restrictedGroups = is_int($filteredGroup) ? [$filteredGroup] : [];
             }
 
             if (is_array($data->restricted_groups ?? null)) {
-                $restrictedGroups = Filter::filterArray($data->restricted_groups, FILTER_VALIDATE_INT);
+                $filteredGroups = Filter::filterArray($data->restricted_groups, FILTER_VALIDATE_INT);
+                $restrictedGroups = is_array($filteredGroups)
+                    ? array_values(array_filter($filteredGroups, is_int(...)))
+                    : [];
             }
         }
 

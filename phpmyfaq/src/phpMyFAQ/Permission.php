@@ -33,6 +33,8 @@ declare(strict_types=1);
 namespace phpMyFAQ;
 
 use InvalidArgumentException;
+use phpMyFAQ\Permission\BasicPermission;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
 
 class Permission
@@ -42,12 +44,10 @@ class Permission
      */
     public static function create(string $permLevel, Configuration $configuration): PermissionInterface
     {
-        $permClass = sprintf('\phpMyFAQ\Permission\%sPermission', ucfirst(strtolower($permLevel)));
-
-        if (!class_exists($permClass)) {
-            throw new InvalidArgumentException(sprintf('Invalid permission level: %s', $permLevel));
-        }
-
-        return new $permClass($configuration);
+        return match (strtolower($permLevel)) {
+            'basic' => new BasicPermission($configuration),
+            'medium' => new MediumPermission($configuration),
+            default => throw new InvalidArgumentException(sprintf('Invalid permission level: %s', $permLevel)),
+        };
     }
 }
