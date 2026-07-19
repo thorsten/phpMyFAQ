@@ -130,7 +130,7 @@ abstract class AbstractAttachment implements AttachmentInterface
 
         if ($result) {
             $assoc = $this->databaseDriver->fetchArray($result);
-            if ($assoc !== null && $assoc !== []) {
+            if (is_array($assoc) && $assoc !== []) {
                 $this->recordId = (int) $assoc['record_id'];
                 $this->recordLang = (string) $assoc['record_lang'];
                 $this->realHash = (string) $assoc['real_hash'];

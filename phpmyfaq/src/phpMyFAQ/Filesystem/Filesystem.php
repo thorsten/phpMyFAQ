@@ -60,7 +60,7 @@ class Filesystem
             return false;
         }
 
-        $directoryName = substr($source, strrpos($source, needle: '/') + 1);
+        $directoryName = substr($source, (int) strrpos($source, needle: '/') + 1);
         $this->createDirectory($dest . DIRECTORY_SEPARATOR . $directoryName, mode: 0o750, recursive: true);
 
         $entries = scandir($source);

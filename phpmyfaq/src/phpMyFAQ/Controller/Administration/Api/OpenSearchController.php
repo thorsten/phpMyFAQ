@@ -98,7 +98,7 @@ final class OpenSearchController extends AbstractController
         $bulkIndexPagesResult = $this->openSearch->bulkIndexCustomPages($pages);
         if (!array_key_exists('success', $bulkIndexPagesResult)) {
             return $this->json([
-                'error' => 'FAQs indexed but custom pages failed: ' . json_encode($bulkIndexPagesResult),
+                'error' => 'FAQs indexed but custom pages failed: ' . (string) json_encode($bulkIndexPagesResult),
             ], Response::HTTP_BAD_REQUEST);
         }
 

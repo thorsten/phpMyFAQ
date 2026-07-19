@@ -117,7 +117,7 @@ readonly class BasicPermissionRepository
 
         $row = $this->configuration->getDb()->fetchArray($res);
 
-        return (int) $row['right_id'];
+        return is_array($row) ? (int) ($row['right_id'] ?? 0) : 0;
     }
 
     /**

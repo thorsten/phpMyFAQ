@@ -138,8 +138,9 @@ abstract class AbstractApiController extends AbstractController
 
         // Build base URL for pagination links
         $baseUrl = $request->getPathInfo();
-        if ($request->getQueryString()) {
-            $baseUrl .= '?' . $request->getQueryString();
+        $queryString = $request->getQueryString();
+        if ($queryString !== null && $queryString !== '') {
+            $baseUrl .= '?' . $queryString;
         }
 
         // Generate pagination metadata

@@ -107,7 +107,7 @@ class TwoFactor
      */
     public function getQrCode(#[\SensitiveParameter] string $secret): string
     {
-        $label = $this->configuration->getTitle() . ':' . $this->currentUser->getUserData('email');
+        $label = $this->configuration->getTitle() . ':' . (string) $this->currentUser->getUserData('email');
         $qrCodeText = sprintf(
             '%s&image=%sassets/templates/images/logo.png',
             $this->twoFactorAuth->getQrText($label, $secret),

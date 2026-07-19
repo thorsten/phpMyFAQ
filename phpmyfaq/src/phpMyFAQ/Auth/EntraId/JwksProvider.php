@@ -61,7 +61,7 @@ class JwksProvider
     {
         $cacheFile = $this->cacheFile($tenantId);
 
-        if (is_file($cacheFile) && (time() - filemtime($cacheFile)) < self::CACHE_TTL_SECONDS) {
+        if (is_file($cacheFile) && (time() - (int) filemtime($cacheFile)) < self::CACHE_TTL_SECONDS) {
             $cached = file_get_contents($cacheFile);
             if ($cached !== false) {
                 $decoded = json_decode($cached, associative: true);

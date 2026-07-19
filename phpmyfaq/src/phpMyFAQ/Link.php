@@ -288,7 +288,7 @@ class Link
     {
         $request = Request::createFromGlobals();
         $host = $request->getHost();
-        $host = preg_replace(pattern: ['/:80$/', '/:443$/'], replacement: '', subject: $host);
+        $host = preg_replace(pattern: ['/:80$/', '/:443$/'], replacement: '', subject: $host) ?? '';
 
         $sysUri = $this->getSystemScheme() . $host;
 
@@ -391,7 +391,7 @@ class Link
             return $url;
         }
 
-        $url = substr($url, offset: 0, length: strpos($url, self::LINK_INDEX_HOME) + 1);
+        $url = substr($url, offset: 0, length: (int) strpos($url, self::LINK_INDEX_HOME) + 1);
         $action = $p[self::LINK_GET_ACTION];
 
         $built = $this->buildActionUrl($action, $p);

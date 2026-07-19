@@ -103,7 +103,7 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
                 return false;
             }
 
-            if ($redis->hDel($this->getHashKey(), $currentKey) < 1) {
+            if ((int) $redis->hDel($this->getHashKey(), $currentKey) < 1) {
                 $redis->hDel($this->getHashKey(), $newKey);
                 return false;
             }

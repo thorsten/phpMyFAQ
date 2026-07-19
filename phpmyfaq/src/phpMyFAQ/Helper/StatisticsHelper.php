@@ -209,6 +209,10 @@ readonly class StatisticsHelper
         $this->visits->resetAll();
 
         $files = glob(PMF_CONTENT_DIR . '/core/data/*');
+        if ($files === false) {
+            $files = [];
+        }
+
         foreach ($files as $file) {
             if (!is_file($file)) {
                 continue;

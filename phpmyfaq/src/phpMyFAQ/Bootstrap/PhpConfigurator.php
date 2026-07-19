@@ -35,7 +35,7 @@ class PhpConfigurator
     {
         $includePaths = explode(PATH_SEPARATOR, (string) ini_get('include_path'));
         if (!in_array('.', $includePaths, strict: true)) {
-            set_include_path('.' . PATH_SEPARATOR . get_include_path());
+            set_include_path('.' . PATH_SEPARATOR . (string) get_include_path());
         }
     }
 

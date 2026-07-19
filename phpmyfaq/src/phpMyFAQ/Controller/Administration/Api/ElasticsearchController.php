@@ -101,7 +101,7 @@ final class ElasticsearchController extends AbstractController
         $bulkIndexPagesResult = $this->elasticsearch->bulkIndexCustomPages($pages);
         if (!array_key_exists('success', $bulkIndexPagesResult)) {
             return $this->json([
-                'error' => 'FAQs indexed but custom pages failed: ' . json_encode($bulkIndexPagesResult),
+                'error' => 'FAQs indexed but custom pages failed: ' . (string) json_encode($bulkIndexPagesResult),
             ], Response::HTTP_BAD_REQUEST);
         }
 

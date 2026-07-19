@@ -217,11 +217,11 @@ class UserSession
             }
 
             $data =
-                $this->getCurrentSessionId()
+                (string) $this->getCurrentSessionId()
                 . ';'
                 . str_replace(search: ';', replace: ',', subject: $action)
                 . ';'
-                . $data
+                . (string) $data
                 . ';'
                 . $remoteAddress
                 . ';'

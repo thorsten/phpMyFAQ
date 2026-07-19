@@ -136,7 +136,7 @@ final class TagController extends AbstractApiController
         // Apply sorting if needed
         if ($sort->getField()) {
             usort($allTags, static function ($a, $b) use ($sort) {
-                $field = $sort->getField();
+                $field = (string) $sort->getField();
                 $aVal = $a[$field] ?? '';
                 $bVal = $b[$field] ?? '';
                 $result = $aVal <=> $bVal;

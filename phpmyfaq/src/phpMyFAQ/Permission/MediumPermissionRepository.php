@@ -179,7 +179,7 @@ readonly class MediumPermissionRepository
 
         $row = $this->configuration->getDb()->fetchArray($res);
 
-        return (int) $row['group_id'];
+        return is_array($row) ? (int) ($row['group_id'] ?? 0) : 0;
     }
 
     /**
@@ -415,7 +415,7 @@ readonly class MediumPermissionRepository
 
         $row = $this->configuration->getDb()->fetchArray($res);
 
-        return (string) $row['name'];
+        return is_array($row) ? (string) ($row['name'] ?? '-') : '-';
     }
 
     /**

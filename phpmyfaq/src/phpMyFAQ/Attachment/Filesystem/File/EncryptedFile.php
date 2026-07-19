@@ -90,7 +90,7 @@ class EncryptedFile extends AbstractFile
         $chunkDelimLen = strlen(self::CHUNK_DELIMITER);
 
         while (!$readEnd && !$this->eof()) {
-            $chunk .= fread($this->handle, length: 1);
+            $chunk .= (string) fread($this->handle, length: 1);
             $readEnd = self::CHUNK_DELIMITER === substr($chunk, -$chunkDelimLen);
         }
 

@@ -292,11 +292,7 @@ class User
         $this->status = (string) $user['account_status'];
 
         // get user-data
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->configuration);
-        }
-
-        $this->userdata->load($this->getUserId());
+        $this->userData()->load($this->getUserId());
 
         return true;
     }
@@ -321,11 +317,7 @@ class User
      */
     public function checkDisplayName(string $name): bool
     {
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->configuration);
-        }
-
-        return $name === $this->userdata->fetch('display_name', $name);
+        return $name === $this->userData()->fetch('display_name', $name);
     }
 
     /**
@@ -333,11 +325,7 @@ class User
      */
     public function checkMailAddress(string $name): bool
     {
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->configuration);
-        }
-
-        return $name === $this->userdata->fetch('email', $name);
+        return $name === $this->userData()->fetch('email', $name);
     }
 
     /**
@@ -392,11 +380,7 @@ class User
 
         // If $login is an email address, check if it already exists in the userdata table
         if ($this->isEmailAddress($login)) {
-            if (!$this->userdata instanceof UserData) {
-                $this->userdata = new UserData($this->configuration);
-            }
-
-            if ($this->userdata->emailExists($login)) {
+            if ($this->userData()->emailExists($login)) {
                 throw new Exception(self::ERROR_USER_EMAIL_NOT_UNIQUE);
             }
         }
@@ -420,11 +404,7 @@ class User
         );
 
         $this->configuration->getDb()->query($insert);
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->configuration);
-        }
-
-        $data = $this->userdata->add($this->getUserId());
+        $data = $this->userData()->add($this->getUserId());
         if (!$data) {
             throw new Exception(self::ERROR_USER_CANNOT_CREATE_USERDATA);
         }
@@ -511,11 +491,7 @@ class User
 
         $this->extractUserFromResult($result);
 
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->configuration);
-        }
-
-        $this->userdata->load($this->getUserId());
+        $this->userData()->load($this->getUserId());
 
         return true;
     }
@@ -612,11 +588,7 @@ class User
             return false;
         }
 
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->configuration);
-        }
-
-        $data = $this->userdata->delete($this->getUserId());
+        $data = $this->userData()->delete($this->getUserId());
         if (!$data) {
             $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USERDATA;
 
@@ -761,11 +733,7 @@ class User
         }
 
         // get user-data
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->configuration);
-        }
-
-        $this->userdata->load($this->getUserId());
+        $this->userData()->load($this->getUserId());
 
         return true;
     }
@@ -808,11 +776,7 @@ class User
      */
     public function getUserIdByEmail(string $email): int
     {
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->configuration);
-        }
-
-        $userData = $this->userdata->fetchAll('email', $email);
+        $userData = $this->userData()->fetchAll('email', $email);
 
         return (int) ($userData['user_id'] ?? 0);
     }
@@ -822,11 +786,7 @@ class User
      */
     public function getUserIdByKeycloakSub(string $keycloakSub): int
     {
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->configuration);
-        }
-
-        $userData = $this->userdata->fetchAll('keycloak_sub', $keycloakSub);
+        $userData = $this->userData()->fetchAll('keycloak_sub', $keycloakSub);
 
         if (!array_key_exists('user_id', $userData)) {
             return 0;
@@ -842,11 +802,7 @@ class User
      */
     public function getUserVisibilityByEmail(string $email): bool
     {
-        if (!$this->userdata instanceof UserData) {
-            $this->userdata = new UserData($this->configuration);
-        }
-
-        $userData = $this->userdata->fetchAll('email', $email);
+        $userData = $this->userData()->fetchAll('email', $email);
 
         return !array_key_exists('is_visible', $userData) || (bool) $userData['is_visible'];
     }
@@ -1097,13 +1053,31 @@ class User
 
     public function extractUserFromResult(mixed $result): void
     {
-        $user = $this->configuration->getDb()->fetchArray($result);
+        $user = array_merge([
+            'user_id' => 0,
+            'login' => '',
+            'account_status' => '',
+            'is_superadmin' => false,
+            'auth_source' => '',
+        ], $this->fetchRowArray($result));
 
         $this->userId = (int) $user['user_id'];
         $this->login = (string) $user['login'];
         $this->status = (string) $user['account_status'];
         $this->isSuperAdmin = (bool) $user['is_superadmin'];
         $this->authSource = (string) $user['auth_source'];
+    }
+
+    /**
+     * Fetches the next result row as an associative array, or an empty array.
+     *
+     * @return array<array-key, mixed>
+     */
+    private function fetchRowArray(mixed $result): array
+    {
+        $row = $this->configuration->getDb()->fetchArray($result);
+
+        return is_array($row) ? $row : [];
     }
 
     public function setWebAuthnKeys(string $webAuthnKeys): bool
@@ -1128,8 +1102,10 @@ class User
 
         $result = $this->configuration->getDb()->query($select);
         if ($this->configuration->getDb()->numRows($result) === 1) {
-            $user = $this->configuration->getDb()->fetchArray($result);
-            return (string) $user['webauthnkeys'];
+            $user = array_merge(['webauthnkeys' => ''], $this->fetchRowArray($result));
+            $webAuthnKeys = $user['webauthnkeys'];
+
+            return is_string($webAuthnKeys) ? $webAuthnKeys : '';
         }
 
         return '';

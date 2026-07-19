@@ -25,12 +25,6 @@ message = "Redundant cast to `(string)`: the expression already has this type."
 count = 5
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Category.php"
-code = "possibly-null-array-index"
-message = "Possibly using `null` as an array index to access elementof variable $this->owner."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/DashboardLayout.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -163,12 +157,6 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
-code = "possibly-false-array-access"
-message = "Cannot perform array access on possibly `false` value."
-count = 8
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractMimeType.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -202,12 +190,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/File/EncryptedFile.php"
 code = "incompatible-parameter-name"
 message = 'Parameter #1 of `phpMyFAQ\Attachment\Filesystem\File\EncryptedFile::copyto()` is named `$target` but parent `phpMyFAQ\Attachment\Filesystem\AbstractEntry::copyto()` names it `$entry`'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/File/EncryptedFile.php"
-code = "possibly-false-operand"
-message = "Possibly false right operand used in string concatenation (type `false|string`)."
 count = 1
 
 [[issues]]
@@ -331,12 +313,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/JwksProvider.php"
-code = "possibly-false-operand"
-message = "Right operand in arithmetic operation might be `false` (type `false|int<1750595956, max>`)."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -433,12 +409,6 @@ message = "Redundant cast to `(string)`: the expression already has this type."
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bootstrap/PhpConfigurator.php"
-code = "possibly-false-operand"
-message = "Possibly false right operand used in string concatenation (type `false|string`)."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bootstrap/SearchClientFactory.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -493,12 +463,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Image.php"
-code = "possibly-false-operand"
-message = "Left operand in `<` comparison might be `false` (type `false|int`)."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Language/CategoryLanguageService.php"
 code = "unfulfilled-expect"
 message = "This pragma was not used and may be removed."
@@ -526,42 +490,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Tree/TreeBuilder.php"
-code = "incompatible-parameter-name"
-message = 'Parameter #1 of `phpMyFAQ\Category\Tree\TreeBuilder::buildtree()` is named `$categoryName` but parent `phpMyFAQ\Category\Tree\TreeBuilderInterface::buildtree()` names it `$categoryNames`'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Tree/TreeBuilder.php"
-code = "incompatible-parameter-name"
-message = 'Parameter #1 of `phpMyFAQ\Category\Tree\TreeBuilder::computelevel()` is named `$categoryName` but parent `phpMyFAQ\Category\Tree\TreeBuilderInterface::computelevel()` names it `$categoryNames`'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Tree/TreeBuilder.php"
-code = "incompatible-parameter-name"
-message = 'Parameter #1 of `phpMyFAQ\Category\Tree\TreeBuilder::getbrothers()` is named `$categoryName` but parent `phpMyFAQ\Category\Tree\TreeBuilderInterface::getbrothers()` names it `$categoryNames`'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Tree/TreeBuilder.php"
-code = "incompatible-parameter-name"
-message = 'Parameter #1 of `phpMyFAQ\Category\Tree\TreeBuilder::getnodes()` is named `$categoryName` but parent `phpMyFAQ\Category\Tree\TreeBuilderInterface::getnodes()` names it `$categoryNames`'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Tree/TreeBuilder.php"
-code = "incompatible-parameter-name"
-message = 'Parameter #2 of `phpMyFAQ\Category\Tree\TreeBuilder::buildtree()` is named `$childrenMap` but parent `phpMyFAQ\Category\Tree\TreeBuilderInterface::buildtree()` names it `$children`'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Tree/TreeBuilder.php"
-code = "incompatible-parameter-name"
-message = 'Parameter #2 of `phpMyFAQ\Category\Tree\TreeBuilder::getbrothers()` is named `$childrenMap` but parent `phpMyFAQ\Category\Tree\TreeBuilderInterface::getbrothers()` names it `$children`'
 count = 1
 
 [[issues]]
@@ -692,12 +620,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
-code = "possibly-false-operand"
-message = "Left operand in `<` comparison might be `false` (type `Redis|false|int`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
 code = "redundant-comparison"
 message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
 count = 2
@@ -755,12 +677,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
-code = "possibly-false-operand"
-message = "Left operand in `>` comparison might be `false` (type `false|int`)."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
@@ -826,12 +742,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ElasticsearchController.php"
-code = "possibly-false-operand"
-message = "Possibly false right operand used in string concatenation (type `false|string`)."
 count = 1
 
 [[issues]]
@@ -932,20 +842,8 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/MediaBrowserController.php"
-code = "possibly-false-operand"
-message = "Possibly false left operand used in string concatenation (type `false|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/MediaBrowserController.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/OpenSearchController.php"
-code = "possibly-false-operand"
-message = "Possibly false right operand used in string concatenation (type `false|string`)."
 count = 1
 
 [[issues]]
@@ -953,12 +851,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 8
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
-code = "possibly-null-operand"
-message = "Possibly null right operand used in string concatenation (type `int|null`)."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
@@ -1019,12 +911,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UpdateController.php
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UpdateController.php"
-code = "possibly-false-operand"
-message = "Possibly false left operand used in string concatenation (type `false|string`)."
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
@@ -1141,12 +1027,6 @@ message = "Redundant null coalesce: left-hand side can never be `null` or undefi
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/AbstractApiController.php"
-code = "possibly-null-operand"
-message = "Possibly null right operand used in string concatenation (type `null|string`)."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -1163,30 +1043,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "possibly-null-array-index"
-message = "Possibly using `null` as an array index to access elementof variable $a."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "possibly-null-array-index"
-message = "Possibly using `null` as an array index to access elementof variable $b."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/GlossaryController.php"
-code = "possibly-null-array-index"
-message = "Possibly using `null` as an array index to access elementof variable $a."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/GlossaryController.php"
-code = "possibly-null-array-index"
-message = "Possibly using `null` as an array index to access elementof variable $b."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/LoginController.php"
@@ -1243,18 +1099,6 @@ message = "This member selector uses a non-literal string type (`non-empty-strin
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/TagController.php"
-code = "possibly-null-array-index"
-message = "Possibly using `null` as an array index to access elementof variable $a."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/TagController.php"
-code = "possibly-null-array-index"
-message = "Possibly using `null` as an array index to access elementof variable $b."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/ContainerControllerResolver.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -1277,12 +1121,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/ChatController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/ChatSseController.php"
-code = "possibly-false-operand"
-message = "Possibly false middle operand used in string concatenation (type `false|string`)."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/CommentController.php"
@@ -1519,22 +1357,10 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 3
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoMysql.php"
-code = "possibly-null-operand"
-message = "Possibly null middle operand used in string concatenation (type `null|string`)."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
-code = "possibly-null-operand"
-message = "Possibly null middle operand used in string concatenation (type `null|string`)."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlite.php"
@@ -1547,12 +1373,6 @@ file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
-code = "possibly-null-operand"
-message = "Possibly null middle operand used in string concatenation (type `null|string`)."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Pgsql.php"
@@ -1571,18 +1391,6 @@ file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "possibly-null-array-access"
-message = "Cannot perform array access on possibly `null` value."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "possibly-null-operand"
-message = "Possibly null right operand used in string concatenation (type `int|null`)."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
@@ -1735,12 +1543,6 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Filesystem/Filesystem.php"
-code = "possibly-false-operand"
-message = "Left operand in arithmetic operation might be `false` (type `false|non-negative-int`)."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Filter.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -1775,12 +1577,6 @@ file = "phpmyfaq/src/phpMyFAQ/Helper/StatisticsHelper.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/StatisticsHelper.php"
-code = "possibly-false-iterator"
-message = "Expression being iterated (type `false|list<non-empty-string>`) might be `false` at runtime."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Helper/SvgSanitizer.php"
@@ -1889,18 +1685,6 @@ file = "phpmyfaq/src/phpMyFAQ/Ldap.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Link.php"
-code = "possibly-false-operand"
-message = "Left operand in arithmetic operation might be `false` (type `false|non-negative-int`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Link.php"
-code = "possibly-null-operand"
-message = "Possibly null right operand used in string concatenation (type `null|string`)."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Link.php"
@@ -2033,30 +1817,6 @@ file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
-code = "possibly-false-array-access"
-message = "Cannot perform array access on possibly `false` value."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
-code = "possibly-null-array-access"
-message = "Cannot perform array access on possibly `null` value."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermissionRepository.php"
-code = "possibly-false-array-access"
-message = "Cannot perform array access on possibly `false` value."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Permission/MediumPermissionRepository.php"
-code = "possibly-null-array-access"
-message = "Cannot perform array access on possibly `null` value."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
@@ -2347,12 +2107,6 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Service/Gravatar.php"
-code = "possibly-false-operand"
-message = "Possibly false right operand used in string concatenation (type `false|truthy-string`)."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/FaqSearchTool.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -2564,12 +2318,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "possibly-false-operand"
-message = "Possibly false left operand used in string concatenation (type `false|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
 code = "redundant-null-coalesce"
 message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
 count = 1
@@ -2722,24 +2470,30 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "possibly-false-array-access"
-message = "Cannot perform array access on possibly `false` value."
-count = 6
+code = "redundant-cast"
+message = "Redundant cast to `(bool)`: the expression already has this type."
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "possibly-null-array-access"
-message = "Cannot perform array access on possibly `null` value."
-count = 6
+code = "redundant-cast"
+message = "Redundant cast to `(string)`: the expression already has this type."
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "redundant-comparison"
 message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "redundant-condition"
+message = "Redundant ternary operator: condition is always truthy."
 count = 1
 
 [[issues]]
@@ -2755,9 +2509,9 @@ message = "Redundant condition: variable `$row` (type `stdClass`) is already kno
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
-code = "possibly-false-operand"
-message = "Possibly false right operand used in string concatenation (type `false|string`)."
+file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "redundant-type-comparison"
+message = "Redundant type assertion: `$webAuthnKeys` is already `string('')`."
 count = 1
 
 [[issues]]
@@ -2792,18 +2546,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/Tracking.php"
-code = "possibly-null-operand"
-message = "Possibly null left operand used in string concatenation (type `int|null`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/Tracking.php"
-code = "possibly-null-operand"
-message = "Possibly null middle operand used in string concatenation (type `int|null|string`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/Tracking.php"
 code = "redundant-comparison"
 message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
 count = 1
@@ -2812,12 +2554,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User/Tracking.php"
 code = "redundant-logical-operation"
 message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/TwoFactor.php"
-code = "possibly-null-operand"
-message = "Possibly null right operand used in string concatenation (type `int|null|string`)."
 count = 1
 
 [[issues]]
@@ -2842,18 +2578,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/User/UserSession.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserSession.php"
-code = "possibly-null-operand"
-message = "Possibly null left operand used in string concatenation (type `int|null`)."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserSession.php"
-code = "possibly-null-operand"
-message = "Possibly null middle operand used in string concatenation (type `int|null|string`)."
 count = 1
 
 [[issues]]

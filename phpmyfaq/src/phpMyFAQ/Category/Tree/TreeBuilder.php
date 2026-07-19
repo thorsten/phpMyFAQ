@@ -93,12 +93,12 @@ class TreeBuilder implements TreeBuilderInterface
     /**
      * Delegates to TreePathResolver::getNodes()
      *
-     * @param array<int, array<string, mixed>> $categoryName Map id => row (needs parent_id)
+     * @param array<int, array<string, mixed>> $categoryNames Map id => row (needs parent_id)
      * @return array<int>
      */
-    public function getNodes(array $categoryName, int $categoryId): array
+    public function getNodes(array $categoryNames, int $categoryId): array
     {
-        return $this->treePathResolver->getNodes($categoryName, $categoryId);
+        return $this->treePathResolver->getNodes($categoryNames, $categoryId);
     }
 
     /**
@@ -126,34 +126,34 @@ class TreeBuilder implements TreeBuilderInterface
     /**
      * Delegates to TreePathResolver::getBrothers()
      *
-     * @param array<int, array<string, mixed>> $categoryName
-     * @param array<int, array<int, array<string, mixed>>> $childrenMap
+     * @param array<int, array<string, mixed>> $categoryNames
+     * @param array<int, array<int, array<string, mixed>>> $children
      * @return array<int>
      */
-    public function getBrothers(array $categoryName, array $childrenMap, int $categoryId): array
+    public function getBrothers(array $categoryNames, array $children, int $categoryId): array
     {
-        return $this->treePathResolver->getBrothers($categoryName, $childrenMap, $categoryId);
+        return $this->treePathResolver->getBrothers($categoryNames, $children, $categoryId);
     }
 
     /**
      * Delegates to TreeVisualizer::buildTree()
      *
-     * @param array<int, array<string, mixed>> $categoryName
-     * @param array<int, array<int, array<string, mixed>>> $childrenMap
+     * @param array<int, array<string, mixed>> $categoryNames
+     * @param array<int, array<int, array<string, mixed>>> $children
      * @return array<int, string>
      */
-    public function buildTree(array $categoryName, array $childrenMap, int $categoryId): array
+    public function buildTree(array $categoryNames, array $children, int $categoryId): array
     {
-        return $this->treeVisualizer->buildTree($categoryName, $childrenMap, $categoryId);
+        return $this->treeVisualizer->buildTree($categoryNames, $children, $categoryId);
     }
 
     /**
      * Delegates to TreePathResolver::computeLevel()
      *
-     * @param array<int, array<string, mixed>> $categoryName Map id => row (needs parent_id)
+     * @param array<int, array<string, mixed>> $categoryNames Map id => row (needs parent_id)
      */
-    public function computeLevel(array $categoryName, int $categoryId): int
+    public function computeLevel(array $categoryNames, int $categoryId): int
     {
-        return $this->treePathResolver->computeLevel($categoryName, $categoryId);
+        return $this->treePathResolver->computeLevel($categoryNames, $categoryId);
     }
 }

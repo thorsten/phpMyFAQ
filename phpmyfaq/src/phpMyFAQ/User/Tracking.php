@@ -185,11 +185,11 @@ class Tracking
     private function writeTrackingData(string $action, int|string|null $data, string $remoteAddress): void
     {
         $data =
-            $this->userSession->getCurrentSessionId()
+            (string) $this->userSession->getCurrentSessionId()
             . ';'
             . str_replace(search: ';', replace: ',', subject: $action)
             . ';'
-            . $data
+            . (string) $data
             . ';'
             . $remoteAddress
             . ';'

@@ -299,7 +299,7 @@ final class PageController extends AbstractAdministrationApiController
         $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($customPage->delete((int) $deleteId, $language)) {
-            $this->adminLog->log($this->currentUser, AdminLogType::PAGE_DELETE->value . ':' . $deleteId);
+            $this->adminLog->log($this->currentUser, AdminLogType::PAGE_DELETE->value . ':' . (int) $deleteId);
 
             // Delete from Elasticsearch/OpenSearch
             $this->deleteCustomPageFromIndex((int) $deleteId, $language);

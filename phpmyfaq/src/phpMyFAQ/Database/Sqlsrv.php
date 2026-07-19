@@ -73,7 +73,7 @@ class Sqlsrv implements DatabaseDriver
     ): ?bool {
         $this->setConnectionOptions($user, $password, $database);
 
-        $this->conn = sqlsrv_connect($host . ', ' . $port, $this->connectionOptions);
+        $this->conn = sqlsrv_connect($host . ', ' . (string) $port, $this->connectionOptions);
         if (!$this->conn) {
             Database::errorPage($this->formatErrors(sqlsrv_errors() ?? []));
             die();
@@ -113,7 +113,9 @@ class Sqlsrv implements DatabaseDriver
      */
     public function fetchRow(mixed $result): mixed
     {
-        return $this->fetchArray($result)[0];
+        $row = $this->fetchArray($result);
+
+        return $row[0] ?? null;
     }
 
     /**

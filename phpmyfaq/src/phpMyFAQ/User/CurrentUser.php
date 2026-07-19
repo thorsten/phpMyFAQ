@@ -358,7 +358,7 @@ class CurrentUser extends User
                 $sessionPath = substr($sessionPath, (int) strpos($sessionPath, needle: ';') + 1);
             }
 
-            $sessionFilename = $sessionPath . '/sess_' . $oldSessionId;
+            $sessionFilename = $sessionPath . '/sess_' . (string) $oldSessionId;
             if (file_exists($sessionFilename)) {
                 unlink($sessionFilename);
             }

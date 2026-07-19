@@ -105,7 +105,7 @@ final class ChatSseController extends AbstractController
                         $messageData = $chat->messagesToArray($messages);
                         ($this->outputEmitter ?? static function (string $chunk): void {
                             echo $chunk;
-                        })('data: ' . json_encode($messageData) . "\n\n");
+                        })('data: ' . (string) json_encode($messageData) . "\n\n");
 
                         $lastMessage = end($messages);
                         $currentLastId = $lastMessage->getId();

@@ -308,7 +308,7 @@ class Upgrade extends AbstractSetup
         $realPath = realpath(dirname($fullPath));
         if ($realPath === false) {
             // Path doesn't exist yet, construct it manually
-            $realPath = realpath($destination) . DIRECTORY_SEPARATOR . dirname($entryPath);
+            $realPath = (string) realpath($destination) . DIRECTORY_SEPARATOR . dirname($entryPath);
         }
 
         // Normalize both paths for comparison

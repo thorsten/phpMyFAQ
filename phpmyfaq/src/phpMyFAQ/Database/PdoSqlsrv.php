@@ -338,7 +338,7 @@ class PdoSqlsrv implements DatabaseDriver
         }
 
         if (false === $result) {
-            $this->sqlLog .= $this->pdo()->errorCode() . ': ' . $this->error();
+            $this->sqlLog .= (string) $this->pdo()->errorCode() . ': ' . $this->error();
         }
 
         $this->lastStatement = $result instanceof PDOStatement ? $result : null;

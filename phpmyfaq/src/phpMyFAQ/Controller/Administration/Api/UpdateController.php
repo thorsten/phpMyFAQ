@@ -202,7 +202,7 @@ final class UpdateController extends AbstractController
 
         return new StreamedResponse(function () use ($pathToPackage): void {
             $progressCallback = static function ($progress): void {
-                echo json_encode(['progress' => $progress]) . "\n";
+                echo (string) json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };
@@ -226,7 +226,7 @@ final class UpdateController extends AbstractController
 
         return new StreamedResponse(function () use ($backupHash): void {
             $progressCallback = static function ($progress): void {
-                echo json_encode(['progress' => $progress]) . "\n";
+                echo (string) json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };
@@ -248,7 +248,7 @@ final class UpdateController extends AbstractController
 
         return new StreamedResponse(function (): void {
             $progressCallback = static function ($progress): void {
-                echo json_encode(['progress' => $progress]) . "\n";
+                echo (string) json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };

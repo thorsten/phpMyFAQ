@@ -60,7 +60,7 @@ class Gravatar
             $params['class'] = '';
         }
 
-        $gravatar = $imageUrl . ($opts !== [] ? '?' . implode('&', $opts) : false);
+        $gravatar = $imageUrl . ($opts !== [] ? '?' . implode('&', $opts) : '');
 
         return sprintf('<img src="%s" class="%s" alt="Gravatar">', htmlspecialchars($gravatar), $params['class']);
     }

@@ -67,7 +67,11 @@ final class MediaBrowserController extends AbstractController
             $allowedDir = realpath(PMF_CONTENT_DIR . '/user/images');
             $targetPath = realpath(PMF_CONTENT_DIR . '/user/images/' . $file);
 
-            if ($targetPath === false || !str_starts_with($targetPath, $allowedDir . DIRECTORY_SEPARATOR)) {
+            if (
+                $allowedDir === false
+                || $targetPath === false
+                || !str_starts_with($targetPath, $allowedDir . DIRECTORY_SEPARATOR)
+            ) {
                 return $this->json(['error' => 'Invalid file path'], Response::HTTP_BAD_REQUEST);
             }
 

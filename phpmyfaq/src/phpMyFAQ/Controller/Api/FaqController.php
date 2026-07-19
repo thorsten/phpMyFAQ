@@ -599,7 +599,7 @@ final class FaqController extends AbstractApiController
 
             if ($sort->getField() && $sort->getField() !== 'id') {
                 usort($allFaqs, static function (array $a, array $b) use ($sort): int {
-                    $field = $sort->getField();
+                    $field = (string) $sort->getField();
                     $aVal = (string) ($a[$field] ?? '');
                     $bVal = (string) ($b[$field] ?? '');
                     $result = $aVal <=> $bVal;

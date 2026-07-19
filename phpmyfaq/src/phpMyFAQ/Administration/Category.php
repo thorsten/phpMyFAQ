@@ -215,7 +215,7 @@ class Category
      */
     public function getOwner(?int $categoryId = null): int
     {
-        return $this->owner[$categoryId] ?? 1;
+        return $categoryId === null ? 1 : $this->owner[$categoryId] ?? 1;
     }
 
     /**
