@@ -59,8 +59,10 @@ class InstallationRunner
      */
     private function configuration(): Configuration
     {
-        return $this->configuration() ?? throw new \LogicException(
-            'The database connection step must run before the configuration is available.',
+        return (
+            $this->configuration ?? throw new \LogicException(
+                'The database connection step must run before the configuration is available.',
+            )
         );
     }
 
@@ -70,8 +72,10 @@ class InstallationRunner
      */
     private function db(): DatabaseDriver
     {
-        return $this->db() ?? throw new \LogicException(
-            'The database connection step must run before the database is available.',
+        return (
+            $this->db ?? throw new \LogicException(
+                'The database connection step must run before the database is available.',
+            )
         );
     }
 

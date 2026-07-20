@@ -2089,24 +2089,6 @@ message = "Assigning `nonnull` type to a variable may lead to unexpected behavio
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationRunner.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationRunner.php"
-code = "write-only-property"
-message = "Property `$configuration` is written to but never read."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationRunner.php"
-code = "write-only-property"
-message = "Property `$db` is written to but never read."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Installer.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."

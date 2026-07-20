@@ -10,6 +10,8 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Session\SessionWrapper;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -45,6 +47,18 @@ class LoginControllerTest extends TestCase
         $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
+    }
+
+    protected function tearDown(): void
+    {
+        // A successful login persists the user id in the session; clear it so
+        // later tests that resolve the shared current-user service do not
+        // resume this login and see an authenticated user.
+        $sessionWrapper = new SessionWrapper();
+        $sessionWrapper->remove(CurrentUser::SESSION_CURRENT_USER);
+        $sessionWrapper->remove(CurrentUser::SESSION_ID_TIMESTAMP);
+
+        parent::tearDown();
     }
 
     private function createConfiguration(): Configuration

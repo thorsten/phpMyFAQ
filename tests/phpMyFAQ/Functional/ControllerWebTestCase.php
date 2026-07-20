@@ -275,6 +275,12 @@ abstract class ControllerWebTestCase extends WebTestCase
         $this->originalConfigurations = [];
         $this->addedConfigurationKeys = [];
         self::$activeContext = null;
+
+        // The admin flow logs user 1 in and persists it to the session; without
+        // clearing it here the next test that resolves the shared current-user
+        // service resumes that session and sees a logged-in user.
+        $this->clearAuthenticationSession();
+
         parent::tearDown();
     }
 }
