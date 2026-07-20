@@ -4,6 +4,7 @@ namespace phpMyFAQ\Bootstrap;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\RedisSessionHandler;
+use phpMyFAQ\Session\Token;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
@@ -16,6 +17,7 @@ use RuntimeException;
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(PhpConfigurator::class)]
 #[UsesClass(RedisSessionHandler::class)]
+#[UsesClass(Token::class)]
 class PhpConfiguratorTest extends TestCase
 {
     /** @var array<string, string|false> */

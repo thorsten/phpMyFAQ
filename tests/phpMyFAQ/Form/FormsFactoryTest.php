@@ -6,6 +6,7 @@ namespace phpMyFAQ\Form;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Forms;
+use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -16,6 +17,7 @@ use ReflectionProperty;
 #[CoversClass(FormsFactory::class)]
 #[UsesClass(Forms::class)]
 #[UsesClass(FormsRepository::class)]
+#[UsesClass(Translation::class)]
 final class FormsFactoryTest extends TestCase
 {
     public function testCreateBuildsFormsWithDefaultRepository(): void
