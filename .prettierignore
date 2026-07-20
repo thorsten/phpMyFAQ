@@ -3,6 +3,9 @@
 phpmyfaq/admin/assets/js/editor/
 phpmyfaq/src/libs/
 
+# Local Docker volumes (may contain root-owned, unreadable directories)
+volumes/
+
 # Ignore all PHP and Markdown files
 *.php
 *.md

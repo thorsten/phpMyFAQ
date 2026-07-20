@@ -33,7 +33,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
-          extensions: mbstring, xml, dom
+          extensions: mbstring, xml, dom, gd, curl, zip, sqlite3, bcmath
           coverage: pcov
 
       - name: Validate composer.json
