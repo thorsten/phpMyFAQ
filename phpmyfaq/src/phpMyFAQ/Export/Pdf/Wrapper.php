@@ -338,7 +338,6 @@ class Wrapper
             $this->engine->writeHtmlCell(w: 0, h: 0, x: null, y: null, html: $this->customFooter);
         }
 
-        $currentTextColor = $this->engine->getTextColor();
         $this->engine->setTextColor(0, 0, 0);
         $this->engine->setY(-25);
         $this->engine->setFont($this->currentFont, '', 10);
@@ -379,8 +378,6 @@ class Wrapper
                 link: $baseUrl,
             );
         }
-
-        $this->engine->setTextColorRaw($currentTextColor);
     }
 
     /**

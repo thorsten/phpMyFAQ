@@ -53,20 +53,6 @@ final class TcpdfDocument extends TCPDF
         $this->imageResolver = $resolver;
     }
 
-    /**
-     * Exposes TCPDF's protected $TextColor (the raw PDF colour command) so the
-     * engine can save and restore it. Only this subclass may read/write it.
-     */
-    public function getTextColorRaw(): string
-    {
-        return (string) $this->TextColor;
-    }
-
-    public function setTextColorRaw(string $color): void
-    {
-        $this->TextColor = $color;
-    }
-
     #[Override]
     public function Header(): void
     {

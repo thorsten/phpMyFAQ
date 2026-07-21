@@ -13,16 +13,6 @@ final class TcpdfEngineTest extends TestCase
         self::assertInstanceOf(PdfEngineInterface::class, new TcpdfEngine());
     }
 
-    public function testTextColorRawRoundTrips(): void
-    {
-        // Guards against accessing TCPDF's protected $TextColor from outside its
-        // class hierarchy (a fatal error); it must go through the document.
-        $engine = new TcpdfEngine();
-        $engine->setTextColorRaw('0.250 0.500 0.750 rg');
-
-        self::assertSame('0.250 0.500 0.750 rg', $engine->getTextColor());
-    }
-
     public function testOutputsNonEmptyPdfStringForASimplePage(): void
     {
         $engine = new TcpdfEngine();

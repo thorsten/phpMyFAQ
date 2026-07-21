@@ -194,16 +194,6 @@ final readonly class TcpdfEngine implements PdfEngineInterface
         $this->document->SetTextColor($col1, $col2, $col3);
     }
 
-    public function getTextColor(): string
-    {
-        return $this->document->getTextColorRaw();
-    }
-
-    public function setTextColorRaw(string $color): void
-    {
-        $this->document->setTextColorRaw($color);
-    }
-
     public function getLastH(): float
     {
         return $this->document->getLastH();

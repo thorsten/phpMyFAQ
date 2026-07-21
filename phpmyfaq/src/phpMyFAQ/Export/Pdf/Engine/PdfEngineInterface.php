@@ -111,10 +111,6 @@ interface PdfEngineInterface
 
     public function setTextColor(int $col1, int $col2 = -1, int $col3 = -1): void;
 
-    public function getTextColor(): string;
-
-    public function setTextColorRaw(string $color): void;
-
     public function getLastH(): float;
 
     // Table of contents
