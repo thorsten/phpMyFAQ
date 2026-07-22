@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc307d3ad442e5a6f7a3191d6dc051a4",
+    "content-hash": "09eb2912c5cddae3307fb2c7bec0eb20",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -1997,16 +1997,16 @@
         },
         {
             "name": "mcp/sdk",
-            "version": "v0.6.0",
+            "version": "v0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/modelcontextprotocol/php-sdk.git",
-                "reference": "433c84b58af346dd32f15f9909679e96a46ebe23"
+                "reference": "a6f415578fa789783d010274d11c922e97659a8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/modelcontextprotocol/php-sdk/zipball/433c84b58af346dd32f15f9909679e96a46ebe23",
-                "reference": "433c84b58af346dd32f15f9909679e96a46ebe23",
+                "url": "https://api.github.com/repos/modelcontextprotocol/php-sdk/zipball/a6f415578fa789783d010274d11c922e97659a8a",
+                "reference": "a6f415578fa789783d010274d11c922e97659a8a",
                 "shasum": ""
             },
             "require": {
@@ -2075,9 +2075,9 @@
             "description": "Model Context Protocol SDK for Client and Server applications in PHP",
             "support": {
                 "issues": "https://github.com/modelcontextprotocol/php-sdk/issues",
-                "source": "https://github.com/modelcontextprotocol/php-sdk/tree/v0.6.0"
+                "source": "https://github.com/modelcontextprotocol/php-sdk/tree/v0.7.0"
             },
-            "time": "2026-06-02T15:47:04+00:00"
+            "time": "2026-07-14T22:58:00+00:00"
         },
         {
             "name": "minishlink/web-push",
