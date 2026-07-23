@@ -95,7 +95,7 @@
     "autoprefixer": "10.5.3",
     "husky": "9.1.7",
     "jsdom": "29.1.1",
-    "oxfmt": "0.58.0",
+    "oxfmt": "0.59.0",
     "oxlint": "1.74.0",
     "postcss": "8.5.19",
     "prettier": "3.9.5",
