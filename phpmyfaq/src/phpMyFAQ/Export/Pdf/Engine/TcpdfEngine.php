@@ -265,9 +265,9 @@ final readonly class TcpdfEngine implements PdfEngineInterface
         self::defineIfMissing('PDF_MARGIN_BOTTOM', 25);
         self::defineIfMissing('PDF_MARGIN_LEFT', 15);
         self::defineIfMissing('PDF_MARGIN_RIGHT', 15);
-        self::defineIfMissing('PDF_FONT_NAME_MAIN', 'arialunicid0');
+        self::defineIfMissing('PDF_FONT_NAME_MAIN', 'dejavusans');
         self::defineIfMissing('PDF_FONT_SIZE_MAIN', 10);
-        self::defineIfMissing('PDF_FONT_NAME_DATA', 'arialunicid0');
+        self::defineIfMissing('PDF_FONT_NAME_DATA', 'dejavusans');
         self::defineIfMissing('PDF_FONT_SIZE_DATA', 8);
         self::defineIfMissing('PDF_FONT_MONOSPACED', 'DejaVuSansMono');
         self::defineIfMissing('PDF_IMAGE_SCALE_RATIO', 1);

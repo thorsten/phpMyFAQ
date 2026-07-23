@@ -265,14 +265,14 @@ class WrapperTest extends TestCase
     public function testConstructorSetsCorrectFontForDifferentLanguages(): void
     {
         $testCases = [
-            'zh' => 'arialunicid0', // Chinese
-            'zh_tw' => 'arialunicid0', // Traditional Chinese
-            'ja' => 'arialunicid0', // Japanese
-            'ko' => 'arialunicid0', // Korean
+            'zh' => 'cid0cs', // Chinese
+            'zh_tw' => 'cid0ct', // Traditional Chinese
+            'ja' => 'cid0jp', // Japanese
+            'ko' => 'cid0kr', // Korean
             'cs' => 'dejavusans', // Czech
             'sk' => 'dejavusans', // Slovak
-            'el' => 'arialunicid0', // Greek
-            'he' => 'arialunicid0', // Hebrew
+            'el' => 'dejavusans', // Greek
+            'he' => 'dejavusans', // Hebrew
             'tr' => 'dejavusans', // Turkish
             'de' => 'dejavusans', // German (default)
         ];
@@ -399,7 +399,7 @@ class WrapperTest extends TestCase
             ->setMultiByteLanguage();
 
         $wrapper = new Wrapper();
-        $this->assertEquals('arialunicid0', $wrapper->getCurrentFont());
+        $this->assertEquals('cid0cs', $wrapper->getCurrentFont());
     }
 
     public function testSetCustomHeaderWithConfig(): void

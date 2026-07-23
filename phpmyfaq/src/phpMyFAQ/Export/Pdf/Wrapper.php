@@ -102,14 +102,14 @@ class Wrapper
      * Font files.
      */
     private array $fontFiles = [
-        'zh' => 'arialunicid0',
-        'zh_tw' => 'arialunicid0',
-        'ja' => 'arialunicid0',
-        'ko' => 'arialunicid0',
+        'zh' => 'cid0cs',
+        'zh_tw' => 'cid0ct',
+        'ja' => 'cid0jp',
+        'ko' => 'cid0kr',
         'cs' => 'dejavusans',
         'sk' => 'dejavusans',
-        'el' => 'arialunicid0',
-        'he' => 'arialunicid0',
+        'el' => 'dejavusans',
+        'he' => 'dejavusans',
         'tr' => 'dejavusans',
         'default' => 'dejavusans',
     ];
