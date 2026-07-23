@@ -514,8 +514,10 @@ class Wrapper
 
         return (string) preg_replace_callback(
             $pattern,
+            /* @mago-expect analysis:invalid-argument - PREG_OFFSET_CAPTURE turns each $matches element into a [text, offset] pair; mago's stub does not model the flag */
+            /** @param array<int, array{0: string, 1: int}> $matches */
             function (array $matches): string {
-                [$tag, $src] = $matches;
+                [[$tag, $tagOffset], [$src, $srcOffset]] = $matches;
                 if (str_starts_with($src, '@') || str_starts_with($src, '*')) {
                     return $tag;
                 }
@@ -528,9 +530,10 @@ class Wrapper
                 [$file] = $resolved;
                 $newSrc = str_starts_with($file, '@') ? '@' . base64_encode(substr($file, offset: 1)) : $file;
 
-                return str_replace($src, $newSrc, $tag);
+                return substr_replace($tag, $newSrc, $srcOffset - $tagOffset, strlen($src));
             },
             $html,
+            flags: PREG_OFFSET_CAPTURE,
         );
     }
 

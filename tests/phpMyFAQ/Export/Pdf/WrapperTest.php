@@ -1064,6 +1064,22 @@ class WrapperTest extends TestCase
         self::assertStringContainsString('<p>y</p>', $result);
     }
 
+    public function testInlineLocalImagesReplacesOnlyTheSrcAttributeValue(): void
+    {
+        $wrapper = new Wrapper();
+        $gif = base64_decode('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+        $dataUri = 'data:image/gif;base64,' . base64_encode($gif);
+        // The src value also appears in another attribute of the same tag; only
+        // the src attribute value may be rewritten.
+        $html = '<img alt="' . $dataUri . '" src="' . $dataUri . '">';
+
+        $method = new ReflectionMethod(Wrapper::class, 'inlineLocalImages');
+        $result = $method->invoke($wrapper, $html);
+
+        self::assertStringContainsString('alt="' . $dataUri . '"', $result);
+        self::assertStringContainsString('src="@', $result);
+    }
+
     public function testInlineLocalImagesLeavesAtAndAsteriskSourcesAlone(): void
     {
         $wrapper = new Wrapper();
