@@ -141,8 +141,10 @@ build_frontend() {
 
 strip_tcpdf_assets() {
     if [ -d "${TCPDF_PATH}" ]; then
-        log "Removing TCPDF fonts and examples"
-        rm -rf "${TCPDF_PATH}/fonts" "${TCPDF_PATH}/examples"
+        log "Removing TCPDF development leftovers"
+        rm -rf "${TCPDF_PATH}/examples" "${TCPDF_PATH}/test" \
+            "${CHECKOUT_DIR}/phpmyfaq/src/libs/tecnickcom/tc-lib-pdf-font/util" \
+            "${CHECKOUT_DIR}/phpmyfaq/src/libs/tecnickcom/tc-lib-pdf-font/target"
     else
         warn "TCPDF path ${TCPDF_PATH} not found; skipping cleanup"
     fi

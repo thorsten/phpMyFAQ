@@ -44,6 +44,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated from ESLint to oxlint for TypeScript linting (Thorsten)
 - migrated from Prettier to oxfmt for JavaScript/TypeScript formatting (Thorsten)
 - migrated experimental MCP Server to mcp/sdk (Thorsten)
+- upgraded PDF engine to TCPDF 7 / tc-lib-pdf; PDF fonts are now JSON descriptors in src/fonts (Thorsten)
 - fixed security vulnerabilities (Thorsten)
 - updated third party dependencies (Thorsten)
 - fixed bugs (Thorsten)
