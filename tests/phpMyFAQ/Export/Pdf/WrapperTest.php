@@ -9,6 +9,7 @@ use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionMethod;
 
 final class WrapperTestFunctionState
 {
@@ -470,24 +471,14 @@ class WrapperTest extends TestCase
     }
 
     /**
-     * Captures the image resolver callback the Wrapper registers on the engine,
-     * so the private resolveImage() decision logic can be exercised directly.
+     * Exposes the private resolveImage() decision logic via reflection, so it
+     * can be exercised directly without routing through the PDF engine.
      */
     private function captureImageResolver(): callable
     {
-        $engine = $this->createMock(PdfEngineInterface::class);
-        $resolver = null;
-        $engine
-            ->method('onImageResolve')
-            ->willReturnCallback(function (callable $cb) use (&$resolver): void {
-                $resolver = $cb;
-            });
+        $method = new ReflectionMethod(Wrapper::class, 'resolveImage');
 
-        new Wrapper($engine);
-
-        self::assertIsCallable($resolver);
-
-        return $resolver;
+        return fn(string $file, string $type): ?array => $method->invoke($this->wrapper, $file, $type);
     }
 
     public function testResolveImagePassesThroughRawAndLinkedSources(): void
@@ -1045,5 +1036,41 @@ class WrapperTest extends TestCase
         $output = $this->wrapper->Output('test.pdf', 'S');
 
         $this->assertStringStartsWith('%PDF', $output);
+    }
+
+    public function testInlineLocalImagesConvertsDataUriToAtBase64(): void
+    {
+        $wrapper = new Wrapper();
+        $gif = base64_decode('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+        $html = '<p>x</p><img src="data:image/gif;base64,' . base64_encode($gif) . '"><p>y</p>';
+
+        $method = new ReflectionMethod(Wrapper::class, 'inlineLocalImages');
+        $result = $method->invoke($wrapper, $html);
+
+        self::assertStringContainsString('src="@', $result);
+        self::assertStringNotContainsString('data:image/gif', $result);
+    }
+
+    public function testInlineLocalImagesDropsUnresolvableImage(): void
+    {
+        $wrapper = new Wrapper();
+        $html = '<p>x</p><img src="/content/user/images/does-not-exist-12345.png"><p>y</p>';
+
+        $method = new ReflectionMethod(Wrapper::class, 'inlineLocalImages');
+        $result = $method->invoke($wrapper, $html);
+
+        self::assertStringNotContainsString('<img', $result);
+        self::assertStringContainsString('<p>x</p>', $result);
+        self::assertStringContainsString('<p>y</p>', $result);
+    }
+
+    public function testInlineLocalImagesLeavesAtAndAsteriskSourcesAlone(): void
+    {
+        $wrapper = new Wrapper();
+        $html = '<img src="@QUJD"><img src="*https://example.org/pic.jpg">';
+
+        $method = new ReflectionMethod(Wrapper::class, 'inlineLocalImages');
+
+        self::assertSame($html, $method->invoke($wrapper, $html));
     }
 }

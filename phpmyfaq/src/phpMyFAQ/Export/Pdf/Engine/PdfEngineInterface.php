@@ -91,8 +91,6 @@ interface PdfEngineInterface
         string $align = '',
     ): void;
 
-    public function image(string $file, ?float $x, ?float $y, float $w, float $h, string $type, string $link): void;
-
     public function multiCell(float $w, float $h, string $txt, mixed $border = 0, string $align = 'J'): void;
 
     /* @mago-expect lint:excessive-parameter-list - mirrors the TCPDF method signature */
@@ -135,12 +133,4 @@ interface PdfEngineInterface
     public function onHeader(callable $renderer): void;
 
     public function onFooter(callable $renderer): void;
-
-    /**
-     * Image resolver. Receives ($file, $type) and returns [resolvedFile, resolvedType]
-     * to draw, or null to skip the image entirely.
-     *
-     * @param callable(string, string): (array{0: string, 1: string}|null) $resolver
-     */
-    public function onImageResolve(callable $resolver): void;
 }

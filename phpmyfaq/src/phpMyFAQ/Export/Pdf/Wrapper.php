@@ -143,11 +143,10 @@ class Wrapper
             $this->currentFont = (string) $this->fontFiles[$metaLanguage];
         }
 
-        // Register render-time callbacks so the engine's Header/Footer/Image hooks
+        // Register render-time callbacks so the engine's Header/Footer hooks
         // call back into this renderer's domain logic.
         $this->engine->onHeader($this->renderHeader(...));
         $this->engine->onFooter($this->renderFooter(...));
-        $this->engine->onImageResolve($this->resolveImage(...));
     }
 
     public function Open(): void
@@ -308,11 +307,11 @@ class Wrapper
      */
     public function setCustomHeader(): void
     {
-        $this->customHeader = html_entity_decode(
+        $this->customHeader = $this->inlineLocalImages(html_entity_decode(
             (string) $this->config()->get(item: 'main.customPdfHeader'),
             ENT_QUOTES,
             encoding: 'utf-8',
-        );
+        ));
     }
 
     /**
@@ -385,7 +384,9 @@ class Wrapper
      */
     public function setCustomFooter(): void
     {
-        $this->customFooter = (string) ($this->config()->get(item: 'main.customPdfFooter') ?? '');
+        $this->customFooter = $this->inlineLocalImages(
+            (string) ($this->config()->get(item: 'main.customPdfFooter') ?? ''),
+        );
     }
 
     /**
@@ -498,6 +499,39 @@ class Wrapper
         }
 
         return [$path, $type];
+    }
+
+    /**
+     * Rewrites every <img> source to inline '@'-base64 data (or a resolvable
+     * local path) via resolveImage(), and removes images that cannot be
+     * resolved. Runs before the HTML reaches the PDF engine, because the
+     * modern engine renders HTML images directly without calling back into
+     * the Image() hook.
+     */
+    private function inlineLocalImages(string $html): string
+    {
+        $pattern = '/<img\b[^>]*\bsrc\s*=\s*["\']([^"\']+)["\'][^>]*>/i';
+
+        return (string) preg_replace_callback(
+            $pattern,
+            function (array $matches): string {
+                [$tag, $src] = $matches;
+                if (str_starts_with($src, '@') || str_starts_with($src, '*')) {
+                    return $tag;
+                }
+
+                $resolved = $this->resolveImage($src, pathinfo($src, PATHINFO_EXTENSION));
+                if ($resolved === null) {
+                    return '';
+                }
+
+                [$file] = $resolved;
+                $newSrc = str_starts_with($file, '@') ? '@' . base64_encode(substr($file, offset: 1)) : $file;
+
+                return str_replace($src, $newSrc, $tag);
+            },
+            $html,
+        );
     }
 
     /* @mago-expect lint:no-error-control-operator - probing whether bytes decode as an image; failure is the negative answer */
@@ -761,6 +795,7 @@ class Wrapper
         string $align = '',
     ): void {
         // Pre-process HTML content to convert external images to base64, then delegate.
-        $this->engine->writeHtml($this->convertExternalImagesToBase64($html), $ln, $fill, $reseth, $cell, $align);
+        $html = $this->convertExternalImagesToBase64($html);
+        $this->engine->writeHtml($this->inlineLocalImages($html), $ln, $fill, $reseth, $cell, $align);
     }
 }

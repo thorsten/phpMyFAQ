@@ -32,9 +32,6 @@ final class TcpdfDocument extends TCPDF
     /** @var (callable():void)|null */
     private $footerRenderer = null;
 
-    /** @var (callable(string,string):?array)|null */
-    private $imageResolver = null;
-
     public function setHeaderRenderer(?callable $renderer): void
     {
         $this->headerRenderer = $renderer;
@@ -43,14 +40,6 @@ final class TcpdfDocument extends TCPDF
     public function setFooterRenderer(?callable $renderer): void
     {
         $this->footerRenderer = $renderer;
-    }
-
-    /**
-     * @param callable(string, string): (array{0: string, 1: string}|null)|null $resolver
-     */
-    public function setImageResolver(?callable $resolver): void
-    {
-        $this->imageResolver = $resolver;
     }
 
     #[Override]
@@ -67,84 +56,5 @@ final class TcpdfDocument extends TCPDF
         if ($this->footerRenderer !== null) {
             ($this->footerRenderer)();
         }
-    }
-
-    #[Override]
-    /* @mago-ignore lint:excessive-parameter-list */
-    public function Image(
-        $file,
-        $x = null,
-        $y = null,
-        $w = 0,
-        $h = 0,
-        $type = '',
-        $link = '',
-        $align = '',
-        $resize = false,
-        $dpi = 300,
-        $palign = '',
-        $ismask = false,
-        $imgmask = false,
-        $border = 0,
-        $fitbox = false,
-        $hidden = false,
-        $fitonpage = false,
-        $alt = false,
-        $altimgs = [],
-    ): void {
-        if ($this->imageResolver === null) {
-            parent::Image(
-                $file,
-                $x,
-                $y,
-                $w,
-                $h,
-                $type,
-                $link,
-                $align,
-                $resize,
-                $dpi,
-                $palign,
-                $ismask,
-                $imgmask,
-                $border,
-                $fitbox,
-                $hidden,
-                $fitonpage,
-                $alt,
-                $altimgs,
-            );
-            return;
-        }
-
-        $resolved = ($this->imageResolver)((string) $file, (string) $type);
-        if ($resolved === null) {
-            return;
-        }
-
-        [$resolvedFile, $resolvedType] = $resolved;
-        $resolvedFile = (string) $resolvedFile;
-        $resolvedType = (string) $resolvedType;
-        parent::Image(
-            $resolvedFile,
-            $x,
-            $y,
-            $w,
-            $h,
-            $resolvedType,
-            $link,
-            $align,
-            $resize,
-            $dpi,
-            $palign,
-            $ismask,
-            $imgmask,
-            $border,
-            $fitbox,
-            $hidden,
-            $fitonpage,
-            $alt,
-            $altimgs,
-        );
     }
 }

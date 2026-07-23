@@ -25,36 +25,17 @@ final class TcpdfEngineTest extends TestCase
         self::assertStringStartsWith('%PDF', $pdf);
     }
 
-    public function testImageResolverSkipWhenResolverReturnsNull(): void
+    public function testWriteHtmlWithInlineBase64ImageRenders(): void
     {
+        $gif = base64_decode('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+        self::assertNotFalse($gif);
+
         $engine = new TcpdfEngine();
-        $engine->onImageResolve(static fn(string $file, string $type): ?array => null);
         $engine->open();
         $engine->setPrintHeader(false);
         $engine->addPage();
-        $engine->writeHtml('<img src="content/user/images/does-not-matter.png">');
-        $pdf = $engine->output('test.pdf', 'S');
+        $engine->writeHtml('<img src="@' . base64_encode($gif) . '">');
 
-        self::assertStringStartsWith('%PDF', $pdf);
-    }
-
-    public function testImageResolverDrawsResolvedFile(): void
-    {
-        $jpegData = base64_decode(
-            '/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDX4A=',
-        );
-        self::assertNotFalse($jpegData);
-
-        // The resolver embeds the image as raw '@'-prefixed data, which the engine
-        // must hand to TCPDF and render without error.
-        $engine = new TcpdfEngine();
-        $engine->onImageResolve(static fn(string $file, string $type): array => ['@' . $jpegData, 'jpg']);
-        $engine->open();
-        $engine->setPrintHeader(false);
-        $engine->addPage();
-        $engine->writeHtml('<img src="content/user/images/anything.jpg">');
-        $pdf = $engine->output('test.pdf', 'S');
-
-        self::assertStringStartsWith('%PDF', $pdf);
+        self::assertStringStartsWith('%PDF', $engine->output('test.pdf', 'S'));
     }
 }

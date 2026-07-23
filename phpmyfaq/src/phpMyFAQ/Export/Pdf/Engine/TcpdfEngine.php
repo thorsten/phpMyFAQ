@@ -160,11 +160,6 @@ final readonly class TcpdfEngine implements PdfEngineInterface
         $this->document->writeHTMLCell($w, $h, $x, $y, $html, $border, $ln, $fill, $reseth, $align);
     }
 
-    public function image(string $file, ?float $x, ?float $y, float $w, float $h, string $type, string $link): void
-    {
-        $this->document->Image($file, $x, $y, $w, $h, $type, $link);
-    }
-
     public function multiCell(float $w, float $h, string $txt, mixed $border = 0, string $align = 'J'): void
     {
         $this->document->MultiCell($w, $h, $txt, $border, $align);
@@ -238,14 +233,6 @@ final readonly class TcpdfEngine implements PdfEngineInterface
     public function onFooter(callable $renderer): void
     {
         $this->document->setFooterRenderer($renderer);
-    }
-
-    /**
-     * @param callable(string, string): (array{0: string, 1: string}|null) $resolver
-     */
-    public function onImageResolve(callable $resolver): void
-    {
-        $this->document->setImageResolver($resolver);
     }
 
     private static function defineTcpdfConstants(): void
