@@ -1388,12 +1388,6 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
-code = "mixed-return-statement"
-message = 'Could not infer a precise return type for function `phpMyFAQ\Export\Pdf\Engine\TcpdfEngine::output`. Saw type `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1

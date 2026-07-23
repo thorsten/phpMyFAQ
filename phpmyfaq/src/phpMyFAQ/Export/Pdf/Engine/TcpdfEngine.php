@@ -45,7 +45,7 @@ final readonly class TcpdfEngine implements PdfEngineInterface
 
     public function output(string $name, string $dest): string
     {
-        return $this->document->Output($name, $dest);
+        return (string) $this->document->Output($name, $dest);
     }
 
     public function addPage(): void
