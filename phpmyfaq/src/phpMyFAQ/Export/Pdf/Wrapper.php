@@ -515,9 +515,18 @@ class Wrapper
             /** @param array<array-key, string> $matches */
             function (array $matches): string {
                 [$tag] = $matches;
+
+                // The engine's attribute parser is last-wins, so a tag with
+                // more than one src attribute could smuggle an unpoliced
+                // source past a first-wins rewrite. Drop such malformed tags.
+                $srcCount = preg_match_all('/(?<![\w-])src\s*=/i', $tag);
+                if ($srcCount === false || $srcCount > 1) {
+                    return '';
+                }
+
                 $srcMatch = [];
                 $found = preg_match(
-                    '/\bsrc\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s"\'=<>`]+))/i',
+                    '/(?<![\w-])src\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s"\'=<>`]+))/i',
                     $tag,
                     $srcMatch,
                     PREG_OFFSET_CAPTURE,

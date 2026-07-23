@@ -1128,4 +1128,38 @@ class WrapperTest extends TestCase
         self::assertStringContainsString('<p>x</p>', $result);
         self::assertStringContainsString('<p>y</p>', $result);
     }
+
+    public function testInlineLocalImagesDropsTagWithDuplicateSrcAttributes(): void
+    {
+        $wrapper = new Wrapper();
+        $gif = base64_decode('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+        // The engine's attribute parser is last-wins, so a benign first src
+        // could smuggle a second, unpoliced src past a first-wins rewrite.
+        // Such malformed tags must be dropped entirely.
+        $html =
+            '<p>x</p><img src="data:image/gif;base64,'
+            . base64_encode($gif)
+            . '" src=/content/user/images/nope.png><p>y</p>';
+
+        $method = new ReflectionMethod(Wrapper::class, 'inlineLocalImages');
+        $result = $method->invoke($wrapper, $html);
+
+        self::assertStringNotContainsString('<img', $result);
+        self::assertStringContainsString('<p>x</p>', $result);
+        self::assertStringContainsString('<p>y</p>', $result);
+    }
+
+    public function testInlineLocalImagesIgnoresDataSrcAndPolicesRealSrc(): void
+    {
+        $wrapper = new Wrapper();
+        $gif = base64_decode('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+        $html = '<img data-src="lazy.jpg" src="data:image/gif;base64,' . base64_encode($gif) . '">';
+
+        $method = new ReflectionMethod(Wrapper::class, 'inlineLocalImages');
+        $result = $method->invoke($wrapper, $html);
+
+        self::assertStringContainsString('data-src="lazy.jpg"', $result);
+        self::assertStringContainsString('src="@', $result);
+        self::assertStringNotContainsString('data:image/gif', $result);
+    }
 }
