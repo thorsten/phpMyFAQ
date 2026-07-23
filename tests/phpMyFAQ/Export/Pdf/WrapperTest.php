@@ -1089,4 +1089,43 @@ class WrapperTest extends TestCase
 
         self::assertSame($html, $method->invoke($wrapper, $html));
     }
+
+    public function testInlineLocalImagesResolvesUnquotedSrc(): void
+    {
+        $wrapper = new Wrapper();
+        $gif = base64_decode('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+        $html = '<img src=data:image/gif;base64,' . base64_encode($gif) . ' alt="x">';
+
+        $method = new ReflectionMethod(Wrapper::class, 'inlineLocalImages');
+        $result = $method->invoke($wrapper, $html);
+
+        self::assertStringContainsString('src="@', $result);
+        self::assertStringContainsString('alt="x"', $result);
+    }
+
+    public function testInlineLocalImagesDropsUnresolvableUnquotedSrc(): void
+    {
+        $wrapper = new Wrapper();
+        $html = '<p>x</p><img src=/content/user/images/nope-unquoted.png><p>y</p>';
+
+        $method = new ReflectionMethod(Wrapper::class, 'inlineLocalImages');
+        $result = $method->invoke($wrapper, $html);
+
+        self::assertStringNotContainsString('<img', $result);
+        self::assertStringContainsString('<p>x</p>', $result);
+        self::assertStringContainsString('<p>y</p>', $result);
+    }
+
+    public function testInlineLocalImagesDropsImgTagWithNoSrcAttribute(): void
+    {
+        $wrapper = new Wrapper();
+        $html = '<p>x</p><img class="foo"><p>y</p>';
+
+        $method = new ReflectionMethod(Wrapper::class, 'inlineLocalImages');
+        $result = $method->invoke($wrapper, $html);
+
+        self::assertStringNotContainsString('<img', $result);
+        self::assertStringContainsString('<p>x</p>', $result);
+        self::assertStringContainsString('<p>y</p>', $result);
+    }
 }

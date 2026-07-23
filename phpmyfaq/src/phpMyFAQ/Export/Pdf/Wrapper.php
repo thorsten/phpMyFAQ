@@ -510,14 +510,39 @@ class Wrapper
      */
     private function inlineLocalImages(string $html): string
     {
-        $pattern = '/<img\b[^>]*\bsrc\s*=\s*["\']([^"\']+)["\'][^>]*>/i';
-
         return (string) preg_replace_callback(
-            $pattern,
-            /* @mago-expect analysis:invalid-argument - PREG_OFFSET_CAPTURE turns each $matches element into a [text, offset] pair; mago's stub does not model the flag */
-            /** @param array<int, array{0: string, 1: int}> $matches */
+            '/<img\b[^>]*>/i',
+            /** @param array<array-key, string> $matches */
             function (array $matches): string {
-                [[$tag, $tagOffset], [$src, $srcOffset]] = $matches;
+                [$tag] = $matches;
+                $srcMatch = [];
+                $found = preg_match(
+                    '/\bsrc\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|([^\s"\'=<>`]+))/i',
+                    $tag,
+                    $srcMatch,
+                    PREG_OFFSET_CAPTURE,
+                );
+                if ($found !== 1) {
+                    return '';
+                }
+
+                /* @mago-expect analysis:docblock-type-mismatch - PREG_OFFSET_CAPTURE turns each $srcMatch element into a [text, offset] pair; mago's stub does not model the flag */
+                /** @var array<array-key, array{0: string, 1: int}> $srcMatch */
+
+                $src = '';
+                foreach ([1, 2, 3] as $group) {
+                    if (!array_key_exists($group, $srcMatch) || $srcMatch[$group][1] === -1) {
+                        continue;
+                    }
+
+                    [$src] = $srcMatch[$group];
+                    break;
+                }
+
+                if ($src === '') {
+                    return '';
+                }
+
                 if (str_starts_with($src, '@') || str_starts_with($src, '*')) {
                     return $tag;
                 }
@@ -530,10 +555,10 @@ class Wrapper
                 [$file] = $resolved;
                 $newSrc = str_starts_with($file, '@') ? '@' . base64_encode(substr($file, offset: 1)) : $file;
 
-                return substr_replace($tag, $newSrc, $srcOffset - $tagOffset, strlen($src));
+                [$attr, $attrOffset] = $srcMatch[0];
+                return substr_replace($tag, 'src="' . $newSrc . '"', $attrOffset, strlen($attr));
             },
             $html,
-            flags: PREG_OFFSET_CAPTURE,
         );
     }
 
