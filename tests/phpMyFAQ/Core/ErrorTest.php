@@ -98,8 +98,6 @@ class ErrorTest extends TestCase
             E_USER_WARNING,
             E_USER_NOTICE,
             E_RECOVERABLE_ERROR,
-            E_DEPRECATED,
-            E_USER_DEPRECATED,
         ];
 
         foreach ($errorLevels as $level) {
@@ -108,6 +106,46 @@ class ErrorTest extends TestCase
                 $this->fail("Expected ErrorException was not thrown for level: $level");
             } catch (ErrorException $exception) {
                 $this->assertSame($level, $exception->getSeverity());
+            }
+        }
+    }
+
+    /**
+     * @throws ErrorException
+     */
+    public function testErrorHandlerDoesNotThrowExceptionForDeprecations(): void
+    {
+        ini_set('log_errors', '0');
+
+        Error::errorHandler(E_DEPRECATED, 'Deprecated feature', 'test.php', 1);
+        Error::errorHandler(
+            E_USER_DEPRECATED,
+            'Since twig/twig 3.27: Using the "macro" tag outside the root of a template is deprecated',
+            'test.php',
+            1,
+        );
+
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @throws ErrorException
+     */
+    public function testErrorHandlerLogsDeprecationsWhenLogErrorsIsEnabled(): void
+    {
+        ini_set('log_errors', '1');
+
+        $logFile = tempnam(sys_get_temp_dir(), 'phpunit_error_log');
+        ini_set('error_log', $logFile);
+
+        try {
+            Error::errorHandler(E_USER_DEPRECATED, 'Deprecated feature', 'test.php', 42);
+
+            $logContent = file_get_contents($logFile);
+            $this->assertStringContainsString('phpMyFAQ Deprecation: Deprecated feature in test.php on line 42', $logContent);
+        } finally {
+            if (file_exists($logFile)) {
+                unlink($logFile);
             }
         }
     }

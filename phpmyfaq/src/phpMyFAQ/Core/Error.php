@@ -32,16 +32,27 @@ class Error
 {
     /**
      * Error handler to convert all errors to PHP exceptions by
-     * throwing a PHP ErrorException.
+     * throwing a PHP ErrorException. Deprecation notices are only
+     * logged, so they never crash the application.
      *
      * @throws ErrorException
      */
     public static function errorHandler(int $level, string $message, string $filename, int $line): void
     {
-        if (error_reporting() !== 0) {
-            $filename = Environment::isDebugMode() ? $filename : basename($filename);
-            throw new ErrorException($message, 0, $level, $filename, $line);
+        if (error_reporting() === 0) {
+            return;
         }
+
+        if ($level === E_DEPRECATED || $level === E_USER_DEPRECATED) {
+            if (ini_get('log_errors')) {
+                error_log(sprintf('phpMyFAQ Deprecation: %s in %s on line %d', $message, $filename, $line));
+            }
+
+            return;
+        }
+
+        $filename = Environment::isDebugMode() ? $filename : basename($filename);
+        throw new ErrorException($message, 0, $level, $filename, $line);
     }
 
     /**
