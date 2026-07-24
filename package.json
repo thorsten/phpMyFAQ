@@ -92,7 +92,7 @@
     "@types/node": "26.1.1",
     "@types/sortablejs": "1.15.9",
     "@vitest/coverage-istanbul": "4.1.0",
-    "autoprefixer": "10.5.3",
+    "autoprefixer": "10.5.4",
     "husky": "9.1.7",
     "jsdom": "29.1.1",
     "oxfmt": "0.58.0",
