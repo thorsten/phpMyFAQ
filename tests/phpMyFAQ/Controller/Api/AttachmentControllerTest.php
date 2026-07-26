@@ -5,11 +5,13 @@ namespace phpMyFAQ\Controller\Api;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\File;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Faq;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -189,6 +191,39 @@ class AttachmentControllerTest extends TestCase
 
         $this->assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
         $this->assertEquals([], json_decode($response->getContent(), true));
+    }
+
+    /**
+     * Security regression: an anonymous requester who cannot see the parent FAQ
+     * must not receive its attachment filenames or generated URLs. The real
+     * controller must short-circuit with a 404 before touching the attachments.
+     *
+     * @throws Exception
+     */
+    public function testListReturnsNotFoundWhenFaqIsNotAccessible(): void
+    {
+        $request = new Request([], [], ['recordId' => '123']);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('setUser')->willReturnSelf();
+        $faq->method('setGroups')->willReturnSelf();
+        $faq->expects($this->once())->method('isFaqAccessibleForUser')->with(123)->willReturn(false);
+
+        $controller = (new ReflectionClass(AttachmentController::class))->newInstanceWithoutConstructor();
+
+        $container = $this->createMock(ContainerBuilder::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(static fn(string $id) => $id === 'phpmyfaq.faq' ? $faq : null);
+
+        $reflection = new ReflectionClass(AttachmentController::class);
+        // currentUser stays null -> resolves to the anonymous user (-1).
+        $reflection->getProperty('container')->setValue($controller, $container);
+
+        $response = $controller->list($request);
+
+        $this->assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->assertSame([], json_decode($response->getContent(), true));
     }
 
     /**

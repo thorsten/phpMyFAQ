@@ -24,6 +24,7 @@ use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Filter;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -80,6 +81,16 @@ class AttachmentController extends AbstractController
     {
         $recordId = (int) Filter::filterVar($request->attributes->get(key: 'recordId'), FILTER_VALIDATE_INT);
         $result = [];
+
+        // Do not disclose attachment metadata of a FAQ record the requester is not allowed to see.
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+
+        if (!$faq->isFaqAccessibleForUser($recordId)) {
+            return $this->json($result, Response::HTTP_NOT_FOUND);
+        }
 
         try {
             $attachments = AttachmentFactory::fetchByRecordId($this->configuration, $recordId);

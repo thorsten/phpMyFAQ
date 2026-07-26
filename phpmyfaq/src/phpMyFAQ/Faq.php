@@ -808,6 +808,61 @@ class Faq
     }
 
     /**
+     * Checks whether the FAQ record with the given ID is visible to the current
+     * user and groups in the current language. This is used to gate access to
+     * child resources such as comments and attachments, which are keyed only by
+     * the record ID and would otherwise leak data from restricted FAQs.
+     *
+     * The visibility rules mirror getFaqByIdAndCategoryId(): the record must be
+     * active, within its active date window, and permitted for the current user
+     * and groups.
+     */
+    public function isFaqAccessibleForUser(int $faqId): bool
+    {
+        $queryHelper = new QueryHelper($this->user, $this->groups);
+        $now = date(format: 'YmdHis');
+
+        $query = sprintf(
+            "
+            SELECT
+                fd.id
+            FROM
+                %sfaqdata AS fd
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fd.id = %d
+            AND
+                fd.lang = '%s'
+            AND
+                fd.active = 'yes'
+            AND
+                fd.date_start <= '%s'
+            AND
+                fd.date_end >= '%s'
+                %s",
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $faqId,
+            $this->getEscapedCurrentLanguage(),
+            $now,
+            $now,
+            $queryHelper->queryPermission($this->groupSupport),
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+
+        return $this->configuration->getDb()->numRows($result) > 0;
+    }
+
+    /**
      * Returns a FAQ by ID and category ID.
      *
      * @param int $faqId FAQ ID

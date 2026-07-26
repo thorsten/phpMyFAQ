@@ -217,7 +217,11 @@ $expired = date(format: 'YmdHis') > $faq->faqRecord['dateEnd'];
 
 // Number of comments
 $numComments = $comment->getNumberOfComments();
-$comments = $comment->getCommentsData((int) $faqId, CommentType::FAQ);
+
+// Do not fetch or render comments when the FAQ record is not accessible to the
+// current requester (getFaq() flags a denied/non-visible record with solution_id 42).
+$isFaqAccessible = isset($faq->faqRecord['solution_id']) && 42 !== (int) $faq->faqRecord['solution_id'];
+$comments = $isFaqAccessible ? $comment->getCommentsData((int) $faqId, CommentType::FAQ) : [];
 
 $commentHelper = new CommentHelper();
 $commentHelper->setConfiguration($faqConfig);
@@ -238,7 +242,11 @@ if (
     );
     $templateVars = [
         ...$templateVars,
-        'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get(key: 'msgComments')),
+        'numberOfComments' => sprintf(
+            '%d %s',
+            $isFaqAccessible ? ($numComments[$faqId] ?? 0) : 0,
+            Translation::get(key: 'msgComments'),
+        ),
         'writeCommentMsg' => $commentMessage,
     ];
 }

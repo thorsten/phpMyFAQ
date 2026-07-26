@@ -25,6 +25,7 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -83,11 +84,21 @@ final class CommentController extends AbstractController
     {
         $recordId = (int) Filter::filterVar($request->attributes->get(key: 'recordId'), FILTER_VALIDATE_INT);
 
+        // Do not disclose comments of a FAQ record the requester is not allowed to see.
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+
+        if (!$faq->isFaqAccessibleForUser($recordId)) {
+            return $this->json([], Response::HTTP_NOT_FOUND);
+        }
+
         /** @var Comments $comments */
         $comments = $this->container->get(id: 'phpmyfaq.comments');
         $result = $comments->getCommentsData($recordId, CommentType::FAQ);
         if ((is_countable($result) ? count($result) : 0) === 0) {
-            $this->json($result, Response::HTTP_NOT_FOUND);
+            return $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
         return $this->json($result, Response::HTTP_OK);
