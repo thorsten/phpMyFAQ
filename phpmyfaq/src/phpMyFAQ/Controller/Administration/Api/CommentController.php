@@ -57,7 +57,8 @@ final class CommentController extends AbstractController
             }
 
             foreach ($commentIds as $commentId) {
-                $result = $comments->delete($data->type, $commentId);
+                // Comment IDs arrive as strings from the serialized form data
+                $result = $comments->delete($data->type, (int) $commentId);
             }
 
             return $this->json(['success' => $result], Response::HTTP_OK);
