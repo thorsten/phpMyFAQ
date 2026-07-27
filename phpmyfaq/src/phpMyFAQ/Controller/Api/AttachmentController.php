@@ -19,9 +19,11 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
+use LogicException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -158,6 +160,10 @@ final class AttachmentController extends AbstractApiController
         // Do not disclose attachment metadata of a FAQ record the requester is not allowed to see.
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
         $faq = $this->container->get(id: 'phpmyfaq.faq');
+        if (!$faq instanceof Faq) {
+            throw new LogicException('Faq service not found in container.');
+        }
+
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 

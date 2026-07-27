@@ -397,24 +397,6 @@ message = "Non numeric string of type `string` implicitly cast to `float`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "possibly-undefined-string-array-index"
-message = "Possibly undefined array key 'b' accessed on `array{'b'?: int<30, 199>, 'g': int<30, 199>, 'r': int<30, 199>}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "possibly-undefined-string-array-index"
-message = "Possibly undefined array key 'g' accessed on `array{'g'?: int<30, 199>, 'r': int<30, 199>}`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Captcha/BuiltinCaptcha.php"
-code = "possibly-undefined-string-array-index"
-message = "Possibly undefined array key 'r' accessed on `array{'r'?: int<30, 199>}`."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Captcha/GoogleRecaptcha.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
