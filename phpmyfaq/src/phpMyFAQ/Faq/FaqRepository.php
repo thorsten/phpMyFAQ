@@ -92,6 +92,62 @@ final class FaqRepository implements FaqRepositoryInterface
         return (bool) $this->configuration->getDb()->numRows($result);
     }
 
+    /**
+     * Checks whether a FAQ record is visible to the given user and groups in the
+     * given language: active, within its active date window, and permitted.
+     *
+     * @param int[] $groups
+     */
+    public function isFaqVisibleForUser(
+        int $faqId,
+        string $faqLang,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): bool {
+        $queryHelper = new QueryHelper($userId, $groups);
+        $now = date(format: 'YmdHis');
+
+        $query = sprintf(
+            "
+            SELECT
+                fd.id
+            FROM
+                %sfaqdata AS fd
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fd.id = %d
+            AND
+                fd.lang = '%s'
+            AND
+                fd.active = 'yes'
+            AND
+                fd.date_start <= '%s'
+            AND
+                fd.date_end >= '%s'
+                %s",
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $faqId,
+            $this->configuration->getDb()->escape($faqLang),
+            $now,
+            $now,
+            $queryHelper->queryPermission($groupSupport),
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+
+        return $this->configuration->getDb()->numRows($result) > 0;
+    }
+
     public function isActive(int $faqId, string $faqLang, string $commentType = 'faq'): bool
     {
         $table = 'news' === $commentType ? 'faqnews' : 'faqdata';

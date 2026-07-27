@@ -23,6 +23,7 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Filter;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -153,6 +154,16 @@ final class AttachmentController extends AbstractApiController
             defaultField: 'id',
             defaultOrder: 'asc',
         );
+
+        // Do not disclose attachment metadata of a FAQ record the requester is not allowed to see.
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+
+        if (!$faq->isFaqAccessibleForUser($faqId)) {
+            return $this->json([], Response::HTTP_NOT_FOUND);
+        }
 
         try {
             // Fetch paginated attachments using property access (PHP 8.4 property hooks)

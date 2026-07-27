@@ -645,6 +645,46 @@ class FaqTest extends TestCase
         $this->assertSame(168, (int) $faq->faqRecord['solution_id']);
     }
 
+    public function testIsFaqAccessibleForUserReturnsTrueForVisiblePublicFaq(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        $this->assertTrue($this->faq->isFaqAccessibleForUser($faqEntity->getId()));
+    }
+
+    public function testIsFaqAccessibleForUserReturnsFalseForFaqRestrictedToAnotherUser(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantUserAccess($faqEntity, 1);
+
+        // Anonymous requester (user -1) must not see a FAQ restricted to user 1.
+        $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId()));
+    }
+
+    public function testIsFaqAccessibleForUserReturnsTrueForAuthorizedUser(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantUserAccess($faqEntity, 23);
+
+        $this->faq->setUser(23);
+
+        $this->assertTrue($this->faq->isFaqAccessibleForUser($faqEntity->getId()));
+    }
+
+    public function testIsFaqAccessibleForUserReturnsFalseForInactiveFaq(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setActive(false);
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId()));
+    }
+
     public function testGetAllAvailableFaqsByCategoryIdSanitizesLanguageAndSorting(): void
     {
         Language::$language = "en' OR 1=1 -- ";

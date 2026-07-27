@@ -596,6 +596,47 @@ class Faq
     }
 
     /**
+     * Checks whether the FAQ record with the given ID is visible to the current
+     * user and groups in the current language. This is used to gate access to
+     * child resources such as comments and attachments, which are keyed only by
+     * the record ID and would otherwise leak data from restricted FAQs.
+     *
+     * The visibility rules mirror getFaqByIdAndCategoryId(): the record must be
+     * active, within its active date window, and permitted for the current user
+     * and groups.
+     *
+     * A record that does not exist at all is reported as accessible: there is
+     * nothing to protect, and the child resource lookup simply comes back empty.
+     */
+    public function isFaqAccessibleForUser(int $faqId): bool
+    {
+        $currentLanguage = $this->getCurrentLanguage();
+
+        return (
+            !$this->faqRepository->hasTranslation($faqId, $currentLanguage)
+            || $this->faqRepository->isFaqVisibleForUser(
+                $faqId,
+                $currentLanguage,
+                $this->user,
+                $this->groups,
+                $this->groupSupport,
+            )
+        );
+    }
+
+    /**
+     * Resolves the current language, preferring the already-detected static value
+     * so callers without a Language object registered in the Configuration
+     * (e.g. plain API requests) still work.
+     */
+    private function getCurrentLanguage(): string
+    {
+        return Language::$language !== ''
+            ? strtolower(Language::$language)
+            : $this->configuration->getLanguage()->getLanguage();
+    }
+
+    /**
      * Returns a FAQ by ID and category ID.
      *
      * @param int $faqId FAQ ID

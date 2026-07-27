@@ -162,6 +162,25 @@ class Filter
     }
 
     /**
+     * Filters a variable containing HTML: removes unsafe elements and attributes via
+     * Symfony's HtmlSanitizer, so safe HTML markup is kept intact. Unlike
+     * removeAttributes(), inline style attributes are preserved.
+     *
+     * @param mixed      $variable Variable
+     * @param mixed|null $default Default value
+     */
+    public static function filterHtml(mixed $variable, mixed $default = null): mixed
+    {
+        if (!is_string($variable)) {
+            return $default ?? '';
+        }
+
+        $config = self::sanitizerConfig()->allowAttribute('style', allowedElements: '*');
+
+        return new HtmlSanitizer($config)->sanitize(str_replace(search: '&#13;', replace: '', subject: $variable));
+    }
+
+    /**
      * Sanitizes HTML by allowing safe elements and attributes via Symfony's HtmlSanitizer.
      */
     public static function removeAttributes(string $html = ''): string
@@ -169,7 +188,17 @@ class Filter
         // remove broken stuff
         $html = str_replace(search: '&#13;', replace: '', subject: $html);
 
-        $config = new HtmlSanitizerConfig()
+        $sanitizer = new HtmlSanitizer(self::sanitizerConfig());
+
+        return $sanitizer->sanitize($html);
+    }
+
+    /**
+     * Shared HtmlSanitizer configuration: safe elements only, no form controls.
+     */
+    private static function sanitizerConfig(): HtmlSanitizerConfig
+    {
+        return new HtmlSanitizerConfig()
             ->allowSafeElements()
             ->allowRelativeLinks()
             ->allowRelativeMedias()
@@ -184,9 +213,5 @@ class Filter
             ->blockElement('textarea')
             ->blockElement('select')
             ->blockElement('button');
-
-        $sanitizer = new HtmlSanitizer($config);
-
-        return $sanitizer->sanitize($html);
     }
 }

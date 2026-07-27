@@ -40,6 +40,20 @@ interface FaqRepositoryInterface
     public function hasTranslation(int $faqId, string $faqLang): bool;
 
     /**
+     * Checks whether a FAQ record is visible to the given user and groups in the
+     * given language: active, within its active date window, and permitted.
+     *
+     * @param int[] $groups
+     */
+    public function isFaqVisibleForUser(
+        int $faqId,
+        string $faqLang,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): bool;
+
+    /**
      * Checks whether a FAQ (or news) record is active.
      */
     public function isActive(int $faqId, string $faqLang, string $commentType = 'faq'): bool;
