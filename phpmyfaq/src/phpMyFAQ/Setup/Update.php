@@ -646,8 +646,11 @@ class Update extends AbstractSetup
                             PRIMARY KEY (category_id))',
                         Database::getTablePrefix(),
                     );
+                    // The old table has no parent_id column, so the columns must be named
+                    // explicitly - a plain SELECT * would shift position into parent_id.
                     $this->queries[] = sprintf(
-                        'INSERT INTO %sfaqcategory_order_new SELECT * FROM %sfaqcategory_order',
+                        'INSERT INTO %sfaqcategory_order_new (category_id, position)
+                            SELECT category_id, position FROM %sfaqcategory_order',
                         Database::getTablePrefix(),
                         Database::getTablePrefix(),
                     );
@@ -874,7 +877,7 @@ class Update extends AbstractSetup
                     break;
                 case 'pgsql':
                     $this->queries[] = sprintf(
-                        'ALTER TABLE %sfaqforms ALTER COLUMN input_label SET TYPE VARCHAR(500)',
+                        'ALTER TABLE %sfaqforms ALTER COLUMN input_label TYPE VARCHAR(500)',
                         Database::getTablePrefix(),
                     );
                     $this->queries[] = sprintf(
@@ -1041,11 +1044,13 @@ class Update extends AbstractSetup
         if (version_compare($this->version, '4.0.9', '<') && Database::getType() === 'pgsql') {
             $this->queries[] = sprintf('CREATE SEQUENCE %sfaqseo_id_seq', Database::getTablePrefix());
             $this->queries[] = sprintf(
-                "ALTER TABLE %sfaqseo ALTER COLUMN id SET DEFAULT nextval('faqseo_id_seq')",
+                "ALTER TABLE %sfaqseo ALTER COLUMN id SET DEFAULT nextval('%sfaqseo_id_seq')",
+                Database::getTablePrefix(),
                 Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
-                "SELECT setval('faqseo_id_seq', (SELECT MAX(id) FROM %sfaqseo));",
+                "SELECT setval('%sfaqseo_id_seq', (SELECT MAX(id) FROM %sfaqseo));",
+                Database::getTablePrefix(),
                 Database::getTablePrefix(),
             );
             $this->queries[] = sprintf('ALTER TABLE %sfaqseo ALTER COLUMN id SET NOT NULL', Database::getTablePrefix());
