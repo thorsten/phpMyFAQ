@@ -244,7 +244,7 @@ count = 4
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 14
+count = 15
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"

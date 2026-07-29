@@ -116,6 +116,73 @@ class WebAuthnControllerTest extends TestCase
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
+    /**
+     * Regression test: the per-login challenge is only useful if it is written back to the user
+     * record, otherwise the replay check in authenticate() has nothing to compare against.
+     */
+    public function testPrepareLoginPersistsTheGeneratedChallenge(): void
+    {
+        $this->configuration->set('security.enableWebAuthnSupport', true);
+
+        $storedKeys = (string) json_encode([['id' => [1, 2, 3], 'key' => 'public-key-pem']]);
+
+        $persistedKeys = null;
+        $user = $this->createMock(\phpMyFAQ\User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $user->expects($this->once())->method('getWebAuthnKeys')->willReturn($storedKeys);
+        $user
+            ->expects($this->once())
+            ->method('setWebAuthnKeys')
+            ->with($this->callback(static function (string $keys) use (&$persistedKeys): bool {
+                $persistedKeys = $keys;
+
+                return true;
+            }))
+            ->willReturn(true);
+
+        $controller = new WebAuthnController(new \phpMyFAQ\Auth\AuthWebAuthn($this->configuration), $user);
+        $request = new Request([], [], [], [], [], [], json_encode(['username' => 'alice']));
+
+        $response = $controller->prepareLogin($request);
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertIsString($persistedKeys, 'The keys carrying the challenge must be persisted.');
+
+        $decoded = json_decode($persistedKeys, false, 512, JSON_THROW_ON_ERROR);
+        $this->assertNotEmpty($decoded[0]->challenge ?? '', 'The pending challenge must be persisted.');
+    }
+
+    /**
+     * Regression test: the challenge consumed by a successful login must be written back so the
+     * same assertion cannot be presented twice.
+     */
+    public function testLoginPersistsTheConsumedChallenge(): void
+    {
+        $this->configuration->set('security.enableWebAuthnSupport', true);
+
+        $user = $this->createMock(\phpMyFAQ\User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $user->expects($this->once())->method('getWebAuthnKeys')->willReturn('stored-keys');
+        $user->expects($this->once())->method('setWebAuthnKeys')->willReturn(true);
+
+        $authWebAuthn = $this->createMock(\phpMyFAQ\Auth\AuthWebAuthn::class);
+        $authWebAuthn->expects($this->once())->method('authenticate')->willReturn(true);
+
+        $loginUser = $this->createMock(\phpMyFAQ\User\CurrentUser::class);
+        $loginUser->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $loginUser->expects($this->once())->method('isBlocked')->willReturn(false);
+
+        $controller = new WebAuthnController($authWebAuthn, $user, $loginUser);
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'username' => 'alice',
+            'login' => ['assertion' => 'payload'],
+        ]));
+
+        $response = $controller->login($request);
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+    }
+
     public function testPrepareLoginReturnsForbiddenWhenWebAuthnDisabled(): void
     {
         $this->configuration->set('security.enableWebAuthnSupport', false);

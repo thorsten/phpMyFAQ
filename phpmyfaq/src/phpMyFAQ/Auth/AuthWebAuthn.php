@@ -350,10 +350,11 @@ class AuthWebAuthn extends Auth
             throw new Exception('No response in info');
         }
 
-        $clientDataObject = $response->clientData ?? null;
-        if (!$clientDataObject instanceof stdClass) {
-            throw new Exception('No client data in info');
-        }
+        // Everything the relying party verifies has to be read out of the clientDataJSON the
+        // authenticator actually signed over. The pre-parsed `clientData` object the client sends
+        // alongside it is unsigned, so an attacker replaying an assertion can put anything there.
+        $clientDataJson = $this->byteString($response->clientDataJSONarray ?? null);
+        $clientDataObject = $this->decodeSignedClientData($clientDataJson);
 
         $rawIdList = $this->idList($info->rawId ?? null);
 
@@ -375,21 +376,17 @@ class AuthWebAuthn extends Auth
             throw new Exception('No key with ID ' . $rawIdList);
         }
 
-        $originalChallenge = rtrim(
-            strtr(
-                string: base64_encode(string: $this->byteString($info->originalChallenge ?? null)),
-                from: '+/',
-                to: '-_',
-            ),
-            characters: '=',
-        );
-        if ($originalChallenge !== $clientDataObject->challenge) {
-            throw new Exception('Challenge mismatch');
+        // A key only carries a challenge between prepareForLogin() and the login that consumes it.
+        // No pending challenge means this assertion answers nothing we asked for, so it is either a
+        // replay or a login that never started: fail closed.
+        $storedChallenge = $key->challenge ?? null;
+        if (!is_string($storedChallenge) || $storedChallenge === '') {
+            throw new Exception('You cannot use the same login more than once');
         }
 
-        $keyChallenge = $key->challenge ?? null;
-        if ($keyChallenge !== null && $keyChallenge !== $clientDataObject->challenge) {
-            throw new Exception('You cannot use the same login more than once');
+        $presentedChallenge = $clientDataObject->challenge ?? null;
+        if (!is_string($presentedChallenge) || !hash_equals($storedChallenge, $presentedChallenge)) {
+            throw new Exception('Challenge mismatch');
         }
 
         foreach ($storedKeys as $webAuthnKey) {
@@ -402,14 +399,16 @@ class AuthWebAuthn extends Auth
 
         $userWebAuthn = (string) json_encode($storedKeys);
 
-        $origin = parse_url((string) $clientDataObject->origin);
+        $clientOrigin = is_string($clientDataObject->origin ?? null) ? $clientDataObject->origin : '';
+        $origin = parse_url($clientOrigin);
         $originHost = is_array($origin) ? $origin['host'] ?? null : null;
         if ($originHost !== $this->appId) {
-            throw new Exception(sprintf("Origin mismatch for '%s'", (string) $clientDataObject->origin));
+            throw new Exception(sprintf("Origin mismatch for '%s'", $clientOrigin));
         }
 
-        if ($clientDataObject->type !== 'webauthn.get') {
-            throw new Exception(sprintf("Type mismatch for '%s'", (string) $clientDataObject->type));
+        $clientType = is_string($clientDataObject->type ?? null) ? $clientDataObject->type : '';
+        if ($clientType !== 'webauthn.get') {
+            throw new Exception(sprintf("Type mismatch for '%s'", $clientType));
         }
 
         $authDataString = $this->byteString($response->authenticatorData ?? null);
@@ -427,8 +426,7 @@ class AuthWebAuthn extends Auth
             throw new Exception('Cannot decode key response (2c)');
         }
 
-        $clientData = $this->byteString($response->clientDataJSONarray ?? null);
-        $signedData = $hashId . chr($flags) . $counter . hash(algo: 'sha256', data: $clientData, binary: true);
+        $signedData = $hashId . chr($flags) . $counter . hash(algo: 'sha256', data: $clientDataJson, binary: true);
 
         $signatureBytes = $response->signature ?? null;
         if (!is_array($signatureBytes) || count($signatureBytes) < 70) {
@@ -456,6 +454,22 @@ class AuthWebAuthn extends Auth
     public function setAppId(string $appId): void
     {
         $this->appId = $appId;
+    }
+
+    /**
+     * Decodes the clientDataJSON the authenticator signed over. This is the only trustworthy
+     * source for the challenge, origin and type, because the signature covers exactly these bytes.
+     *
+     * @throws Exception
+     */
+    private function decodeSignedClientData(string $clientDataJson): stdClass
+    {
+        $clientData = json_decode($clientDataJson);
+        if (!$clientData instanceof stdClass) {
+            throw new Exception('No client data in info');
+        }
+
+        return $clientData;
     }
 
     /**

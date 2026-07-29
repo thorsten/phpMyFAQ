@@ -41,12 +41,18 @@ final class WebAuthnController extends AbstractController
 
     private readonly User $user;
 
-    public function __construct()
-    {
+    private readonly ?CurrentUser $loginCurrentUser;
+
+    public function __construct(
+        ?AuthWebAuthn $authWebAuthn = null,
+        ?User $user = null,
+        ?CurrentUser $loginCurrentUser = null,
+    ) {
         parent::__construct();
 
-        $this->authWebAuthn = new AuthWebAuthn($this->configuration);
-        $this->user = new User($this->configuration);
+        $this->authWebAuthn = $authWebAuthn ?? new AuthWebAuthn($this->configuration);
+        $this->user = $user ?? new User($this->configuration);
+        $this->loginCurrentUser = $loginCurrentUser;
     }
 
     /**
@@ -178,8 +184,13 @@ final class WebAuthnController extends AbstractController
         }
 
         $webAuthnKeys = $this->user->getWebAuthnKeys();
+        $publicKey = $this->authWebAuthn->prepareForLogin($webAuthnKeys);
 
-        return $this->json($this->authWebAuthn->prepareForLogin($webAuthnKeys), Response::HTTP_OK);
+        // prepareForLogin() stamps the pending challenge onto the keys; it has to be stored so the
+        // login can check the assertion against it and reject replays.
+        $this->user->setWebAuthnKeys($webAuthnKeys);
+
+        return $this->json($publicKey, Response::HTTP_OK);
     }
 
     /**
@@ -210,8 +221,14 @@ final class WebAuthnController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'ad_auth_fail')], Response::HTTP_BAD_REQUEST);
         }
 
-        if ($this->authWebAuthn->authenticate($loginData, $webAuthnKeys)) {
-            $currentUser = new CurrentUser($this->configuration);
+        $isAuthenticated = $this->authWebAuthn->authenticate($loginData, $webAuthnKeys);
+
+        // authenticate() blanks the challenge it just consumed. Store that, so the same assertion
+        // cannot be presented a second time.
+        $this->user->setWebAuthnKeys($webAuthnKeys);
+
+        if ($isAuthenticated) {
+            $currentUser = $this->loginCurrentUser ?? new CurrentUser($this->configuration);
             $currentUser->getUserByLogin($login);
 
             if ($currentUser->isBlocked()) {

@@ -200,8 +200,13 @@ final class WebAuthnController extends AbstractController
         }
 
         $webAuthnKeys = $this->user->getWebAuthnKeys();
+        $publicKey = $this->authWebAuthn->prepareForLogin($webAuthnKeys);
 
-        return $this->json($this->authWebAuthn->prepareForLogin($webAuthnKeys), Response::HTTP_OK);
+        // prepareForLogin() stamps the pending challenge onto the keys; it has to be stored so the
+        // login can check the assertion against it and reject replays.
+        $this->user->setWebAuthnKeys($webAuthnKeys);
+
+        return $this->json($publicKey, Response::HTTP_OK);
     }
 
     /**
@@ -235,8 +240,13 @@ final class WebAuthnController extends AbstractController
         $this->user->getUserByLogin($login);
 
         $webAuthnKeys = $this->user->getWebAuthnKeys();
+        $isAuthenticated = $this->authWebAuthn->authenticate($loginData, $webAuthnKeys);
 
-        if ($this->authWebAuthn->authenticate($loginData, $webAuthnKeys)) {
+        // authenticate() blanks the challenge it just consumed. Store that, so the same assertion
+        // cannot be presented a second time.
+        $this->user->setWebAuthnKeys($webAuthnKeys);
+
+        if ($isAuthenticated) {
             $currentUser = $this->loginCurrentUser ?? new CurrentUser($this->configuration);
             $currentUser->getUserByLogin($login);
 
