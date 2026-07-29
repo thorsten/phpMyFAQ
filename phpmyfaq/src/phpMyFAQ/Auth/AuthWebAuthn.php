@@ -327,18 +327,20 @@ class AuthWebAuthn extends Auth
             throw new Exception('No key with ID ' . implode(',', $info->rawId));
         }
 
-        $originalChallenge = rtrim(
-            strtr(base64_encode($this->arrayToString($info->originalChallenge)), '+/', '-_'),
-            '=',
-        );
-        if ($originalChallenge != $info->response->clientData->challenge) {
-            throw new Exception('Challenge mismatch');
-        }
+        // The challenge stored by prepareForLogin() is the only server-side state that proves this
+        // assertion is fresh, so it is compared here. This fails closed: a missing or already
+        // cleared challenge means freshness cannot be established, and the assertion is rejected.
+        // Comparing $info->originalChallenge against the client data would be meaningless, as both
+        // values arrive in the same request and an attacker controls them.
+        $storedChallenge = (string) ($key->challenge ?? '');
+        $clientChallenge = (string) ($info->response->clientData->challenge ?? '');
 
-        if (isset($key->challenge) && $key->challenge != $info->response->clientData->challenge) {
+        if ($storedChallenge === '' || !hash_equals($storedChallenge, $clientChallenge)) {
             throw new Exception('You cannot use the same login more than once');
         }
 
+        // Burn the challenge so this assertion cannot be replayed. The caller MUST persist
+        // $userWebAuthn afterwards, otherwise the challenge stays valid for the next request.
         foreach ($webauthn as $idx => $webAuthnKey) {
             $webauthn[$idx]->challenge = '';
         }

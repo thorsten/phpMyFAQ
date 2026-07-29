@@ -283,4 +283,103 @@ class AuthWebAuthnTest extends TestCase
         $this->assertEquals('example.com', $result['publicKey']['rp']['name']);
         $this->assertEquals('example.com', $result['publicKey']['rp']['id']);
     }
+
+    /**
+     * Builds a minimal assertion that reaches the challenge check in authenticate().
+     */
+    private function createLoginInfo(string $clientChallenge): \stdClass
+    {
+        $info = new \stdClass();
+        $info->rawId = [1, 2, 3];
+        $info->response = new \stdClass();
+        $info->response->clientData = new \stdClass();
+        $info->response->clientData->challenge = $clientChallenge;
+        $info->response->clientData->origin = 'https://attacker.example.net';
+        $info->response->clientData->type = 'webauthn.get';
+
+        return $info;
+    }
+
+    private function createStoredKeys(?string $challenge): string
+    {
+        $key = new \stdClass();
+        $key->id = [1, 2, 3];
+        $key->key = 'test-public-key';
+
+        if ($challenge !== null) {
+            $key->challenge = $challenge;
+        }
+
+        return json_encode([$key]);
+    }
+
+    public function testPrepareForLoginStampsChallengeOnStoredKeys(): void
+    {
+        $userWebAuthn = $this->createStoredKeys(challenge: null);
+
+        $this->authWebAuthn->prepareForLogin($userWebAuthn);
+
+        // prepareForLogin() must hand back keys carrying the challenge, so the caller can persist
+        // it. Without this, the replay check in authenticate() has nothing to compare against.
+        $storedKeys = json_decode($userWebAuthn);
+        $this->assertObjectHasProperty('challenge', $storedKeys[0]);
+        $this->assertNotSame('', $storedKeys[0]->challenge);
+    }
+
+    public function testAuthenticateRejectsAssertionWhenNoChallengeWasStored(): void
+    {
+        // A key registered but never issued a challenge must not authenticate. This used to pass,
+        // because the check disarmed itself when the stored challenge was absent.
+        $userWebAuthn = $this->createStoredKeys(challenge: null);
+        $info = $this->createLoginInfo('some-captured-challenge');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('You cannot use the same login more than once');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testAuthenticateRejectsReplayAfterChallengeWasBurned(): void
+    {
+        // A challenge cleared by a previous successful login must not authenticate again.
+        $userWebAuthn = $this->createStoredKeys(challenge: '');
+        $info = $this->createLoginInfo('');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('You cannot use the same login more than once');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testAuthenticateRejectsChallengeThatDoesNotMatchStoredOne(): void
+    {
+        $userWebAuthn = $this->createStoredKeys(challenge: 'server-issued-challenge');
+        $info = $this->createLoginInfo('challenge-from-an-older-assertion');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('You cannot use the same login more than once');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testAuthenticateAcceptsMatchingChallengeAndClearsIt(): void
+    {
+        $userWebAuthn = $this->createStoredKeys(challenge: 'server-issued-challenge');
+        $info = $this->createLoginInfo('server-issued-challenge');
+
+        // A matching challenge passes the replay check and the request proceeds to the origin
+        // check, which rejects it here. A different message proves the challenge check itself
+        // passed rather than blanket-rejecting everything.
+        try {
+            $this->authWebAuthn->authenticate($info, $userWebAuthn);
+            $this->fail('Expected authentication to fail on the origin check.');
+        } catch (Exception $exception) {
+            $this->assertStringContainsString('Origin mismatch', $exception->getMessage());
+        }
+
+        // The challenge must have been burned on the returned keys, so persisting them makes the
+        // assertion single-use.
+        $storedKeys = json_decode($userWebAuthn);
+        $this->assertSame('', $storedKeys[0]->challenge);
+    }
 }
