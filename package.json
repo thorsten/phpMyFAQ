@@ -64,7 +64,7 @@
     "eslint": "^9.39.5",
     "husky": "^9.1.7",
     "jsdom": "^27.4.0",
-    "postcss": "^8.5.23",
+    "postcss": "^8.5.25",
     "prettier": "^3.9.6",
     "pretty-quick": "^4.2.2",
     "sass": "^1.102.0",
