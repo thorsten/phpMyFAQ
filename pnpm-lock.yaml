@@ -27,8 +27,8 @@ dependencies:
     specifier: 11.11.1
     version: 11.11.1
   jodit:
-    specifier: 4.13.5
-    version: 4.13.5
+    specifier: 4.13.8
+    version: 4.13.8
   masonry-layout:
     specifier: 4.2.2
     version: 4.2.2
@@ -720,12 +720,13 @@ packages:
     resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
     dev: false
 
-  /@napi-rs/wasm-runtime@1.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1):
-    resolution: {integrity: sha512-ZLv/JdUfkvOy9eCnnBaGfiO+XimbjebAeO+MRQqD/B+FR1tnRN0tpKSJHRbE8sFfS6aqsXZ67TQjfwfsxULVbg==}
+  /@napi-rs/wasm-runtime@1.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1):
+    resolution: {integrity: sha512-KjZdi8Q1wh89gsVmghvbrMgWl6ZWmRmHV6wjB7/g4Zf0dyO+hH3neZUtuDNPO00qq5YE5RITVWvrIZKRaAmzGQ==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=23.5.0}
     requiresBuild: true
     peerDependencies:
-      '@emnapi/core': ^1.7.1
-      '@emnapi/runtime': ^1.7.1
+      '@emnapi/core': ^1.7.1 || ^2.0.0-alpha.3
+      '@emnapi/runtime': ^1.7.1 || ^2.0.0-alpha.3
     dependencies:
       '@emnapi/core': 1.11.1
       '@emnapi/runtime': 1.11.1
@@ -1365,7 +1366,7 @@ packages:
     dependencies:
       '@emnapi/core': 1.11.1
       '@emnapi/runtime': 1.11.1
-      '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      '@napi-rs/wasm-runtime': 1.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
     dev: true
     optional: true
 
@@ -2751,8 +2752,8 @@ packages:
     hasBin: true
     dev: true
 
-  /jodit@4.13.5:
-    resolution: {integrity: sha512-twkjhKewz/jtxu2RCLYK406LZK8+epsALTUBjrbvu5gXdEh1NiL1cj1qeX9DPl9RIJjKKgN8MIcxemn5Zb41nw==}
+  /jodit@4.13.8:
+    resolution: {integrity: sha512-O57A3HajqyZKgGypSB0QZ3Q8u61Dv1w98BfLRj+FCuC4YsX1x1om9QM3gVai9snTVWh7p69YfjduhiWZhwr9hA==}
     dev: false
 
   /js-tokens@4.0.0:
