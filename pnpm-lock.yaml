@@ -98,8 +98,8 @@ devDependencies:
     specifier: 4.2.2
     version: 4.2.2(prettier@3.9.5)
   sass:
-    specifier: 1.101.0
-    version: 1.101.0
+    specifier: 1.101.6
+    version: 1.101.6
   stylelint:
     specifier: ^17.14.1
     version: 17.14.1(typescript@7.0.2)
@@ -111,7 +111,7 @@ devDependencies:
     version: 7.0.2
   vite:
     specifier: 8.1.5
-    version: 8.1.5(@types/node@26.1.1)(sass@1.101.0)
+    version: 8.1.5(@types/node@26.1.1)(sass@1.101.6)
   vite-plugin-compression:
     specifier: 0.5.1
     version: 0.5.1(vite@8.1.5)
@@ -720,12 +720,13 @@ packages:
     resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
     dev: false
 
-  /@napi-rs/wasm-runtime@1.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1):
-    resolution: {integrity: sha512-ZLv/JdUfkvOy9eCnnBaGfiO+XimbjebAeO+MRQqD/B+FR1tnRN0tpKSJHRbE8sFfS6aqsXZ67TQjfwfsxULVbg==}
+  /@napi-rs/wasm-runtime@1.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1):
+    resolution: {integrity: sha512-KjZdi8Q1wh89gsVmghvbrMgWl6ZWmRmHV6wjB7/g4Zf0dyO+hH3neZUtuDNPO00qq5YE5RITVWvrIZKRaAmzGQ==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=23.5.0}
     requiresBuild: true
     peerDependencies:
-      '@emnapi/core': ^1.7.1
-      '@emnapi/runtime': ^1.7.1
+      '@emnapi/core': ^1.7.1 || ^2.0.0-alpha.3
+      '@emnapi/runtime': ^1.7.1 || ^2.0.0-alpha.3
     dependencies:
       '@emnapi/core': 1.11.1
       '@emnapi/runtime': 1.11.1
@@ -1365,7 +1366,7 @@ packages:
     dependencies:
       '@emnapi/core': 1.11.1
       '@emnapi/runtime': 1.11.1
-      '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      '@napi-rs/wasm-runtime': 1.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
     dev: true
     optional: true
 
@@ -1711,7 +1712,7 @@ packages:
       '@vitest/spy': 4.1.0
       estree-walker: 3.0.3
       magic-string: 0.30.21
-      vite: 8.1.5(@types/node@26.1.1)(sass@1.101.0)
+      vite: 8.1.5(@types/node@26.1.1)(sass@1.101.6)
     dev: true
 
   /@vitest/pretty-format@4.1.0:
@@ -2631,8 +2632,8 @@ packages:
     engines: {node: '>= 4'}
     dev: true
 
-  /immutable@5.1.6:
-    resolution: {integrity: sha512-q1swsS8K7L8usSHuOqF2TAoCCkonYz0SG38wLAggaa4Wml70zixIvt2ql4coQ2C2B3hTjltJry4r6bULwgAXLQ==}
+  /immutable@5.1.9:
+    resolution: {integrity: sha512-m8nVez3rwrgmWxtLMt1ZYXB2Lv7OKYn/disyxAlSDYAlKSlFoPPfIAmAM/M5xqL4m4C/wAPw7S2/CNaUii1Hxg==}
     dev: true
 
   /import-fresh@3.3.1:
@@ -3432,13 +3433,13 @@ packages:
       queue-microtask: 1.2.3
     dev: true
 
-  /sass@1.101.0:
-    resolution: {integrity: sha512-OL3GoQyoUdDt843DpVmDO6y2k1sc5IhUDSpu8XucEI+35neq5QivZ1iuegnpraEVTJXlQGK1gl27zKcTLEPbQw==}
+  /sass@1.101.6:
+    resolution: {integrity: sha512-j8qYug9WuX19eU5sxJWQlbR8RYhKgXiOYgGjkJRkcW35c3neWtxPdcUW0saN6Od2L0aqEp0AmH9R/QeAxrffMQ==}
     engines: {node: '>=20.19.0'}
     hasBin: true
     dependencies:
       chokidar: 5.0.0
-      immutable: 5.1.6
+      immutable: 5.1.9
       source-map-js: 1.2.1
     optionalDependencies:
       '@parcel/watcher': 2.6.0
@@ -3885,7 +3886,7 @@ packages:
       chalk: 4.1.2
       debug: 4.4.3
       fs-extra: 10.1.0
-      vite: 8.1.5(@types/node@26.1.1)(sass@1.101.0)
+      vite: 8.1.5(@types/node@26.1.1)(sass@1.101.6)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3907,7 +3908,7 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 8.1.5(@types/node@26.1.1)(sass@1.101.0)
+      vite: 8.1.5(@types/node@26.1.1)(sass@1.101.6)
     dev: true
 
   /vite-plugin-minify@3.0.0(vite@8.1.5):
@@ -3916,7 +3917,7 @@ packages:
       vite: '>=5'
     dependencies:
       html-minifier-next: 6.2.11
-      vite: 8.1.5(@types/node@26.1.1)(sass@1.101.0)
+      vite: 8.1.5(@types/node@26.1.1)(sass@1.101.6)
     transitivePeerDependencies:
       - '@swc/core'
     dev: true
@@ -3931,10 +3932,10 @@ packages:
       p-map: 7.0.4
       picocolors: 1.1.1
       tinyglobby: 0.2.17
-      vite: 8.1.5(@types/node@26.1.1)(sass@1.101.0)
+      vite: 8.1.5(@types/node@26.1.1)(sass@1.101.6)
     dev: true
 
-  /vite@8.1.5(@types/node@26.1.1)(sass@1.101.0):
+  /vite@8.1.5(@types/node@26.1.1)(sass@1.101.6):
     resolution: {integrity: sha512-7ULLwsCdYx/nRyrpiEwvqb5TFHrMVZyBt+rg/OAXT7rgj/z+DtTDyKFeLAdDkubDVDKD8jOsndmy7m55XcfUsw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
@@ -3982,7 +3983,7 @@ packages:
       picomatch: 4.0.5
       postcss: 8.5.19
       rolldown: 1.1.5
-      sass: 1.101.0
+      sass: 1.101.6
       tinyglobby: 0.2.17
     optionalDependencies:
       fsevents: 2.3.3
@@ -4052,7 +4053,7 @@ packages:
       tinyexec: 1.2.4
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.0
-      vite: 8.1.5(@types/node@26.1.1)(sass@1.101.0)
+      vite: 8.1.5(@types/node@26.1.1)(sass@1.101.6)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
       - msw
