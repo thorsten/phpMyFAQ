@@ -48,7 +48,7 @@ final class UpdateController extends AbstractController
     #[Route(path: 'admin/api/health-check')]
     public function healthCheck(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $dateTime = new DateTime();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
@@ -78,7 +78,7 @@ final class UpdateController extends AbstractController
     #[Route(path: 'admin/api/versions')]
     public function versions(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         try {
             $versions = HttpClient::create(['timeout' => 30])->request('GET', 'https://api.phpmyfaq.de/versions');
@@ -96,7 +96,7 @@ final class UpdateController extends AbstractController
     #[Route(path: 'admin/api/update-check')]
     public function updateCheck(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $dateTime = new DateTime();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
