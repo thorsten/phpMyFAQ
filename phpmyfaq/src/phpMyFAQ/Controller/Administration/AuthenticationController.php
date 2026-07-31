@@ -65,10 +65,16 @@ final class AuthenticationController extends AbstractAdministrationController im
             try {
                 $this->currentUser = $userAuthentication->authenticate($username, $password);
                 if ($userAuthentication->hasTwoFactorAuthentication()) {
-                    $session = $this->container->get(id: 'session');
-                    $session->set('2fa_pending_user_id', $this->currentUser->getUserId());
-                    $session->set('2fa_failed_attempts', 0);
-                    return new RedirectResponse(url: './token?user-id=' . $this->currentUser->getUserId());
+                    $userId = $this->currentUser->getUserId();
+
+                    // The failure count is deliberately not reset here: a correct
+                    // password must not buy a fresh budget of token guesses.
+                    if ($this->currentUser->isTwoFactorLockedOut()) {
+                        return new RedirectResponse(url: './login');
+                    }
+
+                    $this->container->get(id: 'session')->set('2fa_pending_user_id', $userId);
+                    return new RedirectResponse(url: './token?user-id=' . $userId);
                 }
             } catch (Exception) {
                 $logging->log(
@@ -202,14 +208,15 @@ final class AuthenticationController extends AbstractAdministrationController im
             return new RedirectResponse(url: './login');
         }
 
-        if ($session->get('2fa_failed_attempts', 0) >= 5) {
-            $session->remove('2fa_pending_user_id');
-            $session->remove('2fa_failed_attempts');
-            return new RedirectResponse(url: './login');
-        }
-
         $user = $this->container->get(id: 'phpmyfaq.user.current_user');
         $user->getUserById($userId);
+
+        // The failure count lives on the account, not in the session, so that neither
+        // a fresh session nor another password authentication can clear it.
+        if ($user->isTwoFactorLockedOut()) {
+            $session->remove('2fa_pending_user_id');
+            return new RedirectResponse(url: './login');
+        }
 
         if (strlen((string) $token) === 6) {
             $tfa = $this->container->get(id: 'phpmyfaq.user.two-factor');
@@ -217,13 +224,13 @@ final class AuthenticationController extends AbstractAdministrationController im
 
             if ($result) {
                 $session->remove('2fa_pending_user_id');
-                $session->remove('2fa_failed_attempts');
+                // twoFactorSuccess() clears the counter via setSuccess().
                 $user->twoFactorSuccess();
                 return new RedirectResponse(url: './');
             }
         }
 
-        $session->set('2fa_failed_attempts', $session->get('2fa_failed_attempts', 0) + 1);
+        $user->twoFactorFailure();
 
         return new RedirectResponse('./token?user-id=' . $userId);
     }

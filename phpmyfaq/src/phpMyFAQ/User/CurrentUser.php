@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Auth\AuthDriverInterface;
+use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -92,6 +93,11 @@ class CurrentUser extends User
     private int $loginAttempts = 0;
 
     /**
+     * Number of failed attempts tolerated before the account is locked out.
+     */
+    private const int MAX_LOGIN_ATTEMPTS = 5;
+
+    /**
      * Lockout time in seconds
      */
     private int $lockoutTime = 600;
@@ -136,9 +142,11 @@ class CurrentUser extends User
             $login = $this->getLogin();
         }
 
-        // First check for brute force attack
-        $this->getUserByLogin($login);
-        if ($this->isFailedLastLoginAttempt()) {
+        // First check for brute force attack. An unknown login leaves the user-ID at
+        // its -1 default, which is the guest account, so the lockout bookkeeping is
+        // skipped entirely rather than being applied to the wrong row.
+        $userExists = $this->getUserByLogin($login);
+        if ($userExists && $this->isFailedLastLoginAttempt()) {
             throw new Exception(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
         }
 
@@ -165,12 +173,22 @@ class CurrentUser extends User
         // Attempt to authenticate a user by login and password
         $this->authContainer = $this->sortAuthContainer($this->authContainer);
         foreach ($this->authContainer as $authSource => $auth) {
-            if ($auth->isValidLogin($login, $optData ?? []) === 0) {
-                continue; // Login does not exist, try the next auth method
-            }
+            try {
+                if ($auth->isValidLogin($login, $optData ?? []) === 0) {
+                    continue; // Login does not exist, try the next auth method
+                }
 
-            if (!$auth->checkCredentials($login, $password, $optData ?? [])) {
-                continue; // Incorrect password, try the next auth method
+                if (!$auth->checkCredentials($login, $password, $optData ?? [])) {
+                    continue; // Incorrect password, try the next auth method
+                }
+            } catch (AuthException $authException) {
+                // Auth drivers report a rejected login by throwing rather than by
+                // returning false. Letting that escape would skip the failed-login
+                // bookkeeping below, which is what kept the lockout from ever firing.
+                $this->configuration
+                    ->getLogger()
+                    ->info(sprintf('Authentication via %s failed: %s', $authSource, $authException->getMessage()));
+                continue;
             }
 
             // Login successful, proceed with post-login actions
@@ -203,9 +221,12 @@ class CurrentUser extends User
             return true; // Login successful
         }
 
-        // No successful login, handle errors
-        if ($this->configuration->get(item: 'security.loginWithEmailAddress')) {
-            $this->setLoginAttempt(); // Only set a login attempt if email addresses are allowed
+        // No successful login: count the attempt so the lockout in
+        // isFailedLastLoginAttempt() can fire. This used to be gated on
+        // security.loginWithEmailAddress, which defaults to false and therefore left
+        // the lockout inert on a default installation.
+        if ($userExists) {
+            $this->setLoginAttempt();
         }
 
         if (
@@ -231,7 +252,37 @@ class CurrentUser extends User
     }
 
     /**
+     * Records a failed second-factor attempt.
+     *
+     * The token step is part of the login, so its failures consume the same
+     * per-account budget as failed passwords. Keeping the count in the database
+     * rather than in the session is what makes the throttle effective: an attacker
+     * who already holds the password could otherwise reset a session counter at
+     * will, simply by authenticating again to obtain a fresh session.
+     */
+    public function twoFactorFailure(): bool
+    {
+        return (bool) $this->setLoginAttempt();
+    }
+
+    /**
+     * Returns true while the account is locked out of the second-factor step.
+     *
+     * Unlike the password lockout this deliberately ignores the client IP. Reaching
+     * this step means the password is already known, so allowing a different IP to
+     * start from a clean budget would hand the attacker an unlimited number of
+     * guesses for the price of a proxy.
+     */
+    public function isTwoFactorLockedOut(): bool
+    {
+        return $this->hasExceededLoginAttempts(null);
+    }
+
+    /**
      * Sets loggedIn to true if the 2FA-auth was successful and saves the login to session.
+     *
+     * setSuccess() clears the failed-attempt counter, so a completed second factor
+     * is the only thing that releases the lockout early.
      */
     public function twoFactorSuccess(): bool
     {
@@ -737,6 +788,20 @@ class CurrentUser extends User
      */
     protected function isFailedLastLoginAttempt(): bool
     {
+        // Cast rather than pass through: an unavailable client IP has always been
+        // compared as an empty string here, and must not be confused with the null
+        // that means "count attempts from any IP".
+        return $this->hasExceededLoginAttempts((string) Request::createFromGlobals()->getClientIp());
+    }
+
+    /**
+     * Checks whether the account has burned through its failed-attempt budget
+     * within the lockout window.
+     *
+     * @param string|null $clientIp Only count attempts from this IP, or from any IP when null.
+     */
+    private function hasExceededLoginAttempts(?string $clientIp): bool
+    {
         $select = sprintf(
             "
             SELECT
@@ -750,17 +815,17 @@ class CurrentUser extends User
                 user_id = %d
             AND
                 ('%d' - session_timestamp) <= %d
-            AND
-                ip = '%s'
+            %s
             AND
                 success = 0
             AND
-                login_attempts > 5",
+                login_attempts > %d",
             Database::getTablePrefix(),
             $this->getUserId(),
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $this->lockoutTime,
-            Request::createFromGlobals()->getClientIp(),
+            $clientIp === null ? '' : sprintf("AND ip = '%s'", $clientIp),
+            self::MAX_LOGIN_ATTEMPTS,
         );
 
         $result = $this->configuration->getDb()->query($select);

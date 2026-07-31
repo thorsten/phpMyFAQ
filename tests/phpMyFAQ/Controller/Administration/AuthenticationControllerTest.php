@@ -54,6 +54,17 @@ class AuthenticationControllerTest extends TestCase
         return new Session(new MockArraySessionStorage());
     }
 
+    /**
+     * The user the controller loads by id for the token step.
+     */
+    private function pendingUser(bool $lockedOut = false): CurrentUser
+    {
+        $user = $this->createMock(CurrentUser::class);
+        $user->method('isTwoFactorLockedOut')->willReturn($lockedOut);
+
+        return $user;
+    }
+
     public function testCheckRejectsRequestWithoutPendingSession(): void
     {
         $session = $this->newSession();
@@ -80,66 +91,81 @@ class AuthenticationControllerTest extends TestCase
         $this->assertSame('./login', $response->getTargetUrl());
     }
 
-    public function testCheckLocksOutAfterFiveFailures(): void
+    public function testCheckLocksOutWhenTheAccountExceededItsBudget(): void
     {
         $session = $this->newSession();
         $session->set('2fa_pending_user_id', 1);
-        $session->set('2fa_failed_attempts', 5);
-        $controller = $this->buildController($session);
 
-        $request = new Request([], ['token' => '000000', 'user-id' => '1']);
+        $user = $this->pendingUser(lockedOut: true);
+        $user->expects($this->never())->method('twoFactorFailure');
 
-        $response = $controller->check($request);
+        $tfa = $this->createMock(TwoFactor::class);
+        $tfa->expects($this->never())->method('validateToken');
+
+        $controller = $this->buildController($session, null, $user, $tfa);
+
+        $response = $controller->check(new Request([], ['token' => '000000', 'user-id' => '1']));
 
         $this->assertSame('./login', $response->getTargetUrl());
         $this->assertNull($session->get('2fa_pending_user_id'));
-        $this->assertNull($session->get('2fa_failed_attempts'));
     }
 
-    public function testCheckIncrementsFailedAttemptsOnWrongToken(): void
+    public function testCheckRecordsFailureOnWrongToken(): void
     {
         $session = $this->newSession();
         $session->set('2fa_pending_user_id', 1);
 
         $tfa = $this->createMock(TwoFactor::class);
         $tfa->method('validateToken')->willReturn(false);
-        $sessionUser = $this->createMock(CurrentUser::class);
-        $sessionUser->method('isLoggedIn')->willReturn(false);
-        $containerUser = $this->createMock(CurrentUser::class);
 
-        $controller = $this->buildController($session, $sessionUser, $containerUser, $tfa);
+        $user = $this->pendingUser();
+        $user->expects($this->once())->method('twoFactorFailure');
+        $user->expects($this->never())->method('twoFactorSuccess');
 
-        $request = new Request([], ['token' => '000000', 'user-id' => '1']);
-        $response = $controller->check($request);
+        $controller = $this->buildController($session, null, $user, $tfa);
+
+        $response = $controller->check(new Request([], ['token' => '000000', 'user-id' => '1']));
 
         $this->assertSame('./token?user-id=1', $response->getTargetUrl());
-        $this->assertSame(1, $session->get('2fa_failed_attempts'));
         $this->assertSame(1, $session->get('2fa_pending_user_id'));
     }
 
-    public function testCheckClearsSessionAndLogsInOnSuccess(): void
+    public function testCheckRecordsFailureForATokenOfWrongLength(): void
     {
         $session = $this->newSession();
         $session->set('2fa_pending_user_id', 1);
-        $session->set('2fa_failed_attempts', 2);
+
+        $tfa = $this->createMock(TwoFactor::class);
+        $tfa->expects($this->never())->method('validateToken');
+
+        $user = $this->pendingUser();
+        $user->expects($this->once())->method('twoFactorFailure');
+
+        $controller = $this->buildController($session, null, $user, $tfa);
+
+        $response = $controller->check(new Request([], ['token' => '12345', 'user-id' => '1']));
+
+        $this->assertSame('./token?user-id=1', $response->getTargetUrl());
+    }
+
+    public function testCheckClearsStateAndLogsInOnSuccess(): void
+    {
+        $session = $this->newSession();
+        $session->set('2fa_pending_user_id', 1);
 
         $tfa = $this->createMock(TwoFactor::class);
         $tfa->method('validateToken')->willReturn(true);
 
-        $sessionUser = $this->createMock(CurrentUser::class);
-        $sessionUser->method('isLoggedIn')->willReturn(false);
+        $user = $this->pendingUser();
+        $user->expects($this->once())->method('twoFactorSuccess');
+        $user->expects($this->never())->method('twoFactorFailure');
 
-        $containerUser = $this->createMock(CurrentUser::class);
-        $containerUser->expects($this->once())->method('twoFactorSuccess');
+        $controller = $this->buildController($session, null, $user, $tfa);
 
-        $controller = $this->buildController($session, $sessionUser, $containerUser, $tfa);
-
-        $request = new Request([], ['token' => '654321', 'user-id' => '1']);
-        $response = $controller->check($request);
+        $response = $controller->check(new Request([], ['token' => '654321', 'user-id' => '1']));
 
         $this->assertSame('./', $response->getTargetUrl());
         $this->assertNull($session->get('2fa_pending_user_id'));
-        $this->assertNull($session->get('2fa_failed_attempts'));
     }
 
     public function testCheckRedirectsWhenAlreadyLoggedIn(): void
@@ -150,9 +176,27 @@ class AuthenticationControllerTest extends TestCase
 
         $controller = $this->buildController($session, $sessionUser);
 
-        $request = new Request([], ['token' => '000000', 'user-id' => '1']);
-        $response = $controller->check($request);
+        $response = $controller->check(new Request([], ['token' => '000000', 'user-id' => '1']));
 
         $this->assertSame('./', $response->getTargetUrl());
+    }
+
+    /**
+     * The lockout is a property of the account, so a brand-new session, such as the
+     * one an attacker gets by re-authenticating with the password, is still refused.
+     */
+    public function testLockoutSurvivesANewSession(): void
+    {
+        $tfa = $this->createMock(TwoFactor::class);
+        $tfa->expects($this->never())->method('validateToken');
+
+        $session = $this->newSession();
+        $session->set('2fa_pending_user_id', 1);
+
+        $controller = $this->buildController($session, null, $this->pendingUser(lockedOut: true), $tfa);
+
+        $response = $controller->check(new Request([], ['token' => '000000', 'user-id' => '1']));
+
+        $this->assertSame('./login', $response->getTargetUrl());
     }
 }

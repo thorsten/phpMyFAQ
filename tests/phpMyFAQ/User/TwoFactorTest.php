@@ -14,6 +14,8 @@ use RobThree\Auth\TwoFactorAuthException;
 #[AllowMockObjectsWithoutExpectations]
 class TwoFactorTest extends TestCase
 {
+    private const int PERIOD = 30;
+
     private Configuration $configuration;
     private CurrentUser $currentUser;
     private TwoFactor $twoFactor;
@@ -62,6 +64,43 @@ class TwoFactorTest extends TestCase
         $this->assertEquals('testsecret', $secret);
     }
 
+    private function realTwoFactorAuth(): TwoFactorAuth
+    {
+        return (new ReflectionClass($this->twoFactor))
+            ->getProperty('twoFactorAuth')
+            ->getValue($this->twoFactor);
+    }
+
+    private function replaceTwoFactorAuth(TwoFactorAuth $twoFactorAuth): void
+    {
+        (new ReflectionClass($this->twoFactor))
+            ->getProperty('twoFactorAuth')
+            ->setValue($this->twoFactor, $twoFactorAuth);
+    }
+
+    /**
+     * Only the current time slice may be accepted, so the acceptance window is at
+     * most one period instead of the three slices RobThree allows by default.
+     *
+     * @throws Exception
+     */
+    public function testValidateTokenAcceptsOnlyTheCurrentTimeSlice(): void
+    {
+        $this->currentUser->method('getUserData')->with('secret')->willReturn('testsecret');
+        $this->currentUser->method('getUserById')->with(1)->willReturn(true);
+
+        $twoFactorAuth = $this->createMock(TwoFactorAuth::class);
+        $twoFactorAuth
+            ->expects($this->once())
+            ->method('verifyCode')
+            ->with('testsecret', '123456', 0)
+            ->willReturn(true);
+
+        $this->replaceTwoFactorAuth($twoFactorAuth);
+
+        $this->assertTrue($this->twoFactor->validateToken('123456', 1));
+    }
+
     /**
      * @throws \phpMyFAQ\Core\Exception
      * @throws Exception
@@ -70,19 +109,57 @@ class TwoFactorTest extends TestCase
     {
         $this->configuration->method('get')->willReturn('basic');
 
-        $this->currentUser->method('getUserData')->with('secret')->willReturn('testsecret');
-
+        $secret = $this->twoFactor->generateSecret();
+        $this->currentUser->method('getUserData')->with('secret')->willReturn($secret);
         $this->currentUser->method('getUserById')->with(1)->willReturn(true);
 
-        $twoFactorAuth = $this->createStub(TwoFactorAuth::class);
-        $twoFactorAuth->method('verifyCode')->willReturn(true);
+        // Without any discrepancy tolerance a code generated just before a slice
+        // boundary would no longer verify just after it, so retry in that case.
+        do {
+            $sliceBefore = intdiv(time(), self::PERIOD);
+            $result = $this->twoFactor->validateToken($this->realTwoFactorAuth()->getCode($secret), 1);
+            $sliceAfter = intdiv(time(), self::PERIOD);
+        } while ($sliceBefore !== $sliceAfter);
 
-        $reflection = new ReflectionClass($this->twoFactor);
-        $property = $reflection->getProperty('twoFactorAuth');
-        $property->setValue($this->twoFactor, $twoFactorAuth);
-
-        $result = $this->twoFactor->validateToken('123456', 1);
         $this->assertTrue($result);
+    }
+
+    /**
+     * The previous code stays mathematically valid but is outside the accepted
+     * window, which is what shortens the replay window of a captured code.
+     */
+    public function testValidateTokenRejectsThePreviousTimeSlice(): void
+    {
+        $this->configuration->method('get')->willReturn('basic');
+
+        $secret = $this->twoFactor->generateSecret();
+        $this->currentUser->method('getUserData')->with('secret')->willReturn($secret);
+        $this->currentUser->method('getUserById')->with(1)->willReturn(true);
+
+        $previousCode = $this->realTwoFactorAuth()->getCode($secret, time() - self::PERIOD);
+
+        $this->assertFalse($this->twoFactor->validateToken($previousCode, 1));
+    }
+
+    public function testValidateTokenRejectsTheNextTimeSlice(): void
+    {
+        $this->configuration->method('get')->willReturn('basic');
+
+        $secret = $this->twoFactor->generateSecret();
+        $this->currentUser->method('getUserData')->with('secret')->willReturn($secret);
+        $this->currentUser->method('getUserById')->with(1)->willReturn(true);
+
+        $nextCode = $this->realTwoFactorAuth()->getCode($secret, time() + self::PERIOD);
+
+        $this->assertFalse($this->twoFactor->validateToken($nextCode, 1));
+    }
+
+    public function testValidateTokenWithoutASecret(): void
+    {
+        $this->currentUser->method('getUserData')->with('secret')->willReturn('');
+        $this->currentUser->method('getUserById')->with(1)->willReturn(true);
+
+        $this->assertFalse($this->twoFactor->validateToken('123456', 1));
     }
 
     public function testValidateTokenWithInvalidLength(): void
