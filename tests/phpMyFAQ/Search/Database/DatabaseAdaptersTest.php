@@ -261,6 +261,34 @@ class DatabaseAdaptersTest extends TestCase
         $this->assertSame('pgsql-result', $adapter->search('thorsten'));
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('pgsqlAdaptersProvider')]
+    public function testPgsqlAdaptersNeutralizeLikeWildcardsWithMatchingEscapeClause(string $adapterClass): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->callback(static function (string $query): bool {
+                return (
+                    str_contains($query, "ILIKE ('%100|%|_||off%') ESCAPE '|'")
+                    && !str_contains($query, "ESCAPE '='")
+                );
+            }))
+            ->willReturn('pgsql-result');
+
+        $configuration = $this->createConfiguration($db, [
+            'search.searchForSolutionId' => false,
+            'search.enableRelevance' => false,
+            'search.relevance' => 'thema',
+        ]);
+
+        $adapter = new $adapterClass($configuration);
+        $this->configureAdapter($adapter);
+
+        $this->assertSame('pgsql-result', $adapter->search('100%_|off'));
+    }
+
     private function configureAdapter(SearchDatabase $adapter): void
     {
         $adapter

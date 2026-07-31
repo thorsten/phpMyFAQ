@@ -74,7 +74,7 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
                 FROM
                     %s %s %s %s
                 WHERE
-                    (%s) ILIKE ('%%%s%%') ESCAPE '='
+                    (%s) ILIKE ('%%%s%%') ESCAPE '%s'
                     %s
                     %s",
             $columns,
@@ -86,6 +86,7 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
                 : '',
             $this->getMatchingColumns(),
             self::escapeLikeWildcards($this->configuration->getDb()->escape($searchTerm)),
+            self::LIKE_ESCAPE_CHARACTER,
             $this->getConditions(),
             $orderBy,
         );

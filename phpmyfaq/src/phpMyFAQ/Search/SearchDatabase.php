@@ -29,6 +29,13 @@ use phpMyFAQ\Strings;
 class SearchDatabase extends AbstractSearch implements SearchInterface
 {
     /**
+     * LIKE/ILIKE escape character. Every ESCAPE clause built by this class or
+     * its driver subclasses must use this character, otherwise the wildcard
+     * escaping in escapeLikeWildcards() is silently disabled.
+     */
+    protected const string LIKE_ESCAPE_CHARACTER = '|';
+
+    /**
      * Searching database table.
      */
     protected string $table = '';
@@ -282,10 +289,11 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
                 }
 
                 $where = sprintf(
-                    "%s%s LIKE '%%%s%%' ESCAPE '|'",
+                    "%s%s LIKE '%%%s%%' ESCAPE '%s'",
                     $where,
                     $this->matchingColumns[$j],
                     self::escapeLikeWildcards($this->configuration->getDb()->escape((string) $keys[$i])),
+                    self::LIKE_ESCAPE_CHARACTER,
                 );
             }
 
@@ -310,6 +318,8 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      */
     protected static function escapeLikeWildcards(string $term): string
     {
-        return str_replace(['|', '%', '_'], ['||', '|%', '|_'], $term);
+        $escape = self::LIKE_ESCAPE_CHARACTER;
+
+        return str_replace([$escape, '%', '_'], [$escape . $escape, $escape . '%', $escape . '_'], $term);
     }
 }
