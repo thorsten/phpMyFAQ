@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Manages user authentication with LDAP server.
+ * Manages user authentication with the LDAP server.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -84,6 +84,21 @@ class AuthLdap extends Auth implements AuthDriverInterface
         }
 
         $this->connect($this->activeServer);
+
+        if (!$result && in_array($user->getStatus(), ['blocked', 'protected'], true)) {
+            $this->configuration
+                ->getLogger()
+                ->warning(sprintf(
+                    'LDAP login denied: local %s account "%s" cannot be activated via LDAP.',
+                    $user->getStatus(),
+                    $login,
+                ));
+            throw new AuthException(sprintf(
+                'Local account "%s" is %s and cannot be activated via LDAP.',
+                $login,
+                $user->getStatus(),
+            ));
+        }
 
         $user->setStatus('active');
         $user->setAuthSource(AuthenticationSourceType::AUTH_LDAP->value);

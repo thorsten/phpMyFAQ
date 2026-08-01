@@ -4,7 +4,9 @@ namespace phpMyFAQ\Auth;
 
 use Monolog\Logger;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\AuthenticationSourceType;
+use phpMyFAQ\Ldap;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -219,6 +221,87 @@ class AuthLdapTest extends TestCase
         $expectedValue = AuthenticationSourceType::AUTH_LDAP->value;
         $this->assertIsString($expectedValue);
         $this->assertEquals('ldap', $expectedValue);
+    }
+
+    /**
+     * A locally blocked account must not be silently reactivated by a successful LDAP bind.
+     * create() must throw and leave the account untouched instead of running setStatus('active').
+     */
+    public function testCreateDoesNotReactivateBlockedLocalAccount(): void
+    {
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('Local account "blockedUser" is blocked and cannot be activated via LDAP.');
+
+        $this->createAuthLdapForExistingUser('blockedUser', 'blocked')->create('blockedUser', 'irrelevant-password');
+    }
+
+    /**
+     * A locally protected account must likewise be off-limits to LDAP activation.
+     */
+    public function testCreateDoesNotReactivateProtectedLocalAccount(): void
+    {
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('Local account "protectedUser" is protected and cannot be activated via LDAP.');
+
+        $this->createAuthLdapForExistingUser('protectedUser', 'protected')->create(
+            'protectedUser',
+            'irrelevant-password',
+        );
+    }
+
+    /**
+     * Builds an AuthLdap instance whose internal User lookup resolves to an already
+     * existing account with the given status, without touching a real LDAP server or
+     * database. This reproduces the post-bind create() path from checkCredentials().
+     */
+    private function createAuthLdapForExistingUser(string $login, string $status): AuthLdap
+    {
+        $database = $this->createStub(Sqlite3::class);
+        $database->method('escape')->willReturnArgument(0);
+        $database->method('query')->willReturn(true);
+        // numRows() === 1 makes getUserByLogin() treat the login as already taken,
+        // so createUser() throws ERROR_USER_LOGIN_NOT_UNIQUE after populating the status.
+        $database->method('numRows')->willReturn(1);
+        $database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => 99,
+                'login' => $login,
+                'account_status' => $status,
+                'is_superadmin' => false,
+                'auth_source' => 'local',
+            ]);
+
+        $this->configurationMock->method('getDb')->willReturn($database);
+        $this->configurationMock
+            ->method('get')
+            ->willReturnMap([
+                ['security.permLevel', 'basic'],
+            ]);
+
+        $reflection = new ReflectionClass(AuthLdap::class);
+        $authLdap = $reflection->newInstanceWithoutConstructor();
+
+        $this->setPrivateProperty($authLdap, 'configuration', $this->configurationMock);
+        $this->setPrivateProperty($authLdap, 'ldapCore', $this->createStub(Ldap::class));
+        $this->setPrivateProperty($authLdap, 'activeServer', 0);
+        $this->setPrivateProperty($authLdap, 'ldapServer', [
+            0 => [
+                'ldap_server' => 'ldap.example.com',
+                'ldap_port' => 389,
+                'ldap_base' => 'dc=example,dc=com',
+                'ldap_user' => 'cn=admin,dc=example,dc=com',
+                'ldap_password' => 'password',
+            ],
+        ]);
+
+        return $authLdap;
+    }
+
+    private function setPrivateProperty(object $object, string $property, mixed $value): void
+    {
+        $reflection = new ReflectionClass($object);
+        $reflection->getProperty($property)->setValue($object, $value);
     }
 
     public function testClassConstants(): void
