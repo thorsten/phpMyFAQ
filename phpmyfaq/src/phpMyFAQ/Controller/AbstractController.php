@@ -357,6 +357,30 @@ abstract class AbstractController
     }
 
     /**
+     * Grants access when the user owns at least one of the given permissions.
+     *
+     * @throws UnauthorizedHttpException|ForbiddenException
+     */
+    protected function userHasAnyPermission(PermissionType ...$permissionTypes): void
+    {
+        if (!$this->currentUser->isLoggedIn()) {
+            throw new UnauthorizedHttpException(challenge: 'User is not authenticated.');
+        }
+
+        $currentUser = $this->currentUser;
+        foreach ($permissionTypes as $permissionType) {
+            if ($currentUser->perm->hasPermission($currentUser->getUserId(), $permissionType->value)) {
+                return;
+            }
+        }
+
+        throw new ForbiddenException(message: sprintf('User has none of the required permissions: %s.', implode(', ', array_map(
+            static fn(PermissionType $type): string => $type->name,
+            $permissionTypes,
+        ))));
+    }
+
+    /**
      * Verifies CSRF token using session only (without cookie verification).
      * Use this for authenticated API endpoints where the full cookie-based CSRF
      * verification may fail due to domain/path mismatches.

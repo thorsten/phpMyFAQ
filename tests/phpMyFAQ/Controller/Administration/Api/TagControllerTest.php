@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -137,6 +138,43 @@ final class TagControllerTest extends TestCase
     }
 
     /**
+     * Builds a container for a logged-in user owning exactly the given permissions.
+     */
+    private function createContainerForPermissions(PermissionType ...$granted): ContainerInterface
+    {
+        $grantedValues = array_map(static fn(PermissionType $type): string => $type->value, $granted);
+
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array($right instanceof PermissionType ? $right->value : $right, $grantedValues, true),
+            );
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $session = new Session(new MockArraySessionStorage());
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    default => null,
+                };
+            });
+
+        return $container;
+    }
+
+    /**
      * @throws \Exception
      */
     private function createValidCsrfToken(Session $session, string $page): string
@@ -211,37 +249,38 @@ final class TagControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testSearchReturnsEmptyArrayWhenAuthenticatedUserLacksFaqEditPermission(): void
+    public function testSearchIsForbiddenWhenAuthenticatedUserCanNeitherAddNorEditFaqs(): void
     {
-        $permission = $this->createStub(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturn(false);
-
-        $currentUser = $this->createStub(CurrentUser::class);
-        $currentUser->perm = $permission;
-        $currentUser->method('isLoggedIn')->willReturn(true);
-        $currentUser->method('getUserId')->willReturn(42);
-
-        $session = new Session(new MockArraySessionStorage());
-        $container = $this->createStub(ContainerInterface::class);
-        $container
-            ->method('get')
-            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
-                return match ($id) {
-                    'phpmyfaq.configuration' => $this->configuration,
-                    'phpmyfaq.user.current_user' => $currentUser,
-                    'session' => $session,
-                    default => null,
-                };
-            });
-
         $controller = $this->createController();
-        $controller->setContainer($container);
+        $controller->setContainer($this->createContainerForPermissions());
+
+        $this->expectException(ForbiddenException::class);
+        $controller->search(new Request(['search' => 'foo']));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSearchReturnsTagSuggestionsWhenAuthenticatedUserCanOnlyAddFaqs(): void
+    {
+        $tags = $this->createMock(Tags::class);
+        $tags
+            ->expects($this->once())
+            ->method('getAllTags')
+            ->with('foo', PMF_TAGS_CLOUD_RESULT_SET_SIZE)
+            ->willReturn([
+                'foo',
+                'foobar',
+            ]);
+
+        $controller = $this->createController($tags);
+        $controller->setContainer($this->createContainerForPermissions(PermissionType::FAQ_ADD));
 
         $response = $controller->search(new Request(['search' => 'foo']));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertSame([], $payload);
+        self::assertSame([['id' => '0', 'name' => 'foo'], ['id' => '1', 'name' => 'foobar']], $payload);
     }
 
     /**

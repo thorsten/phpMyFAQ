@@ -81,7 +81,7 @@ final class TagController extends AbstractController
     #[Route(path: 'content/tags', name: 'admin.api.content.tags', methods: ['GET'])]
     public function search(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasAnyPermission(PermissionType::FAQ_EDIT, PermissionType::FAQ_ADD);
 
         $this->tags->setBypassPermissionCheck();
 
@@ -104,23 +104,22 @@ final class TagController extends AbstractController
             $tags = $this->tags->getAllTags();
         }
 
-        if ($this->currentUser?->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_EDIT)) {
-            $numTags = 0;
-            $tagNames = [];
-            foreach ($tags as $tagId => $tag) {
-                ++$numTags;
-                if ($numTags <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
-                    $currentTag = new stdClass();
-                    $currentTag->id = (string) $tagId;
-                    $currentTag->name = $tag;
-                    $tagNames[] = $currentTag;
-                }
-            }
+        $tagNames = [];
+        $suggestions = array_slice(
+            $tags,
+            offset: 0,
+            length: PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE,
+            preserve_keys: true,
+        );
 
-            return $this->json($tagNames, Response::HTTP_OK);
+        foreach ($suggestions as $tagId => $tag) {
+            $currentTag = new stdClass();
+            $currentTag->id = (string) $tagId;
+            $currentTag->name = $tag;
+            $tagNames[] = $currentTag;
         }
 
-        return $this->json([], Response::HTTP_OK);
+        return $this->json($tagNames, Response::HTTP_OK);
     }
 
     /**
