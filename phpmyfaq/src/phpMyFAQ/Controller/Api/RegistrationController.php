@@ -119,6 +119,13 @@ final class RegistrationController extends AbstractController
     {
         $this->hasValidToken();
 
+        if (!$this->configuration->get(item: 'security.enableRegistration')) {
+            return $this->json([
+                'registered' => false,
+                'error' => 'User registration is disabled.',
+            ], Response::HTTP_FORBIDDEN);
+        }
+
         $registrationHelper = is_callable($this->registrationHelperFactory)
             ? ($this->registrationHelperFactory)($this->configuration)
             : new RegistrationHelper($this->configuration);

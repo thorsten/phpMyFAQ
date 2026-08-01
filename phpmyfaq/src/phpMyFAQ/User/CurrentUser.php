@@ -152,9 +152,11 @@ class CurrentUser extends User
             $login = $this->getLogin();
         }
 
-        // First check for brute force attack
-        $this->getUserByLogin($login);
-        if ($this->isFailedLastLoginAttempt()) {
+        // First check for brute force attack. An unknown login leaves the user-ID at
+        // its -1 default, which is the guest account, so the lockout bookkeeping is
+        // skipped entirely rather than being applied to the wrong row.
+        $userExists = $this->getUserByLogin($login);
+        if ($userExists && $this->isFailedLastLoginAttempt()) {
             throw new UserException(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
         }
 
@@ -208,16 +210,15 @@ class CurrentUser extends User
             }
 
             if ($this->rememberMe) {
-                // The remember-me cookie is a password-bypassing credential, so it must be an
-                // unpredictable CSPRNG value (not derived from the session id) and stored hashed
-                // at rest so a database read cannot yield a usable cookie.
-                $rememberMeToken = bin2hex(random_bytes(32));
-                $this->setRememberMe(hash('sha256', $rememberMeToken));
-                $this->userSession->setCookie(
-                    UserSession::COOKIE_NAME_REMEMBER_ME,
-                    $rememberMeToken,
-                    (int) $request->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME,
-                );
+                // A remember-me cookie is a password-equivalent credential: it grants a full
+                // session without a second factor. For a 2FA account it must therefore not be
+                // issued until the token step has succeeded, otherwise an attacker who only
+                // holds the password could obtain the cookie here and replay it to bypass 2FA.
+                // The controllers re-issue it via issueRememberMeCookie() once the second
+                // factor is verified.
+                if ((int) $this->getUserData('twofactor_enabled') !== 1) {
+                    $this->issueRememberMeCookie();
+                }
             }
 
             if (!$this->setAuthSource($authSource)) {
@@ -232,8 +233,11 @@ class CurrentUser extends User
             return true; // Login successful
         }
 
-        // No successful login: count the failed attempt so the account lockout engages
-        $this->setLoginAttempt();
+        // No successful login: count the failed attempt so the account lockout engages.
+        // Unknown logins are skipped — their user-ID is the guest account's.
+        if ($userExists) {
+            $this->setLoginAttempt();
+        }
 
         if (
             true === $this->configuration->get(item: 'security.loginWithEmailAddress')
@@ -258,7 +262,37 @@ class CurrentUser extends User
     }
 
     /**
+     * Records a failed second-factor attempt.
+     *
+     * The token step is part of the login, so its failures consume the same
+     * per-account budget as failed passwords. Keeping the count in the database
+     * rather than in the session is what makes the throttle effective: an attacker
+     * who already holds the password could otherwise reset a session counter at
+     * will, simply by authenticating again to obtain a fresh session.
+     */
+    public function twoFactorFailure(): bool
+    {
+        return (bool) $this->setLoginAttempt();
+    }
+
+    /**
+     * Returns true while the account is locked out of the second-factor step.
+     *
+     * Like the password lockout this deliberately ignores the client IP: reaching
+     * this step means the password is already known, so allowing a different IP to
+     * start from a clean budget would hand the attacker an unlimited number of
+     * guesses for the price of a proxy.
+     */
+    public function isTwoFactorLockedOut(): bool
+    {
+        return $this->hasExceededLoginAttempts();
+    }
+
+    /**
      * Sets loggedIn to true if the 2FA-auth was successful and saves the login to session.
+     *
+     * setSuccess() clears the failed-attempt counter, so a completed second factor
+     * is the only thing that releases the lockout early.
      */
     public function twoFactorSuccess(): bool
     {
@@ -492,6 +526,29 @@ class CurrentUser extends User
     }
 
     /**
+     * Issues the remember-me cookie and stores its token in the database.
+     *
+     * This must only be called once authentication is fully complete. For accounts with
+     * two-factor authentication that means after the second factor has been verified: the
+     * remember-me token is a password-equivalent credential that grants a cookie-based login
+     * via getFromCookie(), so issuing it before 2FA is completed would let an attacker who
+     * only holds the password replay the cookie and bypass 2FA entirely.
+     */
+    public function issueRememberMeCookie(): void
+    {
+        // The remember-me cookie is a password-bypassing credential, so it must be an
+        // unpredictable CSPRNG value (not derived from the session id) and stored hashed
+        // at rest so a database read cannot yield a usable cookie.
+        $rememberMeToken = bin2hex(random_bytes(32));
+        $this->setRememberMe(hash('sha256', $rememberMeToken));
+        $this->userSession->setCookie(
+            UserSession::COOKIE_NAME_REMEMBER_ME,
+            $rememberMeToken,
+            time() + self::PMF_REMEMBER_ME_EXPIRED_TIME,
+        );
+    }
+
+    /**
      * Saves remember me token in the database.
      */
     public function setRememberMe(string $rememberMe): bool
@@ -595,6 +652,15 @@ class CurrentUser extends User
      * be able to keep guessing a single account's password.
      */
     protected function isFailedLastLoginAttempt(): bool
+    {
+        return $this->hasExceededLoginAttempts();
+    }
+
+    /**
+     * Checks whether the account has burned through its failed-attempt budget
+     * within the lockout window.
+     */
+    private function hasExceededLoginAttempts(): bool
     {
         $select = sprintf(
             "

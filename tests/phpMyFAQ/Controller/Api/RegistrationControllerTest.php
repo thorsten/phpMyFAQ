@@ -340,4 +340,36 @@ class RegistrationControllerTest extends TestCase
         $this->assertSame(201, $response->getStatusCode());
         $this->assertStringContainsString('"registered":true', (string) $response->getContent());
     }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     * @throws \JsonException
+     */
+    public function testCreateReturnsForbiddenWhenRegistrationIsDisabled(): void
+    {
+        $token = bin2hex(random_bytes(16));
+        $this->configuration->set('api.apiClientToken', $token);
+        $_SERVER['HTTP_X_PMF_TOKEN'] = $token;
+
+        $this->configuration->set('security.enableRegistration', 'false');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'username' => 'regbypass',
+            'fullname' => 'Reg Bypass',
+            'email' => 'regbypass@example.com',
+            'is-visible' => false,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = new RegistrationController();
+
+        try {
+            $response = $controller->create($request);
+        } finally {
+            $this->configuration->set('security.enableRegistration', 'true');
+        }
+
+        $this->assertSame(403, $response->getStatusCode());
+        $this->assertStringContainsString('User registration is disabled', (string) $response->getContent());
+    }
 }

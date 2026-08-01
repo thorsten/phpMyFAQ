@@ -37,6 +37,17 @@ class TwoFactor
     private EndroidQrCodeProvider $endroidQrCodeProvider;
 
     /**
+     * Number of adjacent time slices accepted besides the current one.
+     *
+     * RobThree defaults to 1, which keeps a code usable for roughly 90 seconds and
+     * leaves a captured code replayable for that whole span. Accepting only the
+     * current slice shortens that to at most 30 seconds. The trade-off is that
+     * authenticator apps whose clock has drifted by more than one period are no
+     * longer tolerated.
+     */
+    private const int VERIFY_DISCREPANCY = 0;
+
+    /**
      * @throws TwoFactorAuthException
      */
     public function __construct(
@@ -99,7 +110,7 @@ class TwoFactor
             return false;
         }
 
-        return $this->twoFactorAuth->verifyCode($secret, $token);
+        return $this->twoFactorAuth->verifyCode($secret, $token, self::VERIFY_DISCREPANCY);
     }
 
     /**

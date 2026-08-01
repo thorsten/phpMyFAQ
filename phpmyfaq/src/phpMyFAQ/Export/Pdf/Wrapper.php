@@ -571,15 +571,19 @@ class Wrapper
         );
     }
 
-    /* @mago-expect lint:no-error-control-operator - probing whether bytes decode as an image; failure is the negative answer */
     private function checkBase64Image(string $base64): bool
     {
-        $img = @imagecreatefromstring($base64);
-        if (!$img) {
-            return false;
-        }
+        set_error_handler(static fn(): bool => true, E_WARNING);
+        try {
+            $img = imagecreatefromstring($base64);
+            if (!$img) {
+                return false;
+            }
 
-        $info = getimagesizefromstring($base64);
+            $info = getimagesizefromstring($base64);
+        } finally {
+            restore_error_handler();
+        }
 
         return $info && $info[0] > 0 && $info[1] > 0 && array_key_exists('mime', $info);
     }
@@ -589,9 +593,6 @@ class Wrapper
         $trimmedPath = rtrim(str_replace(search: '\\', replace: '/', subject: $path), characters: '/');
         $trimmedFile = ltrim(str_replace(search: '\\', replace: '/', subject: $file), characters: '/');
 
-        // Local images served by phpMyFAQ always live under the "content" directory.
-        // If the path does not reference it, refuse to resolve it rather than letting
-        // an attacker-controlled path escape the web root.
         $pos = strpos($trimmedFile, needle: 'content/');
         if ($pos === false) {
             return '';

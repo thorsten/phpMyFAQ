@@ -174,4 +174,48 @@ class SearchDatabaseTest extends TestCase
         );
         $this->assertIsString($this->searchDatabase->getMatchClause('Thorsten'));
     }
+
+    /**
+     * A user-supplied LIKE wildcard must be neutralised with the '|' escape
+     * character declared in the ESCAPE clause, otherwise it stays an active
+     * wildcard and broadens the match (LIKE wildcard injection).
+     */
+    public function testGetMatchClauseNeutralisesUserWildcards()
+    {
+        $this->searchDatabase->setMatchingColumns(['faqdata.author']);
+        $this->assertEquals(
+            " (faqdata.author LIKE '%100|%%' ESCAPE '|')",
+            $this->searchDatabase->getMatchClause('100%'),
+        );
+        $this->assertEquals(
+            " (faqdata.author LIKE '%a|_b%' ESCAPE '|')",
+            $this->searchDatabase->getMatchClause('a_b'),
+        );
+    }
+
+    /**
+     * The escape character itself must be doubled so it cannot smuggle in an
+     * escape sequence of the attacker's choosing.
+     */
+    public function testGetMatchClauseEscapesTheEscapeCharacter()
+    {
+        $this->searchDatabase->setMatchingColumns(['faqdata.author']);
+        $this->assertEquals(
+            " (faqdata.author LIKE '%a||b%' ESCAPE '|')",
+            $this->searchDatabase->getMatchClause('a|b'),
+        );
+    }
+
+    /**
+     * Quote escaping and wildcard escaping must compose: the quote is doubled by
+     * the driver escape and the '%' is still neutralised.
+     */
+    public function testGetMatchClauseComposesQuoteAndWildcardEscaping()
+    {
+        $this->searchDatabase->setMatchingColumns(['faqdata.author']);
+        $this->assertEquals(
+            " (faqdata.author LIKE '%O''Brien|%%' ESCAPE '|')",
+            $this->searchDatabase->getMatchClause("O'Brien%"),
+        );
+    }
 }

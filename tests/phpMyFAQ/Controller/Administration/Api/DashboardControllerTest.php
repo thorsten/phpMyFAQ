@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -118,7 +119,12 @@ final class DashboardControllerTest extends TestCase
                 static fn(int $userId, mixed $right): bool => $userId === 42
                 && in_array(
                     $right,
-                    [PermissionType::STATISTICS_VIEWLOGS, PermissionType::STATISTICS_VIEWLOGS->value],
+                    [
+                        PermissionType::STATISTICS_VIEWLOGS,
+                        PermissionType::STATISTICS_VIEWLOGS->value,
+                        PermissionType::CONFIGURATION_EDIT,
+                        PermissionType::CONFIGURATION_EDIT->value,
+                    ],
                     true,
                 ),
             );
@@ -188,6 +194,90 @@ final class DashboardControllerTest extends TestCase
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
+        $controller->topTen();
+    }
+
+    /**
+     * A logged-in user who holds every permission except $withheld. Calling an
+     * endpoint that requires $withheld must therefore fail, which pins the exact
+     * permission each endpoint is gated on and catches drift to a wrong one.
+     */
+    private function createAuthenticatedContainerMissing(PermissionType $withheld): ContainerInterface
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => !in_array($right, [$withheld, $withheld->value], true),
+            );
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $session = new Session(new MockArraySessionStorage());
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    default => null,
+                };
+            });
+
+        return $container;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testVerifyRequiresConfigurationEditPermission(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerMissing(PermissionType::CONFIGURATION_EDIT));
+
+        $this->expectException(ForbiddenException::class);
+        $controller->verify(new Request([], [], [], [], [], [], '{}'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testVersionsRequiresConfigurationEditPermission(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerMissing(PermissionType::CONFIGURATION_EDIT));
+
+        $this->expectException(ForbiddenException::class);
+        $controller->versions();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testVisitsRequiresStatisticsViewLogsPermission(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerMissing(PermissionType::STATISTICS_VIEWLOGS));
+
+        $this->expectException(ForbiddenException::class);
+        $controller->visits(new Request(server: ['REQUEST_TIME' => 1234567890]));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTopTenRequiresStatisticsViewLogsPermission(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerMissing(PermissionType::STATISTICS_VIEWLOGS));
+
+        $this->expectException(ForbiddenException::class);
         $controller->topTen();
     }
 

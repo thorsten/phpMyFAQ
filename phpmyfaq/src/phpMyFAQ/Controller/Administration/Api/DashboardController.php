@@ -26,6 +26,7 @@ use phpMyFAQ\Administration\Faq as AdminFaq;
 use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Search;
 use phpMyFAQ\Session\Token;
@@ -142,7 +143,7 @@ final class DashboardController extends AbstractController
     #[Route(path: 'dashboard/verify', name: 'admin.api.dashboard.verify', methods: ['POST'])]
     public function verify(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $data = $request->getContent();
         $api = new RemoteApiClient($this->configuration, new System());
@@ -156,7 +157,7 @@ final class DashboardController extends AbstractController
     #[Route(path: 'dashboard/versions', name: 'admin.api.dashboard.versions', methods: ['GET'])]
     public function versions(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $releaseEnvironment = (string) $this->configuration->get(item: 'upgrade.releaseEnvironment');
         $cacheKey = 'dashboard.versions.' . $releaseEnvironment;
@@ -205,7 +206,7 @@ final class DashboardController extends AbstractController
     #[Route(path: 'dashboard/visits', name: 'admin.api.dashboard.visits', methods: ['GET'])]
     public function visits(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
         if ($this->configuration->get(item: 'main.enableUserTracking')) {
             $requestTime = (int) $request->server->get('REQUEST_TIME');
@@ -224,7 +225,7 @@ final class DashboardController extends AbstractController
     #[Route(path: 'dashboard/topten', name: 'admin.api.dashboard.topten', methods: ['GET'])]
     public function topTen(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
         if ($this->configuration->get(item: 'main.enableUserTracking')) {
             $faqStatistics = new Faq\Statistics($this->configuration);

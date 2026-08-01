@@ -77,14 +77,25 @@ final class AuthenticationController extends AbstractAdministrationController im
             try {
                 $this->currentUser = $userAuthentication->authenticate($username, (string) $password);
                 if ($userAuthentication->hasTwoFactorAuthentication()) {
+                    $userId = $this->currentUser->getUserId();
+
+                    // The failure count is deliberately not reset here: a correct
+                    // password must not buy a fresh budget of token guesses.
+                    if ($this->currentUser->isTwoFactorLockedOut()) {
+                        return new RedirectResponse(url: './login');
+                    }
+
                     $session = $this->session;
-                    $session->set('2fa_pending_user_id', $this->currentUser->getUserId());
-                    $session->set('2fa_failed_attempts', 0);
+                    $session->set('2fa_pending_user_id', $userId);
+                    // The remember-me cookie must not be issued until the second factor has
+                    // been verified. Carry the request through the token step so check() can
+                    // issue the cookie only after a successful 2FA challenge.
+                    $session->set('2fa_pending_remember_me', $userAuthentication->isRememberMe());
                     $this->adminLog->log(
                         $this->currentUser,
                         AdminLogType::AUTH_LOGIN_SUCCESS->value . ' (2FA required):' . $username,
                     );
-                    return new RedirectResponse(url: './token?user-id=' . $this->currentUser->getUserId());
+                    return new RedirectResponse(url: './token?user-id=' . $userId);
                 }
 
                 $this->adminLog->log($this->currentUser, AdminLogType::AUTH_LOGIN_SUCCESS->value . ':' . $username);
@@ -236,14 +247,16 @@ final class AuthenticationController extends AbstractAdministrationController im
             return new RedirectResponse(url: './login');
         }
 
-        if ((int) $session->get('2fa_failed_attempts', 0) >= 5) {
-            $session->remove('2fa_pending_user_id');
-            $session->remove('2fa_failed_attempts');
-            return new RedirectResponse(url: './login');
-        }
-
         $user = $this->currentUserService;
         $user->getUserById($userId);
+
+        // The failure count lives on the account, not in the session, so that neither
+        // a fresh session nor another password authentication can clear it.
+        if ($user->isTwoFactorLockedOut()) {
+            $session->remove('2fa_pending_user_id');
+            $session->remove('2fa_pending_remember_me');
+            return new RedirectResponse(url: './login');
+        }
 
         if (strlen((string) $token) === 6) {
             $tfa = $this->twoFactor;
@@ -251,8 +264,16 @@ final class AuthenticationController extends AbstractAdministrationController im
 
             if ($result) {
                 $session->remove('2fa_pending_user_id');
-                $session->remove('2fa_failed_attempts');
+                $rememberMe = true === $session->get('2fa_pending_remember_me');
+                $session->remove('2fa_pending_remember_me');
+                // twoFactorSuccess() clears the counter via setSuccess().
                 $user->twoFactorSuccess();
+                // The second factor is now verified, so the remember-me cookie can safely
+                // be issued for the fully authenticated session.
+                if ($rememberMe) {
+                    $user->issueRememberMeCookie();
+                }
+
                 $this->adminLog->log($user, AdminLogType::AUTH_2FA_SUCCESS->value . ':' . $user->getLogin());
                 return new RedirectResponse(url: './');
             }
@@ -260,7 +281,7 @@ final class AuthenticationController extends AbstractAdministrationController im
             $this->adminLog->log($user, AdminLogType::AUTH_2FA_FAILED->value . ':' . $user->getLogin());
         }
 
-        $session->set('2fa_failed_attempts', (int) $session->get('2fa_failed_attempts', 0) + 1);
+        $user->twoFactorFailure();
 
         return new RedirectResponse('./token?user-id=' . $userId);
     }

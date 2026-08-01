@@ -40,6 +40,34 @@ class RegistrationControllerTest extends TestCase
     }
 
     /**
+     * The JSON endpoint must enforce the registration toggle itself: it is reachable
+     * directly, so hiding the registration form alone would not prevent sign-ups.
+     *
+     * @throws \JsonException
+     */
+    public function testCreateReturnsForbiddenWhenRegistrationIsDisabled(): void
+    {
+        $this->configuration->set('security.enableRegistration', 'false');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'name' => 'attacker',
+            'realname' => 'Attacker',
+            'email' => 'attacker@example.com',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = new RegistrationController();
+
+        try {
+            $response = $controller->create($request);
+        } finally {
+            $this->configuration->set('security.enableRegistration', 'true');
+        }
+
+        $this->assertSame(403, $response->getStatusCode());
+        $this->assertStringContainsString('User registration is disabled', (string) $response->getContent());
+    }
+
+    /**
      * @throws \JsonException
      */
     public function testCreateWithInvalidJsonThrowsException(): void

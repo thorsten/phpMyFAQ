@@ -5,6 +5,7 @@ namespace phpMyFAQ\Auth;
 use Closure;
 use Monolog\Logger;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Ldap as LdapCore;
 use phpMyFAQ\Permission\MediumPermission;
@@ -321,6 +322,47 @@ class AuthLdapTest extends TestCase
         $this->expectExceptionMessage('LDAP bind failed');
 
         $auth->checkCredentials('alice', 'secret');
+    }
+
+    /**
+     * A locally blocked account must not be silently reactivated by a successful LDAP bind.
+     * create() must throw and leave the account untouched instead of running setStatus('active').
+     *
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testCreateDoesNotReactivateBlockedLocalAccount(): void
+    {
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willThrowException(new \Exception('Login is not unique.'));
+        $user->method('getStatus')->willReturn('blocked');
+        $user->expects($this->never())->method('setStatus');
+
+        $auth = $this->createAuthLdap(fn(): User => $user);
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('Local account "blockedUser" is blocked and cannot be activated via LDAP.');
+
+        $auth->create('blockedUser', 'irrelevant-password');
+    }
+
+    /**
+     * A locally protected account must likewise be off-limits to LDAP activation.
+     *
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testCreateDoesNotReactivateProtectedLocalAccount(): void
+    {
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willThrowException(new \Exception('Login is not unique.'));
+        $user->method('getStatus')->willReturn('protected');
+        $user->expects($this->never())->method('setStatus');
+
+        $auth = $this->createAuthLdap(fn(): User => $user);
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('Local account "protectedUser" is protected and cannot be activated via LDAP.');
+
+        $auth->create('protectedUser', 'irrelevant-password');
     }
 
     /**

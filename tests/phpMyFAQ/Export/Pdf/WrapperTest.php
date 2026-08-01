@@ -549,6 +549,24 @@ class WrapperTest extends TestCase
         self::assertNull($resolve('content/%2e%2e/%2e%2e/%2e%2e/etc/passwd', 'jpg'));
     }
 
+    public function testCheckBase64ImageSwallowsWarningsForNonImageData(): void
+    {
+        set_error_handler(static function (): bool {
+            throw new \ErrorException('warning promoted to exception');
+        }, E_WARNING | E_NOTICE);
+
+        $reflection = new ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('checkBase64Image');
+
+        try {
+            $result = $method->invoke($this->wrapper, "<?php \$DB['password'] = 'super-secret';");
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertFalse($result);
+    }
+
     public function testConstructorWithRtlLanguage(): void
     {
         try {

@@ -203,9 +203,19 @@ final class AuthenticationController extends AbstractFrontController
 
                 // Check if two-factor authentication is enabled
                 if ($userAuthentication->hasTwoFactorAuthentication()) {
+                    // The failure count is deliberately not reset here: a correct
+                    // password must not buy a fresh budget of token guesses.
+                    if ($this->currentUser->isTwoFactorLockedOut()) {
+                        $this->session->getFlashBag()->add('error', Translation::get('ad_auth_fail'));
+                        return new RedirectResponse('./login');
+                    }
+
                     // Bind the pending 2FA step to this user, but only after the password was validated
                     $this->session->set('2fa_pending_user_id', $this->currentUser->getUserId());
-                    $this->session->set('2fa_failed_attempts', 0);
+                    // The remember-me cookie must not be issued until the second factor has
+                    // been verified. Carry the request through the token step so check() can
+                    // issue the cookie only after a successful 2FA challenge.
+                    $this->session->set('2fa_pending_remember_me', $userAuthentication->isRememberMe());
                     return new RedirectResponse(url: './token?user-id=' . $this->currentUser->getUserId());
                 }
 
@@ -282,27 +292,36 @@ final class AuthenticationController extends AbstractFrontController
             return new RedirectResponse('./login');
         }
 
-        // Throttle brute-force guessing of the six-digit token
-        if ((int) $this->session->get('2fa_failed_attempts', 0) >= 5) {
+        $this->currentUserService->getUserById($userId);
+
+        // The failure count lives on the account, not in the session, so that neither
+        // a fresh session nor another password authentication can clear it.
+        if ($this->currentUserService->isTwoFactorLockedOut()) {
             $this->session->remove('2fa_pending_user_id');
-            $this->session->remove('2fa_failed_attempts');
+            $this->session->remove('2fa_pending_remember_me');
             return new RedirectResponse('./login');
         }
-
-        $this->currentUserService->getUserById($userId);
 
         if (strlen((string) $token) === 6) {
             $result = $this->twoFactor->validateToken($token, $userId);
 
             if ($result) {
                 $this->session->remove('2fa_pending_user_id');
-                $this->session->remove('2fa_failed_attempts');
+                $rememberMe = true === $this->session->get('2fa_pending_remember_me');
+                $this->session->remove('2fa_pending_remember_me');
+                // twoFactorSuccess() clears the counter via setSuccess().
                 $this->currentUserService->twoFactorSuccess();
+                // The second factor is now verified, so the remember-me cookie can safely
+                // be issued for the fully authenticated session.
+                if ($rememberMe) {
+                    $this->currentUserService->issueRememberMeCookie();
+                }
+
                 return new RedirectResponse(url: './');
             }
         }
 
-        $this->session->set('2fa_failed_attempts', (int) $this->session->get('2fa_failed_attempts', 0) + 1);
+        $this->currentUserService->twoFactorFailure();
 
         $this->session->getFlashBag()->add('error', Translation::get('msgTwofactorErrorToken'));
         return new RedirectResponse('./token?user-id=' . $userId);

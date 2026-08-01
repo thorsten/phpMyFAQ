@@ -39,6 +39,10 @@ final class RegistrationController extends AbstractController
     #[Route(path: 'register', name: 'api.private.register', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
+        if (!$this->configuration->get(item: 'security.enableRegistration')) {
+            return $this->json(['error' => 'User registration is disabled.'], Response::HTTP_FORBIDDEN);
+        }
+
         $registrationHelper = new RegistrationHelper($this->configuration);
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
