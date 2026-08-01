@@ -19,6 +19,7 @@ function extension_loaded(string $extension): bool
 }
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -146,6 +147,51 @@ final class LdapControllerTest extends TestCase
             });
 
         return $container;
+    }
+
+    private function createAuthenticatedContainerWithoutPermission(): ContainerInterface
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(false);
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(4711);
+
+        $session = new Session(new MockArraySessionStorage());
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    default => null,
+                };
+            });
+
+        return $container;
+    }
+
+    public function testConfigurationRequiresConfigurationEditPermission(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerWithoutPermission());
+
+        $this->expectException(ForbiddenException::class);
+        $controller->configuration();
+    }
+
+    public function testHealthcheckRequiresConfigurationEditPermission(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerWithoutPermission());
+
+        $this->expectException(ForbiddenException::class);
+        $controller->healthcheck();
     }
 
     public function testConfigurationRequiresAuthentication(): void

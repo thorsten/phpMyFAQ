@@ -37,7 +37,7 @@ final class StopWordController extends AbstractController
     #[Route(path: 'stopwords', name: 'admin.api.stopwords', methods: ['GET'])]
     public function list(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $language = Filter::filterVar($request->query->get('language'), FILTER_SANITIZE_SPECIAL_CHARS);
 

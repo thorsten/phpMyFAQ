@@ -111,7 +111,7 @@ final class OpenSearchController extends AbstractController
     #[Route(path: 'opensearch/statistics', name: 'admin.api.opensearch.statistics', methods: ['GET'])]
     public function statistics(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $openSearchConfiguration = $this->configuration->getOpenSearchConfig();
 
@@ -129,7 +129,7 @@ final class OpenSearchController extends AbstractController
     #[Route(path: 'opensearch/healthcheck', name: 'admin.api.opensearch.healthcheck', methods: ['GET'])]
     public function healthcheck(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $isAvailable = $this->openSearch->isAvailable();
 

@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Ldap;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +31,7 @@ final class LdapController extends AbstractController
     #[Route(path: 'ldap/configuration', name: 'admin.api.ldap.configuration', methods: ['GET'])]
     public function configuration(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $servers = $this->configuration->getLdapServer();
         $strippedServers = array_map(
@@ -61,7 +62,7 @@ final class LdapController extends AbstractController
     #[Route(path: 'ldap/healthcheck', name: 'admin.api.ldap.healthcheck', methods: ['GET'])]
     public function healthcheck(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         if (!extension_loaded('ldap')) {
             return $this->json([

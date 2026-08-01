@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -151,6 +152,69 @@ final class UpdateControllerTest extends TestCase
             });
 
         return $container;
+    }
+
+    private function createAuthenticatedContainerWithoutPermission(): ContainerInterface
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(false);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(4711);
+
+        $session = new Session(new MockArraySessionStorage());
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    default => null,
+                };
+            });
+
+        return $container;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testHealthCheckRequiresConfigurationEditPermission(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerWithoutPermission());
+
+        $this->expectException(ForbiddenException::class);
+        $controller->healthCheck();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testVersionsRequiresConfigurationEditPermission(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerWithoutPermission());
+
+        $this->expectException(ForbiddenException::class);
+        $controller->versions();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateCheckRequiresConfigurationEditPermission(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerWithoutPermission());
+
+        $this->expectException(ForbiddenException::class);
+        $controller->updateCheck();
     }
 
     /**

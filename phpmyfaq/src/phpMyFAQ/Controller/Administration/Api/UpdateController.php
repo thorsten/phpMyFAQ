@@ -60,7 +60,7 @@ final class UpdateController extends AbstractController
     #[Route(path: 'health-check', name: 'admin.api.health-check', methods: ['GET'])]
     public function healthCheck(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $dateTime = new DateTime();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
@@ -89,7 +89,7 @@ final class UpdateController extends AbstractController
     #[Route(path: 'versions', name: 'admin.api.versions', methods: ['GET'])]
     public function versions(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         try {
             $versions = HttpClient::create(['timeout' => 30])->request('GET', 'https://api.phpmyfaq.de/versions');
@@ -107,7 +107,7 @@ final class UpdateController extends AbstractController
     #[Route(path: 'update-check', name: 'admin.api.update-check', methods: ['POST'])]
     public function updateCheck(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $dateTime = new DateTime();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);

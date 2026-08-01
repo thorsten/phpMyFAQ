@@ -114,7 +114,7 @@ final class ElasticsearchController extends AbstractController
     #[Route(path: 'elasticsearch/statistics', name: 'admin.api.elasticsearch.statistics', methods: ['GET'])]
     public function statistics(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $elasticsearchConfiguration = $this->configuration->getElasticsearchConfig();
 
@@ -137,7 +137,7 @@ final class ElasticsearchController extends AbstractController
     #[Route(path: 'elasticsearch/healthcheck', name: 'admin.api.elasticsearch.healthcheck', methods: ['GET'])]
     public function healthcheck(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $isAvailable = $this->elasticsearch->isAvailable();
 
