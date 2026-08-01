@@ -21,6 +21,11 @@ namespace phpMyFAQ\Release;
 
 use InvalidArgumentException;
 
+/**
+ * Class ReleaseTools
+ *
+ * @package phpMyFAQ\Release
+ */
 final class ReleaseTools
 {
     /**
@@ -30,7 +35,7 @@ final class ReleaseTools
      */
     public static function extractChangelogSection(string $changelog, string $version): string
     {
-        $pattern = '/^### phpMyFAQ v' . preg_quote($version, '/') . ' - .*$/m';
+        $pattern = '/^### phpMyFAQ v' . preg_quote(str: $version, delimiter: '/') . ' - .*$/m';
 
         if (preg_match($pattern, $changelog, $matches, PREG_OFFSET_CAPTURE) !== 1) {
             throw new InvalidArgumentException(
@@ -40,8 +45,8 @@ final class ReleaseTools
 
         $start = $matches[0][1] + strlen($matches[0][0]);
         $rest = substr($changelog, $start);
-        $nextHeading = strpos($rest, "\n### ");
+        $nextHeading = strpos(haystack: $rest, needle: "\n### ");
 
-        return trim($nextHeading === false ? $rest : substr($rest, 0, $nextHeading));
+        return trim($nextHeading === false ? $rest : substr(string: $rest, offset: 0, length: $nextHeading));
     }
 }
