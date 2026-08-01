@@ -20,12 +20,16 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use Exception;
+use LogicException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class CommentController extends AbstractApiController
@@ -146,6 +150,20 @@ final class CommentController extends AbstractApiController
             defaultField: 'id_comment',
             defaultOrder: 'asc',
         );
+
+        // Do not disclose comments of a FAQ record the requester is not allowed to see.
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        if (!$faq instanceof Faq) {
+            throw new LogicException('Faq service not found in container.');
+        }
+
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+
+        if (!$faq->isFaqAccessibleForUser($recordId)) {
+            return $this->json([], Response::HTTP_NOT_FOUND);
+        }
 
         // Get paginated comments
         $result = $this->comments->getCommentsDataPaginated(

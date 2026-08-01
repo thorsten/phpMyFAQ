@@ -51,10 +51,8 @@ class Error
             return;
         }
 
-        if (error_reporting() !== 0) {
-            $filename = Environment::isDebugMode() ? $filename : basename($filename);
-            throw new ErrorException($message, 0, $level, $filename, $line);
-        }
+        $filename = Environment::isDebugMode() ? $filename : basename($filename);
+        throw new ErrorException($message, 0, $level, $filename, $line);
     }
 
     /**

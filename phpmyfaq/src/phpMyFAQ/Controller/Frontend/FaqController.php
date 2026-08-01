@@ -329,7 +329,12 @@ final class FaqController extends AbstractFrontController
         $renderedCategoryPath = $faqDisplayService->getRenderedCategoryPath($faqId);
         $relatedFaqs = $faqDisplayService->getRelatedFaqs($faqId);
         $numComments = $faqDisplayService->getNumberOfComments();
-        $comments = $faqDisplayService->getCommentsData($faqId);
+
+        // Do not fetch or render comments when the FAQ record is not accessible to the
+        // current requester (getFaq() flags a denied/non-visible record with solution_id 42).
+        $isFaqAccessible =
+            ($faq->faqRecord['solution_id'] ?? null) !== null && 42 !== (int) $faq->faqRecord['solution_id'];
+        $comments = $isFaqAccessible ? $faqDisplayService->getCommentsData($faqId) : [];
         $availableLanguages = $faqDisplayService->getAvailableLanguages((int) $faq->faqRecord['id']);
         $tagsHtml = $faqDisplayService->getTagsHtml($faqId);
 
@@ -460,7 +465,7 @@ final class FaqController extends AbstractFrontController
             'csrfTokenAddBookmark' => Token::getInstance($this->session)->getTokenString('add-bookmark'),
             'numberOfComments' => sprintf(
                 '%d %s',
-                $numComments[$faqId] ?? 0,
+                $isFaqAccessible ? $numComments[$faqId] ?? 0 : 0,
                 Translation::getString(key: 'msgComments'),
             ),
             'writeCommentMsg' => $commentMessage,

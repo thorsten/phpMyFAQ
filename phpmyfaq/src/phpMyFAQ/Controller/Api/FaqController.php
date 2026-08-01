@@ -726,8 +726,8 @@ final class FaqController extends AbstractApiController
             $categoryName = Filter::filterVar($data->{'category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
         }
 
-        $question = Filter::filterVar($data->question ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $answer = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $question = Filter::filterHtml($data->question ?? '', '');
+        $answer = Filter::filterHtml($data->answer ?? '', '');
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = (string) Filter::filterVar($data->email ?? '', FILTER_SANITIZE_EMAIL, '');
@@ -885,8 +885,8 @@ final class FaqController extends AbstractApiController
 
         $faqId = Filter::filterVar($data->{'faq-id'} ?? null, FILTER_VALIDATE_INT);
         $languageCode = Filter::filterVar($data->language ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $question = Filter::filterVar($data->question ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $answer = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $question = Filter::filterHtml($data->question ?? '', '');
+        $answer = Filter::filterHtml($data->answer ?? '', '');
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = (string) Filter::filterVar($data->email ?? '', FILTER_SANITIZE_EMAIL, '');

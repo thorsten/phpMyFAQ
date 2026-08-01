@@ -307,4 +307,44 @@ class CommentControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertTrue($payload['success']);
     }
+    /**
+     * Regression: comment IDs arrive as strings from the serialized admin form
+     * data and must be deleted without a TypeError.
+     *
+     * @throws \Exception
+     */
+    public function testDeleteAcceptsStringCommentIdsFromSerializedFormData(): void
+    {
+        $comments = $this->createMock(Comments::class);
+        $deletedIds = [];
+        $comments
+            ->expects($this->exactly(2))
+            ->method('delete')
+            ->willReturnCallback(static function (string $type, int $commentId) use (&$deletedIds): bool {
+                $deletedIds[] = $commentId;
+                return true;
+            });
+
+        $sessionContainer = $this->createAuthenticatedContainer();
+        $session = $sessionContainer->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-comment');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $token,
+                'comments[]' => ['3', '5'],
+            ],
+            'type' => 'faq',
+        ], JSON_THROW_ON_ERROR));
+        $controller = new CommentController($comments);
+        $controller->setContainer($sessionContainer);
+
+        $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        self::assertSame([3, 5], $deletedIds);
+    }
 }
