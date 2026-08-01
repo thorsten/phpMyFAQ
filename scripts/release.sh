@@ -137,7 +137,7 @@ stage_preflight() {
             || fail "preflight: ${site_repo} is not a git checkout — check your release.conf."
         [ -z "$(git -C "${site_repo}" status --porcelain)" ] \
             || fail "preflight: ${site_repo} has uncommitted changes — commit or stash first."
-        run git -C "${site_repo}" pull --ff-only
+        run git -C "${site_repo}" pull --ff-only || fail "preflight: ${site_repo}: git pull --ff-only failed — resolve manually (diverged branch or network issue)."
     done
 
     for ssh_target in "${DOWNLOAD_SSH_TARGET}" "${API_SSH_TARGET}" "${WWW_SSH_TARGET}"; do
@@ -179,13 +179,25 @@ stage_github_release() {
 
 # --- Stage dispatch --------------------------------------------------------
 
+CURRENT_STAGE=''
+
+print_resume_hint() {
+    exit_status=$?
+    if [ "${exit_status}" -ne 0 ] && [ -n "${CURRENT_STAGE}" ]; then
+        printf '\n[FAIL] Stage %s failed — fix the issue and resume with: ./scripts/release.sh %s --from %s\n' \
+            "${CURRENT_STAGE}" "${VERSION}" "${CURRENT_STAGE}" >&2
+    fi
+}
+trap print_resume_hint EXIT
+
 started=0
 for stage in ${STAGES}; do
     [ "${stage}" = "${FROM_STAGE}" ] && started=1
     if [ "${started}" -eq 1 ]; then
+        CURRENT_STAGE=${stage}
         log "=== Stage: ${stage} (release ${VERSION}, ${RELEASE_TYPE}) ==="
-        "stage_$(printf '%s' "${stage}" | tr '-' '_')" \
-            || fail "Stage '${stage}' failed — fix the issue and resume with: ./scripts/release.sh ${VERSION} --from ${stage}"
+        "stage_$(printf '%s' "${stage}" | tr '-' '_')"
+        CURRENT_STAGE=''
     fi
 done
 
