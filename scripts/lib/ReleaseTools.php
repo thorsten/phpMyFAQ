@@ -49,4 +49,53 @@ final class ReleaseTools
 
         return trim($nextHeading === false ? $rest : substr(string: $rest, offset: 0, length: $nextHeading));
     }
+
+    /**
+     * Renders a news entry draft in the format used by content/news/<year>.md
+     * on www.phpmyfaq.de. The changelog section is embedded as an HTML comment
+     * for the maintainer to consult while editing the announcement text.
+     */
+    public static function newsDraft(
+        string $version,
+        string $date,
+        string $changelogSection,
+        string $codename = 'TBD',
+    ): string {
+        return implode("\n", [
+            sprintf('### %s', $date),
+            '',
+            sprintf(
+                'The phpMyFAQ Team is pleased to announce [phpMyFAQ %s](/download), the "%s" release.',
+                $version,
+                $codename,
+            ),
+            'This release updates all third party dependencies, and fixes all reported bugs.',
+            '',
+            '<!-- CHANGELOG for editing reference — remove before publishing:',
+            $changelogSection,
+            '-->',
+        ]) . "\n";
+    }
+
+    /**
+     * Inserts a news entry directly after the YAML frontmatter block.
+     *
+     * @throws InvalidArgumentException when the file has no leading frontmatter
+     */
+    public static function insertNewsEntry(string $newsFileContent, string $entry): string
+    {
+        $delimiter = "\n---\n";
+        $frontmatterEnd = strpos(haystack: $newsFileContent, needle: $delimiter);
+
+        if (!str_starts_with($newsFileContent, "---\n") || $frontmatterEnd === false) {
+            throw new InvalidArgumentException(
+                'News file has no YAML frontmatter — expected a leading "---" block.',
+            );
+        }
+
+        $head = substr($newsFileContent, offset: 0, length: $frontmatterEnd + strlen($delimiter));
+        $tail = ltrim(substr($newsFileContent, offset: $frontmatterEnd + strlen($delimiter)), characters: "\n");
+
+        return $head . "\n" . rtrim($entry) . "\n\n" . $tail;
+    }
 }
