@@ -122,7 +122,39 @@ done
 # --- Stages (implemented in later tasks) -----------------------------------
 
 stage_preflight() {
-    log 'preflight: not implemented yet'
+    [ -z "$(git -C "${REPO_ROOT}" status --porcelain)" ] \
+        || fail 'preflight: main repo working tree is not clean — commit or stash first.'
+
+    actual_version=$("${PHP_BIN}" "${REPO_ROOT}/scripts/get-version.php")
+    [ "${actual_version}" = "${VERSION}" ] \
+        || fail "preflight: System.php reports version ${actual_version}, expected ${VERSION} — bump the version constants first."
+
+    "${PHP_BIN}" "${REPO_ROOT}/scripts/release-changelog.php" "${VERSION}" >/dev/null \
+        || fail "preflight: CHANGELOG.md has no section for ${VERSION} — add the release notes first."
+
+    for site_repo in "${API_REPO_DIR}" "${WWW_REPO_DIR}"; do
+        [ -d "${site_repo}/.git" ] \
+            || fail "preflight: ${site_repo} is not a git checkout — check your release.conf."
+        [ -z "$(git -C "${site_repo}" status --porcelain)" ] \
+            || fail "preflight: ${site_repo} has uncommitted changes — commit or stash first."
+        run git -C "${site_repo}" pull --ff-only
+    done
+
+    for ssh_target in "${DOWNLOAD_SSH_TARGET}" "${API_SSH_TARGET}" "${WWW_SSH_TARGET}"; do
+        ssh_host=${ssh_target%%:*}
+        ssh -o BatchMode=yes "${ssh_host}" true \
+            || fail "preflight: cannot reach ${ssh_host} via non-interactive SSH — check keys/agent."
+    done
+
+    gh auth status >/dev/null 2>&1 \
+        || fail "preflight: gh CLI is not authenticated — run 'gh auth login'."
+
+    if [ "${SKIP_GPG:-0}" != '1' ]; then
+        gpg --list-secret-keys >/dev/null 2>&1 \
+            || fail 'preflight: no GPG secret key available — set SKIP_GPG=1 to release unsigned.'
+    fi
+
+    log 'preflight: all checks passed'
 }
 
 stage_build() {
