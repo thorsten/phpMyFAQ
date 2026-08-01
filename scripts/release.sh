@@ -158,11 +158,40 @@ stage_preflight() {
 }
 
 stage_build() {
-    log 'build: not implemented yet'
+    if [ -f "${RELEASE_DIR}/SHA256SUMS" ]; then
+        log "build: signed artifacts already present in ${RELEASE_DIR} — skipping"
+        return 0
+    fi
+
+    run "${REPO_ROOT}/scripts/prepare-release-artifacts.sh" "${VERSION}"
+    run "${REPO_ROOT}/scripts/sign-release-artifacts.sh" "${VERSION}"
 }
 
 stage_publish_packages() {
-    log 'publish-packages: not implemented yet'
+    [ "${DRY_RUN}" -eq 1 ] || [ -d "${RELEASE_DIR}" ] \
+        || fail "publish-packages: ${RELEASE_DIR} does not exist — run the build stage first."
+
+    run rsync -av --checksum \
+        --exclude "hashes-${VERSION}.json" \
+        --exclude 'ARTIFACTS.txt' \
+        "${RELEASE_DIR}/" "${DOWNLOAD_SSH_TARGET}/"
+
+    if [ "${DRY_RUN}" -eq 1 ]; then
+        log 'publish-packages: dry-run — skipping download.phpmyfaq.de verification'
+        return 0
+    fi
+
+    remote_info=$(curl -fsS "https://download.phpmyfaq.de/info/${VERSION}") \
+        || fail "publish-packages: https://download.phpmyfaq.de/info/${VERSION} is not reachable after upload."
+
+    printf '%s' "${remote_info}" | grep -q "\"version\": *\"${VERSION}\"" \
+        || fail "publish-packages: info endpoint does not report version ${VERSION} — got: ${remote_info}"
+
+    local_md5=$(cut -d' ' -f1 "${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip.md5")
+    printf '%s' "${remote_info}" | grep -q "${local_md5}" \
+        || fail "publish-packages: remote zip md5 does not match local ${local_md5} — upload may be corrupt."
+
+    log "publish-packages: download.phpmyfaq.de serves ${VERSION} with matching checksum"
 }
 
 stage_update_api() {
