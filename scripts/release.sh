@@ -1,5 +1,4 @@
 #!/bin/sh
-# shellcheck disable=SC2034
 
 #
 # One-command phpMyFAQ release orchestrator.
@@ -75,12 +74,13 @@ TYPE=''
 CODENAME='TBD'
 PRINT_TYPE=0
 
+# shellcheck disable=SC2034
 while [ "$#" -gt 0 ]; do
     case "$1" in
-        --from)       FROM_STAGE=$2; shift 2 ;;
+        --from)       [ "$#" -ge 2 ] || fail 'Option --from requires an argument.'; FROM_STAGE=$2; shift 2 ;;
         --dry-run)    DRY_RUN=1; shift ;;
-        --type)       TYPE=$2; shift 2 ;;
-        --codename)   CODENAME=$2; shift 2 ;;
+        --type)       [ "$#" -ge 2 ] || fail 'Option --type requires an argument.'; TYPE=$2; shift 2 ;;
+        --codename)   [ "$#" -ge 2 ] || fail 'Option --codename requires an argument.'; CODENAME=$2; shift 2 ;;
         --print-type) PRINT_TYPE=1; shift ;;
         -h|--help)    usage; exit 0 ;;
         -*)           fail "Unknown option: $1 — run with --help for usage." ;;
@@ -106,6 +106,7 @@ case " ${STAGES} " in
     *) fail "Unknown stage '${FROM_STAGE}' — valid stages: ${STAGES}" ;;
 esac
 
+# shellcheck disable=SC2034
 RELEASE_DIR="${REPO_ROOT}/build/release/${VERSION}"
 
 CONFIG_FILE="${PMF_RELEASE_CONF:-${HOME}/.config/phpmyfaq/release.conf}"
