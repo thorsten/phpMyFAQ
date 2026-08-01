@@ -471,10 +471,14 @@ The script runs six idempotent stages in fixed order:
    to download.phpmyfaq.de, then verify the `info/<version>` endpoint.
 4. `update-api` — copy `hashes-<version>.json`, bump the stable or dev
    version constants, test, commit, push, deploy, then verify `/versions`
-   and `/verify/<version>`.
+   and `/verify/<version>`. Deploy uses `rsync --delete`: any server-only
+   file on `API_SSH_TARGET` that isn't part of this repo checkout will be
+   deleted — verify the server directory before first use.
 5. `update-www` — refresh `data/*.json`, insert a news draft generated from
    the CHANGELOG, **pause for manual review**, then test, build, commit,
-   push, deploy, and verify the homepage.
+   push, deploy, and verify the homepage. Deploy uses `rsync --delete`: any
+   server-only file on `WWW_SSH_TARGET` that isn't part of the built output
+   will be deleted — verify the server directory before first use.
 6. `github-release` — create the GitHub release with notes from the
    CHANGELOG and all artifacts attached (`--prerelease` for development
    versions).

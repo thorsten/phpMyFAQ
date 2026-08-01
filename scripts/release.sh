@@ -94,20 +94,29 @@ usage() {
     sed -n '3,12p' "$0" | sed 's/^# \{0,1\}//'
 }
 
+# Single-quotes a string for safe reuse as one shell word (escapes embedded
+# single quotes using the standard '\'' trick).
+shell_quote() {
+    printf "'%s'" "$(printf '%s' "$1" | sed "s/'/'\\\\''/g")"
+}
+
 VERSION=''
 FROM_STAGE='preflight'
 DRY_RUN=0
 TYPE=''
 CODENAME='TBD'
 PRINT_TYPE=0
+# Reproduces the flags the user actually passed, so a resume hint can be
+# replayed verbatim (see print_resume_hint). --from is deliberately excluded:
+# the hint always supplies its own --from <failed-stage>.
+RESUME_FLAGS=''
 
-# shellcheck disable=SC2034
 while [ "$#" -gt 0 ]; do
     case "$1" in
         --from)       [ "$#" -ge 2 ] || fail 'Option --from requires an argument.'; FROM_STAGE=$2; shift 2 ;;
-        --dry-run)    DRY_RUN=1; shift ;;
-        --type)       [ "$#" -ge 2 ] || fail 'Option --type requires an argument.'; TYPE=$2; shift 2 ;;
-        --codename)   [ "$#" -ge 2 ] || fail 'Option --codename requires an argument.'; CODENAME=$2; shift 2 ;;
+        --dry-run)    DRY_RUN=1; RESUME_FLAGS="${RESUME_FLAGS} --dry-run"; shift ;;
+        --type)       [ "$#" -ge 2 ] || fail 'Option --type requires an argument.'; TYPE=$2; RESUME_FLAGS="${RESUME_FLAGS} --type $(shell_quote "$2")"; shift 2 ;;
+        --codename)   [ "$#" -ge 2 ] || fail 'Option --codename requires an argument.'; CODENAME=$2; RESUME_FLAGS="${RESUME_FLAGS} --codename $(shell_quote "$2")"; shift 2 ;;
         --print-type) PRINT_TYPE=1; shift ;;
         -h|--help)    usage; exit 0 ;;
         -*)           fail "Unknown option: $1 — run with --help for usage." ;;
@@ -222,6 +231,9 @@ stage_publish_packages() {
 }
 
 stage_update_api() {
+    [ "${DRY_RUN}" -eq 1 ] || [ -d "${RELEASE_DIR}" ] \
+        || fail "update-api: ${RELEASE_DIR} does not exist — run the build stage first."
+
     release_date=$(date '+%Y-%m-%d')
 
     if ! cmp -s "${RELEASE_DIR}/hashes-${VERSION}.json" "${API_REPO_DIR}/json/hashes-${VERSION}.json" 2>/dev/null; then
@@ -248,6 +260,9 @@ stage_update_api() {
 
     # Ship production dependencies, then restore dev dependencies locally.
     (cd "${API_REPO_DIR}" && run composer install --no-dev --quiet)
+    # WARNING: --delete removes anything on the server that is not in this
+    # tree. Any server-only files added directly on API_SSH_TARGET (outside
+    # this repo) WILL be deleted — verify the server directory before first use.
     run rsync -av --delete \
         --exclude '.git' --exclude 'tests' --exclude 'phpunit.xml.dist' \
         "${API_REPO_DIR}/" "${API_SSH_TARGET}/"
@@ -300,6 +315,10 @@ stage_update_www() {
     fi
     run git -C "${WWW_REPO_DIR}" push
 
+    # WARNING: --delete removes anything on the server that is not in the
+    # built output. Any server-only files added directly on WWW_SSH_TARGET
+    # (outside this repo's build) WILL be deleted — verify the server
+    # directory before first use.
     run rsync -av --delete "${WWW_REPO_DIR}/out/" "${WWW_SSH_TARGET}/"
 
     if [ "${DRY_RUN}" -eq 1 ]; then
@@ -314,11 +333,6 @@ stage_update_www() {
 }
 
 stage_github_release() {
-    if gh release view "${VERSION}" --repo thorsten/phpMyFAQ >/dev/null 2>&1; then
-        log "github-release: release ${VERSION} already exists — skipping"
-        return 0
-    fi
-
     release_notes=$("${PHP_BIN}" "${REPO_ROOT}/scripts/release-changelog.php" "${VERSION}")
     release_notes=$(printf '%s\n\n## Verification\n\nSee the [verification instructions](https://github.com/thorsten/phpMyFAQ/blob/main/docs/release.md#139-verification). The release public key is published at [docs/keys/phpmyfaq-release-public-key.asc](https://github.com/thorsten/phpMyFAQ/blob/main/docs/keys/phpmyfaq-release-public-key.asc).\n' "${release_notes}")
 
@@ -328,22 +342,60 @@ stage_github_release() {
         set --
     fi
 
-    run gh release create "${VERSION}" \
-        --repo thorsten/phpMyFAQ \
-        --title "phpMyFAQ ${VERSION}" \
-        --notes "${release_notes}" \
-        "$@" \
-        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip" \
-        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.tar.gz" \
-        "${RELEASE_DIR}/SHA256SUMS" \
-        "${RELEASE_DIR}/SHA256SUMS.asc" \
-        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip.asc" \
-        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.tar.gz.asc" \
-        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.php.sbom.json" \
-        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.js.sbom.json" \
-        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.sbom.json"
+    if ! gh release view "${VERSION}" --repo thorsten/phpMyFAQ >/dev/null 2>&1; then
+        run gh release create "${VERSION}" \
+            --repo thorsten/phpMyFAQ \
+            --title "phpMyFAQ ${VERSION}" \
+            --notes "${release_notes}" \
+            "$@" \
+            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip" \
+            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.tar.gz" \
+            "${RELEASE_DIR}/SHA256SUMS" \
+            "${RELEASE_DIR}/SHA256SUMS.asc" \
+            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip.asc" \
+            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.tar.gz.asc" \
+            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.php.sbom.json" \
+            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.js.sbom.json" \
+            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.sbom.json"
 
-    log "github-release: created release ${VERSION}"
+        if [ "${DRY_RUN}" -eq 1 ]; then
+            log 'github-release: dry-run — skipped release creation'
+        else
+            log "github-release: created release ${VERSION}"
+        fi
+        return 0
+    fi
+
+    # The release already exists. `gh release create` creates the release
+    # and THEN uploads assets, so a failure mid-upload leaves a live release
+    # missing artifacts — "exists" must never be treated as "complete".
+    # Diff the expected asset list against what's actually attached and
+    # upload whatever is missing instead of skipping outright.
+    existing_assets=$(gh release view "${VERSION}" --repo thorsten/phpMyFAQ --json assets --jq '.assets[].name')
+
+    missing_found=0
+    for asset_name in \
+        "phpMyFAQ-${VERSION}.zip" \
+        "phpMyFAQ-${VERSION}.tar.gz" \
+        'SHA256SUMS' \
+        'SHA256SUMS.asc' \
+        "phpMyFAQ-${VERSION}.zip.asc" \
+        "phpMyFAQ-${VERSION}.tar.gz.asc" \
+        "phpMyFAQ-${VERSION}.php.sbom.json" \
+        "phpMyFAQ-${VERSION}.js.sbom.json" \
+        "phpMyFAQ-${VERSION}.sbom.json"
+    do
+        if printf '%s\n' "${existing_assets}" | grep -Fxq "${asset_name}"; then
+            continue
+        fi
+        missing_found=1
+        log "github-release: asset ${asset_name} missing from release ${VERSION} — uploading"
+        run gh release upload "${VERSION}" --repo thorsten/phpMyFAQ "${RELEASE_DIR}/${asset_name}"
+    done
+
+    if [ "${missing_found}" -eq 0 ]; then
+        log "github-release: release ${VERSION} already complete — skipping"
+    fi
 }
 
 # --- Stage dispatch --------------------------------------------------------
@@ -353,8 +405,8 @@ CURRENT_STAGE=''
 print_resume_hint() {
     exit_status=$?
     if [ "${exit_status}" -ne 0 ] && [ -n "${CURRENT_STAGE}" ]; then
-        printf '\n[FAIL] Stage %s failed — fix the issue and resume with: ./scripts/release.sh %s --from %s\n' \
-            "${CURRENT_STAGE}" "${VERSION}" "${CURRENT_STAGE}" >&2
+        printf '\n[FAIL] Stage %s failed — fix the issue and resume with: ./scripts/release.sh %s --from %s%s\n' \
+            "${CURRENT_STAGE}" "${VERSION}" "${CURRENT_STAGE}" "${RESUME_FLAGS}" >&2
     fi
 }
 trap print_resume_hint EXIT
