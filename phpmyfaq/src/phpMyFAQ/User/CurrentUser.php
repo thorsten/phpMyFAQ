@@ -200,13 +200,15 @@ class CurrentUser extends User
             }
 
             if ($this->rememberMe) {
-                $rememberMe = sha1(session_id());
-                $this->setRememberMe($rememberMe);
-                $this->userSession->setCookie(
-                    UserSession::COOKIE_NAME_REMEMBER_ME,
-                    $rememberMe,
-                    $request->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME,
-                );
+                // A remember-me cookie is a password-equivalent credential: getFromCookie()
+                // grants a full session for it without a second factor. For a 2FA account it
+                // must therefore not be issued until the token step has succeeded, otherwise
+                // an attacker who only holds the password could obtain the cookie here and
+                // replay it to bypass 2FA. The controllers re-issue it via
+                // issueRememberMeCookie() once the second factor is verified.
+                if ((int) $this->getUserData('twofactor_enabled') !== 1) {
+                    $this->issueRememberMeCookie();
+                }
             }
 
             if (!$this->setAuthSource($authSource)) {
@@ -683,6 +685,26 @@ class CurrentUser extends User
         );
 
         return (bool) $this->configuration->getDb()->query($update);
+    }
+
+    /**
+     * Issues the remember-me cookie and stores its token in the database.
+     *
+     * This must only be called once authentication is fully complete. For accounts with
+     * two-factor authentication that means after the second factor has been verified: the
+     * remember-me token is a password-equivalent credential that grants a cookie-based login
+     * via getFromCookie(), so issuing it before 2FA is completed would let an attacker who
+     * only holds the password replay the cookie and bypass 2FA entirely.
+     */
+    public function issueRememberMeCookie(): void
+    {
+        $rememberMe = sha1(session_id());
+        $this->setRememberMe($rememberMe);
+        $this->userSession->setCookie(
+            UserSession::COOKIE_NAME_REMEMBER_ME,
+            $rememberMe,
+            time() + self::PMF_REMEMBER_ME_EXPIRED_TIME,
+        );
     }
 
     /**

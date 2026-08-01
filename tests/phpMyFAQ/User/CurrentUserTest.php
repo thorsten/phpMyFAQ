@@ -383,4 +383,101 @@ class CurrentUserTest extends TestCase
 
         $this->assertSame($before, $readAttempts());
     }
+
+    /**
+     * A remember-me cookie is a password-equivalent credential: getFromCookie() turns it
+     * into a fully authenticated session with no second factor. Issuing it once the password
+     * step has passed but before 2FA has been verified would hand an attacker who only holds
+     * the password a token they can replay to bypass 2FA entirely. login() must therefore not
+     * write a remember_me token for a 2FA account.
+     *
+     * @throws Exception
+     */
+    public function testRememberMeTokenIsNotIssuedBeforeTwoFactorForATwoFactorAccount(): void
+    {
+        $this->resetLockoutState();
+        $database = $this->configuration->getDb();
+        $database->query(sprintf(
+            'UPDATE %sfaquserdata SET twofactor_enabled = 1 WHERE user_id = 1',
+            Database::getTablePrefix(),
+        ));
+        $this->resetRememberMeToken();
+
+        try {
+            $user = new CurrentUser($this->configuration);
+            $user->enableRememberMe();
+
+            $this->assertTrue($user->login('admin', 'password'));
+            $this->assertFalse($user->isLoggedIn(), 'Password alone must not log a 2FA user in.');
+
+            $this->assertSame(
+                '',
+                $this->readRememberMeToken(),
+                'A 2FA account must not receive a remember-me token before the second factor is verified.',
+            );
+        } finally {
+            $database->query(sprintf(
+                'UPDATE %sfaquserdata SET twofactor_enabled = 0 WHERE user_id = 1',
+                Database::getTablePrefix(),
+            ));
+            $this->resetRememberMeToken();
+            $this->resetLockoutState();
+        }
+    }
+
+    /**
+     * The counterpart to the 2FA case: for an account without a second factor login() is
+     * the point at which authentication is complete, so a requested remember-me cookie must
+     * still be issued and its token persisted.
+     *
+     * @throws Exception
+     */
+    public function testRememberMeTokenIsIssuedDuringLoginWithoutTwoFactor(): void
+    {
+        $this->resetLockoutState();
+        $this->resetRememberMeToken();
+
+        try {
+            $user = new CurrentUser($this->configuration);
+            $user->enableRememberMe();
+
+            $this->assertTrue($user->login('admin', 'password'));
+            $this->assertTrue($user->isLoggedIn());
+
+            $this->assertNotSame(
+                '',
+                $this->readRememberMeToken(),
+                'A non-2FA account must receive a remember-me token once login completes.',
+            );
+        } finally {
+            $this->resetRememberMeToken();
+            $this->resetLockoutState();
+        }
+    }
+
+    /**
+     * Reads the persisted remember-me token for the shared fixture user, normalising the
+     * absent state (SQL NULL) to an empty string.
+     */
+    private function readRememberMeToken(): string
+    {
+        $database = $this->configuration->getDb();
+        $result = $database->query(sprintf(
+            'SELECT remember_me FROM %sfaquser WHERE user_id = 1',
+            Database::getTablePrefix(),
+        ));
+
+        return (string) ($database->fetchArray($result)['remember_me'] ?? '');
+    }
+
+    /**
+     * Clears any remember-me token left on the shared fixture row.
+     */
+    private function resetRememberMeToken(): void
+    {
+        $this->configuration->getDb()->query(sprintf(
+            'UPDATE %sfaquser SET remember_me = NULL WHERE user_id = 1',
+            Database::getTablePrefix(),
+        ));
+    }
 }

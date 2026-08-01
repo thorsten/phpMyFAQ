@@ -188,6 +188,7 @@ if ($token !== '' && $userId > 0) {
     } elseif ($twoFactorUser->isTwoFactorLockedOut()) {
         // Too many failed token attempts: drop the pending state and force a new login.
         $session->remove('2fa_pending_user_id');
+        $session->remove('2fa_pending_remember_me');
         $error = Translation::get(key: 'msgTwofactorErrorToken');
         $action = 'login';
     } elseif (strlen((string) $token) === 6 && is_numeric((string) $token)) {
@@ -200,8 +201,15 @@ if ($token !== '' && $userId > 0) {
             $action = 'twofactor';
         } else {
             $session->remove('2fa_pending_user_id');
+            $issueRememberMe = (bool) $session->get('2fa_pending_remember_me');
+            $session->remove('2fa_pending_remember_me');
             // twoFactorSuccess() clears the counter via setSuccess().
             $user->twoFactorSuccess();
+            // The second factor is now verified, so the remember-me cookie can safely
+            // be issued for the fully authenticated session.
+            if ($issueRememberMe) {
+                $user->issueRememberMeCookie();
+            }
             $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
             $redirect->send();
             exit();
@@ -247,10 +255,15 @@ if (isset($userAuth) && $userAuth instanceof UserAuthentication && $userAuth->ha
     $session = $container->get('session');
     if ($user->isTwoFactorLockedOut()) {
         $session->remove('2fa_pending_user_id');
+        $session->remove('2fa_pending_remember_me');
         $error = Translation::get(key: 'msgTwofactorErrorToken');
         $action = 'login';
     } else {
         $session->set('2fa_pending_user_id', $user->getUserId());
+        // The remember-me cookie must not be issued until the second factor has been
+        // verified. Carry the request through the token step so the success branch above
+        // can issue the cookie only after a successful 2FA challenge.
+        $session->set('2fa_pending_remember_me', $userAuth->isRememberMe());
         $action = 'twofactor';
     }
 }

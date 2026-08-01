@@ -73,7 +73,12 @@ final class AuthenticationController extends AbstractAdministrationController im
                         return new RedirectResponse(url: './login');
                     }
 
-                    $this->container->get(id: 'session')->set('2fa_pending_user_id', $userId);
+                    $session = $this->container->get(id: 'session');
+                    $session->set('2fa_pending_user_id', $userId);
+                    // The remember-me cookie must not be issued until the second factor has
+                    // been verified. Carry the request through the token step so check() can
+                    // issue the cookie only after a successful 2FA challenge.
+                    $session->set('2fa_pending_remember_me', $userAuthentication->isRememberMe());
                     return new RedirectResponse(url: './token?user-id=' . $userId);
                 }
             } catch (Exception) {
@@ -215,6 +220,7 @@ final class AuthenticationController extends AbstractAdministrationController im
         // a fresh session nor another password authentication can clear it.
         if ($user->isTwoFactorLockedOut()) {
             $session->remove('2fa_pending_user_id');
+            $session->remove('2fa_pending_remember_me');
             return new RedirectResponse(url: './login');
         }
 
@@ -224,8 +230,15 @@ final class AuthenticationController extends AbstractAdministrationController im
 
             if ($result) {
                 $session->remove('2fa_pending_user_id');
+                $rememberMe = (bool) $session->get('2fa_pending_remember_me');
+                $session->remove('2fa_pending_remember_me');
                 // twoFactorSuccess() clears the counter via setSuccess().
                 $user->twoFactorSuccess();
+                // The second factor is now verified, so the remember-me cookie can safely
+                // be issued for the fully authenticated session.
+                if ($rememberMe) {
+                    $user->issueRememberMeCookie();
+                }
                 return new RedirectResponse(url: './');
             }
         }
