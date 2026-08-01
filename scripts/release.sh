@@ -270,7 +270,47 @@ stage_update_api() {
 }
 
 stage_update_www() {
-    log 'update-www: not implemented yet'
+    (cd "${WWW_REPO_DIR}" && run pnpm install --frozen-lockfile && run pnpm update:data)
+
+    news_year=$(date '+%Y')
+    news_date=$(date '+%Y-%m-%d')
+    news_file="${WWW_REPO_DIR}/content/news/${news_year}.md"
+    [ "${DRY_RUN}" -eq 1 ] || [ -f "${news_file}" ] \
+        || fail "update-www: ${news_file} does not exist — create the year file with its frontmatter first."
+
+    if [ "${DRY_RUN}" -eq 0 ] && grep -q "phpMyFAQ ${VERSION}](/download)" "${news_file}"; then
+        log "update-www: news entry for ${VERSION} already present — skipping draft"
+    else
+        run "${PHP_BIN}" "${REPO_ROOT}/scripts/release-news-draft.php" \
+            "${VERSION}" "${news_date}" "${CODENAME}" "${news_file}"
+    fi
+
+    if [ "${DRY_RUN}" -eq 0 ]; then
+        printf '\nReview and edit the news entry now:\n  %s\nPress Enter when done to build and deploy...' "${news_file}"
+        read -r _
+    fi
+
+    (cd "${WWW_REPO_DIR}" && run pnpm test:ci && run pnpm build)
+
+    if [ -n "$(git -C "${WWW_REPO_DIR}" status --porcelain)" ]; then
+        run git -C "${WWW_REPO_DIR}" add data content/news public/api/news
+        run git -C "${WWW_REPO_DIR}" commit -m "${VERSION}"
+    else
+        log 'update-www: no changes to commit — already up to date'
+    fi
+    run git -C "${WWW_REPO_DIR}" push
+
+    run rsync -av --delete "${WWW_REPO_DIR}/out/" "${WWW_SSH_TARGET}/"
+
+    if [ "${DRY_RUN}" -eq 1 ]; then
+        log 'update-www: dry-run — skipping www.phpmyfaq.de verification'
+        return 0
+    fi
+
+    curl -fsS 'https://www.phpmyfaq.de/' | grep -q "${VERSION}" \
+        || fail "update-www: deployed homepage does not mention ${VERSION} — check the deploy."
+
+    log "update-www: www.phpmyfaq.de shows ${VERSION}"
 }
 
 stage_github_release() {
