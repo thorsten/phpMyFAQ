@@ -20,9 +20,7 @@ describe('fetchCaptchaImage function', () => {
     const timestamp: number = Date.now();
     const mockResponse = {
       ok: true,
-      json: async () => ({
-        /* mock response data */
-      }),
+      json: async () => ({/* mock response data */}),
     };
 
     // Mock fetch function to return a resolved Promise with a mockResponse

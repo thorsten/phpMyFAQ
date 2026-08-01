@@ -62,9 +62,27 @@ count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #1 of `array_diff`: expected `array<array-key, ('V.array_diff() extends Stringable|null|resource|scalar)>`, but provided type `array<array-key, mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
+code = "less-specific-nested-argument-type"
+message = "Argument type mismatch for argument #2 of `array_diff`: expected `array<array-key, ('V.array_diff() extends Stringable|null|resource|scalar)>`, but provided type `array<array-key, mixed>` is less specific."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
+code = "template-constraint-violation"
+message = "Argument type mismatch for template `V`."
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/ReportRepository.php"
@@ -205,6 +223,42 @@ message = "This condition (type `true`) will always evaluate to true."
 count = 1
 
 [[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
+code = "mixed-argument"
+message = "Invalid argument type for argument #5 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
+code = "non-existent-constant"
+message = 'Undefined constant: `phpMyFAQ\Auth\AAD_OAUTH_CLIENTID`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
+code = "non-existent-constant"
+message = 'Undefined constant: `phpMyFAQ\Auth\AAD_OAUTH_SCOPE`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
+code = "non-existent-constant"
+message = 'Undefined constant: `phpMyFAQ\Auth\AAD_OAUTH_TENANTID`.'
+count = 1
+
+[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthKeycloak.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -284,9 +338,39 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth\EntraId\JwksProvider::getKeys`: expected `string`, but found `mixed`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
+code = "non-existent-constant"
+message = 'Undefined constant: `phpMyFAQ\Auth\EntraId\AAD_OAUTH_CLIENTID`.'
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
+code = "non-existent-constant"
+message = 'Undefined constant: `phpMyFAQ\Auth\EntraId\AAD_OAUTH_SCOPE`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
+code = "non-existent-constant"
+message = 'Undefined constant: `phpMyFAQ\Auth\EntraId\AAD_OAUTH_SECRET`.'
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
+code = "non-existent-constant"
+message = 'Undefined constant: `phpMyFAQ\Auth\EntraId\AAD_OAUTH_TENANTID`.'
+count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
@@ -965,6 +1049,30 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\FaqEntity::setAnswer`: expected `string`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\FaqEntity::setQuestion`: expected `string`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
+code = "mixed-argument"
+message = 'Invalid argument type for argument #1 of `phpMyFAQ\Faq::hasTitleAHash`: expected `string`, but found `mixed`.'
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
