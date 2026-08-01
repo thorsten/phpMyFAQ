@@ -314,7 +314,36 @@ stage_update_www() {
 }
 
 stage_github_release() {
-    log 'github-release: not implemented yet'
+    if gh release view "${VERSION}" --repo thorsten/phpMyFAQ >/dev/null 2>&1; then
+        log "github-release: release ${VERSION} already exists — skipping"
+        return 0
+    fi
+
+    release_notes=$("${PHP_BIN}" "${REPO_ROOT}/scripts/release-changelog.php" "${VERSION}")
+    release_notes=$(printf '%s\n\n## Verification\n\nSee the [verification instructions](https://github.com/thorsten/phpMyFAQ/blob/main/docs/release.md#139-verification). The release public key is published at [docs/keys/phpmyfaq-release-public-key.asc](https://github.com/thorsten/phpMyFAQ/blob/main/docs/keys/phpmyfaq-release-public-key.asc).\n' "${release_notes}")
+
+    if [ "${RELEASE_TYPE}" = 'development' ]; then
+        set -- --prerelease
+    else
+        set --
+    fi
+
+    run gh release create "${VERSION}" \
+        --repo thorsten/phpMyFAQ \
+        --title "phpMyFAQ ${VERSION}" \
+        --notes "${release_notes}" \
+        "$@" \
+        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip" \
+        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.tar.gz" \
+        "${RELEASE_DIR}/SHA256SUMS" \
+        "${RELEASE_DIR}/SHA256SUMS.asc" \
+        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip.asc" \
+        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.tar.gz.asc" \
+        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.php.sbom.json" \
+        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.js.sbom.json" \
+        "${RELEASE_DIR}/phpMyFAQ-${VERSION}.sbom.json"
+
+    log "github-release: created release ${VERSION}"
 }
 
 # --- Stage dispatch --------------------------------------------------------
