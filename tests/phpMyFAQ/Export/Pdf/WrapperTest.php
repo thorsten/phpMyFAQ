@@ -449,6 +449,46 @@ class WrapperTest extends TestCase
         }
     }
 
+    public function testImageRefusesNonImageFileUnderContentWithoutLeaking(): void
+    {
+        $secretDir = PMF_ROOT_DIR . '/content/user/images';
+        $secretFile = $secretDir . '/pmf-test-secret.php';
+        file_put_contents($secretFile, "<?php\n\$DB['password'] = 'super-secret-password';\n");
+
+        $handlerFired = false;
+        set_error_handler(static function () use (&$handlerFired): bool {
+            $handlerFired = true;
+            throw new \ErrorException('warning promoted to exception');
+        }, E_WARNING | E_NOTICE);
+
+        try {
+            $this->wrapper->Image('/content/user/images/pmf-test-secret.php');
+        } finally {
+            restore_error_handler();
+            @unlink($secretFile);
+        }
+
+        $this->assertFalse($handlerFired, 'Probing a non-image file must not emit a warning that could leak its contents');
+    }
+
+    public function testCheckBase64ImageSwallowsWarningsForNonImageData(): void
+    {
+        set_error_handler(static function (): bool {
+            throw new \ErrorException('warning promoted to exception');
+        }, E_WARNING | E_NOTICE);
+
+        $reflection = new ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('checkBase64Image');
+
+        try {
+            $result = $method->invoke($this->wrapper, "<?php \$DB['password'] = 'super-secret';");
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertFalse($result);
+    }
+
     public function testConstructorWithRtlLanguage(): void
     {
         try {
