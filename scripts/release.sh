@@ -63,6 +63,33 @@ release_type() {
     esac
 }
 
+# Rewrites `const <NAME> = '<value>';` in a PHP file. Fails when the constant
+# is not found exactly once.
+patch_php_constant() {
+    if [ "${DRY_RUN}" -eq 1 ]; then
+        printf "[dry-run] patch %s = '%s' in %s\n" "$1" "$2" "$3"
+        return 0
+    fi
+
+    # shellcheck disable=SC2016
+    "${PHP_BIN}" -r '
+        [$name, $value, $file] = [$argv[1], $argv[2], $argv[3]];
+        $source = file_get_contents($file);
+        $patched = preg_replace(
+            sprintf("/const %s = \x27[^\x27]*\x27;/", preg_quote($name, "/")),
+            sprintf("const %s = \x27%s\x27;", $name, $value),
+            $source,
+            1,
+            $count,
+        );
+        if ($count !== 1) {
+            fwrite(STDERR, sprintf("Could not patch constant %s in %s\n", $name, $file));
+            exit(1);
+        }
+        file_put_contents($file, $patched);
+    ' "$1" "$2" "$3"
+}
+
 usage() {
     sed -n '3,12p' "$0" | sed 's/^# \{0,1\}//'
 }
@@ -195,7 +222,51 @@ stage_publish_packages() {
 }
 
 stage_update_api() {
-    log 'update-api: not implemented yet'
+    release_date=$(date '+%Y-%m-%d')
+
+    if ! cmp -s "${RELEASE_DIR}/hashes-${VERSION}.json" "${API_REPO_DIR}/json/hashes-${VERSION}.json" 2>/dev/null; then
+        run cp "${RELEASE_DIR}/hashes-${VERSION}.json" "${API_REPO_DIR}/json/"
+    fi
+
+    if [ "${RELEASE_TYPE}" = 'stable' ]; then
+        patch_php_constant PHPMYFAQ_STABLE_VERSION "${VERSION}" "${API_REPO_DIR}/phpmyfaq.php"
+        patch_php_constant PHPMYFAQ_STABLE_RELEASE "${release_date}" "${API_REPO_DIR}/phpmyfaq.php"
+    else
+        patch_php_constant PHPMYFAQ_DEV_VERSION "${VERSION}" "${API_REPO_DIR}/phpmyfaq.php"
+        patch_php_constant PHPMYFAQ_DEV_RELEASE "${release_date}" "${API_REPO_DIR}/phpmyfaq.php"
+    fi
+
+    (cd "${API_REPO_DIR}" && run composer install --quiet && run composer test)
+
+    if [ -n "$(git -C "${API_REPO_DIR}" status --porcelain)" ]; then
+        run git -C "${API_REPO_DIR}" add "json/hashes-${VERSION}.json" phpmyfaq.php
+        run git -C "${API_REPO_DIR}" commit -m "${VERSION}"
+    else
+        log 'update-api: no changes to commit — already up to date'
+    fi
+    run git -C "${API_REPO_DIR}" push
+
+    # Ship production dependencies, then restore dev dependencies locally.
+    (cd "${API_REPO_DIR}" && run composer install --no-dev --quiet)
+    run rsync -av --delete \
+        --exclude '.git' --exclude 'tests' --exclude 'phpunit.xml.dist' \
+        "${API_REPO_DIR}/" "${API_SSH_TARGET}/"
+    (cd "${API_REPO_DIR}" && run composer install --quiet)
+
+    if [ "${DRY_RUN}" -eq 1 ]; then
+        log 'update-api: dry-run — skipping api.phpmyfaq.de verification'
+        return 0
+    fi
+
+    remote_versions=$(curl -fsS 'https://api.phpmyfaq.de/versions') \
+        || fail 'update-api: https://api.phpmyfaq.de/versions is not reachable after deploy.'
+    printf '%s' "${remote_versions}" | grep -q "\"${VERSION}\"" \
+        || fail "update-api: /versions does not report ${VERSION} — got: ${remote_versions}"
+
+    curl -fsS "https://api.phpmyfaq.de/verify/${VERSION}" >/dev/null \
+        || fail "update-api: /verify/${VERSION} is not serving the hash manifest."
+
+    log "update-api: api.phpmyfaq.de serves ${VERSION}"
 }
 
 stage_update_www() {
