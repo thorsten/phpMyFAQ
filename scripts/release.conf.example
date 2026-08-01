@@ -1,0 +1,11 @@
+# phpMyFAQ release configuration — copy to ~/.config/phpmyfaq/release.conf
+# and fill in your local paths and rsync targets.
+
+# Local checkouts of the two website repositories
+API_REPO_DIR="$HOME/htdocs/api.phpmyfaq.de"
+WWW_REPO_DIR="$HOME/htdocs/www.phpmyfaq.de"
+
+# rsync targets (user@host:/absolute/path)
+DOWNLOAD_SSH_TARGET="user@example.com:/var/www/download.phpmyfaq.de/files"
+API_SSH_TARGET="user@example.com:/var/www/api.phpmyfaq.de"
+WWW_SSH_TARGET="user@example.com:/var/www/www.phpmyfaq.de"
