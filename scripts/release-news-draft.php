@@ -51,7 +51,11 @@ try {
         exit(1);
     }
 
-    file_put_contents($newsFile, ReleaseTools::insertNewsEntry($content, $draft));
+    if (file_put_contents($newsFile, ReleaseTools::insertNewsEntry($content, $draft)) === false) {
+        fwrite(stream: STDERR, data: sprintf("Cannot write news file: %s\n", $newsFile));
+        exit(1);
+    }
+
     fwrite(stream: STDOUT, data: sprintf("News draft inserted into %s\n", $newsFile));
 } catch (InvalidArgumentException $exception) {
     fwrite(stream: STDERR, data: $exception->getMessage() . "\n");
