@@ -10,6 +10,7 @@ includes = [
   "./phpmyfaq/src/constants.php",
   "./phpmyfaq/content/core/config/constants.php",
   "./phpmyfaq/content/core/config/constants_opensearch.php",
+  "./scripts/lib",
 ]
 excludes = []
 

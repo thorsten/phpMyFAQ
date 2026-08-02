@@ -442,3 +442,62 @@ release:
   `.asc` file.
 - CI secrets (`GPG_KEY_ID`, `GPG_PASSPHRASE`, any imported signing subkey
   export) are updated to match the new key material.
+
+## 13.16 One-command release
+
+The whole release — packages, download.phpmyfaq.de, api.phpmyfaq.de,
+www.phpmyfaq.de, and the GitHub release — is orchestrated by:
+
+```bash
+./scripts/release.sh <version>
+```
+
+### 13.16.1 Configuration
+
+Copy `scripts/release.conf.example` to `~/.config/phpmyfaq/release.conf` and
+fill in the local checkout paths of the two site repositories and the three
+rsync targets. The location can be overridden with the `PMF_RELEASE_CONF`
+environment variable.
+
+### 13.16.2 Stages
+
+The script runs six idempotent stages in fixed order:
+
+1. `preflight` — clean trees, version and CHANGELOG checks, SSH/gh/gpg
+   connectivity. Nothing is published if any check fails.
+2. `build` — `prepare-release-artifacts.sh` + `sign-release-artifacts.sh`
+   (skipped when `build/release/<version>/SHA256SUMS` already exists).
+3. `publish-packages` — rsync the archives, checksums, signatures, and SBOMs
+   to download.phpmyfaq.de, then verify the `info/<version>` endpoint.
+4. `update-api` — copy `hashes-<version>.json`, bump the stable or dev
+   version constants, test, commit, push, deploy, then verify `/versions`
+   and `/verify/<version>`. Deploy uses `rsync --delete`: any server-only
+   file on `API_SSH_TARGET` that isn't part of this repo checkout will be
+   deleted — verify the server directory before first use.
+5. `update-www` — refresh `data/*.json`, insert a news draft generated from
+   the CHANGELOG, **pause for manual review**, then test, build, commit,
+   push, deploy, and verify the homepage. Deploy uses `rsync --delete`: any
+   server-only file on `WWW_SSH_TARGET` that isn't part of the built output
+   will be deleted — verify the server directory before first use.
+6. `github-release` — create the GitHub release with notes from the
+   CHANGELOG and all artifacts attached (`--prerelease` for development
+   versions).
+
+### 13.16.3 Options
+
+- `--from <stage>` — resume from a stage after fixing a failure; every
+  failure message names the exact resume command.
+- `--dry-run` — print every mutating command (rsync, git push, gh) instead
+  of executing it.
+- `--type stable|development` — override the type derived from the version
+  string (a version containing `-` is treated as development).
+- `--codename <name>` — the release codename used in the news draft
+  (defaults to `TBD`; edit during the review pause).
+- `--print-type` — print the derived release type and exit.
+
+### 13.16.4 Helpers
+
+- `php scripts/release-changelog.php <version>` — print the CHANGELOG
+  section for a version.
+- `php scripts/release-news-draft.php <version> [date] [codename]
+  [news-file]` — print a news entry draft, or insert it into a news file.
