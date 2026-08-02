@@ -90,6 +90,43 @@ class GlossaryTest extends TestCase
         $this->assertEmpty($result);
     }
 
+    public function testCreateKeepsAnItemEndingInAQuoteInsideTheStringLiteral(): void
+    {
+        $item = str_repeat('A', 253) . "'";
+        $definition = ', (SELECT 1))-- ';
+
+        $this->assertTrue($this->glossary->create($item, $definition));
+
+        $result = $this->glossary->fetch(1);
+
+        $this->assertSame($item, $result['item']);
+        $this->assertSame($definition, $result['definition']);
+    }
+
+    public function testUpdateKeepsAnItemEndingInAQuoteInsideTheStringLiteral(): void
+    {
+        $this->glossary->create('testItem', 'testDefinition');
+
+        $item = str_repeat('A', 253) . "'";
+        $definition = ', (SELECT 1))-- ';
+
+        $this->assertTrue($this->glossary->update(1, $item, $definition));
+
+        $result = $this->glossary->fetch(1);
+
+        $this->assertSame($item, $result['item']);
+        $this->assertSame($definition, $result['definition']);
+    }
+
+    public function testCreateTruncatesOverlongItems(): void
+    {
+        $this->assertTrue($this->glossary->create(str_repeat('A', 300), 'testDefinition'));
+
+        $result = $this->glossary->fetch(1);
+
+        $this->assertSame(str_repeat('A', 254), $result['item']);
+    }
+
     public function testFetchAll(): void
     {
         $this->glossary->create('testItem', 'testDefinition');
