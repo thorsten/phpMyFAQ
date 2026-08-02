@@ -713,6 +713,87 @@ class FaqTest extends TestCase
         $this->assertStringNotContainsString('OR 1=1', $this->configuration->getDb()->log());
     }
 
+    public function testIsFaqRecordVisibleReturnsTrueForActivePublicFaq(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        $this->faq->getFaq($faqEntity->getId());
+
+        $this->assertTrue($this->faq->isFaqRecordVisible());
+    }
+
+    public function testIsFaqRecordVisibleReturnsFalseForInactiveFaq(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setActive(false);
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        $this->faq->getFaq($faqEntity->getId());
+
+        // getFaq() still loads the metadata of an inactive FAQ and only masks the answer, so the
+        // visibility check is the only thing keeping the title out of a public response.
+        $this->assertSame($faqEntity->getQuestion(), strip_tags((string) $this->faq->faqRecord['title']));
+        $this->assertFalse($this->faq->isFaqRecordVisible());
+    }
+
+    public function testIsFaqRecordVisibleReturnsFalseForNotYetPublishedFaq(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+        $this->setPublicationWindow($faqEntity, '99990101000000', '99991231235959');
+
+        $this->faq->getFaq($faqEntity->getId());
+
+        $this->assertFalse($this->faq->isFaqRecordVisible());
+    }
+
+    public function testIsFaqRecordVisibleReturnsFalseForExpiredFaq(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+        $this->setPublicationWindow($faqEntity, '00000000000000', '20200101000000');
+
+        $this->faq->getFaq($faqEntity->getId());
+
+        $this->assertFalse($this->faq->isFaqRecordVisible());
+    }
+
+    public function testIsFaqRecordVisibleReturnsFalseForFaqRestrictedToAnotherUser(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantUserAccess($faqEntity, 23);
+
+        $this->faq->getFaq($faqEntity->getId());
+
+        $this->assertFalse($this->faq->isFaqRecordVisible());
+    }
+
+    public function testIsFaqRecordVisibleReturnsFalseForNonExistingFaq(): void
+    {
+        $this->faq->getFaq(999_999);
+
+        $this->assertSame(42, (int) $this->faq->faqRecord['solution_id']);
+        $this->assertFalse($this->faq->isFaqRecordVisible());
+    }
+
+    private function setPublicationWindow(FaqEntity $faqEntity, string $dateStart, string $dateEnd): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "UPDATE faqdata SET date_start = '%s', date_end = '%s' WHERE id = %d",
+                $dateStart,
+                $dateEnd,
+                $faqEntity->getId(),
+            ));
+    }
+
     private function getFaqEntity(): FaqEntity
     {
         $faqEntity = new FaqEntity();
