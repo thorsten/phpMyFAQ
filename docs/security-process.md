@@ -75,7 +75,7 @@ Severity guides the timeline, not whether the issue gets fixed:
    (`Fix input validation in X`, not `Fix RCE via unserialize in X`).
 4. Check for **variants**: the same pattern elsewhere in the codebase. Most reports are one instance
    of a class of bug. Search for the pattern before closing.
-5. Backport according to the table above.
+5. Backport, according to the table above.
 6. Where a fix takes longer than the target, publish a **mitigation** — a configuration change, a
    `.htaccess` rule, a disabled feature — and communicate it to the reporter and, if the risk
    warrants it, publicly.
@@ -101,7 +101,7 @@ Severity guides the timeline, not whether the issue gets fixed:
 6. Where the vulnerability affects packaged distributions (Docker image, Kubernetes manifests),
    rebuild and republish those too — a patched tarball with a stale image helps nobody.
 
-Order matters: release first, advisory second, announcement third. Publishing an advisory before the
+Order matters: release first, advisory second, an announcement third. Publishing an advisory before the
 release exposes users with no upgrade path.
 
 ## 16.8 After the fact
@@ -115,7 +115,7 @@ Within two weeks of disclosure:
 - For High and Critical issues, write a short internal note on why the code was written that way.
   Not blame; pattern recognition.
 
-Review the security log annually: which classes of vulnerability recur, and whether response targets
+Review the security log annually: which classes of vulnerability recur and whether response targets
 are being met in practice. This log is what an enterprise evaluator will ask to see.
 
 ## 16.9 Records to keep

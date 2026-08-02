@@ -29,9 +29,6 @@ Please use one of the following private channels:
 - Email: security@phpmyfaq.de
 - Machine-readable contact information: https://www.phpmyfaq.de/.well-known/security.txt (RFC 9116)
 
-For sensitive reports you may encrypt email using our PGP key, fingerprint
-`<FINGERPRINT>` (available at https://www.phpmyfaq.de/pgp-key.txt).
-
 Reports are accepted in English and German.
 
 When reporting, please include where possible:
