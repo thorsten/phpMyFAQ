@@ -73,7 +73,8 @@ class Update extends AbstractSetup
     }
 
     /**
-     * Creates a backup of the current config files
+     * Creates a backup of the current config files and returns the path to the archive.
+     *
      * @throws Exception
      * @throws RandomException
      */
@@ -135,7 +136,9 @@ class Update extends AbstractSetup
             throw new Exception('Cannot store config backup file.');
         }
 
-        return $this->configuration->getDefaultUrl() . 'content/core/config/' . $this->getBackupFilename();
+        // The archive holds the database credentials, so we return the path on the file
+        // system and never a URL: the backup is not meant to be downloaded over HTTP.
+        return $outputZipFile;
     }
 
     /**

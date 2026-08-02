@@ -36,6 +36,42 @@
     </div>
   </div>
 
+  {% if updateTokenRequired %}
+    <div class="row">
+      <div class="col">
+        {% if updateTokenError %}
+          <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">The update token could not be created</h4>
+            <p>{{ updateTokenError }}</p>
+            <p>
+              Please make the configuration directory writable, or log in as an administrator in the admin backend
+              before you start the update.
+            </p>
+          </div>
+        {% else %}
+          <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">Update token required</h4>
+            <p>
+              You are not logged in as an administrator, so we need proof that you have access to this server.
+              Open the file <code>{{ updateTokenFile }}</code> on your server and copy the token from it into the
+              field below. The token is valid for {{ updateTokenLifetime }} minutes, reload this page to get a new one.
+            </p>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="phpmyfaq-update-token">Update token</label>
+            <input class="form-control" type="text" id="phpmyfaq-update-token" name="update-token"
+                   autocomplete="off" spellcheck="false" required>
+          </div>
+
+          <button class="btn btn-secondary mb-3" type="button" id="phpmyfaq-update-check-button">
+            Verify token and check installation
+          </button>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
   <div class="row">
     <div class="col">
 

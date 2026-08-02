@@ -22,13 +22,16 @@ namespace phpMyFAQ\Controller\Frontend;
 use Elastic\Elasticsearch\Exception\AuthenticationException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Setup\Installer;
 use phpMyFAQ\Setup\Update;
+use phpMyFAQ\Setup\UpdateToken;
 use phpMyFAQ\System;
 use phpMyFAQ\Twig\TemplateException;
 use phpMyFAQ\Twig\TwigWrapper;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -134,6 +137,17 @@ final class SetupController
             $checkBasicError = $exception->getMessage();
         }
 
+        $updateTokenError = '';
+        $updateTokenRequired = !$this->hasAdministratorSession($configuration);
+        if ($updateTokenRequired) {
+            try {
+                // The token itself is never rendered, it has to be read from the file system
+                (new UpdateToken(PMF_CONFIG_DIR))->getOrCreate();
+            } catch (Exception $exception) {
+                $updateTokenError = $exception->getMessage();
+            }
+        }
+
         return $this->render('@setup/update.twig', [
             'currentStep' => $currentStep,
             'installedVersion' => $configuration->getVersion(),
@@ -142,7 +156,47 @@ final class SetupController
             'currentYear' => date(format: 'Y'),
             'documentationUrl' => System::getDocumentationUrl(),
             'configTableNotAvailable' => $update->isConfigTableNotAvailable($configuration->getDb()),
+            'updateTokenRequired' => $updateTokenRequired,
+            'updateTokenError' => $updateTokenError,
+            'updateTokenFile' => $this->getRelativeTokenFilePath(),
+            'updateTokenLifetime' => (int) (UpdateToken::TOKEN_LIFETIME / 60),
         ]);
+    }
+
+    /**
+     * Returns true if the update is started by a logged-in administrator. This is only
+     * possible as long as the database still matches what the new code expects, so the
+     * update wizard falls back to the update token whenever this returns false.
+     */
+    private function hasAdministratorSession(Configuration $configuration): bool
+    {
+        try {
+            $currentUser = CurrentUser::getCurrentUser($configuration);
+
+            if (!$currentUser->isLoggedIn()) {
+                return false;
+            }
+
+            return $currentUser->isSuperAdmin()
+            || $currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::CONFIGURATION_EDIT->value);
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
+    /**
+     * Returns the path of the token file relative to the phpMyFAQ root directory,
+     * so that we can tell the administrator where to find it.
+     */
+    private function getRelativeTokenFilePath(): string
+    {
+        $tokenFilePath = (new UpdateToken(PMF_CONFIG_DIR))->getTokenFilePath();
+
+        if (str_starts_with($tokenFilePath, PMF_ROOT_DIR . DIRECTORY_SEPARATOR)) {
+            return substr($tokenFilePath, strlen(PMF_ROOT_DIR) + 1);
+        }
+
+        return $tokenFilePath;
     }
 
     /**

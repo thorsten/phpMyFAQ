@@ -18,6 +18,20 @@ Please note that the requirements of phpMyFAQ have to be fulfilled.
 
 Please make sure that you're running at least PHP 8.3, otherwise the upgrade won't work.
 
+## The update token
+
+The update wizard changes your database and your configuration, so it only runs for people who are allowed to do that.
+If you are still logged in as an administrator when you open the update wizard, nothing changes for you: the wizard
+starts right away.
+
+If you are not logged in — which happens on major upgrades, where the old database doesn't match what the new code
+expects, so a login is impossible — the wizard asks for an update token instead. phpMyFAQ writes that token into the
+file `content/core/config/update-token.php` on your server. Open that file with your FTP client or on the console,
+copy the token from it, and paste it into the update wizard. The token is valid for one hour, reload the update page to
+get a new one, and phpMyFAQ deletes it once the database has been updated. The file cannot be read over HTTP.
+
+If phpMyFAQ can't create the token file, make the directory `content/core/config/` writable for your web server.
+
 ## Upgrading from phpMyFAQ 3.0.x
 
 Upgrading from 3.0.x is a major upgrade.
