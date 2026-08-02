@@ -27,6 +27,9 @@ use Psr\Log\NullLogger;
 
 readonly class GlossaryRepository implements GlossaryRepositoryInterface
 {
+    /** Maximum number of characters the item column can hold. */
+    private const int ITEM_MAX_LENGTH = 254;
+
     private LoggerInterface $logger;
 
     public function __construct(
@@ -94,15 +97,13 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
     {
         $db = $this->configuration->getDb();
 
-        $escapedItem = $db->escape($item);
-        $escapedDefinition = $db->escape($definition);
+        $escapedItem = $db->escape($this->prepareItem($item));
+        $escapedDefinition = $db->escape(Strings::htmlspecialchars($definition));
         $escapedLanguage = $db->escape($language);
 
         $id = $db->nextId(Database::getTablePrefix() . 'faqglossary', column: 'id');
-        $safeItem = Strings::htmlspecialchars(substr(string: $escapedItem, offset: 0, length: 254));
-        $safeDef = Strings::htmlspecialchars($escapedDefinition);
         $sql = "INSERT INTO %sfaqglossary (id, lang, item, definition) VALUES (%d, '%s', '%s', '%s')";
-        $query = sprintf($sql, Database::getTablePrefix(), $id, $escapedLanguage, $safeItem, $safeDef);
+        $query = sprintf($sql, Database::getTablePrefix(), $id, $escapedLanguage, $escapedItem, $escapedDefinition);
 
         $ok = (bool) $db->query($query);
         if (!$ok) {
@@ -118,20 +119,37 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
     {
         $db = $this->configuration->getDb();
 
-        $escapedItem = $db->escape($item);
-        $escapedDefinition = $db->escape($definition);
+        $escapedItem = $db->escape($this->prepareItem($item));
+        $escapedDefinition = $db->escape(Strings::htmlspecialchars($definition));
         $escapedLanguage = $db->escape($language);
 
-        $safeItem = Strings::htmlspecialchars(substr(string: $escapedItem, offset: 0, length: 254));
-        $safeDef = Strings::htmlspecialchars($escapedDefinition);
         $sql = "UPDATE %sfaqglossary SET item = '%s', definition = '%s' WHERE id = %d AND lang = '%s'";
-        $query = sprintf($sql, Database::getTablePrefix(), $safeItem, $safeDef, $id, $escapedLanguage);
+        $query = sprintf($sql, Database::getTablePrefix(), $escapedItem, $escapedDefinition, $id, $escapedLanguage);
 
         $ok = (bool) $db->query($query);
         if (!$ok) {
             $this->logger->error(message: 'Glossary update failed', context: ['id' => $id, 'language' => $language]);
         }
         return $ok;
+    }
+
+    /**
+     * Encodes and length-limits an item before it is escaped for the query.
+     *
+     * Truncating must happen before escaping: cutting an escaped string can strip a quote while
+     * keeping the escape character in front of it, which breaks out of the SQL string literal.
+     */
+    private function prepareItem(string $item): string
+    {
+        $encoded = Strings::htmlspecialchars(Strings::substr($item, 0, self::ITEM_MAX_LENGTH));
+
+        if (Strings::strlen($encoded) > self::ITEM_MAX_LENGTH) {
+            $encoded = Strings::substr($encoded, 0, self::ITEM_MAX_LENGTH);
+            // Drop an entity the cut may have left half-written
+            $encoded = (string) preg_replace('/&[#0-9a-zA-Z]*$/', replacement: '', subject: $encoded);
+        }
+
+        return $encoded;
     }
 
     public function delete(int $id, string $language): bool
