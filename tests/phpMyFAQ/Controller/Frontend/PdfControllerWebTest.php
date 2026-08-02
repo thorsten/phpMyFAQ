@@ -15,12 +15,16 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesClass(\phpMyFAQ\Export\Pdf\Wrapper::class)]
 final class PdfControllerWebTest extends ControllerWebTestCase
 {
-    public function testPdfRouteReturnsPdfResponseForUnknownFaq(): void
+    /**
+     * An anonymous request for an FAQ that does not exist, or that the requester may not
+     * read, must not produce a PDF: the export used to render the access-denied
+     * placeholder record, which still carried the title, solution id and author.
+     */
+    public function testPdfRouteReturnsNotFoundForUnknownFaq(): void
     {
         $response = $this->requestPublic('GET', '/pdf/999999/999999/en');
 
-        self::assertResponseStatusCodeSame(200, $response);
-        self::assertSame('application/pdf', $response->headers->get('Content-Type'));
-        self::assertStringStartsWith('%PDF-', (string) $response->getContent());
+        self::assertResponseStatusCodeSame(404, $response);
+        self::assertSame('', (string) $response->getContent());
     }
 }

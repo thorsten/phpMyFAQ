@@ -85,9 +85,14 @@ final class PdfController extends AbstractFrontController
         $pdf = new Pdf($this->faq, $category, $this->configuration);
 
         $this->faq->getFaq($faqId);
+
+        if (!$this->faq->isPublished()) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
         $this->faq->faqRecord['category_id'] = $categoryId;
 
-        if (!$this->configuration->get('records.disableAttachments') && 'yes' === $this->faq->faqRecord['active']) {
+        if (!$this->configuration->get('records.disableAttachments')) {
             try {
                 $attachmentHelper = new AttachmentHelper();
                 $attList = AttachmentFactory::fetchByRecordId($this->configuration, $faqId);

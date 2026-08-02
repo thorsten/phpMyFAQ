@@ -29,6 +29,7 @@ use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq\FaqRepository;
+use phpMyFAQ\Faq\PublicationStatus;
 use phpMyFAQ\Faq\QueryHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Instance\Search\Elasticsearch;
@@ -519,6 +520,15 @@ class Faq
                 'created' => $row->created,
             ];
         }
+    }
+
+    /**
+     * Whether the record currently held in $faqRecord may be handed to an anonymous
+     * consumer in full. See PublicationStatus for why exporters have to ask.
+     */
+    public function isPublished(): bool
+    {
+        return new PublicationStatus($this->faqRecord)->isPublished();
     }
 
     /**
