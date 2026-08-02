@@ -123,6 +123,18 @@ if (0 === (int) $solutionId) {
     $faq->getFaqBySolutionId($solutionId);
 }
 
+// Do not disclose a FAQ the requester may not see. getFaq() and getFaqBySolutionId() also
+// return non-permitted, inactive, not yet published and expired records, keeping their title,
+// solution ID, author and update date intact and only replacing the answer with a placeholder.
+if (!$faq->isFaqRecordVisible()) {
+    $response->setStatusCode(Response::HTTP_NOT_FOUND);
+
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
+    $twigTemplate = $twig->loadTemplate('./404.twig');
+
+    return $templateVars;
+}
+
 if (isset($faq->faqRecord['id'])) {
     $faqId = $faq->faqRecord['id'];
 }

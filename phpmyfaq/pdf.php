@@ -143,6 +143,15 @@ if (true === $getAll && $user->perm->hasPermission($user->getUserId(), Permissio
     }
 
     $faq->getFaq($faqId);
+
+    // Never export a record the requester may not see: getFaq() also returns non-permitted,
+    // inactive, not yet published and expired FAQs, with their metadata left intact.
+    if (!$faq->isFaqRecordVisible()) {
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        $response->send();
+        exit();
+    }
+
     $faq->faqRecord['category_id'] = $currentCategory;
 
     if ($faqConfig->get('records.disableAttachments') && 'yes' === $faq->faqRecord['active']) {

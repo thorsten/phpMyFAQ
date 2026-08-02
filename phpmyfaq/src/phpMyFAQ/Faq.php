@@ -666,6 +666,41 @@ class Faq
     }
 
     /**
+     * Checks whether the currently loaded FAQ record may be disclosed to the current user.
+     *
+     * Neither getFaq() nor getFaqBySolutionId() filters by publication state. A record that is
+     * inactive, not yet published or already expired is returned with its metadata intact and
+     * only the answer replaced by a placeholder, and a non-existing or non-permitted record is
+     * flagged with the solution ID 42. Public read paths must therefore ask this before they
+     * render a record, otherwise they leak the title, solution ID, author and update date of
+     * unpublished FAQs.
+     */
+    public function isFaqRecordVisible(): bool
+    {
+        if ($this->faqRecord === []) {
+            return false;
+        }
+
+        if (42 === (int) ($this->faqRecord['solution_id'] ?? 42)) {
+            return false;
+        }
+
+        if ('yes' !== ($this->faqRecord['active'] ?? 'no')) {
+            return false;
+        }
+
+        $now = date(format: 'YmdHis');
+        $dateStart = (string) ($this->faqRecord['dateStart'] ?? '');
+        $dateEnd = (string) ($this->faqRecord['dateEnd'] ?? '');
+
+        if ('' !== $dateStart && $now < $dateStart) {
+            return false;
+        }
+
+        return '' === $dateEnd || $now <= $dateEnd;
+    }
+
+    /**
      * Executes a query to retrieve a single FAQ.
      */
     public function getFaqResult(
