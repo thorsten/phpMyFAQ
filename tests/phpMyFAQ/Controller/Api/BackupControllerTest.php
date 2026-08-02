@@ -19,6 +19,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -237,6 +238,20 @@ class BackupControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame('application/zip', $response->headers->get('Content-Type'));
         self::assertStringContainsString('attachment;', (string) $response->headers->get('Content-Disposition'));
-        self::assertNotEmpty((string) $response->getContent());
+
+        // The archive is streamed from disk rather than buffered, so assert on the file
+        // itself. It has to sit outside the document root: it used to be written to
+        // PMF_ROOT_DIR/content.zip, where anyone could fetch it without authenticating.
+        self::assertInstanceOf(BinaryFileResponse::class, $response);
+
+        $backupFile = $response->getFile();
+        self::assertFileExists($backupFile->getPathname());
+        self::assertGreaterThan(0, $backupFile->getSize());
+
+        // Resolve both sides before comparing: on macOS sys_get_temp_dir() reports
+        // /var/folders/... while tempnam() hands back the resolved /private/var/folders/...
+        $backupFilePath = (string) realpath($backupFile->getPathname());
+        self::assertStringStartsWith((string) realpath(sys_get_temp_dir()), $backupFilePath);
+        self::assertStringStartsNotWith((string) realpath(PMF_ROOT_DIR), $backupFilePath);
     }
 }
