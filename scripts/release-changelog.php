@@ -28,9 +28,15 @@ if ($argc !== 2) {
     exit(1);
 }
 
+$changelogFile = dirname(__DIR__) . '/CHANGELOG.md';
+$changelog = file_get_contents($changelogFile);
+if ($changelog === false) {
+    fwrite(stream: STDERR, data: sprintf("Cannot read CHANGELOG.md: %s\n", $changelogFile));
+    exit(1);
+}
+
 try {
-    $changelog = file_get_contents(dirname(__DIR__) . '/CHANGELOG.md');
-    echo ReleaseTools::extractChangelogSection((string) $changelog, $argv[1]) . "\n";
+    echo ReleaseTools::extractChangelogSection($changelog, $argv[1]) . "\n";
 } catch (InvalidArgumentException $exception) {
     fwrite(stream: STDERR, data: $exception->getMessage() . "\n");
     exit(1);

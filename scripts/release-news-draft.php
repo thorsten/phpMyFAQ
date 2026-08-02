@@ -35,8 +35,14 @@ $date = $argv[2] ?? date('Y-m-d');
 $codename = $argv[3] ?? 'TBD';
 $newsFile = $argv[4] ?? null;
 
+$changelogFile = dirname(__DIR__) . '/CHANGELOG.md';
+$changelog = file_get_contents($changelogFile);
+if ($changelog === false) {
+    fwrite(stream: STDERR, data: sprintf("Cannot read CHANGELOG.md: %s\n", $changelogFile));
+    exit(1);
+}
+
 try {
-    $changelog = (string) file_get_contents(dirname(__DIR__) . '/CHANGELOG.md');
     $section = ReleaseTools::extractChangelogSection($changelog, $version);
     $draft = ReleaseTools::newsDraft($version, $date, $section, $codename);
 
