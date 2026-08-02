@@ -11,7 +11,8 @@
 #   ./git2package.sh
 #
 # The script will download the source code from branch and
-# it will create the 2 packages plus their MD5 hashes.
+# it will create the 2 packages plus their MD5/SHA256 hashes and
+# CycloneDX SBOM files for the PHP and JS/TS dependency graphs.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public License,
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -49,6 +50,9 @@ PACKAGE_DIR="${BUILD_DIR}/package/${PMF_PACKAGE_FOLDER}"
 ARTIFACT_TAR="${REPO_ROOT}/${PMF_PACKAGE_FOLDER}.tar.gz"
 ARTIFACT_ZIP="${REPO_ROOT}/${PMF_PACKAGE_FOLDER}.zip"
 HASH_MANIFEST="${REPO_ROOT}/hashes-${PMF_VERSION}.json"
+SBOM_PHP="${REPO_ROOT}/phpMyFAQ-${PMF_VERSION}.php.sbom.cdx.json"
+SBOM_JS="${REPO_ROOT}/phpMyFAQ-${PMF_VERSION}.js.sbom.cdx.json"
+SBOM_COMBINED="${REPO_ROOT}/phpMyFAQ-${PMF_VERSION}.sbom.cdx.json"
 TCPDF_PATH="${CHECKOUT_DIR}/phpmyfaq/src/libs/tecnickcom/tcpdf"
 
 log() {
@@ -156,20 +160,29 @@ create_packages() {
     (cd "${PACKAGE_DIR}" && zip -rq "${ARTIFACT_ZIP}" phpmyfaq)
 }
 
+generate_sboms() {
+    log "Generating CycloneDX SBOMs"
+    VERSION="${PMF_VERSION}" "${SCRIPT_DIR}/generate-sbom.sh" "${CHECKOUT_DIR}" "${REPO_ROOT}"
+}
+
 write_checksums() {
     log "Creating checksum files"
-    ${MD5BIN} "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.md5"
-    ${MD5BIN} "${ARTIFACT_ZIP}" > "${ARTIFACT_ZIP}.md5"
 
+    SHA256_CMD=""
     if command -v sha256sum >/dev/null 2>&1; then
-        sha256sum "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.sha256"
-        sha256sum "${ARTIFACT_ZIP}" > "${ARTIFACT_ZIP}.sha256"
+        SHA256_CMD="sha256sum"
     elif command -v shasum >/dev/null 2>&1; then
-        shasum -a 256 "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.sha256"
-        shasum -a 256 "${ARTIFACT_ZIP}" > "${ARTIFACT_ZIP}.sha256"
+        SHA256_CMD="shasum -a 256"
     else
         warn "No SHA256 tool found; skipping .sha256 files"
     fi
+
+    for artifact in "${ARTIFACT_TAR}" "${ARTIFACT_ZIP}" "${SBOM_PHP}" "${SBOM_JS}" "${SBOM_COMBINED}"; do
+        ${MD5BIN} "${artifact}" > "${artifact}.md5"
+        if [ -n "${SHA256_CMD}" ]; then
+            ${SHA256_CMD} "${artifact}" > "${artifact}.sha256"
+        fi
+    done
 }
 
 main() {
@@ -183,8 +196,17 @@ main() {
     generate_hash_manifest
     stage_for_packaging
     create_packages
+    generate_sboms
     write_checksums
-    log "Packages created: ${ARTIFACT_TAR} and ${ARTIFACT_ZIP}"
+
+    log "Created release artifacts:"
+    printf ' - %s\n' \
+        "${ARTIFACT_TAR}" \
+        "${ARTIFACT_ZIP}" \
+        "${HASH_MANIFEST}" \
+        "${SBOM_PHP}" \
+        "${SBOM_JS}" \
+        "${SBOM_COMBINED}"
 }
 
 main

@@ -22,6 +22,7 @@
     "build": "vite build",
     "build:watch": "vite build --watch",
     "build:prod": "vite build",
+    "sbom": "./scripts/generate-sbom.sh",
     "eslint": "eslint .",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write .",

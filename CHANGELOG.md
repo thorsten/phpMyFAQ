@@ -8,6 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v4.1.7 - unreleased
 
+- added CycloneDX SBOM (Software Bill of Materials) generation to the release packaging (Thorsten)
 - updated third party dependencies (Thorsten)
 - fixed bugs (Thorsten)
 
