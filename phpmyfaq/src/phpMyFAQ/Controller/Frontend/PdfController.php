@@ -86,7 +86,7 @@ final class PdfController extends AbstractFrontController
 
         $this->faq->getFaq($faqId);
 
-        if (!$this->faq->isPublished()) {
+        if (!$this->faq->isFaqRecordVisible()) {
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 

@@ -144,6 +144,8 @@ final class FaqControllerTest extends TestCase
      */
     public function testShowReturnsNotFoundWhenFaqIsNotLinkedToCategory(): void
     {
+        $this->seedFaqRow(faqId: 1);
+
         $faq = new Faq($this->configuration);
         $faq->getFaq(1);
 
@@ -171,6 +173,70 @@ final class FaqControllerTest extends TestCase
         );
 
         self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
+    /**
+     * The detail page used to render a deactivated FAQ with an "inactive article" notice,
+     * which still disclosed its title, solution ID, author and update date. The check has
+     * to run before the category link lookup and before the visit is tracked.
+     *
+     * @throws \Exception
+     */
+    public function testShowReturnsNotFoundForInactiveFaq(): void
+    {
+        $this->seedFaqRow(faqId: 2, active: 'no');
+
+        $faq = new Faq($this->configuration);
+
+        $category = $this
+            ->getMockBuilder(Category::class)
+            ->setConstructorArgs([$this->configuration, [-1]])
+            ->onlyMethods(['categoryHasLinkToFaq'])
+            ->getMock();
+        $category->expects(self::never())->method('categoryHasLinkToFaq');
+
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            $faq,
+            $category,
+        );
+
+        $response = $controller->show(
+            new \Symfony\Component\HttpFoundation\Request(
+                [],
+                [],
+                ['categoryId' => '1', 'faqId' => '2', 'faqLang' => 'en', 'slug' => 'faq-title'],
+            ),
+        );
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
+    /**
+     * Seeds a guest-readable FAQ. Defaults describe a visible record.
+     */
+    private function seedFaqRow(int $faqId, string $active = 'yes'): void
+    {
+        $this->dbHandle->query(sprintf('DELETE FROM faqdata WHERE id = %d', $faqId));
+        $this->dbHandle->query(sprintf('DELETE FROM faqdata_user WHERE record_id = %d', $faqId));
+        $this->dbHandle->query(sprintf('DELETE FROM faqdata_group WHERE record_id = %d', $faqId));
+
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faqdata
+                (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content,
+                 author, email, comment, updated, date_start, date_end, notes)
+             VALUES
+                (%d, 'en', %d, 0, '%s', 0, 'keyword', 'Unreleased product name', 'Answer body',
+                 'Draft Author', 'draft@example.org', 'n', '20260101120000',
+                 '00000000000000', '99991231235959', 'internal notes')",
+            $faqId,
+            1000 + $faqId,
+            $active,
+        ));
+        $this->dbHandle->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)', $faqId));
+        $this->dbHandle->query(sprintf('INSERT INTO faqdata_group (record_id, group_id) VALUES (%d, -1)', $faqId));
     }
 
     /**

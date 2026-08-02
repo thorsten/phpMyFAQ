@@ -309,6 +309,14 @@ final class FaqController extends AbstractFrontController
         // Load FAQ data
         $faqId = $faqDisplayService->loadFaq($faqId, $solutionId);
 
+        // Do not disclose a FAQ the requester may not see. loadFaq() also returns
+        // non-permitted, inactive, not yet published and expired records, keeping their title,
+        // solution ID, author and update date intact and only replacing the answer with a
+        // placeholder. Checked before the visit is tracked so hidden records leave no trace.
+        if (!$faq->isFaqRecordVisible()) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
         // Track visit
         $this->faqSession->userTracking('article_view', $faqId);
         $faqVisits = new Visits($this->configuration);
