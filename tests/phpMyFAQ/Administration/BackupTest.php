@@ -14,6 +14,7 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use SodiumException;
 use stdClass;
+use ZipArchive;
 
 /**
  * Class BackupTest
@@ -723,5 +724,33 @@ class BackupTest extends TestCase
         $this->mockDb->method('getTableNames')->willReturn([]);
 
         $this->backup->export(BackupType::BACKUP_TYPE_CONTENT);
+    }
+
+    /**
+     * The content archive must never be created inside the document root, where it would be
+     * publicly downloadable without authentication.
+     *
+     * @throws \Exception
+     */
+    public function testCreateContentFolderBackupIsCreatedOutsideOfDocumentRoot(): void
+    {
+        if (!class_exists(ZipArchive::class)) {
+            $this->markTestSkipped('ZIP extension is not available.');
+        }
+
+        $zipFile = $this->backup->createContentFolderBackup();
+
+        try {
+            $this->assertFileExists($zipFile);
+            $this->assertStringStartsWith(realpath(sys_get_temp_dir()), realpath($zipFile));
+            $this->assertStringStartsNotWith(realpath(PMF_ROOT_DIR), realpath($zipFile));
+            $this->assertFileDoesNotExist(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'content.zip');
+
+            $zipArchive = new ZipArchive();
+            $this->assertTrue($zipArchive->open($zipFile));
+            $zipArchive->close();
+        } finally {
+            unlink($zipFile);
+        }
     }
 }

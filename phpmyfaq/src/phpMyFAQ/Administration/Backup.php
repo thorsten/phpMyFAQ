@@ -210,16 +210,21 @@ readonly class Backup
     }
 
     /**
-     * Creates a ZipArchive of the content-folder
+     * Creates a ZipArchive of the content-folder in a temporary, non-web-accessible location.
+     * The caller is responsible for removing the returned file.
      *
      * @throws \Exception
      */
     public function createContentFolderBackup(): string
     {
-        $zipFile = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'content.zip';
+        $zipFile = tempnam(directory: sys_get_temp_dir(), prefix: 'pmf_content_backup_');
+        if ($zipFile === false) {
+            throw new Exception(message: 'Error while creating temporary file for ZipArchive');
+        }
 
         $zipArchive = new ZipArchive();
-        if (!$zipArchive->open($zipFile, ZipArchive::CREATE)) {
+        if (true !== $zipArchive->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+            unlink($zipFile);
             throw new Exception(message: 'Error while creating ZipArchive');
         }
 

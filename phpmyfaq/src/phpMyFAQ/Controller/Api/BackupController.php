@@ -28,9 +28,11 @@ use phpMyFAQ\Enums\BackupType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use SodiumException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 final class BackupController extends AbstractController
@@ -107,22 +109,23 @@ final class BackupController extends AbstractController
 
         // Create ZipArchive of the content-folder
         if ($backupType === BackupType::BACKUP_TYPE_CONTENT) {
+            // The archive lives outside the document root and is removed once it has been streamed
             $backupFile = $backup->createContentFolderBackup();
-            $response = new Response(file_get_contents($backupFile));
 
-            $backupFileName = sprintf('content_%s.zip', date('dmY_H-i'));
+            try {
+                $backupFileName = sprintf('content_%s.zip', date('dmY_H-i'));
 
-            $disposition = HeaderUtils::makeDisposition(
-                HeaderUtils::DISPOSITION_ATTACHMENT,
-                urlencode($backupFileName),
-            );
+                $response = new BinaryFileResponse($backupFile);
+                $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $backupFileName);
+                $response->headers->set(key: 'Content-Type', values: 'application/zip');
+                $response->deleteFileAfterSend();
+                $response->setStatusCode(Response::HTTP_OK);
+            } catch (\Throwable $throwable) {
+                unlink($backupFile);
+                throw $throwable;
+            }
 
-            $response->headers->set(key: 'Content-Type', values: 'application/zip');
-            $response->headers->set(key: 'Content-Disposition', values: $disposition);
-            $response->setStatusCode(Response::HTTP_OK);
-            // Remove temporary ZipArchive
-            unlink($backupFile);
-            return $response->send();
+            return $response;
         }
 
         $tableNames = $backup->getBackupTableNames($backupType);
@@ -141,7 +144,7 @@ final class BackupController extends AbstractController
             $response->headers->set(key: 'Content-Type', values: 'application/octet-stream');
             $response->headers->set(key: 'Content-Disposition', values: $disposition);
             $response->setStatusCode(Response::HTTP_OK);
-            return $response->send();
+            return $response;
         } catch (SodiumException) {
             return new Response(
                 content: 'An error occurred while creating the backup.',
