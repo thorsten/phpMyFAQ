@@ -8,6 +8,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Strings\Mbstring;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -18,6 +19,7 @@ use Psr\Log\LoggerInterface;
 #[CoversClass(GlossaryRepository::class)]
 #[UsesClass(Database::class)]
 #[UsesClass(Strings::class)]
+#[UsesClass(Mbstring::class)]
 final class GlossaryRepositoryTest extends TestCase
 {
     public function testFetchAllReturnsEmptyArrayAndLogsErrorWhenQueryFails(): void
