@@ -168,4 +168,56 @@ class UtilsTest extends TestCase
         $this->assertStringNotContainsString("' onmouseover='", $result);
         $this->assertStringContainsString('&#039;', $result);
     }
+
+    public function testRedactSensitiveQueryStringRedactsResetToken(): void
+    {
+        $result = Utils::redactSensitiveQueryString(
+            'action=resetpw&u=1&exp=1785766994&sig=308f52b5546849fae74be8ab15164c8c',
+        );
+
+        $this->assertStringContainsString('action=resetpw', $result);
+        $this->assertStringNotContainsString('308f52b5546849fae74be8ab15164c8c', $result);
+        $this->assertStringNotContainsString('sig=308f52b5', $result);
+        $this->assertStringContainsString('sig=[redacted]', $result);
+        $this->assertStringContainsString('u=[redacted]', $result);
+        $this->assertStringContainsString('exp=[redacted]', $result);
+    }
+
+    public function testRedactSensitiveQueryStringIsCaseInsensitive(): void
+    {
+        $result = Utils::redactSensitiveQueryString('Sig=abcdef&TOKEN=secretvalue');
+
+        $this->assertStringNotContainsString('abcdef', $result);
+        $this->assertStringNotContainsString('secretvalue', $result);
+        $this->assertStringContainsString('Sig=[redacted]', $result);
+        $this->assertStringContainsString('TOKEN=[redacted]', $result);
+    }
+
+    public function testRedactSensitiveQueryStringKeepsHarmlessParameters(): void
+    {
+        $result = Utils::redactSensitiveQueryString('action=faq&cat=3&id=42');
+
+        $this->assertSame('action=faq&cat=3&id=42', $result);
+    }
+
+    public function testRedactSensitiveQueryStringHandlesEmptyString(): void
+    {
+        $this->assertSame('', Utils::redactSensitiveQueryString(''));
+    }
+
+    public function testRedactSensitiveUrlRedactsQueryButKeepsPath(): void
+    {
+        $result = Utils::redactSensitiveUrl('https://example.org/index.php?action=resetpw&sig=deadbeef');
+
+        $this->assertStringStartsWith('https://example.org/index.php?', $result);
+        $this->assertStringNotContainsString('deadbeef', $result);
+        $this->assertStringContainsString('sig=[redacted]', $result);
+    }
+
+    public function testRedactSensitiveUrlLeavesUrlWithoutQueryUnchanged(): void
+    {
+        $url = 'https://example.org/index.php';
+
+        $this->assertSame($url, Utils::redactSensitiveUrl($url));
+    }
 }

@@ -329,6 +329,78 @@ class Utils
     }
 
     /**
+     * List of query-string parameter names whose values must never be written
+     * to logs or the user tracking file, because they carry secrets that can be
+     * replayed (e.g. password reset signatures, CSRF tokens, session ids).
+     *
+     * @var string[]
+     */
+    private const SENSITIVE_QUERY_PARAMETERS = [
+        'sig',
+        'signature',
+        'token',
+        'csrf',
+        'secret',
+        'key',
+        'apikey',
+        'api_key',
+        'password',
+        'passwd',
+        'pass',
+        'sid',
+        'exp',
+        'u',
+    ];
+
+    /**
+     * Redacts the values of sensitive parameters from a URL query string so it
+     * can safely be persisted to logs or the tracking file. Unknown parameters
+     * are preserved unchanged. The parameter set is matched case-insensitively.
+     *
+     * The reset-password link, for instance, is emitted as
+     * "action=resetpw&u=1&exp=...&sig=..." — without redaction the signature
+     * would be written verbatim to the world-readable tracking file and could be
+     * replayed to take over the account.
+     *
+     * @param string $queryString Raw query string (without the leading "?").
+     */
+    public static function redactSensitiveQueryString(string $queryString): string
+    {
+        if ($queryString === '') {
+            return $queryString;
+        }
+
+        $sensitive = array_map('strtolower', self::SENSITIVE_QUERY_PARAMETERS);
+        $pairs = explode('&', $queryString);
+
+        foreach ($pairs as $index => $pair) {
+            $name = explode(separator: '=', string: $pair, limit: 2)[0];
+            if (in_array(strtolower(urldecode($name)), $sensitive, strict: true)) {
+                $pairs[$index] = $name . '=[redacted]';
+            }
+        }
+
+        return implode('&', $pairs);
+    }
+
+    /**
+     * Redacts sensitive query-string parameters from a full URL (such as an
+     * HTTP referer), leaving the rest of the URL intact.
+     *
+     * @param string $url URL that may contain a query string.
+     */
+    public static function redactSensitiveUrl(string $url): string
+    {
+        if ($url === '' || !str_contains($url, '?')) {
+            return $url;
+        }
+
+        [$base, $query] = explode(separator: '?', string: $url, limit: 2);
+
+        return $base . '?' . self::redactSensitiveQueryString($query);
+    }
+
+    /**
      * Formats a given number of Bytes to kB, MB, GB, and so on.
      */
     public static function formatBytes(float|int $bytes, int $precision = 2): string

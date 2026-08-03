@@ -31,6 +31,7 @@ use phpMyFAQ\Enums\SessionActionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Network;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -183,9 +184,17 @@ class Tracking
             . ';'
             . $remoteAddress
             . ';'
-            . str_replace(search: ';', replace: ',', subject: $this->request->server->get('QUERY_STRING') ?? '')
+            . str_replace(
+                search: ';',
+                replace: ',',
+                subject: Utils::redactSensitiveQueryString($this->request->server->get('QUERY_STRING') ?? ''),
+            )
             . ';'
-            . str_replace(search: ';', replace: ',', subject: $this->request->server->get('HTTP_REFERER') ?? '')
+            . str_replace(
+                search: ';',
+                replace: ',',
+                subject: Utils::redactSensitiveUrl($this->request->server->get('HTTP_REFERER') ?? ''),
+            )
             . ';'
             . str_replace(
                 search: ';',

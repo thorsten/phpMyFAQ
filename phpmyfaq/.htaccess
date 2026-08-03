@@ -116,6 +116,8 @@ DirectoryIndex index.php
     RewriteBase /
     # Block zip files in content directory
     RewriteRule ^content/.*\.zip$ - [F,L]
+    # Block direct access to internal data files (user tracking logs, backups, ...)
+    RewriteRule ^content/core/data(/|$) - [F,L]
     # Exclude assets from being handled by Symfony Router
     RewriteRule ^(admin/assets)($|/) - [L]
     # Error pages

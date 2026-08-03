@@ -25,6 +25,7 @@ use phpMyFAQ\Enums\SessionActionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Network;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -209,9 +210,9 @@ class UserSession
                 . ';'
                 . $remoteAddress
                 . ';'
-                . str_replace(';', ',', $request->server->get('QUERY_STRING') ?? '')
+                . str_replace(';', ',', Utils::redactSensitiveQueryString($request->server->get('QUERY_STRING') ?? ''))
                 . ';'
-                . str_replace(';', ',', $request->server->get('HTTP_REFERER') ?? '')
+                . str_replace(';', ',', Utils::redactSensitiveUrl($request->server->get('HTTP_REFERER') ?? ''))
                 . ';'
                 . str_replace(';', ',', urldecode((string) $request->server->get('HTTP_USER_AGENT')))
                 . ';'
