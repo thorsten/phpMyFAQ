@@ -354,9 +354,9 @@ stage_github_release() {
             "${RELEASE_DIR}/SHA256SUMS.asc" \
             "${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip.asc" \
             "${RELEASE_DIR}/phpMyFAQ-${VERSION}.tar.gz.asc" \
-            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.php.sbom.json" \
-            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.js.sbom.json" \
-            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.sbom.json"
+            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.php.sbom.cdx.json" \
+            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.js.sbom.cdx.json" \
+            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.sbom.cdx.json"
 
         if [ "${DRY_RUN}" -eq 1 ]; then
             log 'github-release: dry-run — skipped release creation'
@@ -381,9 +381,9 @@ stage_github_release() {
         'SHA256SUMS.asc' \
         "phpMyFAQ-${VERSION}.zip.asc" \
         "phpMyFAQ-${VERSION}.tar.gz.asc" \
-        "phpMyFAQ-${VERSION}.php.sbom.json" \
-        "phpMyFAQ-${VERSION}.js.sbom.json" \
-        "phpMyFAQ-${VERSION}.sbom.json"
+        "phpMyFAQ-${VERSION}.php.sbom.cdx.json" \
+        "phpMyFAQ-${VERSION}.js.sbom.cdx.json" \
+        "phpMyFAQ-${VERSION}.sbom.cdx.json"
     do
         if printf '%s\n' "${existing_assets}" | grep -Fxq "${asset_name}"; then
             continue

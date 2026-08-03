@@ -64,9 +64,9 @@ ARTIFACT_TAR="${RELEASE_DIR}/phpMyFAQ-${VERSION}.tar.gz"
 ARTIFACT_ZIP="${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip"
 HASH_MANIFEST="${RELEASE_DIR}/hashes-${VERSION}.json"
 ARTIFACT_MANIFEST="${RELEASE_DIR}/ARTIFACTS.txt"
-SBOM_PHP="${RELEASE_DIR}/phpMyFAQ-${VERSION}.php.sbom.json"
-SBOM_JS="${RELEASE_DIR}/phpMyFAQ-${VERSION}.js.sbom.json"
-SBOM_COMBINED="${RELEASE_DIR}/phpMyFAQ-${VERSION}.sbom.json"
+SBOM_PHP="${RELEASE_DIR}/phpMyFAQ-${VERSION}.php.sbom.cdx.json"
+SBOM_JS="${RELEASE_DIR}/phpMyFAQ-${VERSION}.js.sbom.cdx.json"
+SBOM_COMBINED="${RELEASE_DIR}/phpMyFAQ-${VERSION}.sbom.cdx.json"
 TCPDF_PATH="${CHECKOUT_DIR}/phpmyfaq/src/libs/tecnickcom/tcpdf"
 
 log() {

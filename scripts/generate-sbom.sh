@@ -16,9 +16,9 @@
 #
 # The resulting files follow the CycloneDX 1.5 JSON schema and are named
 # after the release version:
-#   <output-dir>/phpMyFAQ-<version>-php.sbom.json      (Composer only)
-#   <output-dir>/phpMyFAQ-<version>-js.sbom.json       (pnpm only)
-#   <output-dir>/phpMyFAQ-<version>.sbom.json          (both ecosystems)
+#   <output-dir>/phpMyFAQ-<version>.php.sbom.cdx.json  (Composer only)
+#   <output-dir>/phpMyFAQ-<version>.js.sbom.cdx.json   (pnpm only)
+#   <output-dir>/phpMyFAQ-<version>.sbom.cdx.json      (both ecosystems)
 #
 # Requires pnpm (used to run @cyclonedx/cdxgen via `pnpm dlx`) and php
 # (used to resolve the project version).
@@ -65,9 +65,9 @@ SOURCE_DIR=$(CDPATH= cd -- "${SOURCE_DIR}" && pwd)
 
 OUTPUT_DIR="${2:-${REPO_ROOT}/build/release/${VERSION}}"
 
-SBOM_PHP="${OUTPUT_DIR}/phpMyFAQ-${VERSION}.php.sbom.json"
-SBOM_JS="${OUTPUT_DIR}/phpMyFAQ-${VERSION}.js.sbom.json"
-SBOM_COMBINED="${OUTPUT_DIR}/phpMyFAQ-${VERSION}.sbom.json"
+SBOM_PHP="${OUTPUT_DIR}/phpMyFAQ-${VERSION}.php.sbom.cdx.json"
+SBOM_JS="${OUTPUT_DIR}/phpMyFAQ-${VERSION}.js.sbom.cdx.json"
+SBOM_COMBINED="${OUTPUT_DIR}/phpMyFAQ-${VERSION}.sbom.cdx.json"
 
 log() {
     printf '\n[%s] %s\n' "$(date '+%H:%M:%S')" "$*"

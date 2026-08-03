@@ -39,9 +39,9 @@ The signing phase adds these files to the same directory:
 - `SHA256SUMS.asc`
 - `phpMyFAQ-<version>.zip.asc`
 - `phpMyFAQ-<version>.tar.gz.asc`
-- `phpMyFAQ-<version>.php.sbom.json.asc`
-- `phpMyFAQ-<version>.js.sbom.json.asc`
-- `phpMyFAQ-<version>.sbom.json.asc`
+- `phpMyFAQ-<version>.php.sbom.cdx.json.asc`
+- `phpMyFAQ-<version>.js.sbom.cdx.json.asc`
+- `phpMyFAQ-<version>.sbom.cdx.json.asc`
 
 ## 13.4 Build helper
 
@@ -57,9 +57,9 @@ This creates:
 build/release/4.2.0/phpMyFAQ-4.2.0.zip
 build/release/4.2.0/phpMyFAQ-4.2.0.tar.gz
 build/release/4.2.0/hashes-4.2.0.json
-build/release/4.2.0/phpMyFAQ-4.2.0.php.sbom.json
-build/release/4.2.0/phpMyFAQ-4.2.0.js.sbom.json
-build/release/4.2.0/phpMyFAQ-4.2.0.sbom.json
+build/release/4.2.0/phpMyFAQ-4.2.0.php.sbom.cdx.json
+build/release/4.2.0/phpMyFAQ-4.2.0.js.sbom.cdx.json
+build/release/4.2.0/phpMyFAQ-4.2.0.sbom.cdx.json
 build/release/4.2.0/ARTIFACTS.txt
 ```
 
@@ -82,9 +82,9 @@ The signing helper creates:
 - `SHA256SUMS.asc`
 - `phpMyFAQ-<version>.zip.asc`
 - `phpMyFAQ-<version>.tar.gz.asc`
-- `phpMyFAQ-<version>.php.sbom.json.asc`
-- `phpMyFAQ-<version>.js.sbom.json.asc`
-- `phpMyFAQ-<version>.sbom.json.asc`
+- `phpMyFAQ-<version>.php.sbom.cdx.json.asc`
+- `phpMyFAQ-<version>.js.sbom.cdx.json.asc`
+- `phpMyFAQ-<version>.sbom.cdx.json.asc`
 
 The `SHA256SUMS` manifest covers both archives and all three SBOM files, and
 detached signatures are produced for each of them.
@@ -150,9 +150,9 @@ After downloading a release, users should have these files:
 
 - `phpMyFAQ-<version>.zip`
 - `phpMyFAQ-<version>.tar.gz`
-- `phpMyFAQ-<version>.php.sbom.json`
-- `phpMyFAQ-<version>.js.sbom.json`
-- `phpMyFAQ-<version>.sbom.json`
+- `phpMyFAQ-<version>.php.sbom.cdx.json`
+- `phpMyFAQ-<version>.js.sbom.cdx.json`
+- `phpMyFAQ-<version>.sbom.cdx.json`
 - `SHA256SUMS`
 - `SHA256SUMS.asc`
 - `phpmyfaq-release-public-key.asc`
@@ -180,9 +180,9 @@ Optional detached signature verification:
 ```bash
 gpg --verify phpMyFAQ-<version>.zip.asc phpMyFAQ-<version>.zip
 gpg --verify phpMyFAQ-<version>.tar.gz.asc phpMyFAQ-<version>.tar.gz
-gpg --verify phpMyFAQ-<version>.php.sbom.json.asc phpMyFAQ-<version>.php.sbom.json
-gpg --verify phpMyFAQ-<version>.js.sbom.json.asc phpMyFAQ-<version>.js.sbom.json
-gpg --verify phpMyFAQ-<version>.sbom.json.asc phpMyFAQ-<version>.sbom.json
+gpg --verify phpMyFAQ-<version>.php.sbom.cdx.json.asc phpMyFAQ-<version>.php.sbom.cdx.json
+gpg --verify phpMyFAQ-<version>.js.sbom.cdx.json.asc phpMyFAQ-<version>.js.sbom.cdx.json
+gpg --verify phpMyFAQ-<version>.sbom.cdx.json.asc phpMyFAQ-<version>.sbom.cdx.json
 ```
 
 ## 13.10 Fingerprint publication
@@ -228,9 +228,9 @@ Publish these files with each release:
 
 - `phpMyFAQ-<version>.zip`
 - `phpMyFAQ-<version>.tar.gz`
-- `phpMyFAQ-<version>.php.sbom.json`
-- `phpMyFAQ-<version>.js.sbom.json`
-- `phpMyFAQ-<version>.sbom.json`
+- `phpMyFAQ-<version>.php.sbom.cdx.json`
+- `phpMyFAQ-<version>.js.sbom.cdx.json`
+- `phpMyFAQ-<version>.sbom.cdx.json`
 - `SHA256SUMS`
 - `SHA256SUMS.asc`
 - optional detached signatures for each archive and each SBOM file
@@ -247,9 +247,9 @@ Each release ships a [CycloneDX](https://cyclonedx.org/) 1.5 Software Bill of
 Materials that enumerates every pinned dependency of the packaged code. Three
 files are produced per release:
 
-- `phpMyFAQ-<version>.php.sbom.json` — Composer (PHP) dependency graph only.
-- `phpMyFAQ-<version>.js.sbom.json` — pnpm (JavaScript/TypeScript) dependency graph only.
-- `phpMyFAQ-<version>.sbom.json` — combined PHP + JavaScript/TypeScript graph.
+- `phpMyFAQ-<version>.php.sbom.cdx.json` — Composer (PHP) dependency graph only.
+- `phpMyFAQ-<version>.js.sbom.cdx.json` — pnpm (JavaScript/TypeScript) dependency graph only.
+- `phpMyFAQ-<version>.sbom.cdx.json` — combined PHP + JavaScript/TypeScript graph.
 
 The SBOMs are included in `SHA256SUMS` and each one gets its own detached GPG
 signature during the signing phase, so downstream consumers can verify the
