@@ -54,9 +54,8 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - TypeScript code with coverage: pnpm test:coverage
 - TypeScript code in watch mode: pnpm test:watch
 - TypeScript linting: pnpm oxlint
-- TypeScript code formatting check: pnpm oxfmt
-- TypeScript code formatting auto-fix: pnpm oxfmt:fix
-- JSON/YAML formatting: pnpm lint (check) / pnpm lint:fix (auto-fix, prettier)
+- TypeScript/JSON/YAML/HTML code formatting check: pnpm oxfmt
+- TypeScript/JSON/YAML/HTML code formatting auto-fix: pnpm oxfmt:fix
 - SCSS linting: pnpm stylelint
 - SCSS lint auto-fix: pnpm stylelint:fix
 - TypeScript errors have to be fixed before committing code.
@@ -102,7 +101,7 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 When implementing changes:
 
 1. Read existing code before modifying it.
-2. Run `composer lint` / `pnpm lint` after PHP/TypeScript changes.
+2. Run `composer lint` / `pnpm oxlint` after PHP/TypeScript changes.
 3. Run `composer test` / `pnpm test` — all tests must pass before finishing.
 4. Never commit with `--no-verify`.
 5. Clear route cache (`rm -rf phpmyfaq/cache/routes`) after adding or modifying routes.

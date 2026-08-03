@@ -40,14 +40,11 @@
     "sbom": "./scripts/generate-sbom.sh",
     "docs:build": "mkdocs build --strict",
     "oxlint": "oxlint",
-    "oxfmt": "oxfmt --check --ignore-path .oxfmtignore",
-    "oxfmt:fix": "oxfmt --ignore-path .oxfmtignore",
-    "lint": "prettier --check .",
-    "lint:fix": "prettier --write .",
+    "oxfmt": "oxfmt --check",
+    "oxfmt:fix": "oxfmt",
     "stylelint": "stylelint \"phpmyfaq/**/*.scss\"",
     "stylelint:fix": "stylelint \"phpmyfaq/**/*.scss\" --fix",
     "prepare": "husky",
-    "pretty-quick": "pretty-quick",
     "tsc": "tsc --noEmit",
     "test": "vitest --run",
     "test:watch": "vitest",
@@ -98,8 +95,6 @@
     "oxfmt": "0.61.0",
     "oxlint": "1.76.0",
     "postcss": "8.5.25",
-    "prettier": "3.9.6",
-    "pretty-quick": "4.2.2",
     "sass": "1.102.0",
     "stylelint": "^17.14.1",
     "stylelint-config-standard-scss": "^17.0.0",
@@ -111,12 +106,6 @@
     "vite-plugin-static-copy": "4.1.1",
     "vitest": "4.1.10",
     "vitest-fetch-mock": "0.4.5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "composer lint && composer validate && composer test && pnpm pretty-quick --staged && pnpm test",
-      "pre-push": "composer lint && composer validate && composer test && pnpm pretty-quick --staged && pnpm test"
-    }
   },
   "packageManager": "pnpm@8.15.5"
 }
