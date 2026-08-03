@@ -216,6 +216,8 @@ class UserSession
                 $this->configuration->getDb()->query($query);
             }
 
+            $redactor = new TrackingDataRedactor();
+
             $data =
                 (string) $this->getCurrentSessionId()
                 . ';'
@@ -228,13 +230,13 @@ class UserSession
                 . str_replace(
                     search: ';',
                     replace: ',',
-                    subject: (string) ($request->server->get('QUERY_STRING') ?? ''),
+                    subject: $redactor->redactQueryString((string) ($request->server->get('QUERY_STRING') ?? '')),
                 )
                 . ';'
                 . str_replace(
                     search: ';',
                     replace: ',',
-                    subject: (string) ($request->server->get('HTTP_REFERER') ?? ''),
+                    subject: $redactor->redactUrl((string) ($request->server->get('HTTP_REFERER') ?? '')),
                 )
                 . ';'
                 . str_replace(

@@ -116,6 +116,11 @@ DirectoryIndex index.php
     RewriteBase /
     # Block zip files in content directory
     RewriteRule ^content/.*\.zip$ - [F,L]
+    # Block direct access to server-side internals under content/core/
+    # (user tracking logs, configuration with DB credentials, logs, caches).
+    # The tracking logs may contain sensitive query strings such as password
+    # reset signatures, so they must never be served to HTTP clients.
+    RewriteRule ^content/core/ - [F,L]
     # Block direct access to attachments: downloads must go through the
     # permission-checked /attachment/{id} controller
     RewriteRule ^content/user/attachments/ - [F,L]

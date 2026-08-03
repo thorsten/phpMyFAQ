@@ -184,6 +184,8 @@ class Tracking
 
     private function writeTrackingData(string $action, int|string|null $data, string $remoteAddress): void
     {
+        $redactor = new TrackingDataRedactor();
+
         $data =
             (string) $this->userSession->getCurrentSessionId()
             . ';'
@@ -196,13 +198,13 @@ class Tracking
             . str_replace(
                 search: ';',
                 replace: ',',
-                subject: (string) ($this->request->server->get('QUERY_STRING') ?? ''),
+                subject: $redactor->redactQueryString((string) ($this->request->server->get('QUERY_STRING') ?? '')),
             )
             . ';'
             . str_replace(
                 search: ';',
                 replace: ',',
-                subject: (string) ($this->request->server->get('HTTP_REFERER') ?? ''),
+                subject: $redactor->redactUrl((string) ($this->request->server->get('HTTP_REFERER') ?? '')),
             )
             . ';'
             . str_replace(

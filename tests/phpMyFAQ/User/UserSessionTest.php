@@ -231,6 +231,55 @@ class UserSessionTest extends TestCase
         $this->assertStringContainsString('55;view;99;203.0.113.0;', $contents);
     }
 
+    public function testUserTrackingRedactsPasswordResetSignatureFromLog(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('nextId')->willReturn(55);
+        $db->expects($this->once())->method('query')->with($this->stringContains('INSERT INTO'))->willReturn(true);
+
+        $configuration = $this->createConfiguration($db, [
+            'main.enableUserTracking' => true,
+            'main.botIgnoreList' => 'crawler',
+        ]);
+        $signature = '308f52b5546849fae74be8ab15164c8c3645b849b825e03b595f67fc7fbf2ac6';
+        $request = Request::create(
+            '/user/reset-password?u=1&exp=1785766994&sig=' . $signature,
+            'GET',
+            [],
+            [],
+            [],
+            [
+                'REMOTE_ADDR' => '203.0.113.5',
+                'HTTP_REFERER' => 'https://example.org/user/reset-password?sig=' . $signature,
+                'HTTP_USER_AGENT' => 'Mozilla/5.0',
+                'REQUEST_TIME' => 2000,
+                'SCRIPT_NAME' => '/index.php',
+            ],
+        );
+        $network = $this
+            ->getMockBuilder(Network::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isBanned'])
+            ->getMock();
+        $network->method('isBanned')->willReturn(false);
+
+        $session = new UserSession(
+            $configuration,
+            $request,
+            static fn(Configuration $configuration): Network => $network,
+            null,
+            $this->trackingDirectory,
+        );
+
+        $session->userTracking('reset_password', 0);
+
+        $files = glob($this->trackingDirectory . '/tracking*');
+        $this->assertCount(1, $files);
+        $contents = file_get_contents($files[0]);
+        $this->assertStringNotContainsString($signature, $contents);
+        $this->assertStringContainsString('u=1&exp=1785766994&sig=[redacted]', $contents);
+    }
+
     public function testUserTrackingResetsSessionIdForOldSessionAction(): void
     {
         $db = $this->createMock(DatabaseDriver::class);
