@@ -54,7 +54,7 @@ fi
   echo "error_reporting = $PHP_ERROR_REPORTING"
   echo "date.timezone = $PMF_TIMEZONE"
   echo "memory_limit = $PMF_MEMORY_LIMIT"
-  echo "file_upload = $PMF_ENABLE_UPLOADS"
+  echo "file_uploads = $PMF_ENABLE_UPLOADS"
   echo "post_max_size = $PHP_POST_MAX_SIZE"
   echo "upload_max_filesize = $PHP_UPLOAD_MAX_FILESIZE"
 } | tee $PHP_INI_DIR/conf.d/php.ini
