@@ -26,6 +26,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Setup\Update;
+use phpMyFAQ\Setup\UpdateToken;
 use phpMyFAQ\System;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +35,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class SetupController extends AbstractController
 {
+    public const string TOKEN_HEADER = 'x-pmf-update-token';
+
     /**
      * @param ?Closure(System, \phpMyFAQ\Configuration): Update $updateFactory
      */
@@ -43,10 +46,23 @@ final class SetupController extends AbstractController
         parent::__construct();
     }
 
+    /**
+     * Setup endpoints cannot rely on the regular login, so we override the security
+     * check from AbstractController. Every endpoint checks for itself that the caller
+     * is allowed to run the update, see isAuthorizedForUpdate().
+     */
+    protected function isSecured(): void
+    {
+        // No-op: authorization is handled per endpoint by isAuthorizedForUpdate()
+    }
+
     #[Route(path: 'setup/check', name: 'api.private.setup.check', methods: ['POST'])]
     public function check(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $unauthorized = $this->denyUnauthorizedRequest($request);
+        if ($unauthorized instanceof JsonResponse) {
+            return $unauthorized;
+        }
 
         if (trim($request->getContent()) === '') {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
@@ -83,13 +99,22 @@ final class SetupController extends AbstractController
     #[Route(path: 'setup/backup', name: 'api.private.setup.backup', methods: ['POST'])]
     public function backup(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+        $unauthorized = $this->denyUnauthorizedRequest($request);
+        if ($unauthorized instanceof JsonResponse) {
+            return $unauthorized;
+        }
 
         if (trim($request->getContent()) === '') {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
 
         $update = $this->createUpdate($this->configuration->getVersion());
+
+        if (!$update->checkMaintenanceMode()) {
+            return $this->json([
+                'message' => 'Maintenance mode is not enabled. Please enable it first.',
+            ], Response::HTTP_CONFLICT);
+        }
 
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
@@ -104,13 +129,21 @@ final class SetupController extends AbstractController
             return $this->json(['message' => $exception->getMessage()], Response::HTTP_BAD_GATEWAY);
         }
 
-        return $this->json(['message' => 'Backup successful', 'backupFile' => $pathToBackup], Response::HTTP_OK);
+        // The archive contains the database credentials, so we only report its name
+        // and never a URL that could be used to download it.
+        return $this->json([
+            'message' => 'Backup successful',
+            'backupFile' => basename($pathToBackup),
+        ], Response::HTTP_OK);
     }
 
     #[Route(path: 'setup/update-database', name: 'api.private.setup.update-database', methods: ['POST'])]
     public function updateDatabase(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+        $unauthorized = $this->denyUnauthorizedRequest($request);
+        if ($unauthorized instanceof JsonResponse) {
+            return $unauthorized;
+        }
 
         if (trim($request->getContent()) === '') {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
@@ -120,9 +153,17 @@ final class SetupController extends AbstractController
 
         $update = $this->createUpdate($installedVersion);
 
+        if (!$update->checkMaintenanceMode()) {
+            return $this->json([
+                'message' => 'Maintenance mode is not enabled. Please enable it first.',
+            ], Response::HTTP_CONFLICT);
+        }
+
         try {
             if ($update->applyUpdates()) {
                 $this->configuration->set(key: 'main.maintenanceMode', value: 'false');
+                // The update is done, so the token must not authorize another run
+                $this->getUpdateToken()->delete();
                 return new JsonResponse(['success' => 'Database successfully updated.'], Response::HTTP_OK);
             }
 
@@ -145,5 +186,64 @@ final class SetupController extends AbstractController
         $update->version = $version;
 
         return $update;
+    }
+
+    /**
+     * Returns a 401 response if the caller is not allowed to run the update, otherwise null.
+     */
+    private function denyUnauthorizedRequest(Request $request): ?JsonResponse
+    {
+        if ($this->isAuthorizedForUpdate($request)) {
+            return null;
+        }
+
+        return $this->json([
+            'message' =>
+                'You are not allowed to run the update. Please log in as an administrator or provide the '
+                    . 'update token from '
+                    . UpdateToken::TOKEN_FILENAME
+                    . ' in the configuration directory.',
+        ], Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * The update may run either for a logged-in administrator, or for someone who can
+     * prove access to the file system of the server by sending the update token. The
+     * second way is needed because the login can be broken until the migration has run.
+     */
+    private function isAuthorizedForUpdate(Request $request): bool
+    {
+        if ($this->isAuthenticatedAdministrator()) {
+            return true;
+        }
+
+        return $this->getUpdateToken()->isValid($request->headers->get(self::TOKEN_HEADER));
+    }
+
+    private function isAuthenticatedAdministrator(): bool
+    {
+        try {
+            if (!$this->currentUser->isLoggedIn()) {
+                return false;
+            }
+
+            if ($this->currentUser->isSuperAdmin()) {
+                return true;
+            }
+
+            return $this->currentUser->perm->hasPermission(
+                $this->currentUser->getUserId(),
+                PermissionType::CONFIGURATION_EDIT->value,
+            );
+        } catch (\Throwable) {
+            // A database that is not migrated yet can break the permission lookup,
+            // in that case the update token is the only way in.
+            return false;
+        }
+    }
+
+    private function getUpdateToken(): UpdateToken
+    {
+        return new UpdateToken(PMF_CONFIG_DIR);
     }
 }

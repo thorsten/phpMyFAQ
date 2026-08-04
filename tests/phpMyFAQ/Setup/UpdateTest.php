@@ -77,7 +77,12 @@ class UpdateTest extends TestCase
             }
         }
 
-        $this->update->createConfigBackup($configPath);
+        $pathToBackup = $this->update->createConfigBackup($configPath);
+
+        // The archive contains the database credentials, so the caller must not get a
+        // URL that could be handed out as a download link
+        $this->assertSame($configPath, dirname($pathToBackup), 'Backup path should be a file system path');
+        $this->assertStringStartsNotWith('http', $pathToBackup);
 
         // Find a backup file with a pattern: phpmyfaq-config-backup.YYYY-MM-DD.XXXXXXXX.zip
         $pattern = PMF_TEST_DIR . '/content/core/config/phpmyfaq-config-backup.' . date(format: 'Y-m-d') . '.*.zip';

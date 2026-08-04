@@ -7,6 +7,7 @@ namespace phpMyFAQ\Controller\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Frontend\Api\SetupController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Setup\UpdateToken;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -14,13 +15,22 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class SetupControllerTest
+ *
+ * The setup endpoints run without a login, so they have to reject every caller that
+ * neither has an administrator session nor knows the update token from the file system.
+ */
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(SetupController::class)]
 #[UsesNamespace('phpMyFAQ')]
 class SetupControllerTest extends TestCase
 {
     private Configuration $configuration;
+
+    private UpdateToken $updateToken;
 
     /**
      * @throws Exception
@@ -38,85 +48,73 @@ class SetupControllerTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->configuration = Configuration::getConfigurationInstance();
+
+        $this->updateToken = new UpdateToken(PMF_CONFIG_DIR);
+        $this->updateToken->delete();
     }
 
-    public function testCheckRequiresAuthentication(): void
+    protected function tearDown(): void
     {
-        $request = new Request([], [], [], [], [], [], '4.0.0');
+        $this->updateToken->delete();
 
-        $controller = new SetupController();
-
-        $this->expectException(\Exception::class);
-        $controller->check($request);
+        parent::tearDown();
     }
 
-    public function testCheckWithEmptyVersion(): void
+    public function testCheckIsDeniedWithoutAuthorization(): void
     {
-        $request = new Request([], [], [], [], [], [], '');
+        $response = (new SetupController())->check($this->createRequest());
 
-        $controller = new SetupController();
-
-        $this->expectException(\Exception::class);
-        $controller->check($request);
+        $this->assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        $this->assertStringContainsString('not allowed to run the update', $response->getContent());
     }
 
-    public function testCheckReturnsJsonResponse(): void
+    public function testBackupIsDeniedWithoutAuthorization(): void
     {
-        $request = new Request([], [], [], [], [], [], '4.0.0');
+        $response = (new SetupController())->backup($this->createRequest());
 
-        $controller = new SetupController();
-
-        $this->expectException(\Exception::class);
-        $controller->check($request);
+        $this->assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
-    public function testBackupRequiresAuthentication(): void
+    public function testUpdateDatabaseIsDeniedWithoutAuthorization(): void
     {
-        $request = new Request([], [], [], [], [], [], '4.0.0');
+        $response = (new SetupController())->updateDatabase($this->createRequest());
 
-        $controller = new SetupController();
-
-        $this->expectException(\Exception::class);
-        $controller->backup($request);
+        $this->assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
-    public function testBackupWithEmptyVersion(): void
+    public function testUpdateDatabaseIsDeniedWithAnInvalidUpdateToken(): void
     {
-        $request = new Request([], [], [], [], [], [], '');
+        $this->updateToken->getOrCreate();
 
-        $controller = new SetupController();
+        $response = (new SetupController())->updateDatabase($this->createRequest('an-invalid-token'));
 
-        $this->expectException(\Exception::class);
-        $controller->backup($request);
+        $this->assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
-    public function testUpdateDatabaseRequiresAuthentication(): void
+    /**
+     * With a valid token the request passes the authorization and is stopped by the
+     * next gate: the update only runs while the FAQ is in maintenance mode.
+     *
+     * @throws Exception
+     */
+    public function testAValidUpdateTokenPassesTheAuthorization(): void
     {
-        $request = new Request([], [], [], [], [], [], '4.0.0');
+        $token = $this->updateToken->getOrCreate();
 
-        $controller = new SetupController();
+        $response = (new SetupController())->updateDatabase($this->createRequest($token));
 
-        $this->expectException(\Exception::class);
-        $controller->updateDatabase($request);
+        $this->assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        $this->assertStringContainsString('Maintenance mode is not enabled', $response->getContent());
     }
 
-    public function testUpdateDatabaseWithEmptyVersion(): void
+    private function createRequest(?string $token = null): Request
     {
-        $request = new Request([], [], [], [], [], [], '');
+        $request = new Request(content: '4.1.6');
 
-        $controller = new SetupController();
+        if (is_string($token)) {
+            $request->headers->set(SetupController::TOKEN_HEADER, $token);
+        }
 
-        $this->expectException(\Exception::class);
-        $controller->updateDatabase($request);
-    }
-
-    public function testUpdateDatabaseReturnsJsonResponse(): void
-    {
-        $request = new Request([], [], [], [], [], [], '4.0.0');
-
-        $controller = new SetupController();
-
-        $this->expectException(\Exception::class);
-        $controller->updateDatabase($request);
+        return $request;
     }
 }

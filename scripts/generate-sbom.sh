@@ -94,13 +94,21 @@ check_prerequisites() {
 }
 
 run_cdxgen() {
-    # Usage: run_cdxgen <project-type> <output-file>
-    # <project-type> may be a single type or a comma-separated list,
-    # which cdxgen interprets as a combined multi-ecosystem scan.
-    _type="$1"
+    # Usage: run_cdxgen <project-types> <output-file>
+    # <project-types> may be a single type or a comma-separated list.
+    # cdxgen needs one --type flag per ecosystem for a combined scan;
+    # a comma-separated value silently drops all but one ecosystem.
+    _types="$1"
     _out="$2"
+    set --
+    _old_ifs="$IFS"
+    IFS=','
+    for _type in $_types; do
+        set -- "$@" --type "$_type"
+    done
+    IFS="$_old_ifs"
     pnpm dlx "@cyclonedx/cdxgen@${CDXGEN_VERSION}" \
-        --type "${_type}" \
+        "$@" \
         --spec-version "${CDXGEN_SPEC_VERSION}" \
         --output "${_out}" \
         --project-name "phpMyFAQ-${VERSION}" \

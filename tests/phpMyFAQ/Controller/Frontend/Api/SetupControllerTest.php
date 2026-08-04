@@ -9,6 +9,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\System;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,12 +22,12 @@ final class SetupControllerTest extends ApiControllerTestCase
     private function createAuthenticatedController(): SetupController
     {
         $controller = new SetupController();
-        $this->injectControllerState($controller, $this->createAuthenticatedUserMock());
+        $this->injectControllerState($controller, $this->createPrivilegedUser());
 
         return $controller;
     }
 
-    private function createPrivilegedUser(): object
+    private function createPrivilegedUser(): CurrentUser
     {
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
@@ -94,7 +95,7 @@ final class SetupControllerTest extends ApiControllerTestCase
 
             public function checkPreUpgrade(string $databaseType): void {}
         });
-        $this->injectControllerState($controller, $this->createAuthenticatedUserMock());
+        $this->injectControllerState($controller, $this->createPrivilegedUser());
 
         $response = $controller->check(new Request([], [], [], [], [], [], '4.1.0'));
 
@@ -126,7 +127,7 @@ final class SetupControllerTest extends ApiControllerTestCase
                 throw new \phpMyFAQ\Core\Exception('Sorry, but the database Unsupported is not supported!');
             }
         });
-        $this->injectControllerState($controller, $this->createAuthenticatedUserMock());
+        $this->injectControllerState($controller, $this->createPrivilegedUser());
 
         $response = $controller->check(new Request([], [], [], [], [], [], '4.1.0'));
 
@@ -164,9 +165,14 @@ final class SetupControllerTest extends ApiControllerTestCase
             $system,
             $configuration,
         ) extends Update {
+            public function checkMaintenanceMode(): bool
+            {
+                return true;
+            }
+
             public function createConfigBackup(string $configDir): string
             {
-                return 'https://localhost/content/core/config/config-backup-test.zip';
+                return '/var/www/content/core/config/config-backup-test.zip';
             }
         });
         $currentUser = $this->createPrivilegedUser();
@@ -176,13 +182,16 @@ final class SetupControllerTest extends ApiControllerTestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertJsonStringEqualsJsonString(
-            '{"message":"Backup successful","backupFile":"https://localhost/content/core/config/config-backup-test.zip"}',
+            '{"message":"Backup successful","backupFile":"config-backup-test.zip"}',
             (string) $response->getContent(),
         );
     }
 
     public function testUpdateDatabaseReturnsSuccessWhenUpdatesApplyCleanly(): void
     {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.maintenanceMode' => '1']);
+
         $controller = new SetupController();
         $currentUser = $this->createPrivilegedUser();
         $this->injectControllerState($controller, $currentUser);
@@ -202,6 +211,11 @@ final class SetupControllerTest extends ApiControllerTestCase
             $system,
             $configuration,
         ) extends Update {
+            public function checkMaintenanceMode(): bool
+            {
+                return true;
+            }
+
             public function createConfigBackup(string $configDir): string
             {
                 throw new \phpMyFAQ\Core\Exception('Cannot create config backup file.');
@@ -224,6 +238,11 @@ final class SetupControllerTest extends ApiControllerTestCase
             $system,
             $configuration,
         ) extends Update {
+            public function checkMaintenanceMode(): bool
+            {
+                return true;
+            }
+
             public function applyUpdates(): bool
             {
                 return false;
@@ -243,6 +262,11 @@ final class SetupControllerTest extends ApiControllerTestCase
             $system,
             $configuration,
         ) extends Update {
+            public function checkMaintenanceMode(): bool
+            {
+                return true;
+            }
+
             public function applyUpdates(): bool
             {
                 throw new \RuntimeException('Migration exploded.');

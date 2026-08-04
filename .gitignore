@@ -30,6 +30,7 @@ phpmyfaq/content/core/config/opensearch.bak.php
 phpmyfaq/content/core/config/azure.php
 phpmyfaq/content/core/config/azure.bak.php
 phpmyfaq/content/core/config/phpmyfaq-config-backup.*.zip
+phpmyfaq/content/core/config/update-token.php
 phpmyfaq/content/core/config/index.html
 phpmyfaq/content/core/config/*.zip
 phpmyfaq/content/core/data/*
@@ -101,6 +102,7 @@ tests/test.db
 tests/test.db-journal
 tests/content/core/config/database.php
 tests/content/core/config/ldap.php
+tests/content/core/config/update-token.php
 tests/content/upgrades
 tests/fixtures/path-to-delete/foo.bar.baz
 
