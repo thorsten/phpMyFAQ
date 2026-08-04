@@ -255,18 +255,24 @@ case "$cmd" in
     do_up $list "$@"
     ;;
   down)
-    # 'down' operates on the whole project, so it tears down every profile's
-    # containers regardless of which were started.
-    compose down --remove-orphans "$@"
+    # Every service is gated behind a profile, so a bare 'compose down' leaves
+    # profiled containers behind. Enable all profiles so the whole project is
+    # torn down regardless of which were started.
+    compose --profile "*" down --remove-orphans "$@"
     ;;
   stop)
-    compose stop "$@"
+    # Every service is gated behind a profile, so a bare 'compose stop' has an
+    # empty service set and silently stops nothing. Enable all profiles (as
+    # 'rebuild' does) so it targets whatever is actually running.
+    compose --profile "*" stop "$@"
     ;;
   ps)
     compose ps "$@"
     ;;
   logs)
-    compose logs -f --tail=100 "$@"
+    # Enable all profiles for the same reason as 'stop'; otherwise the profiled
+    # services are not in the target set and no logs are shown.
+    compose --profile "*" logs -f --tail=100 "$@"
     ;;
   shell)
     svc=${1:-}
