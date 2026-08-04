@@ -25,7 +25,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - ./volumes/postgres:/var/lib/postgresql/data
+      - ./volumes/postgres:/var/lib/postgresql
 
   #sqlserver:
   #  image: mcr.microsoft.com/mssql/server:2022-latest
