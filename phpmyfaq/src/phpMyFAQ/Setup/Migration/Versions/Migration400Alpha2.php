@@ -47,9 +47,11 @@ readonly class Migration400Alpha2 extends AbstractMigration
         $recorder->grantPermission('forms_edit', 'Right to edit forms');
 
         // Create forms table
+        // "CREATE TABLE IF NOT EXISTS" keeps a re-run alive after a previously
+        // failed update - SQL Server has no support for it
         if ($this->isMySql()) {
             $recorder->addSql(sprintf(
-                'CREATE TABLE %sfaqforms (
+                'CREATE TABLE IF NOT EXISTS %sfaqforms (
                     form_id INT(1) NOT NULL,
                     input_id INT(11) NOT NULL,
                     input_type VARCHAR(1000) NOT NULL,
@@ -80,7 +82,7 @@ readonly class Migration400Alpha2 extends AbstractMigration
         }
 
         $recorder->addSql(sprintf(
-            'CREATE TABLE %sfaqforms (
+            'CREATE TABLE IF NOT EXISTS %sfaqforms (
                 form_id INTEGER NOT NULL,
                 input_id INTEGER NOT NULL,
                 input_type VARCHAR(1000) NOT NULL,

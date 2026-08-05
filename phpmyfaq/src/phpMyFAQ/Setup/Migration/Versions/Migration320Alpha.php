@@ -77,7 +77,28 @@ readonly class Migration320Alpha extends AbstractMigration
             );
         }
 
-        if (!$this->isSqlite()) {
+        if ($this->isPostgreSql()) {
+            // "IF NOT EXISTS" keeps a re-run alive after a previously failed update
+            // already applied this statement - the version number is only updated
+            // at the very end, so a failed run starts over from the old version.
+            $recorder->addSql(sprintf(
+                'ALTER TABLE %sfaquser
+                    ADD COLUMN IF NOT EXISTS refresh_token TEXT NULL DEFAULT NULL,
+                    ADD COLUMN IF NOT EXISTS access_token TEXT NULL DEFAULT NULL,
+                    ADD COLUMN IF NOT EXISTS code_verifier VARCHAR(255) NULL DEFAULT NULL,
+                    ADD COLUMN IF NOT EXISTS jwt TEXT NULL DEFAULT NULL',
+                $this->tablePrefix,
+            ), 'Add OAuth token columns to faquser');
+
+            $recorder->addSql(sprintf(
+                'ALTER TABLE %sfaquserdata
+                    ADD COLUMN IF NOT EXISTS twofactor_enabled INT NULL DEFAULT 0,
+                    ADD COLUMN IF NOT EXISTS secret VARCHAR(128) NULL DEFAULT NULL',
+                $this->tablePrefix,
+            ), 'Add 2FA columns to faquserdata');
+        }
+
+        if (!$this->isSqlite() && !$this->isPostgreSql()) {
             $recorder->addSql(sprintf(
                 'ALTER TABLE %sfaquser
                     ADD refresh_token TEXT NULL DEFAULT NULL,
@@ -96,15 +117,17 @@ readonly class Migration320Alpha extends AbstractMigration
         }
 
         // New backup table
+        // SQL Server has no "CREATE TABLE IF NOT EXISTS"
+        $createTable = $this->isSqlServer() ? 'CREATE TABLE' : 'CREATE TABLE IF NOT EXISTS';
         $timestampType = $this->timestampType(false);
         $recorder->addSql(
-            sprintf('CREATE TABLE %sfaqbackup (
+            sprintf('%s %sfaqbackup (
                 id INT NOT NULL,
                 filename VARCHAR(255) NOT NULL,
                 authkey VARCHAR(255) NOT NULL,
                 authcode VARCHAR(255) NOT NULL,
                 created %s NOT NULL,
-                PRIMARY KEY (id))', $this->tablePrefix, $timestampType),
+                PRIMARY KEY (id))', $createTable, $this->tablePrefix, $timestampType),
             'Create backup table',
         );
 
@@ -131,13 +154,10 @@ readonly class Migration320Alpha extends AbstractMigration
         $recorder->addConfig('security.googleReCaptchaV2SiteKey', '');
         $recorder->addConfig('security.googleReCaptchaV2SecretKey', '');
 
-        // Remove section tables
-        $recorder->addSql(sprintf('DROP TABLE %sfaqsections', $this->tablePrefix), 'Drop faqsections table');
-        $recorder->addSql(
-            sprintf('DROP TABLE %sfaqsection_category', $this->tablePrefix),
-            'Drop faqsection_category table',
-        );
-        $recorder->addSql(sprintf('DROP TABLE %sfaqsection_group', $this->tablePrefix), 'Drop faqsection_group table');
-        $recorder->addSql(sprintf('DROP TABLE %sfaqsection_news', $this->tablePrefix), 'Drop faqsection_news table');
+        // Remove section tables ("IF EXISTS" is supported by all databases, SQL Server since 2016)
+        $recorder->addSql($this->dropTableIfExists('faqsections'), 'Drop faqsections table');
+        $recorder->addSql($this->dropTableIfExists('faqsection_category'), 'Drop faqsection_category table');
+        $recorder->addSql($this->dropTableIfExists('faqsection_group'), 'Drop faqsection_group table');
+        $recorder->addSql($this->dropTableIfExists('faqsection_news'), 'Drop faqsection_news table');
     }
 }

@@ -275,6 +275,10 @@ class Update extends AbstractSetup
     private function insertFormInputs(): void
     {
         try {
+            // A failed update attempt may already have inserted the default form data,
+            // so the table is emptied before the defaults are inserted again.
+            $this->queries[] = sprintf('DELETE FROM %sfaqforms', Database::getTablePrefix());
+
             $forms = new Forms($this->configuration);
             $seeder = new DefaultDataSeeder();
             foreach ($seeder->getFormInputs() as $input) {
@@ -338,9 +342,15 @@ class Update extends AbstractSetup
 
         foreach ($this->queries as $query) {
             try {
-                $this->configuration->getDb()->query($query);
-            } catch (Exception $exception) {
-                throw new Exception($exception->getMessage());
+                $result = $this->configuration->getDb()->query($query);
+            } catch (\Throwable $throwable) {
+                // The failing statement is essential for diagnosing update problems
+                throw new Exception(sprintf('%s (Query: %s)', $throwable->getMessage(), $query));
+            }
+
+            // Some drivers (e.g. PostgreSQL) return false instead of throwing
+            if ($result === false) {
+                throw new Exception(sprintf('%s (Query: %s)', $this->configuration->getDb()->error(), $query));
             }
         }
     }

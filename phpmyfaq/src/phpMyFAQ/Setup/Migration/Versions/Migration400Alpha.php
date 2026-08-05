@@ -91,17 +91,29 @@ readonly class Migration400Alpha extends AbstractMigration
         $recorder->deleteConfig('mail.remoteSMTPEncryption');
 
         // Bookmarks support
+        // "CREATE TABLE IF NOT EXISTS" keeps a re-run alive after a previously failed
+        // update - SQL Server has no support for it
         if ($this->isMySql()) {
             $recorder->addSql(
                 sprintf(
-                    'CREATE TABLE %sfaqbookmarks (userid int(11) DEFAULT NULL, faqid int(11) DEFAULT NULL)',
+                    'CREATE TABLE IF NOT EXISTS %sfaqbookmarks (userid int(11) DEFAULT NULL, faqid int(11) DEFAULT NULL)',
                     $this->tablePrefix,
                 ),
                 'Create bookmarks table (MySQL)',
             );
         }
 
-        if (!$this->isMySql()) {
+        if (!$this->isMySql() && !$this->isSqlServer()) {
+            $recorder->addSql(
+                sprintf(
+                    'CREATE TABLE IF NOT EXISTS %sfaqbookmarks (userid INTEGER DEFAULT NULL, faqid INTEGER DEFAULT NULL)',
+                    $this->tablePrefix,
+                ),
+                'Create bookmarks table',
+            );
+        }
+
+        if ($this->isSqlServer()) {
             $recorder->addSql(
                 sprintf(
                     'CREATE TABLE %sfaqbookmarks (userid INTEGER DEFAULT NULL, faqid INTEGER DEFAULT NULL)',
@@ -127,7 +139,26 @@ readonly class Migration400Alpha extends AbstractMigration
             );
         }
 
-        if (!$this->isMySql()) {
+        if ($this->isPostgreSql()) {
+            // "IF NOT EXISTS" keeps a re-run alive after a previously failed update
+            $recorder->addSql(
+                sprintf(
+                    'ALTER TABLE %sfaqdata ADD COLUMN IF NOT EXISTS sticky_order integer DEFAULT NULL',
+                    $this->tablePrefix,
+                ),
+                'Add sticky_order column to faqdata',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    'ALTER TABLE %sfaqdata_revisions ADD COLUMN IF NOT EXISTS sticky_order integer DEFAULT NULL',
+                    $this->tablePrefix,
+                ),
+                'Add sticky_order column to faqdata_revisions',
+            );
+        }
+
+        if (!$this->isMySql() && !$this->isPostgreSql()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaqdata ADD COLUMN sticky_order integer DEFAULT NULL', $this->tablePrefix),
                 'Add sticky_order column to faqdata',
@@ -144,8 +175,9 @@ readonly class Migration400Alpha extends AbstractMigration
 
         $recorder->addConfig('records.orderStickyFaqsCustom', 'false');
 
-        // Remove template metadata tables
-        $recorder->addSql(sprintf('DROP TABLE %sfaqmeta', $this->tablePrefix), 'Drop faqmeta table');
+        // Remove template metadata tables ("IF EXISTS" keeps a re-run alive after
+        // a previously failed update - supported by all databases, SQL Server since 2016)
+        $recorder->addSql($this->dropTableIfExists('faqmeta'), 'Drop faqmeta table');
 
         // Blocked statistics browsers
         $recorder->addConfig('main.botIgnoreList', 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,
@@ -178,7 +210,7 @@ readonly class Migration400Alpha extends AbstractMigration
         if (!$this->isMySql() && !$this->isSqlServer()) {
             // SQLite and PostgreSQL - table rebuild approach
             $recorder->addSql(sprintf(
-                'CREATE TABLE %sfaqcategory_order_new (
+                'CREATE TABLE IF NOT EXISTS %sfaqcategory_order_new (
                     category_id INTEGER NOT NULL,
                     parent_id INTEGER DEFAULT NULL,
                     position INTEGER NOT NULL,
@@ -186,19 +218,21 @@ readonly class Migration400Alpha extends AbstractMigration
                 $this->tablePrefix,
             ), 'Create new faqcategory_order table with parent_id');
 
+            // The NOT IN guard keeps a re-run from violating the primary key if
+            // a previous update attempt already copied some rows.
             $recorder->addSql(
                 sprintf(
-                    'INSERT INTO %sfaqcategory_order_new (category_id, parent_id, position) SELECT category_id, NULL AS parent_id, position FROM %sfaqcategory_order',
+                    'INSERT INTO %sfaqcategory_order_new (category_id, parent_id, position)
+                        SELECT category_id, NULL AS parent_id, position FROM %sfaqcategory_order
+                        WHERE category_id NOT IN (SELECT category_id FROM %sfaqcategory_order_new)',
+                    $this->tablePrefix,
                     $this->tablePrefix,
                     $this->tablePrefix,
                 ),
                 'Copy data to new faqcategory_order table',
             );
 
-            $recorder->addSql(
-                sprintf('DROP TABLE %sfaqcategory_order', $this->tablePrefix),
-                'Drop old faqcategory_order table',
-            );
+            $recorder->addSql($this->dropTableIfExists('faqcategory_order'), 'Drop old faqcategory_order table');
 
             $recorder->addSql(
                 sprintf(

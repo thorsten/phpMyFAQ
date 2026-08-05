@@ -178,6 +178,65 @@ class AdditionalMigrationVersionsTest extends TestCase
         $this->assertStringContainsString('idx_faqsearches_date_term_lang', $payload);
     }
 
+    /**
+     * A failed update attempt leaves the database half-migrated, because every
+     * statement is auto-committed but the version number is only written at the
+     * very end. A re-run then starts over from the old version, so all PostgreSQL
+     * DDL must be guarded with IF (NOT) EXISTS to pass statements that were
+     * already applied by the previous attempt.
+     */
+    public function testPostgresMigrationQueriesAreIdempotentForReRuns(): void
+    {
+        $this->setDatabaseState('pgsql');
+
+        $migrationClasses = [
+            Migration320Alpha::class,
+            Migration320Beta::class,
+            Migration400Alpha::class,
+            Migration400Alpha2::class,
+            Migration400Alpha3::class,
+            Migration400Beta2::class,
+            Migration409::class,
+        ];
+
+        $queries = [];
+        foreach ($migrationClasses as $migrationClass) {
+            $recorder = new OperationRecorder($this->createStub(Configuration::class));
+            new $migrationClass($this->createStub(Configuration::class))->up($recorder);
+            $queries = [...$queries, ...$recorder->getSqlQueries()];
+        }
+
+        $this->assertNotEmpty($queries);
+
+        foreach ($queries as $query) {
+            $this->assertDoesNotMatchRegularExpression(
+                '/^\s*CREATE TABLE (?!IF NOT EXISTS)/i',
+                $query,
+                'CREATE TABLE must be guarded with IF NOT EXISTS: ' . $query,
+            );
+            $this->assertDoesNotMatchRegularExpression(
+                '/^\s*CREATE SEQUENCE (?!IF NOT EXISTS)/i',
+                $query,
+                'CREATE SEQUENCE must be guarded with IF NOT EXISTS: ' . $query,
+            );
+            $this->assertDoesNotMatchRegularExpression(
+                '/^\s*DROP TABLE (?!IF EXISTS)/i',
+                $query,
+                'DROP TABLE must be guarded with IF EXISTS: ' . $query,
+            );
+            $this->assertDoesNotMatchRegularExpression(
+                '/\bADD (?!COLUMN IF NOT EXISTS)/i',
+                $query,
+                'ADD COLUMN must be guarded with IF NOT EXISTS: ' . $query,
+            );
+            $this->assertDoesNotMatchRegularExpression(
+                '/\bDROP COLUMN (?!IF EXISTS)/i',
+                $query,
+                'DROP COLUMN must be guarded with IF EXISTS: ' . $query,
+            );
+        }
+    }
+
     private function setDatabaseState(string $type, string $tablePrefix = ''): void
     {
         $databaseReflection = new ReflectionClass(Database::class);

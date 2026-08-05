@@ -50,8 +50,26 @@ readonly class Migration320Beta extends AbstractMigration
             $this->rebuildTableWithoutColumns($recorder, 'faqdata');
             $this->rebuildTableWithoutColumns($recorder, 'faqdata_revisions');
         }
-        if (!$this->isSqlite()) {
-            // MySQL, PostgreSQL, SQL Server - use separate DROP COLUMN statements
+        if ($this->isPostgreSql()) {
+            // "IF EXISTS" keeps a re-run alive after a previously failed update
+            // already applied this statement - the version number is only updated
+            // at the very end, so a failed run starts over from the old version.
+            $recorder->addSql(
+                sprintf(
+                    'ALTER TABLE %sfaqdata DROP COLUMN IF EXISTS links_state, DROP COLUMN IF EXISTS links_check_date',
+                    $this->tablePrefix,
+                ),
+                'Remove link verification columns from faqdata',
+            );
+            $recorder->addSql(sprintf(
+                'ALTER TABLE %sfaqdata_revisions
+                        DROP COLUMN IF EXISTS links_state, DROP COLUMN IF EXISTS links_check_date',
+                $this->tablePrefix,
+            ), 'Remove link verification columns from faqdata_revisions');
+        }
+
+        if (!$this->isSqlite() && !$this->isPostgreSql()) {
+            // MySQL, SQL Server - use separate DROP COLUMN statements
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaqdata DROP COLUMN links_state', $this->tablePrefix),
                 'Remove links_state column from faqdata',

@@ -42,9 +42,11 @@ readonly class Migration400Alpha3 extends AbstractMigration
     public function up(OperationRecorder $recorder): void
     {
         // Create SEO table
+        // "CREATE TABLE IF NOT EXISTS" keeps a re-run alive after a previously
+        // failed update - SQL Server has no support for it
         if ($this->isMySql()) {
             $recorder->addSql(sprintf(
-                'CREATE TABLE %sfaqseo (
+                'CREATE TABLE IF NOT EXISTS %sfaqseo (
                     id INT(11) NOT NULL,
                     type VARCHAR(32) NOT NULL,
                     reference_id INT(11) NOT NULL,
@@ -78,7 +80,7 @@ readonly class Migration400Alpha3 extends AbstractMigration
 
         if ($this->isSqlite()) {
             $recorder->addSql(sprintf(
-                'CREATE TABLE %sfaqseo (
+                'CREATE TABLE IF NOT EXISTS %sfaqseo (
                     id INT NOT NULL,
                     type VARCHAR(32) NOT NULL,
                     reference_id INT NOT NULL,
@@ -95,7 +97,7 @@ readonly class Migration400Alpha3 extends AbstractMigration
 
         if ($this->isPostgreSql()) {
             $recorder->addSql(sprintf(
-                'CREATE TABLE %sfaqseo (
+                'CREATE TABLE IF NOT EXISTS %sfaqseo (
                     id INTEGER NOT NULL,
                     type VARCHAR(32) NOT NULL,
                     reference_id INTEGER NOT NULL,

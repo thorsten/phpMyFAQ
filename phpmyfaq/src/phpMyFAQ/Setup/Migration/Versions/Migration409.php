@@ -45,8 +45,9 @@ readonly class Migration409 extends AbstractMigration
         if ($this->isPostgreSql()) {
             $sequenceName = $this->tablePrefix . 'faqseo_id_seq';
 
+            // "IF NOT EXISTS" keeps a re-run alive after a previously failed update
             $recorder->addSql(
-                sprintf('CREATE SEQUENCE %s', $sequenceName),
+                sprintf('CREATE SEQUENCE IF NOT EXISTS %s', $sequenceName),
                 'Create sequence for faqseo table (PostgreSQL)',
             );
 

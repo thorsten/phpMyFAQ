@@ -51,7 +51,18 @@ readonly class Migration400Beta2 extends AbstractMigration
             );
         }
 
-        if (!$this->isSqlite()) {
+        if ($this->isPostgreSql()) {
+            // "IF NOT EXISTS" keeps a re-run alive after a previously failed update
+            $recorder->addSql(
+                sprintf(
+                    'ALTER TABLE %sfaquser ADD COLUMN IF NOT EXISTS webauthnkeys TEXT NULL DEFAULT NULL',
+                    $this->tablePrefix,
+                ),
+                'Add WebAuthn keys column to faquser (PostgreSQL)',
+            );
+        }
+
+        if (!$this->isSqlite() && !$this->isPostgreSql()) {
             $recorder->addSql(
                 sprintf('ALTER TABLE %sfaquser ADD webauthnkeys TEXT NULL DEFAULT NULL', $this->tablePrefix),
                 'Add WebAuthn keys column to faquser',
