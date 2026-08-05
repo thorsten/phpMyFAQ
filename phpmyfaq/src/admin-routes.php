@@ -195,7 +195,7 @@ $routesConfig = [
     'admin.faq.edit' => [
         'path' => '/faq/edit/{faqId}/{faqLanguage}',
         'controller' => [FaqController::class, 'edit'],
-        'methods' => 'GET'
+        'methods' => ['GET', 'POST']
     ],
     'admin.faq.translate' => [
         'path' => '/faq/translate/{faqId}/{faqLanguage}',
@@ -360,7 +360,7 @@ $routesConfig = [
     'admin.statistics.sessions.day' => [
         'path' => '/statistics/sessions/{date}',
         'controller' => [StatisticsSessionsController::class, 'viewDay'],
-        'methods' => 'POST, GET'
+        'methods' => ['GET', 'POST']
     ],
     'admin.statistics.session.id' => [
         'path' => '/statistics/session/{sessionId}',
@@ -410,7 +410,7 @@ foreach ($routesConfig as $name => $config) {
         new Route(
             path: $config['path'],
             defaults: ['_controller' => $config['controller']],
-            methods: [$config['methods']],
+            methods: (array) $config['methods'],
         )
     );
 }

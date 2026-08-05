@@ -235,7 +235,7 @@ final class FaqController extends AbstractAdministrationController
      * @throws \Exception
      * @todo refactor Twig template variables
      */
-    #[Route(path: '/faq/edit/:faqId/:faqLanguage', name: 'admin.faq.edit', methods: ['GET'])]
+    #[Route(path: '/faq/edit/:faqId/:faqLanguage', name: 'admin.faq.edit', methods: ['GET', 'POST'])]
     public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
@@ -256,7 +256,10 @@ final class FaqController extends AbstractAdministrationController
 
         $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $selectedRevisionId = Filter::filterVar($request->attributes->get('selectedRevisionId'), FILTER_VALIDATE_INT);
+        $selectedRevisionId = Filter::filterVar($request->request->get('selectedRevisionId'), FILTER_VALIDATE_INT);
+        if (!$selectedRevisionId) {
+            $selectedRevisionId = null;
+        }
 
         $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-edit-faq ' . $faqId);
 
@@ -264,6 +267,12 @@ final class FaqController extends AbstractAdministrationController
 
         $faq->getFaq($faqId, null, true);
         $faqData = $faq->faqRecord;
+
+        if ($selectedRevisionId !== null && $selectedRevisionId !== (int) $faqData['revision_id']) {
+            $faq->getFaq($faqId, $selectedRevisionId, true);
+            $faqData = $faq->faqRecord;
+            $faqData['revision_id'] = $selectedRevisionId;
+        }
 
         // Tags
         $faqData['tags'] = implode(', ', $this->container->get(id: 'phpmyfaq.tags')->getAllTagsById($faqId));
@@ -323,7 +332,11 @@ final class FaqController extends AbstractAdministrationController
             ...$this->getBaseTemplateVars(),
             'header' => Translation::get(key: 'ad_entry_edit_1') . ' ' . Translation::get(key: 'ad_entry_edit_2'),
             'editExistingFaq' => true,
-            'currentRevision' => sprintf('%s 1.%d', Translation::get(key: 'msgRevision'), $selectedRevisionId),
+            'currentRevision' => sprintf(
+                '%s 1.%d',
+                Translation::get(key: 'msgRevision'),
+                $selectedRevisionId ?? $faqData['revision_id'],
+            ),
             'numberOfRevisions' => count($revisions),
             'faqId' => $faqId,
             'faqLang' => $faqLanguage,
