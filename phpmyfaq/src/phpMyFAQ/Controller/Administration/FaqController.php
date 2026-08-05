@@ -263,6 +263,9 @@ final class FaqController extends AbstractAdministrationController
         $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $selectedRevisionId = Filter::filterVar($request->request->get('selectedRevisionId'), FILTER_VALIDATE_INT);
+        if (!$selectedRevisionId) {
+            $selectedRevisionId = null;
+        }
 
         $category = new Category($this->configuration, $currentAdminGroups, true, $faqLanguage);
         $category->setUser($currentAdminUser);
@@ -279,6 +282,12 @@ final class FaqController extends AbstractAdministrationController
 
         $this->faq->getFaq($faqId, null, true);
         $faqData = $this->faq->faqRecord;
+
+        if ($selectedRevisionId !== null && $selectedRevisionId !== (int) $faqData['revision_id']) {
+            $this->faq->getFaq($faqId, $selectedRevisionId, true);
+            $faqData = $this->faq->faqRecord;
+            $faqData['revision_id'] = $selectedRevisionId;
+        }
 
         // Tags
         $faqData['tags'] = implode(', ', $this->tags->getAllTagsById($faqId));
