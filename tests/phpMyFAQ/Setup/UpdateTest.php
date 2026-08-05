@@ -157,6 +157,11 @@ class UpdateTest extends TestCase
      */
     public function testPostgresUpdateQueriesAreIdempotentForReRuns(): void
     {
+        // The update steps also write configuration items; a mocked configuration
+        // keeps them away from the shared test database, so only the queued SQL
+        // is inspected.
+        $update = new Update(new System(), $this->createMock(Configuration::class));
+
         $methods = [
             'applyUpdates310Alpha',
             'applyUpdates310Beta',
@@ -168,7 +173,7 @@ class UpdateTest extends TestCase
 
         $queries = [];
         foreach ($methods as $method) {
-            $queries = $this->collectQueriesForPostgres($method, '3.0.11');
+            $queries = $this->collectQueriesForPostgres($method, '3.0.11', '', $update);
         }
 
         $this->assertNotEmpty($queries);
@@ -208,8 +213,14 @@ class UpdateTest extends TestCase
      *
      * @return string[]
      */
-    private function collectQueriesForPostgres(string $method, string $fromVersion, string $prefix = ''): array
-    {
+    private function collectQueriesForPostgres(
+        string $method,
+        string $fromVersion,
+        string $prefix = '',
+        ?Update $update = null,
+    ): array {
+        $update ??= $this->update;
+
         $databaseType = new \ReflectionProperty(Database::class, 'dbType');
         $tablePrefix = new \ReflectionProperty(Database::class, 'tablePrefix');
 
@@ -221,12 +232,12 @@ class UpdateTest extends TestCase
         $tablePrefix->setValue(null, $prefix);
 
         try {
-            $this->update->setVersion($fromVersion);
+            $update->setVersion($fromVersion);
 
-            $reflection = new \ReflectionClass($this->update);
-            $reflection->getMethod($method)->invoke($this->update);
+            $reflection = new \ReflectionClass($update);
+            $reflection->getMethod($method)->invoke($update);
 
-            return $reflection->getProperty('queries')->getValue($this->update);
+            return $reflection->getProperty('queries')->getValue($update);
         } finally {
             // Database keeps this state statically, so leave it exactly as found.
             if ($hadType) {
