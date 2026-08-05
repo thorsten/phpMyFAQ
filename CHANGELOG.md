@@ -8,7 +8,6 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v4.1.8 - unreleased
 
-- made the database update resumable after a failed attempt on PostgreSQL (Thorsten)
 - fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.7 - 2026-08-04
