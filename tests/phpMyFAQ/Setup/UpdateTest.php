@@ -137,7 +137,7 @@ class UpdateTest extends TestCase
     {
         $queries = $this->collectQueriesForPostgres('applyUpdates409', '4.0.8', 'faq_');
 
-        $this->assertContains('CREATE SEQUENCE faq_faqseo_id_seq', $queries);
+        $this->assertContains('CREATE SEQUENCE IF NOT EXISTS faq_faqseo_id_seq', $queries);
         $this->assertContains(
             "ALTER TABLE faq_faqseo ALTER COLUMN id SET DEFAULT nextval('faq_faqseo_id_seq')",
             $queries,
@@ -146,6 +146,60 @@ class UpdateTest extends TestCase
             "SELECT setval('faq_faqseo_id_seq', (SELECT MAX(id) FROM faq_faqseo));",
             $queries,
         );
+    }
+
+    /**
+     * A failed update attempt leaves the database half-migrated, because every
+     * statement is auto-committed but the version number is only written at the
+     * very end. A re-run then starts over from the old version, so all PostgreSQL
+     * DDL must be guarded with IF (NOT) EXISTS to pass statements that were
+     * already applied by the previous attempt.
+     */
+    public function testPostgresUpdateQueriesAreIdempotentForReRuns(): void
+    {
+        $methods = [
+            'applyUpdates310Alpha',
+            'applyUpdates310Beta',
+            'applyUpdates320Alpha',
+            'applyUpdates320Beta',
+            'applyUpdates400Beta2',
+            'applyUpdates409',
+        ];
+
+        $queries = [];
+        foreach ($methods as $method) {
+            $queries = $this->collectQueriesForPostgres($method, '3.0.11');
+        }
+
+        $this->assertNotEmpty($queries);
+
+        foreach ($queries as $query) {
+            $this->assertDoesNotMatchRegularExpression(
+                '/^\s*CREATE TABLE (?!IF NOT EXISTS)/i',
+                $query,
+                'CREATE TABLE must be guarded with IF NOT EXISTS: ' . $query,
+            );
+            $this->assertDoesNotMatchRegularExpression(
+                '/^\s*CREATE SEQUENCE (?!IF NOT EXISTS)/i',
+                $query,
+                'CREATE SEQUENCE must be guarded with IF NOT EXISTS: ' . $query,
+            );
+            $this->assertDoesNotMatchRegularExpression(
+                '/^\s*DROP TABLE (?!IF EXISTS)/i',
+                $query,
+                'DROP TABLE must be guarded with IF EXISTS: ' . $query,
+            );
+            $this->assertDoesNotMatchRegularExpression(
+                '/\bADD (?!COLUMN IF NOT EXISTS)/i',
+                $query,
+                'ADD COLUMN must be guarded with IF NOT EXISTS: ' . $query,
+            );
+            $this->assertDoesNotMatchRegularExpression(
+                '/\bDROP COLUMN (?!IF EXISTS)/i',
+                $query,
+                'DROP COLUMN must be guarded with IF EXISTS: ' . $query,
+            );
+        }
     }
 
     /**

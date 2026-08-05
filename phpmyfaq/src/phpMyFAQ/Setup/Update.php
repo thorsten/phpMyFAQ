@@ -241,9 +241,15 @@ class Update extends AbstractSetup
         } else {
             foreach ($this->queries as $query) {
                 try {
-                    $this->configuration->getDb()->query($query);
-                } catch (Exception $exception) {
-                    throw new Exception($exception->getMessage());
+                    $result = $this->configuration->getDb()->query($query);
+                } catch (\Throwable $throwable) {
+                    // The failing statement is essential for diagnosing update problems
+                    throw new Exception(sprintf('%s (Query: %s)', $throwable->getMessage(), $query));
+                }
+
+                // Some drivers (e.g. PostgreSQL) return false instead of throwing
+                if ($result === false) {
+                    throw new Exception(sprintf('%s (Query: %s)', $this->configuration->getDb()->error(), $query));
                 }
             }
         }
@@ -256,6 +262,14 @@ class Update extends AbstractSetup
             if ('sqlite3' === Database::getType()) {
                 $this->queries[] = sprintf(
                     'ALTER TABLE %sfaquserdata ADD COLUMN is_visible INT(1) DEFAULT 0',
+                    Database::getTablePrefix(),
+                );
+            } elseif ('pgsql' === Database::getType()) {
+                // "IF NOT EXISTS" keeps a re-run alive after a previously failed update
+                // already applied this statement - the version number is only updated
+                // at the very end, so a failed run starts over from the old version.
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaquserdata ADD COLUMN IF NOT EXISTS is_visible INTEGER DEFAULT 0',
                     Database::getTablePrefix(),
                 );
             } else {
@@ -290,11 +304,16 @@ class Update extends AbstractSetup
         if (version_compare($this->version, '3.1.0-beta', '<')) {
             $this->queries[] = match (Database::getType()) {
                 'mysqli' => sprintf(
-                    'CREATE TABLE %sfaqcategory_order
+                    'CREATE TABLE IF NOT EXISTS %sfaqcategory_order
                     (category_id int(11) NOT NULL, position int(11) NOT NULL, PRIMARY KEY (category_id))',
                     Database::getTablePrefix(),
                 ),
-                'pgsql', 'sqlite3', 'sqlsrv' => sprintf(
+                'pgsql', 'sqlite3' => sprintf(
+                    'CREATE TABLE IF NOT EXISTS %sfaqcategory_order
+                    (category_id INTEGER NOT NULL, position INTEGER NOT NULL, PRIMARY KEY (category_id))',
+                    Database::getTablePrefix(),
+                ),
+                'sqlsrv' => sprintf(
                     'CREATE TABLE %sfaqcategory_order
                     (category_id INTEGER NOT NULL, position INTEGER NOT NULL, PRIMARY KEY (category_id))',
                     Database::getTablePrefix(),
@@ -333,6 +352,22 @@ class Update extends AbstractSetup
                         ADD COLUMN secret VARCHAR(128) NULL DEFAULT NULL',
                     Database::getTablePrefix(),
                 );
+            } elseif ('pgsql' === Database::getType()) {
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaquser
+                        ADD COLUMN IF NOT EXISTS refresh_token TEXT NULL DEFAULT NULL,
+                        ADD COLUMN IF NOT EXISTS access_token TEXT NULL DEFAULT NULL,
+                        ADD COLUMN IF NOT EXISTS code_verifier VARCHAR(255) NULL DEFAULT NULL,
+                        ADD COLUMN IF NOT EXISTS jwt TEXT NULL DEFAULT NULL;',
+                    Database::getTablePrefix(),
+                );
+
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaquserdata
+                        ADD COLUMN IF NOT EXISTS twofactor_enabled INT NULL DEFAULT 0,
+                        ADD COLUMN IF NOT EXISTS secret VARCHAR(128) NULL DEFAULT NULL',
+                    Database::getTablePrefix(),
+                );
             } else {
                 $this->queries[] = sprintf(
                     'ALTER TABLE %sfaquser
@@ -352,13 +387,19 @@ class Update extends AbstractSetup
             }
 
             // New backup
-            $this->queries[] = sprintf('CREATE TABLE %sfaqbackup (
+            // SQL Server has no "CREATE TABLE IF NOT EXISTS"
+            $createTable = 'sqlsrv' === Database::getType() ? 'CREATE TABLE' : 'CREATE TABLE IF NOT EXISTS';
+            $this->queries[] = sprintf(
+                '%s %sfaqbackup (
                     id INT NOT NULL,
                     filename VARCHAR(255) NOT NULL,
                     authkey VARCHAR(255) NOT NULL,
                     authcode VARCHAR(255) NOT NULL,
                     created timestamp NOT NULL,
-                    PRIMARY KEY (id))', Database::getTablePrefix());
+                    PRIMARY KEY (id))',
+                $createTable,
+                Database::getTablePrefix(),
+            );
 
             // Migrate MySQL from MyISAM to InnoDB
             if ('mysqli' === Database::getType()) {
@@ -380,11 +421,11 @@ class Update extends AbstractSetup
             $this->configuration->add('security.googleReCaptchaV2SiteKey', '');
             $this->configuration->add('security.googleReCaptchaV2SecretKey', '');
 
-            // Remove section tables
-            $this->queries[] = sprintf('DROP TABLE %sfaqsections', Database::getTablePrefix());
-            $this->queries[] = sprintf('DROP TABLE %sfaqsection_category', Database::getTablePrefix());
-            $this->queries[] = sprintf('DROP TABLE %sfaqsection_group', Database::getTablePrefix());
-            $this->queries[] = sprintf('DROP TABLE %sfaqsection_news', Database::getTablePrefix());
+            // Remove section tables ("IF EXISTS" is supported by all databases, SQL Server since 2016)
+            $this->queries[] = sprintf('DROP TABLE IF EXISTS %sfaqsections', Database::getTablePrefix());
+            $this->queries[] = sprintf('DROP TABLE IF EXISTS %sfaqsection_category', Database::getTablePrefix());
+            $this->queries[] = sprintf('DROP TABLE IF EXISTS %sfaqsection_group', Database::getTablePrefix());
+            $this->queries[] = sprintf('DROP TABLE IF EXISTS %sfaqsection_news', Database::getTablePrefix());
         }
     }
 
@@ -395,14 +436,26 @@ class Update extends AbstractSetup
             $this->configuration->delete('main.enableLinkVerification');
 
             // Delete link verification columns
-            $this->queries[] = sprintf(
-                'ALTER TABLE %sfaqdata DROP COLUMN links_state, DROP COLUMN links_check_date',
-                Database::getTablePrefix(),
-            );
-            $this->queries[] = sprintf(
-                'ALTER TABLE %sfaqdata_revisions DROP COLUMN links_state, DROP COLUMN links_check_date',
-                Database::getTablePrefix(),
-            );
+            if ('pgsql' === Database::getType()) {
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaqdata DROP COLUMN IF EXISTS links_state, DROP COLUMN IF EXISTS links_check_date',
+                    Database::getTablePrefix(),
+                );
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaqdata_revisions
+                        DROP COLUMN IF EXISTS links_state, DROP COLUMN IF EXISTS links_check_date',
+                    Database::getTablePrefix(),
+                );
+            } else {
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaqdata DROP COLUMN links_state, DROP COLUMN links_check_date',
+                    Database::getTablePrefix(),
+                );
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaqdata_revisions DROP COLUMN links_state, DROP COLUMN links_check_date',
+                    Database::getTablePrefix(),
+                );
+            }
 
             // Configuration values in a TEXT column
             switch (Database::getType()) {
@@ -581,10 +634,14 @@ class Update extends AbstractSetup
             // Bookmarks support
             $this->queries[] = match (Database::getType()) {
                 'mysqli' => sprintf(
-                    'CREATE TABLE %sfaqbookmarks (userid int(11) DEFAULT NULL, faqid int(11) DEFAULT NULL)',
+                    'CREATE TABLE IF NOT EXISTS %sfaqbookmarks (userid int(11) DEFAULT NULL, faqid int(11) DEFAULT NULL)',
                     Database::getTablePrefix(),
                 ),
-                'pgsql', 'sqlite3', 'sqlsrv' => sprintf(
+                'pgsql', 'sqlite3' => sprintf(
+                    'CREATE TABLE IF NOT EXISTS %sfaqbookmarks (userid INTEGER DEFAULT NULL, faqid INTEGER DEFAULT NULL)',
+                    Database::getTablePrefix(),
+                ),
+                'sqlsrv' => sprintf(
                     'CREATE TABLE %sfaqbookmarks (userid INTEGER DEFAULT NULL, faqid INTEGER DEFAULT NULL)',
                     Database::getTablePrefix(),
                 ),
@@ -596,7 +653,11 @@ class Update extends AbstractSetup
                     'ALTER TABLE %sfaqdata ADD COLUMN sticky_order int(10) DEFAULT NULL',
                     Database::getTablePrefix(),
                 ),
-                'pgsql', 'sqlite3', 'sqlsrv' => sprintf(
+                'pgsql' => sprintf(
+                    'ALTER TABLE %sfaqdata ADD COLUMN IF NOT EXISTS sticky_order integer DEFAULT NULL',
+                    Database::getTablePrefix(),
+                ),
+                'sqlite3', 'sqlsrv' => sprintf(
                     'ALTER TABLE %sfaqdata ADD COLUMN sticky_order integer DEFAULT NULL',
                     Database::getTablePrefix(),
                 ),
@@ -608,7 +669,11 @@ class Update extends AbstractSetup
                     'ALTER TABLE %sfaqdata_revisions ADD COLUMN sticky_order int(10) DEFAULT NULL',
                     Database::getTablePrefix(),
                 ),
-                'pgsql', 'sqlite3', 'sqlsrv' => sprintf(
+                'pgsql' => sprintf(
+                    'ALTER TABLE %sfaqdata_revisions ADD COLUMN IF NOT EXISTS sticky_order integer DEFAULT NULL',
+                    Database::getTablePrefix(),
+                ),
+                'sqlite3', 'sqlsrv' => sprintf(
                     'ALTER TABLE %sfaqdata_revisions ADD COLUMN sticky_order integer DEFAULT NULL',
                     Database::getTablePrefix(),
                 ),
@@ -616,7 +681,7 @@ class Update extends AbstractSetup
             $this->configuration->add('records.orderStickyFaqsCustom', 'false');
 
             // Remove template metadata tables
-            $this->queries[] = sprintf('DROP TABLE %sfaqmeta', Database::getTablePrefix());
+            $this->queries[] = sprintf('DROP TABLE IF EXISTS %sfaqmeta', Database::getTablePrefix());
 
             // Blocked statistics browsers
             $this->configuration->add('main.botIgnoreList', 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,
@@ -642,7 +707,7 @@ class Update extends AbstractSetup
                 case 'sqlite3':
                 case 'pgsql':
                     $this->queries[] = sprintf(
-                        'CREATE TABLE %sfaqcategory_order_new (
+                        'CREATE TABLE IF NOT EXISTS %sfaqcategory_order_new (
                             category_id INTEGER NOT NULL,
                             parent_id INTEGER DEFAULT NULL,
                             position INTEGER NOT NULL,
@@ -651,13 +716,17 @@ class Update extends AbstractSetup
                     );
                     // The old table has no parent_id column, so the columns must be named
                     // explicitly - a plain SELECT * would shift position into parent_id.
+                    // The NOT IN guard keeps a re-run from violating the primary key if
+                    // a previous update attempt already copied some rows.
                     $this->queries[] = sprintf(
                         'INSERT INTO %sfaqcategory_order_new (category_id, position)
-                            SELECT category_id, position FROM %sfaqcategory_order',
+                            SELECT category_id, position FROM %sfaqcategory_order
+                            WHERE category_id NOT IN (SELECT category_id FROM %sfaqcategory_order_new)',
+                        Database::getTablePrefix(),
                         Database::getTablePrefix(),
                         Database::getTablePrefix(),
                     );
-                    $this->queries[] = sprintf('DROP TABLE %sfaqcategory_order', Database::getTablePrefix());
+                    $this->queries[] = sprintf('DROP TABLE IF EXISTS %sfaqcategory_order', Database::getTablePrefix());
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqcategory_order_new RENAME TO %sfaqcategory_order',
                         Database::getTablePrefix(),
@@ -688,7 +757,7 @@ class Update extends AbstractSetup
             switch (Database::getType()) {
                 case 'mysqli':
                     $this->queries[] = sprintf(
-                        'CREATE TABLE %sfaqforms (
+                        'CREATE TABLE IF NOT EXISTS %sfaqforms (
                         form_id INT(1) NOT NULL,
                         input_id INT(11) NOT NULL,
                         input_type VARCHAR(1000) NOT NULL,
@@ -715,7 +784,7 @@ class Update extends AbstractSetup
                 case 'sqlite3':
                 case 'pgsql':
                     $this->queries[] = sprintf(
-                        'CREATE TABLE %sfaqforms (
+                        'CREATE TABLE IF NOT EXISTS %sfaqforms (
                         form_id INTEGER NOT NULL,
                         input_id INTEGER NOT NULL,
                         input_type VARCHAR(1000) NOT NULL,
@@ -727,6 +796,10 @@ class Update extends AbstractSetup
                     );
                     break;
             }
+
+            // A failed update attempt may already have inserted the default form data,
+            // so the table is emptied before the defaults are inserted again.
+            $this->queries[] = sprintf('DELETE FROM %sfaqforms', Database::getTablePrefix());
 
             // Add function for editing forms
             $forms = new Forms($this->configuration);
@@ -746,7 +819,7 @@ class Update extends AbstractSetup
             switch (Database::getType()) {
                 case 'mysqli':
                     $this->queries[] = sprintf(
-                        'CREATE TABLE %sfaqseo (
+                        'CREATE TABLE IF NOT EXISTS %sfaqseo (
                             id INT(11) NOT NULL,
                             type VARCHAR(32) NOT NULL,
                             reference_id INT(11) NOT NULL,
@@ -776,7 +849,7 @@ class Update extends AbstractSetup
                     break;
                 case 'sqlite3':
                     $this->queries[] = sprintf(
-                        'CREATE TABLE %sfaqseo (
+                        'CREATE TABLE IF NOT EXISTS %sfaqseo (
                             id INT NOT NULL,
                             type VARCHAR(32) NOT NULL,
                             reference_id INT NOT NULL,
@@ -791,7 +864,7 @@ class Update extends AbstractSetup
                     break;
                 case 'pgsql':
                     $this->queries[] = sprintf(
-                        'CREATE TABLE %sfaqseo (
+                        'CREATE TABLE IF NOT EXISTS %sfaqseo (
                             id INTEGER NOT NULL,
                             type VARCHAR(32) NOT NULL,
                             reference_id INTEGER NOT NULL,
@@ -837,6 +910,11 @@ class Update extends AbstractSetup
             if ('sqlite3' === Database::getType()) {
                 $this->queries[] = sprintf(
                     'ALTER TABLE %sfaquser ADD COLUMN webauthnkeys TEXT NULL DEFAULT NULL;',
+                    Database::getTablePrefix(),
+                );
+            } elseif ('pgsql' === Database::getType()) {
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaquser ADD COLUMN IF NOT EXISTS webauthnkeys TEXT NULL DEFAULT NULL;',
                     Database::getTablePrefix(),
                 );
             } else {
@@ -1045,7 +1123,7 @@ class Update extends AbstractSetup
     private function applyUpdates409(): void
     {
         if (version_compare($this->version, '4.0.9', '<') && Database::getType() === 'pgsql') {
-            $this->queries[] = sprintf('CREATE SEQUENCE %sfaqseo_id_seq', Database::getTablePrefix());
+            $this->queries[] = sprintf('CREATE SEQUENCE IF NOT EXISTS %sfaqseo_id_seq', Database::getTablePrefix());
             $this->queries[] = sprintf(
                 "ALTER TABLE %sfaqseo ALTER COLUMN id SET DEFAULT nextval('%sfaqseo_id_seq')",
                 Database::getTablePrefix(),
