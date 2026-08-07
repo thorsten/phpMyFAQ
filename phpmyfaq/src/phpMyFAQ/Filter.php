@@ -195,10 +195,12 @@ class Filter
 
     /**
      * Shared HtmlSanitizer configuration: safe elements only, no form controls.
+     * The input length limit is lifted so large FAQ answers stay intact when saving.
      */
     private static function sanitizerConfig(): HtmlSanitizerConfig
     {
         return new HtmlSanitizerConfig()
+            ->withMaxInputLength(-1)
             ->allowSafeElements()
             ->allowRelativeLinks()
             ->allowRelativeMedias()

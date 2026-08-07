@@ -533,6 +533,9 @@ final class UpdateRunner
 
         try {
             $result = $fn($setProgress) === true;
+        } catch (\Throwable $throwable) {
+            $symfonyStyle->error(message: $throwable->getMessage());
+            $result = false;
         } finally {
             $progressBar->finish();
             $symfonyStyle->newLine(count: 2);

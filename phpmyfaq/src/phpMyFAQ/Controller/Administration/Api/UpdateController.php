@@ -206,10 +206,20 @@ final class UpdateController extends AbstractController
                 ob_flush();
                 flush();
             };
-            $message = $this->upgrade->extractPackage($pathToPackage, $progressCallback)
-                ? Translation::get(key: 'extractSuccessful')
-                : Translation::get(key: 'extractFailure');
-            echo json_encode(['message' => $message]);
+            try {
+                if ($this->upgrade->extractPackage($pathToPackage, $progressCallback)) {
+                    echo json_encode(['message' => Translation::get(key: 'extractSuccessful')]);
+                    return;
+                }
+
+                echo json_encode(['error' => Translation::get(key: 'extractFailure')]);
+            } catch (Exception $exception) {
+                echo
+                    json_encode([
+                        'error' => Translation::get(key: 'extractFailure') . ' ' . $exception->getMessage(),
+                    ])
+                ;
+            }
         });
     }
 
@@ -230,10 +240,16 @@ final class UpdateController extends AbstractController
                 ob_flush();
                 flush();
             };
-            $message = $this->upgrade->createTemporaryBackup($backupHash . '.zip', $progressCallback)
-                ? 'Backup successful'
-                : 'Backup failed';
-            echo json_encode(['message' => $message]);
+            try {
+                if ($this->upgrade->createTemporaryBackup($backupHash . '.zip', $progressCallback)) {
+                    echo json_encode(['success' => 'Backup successful']);
+                    return;
+                }
+
+                echo json_encode(['error' => 'Backup failed']);
+            } catch (Exception $exception) {
+                echo json_encode(['error' => 'Backup failed: ' . $exception->getMessage()]);
+            }
         });
     }
 
@@ -252,11 +268,19 @@ final class UpdateController extends AbstractController
                 ob_flush();
                 flush();
             };
-            $message = $this->upgrade->installPackage($progressCallback)
-            && $this->configurator->adjustRewriteBaseHtaccess()
-                ? 'Package successfully installed.'
-                : 'Install package failed';
-            echo json_encode(['message' => $message]);
+            try {
+                if (
+                    $this->upgrade->installPackage($progressCallback)
+                    && $this->configurator->adjustRewriteBaseHtaccess()
+                ) {
+                    echo json_encode(['success' => 'Package successfully installed.']);
+                    return;
+                }
+
+                echo json_encode(['error' => 'Install package failed']);
+            } catch (Exception $exception) {
+                echo json_encode(['error' => 'Install package failed: ' . $exception->getMessage()]);
+            }
         });
     }
 

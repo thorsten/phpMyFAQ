@@ -83,18 +83,34 @@ describe('Upgrade API', (): void => {
   });
 
   it('extractPackage should extract a package', async (): Promise<void> => {
-    const mockResponse = { success: 'true' };
-    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
+    const mockResponse = new Response('{"progress":"50%"}\n{"message":"Package successfully extracted."}');
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponse);
 
     const result = await extractPackage('csrfToken');
-    expect(result).toEqual(mockResponse);
-    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/extract-package', {
+    expect(result).toEqual({ message: 'Package successfully extracted.' });
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith('./api/extract-package', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ csrf: 'csrfToken' }),
     });
+  });
+
+  it('extractPackage should return the terminal error line', async (): Promise<void> => {
+    const mockResponse = new Response('{"progress":"50%"}\n{"error":"Cannot open zipped download package."}');
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponse);
+
+    const result = await extractPackage('csrfToken');
+    expect(result).toEqual({ error: 'Cannot open zipped download package.' });
+  });
+
+  it('extractPackage should return an empty result for a truncated stream', async (): Promise<void> => {
+    const mockResponse = new Response('{"progress":"50%"}\n{"progre');
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponse);
+
+    const result = await extractPackage('csrfToken');
+    expect(result).toEqual({});
   });
 
   it('startTemporaryBackup should start a temporary backup', async (): Promise<void> => {

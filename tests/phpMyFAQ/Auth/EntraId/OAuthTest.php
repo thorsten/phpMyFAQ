@@ -124,6 +124,52 @@ class OAuthTest extends TestCase
      * @throws Exception
      * @throws \JsonException
      */
+    public function testGetOAuthTokenFallsBackToCookieVerifier(): void
+    {
+        $mockResponse = $this->createStub(ResponseInterface::class);
+        $mockResponse
+            ->method('getContent')
+            ->willReturn(json_encode(['access_token' => 'fake_access_token']));
+
+        // A fresh session (SameSite=Strict cookie not sent on the callback) returns null
+        $this->mockSession
+            ->expects($this->once())
+            ->method('get')
+            ->with(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER)
+            ->willReturn(null);
+
+        $this->mockSession
+            ->expects($this->once())
+            ->method('getCookie')
+            ->with(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER)
+            ->willReturn('verifier-from-cookie');
+
+        $this->mockClient
+            ->expects($this->once())
+            ->method('request')
+            ->with(
+                'POST',
+                $this->stringContains('microsoftonline.com'),
+                $this->callback(
+                    static fn(array $options): bool => $options['body']['code_verifier'] === 'verifier-from-cookie',
+                ),
+            )
+            ->willReturn($mockResponse);
+
+        $reflection = new ReflectionClass($this->oAuth);
+        $clientProperty = $reflection->getProperty('httpClient');
+        $clientProperty->setValue($this->oAuth, $this->mockClient);
+
+        $result = $this->oAuth->getOAuthToken('authorization_code');
+
+        $this->assertEquals('fake_access_token', $result->access_token);
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     * @throws \JsonException
+     */
     public function testRefreshTokenSuccess(): void
     {
         $mockResponse = $this->createStub(ResponseInterface::class);

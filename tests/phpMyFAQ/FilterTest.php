@@ -447,6 +447,30 @@ class FilterTest extends TestCase
         $this->assertStringContainsString('Helpful content', $result);
     }
 
+    public function testRemoveAttributesDoesNotTruncateLargeContent(): void
+    {
+        // Issue #4550: Symfony's HtmlSanitizer truncates input at 20,000 bytes by default
+        $paragraph = '<p>' . str_repeat('Lorem ipsum dolor sit amet. ', 50) . '</p>';
+        $html = str_repeat($paragraph, 30);
+        $this->assertGreaterThan(20000, strlen($html));
+
+        $result = Filter::removeAttributes($html);
+
+        $this->assertEquals($html, $result);
+    }
+
+    public function testFilterHtmlDoesNotTruncateLargeContent(): void
+    {
+        // Issue #4550: large FAQ answers must survive the full sanitization pipeline
+        $paragraph = '<p>' . str_repeat('Lorem ipsum dolor sit amet. ', 50) . '</p>';
+        $html = str_repeat($paragraph, 30);
+        $this->assertGreaterThan(20000, strlen($html));
+
+        $result = Filter::filterHtml($html);
+
+        $this->assertEquals($html, $result);
+    }
+
     public function testRemoveAttributesWithMixedQuoteStyles(): void
     {
         $html = '<div class="safe" onclick=alert(1) style=\'color:red\' onmouseover="steal()">';

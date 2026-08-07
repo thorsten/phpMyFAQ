@@ -47,6 +47,8 @@ class Upgrade extends AbstractSetup
 
     public string $upgradeDirectory = PMF_CONTENT_DIR . '/upgrades';
 
+    private string $installationDirectory = PMF_ROOT_DIR;
+
     private bool $isNightly;
 
     private HttpClientInterface $httpClient;
@@ -114,6 +116,23 @@ class Upgrade extends AbstractSetup
             $this->configuration->isSignInWithMicrosoftActive() && !is_file(PMF_CONTENT_DIR . '/core/config/azure.php')
         ) {
             throw new Exception(message: 'The file /content/core/config/azure.php is missing.');
+        }
+
+        // The install step overwrites the whole installation tree, so every
+        // existing file and directory must be writable for the web server
+        // user. A non-writable path would otherwise leave a partially updated
+        // installation behind. The upgrade directory is skipped because it is
+        // managed by the updater itself.
+        $nonWritablePaths = WritablePathScanner::getNonWritablePaths(
+            $this->installationDirectory,
+            $this->upgradeDirectory,
+        );
+
+        if ($nonWritablePaths !== []) {
+            throw new Exception(
+                message: 'The following files or directories are not writable for the web server: '
+                    . WritablePathScanner::formatPathList($nonWritablePaths),
+            );
         }
 
         return true;
@@ -409,12 +428,24 @@ class Upgrade extends AbstractSetup
     }
 
     /**
-     * Method to install the package
+     * Method to install the package. Throws an exception if any file cannot
+     * be copied, so a partially updated installation is never reported as a
+     * success.
+     *
+     * @throws Exception
      */
     public function installPackage(callable $progressCallback): bool
     {
-        $sourceDir = $this->upgradeDirectory . '/new/phpmyfaq/';
-        $destinationDir = (string) PMF_ROOT_DIR;
+        // realpath() is required because getRealPath() below returns resolved
+        // paths: with a symlinked installation the configured prefix would
+        // never match and every file would be copied to a wrong destination.
+        $sourceDir = realpath($this->upgradeDirectory . '/new/phpmyfaq');
+
+        if ($sourceDir === false) {
+            throw new Exception(message: 'The extracted package is missing, please run the extract step again.');
+        }
+
+        $destinationDir = $this->installationDirectory;
 
         $sourceDirIterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($sourceDir, FilesystemIterator::SKIP_DOTS),
@@ -423,24 +454,37 @@ class Upgrade extends AbstractSetup
 
         $totalFiles = iterator_count($sourceDirIterator);
         $currentFile = 0;
+        $failedPaths = [];
 
-        foreach ($sourceDirIterator as $item) {
-            if (!$item instanceof \SplFileInfo) {
-                continue;
-            }
+        // Failures are collected and reported via the exception below; the
+        // error handler keeps PHP warnings from failed copies out of the
+        // streamed JSON progress response.
+        set_error_handler(static fn(): bool => true);
 
-            $source = $item->getRealPath();
-            if ($source === false) {
-                continue;
-            }
-
-            $relativePath = str_replace($sourceDir, replace: '', subject: $source);
-            $destination = $destinationDir . DIRECTORY_SEPARATOR . $relativePath;
-
-            if ($item->isDir()) {
-                if (!is_dir($destination)) {
-                    mkdir($destination, permissions: 0o755, recursive: true);
+        try {
+            foreach ($sourceDirIterator as $item) {
+                if (!$item instanceof \SplFileInfo) {
+                    continue;
                 }
+
+                $source = $item->getRealPath();
+                if ($source === false) {
+                    continue;
+                }
+
+                $relativePath = substr($source, strlen($sourceDir) + 1);
+                $destination = $destinationDir . DIRECTORY_SEPARATOR . $relativePath;
+
+                if ($item->isDir()) {
+                    if (!is_dir($destination) && !mkdir($destination, permissions: 0o755, recursive: true)) {
+                        $failedPaths[] = $relativePath;
+                    }
+                }
+
+                if (!$item->isDir() && !copy($source, $destination)) {
+                    $failedPaths[] = $relativePath;
+                }
+
                 ++$currentFile;
                 if (($currentFile % 10) !== 0) {
                     continue;
@@ -452,25 +496,46 @@ class Upgrade extends AbstractSetup
                 }
 
                 $progressCallback($progress);
-                continue;
             }
-
-            copy($source, $destination);
-
-            ++$currentFile;
-            if (($currentFile % 10) !== 0) {
-                continue;
-            }
-
-            $progress = 100;
-            if ($totalFiles > 0) {
-                $progress = (int) (($currentFile / $totalFiles) * 100) . '%';
-            }
-
-            $progressCallback($progress);
+        } finally {
+            restore_error_handler();
         }
 
+        if ($failedPaths !== []) {
+            throw new Exception(message: sprintf(
+                'Could not copy %d path(s) into the installation directory: %s.'
+                . ' Please check the file permissions and run the update again.',
+                count($failedPaths),
+                WritablePathScanner::formatPathList($failedPaths),
+            ));
+        }
+
+        $this->resetOpcache();
+
         return true;
+    }
+
+    /**
+     * Drops all cached bytecode after the files have been replaced. With
+     * opcache.validate_timestamps=0 (or an exhausted cache) PHP would
+     * otherwise keep executing classes of the previous version and fail with
+     * undefined-method errors against the freshly installed code.
+     */
+    private function resetOpcache(): void
+    {
+        if (!function_exists('opcache_reset')) {
+            return;
+        }
+
+        // opcache.restrict_api can make the reset fail with a warning; a
+        // failed reset must not abort an otherwise successful installation.
+        set_error_handler(static fn(): bool => true);
+
+        try {
+            opcache_reset();
+        } finally {
+            restore_error_handler();
+        }
     }
 
     /**
@@ -545,6 +610,11 @@ class Upgrade extends AbstractSetup
     public function setUpgradeDirectory(string $upgradeDirectory): void
     {
         $this->upgradeDirectory = $upgradeDirectory;
+    }
+
+    public function setInstallationDirectory(string $installationDirectory): void
+    {
+        $this->installationDirectory = $installationDirectory;
     }
 
     public function isNightly(): bool

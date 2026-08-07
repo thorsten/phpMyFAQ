@@ -27,15 +27,25 @@ import {
 } from '../api';
 import { ResponseData } from '../interfaces';
 
-interface ProgressData {
+interface StreamMessage {
   progress?: string;
+  success?: string;
+  error?: string;
+  message?: string;
 }
 
 /**
- * Handles streaming progress updates for a progress bar
+ * Handles streaming progress updates for a progress bar.
+ *
+ * The server streams one JSON object per line: progress lines followed by a
+ * terminal line carrying either a success or an error message. A stream that
+ * ends without a terminal line means the server process died mid-step (e.g.
+ * a timeout while copying files), so it is treated as a failure instead of
+ * silently reporting success on a partially completed step.
+ *
  * @param response - The fetch Response object with a readable stream
  * @param progressBarId - The ID of the progress bar element
- * @returns Promise that resolves when the stream is complete
+ * @returns Promise that resolves on success and rejects on failure
  */
 export const handleStreamingProgress = async (response: Response, progressBarId: string): Promise<void> => {
   const progressBar = document.getElementById(progressBarId);
@@ -51,35 +61,64 @@ export const handleStreamingProgress = async (response: Response, progressBarId:
   }
 
   const reader: ReadableStreamDefaultReader<Uint8Array> = response.body.getReader();
+  const decoder = new TextDecoder();
   const bar = progressBar; // Create a non-null reference for closure
+  let buffer = '';
+  const state: { terminal: StreamMessage | null } = { terminal: null };
 
-  async function pump(): Promise<void> {
-    const { done, value } = await reader.read();
-
-    if (done) {
-      bar.style.width = '100%';
-      bar.innerText = '100%';
-      bar.classList.remove('progress-bar-animated', 'bg-primary');
-      bar.classList.add('bg-success');
+  const handleLine = (line: string): void => {
+    if (line.trim() === '') {
       return;
     }
-
-    const decodedValue: string = new TextDecoder().decode(value);
     try {
-      const data: ProgressData = JSON.parse(decodedValue);
+      const data: StreamMessage = JSON.parse(line);
       if (data.progress) {
         bar.style.width = data.progress;
         bar.innerText = data.progress;
+      }
+      if (data.error || data.success || data.message) {
+        state.terminal = data;
       }
     } catch (e) {
       // Ignore JSON parse errors for incomplete chunks
       console.debug('JSON parse error (likely incomplete chunk):', e);
     }
+  };
 
-    return pump();
+  const markFailure = (): void => {
+    bar.classList.remove('progress-bar-animated', 'bg-primary');
+    bar.classList.add('bg-danger');
+  };
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) {
+      break;
+    }
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() as string;
+    lines.forEach(handleLine);
   }
 
-  await pump();
+  buffer += decoder.decode();
+  handleLine(buffer);
+
+  if (state.terminal?.error) {
+    markFailure();
+    throw new Error(state.terminal.error);
+  }
+
+  if (state.terminal === null) {
+    markFailure();
+    throw new Error('The server stopped responding before this step was finished. Please check the server logs.');
+  }
+
+  bar.style.width = '100%';
+  bar.innerText = '100%';
+  bar.classList.remove('progress-bar-animated', 'bg-primary');
+  bar.classList.add('bg-success');
 };
 
 export const handleCheckForUpdates = (): void => {
@@ -265,15 +304,22 @@ export const handleCheckForUpdates = (): void => {
         const card = document.getElementById('pmf-update-step-extract-package') as HTMLElement;
 
         if (result) {
-          card.classList.add('text-bg-success');
-          if (divInstallPackage) {
-            divInstallPackage.classList.remove('d-none');
-          }
-          if (response.message) {
+          if (response.error || !response.message) {
+            card.classList.add('text-bg-danger');
+            result.replaceWith(
+              addElement('p', {
+                innerText: response.error ?? 'Extracting the package failed. Please check the server logs.',
+              })
+            );
+          } else {
+            card.classList.add('text-bg-success');
+            if (divInstallPackage) {
+              divInstallPackage.classList.remove('d-none');
+            }
             result.replaceWith(addElement('p', { innerText: response.message }));
+            extractButton.disabled = true;
           }
           spinner.classList.add('d-none');
-          extractButton.disabled = true;
         }
       } catch (error) {
         console.error(error);
@@ -288,8 +334,17 @@ export const handleCheckForUpdates = (): void => {
       const spinner = document.getElementById('spinner-install-package') as HTMLElement;
       spinner.classList.remove('d-none');
       const csrfToken = installButton.getAttribute('data-pmf-csrf') as string;
-      await createTemporaryBackup(csrfToken);
-      spinner.classList.add('d-none');
+      try {
+        await createTemporaryBackup(csrfToken);
+      } catch (error) {
+        console.error('Update failed:', error);
+        const card = document.getElementById('pmf-update-step-install-package') as HTMLElement | null;
+        if (card) {
+          card.classList.add('text-bg-danger');
+        }
+      } finally {
+        spinner.classList.add('d-none');
+      }
     });
   }
 };

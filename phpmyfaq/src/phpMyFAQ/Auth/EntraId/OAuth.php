@@ -82,9 +82,11 @@ class OAuth
     {
         $url = 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/token';
 
-        $codeVerifier = $this->entraIdSession->getCookie(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER);
-        if ($this->entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER) !== '') {
-            $codeVerifier = $this->entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER);
+        // The session cookie is SameSite=Strict, so the browser does not send it on the
+        // cross-site redirect back from Microsoft: fall back to the SameSite=Lax verifier cookie.
+        $codeVerifier = $this->entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER);
+        if ($codeVerifier === null || $codeVerifier === '') {
+            $codeVerifier = $this->entraIdSession->getCookie(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER);
         }
 
         $response = $this->httpClient->request('POST', $url, [

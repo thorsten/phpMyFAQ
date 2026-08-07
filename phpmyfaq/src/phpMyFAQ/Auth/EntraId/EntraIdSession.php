@@ -22,7 +22,6 @@ namespace phpMyFAQ\Auth\EntraId;
 use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\AbstractSession;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Uid\Uuid;
@@ -96,14 +95,15 @@ class EntraIdSession extends AbstractSession
 
         $cookieDomain = parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST);
 
-        Cookie::create($name)
-            ->withValue($sessionId === null ? '' : (string) $sessionId)
-            ->withExpires((int) $request->server->get('REQUEST_TIME') + $timeout)
-            ->withPath(dirname((string) $request->server->get('SCRIPT_NAME')))
-            ->withDomain(is_string($cookieDomain) ? $cookieDomain : null)
-            ->withSameSite($strict ? 'strict' : '')
-            ->withSecure($request->isSecure())
-            ->withHttpOnly();
+        setcookie($name, (string) ($sessionId ?? ''), [
+            'expires' => (int) $request->server->get('REQUEST_TIME') + $timeout,
+            'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
+            'domain' => is_string($cookieDomain) ? $cookieDomain : '',
+            'secure' => $request->isSecure(),
+            'httponly' => true,
+            // 'lax' so the cookie survives the top-level redirect back from login.microsoftonline.com
+            'samesite' => $strict ? 'strict' : 'lax',
+        ]);
     }
 
     /**
