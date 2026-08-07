@@ -2,11 +2,14 @@
 
 namespace phpMyFAQ\Setup;
 
+use FilesystemIterator;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\DownloadHostType;
 use phpMyFAQ\System;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -159,6 +162,127 @@ class UpgradeTest extends TestCase
         } finally {
             unlink($outsidePath);
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testInstallPackageCopiesAllFilesIntoInstallationDirectory(): void
+    {
+        $sourceDir = PMF_CONTENT_DIR . '/upgrades/new/phpmyfaq';
+        mkdir($sourceDir . '/src/phpMyFAQ', recursive: true);
+        file_put_contents($sourceDir . '/index.php', "<?php // new\n");
+        file_put_contents($sourceDir . '/src/phpMyFAQ/System.php', "<?php // new\n");
+
+        $installationDir = PMF_TEST_DIR . '/install-target';
+        mkdir($installationDir);
+        $this->upgrade->setInstallationDirectory($installationDir);
+
+        try {
+            $this->assertTrue($this->upgrade->installPackage(function (): void {
+            }));
+            $this->assertFileExists($installationDir . '/index.php');
+            $this->assertFileExists($installationDir . '/src/phpMyFAQ/System.php');
+        } finally {
+            $this->removeDirectory(PMF_CONTENT_DIR . '/upgrades/new');
+            $this->removeDirectory($installationDir);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testInstallPackageThrowsWhenAFileCannotBeOverwritten(): void
+    {
+        if (function_exists('posix_geteuid') && posix_geteuid() === 0) {
+            $this->markTestSkipped('File permissions are not enforced for the root user.');
+        }
+
+        $sourceDir = PMF_CONTENT_DIR . '/upgrades/new/phpmyfaq';
+        mkdir($sourceDir, recursive: true);
+        file_put_contents($sourceDir . '/locked.php', "<?php // new\n");
+
+        $installationDir = PMF_TEST_DIR . '/install-target-locked';
+        mkdir($installationDir);
+        file_put_contents($installationDir . '/locked.php', "<?php // old\n");
+        chmod($installationDir . '/locked.php', 0o444);
+
+        $this->upgrade->setInstallationDirectory($installationDir);
+
+        try {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage('Could not copy 1 path(s) into the installation directory: locked.php');
+
+            $this->upgrade->installPackage(function (): void {
+            });
+        } finally {
+            chmod($installationDir . '/locked.php', 0o644);
+            $this->assertStringEqualsFile($installationDir . '/locked.php', "<?php // old\n");
+            $this->removeDirectory(PMF_CONTENT_DIR . '/upgrades/new');
+            $this->removeDirectory($installationDir);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testInstallPackageThrowsWhenExtractedPackageIsMissing(): void
+    {
+        $this->removeDirectory(PMF_CONTENT_DIR . '/upgrades/new');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The extracted package is missing, please run the extract step again.');
+
+        $this->upgrade->installPackage(function (): void {
+        });
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testCheckFilesystemThrowsForNonWritableInstallationPath(): void
+    {
+        if (function_exists('posix_geteuid') && posix_geteuid() === 0) {
+            $this->markTestSkipped('File permissions are not enforced for the root user.');
+        }
+
+        touch(PMF_CONTENT_DIR . '/core/config/constants.php');
+
+        $installationDir = PMF_TEST_DIR . '/install-target-readonly';
+        mkdir($installationDir);
+        file_put_contents($installationDir . '/locked.php', "<?php\n");
+        chmod($installationDir . '/locked.php', 0o444);
+
+        $this->upgrade->setInstallationDirectory($installationDir);
+
+        try {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage('not writable for the web server');
+
+            $this->upgrade->checkFilesystem();
+        } finally {
+            chmod($installationDir . '/locked.php', 0o644);
+            $this->removeDirectory($installationDir);
+            unlink(PMF_CONTENT_DIR . '/core/config/constants.php');
+        }
+    }
+
+    private function removeDirectory(string $directory): void
+    {
+        if (!is_dir($directory)) {
+            return;
+        }
+
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST,
+        );
+
+        foreach ($files as $file) {
+            $file->isDir() ? rmdir($file->getPathname()) : unlink($file->getPathname());
+        }
+
+        rmdir($directory);
     }
 
     /**

@@ -94,14 +94,13 @@ describe('Upgrade API', (): void => {
   });
 
   it('extractPackage should extract a package', async (): Promise<void> => {
-    const mockResponse = { success: 'true' };
     (fetch as Mock).mockResolvedValue({
       ok: true,
-      json: async () => mockResponse,
+      text: async () => '{"progress":"50%"}\n{"message":"Package successfully extracted."}',
     });
 
     const result = await extractPackage('csrfToken');
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual({ message: 'Package successfully extracted.' });
     expect(fetch).toHaveBeenCalledWith('./api/extract-package', {
       method: 'POST',
       headers: {
@@ -110,6 +109,26 @@ describe('Upgrade API', (): void => {
       },
       body: JSON.stringify({ csrf: 'csrfToken' }),
     });
+  });
+
+  it('extractPackage should return the terminal error line', async (): Promise<void> => {
+    (fetch as Mock).mockResolvedValue({
+      ok: true,
+      text: async () => '{"progress":"50%"}\n{"error":"Cannot open zipped download package."}',
+    });
+
+    const result = await extractPackage('csrfToken');
+    expect(result).toEqual({ error: 'Cannot open zipped download package.' });
+  });
+
+  it('extractPackage should return an empty result for a truncated stream', async (): Promise<void> => {
+    (fetch as Mock).mockResolvedValue({
+      ok: true,
+      text: async () => '{"progress":"50%"}\n{"progre',
+    });
+
+    const result = await extractPackage('csrfToken');
+    expect(result).toEqual({});
   });
 
   it('startTemporaryBackup should start a temporary backup', async (): Promise<void> => {

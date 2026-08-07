@@ -253,6 +253,9 @@ final class UpdateRunner
         try {
             /** @var bool $result */
             $result = (bool) $fn($setProgress);
+        } catch (\Throwable $throwable) {
+            $io->error(message: $throwable->getMessage());
+            $result = false;
         } finally {
             $progressBar->finish();
             $io->newLine(count: 2);

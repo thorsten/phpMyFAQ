@@ -1,18 +1,30 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { handleStreamingProgress } from './upgrade';
 
+interface StubStreamMessage {
+  progress?: string;
+  success?: string;
+  error?: string;
+  message?: string;
+  status?: string;
+}
+
 /**
- * Helper to create a mock readable stream with progress updates
+ * Helper to create a mock readable stream with newline-delimited JSON lines,
+ * matching the server protocol: progress lines followed by a terminal line.
  */
-function createStubStream(progressValues: string[]): ReadableStream<Uint8Array> {
+function createStubStream(progressValues: string[], terminal: StubStreamMessage | null): ReadableStream<Uint8Array> {
   const encoder = new TextEncoder();
+  const lines: string[] = progressValues.map((progress: string): string => JSON.stringify({ progress }) + '\n');
+  if (terminal !== null) {
+    lines.push(JSON.stringify(terminal));
+  }
   let index = 0;
 
   return new ReadableStream({
     async pull(controller) {
-      if (index < progressValues.length) {
-        const data = JSON.stringify({ progress: progressValues[index] });
-        controller.enqueue(encoder.encode(data));
+      if (index < lines.length) {
+        controller.enqueue(encoder.encode(lines[index]));
         index++;
       } else {
         controller.close();
@@ -24,8 +36,11 @@ function createStubStream(progressValues: string[]): ReadableStream<Uint8Array> 
 /**
  * Helper to create a mock Response with a readable stream
  */
-function createStubResponse(progressValues: string[]): Response {
-  const stream = createStubStream(progressValues);
+function createStubResponse(
+  progressValues: string[],
+  terminal: StubStreamMessage | null = { success: 'Step finished' }
+): Response {
+  const stream = createStubStream(progressValues, terminal);
   return new Response(stream);
 }
 
@@ -62,13 +77,63 @@ describe('handleStreamingProgress', () => {
     expect(progressBar.classList.contains('progress-bar-animated')).toBe(false);
   });
 
-  it('should handle empty stream and complete with 100%', async () => {
-    const response = createStubResponse([]);
+  it('should treat a message terminal line as success', async () => {
+    const response = createStubResponse(['50%'], { message: 'Package successfully extracted.' });
 
     await handleStreamingProgress(response, progressBarId);
 
     expect(progressBar.style.width).toBe('100%');
-    expect(progressBar.innerText).toBe('100%');
+    expect(progressBar.classList.contains('bg-success')).toBe(true);
+  });
+
+  it('should reject when the stream carries a terminal error', async () => {
+    const response = createStubResponse(['25%'], { error: 'Install package failed: could not copy 3 path(s)' });
+
+    await expect(handleStreamingProgress(response, progressBarId)).rejects.toThrow(
+      'Install package failed: could not copy 3 path(s)'
+    );
+
+    expect(progressBar.classList.contains('bg-danger')).toBe(true);
+    expect(progressBar.classList.contains('bg-success')).toBe(false);
+  });
+
+  it('should reject when the stream ends without a terminal message', async () => {
+    // Simulates the server process dying mid-step (e.g. a timeout while copying files)
+    const response = createStubResponse(['10%', '20%'], null);
+
+    await expect(handleStreamingProgress(response, progressBarId)).rejects.toThrow(
+      'The server stopped responding before this step was finished. Please check the server logs.'
+    );
+
+    expect(progressBar.classList.contains('bg-danger')).toBe(true);
+    expect(progressBar.classList.contains('bg-success')).toBe(false);
+  });
+
+  it('should reject on an empty stream', async () => {
+    const response = createStubResponse([], null);
+
+    await expect(handleStreamingProgress(response, progressBarId)).rejects.toThrow(
+      'The server stopped responding before this step was finished. Please check the server logs.'
+    );
+
+    expect(progressBar.classList.contains('bg-danger')).toBe(true);
+  });
+
+  it('should handle a terminal line split across chunks', async () => {
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async pull(controller) {
+        controller.enqueue(encoder.encode('{"progress":"50%"}\n{"succ'));
+        controller.enqueue(encoder.encode('ess":"Package successfully installed."}'));
+        controller.close();
+      },
+    });
+
+    const response = new Response(stream);
+
+    await handleStreamingProgress(response, progressBarId);
+
+    expect(progressBar.style.width).toBe('100%');
     expect(progressBar.classList.contains('bg-success')).toBe(true);
   });
 
@@ -76,9 +141,9 @@ describe('handleStreamingProgress', () => {
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async pull(controller) {
-        // Send invalid JSON
-        controller.enqueue(encoder.encode('invalid json {'));
-        controller.enqueue(encoder.encode(JSON.stringify({ progress: '50%' })));
+        // Send invalid JSON followed by a valid terminal line
+        controller.enqueue(encoder.encode('invalid json {\n'));
+        controller.enqueue(encoder.encode(JSON.stringify({ success: 'Step finished' })));
         controller.close();
       },
     });
@@ -149,13 +214,14 @@ describe('handleStreamingProgress', () => {
     expect(progressBar.style.width).toBe('100%');
   });
 
-  it('should handle responses without progress property', async () => {
+  it('should handle lines without progress property', async () => {
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async pull(controller) {
         // Send JSON without progress property
-        controller.enqueue(encoder.encode(JSON.stringify({ status: 'processing' })));
-        controller.enqueue(encoder.encode(JSON.stringify({ progress: '50%' })));
+        controller.enqueue(encoder.encode(JSON.stringify({ status: 'processing' }) + '\n'));
+        controller.enqueue(encoder.encode(JSON.stringify({ progress: '50%' }) + '\n'));
+        controller.enqueue(encoder.encode(JSON.stringify({ success: 'Step finished' })));
         controller.close();
       },
     });
@@ -222,7 +288,7 @@ describe('Streaming progress error scenarios', () => {
     await expect(handleStreamingProgress(response, progressBarId)).rejects.toThrow('Stream read error');
   });
 
-  it('should handle TextDecoder errors', async () => {
+  it('should reject on undecodable bytes without a terminal message', async () => {
     const stream = new ReadableStream({
       async pull(controller) {
         // Send invalid UTF-8 bytes
@@ -234,11 +300,10 @@ describe('Streaming progress error scenarios', () => {
     const response = new Response(stream);
     const consoleDebugSpy = vi.spyOn(console, 'debug').mockImplementation(() => {});
 
-    // TextDecoder should handle invalid bytes gracefully with replacement characters
-    await handleStreamingProgress(response, progressBarId);
-
-    // Should still complete
-    expect(progressBar.style.width).toBe('100%');
+    // Replacement characters cannot form a terminal message, so this counts as a dead stream
+    await expect(handleStreamingProgress(response, progressBarId)).rejects.toThrow(
+      'The server stopped responding before this step was finished. Please check the server logs.'
+    );
 
     consoleDebugSpy.mockRestore();
   });

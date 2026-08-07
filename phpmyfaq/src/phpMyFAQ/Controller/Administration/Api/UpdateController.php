@@ -197,10 +197,18 @@ final class UpdateController extends AbstractController
                 ob_flush();
                 flush();
             };
-            if ($upgrade->extractPackage($pathToPackage, $progressCallback)) {
-                echo json_encode(['message' => Translation::get(key: 'extractSuccessful')]);
-            } else {
-                echo json_encode(['message' => Translation::get(key: 'extractFailure')]);
+            try {
+                if ($upgrade->extractPackage($pathToPackage, $progressCallback)) {
+                    echo json_encode(['message' => Translation::get(key: 'extractSuccessful')]);
+                } else {
+                    echo json_encode(['error' => Translation::get(key: 'extractFailure')]);
+                }
+            } catch (Exception $exception) {
+                echo
+                    json_encode([
+                        'error' => Translation::get(key: 'extractFailure') . ' ' . $exception->getMessage(),
+                    ])
+                ;
             }
         });
     }
@@ -223,10 +231,14 @@ final class UpdateController extends AbstractController
                 ob_flush();
                 flush();
             };
-            if ($upgrade->createTemporaryBackup($backupHash . '.zip', $progressCallback)) {
-                echo json_encode(['message' => 'Backup successful']);
-            } else {
-                echo json_encode(['message' => 'Backup failed']);
+            try {
+                if ($upgrade->createTemporaryBackup($backupHash . '.zip', $progressCallback)) {
+                    echo json_encode(['success' => 'Backup successful']);
+                } else {
+                    echo json_encode(['error' => 'Backup failed']);
+                }
+            } catch (Exception $exception) {
+                echo json_encode(['error' => 'Backup failed: ' . $exception->getMessage()]);
             }
         });
     }
@@ -248,10 +260,14 @@ final class UpdateController extends AbstractController
                 ob_flush();
                 flush();
             };
-            if ($upgrade->installPackage($progressCallback) && $configurator->adjustRewriteBaseHtaccess()) {
-                echo json_encode(['message' => 'Package successfully installed.']);
-            } else {
-                echo json_encode(['message' => 'Install package failed']);
+            try {
+                if ($upgrade->installPackage($progressCallback) && $configurator->adjustRewriteBaseHtaccess()) {
+                    echo json_encode(['success' => 'Package successfully installed.']);
+                } else {
+                    echo json_encode(['error' => 'Install package failed']);
+                }
+            } catch (Exception $exception) {
+                echo json_encode(['error' => 'Install package failed: ' . $exception->getMessage()]);
             }
         });
     }

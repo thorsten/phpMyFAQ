@@ -84,7 +84,21 @@ export const extractPackage = async (csrfToken: string): Promise<ResponseData> =
     body: JSON.stringify({ csrf: csrfToken }),
   });
 
-  return await response.json();
+  // The endpoint streams one JSON object per line (progress lines followed by
+  // a terminal message), so only the last complete line carries the result.
+  const body = await response.text();
+  const lines = body.split('\n').filter((line: string): boolean => line.trim() !== '');
+  const lastLine = lines.pop();
+
+  if (!lastLine) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(lastLine) as ResponseData;
+  } catch {
+    return {};
+  }
 };
 
 export const startTemporaryBackup = async (csrfToken: string): Promise<Response> => {
