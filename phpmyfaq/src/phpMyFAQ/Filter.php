@@ -165,6 +165,7 @@ class Filter
         $html = str_replace(search: '&#13;', replace: '', subject: $html);
 
         $config = (new HtmlSanitizerConfig())
+            ->withMaxInputLength(-1)
             ->allowSafeElements()
             ->allowRelativeLinks()
             ->allowRelativeMedias()
