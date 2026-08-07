@@ -244,6 +244,6 @@ final class SetupController extends AbstractController
 
     private function getUpdateToken(): UpdateToken
     {
-        return new UpdateToken(PMF_CONFIG_DIR);
+        return new UpdateToken((string) PMF_CONFIG_DIR);
     }
 }

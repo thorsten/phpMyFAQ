@@ -145,7 +145,7 @@ final class SetupController
         if ($updateTokenRequired) {
             try {
                 // The token itself is never rendered, it has to be read from the file system
-                new UpdateToken(PMF_CONFIG_DIR)->getOrCreate();
+                new UpdateToken((string) PMF_CONFIG_DIR)->getOrCreate();
             } catch (Exception $exception) {
                 $updateTokenError = $exception->getMessage();
             }
@@ -193,10 +193,11 @@ final class SetupController
      */
     private function getRelativeTokenFilePath(): string
     {
-        $tokenFilePath = new UpdateToken(PMF_CONFIG_DIR)->getTokenFilePath();
+        $tokenFilePath = new UpdateToken((string) PMF_CONFIG_DIR)->getTokenFilePath();
+        $rootDir = (string) PMF_ROOT_DIR;
 
-        if (str_starts_with($tokenFilePath, PMF_ROOT_DIR . DIRECTORY_SEPARATOR)) {
-            return substr($tokenFilePath, strlen(PMF_ROOT_DIR) + 1);
+        if (str_starts_with($tokenFilePath, $rootDir . DIRECTORY_SEPARATOR)) {
+            return substr($tokenFilePath, strlen($rootDir) + 1);
         }
 
         return $tokenFilePath;

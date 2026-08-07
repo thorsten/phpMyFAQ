@@ -114,7 +114,7 @@ readonly class UpdateToken
             throw new Exception('Cannot create the update token: ' . $randomException->getMessage());
         }
 
-        $content = self::FILE_HEADER . PHP_EOL . json_encode(['token' => $token, 'created' => time()]);
+        $content = self::FILE_HEADER . PHP_EOL . (string) json_encode(['token' => $token, 'created' => time()]);
 
         if (file_put_contents($this->getTokenFilePath(), $content) === false) {
             throw new Exception(sprintf('Cannot write the update token to %s.', $this->getTokenFilePath()));
@@ -138,22 +138,24 @@ readonly class UpdateToken
             return null;
         }
 
+        /** @var array<array-key, mixed>|bool|float|int|string|null $payload */
         $payload = json_decode(substr($content, strlen(self::FILE_HEADER)), associative: true);
         if (!is_array($payload)) {
             return null;
         }
 
-        $token = $payload['token'] ?? null;
-        $created = $payload['created'] ?? null;
-
-        if (!is_string($token) || $token === '' || !is_int($created)) {
+        if (!array_key_exists('token', $payload) || !is_string($payload['token']) || $payload['token'] === '') {
             return null;
         }
 
-        if (($created + self::TOKEN_LIFETIME) < time()) {
+        if (!array_key_exists('created', $payload) || !is_int($payload['created'])) {
             return null;
         }
 
-        return $token;
+        if (($payload['created'] + self::TOKEN_LIFETIME) < time()) {
+            return null;
+        }
+
+        return $payload['token'];
     }
 }

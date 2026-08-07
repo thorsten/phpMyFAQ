@@ -22,6 +22,7 @@ namespace phpMyFAQ\Setup;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 
 final class WritablePathScanner
 {
@@ -43,6 +44,10 @@ final class WritablePathScanner
         );
 
         foreach ($items as $item) {
+            if (!$item instanceof SplFileInfo) {
+                continue;
+            }
+
             $path = $item->getPathname();
 
             if ($realExcludedDirectory !== false && str_starts_with($path, $realExcludedDirectory)) {

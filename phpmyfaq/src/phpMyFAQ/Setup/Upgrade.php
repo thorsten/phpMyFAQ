@@ -47,7 +47,7 @@ class Upgrade extends AbstractSetup
 
     public string $upgradeDirectory = PMF_CONTENT_DIR . '/upgrades';
 
-    private string $installationDirectory = PMF_ROOT_DIR;
+    private string $installationDirectory;
 
     private bool $isNightly;
 
@@ -59,6 +59,8 @@ class Upgrade extends AbstractSetup
         ?HttpClientInterface $httpClient = null,
     ) {
         parent::__construct($this->system);
+
+        $this->installationDirectory = (string) PMF_ROOT_DIR;
 
         $this->isNightly =
             $this->configuration->get(item: 'upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value;
