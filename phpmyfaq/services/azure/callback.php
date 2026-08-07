@@ -24,13 +24,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
-
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-    session_regenerate_id(true);
-}
 
 //
 // Prepend and start the PHP session
@@ -49,9 +42,6 @@ $faqConfig = Configuration::getConfigurationInstance();
 
 $code = Filter::filterInput(INPUT_GET, 'code', FILTER_SANITIZE_SPECIAL_CHARS);
 $error = Filter::filterInput(INPUT_GET, 'error_description', FILTER_SANITIZE_SPECIAL_CHARS);
-
-$session = new Session(new PhpBridgeSessionStorage());
-$session->start();
 
 $entraIdSession = new EntraIdSession($faqConfig, $session);
 $oAuth = new OAuth($faqConfig, $entraIdSession);
