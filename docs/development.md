@@ -453,7 +453,6 @@ phpMyFAQ provides a set of Composer scripts to simplify common development tasks
 | `test`              | Run PHPUnit tests without coverage              |
 | `test:coverage`     | Run PHPUnit tests with text coverage output     |
 | `test:coverage-html` | Run PHPUnit tests with HTML coverage report    |
-| `bench`             | Run PHPBench benchmarks with aggregate report   |
 
 #### API documentation
 
