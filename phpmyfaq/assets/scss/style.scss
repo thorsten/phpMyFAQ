@@ -26,7 +26,10 @@
 // Import global styles
 @import 'global';
 
-// Bootstrap Icons
+// Bootstrap Icons — point the font dir at the real files so Vite can resolve
+// them at build time; the emitted assets land in fonts/ next to the CSS.
+$bootstrap-icons-font-dir: '../../../node_modules/bootstrap-icons/font/fonts';
+
 @import '../../../node_modules/bootstrap-icons/font/bootstrap-icons';
 
 // Cookie Consent

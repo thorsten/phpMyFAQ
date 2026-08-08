@@ -7,24 +7,28 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { ViteMinifyPlugin } from 'vite-plugin-minify';
 
 export default defineConfig({
+  // Relative base so asset URLs in emitted CSS/JS resolve next to the built
+  // files — phpMyFAQ may be installed in a subdirectory.
+  base: './',
   build: {
     rolldownOptions: {
       input: {
-        backend: path.resolve(__dirname, 'phpmyfaq/admin/assets/src/index.ts'),
-        frontend: path.resolve(__dirname, 'phpmyfaq/assets/src/frontend.ts'),
-        notifications: path.resolve(__dirname, 'phpmyfaq/assets/src/notifications-export.ts'),
-        cookieConsent: path.resolve(__dirname, 'phpmyfaq/assets/src/cookie-consent.ts'),
-        setup: path.resolve(__dirname, 'phpmyfaq/assets/src/setup.ts'),
-        update: path.resolve(__dirname, 'phpmyfaq/assets/src/update.ts'),
-        styles: path.resolve(__dirname, 'phpmyfaq/assets/scss/style.scss'),
-        admin: path.resolve(__dirname, 'phpmyfaq/admin/assets/scss/style.scss'),
-        debugMode: path.resolve(__dirname, 'phpmyfaq/assets/scss/debug-mode.scss'),
+        backend: path.resolve(import.meta.dirname, 'phpmyfaq/admin/assets/src/index.ts'),
+        frontend: path.resolve(import.meta.dirname, 'phpmyfaq/assets/src/frontend.ts'),
+        notifications: path.resolve(import.meta.dirname, 'phpmyfaq/assets/src/notifications-export.ts'),
+        cookieConsent: path.resolve(import.meta.dirname, 'phpmyfaq/assets/src/cookie-consent.ts'),
+        setup: path.resolve(import.meta.dirname, 'phpmyfaq/assets/src/setup.ts'),
+        update: path.resolve(import.meta.dirname, 'phpmyfaq/assets/src/update.ts'),
+        styles: path.resolve(import.meta.dirname, 'phpmyfaq/assets/scss/style.scss'),
+        admin: path.resolve(import.meta.dirname, 'phpmyfaq/admin/assets/scss/style.scss'),
+        debugMode: path.resolve(import.meta.dirname, 'phpmyfaq/assets/scss/debug-mode.scss'),
       },
       output: {
-        dir: path.resolve(__dirname, 'phpmyfaq/assets/public'),
+        dir: path.resolve(import.meta.dirname, 'phpmyfaq/assets/public'),
         format: 'es',
         entryFileNames: '[name].js',
-        assetFileNames: '[name].[ext]',
+        assetFileNames: (assetInfo: { names?: string[] }) =>
+          /\.(?:woff2?|ttf|eot)$/.test(assetInfo.names?.[0] ?? '') ? 'fonts/[name].[ext]' : '[name].[ext]',
         preserveModules: false,
         exports: 'named',
         manualChunks: (id: string) => {
@@ -44,17 +48,17 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: path.resolve(__dirname, 'phpmyfaq/assets/fonts/*'),
+          src: path.resolve(import.meta.dirname, 'phpmyfaq/assets/fonts/*'),
           dest: '../phpmyfaq/assets/public/fonts',
           rename: { stripBase: true },
         },
         {
-          src: path.resolve(__dirname, 'node_modules/bootstrap-icons/font/bootstrap-icons.css'),
+          src: path.resolve(import.meta.dirname, 'node_modules/bootstrap-icons/font/bootstrap-icons.css'),
           dest: '../phpmyfaq/assets/public',
           rename: { stripBase: true },
         },
         {
-          src: path.resolve(__dirname, 'node_modules/bootstrap-icons/font/fonts/*'),
+          src: path.resolve(import.meta.dirname, 'node_modules/bootstrap-icons/font/fonts/*'),
           dest: '../phpmyfaq/assets/public/fonts',
           rename: { stripBase: true },
         },
