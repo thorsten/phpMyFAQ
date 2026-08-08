@@ -177,10 +177,15 @@ write_checksums() {
         warn "No SHA256 tool found; skipping .sha256 files"
     fi
 
+    # Hash by bare filename from inside the artifact's directory so the
+    # checksum files stay verifiable via `sha256sum -c` next to the download
+    # and don't leak the local build path.
     for artifact in "${ARTIFACT_TAR}" "${ARTIFACT_ZIP}" "${SBOM_PHP}" "${SBOM_JS}" "${SBOM_COMBINED}"; do
-        ${MD5BIN} "${artifact}" > "${artifact}.md5"
+        artifact_dir=$(dirname "${artifact}")
+        artifact_name=$(basename "${artifact}")
+        (cd "${artifact_dir}" && ${MD5BIN} "${artifact_name}" > "${artifact_name}.md5")
         if [ -n "${SHA256_CMD}" ]; then
-            ${SHA256_CMD} "${artifact}" > "${artifact}.sha256"
+            (cd "${artifact_dir}" && ${SHA256_CMD} "${artifact_name}" > "${artifact_name}.sha256")
         fi
     done
 }
