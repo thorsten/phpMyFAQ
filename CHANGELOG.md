@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.2.0-alpha - unreleased
+### phpMyFAQ v4.2.0-alpha - 2026-08-08
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
 - added Symfony Router for frontend (Thorsten)
