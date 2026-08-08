@@ -9,10 +9,10 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - `/phpmyfaq/`: Contains the source code for the frontend.
 - `/phpmyfaq/admin`: Contains the source code for the admin.
 - `/phpmyfaq/admin/assets`: Contains the TypeScript and SCSS source files for the admin frontend. The tests are located in the same directory as the source files to ensure they are always updated together.
-- `/phpmyfaq/docs`: Contains the documentation for the project.
 - `/phpmyfaq/assets`: Contains the TypeScript and SCSS source files for the frontend. The tests are located in the same directory as the source files to ensure they are always updated together.
 - `/phpmyfaq/src/phpMyFAQ`: Contains the source code for the PHP backend.
 - `/tests`: Contains PHPUnit v13 based unit and integration tests.
+- `/tests/e2e`: Contains the Playwright based end-to-end tests.
 
 ## Development Setup
 
@@ -31,9 +31,9 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 
 - HTML 5, SCSS, TypeScript, Bootstrap, and Bootstrap Icons for the frontend. TypeScript in strict mode.
 - PHP 8.4 and later with Symfony components for the backend.
-- MySQL, PostgreSQL, SQLite3, and MS SQL for data storage. This option is configurable.
+- MySQL, MariaDB, PostgreSQL, SQLite3, and MS SQL for data storage. This option is configurable.
 - Elasticsearch and OpenSearch for search functionality. This option is configurable.
-- Apache, Nginx, and IIS as supported web servers. This option is configurable.
+- Apache, Nginx, IIS, and FrankenPHP as supported web servers. This option is configurable.
 - It uses PNPM as the package manager for JavaScript/TypeScript dependencies.
 - It uses Composer as the package manager for PHP dependencies.
 - Twig as the templating engine.
@@ -58,6 +58,7 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - TypeScript/JSON/YAML/HTML code formatting auto-fix: pnpm oxfmt:fix
 - SCSS linting: pnpm stylelint
 - SCSS lint auto-fix: pnpm stylelint:fix
+- End-to-end tests (Playwright, fully automated setup via bin/e2e): pnpm e2e:local (SQLite + built-in PHP server) or pnpm e2e:docker (MariaDB container)
 - TypeScript errors have to be fixed before committing code.
 
 ## Building
