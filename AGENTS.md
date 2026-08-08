@@ -89,6 +89,10 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - Implement only what the task requires — no speculative abstractions, extra options, or "future-proofing" that wasn't asked for
 - Before writing new code, check whether an existing class or helper already does the job
 - Duplication is acceptable until a real third use case appears; don't build abstractions from two examples
+- Never fix a failing test by deleting, skipping, or loosening it — fix the code, or state explicitly why the test's expectation is wrong
+- Any change to the database schema must ship with a corresponding upgrade step in `phpMyFAQ\Setup\Update`
+- Keep unrelated refactoring, reformatting, and renaming out of a change — separate commits for separate concerns
+- When in doubt, mirror the patterns, naming, and structure of the surrounding code rather than introducing a new style
 
 ## Making illegal states unrepresentable in PHP
 
