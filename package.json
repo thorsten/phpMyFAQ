@@ -1,6 +1,6 @@
 {
   "name": "@thorsten/phpmyfaq",
-  "version": "4.2.0-alpha",
+  "version": "4.2.0-alpha.2",
   "description": "Open source FAQ web application for PHP 8.4+ with multi-database support, full-text search, user management, and a REST API",
   "repository": "git://github.com/thorsten/phpMyFAQ.git",
   "author": "Thorsten Rinne",

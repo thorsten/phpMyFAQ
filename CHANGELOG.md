@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.2.0-alpha - 2026-08-08
+### phpMyFAQ v4.2.0-alpha.2 - unreleased
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
 - added Symfony Router for frontend (Thorsten)
@@ -36,6 +36,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved update process (Thorsten)
 - improved and hardened multi tenancy support (Thorsten)
 - improved and redesigned searchable admin configuration frontend (Thorsten)
+- improved package size by removing unused dependencies (Thorsten)
 - updated to PHPUnit v13 (Thorsten)
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)

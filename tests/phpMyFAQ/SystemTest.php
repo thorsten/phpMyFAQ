@@ -258,7 +258,8 @@ class SystemTest extends TestCase
         $version = System::getVersion();
 
         $this->assertIsString($version);
-        $this->assertMatchesRegularExpression('/^\d+\.\d+\.\d+(-\w+)?$/', $version);
+        // Semver allows dot-separated pre-release identifiers, e.g. 4.2.0-alpha.2
+        $this->assertMatchesRegularExpression('/^\d+\.\d+\.\d+(-\w+(\.\w+)*)?$/', $version);
     }
 
     public function testGetMajorVersion(): void
