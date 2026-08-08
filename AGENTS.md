@@ -86,6 +86,9 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - Separate decisions (pure logic that computes *what* to do) from actions (side effects that carry it out)
 - Keep functions small and single-purpose
 - Fail loudly and specifically: errors state what went wrong, where, and what to do next — structured enough for machines to parse, readable enough for humans to act on
+- Implement only what the task requires — no speculative abstractions, extra options, or "future-proofing" that wasn't asked for
+- Before writing new code, check whether an existing class or helper already does the job
+- Duplication is acceptable until a real third use case appears; don't build abstractions from two examples
 
 ## Making illegal states unrepresentable in PHP
 
