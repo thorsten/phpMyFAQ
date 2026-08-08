@@ -62,6 +62,19 @@ class SystemTest extends TestCase
         $this->assertTrue(System::isUpdateExemptRequest('/admin/api/index.php', '/update-database'));
     }
 
+    public function testIsUpdateExemptRequestForRoutedUpdateWizard(): void
+    {
+        // Since 4.2 the update wizard is a Symfony route served by the main
+        // front controller, so the script name is always /index.php and only
+        // the path identifies the updater. Without this exemption the update
+        // redirect in Bootstrap.php loops onto itself.
+        $this->assertTrue(System::isUpdateExemptRequest('/index.php', '/update'));
+        $this->assertTrue(System::isUpdateExemptRequest('/index.php', '/update/'));
+
+        // Unrelated paths that merely start with "update" must still redirect
+        $this->assertFalse(System::isUpdateExemptRequest('/index.php', '/update-news'));
+    }
+
     public function testIsUpdateExemptRequestAllowsAdminRecoveryPages(): void
     {
         // Admin login and the upgrade UI must stay reachable during a pending

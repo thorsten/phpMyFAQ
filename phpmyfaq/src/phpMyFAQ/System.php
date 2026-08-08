@@ -206,7 +206,7 @@ class System
      * Returns true if the given request must NOT be redirected to the updater
      * while an update is pending.
      *
-     * Exempt are the standalone updater, the installer and all REST endpoints
+     * Exempt are the update wizard, the installer and all REST endpoints
      * (to keep the update process functional and avoid redirect loops), plus a
      * small allow-list of administration pages required to recover: the login
      * flow and the upgrade UI. Content-facing admin pages stay blocked because
@@ -226,7 +226,9 @@ class System
             return in_array(needle: $pathInfo, haystack: self::UPDATE_RECOVERY_ADMIN_PATHS, strict: true);
         }
 
-        return false;
+        // The update wizard is a Symfony route served by the main front
+        // controller, so only the path identifies it there.
+        return $pathInfo === '/update' || str_starts_with($pathInfo, '/update/');
     }
 
     /**

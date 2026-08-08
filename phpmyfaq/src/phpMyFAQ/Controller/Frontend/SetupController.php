@@ -122,6 +122,7 @@ final class SetupController
      * @throws \Exception
      */
     #[Route(path: '/update', name: 'public.update.index', methods: ['GET'])]
+    #[Route(path: '/update/', name: 'public.update.index.slash', methods: ['GET'])]
     public function update(Request $request): Response
     {
         $currentStep = Filter::filterVar($request->query->get('step') ?? 1, FILTER_VALIDATE_INT);
