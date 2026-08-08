@@ -162,6 +162,8 @@ class ErrorTest extends TestCase
     {
         $exception = new Exception('Not found', 404);
 
+        ini_set('log_errors', '0');
+
         $this->expectOutputRegex('/<h1>phpMyFAQ Fatal error<\/h1>/');
 
         Error::exceptionHandler($exception);
@@ -174,6 +176,8 @@ class ErrorTest extends TestCase
     public function testExceptionHandlerSets500ResponseCodeForNon404Errors(): void
     {
         $exception = new Exception('Test error', 200);
+
+        ini_set('log_errors', '0');
 
         $this->expectOutputRegex('/phpMyFAQ Fatal error/');
 
@@ -212,6 +216,8 @@ class ErrorTest extends TestCase
         $customException = new class('Custom error message', 123) extends Exception {
             // Custom exception class for testing
         };
+
+        ini_set('log_errors', '0');
 
         $this->expectOutputRegex('/Custom error message/');
 
@@ -282,6 +288,8 @@ class ErrorTest extends TestCase
     public function testExceptionHandlerWithErrorException(): void
     {
         $errorException = new ErrorException('Test error exception', 0, E_ERROR, 'test.php', 42);
+
+        ini_set('log_errors', '0');
 
         $this->expectOutputRegex('/Test error exception/');
 

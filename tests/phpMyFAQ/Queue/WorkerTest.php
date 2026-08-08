@@ -123,7 +123,10 @@ class WorkerTest extends TestCase
 
     public function testRunContinuesAfterReserveThrows(): void
     {
-        $this->expectOutputRegex('/Queue worker error in run\(\)/');
+        // error_log() output is not captured as test output, so the log is
+        // redirected to a file and asserted from there.
+        $logFile = (string) tempnam(sys_get_temp_dir(), 'pmf-worker-log-');
+        $previousErrorLog = ini_set('error_log', $logFile);
 
         $transport = $this->createMock(DatabaseTransport::class);
         $transport->method('reserve')->willReturnOnConsecutiveCalls(
@@ -148,8 +151,23 @@ class WorkerTest extends TestCase
         $worker = new Worker($transport);
         $worker->registerHandler(SendMailMessage::class, static function (): void {});
 
-        $processed = $worker->run(3);
-        $this->assertSame(1, $processed);
+        try {
+            $processed = $worker->run(3);
+
+            $this->assertSame(1, $processed);
+            $this->assertStringContainsString(
+                'Queue worker error in run()',
+                (string) file_get_contents($logFile),
+            );
+        } finally {
+            if ($previousErrorLog !== false) {
+                ini_set('error_log', $previousErrorLog);
+            }
+
+            if (file_exists($logFile)) {
+                unlink($logFile);
+            }
+        }
     }
 
     public function testRunOnceDeadLettersJobWhenMaxRetriesExceeded(): void

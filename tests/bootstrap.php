@@ -61,6 +61,21 @@ if (!file_exists(PMF_LOG_DIR)) {
     touch(PMF_LOG_DIR);
 }
 
+//
+// Clear the filesystem cache so state persisted by a previous run (e.g. the
+// rate limiter's fixed-window counters) cannot make tests flaky.
+//
+$cacheDirectory = PMF_ROOT_DIR . '/content/core/cache/pmf';
+if (is_dir($cacheDirectory)) {
+    $cacheFiles = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($cacheDirectory, FilesystemIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::CHILD_FIRST,
+    );
+    foreach ($cacheFiles as $cacheFile) {
+        $cacheFile->isDir() ? rmdir($cacheFile->getPathname()) : unlink($cacheFile->getPathname());
+    }
+}
+
 require PMF_ROOT_DIR . '/content/core/config/constants.php';
 
 //

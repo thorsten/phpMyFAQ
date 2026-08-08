@@ -91,14 +91,12 @@ export const handleUsers = async (): Promise<void> => {
 };
 
 const toListEntries = (users: UserOverview[]): UserListEntry[] => {
-  return users.map(
-    (user: UserOverview): UserListEntry => ({
-      id: String(user.id),
-      name: user.displayName,
-      login: user.userName,
-      status: user.status,
-    })
-  );
+  return users.map((user: UserOverview): UserListEntry => ({
+    id: String(user.id),
+    name: user.displayName,
+    login: user.userName,
+    status: user.status,
+  }));
 };
 
 const findUserItemByLogin = (login: string): HTMLButtonElement | undefined => {
@@ -110,13 +108,11 @@ const findUserItemByLogin = (login: string): HTMLButtonElement | undefined => {
 // Note: for server-side filtered searches the API sets `label` to the user's LOGIN,
 // so `name === login` here is intentional — there is no separate display name in that response.
 const searchResultsToEntries = (results: UserAutocomplete[]): UserListEntry[] => {
-  return results.map(
-    (result: UserAutocomplete): UserListEntry => ({
-      id: String(result.value),
-      name: result.label,
-      login: result.label,
-    })
-  );
+  return results.map((result: UserAutocomplete): UserListEntry => ({
+    id: String(result.value),
+    name: result.label,
+    login: result.label,
+  }));
 };
 
 const refreshUserList = async (filter: string): Promise<void> => {
