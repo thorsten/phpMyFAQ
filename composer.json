@@ -115,8 +115,15 @@
       "phpMyFAQ\\": "./phpmyfaq/src/phpMyFAQ"
     }
   },
+  "extra": {
+    "aws/aws-sdk-php": [
+      "S3",
+      "Ses"
+    ]
+  },
   "minimum-stability": "stable",
   "scripts": {
+    "pre-autoload-dump": "Aws\\Script\\Composer\\Composer::removeUnusedServices",
     "analyze": "./phpmyfaq/src/libs/bin/mago analyze --baseline=mago-analyze-baseline.toml",
     "analyze:all": "./phpmyfaq/src/libs/bin/mago analyze",
     "analyze:baseline": "./phpmyfaq/src/libs/bin/mago analyze --baseline=mago-analyze-baseline.toml --remove-outdated-baseline-entries --backup-baseline",

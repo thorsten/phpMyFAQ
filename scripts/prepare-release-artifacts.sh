@@ -139,6 +139,11 @@ build_frontend() {
     (cd "${CHECKOUT_DIR}" && pnpm build:prod)
 }
 
+strip_sourcemaps() {
+    log "Removing JavaScript source maps from built assets"
+    find "${CHECKOUT_DIR}/phpmyfaq/assets/public" -name '*.map' -type f -delete
+}
+
 strip_tcpdf_assets() {
     if [ -d "${TCPDF_PATH}" ]; then
         log "Removing TCPDF development leftovers"
@@ -221,6 +226,7 @@ main() {
     install_php_dependencies
     install_js_dependencies
     build_frontend
+    strip_sourcemaps
     strip_tcpdf_assets
     generate_hash_manifest
     stage_for_packaging
