@@ -232,6 +232,19 @@ class System
     }
 
     /**
+     * Returns the path (relative to the system URI) a request blocked during a
+     * pending update must be redirected to.
+     *
+     * Admin requests go to the admin update page: it is exempt, its auth guard
+     * redirects logged-out users to the exempt login page, and it is where the
+     * maintenance mode is enabled. All other requests go to the update wizard.
+     */
+    public static function getUpdateRedirectPath(string $scriptName): string
+    {
+        return str_contains($scriptName, '/admin/') ? 'admin/update' : 'update/';
+    }
+
+    /**
      * Returns the current major version of phpMyFAQ
      */
     public static function getMajorVersion(): string

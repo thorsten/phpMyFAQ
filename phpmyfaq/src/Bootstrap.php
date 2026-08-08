@@ -47,7 +47,9 @@ if ($faqConfig !== null) {
     );
 
     if (!$isUpdateExemptRequest && System::isUpdateNecessary((string) $faqConfig->get('main.currentVersion'))) {
-        $response = new RedirectResponse((new System())->getSystemUri($faqConfig) . 'update/');
+        $response = new RedirectResponse(
+            (new System())->getSystemUri($faqConfig) . System::getUpdateRedirectPath((string) $request->getScriptName()),
+        );
         $response->send();
         exit();
     }

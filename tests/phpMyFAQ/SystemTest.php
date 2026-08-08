@@ -75,6 +75,19 @@ class SystemTest extends TestCase
         $this->assertFalse(System::isUpdateExemptRequest('/index.php', '/update-news'));
     }
 
+    public function testGetUpdateRedirectPath(): void
+    {
+        // Blocked admin requests must land on the admin update page: it is
+        // exempt, its auth guard redirects to the exempt login page, and it is
+        // where the maintenance mode is enabled. Sending admins to the public
+        // wizard instead would strand them, because the wizard's "go back to
+        // the admin backend" link would bounce right back to the wizard.
+        $this->assertSame('admin/update', System::getUpdateRedirectPath('/admin/index.php'));
+
+        // All other front-facing requests go to the public update wizard
+        $this->assertSame('update/', System::getUpdateRedirectPath('/index.php'));
+    }
+
     public function testIsUpdateExemptRequestAllowsAdminRecoveryPages(): void
     {
         // Admin login and the upgrade UI must stay reachable during a pending
