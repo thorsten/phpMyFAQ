@@ -190,6 +190,7 @@ class Update extends AbstractSetup
         $this->applyUpdates410Alpha2();
         $this->applyUpdates410Alpha3();
         $this->applyUpdates413();
+        $this->applyUpdates418();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -1303,6 +1304,19 @@ class Update extends AbstractSetup
         $currentToken = $this->configuration->get('api.apiClientToken');
         if (empty($currentToken)) {
             $this->configuration->update(['api.apiClientToken' => bin2hex(random_bytes(32))]);
+        }
+    }
+
+    private function applyUpdates418(): void
+    {
+        if (version_compare($this->version, '4.1.8', '<')) {
+            // PermissionType::FAQ_ADD was renamed from 'addfaq' to 'add_faq' in v4.0.15
+            // without a matching migration, so upgraded installations lost the
+            // "Add new FAQ" permission
+            $user = new User($this->configuration);
+            if ($user->perm->getRightId(PermissionType::FAQ_ADD->value) === 0) {
+                $user->perm->renameRight('addfaq', PermissionType::FAQ_ADD->value);
+            }
         }
     }
 

@@ -7,6 +7,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\System;
+use phpMyFAQ\User;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Random\RandomException;
@@ -246,6 +247,37 @@ class UpdateTest extends TestCase
 
             $tablePrefix->setValue(null, $previousPrefix);
         }
+    }
+
+    /**
+     * PermissionType::FAQ_ADD was renamed from 'addfaq' to 'add_faq' in v4.0.15
+     * without a database migration, so upgraded installations kept the legacy
+     * row name and silently lost the "Add new FAQ" entry in the admin menu.
+     */
+    public function testApplyUpdates418RenamesLegacyAddFaqRight(): void
+    {
+        $permission = (new User(Configuration::getConfigurationInstance()))->perm;
+
+        // Simulate a database that was installed before v4.0.15
+        $this->assertTrue($permission->renameRight('add_faq', 'addfaq'));
+
+        $this->update->setVersion('4.1.7');
+        (new \ReflectionClass($this->update))->getMethod('applyUpdates418')->invoke($this->update);
+
+        $this->assertSame(0, $permission->getRightId('addfaq'));
+        $this->assertGreaterThan(0, $permission->getRightId('add_faq'));
+    }
+
+    public function testApplyUpdates418KeepsAlreadyMigratedRightUntouched(): void
+    {
+        $permission = (new User(Configuration::getConfigurationInstance()))->perm;
+        $rightId = $permission->getRightId('add_faq');
+        $this->assertGreaterThan(0, $rightId);
+
+        $this->update->setVersion('4.1.7');
+        (new \ReflectionClass($this->update))->getMethod('applyUpdates418')->invoke($this->update);
+
+        $this->assertSame($rightId, $permission->getRightId('add_faq'));
     }
 
     public function testSetDryRun()
