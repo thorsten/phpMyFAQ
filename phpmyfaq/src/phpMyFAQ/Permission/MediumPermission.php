@@ -585,6 +585,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      * @return array<int>|null
      * @throws Exception
      */
+    #[\Override]
     public function getAllowedCategoriesForRight(int $userId, mixed $right): ?array
     {
         $currentUser = new CurrentUser($this->configuration);

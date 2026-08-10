@@ -670,6 +670,29 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testGetAllowedCategoriesForRightReturnsUnionAcrossGroups(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroupOne', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addGroup(['name' => 'TestGroupTwo', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->addToGroup(1, 2);
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->mediumPermission->grantGroupRight(2, 1);
+        $this->mediumPermission->setCategoryRestrictions(1, 1, [10, 20]);
+        $this->mediumPermission->setCategoryRestrictions(2, 1, [20, 30]);
+
+        $this->assertSame([10, 20, 30], $this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+
+        $this->mediumPermission->deleteGroup(1);
+        $this->mediumPermission->deleteGroup(2);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testGetAllowedCategoriesForRightReturnsEmptyArrayWithoutAnyGrant(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
