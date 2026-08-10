@@ -126,6 +126,9 @@ final class FaqController extends AbstractAdministrationApiController
         $this->userHasPermissionForCategories(PermissionType::FAQ_ADD, $categories);
 
         $language = Filter::filterVar($data->lang ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+
+        $this->userHasPermissionForLanguage(PermissionType::FAQ_ADD, $language);
+
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
@@ -361,6 +364,7 @@ final class FaqController extends AbstractAdministrationApiController
         $categoryRelation = new Relation($this->configuration, $category);
         $currentCategoryIds = array_keys($categoryRelation->getCategories($faqId, $faqLang));
         $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, [...$categories, ...$currentCategoryIds]);
+        $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $faqLang);
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
@@ -557,6 +561,7 @@ final class FaqController extends AbstractAdministrationApiController
         $language = Filter::filterVar($request->attributes->get(key: 'language'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, [$categoryId]);
+        $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $language);
 
         $onlyInactive = Filter::filterVar(
             $request->query->get(key: 'only-inactive'),
@@ -570,11 +575,17 @@ final class FaqController extends AbstractAdministrationApiController
 
         return $this->json([
             'faqs' => $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew),
-            'isAllowedToTranslate' => $this->currentUser?->perm->hasPermissionForCategory(
-                $this->currentUser->getUserId(),
-                PermissionType::FAQ_TRANSLATE->value,
-                $categoryId,
-            ),
+            'isAllowedToTranslate' =>
+                $this->currentUser?->perm->hasPermissionForCategory(
+                    $this->currentUser->getUserId(),
+                    PermissionType::FAQ_TRANSLATE->value,
+                    $categoryId,
+                )
+                    && $this->currentUser?->perm->hasPermissionForLanguage(
+                        $this->currentUser->getUserId(),
+                        PermissionType::FAQ_TRANSLATE->value,
+                        $language,
+                    ),
         ], Response::HTTP_OK);
     }
 
@@ -601,6 +612,8 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         if ($faqIds !== []) {
+            $this->userHasPermissionForLanguage(PermissionType::FAQ_APPROVE, $faqLanguage);
+
             $activateCategory = new Category($this->configuration, [], withPermission: false);
             $activateCategoryRelation = new Relation($this->configuration, $activateCategory);
             foreach ($faqIds as $faqId) {
@@ -655,6 +668,8 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         if ($faqIds !== []) {
+            $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $faqLanguage);
+
             $stickyCategory = new Category($this->configuration, [], withPermission: false);
             $stickyCategoryRelation = new Relation($this->configuration, $stickyCategory);
             foreach ($faqIds as $faqId) {
@@ -715,6 +730,7 @@ final class FaqController extends AbstractAdministrationApiController
             PermissionType::FAQ_DELETE,
             array_keys($deleteCategoryRelation->getCategories($faqId, $faqLanguage)),
         );
+        $this->userHasPermissionForLanguage(PermissionType::FAQ_DELETE, $faqLanguage);
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_DELETE->value . ':' . $faqId);
 

@@ -8,6 +8,9 @@ import {
   fetchGroupCategoryRestrictions,
   saveGroupCategoryRestrictions,
   fetchCategoriesForRestrictions,
+  fetchGroupLanguageRestrictions,
+  saveGroupLanguageRestrictions,
+  fetchLanguagesForRestrictions,
   updateGroup,
   updateGroupMembers,
   updateGroupPermissions,
@@ -265,6 +268,95 @@ describe('fetchCategoriesForRestrictions', () => {
     vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
 
     await expect(fetchCategoriesForRestrictions()).rejects.toThrow('Network response was not ok.');
+  });
+});
+
+describe('fetchGroupLanguageRestrictions', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should fetch language restrictions for a group', async () => {
+    const mockResponse = { '1': ['en', 'de'], '3': ['fr'] };
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
+
+    const groupId = '5';
+    const result = await fetchGroupLanguageRestrictions(groupId);
+
+    expect(result).toEqual(mockResponse);
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith(`./api/group/language-restrictions/${groupId}`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+  });
+
+  it('should throw an error if the network response is not ok', async () => {
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
+
+    await expect(fetchGroupLanguageRestrictions('5')).rejects.toThrow('Network response was not ok.');
+  });
+});
+
+describe('saveGroupLanguageRestrictions', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should save language restrictions for a group right', async () => {
+    const mockResponse = { ok: true, status: 200 } as Response;
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue(mockResponse);
+
+    const result = await saveGroupLanguageRestrictions('5', '1', ['en', 'de'], 'test-csrf-token');
+
+    expect(result).toEqual(mockResponse);
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith('./api/group/language-restrictions', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ groupId: 5, rightId: 1, languages: ['en', 'de'], csrfToken: 'test-csrf-token' }),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+  });
+});
+
+describe('fetchLanguagesForRestrictions', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should fetch all languages for restriction picker', async () => {
+    const mockResponse = [
+      { code: 'en', label: 'English' },
+      { code: 'de', label: 'Deutsch' },
+    ];
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);
+
+    const result = await fetchLanguagesForRestrictions();
+
+    expect(result).toEqual(mockResponse);
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('./api/group/languages', {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+  });
+
+  it('should throw an error if the network response is not ok', async () => {
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockRejectedValue(new Error('Network response was not ok.'));
+
+    await expect(fetchLanguagesForRestrictions()).rejects.toThrow('Network response was not ok.');
   });
 });
 

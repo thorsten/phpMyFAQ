@@ -17,15 +17,25 @@ import { Modal } from 'bootstrap';
 import {
   deleteUser,
   fetchAllUsers,
+  fetchLanguagesForRestrictions,
   fetchUserData,
+  fetchUserLanguageRestrictions,
   fetchUserRights,
   fetchUsers,
   overwritePassword,
+  saveUserLanguageRestrictions,
   updateUserData,
   updateUserRights,
 } from '../api';
 import { capitalize, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { ApiResponse, UserAutocomplete, UserData, UserOverview } from '../interfaces';
+import {
+  ApiResponse,
+  LanguageItem,
+  LanguageRestrictions,
+  UserAutocomplete,
+  UserData,
+  UserOverview,
+} from '../interfaces';
 import { wireAddUserModal } from './add-user';
 
 interface UserListEntry {
@@ -207,6 +217,26 @@ const selectUser = async (userId: string): Promise<void> => {
   if (requestToken !== selectRequestToken) {
     return;
   }
+  try {
+    await loadUserLanguageRestrictions(userId);
+  } catch (error) {
+    if (requestToken !== selectRequestToken) {
+      return;
+    }
+    console.error('Failed to load language restrictions:', error);
+    currentLanguageRestrictions = {};
+    const container = document.getElementById('userLanguageRestrictionsBody');
+    if (container) {
+      container.innerHTML = '';
+      const errorParagraph = document.createElement('p');
+      errorParagraph.className = 'text-body-secondary';
+      errorParagraph.textContent = container.dataset.msgEmpty || 'No permissions assigned to this user.';
+      container.appendChild(errorParagraph);
+    }
+  }
+  if (requestToken !== selectRequestToken) {
+    return;
+  }
 
   (document.getElementById('pmf-user-empty-state') as HTMLElement).classList.add('d-none');
   (document.getElementById('pmf-user-detail') as HTMLElement).classList.remove('d-none');
@@ -277,6 +307,7 @@ const wirePermissionToggles = (): void => {
       .forEach((checkbox: HTMLInputElement): void => {
         checkbox.checked = checked;
       });
+    refreshUserLanguageRestrictionsPanel();
   };
 
   (document.getElementById('pmf-user-check-all') as HTMLButtonElement).addEventListener('click', (): void => {
@@ -285,6 +316,21 @@ const wirePermissionToggles = (): void => {
   (document.getElementById('pmf-user-uncheck-all') as HTMLButtonElement).addEventListener('click', (): void => {
     setAll(false);
   });
+
+  document.getElementById('pmf-user-permission-list')?.addEventListener('change', (event: Event): void => {
+    const target = event.target as HTMLInputElement;
+    if (target.type === 'checkbox' && target.classList.contains('permission')) {
+      refreshUserLanguageRestrictionsPanel();
+    }
+  });
+};
+
+const refreshUserLanguageRestrictionsPanel = (): void => {
+  const container = document.getElementById('userLanguageRestrictionsBody');
+  if (container) {
+    captureCurrentUserLanguageRestrictions(container);
+    renderUserLanguageRestrictions(container);
+  }
 };
 
 const notifyResult = (response: ApiResponse): void => {
@@ -339,6 +385,18 @@ const wireSaveButtons = (): void => {
       try {
         const response = await updateUserRights(selectedUserId, rights, detail.dataset.csrfRights || '');
         notifyResult(response);
+      } catch {
+        pushErrorNotification(getGenericErrorMessage());
+      }
+    }
+  );
+
+  (document.getElementById('pmf-user-language-restrictions-save') as HTMLButtonElement).addEventListener(
+    'click',
+    async (event: Event): Promise<void> => {
+      event.preventDefault();
+      try {
+        await handleUserLanguageRestrictionsSave();
       } catch {
         pushErrorNotification(getGenericErrorMessage());
       }
@@ -417,4 +475,136 @@ const wirePasswordOverwrite = (): void => {
       pushErrorNotification(getGenericErrorMessage());
     }
   });
+};
+
+let cachedLanguages: LanguageItem[] = [];
+let currentLanguageRestrictions: LanguageRestrictions = {};
+
+const loadUserLanguageRestrictions = async (userId: string): Promise<void> => {
+  const container = document.getElementById('userLanguageRestrictionsBody');
+  if (!container) {
+    return;
+  }
+
+  if (cachedLanguages.length === 0) {
+    cachedLanguages = await fetchLanguagesForRestrictions();
+  }
+
+  currentLanguageRestrictions = await fetchUserLanguageRestrictions(userId);
+
+  renderUserLanguageRestrictions(container);
+};
+
+const captureCurrentUserLanguageRestrictions = (container: HTMLElement): void => {
+  const selects = container.querySelectorAll<HTMLSelectElement>('select[data-right-id]');
+  selects.forEach((select: HTMLSelectElement): void => {
+    const rightId = select.dataset.rightId;
+    if (!rightId) {
+      return;
+    }
+    currentLanguageRestrictions[rightId] = [...select.options]
+      .filter((option: HTMLOptionElement): boolean => option.selected)
+      .map((option: HTMLOptionElement): string => option.value);
+  });
+};
+
+const renderUserLanguageRestrictions = (container: HTMLElement): void => {
+  const checkedRights = document.querySelectorAll<HTMLInputElement>(
+    '#pmf-user-permission-list input[type=checkbox]:checked'
+  );
+
+  container.innerHTML = '';
+
+  if (checkedRights.length === 0) {
+    const emptyMsg = container.dataset.msgEmpty || 'No permissions assigned to this user.';
+    const emptyParagraph = document.createElement('p');
+    emptyParagraph.className = 'text-body-secondary';
+    emptyParagraph.textContent = emptyMsg;
+    container.appendChild(emptyParagraph);
+    return;
+  }
+
+  checkedRights.forEach((checkbox: HTMLInputElement): void => {
+    const rightId = checkbox.value;
+    const label = checkbox.closest('.form-check')?.querySelector('label')?.textContent?.trim() || `Right ${rightId}`;
+    const restrictedLanguageCodes = currentLanguageRestrictions[rightId] || [];
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'mb-3';
+
+    const labelElement = document.createElement('label');
+    labelElement.className = 'form-label fw-semibold';
+    labelElement.textContent = label;
+    wrapper.appendChild(labelElement);
+
+    const select = document.createElement('select');
+    select.className = 'form-select form-select-sm';
+    select.multiple = true;
+    select.size = 4;
+    select.dataset.rightId = rightId;
+
+    cachedLanguages.forEach((lang: LanguageItem): void => {
+      const option = document.createElement('option');
+      option.value = lang.code;
+      option.textContent = lang.label;
+      option.selected = restrictedLanguageCodes.includes(lang.code);
+      select.appendChild(option);
+    });
+
+    wrapper.appendChild(select);
+
+    const helpText = document.createElement('div');
+    helpText.className = 'form-text';
+    helpText.textContent =
+      container.dataset.msgHelp || 'Select languages to restrict this permission. Leave empty for unrestricted access.';
+    wrapper.appendChild(helpText);
+
+    container.appendChild(wrapper);
+  });
+};
+
+export const handleUserLanguageRestrictionsSave = async (): Promise<void> => {
+  if (selectedUserId === '') {
+    return;
+  }
+
+  const container = document.getElementById('userLanguageRestrictionsBody');
+  if (!container) {
+    return;
+  }
+
+  const detail = document.getElementById('pmf-user-detail') as HTMLElement;
+  const csrfToken = detail.dataset.csrfLanguageRestrictions || '';
+
+  // Collect every right ID from the permission checkboxes so unticked
+  // permissions also get their stored restrictions cleared.
+  const rightIds = new Set<string>();
+  document
+    .querySelectorAll<HTMLInputElement>('#pmf-user-permission-list input[type=checkbox].permission')
+    .forEach((checkbox: HTMLInputElement): void => {
+      if (checkbox.value) {
+        rightIds.add(checkbox.value);
+      }
+    });
+
+  let failed = false;
+  for (const rightId of rightIds) {
+    const select = container.querySelector<HTMLSelectElement>(`select[data-right-id="${rightId}"]`);
+    const selectedLanguageCodes = select
+      ? [...select.options]
+          .filter((option: HTMLOptionElement): boolean => option.selected)
+          .map((option: HTMLOptionElement): string => option.value)
+      : [];
+
+    const response = await saveUserLanguageRestrictions(selectedUserId, rightId, selectedLanguageCodes, csrfToken);
+    if (!response.success) {
+      failed = true;
+    }
+  }
+
+  if (failed) {
+    pushErrorNotification(container.dataset.msgSaveFailed || 'Failed to save language restrictions.');
+  } else {
+    pushNotification(container.dataset.msgSaved || 'Language restrictions saved.');
+  }
 };

@@ -1853,4 +1853,17 @@ $PMF_LANG['msgOrBrowseFiles'] = 'browse your files';
 $PMF_LANG['msgAttachmentTooBig'] = 'This file exceeds the maximum attachment size.';
 $PMF_LANG['msgAttachmentsUploaded'] = 'Attachments uploaded successfully.';
 
+// added v4.2.0-alpha.2 - 2026-08-10 by Thorsten
+$PMF_LANG['ad_group_language_restrictions'] = 'Language Restrictions';
+$PMF_LANG['ad_group_language_restrictions_help'] = 'Select a group to manage language restrictions for its permissions.';
+$PMF_LANG['ad_group_language_restrictions_select'] = 'Select languages to restrict this permission. Leave empty for unrestricted access.';
+$PMF_LANG['ad_group_language_restrictions_saved'] = 'Language restrictions saved.';
+$PMF_LANG['ad_group_language_restrictions_error'] = 'Failed to save language restrictions.';
+$PMF_LANG['ad_user_language_restrictions'] = 'Language Restrictions';
+$PMF_LANG['ad_user_language_restrictions_help'] = "Select languages to restrict this user's permissions to.";
+$PMF_LANG['ad_user_language_restrictions_select'] = 'Select languages to restrict this permission. Leave empty for unrestricted access.';
+$PMF_LANG['ad_user_language_restrictions_saved'] = 'Language restrictions saved.';
+$PMF_LANG['ad_user_language_restrictions_error'] = 'Failed to save language restrictions.';
+$PMF_LANG['ad_user_no_permissions'] = 'No permissions assigned to this user.';
+
 return $PMF_LANG;

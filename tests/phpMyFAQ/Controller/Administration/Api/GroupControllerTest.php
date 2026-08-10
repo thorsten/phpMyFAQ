@@ -421,6 +421,131 @@ final class GroupControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testListLanguageRestrictionsRequiresGroupPermission(): void
+    {
+        $request = new Request([], [], ['groupId' => self::TEST_GROUP_ID]);
+        $controller = new GroupController();
+
+        $this->expectException(\Exception::class);
+        $controller->listLanguageRestrictions($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListLanguageRestrictionsReturnsEmptyWhenNoneSet(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->listLanguageRestrictions(new Request([], [], ['groupId' => self::TEST_GROUP_ID]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLanguageRestrictionsRequiresGroupPermission(): void
+    {
+        $controller = new GroupController();
+
+        $this->expectException(\Exception::class);
+        $controller->saveLanguageRestrictions(new Request(content: '{}'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLanguageRestrictionsRejectsInvalidCsrfToken(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->saveLanguageRestrictions(new Request(content: json_encode([
+            'groupId' => self::TEST_GROUP_ID,
+            'rightId' => 1,
+            'languages' => ['en'],
+            'csrfToken' => 'invalid-token',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame('Invalid CSRF token.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLanguageRestrictionsSavesAndSkipsUnsupportedLanguages(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('save-language-restrictions');
+        $this->setCsrfCookie('save-language-restrictions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->saveLanguageRestrictions(new Request(content: json_encode([
+            'groupId' => self::TEST_GROUP_ID,
+            'rightId' => 1,
+            'languages' => ['en', 'not-a-language'],
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+
+        $listResponse = $controller->listLanguageRestrictions(new Request([], [], ['groupId' => self::TEST_GROUP_ID]));
+        $listPayload = json_decode((string) $listResponse->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        self::assertSame(['1' => ['en']], $listPayload);
+        $this->removeCsrfCookie('save-language-restrictions');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListLanguagesRequiresGroupPermission(): void
+    {
+        $controller = new GroupController();
+
+        $this->expectException(\Exception::class);
+        $controller->listLanguages();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListLanguagesReturnsAvailableLanguages(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->listLanguages();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertNotEmpty($payload);
+        self::assertContains(['code' => 'en', 'label' => 'English'], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testUpdateGroupRequiresGroupEditPermission(): void
     {
         $controller = new GroupController();

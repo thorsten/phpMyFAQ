@@ -8,7 +8,10 @@ import {
   fetchCategoriesForRestrictions,
   fetchGroup,
   fetchGroupCategoryRestrictions,
+  fetchGroupLanguageRestrictions,
   fetchGroupRights,
+  fetchLanguagesForRestrictions,
+  saveGroupLanguageRestrictions,
   updateGroup,
   updateGroupMembers,
   updateGroupPermissions,
@@ -76,6 +79,9 @@ const setupFullDom = (): void => {
       <div id="categoryRestrictionsBody" data-msg-empty="No permissions." data-msg-help="Help."
            data-msg-saved="Restrictions saved." data-csrf-token="csrf-restrictions"></div>
       <button id="saveCategoryRestrictions" type="button"></button>
+      <div id="languageRestrictionsBody" data-msg-empty="No permissions." data-msg-help="Help."
+           data-msg-saved="Language restrictions saved." data-csrf-token="csrf-language-restrictions"></div>
+      <button id="saveLanguageRestrictions" type="button"></button>
     </div>
     <div id="pmf-group-delete-modal">
       <strong id="pmf-group-delete-name"></strong>
@@ -103,6 +109,9 @@ const mockDefaultApis = (): void => {
   (fetchGroupRights as Mock).mockResolvedValue(['1', '3']);
   (fetchCategoriesForRestrictions as Mock).mockResolvedValue([]);
   (fetchGroupCategoryRestrictions as Mock).mockResolvedValue({});
+  (fetchLanguagesForRestrictions as Mock).mockResolvedValue([]);
+  (fetchGroupLanguageRestrictions as Mock).mockResolvedValue({});
+  (saveGroupLanguageRestrictions as Mock).mockResolvedValue({ ok: true } as Response);
   (updateGroup as Mock).mockResolvedValue({ success: 'saved' });
   (updateGroupMembers as Mock).mockResolvedValue({ success: 'saved' });
   (updateGroupPermissions as Mock).mockResolvedValue({ success: 'saved' });
@@ -345,15 +354,21 @@ describe('handleGroups', () => {
     expect(document.getElementById('pmf-group-empty-state')?.classList.contains('d-none')).toBe(false);
   });
 
-  // Keep this test last: cachedCategories is module-level and, once populated
-  // with a non-empty list, is reused by any test that runs after it.
-  it('should indent subcategories in the category restrictions options', async () => {
+  // Keep this test last: cachedCategories and cachedLanguages are module-level
+  // and, once populated with a non-empty list, are reused by any test that
+  // runs after it.
+  it('should indent subcategories in the category restrictions options and render language restriction options', async () => {
     setupFullDom();
     mockDefaultApis();
     (fetchCategoriesForRestrictions as Mock).mockResolvedValue([
       { id: 1, name: 'Guides', parent_id: 0, level: 0 },
       { id: 2, name: 'Setup', parent_id: 1, level: 1 },
     ]);
+    (fetchLanguagesForRestrictions as Mock).mockResolvedValue([
+      { code: 'en', label: 'English' },
+      { code: 'de', label: 'Deutsch' },
+    ]);
+    (fetchGroupLanguageRestrictions as Mock).mockResolvedValue({ '1': ['de'] });
 
     await handleGroups();
     await selectFirstGroup();
@@ -365,5 +380,19 @@ describe('handleGroups', () => {
     expect(options.length).toBe(2);
     expect(options[0].textContent).toBe('Guides');
     expect(options[1].textContent).toBe('\u00A0\u00A0\u00A0Setup');
+
+    const languageOptions = document.querySelectorAll<HTMLOptionElement>(
+      '#languageRestrictionsBody select[data-right-id="1"] option'
+    );
+    expect(languageOptions.length).toBe(2);
+    expect(languageOptions[0].textContent).toBe('English');
+    expect(languageOptions[1].selected).toBe(true);
+
+    (document.getElementById('saveLanguageRestrictions') as HTMLButtonElement).click();
+    await flushPromises();
+
+    expect(saveGroupLanguageRestrictions).toHaveBeenCalledWith('1', '1', ['de'], 'csrf-language-restrictions');
+    expect(saveGroupLanguageRestrictions).toHaveBeenCalledWith('1', '3', [], 'csrf-language-restrictions');
+    expect(pushNotification).toHaveBeenCalledWith('Language restrictions saved.');
   });
 });

@@ -323,6 +323,46 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testEditReturnsForbiddenForRestrictedLanguage(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = [
+            'id' => 1,
+            'lang' => 'fr',
+            'title' => 'Prepared FAQ',
+            'revision_id' => 0,
+            'active' => 'yes',
+            'author' => 'Test Author',
+            'email' => 'test@example.com',
+        ];
+
+        $faqPermission = $this->createMock(FaqPermission::class);
+        $faqPermission->method('get')->willReturn([]);
+
+        $controller = new FaqController(
+            $this->createStub(Comments::class),
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(Seo::class),
+            $this->createStub(CategoryHelper::class),
+            $this->createStub(UserHelper::class),
+            $faqPermission,
+            $this->createStub(Changelog::class),
+            $this->createStub(Question::class),
+        );
+
+        $request = new Request([], [], ['faqId' => '1', 'faqLanguage' => 'fr']);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "fr".');
+
+        $controller->edit($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testAnswerPrefillsQuestionNotificationFields(): void
     {
         $faq = $this->createMock(Faq::class);
@@ -379,6 +419,13 @@ final class FaqControllerTest extends TestCase
                 static fn(int $userId, mixed $right, int $categoryId): bool => $categoryId !== 666,
             );
         $permission->method('getAllowedCategoriesForRight')->willReturn(null);
+        $permission
+            ->method('hasPermissionForLanguage')
+            ->willReturnCallback(
+                // sentinel forbidden language for tests
+                static fn(int $userId, mixed $right, string $language): bool => $language !== 'fr',
+            );
+        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;

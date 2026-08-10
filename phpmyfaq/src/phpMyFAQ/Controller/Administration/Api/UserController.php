@@ -27,7 +27,9 @@ use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\MailHelper;
+use phpMyFAQ\Language;
 use phpMyFAQ\Permission;
+use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -42,6 +44,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 /* @mago-expect lint:cyclomatic-complexity - each endpoint validates its full payload inline; split planned with the admin API rework */
+/* @mago-expect lint:kan-defect - permission-level guards on every endpoint raise the score; split planned with the admin API rework */
 final class UserController extends AbstractAdministrationApiController
 {
     public function __construct(
@@ -628,5 +631,102 @@ final class UserController extends AbstractAdministrationApiController
             . Translation::getString(key: 'ad_msg_savedsuc_2');
 
         return $this->json(['success' => $success], Response::HTTP_OK);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route(
+        path: 'user/language-restrictions/{userId}',
+        name: 'admin.api.user.language-restrictions',
+        methods: ['GET'],
+    )]
+    public function listUserLanguageRestrictions(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::USER_EDIT);
+
+        $userId = (int) Filter::filterVar($request->attributes->get('userId'), FILTER_VALIDATE_INT);
+
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
+        $currentUser->getUserById($userId, allowBlockedUsers: true);
+
+        if (!$currentUser->perm instanceof BasicPermission) {
+            return $this->json(new stdClass(), Response::HTTP_OK);
+        }
+
+        $restrictions = $currentUser->perm->getAllUserLanguageRestrictions($userId);
+
+        return $this->json($restrictions === [] ? new stdClass() : $restrictions, Response::HTTP_OK);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
+    #[Route(path: 'user/language-restrictions', name: 'admin.api.user.language-restrictions.save', methods: ['PUT'])]
+    public function saveUserLanguageRestrictions(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::USER_EDIT);
+
+        $data = $this->getJsonObject($request);
+
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'update-user-language-restrictions',
+            requestToken: (string) ($data->csrfToken ?? ''),
+        )) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $userId = (int) Filter::filterVar($data->userId ?? null, FILTER_VALIDATE_INT, default: 0);
+        $rightId = (int) Filter::filterVar($data->rightId ?? null, FILTER_VALIDATE_INT, default: 0);
+
+        if (0 === $userId || 0 === $rightId) {
+            return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
+        }
+
+        $rawLanguages = is_array($data->languages ?? null) ? $data->languages : [];
+        $languages = array_values(array_filter(
+            array_map(static fn(mixed $language): string => (string) $language, $rawLanguages),
+            Language::isASupportedLanguage(...),
+        ));
+
+        $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
+
+        // A non-SuperAdmin may only restrict a user's language grant to a subset of the
+        // languages they themselves are allowed for this right. This prevents an administrator
+        // with the delegable USER_EDIT right from granting language access they do not possess
+        // (privilege escalation).
+        if (!$actingIsSuperAdmin) {
+            $actingUserId = $this->currentUser->getUserId();
+            $allowedLanguages = $this->currentUser->perm->getAllowedLanguagesForRight($actingUserId, $rightId);
+            if ($allowedLanguages !== null) {
+                foreach ($languages as $language) {
+                    if (!in_array($language, $allowedLanguages, strict: true)) {
+                        return $this->json([
+                            'error' => Translation::get(key: 'msgNoPermission'),
+                        ], Response::HTTP_FORBIDDEN);
+                    }
+                }
+            }
+        }
+
+        $user = new User($this->configuration);
+        $user->getUserById($userId);
+
+        // Defense in depth: a non-SuperAdmin must never be able to alter a SuperAdmin or
+        // protected account.
+        if (!$actingIsSuperAdmin && ($user->isSuperAdmin() || $user->getStatus() === 'protected')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
+        if (!$user->perm instanceof BasicPermission) {
+            return $this->json(['error' => 'Language restrictions are not enabled.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!$user->perm->setUserLanguageRestrictions($userId, $rightId, $languages)) {
+            return $this->json(['error' => Translation::get(key: 'ad_msg_mysqlerr')], Response::HTTP_BAD_REQUEST);
+        }
+
+        return $this->json(['success' => true], Response::HTTP_OK);
     }
 }

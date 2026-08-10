@@ -66,6 +66,7 @@ class DatabaseSchema
             'faqgroup' => $this->faqgroup(),
             'faqgroup_right' => $this->faqgroupRight(),
             'faqgroup_right_category' => $this->faqgroupRightCategory(),
+            'faqgroup_right_language' => $this->faqgroupRightLanguage(),
             'faqapi_keys' => $this->faqapiKeys(),
             'faqoauth_clients' => $this->faqoauthClients(),
             'faqoauth_scopes' => $this->faqoauthScopes(),
@@ -90,6 +91,7 @@ class DatabaseSchema
             'faquserlogin' => $this->faquserlogin(),
             'faquser_group' => $this->faquserGroup(),
             'faquser_right' => $this->faquserRight(),
+            'faquser_right_language' => $this->faquserRightLanguage(),
             'faqvisits' => $this->faqvisits(),
             'faqvoting' => $this->faqvoting(),
             'faqchat_messages' => $this->faqchatMessages(),
@@ -736,6 +738,26 @@ class DatabaseSchema
             ->integer('user_id', false)
             ->integer('right_id', false)
             ->primaryKey(['user_id', 'right_id']);
+    }
+
+    public function faquserRightLanguage(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faquser_right_language')
+            ->integer('user_id', false)
+            ->integer('right_id', false)
+            ->varchar('language', 5, false)
+            ->primaryKey(['user_id', 'right_id', 'language']);
+    }
+
+    public function faqgroupRightLanguage(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqgroup_right_language')
+            ->integer('group_id', false)
+            ->integer('right_id', false)
+            ->varchar('language', 5, false)
+            ->primaryKey(['group_id', 'right_id', 'language']);
     }
 
     public function faqvisits(): TableBuilder

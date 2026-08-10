@@ -145,4 +145,28 @@ interface PermissionInterface
      * @return array<int>|null
      */
     public function getAllowedCategoriesForRight(int $userId, mixed $right): ?array;
+
+    /**
+     * Returns true if the user owns the right for the given language.
+     * Unlike category restrictions, language restrictions apply to both
+     * direct user-rights and group-rights: Basic mode has no groups but can
+     * still restrict a user's right to specific language(s) via a direct
+     * grant.
+     *
+     * @param int    $userId   User ID
+     * @param mixed  $right    Right ID, right name, or PermissionType value
+     * @param string $language Language code (e.g. 'en', 'de')
+     */
+    public function hasPermissionForLanguage(int $userId, mixed $right, string $language): bool;
+
+    /**
+     * Returns the language codes in which the user may exercise the right,
+     * null if the right is unrestricted (applies to all languages), or an
+     * empty array if the user cannot exercise the right in any language.
+     *
+     * @param int   $userId User ID
+     * @param mixed $right  Right ID, right name, or PermissionType value
+     * @return array<string>|null
+     */
+    public function getAllowedLanguagesForRight(int $userId, mixed $right): ?array;
 }

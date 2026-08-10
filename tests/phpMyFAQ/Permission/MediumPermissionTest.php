@@ -41,6 +41,8 @@ class MediumPermissionTest extends TestCase
         $this->initializeDatabaseStatics($this->dbHandle);
         $this->configuration = new Configuration($this->dbHandle);
         $this->dbHandle->query('DELETE FROM faqgroup_right_category');
+        $this->dbHandle->query('DELETE FROM faqgroup_right_language');
+        $this->dbHandle->query('DELETE FROM faquser_right_language');
         $this->dbHandle->query('DELETE FROM faqgroup_right');
         $this->dbHandle->query('DELETE FROM faquser_group');
         $this->dbHandle->query('DELETE FROM faqgroup');
@@ -748,6 +750,278 @@ class MediumPermissionTest extends TestCase
                 $allowed === null || in_array($categoryId, $allowed, strict: true),
                 $this->mediumPermission->hasPermissionForCategory($userId, $rightId, $categoryId),
                 sprintf('Mismatch for category %d (allowed: %s)', $categoryId, json_encode($allowed)),
+            );
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testHasPermissionForLanguageWithUnrestrictedGroupRight(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+
+        // No language restrictions -> should have access to any language
+        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 1, 'en'));
+
+        $this->mediumPermission->deleteGroup(1);
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
+        $this->configuration->getDb()->query('INSERT INTO faquser_right (user_id, right_id) VALUES (1, 1)');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testHasPermissionForLanguageWithRestrictedGroupRight(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->mediumPermission->setLanguageRestrictions(1, 1, ['de']);
+
+        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 1, 'de'));
+        $this->assertFalse($this->mediumPermission->hasPermissionForLanguage(1, 1, 'en'));
+
+        $this->mediumPermission->deleteGroup(1);
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
+        $this->configuration->getDb()->query('INSERT INTO faquser_right (user_id, right_id) VALUES (1, 1)');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testHasPermissionForLanguageWithRestrictedDirectUserGrantOnly(): void
+    {
+        // Fixture user 1 owns right 1 directly; restrict it to 'de' only, no groups involved
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->mediumPermission->setUserLanguageRestrictions(1, 1, ['de']);
+
+        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 1, 'de'));
+        $this->assertFalse($this->mediumPermission->hasPermissionForLanguage(1, 1, 'en'));
+
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
+        $this->mediumPermission->setUserLanguageRestrictions(1, 1, []);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testHasPermissionForLanguageCombinesUserAndGroupGrantsAsUnion(): void
+    {
+        // Fixture user 1 owns right 1 directly, restricted to 'de'
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->mediumPermission->setUserLanguageRestrictions(1, 1, ['de']);
+
+        // Also a member of a group holding right 1, restricted to 'fr'
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->mediumPermission->setLanguageRestrictions(1, 1, ['fr']);
+
+        // Union of both grants: 'de' (direct) and 'fr' (group) both pass, 'es' fails
+        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 1, 'de'));
+        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 1, 'fr'));
+        $this->assertFalse($this->mediumPermission->hasPermissionForLanguage(1, 1, 'es'));
+
+        $this->mediumPermission->deleteGroup(1);
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
+        $this->mediumPermission->setUserLanguageRestrictions(1, 1, []);
+    }
+
+    public function testGetAndSetLanguageRestrictions(): void
+    {
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => false,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+
+        $this->assertEmpty($this->mediumPermission->getLanguageRestrictions(1, 1));
+
+        $this->assertTrue($this->mediumPermission->setLanguageRestrictions(1, 1, ['en', 'de']));
+        $restrictions = $this->mediumPermission->getLanguageRestrictions(1, 1);
+        $this->assertCount(2, $restrictions);
+        $this->assertContains('en', $restrictions);
+        $this->assertContains('de', $restrictions);
+
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    public function testGetAndSetUserLanguageRestrictions(): void
+    {
+        $this->assertEmpty($this->mediumPermission->getUserLanguageRestrictions(1, 1));
+
+        $this->assertTrue($this->mediumPermission->setUserLanguageRestrictions(1, 1, ['en', 'de']));
+        $restrictions = $this->mediumPermission->getUserLanguageRestrictions(1, 1);
+        $this->assertCount(2, $restrictions);
+        $this->assertContains('en', $restrictions);
+        $this->assertContains('de', $restrictions);
+
+        $this->mediumPermission->setUserLanguageRestrictions(1, 1, []);
+    }
+
+    public function testGetAllLanguageRestrictions(): void
+    {
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => false,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+
+        $this->mediumPermission->setLanguageRestrictions(1, 1, ['en']);
+        $this->mediumPermission->setLanguageRestrictions(1, 2, ['de', 'fr']);
+
+        $all = $this->mediumPermission->getAllLanguageRestrictions(1);
+        $this->assertCount(2, $all);
+        $this->assertArrayHasKey(1, $all);
+        $this->assertArrayHasKey(2, $all);
+
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    public function testDeleteGroupCleansLanguageRestrictions(): void
+    {
+        $groupData = [
+            'name' => 'TestGroup',
+            'description' => 'TestDescription',
+            'auto_join' => false,
+        ];
+        $this->mediumPermission->addGroup($groupData);
+        $this->mediumPermission->setLanguageRestrictions(1, 1, ['en', 'de']);
+
+        $this->assertTrue($this->mediumPermission->deleteGroup(1));
+        $this->assertEmpty($this->mediumPermission->getAllLanguageRestrictions(1));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetAllowedLanguagesForRightReturnsNullForUnrestrictedGroupRight(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+
+        $this->assertNull($this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetAllowedLanguagesForRightReturnsRestrictedLanguages(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->mediumPermission->setLanguageRestrictions(1, 1, ['en', 'de']);
+
+        $this->assertEqualsCanonicalizing(['en', 'de'], $this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetAllowedLanguagesForRightReturnsNullForUnrestrictedDirectUserRight(): void
+    {
+        // Fixture user 1 owns right 1 directly (faquser_right), unrestricted => global
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+
+        $this->assertNull($this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetAllowedLanguagesForRightReturnsUnionAcrossUserAndGroups(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->mediumPermission->setUserLanguageRestrictions(1, 1, ['de']);
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->mediumPermission->setLanguageRestrictions(1, 1, ['fr']);
+
+        $this->assertSame(['de', 'fr'], $this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+
+        $this->mediumPermission->deleteGroup(1);
+        $this->mediumPermission->setUserLanguageRestrictions(1, 1, []);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetAllowedLanguagesForRightReturnsEmptyArrayWithoutAnyGrant(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->assertSame([], $this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+    }
+
+    /**
+     * Pins that getAllowedLanguagesForRight() and hasPermissionForLanguage()
+     * agree for every language: a language is in the allowed set (or the set
+     * is null) exactly when the per-language check grants it.
+     *
+     * @throws Exception
+     */
+    public function testGetAllowedLanguagesForRightMatchesPerLanguageChecks(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->mediumPermission->setUserLanguageRestrictions(1, 1, ['en', 'de']);
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->mediumPermission->setLanguageRestrictions(1, 1, ['de', 'fr']);
+
+        $languages = ['en', 'de', 'fr', 'es'];
+
+        // Both grants restricted: allowed set is the union
+        $this->assertConsistentWithPerLanguageChecks(1, 1, $languages);
+
+        // Group grant becomes unrestricted: the right applies globally
+        $this->mediumPermission->setLanguageRestrictions(1, 1, []);
+        $this->assertNull($this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+        $this->assertConsistentWithPerLanguageChecks(1, 1, $languages);
+
+        $this->mediumPermission->deleteGroup(1);
+        $this->mediumPermission->setUserLanguageRestrictions(1, 1, []);
+    }
+
+    /**
+     * @param array<string> $languages
+     * @throws Exception
+     */
+    private function assertConsistentWithPerLanguageChecks(int $userId, int $rightId, array $languages): void
+    {
+        $allowed = $this->mediumPermission->getAllowedLanguagesForRight($userId, $rightId);
+        foreach ($languages as $language) {
+            $this->assertSame(
+                $allowed === null || in_array($language, $allowed, strict: true),
+                $this->mediumPermission->hasPermissionForLanguage($userId, $rightId, $language),
+                sprintf('Mismatch for language %s (allowed: %s)', $language, json_encode($allowed)),
             );
         }
     }

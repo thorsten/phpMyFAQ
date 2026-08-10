@@ -204,4 +204,52 @@ class BasicPermissionTest extends TestCase
     {
         $this->assertNull($this->basicPermission->getAllowedCategoriesForRight(1, 1));
     }
+
+    public function testHasPermissionForLanguageWithNoRestrictionIsUnrestricted(): void
+    {
+        // Right 1 granted to user 1 in the fixture DB, no language restriction set
+        $this->assertTrue($this->basicPermission->hasPermissionForLanguage(1, 1, 'en'));
+        $this->assertTrue($this->basicPermission->hasPermissionForLanguage(1, 1, 'de'));
+    }
+
+    public function testHasPermissionForLanguageDeniesWithoutGlobalRight(): void
+    {
+        $this->assertFalse($this->basicPermission->hasPermissionForLanguage(0, 999, 'en'));
+    }
+
+    public function testHasPermissionForLanguageDeniesOtherLanguageWhenRestricted(): void
+    {
+        $this->dbHandle->query(
+            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')",
+        );
+
+        $this->assertTrue($this->basicPermission->hasPermissionForLanguage(1, 1, 'de'));
+        $this->assertFalse($this->basicPermission->hasPermissionForLanguage(1, 1, 'en'));
+
+        // Cleanup
+        $this->dbHandle->query('DELETE FROM faquser_right_language WHERE user_id = 1 AND right_id = 1');
+    }
+
+    public function testGetAllowedLanguagesForRightReturnsNullWhenUnrestricted(): void
+    {
+        $this->assertNull($this->basicPermission->getAllowedLanguagesForRight(1, 1));
+    }
+
+    public function testGetAllowedLanguagesForRightReturnsRestrictedSet(): void
+    {
+        $this->dbHandle->query(
+            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')",
+        );
+
+        $allowed = $this->basicPermission->getAllowedLanguagesForRight(1, 1);
+        $this->assertSame(['de'], $allowed);
+
+        // Cleanup
+        $this->dbHandle->query('DELETE FROM faquser_right_language WHERE user_id = 1 AND right_id = 1');
+    }
+
+    public function testGetAllowedLanguagesForRightReturnsEmptyArrayWithoutRight(): void
+    {
+        $this->assertSame([], $this->basicPermission->getAllowedLanguagesForRight(0, 999));
+    }
 }

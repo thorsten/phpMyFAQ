@@ -176,6 +176,9 @@ final class UserController extends AbstractAdministrationController
             ),
             'csrfToken_updateUserData' => Token::getInstance($this->session)->getTokenString('update-user-data'),
             'csrfToken_updateUserRights' => Token::getInstance($this->session)->getTokenString('update-user-rights'),
+            'csrfToken_updateUserLanguageRestrictions' => Token::getInstance($this->session)->getTokenString(
+                'update-user-language-restrictions',
+            ),
             'csrfToken_activateUser' => Token::getInstance($this->session)->getTokenString('activate-user'),
             'csrfToken_deleteUser' => Token::getInstance($this->session)->getTokenString('delete-user'),
             'csrfToken_addUser' => Token::getInstance($this->session)->getTokenString('add-user'),
