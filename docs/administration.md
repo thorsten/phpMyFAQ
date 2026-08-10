@@ -57,6 +57,22 @@ permissions for groups in the same way as for users described in the topic above
 Please note that the permissions for a group are higher rated than the permissions on a user. To enable the group
 permissions, please set the permission level from _basic_ to _medium_ in the main configuration.
 
+### 5.1.3 Category restrictions (Medium permission mode)
+
+Groups can be restricted per right to a set of categories (Admin → Groups → Category restrictions). The rules are:
+
+- **No restriction selected = the right applies to all categories.**
+- A group restricted to categories X and Y cannot add, edit, translate, approve, or delete FAQs in other categories, and
+  the admin UI only shows the allowed categories.
+- **Direct user rights always remain global** — category restrictions only apply to rights granted through groups. Grant
+  rights via groups if you want category-level control.
+- Restrictions match exact categories; they are not inherited by subcategories.
+- **Basic permission mode has no groups**, so category restrictions do not apply there; every right is global.
+- CSV import and the AI translation endpoint are gated by the global `add_faq` / `translate_faq` rights; category checks
+  apply when the translated or imported content is saved.
+- A blocked action returns HTTP 403 with a message naming the missing right and the category.
+- FAQs without any category assignment can only be modified by users whose rights are not category-restricted.
+
 ## 5.2 Content
 
 ### 5.2.1 Category Administration

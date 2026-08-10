@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\Category as AdminCategory;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryTreeRestrictionFilter;
 use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Language\CategoryLanguageService;
 use phpMyFAQ\Category\Order;
@@ -77,6 +78,18 @@ final class CategoryController extends AbstractAdministrationController
 
         $categoryInfo = $category->getAllCategories();
 
+        $allowedCategories = $this->currentUser->perm->getAllowedCategoriesForRight(
+            $currentUserId,
+            PermissionType::CATEGORY_EDIT->value,
+        );
+        if ($allowedCategories !== null) {
+            $categoryInfo = array_filter(
+                $categoryInfo,
+                static fn(int $categoryId): bool => in_array($categoryId, $allowedCategories, strict: true),
+                ARRAY_FILTER_USE_KEY,
+            );
+        }
+
         $orderedCategories = $this->categoryOrder->getAllCategories();
         $categoryTree = $this->categoryOrder->getCategoryTree($orderedCategories);
 
@@ -84,6 +97,8 @@ final class CategoryController extends AbstractAdministrationController
             // Fallback if no category order is available
             $categoryTree = $category->buildAdminCategoryTree($categoryInfo);
         }
+
+        $categoryTree = CategoryTreeRestrictionFilter::filterNested($categoryTree, $allowedCategories);
 
         // Per-category translation state for the badge + popover (same source as hierarchy())
         $categoryLanguageService = new CategoryLanguageService();
@@ -163,6 +178,8 @@ final class CategoryController extends AbstractAdministrationController
 
         $parentId = (int) Filter::filterVar($request->attributes->get(key: 'parentId'), FILTER_VALIDATE_INT);
 
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_ADD, [$parentId]);
+
         $templateVars = [];
         if ($this->currentUser->perm instanceof MediumPermission) {
             $templateVars = [
@@ -212,6 +229,9 @@ final class CategoryController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
 
         $parentId = (int) Filter::filterVar($request->request->get(key: 'parent_id'), FILTER_VALIDATE_INT);
+
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_ADD, [$parentId]);
+
         $categoryId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
         $categoryLang = Filter::filterVar($request->request->get(key: 'lang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
@@ -370,6 +390,8 @@ final class CategoryController extends AbstractAdministrationController
             default: 0,
         );
 
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_EDIT, [$categoryId]);
+
         $category = new Category($this->configuration, [], withPermission: false);
         $category
             ->setUser($currentAdminUser)
@@ -466,8 +488,13 @@ final class CategoryController extends AbstractAdministrationController
         $categoryLanguageService = new CategoryLanguageService();
         $languages = $categoryLanguageService->getLanguagesInUse($this->configuration); // [code => name]
 
+        $categoryTree = CategoryTreeRestrictionFilter::filter($category->getCategoryTree(), $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            PermissionType::CATEGORY_EDIT->value,
+        ));
+
         $translations = [];
-        foreach ($category->getCategoryTree() as $cat) {
+        foreach ($categoryTree as $cat) {
             $categoryTreeId = (int) ($cat['id'] ?? 0);
             // [code => name]
             $existing = $categoryLanguageService->getExistingTranslations($this->configuration, $categoryTreeId);
@@ -490,7 +517,7 @@ final class CategoryController extends AbstractAdministrationController
             'currentLanguage' => $currentLanguage,
             'allLangs' => $languages,
             'allLangCodes' => $languageCodes,
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => $categoryTree,
             'basePath' => $request->getBasePath(),
             'faqlangcode' => $currentLangCode,
             'msgCategoryRemark_overview' => Translation::get(key: 'msgCategoryRemark_overview'),
@@ -525,6 +552,9 @@ final class CategoryController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
 
         $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
+
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_EDIT, [$categoryId]);
+
         $translateTo = Filter::filterVar($request->query->get(key: 'translateTo'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Re-add permission arrays used in the template
@@ -585,6 +615,9 @@ final class CategoryController extends AbstractAdministrationController
 
         $parentId = (int) Filter::filterVar($request->request->get(key: 'parent_id'), FILTER_VALIDATE_INT);
         $categoryId = (int) Filter::filterVar($request->request->get(key: 'id'), FILTER_VALIDATE_INT);
+
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_EDIT, [$categoryId]);
+
         $categoryLang = Filter::filterVar($request->request->get(key: 'catlang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $existingImage = Filter::filterVar(
             $request->request->get(key: 'existing_image'),

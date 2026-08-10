@@ -89,16 +89,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return true;
         }
 
-        // get right id
-        if (!is_numeric($right) && is_string($right)) {
-            $right = $this->getRightId($right);
-        }
-
-        if ($right instanceof PermissionType) {
-            $right = $this->getRightId($right->value);
-        }
-
-        $rightId = (int) $right;
+        $rightId = $this->resolveRightId($right);
 
         // check user right and group right
         if ($this->checkUserGroupRight($userId, $rightId)) {
@@ -518,16 +509,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return true;
         }
 
-        // Resolve right to ID
-        if (!is_numeric($right) && is_string($right)) {
-            $right = $this->getRightId($right);
-        }
-
-        if ($right instanceof PermissionType) {
-            $right = $this->getRightId($right->value);
-        }
-
-        $rightId = (int) $right;
+        $rightId = $this->resolveRightId($right);
 
         // Check direct user right (always global, no category restriction)
         if ($this->checkUserRight($userId, $rightId)) {
@@ -572,5 +554,65 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     public function setCategoryRestrictions(int $groupId, int $rightId, array $categoryIds): bool
     {
         return $this->categoryPermissionRepository->setCategoryRestrictions($groupId, $rightId, $categoryIds);
+    }
+
+    /**
+     * Returns the category IDs in which the user may exercise the right.
+     * Null means unrestricted: superadmins, direct user-rights, and group
+     * grants without category restrictions always apply globally. An empty
+     * array means the user cannot exercise the right in any category.
+     *
+     * @param int   $userId User ID
+     * @param mixed $right  Right ID, right name, or PermissionType value
+     * @return array<int>|null
+     * @throws Exception
+     */
+    #[\Override]
+    public function getAllowedCategoriesForRight(int $userId, mixed $right): ?array
+    {
+        $currentUser = new CurrentUser($this->configuration);
+        $currentUser->getUserById($userId);
+
+        if ($currentUser->isSuperAdmin()) {
+            return null;
+        }
+
+        $rightId = $this->resolveRightId($right);
+
+        if ($this->checkUserRight($userId, $rightId)) {
+            return null;
+        }
+
+        $allowedCategories = [];
+        foreach ($this->getUserGroups($userId) as $groupId) {
+            if (!in_array($rightId, $this->getGroupRights($groupId), strict: true)) {
+                continue;
+            }
+
+            $restrictions = $this->categoryPermissionRepository->getCategoryRestrictions($groupId, $rightId);
+            if ($restrictions === []) {
+                return null;
+            }
+
+            $allowedCategories = [...$allowedCategories, ...$restrictions];
+        }
+
+        return array_values(array_unique($allowedCategories));
+    }
+
+    /**
+     * Resolves a right given as ID, name, or PermissionType to its right ID.
+     */
+    private function resolveRightId(mixed $right): int
+    {
+        if (!is_numeric($right) && is_string($right)) {
+            $right = $this->getRightId($right);
+        }
+
+        if ($right instanceof PermissionType) {
+            $right = $this->getRightId($right->value);
+        }
+
+        return (int) $right;
     }
 }

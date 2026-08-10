@@ -621,6 +621,137 @@ class MediumPermissionTest extends TestCase
         $this->assertEmpty($this->mediumPermission->getAllCategoryRestrictions(1));
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testGetAllowedCategoriesForRightReturnsNullForUnrestrictedGroupRight(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+
+        $this->assertNull($this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetAllowedCategoriesForRightReturnsRestrictedCategories(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->mediumPermission->setCategoryRestrictions(1, 1, [10, 20]);
+
+        $this->assertSame([10, 20], $this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+
+        $this->mediumPermission->deleteGroup(1);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetAllowedCategoriesForRightReturnsNullForDirectUserRight(): void
+    {
+        // Fixture user 1 owns right 1 directly (faquser_right) => global, restrictions ignored
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+
+        $this->assertNull($this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetAllowedCategoriesForRightReturnsUnionAcrossGroups(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroupOne', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addGroup(['name' => 'TestGroupTwo', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->addToGroup(1, 2);
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->mediumPermission->grantGroupRight(2, 1);
+        $this->mediumPermission->setCategoryRestrictions(1, 1, [10, 20]);
+        $this->mediumPermission->setCategoryRestrictions(2, 1, [20, 30]);
+
+        $this->assertSame([10, 20, 30], $this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+
+        $this->mediumPermission->deleteGroup(1);
+        $this->mediumPermission->deleteGroup(2);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetAllowedCategoriesForRightReturnsEmptyArrayWithoutAnyGrant(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->assertSame([], $this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+    }
+
+    /**
+     * Pins that getAllowedCategoriesForRight() and hasPermissionForCategory()
+     * agree for every category: a category is in the allowed set (or the set
+     * is null) exactly when the per-category check grants it.
+     *
+     * @throws Exception
+     */
+    public function testGetAllowedCategoriesForRightMatchesPerCategoryChecks(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroupOne', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addGroup(['name' => 'TestGroupTwo', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->addToGroup(1, 2);
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->mediumPermission->grantGroupRight(2, 1);
+
+        $categories = [10, 20, 30, 40];
+
+        // Both groups restricted: allowed set is the union of the restrictions
+        $this->mediumPermission->setCategoryRestrictions(1, 1, [10, 20]);
+        $this->mediumPermission->setCategoryRestrictions(2, 1, [20, 30]);
+        $this->assertConsistentWithPerCategoryChecks(1, 1, $categories);
+
+        // One group unrestricted: the right applies globally
+        $this->mediumPermission->setCategoryRestrictions(2, 1, []);
+        $this->assertNull($this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+        $this->assertConsistentWithPerCategoryChecks(1, 1, $categories);
+
+        $this->mediumPermission->deleteGroup(1);
+        $this->mediumPermission->deleteGroup(2);
+    }
+
+    /**
+     * @param array<int> $categories
+     * @throws Exception
+     */
+    private function assertConsistentWithPerCategoryChecks(int $userId, int $rightId, array $categories): void
+    {
+        $allowed = $this->mediumPermission->getAllowedCategoriesForRight($userId, $rightId);
+        foreach ($categories as $categoryId) {
+            $this->assertSame(
+                $allowed === null || in_array($categoryId, $allowed, strict: true),
+                $this->mediumPermission->hasPermissionForCategory($userId, $rightId, $categoryId),
+                sprintf('Mismatch for category %d (allowed: %s)', $categoryId, json_encode($allowed)),
+            );
+        }
+    }
+
     private function initializeDatabaseStatics(Sqlite3 $dbHandle): void
     {
         $databaseReflection = new ReflectionClass(Database::class);

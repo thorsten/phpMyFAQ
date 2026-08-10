@@ -185,4 +185,23 @@ class BasicPermissionTest extends TestCase
         $this->basicPermission->grantUserRight(2, 1);
         $this->assertTrue($this->basicPermission->refuseAllUserRights(2));
     }
+
+    public function testHasPermissionForCategoryDelegatesToGlobalCheck(): void
+    {
+        // Right 1 granted to user 1 in the fixture DB => category is irrelevant in basic mode
+        $this->assertSame(
+            $this->basicPermission->hasPermission(1, 1),
+            $this->basicPermission->hasPermissionForCategory(1, 1, 99),
+        );
+    }
+
+    public function testHasPermissionForCategoryDeniesWithoutGlobalRight(): void
+    {
+        $this->assertFalse($this->basicPermission->hasPermissionForCategory(0, 999, 1));
+    }
+
+    public function testGetAllowedCategoriesForRightIsAlwaysUnrestricted(): void
+    {
+        $this->assertNull($this->basicPermission->getAllowedCategoriesForRight(1, 1));
+    }
 }

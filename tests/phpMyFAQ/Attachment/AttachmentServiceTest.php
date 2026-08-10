@@ -450,6 +450,15 @@ final class AttachmentServiceTest extends TestCase
                 return [];
             }
 
+            public function hasPermissionForCategory(int $userId, mixed $right, int $categoryId): bool
+            {
+                return $this->hasPermission($userId, $right);
+            }
+
+            public function getAllowedCategoriesForRight(int $userId, mixed $right): ?array
+            {
+                return null;
+            }
 
             public function getAllUserRights(int $userId): array
             {

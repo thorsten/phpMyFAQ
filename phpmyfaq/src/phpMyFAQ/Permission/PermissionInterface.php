@@ -122,4 +122,27 @@ interface PermissionInterface
      * @return array<int>
      */
     public function getUserGroups(int $userId): array;
+
+    /**
+     * Returns true if the user owns the right within the given category.
+     * Permission modes without group support have no category restrictions,
+     * so this behaves exactly like hasPermission(). Direct user-rights are
+     * always global and are never limited by category restrictions.
+     *
+     * @param int   $userId     User ID
+     * @param mixed $right      Right ID, right name, or PermissionType value
+     * @param int   $categoryId Category ID
+     */
+    public function hasPermissionForCategory(int $userId, mixed $right, int $categoryId): bool;
+
+    /**
+     * Returns the category IDs in which the user may exercise the right,
+     * null if the right is unrestricted (applies to all categories), or an
+     * empty array if the user cannot exercise the right in any category.
+     *
+     * @param int   $userId User ID
+     * @param mixed $right  Right ID, right name, or PermissionType value
+     * @return array<int>|null
+     */
+    public function getAllowedCategoriesForRight(int $userId, mixed $right): ?array;
 }

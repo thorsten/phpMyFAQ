@@ -23,6 +23,7 @@ use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Revision;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryTreeRestrictionFilter;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Core\Exception;
@@ -101,7 +102,7 @@ final class FaqController extends AbstractAdministrationController
             ...$this->getFooter(),
             'csrfTokenSearch' => Token::getInstance($this->session)->getTokenInput('pmf-csrf-token'),
             'csrfTokenOverview' => Token::getInstance($this->session)->getTokenString('pmf-csrf-token'),
-            'categories' => $category->getCategoryTree(),
+            'categories' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_EDIT),
             'numberOfRecords' => $categoryRelation->getNumberOfFaqsPerCategory(),
             'numberOfComments' => $this->comments->getNumberOfCommentsByCategory(),
         ]);
@@ -153,7 +154,7 @@ final class FaqController extends AbstractAdministrationController
             'openQuestionId' => 0,
             'notifyUser' => '',
             'notifyEmail' => '',
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categories,
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
             'attachments' => [],
@@ -196,6 +197,8 @@ final class FaqController extends AbstractAdministrationController
             '',
         );
 
+        $this->userHasPermissionForCategories(PermissionType::FAQ_ADD, [$categoryId]);
+
         $this->categoryHelper->setCategory($category);
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_ADD->value);
@@ -223,7 +226,7 @@ final class FaqController extends AbstractAdministrationController
             'openQuestionId' => 0,
             'notifyUser' => '',
             'notifyEmail' => '',
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categoryId,
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
             'attachments' => [],
@@ -276,9 +279,11 @@ final class FaqController extends AbstractAdministrationController
 
         $categoryRelation = new Relation($this->configuration, $category);
 
-        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
-
         $categories = $categoryRelation->getCategories($faqId, $faqLanguage);
+
+        $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, array_keys($categories));
+
+        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
 
         $this->faq->getFaq($faqId, null, true);
         $faqData = $this->faq->faqRecord;
@@ -360,7 +365,7 @@ final class FaqController extends AbstractAdministrationController
             'openQuestionId' => 0,
             'notifyUser' => '',
             'notifyEmail' => '',
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_EDIT),
             'selectedCategories' => $categories,
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
             'attachments' => $attachmentList,
@@ -432,7 +437,7 @@ final class FaqController extends AbstractAdministrationController
             'openQuestionId' => 0,
             'notifyUser' => '',
             'notifyEmail' => '',
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categories,
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
             'attachments' => [],
@@ -504,7 +509,7 @@ final class FaqController extends AbstractAdministrationController
             'openQuestionId' => 0,
             'notifyUser' => '',
             'notifyEmail' => '',
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categories,
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
             'attachments' => [],
@@ -587,7 +592,7 @@ final class FaqController extends AbstractAdministrationController
             'openQuestionId' => 0,
             'notifyUser' => $questionData['username'] ?? $this->currentUser->getUserData('display_name'),
             'notifyEmail' => $questionData['email'] ?? $this->currentUser->getUserData('email'),
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categories,
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
             'attachments' => [],
@@ -672,5 +677,19 @@ final class FaqController extends AbstractAdministrationController
             'ad_changerev' => Translation::get(key: 'ad_changerev'),
             'ad_view_faq' => Translation::get(key: 'ad_view_faq'),
         ];
+    }
+
+    /**
+     * Returns the category tree reduced to the categories the current user
+     * may exercise the given right in (null restrictions = full tree).
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function getFilteredCategoryTree(Category $category, PermissionType $permissionType): array
+    {
+        return CategoryTreeRestrictionFilter::filter($category->getCategoryTree(), $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            $permissionType->value,
+        ));
     }
 }

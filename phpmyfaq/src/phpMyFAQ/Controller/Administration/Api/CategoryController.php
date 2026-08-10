@@ -24,6 +24,7 @@ use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Category\Relation;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
@@ -63,6 +64,8 @@ final class CategoryController extends AbstractAdministrationApiController
 
         $categoryId = (int) ($data->categoryId ?? 0);
         $categoryLang = (string) ($data->language ?? '');
+
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_DELETE, [$categoryId]);
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
@@ -157,6 +160,20 @@ final class CategoryController extends AbstractAdministrationApiController
         }
 
         $categoryId = (int) ($data->categoryId ?? 0);
+
+        // Reordering persists the entire submitted tree (all categories), so a
+        // per-category check is not enough: the right must be unrestricted.
+        $allowedCategories = $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            PermissionType::CATEGORY_EDIT->value,
+        );
+        if ($allowedCategories !== null) {
+            throw new ForbiddenException(message: sprintf(
+                'User has no "%s" permission to reorder the category tree.',
+                PermissionType::CATEGORY_EDIT->name,
+            ));
+        }
+
         $categoryTreeRaw = $data->categoryTree ?? [];
         $categoryTree = array_values(array_filter(
             is_array($categoryTreeRaw) ? $categoryTreeRaw : [],
