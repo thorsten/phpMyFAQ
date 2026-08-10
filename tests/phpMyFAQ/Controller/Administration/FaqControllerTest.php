@@ -353,6 +353,8 @@ final class FaqControllerTest extends TestCase
     {
         $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
+        $permission->method('hasPermissionForCategory')->willReturn(true);
+        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;

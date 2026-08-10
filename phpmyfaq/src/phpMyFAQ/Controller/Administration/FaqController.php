@@ -23,6 +23,7 @@ use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Revision;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryTreeRestrictionFilter;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Core\Exception;
@@ -96,12 +97,17 @@ final class FaqController extends AbstractAdministrationController
         $categoryRelation = new Relation($this->configuration, $category);
         $categoryRelation->setGroups($currentAdminGroups);
 
+        $allowedCategories = $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            PermissionType::FAQ_EDIT->value,
+        );
+
         return $this->render('@admin/content/faq.overview.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'csrfTokenSearch' => Token::getInstance($this->session)->getTokenInput('pmf-csrf-token'),
             'csrfTokenOverview' => Token::getInstance($this->session)->getTokenString('pmf-csrf-token'),
-            'categories' => $category->getCategoryTree(),
+            'categories' => CategoryTreeRestrictionFilter::filter($category->getCategoryTree(), $allowedCategories),
             'numberOfRecords' => $categoryRelation->getNumberOfFaqsPerCategory(),
             'numberOfComments' => $this->comments->getNumberOfCommentsByCategory(),
         ]);
@@ -139,6 +145,11 @@ final class FaqController extends AbstractAdministrationController
             'comment' => $this->configuration->get(item: 'records.defaultAllowComments') ? 'checked' : null,
         ];
 
+        $allowedCategoriesForAdd = $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            PermissionType::FAQ_ADD->value,
+        );
+
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
@@ -153,7 +164,7 @@ final class FaqController extends AbstractAdministrationController
             'openQuestionId' => 0,
             'notifyUser' => '',
             'notifyEmail' => '',
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => CategoryTreeRestrictionFilter::filter($category->getCategoryTree(), $allowedCategoriesForAdd),
             'selectedCategories' => $categories,
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
             'attachments' => [],
@@ -196,6 +207,8 @@ final class FaqController extends AbstractAdministrationController
             '',
         );
 
+        $this->userHasPermissionForCategories(PermissionType::FAQ_ADD, [$categoryId]);
+
         $this->categoryHelper->setCategory($category);
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_ADD->value);
@@ -208,6 +221,11 @@ final class FaqController extends AbstractAdministrationController
             'email' => $this->currentUser->getUserData('email'),
             'comment' => $this->configuration->get(item: 'records.defaultAllowComments') ? 'checked' : null,
         ];
+
+        $allowedCategoriesForAddInCategory = $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            PermissionType::FAQ_ADD->value,
+        );
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
@@ -223,7 +241,7 @@ final class FaqController extends AbstractAdministrationController
             'openQuestionId' => 0,
             'notifyUser' => '',
             'notifyEmail' => '',
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => CategoryTreeRestrictionFilter::filter($category->getCategoryTree(), $allowedCategoriesForAddInCategory),
             'selectedCategories' => $categoryId,
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
             'attachments' => [],
@@ -278,10 +296,7 @@ final class FaqController extends AbstractAdministrationController
 
         $categories = $categoryRelation->getCategories($faqId, $faqLanguage);
 
-        $this->userHasPermissionForCategories(
-            PermissionType::FAQ_EDIT,
-            array_keys($categories),
-        );
+        $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, array_keys($categories));
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
 
@@ -338,6 +353,11 @@ final class FaqController extends AbstractAdministrationController
             $groupPermission[0] = -1;
         }
 
+        $allowedCategoriesForEdit = $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            PermissionType::FAQ_EDIT->value,
+        );
+
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
@@ -365,7 +385,7 @@ final class FaqController extends AbstractAdministrationController
             'openQuestionId' => 0,
             'notifyUser' => '',
             'notifyEmail' => '',
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => CategoryTreeRestrictionFilter::filter($category->getCategoryTree(), $allowedCategoriesForEdit),
             'selectedCategories' => $categories,
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
             'attachments' => $attachmentList,
@@ -420,6 +440,11 @@ final class FaqController extends AbstractAdministrationController
         $faqData = $this->faq->faqRecord;
         $faqData['title'] = 'Copy of ' . (string) $faqData['title'];
 
+        $allowedCategoriesForCopy = $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            PermissionType::FAQ_ADD->value,
+        );
+
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
@@ -437,7 +462,7 @@ final class FaqController extends AbstractAdministrationController
             'openQuestionId' => 0,
             'notifyUser' => '',
             'notifyEmail' => '',
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => CategoryTreeRestrictionFilter::filter($category->getCategoryTree(), $allowedCategoriesForCopy),
             'selectedCategories' => $categories,
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
             'attachments' => [],
@@ -492,6 +517,11 @@ final class FaqController extends AbstractAdministrationController
         $faqData = $this->faq->faqRecord;
         $faqData['title'] = 'Translation of ' . (string) $faqData['title'];
 
+        $allowedCategoriesForTranslate = $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            PermissionType::FAQ_ADD->value,
+        );
+
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
@@ -509,7 +539,7 @@ final class FaqController extends AbstractAdministrationController
             'openQuestionId' => 0,
             'notifyUser' => '',
             'notifyEmail' => '',
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => CategoryTreeRestrictionFilter::filter($category->getCategoryTree(), $allowedCategoriesForTranslate),
             'selectedCategories' => $categories,
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
             'attachments' => [],
@@ -575,6 +605,11 @@ final class FaqController extends AbstractAdministrationController
             'category_lang' => $faqLanguage,
         ];
 
+        $allowedCategoriesForAnswer = $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            PermissionType::FAQ_ADD->value,
+        );
+
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
@@ -592,7 +627,7 @@ final class FaqController extends AbstractAdministrationController
             'openQuestionId' => 0,
             'notifyUser' => $questionData['username'] ?? $this->currentUser->getUserData('display_name'),
             'notifyEmail' => $questionData['email'] ?? $this->currentUser->getUserData('email'),
-            'categoryTree' => $category->getCategoryTree(),
+            'categoryTree' => CategoryTreeRestrictionFilter::filter($category->getCategoryTree(), $allowedCategoriesForAnswer),
             'selectedCategories' => $categories,
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
             'attachments' => [],
