@@ -8,6 +8,7 @@ use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Faq as FaqAdministration;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -199,6 +200,24 @@ final class FaqControllerTest extends TestCase
                     true,
                 ),
             );
+        $permission
+            ->method('hasPermissionForCategory')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right, int $categoryId): bool => $userId === 42
+                && in_array(
+                    $right,
+                    [
+                        PermissionType::FAQ_ADD->value,
+                        PermissionType::FAQ_EDIT->value,
+                        PermissionType::FAQ_DELETE->value,
+                        PermissionType::FAQ_APPROVE->value,
+                        PermissionType::FAQ_TRANSLATE->value,
+                    ],
+                    true,
+                )
+                && $categoryId !== 666, // sentinel forbidden category for tests
+            );
+        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -437,6 +456,47 @@ final class FaqControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsForbiddenForRestrictedCategory(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'question' => 'Restricted question',
+                'categories[]' => [666],
+                'lang' => 'en',
+                'tags' => '',
+                'active' => 'yes',
+                'answer' => 'Restricted answer',
+                'keywords' => '',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'userpermission' => 'restricted',
+                'restricted_users' => [],
+                'grouppermission' => 'restricted',
+                'restricted_groups' => [],
+                'changed' => '',
+                'notes' => '',
+                'serpTitle' => '',
+                'serpDescription' => '',
+                'openQuestionId' => 0,
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 666.');
+        $controller->create($request);
     }
 
     /**

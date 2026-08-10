@@ -123,6 +123,8 @@ final class FaqController extends AbstractAdministrationApiController
             ? array_map(static fn(mixed $categoryId): int => (int) $categoryId, $rawCategories)
             : [(int) Filter::filterVar($rawCategories, FILTER_VALIDATE_INT)];
 
+        $this->userHasPermissionForCategories(PermissionType::FAQ_ADD, $categories);
+
         $language = Filter::filterVar($data->lang ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');

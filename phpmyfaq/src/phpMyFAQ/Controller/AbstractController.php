@@ -55,6 +55,7 @@ use Twig\TwigFilter;
     contact: new OA\Contact(name: 'phpMyFAQ Team', email: 'support@phpmyfaq.de'),
 )]
 #[OA\Server(url: 'https://localhost', description: 'Local dockerized server')]
+/* @mago-expect lint:too-many-methods - permission guard methods grow with each enforced right; a dedicated guard trait is planned */
 #[OA\License(name: 'Mozilla Public Licence 2.0', url: 'https://www.mozilla.org/MPL/2.0/')]
 abstract class AbstractController
 {
@@ -353,6 +354,39 @@ abstract class AbstractController
         $currentUser = $this->currentUser;
         if (!$currentUser?->perm->hasPermission($currentUser->getUserId(), $permissionType->value)) {
             throw new ForbiddenException(message: sprintf('User has no "%s" permission.', $permissionType->name));
+        }
+    }
+
+    /**
+     * Ensures the user owns the permission in every given category.
+     * Direct user-rights remain global; in basic permission mode this is
+     * identical to userHasPermission().
+     *
+     * @param int[] $categoryIds
+     * @throws UnauthorizedHttpException|ForbiddenException
+     */
+    protected function userHasPermissionForCategories(PermissionType $permissionType, array $categoryIds): void
+    {
+        if (!$this->currentUser->isLoggedIn()) {
+            throw new UnauthorizedHttpException(challenge: 'User is not authenticated.');
+        }
+
+        $currentUser = $this->currentUser;
+        $categoryIds = array_filter(array_unique($categoryIds), static fn(int $id): bool => $id > 0);
+        foreach ($categoryIds as $categoryId) {
+            if (
+                !$currentUser->perm->hasPermissionForCategory(
+                    $currentUser->getUserId(),
+                    $permissionType->value,
+                    $categoryId,
+                )
+            ) {
+                throw new ForbiddenException(message: sprintf(
+                    'User has no "%s" permission for category %d.',
+                    $permissionType->name,
+                    $categoryId,
+                ));
+            }
         }
     }
 
