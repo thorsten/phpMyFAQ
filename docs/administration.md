@@ -71,6 +71,7 @@ Groups can be restricted per right to a set of categories (Admin → Groups → 
 - CSV import and the AI translation endpoint are gated by the global `add_faq` / `translate_faq` rights; category checks
   apply when the translated or imported content is saved.
 - A blocked action returns HTTP 403 with a message naming the missing right and the category.
+- FAQs without any category assignment can only be modified by users whose rights are not category-restricted.
 
 ## 5.2 Content
 

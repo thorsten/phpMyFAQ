@@ -183,6 +183,16 @@ final class FaqControllerTest extends TestCase
 
     private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
     {
+        return $this->createAuthenticatedContainerWithAllowedCategories($session, null);
+    }
+
+    /**
+     * @param int[]|null $allowedCategories null = unrestricted, int[] = category-restricted
+     */
+    private function createAuthenticatedContainerWithAllowedCategories(
+        ?Session $session,
+        ?array $allowedCategories,
+    ): ContainerInterface {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
@@ -217,7 +227,7 @@ final class FaqControllerTest extends TestCase
                 )
                 && $categoryId !== 666, // sentinel forbidden category for tests
             );
-        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
+        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -1589,6 +1599,83 @@ final class FaqControllerTest extends TestCase
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666.');
         $controller->listByCategory(new Request([], [], ['categoryId' => 666, 'language' => 'en']));
+    }
+
+    private function seedOrphanedFaqRecord(int $faqId = 1, string $language = 'en'): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (%d, '%s', %d, 0, 'no', 0, '', 'Orphaned FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                $faqId,
+                $language,
+                $faqId + 1000,
+            ));
+        // Intentionally no faqcategoryrelations row — this is the orphaned-FAQ case.
+    }
+
+    /**
+     * A category-restricted user must be denied when attempting to delete an
+     * orphaned FAQ (one with no category relations), because the guard cannot
+     * verify category membership and must err on the side of restriction.
+     *
+     * @throws \Exception
+     */
+    public function testDeleteReturnsForbiddenForRestrictedUserWithOrphanedFaq(): void
+    {
+        $this->seedOrphanedFaqRecord();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqId' => 1,
+            'faqLanguage' => 'en',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer(
+            $this->createAuthenticatedContainerWithAllowedCategories($session, [10]),
+        );
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_DELETE" permission for uncategorized content.');
+        $controller->delete($request);
+    }
+
+    /**
+     * An unrestricted user (getAllowedCategoriesForRight returns null) must
+     * succeed when deleting an orphaned FAQ — the guard passes on empty lists
+     * only when the right is not category-restricted.
+     *
+     * @throws \Exception
+     */
+    public function testDeleteSucceedsForUnrestrictedUserWithOrphanedFaq(): void
+    {
+        $this->seedOrphanedFaqRecord();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqId' => 1,
+            'faqLanguage' => 'en',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_delsuc'), $payload['success']);
+        $this->removeCsrfCookie('pmf-csrf-token');
     }
 
     private function setCsrfCookie(string $page, string $token): void

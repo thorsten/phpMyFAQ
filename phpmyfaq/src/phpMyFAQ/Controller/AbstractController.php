@@ -362,6 +362,13 @@ abstract class AbstractController
      * Direct user-rights remain global; in basic permission mode this is
      * identical to userHasPermission().
      *
+     * Empty-list policy: when $categoryIds resolves to an empty list after
+     * filtering (e.g. an orphaned FAQ with no category relations), only users
+     * whose right is unrestricted (getAllowedCategoriesForRight() returns null)
+     * may proceed. A category-restricted user is denied with a ForbiddenException,
+     * because there is no category membership to verify against and allowing
+     * unrestricted access would defeat the restriction.
+     *
      * @param int[] $categoryIds
      * @throws UnauthorizedHttpException|ForbiddenException
      */
@@ -373,14 +380,28 @@ abstract class AbstractController
 
         $currentUser = $this->currentUser;
         $categoryIds = array_filter(array_unique($categoryIds), static fn(int $id): bool => $id > 0);
+
+        if ($categoryIds === []) {
+            $allowed = $currentUser->perm->getAllowedCategoriesForRight(
+                $currentUser->getUserId(),
+                $permissionType->value,
+            );
+            if ($allowed !== null) {
+                throw new ForbiddenException(message: sprintf(
+                    'User has no "%s" permission for uncategorized content.',
+                    $permissionType->name,
+                ));
+            }
+
+            return;
+        }
+
         foreach ($categoryIds as $categoryId) {
-            if (
-                !$currentUser->perm->hasPermissionForCategory(
-                    $currentUser->getUserId(),
-                    $permissionType->value,
-                    $categoryId,
-                )
-            ) {
+            if (!$currentUser->perm->hasPermissionForCategory(
+                $currentUser->getUserId(),
+                $permissionType->value,
+                $categoryId,
+            )) {
                 throw new ForbiddenException(message: sprintf(
                     'User has no "%s" permission for category %d.',
                     $permissionType->name,
