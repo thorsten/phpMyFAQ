@@ -42,4 +42,33 @@ final class CategoryTreeRestrictionFilter
             strict: true,
         )));
     }
+
+    /**
+     * Filters a nested tree (map of categoryId => children map) as produced by
+     * Category\Order::getCategoryTree() and Category::buildAdminCategoryTree().
+     * Removing a node removes its whole subtree.
+     *
+     * @param array<array-key, mixed> $categoryTree
+     * @param array<int>|null $allowedCategoryIds Null = unrestricted
+     * @return array<array-key, mixed>
+     */
+    public static function filterNested(array $categoryTree, ?array $allowedCategoryIds): array
+    {
+        if ($allowedCategoryIds === null) {
+            return $categoryTree;
+        }
+
+        $filtered = [];
+        foreach ($categoryTree as $categoryId => $children) {
+            if (!in_array(needle: (int) $categoryId, haystack: $allowedCategoryIds, strict: true)) {
+                continue;
+            }
+
+            $filtered[$categoryId] = is_array($children)
+                ? self::filterNested($children, $allowedCategoryIds)
+                : $children;
+        }
+
+        return $filtered;
+    }
 }

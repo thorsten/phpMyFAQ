@@ -136,6 +136,16 @@ final class CategoryControllerTest extends TestCase
 
     private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
     {
+        return $this->createAuthenticatedContainerWithAllowedCategories($session, null);
+    }
+
+    /**
+     * @param array<int>|null $allowedCategories Return value for getAllowedCategoriesForRight (null = unrestricted)
+     */
+    private function createAuthenticatedContainerWithAllowedCategories(
+        ?Session $session,
+        ?array $allowedCategories,
+    ): ContainerInterface {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
@@ -166,7 +176,7 @@ final class CategoryControllerTest extends TestCase
                 )
                 && $categoryId !== 666, // sentinel forbidden category for tests
             );
-        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
+        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -466,6 +476,28 @@ final class CategoryControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR)));
 
         $this->removeCsrfCookie('category');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateOrderReturnsForbiddenForCategoryRestrictedUser(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('category');
+        $this->setCsrfCookie('category', $csrfToken);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerWithAllowedCategories($session, [10]));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "CATEGORY_EDIT" permission to reorder the category tree.');
+
+        $controller->updateOrder(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+            'categoryTree' => [['id' => 10, 'children' => []]],
+            'categoryId' => 10,
+        ], JSON_THROW_ON_ERROR)));
     }
 
     private function setCsrfCookie(string $page, string $token): void

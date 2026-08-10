@@ -9,6 +9,7 @@ use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -200,6 +201,24 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testAddInCategoryReturnsForbiddenForRestrictedCategory(): void
+    {
+        $request = new Request();
+        $request->attributes->set('categoryId', '666');
+        $request->attributes->set('categoryLanguage', 'en');
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 666.');
+
+        $controller->addInCategory($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testCopyRendersWithPreparedFaqRecord(): void
     {
         $request = new Request();
@@ -353,7 +372,12 @@ final class FaqControllerTest extends TestCase
     {
         $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission->method('hasPermissionForCategory')->willReturn(true);
+        $permission
+            ->method('hasPermissionForCategory')
+            ->willReturnCallback(
+                // sentinel forbidden category for tests
+                static fn(int $userId, mixed $right, int $categoryId): bool => $categoryId !== 666,
+            );
         $permission->method('getAllowedCategoriesForRight')->willReturn(null);
 
         $currentUser = $this->createMock(CurrentUser::class);

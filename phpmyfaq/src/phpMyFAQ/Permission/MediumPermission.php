@@ -89,16 +89,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return true;
         }
 
-        // get right id
-        if (!is_numeric($right) && is_string($right)) {
-            $right = $this->getRightId($right);
-        }
-
-        if ($right instanceof PermissionType) {
-            $right = $this->getRightId($right->value);
-        }
-
-        $rightId = (int) $right;
+        $rightId = $this->resolveRightId($right);
 
         // check user right and group right
         if ($this->checkUserGroupRight($userId, $rightId)) {
@@ -518,16 +509,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return true;
         }
 
-        // Resolve right to ID
-        if (!is_numeric($right) && is_string($right)) {
-            $right = $this->getRightId($right);
-        }
-
-        if ($right instanceof PermissionType) {
-            $right = $this->getRightId($right->value);
-        }
-
-        $rightId = (int) $right;
+        $rightId = $this->resolveRightId($right);
 
         // Check direct user right (always global, no category restriction)
         if ($this->checkUserRight($userId, $rightId)) {
@@ -595,15 +577,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return null;
         }
 
-        if (!is_numeric($right) && is_string($right)) {
-            $right = $this->getRightId($right);
-        }
-
-        if ($right instanceof PermissionType) {
-            $right = $this->getRightId($right->value);
-        }
-
-        $rightId = (int) $right;
+        $rightId = $this->resolveRightId($right);
 
         if ($this->checkUserRight($userId, $rightId)) {
             return null;
@@ -624,5 +598,21 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         }
 
         return array_values(array_unique($allowedCategories));
+    }
+
+    /**
+     * Resolves a right given as ID, name, or PermissionType to its right ID.
+     */
+    private function resolveRightId(mixed $right): int
+    {
+        if (!is_numeric($right) && is_string($right)) {
+            $right = $this->getRightId($right);
+        }
+
+        if ($right instanceof PermissionType) {
+            $right = $this->getRightId($right->value);
+        }
+
+        return (int) $right;
     }
 }

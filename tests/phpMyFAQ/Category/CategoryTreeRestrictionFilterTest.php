@@ -30,4 +30,24 @@ final class CategoryTreeRestrictionFilterTest extends TestCase
     {
         $this->assertSame([], CategoryTreeRestrictionFilter::filter($this->tree, []));
     }
+
+    public function testNestedNullMeansUnrestricted(): void
+    {
+        $nested = [1 => [3 => []], 2 => []];
+        $this->assertSame($nested, CategoryTreeRestrictionFilter::filterNested($nested, null));
+    }
+
+    public function testNestedKeepsOnlyAllowedBranches(): void
+    {
+        $nested = [1 => [3 => [], 4 => []], 2 => [5 => []]];
+        $this->assertSame(
+            [1 => [3 => []]],
+            CategoryTreeRestrictionFilter::filterNested($nested, [1, 3, 5]),
+        );
+    }
+
+    public function testNestedEmptyAllowListHidesEverything(): void
+    {
+        $this->assertSame([], CategoryTreeRestrictionFilter::filterNested([1 => [], 2 => []], []));
+    }
 }

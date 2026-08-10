@@ -11,6 +11,7 @@ use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -369,6 +370,27 @@ final class CategoryControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testEditReturnsForbiddenForRestrictedCategory(): void
+    {
+        $controller = new CategoryController(
+            new AdminCategory($this->configuration),
+            $this->createStub(Order::class),
+            $this->createStub(CategoryPermission::class),
+            $this->createStub(Image::class),
+            $this->createStub(Seo::class),
+            $this->createStub(UserHelper::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "CATEGORY_EDIT" permission for category 666.');
+
+        $controller->edit(new Request([], [], ['categoryId' => '666']));
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testAddChildRendersParentCategoryDetailsInBasicMode(): void
     {
         $this->setConfigurationValues(['security.permLevel' => 'basic']);
@@ -647,7 +669,12 @@ final class CategoryControllerTest extends TestCase
     {
         $permission = $this->createMock(MediumPermission::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission->method('hasPermissionForCategory')->willReturn(true);
+        $permission
+            ->method('hasPermissionForCategory')
+            ->willReturnCallback(
+                // sentinel forbidden category for tests
+                static fn(int $userId, mixed $right, int $categoryId): bool => $categoryId !== 666,
+            );
         $permission->method('getAllowedCategoriesForRight')->willReturn(null);
         $permission->method('getAllGroupsOptions')->willReturn($groupsOptions);
 
