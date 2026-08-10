@@ -1455,6 +1455,116 @@ final class FaqControllerTest extends TestCase
         $this->removeCsrfCookie('importfaqs');
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsForbiddenWhenTargetCategoryIsRestricted(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'faqId' => 1,
+                'solutionId' => 1,
+                'revisionId' => 0,
+                'question' => 'Updated question?',
+                'categories[]' => [666],
+                'lang' => 'en',
+                'tags' => '',
+                'active' => 'yes',
+                'answer' => 'Updated answer',
+                'keywords' => '',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'userpermission' => 'restricted',
+                'restricted_users' => [],
+                'grouppermission' => 'restricted',
+                'restricted_groups' => [],
+                'changed' => 'Updated',
+                'date' => '2026-03-08 10:00:00',
+                'notes' => '',
+                'revision' => 'no',
+                'recordDateHandling' => 'keepDate',
+                'serpTitle' => '',
+                'serpDescription' => '',
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666.');
+        $controller->update($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsForbiddenWhenFaqIsInRestrictedCategory(): void
+    {
+        $this->seedFaqRecord(categoryId: 666);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqId' => 1,
+            'faqLanguage' => 'en',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_DELETE" permission for category 666.');
+        $controller->delete($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateReturnsForbiddenWhenFaqIsInRestrictedCategory(): void
+    {
+        $this->seedFaqRecord(categoryId: 666);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'checked' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_APPROVE" permission for category 666.');
+        $controller->activate($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListByCategoryReturnsForbiddenForRestrictedCategory(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666.');
+        $controller->listByCategory(new Request([], [], ['categoryId' => 666, 'language' => 'en']));
+    }
+
     private function setCsrfCookie(string $page, string $token): void
     {
         $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;

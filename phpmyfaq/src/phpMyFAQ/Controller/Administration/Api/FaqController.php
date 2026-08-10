@@ -357,6 +357,11 @@ final class FaqController extends AbstractAdministrationApiController
             : [(int) Filter::filterVar($rawCategories, FILTER_VALIDATE_INT)];
 
         $faqLang = Filter::filterVar($data->lang ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+
+        $categoryRelation = new Relation($this->configuration, $category);
+        $currentCategoryIds = array_keys($categoryRelation->getCategories($faqId, $faqLang));
+        $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, [...$categories, ...$currentCategoryIds]);
+
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
@@ -444,7 +449,6 @@ final class FaqController extends AbstractAdministrationApiController
 
         $faqId = $faqData->getId() ?? $faqId;
 
-        $categoryRelation = new Relation($this->configuration, $category);
         $categoryRelation->deleteByFaq($faqId, $faqLang);
         $categoryRelation->add($categories, $faqId, $faqLang);
 
@@ -552,6 +556,8 @@ final class FaqController extends AbstractAdministrationApiController
         $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
         $language = Filter::filterVar($request->attributes->get(key: 'language'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
+        $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, [$categoryId]);
+
         $onlyInactive = Filter::filterVar(
             $request->query->get(key: 'only-inactive'),
             FILTER_VALIDATE_BOOLEAN,
@@ -564,9 +570,10 @@ final class FaqController extends AbstractAdministrationApiController
 
         return $this->json([
             'faqs' => $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew),
-            'isAllowedToTranslate' => $this->currentUser?->perm->hasPermission(
+            'isAllowedToTranslate' => $this->currentUser?->perm->hasPermissionForCategory(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_TRANSLATE->value,
+                $categoryId,
             ),
         ], Response::HTTP_OK);
     }
@@ -594,6 +601,15 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         if ($faqIds !== []) {
+            $activateCategory = new Category($this->configuration, [], withPermission: false);
+            $activateCategoryRelation = new Relation($this->configuration, $activateCategory);
+            foreach ($faqIds as $faqId) {
+                $this->userHasPermissionForCategories(
+                    PermissionType::FAQ_APPROVE,
+                    array_keys($activateCategoryRelation->getCategories($faqId, $faqLanguage)),
+                );
+            }
+
             $faq = new FaqAdministration($this->configuration);
             $success = false;
 
@@ -639,6 +655,15 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         if ($faqIds !== []) {
+            $stickyCategory = new Category($this->configuration, [], withPermission: false);
+            $stickyCategoryRelation = new Relation($this->configuration, $stickyCategory);
+            foreach ($faqIds as $faqId) {
+                $this->userHasPermissionForCategories(
+                    PermissionType::FAQ_EDIT,
+                    array_keys($stickyCategoryRelation->getCategories($faqId, $faqLanguage)),
+                );
+            }
+
             $faq = new FaqAdministration($this->configuration);
             $success = false;
 
@@ -683,6 +708,13 @@ final class FaqController extends AbstractAdministrationApiController
                 'error' => 'CSRF Token - ' . Translation::getString(key: 'msgNoPermission'),
             ], Response::HTTP_UNAUTHORIZED);
         }
+
+        $deleteCategory = new Category($this->configuration, [], withPermission: false);
+        $deleteCategoryRelation = new Relation($this->configuration, $deleteCategory);
+        $this->userHasPermissionForCategories(
+            PermissionType::FAQ_DELETE,
+            array_keys($deleteCategoryRelation->getCategories($faqId, $faqLanguage)),
+        );
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_DELETE->value . ':' . $faqId);
 
