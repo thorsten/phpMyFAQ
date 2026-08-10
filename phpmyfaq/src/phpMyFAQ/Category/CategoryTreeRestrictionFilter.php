@@ -36,9 +36,10 @@ final class CategoryTreeRestrictionFilter
             return $categoryTree;
         }
 
-        return array_values(array_filter(
-            $categoryTree,
-            static fn(array $entry): bool => in_array(needle: (int) $entry['id'], haystack: $allowedCategoryIds, strict: true),
-        ));
+        return array_values(array_filter($categoryTree, static fn(array $entry): bool => in_array(
+            needle: (int) $entry['id'],
+            haystack: $allowedCategoryIds,
+            strict: true,
+        )));
     }
 }
