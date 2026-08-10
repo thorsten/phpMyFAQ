@@ -573,4 +573,55 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     {
         return $this->categoryPermissionRepository->setCategoryRestrictions($groupId, $rightId, $categoryIds);
     }
+
+    /**
+     * Returns the category IDs in which the user may exercise the right.
+     * Null means unrestricted: superadmins, direct user-rights, and group
+     * grants without category restrictions always apply globally. An empty
+     * array means the user cannot exercise the right in any category.
+     *
+     * @param int   $userId User ID
+     * @param mixed $right  Right ID, right name, or PermissionType value
+     * @return array<int>|null
+     * @throws Exception
+     */
+    public function getAllowedCategoriesForRight(int $userId, mixed $right): ?array
+    {
+        $currentUser = new CurrentUser($this->configuration);
+        $currentUser->getUserById($userId);
+
+        if ($currentUser->isSuperAdmin()) {
+            return null;
+        }
+
+        if (!is_numeric($right) && is_string($right)) {
+            $right = $this->getRightId($right);
+        }
+
+        if ($right instanceof PermissionType) {
+            $right = $this->getRightId($right->value);
+        }
+
+        $rightId = (int) $right;
+
+        if ($this->checkUserRight($userId, $rightId)) {
+            return null;
+        }
+
+        $allowedCategories = [];
+        foreach ($this->getUserGroups($userId) as $groupId) {
+            if (!in_array($rightId, $this->getGroupRights($groupId), strict: true)) {
+                continue;
+            }
+
+            $restrictions = $this->categoryPermissionRepository->getCategoryRestrictions($groupId, $rightId);
+            if ($restrictions === []) {
+                return null;
+            }
+
+            $allowedCategories = [...$allowedCategories, ...$restrictions];
+        }
+
+        return array_values(array_unique($allowedCategories));
+    }
 }
