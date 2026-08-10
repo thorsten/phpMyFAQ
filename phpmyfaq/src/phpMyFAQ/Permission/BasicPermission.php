@@ -289,4 +289,21 @@ class BasicPermission implements PermissionInterface
     {
         return [];
     }
+
+    /**
+     * Basic mode has no groups and therefore no category restrictions:
+     * the check is identical to the global permission check.
+     */
+    public function hasPermissionForCategory(int $userId, mixed $right, int $categoryId): bool
+    {
+        return $this->hasPermission($userId, $right);
+    }
+
+    /**
+     * Basic mode has no groups and therefore no category restrictions.
+     */
+    public function getAllowedCategoriesForRight(int $userId, mixed $right): ?array
+    {
+        return null;
+    }
 }
