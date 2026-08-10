@@ -382,6 +382,7 @@ readonly class LanguagePermissionRepository
      * supported language code, built via $rowBuilder. Runs inside a transaction so
      * the replace is atomic. Unsupported language codes are silently skipped.
      *
+     * @param callable(string): string $rowBuilder
      * @param array<string> $languages
      */
     private function replaceLanguageRows(

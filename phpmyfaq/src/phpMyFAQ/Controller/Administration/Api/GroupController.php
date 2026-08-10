@@ -318,12 +318,10 @@ final class GroupController extends AbstractAdministrationApiController
     {
         $this->userHasGroupPermission();
 
-        $availableLanguages = LanguageHelper::getAvailableLanguages();
-        $languages = array_map(
-            static fn(string $code, string $label): array => ['code' => $code, 'label' => $label],
-            array_keys($availableLanguages),
-            $availableLanguages,
-        );
+        $languages = [];
+        foreach (LanguageHelper::getAvailableLanguages() as $code => $label) {
+            $languages[] = ['code' => $code, 'label' => $label];
+        }
 
         return $this->json($languages, Response::HTTP_OK);
     }

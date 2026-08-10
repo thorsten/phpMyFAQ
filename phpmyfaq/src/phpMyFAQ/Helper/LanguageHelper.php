@@ -74,7 +74,7 @@ class LanguageHelper
     /**
      * This function returns the available languages.
      *
-     * @return string[]
+     * @return array<string, string>
      */
     public static function getAvailableLanguages(): array
     {
