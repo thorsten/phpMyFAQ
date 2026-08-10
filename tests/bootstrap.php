@@ -73,36 +73,51 @@ $loader = new ClassLoader();
 $loader->add('phpMyFAQ', PMF_SRC_DIR);
 $loader->register();
 
-//
-// Delete possible leftover files from previous test runs
-//
-@unlink(PMF_TEST_DIR . '/test.db');
-@unlink(PMF_TEST_DIR . '/content/core/config/database.php');
-
-//
-// Create database credentials for SQLite
-//
-$setup = [
-    'dbServer' => PMF_TEST_DIR . '/test.db',
-    'dbType' => 'pdo_sqlite',
-    'dbPort' => null,
-    'dbDatabaseName' => '',
-    'loginname' => 'admin',
-    'password' => 'password',
-    'password_retyped' => 'password',
-    'rootDir' => PMF_TEST_DIR,
-    'mainUrl' => 'https://localhost/',
-];
-
 Strings::init();
 
 Request::setTrustedHosts(['^.*$']); // Trust all hosts for testing
 
-try {
-    $installer = new Installer(new System());
-    $installer->startInstall($setup);
-} catch (Exception $exception) {
-    fwrite(STDERR, $exception->getMessage() . PHP_EOL);
+//
+// Install a fresh test database, but only once per test run: tests marked with
+// #[RunInSeparateProcess] or #[RunTestsInSeparateProcesses] execute this
+// bootstrap again in a child process, and re-installing would delete the
+// database file the main process still holds open — every later write on that
+// stale connection would fail with "attempt to write a readonly database".
+//
+if (getenv('PMF_TEST_BOOTSTRAPPED') === false) {
+    //
+    // Delete possible leftover files from previous test runs
+    //
+    @unlink(PMF_TEST_DIR . '/test.db');
+    @unlink(PMF_TEST_DIR . '/content/core/config/database.php');
+
+    //
+    // Create database credentials for SQLite
+    //
+    $setup = [
+        'dbServer' => PMF_TEST_DIR . '/test.db',
+        'dbType' => 'pdo_sqlite',
+        'dbPort' => null,
+        'dbDatabaseName' => '',
+        'loginname' => 'admin',
+        'password' => 'password',
+        'password_retyped' => 'password',
+        'rootDir' => PMF_TEST_DIR,
+        'mainUrl' => 'https://localhost/',
+    ];
+
+    try {
+        $installer = new Installer(new System());
+        $installer->startInstall($setup);
+    } catch (Exception $exception) {
+        fwrite(STDERR, $exception->getMessage() . PHP_EOL);
+    }
+
+    // Mark this test run as bootstrapped for child processes: PHPUnit either
+    // inherits the real environment (putenv) or rebuilds it from $_SERVER.
+    putenv('PMF_TEST_BOOTSTRAPPED=1');
+    $_SERVER['PMF_TEST_BOOTSTRAPPED'] = '1';
+    $_ENV['PMF_TEST_BOOTSTRAPPED'] = '1';
 }
 
 require PMF_TEST_DIR . '/content/core/config/database.php';
