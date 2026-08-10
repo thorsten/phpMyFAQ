@@ -23,7 +23,6 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\QuestionEntity;
-use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\QuestionHelper;
@@ -182,17 +181,12 @@ final class QuestionController extends AbstractController
      */
     private function isAddingQuestionsAllowed(): bool
     {
-        if ($this->configuration->get(item: 'records.allowQuestionsForGuests')) {
-            return true;
+        if (!$this->configuration->get(item: 'main.enableAskQuestions')) {
+            return false;
         }
 
-        if ($this->configuration->get(item: 'main.enableAskQuestions')) {
-            return true;
-        }
+        $isGuest = -1 === $this->currentUser->getUserId();
 
-        return $this->currentUser->perm->hasPermission(
-            $this->currentUser->getUserId(),
-            PermissionType::QUESTION_ADD->value,
-        );
+        return !$isGuest || (bool) $this->configuration->get(item: 'records.allowQuestionsForGuests');
     }
 }

@@ -179,18 +179,27 @@ generate_sboms() {
 
 write_checksums() {
     log "Creating checksum files"
-    ${MD5BIN} "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.md5"
-    ${MD5BIN} "${ARTIFACT_ZIP}" > "${ARTIFACT_ZIP}.md5"
 
+    SHA256_CMD=""
     if command -v sha256sum >/dev/null 2>&1; then
-        sha256sum "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.sha256"
-        sha256sum "${ARTIFACT_ZIP}" > "${ARTIFACT_ZIP}.sha256"
+        SHA256_CMD="sha256sum"
     elif command -v shasum >/dev/null 2>&1; then
-        shasum -a 256 "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.sha256"
-        shasum -a 256 "${ARTIFACT_ZIP}" > "${ARTIFACT_ZIP}.sha256"
+        SHA256_CMD="shasum -a 256"
     else
         warn "No SHA256 tool found; skipping .sha256 files"
     fi
+
+    # Hash by bare filename from inside the artifact's directory so the
+    # checksum files stay verifiable via `sha256sum -c` next to the download
+    # and don't leak the local build path.
+    for artifact in "${ARTIFACT_TAR}" "${ARTIFACT_ZIP}"; do
+        artifact_dir=$(dirname "${artifact}")
+        artifact_name=$(basename "${artifact}")
+        (cd "${artifact_dir}" && ${MD5BIN} "${artifact_name}" > "${artifact_name}.md5")
+        if [ -n "${SHA256_CMD}" ]; then
+            (cd "${artifact_dir}" && ${SHA256_CMD} "${artifact_name}" > "${artifact_name}.sha256")
+        fi
+    done
 }
 
 write_manifest() {

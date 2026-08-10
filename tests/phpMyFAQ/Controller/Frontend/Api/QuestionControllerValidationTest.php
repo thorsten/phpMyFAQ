@@ -60,6 +60,9 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
 
     public function testCreateThrowsExceptionWhenNameIsMissing(): void
     {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.enableAskQuestions' => '1']);
+
         $controller = $this->createController();
         $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
 
@@ -75,6 +78,9 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
 
     public function testCreateThrowsExceptionWhenEmailIsMissing(): void
     {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.enableAskQuestions' => '1']);
+
         $controller = $this->createController();
         $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
 
@@ -90,6 +96,9 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
 
     public function testCreateThrowsExceptionWhenLanguageIsMissing(): void
     {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.enableAskQuestions' => '1']);
+
         $controller = $this->createController();
         $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
 
@@ -105,6 +114,9 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
 
     public function testCreateThrowsExceptionWhenQuestionIsMissing(): void
     {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.enableAskQuestions' => '1']);
+
         $controller = $this->createController();
         $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
 
@@ -120,6 +132,9 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
 
     public function testCreateThrowsExceptionWhenQuestionIsEmpty(): void
     {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.enableAskQuestions' => '1']);
+
         $controller = $this->createController();
         $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
 
@@ -136,6 +151,9 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
 
     public function testCreateThrowsExceptionWhenEmailIsInvalid(): void
     {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.enableAskQuestions' => '1']);
+
         $controller = $this->createController();
         $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
 
@@ -152,6 +170,9 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
 
     public function testCreateThrowsExceptionWhenCategoryParameterIsProvided(): void
     {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.enableAskQuestions' => '1']);
+
         $controller = $this->createController();
         $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
 
@@ -169,6 +190,9 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
 
     public function testCreateThrowsExceptionWhenSaveParameterIsProvided(): void
     {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.enableAskQuestions' => '1']);
+
         $controller = $this->createController();
         $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
 
@@ -217,6 +241,7 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         $this->overrideConfigurationValues([
             'records.allowQuestionsForGuests' => '1',
             'main.enableSmartAnswering' => '1',
+            'main.enableAskQuestions' => '1',
         ]);
 
         $controller = $this->createController();
@@ -245,6 +270,7 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         $this->overrideConfigurationValues([
             'records.allowQuestionsForGuests' => '1',
             'main.enableSmartAnswering' => '0',
+            'main.enableAskQuestions' => '1',
         ]);
         $this->seedCategory();
 
@@ -292,6 +318,7 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         $this->overrideConfigurationValues([
             'records.allowQuestionsForGuests' => '1',
             'main.enableSmartAnswering' => '1',
+            'main.enableAskQuestions' => '1',
             'security.permLevel' => 'basic',
         ]);
         $this->seedCategory();
@@ -364,6 +391,7 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         $this->overrideConfigurationValues([
             'records.allowQuestionsForGuests' => '1',
             'main.enableSmartAnswering' => '1',
+            'main.enableAskQuestions' => '1',
             'security.permLevel' => 'basic',
         ]);
         $this->seedCategory();
@@ -420,6 +448,7 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         $this->overrideConfigurationValues([
             'records.allowQuestionsForGuests' => '1',
             'main.enableSmartAnswering' => '0',
+            'main.enableAskQuestions' => '1',
         ]);
         $this->seedCategory();
 
