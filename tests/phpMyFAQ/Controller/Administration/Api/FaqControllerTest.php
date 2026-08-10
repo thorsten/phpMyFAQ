@@ -1555,6 +1555,32 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testStickyReturnsForbiddenWhenFaqIsInRestrictedCategory(): void
+    {
+        $this->seedFaqRecord(categoryId: 666);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'checked' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666.');
+        $controller->sticky($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testListByCategoryReturnsForbiddenForRestrictedCategory(): void
     {
         $controller = $this->createController();
