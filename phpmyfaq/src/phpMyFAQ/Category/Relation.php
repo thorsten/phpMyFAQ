@@ -337,6 +337,7 @@ class Relation
      *
      * @param int    $faqId FAQ id
      * @param string $faqLang FAQ language
+     * @return array<int, array{category_id: int, category_lang: string}>
      */
     public function getCategories(int $faqId, string $faqLang): array
     {
