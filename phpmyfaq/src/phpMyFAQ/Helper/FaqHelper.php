@@ -223,14 +223,35 @@ class FaqHelper extends AbstractHelper
     public function convertOldInternalLinks(string $question, string $answer): string
     {
         $link = new Link($this->configuration->getDefaultUrl(), $this->configuration);
-        // Optional artlang parameter; prevents an empty match (sets fallback later)
-        $pattern = '#(https?://[^/]+)/index\.php\?action=(artikel|faq)&cat=(\d+)&id=(\d+)(?:&artlang=([a-z]{2}))?#i';
 
-        $decodedAnswer = html_entity_decode($answer);
+        // Match legacy URLs in both their plain form and the entity-encoded form the HTML sanitizer
+        // produces (`=` becomes `&#61;`, `&` becomes `&amp;`). The pattern is applied to the answer as-is
+        // — never to an html_entity_decode()'d copy — so that entity-encoded content elsewhere in the
+        // answer (e.g. a neutralized `&lt;img onerror=...&gt;` payload) is not reactivated. Each match is
+        // replaced with a freshly built, safe URL.
+        $eq = '(?:=|&#61;)';
+        $amp = '(?:&|&amp;)';
+        $pattern =
+            '~(https?://[^/]+)/index\.php\?action'
+            . $eq
+            . '(artikel|faq)'
+            . $amp
+            . 'cat'
+            . $eq
+            . '(\d+)'
+            . $amp
+            . 'id'
+            . $eq
+            . '(\d+)'
+            . '(?:'
+            . $amp
+            . 'artlang'
+            . $eq
+            . '([a-z]{2}))?~i';
 
-        $result = preg_replace_callback(
+        return preg_replace_callback(
             $pattern,
-            function ($matches) use ($question, $link): string {
+            function (array $matches) use ($question, $link): string {
                 $baseUrl = $this->configuration->getDefaultUrl();
                 $categoryId = $matches[3];
                 $faqId = $matches[4];
@@ -248,38 +269,7 @@ class FaqHelper extends AbstractHelper
                     $link->getSEOTitle($question),
                 );
             },
-            $decodedAnswer,
-        );
-
-        if ($result === $decodedAnswer && $decodedAnswer !== $answer) {
-            $htmlEncodedPattern =
-                '/(https?:\/\/[^\/]+)\/index\.php\?action(&#61;|=)(artikel|faq)(&|&)cat'
-                . '(&#61;|=)(\d+)(&|&)id(&#61;|=)(\d+)((&|&)artlang(&#61;|=)([a-z]{2}))?/i';
-
-            return preg_replace_callback(
-                $htmlEncodedPattern,
-                function ($matches) use ($question, $link): string {
-                    $baseUrl = $this->configuration->getDefaultUrl();
-                    $categoryId = $matches[6];
-                    $faqId = $matches[9];
-                    $language = $matches[13] ?? $this->configuration->getLanguage()->getLanguage();
-                    if ($language === '' || $language === '0') {
-                        $language = 'en';
-                    }
-
-                    return sprintf(
-                        '%scontent/%d/%d/%s/%s.html',
-                        $baseUrl,
-                        $categoryId,
-                        $faqId,
-                        $language,
-                        $link->getSEOTitle($question),
-                    );
-                },
-                $answer,
-            );
-        }
-
-        return $result;
+            $answer,
+        ) ?? $answer;
     }
 }

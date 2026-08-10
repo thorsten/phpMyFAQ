@@ -268,4 +268,45 @@ class FaqHelperTest extends TestCase
             $content1,
         ));
     }
+
+    /**
+     * Legacy URLs as produced by the HTML sanitizer (`=` encoded as &#61;, `&` encoded as &amp;)
+     * must still be converted, without decoding the surrounding answer body.
+     */
+    public function testConvertOldInternalLinksWithEntityEncodedUrls(): void
+    {
+        $question = 'How can I create an account?';
+
+        $content = 'See <a href="http://example.org/index.php?action&#61;faq&amp;cat&#61;7&amp;id&#61;42">this link</a>';
+        $expected =
+            'See <a href="https://localhost:443/content/7/42/en/how-can-i-create-an-account.html">this link</a>';
+
+        $this->assertEquals($expected, $this->faqHelper->convertOldInternalLinks($question, $content));
+    }
+
+    /**
+     * convertOldInternalLinks() must not reverse the entity-encoding applied by the HTML sanitizer.
+     * A neutralized payload elsewhere in the answer has to stay neutralized even when a legacy URL is
+     * present to trigger the conversion code path (regression test for the stored XSS via
+     * html_entity_decode()).
+     */
+    public function testConvertOldInternalLinksDoesNotReviveEncodedPayload(): void
+    {
+        $question = 'How can I create an account?';
+
+        $content =
+            '&lt;img src=x onerror=alert(document.domain)&gt; '
+            . 'See also <a href="http://example.org/index.php?action&#61;faq&amp;cat&#61;1&amp;id&#61;1">link</a>';
+
+        $result = $this->faqHelper->convertOldInternalLinks($question, $content);
+
+        // The neutralized <img> payload must remain entity-encoded.
+        $this->assertStringContainsString('&lt;img src=x onerror=alert(document.domain)&gt;', $result);
+        $this->assertStringNotContainsString('<img src=x onerror=alert(document.domain)>', $result);
+        // The legacy URL is still rewritten to the new format.
+        $this->assertStringContainsString(
+            'https://localhost:443/content/1/1/en/how-can-i-create-an-account.html',
+            $result,
+        );
+    }
 }
