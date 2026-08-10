@@ -647,6 +647,8 @@ final class CategoryControllerTest extends TestCase
     {
         $permission = $this->createMock(MediumPermission::class);
         $permission->method('hasPermission')->willReturn(true);
+        $permission->method('hasPermissionForCategory')->willReturn(true);
+        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
         $permission->method('getAllGroupsOptions')->willReturn($groupsOptions);
 
         $currentUser = $this->createMock(CurrentUser::class);

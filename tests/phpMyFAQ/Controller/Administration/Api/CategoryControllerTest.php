@@ -8,6 +8,7 @@ use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -135,7 +136,7 @@ final class CategoryControllerTest extends TestCase
 
     private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
     {
-        $permission = $this->createStub(PermissionInterface::class);
+        $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
             ->willReturnCallback(
@@ -143,14 +144,31 @@ final class CategoryControllerTest extends TestCase
                 && in_array(
                     $right,
                     [
+                        PermissionType::CATEGORY_ADD->value,
                         PermissionType::CATEGORY_DELETE->value,
                         PermissionType::CATEGORY_EDIT->value,
                     ],
                     true,
                 ),
             );
+        $permission
+            ->method('hasPermissionForCategory')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right, int $categoryId): bool => $userId === 42
+                && in_array(
+                    $right,
+                    [
+                        PermissionType::CATEGORY_ADD->value,
+                        PermissionType::CATEGORY_DELETE->value,
+                        PermissionType::CATEGORY_EDIT->value,
+                    ],
+                    true,
+                )
+                && $categoryId !== 666, // sentinel forbidden category for tests
+            );
+        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
 
-        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
@@ -423,6 +441,30 @@ final class CategoryControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_categ_deleted'), $payload['success']);
+        $this->removeCsrfCookie('category');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsForbiddenForRestrictedCategory(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('category');
+        $this->setCsrfCookie('category', $csrfToken);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "CATEGORY_DELETE" permission for category 666.');
+
+        $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+            'categoryId' => 666,
+            'language' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+
         $this->removeCsrfCookie('category');
     }
 

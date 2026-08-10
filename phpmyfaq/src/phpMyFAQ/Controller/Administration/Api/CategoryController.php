@@ -64,6 +64,8 @@ final class CategoryController extends AbstractAdministrationApiController
         $categoryId = (int) ($data->categoryId ?? 0);
         $categoryLang = (string) ($data->language ?? '');
 
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_DELETE, [$categoryId]);
+
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, [], false);
@@ -157,6 +159,9 @@ final class CategoryController extends AbstractAdministrationApiController
         }
 
         $categoryId = (int) ($data->categoryId ?? 0);
+
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_EDIT, [$categoryId]);
+
         $categoryTreeRaw = $data->categoryTree ?? [];
         $categoryTree = array_values(array_filter(
             is_array($categoryTreeRaw) ? $categoryTreeRaw : [],

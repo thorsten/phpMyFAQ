@@ -163,6 +163,8 @@ final class CategoryController extends AbstractAdministrationController
 
         $parentId = (int) Filter::filterVar($request->attributes->get(key: 'parentId'), FILTER_VALIDATE_INT);
 
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_ADD, [$parentId]);
+
         $templateVars = [];
         if ($this->currentUser->perm instanceof MediumPermission) {
             $templateVars = [
@@ -212,6 +214,9 @@ final class CategoryController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
 
         $parentId = (int) Filter::filterVar($request->request->get(key: 'parent_id'), FILTER_VALIDATE_INT);
+
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_ADD, [$parentId]);
+
         $categoryId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
         $categoryLang = Filter::filterVar($request->request->get(key: 'lang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
@@ -370,6 +375,8 @@ final class CategoryController extends AbstractAdministrationController
             default: 0,
         );
 
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_EDIT, [$categoryId]);
+
         $category = new Category($this->configuration, [], withPermission: false);
         $category
             ->setUser($currentAdminUser)
@@ -525,6 +532,9 @@ final class CategoryController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
 
         $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
+
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_EDIT, [$categoryId]);
+
         $translateTo = Filter::filterVar($request->query->get(key: 'translateTo'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Re-add permission arrays used in the template
@@ -585,6 +595,9 @@ final class CategoryController extends AbstractAdministrationController
 
         $parentId = (int) Filter::filterVar($request->request->get(key: 'parent_id'), FILTER_VALIDATE_INT);
         $categoryId = (int) Filter::filterVar($request->request->get(key: 'id'), FILTER_VALIDATE_INT);
+
+        $this->userHasPermissionForCategories(PermissionType::CATEGORY_EDIT, [$categoryId]);
+
         $categoryLang = Filter::filterVar($request->request->get(key: 'catlang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $existingImage = Filter::filterVar(
             $request->request->get(key: 'existing_image'),

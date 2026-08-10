@@ -276,9 +276,14 @@ final class FaqController extends AbstractAdministrationController
 
         $categoryRelation = new Relation($this->configuration, $category);
 
-        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
-
         $categories = $categoryRelation->getCategories($faqId, $faqLanguage);
+
+        $this->userHasPermissionForCategories(
+            PermissionType::FAQ_EDIT,
+            array_keys($categories),
+        );
+
+        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
 
         $this->faq->getFaq($faqId, null, true);
         $faqData = $this->faq->faqRecord;
