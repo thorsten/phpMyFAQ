@@ -693,7 +693,9 @@ final class UserController extends AbstractAdministrationApiController
         // An empty set means "unrestricted". Dropping every unsupported code would
         // silently turn a narrowing request into a grant, so refuse it instead.
         if ($rawLanguages !== [] && $languages === []) {
-            return $this->json(['error' => 'No supported language code provided.'], Response::HTTP_BAD_REQUEST);
+            return $this->json([
+                'error' => Translation::get(key: 'ad_language_restrictions_no_language'),
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         // A non-SuperAdmin may only restrict a user's language grant to a non-empty subset

@@ -448,9 +448,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
 
         // The language restrictions are scoped to a group-right pair. Leaving them behind
         // would silently re-apply the old scope if the same right is granted again later.
-        $this->languageRepository->deleteAllForGroup($groupId);
-
-        return true;
+        return $this->languageRepository->deleteAllForGroup($groupId);
     }
 
     /**

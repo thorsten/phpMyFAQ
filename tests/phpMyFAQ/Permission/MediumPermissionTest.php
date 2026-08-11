@@ -992,7 +992,10 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->grantGroupRight(1, 1);
         $this->mediumPermission->setLanguageRestrictions(1, 1, ['fr']);
 
-        $this->assertSame(['de', 'fr'], $this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+        $this->assertEqualsCanonicalizing(
+            ['de', 'fr'],
+            $this->mediumPermission->getAllowedLanguagesForRight(1, 1),
+        );
 
         $this->mediumPermission->deleteGroup(1);
         $this->mediumPermission->setUserLanguageRestrictions(1, 1, []);

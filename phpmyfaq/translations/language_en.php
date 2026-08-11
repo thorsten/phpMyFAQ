@@ -1865,5 +1865,8 @@ $PMF_LANG['ad_user_language_restrictions_select'] = 'Select languages to restric
 $PMF_LANG['ad_user_language_restrictions_saved'] = 'Language restrictions saved.';
 $PMF_LANG['ad_user_language_restrictions_error'] = 'Failed to save language restrictions.';
 $PMF_LANG['ad_user_no_permissions'] = 'No permissions assigned to this user.';
+$PMF_LANG['ad_language_restrictions_no_language'] = 'No supported language code provided.';
+$PMF_LANG['msgImportRowNoCategoryPermission'] = 'Row %d: no "%s" permission for category %d.';
+$PMF_LANG['msgImportRowNoLanguagePermission'] = 'Row %d: no "%s" permission for language "%s".';
 
 return $PMF_LANG;
