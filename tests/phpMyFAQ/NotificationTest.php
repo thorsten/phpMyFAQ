@@ -21,6 +21,7 @@ use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\BasicPermissionRepository;
+use phpMyFAQ\Permission\LanguagePermissionRepository;
 use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Strings\AbstractString;
 use phpMyFAQ\Strings\Mbstring;
@@ -54,6 +55,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 #[UsesClass(Permission::class)]
 #[UsesClass(BasicPermission::class)]
 #[UsesClass(BasicPermissionRepository::class)]
+#[UsesClass(LanguagePermissionRepository::class)]
 #[UsesClass(Mail::class)]
 #[UsesClass(Builtin::class)]
 #[UsesClass(UserData::class)]
