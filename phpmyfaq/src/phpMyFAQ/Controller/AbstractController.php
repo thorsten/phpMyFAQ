@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Administration\SkipsAuthenticationCheck;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -159,6 +160,12 @@ abstract class AbstractController
      */
     protected function isSecured(): void
     {
+        // Login and authentication endpoints must stay reachable even in "login only"
+        // mode, otherwise the login page redirects to itself in an infinite loop.
+        if ($this instanceof SkipsAuthenticationCheck) {
+            return;
+        }
+
         if (!$this->currentUser->isLoggedIn() && $this->configuration->get(item: 'security.enableLoginOnly')) {
             throw new UnauthorizedHttpException(challenge: 'You are not allowed to view this content.');
         }

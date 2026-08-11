@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Frontend;
 use phpMyFAQ\Auth\AuthWebAuthn;
 use phpMyFAQ\Auth\WebAuthn\WebAuthnUser;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Controller\Administration\SkipsAuthenticationCheck;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
@@ -35,7 +36,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class WebAuthnController extends AbstractController
+final class WebAuthnController extends AbstractController implements SkipsAuthenticationCheck
 {
     private readonly AuthWebAuthn $authWebAuthn;
 

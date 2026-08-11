@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller;
 
+use phpMyFAQ\Controller\Administration\SkipsAuthenticationCheck;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -30,7 +31,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Error\LoaderError;
 
-final class WebAuthnController extends AbstractController
+final class WebAuthnController extends AbstractController implements SkipsAuthenticationCheck
 {
     /**
      * @throws Exception|LoaderError
