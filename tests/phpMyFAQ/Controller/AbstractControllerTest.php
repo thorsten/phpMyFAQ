@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Administration\SkipsAuthenticationCheck;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\BasicPermission;
@@ -374,6 +375,30 @@ class AbstractControllerTest extends TestCase
 
         $this->abstractController->isSecuredPublic();
         $this->assertTrue(true);
+    }
+
+    public function testIsSecuredSkipsCheckForControllersImplementingSkipsAuthenticationCheck(): void
+    {
+        $this->currentUserMock->expects($this->never())->method('isLoggedIn');
+        $this->configurationMock->expects($this->never())->method('get');
+
+        $loginController = new class($this->configurationMock, $this->currentUserMock) extends
+            AbstractController implements SkipsAuthenticationCheck {
+            public function __construct(Configuration $config, CurrentUser $user)
+            {
+                // Skip parent constructor completely to avoid container issues
+                $this->configuration = $config;
+                $this->currentUser = $user;
+            }
+
+            public function isSecuredPublic(): void
+            {
+                $this->isSecured();
+            }
+        };
+
+        $loginController->isSecuredPublic();
+        $this->assertTrue(true); // Login page stays reachable in "login only" mode
     }
 
     public function testIsSecuredSucceedsOnLoginPathWhenNotLoggedInAndLoginRequired(): void

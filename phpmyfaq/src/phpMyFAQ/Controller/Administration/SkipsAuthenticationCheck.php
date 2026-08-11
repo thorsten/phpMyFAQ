@@ -1,13 +1,14 @@
 <?php
 
 /**
- * Marker interface for admin controllers that intentionally bypass the
- * automatic authentication enforcement performed by the
- * ControllerContainerListener.
+ * Marker interface for controllers that intentionally bypass the automatic
+ * "login only" enforcement performed by AbstractController::isSecured().
  *
- * Only the AuthenticationController itself (handling login/logout/token
- * endpoints) should implement this interface. Every other controller in
- * the Administration namespace must require an authenticated user.
+ * Only controllers that make up the login flow itself (the admin
+ * AuthenticationController and the WebAuthn login controllers) should
+ * implement this interface — without it, requesting the login page in
+ * "login only" mode redirects to itself in an infinite loop. Every other
+ * controller must require an authenticated user.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
