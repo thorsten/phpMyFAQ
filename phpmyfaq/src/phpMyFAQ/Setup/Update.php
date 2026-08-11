@@ -235,24 +235,31 @@ class Update extends AbstractSetup
      */
     private function executeQueries(): void
     {
-        if ($this->dryRun) {
-            foreach ($this->queries as $query) {
-                $this->dryRunQueries[] = $query;
-            }
-        } else {
-            foreach ($this->queries as $query) {
-                try {
-                    $result = $this->configuration->getDb()->query($query);
-                } catch (\Throwable $throwable) {
-                    // The failing statement is essential for diagnosing update problems
-                    throw new Exception(sprintf('%s (Query: %s)', $throwable->getMessage(), $query));
-                }
+        foreach ($this->queries as $query) {
+            $this->executeQuery($query);
+        }
+    }
 
-                // Some drivers (e.g. PostgreSQL) return false instead of throwing
-                if ($result === false) {
-                    throw new Exception(sprintf('%s (Query: %s)', $this->configuration->getDb()->error(), $query));
-                }
-            }
+    /**
+     * @throws Exception
+     */
+    private function executeQuery(string $query): void
+    {
+        if ($this->dryRun) {
+            $this->dryRunQueries[] = $query;
+            return;
+        }
+
+        try {
+            $result = $this->configuration->getDb()->query($query);
+        } catch (\Throwable $throwable) {
+            // The failing statement is essential for diagnosing update problems
+            throw new Exception(sprintf('%s (Query: %s)', $throwable->getMessage(), $query));
+        }
+
+        // Some drivers (e.g. PostgreSQL) return false instead of throwing
+        if ($result === false) {
+            throw new Exception(sprintf('%s (Query: %s)', $this->configuration->getDb()->error(), $query));
         }
     }
 
@@ -430,9 +437,55 @@ class Update extends AbstractSetup
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function applyUpdates320Beta(): void
     {
         if (version_compare($this->version, '3.2.0-beta', '<')) {
+            // Configuration values in a TEXT column: this must run immediately, because
+            // later update steps write configuration values longer than 255 characters
+            // through Configuration::add() before the queued queries are executed
+            switch (Database::getType()) {
+                case 'mysqli':
+                    $this->executeQuery(sprintf(
+                        'ALTER TABLE %sfaqconfig MODIFY config_value TEXT DEFAULT NULL',
+                        Database::getTablePrefix(),
+                    ));
+                    break;
+                case 'pgsql':
+                    $this->executeQuery(sprintf(
+                        'ALTER TABLE %sfaqconfig ALTER COLUMN config_value TYPE TEXT',
+                        Database::getTablePrefix(),
+                    ));
+                    break;
+                case 'sqlite3':
+                    // A leftover table from a previously failed update attempt would break the rerun
+                    $this->executeQuery(sprintf('DROP TABLE IF EXISTS %sfaqconfig_new', Database::getTablePrefix()));
+                    $this->executeQuery(sprintf('CREATE TABLE %sfaqconfig_new (
+                            config_name VARCHAR(255) NOT NULL default \'\',
+                            config_value TEXT DEFAULT NULL, PRIMARY KEY (config_name)
+                         )', Database::getTablePrefix()));
+                    $this->executeQuery(sprintf(
+                        'INSERT INTO %sfaqconfig_new SELECT config_name, config_value FROM %sfaqconfig',
+                        Database::getTablePrefix(),
+                        Database::getTablePrefix(),
+                    ));
+                    $this->executeQuery(sprintf('DROP TABLE %sfaqconfig', Database::getTablePrefix()));
+                    $this->executeQuery(sprintf(
+                        'ALTER TABLE %sfaqconfig_new RENAME TO %sfaqconfig',
+                        Database::getTablePrefix(),
+                        Database::getTablePrefix(),
+                    ));
+                    break;
+                case 'sqlsrv':
+                    $this->executeQuery(sprintf(
+                        'ALTER TABLE %sfaqconfig ALTER COLUMN config_value TEXT',
+                        Database::getTablePrefix(),
+                    ));
+                    break;
+            }
+
             $this->configuration->add('mail.remoteSMTPDisableTLSPeerVerification', false);
             $this->configuration->delete('main.enableLinkVerification');
 
@@ -456,45 +509,6 @@ class Update extends AbstractSetup
                     'ALTER TABLE %sfaqdata_revisions DROP COLUMN links_state, DROP COLUMN links_check_date',
                     Database::getTablePrefix(),
                 );
-            }
-
-            // Configuration values in a TEXT column
-            switch (Database::getType()) {
-                case 'mysqli':
-                    $this->queries[] = sprintf(
-                        'ALTER TABLE %sfaqconfig MODIFY config_value TEXT DEFAULT NULL',
-                        Database::getTablePrefix(),
-                    );
-                    break;
-                case 'pgsql':
-                    $this->queries[] = sprintf(
-                        'ALTER TABLE %sfaqconfig ALTER COLUMN config_value TYPE TEXT',
-                        Database::getTablePrefix(),
-                    );
-                    break;
-                case 'sqlite3':
-                    $this->queries[] = sprintf('CREATE TABLE %sfaqconfig_new (
-                            config_name VARCHAR(255) NOT NULL default \'\',
-                            config_value TEXT DEFAULT NULL, PRIMARY KEY (config_name)
-                         )', Database::getTablePrefix());
-                    $this->queries[] = sprintf(
-                        'INSERT INTO %sfaqconfig_new SELECT config_name, config_value FROM %sfaqconfig',
-                        Database::getTablePrefix(),
-                        Database::getTablePrefix(),
-                    );
-                    $this->queries[] = sprintf('DROP TABLE %sfaqconfig', Database::getTablePrefix());
-                    $this->queries[] = sprintf(
-                        'ALTER TABLE %sfaqconfig_new RENAME TO %sfaqconfig',
-                        Database::getTablePrefix(),
-                        Database::getTablePrefix(),
-                    );
-                    break;
-                case 'sqlsrv':
-                    $this->queries[] = sprintf(
-                        'ALTER TABLE %sfaqconfig ALTER COLUMN config_value TEXT',
-                        Database::getTablePrefix(),
-                    );
-                    break;
             }
         }
     }

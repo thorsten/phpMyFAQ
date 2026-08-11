@@ -280,6 +280,35 @@ class UpdateTest extends TestCase
         $this->assertSame($rightId, $permission->getRightId('add_faq'));
     }
 
+    /**
+     * Later update steps write configuration values longer than 255 characters
+     * (e.g. seo.contentRobotsText) directly to the database, so the widening of
+     * faqconfig.config_value to TEXT must be executed immediately instead of
+     * being queued for the final batch — otherwise updating from 3.1.x fails
+     * with "Data too long for column 'config_value'".
+     */
+    public function testApplyUpdates320BetaWidensConfigValueColumnImmediately(): void
+    {
+        $update = new Update(new System(), $this->createMock(Configuration::class));
+        $update->setDryRun(true);
+
+        $queuedQueries = $this->collectQueriesForPostgres('applyUpdates320Beta', '3.1.0', '', $update);
+
+        $this->assertContains(
+            'ALTER TABLE faqconfig ALTER COLUMN config_value TYPE TEXT',
+            $update->getDryRunQueries(),
+            'The config_value widening must be executed immediately, not queued.',
+        );
+
+        foreach ($queuedQueries as $queuedQuery) {
+            $this->assertStringNotContainsString(
+                'config_value',
+                $queuedQuery,
+                'The config_value widening must not wait for the final query batch.',
+            );
+        }
+    }
+
     public function testSetDryRun()
     {
         $this->update->setDryRun(true);
