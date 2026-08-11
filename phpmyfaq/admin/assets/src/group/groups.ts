@@ -678,13 +678,17 @@ const renderLanguageRestrictions = (container: HTMLElement): void => {
     const wrapper = document.createElement('div');
     wrapper.className = 'mb-3';
 
+    const selectId = `group-language-restriction-${rightId}`;
+
     const labelElement = document.createElement('label');
     labelElement.className = 'form-label fw-semibold';
     labelElement.textContent = label;
+    labelElement.htmlFor = selectId;
     wrapper.appendChild(labelElement);
 
     const select = document.createElement('select');
     select.className = 'form-select form-select-sm';
+    select.id = selectId;
     select.multiple = true;
     select.size = 4;
     select.dataset.rightId = rightId;

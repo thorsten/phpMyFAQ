@@ -442,7 +442,15 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function refuseAllGroupRights(int $groupId): bool
     {
-        return $this->mediumRepository->refuseAllGroupRights($groupId);
+        if (!$this->mediumRepository->refuseAllGroupRights($groupId)) {
+            return false;
+        }
+
+        // The language restrictions are scoped to a group-right pair. Leaving them behind
+        // would silently re-apply the old scope if the same right is granted again later.
+        $this->languageRepository->deleteAllForGroup($groupId);
+
+        return true;
     }
 
     /**

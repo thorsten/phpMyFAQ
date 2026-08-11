@@ -380,7 +380,13 @@ readonly class LanguagePermissionRepository
     /**
      * Deletes all rows matching $whereClause on $table, then re-inserts one row per
      * supported language code, built via $rowBuilder. Runs inside a transaction so
-     * the replace is atomic. Unsupported language codes are silently skipped.
+     * the replace is atomic.
+     *
+     * Because an empty restriction set means "unrestricted", the language list is
+     * validated up front and the whole write is refused when the caller supplied
+     * codes but none of them are supported. Silently dropping them would delete the
+     * existing rows and widen the right to every language — a fail-open outcome for
+     * a permission control.
      *
      * @param callable(string): string $rowBuilder
      * @param array<string> $languages
@@ -392,9 +398,16 @@ readonly class LanguagePermissionRepository
         callable $rowBuilder,
         array $languages,
     ): bool {
+        $supportedLanguages = array_values(array_filter($languages, Language::isASupportedLanguage(...)));
+
+        // Only an explicitly empty input may clear the restrictions.
+        if ($languages !== [] && $supportedLanguages === []) {
+            return false;
+        }
+
         $db = $this->configuration->getDb();
 
-        $db->query('BEGIN');
+        $db->query($this->beginTransactionStatement());
 
         $delete = sprintf('DELETE FROM %s%s WHERE %s', Database::getTablePrefix(), $table, $whereClause);
         if (!$db->query($delete)) {
@@ -402,11 +415,7 @@ readonly class LanguagePermissionRepository
             return false;
         }
 
-        foreach ($languages as $language) {
-            if (!Language::isASupportedLanguage($language)) {
-                continue;
-            }
-
+        foreach ($supportedLanguages as $language) {
             $escapedLanguage = sprintf("'%s'", $db->escape($language));
 
             $insert = sprintf(
@@ -426,5 +435,18 @@ readonly class LanguagePermissionRepository
         $db->query('COMMIT');
 
         return true;
+    }
+
+    /**
+     * Returns the statement that opens a transaction on the current driver.
+     * SQL Server treats a bare `BEGIN` as a statement block, not a transaction,
+     * so the DELETE/INSERT pair would run unscoped there.
+     */
+    private function beginTransactionStatement(): string
+    {
+        return match (Database::getType()) {
+            'sqlsrv', 'pdo_sqlsrv' => 'BEGIN TRANSACTION',
+            default => 'BEGIN',
+        };
     }
 }

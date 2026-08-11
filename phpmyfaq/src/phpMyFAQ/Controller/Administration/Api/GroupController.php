@@ -299,6 +299,20 @@ final class GroupController extends AbstractAdministrationApiController
             Language::isASupportedLanguage(...),
         ));
 
+        // An empty set means "unrestricted". Dropping every unsupported code would
+        // silently turn a narrowing request into a grant, so refuse it instead.
+        if ($rawLanguages !== [] && $languages === []) {
+            return $this->json(['error' => 'No supported language code provided.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        // A non-SuperAdmin may only scope a group's right to a non-empty subset of the
+        // languages they hold themselves. Group rights are inherited by every member, so
+        // without this an administrator could grant the group language access they do not
+        // possess (privilege escalation), including via an empty "unrestricted" list.
+        if (!$this->mayAssignLanguages($rightId, $languages)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         $success = $currentUser->perm->setLanguageRestrictions($groupId, $rightId, $languages);
 
         if (!$success) {

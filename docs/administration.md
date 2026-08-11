@@ -68,8 +68,10 @@ Groups can be restricted per right to a set of categories (Admin → Groups → 
   rights via groups if you want category-level control.
 - Restrictions match exact categories; they are not inherited by subcategories.
 - **Basic permission mode has no groups**, so category restrictions do not apply there; every right is global.
-- CSV import and the AI translation endpoint are gated by the global `add_faq` / `translate_faq` rights; category checks
-  apply when the translated or imported content is saved.
+- CSV import is vetted row by row against the `add_faq` right before anything is stored: each row's target category and
+  language must be inside your scope, and a single out-of-scope row rejects the whole file with HTTP 403. The AI
+  translation endpoint is gated by the global `translate_faq` right; category and language checks apply when the
+  translated content is saved.
 - A blocked action returns HTTP 403 with a message naming the missing right and the category.
 - FAQs without any category assignment can only be modified by users whose rights are not category-restricted.
 

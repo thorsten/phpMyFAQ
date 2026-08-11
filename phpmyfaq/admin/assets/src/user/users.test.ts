@@ -425,6 +425,14 @@ describe('handleUsers', () => {
     expect(options[0].textContent).toBe('English');
     expect(options[1].selected).toBe(true);
 
+    // Each select must be reachable from its own label for screen readers.
+    const languageSelect = document.querySelector<HTMLSelectElement>(
+      '#userLanguageRestrictionsBody select[data-right-id="1"]'
+    );
+    const languageLabel = languageSelect?.previousElementSibling as HTMLLabelElement | null;
+    expect(languageSelect?.id).toBe('user-language-restriction-1');
+    expect(languageLabel?.htmlFor).toBe('user-language-restriction-1');
+
     (document.getElementById('pmf-user-language-restrictions-save') as HTMLButtonElement).click();
     await flushPromises();
 

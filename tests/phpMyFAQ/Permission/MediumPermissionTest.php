@@ -472,6 +472,36 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->deleteGroup(1);
     }
 
+    /**
+     * Revoking every group right must also drop the group's language restrictions,
+     * otherwise re-granting the same right later silently re-applies the old scope.
+     *
+     * @throws Exception
+     */
+    public function testRefuseAllGroupRightsClearsLanguageRestrictionsBeforeRegrant(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->mediumPermission->setLanguageRestrictions(1, 1, ['de']);
+
+        $this->assertFalse($this->mediumPermission->hasPermissionForLanguage(1, 1, 'fr'));
+
+        $this->assertTrue($this->mediumPermission->refuseAllGroupRights(1));
+        $this->assertSame([], $this->mediumPermission->getLanguageRestrictions(1, 1));
+
+        // Re-granting the right must not resurrect the stale 'de'-only scope.
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 1, 'fr'));
+
+        $this->mediumPermission->deleteGroup(1);
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
+        $this->configuration->getDb()->query('INSERT INTO faquser_right (user_id, right_id) VALUES (1, 1)');
+    }
+
     public function testRemoveAllUsersFromGroup(): void
     {
         $this->assertFalse($this->mediumPermission->removeAllUsersFromGroup(0));

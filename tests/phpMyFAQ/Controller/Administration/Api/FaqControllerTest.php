@@ -1525,6 +1525,84 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * Import::import() takes the target language from the row, so a language-restricted
+     * user must not be able to create out-of-scope records through a CSV upload.
+     *
+     * @throws \Exception
+     */
+    public function testImportReturnsForbiddenForRowInRestrictedLanguage(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('importfaqs');
+        $this->setCsrfCookie('importfaqs', $csrfToken);
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
+        self::assertNotFalse($tempFile);
+        // Row 2 targets the sentinel forbidden language 'fr'.
+        file_put_contents(
+            $tempFile,
+            "1,Allowed question,Allowed answer,keywords,en,Author,author@example.com,true,false\n"
+            . "1,Blocked question,Blocked answer,keywords,fr,Author,author@example.com,true,false\n",
+        );
+        $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
+
+        $request = new Request([], ['csrf' => $csrfToken], [], [], ['file' => $uploadedFile]);
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->import($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertFalse($payload['storedAll']);
+        self::assertSame(['Row 2: no "FAQ_ADD" permission for language "fr".'], $payload['messages']);
+
+        // The whole upload is refused, so the in-scope row must not have been stored either.
+        self::assertSame(0, $this->countFaqsWithQuestion('Allowed question'));
+        $this->removeCsrfCookie('importfaqs');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsForbiddenForRowInRestrictedCategory(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('importfaqs');
+        $this->setCsrfCookie('importfaqs', $csrfToken);
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
+        self::assertNotFalse($tempFile);
+        file_put_contents(
+            $tempFile,
+            "666,Blocked question,Blocked answer,keywords,en,Author,author@example.com,true,false\n",
+        );
+        $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
+
+        $request = new Request([], ['csrf' => $csrfToken], [], [], ['file' => $uploadedFile]);
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->import($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(['Row 1: no "FAQ_ADD" permission for category 666.'], $payload['messages']);
+        $this->removeCsrfCookie('importfaqs');
+    }
+
+    private function countFaqsWithQuestion(string $question): int
+    {
+        $result = $this->configuration->getDb()->query(sprintf(
+            "SELECT COUNT(*) AS total FROM faqdata WHERE thema = '%s'",
+            $this->configuration->getDb()->escape($question),
+        ));
+        $row = $this->configuration->getDb()->fetchArray($result);
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testUpdateReturnsForbiddenWhenTargetCategoryIsRestricted(): void

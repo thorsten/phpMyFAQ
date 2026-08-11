@@ -278,9 +278,17 @@ class BasicPermission implements PermissionInterface
      */
     public function refuseAllUserRights(int $userId): bool
     {
+        // Revoke the rights first. There is no transaction API on the database layer,
+        // so order is what keeps this fail-safe: if revoking fails, the restriction rows
+        // are still in place and the retained right stays scoped. Dropping the
+        // restrictions first would leave a surviving right unrestricted.
+        if (!$this->repository->refuseAllUserRights($userId)) {
+            return false;
+        }
+
         $this->languageRepository->deleteAllForUser($userId);
 
-        return $this->repository->refuseAllUserRights($userId);
+        return true;
     }
 
     /**
@@ -322,6 +330,13 @@ class BasicPermission implements PermissionInterface
             return false;
         }
 
+        // Superadmins hold every right implicitly, without a faquser_right row.
+        // Querying the direct-grant restrictions would find no row and deny them,
+        // so bypass here exactly as hasPermission() and MediumPermission do.
+        if ($this->isSuperAdmin($userId)) {
+            return true;
+        }
+
         $rightId = $this->resolveRightId($right);
 
         return $this->languageRepository->checkUserRightForLanguage($userId, $rightId, $language);
@@ -338,10 +353,28 @@ class BasicPermission implements PermissionInterface
             return [];
         }
 
+        // Superadmins are never language-restricted, see hasPermissionForLanguage().
+        if ($this->isSuperAdmin($userId)) {
+            return null;
+        }
+
         $rightId = $this->resolveRightId($right);
         $restrictions = $this->languageRepository->getUserLanguageRestrictions($userId, $rightId);
 
         return $restrictions === [] ? null : $restrictions;
+    }
+
+    /**
+     * Returns true if the given user is a superadmin.
+     *
+     * @throws Exception
+     */
+    private function isSuperAdmin(int $userId): bool
+    {
+        $currentUser = new CurrentUser($this->configuration);
+        $currentUser->getUserById($userId);
+
+        return $currentUser->isSuperAdmin();
     }
 
     /**

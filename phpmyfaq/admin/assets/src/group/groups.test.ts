@@ -388,6 +388,14 @@ describe('handleGroups', () => {
     expect(languageOptions[0].textContent).toBe('English');
     expect(languageOptions[1].selected).toBe(true);
 
+    // Each select must be reachable from its own label for screen readers.
+    const languageSelect = document.querySelector<HTMLSelectElement>(
+      '#languageRestrictionsBody select[data-right-id="1"]'
+    );
+    const languageLabel = languageSelect?.previousElementSibling as HTMLLabelElement | null;
+    expect(languageSelect?.id).toBe('group-language-restriction-1');
+    expect(languageLabel?.htmlFor).toBe('group-language-restriction-1');
+
     (document.getElementById('saveLanguageRestrictions') as HTMLButtonElement).click();
     await flushPromises();
 

@@ -65,6 +65,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 /* @mago-expect lint:cyclomatic-complexity - the create/update endpoints validate every field inline; split planned with the admin API rework */
+/* @mago-expect lint:kan-defect - permission-level guards on every endpoint raise the score; split planned with the admin API rework */
 final class FaqController extends AbstractAdministrationApiController
 {
     /* @mago-expect lint:excessive-parameter-list - the endpoint dependencies are injected explicitly; a service split is planned with the admin API rework */
@@ -858,6 +859,18 @@ final class FaqController extends AbstractAdministrationApiController
                 return $this->json($result, Response::HTTP_BAD_REQUEST);
             }
 
+            // Import::import() takes the target category and language straight from the row,
+            // so the blanket FAQ_ADD check above is not enough: a user scoped to one category
+            // or language could otherwise create records outside that scope. Vet every row
+            // up front so a rejected file imports nothing at all.
+            $scopeErrors = $this->findImportRowsOutOfScope($csvData);
+            if ($scopeErrors !== []) {
+                return $this->json([
+                    'storedAll' => false,
+                    'messages' => $scopeErrors,
+                ], Response::HTTP_FORBIDDEN);
+            }
+
             foreach ($csvData as $index => $record) {
                 try {
                     if (!$faqImport->import($record)) {
@@ -890,5 +903,50 @@ final class FaqController extends AbstractAdministrationApiController
         ];
 
         return $this->json($result, Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Returns one message per CSV row whose target category or language lies outside
+     * the current user's FAQ_ADD scope. An empty array means every row may be imported.
+     *
+     * Column layout matches Import::import(): 0 = category id, 4 = language code.
+     *
+     * @param array<array-key, array<array-key, mixed>> $csvData
+     * @return array<int, string>
+     */
+    private function findImportRowsOutOfScope(array $csvData): array
+    {
+        $currentUser = $this->currentUser;
+        $userId = $currentUser->getUserId();
+        $messages = [];
+        $rowNumber = 0;
+
+        foreach ($csvData as $record) {
+            ++$rowNumber;
+
+            $categoryId = (int) Filter::filterVar($record[0] ?? null, FILTER_VALIDATE_INT, default: 0);
+            $language = (string) Filter::filterVar($record[4] ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+
+            if (!$currentUser->perm->hasPermissionForCategory($userId, PermissionType::FAQ_ADD->value, $categoryId)) {
+                $messages[] = sprintf(
+                    'Row %d: no "%s" permission for category %d.',
+                    $rowNumber,
+                    PermissionType::FAQ_ADD->name,
+                    $categoryId,
+                );
+                continue;
+            }
+
+            if (!$currentUser->perm->hasPermissionForLanguage($userId, PermissionType::FAQ_ADD->value, $language)) {
+                $messages[] = sprintf(
+                    'Row %d: no "%s" permission for language "%s".',
+                    $rowNumber,
+                    PermissionType::FAQ_ADD->name,
+                    $language,
+                );
+            }
+        }
+
+        return $messages;
     }
 }

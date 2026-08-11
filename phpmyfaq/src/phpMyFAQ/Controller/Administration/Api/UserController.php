@@ -690,32 +690,28 @@ final class UserController extends AbstractAdministrationApiController
             Language::isASupportedLanguage(...),
         ));
 
-        $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
+        // An empty set means "unrestricted". Dropping every unsupported code would
+        // silently turn a narrowing request into a grant, so refuse it instead.
+        if ($rawLanguages !== [] && $languages === []) {
+            return $this->json(['error' => 'No supported language code provided.'], Response::HTTP_BAD_REQUEST);
+        }
 
-        // A non-SuperAdmin may only restrict a user's language grant to a subset of the
-        // languages they themselves are allowed for this right. This prevents an administrator
+        // A non-SuperAdmin may only restrict a user's language grant to a non-empty subset
+        // of the languages they hold themselves for this right. This prevents an administrator
         // with the delegable USER_EDIT right from granting language access they do not possess
-        // (privilege escalation).
-        if (!$actingIsSuperAdmin) {
-            $actingUserId = $this->currentUser->getUserId();
-            $allowedLanguages = $this->currentUser->perm->getAllowedLanguagesForRight($actingUserId, $rightId);
-            if ($allowedLanguages !== null) {
-                foreach ($languages as $language) {
-                    if (!in_array($language, $allowedLanguages, strict: true)) {
-                        return $this->json([
-                            'error' => Translation::get(key: 'msgNoPermission'),
-                        ], Response::HTTP_FORBIDDEN);
-                    }
-                }
-            }
+        // (privilege escalation), including via an empty "unrestricted" list.
+        if (!$this->mayAssignLanguages($rightId, $languages)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
         $user = new User($this->configuration);
-        $user->getUserById($userId);
+        if (!$user->getUserById($userId)) {
+            return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
+        }
 
         // Defense in depth: a non-SuperAdmin must never be able to alter a SuperAdmin or
         // protected account.
-        if (!$actingIsSuperAdmin && ($user->isSuperAdmin() || $user->getStatus() === 'protected')) {
+        if (!$this->currentUser->isSuperAdmin() && ($user->isSuperAdmin() || $user->getStatus() === 'protected')) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 

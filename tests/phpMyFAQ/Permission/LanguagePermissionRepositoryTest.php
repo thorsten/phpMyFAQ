@@ -58,6 +58,12 @@ class LanguagePermissionRepositoryTest extends TestCase
             $this->dbHandle->close();
         }
 
+        // setUp() points the Database statics at this test's handle; leaving them
+        // set would hand a later test in the same process a closed connection.
+        $databaseReflection = new ReflectionClass(Database::class);
+        $databaseReflection->getProperty('databaseDriver')->setValue(null, null);
+        $databaseReflection->getProperty('dbType')->setValue(null, '');
+
         if (isset($this->databasePath) && is_file($this->databasePath)) {
             unlink($this->databasePath);
         }
@@ -115,6 +121,30 @@ class LanguagePermissionRepositoryTest extends TestCase
         $restrictions = $this->repository->getUserLanguageRestrictions(1, 1);
         $this->assertCount(1, $restrictions);
         $this->assertContains('en', $restrictions);
+    }
+
+    /**
+     * An empty restriction set means "unrestricted", so silently dropping every
+     * unsupported code would widen the right instead of narrowing it. The write
+     * must fail closed and leave the existing restrictions untouched.
+     */
+    public function testSetUserLanguageRestrictionsRejectsAllUnsupportedLanguageCodes(): void
+    {
+        $this->repository->setUserLanguageRestrictions(1, 1, ['de']);
+
+        $this->assertFalse($this->repository->setUserLanguageRestrictions(1, 1, ['not-a-language', 'xx-YY']));
+
+        // The previous restriction must survive the refused write.
+        $this->assertSame(['de'], $this->repository->getUserLanguageRestrictions(1, 1));
+    }
+
+    public function testSetLanguageRestrictionsRejectsAllUnsupportedLanguageCodes(): void
+    {
+        $this->repository->setLanguageRestrictions(1, 1, ['de']);
+
+        $this->assertFalse($this->repository->setLanguageRestrictions(1, 1, ['not-a-language']));
+
+        $this->assertSame(['de'], $this->repository->getLanguageRestrictions(1, 1));
     }
 
     public function testSetUserLanguageRestrictionsReturnsFalseForInvalidInput(): void
