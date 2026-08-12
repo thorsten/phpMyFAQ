@@ -121,7 +121,7 @@ readonly class GroupCategoryPermissionRepository
 
         $db = $this->configuration->getDb();
 
-        $db->query('BEGIN');
+        $db->query($this->beginTransactionStatement());
 
         // Remove existing restrictions
         $delete = sprintf(
@@ -258,5 +258,18 @@ readonly class GroupCategoryPermissionRepository
         $res = $this->configuration->getDb()->query($select);
 
         return $this->configuration->getDb()->numRows($res) > 0;
+    }
+
+    /**
+     * Returns the statement that opens a transaction on the current driver.
+     * SQL Server treats a bare `BEGIN` as a statement block, not a transaction,
+     * so the DELETE/INSERT pair would run unscoped there.
+     */
+    private function beginTransactionStatement(): string
+    {
+        return match (Database::getType()) {
+            'sqlsrv', 'pdo_sqlsrv' => 'BEGIN TRANSACTION',
+            default => 'BEGIN',
+        };
     }
 }

@@ -3,10 +3,13 @@ import { handleUsers } from './users';
 import {
   deleteUser,
   fetchAllUsers,
+  fetchLanguagesForRestrictions,
   fetchUserData,
+  fetchUserLanguageRestrictions,
   fetchUserRights,
   fetchUsers,
   overwritePassword,
+  saveUserLanguageRestrictions,
   updateUserData,
   updateUserRights,
 } from '../api';
@@ -46,6 +49,7 @@ const setupFullDom = (userId = ''): void => {
     <div id="pmf-user-empty-state"></div>
     <div id="pmf-user-detail" class="d-none"
          data-csrf-update="csrf-update" data-csrf-rights="csrf-rights"
+         data-csrf-language-restrictions="csrf-language-restrictions"
          data-csrf-delete="csrf-delete" data-msg-error="An error occurred."
          data-current-user-id="42">
       <div id="pmf-password-overwrite-row"></div>
@@ -79,6 +83,9 @@ const setupFullDom = (userId = ''): void => {
         </div>
       </div>
       <button id="pmf-user-rights-save" type="button"></button>
+      <div id="userLanguageRestrictionsBody" data-msg-empty="No permissions." data-msg-help="Help."
+           data-msg-saved="Language restrictions saved."></div>
+      <button id="pmf-user-language-restrictions-save" type="button"></button>
     </div>
     <div id="pmf-modal-user-confirm-delete">
       <input type="hidden" id="csrf-token-delete-user" value="csrf-delete" />
@@ -134,6 +141,9 @@ const mockDefaultApis = (): void => {
   (fetchUsers as Mock).mockResolvedValue([{ label: 'alice', value: 10 }]);
   (fetchUserData as Mock).mockResolvedValue(aliceData);
   (fetchUserRights as Mock).mockResolvedValue(['1']);
+  (fetchLanguagesForRestrictions as Mock).mockResolvedValue([]);
+  (fetchUserLanguageRestrictions as Mock).mockResolvedValue({});
+  (saveUserLanguageRestrictions as Mock).mockResolvedValue({ success: 'saved' });
   (updateUserData as Mock).mockResolvedValue({ success: 'saved' });
   (updateUserRights as Mock).mockResolvedValue({ success: 'saved' });
   (deleteUser as Mock).mockResolvedValue({ success: 'deleted' });
@@ -393,6 +403,41 @@ describe('handleUsers', () => {
 
     expect(updateUserRights).toHaveBeenCalledWith('10', ['1', '3'], 'csrf-rights');
     expect(pushNotification).toHaveBeenCalledWith('saved');
+  });
+
+  it('should render and save per-right language restrictions', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (fetchLanguagesForRestrictions as Mock).mockResolvedValue([
+      { code: 'en', label: 'English' },
+      { code: 'de', label: 'Deutsch' },
+    ]);
+    (fetchUserLanguageRestrictions as Mock).mockResolvedValue({ '1': ['de'] });
+
+    await handleUsers();
+    await selectFirstUser();
+
+    // fetchUserRights checks right 1, so its restriction select renders.
+    const options = document.querySelectorAll<HTMLOptionElement>(
+      '#userLanguageRestrictionsBody select[data-right-id="1"] option'
+    );
+    expect(options.length).toBe(2);
+    expect(options[0].textContent).toBe('English');
+    expect(options[1].selected).toBe(true);
+
+    // Each select must be reachable from its own label for screen readers.
+    const languageSelect = document.querySelector<HTMLSelectElement>(
+      '#userLanguageRestrictionsBody select[data-right-id="1"]'
+    );
+    const languageLabel = languageSelect?.previousElementSibling as HTMLLabelElement | null;
+    expect(languageSelect?.id).toBe('user-language-restriction-1');
+    expect(languageLabel?.htmlFor).toBe('user-language-restriction-1');
+
+    (document.getElementById('pmf-user-language-restrictions-save') as HTMLButtonElement).click();
+    await flushPromises();
+
+    expect(saveUserLanguageRestrictions).toHaveBeenCalledWith('10', '1', ['de'], 'csrf-language-restrictions');
+    expect(pushNotification).toHaveBeenCalledWith('Language restrictions saved.');
   });
 
   it('should filter the permission list by label', async () => {

@@ -13,7 +13,16 @@
  * @since     2023-01-02
  */
 
-import { ApiResponse, CategoryItem, CategoryRestrictions, Group, Member, User } from '../interfaces';
+import {
+  ApiResponse,
+  CategoryItem,
+  CategoryRestrictions,
+  Group,
+  LanguageItem,
+  LanguageRestrictions,
+  Member,
+  User,
+} from '../interfaces';
 import { fetchJson, fetchWrapper } from './fetch-wrapper';
 
 export const fetchAllGroups = async (): Promise<Group[]> => {
@@ -116,6 +125,48 @@ export const fetchCategoriesForRestrictions = async (): Promise<CategoryItem[]> 
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   })) as CategoryItem[];
+};
+
+export const fetchGroupLanguageRestrictions = async (groupId: string): Promise<LanguageRestrictions> => {
+  return (await fetchJson(`./api/group/language-restrictions/${groupId}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  })) as LanguageRestrictions;
+};
+
+export const saveGroupLanguageRestrictions = async (
+  groupId: string,
+  rightId: string,
+  languages: string[],
+  csrfToken: string
+): Promise<Response> => {
+  return await fetchWrapper('./api/group/language-restrictions', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ groupId: parseInt(groupId), rightId: parseInt(rightId), languages, csrfToken }),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+};
+
+export const fetchLanguagesForRestrictions = async (): Promise<LanguageItem[]> => {
+  return (await fetchJson('./api/group/languages', {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  })) as LanguageItem[];
 };
 
 export const updateGroup = async (

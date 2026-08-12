@@ -25,6 +25,8 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\LanguageHelper;
+use phpMyFAQ\Language;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -227,6 +229,117 @@ final class GroupController extends AbstractAdministrationApiController
         }
 
         return $this->json(['success' => true], Response::HTTP_OK);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route(
+        path: 'group/language-restrictions/{groupId}',
+        name: 'admin.api.group.language-restrictions',
+        methods: ['GET'],
+    )]
+    public function listLanguageRestrictions(Request $request): JsonResponse
+    {
+        $this->userHasGroupPermission();
+
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
+
+        $groupId = (int) $request->attributes->get('groupId');
+
+        if (!$currentUser->perm instanceof MediumPermission) {
+            return $this->json(new \stdClass(), Response::HTTP_OK);
+        }
+
+        $restrictions = $currentUser->perm->getAllLanguageRestrictions($groupId);
+
+        return $this->json($restrictions === [] ? new \stdClass() : $restrictions, Response::HTTP_OK);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route(path: 'group/language-restrictions', name: 'admin.api.group.language-restrictions.save', methods: ['POST'])]
+    public function saveLanguageRestrictions(Request $request): JsonResponse
+    {
+        $this->userHasGroupPermission();
+
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
+
+        if (!$currentUser->perm instanceof MediumPermission) {
+            return $this->json(['error' => 'Group permissions are not enabled.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $data = json_decode($request->getContent(), associative: true);
+        if (!is_array($data)) {
+            return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!Token::getInstance($this->session)->verifyToken(
+            'save-language-restrictions',
+            (string) ($data['csrfToken'] ?? ''),
+        )) {
+            return $this->json(['error' => 'Invalid CSRF token.'], Response::HTTP_FORBIDDEN);
+        }
+
+        $groupId = (int) ($data['groupId'] ?? 0);
+        $rightId = (int) ($data['rightId'] ?? 0);
+
+        if ($groupId <= 0 || $rightId <= 0) {
+            return $this->json(['error' => 'Invalid group or right ID.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $rawLanguages = $data['languages'] ?? [];
+        if (!is_array($rawLanguages)) {
+            return $this->json(['error' => 'languages must be an array.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $languages = array_values(array_filter(
+            array_map('strval', $rawLanguages),
+            Language::isASupportedLanguage(...),
+        ));
+
+        // An empty set means "unrestricted". Dropping every unsupported code would
+        // silently turn a narrowing request into a grant, so refuse it instead.
+        if ($rawLanguages !== [] && $languages === []) {
+            return $this->json([
+                'error' => Translation::get(key: 'ad_language_restrictions_no_language'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        // A non-SuperAdmin may only scope a group's right to a non-empty subset of the
+        // languages they hold themselves. Group rights are inherited by every member, so
+        // without this an administrator could grant the group language access they do not
+        // possess (privilege escalation), including via an empty "unrestricted" list.
+        if (!$this->mayAssignLanguages($rightId, $languages)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
+        $success = $currentUser->perm->setLanguageRestrictions($groupId, $rightId, $languages);
+
+        if (!$success) {
+            return $this->json([
+                'error' => 'Failed to save language restrictions.',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->json(['success' => true], Response::HTTP_OK);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route(path: 'group/languages', name: 'admin.api.group.languages', methods: ['GET'])]
+    public function listLanguages(): JsonResponse
+    {
+        $this->userHasGroupPermission();
+
+        $languages = [];
+        foreach (LanguageHelper::getAvailableLanguages() as $code => $label) {
+            $languages[] = ['code' => $code, 'label' => $label];
+        }
+
+        return $this->json($languages, Response::HTTP_OK);
     }
 
     /**

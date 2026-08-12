@@ -1059,6 +1059,272 @@ final class UserControllerTest extends TestCase
         self::assertArrayHasKey('success', $payload);
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testListUserLanguageRestrictionsRequiresUserPermission(): void
+    {
+        $request = new Request([], [], ['userId' => 1]);
+        $controller = $this->createController();
+
+        $this->expectException(\Exception::class);
+        $controller->listUserLanguageRestrictions($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListUserLanguageRestrictionsReturnsEmptyWhenNoneSet(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser();
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->listUserLanguageRestrictions(
+            new Request([], [], ['userId' => $managedUserId]),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveUserLanguageRestrictionsRequiresUserPermission(): void
+    {
+        $controller = $this->createController();
+
+        $this->expectException(\Exception::class);
+        $controller->saveUserLanguageRestrictions(new Request(content: '{}'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveUserLanguageRestrictionsReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser();
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => 'invalid-token',
+            'userId' => $managedUserId,
+            'rightId' => 1,
+            'languages' => ['en'],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->saveUserLanguageRestrictions($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveUserLanguageRestrictionsReturnsBadRequestForMissingUserIdWithValidCsrf(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-language-restrictions');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'userId' => 0,
+            'rightId' => 1,
+            'languages' => ['en'],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->saveUserLanguageRestrictions($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_user_error_noId'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveUserLanguageRestrictionsSavesAndSkipsUnsupportedLanguagesWithValidCsrf(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-language-restrictions');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'userId' => $managedUserId,
+            'rightId' => 1,
+            'languages' => ['en', 'not-a-language'],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->saveUserLanguageRestrictions($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+
+        $listResponse = $controller->listUserLanguageRestrictions(
+            new Request([], [], ['userId' => $managedUserId]),
+        );
+        $listPayload = json_decode((string) $listResponse->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        self::assertSame(['1' => ['en']], $listPayload);
+    }
+
+    /**
+     * A non-SuperAdmin acting user restricted to 'de' for a right must not be able to grant
+     * another user 'fr' access for that same right (privilege escalation via language grant).
+     *
+     * @throws \Exception
+     */
+    public function testSaveUserLanguageRestrictionsRejectsLanguageNotHeldByNonSuperAdmin(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+        $permission->method('getAllowedLanguagesForRight')->willReturn(['de']);
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $permission;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-language-restrictions');
+
+        $request = $this->jsonRequest([
+            'csrfToken' => $csrf,
+            'userId' => 1,
+            'rightId' => 1,
+            'languages' => ['fr'],
+        ]);
+
+        $response = $controller->saveUserLanguageRestrictions($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * An empty language list clears every restriction row, which the permission model
+     * reads as "all languages". A restricted acting user must not be able to use it to
+     * widen a right beyond their own scope.
+     *
+     * @throws \Exception
+     */
+    public function testSaveUserLanguageRestrictionsRejectsEmptyListFromRestrictedNonSuperAdmin(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+        $permission->method('getAllowedLanguagesForRight')->willReturn(['de']);
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $permission;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-language-restrictions');
+
+        $request = $this->jsonRequest([
+            'csrfToken' => $csrf,
+            'userId' => 1,
+            'rightId' => 1,
+            'languages' => [],
+        ]);
+
+        $response = $controller->saveUserLanguageRestrictions($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * A list of only unsupported codes filters down to an empty set, which would
+     * otherwise be persisted as "unrestricted".
+     *
+     * @throws \Exception
+     */
+    public function testSaveUserLanguageRestrictionsRejectsOnlyUnsupportedLanguageCodes(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-language-restrictions');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->saveUserLanguageRestrictions($this->jsonRequest([
+            'csrfToken' => $token,
+            'userId' => $managedUserId,
+            'rightId' => 1,
+            'languages' => ['not-a-language'],
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('No supported language code provided.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveUserLanguageRestrictionsRejectsUnknownUserId(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-language-restrictions');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->saveUserLanguageRestrictions($this->jsonRequest([
+            'csrfToken' => $token,
+            'userId' => 999999,
+            'rightId' => 1,
+            'languages' => ['en'],
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_user_error_noId'), $payload['error']);
+    }
+
     public function testEditUserNonSuperAdminCannotGrantSuperAdminFlag(): void
     {
         $session = new Session(new MockArraySessionStorage());

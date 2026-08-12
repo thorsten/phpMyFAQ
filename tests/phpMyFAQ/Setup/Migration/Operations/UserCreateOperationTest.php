@@ -42,6 +42,7 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
 use phpMyFAQ\Permission\GroupCategoryPermissionRepository;
+use phpMyFAQ\Permission\LanguagePermissionRepository;
 use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -81,6 +82,7 @@ use phpMyFAQ\Plugin\PluginDiscovery;
 #[UsesClass(UserData::class)]
 #[UsesClass(FilesystemConfigurationCache::class)]
 #[UsesClass(GroupCategoryPermissionRepository::class)]
+#[UsesClass(LanguagePermissionRepository::class)]
 #[UsesClass(PluginDiscovery::class)]
 final class UserCreateOperationTest extends TestCase
 {

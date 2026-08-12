@@ -39,6 +39,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\UserHelper;
+use phpMyFAQ\Language\LanguageRestrictionFilter;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Permission\MediumPermission;
@@ -156,7 +157,7 @@ final class FaqController extends AbstractAdministrationController
             'notifyEmail' => '',
             'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categories,
-            'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
+            'languageOptions' => $this->getFilteredLanguageOptions($faqData['lang'], PermissionType::FAQ_ADD),
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
@@ -228,7 +229,7 @@ final class FaqController extends AbstractAdministrationController
             'notifyEmail' => '',
             'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categoryId,
-            'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
+            'languageOptions' => $this->getFilteredLanguageOptions($faqData['lang'], PermissionType::FAQ_ADD),
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
@@ -282,6 +283,7 @@ final class FaqController extends AbstractAdministrationController
         $categories = $categoryRelation->getCategories($faqId, $faqLanguage);
 
         $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, array_keys($categories));
+        $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $faqLanguage);
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
 
@@ -367,7 +369,7 @@ final class FaqController extends AbstractAdministrationController
             'notifyEmail' => '',
             'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_EDIT),
             'selectedCategories' => $categories,
-            'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+            'languageOptions' => $this->getFilteredLanguageOptions($faqLanguage, PermissionType::FAQ_EDIT),
             'attachments' => $attachmentList,
             'allGroups' => $allGroups,
             'restrictedGroups' => $restrictedGroups,
@@ -439,7 +441,7 @@ final class FaqController extends AbstractAdministrationController
             'notifyEmail' => '',
             'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categories,
-            'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+            'languageOptions' => $this->getFilteredLanguageOptions($faqLanguage, PermissionType::FAQ_ADD),
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
@@ -511,7 +513,7 @@ final class FaqController extends AbstractAdministrationController
             'notifyEmail' => '',
             'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categories,
-            'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+            'languageOptions' => $this->getFilteredLanguageOptions($faqLanguage, PermissionType::FAQ_ADD),
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
@@ -594,7 +596,7 @@ final class FaqController extends AbstractAdministrationController
             'notifyEmail' => $questionData['email'] ?? $this->currentUser->getUserData('email'),
             'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categories,
-            'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+            'languageOptions' => $this->getFilteredLanguageOptions($faqLanguage, PermissionType::FAQ_ADD),
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
@@ -691,5 +693,25 @@ final class FaqController extends AbstractAdministrationController
             $this->currentUser->getUserId(),
             $permissionType->value,
         ));
+    }
+
+    /**
+     * Renders the language <select> reduced to the languages the current
+     * user may exercise the given right in (null restrictions = every
+     * available language).
+     */
+    private function getFilteredLanguageOptions(string $selected, PermissionType $permissionType): string
+    {
+        $allowed = $this->currentUser->perm->getAllowedLanguagesForRight(
+            $this->currentUser->getUserId(),
+            $permissionType->value,
+        );
+
+        $excludedLanguages = LanguageRestrictionFilter::excludedLanguages(
+            LanguageHelper::getAvailableLanguages(),
+            $allowed,
+        );
+
+        return LanguageHelper::renderSelectLanguage($selected, false, $excludedLanguages, 'lang');
     }
 }

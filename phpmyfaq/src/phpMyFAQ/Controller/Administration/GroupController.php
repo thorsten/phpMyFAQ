@@ -152,6 +152,9 @@ final class GroupController extends AbstractAdministrationController
             'csrfTokenCategoryRestrictions' => Token::getInstance($this->session)->getTokenString(
                 'save-category-restrictions',
             ),
+            'csrfTokenLanguageRestrictions' => Token::getInstance($this->session)->getTokenString(
+                'save-language-restrictions',
+            ),
         ];
     }
 }

@@ -87,6 +87,13 @@
                 {{ 'ad_group_category_restrictions' | translate }}
               </button>
             </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="pmf-tab-language-restrictions-tab" data-bs-toggle="tab"
+                      data-bs-target="#pmf-tab-language-restrictions" type="button" role="tab"
+                      aria-controls="pmf-tab-language-restrictions" aria-selected="false">
+                {{ 'ad_group_language_restrictions' | translate }}
+              </button>
+            </li>
           </ul>
 
           <div class="tab-content pt-4">
@@ -188,6 +195,23 @@
               </div>
               <div class="text-end">
                 <button id="saveCategoryRestrictions" class="btn btn-primary" type="button">
+                  {{ 'ad_gen_save' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="pmf-tab-language-restrictions" role="tabpanel"
+                 aria-labelledby="pmf-tab-language-restrictions-tab">
+              <div id="languageRestrictionsBody"
+                   data-msg-empty="{{ 'ad_group_no_permissions' | translate }}"
+                   data-msg-help="{{ 'ad_group_language_restrictions_select' | translate }}"
+                   data-msg-saved="{{ 'ad_group_language_restrictions_saved' | translate }}"
+                   data-msg-save-failed="{{ 'ad_group_language_restrictions_error' | translate }}"
+                   data-csrf-token="{{ csrfTokenLanguageRestrictions }}">
+                <p class="text-body-secondary">{{ 'ad_group_language_restrictions_help' | translate }}</p>
+              </div>
+              <div class="text-end">
+                <button id="saveLanguageRestrictions" class="btn btn-primary" type="button">
                   {{ 'ad_gen_save' | translate }}
                 </button>
               </div>

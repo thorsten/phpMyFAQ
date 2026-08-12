@@ -39,4 +39,48 @@ abstract class AbstractAdministrationApiController extends AbstractController
 
         $this->adminLog = $adminLog;
     }
+
+    /**
+     * Returns true if the acting user may scope the given right to exactly the
+     * given languages.
+     *
+     * An empty restriction set means "unrestricted", so writing one is a
+     * privilege *grant*, not a narrowing. A non-SuperAdmin whose own set for the
+     * right is restricted may therefore only write a non-empty subset of that
+     * set — never an empty list, and never a language they do not hold
+     * themselves. SuperAdmins and acting users whose own right is unrestricted
+     * (`getAllowedLanguagesForRight()` returns null) are unaffected.
+     *
+     * @param array<string> $languages
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    protected function mayAssignLanguages(int $rightId, array $languages): bool
+    {
+        if ($this->currentUser->isSuperAdmin()) {
+            return true;
+        }
+
+        $allowedLanguages = $this->currentUser->perm->getAllowedLanguagesForRight(
+            $this->currentUser->getUserId(),
+            $rightId,
+        );
+
+        if ($allowedLanguages === null) {
+            return true;
+        }
+
+        // Clearing the restrictions would widen the right to every language,
+        // including ones the acting user does not hold.
+        if ($languages === []) {
+            return false;
+        }
+
+        foreach ($languages as $language) {
+            if (!in_array($language, $allowedLanguages, strict: true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

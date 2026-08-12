@@ -22,14 +22,25 @@ import {
   fetchCategoriesForRestrictions,
   fetchGroup,
   fetchGroupCategoryRestrictions,
+  fetchGroupLanguageRestrictions,
   fetchGroupRights,
+  fetchLanguagesForRestrictions,
   saveGroupCategoryRestrictions,
+  saveGroupLanguageRestrictions,
   updateGroup,
   updateGroupMembers,
   updateGroupPermissions,
 } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { ApiResponse, CategoryItem, CategoryRestrictions, Group, User } from '../interfaces';
+import {
+  ApiResponse,
+  CategoryItem,
+  CategoryRestrictions,
+  Group,
+  LanguageItem,
+  LanguageRestrictions,
+  User,
+} from '../interfaces';
 
 let allUsers: User[] = [];
 let selectedGroupId: string = '';
@@ -128,6 +139,26 @@ const selectGroup = async (groupId: string): Promise<void> => {
     console.error('Failed to load category restrictions:', error);
     currentRestrictions = {};
     const container = document.getElementById('categoryRestrictionsBody');
+    if (container) {
+      container.innerHTML = '';
+      const errorParagraph = document.createElement('p');
+      errorParagraph.className = 'text-body-secondary';
+      errorParagraph.textContent = container.dataset.msgEmpty || 'No permissions assigned to this group.';
+      container.appendChild(errorParagraph);
+    }
+  }
+  if (requestToken !== selectRequestToken) {
+    return;
+  }
+  try {
+    await loadLanguageRestrictions(groupId);
+  } catch (error) {
+    if (requestToken !== selectRequestToken) {
+      return;
+    }
+    console.error('Failed to load language restrictions:', error);
+    currentLanguageRestrictions = {};
+    const container = document.getElementById('languageRestrictionsBody');
     if (container) {
       container.innerHTML = '';
       const errorParagraph = document.createElement('p');
@@ -279,6 +310,7 @@ const wirePermissionToggles = (): void => {
         checkbox.checked = checked;
       });
     refreshRestrictionsPanel();
+    refreshLanguageRestrictionsPanel();
   };
 
   (document.getElementById('pmf-group-check-all') as HTMLButtonElement).addEventListener('click', (): void => {
@@ -292,6 +324,7 @@ const wirePermissionToggles = (): void => {
     const target = event.target as HTMLInputElement;
     if (target.type === 'checkbox' && target.classList.contains('permission')) {
       refreshRestrictionsPanel();
+      refreshLanguageRestrictionsPanel();
     }
   });
 };
@@ -301,6 +334,14 @@ const refreshRestrictionsPanel = (): void => {
   if (container) {
     captureCurrentRestrictions(container);
     renderCategoryRestrictions(container);
+  }
+};
+
+const refreshLanguageRestrictionsPanel = (): void => {
+  const container = document.getElementById('languageRestrictionsBody');
+  if (container) {
+    captureCurrentLanguageRestrictions(container);
+    renderLanguageRestrictions(container);
   }
 };
 
@@ -391,6 +432,18 @@ const wireSaveButtons = (): void => {
       event.preventDefault();
       try {
         await handleCategoryRestrictionsSave();
+      } catch {
+        pushErrorNotification(getGenericErrorMessage());
+      }
+    }
+  );
+
+  (document.getElementById('saveLanguageRestrictions') as HTMLButtonElement).addEventListener(
+    'click',
+    async (event: Event): Promise<void> => {
+      event.preventDefault();
+      try {
+        await handleLanguageRestrictionsSave();
       } catch {
         pushErrorNotification(getGenericErrorMessage());
       }
@@ -567,5 +620,140 @@ export const handleCategoryRestrictionsSave = async (): Promise<void> => {
     pushErrorNotification(container.dataset.msgSaveFailed || 'Failed to save category restrictions.');
   } else {
     pushNotification(container.dataset.msgSaved || 'Category restrictions saved.');
+  }
+};
+
+let cachedLanguages: LanguageItem[] = [];
+let currentLanguageRestrictions: LanguageRestrictions = {};
+
+const loadLanguageRestrictions = async (groupId: string): Promise<void> => {
+  const container = document.getElementById('languageRestrictionsBody');
+  if (!container) {
+    return;
+  }
+
+  if (cachedLanguages.length === 0) {
+    cachedLanguages = await fetchLanguagesForRestrictions();
+  }
+
+  currentLanguageRestrictions = await fetchGroupLanguageRestrictions(groupId);
+
+  renderLanguageRestrictions(container);
+};
+
+const captureCurrentLanguageRestrictions = (container: HTMLElement): void => {
+  const selects = container.querySelectorAll<HTMLSelectElement>('select[data-right-id]');
+  selects.forEach((select: HTMLSelectElement): void => {
+    const rightId = select.dataset.rightId;
+    if (!rightId) {
+      return;
+    }
+    currentLanguageRestrictions[rightId] = [...select.options]
+      .filter((option: HTMLOptionElement): boolean => option.selected)
+      .map((option: HTMLOptionElement): string => option.value);
+  });
+};
+
+const renderLanguageRestrictions = (container: HTMLElement): void => {
+  const checkedRights = document.querySelectorAll<HTMLInputElement>(
+    '#pmf-permission-list input[type=checkbox]:checked'
+  );
+
+  container.innerHTML = '';
+
+  if (checkedRights.length === 0) {
+    const emptyMsg = container.dataset.msgEmpty || 'No permissions assigned to this group.';
+    const emptyParagraph = document.createElement('p');
+    emptyParagraph.className = 'text-body-secondary';
+    emptyParagraph.textContent = emptyMsg;
+    container.appendChild(emptyParagraph);
+    return;
+  }
+
+  checkedRights.forEach((checkbox: HTMLInputElement): void => {
+    const rightId = checkbox.value;
+    const label = checkbox.closest('.form-check')?.querySelector('label')?.textContent?.trim() || `Right ${rightId}`;
+    const restrictedLanguageCodes = currentLanguageRestrictions[rightId] || [];
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'mb-3';
+
+    const selectId = `group-language-restriction-${rightId}`;
+
+    const labelElement = document.createElement('label');
+    labelElement.className = 'form-label fw-semibold';
+    labelElement.textContent = label;
+    labelElement.htmlFor = selectId;
+    wrapper.appendChild(labelElement);
+
+    const select = document.createElement('select');
+    select.className = 'form-select form-select-sm';
+    select.id = selectId;
+    select.multiple = true;
+    select.size = 4;
+    select.dataset.rightId = rightId;
+
+    cachedLanguages.forEach((lang: LanguageItem): void => {
+      const option = document.createElement('option');
+      option.value = lang.code;
+      option.textContent = lang.label;
+      option.selected = restrictedLanguageCodes.includes(lang.code);
+      select.appendChild(option);
+    });
+
+    wrapper.appendChild(select);
+
+    const helpText = document.createElement('div');
+    helpText.className = 'form-text';
+    helpText.textContent =
+      container.dataset.msgHelp || 'Select languages to restrict this permission. Leave empty for unrestricted access.';
+    wrapper.appendChild(helpText);
+
+    container.appendChild(wrapper);
+  });
+};
+
+export const handleLanguageRestrictionsSave = async (): Promise<void> => {
+  if (selectedGroupId === '') {
+    return;
+  }
+
+  const container = document.getElementById('languageRestrictionsBody');
+  if (!container) {
+    return;
+  }
+
+  const csrfToken = container.dataset.csrfToken || '';
+
+  // Collect every right ID from the permission checkboxes so unticked
+  // permissions also get their stored restrictions cleared.
+  const rightIds = new Set<string>();
+  document
+    .querySelectorAll<HTMLInputElement>('#pmf-permission-list input[type=checkbox].permission')
+    .forEach((checkbox: HTMLInputElement): void => {
+      if (checkbox.value) {
+        rightIds.add(checkbox.value);
+      }
+    });
+
+  let failed = false;
+  for (const rightId of rightIds) {
+    const select = container.querySelector<HTMLSelectElement>(`select[data-right-id="${rightId}"]`);
+    const selectedLanguageCodes = select
+      ? [...select.options]
+          .filter((option: HTMLOptionElement): boolean => option.selected)
+          .map((option: HTMLOptionElement): string => option.value)
+      : [];
+
+    const response = await saveGroupLanguageRestrictions(selectedGroupId, rightId, selectedLanguageCodes, csrfToken);
+    if (!response.ok) {
+      failed = true;
+    }
+  }
+
+  if (failed) {
+    pushErrorNotification(container.dataset.msgSaveFailed || 'Failed to save language restrictions.');
+  } else {
+    pushNotification(container.dataset.msgSaved || 'Language restrictions saved.');
   }
 };

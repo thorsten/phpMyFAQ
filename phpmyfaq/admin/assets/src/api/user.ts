@@ -14,7 +14,15 @@
  */
 
 import { fetchJson } from './fetch-wrapper';
-import { AddUserPayload, ApiResponse, UserAutocomplete, UserData, UserEditPayload, UserOverview } from '../interfaces';
+import {
+  AddUserPayload,
+  ApiResponse,
+  LanguageRestrictions,
+  UserAutocomplete,
+  UserData,
+  UserEditPayload,
+  UserOverview,
+} from '../interfaces';
 
 // Dual-path endpoint: when a non-empty `filter` query param is sent (as here),
 // the server returns autocomplete pairs ({ label, value }); when no filter is
@@ -115,6 +123,36 @@ export const updateUserRights = async (
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
     body: JSON.stringify({ csrfToken, userId, userRights }),
+  });
+};
+
+export const fetchUserLanguageRestrictions = async (userId: string): Promise<LanguageRestrictions> => {
+  return await fetchJson<LanguageRestrictions>(`./api/user/language-restrictions/${userId}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+};
+
+export const saveUserLanguageRestrictions = async (
+  userId: string,
+  rightId: string,
+  languages: string[],
+  csrfToken: string
+): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>('./api/user/language-restrictions', {
+    method: 'PUT',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify({ csrfToken, userId, rightId: parseInt(rightId), languages }),
   });
 };
 

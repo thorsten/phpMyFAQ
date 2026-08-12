@@ -4,9 +4,11 @@ import {
   addUser,
   fetchUsers,
   fetchUserData,
+  fetchUserLanguageRestrictions,
   fetchUserRights,
   fetchAllUsers,
   overwritePassword,
+  saveUserLanguageRestrictions,
   updateUserData,
   updateUserRights,
   deleteUser,
@@ -263,6 +265,47 @@ describe('User API', () => {
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
         body: JSON.stringify({ csrfToken: 'token', userId: '42', userRights: ['1', '3'] }),
+      });
+    });
+  });
+
+  describe('fetchUserLanguageRestrictions', () => {
+    it('should fetch language restrictions for a user', async () => {
+      const mockResponse = { '1': ['en', 'de'] };
+      global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(mockResponse) } as Response));
+
+      const result = await fetchUserLanguageRestrictions('42');
+
+      expect(result).toEqual(mockResponse);
+      expect(global.fetch).toHaveBeenCalledWith('./api/user/language-restrictions/42', {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+      });
+    });
+  });
+
+  describe('saveUserLanguageRestrictions', () => {
+    it('should PUT the language restrictions payload to user/language-restrictions', async () => {
+      const mockResponse = { success: 'saved' };
+      global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(mockResponse) } as Response));
+
+      const result = await saveUserLanguageRestrictions('42', '1', ['en', 'de'], 'token');
+
+      expect(result).toEqual(mockResponse);
+      expect(global.fetch).toHaveBeenCalledWith('./api/user/language-restrictions', {
+        method: 'PUT',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify({ csrfToken: 'token', userId: '42', rightId: 1, languages: ['en', 'de'] }),
       });
     });
   });

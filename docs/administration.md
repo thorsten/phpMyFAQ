@@ -68,10 +68,33 @@ Groups can be restricted per right to a set of categories (Admin → Groups → 
   rights via groups if you want category-level control.
 - Restrictions match exact categories; they are not inherited by subcategories.
 - **Basic permission mode has no groups**, so category restrictions do not apply there; every right is global.
-- CSV import and the AI translation endpoint are gated by the global `add_faq` / `translate_faq` rights; category checks
-  apply when the translated or imported content is saved.
+- CSV import is vetted row by row against the `add_faq` right before anything is stored: each row's target category and
+  language must be inside your scope, and a single out-of-scope row rejects the whole file with HTTP 403. The AI
+  translation endpoint is gated by the global `translate_faq` right; category and language checks apply when the
+  translated content is saved.
 - A blocked action returns HTTP 403 with a message naming the missing right and the category.
 - FAQs without any category assignment can only be modified by users whose rights are not category-restricted.
+
+### 5.1.4 Language restrictions
+
+Both individual users and groups can be restricted per right to a set of languages (Admin → Users/Groups → Language
+restrictions). The rules are deliberately different from category restrictions:
+
+- **No restriction selected = the right applies to all languages.**
+- Unlike category restrictions, **language restrictions apply to direct user rights too** — a user's own right grant can
+  itself be scoped to specific language(s), not only rights granted through group membership.
+- A user restricted to `de` cannot add, edit, translate, approve, or delete FAQ content in `fr` or any other language,
+  and the admin UI only offers the allowed languages.
+- **Basic permission mode has no groups but still enforces per-user language restrictions** directly (unlike category
+  restrictions, which are a no-op in Basic mode).
+- When a user has both a direct grant and a group grant for the same right, the right applies to the **union** of both
+  grants' allowed languages; either grant being unrestricted makes the right globally usable for that user.
+- Restrictions match exact language codes; there is no fallback or inheritance between language variants.
+- Translating a FAQ into a new language is checked against the **target** language (the language being created), not
+  the source language being read.
+- A blocked action returns HTTP 403 with a message naming the missing right and the language.
+- Category and language restrictions combine with **AND** semantics: an action must be permitted by both the category
+  and the language rules to succeed.
 
 ## 5.2 Content
 

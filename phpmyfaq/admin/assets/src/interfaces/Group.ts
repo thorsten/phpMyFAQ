@@ -15,3 +15,12 @@ export interface CategoryItem {
 export interface CategoryRestrictions {
   [rightId: string]: number[];
 }
+
+export interface LanguageItem {
+  code: string;
+  label: string;
+}
+
+export interface LanguageRestrictions {
+  [rightId: string]: string[];
+}

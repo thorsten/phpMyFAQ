@@ -421,6 +421,33 @@ abstract class AbstractController
     }
 
     /**
+     * Ensures the user owns the permission for the given language. Unlike
+     * category restrictions, a direct user-right grant can itself be
+     * language-restricted, so this is not a no-op in basic permission mode.
+     *
+     * @throws UnauthorizedHttpException|ForbiddenException
+     */
+    protected function userHasPermissionForLanguage(PermissionType $permissionType, string $language): void
+    {
+        if (!$this->currentUser->isLoggedIn()) {
+            throw new UnauthorizedHttpException(challenge: 'User is not authenticated.');
+        }
+
+        $currentUser = $this->currentUser;
+        if (!$currentUser?->perm->hasPermissionForLanguage(
+            $currentUser->getUserId(),
+            $permissionType->value,
+            $language,
+        )) {
+            throw new ForbiddenException(message: sprintf(
+                'User has no "%s" permission for language "%s".',
+                $permissionType->name,
+                $language,
+            ));
+        }
+    }
+
+    /**
      * Grants access when the user owns at least one of the given permissions.
      *
      * @throws UnauthorizedHttpException|ForbiddenException

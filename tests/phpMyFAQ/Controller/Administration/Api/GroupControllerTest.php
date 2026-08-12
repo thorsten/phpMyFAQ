@@ -421,6 +421,260 @@ final class GroupControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testListLanguageRestrictionsRequiresGroupPermission(): void
+    {
+        $request = new Request([], [], ['groupId' => self::TEST_GROUP_ID]);
+        $controller = new GroupController();
+
+        $this->expectException(\Exception::class);
+        $controller->listLanguageRestrictions($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListLanguageRestrictionsReturnsEmptyWhenNoneSet(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->listLanguageRestrictions(new Request([], [], ['groupId' => self::TEST_GROUP_ID]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLanguageRestrictionsRequiresGroupPermission(): void
+    {
+        $controller = new GroupController();
+
+        $this->expectException(\Exception::class);
+        $controller->saveLanguageRestrictions(new Request(content: '{}'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLanguageRestrictionsRejectsInvalidCsrfToken(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->saveLanguageRestrictions(new Request(content: json_encode([
+            'groupId' => self::TEST_GROUP_ID,
+            'rightId' => 1,
+            'languages' => ['en'],
+            'csrfToken' => 'invalid-token',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame('Invalid CSRF token.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLanguageRestrictionsSavesAndSkipsUnsupportedLanguages(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('save-language-restrictions');
+        $this->setCsrfCookie('save-language-restrictions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->saveLanguageRestrictions(new Request(content: json_encode([
+            'groupId' => self::TEST_GROUP_ID,
+            'rightId' => 1,
+            'languages' => ['en', 'not-a-language'],
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+
+        $listResponse = $controller->listLanguageRestrictions(new Request([], [], ['groupId' => self::TEST_GROUP_ID]));
+        $listPayload = json_decode((string) $listResponse->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        self::assertSame(['1' => ['en']], $listPayload);
+        $this->removeCsrfCookie('save-language-restrictions');
+    }
+
+    /**
+     * A list of only unsupported codes filters down to an empty set, which would
+     * otherwise be persisted as "unrestricted".
+     *
+     * @throws \Exception
+     */
+    public function testSaveLanguageRestrictionsRejectsOnlyUnsupportedLanguageCodes(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('save-language-restrictions');
+        $this->setCsrfCookie('save-language-restrictions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->saveLanguageRestrictions(new Request(content: json_encode([
+            'groupId' => self::TEST_GROUP_ID,
+            'rightId' => 1,
+            'languages' => ['not-a-language'],
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('No supported language code provided.', $payload['error']);
+        $this->removeCsrfCookie('save-language-restrictions');
+    }
+
+    /**
+     * Group rights are inherited by every member, so a language-restricted admin must
+     * not be able to scope a group right to a language they do not hold themselves.
+     *
+     * @throws \Exception
+     */
+    public function testSaveLanguageRestrictionsRejectsLanguageNotHeldByNonSuperAdmin(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('save-language-restrictions');
+        $this->setCsrfCookie('save-language-restrictions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createRestrictedContainer($session, ['de']));
+
+        $response = $controller->saveLanguageRestrictions(new Request(content: json_encode([
+            'groupId' => self::TEST_GROUP_ID,
+            'rightId' => 1,
+            'languages' => ['fr'],
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+        $this->removeCsrfCookie('save-language-restrictions');
+    }
+
+    /**
+     * An empty language list clears every restriction row, which the permission model
+     * reads as "all languages" — a grant, not a narrowing.
+     *
+     * @throws \Exception
+     */
+    public function testSaveLanguageRestrictionsRejectsEmptyListFromRestrictedNonSuperAdmin(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('save-language-restrictions');
+        $this->setCsrfCookie('save-language-restrictions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createRestrictedContainer($session, ['de']));
+
+        $response = $controller->saveLanguageRestrictions(new Request(content: json_encode([
+            'groupId' => self::TEST_GROUP_ID,
+            'rightId' => 1,
+            'languages' => [],
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+        $this->removeCsrfCookie('save-language-restrictions');
+    }
+
+    /**
+     * Builds a container whose acting user holds the group-permission gate but is a
+     * non-SuperAdmin restricted to $allowedLanguages for every right.
+     *
+     * @param array<string> $allowedLanguages
+     */
+    private function createRestrictedContainer(Session $session, array $allowedLanguages): ContainerInterface
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+        $permission->method('getAllowedLanguagesForRight')->willReturn($allowedLanguages);
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('isSuperAdmin')->willReturn(false);
+
+        $adminLog = $this->createStub(AdminLog::class);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
+
+        return $container;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListLanguagesRequiresGroupPermission(): void
+    {
+        $controller = new GroupController();
+
+        $this->expectException(\Exception::class);
+        $controller->listLanguages();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListLanguagesReturnsAvailableLanguages(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->listLanguages();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertNotEmpty($payload);
+        self::assertContains(['code' => 'en', 'label' => 'English'], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testUpdateGroupRequiresGroupEditPermission(): void
     {
         $controller = new GroupController();

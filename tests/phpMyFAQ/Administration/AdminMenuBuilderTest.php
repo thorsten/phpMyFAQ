@@ -138,6 +138,16 @@ class AdminMenuBuilderTest extends TestCase
                 return null;
             }
 
+            public function hasPermissionForLanguage(int $userId, mixed $right, string $language): bool
+            {
+                return $this->hasPermission($userId, $right);
+            }
+
+            public function getAllowedLanguagesForRight(int $userId, mixed $right): ?array
+            {
+                return null;
+            }
+
             public function getAllUserRights(int $userId): array
             {
                 return array_column($this->rights, 'right_id');

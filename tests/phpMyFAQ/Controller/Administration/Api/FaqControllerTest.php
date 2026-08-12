@@ -228,6 +228,24 @@ final class FaqControllerTest extends TestCase
                 && $categoryId !== 666, // sentinel forbidden category for tests
             );
         $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
+        $permission
+            ->method('hasPermissionForLanguage')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right, string $language): bool => $userId === 42
+                && in_array(
+                    $right,
+                    [
+                        PermissionType::FAQ_ADD->value,
+                        PermissionType::FAQ_EDIT->value,
+                        PermissionType::FAQ_DELETE->value,
+                        PermissionType::FAQ_APPROVE->value,
+                        PermissionType::FAQ_TRANSLATE->value,
+                    ],
+                    true,
+                )
+                && $language !== 'fr', // sentinel forbidden language for tests
+            );
+        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -506,6 +524,47 @@ final class FaqControllerTest extends TestCase
 
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 666.');
+        $controller->create($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsForbiddenForRestrictedLanguage(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'question' => 'Restricted question',
+                'categories[]' => [1],
+                'lang' => 'fr',
+                'tags' => '',
+                'active' => 'yes',
+                'answer' => 'Restricted answer',
+                'keywords' => '',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'userpermission' => 'restricted',
+                'restricted_users' => [],
+                'grouppermission' => 'restricted',
+                'restricted_groups' => [],
+                'changed' => '',
+                'notes' => '',
+                'serpTitle' => '',
+                'serpDescription' => '',
+                'openQuestionId' => 0,
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for language "fr".');
         $controller->create($request);
     }
 
@@ -1466,6 +1525,84 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * Import::import() takes the target language from the row, so a language-restricted
+     * user must not be able to create out-of-scope records through a CSV upload.
+     *
+     * @throws \Exception
+     */
+    public function testImportReturnsForbiddenForRowInRestrictedLanguage(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('importfaqs');
+        $this->setCsrfCookie('importfaqs', $csrfToken);
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
+        self::assertNotFalse($tempFile);
+        // Row 2 targets the sentinel forbidden language 'fr'.
+        file_put_contents(
+            $tempFile,
+            "1,Allowed question,Allowed answer,keywords,en,Author,author@example.com,true,false\n"
+            . "1,Blocked question,Blocked answer,keywords,fr,Author,author@example.com,true,false\n",
+        );
+        $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
+
+        $request = new Request([], ['csrf' => $csrfToken], [], [], ['file' => $uploadedFile]);
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->import($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertFalse($payload['storedAll']);
+        self::assertSame(['Row 2: no "FAQ_ADD" permission for language "fr".'], $payload['messages']);
+
+        // The whole upload is refused, so the in-scope row must not have been stored either.
+        self::assertSame(0, $this->countFaqsWithQuestion('Allowed question'));
+        $this->removeCsrfCookie('importfaqs');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportReturnsForbiddenForRowInRestrictedCategory(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('importfaqs');
+        $this->setCsrfCookie('importfaqs', $csrfToken);
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
+        self::assertNotFalse($tempFile);
+        file_put_contents(
+            $tempFile,
+            "666,Blocked question,Blocked answer,keywords,en,Author,author@example.com,true,false\n",
+        );
+        $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
+
+        $request = new Request([], ['csrf' => $csrfToken], [], [], ['file' => $uploadedFile]);
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->import($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(['Row 1: no "FAQ_ADD" permission for category 666.'], $payload['messages']);
+        $this->removeCsrfCookie('importfaqs');
+    }
+
+    private function countFaqsWithQuestion(string $question): int
+    {
+        $result = $this->configuration->getDb()->query(sprintf(
+            "SELECT COUNT(*) AS total FROM faqdata WHERE thema = '%s'",
+            $this->configuration->getDb()->escape($question),
+        ));
+        $row = $this->configuration->getDb()->fetchArray($result);
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testUpdateReturnsForbiddenWhenTargetCategoryIsRestricted(): void
@@ -1514,6 +1651,52 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testUpdateReturnsForbiddenWhenTargetLanguageIsRestricted(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'faqId' => 1,
+                'solutionId' => 1,
+                'revisionId' => 0,
+                'question' => 'Updated question?',
+                'categories[]' => [1],
+                'lang' => 'fr',
+                'tags' => '',
+                'active' => 'yes',
+                'answer' => 'Updated answer',
+                'keywords' => '',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'userpermission' => 'restricted',
+                'restricted_users' => [],
+                'grouppermission' => 'restricted',
+                'restricted_groups' => [],
+                'changed' => 'Updated',
+                'date' => '2026-03-08 10:00:00',
+                'notes' => '',
+                'revision' => 'no',
+                'recordDateHandling' => 'keepDate',
+                'serpTitle' => '',
+                'serpDescription' => '',
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "fr".');
+        $controller->update($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testDeleteReturnsForbiddenWhenFaqIsInRestrictedCategory(): void
     {
         $this->seedFaqRecord(categoryId: 666);
@@ -1533,6 +1716,31 @@ final class FaqControllerTest extends TestCase
 
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_DELETE" permission for category 666.');
+        $controller->delete($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsForbiddenWhenFaqIsInRestrictedLanguage(): void
+    {
+        $this->seedFaqRecord(categoryId: 1, language: 'fr');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqId' => 1,
+            'faqLanguage' => 'fr',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_DELETE" permission for language "fr".');
         $controller->delete($request);
     }
 
@@ -1565,6 +1773,32 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testActivateReturnsForbiddenWhenLanguageIsRestricted(): void
+    {
+        $this->seedFaqRecord(categoryId: 1, language: 'fr');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'fr',
+            'checked' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_APPROVE" permission for language "fr".');
+        $controller->activate($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testStickyReturnsForbiddenWhenFaqIsInRestrictedCategory(): void
     {
         $this->seedFaqRecord(categoryId: 666);
@@ -1591,6 +1825,32 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testStickyReturnsForbiddenWhenLanguageIsRestricted(): void
+    {
+        $this->seedFaqRecord(categoryId: 1, language: 'fr');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'fr',
+            'checked' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "fr".');
+        $controller->sticky($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testListByCategoryReturnsForbiddenForRestrictedCategory(): void
     {
         $controller = $this->createController();
@@ -1599,6 +1859,70 @@ final class FaqControllerTest extends TestCase
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666.');
         $controller->listByCategory(new Request([], [], ['categoryId' => 666, 'language' => 'en']));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListByCategoryReturnsForbiddenForRestrictedLanguage(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "fr".');
+        $controller->listByCategory(new Request([], [], ['categoryId' => 1, 'language' => 'fr']));
+    }
+
+    /**
+     * isAllowedToTranslate must combine category and language restrictions
+     * with AND: a user allowed to translate category 1 but not language 'en'
+     * must not be reported as allowed to translate.
+     *
+     * @throws \Exception
+     */
+    public function testListByCategoryIsAllowedToTranslateCombinesCategoryAndLanguage(): void
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+        $permission->method('hasPermissionForCategory')->willReturn(true);
+        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
+        $permission
+            ->method('hasPermissionForLanguage')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right, string $language): bool => $right
+                    !== PermissionType::FAQ_TRANSLATE->value,
+            );
+        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $session = new Session(new MockArraySessionStorage());
+        $adminLog = $this->createStub(AdminLog::class);
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->listByCategory(new Request([], [], ['categoryId' => 1, 'language' => 'en']));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertFalse($payload['isAllowedToTranslate']);
     }
 
     private function seedOrphanedFaqRecord(int $faqId = 1, string $language = 'en'): void

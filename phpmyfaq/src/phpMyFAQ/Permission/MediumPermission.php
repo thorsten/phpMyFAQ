@@ -213,6 +213,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         }
 
         $this->categoryPermissionRepository->deleteAllForGroup($groupId);
+        $this->languageRepository->deleteAllForGroup($groupId);
 
         return $this->mediumRepository->deleteGroupRights($groupId);
     }
@@ -441,7 +442,13 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function refuseAllGroupRights(int $groupId): bool
     {
-        return $this->mediumRepository->refuseAllGroupRights($groupId);
+        if (!$this->mediumRepository->refuseAllGroupRights($groupId)) {
+            return false;
+        }
+
+        // The language restrictions are scoped to a group-right pair. Leaving them behind
+        // would silently re-apply the old scope if the same right is granted again later.
+        return $this->languageRepository->deleteAllForGroup($groupId);
     }
 
     /**
@@ -598,6 +605,133 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         }
 
         return array_values(array_unique($allowedCategories));
+    }
+
+    /**
+     * Returns true if the user has the specified right for the given language,
+     * taking into account both the user's own direct language restriction and
+     * group-level language restrictions. Unlike category restrictions, a
+     * direct user-right grant CAN be language-restricted.
+     *
+     * The right is usable for a language if either the user's own grant is
+     * unrestricted or matches the language, OR any qualifying group's grant
+     * is unrestricted or matches the language (union of all grants).
+     *
+     * @param int    $userId      User ID
+     * @param mixed  $right       Right ID, name, or PermissionType enum
+     * @param string $language    Language code (e.g. 'en', 'de')
+     * @param CurrentUser|null $currentUser Optional pre-loaded user to avoid repeated instantiation
+     * @throws Exception
+     */
+    public function hasPermissionForLanguage(
+        int $userId,
+        mixed $right,
+        string $language,
+        ?CurrentUser $currentUser = null,
+    ): bool {
+        if ($currentUser === null) {
+            $currentUser = new CurrentUser($this->configuration);
+            $currentUser->getUserById($userId);
+        }
+
+        if ($currentUser->isSuperAdmin()) {
+            return true;
+        }
+
+        $rightId = $this->resolveRightId($right);
+
+        if (
+            $this->checkUserRight($userId, $rightId)
+            && $this->languageRepository->checkUserRightForLanguage($userId, $rightId, $language)
+        ) {
+            return true;
+        }
+
+        return $this->languageRepository->checkUserGroupRightForLanguage($userId, $rightId, $language);
+    }
+
+    /**
+     * Returns the language codes that a group's right is restricted to.
+     * An empty array means the right is unrestricted (applies globally).
+     *
+     * @return array<string>
+     */
+    public function getLanguageRestrictions(int $groupId, int $rightId): array
+    {
+        return $this->languageRepository->getLanguageRestrictions($groupId, $rightId);
+    }
+
+    /**
+     * Returns all language restrictions for a group, keyed by right ID.
+     *
+     * @return array<int, array<string>>
+     */
+    public function getAllLanguageRestrictions(int $groupId): array
+    {
+        return $this->languageRepository->getAllLanguageRestrictions($groupId);
+    }
+
+    /**
+     * Sets language restrictions for a group's right.
+     *
+     * @param array<string> $languages Language codes to restrict to (empty = unrestricted)
+     */
+    public function setLanguageRestrictions(int $groupId, int $rightId, array $languages): bool
+    {
+        return $this->languageRepository->setLanguageRestrictions($groupId, $rightId, $languages);
+    }
+
+    /**
+     * Returns the language codes in which the user may exercise the right:
+     * the union of the user's own direct grant (if any) and every group
+     * grant that also holds the right. Null means unrestricted (superadmin,
+     * or any single grant is itself unrestricted). An empty array means the
+     * user does not hold the right through any grant at all.
+     *
+     * @param int   $userId User ID
+     * @param mixed $right  Right ID, right name, or PermissionType value
+     * @return array<string>|null
+     * @throws Exception
+     */
+    #[\Override]
+    public function getAllowedLanguagesForRight(int $userId, mixed $right): ?array
+    {
+        $currentUser = new CurrentUser($this->configuration);
+        $currentUser->getUserById($userId);
+
+        if ($currentUser->isSuperAdmin()) {
+            return null;
+        }
+
+        $rightId = $this->resolveRightId($right);
+        $allowedLanguages = [];
+        $hasAnyGrant = false;
+
+        if ($this->checkUserRight($userId, $rightId)) {
+            $hasAnyGrant = true;
+            $userRestrictions = $this->languageRepository->getUserLanguageRestrictions($userId, $rightId);
+            if ($userRestrictions === []) {
+                return null;
+            }
+
+            $allowedLanguages = [...$allowedLanguages, ...$userRestrictions];
+        }
+
+        foreach ($this->getUserGroups($userId) as $groupId) {
+            if (!in_array($rightId, $this->getGroupRights($groupId), strict: true)) {
+                continue;
+            }
+
+            $hasAnyGrant = true;
+            $groupRestrictions = $this->languageRepository->getLanguageRestrictions($groupId, $rightId);
+            if ($groupRestrictions === []) {
+                return null;
+            }
+
+            $allowedLanguages = [...$allowedLanguages, ...$groupRestrictions];
+        }
+
+        return $hasAnyGrant ? array_values(array_unique($allowedLanguages)) : [];
     }
 
     /**
