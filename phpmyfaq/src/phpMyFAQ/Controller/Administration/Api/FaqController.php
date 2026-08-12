@@ -929,7 +929,7 @@ final class FaqController extends AbstractAdministrationApiController
 
             if (!$currentUser->perm->hasPermissionForCategory($userId, PermissionType::FAQ_ADD->value, $categoryId)) {
                 $messages[] = sprintf(
-                    Translation::get(key: 'msgImportRowNoCategoryPermission'),
+                    Translation::getString(key: 'msgImportRowNoCategoryPermission'),
                     $rowNumber,
                     PermissionType::FAQ_ADD->name,
                     $categoryId,
@@ -939,7 +939,7 @@ final class FaqController extends AbstractAdministrationApiController
 
             if (!$currentUser->perm->hasPermissionForLanguage($userId, PermissionType::FAQ_ADD->value, $language)) {
                 $messages[] = sprintf(
-                    Translation::get(key: 'msgImportRowNoLanguagePermission'),
+                    Translation::getString(key: 'msgImportRowNoLanguagePermission'),
                     $rowNumber,
                     PermissionType::FAQ_ADD->name,
                     $language,
