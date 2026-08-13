@@ -92,7 +92,10 @@ export const requestUserRemoval = async (data: FormData): Promise<ApiResponse | 
   }
 };
 
-export const removeTwofactorConfig = async (csrfToken: string): Promise<ApiResponse | undefined> => {
+export const removeTwofactorConfig = async (
+  csrfToken: string,
+  currentPassword: string
+): Promise<ApiResponse | undefined> => {
   try {
     const response: Response = await fetch('api/user/remove-twofactor', {
       method: 'POST',
@@ -102,6 +105,7 @@ export const removeTwofactorConfig = async (csrfToken: string): Promise<ApiRespo
       },
       body: JSON.stringify({
         csrfToken: csrfToken,
+        currentPassword: currentPassword,
       }),
       redirect: 'follow',
       referrerPolicy: 'no-referrer',

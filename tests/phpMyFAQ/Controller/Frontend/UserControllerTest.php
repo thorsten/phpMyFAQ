@@ -105,15 +105,62 @@ class UserControllerTest extends TestCase
     {
         $driver = $this->createMock(AuthDatabase::class);
         $driver->method('disableReadOnly')->willReturn(false);
-        $driver->expects($this->once())
-            ->method('update')
-            ->with('jdoe', 'NewPass123!')
-            ->willReturn(true);
+        $driver->expects($this->once())->method('update')->with('jdoe', 'NewPass123!')->willReturn(true);
 
         $this->currentUserMock->method('verifyPassword')->with('correct-current')->willReturn(true);
         $this->currentUserMock->method('getLogin')->willReturn('jdoe');
         $this->currentUserMock->method('getAuthContainer')->willReturn([$driver]);
 
         $this->assertTrue($this->changePassword('correct-current', 'NewPass123!', 'NewPass123!'));
+    }
+
+    private function requireTwoFactorStepUp(
+        bool $isCurrentlyEnabled,
+        bool $willBeEnabled,
+        string $currentPassword,
+    ): ?JsonResponse {
+        $method = new ReflectionMethod(UserController::class, 'requireTwoFactorStepUp');
+
+        return $method->invoke($this->controller, $isCurrentlyEnabled, $willBeEnabled, $currentPassword);
+    }
+
+    public function testEnablingTwoFactorNeedsNoStepUp(): void
+    {
+        $this->currentUserMock->expects($this->never())->method('verifyPassword');
+
+        $this->assertNull($this->requireTwoFactorStepUp(false, true, ''));
+    }
+
+    public function testLeavingTwoFactorEnabledNeedsNoStepUp(): void
+    {
+        $this->currentUserMock->expects($this->never())->method('verifyPassword');
+
+        $this->assertNull($this->requireTwoFactorStepUp(true, true, ''));
+    }
+
+    public function testKeepingTwoFactorDisabledNeedsNoStepUp(): void
+    {
+        $this->currentUserMock->expects($this->never())->method('verifyPassword');
+
+        $this->assertNull($this->requireTwoFactorStepUp(false, false, ''));
+    }
+
+    public function testDisablingTwoFactorWithWrongPasswordIsForbidden(): void
+    {
+        $this->currentUserMock->method('verifyPassword')->with('wrong')->willReturn(false);
+        // The downgrade must never be written when the step-up fails (CWE-308).
+        $this->currentUserMock->expects($this->never())->method('setUserData');
+
+        $result = $this->requireTwoFactorStepUp(true, false, 'wrong');
+
+        $this->assertInstanceOf(JsonResponse::class, $result);
+        $this->assertSame(Response::HTTP_FORBIDDEN, $result->getStatusCode());
+    }
+
+    public function testDisablingTwoFactorWithValidPasswordIsAllowed(): void
+    {
+        $this->currentUserMock->method('verifyPassword')->with('correct')->willReturn(true);
+
+        $this->assertNull($this->requireTwoFactorStepUp(true, false, 'correct'));
     }
 }

@@ -86,6 +86,15 @@ final class UserController extends AbstractController
                 'is_visible' => $isVisible === 'on' ? 1 : 0,
             ]);
         } else {
+            $twoFactorStepUp = $this->requireTwoFactorStepUp(
+                (int) $this->currentUser->getUserData('twofactor_enabled') === 1,
+                $twoFactorEnabled === 'on',
+                $currentPassword,
+            );
+            if ($twoFactorStepUp instanceof JsonResponse) {
+                return $twoFactorStepUp;
+            }
+
             $success = $this->currentUser->setUserData([
                 'display_name' => $userName,
                 'email' => $email,
@@ -161,6 +170,50 @@ final class UserController extends AbstractController
         }
 
         return $changed;
+    }
+
+    /**
+     * Requires a verified step-up before two-factor authentication is turned off.
+     *
+     * Disabling 2FA is a security downgrade, so a valid session plus CSRF token must
+     * not be enough on their own (CWE-308): the current password is required and
+     * verified first. The guard applies only when 2FA is actually being switched off
+     * for a user who currently has it enabled — enabling it, or leaving the setting
+     * unchanged, needs no step-up.
+     *
+     * Returns a JsonResponse to short-circuit the request when the step-up fails, or
+     * null when the change may proceed.
+     */
+    private function requireTwoFactorStepUp(
+        bool $isCurrentlyEnabled,
+        bool $willBeEnabled,
+        #[\SensitiveParameter]
+        string $currentPassword,
+    ): ?JsonResponse {
+        if (!$isCurrentlyEnabled || $willBeEnabled) {
+            return null;
+        }
+
+        return $this->verifyCurrentPassword($currentPassword);
+    }
+
+    /**
+     * Verifies the current user's password as a step-up check.
+     *
+     * Used before security-sensitive changes that a session cookie plus CSRF token
+     * must not be enough to make on their own. Returns a 403 JsonResponse to
+     * short-circuit the request when the password is missing or wrong (an empty
+     * password never verifies), or null when it verifies and the caller may proceed.
+     */
+    private function verifyCurrentPassword(#[\SensitiveParameter] string $currentPassword): ?JsonResponse
+    {
+        if (!$this->currentUser->verifyPassword($currentPassword)) {
+            return $this->json([
+                'error' => Translation::get(key: 'ad_user_error_currentPasswordInvalid'),
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        return null;
     }
 
     /**
@@ -314,18 +367,31 @@ final class UserController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($this->currentUser->isLoggedIn()) {
-            $newSecret = $twoFactor->generateSecret();
-
-            if ($this->currentUser->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
-                return $this->json([
-                    'success' => Translation::get('msgRemoveTwofactorConfigSuccessful'),
-                ], Response::HTTP_OK);
-            }
-
-            return $this->json(['error' => Translation::get(key: 'msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
+        if (!$this->currentUser->isLoggedIn()) {
+            throw new Exception('The user is not logged in.');
         }
 
-        throw new Exception('The user is not logged in.');
+        // Disabling 2FA is a security downgrade; require and verify the current
+        // password so a session cookie plus CSRF token alone cannot strip the
+        // second factor (CWE-308).
+        $currentPassword = trim((string) Filter::filterVar(
+            $data->currentPassword ?? '',
+            FILTER_SANITIZE_SPECIAL_CHARS,
+        ));
+
+        $stepUp = $this->verifyCurrentPassword($currentPassword);
+        if ($stepUp instanceof JsonResponse) {
+            return $stepUp;
+        }
+
+        $newSecret = $twoFactor->generateSecret();
+
+        if ($this->currentUser->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
+            return $this->json([
+                'success' => Translation::get('msgRemoveTwofactorConfigSuccessful'),
+            ], Response::HTTP_OK);
+        }
+
+        return $this->json(['error' => Translation::get(key: 'msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
     }
 }

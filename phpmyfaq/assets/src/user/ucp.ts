@@ -55,7 +55,11 @@ export const handleUserControlPanel = (): void => {
       confirmRemoveTwoFactor.addEventListener('click', async (event: Event): Promise<void> => {
         event.preventDefault();
         const csrfToken = document.getElementById('pmf-csrf-token-remove-twofactor') as HTMLInputElement;
-        const response = (await removeTwofactorConfig(csrfToken.value)) as ApiResponse;
+        const passwordField = document.getElementById('pmf-remove-twofactor-password') as HTMLInputElement | null;
+        const response = (await removeTwofactorConfig(csrfToken.value, passwordField?.value ?? '')) as ApiResponse;
+        if (passwordField) {
+          passwordField.value = '';
+        }
         if (response.success) {
           pushNotification(response.success);
           const twoFactorEnabled = document.getElementById('twofactor_enabled') as HTMLInputElement | null;
