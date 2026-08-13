@@ -246,6 +246,38 @@ class CurrentUser extends User
     }
 
     /**
+     * Verifies a password against the current user's stored credentials.
+     *
+     * This is the step-up check used before security-sensitive changes such as a
+     * password change: it re-authenticates the already logged-in user without
+     * altering the session. Auth drivers report a rejected credential by throwing,
+     * so any exception is treated as "not verified". An empty password never
+     * verifies.
+     */
+    public function verifyPassword(#[SensitiveParameter] string $password): bool
+    {
+        if ($password === '') {
+            return false;
+        }
+
+        $login = $this->getLogin();
+
+        foreach ($this->authContainer as $auth) {
+            try {
+                if ($auth->checkCredentials($login, $password)) {
+                    return true;
+                }
+            } catch (AuthException $authException) {
+                $this->configuration
+                    ->getLogger()
+                    ->info(sprintf('Password verification failed: %s', $authException->getMessage()));
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Returns true if CurrentUser is logged in, otherwise false.
      */
     public function isLoggedIn(): bool

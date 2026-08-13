@@ -66,6 +66,61 @@ class CurrentUserTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testVerifyPasswordAcceptsTheCorrectPassword(): void
+    {
+        $this->currentUser->login('admin', 'password');
+
+        $this->assertTrue($this->currentUser->verifyPassword('password'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testVerifyPasswordRejectsAnIncorrectPassword(): void
+    {
+        $this->currentUser->login('admin', 'password');
+
+        $this->assertFalse($this->currentUser->verifyPassword('wrong-password'));
+    }
+
+    /**
+     * An empty password must never verify, even for a fully authenticated user.
+     *
+     * @throws Exception
+     */
+    public function testVerifyPasswordRejectsAnEmptyPassword(): void
+    {
+        $this->currentUser->login('admin', 'password');
+
+        $this->assertFalse($this->currentUser->verifyPassword(''));
+    }
+
+    /**
+     * Verifying the current password re-checks the credential without going through
+     * login(), so it must not record a failed-login attempt or trip the lockout.
+     *
+     * @throws Exception
+     */
+    public function testVerifyPasswordDoesNotCountAsAFailedLoginAttempt(): void
+    {
+        $this->resetLockoutState();
+        $this->currentUser->login('admin', 'password');
+
+        for ($attempt = 0; $attempt <= 5; ++$attempt) {
+            $this->assertFalse($this->currentUser->verifyPassword('wrong-password'));
+        }
+
+        // The correct password must still log in: the wrong verifyPassword() calls
+        // above must not have locked the account.
+        $freshUser = new CurrentUser($this->configuration);
+        $this->assertTrue($freshUser->login('admin', 'password'));
+
+        $this->resetLockoutState();
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testLoginFailureWithInvalidCredentials(): void
     {
         $this->expectException(Exception::class);

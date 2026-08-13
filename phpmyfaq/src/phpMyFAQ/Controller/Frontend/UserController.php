@@ -57,8 +57,12 @@ final class UserController extends AbstractController
         $userName = trim(strip_tags((string) $data->name));
         $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
         $isVisible = Filter::filterVar($data->{'is_visible'}, FILTER_SANITIZE_SPECIAL_CHARS);
-        $password = trim((string) Filter::filterVar($data->faqpassword, FILTER_SANITIZE_SPECIAL_CHARS));
-        $confirm = trim((string) Filter::filterVar($data->faqpassword_confirm, FILTER_SANITIZE_SPECIAL_CHARS));
+        $currentPassword = trim((string) Filter::filterVar(
+            $data->faqpassword_current ?? '',
+            FILTER_SANITIZE_SPECIAL_CHARS,
+        ));
+        $password = trim((string) Filter::filterVar($data->faqpassword ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
+        $confirm = trim((string) Filter::filterVar($data->faqpassword_confirm ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
         $twoFactorEnabled = Filter::filterVar($data->twofactor_enabled ?? 'off', FILTER_SANITIZE_SPECIAL_CHARS);
         $secret = Filter::filterVar($data->secret ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -69,52 +73,32 @@ final class UserController extends AbstractController
             return $this->json(['error' => 'User ID mismatch!'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!$isAzureAdUser) {
-            if ($password !== $confirm) {
-                return $this->json([
-                    'error' => Translation::get('ad_user_error_passwordsDontMatch'),
-                ], Response::HTTP_CONFLICT);
-            }
-
-            if ((strlen($password) <= 7 || strlen($confirm) <= 7) && !$isWebAuthnUser) {
-                return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_CONFLICT);
-            }
-
-            if ($isWebAuthnUser) {
-                $userData = [
-                    'display_name' => $userName,
-                    'is_visible' => $isVisible === 'on' ? 1 : 0,
-                ];
-            } else {
-                $userData = [
-                    'display_name' => $userName,
-                    'email' => $email,
-                    'is_visible' => $isVisible === 'on' ? 1 : 0,
-                    'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0,
-                ];
-            }
-
-            $success = $this->currentUser->setUserData($userData);
-
-            foreach ($this->currentUser->getAuthContainer() as $authDriver) {
-                if ($authDriver->disableReadOnly()) {
-                    continue;
-                }
-
-                if (!$authDriver->update($this->currentUser->getLogin(), $password)) {
-                    return $this->json(['error' => $authDriver->getErrors()], Response::HTTP_BAD_REQUEST);
-                }
-
-                $success = true;
-            }
-        } else {
-            $userData = [
+        if ($isAzureAdUser) {
+            $success = $this->currentUser->setUserData([
                 'is_visible' => $isVisible === 'on' ? 1 : 0,
                 'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0,
                 'secret' => $secret,
-            ];
+            ]);
+        } elseif ($isWebAuthnUser) {
+            // Passkey users have no password to rotate here; only profile fields apply.
+            $success = $this->currentUser->setUserData([
+                'display_name' => $userName,
+                'is_visible' => $isVisible === 'on' ? 1 : 0,
+            ]);
+        } else {
+            $success = $this->currentUser->setUserData([
+                'display_name' => $userName,
+                'email' => $email,
+                'is_visible' => $isVisible === 'on' ? 1 : 0,
+                'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0,
+            ]);
 
-            $success = $this->currentUser->setUserData($userData);
+            $passwordResult = $this->changePassword($currentPassword, $password, $confirm);
+            if ($passwordResult instanceof JsonResponse) {
+                return $passwordResult;
+            }
+
+            $success = $success || $passwordResult;
         }
 
         if ($success) {
@@ -122,6 +106,61 @@ final class UserController extends AbstractController
         }
 
         return $this->json(['error' => Translation::get(key: 'ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Applies a password change for the current (local) user.
+     *
+     * A change is attempted only when a new password was supplied, so routine
+     * profile edits no longer force a password rotation. Before the new password is
+     * written the current one is required and verified: a valid session plus CSRF
+     * token must not be enough to silently take over the account (CWE-620).
+     *
+     * Returns a JsonResponse to short-circuit the request on validation failure,
+     * true when the password was changed, or false when no change was requested.
+     */
+    private function changePassword(
+        #[\SensitiveParameter]
+        string $currentPassword,
+        #[\SensitiveParameter]
+        string $password,
+        #[\SensitiveParameter]
+        string $confirm,
+    ): JsonResponse|bool {
+        if ($password === '' && $confirm === '') {
+            return false;
+        }
+
+        if ($password !== $confirm) {
+            return $this->json([
+                'error' => Translation::get('ad_user_error_passwordsDontMatch'),
+            ], Response::HTTP_CONFLICT);
+        }
+
+        if (strlen($password) <= 7) {
+            return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_CONFLICT);
+        }
+
+        if (!$this->currentUser->verifyPassword($currentPassword)) {
+            return $this->json([
+                'error' => Translation::get(key: 'ad_user_error_currentPasswordInvalid'),
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        $changed = false;
+        foreach ($this->currentUser->getAuthContainer() as $authDriver) {
+            if ($authDriver->disableReadOnly()) {
+                continue;
+            }
+
+            if (!$authDriver->update($this->currentUser->getLogin(), $password)) {
+                return $this->json(['error' => $authDriver->getErrors()], Response::HTTP_BAD_REQUEST);
+            }
+
+            $changed = true;
+        }
+
+        return $changed;
     }
 
     /**

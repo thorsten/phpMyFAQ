@@ -83,6 +83,8 @@ if ($user->isLoggedIn()) {
         'email' => $user->getUserData('email'),
         'msgIsVisible' => Translation::get(key: 'msgUserDataVisible'),
         'checked' => (int) $user->getUserData('is_visible') === 1 ? 'checked' : '',
+        'msgCurrentPassword' => Translation::get(key: 'ad_passwd_old'),
+        'msgUcpPasswordHint' => Translation::get(key: 'msgUcpPasswordHint'),
         'msgPassword' => Translation::get(key: 'ad_auth_passwd'),
         'msgConfirm' => Translation::get(key: 'ad_user_confirm'),
         'msgSave' => Translation::get(key: 'msgSave'),

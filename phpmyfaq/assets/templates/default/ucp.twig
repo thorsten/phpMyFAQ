@@ -80,17 +80,42 @@
             </div>
 
             <div class="row mb-2">
-              <label class="col-lg-4 col-form-label" for="faqpassword">{{ msgPassword }}: *</label>
+              <div class="offset-4 col-lg-8">
+                <small class="form-text text-muted">{{ msgUcpPasswordHint }}</small>
+              </div>
+            </div>
+
+            <div class="row mb-2">
+              <label class="col-lg-4 col-form-label" for="faqpassword_current">{{ msgCurrentPassword }}:</label>
               <div class="col-lg-8">
                 <div class="input-group">
                   <input
                     type="password"
-                    autocomplete="off"
+                    autocomplete="current-password"
+                    name="faqpassword_current"
+                    id="faqpassword_current"
+                    class="form-control"
+                    data-pmf-toggle="faqpassword_current_toggle"
+                    {{ readonly }}
+                  />
+                  <span class="input-group-text" id="faqpassword_current_toggle" role="button" tabindex="0">
+                  <i class="bi bi-eye-slash" id="faqpassword_current_toggle_icon"></i>
+                </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-2">
+              <label class="col-lg-4 col-form-label" for="faqpassword">{{ msgPassword }}:</label>
+              <div class="col-lg-8">
+                <div class="input-group">
+                  <input
+                    type="password"
+                    autocomplete="new-password"
                     name="faqpassword"
                     id="faqpassword"
                     class="form-control"
                     data-pmf-toggle="faqpassword_toggle"
-                    required
                     {{ readonly }}
                   />
                   <span class="input-group-text" id="faqpassword_toggle" role="button" tabindex="0">
@@ -106,17 +131,16 @@
             </div>
 
             <div class="row mb-4">
-              <label class="col-lg-4 col-form-label" for="faqpassword_confirm">{{ msgConfirm }}: *</label>
+              <label class="col-lg-4 col-form-label" for="faqpassword_confirm">{{ msgConfirm }}:</label>
               <div class="col-lg-8">
                 <div class="input-group">
                   <input
                     type="password"
-                    autocomplete="off"
+                    autocomplete="new-password"
                     name="faqpassword_confirm"
                     id="faqpassword_confirm"
                     class="form-control"
                     data-pmf-toggle="faqpassword_confirm_toggle"
-                    required
                     {{ readonly }}
                   />
                   <span class="input-group-text" id="faqpassword_confirm_toggle">

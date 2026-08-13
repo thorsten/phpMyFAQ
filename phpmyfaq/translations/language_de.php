@@ -611,6 +611,8 @@ $PMF_LANG['ad_entry_not_visibility'] = "nicht veröffentlicht";
 // added v2.0.0 - 2006-01-02 by Lars
 $PMF_LANG['ad_user_error_password'] = "Bitte geben Sie ein Passwort ein. ";
 $PMF_LANG['ad_user_error_passwordsDontMatch'] = "Die Passwörter stimmen nicht überein. ";
+$PMF_LANG['ad_user_error_currentPasswordInvalid'] = "Das aktuelle Passwort ist nicht korrekt.";
+$PMF_LANG['msgUcpPasswordHint'] = "Lassen Sie die Passwortfelder leer, um Ihr aktuelles Passwort beizubehalten. Zum Ändern geben Sie Ihr aktuelles Passwort und das neue Passwort zweimal ein.";
 $PMF_LANG['ad_user_error_loginInvalid'] = "Der ausgewählte Benutzer ist ungültig.";
 $PMF_LANG['ad_user_error_noEmail'] = "Bitte geben Sie eine korrekte E-Mailadresse ein. ";
 $PMF_LANG['ad_user_error_noRealName'] = "Bitte geben Sie ihren Namen ein. ";
