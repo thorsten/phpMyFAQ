@@ -23,6 +23,7 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 #[AllowMockObjectsWithoutExpectations]
 class QuestionControllerTest extends TestCase
@@ -87,5 +88,40 @@ class QuestionControllerTest extends TestCase
             });
 
         $this->assertSame($expected, $this->isAddingQuestionsAllowed());
+    }
+
+    private function isSmartAnswerConfirmationAllowed(SessionInterface $session): bool
+    {
+        $method = new \ReflectionMethod(QuestionController::class, 'isSmartAnswerConfirmationAllowed');
+
+        return $method->invoke($this->controller, $session);
+    }
+
+    /**
+     * A forged "store now" request has no server-side smart-answer flag, so the captcha
+     * skip must be denied. This is the regression guard for the captcha-bypass report.
+     */
+    public function testStoreNowConfirmationIsDeniedWithoutSmartAnswerFlag(): void
+    {
+        $session = $this->createMock(SessionInterface::class);
+        $session->method('get')
+            ->with('phpmyfaq.question.smartAnswerShown', false)
+            ->willReturn(false);
+
+        $this->assertFalse($this->isSmartAnswerConfirmationAllowed($session));
+    }
+
+    /**
+     * The legitimate two-phase flow: a captcha-validated first request set the smart-answer
+     * flag, so the "store now" confirmation is allowed to proceed without a fresh captcha.
+     */
+    public function testStoreNowConfirmationIsAllowedWithSmartAnswerFlag(): void
+    {
+        $session = $this->createMock(SessionInterface::class);
+        $session->method('get')
+            ->with('phpmyfaq.question.smartAnswerShown', false)
+            ->willReturn(true);
+
+        $this->assertTrue($this->isSmartAnswerConfirmationAllowed($session));
     }
 }

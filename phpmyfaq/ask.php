@@ -19,6 +19,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Enums\Forms\FormIds;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Forms;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -79,6 +80,7 @@ $templateVars = [
     'categories' => $category->getCategoryTree(),
     'captchaFieldset' =>
         $captchaHelper->renderCaptcha($captcha, 'ask', Translation::get(key: 'msgCaptcha'), $user->isLoggedIn()),
+    'csrfTokenAddQuestion' => Token::getInstance($container->get('session'))->getTokenString('add-question'),
     'msgNewContentSubmit' => Translation::get(key: 'msgNewContentSubmit'),
     'noCategories' => $categories === [],
     'msgFormDisabledDueToMissingCategories' => Translation::get(key: 'msgFormDisabledDueToMissingCategories')

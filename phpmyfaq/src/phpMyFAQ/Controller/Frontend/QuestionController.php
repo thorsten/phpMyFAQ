@@ -26,13 +26,22 @@ use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Search\SearchResultSet;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class QuestionController extends AbstractController
 {
+    /**
+     * Session flag proving that a captcha-validated first request has already
+     * displayed a smart answer. Only then may the "store now" confirmation step
+     * skip the (already consumed) captcha.
+     */
+    private const string SMART_ANSWER_SESSION_KEY = 'phpmyfaq.question.smartAnswerShown';
+
     /**
      * @throws Exception
      * @throws \JsonException
@@ -54,6 +63,15 @@ final class QuestionController extends AbstractController
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
+        $session = $this->container->get(id: 'session');
+
+        if (!Token::getInstance($session)->verifyToken(
+            page: 'add-question',
+            requestToken: $data->{'pmf-csrf-token'} ?? null,
+        )) {
+            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
+
         $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
         $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -68,8 +86,16 @@ final class QuestionController extends AbstractController
             $save = true;
         }
 
-        // Validate captcha if we can store the question after displaying the smart answer
-        if ($storeNow !== 'now' && !$this->captchaCodeIsValid($request)) {
+        // The captcha may only be skipped for the "store now" confirmation step when a
+        // captcha-validated first request has already displayed a smart answer and set the
+        // server-side flag below. Otherwise the captcha (single-use) must be validated here.
+        if ($storeNow === 'now') {
+            if (!$this->isSmartAnswerConfirmationAllowed($session)) {
+                return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
+            }
+
+            $session->remove(self::SMART_ANSWER_SESSION_KEY);
+        } elseif (!$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 
@@ -109,6 +135,10 @@ final class QuestionController extends AbstractController
                 $searchResultSet->reviewResultSet($searchResult);
 
                 if ($searchResultSet->getNumberOfResults() > 0) {
+                    // Remember that this captcha-validated request produced a smart answer, so the
+                    // subsequent "store now" confirmation is allowed to skip the consumed captcha.
+                    $session->set(self::SMART_ANSWER_SESSION_KEY, true);
+
                     $smartAnswer = $questionHelper->generateSmartAnswer($searchResultSet);
                     return $this->json(['result' => $smartAnswer], Response::HTTP_OK);
                 }
@@ -128,6 +158,16 @@ final class QuestionController extends AbstractController
         }
 
         return $this->json(['error' => Translation::get(key: 'errSaveEntries')], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Whether the "store now" confirmation step may proceed without a captcha. This is only
+     * true after a previous captcha-validated request displayed a smart answer and set the
+     * server-side flag; a forged request that jumps straight to "store now" has no such flag.
+     */
+    private function isSmartAnswerConfirmationAllowed(SessionInterface $session): bool
+    {
+        return (bool) $session->get(self::SMART_ANSWER_SESSION_KEY, false);
     }
 
     /**

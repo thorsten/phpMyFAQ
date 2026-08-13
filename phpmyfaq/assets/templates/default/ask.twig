@@ -29,6 +29,7 @@
 
   <form id="pmf-question-form" action="#" method="post" class="needs-validation" novalidate>
     <input type="hidden" name="lang" id="lang" value="{{ lang }}">
+    <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfTokenAddQuestion }}">
 
     <div class="row mb-2">
       <label class="col-sm-3 col-form-label" for="name">
