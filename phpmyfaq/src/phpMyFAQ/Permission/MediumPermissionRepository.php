@@ -30,6 +30,38 @@ readonly class MediumPermissionRepository
     }
 
     /**
+     * Returns the IDs of all groups that hold the given right.
+     *
+     * @param int $rightId Right ID
+     * @return array<int>
+     */
+    public function getGroupIdsWithRight(int $rightId): array
+    {
+        if ($rightId <= 0) {
+            return [];
+        }
+
+        $select = sprintf(
+            'SELECT group_id FROM %sfaqgroup_right WHERE right_id = %d ORDER BY group_id ASC',
+            Database::getTablePrefix(),
+            $rightId,
+        );
+
+        $res = $this->configuration->getDb()->query($select);
+        $result = [];
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($res);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
+            $result[] = (int) $row['group_id'];
+        }
+
+        return $result;
+    }
+
+    /**
      * Returns an array that contains the right-IDs of all
      * group-rights the group $groupId owns.
      *

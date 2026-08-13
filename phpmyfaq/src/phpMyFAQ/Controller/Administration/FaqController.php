@@ -83,10 +83,14 @@ final class FaqController extends AbstractAdministrationController
     #[Route(path: '/faqs', name: 'admin.faqs', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $this->userHasPermission(PermissionType::FAQ_ADD);
-        $this->userHasPermission(PermissionType::FAQ_APPROVE);
-        $this->userHasPermission(PermissionType::FAQ_EDIT);
-        $this->userHasPermission(PermissionType::FAQ_DELETE);
+        // Adding, editing, deleting and publishing are independently assignable, so holding any
+        // one of them is enough to reach the overview; each action enforces its own right.
+        $this->userHasAnyPermission(
+            PermissionType::FAQ_ADD,
+            PermissionType::FAQ_EDIT,
+            PermissionType::FAQ_DELETE,
+            PermissionType::FAQ_PUBLISH,
+        );
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
@@ -168,9 +172,9 @@ final class FaqController extends AbstractAdministrationController
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
+            'hasPermissionForPublish' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
-                PermissionType::FAQ_APPROVE->value,
+                PermissionType::FAQ_PUBLISH->value,
             ),
             'isActive' => null,
             'isInActive' => 'checked',
@@ -240,9 +244,9 @@ final class FaqController extends AbstractAdministrationController
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
+            'hasPermissionForPublish' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
-                PermissionType::FAQ_APPROVE->value,
+                PermissionType::FAQ_PUBLISH->value,
             ),
             'isActive' => null,
             'isInActive' => 'checked',
@@ -380,10 +384,9 @@ final class FaqController extends AbstractAdministrationController
             'restrictedUsers' => $restrictedUsers,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => $this->changelog->getByFaqId($faqId),
-            'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
-                $this->currentUser->getUserId(),
-                PermissionType::FAQ_APPROVE->value,
-            ),
+            // Scoped to this FAQ, so a publisher restricted to other categories or languages is
+            // not offered a control that the API would reject.
+            'hasPermissionForPublish' => $this->userMayPublishIn(array_keys($categories), $faqLanguage),
             'isActive' => $faqData['active'] === 'yes' ? 'checked' : null,
             'isInActive' => $faqData['active'] !== 'yes' ? 'checked' : null,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
@@ -452,9 +455,9 @@ final class FaqController extends AbstractAdministrationController
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
+            'hasPermissionForPublish' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
-                PermissionType::FAQ_APPROVE->value,
+                PermissionType::FAQ_PUBLISH->value,
             ),
             'isActive' => null,
             'isInActive' => null,
@@ -524,9 +527,9 @@ final class FaqController extends AbstractAdministrationController
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
+            'hasPermissionForPublish' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
-                PermissionType::FAQ_APPROVE->value,
+                PermissionType::FAQ_PUBLISH->value,
             ),
             'isActive' => null,
             'isInActive' => null,
@@ -607,9 +610,9 @@ final class FaqController extends AbstractAdministrationController
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForApprove' => $this->currentUser?->perm->hasPermission(
+            'hasPermissionForPublish' => $this->currentUser?->perm->hasPermission(
                 $this->currentUser->getUserId(),
-                PermissionType::FAQ_APPROVE->value,
+                PermissionType::FAQ_PUBLISH->value,
             ),
             'isActive' => null,
             'isInActive' => null,
@@ -667,6 +670,7 @@ final class FaqController extends AbstractAdministrationController
             'ad_entry_status' => Translation::get(key: 'ad_entry_status'),
             'ad_entry_visibility' => Translation::get(key: 'ad_entry_visibility'),
             'ad_entry_not_visibility' => Translation::get(key: 'ad_entry_not_visibility'),
+            'msgNoPublishPermission' => Translation::get(key: 'msgNoPublishPermission'),
             'ad_entry_new_revision' => Translation::get(key: 'ad_entry_new_revision'),
             'ad_gen_yes' => Translation::get(key: 'ad_gen_yes'),
             'ad_gen_no' => Translation::get(key: 'ad_gen_no'),

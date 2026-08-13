@@ -230,6 +230,7 @@ describe('FAQ Overview Functions', () => {
           },
         ],
         isAllowedToTranslate: false,
+        isAllowedToPublish: true,
       });
 
       await handleFaqOverview();
@@ -259,6 +260,7 @@ describe('FAQ Overview Functions', () => {
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
         faqs: [],
         isAllowedToTranslate: false,
+        isAllowedToPublish: true,
       });
 
       await handleFaqOverview();
@@ -269,6 +271,42 @@ describe('FAQ Overview Functions', () => {
       await flushPromises();
 
       expect(fetchAllFaqsByCategory).toHaveBeenCalledWith('3', 'en', true, true);
+    });
+
+    it('should render the active state read-only without the publish permission', async () => {
+      document.body.innerHTML = `
+        <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+      `;
+
+      (fetchAllFaqsByCategory as Mock).mockResolvedValue({
+        faqs: [
+          {
+            id: 7,
+            language: 'en',
+            solution_id: 1007,
+            question: 'Test FAQ',
+            created: '2026-03-01',
+            category_id: 3,
+            sticky: 'no',
+            active: 'yes',
+          },
+        ],
+        isAllowedToTranslate: false,
+        isAllowedToPublish: false,
+      });
+
+      await handleFaqOverview();
+
+      const category = document.querySelector('.accordion-collapse') as HTMLElement;
+      category.dispatchEvent(new Event('shown.bs.collapse'));
+
+      await flushPromises();
+
+      // No checkbox to click, but the state stays visible, and the sticky toggle is unaffected.
+      expect(document.querySelector('.pmf-admin-active-faq')).toBeNull();
+      expect(document.querySelector('.bi-check-lg')).not.toBeNull();
+      expect(document.querySelector('.pmf-admin-sticky-faq')).not.toBeNull();
     });
 
     it('should call saveStatus when sticky toggle changes', async () => {
@@ -291,6 +329,7 @@ describe('FAQ Overview Functions', () => {
           },
         ],
         isAllowedToTranslate: false,
+        isAllowedToPublish: true,
       });
 
       const fetchMock = vi.fn().mockResolvedValue({
@@ -345,6 +384,7 @@ describe('FAQ Overview Functions', () => {
           },
         ],
         isAllowedToTranslate: false,
+        isAllowedToPublish: true,
       });
 
       const fetchMock = vi.fn().mockResolvedValue({
@@ -397,6 +437,7 @@ describe('FAQ Overview Functions', () => {
           },
         ],
         isAllowedToTranslate: false,
+        isAllowedToPublish: true,
       });
 
       const fetchMock = vi.fn().mockResolvedValue({
@@ -442,6 +483,7 @@ describe('FAQ Overview Functions', () => {
           },
         ],
         isAllowedToTranslate: false,
+        isAllowedToPublish: true,
       });
 
       const fetchMock = vi.fn().mockRejectedValue(new Error('Connection refused'));
@@ -484,6 +526,7 @@ describe('FAQ Overview Functions', () => {
           },
         ],
         isAllowedToTranslate: false,
+        isAllowedToPublish: true,
       });
 
       const fetchMock = vi.fn().mockResolvedValue({

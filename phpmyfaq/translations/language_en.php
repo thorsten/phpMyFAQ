@@ -1869,4 +1869,8 @@ $PMF_LANG['ad_language_restrictions_no_language'] = 'No supported language code 
 $PMF_LANG['msgImportRowNoCategoryPermission'] = 'Row %d: no "%s" permission for category %d.';
 $PMF_LANG['msgImportRowNoLanguagePermission'] = 'Row %d: no "%s" permission for language "%s".';
 
+// added v4.2.0-alpha.2 - 2026-08-12 by Thorsten
+$PMF_LANG['permission::faq_publish'] = 'Publish FAQs';
+$PMF_LANG['msgNoPublishPermission'] = 'You are not allowed to change the publication state of this FAQ.';
+
 return $PMF_LANG;

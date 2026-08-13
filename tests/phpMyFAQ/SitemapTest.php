@@ -78,6 +78,7 @@ class SitemapTest extends TestCase
     private const int FAQ_ID_2 = 9991;
     private const int CAT_ID = 9990;
     private const int CAT_ID_2 = 9991;
+    private const int READER_USER_ID = 42;
 
     private Configuration $configuration;
 
@@ -190,8 +191,22 @@ class SitemapTest extends TestCase
 
         $this->assertFalse($hasUser42, 'user42 question should not be visible to user -1');
 
+        // Reading is gated on the FAQ read right for logged-in users, so user 42 has to be a
+        // real account holding it — as every account is after the upgrade. cleanupTestData()
+        // removes it again, because this suite shares the fixture database.
+        $this->db->query(sprintf(
+            "INSERT INTO faquser (user_id, login, session_timestamp, member_since, account_status)
+             VALUES (%d, 'user42', 0, '20260101000000', 'active')",
+            self::READER_USER_ID,
+        ));
+        $this->db->query(sprintf(
+            "INSERT INTO faquser_right (user_id, right_id)
+             SELECT %d, right_id FROM faqright WHERE name = 'view_faqs'",
+            self::READER_USER_ID,
+        ));
+
         // After setUser(42), user42 question should be visible
-        $sitemap->setUser(42);
+        $sitemap->setUser(self::READER_USER_ID);
         $faqs = $sitemap->getFaqsFromLetter('U');
         $hasUser42 = false;
         foreach ($faqs as $faq) {
@@ -384,6 +399,12 @@ class SitemapTest extends TestCase
         $this->db->query(
             "DELETE FROM faqcategoryrelations WHERE record_id IN ($idList) AND category_id IN ($catIdList)",
         );
+
+        // This suite works on the shared fixture database, so the reader account created by
+        // testSetUser() has to go too — leaving it behind would hand every later test a user
+        // that already holds the FAQ read right.
+        $this->db->query('DELETE FROM faquser_right WHERE user_id = ' . self::READER_USER_ID);
+        $this->db->query('DELETE FROM faquser WHERE user_id = ' . self::READER_USER_ID);
     }
 
     public function testGetAllFirstLettersNormalizesGroupIds(): void

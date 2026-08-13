@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Setup\Migration\Versions;
 
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Setup\Migration\AbstractMigration;
 use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 
@@ -36,7 +37,10 @@ readonly class Migration420Alpha2 extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Add faquser_right_language and faqgroup_right_language tables for granular language-based permissions';
+        return (
+            'Add faquser_right_language and faqgroup_right_language tables for granular '
+            . 'language-based permissions, and separate the FAQ read and publish rights'
+        );
     }
 
     public function up(OperationRecorder $recorder): void
@@ -154,5 +158,36 @@ readonly class Migration420Alpha2 extends AbstractMigration
                 'Create faqgroup_right_language table (SQL Server)',
             );
         }
+
+        $this->separateReadAndPublishRights($recorder);
+    }
+
+    /**
+     * Splits reading and publishing off from the edit/approve mix without changing anybody's
+     * effective permissions.
+     *
+     * view_faqs has existed since 3.0 but was never enforced, so it has to reach every existing
+     * user and group before the read gate goes live — otherwise an upgrade would blank the FAQ
+     * for everybody. faq_publish is new and mirrors approverec, carrying its category and
+     * language restrictions across so a scoped approver becomes an equally scoped publisher.
+     *
+     * The read backfill runs first: if the update dies between the two operations, everybody can
+     * still read, which is the more forgiving half-applied state.
+     */
+    private function separateReadAndPublishRights(OperationRecorder $recorder): void
+    {
+        $recorder->backfillPermission(
+            PermissionType::FAQS_VIEW->value,
+            'Right to view FAQs',
+            grantToAllUsers: true,
+            grantToAllGroups: true,
+        );
+
+        $recorder->backfillPermission(
+            PermissionType::FAQ_PUBLISH->value,
+            'Right to publish FAQs',
+            mirrorFrom: PermissionType::FAQ_APPROVE->value,
+            mirrorRestrictions: true,
+        );
     }
 }

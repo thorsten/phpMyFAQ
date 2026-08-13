@@ -182,6 +182,21 @@ Then go to the "phpMyFAQ Update" page in the configuration section and click thr
 Note:
 The online update feature is experimental and might not work in all environments.
 
+### Permission changes in phpMyFAQ 4.2
+
+The update separates reading, writing and publishing FAQs into independent rights, without changing what anybody can
+currently do:
+
+- The existing `View FAQs` (`view_faqs`) right starts being enforced for logged-in users. The update grants it to every
+  existing user and group, and new accounts receive it automatically, so nothing becomes invisible. Anonymous visitors
+  are not affected by the right at all.
+- A new `Publish FAQs` (`faq_publish`) right decides whether an FAQ may be set live. The update grants it to every user
+  and group that currently holds `Approve FAQs` (`approverec`), including their category and language restrictions, so
+  everyone who can publish today can still publish afterwards.
+
+Afterwards you can revoke `faq_publish` from editors who should be able to write but not publish. See section 5.1.5 of
+the administration documentation for the details.
+
 ## Modifying templates for phpMyFAQ 4.2
 
 We recommend you take a look at the main [Bootstrap documentation](https://getbootstrap.com/).

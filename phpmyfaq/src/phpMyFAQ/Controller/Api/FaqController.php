@@ -761,6 +761,11 @@ final class FaqController extends AbstractApiController
         $isActive = !is_null($isActive);
         $isSticky = !is_null($isSticky);
 
+        // Creating an FAQ and making it public are separate rights.
+        if ($isActive) {
+            $this->userMayPublish([(int) $categoryId], (string) $languageCode);
+        }
+
         $faqData = new FaqEntity();
         $faqData
             ->setLanguage($languageCode)
