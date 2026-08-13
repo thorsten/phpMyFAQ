@@ -94,6 +94,29 @@
             </div>
 
             <div class="row mb-2">
+              <label class="col-lg-4 col-form-label" for="faqpassword_current">
+                {{ 'ad_passwd_old' | translate }}
+              </label>
+              <div class="col-lg-8">
+                <div class="input-group">
+                  <input
+                    type="password"
+                    autocomplete="current-password"
+                    name="faqpassword_current"
+                    id="faqpassword_current"
+                    class="form-control"
+                    data-pmf-toggle="faqpassword_current_toggle"
+                    {{ readonly }}
+                  />
+                  <span class="input-group-text" id="faqpassword_current_toggle" role="button" tabindex="0"
+                        aria-label="{{ 'msgShowPassword' | translate }}" aria-pressed="false">
+                    <i class="bi bi-eye-slash" id="faqpassword_current_toggle_icon"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-2">
               <label class="col-lg-4 col-form-label" for="faqpassword">{{ msgPassword }}</label>
               <div class="col-lg-8">
                 <div class="input-group">

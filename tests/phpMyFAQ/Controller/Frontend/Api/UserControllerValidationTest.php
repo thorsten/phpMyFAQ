@@ -168,6 +168,97 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         self::assertSame(Translation::get('ad_passwd_fail'), $payload['error']);
     }
 
+    public function testUpdateDataRejectsPasswordChangeWithoutCurrentPassword(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'ucp');
+
+        // The auth driver must never be touched: verification fails before any write.
+        $authDriver = $this
+            ->getMockBuilder(AuthDatabase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['checkCredentials', 'update'])
+            ->getMock();
+        $authDriver->expects($this->never())->method('update');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserAuthSource')->willReturn('local');
+        $currentUser->method('getLogin')->willReturn('testuser');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser->expects($this->never())->method('setUserData');
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userid' => 1,
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'is_visible' => 'on',
+            'faqpassword' => 'password123',
+            'faqpassword_confirm' => 'password123',
+            'twofactor_enabled' => 'off',
+            'secret' => '',
+            'pmf-csrf-token' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->updateData($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_passwd_fail'), $payload['error']);
+    }
+
+    public function testUpdateDataRejectsPasswordChangeWithWrongCurrentPassword(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'ucp');
+
+        // A wrong current password makes checkCredentials() throw; the change must be
+        // rejected before update() is ever reached.
+        $authDriver = $this
+            ->getMockBuilder(AuthDatabase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['checkCredentials', 'update'])
+            ->getMock();
+        $authDriver
+            ->method('checkCredentials')
+            ->willThrowException(new \phpMyFAQ\Auth\AuthException('incorrect password'));
+        $authDriver->expects($this->never())->method('update');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserAuthSource')->willReturn('local');
+        $currentUser->method('getLogin')->willReturn('testuser');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser->expects($this->never())->method('setUserData');
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userid' => 1,
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'is_visible' => 'on',
+            'faqpassword' => 'password123',
+            'faqpassword_confirm' => 'password123',
+            'faqpassword_current' => 'wrong-old-password',
+            'twofactor_enabled' => 'off',
+            'secret' => '',
+            'pmf-csrf-token' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->updateData($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_passwd_fail'), $payload['error']);
+    }
+
     public function testUpdateDataReturnsSuccessForLocalUserWhenProfileAndAuthUpdateSucceed(): void
     {
         $controller = $this->createController();
@@ -180,10 +271,12 @@ final class UserControllerValidationTest extends ApiControllerTestCase
             ->onlyMethods([
                 'disableReadOnly',
                 'update',
+                'checkCredentials',
             ])
             ->getMock();
         $authDriver->expects($this->once())->method('disableReadOnly')->willReturn(false);
         $authDriver->expects($this->once())->method('update')->with('testuser', 'password123')->willReturn(true);
+        $authDriver->expects($this->once())->method('checkCredentials')->with('testuser', 'oldpass123')->willReturn(true);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
@@ -211,6 +304,7 @@ final class UserControllerValidationTest extends ApiControllerTestCase
             'is_visible' => 'on',
             'faqpassword' => 'password123',
             'faqpassword_confirm' => 'password123',
+            'faqpassword_current' => 'oldpass123',
             'twofactor_enabled' => 'off',
             'secret' => '',
             'pmf-csrf-token' => $csrfToken,
@@ -236,11 +330,13 @@ final class UserControllerValidationTest extends ApiControllerTestCase
                 'disableReadOnly',
                 'update',
                 'getErrors',
+                'checkCredentials',
             ])
             ->getMock();
         $authDriver->expects($this->once())->method('disableReadOnly')->willReturn(false);
         $authDriver->expects($this->once())->method('update')->with('testuser', 'password123')->willReturn(false);
         $authDriver->expects($this->once())->method('getErrors')->willReturn('Driver failed');
+        $authDriver->expects($this->once())->method('checkCredentials')->with('testuser', 'oldpass123')->willReturn(true);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
@@ -259,6 +355,7 @@ final class UserControllerValidationTest extends ApiControllerTestCase
             'is_visible' => 'on',
             'faqpassword' => 'password123',
             'faqpassword_confirm' => 'password123',
+            'faqpassword_current' => 'oldpass123',
             'twofactor_enabled' => 'off',
             'secret' => '',
             'pmf-csrf-token' => $csrfToken,
@@ -806,9 +903,11 @@ final class UserControllerValidationTest extends ApiControllerTestCase
             ->disableOriginalConstructor()
             ->onlyMethods([
                 'disableReadOnly',
+                'checkCredentials',
             ])
             ->getMock();
         $authDriver->expects($this->once())->method('disableReadOnly')->willReturn(true);
+        $authDriver->expects($this->once())->method('checkCredentials')->with('testuser', 'oldpass123')->willReturn(true);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
@@ -816,6 +915,7 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         $currentUser->method('getUserAuthSource')->willReturn('local');
         $currentUser->expects($this->once())->method('setUserData')->willReturn(false);
         $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser->method('getLogin')->willReturn('testuser');
 
         $this->injectControllerState($controller, $currentUser, $session);
 
@@ -826,6 +926,7 @@ final class UserControllerValidationTest extends ApiControllerTestCase
             'is_visible' => 'on',
             'faqpassword' => 'password123',
             'faqpassword_confirm' => 'password123',
+            'faqpassword_current' => 'oldpass123',
             'twofactor_enabled' => 'off',
             'secret' => '',
             'pmf-csrf-token' => $csrfToken,
