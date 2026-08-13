@@ -243,15 +243,7 @@ final class UserController extends AbstractController
             return $this->json(['error' => 'ZIP extension not available.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $userData = [
-            'user_id' => $this->currentUser->getUserId(),
-            'last_modified' => (string) ($this->currentUser->getUserData('last_modified') ?? ''),
-            'display_name' => (string) ($this->currentUser->getUserData('display_name') ?? ''),
-            'email' => (string) ($this->currentUser->getUserData('email') ?? ''),
-            'is_visible' => (int) ($this->currentUser->getUserData('is_visible') ?? 0),
-            'twofactor_enabled' => (int) ($this->currentUser->getUserData('twofactor_enabled') ?? 0),
-            'secret' => (string) ($this->currentUser->getUserData('secret') ?? ''),
-        ];
+        $userData = $this->buildUserDataExport();
 
         $json = json_encode($userData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         if ($json === false) {
@@ -280,6 +272,31 @@ final class UserController extends AbstractController
         $response->deleteFileAfterSend();
 
         return $response;
+    }
+
+    /**
+     * Builds the self-service data export payload for the current user.
+     *
+     * Only non-credential profile fields are exported. Credential material such as
+     * the TOTP shared secret ("secret") and WebAuthn keys ("webauthnkeys") must never
+     * leave the server in a user-facing download: the archive lands in browsers,
+     * download folders, mailboxes and backups, where an exported 2FA seed would let
+     * anyone holding the file defeat the account's second factor (CWE-200). The set
+     * below is an explicit allowlist — new faquserdata columns are excluded by default
+     * and must be added here deliberately after confirming they are not sensitive.
+     *
+     * @return array<string, int|string>
+     */
+    private function buildUserDataExport(): array
+    {
+        return [
+            'user_id' => $this->currentUser->getUserId(),
+            'last_modified' => (string) ($this->currentUser->getUserData('last_modified') ?? ''),
+            'display_name' => (string) ($this->currentUser->getUserData('display_name') ?? ''),
+            'email' => (string) ($this->currentUser->getUserData('email') ?? ''),
+            'is_visible' => (int) ($this->currentUser->getUserData('is_visible') ?? 0),
+            'twofactor_enabled' => (int) ($this->currentUser->getUserData('twofactor_enabled') ?? 0),
+        ];
     }
 
     /**

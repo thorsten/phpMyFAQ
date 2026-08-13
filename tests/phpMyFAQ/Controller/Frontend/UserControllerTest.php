@@ -163,4 +163,47 @@ class UserControllerTest extends TestCase
 
         $this->assertNull($this->requireTwoFactorStepUp(true, false, 'correct'));
     }
+
+    /**
+     * @return array<string, int|string>
+     */
+    private function buildUserDataExport(): array
+    {
+        $method = new ReflectionMethod(UserController::class, 'buildUserDataExport');
+
+        return $method->invoke($this->controller);
+    }
+
+    public function testDataExportNeverContainsTheTotpSecret(): void
+    {
+        // The TOTP shared secret must never appear in a user-facing export (CWE-200):
+        // anyone holding the archive could otherwise generate valid 2FA codes.
+        $this->currentUserMock->method('getUserId')->willReturn(2);
+        $this->currentUserMock->method('getUserData')->willReturnMap([
+            ['last_modified', '2026-08-13 00:00:00'],
+            ['display_name', 'Jane Doe'],
+            ['email', 'jane@example.com'],
+            ['is_visible', 1],
+            ['twofactor_enabled', 1],
+            ['secret', 'LIVE-TOTP-SEED'],
+        ]);
+
+        $export = $this->buildUserDataExport();
+
+        $this->assertArrayNotHasKey('secret', $export);
+        $this->assertNotContains('LIVE-TOTP-SEED', $export);
+    }
+
+    public function testDataExportOnlyContainsAllowlistedFields(): void
+    {
+        $this->currentUserMock->method('getUserId')->willReturn(2);
+        $this->currentUserMock->method('getUserData')->willReturn('');
+
+        $export = $this->buildUserDataExport();
+
+        $this->assertSame(
+            ['user_id', 'last_modified', 'display_name', 'email', 'is_visible', 'twofactor_enabled'],
+            array_keys($export),
+        );
+    }
 }
