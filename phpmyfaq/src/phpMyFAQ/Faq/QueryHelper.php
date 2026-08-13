@@ -38,14 +38,36 @@ readonly class QueryHelper
 
     private Configuration $configuration;
 
+    private ReadScope $readScope;
+
     /**
      * @param int[] $groups
      */
     public function __construct(
         private int $user,
         private array $groups,
+        ?ReadScope $readScope = null,
     ) {
         $this->configuration = Configuration::getConfigurationInstance();
+        // No scope handed in means the caller never established a requester, in which case
+        // $user is still -1 and queryPermission() already treats them as anonymous — the most
+        // restrictive record ACL there is. Resolving a scope here instead would make query
+        // building issue its own permission lookups.
+        $this->readScope = $readScope ?? ReadScope::unrestricted();
+    }
+
+    /**
+     * Restricts the result to the FAQs the requester may read at all.
+     *
+     * Appended next to queryPermission() / queryPermissionExistsAny(), which answer a different
+     * question: those check the record's own user and group ACL, this one checks whether the
+     * requester holds the FAQ read right and in which categories and languages.
+     *
+     * @param string $faqAlias the alias the query gives the faqdata table
+     */
+    public function queryReadScope(string $faqAlias = 'fd'): string
+    {
+        return $this->readScope->toSqlFragment($faqAlias);
     }
 
     public function queryPermission(bool $hasGroupSupport = false): string
@@ -213,6 +235,8 @@ readonly class QueryHelper
                 $query .= " fd.active = '" . self::FAQ_SQL_ACTIVE_YES . "'";
                 break;
         }
+
+        $query .= $this->queryReadScope();
 
         match ($queryType) {
             self::FAQ_QUERY_TYPE_EXPORT_PDF,

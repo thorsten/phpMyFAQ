@@ -439,6 +439,67 @@ abstract class AbstractController
     }
 
     /**
+     * Ensures the user may make FAQ content live in the given categories and language.
+     *
+     * Publishing is a right of its own: editing an FAQ and deciding that it goes public are
+     * separate decisions, so this is asserted only on requests that actually change the
+     * publication state, on top of the FAQ_ADD or FAQ_EDIT guard the endpoint already applies.
+     *
+     * @param int[] $categoryIds
+     * @throws UnauthorizedHttpException|ForbiddenException
+     */
+    protected function userMayPublish(array $categoryIds, string $language): void
+    {
+        $this->userHasPermission(PermissionType::FAQ_PUBLISH);
+        $this->userHasPermissionForCategories(PermissionType::FAQ_PUBLISH, $categoryIds);
+        $this->userHasPermissionForLanguage(PermissionType::FAQ_PUBLISH, $language);
+    }
+
+    /**
+     * Non-throwing companion to userMayPublish(), for the callers that need to decide between
+     * two valid outcomes rather than reject the request — a user without the publish right may
+     * still save an FAQ, their edit simply must not change its publication state.
+     *
+     * Mirrors the empty-list policy of userHasPermissionForCategories(): with no categories to
+     * check against, only a user whose right is unrestricted qualifies.
+     *
+     * @param int[] $categoryIds
+     * @throws \Exception
+     */
+    protected function userMayPublishIn(array $categoryIds, string $language): bool
+    {
+        $currentUser = $this->currentUser;
+        if (!$currentUser->isLoggedIn()) {
+            return false;
+        }
+
+        $userId = $currentUser->getUserId();
+        $right = PermissionType::FAQ_PUBLISH->value;
+
+        if (!$currentUser->perm->hasPermission($userId, $right)) {
+            return false;
+        }
+
+        if (!$currentUser->perm->hasPermissionForLanguage($userId, $right, $language)) {
+            return false;
+        }
+
+        $categoryIds = array_filter(array_unique($categoryIds), static fn(int $id): bool => $id > 0);
+
+        if ($categoryIds === []) {
+            return $currentUser->perm->getAllowedCategoriesForRight($userId, $right) === null;
+        }
+
+        foreach ($categoryIds as $categoryId) {
+            if (!$currentUser->perm->hasPermissionForCategory($userId, $right, $categoryId)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Grants access when the user owns at least one of the given permissions.
      *
      * @throws UnauthorizedHttpException|ForbiddenException

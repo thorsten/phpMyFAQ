@@ -21,6 +21,7 @@ namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq\Permission;
+use phpMyFAQ\Faq\ReadScope;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
 
@@ -82,6 +83,10 @@ class SearchResultSet
         $duplicateResults = [];
         $currentGroupIds = [-1];
 
+        // Not every caller routes its hits through Faq::getFaqResult() first, so the read scope
+        // is applied here too — a hit a user may not open must not leak its question text.
+        $readScope = ReadScope::forUserId($this->configuration, $this->currentUser->getUserId());
+
         if (
             'basic' !== $this->configuration->get(item: 'security.permLevel')
             && isset($this->currentUser->perm) // @mago-expect lint:no-isset - typed property may be uninitialized
@@ -94,6 +99,10 @@ class SearchResultSet
 
         foreach ($this->rawResultSet as $result) {
             $permission = false;
+
+            if (!$this->isWithinReadScope($readScope, $result)) {
+                continue;
+            }
 
             // check permissions for groups
             if ('medium' === $this->configuration->get(item: 'security.permLevel')) {
@@ -134,6 +143,23 @@ class SearchResultSet
         }
 
         $this->setNumberOfResults($this->reviewedResultSet);
+    }
+
+    /**
+     * Search hits vary by backend, so a field that is absent is treated as "nothing to check"
+     * rather than as a denial — the SQL-level scope on the FAQ queries stays the real gate.
+     */
+    private function isWithinReadScope(ReadScope $readScope, stdClass $result): bool
+    {
+        if ($readScope->isUnrestricted()) {
+            return true;
+        }
+
+        if (property_exists($result, 'lang') && !$readScope->allowsLanguage((string) $result->lang)) {
+            return false;
+        }
+
+        return !property_exists($result, 'category_id') || $readScope->allowsCategory((int) $result->category_id);
     }
 
     /**

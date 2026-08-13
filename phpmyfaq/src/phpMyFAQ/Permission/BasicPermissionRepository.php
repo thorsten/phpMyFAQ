@@ -201,6 +201,39 @@ readonly class BasicPermissionRepository
     }
 
     /**
+     * Returns the IDs of all users that hold the given right directly.
+     * Group rights are not taken into account.
+     *
+     * @param int $rightId Right ID
+     * @return array<int>
+     */
+    public function getUserIdsWithRight(int $rightId): array
+    {
+        if ($rightId <= 0) {
+            return [];
+        }
+
+        $select = sprintf(
+            'SELECT user_id FROM %sfaquser_right WHERE right_id = %d ORDER BY user_id ASC',
+            Database::getTablePrefix(),
+            $rightId,
+        );
+
+        $res = $this->configuration->getDb()->query($select);
+        $result = [];
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($res);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
+            $result[] = (int) $row['user_id'];
+        }
+
+        return $result;
+    }
+
+    /**
      * Adds a new right into the database. Returns the ID of the new right.
      *
      * @param array<string, string|int> $rightData Array of rights

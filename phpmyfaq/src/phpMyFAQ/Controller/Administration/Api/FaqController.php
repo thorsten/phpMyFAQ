@@ -29,6 +29,7 @@ use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Category\Relation;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\AdminLogType;
@@ -132,6 +133,12 @@ final class FaqController extends AbstractAdministrationApiController
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
+
+        // Creating an FAQ and making it public are separate rights.
+        if ($active === 'yes') {
+            $this->userMayPublish($categories, $language);
+        }
+
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
         $content = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -368,7 +375,7 @@ final class FaqController extends AbstractAdministrationApiController
         $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $faqLang);
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
+        $active = $this->resolvePublicationState($data, $faqId, $faqLang, [...$categories, ...$currentCategoryIds]);
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
         $content = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -587,6 +594,7 @@ final class FaqController extends AbstractAdministrationApiController
                         PermissionType::FAQ_TRANSLATE->value,
                         $language,
                     ),
+            'isAllowedToPublish' => $this->userMayPublishIn([$categoryId], $language),
         ], Response::HTTP_OK);
     }
 
@@ -596,7 +604,7 @@ final class FaqController extends AbstractAdministrationApiController
     #[Route(path: 'faq/activate', name: 'admin.api.faq.activate', methods: ['POST'])]
     public function activate(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_APPROVE);
+        $this->userHasPermission(PermissionType::FAQ_PUBLISH);
 
         $data = $this->getJsonObject($request);
 
@@ -613,13 +621,13 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         if ($faqIds !== []) {
-            $this->userHasPermissionForLanguage(PermissionType::FAQ_APPROVE, $faqLanguage);
+            $this->userHasPermissionForLanguage(PermissionType::FAQ_PUBLISH, $faqLanguage);
 
             $activateCategory = new Category($this->configuration, [], withPermission: false);
             $activateCategoryRelation = new Relation($this->configuration, $activateCategory);
             foreach ($faqIds as $faqId) {
                 $this->userHasPermissionForCategories(
-                    PermissionType::FAQ_APPROVE,
+                    PermissionType::FAQ_PUBLISH,
                     array_keys($activateCategoryRelation->getCategories($faqId, $faqLanguage)),
                 );
             }
@@ -636,7 +644,10 @@ final class FaqController extends AbstractAdministrationApiController
             }
 
             if ($success) {
-                $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value);
+                $this->adminLog->log(
+                    $this->currentUser,
+                    ($checked ? AdminLogType::FAQ_PUBLISH : AdminLogType::FAQ_EDIT)->value,
+                );
                 return $this->json(['success' => Translation::get(key: 'ad_entry_savedsuc')], Response::HTTP_OK);
             }
 
@@ -948,5 +959,44 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         return $messages;
+    }
+
+    /**
+     * Decides the publication state an update should persist.
+     *
+     * A user without the publish right may still edit a published FAQ; their save simply must
+     * not change whether it is live. The editor omits the field entirely for those users, and an
+     * absent field is deliberately distinct from an explicit "no" — treating the two alike would
+     * unpublish an FAQ on every ordinary save. A request that does try to change the state
+     * without the right is rejected rather than silently downgraded, so the caller never gets a
+     * success response for something that did not happen.
+     *
+     * @param int[] $categoryIds the FAQ's current and submitted categories
+     * @throws ForbiddenException|Exception
+     */
+    private function resolvePublicationState(
+        stdClass $data,
+        int $faqId,
+        string $faqLanguage,
+        array $categoryIds,
+    ): string {
+        $requestedActive = property_exists($data, 'active')
+            ? Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS, 'no')
+            : null;
+
+        $currentActive = $this->faq->isActive($faqId, $faqLanguage) ? 'yes' : 'no';
+
+        if ($this->userMayPublishIn($categoryIds, $faqLanguage)) {
+            return $requestedActive ?? $currentActive;
+        }
+
+        if ($requestedActive !== null && $requestedActive !== $currentActive) {
+            throw new ForbiddenException(message: sprintf(
+                'User has no "%s" permission.',
+                PermissionType::FAQ_PUBLISH->name,
+            ));
+        }
+
+        return $currentActive;
     }
 }

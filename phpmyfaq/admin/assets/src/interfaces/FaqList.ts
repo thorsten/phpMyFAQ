@@ -14,4 +14,5 @@ export interface Faq {
 export interface FaqList {
   faqs: Faq[];
   isAllowedToTranslate: boolean;
+  isAllowedToPublish: boolean;
 }

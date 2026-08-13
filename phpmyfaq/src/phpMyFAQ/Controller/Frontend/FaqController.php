@@ -288,6 +288,11 @@ final class FaqController extends AbstractFrontController
         $faq = new Faq($this->configuration);
         $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
 
+        // Without this the detail page evaluates permissions as an anonymous visitor, so a
+        // logged-in user is denied FAQs that were shared with them specifically.
+        $faq->setUser($this->currentUser->getUserId());
+        $faq->setGroups($currentGroups);
+
         // Handle bookmarks
         if ($bookmarkAction === 'add' && $faqId > 0) {
             $this->bookmark->add($faqId);

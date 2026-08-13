@@ -42,6 +42,9 @@ class Statistics
     /** Flag for Group support. */
     private bool $groupSupport = false;
 
+    /** Resolved by setUser(); null leaves the read gate off, as for anonymous requesters. */
+    private ?ReadScope $readScope = null;
+
     /** Plural form support. */
     private readonly Plurals $plurals;
 
@@ -431,7 +434,7 @@ class Statistics
         int $categoryId = 0,
     ): string {
         $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($this->user, $this->groups);
+        $queryHelper = new QueryHelper($this->user, $this->groups, $this->readScope);
         $prefix = Database::getTablePrefix();
 
         $categoryFilter = $categoryId !== 0 ? sprintf(' AND fcr.category_id = %d', $categoryId) : '';
@@ -465,12 +468,21 @@ class Statistics
             $query .= sprintf(" AND fd.lang = '%s'", $this->configuration->getDb()->escape($language));
         }
 
-        return $query . ' ' . $queryHelper->queryPermissionExistsAll($this->groupSupport) . ' ORDER BY ' . $orderBy;
+        return (
+            $query
+            . ' '
+            . $queryHelper->queryPermissionExistsAll($this->groupSupport)
+            . $queryHelper->queryReadScope()
+            . ' ORDER BY '
+            . $orderBy
+        );
     }
 
     public function setUser(int $userId = -1): Statistics
     {
         $this->user = $userId;
+        $this->readScope = ReadScope::forUserId($this->configuration, $userId);
+
         return $this;
     }
 

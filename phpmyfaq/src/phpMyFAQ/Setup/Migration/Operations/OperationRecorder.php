@@ -123,6 +123,33 @@ class OperationRecorder
     }
 
     /**
+     * Records a permission backfill operation.
+     *
+     * Unlike grantPermission(), this succeeds on an already existing right and reaches every
+     * matching user and group, so an existing-but-unenforced right can start being enforced
+     * without revoking access from anybody.
+     */
+    public function backfillPermission(
+        string $name,
+        string $description,
+        bool $grantToAllUsers = false,
+        bool $grantToAllGroups = false,
+        ?string $mirrorFrom = null,
+        bool $mirrorRestrictions = false,
+    ): self {
+        $this->operations[] = new PermissionBackfillOperation(
+            $this->configuration,
+            $name,
+            $description,
+            $grantToAllUsers,
+            $grantToAllGroups,
+            $mirrorFrom,
+            $mirrorRestrictions,
+        );
+        return $this;
+    }
+
+    /**
      * Records a user creation operation.
      */
     public function createUser(

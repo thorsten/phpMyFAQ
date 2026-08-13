@@ -23,6 +23,7 @@ namespace phpMyFAQ;
 
 use Exception;
 use phpMyFAQ\Auth\AuthDriverInterface;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Tenant\TenantQuotaEnforcer;
@@ -435,7 +436,35 @@ class User
             $this->perm->autoJoin($this->userId);
         }
 
+        $this->grantDefaultReadRight();
+
         return $this->getUserByLogin($login, false);
+    }
+
+    /**
+     * Grants the FAQ read right to a freshly created account.
+     *
+     * Reading FAQs is gated on PermissionType::FAQS_VIEW for authenticated users, and new
+     * accounts start out with no rights at all. Without this grant a user created after the
+     * 4.2.0-alpha.2 upgrade would see an empty FAQ while an anonymous visitor sees everything.
+     * Hiding FAQs from a user therefore stays an explicit revoke instead of being an accident
+     * of account creation.
+     */
+    private function grantDefaultReadRight(): void
+    {
+        // The anonymous account is never gated on the right, so granting it would only add a
+        // row that nothing reads — and it would let an unresolvable user id inherit read access
+        // through the anonymous fallback in hasPermission().
+        if ($this->userId <= 0) {
+            return;
+        }
+
+        $rightId = $this->perm->getRightId(PermissionType::FAQS_VIEW->value);
+        if ($rightId <= 0) {
+            return;
+        }
+
+        $this->perm->grantUserRight($this->userId, $rightId);
     }
 
     private function getTenantQuotaEnforcer(): TenantQuotaEnforcer

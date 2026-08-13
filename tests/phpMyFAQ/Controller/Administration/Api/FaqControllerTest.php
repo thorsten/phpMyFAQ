@@ -205,6 +205,7 @@ final class FaqControllerTest extends TestCase
                         PermissionType::FAQ_EDIT->value,
                         PermissionType::FAQ_DELETE->value,
                         PermissionType::FAQ_APPROVE->value,
+                        PermissionType::FAQ_PUBLISH->value,
                         PermissionType::FAQ_TRANSLATE->value,
                     ],
                     true,
@@ -221,6 +222,7 @@ final class FaqControllerTest extends TestCase
                         PermissionType::FAQ_EDIT->value,
                         PermissionType::FAQ_DELETE->value,
                         PermissionType::FAQ_APPROVE->value,
+                        PermissionType::FAQ_PUBLISH->value,
                         PermissionType::FAQ_TRANSLATE->value,
                     ],
                     true,
@@ -239,6 +241,7 @@ final class FaqControllerTest extends TestCase
                         PermissionType::FAQ_EDIT->value,
                         PermissionType::FAQ_DELETE->value,
                         PermissionType::FAQ_APPROVE->value,
+                        PermissionType::FAQ_PUBLISH->value,
                         PermissionType::FAQ_TRANSLATE->value,
                     ],
                     true,
@@ -1766,7 +1769,7 @@ final class FaqControllerTest extends TestCase
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_APPROVE" permission for category 666.');
+        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission for category 666.');
         $controller->activate($request);
     }
 
@@ -1792,7 +1795,7 @@ final class FaqControllerTest extends TestCase
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_APPROVE" permission for language "fr".');
+        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission for language "fr".');
         $controller->activate($request);
     }
 
@@ -2000,6 +2003,272 @@ final class FaqControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_entry_delsuc'), $payload['success']);
         $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    // =====================================================================
+    // Read / write / publish matrix
+    //
+    // Writing and publishing are separate rights: holding edit_faq lets a user change an FAQ,
+    // but only faq_publish decides whether it goes live.
+    // =====================================================================
+
+    public function testCreateReturnsForbiddenForActiveFaqWithoutPublishPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForNewFaq($csrfToken, active: 'yes');
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission.');
+
+        try {
+            $controller->create($request);
+        } finally {
+            $this->removeCsrfCookie('pmf-csrf-token');
+        }
+    }
+
+    public function testCreateSucceedsForInactiveFaqWithoutPublishPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForNewFaq($csrfToken, active: 'no');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $response = $controller->create($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * The editor omits the "active" field for a user without the publish right, and an absent
+     * field must not be read as "no" — that would unpublish a live FAQ on an ordinary save.
+     */
+    public function testUpdateKeepsAPublishedFaqLiveWhenTheFieldIsOmitted(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        $this->configuration->getDb()->query("UPDATE faqdata SET active = 'yes' WHERE id = 1 AND lang = 'en'");
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForFaqUpdate($csrfToken, active: null);
+
+        $persisted = null;
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('isActive')->willReturn(true);
+        $faq->expects($this->once())
+            ->method('update')
+            ->willReturnCallback(static function (\phpMyFAQ\Entity\FaqEntity $faqEntity) use (&$persisted): \phpMyFAQ\Entity\FaqEntity {
+                $persisted = $faqEntity;
+
+                return $faqEntity;
+            });
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $response = $controller->update($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertInstanceOf(\phpMyFAQ\Entity\FaqEntity::class, $persisted);
+        self::assertTrue($persisted->isActive(), 'A save without the publish right must not unpublish the FAQ.');
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    public function testUpdateReturnsForbiddenWhenChangingTheStateWithoutPublishPermission(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForFaqUpdate($csrfToken, active: 'yes');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('isActive')->willReturn(false);
+        $faq->expects($this->never())->method('update');
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission.');
+
+        try {
+            $controller->update($request);
+        } finally {
+            $this->removeCsrfCookie('pmf-csrf-token');
+        }
+    }
+
+    public function testActivateReturnsForbiddenWithoutPublishPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'checked' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission.');
+
+        try {
+            $controller->activate($request);
+        } finally {
+            $this->removeCsrfCookie('pmf-csrf-token');
+        }
+    }
+
+    /**
+     * A user holding every FAQ right except faq_publish: everything that is not publishing has
+     * to keep working for them.
+     */
+    private function createContainerWithoutPublishPermission(Session $session): ContainerInterface
+    {
+        $writeRights = [
+            PermissionType::FAQ_ADD->value,
+            PermissionType::FAQ_EDIT->value,
+            PermissionType::FAQ_DELETE->value,
+            PermissionType::FAQ_APPROVE->value,
+            PermissionType::FAQ_TRANSLATE->value,
+            PermissionType::FAQS_VIEW->value,
+        ];
+
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array($right, $writeRights, true),
+            );
+        $permission
+            ->method('hasPermissionForCategory')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right, int $categoryId): bool => $userId === 42
+                && in_array($right, $writeRights, true),
+            );
+        $permission
+            ->method('hasPermissionForLanguage')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right, string $language): bool => $userId === 42
+                && in_array($right, $writeRights, true),
+            );
+        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
+        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $adminLog = $this->createStub(AdminLog::class);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
+
+        return $container;
+    }
+
+    private function createRequestForNewFaq(string $csrfToken, string $active): Request
+    {
+        return new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'question' => 'New question',
+                'categories[]' => 1,
+                'lang' => 'en',
+                'tags' => '',
+                'active' => $active,
+                'sticky' => 'no',
+                'answer' => 'New answer',
+                'keywords' => '',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'userpermission' => 'all',
+                'restricted_users' => [],
+                'grouppermission' => 'all',
+                'restricted_groups' => [],
+                'changed' => '',
+                'notes' => '',
+                'serpTitle' => '',
+                'serpDescription' => '',
+                'openQuestionId' => 0,
+            ],
+        ], JSON_THROW_ON_ERROR));
+    }
+
+    private function createRequestForFaqUpdate(string $csrfToken, ?string $active): Request
+    {
+        $data = [
+            'pmf-csrf-token' => $csrfToken,
+            'faqId' => 1,
+            'solutionId' => 1001,
+            'revisionId' => 0,
+            'question' => 'Updated FAQ',
+            'categories[]' => 1,
+            'lang' => 'en',
+            'tags' => '',
+            'sticky' => 'no',
+            'answer' => 'Updated answer',
+            'keywords' => 'updated',
+            'author' => 'Author',
+            'email' => 'author@example.com',
+            'userpermission' => 'all',
+            'restricted_users' => [],
+            'grouppermission' => 'all',
+            'restricted_groups' => [],
+            'changed' => 'Updated',
+            'notes' => 'Updated notes',
+            'revision' => 'no',
+            'serpTitle' => '',
+            'serpDescription' => '',
+        ];
+
+        // A null $active omits the field entirely, which is what the editor sends for a user
+        // without the publish right.
+        if ($active !== null) {
+            $data['active'] = $active;
+        }
+
+        return new Request([], [], [], [], [], [], json_encode(['data' => $data], JSON_THROW_ON_ERROR));
     }
 
     private function setCsrfCookie(string $page, string $token): void

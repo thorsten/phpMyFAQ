@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace phpMyFAQ;
 
 use phpMyFAQ\Entity\Tag;
+use phpMyFAQ\Faq\ReadScope;
 
 /**
  * Class Tags
@@ -41,6 +42,9 @@ class Tags
 
     private bool $bypassPermissionCheck = false;
 
+    /** Resolved by setUser(); null leaves the read gate off, as for anonymous requesters. */
+    private ?ReadScope $readScope = null;
+
     /**
      * Constructor.
      */
@@ -55,6 +59,8 @@ class Tags
     public function setUser(int $userId = -1): Tags
     {
         $this->user = $userId;
+        $this->readScope = ReadScope::forUserId($this->configuration, $userId);
+
         return $this;
     }
 
@@ -548,23 +554,21 @@ class Tags
         $groupSupport = $this->configuration->get(item: 'security.permLevel') !== 'basic';
         $groupList = $this->normalizePermissionGroups();
 
-        if ($groupSupport) {
-            if (-1 === $this->user) {
-                // Only group permissions apply (anonymous user)
-                return sprintf('AND fdg.group_id IN (%s)', $groupList);
-            }
+        // Tags alias faqdata as "d", so the read scope has to be rendered for that alias.
+        $readScope = ($this->readScope ?? ReadScope::unrestricted())->toSqlFragment('d');
 
+        $recordAccess = match (true) {
+            // Only group permissions apply (anonymous user)
+            $groupSupport && -1 === $this->user => sprintf('AND fdg.group_id IN (%s)', $groupList),
             // Check both user and group permissions
-            return sprintf('AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )', (int) $this->user, $groupList);
-        }
+            $groupSupport => sprintf('AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )', (int) $this->user, $groupList),
+            // Basic permission level - only user permissions
+            -1 !== $this->user => sprintf('AND ( fdu.user_id = %d OR fdu.user_id = -1 )', (int) $this->user),
+            // Anonymous user with basic permission level
+            default => 'AND fdu.user_id = -1',
+        };
 
-        // Basic permission level - only user permissions
-        if (-1 !== $this->user) {
-            return sprintf('AND ( fdu.user_id = %d OR fdu.user_id = -1 )', (int) $this->user);
-        }
-
-        // Anonymous user with basic permission level
-        return 'AND fdu.user_id = -1';
+        return $recordAccess . $readScope;
     }
 
     private function normalizePermissionGroups(): string

@@ -43,8 +43,10 @@ Keep in mind that new users have no privileges at all; you will have to assign t
 A super admin can set users as super admins as well, then the given permissions aren't evaluated, so please be careful
 with setting this option.
 
-A user without any permission in the admin section can still get read access to categories and records. You can set
-the permissions on categories and records in the category and record administration frontend.
+A user without any permission in the admin section can still get read access to categories and records. Reading FAQs
+requires the `View FAQs` right, which new accounts receive automatically and which the update grants to every existing
+user and group — see 5.1.5. Beyond that, you can set the permissions on categories and records in the category and
+record administration frontend.
 
 If you enable LDAP or Microsoft Entra ID authentication, you can't edit the user's profile in the admin area.
 The users will be created automatically when they log in the first time.
@@ -95,6 +97,35 @@ restrictions). The rules are deliberately different from category restrictions:
 - A blocked action returns HTTP 403 with a message naming the missing right and the language.
 - Category and language restrictions combine with **AND** semantics: an action must be permitted by both the category
   and the language rules to succeed.
+
+### 5.1.5 Read, write and publish rights
+
+Reading FAQs, changing them, and deciding that a change goes public are three independently assignable rights:
+
+| Right | Name in the permission list | Grants |
+|---|---|---|
+| Read | `View FAQs` (`view_faqs`) | Seeing FAQs at all as a logged-in user |
+| Write | `Add`/`Edit`/`Delete FAQs` | Creating and changing FAQ content |
+| Publish | `Publish FAQs` (`faq_publish`) | Setting an FAQ live, on its own or in the FAQ overview |
+
+- **A user with write but not publish can edit a published FAQ without changing whether it is public.** The editor shows
+  the current publication state read-only instead of the visibility radio buttons, and saving leaves that state alone.
+  The activation checkbox in the FAQ overview is likewise shown read-only.
+- `Publish FAQs` is separate from the older `Approve FAQs` (`approverec`) right, which continues to gate the list of
+  inactive FAQs. Upgrades grant `faq_publish` to everyone who already held `approverec`, carrying their category and
+  language restrictions across, so no one loses or gains an ability.
+- **`View FAQs` is only enforced for logged-in users.** Anonymous visitors are unaffected by it; what they may see is
+  still governed by `security.enableLoginOnly` and by the per-FAQ user and group permissions set in the FAQ editor.
+  Revoking `view_faqs` from a user therefore hides FAQs from that account, not from the public site.
+- New accounts receive `view_faqs` automatically, and the upgrade grants it to every existing user and group, so
+  enabling the gate changes nothing until you deliberately revoke it.
+- Both rights honour the category and language restrictions described in 5.1.3 and 5.1.4, with the same **AND**
+  semantics. A user whose `view_faqs` is restricted to one category sees only that category's FAQs — in FAQ pages,
+  category listings, search results, tag listings, the sitemap and the "latest"/"most popular" lists alike.
+- Super admins bypass all of this, as they do every other right.
+- FAQs submitted through the frontend are still activated according to the `records.defaultActivation` configuration
+  option. That is a site-wide setting about anonymous submissions rather than a right exercised by the submitter, so it
+  is deliberately not gated on `faq_publish`.
 
 ## 5.2 Content
 
