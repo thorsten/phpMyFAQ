@@ -89,7 +89,7 @@ final class NewsController extends AbstractAdministrationController
     #[Route(path: '/news/edit/:newsId', name: 'admin.news.edit', methods: ['GET'])]
     public function edit(Request $request): Response
     {
-        $this->userHasPermission(PermissionType::NEWS_ADD);
+        $this->userHasPermission(PermissionType::NEWS_EDIT);
 
         $newsId = (int) Filter::filterVar($request->attributes->get('newsId'), FILTER_VALIDATE_INT);
 
