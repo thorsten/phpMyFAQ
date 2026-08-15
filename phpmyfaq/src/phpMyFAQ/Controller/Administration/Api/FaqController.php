@@ -597,7 +597,7 @@ final class FaqController extends AbstractAdministrationApiController
             $faqData['isAllowedToPublish'] =
                 $mayPublishEverywhere
                 || $this->userMayPublishIn(
-                    array_keys($publishCategoryRelation->getCategories((int) $faqData['id'], $language)),
+                    array_keys($publishCategoryRelation->getCategories($faqData['id'], $language)),
                     $language,
                 );
         }
@@ -860,6 +860,7 @@ final class FaqController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
+        /** @var UploadedFile|null $file */
         $file = $request->files->get(key: 'file');
         if (!$file instanceof UploadedFile) {
             return $this->json(['error' => 'Bad request: There is no file submitted.'], Response::HTTP_BAD_REQUEST);
@@ -958,7 +959,7 @@ final class FaqController extends AbstractAdministrationApiController
             ++$rowNumber;
 
             $categoryId = (int) Filter::filterVar($record[0] ?? null, FILTER_VALIDATE_INT, default: 0);
-            $language = (string) Filter::filterVar($record[4] ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+            $language = Filter::filterVar($record[4] ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
             if (!$currentUser->perm->hasPermissionForCategory($userId, PermissionType::FAQ_ADD->value, $categoryId)) {
                 $messages[] = sprintf(

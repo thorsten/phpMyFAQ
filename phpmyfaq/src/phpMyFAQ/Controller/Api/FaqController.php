@@ -764,7 +764,7 @@ final class FaqController extends AbstractApiController
 
         // Creating an FAQ and making it public are separate rights.
         if ($isActive) {
-            $this->userMayPublish([(int) $categoryId], (string) $languageCode);
+            $this->userMayPublish([(int) $categoryId], $languageCode);
         }
 
         $faqData = new FaqEntity();
@@ -920,12 +920,12 @@ final class FaqController extends AbstractApiController
 
         // Editing an FAQ and deciding that it goes live are separate rights, so a change of
         // the publication state needs FAQ_PUBLISH on top of the FAQ_EDIT guard above.
-        if ($isActive !== $this->faq->isActive($faqId, (string) $languageCode)) {
+        if ($isActive !== $this->faq->isActive($faqId, $languageCode)) {
             $faqCategories = new CategoryRelation($this->configuration, $category)->getCategories(
                 $faqId,
-                (string) $languageCode,
+                $languageCode,
             );
-            $this->userMayPublish(array_keys($faqCategories), (string) $languageCode);
+            $this->userMayPublish(array_keys($faqCategories), $languageCode);
         }
 
         $faqEntity = new FaqEntity();

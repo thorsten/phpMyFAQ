@@ -39,7 +39,7 @@ final class CategoryLanguageService
 
         $result = [];
         foreach (LanguageHelper::getAvailableLanguages() as $lang => $name) {
-            $langLower = strtolower((string) $lang);
+            $langLower = strtolower($lang);
             if (!in_array($langLower, $existingLower, strict: true)) {
                 $result[$langLower] = $name;
             }
