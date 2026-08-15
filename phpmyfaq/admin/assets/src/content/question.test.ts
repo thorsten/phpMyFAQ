@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { handleOpenQuestions, handleToggleVisibility } from './question';
-import { toggleQuestionVisibility } from '../api';
+import { handleOpenQuestions, handleToggleVisibility, handleReopenQuestion } from './question';
+import { toggleQuestionVisibility, reopenQuestion } from '../api';
 import { pushErrorNotification } from '../../../../assets/src/utils';
 
 vi.mock('../api');
@@ -221,6 +221,78 @@ describe('Question Functions', () => {
       handleToggleVisibility();
 
       const element = document.querySelector('.pmf-toggle-visibility') as HTMLElement;
+      element.click();
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('An error occurred');
+    });
+  });
+
+  describe('handleReopenQuestion', () => {
+    it('should do nothing when no reopen elements exist', () => {
+      document.body.innerHTML = '<div></div>';
+
+      handleReopenQuestion();
+
+      expect(reopenQuestion).not.toHaveBeenCalled();
+    });
+
+    it('should call reopenQuestion with correct params on click and reload on success', async () => {
+      document.body.innerHTML = `
+        <button class="pmf-reopen-question" data-pmf-question-id="42" data-pmf-csrf="token">Reopen</button>
+      `;
+
+      (reopenQuestion as Mock).mockResolvedValue({ success: 'Question reopened' });
+
+      const originalLocation = window.location;
+      Object.defineProperty(window, 'location', {
+        value: { href: '', reload: vi.fn() },
+        writable: true,
+      });
+
+      try {
+        handleReopenQuestion();
+
+        const element = document.querySelector('.pmf-reopen-question') as HTMLElement;
+        element.click();
+
+        await new Promise((resolve) => setTimeout(resolve, 10));
+
+        expect(reopenQuestion).toHaveBeenCalledWith('42', 'token');
+        expect((window.location as unknown as { reload: Mock }).reload).toHaveBeenCalled();
+      } finally {
+        Object.defineProperty(window, 'location', { value: originalLocation, writable: true });
+      }
+    });
+
+    it('should show error notification when API returns error', async () => {
+      document.body.innerHTML = `
+        <button class="pmf-reopen-question" data-pmf-question-id="42" data-pmf-csrf="token">Reopen</button>
+      `;
+
+      (reopenQuestion as Mock).mockResolvedValue({ error: 'Reopen failed' });
+
+      handleReopenQuestion();
+
+      const element = document.querySelector('.pmf-reopen-question') as HTMLElement;
+      element.click();
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('Reopen failed');
+    });
+
+    it('should show default error notification when API returns undefined', async () => {
+      document.body.innerHTML = `
+        <button class="pmf-reopen-question" data-pmf-question-id="42" data-pmf-csrf="token">Reopen</button>
+      `;
+
+      (reopenQuestion as Mock).mockResolvedValue(undefined);
+
+      handleReopenQuestion();
+
+      const element = document.querySelector('.pmf-reopen-question') as HTMLElement;
       element.click();
 
       await new Promise((resolve) => setTimeout(resolve, 10));

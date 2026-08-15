@@ -11,6 +11,7 @@ use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Search;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
@@ -37,6 +38,7 @@ class QuestionControllerTest extends TestCase
     private Search $search;
     private Question $question;
     private Notification $notification;
+    private QuestionHistoryRepository $questionHistory;
 
     /**
      * @throws Exception
@@ -69,6 +71,7 @@ class QuestionControllerTest extends TestCase
         $this->search = $this->createStub(Search::class);
         $this->question = $this->createStub(Question::class);
         $this->notification = $this->createStub(Notification::class);
+        $this->questionHistory = $this->createStub(QuestionHistoryRepository::class);
     }
 
     private function createConfiguration(): Configuration
@@ -99,6 +102,7 @@ class QuestionControllerTest extends TestCase
             $this->search,
             $this->question,
             $this->notification,
+            $this->questionHistory,
         );
     }
 

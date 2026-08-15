@@ -20,10 +20,14 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use Exception;
+use InvalidArgumentException;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Entity\QuestionHistoryEntity;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Enums\QuestionHistoryEventType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,6 +39,7 @@ final class QuestionController extends AbstractController
 {
     public function __construct(
         private readonly Question $question,
+        private readonly QuestionHistoryRepository $questionHistory,
     ) {
         parent::__construct();
     }
@@ -109,5 +114,51 @@ final class QuestionController extends AbstractController
         }
 
         return $this->json(['error' => 'toggle not successful'], Response::HTTP_BAD_REQUEST);
+    }
+
+    #[Route(path: 'question/reopen', name: 'admin.api.question.reopen', methods: ['PUT'])]
+    public function reopen(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::QUESTION_ADD);
+
+        $data = $this->getJsonObject($request);
+
+        if (!Token::getInstance($this->session)->verifyToken('reopen-question', (string) ($data->csrfToken ?? ''))) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $questionId = Filter::filterVar($data->questionId ?? null, FILTER_VALIDATE_INT);
+
+        if (!is_int($questionId) || $questionId <= 0) {
+            return $this->json([
+                'error' => Translation::get(key: 'msgQuestionReopenError'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $questionData = $this->question->get($questionId);
+
+        if ($questionData === []) {
+            return $this->json(['error' => Translation::get(key: 'msgQuestionReopenError')], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($this->question->reopen($questionId)) {
+            try {
+                $this->questionHistory->add(new QuestionHistoryEntity(
+                    questionId: $questionId,
+                    questionLanguage: (string) $questionData['lang'],
+                    eventType: QuestionHistoryEventType::Reopened,
+                    userId: $this->currentUser->getUserId(),
+                    username: $this->currentUser->getLogin(),
+                ));
+            } catch (InvalidArgumentException $exception) {
+                $this->configuration
+                    ->getLogger()
+                    ->error('Recording question history failed: ' . $exception->getMessage());
+            }
+
+            return $this->json(['success' => Translation::get(key: 'msgQuestionReopened')], Response::HTTP_OK);
+        }
+
+        return $this->json(['error' => Translation::get(key: 'msgQuestionReopenError')], Response::HTTP_BAD_REQUEST);
     }
 }

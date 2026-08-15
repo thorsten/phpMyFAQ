@@ -84,6 +84,7 @@ import {
   handleUpdateQuestion,
   handleRefreshAttachments,
   handleToggleVisibility,
+  handleReopenQuestion,
   handleResetCategoryImage,
   handleResetButton,
   handleDeleteFaqEditorModal,
@@ -180,6 +181,7 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   // Content → Open questions
   handleOpenQuestions();
   handleToggleVisibility();
+  handleReopenQuestion();
 
   // Content → Attachments
   handleDeleteAttachments();

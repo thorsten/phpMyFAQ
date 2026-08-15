@@ -21,4 +21,20 @@ final class OpenQuestionsControllerWebTest extends ControllerWebTestCase
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('id="phpmyfaq-open-questions"', $response);
     }
+
+    public function testQuestionHistoryPageRenders(): void
+    {
+        $response = $this->requestAdmin('GET', '/questions/history/1');
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('bi-clock-history', $response);
+    }
+
+    public function testQuestionHistoryPageRedirectsGuestToLogin(): void
+    {
+        $response = $this->requestAdminGuest('GET', '/questions/history/1');
+
+        self::assertResponseStatusCodeSame(302, $response);
+        self::assertRedirectLocationContains('/login', $response);
+    }
 }

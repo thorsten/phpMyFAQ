@@ -12,7 +12,9 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\StopWords;
+use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -41,6 +43,7 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
         ?UserSession $userSession = null,
         ?CategoryHelper $categoryHelper = null,
         ?Notification $notification = null,
+        ?QuestionHistoryRepository $questionHistory = null,
     ): FaqController {
         $language = $this->createStub(Language::class);
         $language->method('setLanguageFromConfiguration')->willReturn('en');
@@ -55,6 +58,7 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
             $language,
             $categoryHelper ?? $this->createStub(CategoryHelper::class),
             $notification ?? $this->createStub(Notification::class),
+            $questionHistory ?? $this->createStub(QuestionHistoryRepository::class),
         );
     }
 
@@ -500,6 +504,8 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
         $language->method('setLanguageFromConfiguration')->willReturn('en');
         $language->method('setLanguageWithDetection')->willReturn('en');
 
+        $questionHistory = new QuestionHistoryRepository($this->configuration);
+
         $controller = new FaqController(
             $faq,
             $this->createStub(FaqHelper::class),
@@ -509,6 +515,7 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
             $language,
             $categoryHelper,
             $notification,
+            $questionHistory,
         );
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
@@ -530,6 +537,13 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
+
+        $events = $questionHistory->getByQuestion(55, 'en');
+        self::assertCount(1, $events);
+        self::assertSame('answered', $events[0]['event_type']);
+        self::assertSame(125, $events[0]['faq_id']);
+        self::assertSame(1, $events[0]['user_id']);
+        self::assertSame('testuser', $events[0]['username']);
     }
 
     public function testCreateUpdatesOpenQuestionWhenDeleteQuestionIsDisabled(): void
@@ -575,6 +589,8 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
         $language->method('setLanguageFromConfiguration')->willReturn('en');
         $language->method('setLanguageWithDetection')->willReturn('en');
 
+        $questionHistory = new QuestionHistoryRepository($this->configuration);
+
         $controller = new FaqController(
             $faq,
             $this->createStub(FaqHelper::class),
@@ -584,6 +600,7 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
             $language,
             $categoryHelper,
             $notification,
+            $questionHistory,
         );
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
@@ -605,5 +622,102 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
+
+        $events = $questionHistory->getByQuestion(77, 'en');
+        self::assertCount(1, $events);
+        self::assertSame('answered', $events[0]['event_type']);
+        self::assertSame(126, $events[0]['faq_id']);
+        self::assertSame(1, $events[0]['user_id']);
+        self::assertSame('testuser', $events[0]['username']);
+    }
+
+    public function testCreateFallsBackToFaqAuthorWhenGuestAnswersOpenQuestion(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'records.allowNewFaqsForGuests' => '1',
+            'records.defaultActivation' => false,
+            'records.enableDeleteQuestion' => false,
+            'security.permLevel' => 'basic',
+            'spam.enableCaptchaCode' => false,
+        ]);
+        $this->seedCategory();
+
+        $faq = $this->createMock(Faq::class);
+        $faq
+            ->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static function ($entity) {
+                $entity->setId(128);
+                return $entity;
+            });
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->never())->method('delete');
+        $question->expects($this->once())->method('updateQuestionAnswer')->with(99, 128, 1);
+
+        $stopWords = $this->createStub(StopWords::class);
+        $stopWords->method('checkBannedWord')->willReturn(true);
+
+        $userSession = $this->createMock(UserSession::class);
+        $userSession->expects($this->once())->method('setCurrentUser')->willReturnSelf();
+        $userSession->expects($this->once())->method('userTracking')->with('save_new_entry', 0);
+
+        $categoryHelper = $this->createMock(CategoryHelper::class);
+        $categoryHelper->expects($this->once())->method('setCategory')->willReturnSelf();
+        $categoryHelper->expects($this->once())->method('setConfiguration')->willReturnSelf();
+        $categoryHelper->expects($this->once())->method('getModerators')->with([1])->willReturn([]);
+
+        $notification = $this->createMock(Notification::class);
+        $notification->expects($this->once())->method('sendNewFaqAdded')->with([], $this->anything());
+
+        $language = $this->createStub(Language::class);
+        $language->method('setLanguageFromConfiguration')->willReturn('en');
+        $language->method('setLanguageWithDetection')->willReturn('en');
+
+        $questionHistory = new QuestionHistoryRepository($this->configuration);
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(FaqHelper::class),
+            $question,
+            $stopWords,
+            $userSession,
+            $language,
+            $categoryHelper,
+            $notification,
+            $questionHistory,
+        );
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(false);
+        $currentUser->method('getUserId')->willReturn(-1);
+        $currentUser->method('getLogin')->willReturn('');
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => false]);
+        $this->injectControllerState($controller, $currentUser, $this->createSession());
+
+        $request = Request::create('/api/faq/create', 'POST', content: json_encode([
+            'name' => 'Guest Author',
+            'email' => 'guest@example.com',
+            'question' => 'Guest answered question from open item?',
+            'answer' => 'Guest answer',
+            'keywords' => 'test',
+            'rubrik' => [1],
+            'openQuestionID' => 99,
+            'captcha' => 'ignored-for-guests',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+
+        $events = $questionHistory->getByQuestion(99, 'en');
+        self::assertCount(1, $events);
+        self::assertSame('answered', $events[0]['event_type']);
+        self::assertSame(128, $events[0]['faq_id']);
+        self::assertSame(-1, $events[0]['user_id']);
+        self::assertSame('Guest Author', $events[0]['username']);
     }
 }

@@ -20,8 +20,11 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Date;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Enums\QuestionHistoryEventType;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\CategoryNameTwigExtension;
@@ -36,6 +39,7 @@ final class OpenQuestionsController extends AbstractAdministrationController
 {
     public function __construct(
         private readonly Question $question,
+        private readonly QuestionHistoryRepository $questionHistory,
     ) {
         parent::__construct();
     }
@@ -104,6 +108,52 @@ final class OpenQuestionsController extends AbstractAdministrationController
             'msgOtherQuestionDesc' => Translation::get(key: 'msgOtherQuestionDesc'),
             'msgChangeLanguageHint' => Translation::get(key: 'msgChangeLanguageHint'),
             'msgOpenQuestion' => Translation::get(key: 'msgOpenQuestion'),
+            'csrfTokenReopenQuestion' => Token::getInstance($this->session)->getTokenString('reopen-question'),
+            'msgReopenQuestion' => Translation::get(key: 'msgReopenQuestion'),
+            'msgQuestionHistory' => Translation::get(key: 'msgQuestionHistory'),
+        ]);
+    }
+
+    /**
+     * @throws Exception
+     * @throws LoaderError
+     */
+    #[Route(path: '/questions/history/{questionId}', name: 'admin.questions.history', methods: ['GET'])]
+    public function history(Request $request, int $questionId): Response
+    {
+        $this->userHasPermission(PermissionType::QUESTION_DELETE);
+
+        $currentLang = $this->configuration->getLanguage()->getLanguage();
+
+        $entries = [];
+        foreach ($this->questionHistory->getByQuestion($questionId, $currentLang) as $row) {
+            $entries[] = [
+                'eventType' => (string) $row['event_type'],
+                'userId' => (int) $row['user_id'],
+                'username' => (string) $row['username'],
+                'faqId' => (int) $row['faq_id'],
+                'created' => Date::createIsoDate((string) $row['created']),
+            ];
+        }
+
+        $this->addExtension(new IntlExtension());
+        return $this->render('@admin/content/open-question-history.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'msgQuestionHistory' => Translation::get(key: 'msgQuestionHistory'),
+            'msgQuestionHistoryDate' => Translation::get(key: 'msgQuestionHistoryDate'),
+            'msgQuestionHistoryEvent' => Translation::get(key: 'msgQuestionHistoryEvent'),
+            'msgAuthor' => Translation::get(key: 'msgAuthor'),
+            'msgNoQuestionHistory' => Translation::get(key: 'msgNoQuestionHistory'),
+            'msgOpenQuestions' => Translation::get(key: 'msgOpenQuestions'),
+            'msgQuestionHistoryFaq' => Translation::get(key: 'msgQuestionHistoryFaqReference'),
+            'question' => $this->question->get($questionId),
+            'entries' => $entries,
+            'eventLabels' => [
+                QuestionHistoryEventType::Submitted->value => Translation::get(key: 'questionHistoryEventSubmitted'),
+                QuestionHistoryEventType::Answered->value => Translation::get(key: 'questionHistoryEventAnswered'),
+                QuestionHistoryEventType::Reopened->value => Translation::get(key: 'questionHistoryEventReopened'),
+            ],
         ]);
     }
 }

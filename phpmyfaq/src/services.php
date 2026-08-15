@@ -186,6 +186,7 @@ use phpMyFAQ\Push\PushSubscriptionRepository;
 use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Scheduler\TaskScheduler;
@@ -612,6 +613,10 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
+    $services->set('phpmyfaq.question.history', QuestionHistoryRepository::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
     $services->set('phpmyfaq.rating', Rating::class)->args([
         service('phpmyfaq.configuration'),
     ]);
@@ -800,6 +805,7 @@ return static function (ContainerConfigurator $container): void {
     ]);
     $services->set(ApiQuestionController::class, ApiQuestionController::class)->args([
         service('phpmyfaq.notification'),
+        service('phpmyfaq.question.history'),
     ]);
 
     // Batch 2: Controller/Frontend/Api/
@@ -839,6 +845,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.language'),
         service('phpmyfaq.helper.category-helper'),
         service('phpmyfaq.notification'),
+        service('phpmyfaq.question.history'),
     ]);
     $services->set(FrontendApiPushController::class, FrontendApiPushController::class)->args([
         service('phpmyfaq.push.web-push-service'),
@@ -850,6 +857,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.search'),
         service('phpmyfaq.question'),
         service('phpmyfaq.notification'),
+        service('phpmyfaq.question.history'),
         service('phpmyfaq.http.rate-limiter'),
     ]);
     $services->set(FrontendApiUserController::class, FrontendApiUserController::class)->args([
@@ -901,6 +909,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.question'),
         service('phpmyfaq.admin.admin-log'),
         service('phpmyfaq.push.web-push-service'),
+        service('phpmyfaq.question.history'),
     ]);
     $services->set(AdminApiGlossaryController::class, AdminApiGlossaryController::class)->args([
         service('phpmyfaq.glossary'),
@@ -920,6 +929,7 @@ return static function (ContainerConfigurator $container): void {
     ]);
     $services->set(AdminApiQuestionController::class, AdminApiQuestionController::class)->args([
         service('phpmyfaq.question'),
+        service('phpmyfaq.question.history'),
     ]);
     $services->set(AdminApiSessionController::class, AdminApiSessionController::class)->args([
         service('phpmyfaq.admin.session'),
@@ -1100,6 +1110,7 @@ return static function (ContainerConfigurator $container): void {
     ]);
     $services->set(AdminOpenQuestionsController::class, AdminOpenQuestionsController::class)->args([
         service('phpmyfaq.question'),
+        service('phpmyfaq.question.history'),
     ]);
     $services->set(AdminOrphanedFaqsController::class, AdminOrphanedFaqsController::class)->args([
         service('phpmyfaq.admin.faq'),

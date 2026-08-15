@@ -19,16 +19,20 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use InvalidArgumentException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\QuestionEntity;
+use phpMyFAQ\Entity\QuestionHistoryEntity;
+use phpMyFAQ\Enums\QuestionHistoryEventType;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Session\Token;
@@ -55,6 +59,7 @@ final class QuestionController extends AbstractController
         private readonly Search $search,
         private readonly Question $question,
         private readonly Notification $notification,
+        private readonly QuestionHistoryRepository $questionHistory,
         ?RateLimiter $rateLimiter = null,
     ) {
         $this->rateLimiter = $rateLimiter ?? new RateLimiter();
@@ -211,7 +216,22 @@ final class QuestionController extends AbstractController
                 }
             }
 
-            $this->question->add($questionEntity);
+            $questionId = $this->question->add($questionEntity);
+            if ($questionId > 0) {
+                try {
+                    $this->questionHistory->add(new QuestionHistoryEntity(
+                        questionId: $questionId,
+                        questionLanguage: $language,
+                        eventType: QuestionHistoryEventType::Submitted,
+                        userId: $this->currentUser->getUserId(),
+                        username: $author,
+                    ));
+                } catch (InvalidArgumentException $exception) {
+                    $this->configuration
+                        ->getLogger()
+                        ->error('Recording question history failed: ' . $exception->getMessage());
+                }
+            }
             $this->notification->sendQuestionSuccessMail($questionEntity, $categories);
 
             return $this->json(['success' => Translation::get(key: 'msgAskThx4Mail')], Response::HTTP_OK);

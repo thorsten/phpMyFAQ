@@ -88,6 +88,7 @@ vi.mock('./content', () => ({
   handleUpdateQuestion: vi.fn(() => trackCall('handleUpdateQuestion')),
   handleRefreshAttachments: vi.fn(() => trackCall('handleRefreshAttachments')),
   handleToggleVisibility: vi.fn(() => trackCall('handleToggleVisibility')),
+  handleReopenQuestion: vi.fn(() => trackCall('handleReopenQuestion')),
   handleResetCategoryImage: vi.fn(() => trackCall('handleResetCategoryImage')),
   handleResetButton: vi.fn(() => trackCall('handleResetButton')),
   handleDeleteFaqEditorModal: vi.fn(() => trackCall('handleDeleteFaqEditorModal')),
@@ -186,6 +187,7 @@ describe('admin index.ts', () => {
     expect(calls).toContain('handleDeleteComments');
     expect(calls).toContain('handleOpenQuestions');
     expect(calls).toContain('handleToggleVisibility');
+    expect(calls).toContain('handleReopenQuestion');
 
     // Attachments
     expect(calls).toContain('handleDeleteAttachments');

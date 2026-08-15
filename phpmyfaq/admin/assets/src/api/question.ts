@@ -33,3 +33,16 @@ export const toggleQuestionVisibility = async (
     }),
   });
 };
+
+export const reopenQuestion = async (questionId: string, csrfToken: string): Promise<ApiResponse> => {
+  return await fetchJson<ApiResponse>(`./api/question/reopen`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      questionId: questionId,
+      csrfToken: csrfToken,
+    }),
+  });
+};

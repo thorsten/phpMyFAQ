@@ -41,9 +41,9 @@ readonly class Question
     }
 
     /**
-     * Adds a new question.
+     * Adds a new question and returns its new id, 0 on failure.
      */
-    public function add(QuestionEntity $questionEntity): bool
+    public function add(QuestionEntity $questionEntity): int
     {
         return $this->questionRepository->add($questionEntity);
     }
@@ -125,5 +125,13 @@ readonly class Question
     public function updateQuestionAnswer(int $openQuestionId, int $faqId, int $categoryId): bool
     {
         return $this->questionRepository->updateQuestionAnswer($openQuestionId, $faqId, $categoryId);
+    }
+
+    /**
+     * Reopens an answered question.
+     */
+    public function reopen(int $questionId): bool
+    {
+        return $this->questionRepository->reopen($questionId);
     }
 }

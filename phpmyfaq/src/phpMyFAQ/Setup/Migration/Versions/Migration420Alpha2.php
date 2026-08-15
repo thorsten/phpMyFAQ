@@ -39,7 +39,8 @@ readonly class Migration420Alpha2 extends AbstractMigration
     {
         return (
             'Add faquser_right_language and faqgroup_right_language tables for granular '
-            . 'language-based permissions, and separate the FAQ read and publish rights'
+            . 'language-based permissions, separate the FAQ read and publish rights, '
+            . 'and add the faqquestion_history table for open question lifecycle metadata tracking'
         );
     }
 
@@ -160,6 +161,130 @@ readonly class Migration420Alpha2 extends AbstractMigration
         }
 
         $this->separateReadAndPublishRights($recorder);
+        $this->createQuestionHistoryTable($recorder);
+    }
+
+    /**
+     * Creates the faqquestion_history table that records the open question
+     * lifecycle (submitted, answered, reopened) with actor and timestamp.
+     */
+    private function createQuestionHistoryTable(OperationRecorder $recorder): void
+    {
+        $intType = $this->integerType();
+
+        if ($this->isMySql()) {
+            $recorder->addSql(
+                sprintf(
+                    'CREATE TABLE IF NOT EXISTS %sfaqquestion_history (
+                        id %s NOT NULL,
+                        question_id %s NOT NULL,
+                        question_lang VARCHAR(5) NOT NULL,
+                        event_type VARCHAR(20) NOT NULL,
+                        user_id %s NOT NULL DEFAULT -1,
+                        username VARCHAR(100) NOT NULL,
+                        faq_id %s NOT NULL DEFAULT 0,
+                        created VARCHAR(20) NOT NULL,
+                        PRIMARY KEY (id),
+                        INDEX idx_faqquestion_history (question_id, question_lang)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci',
+                    $this->tablePrefix,
+                    $intType,
+                    $intType,
+                    $intType,
+                    $intType,
+                ),
+                'Create faqquestion_history table (MySQL)',
+            );
+        }
+
+        if ($this->isPostgreSql()) {
+            $recorder->addSql(
+                sprintf('CREATE TABLE IF NOT EXISTS %sfaqquestion_history (
+                        id %s NOT NULL,
+                        question_id %s NOT NULL,
+                        question_lang VARCHAR(5) NOT NULL,
+                        event_type VARCHAR(20) NOT NULL,
+                        user_id %s NOT NULL DEFAULT -1,
+                        username VARCHAR(100) NOT NULL,
+                        faq_id %s NOT NULL DEFAULT 0,
+                        created VARCHAR(20) NOT NULL,
+                        PRIMARY KEY (id)
+                    )', $this->tablePrefix, $intType, $intType, $intType, $intType),
+                'Create faqquestion_history table (PostgreSQL)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_faqquestion_history ON %sfaqquestion_history '
+                    . '(question_id, question_lang)',
+                    $this->tablePrefix,
+                ),
+                'Create faqquestion_history index (PostgreSQL)',
+            );
+        }
+
+        if ($this->isSqlite()) {
+            $recorder->addSql(
+                sprintf('CREATE TABLE IF NOT EXISTS %sfaqquestion_history (
+                        id %s NOT NULL,
+                        question_id %s NOT NULL,
+                        question_lang VARCHAR(5) NOT NULL,
+                        event_type VARCHAR(20) NOT NULL,
+                        user_id %s NOT NULL DEFAULT -1,
+                        username VARCHAR(100) NOT NULL,
+                        faq_id %s NOT NULL DEFAULT 0,
+                        created VARCHAR(20) NOT NULL,
+                        PRIMARY KEY (id)
+                    )', $this->tablePrefix, $intType, $intType, $intType, $intType),
+                'Create faqquestion_history table (SQLite)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS idx_faqquestion_history ON %sfaqquestion_history '
+                    . '(question_id, question_lang)',
+                    $this->tablePrefix,
+                ),
+                'Create faqquestion_history index (SQLite)',
+            );
+        }
+
+        if ($this->isSqlServer()) {
+            $recorder->addSql(
+                sprintf(
+                    'IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = \'%sfaqquestion_history\') '
+                    . 'CREATE TABLE %sfaqquestion_history (
+                        id %s NOT NULL,
+                        question_id %s NOT NULL,
+                        question_lang NVARCHAR(5) NOT NULL,
+                        event_type NVARCHAR(20) NOT NULL,
+                        user_id %s NOT NULL DEFAULT -1,
+                        username NVARCHAR(100) NOT NULL,
+                        faq_id %s NOT NULL DEFAULT 0,
+                        created NVARCHAR(20) NOT NULL,
+                        PRIMARY KEY (id)
+                    )',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                    $intType,
+                    $intType,
+                    $intType,
+                    $intType,
+                ),
+                'Create faqquestion_history table (SQL Server)',
+            );
+
+            $recorder->addSql(
+                sprintf(
+                    'IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = \'idx_faqquestion_history\''
+                    . ' AND object_id = OBJECT_ID(N\'%sfaqquestion_history\'))'
+                    . ' CREATE INDEX idx_faqquestion_history ON %sfaqquestion_history (question_id, question_lang)',
+                    $this->tablePrefix,
+                    $this->tablePrefix,
+                ),
+                'Create faqquestion_history index (SQL Server)',
+            );
+        }
     }
 
     /**

@@ -12,6 +12,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -84,6 +85,7 @@ final class QuestionControllerTest extends TestCase
         Token::resetInstanceForTests();
         unset($_COOKIE['pmf-csrf-token-' . substr(md5('delete-questions'), 0, 10)]);
         unset($_COOKIE['pmf-csrf-token-' . substr(md5('toggle-question-visibility'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('reopen-question'), 0, 10)]);
 
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
@@ -100,9 +102,14 @@ final class QuestionControllerTest extends TestCase
         parent::tearDown();
     }
 
-    private function createController(?Question $question = null): QuestionController
-    {
-        return new QuestionController($question ?? $this->createStub(Question::class));
+    private function createController(
+        ?Question $question = null,
+        ?QuestionHistoryRepository $questionHistory = null,
+    ): QuestionController {
+        return new QuestionController(
+            $question ?? $this->createStub(Question::class),
+            $questionHistory ?? $this->createStub(QuestionHistoryRepository::class),
+        );
     }
 
     private function seedOpenQuestion(int $id, string $visibility = 'N'): void
@@ -115,6 +122,29 @@ final class QuestionControllerTest extends TestCase
             $this->dbHandle->escape($visibility),
         );
         $this->dbHandle->query($query);
+    }
+
+    private function seedAnsweredQuestion(int $id, int $answerId): void
+    {
+        $this->seedOpenQuestion($id, 'Y');
+        $this->dbHandle->query(sprintf(
+            'UPDATE %sfaqquestions SET answer_id = %d WHERE id = %d',
+            Database::getTablePrefix(),
+            $answerId,
+            $id,
+        ));
+    }
+
+    private function fetchAnswerId(int $id): int
+    {
+        $result = $this->dbHandle->query(sprintf(
+            'SELECT answer_id FROM %sfaqquestions WHERE id = %d',
+            Database::getTablePrefix(),
+            $id,
+        ));
+        $row = $this->dbHandle->fetchObject($result);
+
+        return $row instanceof \stdClass ? (int) $row->answer_id : -1;
     }
 
     private function questionExists(int $id): bool
@@ -149,6 +179,7 @@ final class QuestionControllerTest extends TestCase
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
+        $currentUser->method('getLogin')->willReturn('admin');
 
         $session = new Session(new MockArraySessionStorage());
 
@@ -361,5 +392,112 @@ final class QuestionControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_gen_no'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testReopenReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => 'invalid-token',
+            'questionId' => 1,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->reopen($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testReopenReturnsBadRequestWhenQuestionIdIsZero(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'reopen-question');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'questionId' => 0,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->reopen($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgQuestionReopenError'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testReopenReturnsNotFoundForNonexistentQuestionAndWritesNoHistory(): void
+    {
+        $questionHistory = new QuestionHistoryRepository($this->configuration);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'reopen-question');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'questionId' => 999999,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController(new Question($this->configuration), $questionHistory);
+        $controller->setContainer($container);
+
+        $response = $controller->reopen($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertSame(Translation::get('msgQuestionReopenError'), $payload['error']);
+
+        $events = $questionHistory->getByQuestion(999999, 'en');
+        self::assertCount(0, $events);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testReopenReturnsSuccessForValidCsrfAndClearsAnswerIdWithHistoryEntry(): void
+    {
+        $this->seedAnsweredQuestion(771, 55);
+
+        $questionHistory = new QuestionHistoryRepository($this->configuration);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'reopen-question');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'questionId' => 771,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController(new Question($this->configuration), $questionHistory);
+        $controller->setContainer($container);
+
+        $response = $controller->reopen($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('msgQuestionReopened'), $payload['success']);
+        self::assertSame(0, $this->fetchAnswerId(771));
+
+        $events = $questionHistory->getByQuestion(771, 'en');
+        self::assertCount(1, $events);
+        self::assertSame('reopened', $events[0]['event_type']);
+        self::assertSame(42, $events[0]['user_id']);
+        self::assertSame('admin', $events[0]['username']);
     }
 }

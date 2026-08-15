@@ -262,6 +262,17 @@ class PdoSqlsrv extends Database implements DriverInterface
             is_visible char(1) default \'Y\',
             answer_id INTEGER NOT NULL DEFAULT 0,
             PRIMARY KEY (id))',
+        'faqquestion_history' => 'CREATE TABLE %sfaqquestion_history (
+            id INTEGER NOT NULL,
+            question_id INTEGER NOT NULL,
+            question_lang NVARCHAR(5) NOT NULL,
+            event_type NVARCHAR(20) NOT NULL,
+            user_id INTEGER NOT NULL DEFAULT -1,
+            username NVARCHAR(100) NOT NULL,
+            faq_id INTEGER NOT NULL DEFAULT 0,
+            created NVARCHAR(20) NOT NULL,
+            PRIMARY KEY (id))',
+        'faqquestion_history_idx' => 'CREATE INDEX idx_faqquestion_history ON %sfaqquestion_history (question_id, question_lang)',
         'faqright' => 'CREATE TABLE %sfaqright (
             right_id INTEGER NOT NULL,
             name NVARCHAR(50) NULL,

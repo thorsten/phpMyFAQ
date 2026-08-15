@@ -1873,4 +1873,17 @@ $PMF_LANG['msgImportRowNoLanguagePermission'] = 'Row %d: no "%s" permission for 
 $PMF_LANG['permission::faq_publish'] = 'Publish FAQs';
 $PMF_LANG['msgNoPublishPermission'] = 'You are not allowed to change the publication state of this FAQ.';
 
+// added v4.2.0-alpha.2 - 2026-08-15 by Thorsten Rinne - question metadata tracking
+$PMF_LANG['msgQuestionReopened'] = 'The question was reopened.';
+$PMF_LANG['msgReopenQuestion'] = 'Reopen';
+$PMF_LANG['msgQuestionHistory'] = 'History';
+$PMF_LANG['msgQuestionHistoryDate'] = 'Date';
+$PMF_LANG['msgQuestionHistoryEvent'] = 'Event';
+$PMF_LANG['msgNoQuestionHistory'] = 'No history available for this question.';
+$PMF_LANG['questionHistoryEventSubmitted'] = 'Question submitted';
+$PMF_LANG['questionHistoryEventAnswered'] = 'Question answered';
+$PMF_LANG['questionHistoryEventReopened'] = 'Question reopened';
+$PMF_LANG['msgQuestionReopenError'] = 'The question could not be reopened.';
+$PMF_LANG['msgQuestionHistoryFaqReference'] = 'FAQ #%d';
+
 return $PMF_LANG;

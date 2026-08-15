@@ -263,6 +263,17 @@ class Sqlite3 extends Database implements DriverInterface
             is_visible char(1) default \'Y\',
             answer_id INTEGER NOT NULL DEFAULT 0,
             PRIMARY KEY (id))',
+        'faqquestion_history' => 'CREATE TABLE %sfaqquestion_history (
+            id INTEGER NOT NULL,
+            question_id INTEGER NOT NULL,
+            question_lang VARCHAR(5) NOT NULL,
+            event_type VARCHAR(20) NOT NULL,
+            user_id INTEGER NOT NULL DEFAULT -1,
+            username VARCHAR(100) NOT NULL,
+            faq_id INTEGER NOT NULL DEFAULT 0,
+            created VARCHAR(20) NOT NULL,
+            PRIMARY KEY (id))',
+        'faqquestion_history_idx' => 'CREATE INDEX idx_faqquestion_history ON %sfaqquestion_history (question_id, question_lang)',
         'faqright' => 'CREATE TABLE %sfaqright (
             right_id INTEGER NOT NULL,
             name VARCHAR(50) NULL,
