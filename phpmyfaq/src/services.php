@@ -845,6 +845,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.language'),
         service('phpmyfaq.helper.category-helper'),
         service('phpmyfaq.notification'),
+        service('phpmyfaq.question.history'),
     ]);
     $services->set(FrontendApiPushController::class, FrontendApiPushController::class)->args([
         service('phpmyfaq.push.web-push-service'),
@@ -908,6 +909,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.question'),
         service('phpmyfaq.admin.admin-log'),
         service('phpmyfaq.push.web-push-service'),
+        service('phpmyfaq.question.history'),
     ]);
     $services->set(AdminApiGlossaryController::class, AdminApiGlossaryController::class)->args([
         service('phpmyfaq.glossary'),

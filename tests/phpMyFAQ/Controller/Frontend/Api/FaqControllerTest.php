@@ -12,6 +12,7 @@ use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -37,6 +38,7 @@ class FaqControllerTest extends TestCase
     private Language $language;
     private CategoryHelper $categoryHelper;
     private Notification $notification;
+    private QuestionHistoryRepository $questionHistory;
 
     /**
      * @throws Exception
@@ -63,6 +65,7 @@ class FaqControllerTest extends TestCase
         $this->language = $this->createStub(Language::class);
         $this->categoryHelper = $this->createStub(CategoryHelper::class);
         $this->notification = $this->createStub(Notification::class);
+        $this->questionHistory = $this->createStub(QuestionHistoryRepository::class);
     }
 
     private function createController(): FaqController
@@ -76,6 +79,7 @@ class FaqControllerTest extends TestCase
             $this->language,
             $this->categoryHelper,
             $this->notification,
+            $this->questionHistory,
         );
     }
 

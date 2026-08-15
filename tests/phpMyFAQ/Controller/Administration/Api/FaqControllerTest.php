@@ -19,6 +19,7 @@ use phpMyFAQ\Notification;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -120,6 +121,7 @@ final class FaqControllerTest extends TestCase
             $this->createStub(Question::class),
             $this->createStub(AdminLog::class),
             $this->createStub(WebPushService::class),
+            $this->createStub(QuestionHistoryRepository::class),
         );
     }
 
@@ -136,6 +138,7 @@ final class FaqControllerTest extends TestCase
             $this->createStub(Question::class),
             $this->createStub(AdminLog::class),
             $this->createStub(WebPushService::class),
+            $this->createStub(QuestionHistoryRepository::class),
         );
     }
 
@@ -152,6 +155,7 @@ final class FaqControllerTest extends TestCase
             $this->createStub(Question::class),
             $this->createStub(AdminLog::class),
             $this->createStub(WebPushService::class),
+            $this->createStub(QuestionHistoryRepository::class),
         );
     }
 
@@ -166,6 +170,7 @@ final class FaqControllerTest extends TestCase
         ?Question $question = null,
         ?AdminLog $adminLog = null,
         ?WebPushService $webPushService = null,
+        ?QuestionHistoryRepository $questionHistory = null,
     ): FaqController {
         return new FaqController(
             $faq ?? $this->createStub(Faq::class),
@@ -178,6 +183,7 @@ final class FaqControllerTest extends TestCase
             $question ?? $this->createStub(Question::class),
             $adminLog ?? $this->createStub(AdminLog::class),
             $webPushService ?? $this->createStub(WebPushService::class),
+            $questionHistory ?? $this->createStub(QuestionHistoryRepository::class),
         );
     }
 
@@ -254,6 +260,7 @@ final class FaqControllerTest extends TestCase
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
+        $currentUser->method('getLogin')->willReturn('admin');
 
         $session ??= new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
@@ -755,6 +762,172 @@ final class FaqControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
         self::assertStringContainsString('"id":123', $payload['data']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateAnsweringOpenQuestionRecordsHistoryAndDeletesQuestionWhenEnabled(): void
+    {
+        self::assertTrue($this->configuration->set('security.permLevel', 'basic'));
+        self::assertTrue($this->configuration->set('records.enableDeleteQuestion', true));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faqEntity = new \phpMyFAQ\Entity\FaqEntity()
+            ->setId(321)
+            ->setLanguage('en')
+            ->setSolutionId(1321)
+            ->setActive(true)
+            ->setSticky(false)
+            ->setQuestion('Answered FAQ')
+            ->setAnswer('Answered answer')
+            ->setKeywords('answered')
+            ->setAuthor('Author')
+            ->setEmail('author@example.com')
+            ->setComment(true)
+            ->setCreatedDate(new \DateTime())
+            ->setNotes('');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('create')->willReturn($faqEntity);
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('delete')->with(55);
+        $question->expects($this->never())->method('updateQuestionAnswer');
+
+        $questionHistory = new QuestionHistoryRepository($this->configuration);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'question' => 'Answered FAQ',
+                'categories[]' => 1,
+                'lang' => 'en',
+                'tags' => '',
+                'active' => 'yes',
+                'sticky' => 'no',
+                'answer' => 'Answered answer',
+                'keywords' => 'answered',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'comment' => 'y',
+                'userpermission' => 'restricted',
+                'restricted_users' => [],
+                'grouppermission' => 'restricted',
+                'restricted_groups' => [],
+                'changed' => 'Initial import',
+                'notes' => '',
+                'serpTitle' => '',
+                'serpDescription' => '',
+                'openQuestionId' => 55,
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithDependencies(
+            faq: $faq,
+            question: $question,
+            questionHistory: $questionHistory,
+        );
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        $events = $questionHistory->getByQuestion(55, 'en');
+        self::assertCount(1, $events);
+        self::assertSame('answered', $events[0]['event_type']);
+        self::assertSame(321, $events[0]['faq_id']);
+        self::assertSame(42, $events[0]['user_id']);
+        self::assertSame('admin', $events[0]['username']);
+
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateAnsweringOpenQuestionRecordsHistoryAndUpdatesQuestionWhenDisabled(): void
+    {
+        self::assertTrue($this->configuration->set('security.permLevel', 'basic'));
+        self::assertTrue($this->configuration->set('records.enableDeleteQuestion', false));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faqEntity = new \phpMyFAQ\Entity\FaqEntity()
+            ->setId(322)
+            ->setLanguage('en')
+            ->setSolutionId(1322)
+            ->setActive(true)
+            ->setSticky(false)
+            ->setQuestion('Answered FAQ 2')
+            ->setAnswer('Answered answer 2')
+            ->setKeywords('answered')
+            ->setAuthor('Author')
+            ->setEmail('author@example.com')
+            ->setComment(true)
+            ->setCreatedDate(new \DateTime())
+            ->setNotes('');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('create')->willReturn($faqEntity);
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->never())->method('delete');
+        $question->expects($this->once())->method('updateQuestionAnswer')->with(56, 322, 1);
+
+        $questionHistory = new QuestionHistoryRepository($this->configuration);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'question' => 'Answered FAQ 2',
+                'categories[]' => 1,
+                'lang' => 'en',
+                'tags' => '',
+                'active' => 'yes',
+                'sticky' => 'no',
+                'answer' => 'Answered answer 2',
+                'keywords' => 'answered',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'comment' => 'y',
+                'userpermission' => 'restricted',
+                'restricted_users' => [],
+                'grouppermission' => 'restricted',
+                'restricted_groups' => [],
+                'changed' => 'Initial import',
+                'notes' => '',
+                'serpTitle' => '',
+                'serpDescription' => '',
+                'openQuestionId' => 56,
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithDependencies(
+            faq: $faq,
+            question: $question,
+            questionHistory: $questionHistory,
+        );
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        $events = $questionHistory->getByQuestion(56, 'en');
+        self::assertCount(1, $events);
+        self::assertSame('answered', $events[0]['event_type']);
+        self::assertSame(322, $events[0]['faq_id']);
+        self::assertSame(42, $events[0]['user_id']);
+        self::assertSame('admin', $events[0]['username']);
+
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 

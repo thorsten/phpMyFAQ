@@ -20,6 +20,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use DateTime;
 use Exception;
+use InvalidArgumentException;
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Faq as FaqAdministration;
@@ -31,9 +32,11 @@ use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Entity\QuestionHistoryEntity;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Enums\QuestionHistoryEventType;
 use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Import;
@@ -49,6 +52,7 @@ use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Seo;
@@ -81,6 +85,7 @@ final class FaqController extends AbstractAdministrationApiController
         private readonly Question $question,
         private readonly AdminLog $logging,
         private readonly WebPushService $webPushService,
+        private readonly QuestionHistoryRepository $questionHistory,
     ) {
         parent::__construct();
     }
@@ -223,6 +228,21 @@ final class FaqController extends AbstractAdministrationApiController
             // Open question answered
             $openQuestionId = (int) Filter::filterVar($data->openQuestionId ?? null, FILTER_VALIDATE_INT);
             if (0 !== $openQuestionId) {
+                try {
+                    $this->questionHistory->add(new QuestionHistoryEntity(
+                        questionId: $openQuestionId,
+                        questionLanguage: $faqData->getLanguage(),
+                        eventType: QuestionHistoryEventType::Answered,
+                        userId: $this->currentUser->getUserId(),
+                        username: (string) $this->currentUser->getLogin(),
+                        faqId: $faqId,
+                    ));
+                } catch (InvalidArgumentException $exception) {
+                    $this->configuration
+                        ->getLogger()
+                        ->error('Recording question history failed: ' . $exception->getMessage());
+                }
+
                 if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
                     // deletes question
                     $this->question->delete($openQuestionId);
