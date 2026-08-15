@@ -27,6 +27,7 @@ use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Setup\Installation\DefaultDataSeeder;
+use phpMyFAQ\Setup\Migration\AbstractMigration;
 use phpMyFAQ\Setup\Migration\MigrationExecutor;
 use phpMyFAQ\Setup\Migration\MigrationInterface;
 use phpMyFAQ\Setup\Migration\MigrationRegistry;
@@ -195,8 +196,11 @@ class Update extends AbstractSetup
             $this->migrationTracker->ensureTableExists();
         }
 
-        // Get pending migrations based on a version
+        // Get pending migrations based on a version, plus already-applied
+        // migrations that were amended after this installation executed them
         $pendingMigrations = $this->migrationRegistry->getPendingMigrations($this->version);
+        $pendingMigrations += $this->getAmendedAppliedMigrations();
+        uksort($pendingMigrations, callback: 'version_compare');
 
         // Set dry-run mode
         $this->migrationExecutor->setDryRun($this->dryRun);
@@ -230,6 +234,44 @@ class Update extends AbstractSetup
     private function allMigrationsSucceeded(): bool
     {
         return array_all($this->migrationResults, static fn($result) => $result->isSuccess());
+    }
+
+    /**
+     * Returns already-applied migrations whose registered definition changed after this
+     * installation executed them — e.g. a migration of an unreleased version that was
+     * amended later. Re-running keeps such installations in sync; migration operations
+     * are required to be re-run safe.
+     *
+     * @return array<string, MigrationInterface>
+     */
+    private function getAmendedAppliedMigrations(): array
+    {
+        if (!$this->migrationTracker->tableExists()) {
+            return [];
+        }
+
+        $appliedChecksums = [];
+        foreach ($this->migrationTracker->getAppliedMigrations() as $appliedMigration) {
+            $appliedChecksums[$appliedMigration['version']] = $appliedMigration['checksum'];
+        }
+
+        $amendedMigrations = [];
+        foreach ($this->migrationRegistry->getMigrations() as $version => $migration) {
+            if (!array_key_exists($version, $appliedChecksums)) {
+                continue;
+            }
+
+            $appliedChecksum = $appliedChecksums[$version];
+            if ($appliedChecksum === null || !$migration instanceof AbstractMigration) {
+                continue;
+            }
+
+            if ($appliedChecksum !== $migration->getChecksum()) {
+                $amendedMigrations[$version] = $migration;
+            }
+        }
+
+        return $amendedMigrations;
     }
 
     /**

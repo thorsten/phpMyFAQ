@@ -52,36 +52,44 @@ class MigrationTrackerTest extends TestCase
         $this->assertFalse($this->tracker->isApplied('4.0.0'));
     }
 
-    public function testRecordMigrationExecutesInsertQuery(): void
+    public function testRecordMigrationReplacesExistingRecordAndExecutesInsertQuery(): void
     {
         $this->database->method('escape')->willReturnArgument(0);
 
+        $executedQueries = [];
         $this->database
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('query')
-            ->with($this->callback(function ($query) {
-                return (
-                    str_contains($query, 'INSERT INTO')
-                    && str_contains($query, '4.0.0')
-                    && str_contains($query, 'faqmigrations')
-                );
-            }));
+            ->willReturnCallback(function ($query) use (&$executedQueries) {
+                $executedQueries[] = $query;
+                return true;
+            });
 
         $this->tracker->recordMigration('4.0.0', 100, 'abc123', 'Test migration');
+
+        $this->assertStringContainsString('DELETE FROM', $executedQueries[0]);
+        $this->assertStringContainsString('4.0.0', $executedQueries[0]);
+        $this->assertStringContainsString('INSERT INTO', $executedQueries[1]);
+        $this->assertStringContainsString('4.0.0', $executedQueries[1]);
+        $this->assertStringContainsString('faqmigrations', $executedQueries[1]);
     }
 
     public function testRecordMigrationWithNullChecksum(): void
     {
         $this->database->method('escape')->willReturnArgument(0);
 
+        $executedQueries = [];
         $this->database
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('query')
-            ->with($this->callback(function ($query) {
-                return str_contains($query, 'NULL');
-            }));
+            ->willReturnCallback(function ($query) use (&$executedQueries) {
+                $executedQueries[] = $query;
+                return true;
+            });
 
         $this->tracker->recordMigration('4.0.0', 100, null, null);
+
+        $this->assertStringContainsString('NULL', $executedQueries[1]);
     }
 
     public function testRemoveMigrationExecutesDeleteQuery(): void
@@ -218,21 +226,48 @@ class MigrationTrackerTest extends TestCase
 
     public function testTableExistsReturnsTrueWhenTableExists(): void
     {
-        $resultMock = $this->createMock(stdClass::class);
+        $previousDbType = $this->setDatabaseType('sqlite3');
 
-        $this->database->method('query')->willReturn($resultMock);
-        $this->database->method('numRows')->willReturn(1);
+        try {
+            $resultMock = $this->createMock(stdClass::class);
 
-        $this->assertTrue($this->tracker->tableExists());
+            $this->database->method('query')->willReturn($resultMock);
+            $this->database->method('numRows')->willReturn(1);
+
+            $this->assertTrue($this->tracker->tableExists());
+        } finally {
+            $this->setDatabaseType($previousDbType);
+        }
     }
 
     public function testTableExistsReturnsFalseWhenTableDoesNotExist(): void
     {
-        $resultMock = $this->createMock(stdClass::class);
+        $previousDbType = $this->setDatabaseType('sqlite3');
 
-        $this->database->method('query')->willReturn($resultMock);
-        $this->database->method('numRows')->willReturn(0);
+        try {
+            $resultMock = $this->createMock(stdClass::class);
 
-        $this->assertFalse($this->tracker->tableExists());
+            $this->database->method('query')->willReturn($resultMock);
+            $this->database->method('numRows')->willReturn(0);
+
+            $this->assertFalse($this->tracker->tableExists());
+        } finally {
+            $this->setDatabaseType($previousDbType);
+        }
+    }
+
+    /**
+     * tableExists() dispatches on the Database::getType() static, which these mock-based
+     * tests cannot rely on being set by earlier tests in the same process. Returns the
+     * previous value so tests can restore it.
+     */
+    private function setDatabaseType(string $type): string
+    {
+        $databaseReflection = new \ReflectionClass(\phpMyFAQ\Database::class);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $previous = (string) $dbTypeProperty->getValue();
+        $dbTypeProperty->setValue(null, $type);
+
+        return $previous;
     }
 }

@@ -6,6 +6,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Setup\Migration\MigrationTracker;
+use phpMyFAQ\Setup\Migration\Versions\Migration420Alpha2;
 use phpMyFAQ\System;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -119,6 +121,46 @@ class UpdateTest extends TestCase
         $result = $this->update->applyUpdates();
 
         $this->assertTrue($result);
+    }
+
+    public function testApplyUpdatesReRunsAmendedMigration(): void
+    {
+        // Simulate an installation that executed 4.2.0-alpha.2 before the migration
+        // was amended: the recorded checksum no longer matches the registered one.
+        // Uses the temporary database copy explicitly — the Configuration singleton
+        // still points at the shared bootstrap database.
+        $configuration = new Configuration($this->dbHandle);
+        $tracker = new MigrationTracker($configuration);
+        $tracker->ensureTableExists();
+        $tracker->recordMigration('4.2.0-alpha.2', 1, 'outdated', 'pre-amendment state');
+
+        $update = new Update(new System(), $configuration);
+        $update->version = '4.2.0-alpha.2';
+        $update->dryRun = true;
+        $update->applyUpdates();
+
+        $queries = array_filter(
+            $update->dryRunQueries,
+            static fn(string $query): bool => str_contains($query, 'faqquestion_history'),
+        );
+
+        $this->assertNotEmpty($queries, 'Amended migration must be re-run for installations that already applied it');
+    }
+
+    public function testApplyUpdatesSkipsAppliedMigrationWithUnchangedChecksum(): void
+    {
+        $configuration = new Configuration($this->dbHandle);
+        $migration = new Migration420Alpha2($configuration);
+        $tracker = new MigrationTracker($configuration);
+        $tracker->ensureTableExists();
+        $tracker->recordMigration('4.2.0-alpha.2', 1, $migration->getChecksum(), $migration->getDescription());
+
+        $update = new Update(new System(), $configuration);
+        $update->version = '4.2.0-alpha.2';
+        $update->dryRun = true;
+        $update->applyUpdates();
+
+        $this->assertSame([], $update->dryRunQueries);
     }
 
     public function testApplyUpdatesWithDryRunForAlpha3(): void

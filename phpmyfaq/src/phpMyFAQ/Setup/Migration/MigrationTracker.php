@@ -103,7 +103,8 @@ class MigrationTracker
     }
 
     /**
-     * Records a migration as applied.
+     * Records a migration as applied. An existing record for the same version is
+     * replaced, so re-running an amended migration updates its checksum.
      */
     public function recordMigration(
         string $version,
@@ -111,6 +112,8 @@ class MigrationTracker
         ?string $checksum = null,
         ?string $description = null,
     ): void {
+        $this->removeMigration($version);
+
         $tableName = Database::getTablePrefix() . self::TABLE_NAME;
         $db = $this->configuration->getDb();
 
