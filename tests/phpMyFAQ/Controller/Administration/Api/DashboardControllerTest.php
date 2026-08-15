@@ -352,6 +352,18 @@ final class DashboardControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testSearchesRequiresStatisticsViewLogsPermission(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerMissing(PermissionType::STATISTICS_VIEWLOGS));
+
+        $this->expectException(ForbiddenException::class);
+        $controller->searches();
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testSearchesReturnsArrayForAuthenticatedUser(): void
     {
         $controller = $this->createController();
@@ -372,6 +384,18 @@ final class DashboardControllerTest extends TestCase
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
+        $controller->contentHealth();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testContentHealthRequiresStatisticsViewLogsPermission(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerMissing(PermissionType::STATISTICS_VIEWLOGS));
+
+        $this->expectException(ForbiddenException::class);
         $controller->contentHealth();
     }
 

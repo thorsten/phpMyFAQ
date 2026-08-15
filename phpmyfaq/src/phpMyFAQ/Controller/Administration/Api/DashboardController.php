@@ -298,7 +298,7 @@ final class DashboardController extends AbstractController
     #[Route(path: 'dashboard/searches', name: 'admin.api.dashboard.searches', methods: ['GET'])]
     public function searches(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
         $search = new Search($this->configuration);
 
@@ -313,7 +313,7 @@ final class DashboardController extends AbstractController
     #[Route(path: 'dashboard/content-health', name: 'admin.api.dashboard.content-health', methods: ['GET'])]
     public function contentHealth(): JsonResponse
     {
-        $this->userIsAuthenticated();
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
         $faq = new AdminFaq($this->configuration);
 
