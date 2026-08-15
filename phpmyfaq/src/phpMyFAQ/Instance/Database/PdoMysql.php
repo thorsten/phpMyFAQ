@@ -271,6 +271,16 @@ class PdoMysql extends Database implements DriverInterface
             is_visible char(1) default \'Y\',
             answer_id INT(11) NOT NULL DEFAULT 0,
             PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+        'faqquestion_history' => 'CREATE TABLE %sfaqquestion_history (
+            id INT(11) NOT NULL,
+            question_id INT(11) NOT NULL,
+            question_lang VARCHAR(5) NOT NULL,
+            event_type VARCHAR(20) NOT NULL,
+            user_id INT(11) NOT NULL DEFAULT -1,
+            username VARCHAR(100) NOT NULL,
+            faq_id INT(11) NOT NULL DEFAULT 0,
+            created VARCHAR(20) NOT NULL,
+            PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
         'faqright' => 'CREATE TABLE %sfaqright (
             right_id INT(11) NOT NULL,
             name VARCHAR(50) NULL,

@@ -79,6 +79,7 @@ class DatabaseSchema
             'faqcustompages' => $this->faqcustompages(),
             'faqjobs' => $this->faqjobs(),
             'faqquestions' => $this->faqquestions(),
+            'faqquestion_history' => $this->faqquestionHistory(),
             'faqright' => $this->faqright(),
 
             'faqsearches' => $this->faqsearches(),
@@ -598,6 +599,22 @@ class DatabaseSchema
             ->char('is_visible', 1, true, 'Y')
             ->integer('answer_id', false, 0)
             ->primaryKey('id');
+    }
+
+    public function faqquestionHistory(): TableBuilder
+    {
+        return new TableBuilder($this->dialect)
+            ->table('faqquestion_history')
+            ->integer('id', false)
+            ->integer('question_id', false)
+            ->varchar('question_lang', 5, false)
+            ->varchar('event_type', 20, false)
+            ->integer('user_id', false, -1)
+            ->varchar('username', 100, false)
+            ->integer('faq_id', false, 0)
+            ->varchar('created', 20, false)
+            ->primaryKey('id')
+            ->index('idx_faqquestion_history', ['question_id', 'question_lang']);
     }
 
     public function faqright(): TableBuilder
