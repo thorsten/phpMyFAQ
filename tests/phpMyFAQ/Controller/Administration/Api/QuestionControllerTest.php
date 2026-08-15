@@ -440,6 +440,35 @@ final class QuestionControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testReopenReturnsNotFoundForNonexistentQuestionAndWritesNoHistory(): void
+    {
+        $questionHistory = new QuestionHistoryRepository($this->configuration);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'reopen-question');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'questionId' => 999999,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController(new Question($this->configuration), $questionHistory);
+        $controller->setContainer($container);
+
+        $response = $controller->reopen($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertSame('reopen not successful', $payload['error']);
+
+        $events = $questionHistory->getByQuestion(999999, 'en');
+        self::assertCount(0, $events);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testReopenReturnsSuccessForValidCsrfAndClearsAnswerIdWithHistoryEntry(): void
     {
         $this->seedAnsweredQuestion(771, 55);

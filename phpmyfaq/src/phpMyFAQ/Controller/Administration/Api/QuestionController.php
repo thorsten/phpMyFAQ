@@ -129,11 +129,21 @@ final class QuestionController extends AbstractController
 
         $questionId = (int) ($data->questionId ?? 0);
 
-        if ($questionId !== 0 && $this->question->reopen($questionId)) {
+        if ($questionId === 0) {
+            return $this->json(['error' => 'reopen not successful'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $questionData = $this->question->get($questionId);
+
+        if ($questionData === []) {
+            return $this->json(['error' => 'reopen not successful'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($this->question->reopen($questionId)) {
             try {
                 $this->questionHistory->add(new QuestionHistoryEntity(
                     questionId: $questionId,
-                    questionLanguage: $this->configuration->getLanguage()->getLanguage(),
+                    questionLanguage: (string) $questionData['lang'],
                     eventType: QuestionHistoryEventType::Reopened,
                     userId: $this->currentUser->getUserId(),
                     username: $this->currentUser->getLogin(),

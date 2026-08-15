@@ -207,7 +207,9 @@ final class FaqController extends AbstractController
                         questionLanguage: $faqEntity->getLanguage(),
                         eventType: QuestionHistoryEventType::Answered,
                         userId: $this->currentUser->getUserId(),
-                        username: (string) $this->currentUser->getLogin(),
+                        username: $this->currentUser->getLogin() !== ''
+                            ? $this->currentUser->getLogin()
+                            : $faqEntity->getAuthor(),
                         faqId: (int) $recordId,
                     ));
                 } catch (InvalidArgumentException $exception) {
