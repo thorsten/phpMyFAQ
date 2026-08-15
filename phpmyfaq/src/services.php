@@ -929,6 +929,7 @@ return static function (ContainerConfigurator $container): void {
     ]);
     $services->set(AdminApiQuestionController::class, AdminApiQuestionController::class)->args([
         service('phpmyfaq.question'),
+        service('phpmyfaq.question.history'),
     ]);
     $services->set(AdminApiSessionController::class, AdminApiSessionController::class)->args([
         service('phpmyfaq.admin.session'),

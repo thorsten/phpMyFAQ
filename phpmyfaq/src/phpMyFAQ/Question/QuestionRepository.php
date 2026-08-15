@@ -238,4 +238,18 @@ readonly class QuestionRepository
 
         return (bool) $this->configuration->getDb()->query($query);
     }
+
+    /**
+     * Reopens an answered question by clearing its answer reference.
+     */
+    public function reopen(int $questionId): bool
+    {
+        $query = sprintf(
+            'UPDATE %sfaqquestions SET answer_id = 0 WHERE id = %d',
+            Database::getTablePrefix(),
+            $questionId,
+        );
+
+        return (bool) $this->configuration->getDb()->query($query);
+    }
 }

@@ -296,4 +296,24 @@ class QuestionRepositoryTest extends TestCase
         $this->assertStringContainsString("en'' OR 1=1 -- ", $this->dbHandle->log());
         $this->assertNotEmpty($this->repository->getById(1, 'en'));
     }
+
+    public function testReopenClearsAnswerId(): void
+    {
+        $questionEntity = new QuestionEntity();
+        $questionEntity
+            ->setUsername('testuser')
+            ->setEmail('test@example.org')
+            ->setCategoryId(1)
+            ->setQuestion('Answered question')
+            ->setLanguage('en')
+            ->setIsVisible(true);
+
+        $questionId = $this->repository->add($questionEntity);
+        $this->repository->updateQuestionAnswer($questionId, 7, 1);
+
+        $this->assertTrue($this->repository->reopen($questionId));
+
+        $questions = $this->repository->getAll('en');
+        $this->assertSame(0, $questions[0]['answer_id']);
+    }
 }

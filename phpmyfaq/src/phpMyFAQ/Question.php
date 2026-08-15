@@ -126,4 +126,12 @@ readonly class Question
     {
         return $this->questionRepository->updateQuestionAnswer($openQuestionId, $faqId, $categoryId);
     }
+
+    /**
+     * Reopens an answered question.
+     */
+    public function reopen(int $questionId): bool
+    {
+        return $this->questionRepository->reopen($questionId);
+    }
 }
