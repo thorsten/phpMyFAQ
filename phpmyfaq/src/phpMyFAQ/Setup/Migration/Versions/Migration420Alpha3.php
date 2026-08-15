@@ -147,8 +147,10 @@ readonly class Migration420Alpha3 extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = \'idx_faqquestion_history\') '
-                    . 'CREATE INDEX idx_faqquestion_history ON %sfaqquestion_history (question_id, question_lang)',
+                    'IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = \'idx_faqquestion_history\''
+                    . ' AND object_id = OBJECT_ID(N\'%sfaqquestion_history\'))'
+                    . ' CREATE INDEX idx_faqquestion_history ON %sfaqquestion_history (question_id, question_lang)',
+                    $this->tablePrefix,
                     $this->tablePrefix,
                 ),
                 'Create faqquestion_history index (SQL Server)',
