@@ -475,7 +475,7 @@ final class FaqController extends AbstractAdministrationController
     #[Route(path: '/faq/translate/{faqId}/{faqLanguage}', name: 'admin.faq.translate', methods: ['GET'])]
     public function translate(Request $request): Response
     {
-        $this->userHasPermission(PermissionType::FAQ_ADD);
+        $this->userHasPermission(PermissionType::FAQ_TRANSLATE);
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
