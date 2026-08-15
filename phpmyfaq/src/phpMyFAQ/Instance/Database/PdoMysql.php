@@ -281,6 +281,7 @@ class PdoMysql extends Database implements DriverInterface
             faq_id INT(11) NOT NULL DEFAULT 0,
             created VARCHAR(20) NOT NULL,
             PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+        'faqquestion_history_idx' => 'CREATE INDEX idx_faqquestion_history ON %sfaqquestion_history (question_id, question_lang)',
         'faqright' => 'CREATE TABLE %sfaqright (
             right_id INT(11) NOT NULL,
             name VARCHAR(50) NULL,

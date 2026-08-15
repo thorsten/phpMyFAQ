@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use phpMyFAQ\Enums\QuestionHistoryEventType;
 use PHPUnit\Framework\TestCase;
 
-class QuestionHistoryEntityTest extends TestCase
+final class QuestionHistoryEntityTest extends TestCase
 {
     public function testConstructionExposesAllValues(): void
     {

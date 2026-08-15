@@ -33,7 +33,7 @@
               <td>
                 {{ eventLabels[entry.eventType] ?? entry.eventType }}
                 {% if entry.faqId > 0 %}
-                  (FAQ #{{ entry.faqId }})
+                  ({{ msgQuestionHistoryFaq | format(entry.faqId) }})
                 {% endif %}
               </td>
               <td>{{ entry.username }}</td>

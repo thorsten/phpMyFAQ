@@ -309,11 +309,35 @@ class QuestionRepositoryTest extends TestCase
             ->setIsVisible(true);
 
         $questionId = $this->repository->add($questionEntity);
-        $this->repository->updateQuestionAnswer($questionId, 7, 1);
+        $this->assertTrue($this->repository->updateQuestionAnswer($questionId, 7, 1));
+
+        $questions = $this->repository->getAll('en');
+        $this->assertSame(7, $questions[0]['answer_id']);
 
         $this->assertTrue($this->repository->reopen($questionId));
 
         $questions = $this->repository->getAll('en');
         $this->assertSame(0, $questions[0]['answer_id']);
+    }
+
+    public function testReopenReturnsFalseForNeverAnsweredQuestion(): void
+    {
+        $questionEntity = new QuestionEntity();
+        $questionEntity
+            ->setUsername('testuser')
+            ->setEmail('test@example.org')
+            ->setCategoryId(1)
+            ->setQuestion('Open question')
+            ->setLanguage('en')
+            ->setIsVisible(true);
+
+        $questionId = $this->repository->add($questionEntity);
+
+        $this->assertFalse($this->repository->reopen($questionId));
+    }
+
+    public function testReopenReturnsFalseForNonexistentQuestion(): void
+    {
+        $this->assertFalse($this->repository->reopen(9999));
     }
 }

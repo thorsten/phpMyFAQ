@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Date;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Enums\QuestionHistoryEventType;
 use phpMyFAQ\Question;
 use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Session\Token;
@@ -145,12 +146,13 @@ final class OpenQuestionsController extends AbstractAdministrationController
             'msgAuthor' => Translation::get(key: 'msgAuthor'),
             'msgNoQuestionHistory' => Translation::get(key: 'msgNoQuestionHistory'),
             'msgOpenQuestions' => Translation::get(key: 'msgOpenQuestions'),
+            'msgQuestionHistoryFaq' => Translation::get(key: 'msgQuestionHistoryFaqReference'),
             'question' => $this->question->get($questionId),
             'entries' => $entries,
             'eventLabels' => [
-                'submitted' => Translation::get(key: 'questionHistoryEventSubmitted'),
-                'answered' => Translation::get(key: 'questionHistoryEventAnswered'),
-                'reopened' => Translation::get(key: 'questionHistoryEventReopened'),
+                QuestionHistoryEventType::Submitted->value => Translation::get(key: 'questionHistoryEventSubmitted'),
+                QuestionHistoryEventType::Answered->value => Translation::get(key: 'questionHistoryEventAnswered'),
+                QuestionHistoryEventType::Reopened->value => Translation::get(key: 'questionHistoryEventReopened'),
             ],
         ]);
     }

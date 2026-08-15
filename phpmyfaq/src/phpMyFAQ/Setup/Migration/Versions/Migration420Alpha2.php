@@ -256,12 +256,12 @@ readonly class Migration420Alpha2 extends AbstractMigration
                     . 'CREATE TABLE %sfaqquestion_history (
                         id %s NOT NULL,
                         question_id %s NOT NULL,
-                        question_lang VARCHAR(5) NOT NULL,
-                        event_type VARCHAR(20) NOT NULL,
+                        question_lang NVARCHAR(5) NOT NULL,
+                        event_type NVARCHAR(20) NOT NULL,
                         user_id %s NOT NULL DEFAULT -1,
-                        username VARCHAR(100) NOT NULL,
+                        username NVARCHAR(100) NOT NULL,
                         faq_id %s NOT NULL DEFAULT 0,
-                        created VARCHAR(20) NOT NULL,
+                        created NVARCHAR(20) NOT NULL,
                         PRIMARY KEY (id)
                     )',
                     $this->tablePrefix,

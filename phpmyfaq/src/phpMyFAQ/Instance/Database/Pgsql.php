@@ -275,6 +275,7 @@ class Pgsql extends Database implements DriverInterface
             faq_id INTEGER NOT NULL DEFAULT 0,
             created VARCHAR(20) NOT NULL,
             PRIMARY KEY (id))',
+        'faqquestion_history_idx' => 'CREATE INDEX idx_faqquestion_history ON %sfaqquestion_history (question_id, question_lang)',
         'faqright' => 'CREATE TABLE %sfaqright (
             right_id SERIAL NOT NULL,
             name VARCHAR(50) NULL,

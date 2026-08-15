@@ -1883,5 +1883,7 @@ $PMF_LANG['msgNoQuestionHistory'] = 'No history available for this question.';
 $PMF_LANG['questionHistoryEventSubmitted'] = 'Question submitted';
 $PMF_LANG['questionHistoryEventAnswered'] = 'Question answered';
 $PMF_LANG['questionHistoryEventReopened'] = 'Question reopened';
+$PMF_LANG['msgQuestionReopenError'] = 'The question could not be reopened.';
+$PMF_LANG['msgQuestionHistoryFaqReference'] = 'FAQ #%d';
 
 return $PMF_LANG;

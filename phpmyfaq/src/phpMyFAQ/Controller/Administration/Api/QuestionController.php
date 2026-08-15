@@ -127,16 +127,18 @@ final class QuestionController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $questionId = (int) ($data->questionId ?? 0);
+        $questionId = Filter::filterVar($data->questionId ?? null, FILTER_VALIDATE_INT);
 
-        if ($questionId === 0) {
-            return $this->json(['error' => 'reopen not successful'], Response::HTTP_BAD_REQUEST);
+        if (!is_int($questionId) || $questionId <= 0) {
+            return $this->json([
+                'error' => Translation::get(key: 'msgQuestionReopenError'),
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $questionData = $this->question->get($questionId);
 
         if ($questionData === []) {
-            return $this->json(['error' => 'reopen not successful'], Response::HTTP_NOT_FOUND);
+            return $this->json(['error' => Translation::get(key: 'msgQuestionReopenError')], Response::HTTP_NOT_FOUND);
         }
 
         if ($this->question->reopen($questionId)) {
@@ -157,6 +159,6 @@ final class QuestionController extends AbstractController
             return $this->json(['success' => Translation::get(key: 'msgQuestionReopened')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => 'reopen not successful'], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(key: 'msgQuestionReopenError')], Response::HTTP_BAD_REQUEST);
     }
 }

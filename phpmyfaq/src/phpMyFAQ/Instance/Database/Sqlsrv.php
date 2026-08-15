@@ -273,6 +273,7 @@ class Sqlsrv extends Database implements DriverInterface
             faq_id INTEGER NOT NULL DEFAULT 0,
             created NVARCHAR(20) NOT NULL,
             PRIMARY KEY (id))',
+        'faqquestion_history_idx' => 'CREATE INDEX idx_faqquestion_history ON %sfaqquestion_history (question_id, question_lang)',
         'faqright' => 'CREATE TABLE %sfaqright (
             right_id INTEGER NOT NULL,
             name NVARCHAR(50) NULL,

@@ -434,7 +434,7 @@ final class QuestionControllerTest extends TestCase
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        self::assertSame('reopen not successful', $payload['error']);
+        self::assertSame('The question could not be reopened.', $payload['error']);
     }
 
     /**
@@ -460,7 +460,7 @@ final class QuestionControllerTest extends TestCase
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
-        self::assertSame('reopen not successful', $payload['error']);
+        self::assertSame('The question could not be reopened.', $payload['error']);
 
         $events = $questionHistory->getByQuestion(999999, 'en');
         self::assertCount(0, $events);

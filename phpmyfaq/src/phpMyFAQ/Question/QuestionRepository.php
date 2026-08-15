@@ -241,15 +241,17 @@ readonly class QuestionRepository
 
     /**
      * Reopens an answered question by clearing its answer reference.
+     * Returns true only when a question actually transitioned back to open.
      */
     public function reopen(int $questionId): bool
     {
+        $db = $this->configuration->getDb();
         $query = sprintf(
-            'UPDATE %sfaqquestions SET answer_id = 0 WHERE id = %d',
+            'UPDATE %sfaqquestions SET answer_id = 0 WHERE id = %d AND answer_id <> 0',
             Database::getTablePrefix(),
             $questionId,
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return $db->query($query) !== false && $db->affectedRows() > 0;
     }
 }
