@@ -1877,5 +1877,11 @@ $PMF_LANG['msgNoPublishPermission'] = 'You are not allowed to change the publica
 $PMF_LANG['msgQuestionReopened'] = 'The question was reopened.';
 $PMF_LANG['msgReopenQuestion'] = 'Reopen';
 $PMF_LANG['msgQuestionHistory'] = 'History';
+$PMF_LANG['msgQuestionHistoryDate'] = 'Date';
+$PMF_LANG['msgQuestionHistoryEvent'] = 'Event';
+$PMF_LANG['msgNoQuestionHistory'] = 'No history available for this question.';
+$PMF_LANG['questionHistoryEventSubmitted'] = 'Question submitted';
+$PMF_LANG['questionHistoryEventAnswered'] = 'Question answered';
+$PMF_LANG['questionHistoryEventReopened'] = 'Question reopened';
 
 return $PMF_LANG;

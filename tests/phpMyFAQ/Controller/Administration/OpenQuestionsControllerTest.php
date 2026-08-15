@@ -14,6 +14,7 @@ use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -126,7 +127,10 @@ final class OpenQuestionsControllerTest extends TestCase
                 ];
             });
 
-        $controller = new OpenQuestionsController($question);
+        $questionHistory = $this->createStub(QuestionHistoryRepository::class);
+        $questionHistory->method('getByQuestion')->willReturn([]);
+
+        $controller = new OpenQuestionsController($question, $questionHistory);
         $controller->setContainer($this->createControllerContainer());
 
         $request = Request::create('https://localhost/admin/questions');

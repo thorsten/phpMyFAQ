@@ -1110,6 +1110,7 @@ return static function (ContainerConfigurator $container): void {
     ]);
     $services->set(AdminOpenQuestionsController::class, AdminOpenQuestionsController::class)->args([
         service('phpmyfaq.question'),
+        service('phpmyfaq.question.history'),
     ]);
     $services->set(AdminOrphanedFaqsController::class, AdminOrphanedFaqsController::class)->args([
         service('phpmyfaq.admin.faq'),
