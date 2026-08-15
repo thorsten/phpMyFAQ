@@ -74,10 +74,7 @@ final class QuestionController extends AbstractController
             self::CREATE_LIMIT_PER_IP,
             self::CREATE_LIMIT_INTERVAL_SECONDS,
         )) {
-            return $this->json(
-                ['error' => 'Too many requests. Please retry later.'],
-                Response::HTTP_TOO_MANY_REQUESTS,
-            );
+            return $this->json(['error' => 'Too many requests. Please retry later.'], Response::HTTP_TOO_MANY_REQUESTS);
         }
 
         if (!$this->isAddingQuestionsAllowed()) {
