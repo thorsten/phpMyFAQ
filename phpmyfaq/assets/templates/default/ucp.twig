@@ -264,6 +264,16 @@
                   <div class="modal-body">
                     <input id="pmf-csrf-token-remove-twofactor" value="{{ csrfTokenRemoveTwofactor }}" type="hidden" />
                     <p>{{ msgConfirmTwofactorConfig }}</p>
+                    <label class="form-label" for="pmf-remove-twofactor-code">{{ msgEnterTwofactorToken }}</label>
+                    <input
+                      class="form-control"
+                      id="pmf-remove-twofactor-code"
+                      type="text"
+                      inputmode="numeric"
+                      autocomplete="one-time-code"
+                      maxlength="6"
+                      pattern="[0-9]*"
+                    />
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">

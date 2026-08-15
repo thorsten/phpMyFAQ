@@ -892,6 +892,109 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         self::assertSame(Translation::get('msgErrorOccurred'), $payload['error']);
     }
 
+    public function testRemoveTwofactorConfigDeniesRemovalWhenEnabledAndCodeMissing(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'remove-twofactor');
+
+        // 2FA is on, so removal must prove the factor. The exploit sends only a CSRF token
+        // and no code; the second factor must survive and no write must happen.
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserData')->willReturnMap([
+            ['twofactor_enabled', 1],
+            ['secret', ''],
+        ]);
+        $currentUser->expects($this->never())->method('setUserData');
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->removeTwofactorConfig(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgTwofactorErrorToken'), $payload['error']);
+    }
+
+    public function testRemoveTwofactorConfigDeniesRemovalWhenEnabledAndCodeInvalid(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'remove-twofactor');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserData')->willReturnMap([
+            ['twofactor_enabled', 1],
+            ['secret', ''],
+        ]);
+        $currentUser->expects($this->never())->method('setUserData');
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->removeTwofactorConfig(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+            'code' => 'abc',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgTwofactorErrorToken'), $payload['error']);
+    }
+
+    public function testUpdateDataCannotDisableEnabledTwoFactor(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'ucp');
+
+        // The bulk profile form asks to switch 2FA off while it is currently on. This route
+        // must not honour that downgrade: the stored flag stays 1 and disabling is left to the
+        // dedicated, code-protected endpoint.
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserAuthSource')->willReturn('local');
+        $currentUser->method('getUserData')->willReturnMap([
+            ['twofactor_enabled', 1],
+        ]);
+        $currentUser
+            ->expects($this->once())
+            ->method('setUserData')
+            ->with([
+                'display_name' => 'Test User',
+                'is_visible' => 1,
+                'email' => 'test@example.com',
+                'twofactor_enabled' => 1,
+            ])
+            ->willReturn(true);
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userid' => 1,
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'is_visible' => 'on',
+            'faqpassword' => '',
+            'faqpassword_confirm' => '',
+            'twofactor_enabled' => 'off',
+            'secret' => '',
+            'pmf-csrf-token' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->updateData($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+    }
+
     public function testUpdateDataReturnsBadRequestWhenLocalProfileSaveFailsWithoutWritableAuthDriver(): void
     {
         $controller = $this->createController();

@@ -172,6 +172,7 @@ describe('handleUserControlPanel', () => {
         <div id="loader"></div>
         <div id="pmf-user-control-panel-response"></div>
         <input id="pmf-csrf-token-remove-twofactor" value="csrf-token-123" />
+        <input id="pmf-remove-twofactor-code" value=" 123456 " />
         <button id="pmf-remove-twofactor-confirm">Remove 2FA</button>
         <input id="twofactor_enabled" type="checkbox" checked />
         <div id="removeCurrentConfig" style="display: block;"></div>
@@ -185,7 +186,7 @@ describe('handleUserControlPanel', () => {
       confirmButton.click();
 
       await vi.waitFor(() => {
-        expect(removeTwofactorConfig).toHaveBeenCalledWith('csrf-token-123');
+        expect(removeTwofactorConfig).toHaveBeenCalledWith('csrf-token-123', '123456');
       });
 
       expect(pushNotification).toHaveBeenCalledWith('2FA removed successfully');
@@ -195,6 +196,10 @@ describe('handleUserControlPanel', () => {
 
       const configSection = document.getElementById('removeCurrentConfig') as HTMLElement;
       expect(configSection.style.display).toBe('none');
+
+      // The one-time code must not linger in the DOM after the request.
+      const codeInput = document.getElementById('pmf-remove-twofactor-code') as HTMLInputElement;
+      expect(codeInput.value).toBe('');
     });
 
     it('should show error notification when remove fails', async () => {
@@ -215,7 +220,7 @@ describe('handleUserControlPanel', () => {
       confirmButton.click();
 
       await vi.waitFor(() => {
-        expect(removeTwofactorConfig).toHaveBeenCalledWith('bad-token');
+        expect(removeTwofactorConfig).toHaveBeenCalledWith('bad-token', '');
       });
 
       expect(pushErrorNotification).toHaveBeenCalledWith('Invalid CSRF token');

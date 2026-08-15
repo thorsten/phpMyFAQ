@@ -83,6 +83,14 @@ final class UserController extends AbstractController
             return $this->json(['error' => 'User ID mismatch!'], Response::HTTP_BAD_REQUEST);
         }
 
+        // This bulk profile update may enable 2FA or leave it untouched, but it must never turn
+        // it off: disabling the second factor is a security downgrade that requires proof of the
+        // factor, which only the dedicated remove-twofactor endpoint enforces. Deriving the
+        // stored flag straight from the form field would let a stolen session silently strip 2FA
+        // via this route (CWE-308), so an "off" is ignored while the factor is currently on.
+        $twoFactorCurrentlyEnabled = (int) ($this->currentUser->getUserData('twofactor_enabled') ?? 0) === 1;
+        $twoFactorFlag = $twoFactorCurrentlyEnabled || $twoFactorEnabled === 'on' ? 1 : 0;
+
         $success = false;
         if (!$isAzureAdUser) {
             // The password is only changed when the user actually entered one;
@@ -117,7 +125,7 @@ final class UserController extends AbstractController
             ];
             if (!$isWebAuthnUser) {
                 $userData['email'] = is_string($email) ? $email : '';
-                $userData['twofactor_enabled'] = $twoFactorEnabled === 'on' ? 1 : 0;
+                $userData['twofactor_enabled'] = $twoFactorFlag;
             }
 
             $success = $this->currentUser->setUserData($userData);
@@ -140,7 +148,7 @@ final class UserController extends AbstractController
         if ($isAzureAdUser) {
             $userData = [
                 'is_visible' => $isVisible === 'on' ? 1 : 0,
-                'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0,
+                'twofactor_enabled' => $twoFactorFlag,
                 'secret' => $secret,
             ];
 
@@ -351,6 +359,19 @@ final class UserController extends AbstractController
 
         if (!$this->currentUser->isLoggedIn()) {
             throw new Exception('The user is not logged in.');
+        }
+
+        // Disabling the second factor is a security downgrade, so it requires proof of that
+        // very factor. Without this a stolen session plus a CSRF token would silently strip
+        // 2FA and reduce the account to password-only authentication (CWE-308). The code is
+        // verified against the still-current secret, before it is rotated below.
+        if ((int) $this->currentUser->getUserData('twofactor_enabled') === 1) {
+            $code = trim((string) Filter::filterVar($data->code ?? null, FILTER_SANITIZE_SPECIAL_CHARS, ''));
+            if (!$twoFactor->validateToken($code, $this->currentUser->getUserId())) {
+                return $this->json([
+                    'error' => Translation::get(key: 'msgTwofactorErrorToken'),
+                ], Response::HTTP_FORBIDDEN);
+            }
         }
 
         $newSecret = $twoFactor->generateSecret();
