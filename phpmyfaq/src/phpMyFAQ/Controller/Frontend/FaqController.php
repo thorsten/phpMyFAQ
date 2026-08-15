@@ -185,6 +185,8 @@ final class FaqController extends AbstractFrontController
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
+        $this->applyFaqAccessContext($this->faq);
+
         $faqData = $this->faq->getIdFromSolutionId($solutionId);
 
         if ($faqData === []) {
@@ -219,6 +221,8 @@ final class FaqController extends AbstractFrontController
         if ($faqId === 0 || $faqLang === '') {
             return new Response('', Response::HTTP_NOT_FOUND);
         }
+
+        $this->applyFaqAccessContext($this->faq);
 
         // Query the FAQ data directly for the specified language
         $result = $this->faq->getFaqResult($faqId, $faqLang);
@@ -286,12 +290,7 @@ final class FaqController extends AbstractFrontController
 
         // Initialize core objects
         $faq = new Faq($this->configuration);
-        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
-
-        // Without this the detail page evaluates permissions as an anonymous visitor, so a
-        // logged-in user is denied FAQs that were shared with them specifically.
-        $faq->setUser($this->currentUser->getUserId());
-        $faq->setGroups($currentGroups);
+        $currentGroups = $this->applyFaqAccessContext($faq);
 
         // Handle bookmarks
         if ($bookmarkAction === 'add' && $faqId > 0) {
@@ -525,6 +524,25 @@ final class FaqController extends AbstractFrontController
 
         $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
         return $this->render('faq.twig', $templateVars);
+    }
+
+    /**
+     * Hands the requester's identity to a Faq instance before it looks anything up.
+     *
+     * Without this every lookup evaluates permissions as an anonymous visitor: a logged-in
+     * user is denied FAQs that were shared with them specifically, and a scoped user can
+     * resolve titles of FAQs outside their read scope.
+     *
+     * @return int[] the resolved group ids of the current user
+     */
+    private function applyFaqAccessContext(Faq $faq): array
+    {
+        $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
+
+        $faq->setUser($this->currentUser->getUserId());
+        $faq->setGroups($currentGroups);
+
+        return $currentGroups;
     }
 
     /**

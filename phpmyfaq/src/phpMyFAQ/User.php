@@ -449,6 +449,9 @@ class User
      * 4.2.0-alpha.2 upgrade would see an empty FAQ while an anonymous visitor sees everything.
      * Hiding FAQs from a user therefore stays an explicit revoke instead of being an accident
      * of account creation.
+     *
+     * @throws Exception when the grant cannot be persisted — reporting the account as created
+     *                   anyway would hand out a user that sees an empty FAQ
      */
     private function grantDefaultReadRight(): void
     {
@@ -464,7 +467,14 @@ class User
             return;
         }
 
-        $this->perm->grantUserRight($this->userId, $rightId);
+        if (!$this->perm->grantUserRight($this->userId, $rightId)) {
+            throw new Exception(sprintf(
+                '%sThe default "%s" right could not be granted to user %d.',
+                self::ERROR_USER_CANNOT_CREATE_USER,
+                PermissionType::FAQS_VIEW->value,
+                $this->userId,
+            ));
+        }
     }
 
     private function getTenantQuotaEnforcer(): TenantQuotaEnforcer

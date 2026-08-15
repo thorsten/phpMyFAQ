@@ -229,7 +229,7 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $solutionId,
-            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope(),
+            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -405,7 +405,7 @@ final class FaqRepository implements FaqRepositoryInterface
             $onlyActive
                 ? sprintf("AND fd.active = 'yes' AND fd.date_start <= '%s' AND fd.date_end >= '%s'", $now, $now)
                 : '',
-            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope(),
+            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -539,7 +539,7 @@ final class FaqRepository implements FaqRepositoryInterface
             $now,
             $categoryId,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $queryHelper->queryPermissionExistsAny($groupSupport) . $queryHelper->queryReadScope(),
+            $queryHelper->queryPermissionExistsAny($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
             $orderTable,
             $orderColumn,
             $sortDirection,
@@ -608,7 +608,7 @@ final class FaqRepository implements FaqRepositoryInterface
             $onlyActive
                 ? sprintf("AND fd.active = 'yes' AND fd.date_start <= '%s' AND fd.date_end >= '%s'", $now, $now)
                 : '',
-            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope(),
+            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
 
         return $this->fetchAllRows($this->configuration->getDb()->query($query));
@@ -668,7 +668,7 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope(),
+            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
 
         return $this->fetchAllRows($this->configuration->getDb()->query($query));
@@ -739,7 +739,7 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $where,
-            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope(),
+            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
             $groupBy,
             $orderBy,
         );
@@ -931,7 +931,7 @@ final class FaqRepository implements FaqRepositoryInterface
             $now,
             $categoryId,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $queryHelper->queryPermissionExistsAny($groupSupport) . $queryHelper->queryReadScope(),
+            $queryHelper->queryPermissionExistsAny($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
             $order,
         );
 
@@ -953,14 +953,17 @@ final class FaqRepository implements FaqRepositoryInterface
         $query = sprintf(
             'SELECT COUNT(*) AS total FROM %sfaqdata fd '
             . "WHERE fd.date_start <= '%s' AND fd.date_end >= '%s' AND fd.active = 'yes' AND fd.lang = '%s' "
+            // The scope constraint lives inside the EXISTS so the count matches
+            // queryRenderableFaqsByCategoryId(), which constrains its fcr join the same way.
             . 'AND EXISTS (SELECT 1 FROM %sfaqcategoryrelations fcr '
-            . 'WHERE fcr.record_id = fd.id AND fcr.record_lang = fd.lang AND fcr.category_id = %d) %s',
+            . 'WHERE fcr.record_id = fd.id AND fcr.record_lang = fd.lang AND fcr.category_id = %d%s) %s',
             Database::getTablePrefix(),
             $now,
             $now,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             Database::getTablePrefix(),
             $categoryId,
+            $queryHelper->queryReadScopeCategoryRelation('fcr'),
             $queryHelper->queryPermissionExistsAny($groupSupport) . $queryHelper->queryReadScope(),
         );
 

@@ -227,10 +227,10 @@ describe('FAQ Overview Functions', () => {
             category_id: 3,
             sticky: 'no',
             active: 'yes',
+            isAllowedToPublish: true,
           },
         ],
         isAllowedToTranslate: false,
-        isAllowedToPublish: true,
       });
 
       await handleFaqOverview();
@@ -260,7 +260,6 @@ describe('FAQ Overview Functions', () => {
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
         faqs: [],
         isAllowedToTranslate: false,
-        isAllowedToPublish: true,
       });
 
       await handleFaqOverview();
@@ -290,10 +289,10 @@ describe('FAQ Overview Functions', () => {
             category_id: 3,
             sticky: 'no',
             active: 'yes',
+            isAllowedToPublish: false,
           },
         ],
         isAllowedToTranslate: false,
-        isAllowedToPublish: false,
       });
 
       await handleFaqOverview();
@@ -326,10 +325,10 @@ describe('FAQ Overview Functions', () => {
             category_id: 3,
             sticky: 'no',
             active: 'yes',
+            isAllowedToPublish: true,
           },
         ],
         isAllowedToTranslate: false,
-        isAllowedToPublish: true,
       });
 
       const fetchMock = vi.fn().mockResolvedValue({
@@ -381,10 +380,10 @@ describe('FAQ Overview Functions', () => {
             category_id: 3,
             sticky: 'no',
             active: 'yes',
+            isAllowedToPublish: true,
           },
         ],
         isAllowedToTranslate: false,
-        isAllowedToPublish: true,
       });
 
       const fetchMock = vi.fn().mockResolvedValue({
@@ -434,10 +433,10 @@ describe('FAQ Overview Functions', () => {
             category_id: 3,
             sticky: 'no',
             active: 'yes',
+            isAllowedToPublish: true,
           },
         ],
         isAllowedToTranslate: false,
-        isAllowedToPublish: true,
       });
 
       const fetchMock = vi.fn().mockResolvedValue({
@@ -480,10 +479,10 @@ describe('FAQ Overview Functions', () => {
             category_id: 3,
             sticky: 'no',
             active: 'yes',
+            isAllowedToPublish: true,
           },
         ],
         isAllowedToTranslate: false,
-        isAllowedToPublish: true,
       });
 
       const fetchMock = vi.fn().mockRejectedValue(new Error('Connection refused'));
@@ -523,10 +522,10 @@ describe('FAQ Overview Functions', () => {
             category_id: 3,
             sticky: 'no',
             active: 'yes',
+            isAllowedToPublish: true,
           },
         ],
         isAllowedToTranslate: false,
-        isAllowedToPublish: true,
       });
 
       const fetchMock = vi.fn().mockResolvedValue({

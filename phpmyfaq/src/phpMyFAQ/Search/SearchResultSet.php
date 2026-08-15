@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Faq\ReadScope;
 use phpMyFAQ\User\CurrentUser;
@@ -85,7 +86,7 @@ class SearchResultSet
 
         // Not every caller routes its hits through Faq::getFaqResult() first, so the read scope
         // is applied here too — a hit a user may not open must not leak its question text.
-        $readScope = ReadScope::forUserId($this->configuration, $this->currentUser->getUserId());
+        $readScope = $this->resolveReadScope();
 
         if (
             'basic' !== $this->configuration->get(item: 'security.permLevel')
@@ -146,8 +147,19 @@ class SearchResultSet
     }
 
     /**
-     * Search hits vary by backend, so a field that is absent is treated as "nothing to check"
-     * rather than as a denial — the SQL-level scope on the FAQ queries stays the real gate.
+     * The single place the requester's read scope is resolved, overridable so tests can review
+     * a result set under a chosen scope without a database-backed permission lookup.
+     */
+    protected function resolveReadScope(): ReadScope
+    {
+        return ReadScope::forUserId($this->configuration, $this->currentUser->getUserId());
+    }
+
+    /**
+     * Search hits vary by backend, so a restricted scope must not take a hit at its word: a hit
+     * that does not carry a usable language or category is authorized against the stored FAQ
+     * data instead of being waved through — an absent field would otherwise become a way to
+     * leak the question text of an FAQ the requester may not open.
      */
     private function isWithinReadScope(ReadScope $readScope, stdClass $result): bool
     {
@@ -155,11 +167,51 @@ class SearchResultSet
             return true;
         }
 
-        if (property_exists($result, 'lang') && !$readScope->allowsLanguage((string) $result->lang)) {
+        $language = property_exists($result, 'lang') && (string) $result->lang !== '' ? (string) $result->lang : null;
+        $categoryId = property_exists($result, 'category_id') && (int) $result->category_id > 0
+            ? (int) $result->category_id
+            : null;
+
+        if ($language === null || $categoryId === null) {
+            return $this->isStoredFaqWithinReadScope($readScope, (int) ($result->id ?? 0), $language);
+        }
+
+        return $readScope->allowsLanguage($language) && $readScope->allowsCategory($categoryId);
+    }
+
+    /**
+     * Authorizes an incomplete hit from the stored FAQ data: the hit passes when at least one
+     * of the record's stored language and category combinations lies within the scope. A hit
+     * whose record cannot be resolved at all fails closed.
+     */
+    private function isStoredFaqWithinReadScope(ReadScope $readScope, int $faqId, ?string $language): bool
+    {
+        if ($faqId <= 0) {
             return false;
         }
 
-        return !property_exists($result, 'category_id') || $readScope->allowsCategory((int) $result->category_id);
+        $database = $this->configuration->getDb();
+        $query = sprintf(
+            'SELECT fd.lang AS lang, fcr.category_id AS category_id FROM %sfaqdata fd '
+            . 'LEFT JOIN %sfaqcategoryrelations fcr ON fcr.record_id = fd.id AND fcr.record_lang = fd.lang '
+            . 'WHERE fd.id = %d%s',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $faqId,
+            $language !== null ? sprintf(" AND fd.lang = '%s'", $database->escape($language)) : '',
+        );
+
+        $rows = $database->fetchAll($database->query($query)) ?? [];
+
+        foreach ($rows as $row) {
+            if (
+                $readScope->allowsLanguage((string) $row->lang) && $readScope->allowsCategory((int) $row->category_id)
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -9,10 +9,10 @@ export interface Faq {
   updated: string; // Format: YYYYMMDDHHMMSS
   visits: number;
   created: string; // Format: YYYY-MM-DD HH:MM:SS
+  isAllowedToPublish: boolean;
 }
 
 export interface FaqList {
   faqs: Faq[];
   isAllowedToTranslate: boolean;
-  isAllowedToPublish: boolean;
 }

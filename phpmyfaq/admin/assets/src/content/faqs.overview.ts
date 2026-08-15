@@ -38,7 +38,7 @@ export const handleFaqOverview = async (): Promise<void> => {
         const onlyNew: boolean = getNewCheckboxState();
 
         const faqs = await fetchAllFaqsByCategory(categoryId, language, onlyInactive, onlyNew);
-        await populateCategoryTable(categoryId, faqs.faqs, faqs.isAllowedToTranslate, faqs.isAllowedToPublish);
+        await populateCategoryTable(categoryId, faqs.faqs, faqs.isAllowedToTranslate);
         const toggleStickyFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-sticky-faq');
         const toggleActiveFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-active-faq');
         const translationDropdown: NodeListOf<HTMLElement> = document.querySelectorAll('#dropdownAddNewTranslation');
@@ -215,12 +215,7 @@ const saveStatus = async (
   }
 };
 
-const populateCategoryTable = async (
-  categoryId: string,
-  faqs: Faq[],
-  isAllowedToTranslate: boolean,
-  isAllowedToPublish: boolean
-): Promise<void> => {
+const populateCategoryTable = async (categoryId: string, faqs: Faq[], isAllowedToTranslate: boolean): Promise<void> => {
   const tableBody = document.getElementById(`tbody-category-id-${categoryId}`) as HTMLElement;
   const csrfToken = tableBody.getAttribute('data-pmf-csrf') as string;
 
@@ -271,10 +266,10 @@ const populateCategoryTable = async (
         }),
       ])
     );
-    // Without the publish right the checkbox would only ever produce a 403, so show the state
-    // read-only instead of offering an action the API rejects.
+    // Without the publish right for every category of this FAQ the checkbox would only ever
+    // produce a 403, so show the state read-only instead of offering an action the API rejects.
     row.append(
-      isAllowedToPublish
+      faq.isAllowedToPublish
         ? addElement('td', { classList: 'align-middle' }, [
             addElement('input', {
               classList: 'form-check-input pmf-admin-active-faq',

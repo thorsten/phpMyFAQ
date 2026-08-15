@@ -97,10 +97,9 @@ readonly class PermissionBackfillOperation implements OperationInterface
 
             $sourceRightId = $this->mirrorFrom === null ? 0 : $permission->getRightId($this->mirrorFrom);
 
-            $this->backfillUsers($user, $rightId, $sourceRightId);
-            $this->backfillGroups($rightId, $sourceRightId);
-
-            return true;
+            return (
+                $this->backfillUsers($user, $rightId, $sourceRightId) && $this->backfillGroups($rightId, $sourceRightId)
+            );
         } catch (Throwable) {
             return false;
         }
@@ -136,27 +135,38 @@ readonly class PermissionBackfillOperation implements OperationInterface
         ]);
     }
 
-    private function backfillUsers(User $user, int $rightId, int $sourceRightId): void
+    /**
+     * Returns false as soon as one grant cannot be persisted: a backfill that silently skips
+     * an account would enforce a right that account never received, so the whole operation
+     * reports failure and stays retryable instead.
+     */
+    private function backfillUsers(User $user, int $rightId, int $sourceRightId): bool
     {
         $userIds = $this->resolveUserIds($user, $sourceRightId);
 
         foreach ($userIds as $userId) {
             // grantUserRight() is a plain INSERT, so a re-run after a partially failed update
             // would hit a primary key violation without this guard.
-            if (!$user->perm->checkUserRight($userId, $rightId)) {
-                $user->perm->grantUserRight($userId, $rightId);
+            if (!$user->perm->checkUserRight($userId, $rightId) && !$user->perm->grantUserRight($userId, $rightId)) {
+                return false;
             }
 
             if ($this->mirrorRestrictions && $sourceRightId > 0) {
                 $this->mirrorUserLanguageRestrictions($userId, $rightId, $sourceRightId);
             }
         }
+
+        return true;
     }
 
-    private function backfillGroups(int $rightId, int $sourceRightId): void
+    /**
+     * Same failure policy as backfillUsers(): the first grant that does not persist fails
+     * the operation.
+     */
+    private function backfillGroups(int $rightId, int $sourceRightId): bool
     {
         if (!$this->grantToAllGroups && $this->mirrorFrom === null) {
-            return;
+            return true;
         }
 
         // The group tables exist in both permission levels, and an installation can be switched
@@ -167,20 +177,25 @@ readonly class PermissionBackfillOperation implements OperationInterface
             : $groupRepository->getGroupIdsWithRight($sourceRightId);
 
         if ($groupIds === []) {
-            return;
+            return true;
         }
 
         $permission = new MediumPermission($this->configuration);
 
         foreach ($groupIds as $groupId) {
-            if (!in_array($rightId, $groupRepository->getGroupRights($groupId), strict: true)) {
-                $permission->grantGroupRight($groupId, $rightId);
+            if (
+                !in_array($rightId, $groupRepository->getGroupRights($groupId), strict: true)
+                && !$permission->grantGroupRight($groupId, $rightId)
+            ) {
+                return false;
             }
 
             if ($this->mirrorRestrictions && $sourceRightId > 0) {
                 $this->mirrorGroupRestrictions($groupId, $rightId, $sourceRightId);
             }
         }
+
+        return true;
     }
 
     /**

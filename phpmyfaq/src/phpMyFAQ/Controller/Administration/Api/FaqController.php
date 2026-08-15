@@ -581,8 +581,31 @@ final class FaqController extends AbstractAdministrationApiController
         $faq = new FaqAdministration($this->configuration);
         $faq->setLanguage($language);
 
+        $faqs = $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew);
+
+        // activate() authorizes against every category an FAQ is attached to, so the
+        // active-state checkbox has to be offered on the same basis — judging only the
+        // requested category would offer an action the API then rejects with a 403 for
+        // multi-category FAQs.
+        $publishCategoryRelation = new Relation(
+            $this->configuration,
+            new Category($this->configuration, [], withPermission: false),
+        );
+        $mayPublishEverywhere = $this->userMayPublishIn([], $language);
+
+        foreach ($faqs as &$faqData) {
+            $faqData['isAllowedToPublish'] =
+                $mayPublishEverywhere
+                || $this->userMayPublishIn(
+                    array_keys($publishCategoryRelation->getCategories((int) $faqData['id'], $language)),
+                    $language,
+                );
+        }
+
+        unset($faqData);
+
         return $this->json([
-            'faqs' => $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew),
+            'faqs' => $faqs,
             'isAllowedToTranslate' =>
                 $this->currentUser?->perm->hasPermissionForCategory(
                     $this->currentUser->getUserId(),
@@ -594,7 +617,6 @@ final class FaqController extends AbstractAdministrationApiController
                         PermissionType::FAQ_TRANSLATE->value,
                         $language,
                     ),
-            'isAllowedToPublish' => $this->userMayPublishIn([$categoryId], $language),
         ], Response::HTTP_OK);
     }
 

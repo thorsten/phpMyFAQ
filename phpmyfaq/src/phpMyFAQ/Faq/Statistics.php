@@ -67,13 +67,15 @@ class Statistics
     public function totalFaqs(?string $language = null): int
     {
         $now = date(format: 'YmdHis');
+        $queryHelper = new QueryHelper($this->user, $this->groups, $this->readScope);
 
         $query = sprintf(
-            "SELECT id FROM %sfaqdata WHERE active = 'yes' %s AND date_start <= '%s' AND date_end >= '%s'",
+            "SELECT fd.id FROM %sfaqdata fd WHERE fd.active = 'yes' %s AND fd.date_start <= '%s' AND fd.date_end >= '%s'%s",
             Database::getTablePrefix(),
-            null === $language ? '' : "AND lang = '" . $this->configuration->getDb()->escape($language) . "'",
+            null === $language ? '' : "AND fd.lang = '" . $this->configuration->getDb()->escape($language) . "'",
             $now,
             $now,
+            $queryHelper->queryReadScope(),
         );
 
         $num = $this->configuration->getDb()->numRows($this->configuration->getDb()->query($query));
@@ -437,7 +439,11 @@ class Statistics
         $queryHelper = new QueryHelper($this->user, $this->groups, $this->readScope);
         $prefix = Database::getTablePrefix();
 
-        $categoryFilter = $categoryId !== 0 ? sprintf(' AND fcr.category_id = %d', $categoryId) : '';
+        // The scope constraint keeps the deterministic category out of the requester's
+        // denied categories — the outer WHERE only decides whether the FAQ shows at all.
+        $categoryFilter =
+            ($categoryId !== 0 ? sprintf(' AND fcr.category_id = %d', $categoryId) : '')
+            . $queryHelper->queryReadScopeCategoryRelation('fcr');
 
         $query = sprintf(
             'SELECT %s, (SELECT MIN(fcr.category_id) FROM %sfaqcategoryrelations fcr '

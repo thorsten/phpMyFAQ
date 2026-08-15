@@ -135,9 +135,11 @@ final readonly class ReadScope
      * anonymous visitors, superadmins and every user holding an unscoped grant — so the common
      * query stays exactly as it was.
      *
-     * @param string $faqAlias the alias the query gives the faqdata table
+     * @param string      $faqAlias              the alias the query gives the faqdata table
+     * @param string|null $categoryRelationAlias the alias of a faqcategoryrelations join in the
+     *                                           outer query, when it has one
      */
-    public function toSqlFragment(string $faqAlias = 'fd'): string
+    public function toSqlFragment(string $faqAlias = 'fd', ?string $categoryRelationAlias = null): string
     {
         if (!$this->enforced) {
             return '';
@@ -155,22 +157,53 @@ final readonly class ReadScope
             $fragment .= sprintf(' AND %s.lang IN (%s)', $faqAlias, $this->quotedLanguageList());
         }
 
-        if ($this->categoryIds !== null) {
-            // An EXISTS sub-query rather than a join condition: not every FAQ query carries a
-            // faqcategoryrelations alias in its outer query, and a join would fan one FAQ out
-            // into several rows and break LIMIT and COUNT.
-            $fragment .= sprintf(
-                ' AND EXISTS (SELECT 1 FROM %sfaqcategoryrelations pmfrs'
-                . ' WHERE pmfrs.record_id = %s.id AND pmfrs.record_lang = %s.lang'
-                . ' AND pmfrs.category_id IN (%s))',
-                Database::getTablePrefix(),
-                $faqAlias,
-                $faqAlias,
-                implode(', ', array_map(intval(...), $this->categoryIds ?? [])),
-            );
+        if ($this->categoryIds === null) {
+            return $fragment;
         }
 
-        return $fragment;
+        // A query that joins faqcategoryrelations itself must constrain that alias directly:
+        // the EXISTS predicate admits the FAQ as soon as one permitted category exists, so the
+        // join could still project a denied category id next to it.
+        if ($categoryRelationAlias !== null) {
+            return $fragment . $this->toCategoryRelationConstraint($categoryRelationAlias);
+        }
+
+        // An EXISTS sub-query rather than a join condition: not every FAQ query carries a
+        // faqcategoryrelations alias in its outer query, and a join would fan one FAQ out
+        // into several rows and break LIMIT and COUNT.
+        return sprintf(
+            '%s AND EXISTS (SELECT 1 FROM %sfaqcategoryrelations pmfrs'
+            . ' WHERE pmfrs.record_id = %s.id AND pmfrs.record_lang = %s.lang'
+            . ' AND pmfrs.category_id IN (%s))',
+            $fragment,
+            Database::getTablePrefix(),
+            $faqAlias,
+            $faqAlias,
+            $this->categoryIdList(),
+        );
+    }
+
+    /**
+     * Constrains a faqcategoryrelations alias to the scoped categories, for queries that
+     * project or aggregate a category id themselves — an outer join as well as a sub-query
+     * computing something like MIN(category_id) must not surface a denied category.
+     */
+    public function toCategoryRelationConstraint(string $categoryRelationAlias): string
+    {
+        if (!$this->enforced || $this->categoryIds === null) {
+            return '';
+        }
+
+        if (!$this->granted || $this->categoryIds === []) {
+            return ' AND 1 = 0';
+        }
+
+        return sprintf(' AND %s.category_id IN (%s)', $categoryRelationAlias, $this->categoryIdList());
+    }
+
+    private function categoryIdList(): string
+    {
+        return implode(', ', array_map(intval(...), $this->categoryIds ?? []));
     }
 
     private function quotedLanguageList(): string

@@ -63,11 +63,22 @@ readonly class QueryHelper
      * question: those check the record's own user and group ACL, this one checks whether the
      * requester holds the FAQ read right and in which categories and languages.
      *
-     * @param string $faqAlias the alias the query gives the faqdata table
+     * @param string      $faqAlias              the alias the query gives the faqdata table
+     * @param string|null $categoryRelationAlias the alias of a faqcategoryrelations join in the
+     *                                           outer query, when it has one
      */
-    public function queryReadScope(string $faqAlias = 'fd'): string
+    public function queryReadScope(string $faqAlias = 'fd', ?string $categoryRelationAlias = null): string
     {
-        return $this->readScope->toSqlFragment($faqAlias);
+        return $this->readScope->toSqlFragment($faqAlias, $categoryRelationAlias);
+    }
+
+    /**
+     * Constrains a faqcategoryrelations alias to the scoped categories. For sub-queries that
+     * aggregate a category id on their own, where queryReadScope() cannot reach.
+     */
+    public function queryReadScopeCategoryRelation(string $categoryRelationAlias): string
+    {
+        return $this->readScope->toCategoryRelationConstraint($categoryRelationAlias);
     }
 
     public function queryPermission(bool $hasGroupSupport = false): string
@@ -236,7 +247,7 @@ readonly class QueryHelper
                 break;
         }
 
-        $query .= $this->queryReadScope();
+        $query .= $this->queryReadScope('fd', 'fcr');
 
         match ($queryType) {
             self::FAQ_QUERY_TYPE_EXPORT_PDF,

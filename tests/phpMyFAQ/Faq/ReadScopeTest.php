@@ -107,6 +107,44 @@ class ReadScopeTest extends TestCase
     }
 
     /**
+     * A query that joins faqcategoryrelations itself must constrain that alias instead of
+     * relying on EXISTS, or it could still project a denied category id for an FAQ that also
+     * belongs to an allowed category.
+     */
+    public function testOuterRelationAliasReplacesTheExistsSubQuery(): void
+    {
+        $scope = ReadScope::forUser($this->permission(hasRight: true, categories: [2, 3]), 5);
+
+        $fragment = $scope->toSqlFragment('fd', 'fcr');
+
+        self::assertStringContainsString('fcr.category_id IN (2, 3)', $fragment);
+        self::assertStringNotContainsString('EXISTS', $fragment);
+    }
+
+    public function testCategoryRelationConstraintRendersNothingWithoutCategoryRestriction(): void
+    {
+        self::assertSame('', ReadScope::unrestricted()->toCategoryRelationConstraint('fcr'));
+        self::assertSame(
+            '',
+            ReadScope::forUser($this->permission(hasRight: true), 5)->toCategoryRelationConstraint('fcr'),
+        );
+    }
+
+    public function testCategoryRelationConstraintMatchesNoRowsWithoutTheRight(): void
+    {
+        $scope = ReadScope::forUser($this->permission(hasRight: false), 5);
+
+        self::assertSame(' AND 1 = 0', $scope->toCategoryRelationConstraint('fcr'));
+    }
+
+    public function testCategoryRelationConstraintHonoursTheGivenAlias(): void
+    {
+        $scope = ReadScope::forUser($this->permission(hasRight: true, categories: [7]), 5);
+
+        self::assertSame(' AND rel.category_id IN (7)', $scope->toCategoryRelationConstraint('rel'));
+    }
+
+    /**
      * The read right is one decision, so it must be read once — not re-derived per query.
      */
     public function testTheRightIsEvaluatedExactlyOnce(): void
