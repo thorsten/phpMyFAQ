@@ -548,6 +548,62 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         self::assertStringContainsString('attachment;', (string) $response->headers->get('Content-Disposition'));
     }
 
+    /**
+     * Regression test: the GDPR self-service export is a user-facing download that ends up
+     * in browsers, download folders and backups. It must never contain credential material —
+     * exporting the live TOTP seed would let anyone holding the archive generate valid
+     * one-time codes and defeat the account's second factor (CWE-200).
+     */
+    public function testExportUserDataDoesNotContainTotpSecret(): void
+    {
+        if (!class_exists(\ZipArchive::class)) {
+            self::markTestSkipped('ZIP extension not available.');
+        }
+
+        $liveTotpSecret = 'JBSWY3DPEHPK3PXP';
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['email',             'test@example.com'],
+                ['display_name',      'Test User'],
+                ['last_modified',     '20260301120000'],
+                ['is_visible',        1],
+                ['twofactor_enabled', 1],
+                ['secret',            $liveTotpSecret],
+            ]);
+
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'export-userdata');
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'userid' => 1,
+        ]);
+
+        $response = $controller->exportUserData($request);
+
+        self::assertInstanceOf(BinaryFileResponse::class, $response);
+
+        $zipArchive = new \ZipArchive();
+        self::assertTrue($zipArchive->open($response->getFile()->getPathname()));
+        $json = $zipArchive->getFromName('userdata.json');
+        $zipArchive->close();
+
+        self::assertIsString($json);
+        $userData = json_decode($json, true);
+        self::assertIsArray($userData);
+        self::assertArrayNotHasKey('secret', $userData);
+        self::assertStringNotContainsString($liveTotpSecret, $json);
+        self::assertSame(1, $userData['twofactor_enabled']);
+    }
+
     public function testExportUserDataReturnsBadRequestForUserIdMismatch(): void
     {
         $controller = $this->createController();

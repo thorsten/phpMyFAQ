@@ -225,7 +225,6 @@ final class UserController extends AbstractController
             'email' => (string) ($this->currentUser->getUserData('email') ?? ''),
             'is_visible' => (int) ($this->currentUser->getUserData('is_visible') ?? 0),
             'twofactor_enabled' => (int) ($this->currentUser->getUserData('twofactor_enabled') ?? 0),
-            'secret' => (string) ($this->currentUser->getUserData('secret') ?? ''),
         ];
 
         $json = json_encode($userData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
