@@ -52,6 +52,9 @@ class FaqRepositoryTest extends TestCase
         Language::$language = 'en';
 
         $this->faqRepository = new FaqRepository($this->configuration);
+        // QueryHelper rejects a known user without a resolved scope; these tests exercise the
+        // record ACL, so the requester's read scope is explicitly unrestricted.
+        $this->faqRepository->setReadScope(ReadScope::unrestricted());
     }
 
     protected function tearDown(): void

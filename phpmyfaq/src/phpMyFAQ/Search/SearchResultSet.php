@@ -88,6 +88,10 @@ class SearchResultSet
         // is applied here too — a hit a user may not open must not leak its question text.
         $readScope = $this->resolveReadScope();
 
+        $storedRowsByFaq = $readScope->isUnrestricted()
+            ? []
+            : $this->loadStoredRowsForIncompleteHits($this->rawResultSet);
+
         if (
             'basic' !== $this->configuration->get(item: 'security.permLevel')
             && isset($this->currentUser->perm) // @mago-expect lint:no-isset - typed property may be uninitialized
@@ -101,7 +105,7 @@ class SearchResultSet
         foreach ($this->rawResultSet as $result) {
             $permission = false;
 
-            if (!$this->isWithinReadScope($readScope, $result)) {
+            if (!$this->isWithinReadScope($readScope, $result, $storedRowsByFaq)) {
                 continue;
             }
 
@@ -160,50 +164,88 @@ class SearchResultSet
      * that does not carry a usable language or category is authorized against the stored FAQ
      * data instead of being waved through — an absent field would otherwise become a way to
      * leak the question text of an FAQ the requester may not open.
+     *
+     * @param array<int, list<stdClass>> $storedRowsByFaq
      */
-    private function isWithinReadScope(ReadScope $readScope, stdClass $result): bool
+    private function isWithinReadScope(ReadScope $readScope, stdClass $result, array $storedRowsByFaq): bool
     {
         if ($readScope->isUnrestricted()) {
             return true;
         }
 
-        $language = property_exists($result, 'lang') && (string) $result->lang !== '' ? (string) $result->lang : null;
-        $categoryId = property_exists($result, 'category_id') && (int) $result->category_id > 0
-            ? (int) $result->category_id
-            : null;
+        $language = $this->hitLanguage($result);
+        $categoryId = $this->hitCategoryId($result);
 
         if ($language === null || $categoryId === null) {
-            return $this->isStoredFaqWithinReadScope($readScope, (int) ($result->id ?? 0), $language);
+            return $this->isStoredFaqWithinReadScope(
+                $readScope,
+                $storedRowsByFaq[(int) ($result->id ?? 0)] ?? [],
+                $language,
+            );
         }
 
         return $readScope->allowsLanguage($language) && $readScope->allowsCategory($categoryId);
     }
 
     /**
-     * Authorizes an incomplete hit from the stored FAQ data: the hit passes when at least one
-     * of the record's stored language and category combinations lies within the scope. A hit
-     * whose record cannot be resolved at all fails closed.
+     * Loads the stored language and category rows of every hit that will need the storage
+     * fallback, in one query — resolving them per hit would issue one query for each
+     * incomplete hit in the raw result set.
+     *
+     * @param stdClass[] $results
+     * @return array<int, list<stdClass>>
      */
-    private function isStoredFaqWithinReadScope(ReadScope $readScope, int $faqId, ?string $language): bool
+    private function loadStoredRowsForIncompleteHits(array $results): array
     {
-        if ($faqId <= 0) {
-            return false;
+        $faqIds = [];
+
+        foreach ($results as $result) {
+            if ($this->hitLanguage($result) !== null && $this->hitCategoryId($result) !== null) {
+                continue;
+            }
+
+            $faqId = (int) ($result->id ?? 0);
+            if ($faqId > 0) {
+                $faqIds[$faqId] = true;
+            }
+        }
+
+        if ($faqIds === []) {
+            return [];
         }
 
         $database = $this->configuration->getDb();
         $query = sprintf(
-            'SELECT fd.lang AS lang, fcr.category_id AS category_id FROM %sfaqdata fd '
+            'SELECT fd.id AS id, fd.lang AS lang, fcr.category_id AS category_id FROM %sfaqdata fd '
             . 'LEFT JOIN %sfaqcategoryrelations fcr ON fcr.record_id = fd.id AND fcr.record_lang = fd.lang '
-            . 'WHERE fd.id = %d%s',
+            . 'WHERE fd.id IN (%s)',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $faqId,
-            $language !== null ? sprintf(" AND fd.lang = '%s'", $database->escape($language)) : '',
+            implode(', ', array_keys($faqIds)),
         );
 
-        $rows = $database->fetchAll($database->query($query)) ?? [];
+        $storedRowsByFaq = [];
+        foreach ($database->fetchAll($database->query($query)) ?? [] as $row) {
+            $storedRowsByFaq[(int) $row->id][] = $row;
+        }
 
-        foreach ($rows as $row) {
+        return $storedRowsByFaq;
+    }
+
+    /**
+     * Authorizes an incomplete hit from its stored rows: the hit passes when at least one
+     * stored language and category combination lies within the scope, constrained to the
+     * hit's language when it carried one. A hit whose record resolved to no rows fails closed.
+     *
+     * @param list<stdClass> $storedRows
+     */
+    private function isStoredFaqWithinReadScope(ReadScope $readScope, array $storedRows, ?string $language): bool
+    {
+        foreach ($storedRows as $row) {
+            if ($language !== null && (string) $row->lang !== $language) {
+                continue;
+            }
+
             if (
                 $readScope->allowsLanguage((string) $row->lang) && $readScope->allowsCategory((int) $row->category_id)
             ) {
@@ -212,6 +254,18 @@ class SearchResultSet
         }
 
         return false;
+    }
+
+    private function hitLanguage(stdClass $result): ?string
+    {
+        return property_exists($result, 'lang') && (string) $result->lang !== '' ? (string) $result->lang : null;
+    }
+
+    private function hitCategoryId(stdClass $result): ?int
+    {
+        return property_exists($result, 'category_id') && (int) $result->category_id > 0
+            ? (int) $result->category_id
+            : null;
     }
 
     /**

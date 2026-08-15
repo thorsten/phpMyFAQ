@@ -9,10 +9,48 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\GroupCategoryPermissionRepository;
 use phpMyFAQ\Permission\LanguagePermissionRepository;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 #[CoversClass(PermissionBackfillOperation::class)]
+#[UsesClass(\phpMyFAQ\Auth::class)]
+#[UsesClass(\phpMyFAQ\Auth\AuthDatabase::class)]
+#[UsesClass(\phpMyFAQ\Auth\PasswordHasher::class)]
+#[UsesClass(\phpMyFAQ\Configuration::class)]
+#[UsesClass(\phpMyFAQ\Configuration\ConfigurationRepository::class)]
+#[UsesClass(\phpMyFAQ\Configuration\LayoutSettings::class)]
+#[UsesClass(\phpMyFAQ\Configuration\LdapSettings::class)]
+#[UsesClass(\phpMyFAQ\Configuration\MailSettings::class)]
+#[UsesClass(\phpMyFAQ\Configuration\SearchSettings::class)]
+#[UsesClass(\phpMyFAQ\Configuration\SecuritySettings::class)]
+#[UsesClass(\phpMyFAQ\Configuration\Storage\ConfigurationStorageSettings::class)]
+#[UsesClass(\phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver::class)]
+#[UsesClass(\phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore::class)]
+#[UsesClass(\phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache::class)]
+#[UsesClass(\phpMyFAQ\Configuration\Storage\HybridConfigurationStore::class)]
+#[UsesClass(\phpMyFAQ\Configuration\UrlSettings::class)]
+#[UsesClass(\phpMyFAQ\Database::class)]
+#[UsesClass(\phpMyFAQ\Database\Sqlite3::class)]
+#[UsesClass(\phpMyFAQ\Encryption::class)]
+#[UsesClass(\phpMyFAQ\Environment::class)]
+#[UsesClass(\phpMyFAQ\Language::class)]
+#[UsesClass(\phpMyFAQ\Language\LanguageCodes::class)]
+#[UsesClass(\phpMyFAQ\Permission::class)]
+#[UsesClass(\phpMyFAQ\Permission\BasicPermission::class)]
+#[UsesClass(\phpMyFAQ\Permission\BasicPermissionRepository::class)]
+#[UsesClass(GroupCategoryPermissionRepository::class)]
+#[UsesClass(LanguagePermissionRepository::class)]
+#[UsesClass(\phpMyFAQ\Permission\MediumPermission::class)]
+#[UsesClass(\phpMyFAQ\Permission\MediumPermissionRepository::class)]
+#[UsesClass(\phpMyFAQ\Plugin\PluginDiscovery::class)]
+#[UsesClass(\phpMyFAQ\Plugin\PluginManager::class)]
+#[UsesClass(\phpMyFAQ\System::class)]
+#[UsesClass(\phpMyFAQ\Translation::class)]
+#[UsesClass(\phpMyFAQ\User::class)]
+#[UsesClass(\phpMyFAQ\User\UserData::class)]
+#[UsesTrait(\phpMyFAQ\ConfigurationMethodsTrait::class)]
 class PermissionBackfillOperationTest extends TestCase
 {
     private Sqlite3 $dbHandle;

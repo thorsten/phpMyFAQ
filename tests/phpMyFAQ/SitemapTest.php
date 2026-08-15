@@ -32,8 +32,18 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\HttpFoundation\Session\Session;
+use phpMyFAQ\Auth\AuthDatabase;
+use phpMyFAQ\Auth\PasswordHasher;
 use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
+use phpMyFAQ\Faq\ReadScope;
+use phpMyFAQ\Permission\BasicPermission;
+use phpMyFAQ\Permission\BasicPermissionRepository;
+use phpMyFAQ\Permission\LanguagePermissionRepository;
 use phpMyFAQ\Plugin\PluginDiscovery;
+use phpMyFAQ\Session\SessionWrapper;
+use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserData;
+use phpMyFAQ\User\UserSession;
 
 #[CoversClass(Sitemap::class)]
 #[UsesClass(Configuration::class)]
@@ -72,6 +82,20 @@ use phpMyFAQ\Plugin\PluginDiscovery;
 #[UsesClass(Translation::class)]
 #[UsesClass(FilesystemConfigurationCache::class)]
 #[UsesClass(PluginDiscovery::class)]
+#[UsesClass(Auth::class)]
+#[UsesClass(AuthDatabase::class)]
+#[UsesClass(PasswordHasher::class)]
+#[UsesClass(Encryption::class)]
+#[UsesClass(ReadScope::class)]
+#[UsesClass(Permission::class)]
+#[UsesClass(BasicPermission::class)]
+#[UsesClass(BasicPermissionRepository::class)]
+#[UsesClass(LanguagePermissionRepository::class)]
+#[UsesClass(SessionWrapper::class)]
+#[UsesClass(User::class)]
+#[UsesClass(CurrentUser::class)]
+#[UsesClass(UserData::class)]
+#[UsesClass(UserSession::class)]
 class SitemapTest extends TestCase
 {
     private const int FAQ_ID = 9990;

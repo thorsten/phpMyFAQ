@@ -4,12 +4,22 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Faq;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\ConfigurationMethodsTrait;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\PermissionInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ReadScope::class)]
+#[UsesClass(Configuration::class)]
+#[UsesClass(Database::class)]
+#[UsesClass(Sqlite3::class)]
+#[UsesTrait(ConfigurationMethodsTrait::class)]
 class ReadScopeTest extends TestCase
 {
     public function testUnrestrictedScopeAddsNothingToTheQuery(): void

@@ -49,6 +49,7 @@ use phpMyFAQ\Plugin\PluginDiscovery;
 #[UsesClass(\phpMyFAQ\Faq::class)]
 #[UsesClass(\phpMyFAQ\Faq\FaqRepository::class)]
 #[UsesClass(\phpMyFAQ\Faq\Permission::class)]
+#[UsesClass(\phpMyFAQ\Faq\ReadScope::class)]
 #[UsesClass(\phpMyFAQ\Filter::class)]
 #[UsesClass(\phpMyFAQ\Glossary::class)]
 #[UsesClass(\phpMyFAQ\Glossary\GlossaryRepository::class)]

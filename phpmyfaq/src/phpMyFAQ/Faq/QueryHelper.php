@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Faq;
 
+use InvalidArgumentException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
@@ -48,6 +49,17 @@ readonly class QueryHelper
         private array $groups,
         ?ReadScope $readScope = null,
     ) {
+        // A known user must bring the scope resolved where the requester became known —
+        // silently defaulting them to an unrestricted read gate would disable the FAQS_VIEW
+        // enforcement for exactly the accounts it exists for.
+        if ($readScope === null && $user > 0) {
+            throw new InvalidArgumentException(sprintf(
+                'QueryHelper requires a resolved ReadScope for user %d; only an anonymous or'
+                . ' unresolved requester may omit it.',
+                $user,
+            ));
+        }
+
         $this->configuration = Configuration::getConfigurationInstance();
         // No scope handed in means the caller never established a requester, in which case
         // $user is still -1 and queryPermission() already treats them as anonymous — the most
