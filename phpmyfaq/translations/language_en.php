@@ -1873,7 +1873,7 @@ $PMF_LANG['msgImportRowNoLanguagePermission'] = 'Row %d: no "%s" permission for 
 $PMF_LANG['permission::faq_publish'] = 'Publish FAQs';
 $PMF_LANG['msgNoPublishPermission'] = 'You are not allowed to change the publication state of this FAQ.';
 
-// added v4.2.0-alpha.3 - 2026-08-15 by Thorsten Rinne - question metadata tracking
+// added v4.2.0-alpha.2 - 2026-08-15 by Thorsten Rinne - question metadata tracking
 $PMF_LANG['msgQuestionReopened'] = 'The question was reopened.';
 $PMF_LANG['msgReopenQuestion'] = 'Reopen';
 $PMF_LANG['msgQuestionHistory'] = 'History';
