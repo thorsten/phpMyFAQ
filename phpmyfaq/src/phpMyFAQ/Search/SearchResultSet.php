@@ -181,6 +181,7 @@ class SearchResultSet
                 $readScope,
                 $storedRowsByFaq[(int) ($result->id ?? 0)] ?? [],
                 $language,
+                $categoryId,
             );
         }
 
@@ -221,11 +222,11 @@ class SearchResultSet
             . 'WHERE fd.id IN (%s)',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            implode(', ', array_keys($faqIds)),
+            implode(', ', array_fill(start_index: 0, count: count($faqIds), value: '?')),
         );
 
         $storedRowsByFaq = [];
-        foreach ($database->fetchAll($database->query($query)) ?? [] as $row) {
+        foreach ($database->fetchAll($database->queryPrepared($query, array_keys($faqIds))) ?? [] as $row) {
             $storedRowsByFaq[(int) $row->id][] = $row;
         }
 
@@ -235,14 +236,24 @@ class SearchResultSet
     /**
      * Authorizes an incomplete hit from its stored rows: the hit passes when at least one
      * stored language and category combination lies within the scope, constrained to the
-     * hit's language when it carried one. A hit whose record resolved to no rows fails closed.
+     * language and category the hit itself carried — a hit claiming a denied category must
+     * not slip through on another membership of the same FAQ. A hit whose record resolved
+     * to no matching rows fails closed.
      *
      * @param list<stdClass> $storedRows
      */
-    private function isStoredFaqWithinReadScope(ReadScope $readScope, array $storedRows, ?string $language): bool
-    {
+    private function isStoredFaqWithinReadScope(
+        ReadScope $readScope,
+        array $storedRows,
+        ?string $language,
+        ?int $categoryId,
+    ): bool {
         foreach ($storedRows as $row) {
             if ($language !== null && (string) $row->lang !== $language) {
+                continue;
+            }
+
+            if ($categoryId !== null && (int) $row->category_id !== $categoryId) {
                 continue;
             }
 

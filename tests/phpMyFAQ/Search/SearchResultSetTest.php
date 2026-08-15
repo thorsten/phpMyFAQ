@@ -47,9 +47,17 @@ class SearchResultSetTest extends TestCase
         array $permissionResult = [-1],
         int $userId = 1,
         ?ReadScope $readScope = null,
+        array $storedFaqRows = [],
     ): SearchResultSet {
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('get')->willReturn($permLevel);
+
+        if ($storedFaqRows !== []) {
+            $database = $this->createMock(Sqlite3::class);
+            $database->method('queryPrepared')->willReturn(true);
+            $database->method('fetchAll')->willReturn($storedFaqRows);
+            $configuration->method('getDb')->willReturn($database);
+        }
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('getUserId')->willReturn($userId);
@@ -300,6 +308,40 @@ class SearchResultSetTest extends TestCase
 
         $this->assertSame([], $searchResultSet->getResultSet());
         $this->assertSame(0, $searchResultSet->getNumberOfResults());
+    }
+
+    public function testReviewResultSetAuthorizesIncompleteHitFromStoredRows(): void
+    {
+        $scope = $this->makeRestrictedScope([3], ['en']);
+        $storedRow = new stdClass();
+        $storedRow->id = 1;
+        $storedRow->lang = 'en';
+        $storedRow->category_id = 3;
+
+        $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1, $scope, [$storedRow]);
+
+        // The hit carries an allowed category but no language; the stored row supplies it.
+        $searchResultSet->reviewResultSet([$this->makeResult(1, ['category_id' => 3])]);
+
+        $this->assertCount(1, $searchResultSet->getResultSet());
+    }
+
+    public function testReviewResultSetDropsIncompleteHitClaimingDeniedCategory(): void
+    {
+        $scope = $this->makeRestrictedScope([3], ['en']);
+
+        // The FAQ also belongs to an allowed category and language — but the hit itself
+        // claims the denied category 9, so another membership must not admit it.
+        $storedRow = new stdClass();
+        $storedRow->id = 1;
+        $storedRow->lang = 'en';
+        $storedRow->category_id = 3;
+
+        $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1, $scope, [$storedRow]);
+
+        $searchResultSet->reviewResultSet([$this->makeResult(1, ['category_id' => 9])]);
+
+        $this->assertSame([], $searchResultSet->getResultSet());
     }
 
     public function testReviewResultSetWithoutRightFailsClosedForIncompleteHit(): void

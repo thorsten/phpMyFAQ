@@ -349,14 +349,13 @@ class Relation
 
         $query = sprintf(
             'SELECT record_id, category_id FROM %sfaqcategoryrelations WHERE record_id IN (%s)'
-            . " AND record_lang = '%s'",
+            . ' AND record_lang = ?',
             Database::getTablePrefix(),
-            implode(', ', $faqIds),
-            $this->configuration->getDb()->escape($faqLang),
+            implode(', ', array_fill(start_index: 0, count: count($faqIds), value: '?')),
         );
 
         $categoryIdsByFaq = [];
-        $result = $this->configuration->getDb()->query($query);
+        $result = $this->configuration->getDb()->queryPrepared($query, [...$faqIds, $faqLang]);
 
         if ($result) {
             while (true) {
