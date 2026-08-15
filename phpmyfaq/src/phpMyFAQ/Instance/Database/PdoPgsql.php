@@ -274,7 +274,7 @@ class PdoPgsql extends Database implements DriverInterface
             faq_id INTEGER NOT NULL DEFAULT 0,
             created VARCHAR(20) NOT NULL,
             PRIMARY KEY (id))',
-        'faqquestion_history_idx' => 'CREATE INDEX idx_faqquestion_history ON %sfaqquestion_history (question_id, question_lang)',
+        'faqquestion_history_idx' => 'CREATE INDEX idx_faqquestion_history_%s ON %sfaqquestion_history (question_id, question_lang)',
         'faqright' => 'CREATE TABLE %sfaqright (
             right_id SERIAL NOT NULL,
             name VARCHAR(50) NULL,
@@ -422,6 +422,7 @@ class PdoPgsql extends Database implements DriverInterface
             if (
                 $key === 'idx_records'
                 || $key === 'faqsessions_idx'
+                || $key === 'faqquestion_history_idx'
                 || str_starts_with($key, 'faqsearches_')
                 || str_starts_with($key, 'faqchat_messages_idx_')
             ) {
