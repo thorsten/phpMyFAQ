@@ -27,6 +27,11 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
     pnpm install
     pnpm build
 
+### Tool locations
+
+Composer installs dependencies to `phpmyfaq/src/libs` (not `vendor/`).
+CLI tools therefore live in `phpmyfaq/src/libs/bin/` (`phpunit`, `mago`, `rector`, etc.).
+
 ## Tech stack, libraries, and frameworks
 
 - HTML 5, SCSS, TypeScript, Bootstrap, and Bootstrap Icons for the frontend. TypeScript in strict mode.
@@ -45,16 +50,21 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 ## Testing
 
 - Always write tests for new features and bug fixes.
-- Always run tests before committing code. All tests must pass. No warnings or errors are allowed.
+- Always run tests before committing code. All tests must pass. CI must stay green: do not introduce new warnings or errors.
 - Linting and code formatting issues must be fixed before committing code.
 - PHP code: composer test
+- PHP single test file (much faster than the full suite): composer test -- tests/phpMyFAQ/Path/SomeTest.php
 - PHP code with coverage: composer test:coverage
 - PHP linting: composer lint
+- PHP lint auto-fix: composer lint:fix
 - PHP static analysis: composer analyze
+- PHP formatting check: composer format:dry-run
+- PHP formatting auto-fix: composer format
 - PHP CI parity (format check + lint + static analysis, same as the GitHub Actions Mago step): composer check
 - TypeScript code: pnpm test
 - TypeScript code with coverage: pnpm test:coverage
 - TypeScript code in watch mode: pnpm test:watch
+- TypeScript type check: pnpm tsc
 - TypeScript linting: pnpm oxlint
 - TypeScript/JSON/YAML/HTML code formatting check: pnpm oxfmt
 - TypeScript/JSON/YAML/HTML code formatting auto-fix: pnpm oxfmt:fix
@@ -63,11 +73,36 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - End-to-end tests (Playwright, fully automated setup via bin/e2e): pnpm e2e:local (SQLite + built-in PHP server) or pnpm e2e:docker (MariaDB container)
 - TypeScript errors have to be fixed before committing code.
 
+### Mago baselines
+
+Mago lint and analyze run against baseline files (`mago-lint-baseline.toml`,
+`mago-analyze-baseline.toml`) that suppress pre-existing findings. Editing a
+baselined line invalidates its entry and resurfaces the old finding — fix the
+finding rather than re-baselining it. Only error-level analyze findings fail CI;
+regenerate the analyze baseline with `composer analyze:baseline` when entries go stale.
+
 ## Building
 
 - TypeScript and CSS build: pnpm build
 - TypeScript and CSS build in watch mode: pnpm build:watch
 - TypeScript and CSS production build: pnpm build:prod
+
+## Running the Application
+
+`bin/dev` starts selectable Docker Compose development stacks (web server, database,
+search engine — every service is gated behind a Compose profile):
+
+- Start / stop: pnpm dev:up / pnpm dev:down
+- Status / logs: pnpm dev:ps / pnpm dev:logs
+- Presets: pnpm dev:default, pnpm dev:full
+
+## Git Hooks and Commit Messages
+
+- Commit messages must follow Conventional Commits (`fix:`, `feat:`, `test:`, `chore:`, `docs:`, `refactor:`, ...);
+  the commit-msg hook runs commitlint and rejects non-conforming messages.
+- The pre-commit hook runs the full check pipeline (Mago format/lint/analyze, composer validate,
+  PHPUnit, oxfmt, oxlint, stylelint, tsc, vitest). It takes a few minutes — that is expected, not a hang.
+- The pre-push hook runs composer validate and both test suites again.
 
 ## Coding Standards
 
@@ -79,7 +114,7 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - Use arrow functions for callbacks.
 - Always add the copyright header to new files, but not to test files.
 
-# Coding Patterns
+## Coding Patterns
 
 - Prefer guard clauses and early returns over deep conditional nesting
 - Name classes and methods after domain concepts, not technical mechanics (e.g. `Subscription.renew()`, not `DataRecord.update()`)
@@ -199,9 +234,7 @@ Use curly braces `{param}` for route parameters:
 #[Route(path: '/faq/{categoryId}/{faqId}', name: 'public.faq.show', methods: ['GET'])]
 public function show(Request $request, int $categoryId, int $faqId): Response
 {
-    // Parameters are automatically extracted from the URL
-    $categoryId = $request->attributes->get('categoryId');
-    $faqId = $request->attributes->get('faqId');
+    // {categoryId} and {faqId} are injected as typed method arguments
     // ...
 }
 ```
