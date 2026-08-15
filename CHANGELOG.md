@@ -29,6 +29,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental support for API key authentication via OAuth2 (Thorsten)
 - added experimental per-tenant quota enforcement and API request rate limits (Thorsten)
 - added SBOM (Software Bill of Materials) generation (Thorsten)
+- added separate read, write and publish permissions for FAQs (Thorsten)
 - improved audit and activity log with comprehensive security event tracking (Thorsten)
 - improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
 - improved support for PDO (Thorsten)

@@ -333,6 +333,45 @@ class Relation
     }
 
     /**
+     * Returns the category ids of many records at once, keyed by record id — listing pages
+     * would otherwise issue one getCategories() query per FAQ.
+     *
+     * @param int[] $faqIds
+     * @return array<int, list<int>>
+     */
+    public function getCategoryIdsForRecords(array $faqIds, string $faqLang): array
+    {
+        $faqIds = array_values(array_unique(array_filter($faqIds, static fn(int $faqId): bool => $faqId > 0)));
+
+        if ($faqIds === []) {
+            return [];
+        }
+
+        $query = sprintf(
+            'SELECT record_id, category_id FROM %sfaqcategoryrelations WHERE record_id IN (%s)'
+            . ' AND record_lang = ?',
+            Database::getTablePrefix(),
+            implode(', ', array_fill(start_index: 0, count: count($faqIds), value: '?')),
+        );
+
+        $categoryIdsByFaq = [];
+        $result = $this->configuration->getDb()->queryPrepared($query, [...$faqIds, $faqLang]);
+
+        if ($result) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if (!$row instanceof \stdClass) {
+                    break;
+                }
+
+                $categoryIdsByFaq[(int) $row->record_id][] = (int) $row->category_id;
+            }
+        }
+
+        return $categoryIdsByFaq;
+    }
+
+    /**
      * Returns the categories from a FAQ id and language.
      *
      * @param int    $faqId FAQ id

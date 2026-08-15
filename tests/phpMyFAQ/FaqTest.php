@@ -8,6 +8,7 @@ use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Tenant\QuotaExceededException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -603,6 +604,7 @@ class FaqTest extends TestCase
     public function testGetRecordBySolutionIdReturnsFaqForAuthorizedUser(): void
     {
         $faqEntity = $this->createFaqWithSolutionId(126);
+        $this->createReaderAccount(23);
         $this->grantUserAccess($faqEntity, 23);
 
         $this->faq->setUser(23);
@@ -668,6 +670,7 @@ class FaqTest extends TestCase
     {
         $faqEntity = $this->getFaqEntity();
         $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->createReaderAccount(23);
         $this->grantUserAccess($faqEntity, 23);
 
         $this->faq->setUser(23);
@@ -875,6 +878,32 @@ class FaqTest extends TestCase
                 $faqEntity->getId(),
                 $userId,
             ));
+    }
+
+    /**
+     * Creates a real account holding the FAQ read right.
+     *
+     * Reading is gated on PermissionType::FAQS_VIEW for logged-in users, so a bare user id with
+     * only a faqdata_user row is denied — as it would be on a real installation, where the
+     * upgrade and User::createUser() are what hand out the right.
+     */
+    private function createReaderAccount(int $userId): void
+    {
+        $database = $this->configuration->getDb();
+
+        $database->query(sprintf(
+            "INSERT INTO faquser (user_id, login, session_timestamp, member_since, account_status)
+             VALUES (%d, 'reader%d', 0, '20260101000000', 'active')",
+            $userId,
+            $userId,
+        ));
+
+        $database->query(sprintf(
+            'INSERT INTO faquser_right (user_id, right_id)
+             SELECT %d, right_id FROM faqright WHERE name = %s',
+            $userId,
+            "'" . $database->escape(PermissionType::FAQS_VIEW->value) . "'",
+        ));
     }
 
     private function grantGroupAccess(FaqEntity $faqEntity, int $groupId): void

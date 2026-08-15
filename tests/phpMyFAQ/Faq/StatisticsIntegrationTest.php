@@ -71,6 +71,31 @@ class StatisticsIntegrationTest extends TestCase
     }
 
     /**
+     * Creates a real account holding the FAQ read right.
+     *
+     * Reading is gated on that right for logged-in users, so a bare user id with only a
+     * faqdata_user row is denied — as it would be on a real installation, where the upgrade and
+     * User::createUser() are what hand the right out.
+     */
+    private function createReaderAccount(int $userId): void
+    {
+        $database = $this->configuration->getDb();
+
+        $database->query(sprintf(
+            "INSERT INTO faquser (user_id, login, session_timestamp, member_since, account_status)
+             VALUES (%d, 'reader%d', 0, '20260101000000', 'active')",
+            $userId,
+            $userId,
+        ));
+
+        $database->query(sprintf(
+            "INSERT INTO faquser_right (user_id, right_id)
+             SELECT %d, right_id FROM faqright WHERE name = 'view_faqs'",
+            $userId,
+        ));
+    }
+
+    /**
      * @param int[] $userIds
      * @param int[] $groupIds
      * @param int[] $categoryIds
@@ -144,6 +169,7 @@ class StatisticsIntegrationTest extends TestCase
     {
         $this->seedFaq(9001, 'Public FAQ', '20260101000000', 1);
         $this->seedFaq(9002, 'Restricted FAQ', '20260102000000', 1, userIds: [42]);
+        $this->createReaderAccount(42);
 
         $latest = $this->createStatistics('basic')->setUser(42)->getLatestData(10, 'en');
 
@@ -165,6 +191,7 @@ class StatisticsIntegrationTest extends TestCase
     public function testGetLatestDataWithGroupSupportRequiresMatchingUser(): void
     {
         $this->seedFaq(9001, 'Owner-only FAQ', '20260101000000', 1, userIds: [42], groupIds: [10]);
+        $this->createReaderAccount(42);
 
         $statistics = $this->createStatistics('medium');
 

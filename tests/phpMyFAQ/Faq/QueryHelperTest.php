@@ -64,7 +64,7 @@ class QueryHelperTest extends TestCase
     {
         $user = 42;
         $groups = [1, 2, 3];
-        $queryHelper = new QueryHelper($user, $groups);
+        $queryHelper = new QueryHelper($user, $groups, ReadScope::unrestricted());
 
         $expectedQuery = 'AND ( fdu.user_id = 42 OR fdu.user_id = -1 )';
         $this->assertEquals($expectedQuery, $queryHelper->queryPermission());
@@ -74,7 +74,7 @@ class QueryHelperTest extends TestCase
     {
         $user = 42;
         $groups = [1, 2, 3];
-        $queryHelper = new QueryHelper($user, $groups);
+        $queryHelper = new QueryHelper($user, $groups, ReadScope::unrestricted());
 
         $expectedQuery = 'AND ( fdu.user_id = 42 OR fdg.group_id IN (1, 2, 3) )';
         $this->assertEquals($expectedQuery, $queryHelper->queryPermission(true));
@@ -84,7 +84,7 @@ class QueryHelperTest extends TestCase
     {
         $user = -1;
         $groups = [1, 2, 3];
-        $queryHelper = new QueryHelper($user, $groups);
+        $queryHelper = new QueryHelper($user, $groups, ReadScope::unrestricted());
 
         $expectedQuery = 'AND fdg.group_id IN (1, 2, 3)';
         $this->assertEquals($expectedQuery, $queryHelper->queryPermission(true));
@@ -94,7 +94,7 @@ class QueryHelperTest extends TestCase
     {
         $user = -1;
         $groups = [1, 2, 3];
-        $queryHelper = new QueryHelper($user, $groups);
+        $queryHelper = new QueryHelper($user, $groups, ReadScope::unrestricted());
 
         $expectedQuery = 'AND fdu.user_id = -1';
         $this->assertEquals($expectedQuery, $queryHelper->queryPermission());
@@ -104,7 +104,7 @@ class QueryHelperTest extends TestCase
     {
         $user = -1;
         $groups = [1, 2, 3];
-        $queryHelper = new QueryHelper($user, $groups);
+        $queryHelper = new QueryHelper($user, $groups, ReadScope::unrestricted());
 
         // Define the input values
         $queryType = 'export_pdf';
@@ -193,7 +193,7 @@ ORDER BY fcr.category_id, fd.id";
 
     public function testQueryPermissionExistsAllWithoutGroupSupport(): void
     {
-        $queryHelper = new QueryHelper(42, [1, 2, 3]);
+        $queryHelper = new QueryHelper(42, [1, 2, 3], ReadScope::unrestricted());
 
         $this->assertSame(
             'AND EXISTS (SELECT 1 FROM faqdata_user pfdu '
@@ -215,7 +215,7 @@ ORDER BY fcr.category_id, fd.id";
 
     public function testQueryPermissionExistsAllWithGroupSupport(): void
     {
-        $queryHelper = new QueryHelper(42, [1, 2, 3]);
+        $queryHelper = new QueryHelper(42, [1, 2, 3], ReadScope::unrestricted());
 
         $this->assertSame(
             'AND EXISTS (SELECT 1 FROM faqdata_user pfdu '
@@ -241,7 +241,7 @@ ORDER BY fcr.category_id, fd.id";
 
     public function testQueryPermissionExistsAnyWithoutGroupSupport(): void
     {
-        $queryHelper = new QueryHelper(42, [1, 2, 3]);
+        $queryHelper = new QueryHelper(42, [1, 2, 3], ReadScope::unrestricted());
 
         $this->assertSame(
             'AND EXISTS (SELECT 1 FROM faqdata_user pfdu '
@@ -263,7 +263,7 @@ ORDER BY fcr.category_id, fd.id";
 
     public function testQueryPermissionExistsAnyWithGroupSupportAllowsUserOrGroupMatch(): void
     {
-        $queryHelper = new QueryHelper(42, [1, 2, 3]);
+        $queryHelper = new QueryHelper(42, [1, 2, 3], ReadScope::unrestricted());
 
         $this->assertSame(
             'AND (EXISTS (SELECT 1 FROM faqdata_user pfdu '
@@ -290,5 +290,16 @@ ORDER BY fcr.category_id, fd.id";
         $queryHelper = new QueryHelper(-1, ['1) OR 1=1 -- ', '2']);
 
         $this->assertStringContainsString('pfdg.group_id IN (1, 2)', $queryHelper->queryPermissionExistsAll(true));
+    }
+
+    /**
+     * A known user must never fall through to an unrestricted read gate by omission — the
+     * scope has to be resolved where the requester became known and passed in explicitly.
+     */
+    public function testKnownUserWithoutReadScopeIsRejected(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        new QueryHelper(42, [1, 2, 3]);
     }
 }

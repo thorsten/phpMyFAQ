@@ -23,6 +23,7 @@ use Exception;
 use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Faq\ReadScope;
 use phpMyFAQ\Link\Util\TitleSlugifier;
 use stdClass;
 
@@ -51,6 +52,11 @@ class Sitemap
     private bool $groupSupport = false;
 
     /**
+     * Resolved by setUser(); null leaves the read gate off, as for anonymous requesters.
+     */
+    private ?ReadScope $readScope = null;
+
+    /**
      * Constructor.
      */
     public function __construct(
@@ -64,6 +70,16 @@ class Sitemap
     public function setUser(int $userId = -1): void
     {
         $this->user = $userId;
+        $this->readScope = ReadScope::forUserId($this->configuration, $userId);
+    }
+
+    /**
+     * The sitemap builds its own permission clause instead of going through QueryHelper, so the
+     * read scope has to be appended explicitly here.
+     */
+    private function readScopeFragment(): string
+    {
+        return ($this->readScope ?? ReadScope::unrestricted())->toSqlFragment();
     }
 
     /**
@@ -123,7 +139,7 @@ class Sitemap
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $permPart,
+            $permPart . $this->readScopeFragment(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -214,7 +230,7 @@ class Sitemap
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($letter),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $permPart,
+            $permPart . $this->readScopeFragment(),
         );
 
         $result = $this->configuration->getDb()->query($query);

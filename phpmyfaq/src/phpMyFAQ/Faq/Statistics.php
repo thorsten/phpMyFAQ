@@ -42,6 +42,9 @@ class Statistics
     /** Flag for Group support. */
     private bool $groupSupport = false;
 
+    /** Resolved by setUser(); null leaves the read gate off, as for anonymous requesters. */
+    private ?ReadScope $readScope = null;
+
     /** Plural form support. */
     private readonly Plurals $plurals;
 
@@ -64,13 +67,15 @@ class Statistics
     public function totalFaqs(?string $language = null): int
     {
         $now = date(format: 'YmdHis');
+        $queryHelper = new QueryHelper($this->user, $this->groups, $this->readScope);
 
         $query = sprintf(
-            "SELECT id FROM %sfaqdata WHERE active = 'yes' %s AND date_start <= '%s' AND date_end >= '%s'",
+            "SELECT fd.id FROM %sfaqdata fd WHERE fd.active = 'yes' %s AND fd.date_start <= '%s' AND fd.date_end >= '%s'%s",
             Database::getTablePrefix(),
-            null === $language ? '' : "AND lang = '" . $this->configuration->getDb()->escape($language) . "'",
+            null === $language ? '' : "AND fd.lang = '" . $this->configuration->getDb()->escape($language) . "'",
             $now,
             $now,
+            $queryHelper->queryReadScope(),
         );
 
         $num = $this->configuration->getDb()->numRows($this->configuration->getDb()->query($query));
@@ -431,10 +436,14 @@ class Statistics
         int $categoryId = 0,
     ): string {
         $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($this->user, $this->groups);
+        $queryHelper = new QueryHelper($this->user, $this->groups, $this->readScope);
         $prefix = Database::getTablePrefix();
 
-        $categoryFilter = $categoryId !== 0 ? sprintf(' AND fcr.category_id = %d', $categoryId) : '';
+        // The scope constraint keeps the deterministic category out of the requester's
+        // denied categories — the outer WHERE only decides whether the FAQ shows at all.
+        $categoryFilter =
+            ($categoryId !== 0 ? sprintf(' AND fcr.category_id = %d', $categoryId) : '')
+            . $queryHelper->queryReadScopeCategoryRelation('fcr');
 
         $query = sprintf(
             'SELECT %s, (SELECT MIN(fcr.category_id) FROM %sfaqcategoryrelations fcr '
@@ -465,12 +474,21 @@ class Statistics
             $query .= sprintf(" AND fd.lang = '%s'", $this->configuration->getDb()->escape($language));
         }
 
-        return $query . ' ' . $queryHelper->queryPermissionExistsAll($this->groupSupport) . ' ORDER BY ' . $orderBy;
+        return (
+            $query
+            . ' '
+            . $queryHelper->queryPermissionExistsAll($this->groupSupport)
+            . $queryHelper->queryReadScope()
+            . ' ORDER BY '
+            . $orderBy
+        );
     }
 
     public function setUser(int $userId = -1): Statistics
     {
         $this->user = $userId;
+        $this->readScope = ReadScope::forUserId($this->configuration, $userId);
+
         return $this;
     }
 

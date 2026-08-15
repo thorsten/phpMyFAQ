@@ -111,6 +111,10 @@ class FaqControllerTest extends TestCase
     {
         $permission = $this->createMock(BasicPermission::class);
         $permission->method('hasPermission')->willReturn(true);
+        $permission->method('hasPermissionForCategory')->willReturn(true);
+        $permission->method('hasPermissionForLanguage')->willReturn(true);
+        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
+        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;

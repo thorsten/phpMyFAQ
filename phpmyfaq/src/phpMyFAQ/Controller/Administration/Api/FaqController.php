@@ -29,6 +29,7 @@ use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Category\Relation;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\AdminLogType;
@@ -132,6 +133,12 @@ final class FaqController extends AbstractAdministrationApiController
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
+
+        // Creating an FAQ and making it public are separate rights.
+        if ($active === 'yes') {
+            $this->userMayPublish($categories, $language);
+        }
+
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
         $content = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -368,7 +375,7 @@ final class FaqController extends AbstractAdministrationApiController
         $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $faqLang);
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
+        $active = $this->resolvePublicationState($data, $faqId, $faqLang, [...$categories, ...$currentCategoryIds]);
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
         $content = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -574,15 +581,17 @@ final class FaqController extends AbstractAdministrationApiController
         $faq = new FaqAdministration($this->configuration);
         $faq->setLanguage($language);
 
+        $faqs = $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew);
+
         return $this->json([
-            'faqs' => $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew),
+            'faqs' => $this->withPublishCapability($faqs, $language),
             'isAllowedToTranslate' =>
-                $this->currentUser?->perm->hasPermissionForCategory(
+                $this->currentUser->perm->hasPermissionForCategory(
                     $this->currentUser->getUserId(),
                     PermissionType::FAQ_TRANSLATE->value,
                     $categoryId,
                 )
-                    && $this->currentUser?->perm->hasPermissionForLanguage(
+                    && $this->currentUser->perm->hasPermissionForLanguage(
                         $this->currentUser->getUserId(),
                         PermissionType::FAQ_TRANSLATE->value,
                         $language,
@@ -596,7 +605,7 @@ final class FaqController extends AbstractAdministrationApiController
     #[Route(path: 'faq/activate', name: 'admin.api.faq.activate', methods: ['POST'])]
     public function activate(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_APPROVE);
+        $this->userHasPermission(PermissionType::FAQ_PUBLISH);
 
         $data = $this->getJsonObject($request);
 
@@ -613,13 +622,13 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         if ($faqIds !== []) {
-            $this->userHasPermissionForLanguage(PermissionType::FAQ_APPROVE, $faqLanguage);
+            $this->userHasPermissionForLanguage(PermissionType::FAQ_PUBLISH, $faqLanguage);
 
             $activateCategory = new Category($this->configuration, [], withPermission: false);
             $activateCategoryRelation = new Relation($this->configuration, $activateCategory);
             foreach ($faqIds as $faqId) {
                 $this->userHasPermissionForCategories(
-                    PermissionType::FAQ_APPROVE,
+                    PermissionType::FAQ_PUBLISH,
                     array_keys($activateCategoryRelation->getCategories($faqId, $faqLanguage)),
                 );
             }
@@ -636,7 +645,10 @@ final class FaqController extends AbstractAdministrationApiController
             }
 
             if ($success) {
-                $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value);
+                $this->adminLog->log(
+                    $this->currentUser,
+                    ($checked ? AdminLogType::FAQ_PUBLISH : AdminLogType::FAQ_EDIT)->value,
+                );
                 return $this->json(['success' => Translation::get(key: 'ad_entry_savedsuc')], Response::HTTP_OK);
             }
 
@@ -827,6 +839,7 @@ final class FaqController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
+        /** @var UploadedFile|null $file */
         $file = $request->files->get(key: 'file');
         if (!$file instanceof UploadedFile) {
             return $this->json(['error' => 'Bad request: There is no file submitted.'], Response::HTTP_BAD_REQUEST);
@@ -925,7 +938,7 @@ final class FaqController extends AbstractAdministrationApiController
             ++$rowNumber;
 
             $categoryId = (int) Filter::filterVar($record[0] ?? null, FILTER_VALIDATE_INT, default: 0);
-            $language = (string) Filter::filterVar($record[4] ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+            $language = Filter::filterVar($record[4] ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
             if (!$currentUser->perm->hasPermissionForCategory($userId, PermissionType::FAQ_ADD->value, $categoryId)) {
                 $messages[] = sprintf(
@@ -948,5 +961,99 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         return $messages;
+    }
+
+    /**
+     * Adds isAllowedToPublish to every listed FAQ with a fixed number of lookups.
+     *
+     * activate() authorizes against every category an FAQ is attached to, so the active-state
+     * checkbox has to be offered on the same basis — judging only the requested category would
+     * offer an action the API then rejects with a 403 for multi-category FAQs. The publish
+     * scope is resolved once and the category memberships of all listed FAQs are loaded in one
+     * query, because a userMayPublishIn() call per FAQ issues several permission queries per
+     * row.
+     *
+     * @param list<array{id: int, ...}> $faqs
+     * @return list<array{id: int, ...}>
+     * @throws Exception
+     */
+    private function withPublishCapability(array $faqs, string $language): array
+    {
+        $currentUser = $this->currentUser;
+        $publishRight = PermissionType::FAQ_PUBLISH->value;
+
+        // Nobody may publish until the right, the language and the scope say otherwise.
+        $allowedCategoryIds = [];
+
+        if ($currentUser->isLoggedIn()) {
+            $userId = $currentUser->getUserId();
+
+            if (
+                $currentUser->perm->hasPermission($userId, $publishRight)
+                && $currentUser->perm->hasPermissionForLanguage($userId, $publishRight, $language)
+            ) {
+                // null means unrestricted — the same contract userMayPublishIn() evaluates
+                // per category via hasPermissionForCategory().
+                $allowedCategoryIds = $currentUser->perm->getAllowedCategoriesForRight($userId, $publishRight);
+            }
+        }
+
+        $categoryIdsByFaq =
+            $allowedCategoryIds === null || $allowedCategoryIds === []
+                ? []
+                : new Relation(
+                    $this->configuration,
+                    new Category($this->configuration, [], withPermission: false),
+                )->getCategoryIdsForRecords(array_column($faqs, 'id'), $language);
+
+        foreach ($faqs as &$faqData) {
+            $faqCategoryIds = $categoryIdsByFaq[$faqData['id']] ?? [];
+            $faqData['isAllowedToPublish'] =
+                $allowedCategoryIds === null
+                || $faqCategoryIds !== [] && array_diff($faqCategoryIds, $allowedCategoryIds) === [];
+        }
+
+        unset($faqData);
+
+        return $faqs;
+    }
+
+    /**
+     * Decides the publication state an update should persist.
+     *
+     * A user without the publish right may still edit a published FAQ; their save simply must
+     * not change whether it is live. The editor omits the field entirely for those users, and an
+     * absent field is deliberately distinct from an explicit "no" — treating the two alike would
+     * unpublish an FAQ on every ordinary save. A request that does try to change the state
+     * without the right is rejected rather than silently downgraded, so the caller never gets a
+     * success response for something that did not happen.
+     *
+     * @param int[] $categoryIds the FAQ's current and submitted categories
+     * @throws ForbiddenException|Exception
+     */
+    private function resolvePublicationState(
+        stdClass $data,
+        int $faqId,
+        string $faqLanguage,
+        array $categoryIds,
+    ): string {
+        $requestedActive = property_exists($data, 'active')
+            ? Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS, 'no')
+            : null;
+
+        $currentActive = $this->faq->isActive($faqId, $faqLanguage) ? 'yes' : 'no';
+
+        if ($this->userMayPublishIn($categoryIds, $faqLanguage)) {
+            return $requestedActive ?? $currentActive;
+        }
+
+        if ($requestedActive !== null && $requestedActive !== $currentActive) {
+            throw new ForbiddenException(message: sprintf(
+                'User has no "%s" permission.',
+                PermissionType::FAQ_PUBLISH->name,
+            ));
+        }
+
+        return $currentActive;
     }
 }

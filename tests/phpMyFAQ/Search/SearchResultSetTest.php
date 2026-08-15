@@ -5,6 +5,7 @@ namespace phpMyFAQ\Search;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Faq\Permission;
+use phpMyFAQ\Faq\ReadScope;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -35,9 +36,9 @@ class SearchResultSetTest extends TestCase
     }
 
     /**
-     * Builds a SearchResultSet whose permission level, permission lookups and current
-     * user id are fully controlled, so reviewResultSet() can be exercised deterministically
-     * without touching the database.
+     * Builds a SearchResultSet whose permission level, permission lookups, current user id
+     * and read scope are fully controlled, so reviewResultSet() can be exercised
+     * deterministically without touching the database.
      *
      * @param int[] $permissionResult value returned by Permission::get() for every lookup
      */
@@ -45,9 +46,18 @@ class SearchResultSetTest extends TestCase
         string $permLevel = 'basic',
         array $permissionResult = [-1],
         int $userId = 1,
+        ?ReadScope $readScope = null,
+        array $storedFaqRows = [],
     ): SearchResultSet {
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('get')->willReturn($permLevel);
+
+        if ($storedFaqRows !== []) {
+            $database = $this->createMock(Sqlite3::class);
+            $database->method('queryPrepared')->willReturn(true);
+            $database->method('fetchAll')->willReturn($storedFaqRows);
+            $configuration->method('getDb')->willReturn($database);
+        }
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('getUserId')->willReturn($userId);
@@ -55,7 +65,37 @@ class SearchResultSetTest extends TestCase
         $faqPermission = $this->createMock(Permission::class);
         $faqPermission->method('get')->willReturn($permissionResult);
 
-        return new SearchResultSet($currentUser, $faqPermission, $configuration);
+        return new class ($currentUser, $faqPermission, $configuration, $readScope) extends SearchResultSet {
+            public function __construct(
+                CurrentUser $currentUser,
+                Permission $faqPermission,
+                Configuration $configuration,
+                private readonly ?ReadScope $readScope,
+            ) {
+                parent::__construct($currentUser, $faqPermission, $configuration);
+            }
+
+            protected function resolveReadScope(): ReadScope
+            {
+                return $this->readScope ?? ReadScope::unrestricted();
+            }
+        };
+    }
+
+    /**
+     * A scope granting FAQS_VIEW restricted to the given categories and languages.
+     *
+     * @param int[]|null    $categoryIds
+     * @param string[]|null $languages
+     */
+    private function makeRestrictedScope(?array $categoryIds, ?array $languages): ReadScope
+    {
+        $permission = $this->createMock(\phpMyFAQ\Permission\PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+        $permission->method('getAllowedCategoriesForRight')->willReturn($categoryIds);
+        $permission->method('getAllowedLanguagesForRight')->willReturn($languages);
+
+        return ReadScope::forUser($permission, 1);
     }
 
     private function makeResult(int $id, array $properties = []): stdClass
@@ -235,5 +275,85 @@ class SearchResultSetTest extends TestCase
 
         $this->assertSame([], $searchResultSet->getResultSet());
         $this->assertSame(0, $searchResultSet->getNumberOfResults());
+    }
+
+    public function testReviewResultSetKeepsScopedHitWithinScope(): void
+    {
+        $scope = $this->makeRestrictedScope([3], ['en']);
+        $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1, $scope);
+
+        $searchResultSet->reviewResultSet([$this->makeResult(1, ['lang' => 'en', 'category_id' => 3])]);
+
+        $this->assertCount(1, $searchResultSet->getResultSet());
+    }
+
+    public function testReviewResultSetDropsScopedHitOutsideScope(): void
+    {
+        $scope = $this->makeRestrictedScope([3], ['en']);
+        $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1, $scope);
+
+        $searchResultSet->reviewResultSet([$this->makeResult(1, ['lang' => 'en', 'category_id' => 9])]);
+
+        $this->assertSame([], $searchResultSet->getResultSet());
+    }
+
+    public function testReviewResultSetFailsClosedForScopedHitWithoutLanguageAndCategory(): void
+    {
+        // The hit carries neither language nor category, and the record cannot be resolved
+        // from storage either (the mocked driver returns nothing) — it must not pass.
+        $scope = $this->makeRestrictedScope([3], ['en']);
+        $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1, $scope);
+
+        $searchResultSet->reviewResultSet([$this->makeResult(1)]);
+
+        $this->assertSame([], $searchResultSet->getResultSet());
+        $this->assertSame(0, $searchResultSet->getNumberOfResults());
+    }
+
+    public function testReviewResultSetAuthorizesIncompleteHitFromStoredRows(): void
+    {
+        $scope = $this->makeRestrictedScope([3], ['en']);
+        $storedRow = new stdClass();
+        $storedRow->id = 1;
+        $storedRow->lang = 'en';
+        $storedRow->category_id = 3;
+
+        $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1, $scope, [$storedRow]);
+
+        // The hit carries an allowed category but no language; the stored row supplies it.
+        $searchResultSet->reviewResultSet([$this->makeResult(1, ['category_id' => 3])]);
+
+        $this->assertCount(1, $searchResultSet->getResultSet());
+    }
+
+    public function testReviewResultSetDropsIncompleteHitClaimingDeniedCategory(): void
+    {
+        $scope = $this->makeRestrictedScope([3], ['en']);
+
+        // The FAQ also belongs to an allowed category and language — but the hit itself
+        // claims the denied category 9, so another membership must not admit it.
+        $storedRow = new stdClass();
+        $storedRow->id = 1;
+        $storedRow->lang = 'en';
+        $storedRow->category_id = 3;
+
+        $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1, $scope, [$storedRow]);
+
+        $searchResultSet->reviewResultSet([$this->makeResult(1, ['category_id' => 9])]);
+
+        $this->assertSame([], $searchResultSet->getResultSet());
+    }
+
+    public function testReviewResultSetWithoutRightFailsClosedForIncompleteHit(): void
+    {
+        $permission = $this->createMock(\phpMyFAQ\Permission\PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(false);
+        $scope = ReadScope::forUser($permission, 1);
+
+        $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1, $scope);
+
+        $searchResultSet->reviewResultSet([$this->makeResult(1)]);
+
+        $this->assertSame([], $searchResultSet->getResultSet());
     }
 }

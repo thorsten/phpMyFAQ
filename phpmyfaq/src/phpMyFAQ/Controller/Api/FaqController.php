@@ -23,6 +23,7 @@ use Exception;
 use League\CommonMark\Exception\CommonMarkException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\Relation as CategoryRelation;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
@@ -758,8 +759,13 @@ final class FaqController extends AbstractApiController
         }
 
         $categories = [$categoryId];
-        $isActive = !is_null($isActive);
-        $isSticky = !is_null($isSticky);
+        $isActive = $isActive === true;
+        $isSticky = $isSticky === true;
+
+        // Creating an FAQ and making it public are separate rights.
+        if ($isActive) {
+            $this->userMayPublish([(int) $categoryId], $languageCode);
+        }
 
         $faqData = new FaqEntity();
         $faqData
@@ -909,8 +915,18 @@ final class FaqController extends AbstractApiController
             return $this->json($result, Response::HTTP_BAD_REQUEST);
         }
 
-        $isActive = !is_null($isActive);
-        $isSticky = !is_null($isSticky);
+        $isActive = $isActive === true;
+        $isSticky = $isSticky === true;
+
+        // Editing an FAQ and deciding that it goes live are separate rights, so a change of
+        // the publication state needs FAQ_PUBLISH on top of the FAQ_EDIT guard above.
+        if ($isActive !== $this->faq->isActive($faqId, $languageCode)) {
+            $faqCategories = new CategoryRelation($this->configuration, $category)->getCategories(
+                $faqId,
+                $languageCode,
+            );
+            $this->userMayPublish(array_keys($faqCategories), $languageCode);
+        }
 
         $faqEntity = new FaqEntity();
         $faqEntity

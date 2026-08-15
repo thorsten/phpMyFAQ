@@ -124,7 +124,7 @@ class LanguageHelper
     ): string {
         $output = '';
         foreach (LanguageHelper::getAvailableLanguages() as $key => $value) {
-            $normalizedKey = strtolower((string) $key);
+            $normalizedKey = strtolower($key);
             if ($onlyThisLang && $normalizedKey !== $lang) {
                 continue;
             }

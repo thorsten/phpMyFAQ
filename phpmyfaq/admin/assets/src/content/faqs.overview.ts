@@ -266,19 +266,28 @@ const populateCategoryTable = async (categoryId: string, faqs: Faq[], isAllowedT
         }),
       ])
     );
+    // Without the publish right for every category of this FAQ the checkbox would only ever
+    // produce a 403, so show the state read-only instead of offering an action the API rejects.
     row.append(
-      addElement('td', { classList: 'align-middle' }, [
-        addElement('input', {
-          classList: 'form-check-input pmf-admin-active-faq',
-          type: 'checkbox',
-          'data-pmf-category-id-active': faq.category_id.toString(),
-          'data-pmf-faq-id': faq.id.toString(),
-          'data-pmf-csrf': csrfToken,
-          lang: faq.language,
-          id: `active_record_${faq.category_id.toString()}_${faq.id.toString()}`,
-          checked: faq.active === 'yes',
-        }),
-      ])
+      faq.isAllowedToPublish
+        ? addElement('td', { classList: 'align-middle' }, [
+            addElement('input', {
+              classList: 'form-check-input pmf-admin-active-faq',
+              type: 'checkbox',
+              'data-pmf-category-id-active': faq.category_id.toString(),
+              'data-pmf-faq-id': faq.id.toString(),
+              'data-pmf-csrf': csrfToken,
+              lang: faq.language,
+              id: `active_record_${faq.category_id.toString()}_${faq.id.toString()}`,
+              checked: faq.active === 'yes',
+            }),
+          ])
+        : addElement('td', { classList: 'align-middle' }, [
+            addElement('i', {
+              classList: faq.active === 'yes' ? 'bi bi-check-lg text-success' : 'bi bi-x-lg text-muted',
+              'aria-hidden': 'true',
+            }),
+          ])
     );
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [

@@ -585,7 +585,7 @@
               {{ ad_entry_status }}
             </h5>
             <!-- active or not -->
-            {% if hasPermissionForApprove %}
+            {% if hasPermissionForPublish %}
               <div class="form-check">
                 <input type="radio" id="active" name="active" value="yes" class="form-check-input" {{ isActive }}>
                 <label class="form-check-label" for="active">
@@ -599,12 +599,11 @@
                 </label>
               </div>
             {% else %}
-              <div class="form-check">
-                <input type="radio" id="inactive" name="active" value="no" class="form-check-input" checked>
-                <label class="form-check-label" for="inactive">
-                  {{ ad_entry_not_visibility }}
-                </label>
-              </div>
+              {# No "active" field is submitted, so saving preserves the stored publication state. #}
+              <p class="form-text mb-0">
+                {{ isActive ? ad_entry_visibility : ad_entry_not_visibility }}
+                <span class="text-muted d-block">{{ msgNoPublishPermission }}</span>
+              </p>
             {% endif %}
           </div>
 

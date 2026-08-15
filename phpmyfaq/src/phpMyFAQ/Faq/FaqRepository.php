@@ -24,11 +24,23 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\FaqEntity;
 
+/* @mago-expect lint:too-many-methods - one query method per FAQ lookup; a split is planned with the Faq facade rework */
 final class FaqRepository implements FaqRepositoryInterface
 {
+    /**
+     * Resolved once by Faq::setUser(), rather than per query. Null means no requester was
+     * established, which leaves the read gate off and the record ACL at its anonymous default.
+     */
+    private ?ReadScope $readScope = null;
+
     public function __construct(
         private readonly Configuration $configuration,
     ) {
+    }
+
+    public function setReadScope(?ReadScope $readScope): void
+    {
+        $this->readScope = $readScope;
     }
 
     public function getNextSolutionId(): int
@@ -105,7 +117,7 @@ final class FaqRepository implements FaqRepositoryInterface
         array $groups,
         bool $groupSupport,
     ): bool {
-        $queryHelper = new QueryHelper($userId, $groups);
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $now = date(format: 'YmdHis');
 
         $query = sprintf(
@@ -140,7 +152,7 @@ final class FaqRepository implements FaqRepositoryInterface
             $this->configuration->getDb()->escape($faqLang),
             $now,
             $now,
-            $queryHelper->queryPermission($groupSupport),
+            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -184,7 +196,7 @@ final class FaqRepository implements FaqRepositoryInterface
 
     public function getIdFromSolutionId(int $solutionId, int $userId, array $groups, bool $groupSupport): array
     {
-        $queryHelper = new QueryHelper($userId, $groups);
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             '
             SELECT
@@ -217,7 +229,7 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $solutionId,
-            $queryHelper->queryPermission($groupSupport),
+            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -292,7 +304,7 @@ final class FaqRepository implements FaqRepositoryInterface
         array $groups,
         bool $groupSupport,
     ): mixed {
-        $queryHelper = new QueryHelper($userId, $groups);
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             "SELECT
                  id, lang, solution_id, revision_id, active, sticky, keywords,
@@ -321,7 +333,9 @@ final class FaqRepository implements FaqRepositoryInterface
             $faqId,
             $faqRevisionId !== null ? 'AND revision_id = ' . $faqRevisionId : '',
             $this->configuration->getDb()->escape($faqLanguage),
-            $isAdmin ? 'AND 1=1' : $queryHelper->queryPermission($groupSupport),
+            // An admin context skips the record ACL but not the read scope: a category-restricted
+            // editor is exactly who that scope exists for.
+            ($isAdmin ? 'AND 1=1' : $queryHelper->queryPermission($groupSupport)) . $queryHelper->queryReadScope(),
         );
 
         return $this->configuration->getDb()->query($query);
@@ -335,7 +349,7 @@ final class FaqRepository implements FaqRepositoryInterface
         array $groups,
         bool $groupSupport,
     ): ?object {
-        $queryHelper = new QueryHelper($userId, $groups);
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $now = date(format: 'YmdHis');
         $query = sprintf(
             "
@@ -391,7 +405,7 @@ final class FaqRepository implements FaqRepositoryInterface
             $onlyActive
                 ? sprintf("AND fd.active = 'yes' AND fd.date_start <= '%s' AND fd.date_end >= '%s'", $now, $now)
                 : '',
-            $queryHelper->queryPermission($groupSupport),
+            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -402,7 +416,7 @@ final class FaqRepository implements FaqRepositoryInterface
 
     public function fetchRowBySolutionId(int $solutionId, int $userId, array $groups, bool $groupSupport): ?\stdClass
     {
-        $queryHelper = new QueryHelper($userId, $groups);
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             'SELECT
                 fd.*, COALESCE(fdg.group_id, -1) AS group_id, fdu.user_id
@@ -428,7 +442,7 @@ final class FaqRepository implements FaqRepositoryInterface
             $solutionId,
             Database::getTablePrefix(),
             $solutionId,
-            $queryHelper->queryPermission($groupSupport),
+            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -450,10 +464,13 @@ final class FaqRepository implements FaqRepositoryInterface
                 && $this->configuration->getDb()->fetchObject($restrictionResult) instanceof \stdClass;
 
             if (!$hasRestriction) {
+                // The fallback deliberately ignores the record ACL for FAQs that carry none, but
+                // it must still honour the read scope, or it would become a way around it.
                 $fallbackQuery = sprintf(
-                    'SELECT * FROM %sfaqdata fd WHERE fd.solution_id = %d LIMIT 1',
+                    'SELECT * FROM %sfaqdata fd WHERE fd.solution_id = %d %s LIMIT 1',
                     Database::getTablePrefix(),
                     $solutionId,
+                    $queryHelper->queryReadScope(),
                 );
                 $fallbackResult = $this->configuration->getDb()->query($fallbackQuery);
                 $row = $this->configuration->getDb()->fetchObject($fallbackResult);
@@ -476,7 +493,7 @@ final class FaqRepository implements FaqRepositoryInterface
         bool $groupSupport,
     ): array {
         $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($userId, $groups);
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             "
             SELECT
@@ -522,7 +539,7 @@ final class FaqRepository implements FaqRepositoryInterface
             $now,
             $categoryId,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $queryHelper->queryPermissionExistsAny($groupSupport),
+            $queryHelper->queryPermissionExistsAny($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
             $orderTable,
             $orderColumn,
             $sortDirection,
@@ -542,7 +559,7 @@ final class FaqRepository implements FaqRepositoryInterface
         bool $groupSupport,
     ): array {
         $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($userId, $groups);
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             "SELECT
                  fd.id AS id,
@@ -591,7 +608,7 @@ final class FaqRepository implements FaqRepositoryInterface
             $onlyActive
                 ? sprintf("AND fd.active = 'yes' AND fd.date_start <= '%s' AND fd.date_end >= '%s'", $now, $now)
                 : '',
-            $queryHelper->queryPermission($groupSupport),
+            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
 
         return $this->fetchAllRows($this->configuration->getDb()->query($query));
@@ -602,7 +619,7 @@ final class FaqRepository implements FaqRepositoryInterface
      */
     public function fetchStickyFaqs(int $userId, array $groups, bool $groupSupport): array
     {
-        $queryHelper = new QueryHelper($userId, $groups);
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             "
             SELECT
@@ -651,7 +668,7 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $queryHelper->queryPermission($groupSupport),
+            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
 
         return $this->fetchAllRows($this->configuration->getDb()->query($query));
@@ -674,7 +691,7 @@ final class FaqRepository implements FaqRepositoryInterface
             ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.active,fd.sticky,fd.keywords,'
             . 'fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,'
             . 'fd.date_start,fd.date_end,fd.sticky,fd.created,fd.notes,fd.lang ';
-        $queryHelper = new QueryHelper($userId, $groups);
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             '
             SELECT
@@ -722,7 +739,7 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $where,
-            $queryHelper->queryPermission($groupSupport),
+            $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
             $groupBy,
             $orderBy,
         );
@@ -870,7 +887,7 @@ final class FaqRepository implements FaqRepositoryInterface
         int $rowcount = 0,
     ): mixed {
         $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($userId, $groups);
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             "
             SELECT
@@ -914,7 +931,7 @@ final class FaqRepository implements FaqRepositoryInterface
             $now,
             $categoryId,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $queryHelper->queryPermissionExistsAny($groupSupport),
+            $queryHelper->queryPermissionExistsAny($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
             $order,
         );
 
@@ -932,19 +949,22 @@ final class FaqRepository implements FaqRepositoryInterface
         bool $groupSupport,
     ): int {
         $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($userId, $groups);
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             'SELECT COUNT(*) AS total FROM %sfaqdata fd '
             . "WHERE fd.date_start <= '%s' AND fd.date_end >= '%s' AND fd.active = 'yes' AND fd.lang = '%s' "
+            // The scope constraint lives inside the EXISTS so the count matches
+            // queryRenderableFaqsByCategoryId(), which constrains its fcr join the same way.
             . 'AND EXISTS (SELECT 1 FROM %sfaqcategoryrelations fcr '
-            . 'WHERE fcr.record_id = fd.id AND fcr.record_lang = fd.lang AND fcr.category_id = %d) %s',
+            . 'WHERE fcr.record_id = fd.id AND fcr.record_lang = fd.lang AND fcr.category_id = %d%s) %s',
             Database::getTablePrefix(),
             $now,
             $now,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             Database::getTablePrefix(),
             $categoryId,
-            $queryHelper->queryPermissionExistsAny($groupSupport),
+            $queryHelper->queryReadScopeCategoryRelation('fcr'),
+            $queryHelper->queryPermissionExistsAny($groupSupport) . $queryHelper->queryReadScope(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -962,7 +982,7 @@ final class FaqRepository implements FaqRepositoryInterface
         bool $groupSupport,
     ): mixed {
         $now = date(format: 'YmdHis');
-        $queryHelper = new QueryHelper($userId, $groups);
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             "
             SELECT
@@ -1006,7 +1026,7 @@ final class FaqRepository implements FaqRepositoryInterface
             $now,
             $records,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $queryHelper->queryPermissionExistsAny($groupSupport),
+            $queryHelper->queryPermissionExistsAny($groupSupport) . $queryHelper->queryReadScope(),
             $orderExpression,
             $sortDirection,
         );

@@ -34,6 +34,19 @@ class Faq
 
     /**
      * Get all FAQs by category
+     *
+     * @return list<array{
+     *     id: int,
+     *     language: string,
+     *     solution_id: int,
+     *     active: string,
+     *     sticky: string,
+     *     category_id: int,
+     *     question: string,
+     *     updated: string,
+     *     visits: int,
+     *     created: string,
+     * }>
      */
     public function getAllFaqsByCategory(int $categoryId, bool $onlyInactive = false, bool $onlyNew = false): array
     {
@@ -102,15 +115,15 @@ class Faq
 
                 $faqData[] = [
                     'id' => (int) $row->id,
-                    'language' => $row->lang,
+                    'language' => (string) $row->lang,
                     'solution_id' => (int) $row->solution_id,
-                    'active' => $row->active,
+                    'active' => (string) $row->active,
                     'sticky' => $row->sticky ? 'yes' : 'no',
                     'category_id' => (int) $row->category_id,
-                    'question' => $row->question,
-                    'updated' => $row->updated,
-                    'visits' => (int) $visits,
-                    'created' => $row->created,
+                    'question' => (string) $row->question,
+                    'updated' => (string) $row->updated,
+                    'visits' => $visits,
+                    'created' => (string) $row->created,
                 ];
             }
         }

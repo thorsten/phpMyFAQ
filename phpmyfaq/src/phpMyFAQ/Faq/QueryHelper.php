@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Faq;
 
+use InvalidArgumentException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
@@ -38,14 +39,58 @@ readonly class QueryHelper
 
     private Configuration $configuration;
 
+    private ReadScope $readScope;
+
     /**
      * @param int[] $groups
      */
     public function __construct(
         private int $user,
         private array $groups,
+        ?ReadScope $readScope = null,
     ) {
+        // A known user must bring the scope resolved where the requester became known —
+        // silently defaulting them to an unrestricted read gate would disable the FAQS_VIEW
+        // enforcement for exactly the accounts it exists for.
+        if ($readScope === null && $user > 0) {
+            throw new InvalidArgumentException(sprintf(
+                'QueryHelper requires a resolved ReadScope for user %d; only an anonymous or'
+                . ' unresolved requester may omit it.',
+                $user,
+            ));
+        }
+
         $this->configuration = Configuration::getConfigurationInstance();
+        // No scope handed in means the caller never established a requester, in which case
+        // $user is still -1 and queryPermission() already treats them as anonymous — the most
+        // restrictive record ACL there is. Resolving a scope here instead would make query
+        // building issue its own permission lookups.
+        $this->readScope = $readScope ?? ReadScope::unrestricted();
+    }
+
+    /**
+     * Restricts the result to the FAQs the requester may read at all.
+     *
+     * Appended next to queryPermission() / queryPermissionExistsAny(), which answer a different
+     * question: those check the record's own user and group ACL, this one checks whether the
+     * requester holds the FAQ read right and in which categories and languages.
+     *
+     * @param string      $faqAlias              the alias the query gives the faqdata table
+     * @param string|null $categoryRelationAlias the alias of a faqcategoryrelations join in the
+     *                                           outer query, when it has one
+     */
+    public function queryReadScope(string $faqAlias = 'fd', ?string $categoryRelationAlias = null): string
+    {
+        return $this->readScope->toSqlFragment($faqAlias, $categoryRelationAlias);
+    }
+
+    /**
+     * Constrains a faqcategoryrelations alias to the scoped categories. For sub-queries that
+     * aggregate a category id on their own, where queryReadScope() cannot reach.
+     */
+    public function queryReadScopeCategoryRelation(string $categoryRelationAlias): string
+    {
+        return $this->readScope->toCategoryRelationConstraint($categoryRelationAlias);
     }
 
     public function queryPermission(bool $hasGroupSupport = false): string
@@ -213,6 +258,8 @@ readonly class QueryHelper
                 $query .= " fd.active = '" . self::FAQ_SQL_ACTIVE_YES . "'";
                 break;
         }
+
+        $query .= $this->queryReadScope('fd', 'fcr');
 
         match ($queryType) {
             self::FAQ_QUERY_TYPE_EXPORT_PDF,

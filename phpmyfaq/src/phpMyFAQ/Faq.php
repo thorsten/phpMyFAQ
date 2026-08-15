@@ -30,6 +30,7 @@ use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq\FaqRepository;
 use phpMyFAQ\Faq\QueryHelper;
+use phpMyFAQ\Faq\ReadScope;
 use phpMyFAQ\Faq\RecordVisibility;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Instance\Search\Elasticsearch;
@@ -91,6 +92,8 @@ class Faq
     private bool $groupSupport = false;
     private ?TenantQuotaEnforcer $tenantQuotaEnforcer = null;
 
+    private ?ReadScope $readScope = null;
+
     private readonly FaqRepository $faqRepository;
 
     /**
@@ -110,6 +113,11 @@ class Faq
     public function setUser(int $userId = -1): Faq
     {
         $this->user = $userId;
+        // Resolved here, once, because this is where the requester becomes known. Every query
+        // below then reuses the same scope instead of re-deriving it.
+        $this->readScope = ReadScope::forUserId($this->configuration, $userId);
+        $this->faqRepository->setReadScope($this->readScope);
+
         return $this;
     }
 
@@ -973,7 +981,7 @@ class Faq
     ): array {
         $faqs = [];
 
-        $queryHelper = new QueryHelper($this->user, $this->groups);
+        $queryHelper = new QueryHelper($this->user, $this->groups, $this->readScope);
         $query = $queryHelper->getQuery($queryType, $categoryId, $downwards, $lang, $date);
         $result = $this->configuration->getDb()->query($query);
 
