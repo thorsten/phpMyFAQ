@@ -88,6 +88,9 @@ final class QuestionController extends AbstractController
         $categories = $category->getAllCategories();
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        if (!$data instanceof \stdClass) {
+            throw new Exception('The request body must be a JSON object');
+        }
 
         if (($data->{'pmf-csrf-token'} ?? null) === null) {
             throw new Exception('Missing CSRF token');
@@ -135,7 +138,6 @@ final class QuestionController extends AbstractController
 
         $language = trim((string) Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS));
         $userQuestion = trim(strip_tags((string) $data->question));
-        $save = Filter::filterVar($data->save ?? 0, FILTER_VALIDATE_INT);
 
         if (($data->save ?? null) !== null) {
             throw new Exception('Save parameter not allowed');
@@ -143,16 +145,12 @@ final class QuestionController extends AbstractController
 
         $storeNow = Filter::filterVar($data->store ?? 'not', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        // If smart answering is disabled, save the question immediately
-        if (!filter_var($this->configuration->get(item: 'main.enableSmartAnswering'), FILTER_VALIDATE_BOOLEAN)) {
-            $save = true;
-        }
-
-        // The "store now" confirmation of the two-phase smart-answer flow stores
-        // the question directly instead of searching for smart answers again
-        if ($storeNow === 'now') {
-            $save = true;
-        }
+        // Store directly when smart answering is disabled or when the "store now"
+        // confirmation of the two-phase smart-answer flow arrives; only the initial
+        // request with smart answering enabled searches for smart answers first
+        $storeDirectly =
+            $storeNow === 'now'
+            || !filter_var($this->configuration->get(item: 'main.enableSmartAnswering'), FILTER_VALIDATE_BOOLEAN);
 
         // The captcha code is single-use, so the "store now" confirmation of the
         // two-phase smart-answer flow cannot present it a second time. Phase one
@@ -190,8 +188,7 @@ final class QuestionController extends AbstractController
                 ->setQuestion($userQuestion)
                 ->setIsVisible($visibility === 'Y');
 
-            // Save the question immediately if smart answering is disabled
-            if (false === (bool) $save) {
+            if (!$storeDirectly) {
                 $cleanQuestion = $this->stopWords->clean($userQuestion);
 
                 $this->search->setCategory(new Category($this->configuration));
@@ -234,6 +231,7 @@ final class QuestionController extends AbstractController
 
         $isGuest = -1 === $this->currentUser->getUserId();
 
-        return !$isGuest || (bool) $this->configuration->get(item: 'records.allowQuestionsForGuests');
+        return !$isGuest
+        || filter_var($this->configuration->get(item: 'records.allowQuestionsForGuests'), FILTER_VALIDATE_BOOLEAN);
     }
 }

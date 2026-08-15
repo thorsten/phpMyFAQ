@@ -536,6 +536,20 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         self::assertArrayHasKey('error', $payload);
     }
 
+    public function testCreateThrowsExceptionWhenBodyIsNotAJsonObject(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.enableAskQuestions' => '1']);
+
+        $controller = $this->createController();
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The request body must be a JSON object');
+
+        $controller->create(Request::create('/api/question/create', 'POST', content: '"just a string"'));
+    }
+
     public function testCreateThrowsExceptionWhenCsrfTokenIsMissing(): void
     {
         $this->configuration->getAll();

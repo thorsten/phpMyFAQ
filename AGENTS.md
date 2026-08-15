@@ -50,6 +50,8 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - PHP code: composer test
 - PHP code with coverage: composer test:coverage
 - PHP linting: composer lint
+- PHP static analysis: composer analyze
+- PHP CI parity (format check + lint + static analysis, same as the GitHub Actions Mago step): composer check
 - TypeScript code: pnpm test
 - TypeScript code with coverage: pnpm test:coverage
 - TypeScript code in watch mode: pnpm test:watch
@@ -109,7 +111,7 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 When implementing changes:
 
 1. Read existing code before modifying it.
-2. Run `composer lint` / `pnpm oxlint` after PHP/TypeScript changes.
+2. Run `composer check` / `pnpm oxlint` after PHP/TypeScript changes — `composer lint` alone does not run the static analysis that CI enforces.
 3. Run `composer test` / `pnpm test` — all tests must pass before finishing.
 4. Never commit with `--no-verify`.
 5. Clear route cache (`rm -rf phpmyfaq/cache/routes`) after adding or modifying routes.

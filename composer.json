@@ -127,10 +127,15 @@
     "analyze": "./phpmyfaq/src/libs/bin/mago analyze --baseline=mago-analyze-baseline.toml",
     "analyze:all": "./phpmyfaq/src/libs/bin/mago analyze",
     "analyze:baseline": "./phpmyfaq/src/libs/bin/mago analyze --baseline=mago-analyze-baseline.toml --remove-outdated-baseline-entries --backup-baseline",
+    "check": [
+      "@format:dry-run",
+      "@lint",
+      "@analyze"
+    ],
     "format": "./phpmyfaq/src/libs/bin/mago format",
     "format:dry-run": "./phpmyfaq/src/libs/bin/mago format --dry-run",
     "format:fix": "./phpmyfaq/src/libs/bin/mago format --fix",
-    "lint": "./phpmyfaq/src/libs/bin/mago lint",
+    "lint": "./phpmyfaq/src/libs/bin/mago lint --baseline=mago-lint-baseline.toml",
     "lint:fix": "./phpmyfaq/src/libs/bin/mago lint --fix",
     "openapi:json": "./phpmyfaq/src/libs/bin/openapi -b ./phpmyfaq/src/libs/autoload.php -f json ./phpmyfaq/src/phpMyFAQ -o docs/openapi.json",
     "openapi:yaml": "./phpmyfaq/src/libs/bin/openapi -b ./phpmyfaq/src/libs/autoload.php ./phpmyfaq/src/phpMyFAQ -o docs/openapi.yaml",
