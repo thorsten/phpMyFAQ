@@ -850,6 +850,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.search'),
         service('phpmyfaq.question'),
         service('phpmyfaq.notification'),
+        service('phpmyfaq.http.rate-limiter'),
     ]);
     $services->set(FrontendApiUserController::class, FrontendApiUserController::class)->args([
         service('phpmyfaq.stop-words'),

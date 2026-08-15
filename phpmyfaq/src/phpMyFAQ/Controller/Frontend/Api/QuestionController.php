@@ -26,6 +26,7 @@ use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\QuestionHelper;
+use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
 use phpMyFAQ\Search;
@@ -42,13 +43,21 @@ final class QuestionController extends AbstractController
 {
     private const string SESSION_CAPTCHA_VERIFIED = 'pmf-ask-question-captcha-verified';
 
+    private const int CREATE_LIMIT_PER_IP = 10;
+
+    private const int CREATE_LIMIT_INTERVAL_SECONDS = 3600;
+
+    private readonly RateLimiter $rateLimiter;
+
     public function __construct(
         private readonly StopWords $stopWords,
         private readonly QuestionHelper $questionHelper,
         private readonly Search $search,
         private readonly Question $question,
         private readonly Notification $notification,
+        ?RateLimiter $rateLimiter = null,
     ) {
+        $this->rateLimiter = $rateLimiter ?? new RateLimiter();
         parent::__construct();
     }
 
@@ -60,6 +69,17 @@ final class QuestionController extends AbstractController
     #[Route(path: 'question/create', name: 'api.private.question.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
+        if (!$this->rateLimiter->check(
+            'question:create:ip:' . ($request->getClientIp() ?? 'anonymous'),
+            self::CREATE_LIMIT_PER_IP,
+            self::CREATE_LIMIT_INTERVAL_SECONDS,
+        )) {
+            return $this->json(
+                ['error' => 'Too many requests. Please retry later.'],
+                Response::HTTP_TOO_MANY_REQUESTS,
+            );
+        }
+
         if (!$this->isAddingQuestionsAllowed()) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
@@ -128,6 +148,12 @@ final class QuestionController extends AbstractController
 
         // If smart answering is disabled, save the question immediately
         if (!filter_var($this->configuration->get(item: 'main.enableSmartAnswering'), FILTER_VALIDATE_BOOLEAN)) {
+            $save = true;
+        }
+
+        // The "store now" confirmation of the two-phase smart-answer flow stores
+        // the question directly instead of searching for smart answers again
+        if ($storeNow === 'now') {
             $save = true;
         }
 

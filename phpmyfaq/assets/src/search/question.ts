@@ -47,8 +47,7 @@ export const handleQuestion = () => {
 
             // Add smart answers
             message.insertAdjacentElement('afterend', addElement('div', { classList: '', innerHTML: resultMessage }));
-            // Add hidden input
-            form.insertAdjacentElement('afterbegin', addElement('input', { type: 'hidden', name: 'save', value: 1 }));
+            // The next submission confirms storing the question
             form.insertAdjacentElement(
               'afterbegin',
               addElement('input', { type: 'hidden', name: 'store', value: 'now' })

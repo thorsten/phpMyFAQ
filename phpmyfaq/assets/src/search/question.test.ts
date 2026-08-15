@@ -90,12 +90,11 @@ describe('handleQuestion', () => {
     const response = document.getElementById('pmf-question-response') as HTMLElement;
     expect(response.nextElementSibling?.innerHTML).toContain('Similar FAQ');
 
-    // Hidden inputs should be added to the form
+    // Hidden input should be added to the form; the rejected save parameter must not be
     const form = document.getElementById('pmf-question-form') as HTMLFormElement;
-    const saveInput = form.querySelector('input[name="save"]') as HTMLInputElement;
+    const saveInput = form.querySelector('input[name="save"]') as HTMLInputElement | null;
     const storeInput = form.querySelector('input[name="store"]') as HTMLInputElement;
-    expect(saveInput).not.toBeNull();
-    expect(saveInput.getAttribute('value')).toBe('1');
+    expect(saveInput).toBeNull();
     expect(storeInput).not.toBeNull();
     expect(storeInput.getAttribute('value')).toBe('now');
   });

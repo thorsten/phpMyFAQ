@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Helper\QuestionHelper;
+use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Question;
@@ -51,6 +52,7 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         ?Search $search = null,
         ?Question $question = null,
         ?Notification $notification = null,
+        ?RateLimiter $rateLimiter = null,
     ): QuestionController {
         return new QuestionController(
             $stopWords ?? $this->createStub(StopWords::class),
@@ -58,6 +60,7 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
             $search ?? $this->createStub(Search::class),
             $question ?? $this->createStub(Question::class),
             $notification ?? $this->createStub(Notification::class),
+            $rateLimiter,
         );
     }
 
@@ -615,7 +618,7 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         $this->configuration->getAll();
         $this->overrideConfigurationValues([
             'records.allowQuestionsForGuests' => '1',
-            'main.enableSmartAnswering' => '0',
+            'main.enableSmartAnswering' => '1',
             'main.enableAskQuestions' => '1',
             'spam.enableCaptchaCode' => 'true',
         ]);
@@ -624,13 +627,22 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         $stopWords = $this->createStub(StopWords::class);
         $stopWords->method('checkBannedWord')->willReturn(true);
 
+        // The confirmation stores directly; it must not search for smart answers again
+        $search = $this->createMock(Search::class);
+        $search->expects($this->never())->method('search');
+
         $question = $this->createMock(Question::class);
         $question->expects($this->once())->method('add');
 
         $notification = $this->createMock(Notification::class);
         $notification->expects($this->once())->method('sendQuestionSuccessMail');
 
-        $controller = $this->createController(stopWords: $stopWords, question: $question, notification: $notification);
+        $controller = $this->createController(
+            stopWords: $stopWords,
+            search: $search,
+            question: $question,
+            notification: $notification,
+        );
         [$session, $csrfToken] = $this->createValidCsrfSession();
         $this->injectControllerState($controller, $this->createGuestUserStub(), $session);
 
@@ -659,5 +671,40 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $replayResponse->getStatusCode());
         self::assertSame(Translation::get(key: 'msgCaptcha'), $replayPayload['error']);
+    }
+
+    public function testCreateReturnsTooManyRequestsWhenRateLimitIsExceeded(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.enableAskQuestions' => '1']);
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->never())->method('add');
+
+        $controller = $this->createController(question: $question, rateLimiter: new RateLimiter());
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+
+        // Missing CSRF token, so each request within the budget throws after the rate check
+        $request = Request::create('/api/question/create', 'POST', content: json_encode([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'lang' => 'en',
+            'question' => 'How does this work?',
+        ], JSON_THROW_ON_ERROR));
+
+        for ($i = 0; $i < 10; ++$i) {
+            try {
+                $controller->create($request);
+                self::fail('Requests within the rate limit budget must fail the CSRF check');
+            } catch (Exception) {
+                // expected: 'Missing CSRF token'
+            }
+        }
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
     }
 }
