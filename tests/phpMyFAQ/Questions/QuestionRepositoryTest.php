@@ -54,7 +54,7 @@ class QuestionRepositoryTest extends TestCase
 
         $result = $this->repository->add($questionEntity);
 
-        $this->assertTrue($result);
+        $this->assertSame(1, $result);
     }
 
     public function testDelete(): void

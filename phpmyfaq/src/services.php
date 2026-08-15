@@ -805,6 +805,7 @@ return static function (ContainerConfigurator $container): void {
     ]);
     $services->set(ApiQuestionController::class, ApiQuestionController::class)->args([
         service('phpmyfaq.notification'),
+        service('phpmyfaq.question.history'),
     ]);
 
     // Batch 2: Controller/Frontend/Api/
@@ -855,6 +856,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.search'),
         service('phpmyfaq.question'),
         service('phpmyfaq.notification'),
+        service('phpmyfaq.question.history'),
         service('phpmyfaq.http.rate-limiter'),
     ]);
     $services->set(FrontendApiUserController::class, FrontendApiUserController::class)->args([

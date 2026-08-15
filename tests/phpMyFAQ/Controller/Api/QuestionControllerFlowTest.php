@@ -12,6 +12,7 @@ use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Language;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Permission\BasicPermission;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -131,7 +132,7 @@ final class QuestionControllerFlowTest extends TestCase
             'email' => 'test@example.com',
         ], JSON_THROW_ON_ERROR));
 
-        $controller = new QuestionController($notification);
+        $controller = new QuestionController($notification, $this->createStub(QuestionHistoryRepository::class));
         $controller->setContainer($this->createContainer());
 
         $response = $controller->create($request);
@@ -164,7 +165,7 @@ final class QuestionControllerFlowTest extends TestCase
             'email' => 'visible@example.com',
         ], JSON_THROW_ON_ERROR));
 
-        $controller = new QuestionController($notification);
+        $controller = new QuestionController($notification, $this->createStub(QuestionHistoryRepository::class));
         $controller->setContainer($this->createContainer());
 
         $response = $controller->create($request);
@@ -188,7 +189,10 @@ final class QuestionControllerFlowTest extends TestCase
             'email' => 'token@example.com',
         ], JSON_THROW_ON_ERROR));
 
-        $controller = new QuestionController($this->createStub(Notification::class));
+        $controller = new QuestionController(
+            $this->createStub(Notification::class),
+            $this->createStub(QuestionHistoryRepository::class),
+        );
         $controller->setContainer($this->createContainer());
 
         $this->expectException(UnauthorizedHttpException::class);

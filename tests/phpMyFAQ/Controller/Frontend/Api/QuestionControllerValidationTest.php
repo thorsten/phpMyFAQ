@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Entity\QuestionHistoryEntity;
+use phpMyFAQ\Enums\QuestionHistoryEventType;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Search;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\StopWords;
@@ -52,6 +55,7 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         ?Search $search = null,
         ?Question $question = null,
         ?Notification $notification = null,
+        ?QuestionHistoryRepository $questionHistory = null,
         ?RateLimiter $rateLimiter = null,
     ): QuestionController {
         return new QuestionController(
@@ -60,6 +64,7 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
             $search ?? $this->createStub(Search::class),
             $question ?? $this->createStub(Question::class),
             $notification ?? $this->createStub(Notification::class),
+            $questionHistory ?? $this->createStub(QuestionHistoryRepository::class),
             $rateLimiter,
         );
     }
@@ -339,6 +344,66 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         $notification->expects($this->once())->method('sendQuestionSuccessMail');
 
         $controller = $this->createController(stopWords: $stopWords, question: $question, notification: $notification);
+        $currentUser = $this->createAuthenticatedUserMock();
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = Request::create('/api/question/create', 'POST', content: json_encode([
+            'pmf-csrf-token' => $csrfToken,
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'lang' => 'en',
+            'question' => 'How does this work?',
+            'captcha' => 'ignored-for-logged-in-user',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
+    public function testCreateRecordsSubmittedHistoryEventOnSuccess(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'records.allowQuestionsForGuests' => '1',
+            'main.enableSmartAnswering' => '0',
+            'main.enableAskQuestions' => '1',
+        ]);
+        $this->seedCategory();
+
+        $stopWords = $this->createStub(StopWords::class);
+        $stopWords->method('checkBannedWord')->willReturn(true);
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('add')->willReturn(42);
+
+        $questionHistory = $this->createMock(QuestionHistoryRepository::class);
+        $questionHistory
+            ->expects($this->once())
+            ->method('add')
+            ->with($this->callback(static function (QuestionHistoryEntity $entity): bool {
+                return (
+                    $entity->getQuestionId() === 42
+                    && $entity->getQuestionLanguage() === 'en'
+                    && $entity->getEventType() === QuestionHistoryEventType::Submitted
+                    && $entity->getUserId() === 1
+                    && $entity->getUsername() === 'Test User'
+                );
+            }))
+            ->willReturn(true);
+
+        $notification = $this->createStub(Notification::class);
+
+        $controller = $this->createController(
+            stopWords: $stopWords,
+            question: $question,
+            notification: $notification,
+            questionHistory: $questionHistory,
+        );
         $currentUser = $this->createAuthenticatedUserMock();
         $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
         [$session, $csrfToken] = $this->createValidCsrfSession();

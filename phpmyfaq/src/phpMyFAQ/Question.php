@@ -41,9 +41,9 @@ readonly class Question
     }
 
     /**
-     * Adds a new question.
+     * Adds a new question and returns its new id, 0 on failure.
      */
-    public function add(QuestionEntity $questionEntity): bool
+    public function add(QuestionEntity $questionEntity): int
     {
         return $this->questionRepository->add($questionEntity);
     }

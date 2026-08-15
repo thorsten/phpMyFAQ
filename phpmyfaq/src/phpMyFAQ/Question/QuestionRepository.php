@@ -31,10 +31,11 @@ readonly class QuestionRepository
     }
 
     /**
-     * Adds a new question to the database.
+     * Adds a new question to the database and returns its new id, 0 on failure.
      */
-    public function add(QuestionEntity $questionEntity): bool
+    public function add(QuestionEntity $questionEntity): int
     {
+        $questionId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqquestions', column: 'id');
         $query = sprintf(
             "
             INSERT INTO
@@ -43,7 +44,7 @@ readonly class QuestionRepository
                 VALUES
             (%d, '%s', '%s', '%s', %d, '%s', '%s', '%s', %d)",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqquestions', column: 'id'),
+            $questionId,
             $this->configuration->getDb()->escape($questionEntity->getLanguage()),
             $this->configuration->getDb()->escape($questionEntity->getUsername()),
             $this->configuration->getDb()->escape($questionEntity->getEmail()),
@@ -54,7 +55,7 @@ readonly class QuestionRepository
             0,
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->configuration->getDb()->query($query) !== false ? $questionId : 0;
     }
 
     /**

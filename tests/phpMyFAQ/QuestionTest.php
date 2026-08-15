@@ -47,7 +47,9 @@ class QuestionTest extends TestCase
             ->setLanguage('en')
             ->setIsVisible(true);
 
-        $this->assertTrue($this->question->add($questionData));
+        $result = $this->question->add($questionData);
+
+        $this->assertGreaterThan(0, $result);
     }
 
     public function testDelete(): void

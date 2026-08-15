@@ -23,10 +23,13 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\QuestionEntity;
+use phpMyFAQ\Entity\QuestionHistoryEntity;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Enums\QuestionHistoryEventType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +39,7 @@ final class QuestionController extends AbstractApiController
 {
     public function __construct(
         private readonly Notification $notification,
+        private readonly QuestionHistoryRepository $questionHistory,
     ) {
         parent::__construct();
     }
@@ -113,6 +117,7 @@ final class QuestionController extends AbstractApiController
         $email = Filter::filterVar($data->email ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $visibility = $this->configuration->get(item: 'records.enableVisibilityQuestions') ? 'Y' : 'N';
+        $language = $this->configuration->getLanguage()->getLanguage();
 
         $questionEntity = new QuestionEntity();
         $questionEntity
@@ -120,11 +125,20 @@ final class QuestionController extends AbstractApiController
             ->setEmail($email)
             ->setCategoryId($categoryId)
             ->setQuestion($question)
-            ->setLanguage($this->configuration->getLanguage()->getLanguage())
+            ->setLanguage($language)
             ->setIsVisible($visibility === 'Y');
 
         $questionObject = new Question($this->configuration);
-        $questionObject->add($questionEntity);
+        $questionId = $questionObject->add($questionEntity);
+        if ($questionId > 0) {
+            $this->questionHistory->add(new QuestionHistoryEntity(
+                questionId: $questionId,
+                questionLanguage: $language,
+                eventType: QuestionHistoryEventType::Submitted,
+                userId: $this->currentUser->getUserId(),
+                username: $author,
+            ));
+        }
 
         $category = new Category($this->configuration);
         $category->getCategoryData($categoryId);
