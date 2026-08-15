@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
+use InvalidArgumentException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Core\Exception;
@@ -131,13 +132,19 @@ final class QuestionController extends AbstractApiController
         $questionObject = new Question($this->configuration);
         $questionId = $questionObject->add($questionEntity);
         if ($questionId > 0) {
-            $this->questionHistory->add(new QuestionHistoryEntity(
-                questionId: $questionId,
-                questionLanguage: $language,
-                eventType: QuestionHistoryEventType::Submitted,
-                userId: $this->currentUser->getUserId(),
-                username: $author,
-            ));
+            try {
+                $this->questionHistory->add(new QuestionHistoryEntity(
+                    questionId: $questionId,
+                    questionLanguage: $language,
+                    eventType: QuestionHistoryEventType::Submitted,
+                    userId: $this->currentUser->getUserId(),
+                    username: $author,
+                ));
+            } catch (InvalidArgumentException $exception) {
+                $this->configuration
+                    ->getLogger()
+                    ->error('Recording question history failed: ' . $exception->getMessage());
+            }
         }
 
         $category = new Category($this->configuration);

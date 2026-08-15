@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use InvalidArgumentException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
@@ -217,13 +218,19 @@ final class QuestionController extends AbstractController
 
             $questionId = $this->question->add($questionEntity);
             if ($questionId > 0) {
-                $this->questionHistory->add(new QuestionHistoryEntity(
-                    questionId: $questionId,
-                    questionLanguage: $language,
-                    eventType: QuestionHistoryEventType::Submitted,
-                    userId: $this->currentUser->getUserId(),
-                    username: $author,
-                ));
+                try {
+                    $this->questionHistory->add(new QuestionHistoryEntity(
+                        questionId: $questionId,
+                        questionLanguage: $language,
+                        eventType: QuestionHistoryEventType::Submitted,
+                        userId: $this->currentUser->getUserId(),
+                        username: $author,
+                    ));
+                } catch (InvalidArgumentException $exception) {
+                    $this->configuration
+                        ->getLogger()
+                        ->error('Recording question history failed: ' . $exception->getMessage());
+                }
             }
             $this->notification->sendQuestionSuccessMail($questionEntity, $categories);
 

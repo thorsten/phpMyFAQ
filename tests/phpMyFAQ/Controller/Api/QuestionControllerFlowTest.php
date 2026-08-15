@@ -144,6 +144,40 @@ final class QuestionControllerFlowTest extends TestCase
     }
 
     /**
+     * A blank author cannot build a QuestionHistoryEntity (it requires a non-empty username), but
+     * the question itself was already stored successfully by the time history recording is
+     * attempted. The submission must not be aborted by that secondary failure.
+     *
+     * @throws \Exception
+     */
+    public function testCreateSucceedsWhenAuthorIsBlankEvenThoughHistoryCannotBeRecorded(): void
+    {
+        $before = $this->getQuestionCount();
+
+        $notification = $this->createStub(Notification::class);
+
+        $questionHistory = $this->createMock(QuestionHistoryRepository::class);
+        $questionHistory->expects($this->never())->method('add');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'category-id' => 1,
+            'question' => 'Is this a test question?',
+            'author' => '',
+            'email' => 'test@example.com',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = new QuestionController($notification, $questionHistory);
+        $controller->setContainer($this->createContainer());
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(201, $response->getStatusCode());
+        self::assertSame(['stored' => true], $payload);
+        self::assertSame($before + 1, $this->getQuestionCount());
+    }
+
+    /**
      * @throws \Exception
      */
     public function testCreateMarksQuestionVisibleWhenVisibilitySettingIsEnabled(): void
