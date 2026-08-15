@@ -186,6 +186,7 @@ use phpMyFAQ\Push\PushSubscriptionRepository;
 use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Scheduler\TaskScheduler;
@@ -609,6 +610,10 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.plugin.plugin-manager', PluginManager::class);
 
     $services->set('phpmyfaq.question', Question::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
+    $services->set('phpmyfaq.question.history', QuestionHistoryRepository::class)->args([
         service('phpmyfaq.configuration'),
     ]);
 
