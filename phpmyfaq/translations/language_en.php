@@ -1875,5 +1875,7 @@ $PMF_LANG['msgNoPublishPermission'] = 'You are not allowed to change the publica
 
 // added v4.2.0-alpha.3 - 2026-08-15 by Thorsten Rinne - question metadata tracking
 $PMF_LANG['msgQuestionReopened'] = 'The question was reopened.';
+$PMF_LANG['msgReopenQuestion'] = 'Reopen';
+$PMF_LANG['msgQuestionHistory'] = 'History';
 
 return $PMF_LANG;

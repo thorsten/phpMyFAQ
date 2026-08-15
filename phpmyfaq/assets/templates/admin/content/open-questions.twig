@@ -58,11 +58,18 @@
                      class="btn btn-success">
                     {{ msg2answerFAQ }}
                   </a>
+                  <button type="button" class="btn btn-warning pmf-reopen-question"
+                          data-pmf-question-id="{{ question.id }}" data-pmf-csrf="{{ csrfTokenReopenQuestion }}">
+                    {{ msgReopenQuestion }}
+                  </button>
                 {% else %}
                   <a href="./faq/answer/{{ question.id }}/{{ currentLocale }}" class="btn btn-success">
                     {{ msgTakeQuestion }}
                   </a>
                 {% endif %}
+                <a href="./questions/history/{{ question.id }}" class="btn btn-outline-secondary">
+                  {{ msgQuestionHistory }}
+                </a>
               </td>
             </tr>
           {% endfor %}

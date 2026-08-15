@@ -14,7 +14,7 @@
  */
 
 import { addElement, pushErrorNotification, serialize } from '../../../../assets/src/utils';
-import { toggleQuestionVisibility } from '../api';
+import { reopenQuestion, toggleQuestionVisibility } from '../api';
 
 export const handleOpenQuestions = (): void => {
   const deleteButton = document.getElementById('pmf-delete-questions') as HTMLButtonElement | null;
@@ -87,4 +87,25 @@ export const handleToggleVisibility = (): void => {
       });
     });
   }
+};
+
+export const handleReopenQuestion = (): void => {
+  const reopenButtons = document.querySelectorAll('.pmf-reopen-question') as NodeListOf<HTMLElement>;
+
+  reopenButtons.forEach((element) => {
+    element.addEventListener('click', async (event: Event) => {
+      event.preventDefault();
+
+      const questionId = element.getAttribute('data-pmf-question-id') as string;
+      const csrfToken = element.getAttribute('data-pmf-csrf') as string;
+
+      const response = await reopenQuestion(questionId, csrfToken);
+
+      if (response?.success) {
+        window.location.reload();
+      } else {
+        pushErrorNotification(response?.error ?? 'An error occurred');
+      }
+    });
+  });
 };

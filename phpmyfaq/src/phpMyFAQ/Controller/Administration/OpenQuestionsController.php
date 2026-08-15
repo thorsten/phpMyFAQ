@@ -104,6 +104,9 @@ final class OpenQuestionsController extends AbstractAdministrationController
             'msgOtherQuestionDesc' => Translation::get(key: 'msgOtherQuestionDesc'),
             'msgChangeLanguageHint' => Translation::get(key: 'msgChangeLanguageHint'),
             'msgOpenQuestion' => Translation::get(key: 'msgOpenQuestion'),
+            'csrfTokenReopenQuestion' => Token::getInstance($this->session)->getTokenString('reopen-question'),
+            'msgReopenQuestion' => Translation::get(key: 'msgReopenQuestion'),
+            'msgQuestionHistory' => Translation::get(key: 'msgQuestionHistory'),
         ]);
     }
 }
