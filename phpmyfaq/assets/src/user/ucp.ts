@@ -61,9 +61,11 @@ export const handleUserControlPanel = (): void => {
       confirmRemoveTwoFactor.addEventListener('click', async (event: Event): Promise<void> => {
         event.preventDefault();
         const csrfToken = document.getElementById('pmf-csrf-token-remove-twofactor') as HTMLInputElement;
+        const codeInput = document.getElementById('pmf-remove-twofactor-code') as HTMLInputElement | null;
+        const code = codeInput ? codeInput.value.trim() : '';
 
         try {
-          const response = await removeTwofactorConfig(csrfToken.value);
+          const response = await removeTwofactorConfig(csrfToken.value, code);
           if (response.success) {
             pushNotification(response.success);
             const twoFactorEnabled = document.getElementById('twofactor_enabled') as HTMLInputElement | null;
@@ -80,6 +82,10 @@ export const handleUserControlPanel = (): void => {
           }
         } catch (error) {
           pushErrorNotification((error as Error).message);
+        } finally {
+          if (codeInput) {
+            codeInput.value = '';
+          }
         }
       });
     }

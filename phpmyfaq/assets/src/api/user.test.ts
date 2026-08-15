@@ -168,7 +168,7 @@ describe('removeTwofactorConfig', () => {
       json: () => Promise.resolve({ success: 'Two-factor authentication removed' }),
     });
 
-    const result = await removeTwofactorConfig('csrf-token-123');
+    const result = await removeTwofactorConfig('csrf-token-123', '123456');
 
     expect(result).toEqual({ success: 'Two-factor authentication removed' });
     expect(fetch).toHaveBeenCalledWith('api/user/remove-twofactor', {
@@ -177,7 +177,7 @@ describe('removeTwofactorConfig', () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ csrfToken: 'csrf-token-123' }),
+      body: JSON.stringify({ csrfToken: 'csrf-token-123', code: '123456' }),
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
     });
@@ -190,6 +190,6 @@ describe('removeTwofactorConfig', () => {
       json: () => Promise.resolve({ error: 'Something went wrong' }),
     });
 
-    await expect(removeTwofactorConfig('bad-token')).rejects.toThrow('HTTP 400');
+    await expect(removeTwofactorConfig('bad-token', '123456')).rejects.toThrow('HTTP 400');
   });
 });

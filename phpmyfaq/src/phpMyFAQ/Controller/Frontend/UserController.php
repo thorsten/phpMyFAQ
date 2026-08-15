@@ -259,6 +259,7 @@ final class UserController extends AbstractFrontController
             'ad_gen_yes' => Translation::get(key: 'ad_gen_yes'),
             'ad_gen_no' => Translation::get(key: 'ad_gen_no'),
             'msgConfirmTwofactorConfig' => Translation::get(key: 'msgConfirmTwofactorConfig'),
+            'msgEnterTwofactorToken' => Translation::get(key: 'msgEnterTwofactorToken'),
             'csrfTokenRemoveTwofactor' => Token::getInstance($this->session)->getTokenString('remove-twofactor'),
             'msgGravatarNotConnected' => Translation::get(key: 'msgGravatarNotConnected'),
             'webauthnSupportEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
