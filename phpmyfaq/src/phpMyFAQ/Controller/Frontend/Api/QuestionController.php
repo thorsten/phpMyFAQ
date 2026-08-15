@@ -30,6 +30,7 @@ use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,6 +40,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class QuestionController extends AbstractController
 {
+    private const string SESSION_CAPTCHA_VERIFIED = 'pmf-ask-question-captcha-verified';
+
     public function __construct(
         private readonly StopWords $stopWords,
         private readonly QuestionHelper $questionHelper,
@@ -68,6 +71,17 @@ final class QuestionController extends AbstractController
         $categories = $category->getAllCategories();
 
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+
+        if (($data->{'pmf-csrf-token'} ?? null) === null) {
+            throw new Exception('Missing CSRF token');
+        }
+
+        if (!Token::getInstance($this->session)->verifyToken(
+            page: 'ask-question',
+            requestToken: (string) $data->{'pmf-csrf-token'},
+        )) {
+            throw new Exception('Invalid CSRF token');
+        }
 
         if (($data->name ?? null) === null) {
             throw new Exception('Missing name');
@@ -117,8 +131,17 @@ final class QuestionController extends AbstractController
             $save = true;
         }
 
-        // Validate captcha if we can store the question after displaying the smart answer
-        if ($storeNow !== 'now' && !$this->captchaCodeIsValid($request)) {
+        // The captcha code is single-use, so the "store now" confirmation of the
+        // two-phase smart-answer flow cannot present it a second time. Phase one
+        // arms a one-time session flag after its captcha check succeeded; the
+        // confirmation request must consume that flag or pass a fresh captcha.
+        $captchaVerifiedForSmartAnswer = $this->session->get(self::SESSION_CAPTCHA_VERIFIED) === true;
+        if ($storeNow === 'now') {
+            $this->session->remove(self::SESSION_CAPTCHA_VERIFIED);
+        }
+
+        $captchaRequired = $storeNow !== 'now' || !$captchaVerifiedForSmartAnswer;
+        if ($captchaRequired && !$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 
@@ -163,6 +186,7 @@ final class QuestionController extends AbstractController
 
                 if ($searchResultSet->getNumberOfResults() > 0) {
                     $smartAnswer = $this->questionHelper->generateSmartAnswer($searchResultSet);
+                    $this->session->set(self::SESSION_CAPTCHA_VERIFIED, true);
                     return $this->json(['result' => $smartAnswer], Response::HTTP_OK);
                 }
             }

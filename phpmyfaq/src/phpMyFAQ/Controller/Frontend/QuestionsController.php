@@ -27,6 +27,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq\QuestionService;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\QuestionHelper;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -141,6 +142,7 @@ final class QuestionsController extends AbstractFrontController
                 $this->currentUser->isLoggedIn(),
             ),
             'msgNewContentSubmit' => Translation::get(key: 'msgNewContentSubmit'),
+            'csrfTokenAskQuestion' => Token::getInstance($this->session)->getTokenString('ask-question'),
             'noCategories' => $questionData['noCategories'],
             'msgFormDisabledDueToMissingCategories' => Translation::get(key: 'msgFormDisabledDueToMissingCategories'),
         ];
