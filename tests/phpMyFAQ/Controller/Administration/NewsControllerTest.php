@@ -8,6 +8,7 @@ use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -171,25 +172,38 @@ final class NewsControllerTest extends TestCase
         self::assertStringContainsString('author@example.com', (string) $response->getContent());
     }
 
-    private function createControllerContainer(): ContainerInterface
+    /**
+     * @throws \Exception
+     */
+    public function testEditRequiresEditNewsPermission(): void
     {
+        $controller = new NewsController($this->createStub(News::class), $this->createStub(Comments::class));
+        $controller->setContainer($this->createControllerContainer([PermissionType::NEWS_ADD]));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "NEWS_EDIT" permission.');
+
+        $controller->edit(new Request([], [], ['newsId' => '7']));
+    }
+
+    /**
+     * @param list<PermissionType>|null $grantedPermissions null grants all news permissions
+     */
+    private function createControllerContainer(?array $grantedPermissions = null): ContainerInterface
+    {
+        $grantedPermissions ??= [PermissionType::NEWS_ADD, PermissionType::NEWS_EDIT, PermissionType::NEWS_DELETE];
+        $grantedRights = [];
+        foreach ($grantedPermissions as $grantedPermission) {
+            $grantedRights[] = $grantedPermission;
+            $grantedRights[] = $grantedPermission->value;
+        }
+
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
             ->willReturnCallback(
                 static fn(int $userId, mixed $right): bool => $userId === 42
-                && in_array(
-                    $right,
-                    [
-                        PermissionType::NEWS_ADD,
-                        PermissionType::NEWS_ADD->value,
-                        PermissionType::NEWS_EDIT,
-                        PermissionType::NEWS_EDIT->value,
-                        PermissionType::NEWS_DELETE,
-                        PermissionType::NEWS_DELETE->value,
-                    ],
-                    true,
-                ),
+                && in_array($right, $grantedRights, true),
             );
 
         $currentUser = $this->createMock(CurrentUser::class);

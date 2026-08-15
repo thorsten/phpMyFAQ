@@ -14,6 +14,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\SeoEntity;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Helper\CategoryHelper;
@@ -255,6 +256,22 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testTranslateRequiresTranslatePermission(): void
+    {
+        $request = new Request([], [], ['faqId' => '1', 'faqLanguage' => 'en']);
+
+        $controller = $this->createControllerWithPreparedFaqRecord();
+        $controller->setContainer($this->createAuthenticatedContainer(deniedRight: PermissionType::FAQ_TRANSLATE));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_TRANSLATE" permission.');
+
+        $controller->translate($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testAnswerRendersInCurrentAnonymousAdminContext(): void
     {
         $request = new Request();
@@ -408,10 +425,15 @@ final class FaqControllerTest extends TestCase
         );
     }
 
-    private function createAuthenticatedContainer(): ContainerInterface
+    private function createAuthenticatedContainer(?PermissionType $deniedRight = null): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);
-        $permission->method('hasPermission')->willReturn(true);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $deniedRight === null
+                    || ($right !== $deniedRight && $right !== $deniedRight->value),
+            );
         $permission
             ->method('hasPermissionForCategory')
             ->willReturnCallback(
