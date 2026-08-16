@@ -138,9 +138,18 @@ final class FaqController extends AbstractAdministrationApiController
         $this->userHasPermissionForLanguage(PermissionType::FAQ_ADD, $language);
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $status =
-            FaqStatus::tryFrom((string) Filter::filterVar($data->status ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''))
-            ?? FaqStatus::Draft;
+
+        // An absent status field means a new draft; a present but unsupported value is a
+        // malformed request and must fail loudly instead of silently creating a draft.
+        $status = FaqStatus::Draft;
+        if (property_exists($data, 'status')) {
+            $status = FaqStatus::tryFrom((string) Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS, ''));
+            if (!$status instanceof FaqStatus) {
+                return $this->json([
+                    'error' => Translation::get(key: 'msgInvalidFaqStatus'),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        }
 
         // Creating an FAQ and making it public are separate rights.
         if ($status === FaqStatus::Published) {
@@ -408,9 +417,26 @@ final class FaqController extends AbstractAdministrationApiController
         $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $faqLang);
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+
+        // An absent status field keeps the stored state; a present but unsupported value
+        // is a malformed request and must fail loudly instead of being silently ignored.
+        $requestedStatus = null;
+        if (property_exists($data, 'status')) {
+            $requestedStatus = FaqStatus::tryFrom((string) Filter::filterVar(
+                $data->status,
+                FILTER_SANITIZE_SPECIAL_CHARS,
+                '',
+            ));
+            if (!$requestedStatus instanceof FaqStatus) {
+                return $this->json([
+                    'error' => Translation::get(key: 'msgInvalidFaqStatus'),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        }
+
         $previousStatus = $this->faq->getStatus($faqId, $faqLang);
         $status = $this->resolveStatusChange(
-            $data,
+            $requestedStatus,
             $previousStatus,
             $faqLang,
             [...$categories, ...$currentCategoryIds],
@@ -1174,15 +1200,11 @@ final class FaqController extends AbstractAdministrationApiController
      * @throws ForbiddenException|Exception
      */
     private function resolveStatusChange(
-        stdClass $data,
+        ?FaqStatus $requestedStatus,
         FaqStatus $currentStatus,
         string $faqLanguage,
         array $categoryIds,
     ): FaqStatus {
-        $requestedStatus = property_exists($data, 'status')
-            ? FaqStatus::tryFrom((string) Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS, ''))
-            : null;
-
         if ($requestedStatus === null || $requestedStatus === $currentStatus) {
             return $currentStatus;
         }

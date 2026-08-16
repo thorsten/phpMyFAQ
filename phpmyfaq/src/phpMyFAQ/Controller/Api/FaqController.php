@@ -930,7 +930,7 @@ final class FaqController extends AbstractApiController
 
         // Editing an FAQ and deciding that it goes live are separate rights, so a change of
         // the publication state needs FAQ_PUBLISH on top of the FAQ_EDIT guard above.
-        if ($isActive !== $this->faq->isActive($faqId, $languageCode)) {
+        if ($isActive !== ($currentStatus === FaqStatus::Published)) {
             $faqCategories = new CategoryRelation($this->configuration, $category)->getCategories(
                 $faqId,
                 $languageCode,

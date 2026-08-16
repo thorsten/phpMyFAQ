@@ -2555,6 +2555,30 @@ final class FaqControllerTest extends TestCase
      *
      * @throws \Exception
      */
+    /**
+     * A present but unsupported status value is a malformed request — it must 400 instead
+     * of silently creating a draft; only an absent field falls back to Draft.
+     */
+    public function testCreateRejectsUnsupportedStatusValue(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForNewFaq($csrfToken, status: 'bogus');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('create');
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($request);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
     public function testCreateDoesNotIndexDraftFaqWhenSearchIsEnabled(): void
     {
         self::assertTrue($this->configuration->set('search.enableElasticsearch', true));
@@ -2683,6 +2707,34 @@ final class FaqControllerTest extends TestCase
         $response = $controller->update($request);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * A present but unsupported status value is a malformed request — it must 400 instead
+     * of being silently ignored; only an absent field keeps the stored state.
+     */
+    public function testUpdateRejectsUnsupportedStatusValue(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForFaqUpdate($csrfToken, status: 'PUBLISHED');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
+        $faq->expects($this->never())->method('update');
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $response = $controller->update($request);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 

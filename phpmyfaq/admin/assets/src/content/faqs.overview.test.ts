@@ -596,9 +596,10 @@ describe('FAQ Overview Functions', () => {
         isAllowedToTranslate: false,
       });
 
+      // The API rejects unauthorized transitions with a non-OK response (403).
       const fetchMock = vi.fn().mockResolvedValue({
-        ok: true,
-        json: vi.fn().mockResolvedValue({ error: 'No permission' }),
+        ok: false,
+        text: vi.fn().mockResolvedValue('No permission'),
       });
       vi.stubGlobal('fetch', fetchMock);
 

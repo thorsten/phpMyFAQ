@@ -59,9 +59,14 @@ const refreshCategoryTable = async (category: Element): Promise<void> => {
   clearCategoryTable(categoryId);
   const faqs = await fetchAllFaqsByCategory(categoryId, language, statusFilter, onlyNew);
   await populateCategoryTable(categoryId, faqs.faqs, faqs.isAllowedToTranslate);
-  const toggleStickyFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-sticky-faq');
-  const toggleStatusFaq: NodeListOf<HTMLSelectElement> = document.querySelectorAll('.pmf-admin-status-faq');
-  const translationDropdown: NodeListOf<HTMLElement> = document.querySelectorAll('#dropdownAddNewTranslation');
+
+  // Scope the wiring to this category's freshly built rows — a document-wide query
+  // would re-bind the controls of every other expanded category on each refresh,
+  // stacking duplicate change listeners.
+  const tableBody = document.getElementById(`tbody-category-id-${categoryId}`) as HTMLElement;
+  const toggleStickyFaq: NodeListOf<HTMLInputElement> = tableBody.querySelectorAll('.pmf-admin-sticky-faq');
+  const toggleStatusFaq: NodeListOf<HTMLSelectElement> = tableBody.querySelectorAll('.pmf-admin-status-faq');
+  const translationDropdown: NodeListOf<HTMLElement> = tableBody.querySelectorAll('#dropdownAddNewTranslation');
 
   translationDropdown.forEach((element: Element): void => {
     element.addEventListener('click', async (event: Event): Promise<void> => {
