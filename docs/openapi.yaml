@@ -576,7 +576,7 @@ paths:
                 lang: en
                 solution_id: 1000
                 revision_id: 0
-                active: 'yes'
+                status: published
                 sticky: 0
                 keywords: ''
                 question: 'Is there life after death?'
@@ -863,7 +863,7 @@ paths:
                       lang: en,
                       solution_id: '1000',
                       revision_id: '0',
-                      active: 'yes',
+                      status: published,
                       sticky: '0',
                       keywords: '',
                       title: 'Is there life after death?',
