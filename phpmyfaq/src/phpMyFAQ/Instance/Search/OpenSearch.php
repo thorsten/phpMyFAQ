@@ -23,6 +23,7 @@ use Exception;
 use OpenSearch\Client;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
+use phpMyFAQ\Enums\FaqStatus;
 
 /**
  * Class OpenSearch
@@ -212,7 +213,7 @@ readonly class OpenSearch
         $i = 1;
 
         foreach ($faqs as $faq) {
-            if ('no' === ($faq['active'] ?? 'no')) {
+            if (FaqStatus::Published->value !== ($faq['status'] ?? null)) {
                 continue;
             }
 

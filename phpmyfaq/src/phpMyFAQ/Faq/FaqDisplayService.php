@@ -31,6 +31,7 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\AttachmentHelper;
@@ -179,7 +180,10 @@ final class FaqDisplayService
      */
     public function getAttachmentList(int $faqId): array
     {
-        if (!$this->configuration->get('records.disableAttachments') || $this->faq->faqRecord['active'] !== 'yes') {
+        if (
+            !$this->configuration->get('records.disableAttachments')
+            || ($this->faq->faqRecord['status'] ?? null) !== FaqStatus::Published->value
+        ) {
             return [];
         }
 

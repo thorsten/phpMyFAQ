@@ -79,15 +79,17 @@ class FaqRepositoryTest extends TestCase
     ): void {
         $database = $this->configuration->getDb();
         $prefix = Database::getTablePrefix();
+        $status = 'yes' === $active ? FaqStatus::Published->value : FaqStatus::Draft->value;
 
         $database->query(sprintf(
-            "INSERT INTO %sfaqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
-             VALUES (%d, '%s', %d, 0, '%s', %d, '%s', '%s', 'Answer', 'Author', 'author@example.com', 'y', '20260301010101', '00000000000000', '99991231235959', '2026-03-01 01:01:01', '', 0)",
+            "INSERT INTO %sfaqdata (id, lang, solution_id, revision_id, active, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
+             VALUES (%d, '%s', %d, 0, '%s', '%s', %d, '%s', '%s', 'Answer', 'Author', 'author@example.com', 'y', '20260301010101', '00000000000000', '99991231235959', '2026-03-01 01:01:01', '', 0)",
             $prefix,
             $id,
             $lang,
             $solutionId,
             $active,
+            $status,
             $sticky,
             $database->escape($keywords),
             $database->escape($question),

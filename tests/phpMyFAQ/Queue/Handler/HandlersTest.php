@@ -5,6 +5,7 @@ namespace phpMyFAQ\Queue\Handler;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Language;
@@ -83,7 +84,7 @@ class HandlersTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->faqRecord = [
             'id' => 42,
-            'active' => 'yes',
+            'status' => FaqStatus::Published->value,
             'content' => 'Answer',
             'lang' => 'de',
             'solution_id' => 99,

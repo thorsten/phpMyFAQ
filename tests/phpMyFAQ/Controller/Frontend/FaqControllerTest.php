@@ -15,6 +15,7 @@ use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\Comment;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Mail;
@@ -184,7 +185,7 @@ final class FaqControllerTest extends TestCase
      */
     public function testShowReturnsNotFoundForInactiveFaq(): void
     {
-        $this->seedFaqRow(faqId: 2, active: 'no');
+        $this->seedFaqRow(faqId: 2, status: 'draft');
 
         $faq = new Faq($this->configuration);
 
@@ -217,23 +218,26 @@ final class FaqControllerTest extends TestCase
     /**
      * Seeds a guest-readable FAQ. Defaults describe a visible record.
      */
-    private function seedFaqRow(int $faqId, string $active = 'yes'): void
+    private function seedFaqRow(int $faqId, string $status = 'published'): void
     {
+        $active = FaqStatus::Published->value === $status ? 'yes' : 'no';
+
         $this->dbHandle->query(sprintf('DELETE FROM faqdata WHERE id = %d', $faqId));
         $this->dbHandle->query(sprintf('DELETE FROM faqdata_user WHERE record_id = %d', $faqId));
         $this->dbHandle->query(sprintf('DELETE FROM faqdata_group WHERE record_id = %d', $faqId));
 
         $this->dbHandle->query(sprintf(
             "INSERT INTO faqdata
-                (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content,
+                (id, lang, solution_id, revision_id, active, status, sticky, keywords, thema, content,
                  author, email, comment, updated, date_start, date_end, notes)
              VALUES
-                (%d, 'en', %d, 0, '%s', 0, 'keyword', 'Unreleased product name', 'Answer body',
+                (%d, 'en', %d, 0, '%s', '%s', 0, 'keyword', 'Unreleased product name', 'Answer body',
                  'Draft Author', 'draft@example.org', 'n', '20260101120000',
                  '00000000000000', '99991231235959', 'internal notes')",
             $faqId,
             1000 + $faqId,
             $active,
+            $status,
         ));
         $this->dbHandle->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)', $faqId));
         $this->dbHandle->query(sprintf('INSERT INTO faqdata_group (record_id, group_id) VALUES (%d, -1)', $faqId));

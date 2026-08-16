@@ -28,6 +28,7 @@ use Http\Promise\Promise;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\FaqStatus;
 
 /**
  * Class Elasticsearch
@@ -325,7 +326,7 @@ class Elasticsearch
         $i = 1;
 
         foreach ($faqs as $faq) {
-            if ('no' === ($faq['active'] ?? 'no')) {
+            if (FaqStatus::Published->value !== ($faq['status'] ?? null)) {
                 continue;
             }
 

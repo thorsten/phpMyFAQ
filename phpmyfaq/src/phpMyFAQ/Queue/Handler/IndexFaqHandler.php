@@ -22,6 +22,7 @@ namespace phpMyFAQ\Queue\Handler;
 use Closure;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Queue\Message\IndexFaqMessage;
@@ -56,7 +57,7 @@ final readonly class IndexFaqHandler
 
         if (
             $faq->faqRecord['id'] === $message->faqId
-            && $faq->faqRecord['active'] === 'yes'
+            && $faq->faqRecord['status'] === FaqStatus::Published->value
             && $faq->faqRecord['content'] !== ''
         ) {
             $category = null;

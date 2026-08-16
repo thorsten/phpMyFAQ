@@ -355,7 +355,7 @@ class RelationTest extends TestCase
         $this->databaseMock
             ->expects($this->once())
             ->method('query')
-            ->with($this->stringContains("AND fd.active = 'yes'"))
+            ->with($this->stringContains("AND fd.status = 'published'"))
             ->willReturn('query_result');
 
         $this->databaseMock->expects($this->once())->method('numRows')->willReturn(0);
@@ -378,7 +378,7 @@ class RelationTest extends TestCase
             ->method('query')
             ->with($this->logicalAnd(
                 $this->stringContains('fdg.group_id = 3'),
-                $this->stringContains("fd.active = 'yes'"),
+                $this->stringContains("fd.status = 'published'"),
             ))
             ->willReturn('query_result');
 

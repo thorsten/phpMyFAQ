@@ -23,14 +23,11 @@ use InvalidArgumentException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Utils;
 
 readonly class QueryHelper
 {
-    public const string FAQ_SQL_ACTIVE_YES = 'yes';
-
-    public const string FAQ_SQL_ACTIVE_NO = 'no';
-
     public const string FAQ_QUERY_TYPE_APPROVAL = 'faq_approval';
 
     public const string FAQ_QUERY_TYPE_EXPORT_PDF = 'faq_export_pdf';
@@ -191,7 +188,7 @@ readonly class QueryHelper
                 fd.revision_id AS revision_id,
                 fd.lang AS lang,
                 fcr.category_id AS category_id,
-                fd.active AS active,
+                fd.status AS status,
                 fd.sticky AS sticky,
                 fd.keywords AS keywords,
                 fd.thema AS thema,
@@ -249,13 +246,13 @@ readonly class QueryHelper
         switch ($queryType) {
             case self::FAQ_QUERY_TYPE_APPROVAL:
                 $query .= ' AND';
-                $query .= " fd.active = '" . self::FAQ_SQL_ACTIVE_NO . "'";
+                $query .= " fd.status != '" . FaqStatus::Published->value . "'";
                 break;
             case self::FAQ_QUERY_TYPE_EXPORT_PDF:
             case self::FAQ_QUERY_TYPE_EXPORT_JSON:
             default:
                 $query .= ' AND';
-                $query .= " fd.active = '" . self::FAQ_SQL_ACTIVE_YES . "'";
+                $query .= " fd.status = '" . FaqStatus::Published->value . "'";
                 break;
         }
 

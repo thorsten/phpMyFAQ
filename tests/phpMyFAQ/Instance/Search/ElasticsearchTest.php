@@ -462,7 +462,7 @@ class ElasticsearchTest extends TestCase
     {
         $faqs = [
             [
-                'active' => 'no',
+                'status' => 'draft',
                 'solution_id' => '1',
                 'id' => '1',
                 'lang' => 'en',
@@ -472,7 +472,7 @@ class ElasticsearchTest extends TestCase
                 'category_id' => '1',
             ],
             [
-                'active' => 'yes',
+                'status' => 'published',
                 'solution_id' => '2',
                 'id' => '2',
                 'lang' => 'en',
@@ -502,7 +502,7 @@ class ElasticsearchTest extends TestCase
     {
         $faqs = [
             [
-                'active' => 'yes',
+                'status' => 'published',
                 'solution_id' => '1',
                 'id' => '1',
                 'lang' => 'en',
@@ -526,7 +526,7 @@ class ElasticsearchTest extends TestCase
     {
         $faqs = [
             [
-                'active' => 'yes',
+                'status' => 'published',
                 'solution_id' => '1',
                 'id' => '1',
                 'lang' => 'en',

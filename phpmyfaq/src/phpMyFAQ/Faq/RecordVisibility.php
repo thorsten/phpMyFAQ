@@ -19,9 +19,11 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Faq;
 
+use phpMyFAQ\Enums\FaqStatus;
+
 /**
  * Answers whether an FAQ record may be disclosed to the current requester: permitted,
- * activated by an editor and inside its publication window.
+ * published and inside its publication window.
  *
  * Neither Faq::getFaq() nor Faq::getFaqBySolutionId() filters by publication state. An
  * inactive, not yet published or already expired record comes back with its metadata
@@ -48,7 +50,7 @@ final readonly class RecordVisibility
 
     public function isVisible(): bool
     {
-        return $this->isPermitted() && $this->isActivated() && $this->isWithinPublicationWindow();
+        return $this->isPermitted() && $this->isPublished() && $this->isWithinPublicationWindow();
     }
 
     /**
@@ -66,9 +68,9 @@ final readonly class RecordVisibility
         return self::ACCESS_DENIED_SOLUTION_ID !== $solutionId;
     }
 
-    private function isActivated(): bool
+    private function isPublished(): bool
     {
-        return 'yes' === ($this->faqRecord['active'] ?? 'no');
+        return FaqStatus::Published->value === ($this->faqRecord['status'] ?? FaqStatus::Draft->value);
     }
 
     private function isWithinPublicationWindow(): bool

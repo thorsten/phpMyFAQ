@@ -126,7 +126,7 @@ class QueryHelperTest extends TestCase
                 fd.revision_id AS revision_id,
                 fd.lang AS lang,
                 fcr.category_id AS category_id,
-                fd.active AS active,
+                fd.status AS status,
                 fd.sticky AS sticky,
                 fd.keywords AS keywords,
                 fd.thema AS thema,
@@ -154,7 +154,7 @@ class QueryHelperTest extends TestCase
                 fd.lang = fcr.record_lang
             AND fd.id = fv.id
             AND
-                fd.lang = fv.lang AND (fcr.category_id = 1) AND fd.lang = 'en' AND fd.active = 'yes'
+                fd.lang = fv.lang AND (fcr.category_id = 1) AND fd.lang = 'en' AND fd.status = 'published'
 ORDER BY fcr.category_id, fd.id";
 
         // Perform the assertion

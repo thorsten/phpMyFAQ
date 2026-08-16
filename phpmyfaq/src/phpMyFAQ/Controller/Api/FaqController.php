@@ -25,6 +25,7 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Relation as CategoryRelation;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData as FaqMetaData;
@@ -150,7 +151,7 @@ final class FaqController extends AbstractApiController
         'lang' => 'en',
         'solution_id' => 1000,
         'revision_id' => 0,
-        'active' => 'yes',
+        'status' => 'published',
         'sticky' => 0,
         'keywords' => '',
         'question' => 'Is there life after death?',
@@ -188,7 +189,7 @@ final class FaqController extends AbstractApiController
             if (
                 (is_countable($result) ? count($result) : 0) === 0
                 || $result['solution_id'] === 42
-                || $onlyActive && $result['active'] !== 'yes'
+                || $onlyActive && $result['status'] !== FaqStatus::Published->value
             ) {
                 $result = new stdClass();
                 return $this->json($result, Response::HTTP_NOT_FOUND);
@@ -528,7 +529,7 @@ final class FaqController extends AbstractApiController
             'lang' => 'en',
             'solution_id' => '1000',
             'revision_id' => '0',
-            'active' => 'yes',
+            'status' => 'published',
             'sticky' => '0',
             'keywords' => '',
             'title' => 'Is there life after death?',
@@ -590,7 +591,7 @@ final class FaqController extends AbstractApiController
                 [
                     'lang' => $this->configuration->getLanguage()->getLanguage(),
                     'fcr.category_id' => $ignoreOrphanedFaqs ? 'IS NOT NULL' : null,
-                    'fd.active' => $onlyActive ? 'yes' : null,
+                    'fd.status' => $onlyActive ? FaqStatus::Published->value : null,
                 ],
                 $sort->getOrderSql(),
             );

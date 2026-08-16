@@ -27,6 +27,7 @@ use League\CommonMark\MarkdownConverter;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
@@ -94,7 +95,7 @@ class FaqHelper extends AbstractHelper
     {
         $category->transform(0);
 
-        $faq->getAllFaqs(Faq::SORTING_TYPE_CATID_FAQID, ['lang' => $language, 'active' => 'yes']);
+        $faq->getAllFaqs(Faq::SORTING_TYPE_CATID_FAQID, ['lang' => $language, 'status' => FaqStatus::Published->value]);
 
         return $faq->faqRecords;
     }

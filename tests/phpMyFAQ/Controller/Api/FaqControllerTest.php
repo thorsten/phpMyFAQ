@@ -1112,7 +1112,7 @@ class FaqControllerTest extends TestCase
             ->with(9, 4)
             ->willReturn([
                 'solution_id' => 123,
-                'active' => 'yes',
+                'status' => 'published',
                 'question' => 'Active FAQ',
             ]);
 
@@ -1152,7 +1152,7 @@ class FaqControllerTest extends TestCase
             ->with(9, 4)
             ->willReturn([
                 'solution_id' => 123,
-                'active' => 'no',
+                'status' => 'draft',
             ]);
 
         $controller = new FaqController(
