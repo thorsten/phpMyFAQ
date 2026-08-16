@@ -21,6 +21,7 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\FaqStatus;
 use stdClass;
 
 class Faq
@@ -39,7 +40,7 @@ class Faq
      *     id: int,
      *     language: string,
      *     solution_id: int,
-     *     active: string,
+     *     status: string,
      *     sticky: string,
      *     category_id: int,
      *     question: string,
@@ -48,7 +49,7 @@ class Faq
      *     created: string,
      * }>
      */
-    public function getAllFaqsByCategory(int $categoryId, bool $onlyInactive = false, bool $onlyNew = false): array
+    public function getAllFaqsByCategory(int $categoryId, ?FaqStatus $statusFilter = null, bool $onlyNew = false): array
     {
         $faqData = [];
 
@@ -58,7 +59,7 @@ class Faq
                 fd.id AS id,
                 fd.lang AS lang,
                 fd.solution_id AS solution_id,
-                fd.active AS active,
+                fd.status AS status,
                 fd.sticky AS sticky,
                 fd.thema AS question,
                 fd.updated AS updated,
@@ -92,7 +93,7 @@ class Faq
             Database::getTablePrefix(),
             $categoryId,
             $this->configuration->getDb()->escape($this->getLanguage() ?? ''),
-            $onlyInactive ? "AND fd.active = 'no'" : '',
+            $statusFilter !== null ? sprintf("AND fd.status = '%s'", $statusFilter->value) : '',
             $onlyNew
                 ? sprintf("AND fd.created > '%s'", date(
                     format: 'Y-m-d H:i:s',
@@ -117,7 +118,7 @@ class Faq
                     'id' => (int) $row->id,
                     'language' => (string) $row->lang,
                     'solution_id' => (int) $row->solution_id,
-                    'active' => (string) $row->active,
+                    'status' => (string) $row->status,
                     'sticky' => $row->sticky ? 'yes' : 'no',
                     'category_id' => (int) $row->category_id,
                     'question' => (string) $row->question,
@@ -132,6 +133,26 @@ class Faq
     }
 
     /**
+     * Sets the editorial status of a FAQ record.
+     *
+     * The `active` assignment is transitional: it keeps the legacy column in sync so the
+     * remaining `active`-based read paths stay correct until Task 7 drops the column.
+     */
+    public function updateRecordStatus(int $faqId, string $faqLanguage, FaqStatus $status): bool
+    {
+        $update = sprintf(
+            "UPDATE %sfaqdata SET status = '%s', active = '%s' WHERE id = %d AND lang = '%s'",
+            Database::getTablePrefix(),
+            $status->value,
+            $status === FaqStatus::Published ? 'yes' : 'no',
+            $faqId,
+            $this->configuration->getDb()->escape($faqLanguage),
+        );
+
+        return (bool) $this->configuration->getDb()->query($update);
+    }
+
+    /**
      * Set or unset a faq item flag.
      *
      * @param int    $faqId       FAQ id
@@ -143,7 +164,6 @@ class Faq
     {
         $flag = match ($type) {
             'sticky' => $flag ? 1 : 0,
-            'active' => $flag ? "'yes'" : "'no'",
             default => null,
         };
 
@@ -186,8 +206,8 @@ class Faq
                 %sfaqdata fd
             WHERE
                 fd.lang = '%s'
-            AND 
-                fd.active = 'no'
+            AND
+                fd.status != 'published'
             GROUP BY
                 fd.id, fd.lang, fd.thema
             ORDER BY

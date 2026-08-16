@@ -374,13 +374,13 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateRequiresAuthentication(): void
+    public function testStatusRequiresAuthentication(): void
     {
         $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->activate($request);
+        $controller->status($request);
     }
 
     /**
@@ -956,19 +956,49 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    public function testListByCategoryFiltersByStatusQueryParameter(): void
+    {
+        $this->seedFaqRecord(faqId: 1, question: 'Draft FAQ');
+
+        $this->configuration->getDb()->query(
+            "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (2, 'en', 1002, 0, 'yes', 'published', 0, '', 'Published FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+        );
+        $this->configuration->getDb()->query(
+            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+             VALUES (1, 'en', 2, 'en')",
+        );
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->listByCategory(
+            new Request(['status' => 'published'], [], ['categoryId' => 1, 'language' => 'en']),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertCount(1, $payload['faqs']);
+        self::assertSame(2, $payload['faqs'][0]['id']);
+        self::assertSame('published', $payload['faqs'][0]['status']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatusReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
     {
         $request = new Request([], [], [], [], [], [], json_encode([
             'csrf' => 'invalid-token',
             'faqIds' => [1],
             'faqLanguage' => 'en',
-            'checked' => true,
+            'status' => 'published',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $response = $controller->activate($request);
+        $response = $controller->status($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
@@ -1315,7 +1345,7 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateReturnsBadRequestWhenFaqIdsAreMissingWithValidCsrf(): void
+    public function testStatusReturnsBadRequestWhenFaqIdsAreMissingWithValidCsrf(): void
     {
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
@@ -1325,17 +1355,70 @@ final class FaqControllerTest extends TestCase
             'csrf' => $csrfToken,
             'faqIds' => [],
             'faqLanguage' => 'en',
-            'checked' => true,
+            'status' => 'published',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->activate($request);
+        $response = $controller->status($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame('No FAQ IDs provided.', $payload['error']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatusReturnsBadRequestForInvalidStatusValueWithValidCsrf(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'not-a-real-status',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->status($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Invalid or missing status value.', $payload['error']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatusReturnsBadRequestWhenStatusValueIsMissingWithValidCsrf(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->status($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Invalid or missing status value.', $payload['error']);
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
@@ -1369,7 +1452,7 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateReturnsBadRequestWhenLanguageIsUnsupportedWithValidCsrf(): void
+    public function testStatusReturnsBadRequestWhenLanguageIsUnsupportedWithValidCsrf(): void
     {
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
@@ -1379,13 +1462,13 @@ final class FaqControllerTest extends TestCase
             'csrf' => $csrfToken,
             'faqIds' => [1],
             'faqLanguage' => 'zz',
-            'checked' => true,
+            'status' => 'published',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->activate($request);
+        $response = $controller->status($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
@@ -1396,9 +1479,9 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateReturnsSuccessWithValidCsrf(): void
+    public function testStatusReturnsSuccessWithValidCsrf(): void
     {
-        $this->seedFaqRecord(question: 'Activatable FAQ');
+        $this->seedFaqRecord(question: 'Publishable FAQ');
 
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
@@ -1408,13 +1491,78 @@ final class FaqControllerTest extends TestCase
             'csrf' => $csrfToken,
             'faqIds' => [1],
             'faqLanguage' => 'en',
-            'checked' => true,
+            'status' => 'review',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->activate($request);
+        $response = $controller->status($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * Draft to review is an editorial step, not a publication one — the edit right is enough.
+     *
+     * @throws \Exception
+     */
+    public function testStatusAllowsDraftToReviewWithoutPublishPermission(): void
+    {
+        $this->seedFaqRecord(question: 'Publishable FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'review',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $response = $controller->status($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * Review to published is a gated transition; a user holding the publish right may complete it.
+     *
+     * @throws \Exception
+     */
+    public function testStatusAllowsReviewToPublishedWithPublishPermission(): void
+    {
+        $this->seedFaqRecord(question: 'Publishable FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Review);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'published',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->status($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -1929,7 +2077,7 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateReturnsForbiddenWhenFaqIsInRestrictedCategory(): void
+    public function testStatusReturnsForbiddenWhenFaqIsInRestrictedCategory(): void
     {
         $this->seedFaqRecord(categoryId: 666);
 
@@ -1941,7 +2089,7 @@ final class FaqControllerTest extends TestCase
             'csrf' => $csrfToken,
             'faqIds' => [1],
             'faqLanguage' => 'en',
-            'checked' => true,
+            'status' => 'published',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
@@ -1949,13 +2097,13 @@ final class FaqControllerTest extends TestCase
 
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission for category 666.');
-        $controller->activate($request);
+        $controller->status($request);
     }
 
     /**
      * @throws \Exception
      */
-    public function testActivateReturnsForbiddenWhenLanguageIsRestricted(): void
+    public function testStatusReturnsForbiddenWhenLanguageIsRestricted(): void
     {
         $this->seedFaqRecord(categoryId: 1, language: 'fr');
 
@@ -1967,7 +2115,7 @@ final class FaqControllerTest extends TestCase
             'csrf' => $csrfToken,
             'faqIds' => [1],
             'faqLanguage' => 'fr',
-            'checked' => true,
+            'status' => 'published',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
@@ -1975,7 +2123,66 @@ final class FaqControllerTest extends TestCase
 
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission for language "fr".');
-        $controller->activate($request);
+        $controller->status($request);
+    }
+
+    /**
+     * Publishing without the publish right must fail even when the user otherwise holds
+     * FAQ_EDIT and every category/language right — the transition itself is gated.
+     *
+     * @throws \Exception
+     */
+    public function testStatusReturnsForbiddenWhenPublishingWithoutPublishPermission(): void
+    {
+        $this->seedFaqRecord(question: 'Publishable FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'published',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission for language "en".');
+        $controller->status($request);
+    }
+
+    /**
+     * Unpublishing without the publish right must also fail — going from Published to any
+     * other status is a publication decision, not an ordinary edit.
+     *
+     * @throws \Exception
+     */
+    public function testStatusReturnsForbiddenWhenUnpublishingWithoutPublishPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'draft',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission for language "en".');
+        $controller->status($request);
     }
 
     /**
@@ -2433,8 +2640,16 @@ final class FaqControllerTest extends TestCase
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
-    public function testActivateReturnsForbiddenWithoutPublishPermission(): void
+    /**
+     * Submitting the FAQ's current status is a no-op that must succeed without the publish
+     * right, since transitionRequiresPublishRight() only gates an actual transition.
+     *
+     * @throws \Exception
+     */
+    public function testStatusSucceedsWhenSubmittedStatusMatchesTheCurrentStatusWithoutPublishPermission(): void
     {
+        $this->seedFaqRecord(question: 'Publishable FAQ');
+
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
         $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
@@ -2443,20 +2658,18 @@ final class FaqControllerTest extends TestCase
             'csrf' => $csrfToken,
             'faqIds' => [1],
             'faqLanguage' => 'en',
-            'checked' => true,
+            'status' => 'draft',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
         $controller->setContainer($this->createContainerWithoutPublishPermission($session));
 
-        $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission.');
+        $response = $controller->status($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        try {
-            $controller->activate($request);
-        } finally {
-            $this->removeCsrfCookie('pmf-csrf-token');
-        }
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+        $this->removeCsrfCookie('pmf-csrf-token');
     }
 
     /**

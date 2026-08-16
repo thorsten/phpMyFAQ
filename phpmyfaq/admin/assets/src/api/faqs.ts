@@ -19,7 +19,7 @@ import { ApiResponse, FaqList } from '../interfaces';
 export const fetchAllFaqsByCategory = async (
   categoryId: string,
   language: string,
-  onlyInactive?: boolean,
+  status?: string,
   onlyNew?: boolean
 ): Promise<FaqList> => {
   let currentUrl: string = window.location.protocol + '//' + window.location.host;
@@ -31,8 +31,8 @@ export const fetchAllFaqsByCategory = async (
 
   currentUrl += pathname;
   const url = new URL(`${currentUrl}/api/faqs/${categoryId}/${language}`);
-  if (onlyInactive) {
-    url.searchParams.set('only-inactive', onlyInactive as unknown as string);
+  if (status) {
+    url.searchParams.set('status', status);
   }
   if (onlyNew) {
     url.searchParams.set('only-new', onlyNew as unknown as string);

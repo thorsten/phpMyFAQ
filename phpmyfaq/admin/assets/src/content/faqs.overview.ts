@@ -23,7 +23,7 @@ export const handleFaqOverview = async (): Promise<void> => {
   const collapsedCategories: NodeListOf<Element> = document.querySelectorAll('.accordion-collapse');
 
   if (collapsedCategories) {
-    initializeCheckboxState();
+    initializeFilterState();
 
     collapsedCategories.forEach((category: Element): void => {
       const categoryId = category.getAttribute('data-pmf-categoryId') as string;
@@ -34,13 +34,13 @@ export const handleFaqOverview = async (): Promise<void> => {
       });
 
       category.addEventListener('shown.bs.collapse', async (): Promise<void> => {
-        const onlyInactive: boolean = getInactiveCheckboxState();
+        const statusFilter: string = getStatusFilterState();
         const onlyNew: boolean = getNewCheckboxState();
 
-        const faqs = await fetchAllFaqsByCategory(categoryId, language, onlyInactive, onlyNew);
+        const faqs = await fetchAllFaqsByCategory(categoryId, language, statusFilter, onlyNew);
         await populateCategoryTable(categoryId, faqs.faqs, faqs.isAllowedToTranslate);
         const toggleStickyFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-sticky-faq');
-        const toggleActiveFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-active-faq');
+        const toggleStatusFaq: NodeListOf<HTMLSelectElement> = document.querySelectorAll('.pmf-admin-status-faq');
         const translationDropdown: NodeListOf<HTMLElement> = document.querySelectorAll('#dropdownAddNewTranslation');
 
         translationDropdown.forEach((element: Element): void => {
@@ -92,20 +92,20 @@ export const handleFaqOverview = async (): Promise<void> => {
             const faqId = target.getAttribute('data-pmf-faq-id') as string;
             const token = target.getAttribute('data-pmf-csrf') as string;
 
-            await saveStatus(categoryId, [faqId], token, target.checked, 'sticky');
+            await saveStickyFlag(categoryId, [faqId], token, target.checked);
           });
         });
 
-        toggleActiveFaq.forEach((element: Element): void => {
+        toggleStatusFaq.forEach((element: Element): void => {
           element.addEventListener('change', async (event: Event): Promise<void> => {
             event.preventDefault();
 
-            const target = event.target as HTMLInputElement;
-            const categoryId = target.getAttribute('data-pmf-category-id-active') as string;
+            const target = event.target as HTMLSelectElement;
+            const categoryId = target.getAttribute('data-pmf-category-id-status') as string;
             const faqId = target.getAttribute('data-pmf-faq-id') as string;
             const token = target.getAttribute('data-pmf-csrf') as string;
 
-            await saveStatus(categoryId, [faqId], token, target.checked, 'active');
+            await saveFaqStatus(categoryId, [faqId], token, target.value);
           });
         });
       });
@@ -164,23 +164,7 @@ export const handleDeleteFaqModal = (): void => {
   }
 };
 
-const saveStatus = async (
-  categoryId: string,
-  faqIds: string[],
-  token: string,
-  checked: boolean,
-  type: 'active' | 'sticky'
-): Promise<void> => {
-  let url;
-  const languageElement = document.getElementById(`${type}_record_${categoryId}_${faqIds[0]}`) as HTMLElement;
-  const faqLanguage = languageElement.getAttribute('lang') as string;
-
-  if ('active' === type) {
-    url = './api/faq/activate';
-  } else {
-    url = './api/faq/sticky';
-  }
-
+const postStatusChange = async (url: string, body: Record<string, unknown>): Promise<void> => {
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -188,13 +172,7 @@ const saveStatus = async (
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        csrf: token,
-        categoryId: categoryId,
-        faqIds: faqIds,
-        faqLanguage: faqLanguage,
-        checked: checked,
-      }),
+      body: JSON.stringify(body),
     });
 
     if (response.ok) {
@@ -213,6 +191,78 @@ const saveStatus = async (
     console.error('Error saving status:', error instanceof Error ? error.message : String(error));
     pushErrorNotification('An error occurred while saving the status.');
   }
+};
+
+const saveStickyFlag = async (categoryId: string, faqIds: string[], token: string, checked: boolean): Promise<void> => {
+  const languageElement = document.getElementById(`sticky_record_${categoryId}_${faqIds[0]}`) as HTMLElement;
+  const faqLanguage = languageElement.getAttribute('lang') as string;
+
+  await postStatusChange('./api/faq/sticky', {
+    csrf: token,
+    categoryId: categoryId,
+    faqIds: faqIds,
+    faqLanguage: faqLanguage,
+    checked: checked,
+  });
+};
+
+const saveFaqStatus = async (categoryId: string, faqIds: string[], token: string, status: string): Promise<void> => {
+  const languageElement = document.getElementById(`status_record_${categoryId}_${faqIds[0]}`) as HTMLElement;
+  const faqLanguage = languageElement.getAttribute('lang') as string;
+
+  await postStatusChange('./api/faq/status', {
+    csrf: token,
+    categoryId: categoryId,
+    faqIds: faqIds,
+    faqLanguage: faqLanguage,
+    status: status,
+  });
+};
+
+const statusLabels: Record<Faq['status'], string> = {
+  draft: 'Draft',
+  review: 'In review',
+  published: 'Published',
+};
+
+const buildStatusSelect = (faq: Faq, csrfToken: string, options: Faq['status'][]): HTMLElement => {
+  return addElement(
+    'select',
+    {
+      classList: 'form-select form-select-sm pmf-admin-status-faq',
+      'data-pmf-category-id-status': faq.category_id.toString(),
+      'data-pmf-faq-id': faq.id.toString(),
+      'data-pmf-csrf': csrfToken,
+      lang: faq.language,
+      id: `status_record_${faq.category_id}_${faq.id.toString()}`,
+    },
+    options.map((status: Faq['status']) =>
+      addElement('option', {
+        value: status,
+        innerText: statusLabels[status],
+        selected: status === faq.status,
+      })
+    )
+  );
+};
+
+// A user without the publish right for every category of this FAQ cannot move it into or
+// out of "published" — offering that transition would only ever produce a 403. Once the FAQ
+// is live, such a user gets a read-only badge instead of a select they cannot act on.
+const buildStatusCell = (faq: Faq, csrfToken: string): HTMLElement => {
+  if (faq.isAllowedToPublish) {
+    return addElement('td', { classList: 'align-middle' }, [
+      buildStatusSelect(faq, csrfToken, ['draft', 'review', 'published']),
+    ]);
+  }
+
+  if (faq.status !== 'published') {
+    return addElement('td', { classList: 'align-middle' }, [buildStatusSelect(faq, csrfToken, ['draft', 'review'])]);
+  }
+
+  return addElement('td', { classList: 'align-middle' }, [
+    addElement('span', { classList: 'badge bg-success', innerText: statusLabels[faq.status] }),
+  ]);
 };
 
 const populateCategoryTable = async (categoryId: string, faqs: Faq[], isAllowedToTranslate: boolean): Promise<void> => {
@@ -266,29 +316,7 @@ const populateCategoryTable = async (categoryId: string, faqs: Faq[], isAllowedT
         }),
       ])
     );
-    // Without the publish right for every category of this FAQ the checkbox would only ever
-    // produce a 403, so show the state read-only instead of offering an action the API rejects.
-    row.append(
-      faq.isAllowedToPublish
-        ? addElement('td', { classList: 'align-middle' }, [
-            addElement('input', {
-              classList: 'form-check-input pmf-admin-active-faq',
-              type: 'checkbox',
-              'data-pmf-category-id-active': faq.category_id.toString(),
-              'data-pmf-faq-id': faq.id.toString(),
-              'data-pmf-csrf': csrfToken,
-              lang: faq.language,
-              id: `active_record_${faq.category_id.toString()}_${faq.id.toString()}`,
-              checked: faq.active === 'yes',
-            }),
-          ])
-        : addElement('td', { classList: 'align-middle' }, [
-            addElement('i', {
-              classList: faq.active === 'yes' ? 'bi bi-check-lg text-success' : 'bi bi-x-lg text-muted',
-              'aria-hidden': 'true',
-            }),
-          ])
-    );
+    row.append(buildStatusCell(faq, csrfToken));
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [
         addElement('a', { classList: 'btn btn-primary', href: `./faq/edit/${faq.id.toString()}/${faq.language}` }, [
@@ -358,24 +386,24 @@ const clearCategoryTable = (categoryId: string): void => {
   tableBody.innerHTML = '';
 };
 
-const initializeCheckboxState = (): void => {
-  const filterForInactive = document.getElementById('pmf-checkbox-filter-inactive') as HTMLInputElement | null;
+const initializeFilterState = (): void => {
+  const statusFilter = document.getElementById('pmf-status-filter') as HTMLSelectElement | null;
   const filterForNew = document.getElementById('pmf-checkbox-filter-new') as HTMLInputElement | null;
 
-  const storedInactiveState: string | null = localStorage.getItem('pmfCheckboxFilterInactive');
+  const storedStatusState: string | null = localStorage.getItem('pmfStatusFilter');
   const storedNewState: string | null = localStorage.getItem('pmfCheckboxFilterNew');
 
-  if (filterForInactive && storedInactiveState !== null) {
-    filterForInactive.checked = JSON.parse(storedInactiveState);
+  if (statusFilter && storedStatusState !== null) {
+    statusFilter.value = storedStatusState;
   }
 
   if (filterForNew && storedNewState !== null) {
     filterForNew.checked = JSON.parse(storedNewState);
   }
 
-  if (filterForInactive) {
-    filterForInactive.addEventListener('change', (): void => {
-      localStorage.setItem('pmfCheckboxFilterInactive', JSON.stringify(filterForInactive.checked));
+  if (statusFilter) {
+    statusFilter.addEventListener('change', (): void => {
+      localStorage.setItem('pmfStatusFilter', statusFilter.value);
     });
   }
 
@@ -386,10 +414,9 @@ const initializeCheckboxState = (): void => {
   }
 };
 
-// Getter for the inactive checkbox state
-const getInactiveCheckboxState = (): boolean => {
-  const storedInactiveState = localStorage.getItem('pmfCheckboxFilterInactive');
-  return storedInactiveState !== null ? JSON.parse(storedInactiveState) : false;
+// Getter for the status filter state
+const getStatusFilterState = (): string => {
+  return localStorage.getItem('pmfStatusFilter') ?? '';
 };
 
 // Getter for the new checkbox state

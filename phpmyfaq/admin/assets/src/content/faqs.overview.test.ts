@@ -154,39 +154,47 @@ describe('FAQ Overview Functions', () => {
       expect(fetchAllFaqsByCategory).not.toHaveBeenCalled();
     });
 
-    it('should initialize checkbox state from localStorage', async () => {
-      localStorage.setItem('pmfCheckboxFilterInactive', 'true');
+    it('should initialize status filter state from localStorage', async () => {
+      localStorage.setItem('pmfStatusFilter', 'review');
       localStorage.setItem('pmfCheckboxFilterNew', 'false');
 
       document.body.innerHTML = `
-        <input type="checkbox" id="pmf-checkbox-filter-inactive" />
+        <select id="pmf-status-filter">
+          <option value="">All</option>
+          <option value="draft">Draft</option>
+          <option value="review">In review</option>
+          <option value="published">Published</option>
+        </select>
         <input type="checkbox" id="pmf-checkbox-filter-new" />
         <div class="accordion-collapse" data-pmf-categoryId="1" data-pmf-language="en"></div>
       `;
 
       await handleFaqOverview();
 
-      const inactiveCheckbox = document.getElementById('pmf-checkbox-filter-inactive') as HTMLInputElement;
+      const statusFilter = document.getElementById('pmf-status-filter') as HTMLSelectElement;
       const newCheckbox = document.getElementById('pmf-checkbox-filter-new') as HTMLInputElement;
 
-      expect(inactiveCheckbox.checked).toBe(true);
+      expect(statusFilter.value).toBe('review');
       expect(newCheckbox.checked).toBe(false);
     });
 
-    it('should persist checkbox state to localStorage on change', async () => {
+    it('should persist status filter state to localStorage on change', async () => {
       document.body.innerHTML = `
-        <input type="checkbox" id="pmf-checkbox-filter-inactive" />
+        <select id="pmf-status-filter">
+          <option value="">All</option>
+          <option value="draft">Draft</option>
+        </select>
         <input type="checkbox" id="pmf-checkbox-filter-new" />
         <div class="accordion-collapse" data-pmf-categoryId="1" data-pmf-language="en"></div>
       `;
 
       await handleFaqOverview();
 
-      const inactiveCheckbox = document.getElementById('pmf-checkbox-filter-inactive') as HTMLInputElement;
-      inactiveCheckbox.checked = true;
-      inactiveCheckbox.dispatchEvent(new Event('change'));
+      const statusFilter = document.getElementById('pmf-status-filter') as HTMLSelectElement;
+      statusFilter.value = 'draft';
+      statusFilter.dispatchEvent(new Event('change'));
 
-      expect(localStorage.getItem('pmfCheckboxFilterInactive')).toBe('true');
+      expect(localStorage.getItem('pmfStatusFilter')).toBe('draft');
 
       const newCheckbox = document.getElementById('pmf-checkbox-filter-new') as HTMLInputElement;
       newCheckbox.checked = true;
@@ -226,7 +234,7 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'published',
             isAllowedToPublish: true,
           },
         ],
@@ -240,18 +248,21 @@ describe('FAQ Overview Functions', () => {
 
       await flushPromises();
 
-      expect(fetchAllFaqsByCategory).toHaveBeenCalledWith('3', 'en', false, false);
+      expect(fetchAllFaqsByCategory).toHaveBeenCalledWith('3', 'en', '', false);
 
       const tableBody = document.getElementById('tbody-category-id-3') as HTMLElement;
       expect(tableBody.querySelectorAll('tr').length).toBe(1);
     });
 
     it('should use localStorage filter states when fetching FAQs', async () => {
-      localStorage.setItem('pmfCheckboxFilterInactive', 'true');
+      localStorage.setItem('pmfStatusFilter', 'published');
       localStorage.setItem('pmfCheckboxFilterNew', 'true');
 
       document.body.innerHTML = `
-        <input type="checkbox" id="pmf-checkbox-filter-inactive" />
+        <select id="pmf-status-filter">
+          <option value="">All</option>
+          <option value="published">Published</option>
+        </select>
         <input type="checkbox" id="pmf-checkbox-filter-new" />
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
         <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
@@ -269,10 +280,10 @@ describe('FAQ Overview Functions', () => {
 
       await flushPromises();
 
-      expect(fetchAllFaqsByCategory).toHaveBeenCalledWith('3', 'en', true, true);
+      expect(fetchAllFaqsByCategory).toHaveBeenCalledWith('3', 'en', 'published', true);
     });
 
-    it('should render the active state read-only without the publish permission', async () => {
+    it('should render the status read-only without the publish permission once published', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
         <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
@@ -288,7 +299,7 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'published',
             isAllowedToPublish: false,
           },
         ],
@@ -302,10 +313,46 @@ describe('FAQ Overview Functions', () => {
 
       await flushPromises();
 
-      // No checkbox to click, but the state stays visible, and the sticky toggle is unaffected.
-      expect(document.querySelector('.pmf-admin-active-faq')).toBeNull();
-      expect(document.querySelector('.bi-check-lg')).not.toBeNull();
+      // No select to change, but the state stays visible, and the sticky toggle is unaffected.
+      expect(document.querySelector('.pmf-admin-status-faq')).toBeNull();
+      expect(document.querySelector('.badge')).not.toBeNull();
       expect(document.querySelector('.pmf-admin-sticky-faq')).not.toBeNull();
+    });
+
+    it('should render a draft/review select for a non-published FAQ without the publish permission', async () => {
+      document.body.innerHTML = `
+        <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+      `;
+
+      (fetchAllFaqsByCategory as Mock).mockResolvedValue({
+        faqs: [
+          {
+            id: 7,
+            language: 'en',
+            solution_id: 1007,
+            question: 'Test FAQ',
+            created: '2026-03-01',
+            category_id: 3,
+            sticky: 'no',
+            status: 'draft',
+            isAllowedToPublish: false,
+          },
+        ],
+        isAllowedToTranslate: false,
+      });
+
+      await handleFaqOverview();
+
+      const category = document.querySelector('.accordion-collapse') as HTMLElement;
+      category.dispatchEvent(new Event('shown.bs.collapse'));
+
+      await flushPromises();
+
+      const statusSelect = document.querySelector('.pmf-admin-status-faq') as HTMLSelectElement;
+      expect(statusSelect).not.toBeNull();
+      const optionValues = Array.from(statusSelect.options).map((option) => option.value);
+      expect(optionValues).toEqual(['draft', 'review']);
     });
 
     it('should call saveStatus when sticky toggle changes', async () => {
@@ -324,7 +371,7 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'published',
             isAllowedToPublish: true,
           },
         ],
@@ -363,7 +410,7 @@ describe('FAQ Overview Functions', () => {
       vi.unstubAllGlobals();
     });
 
-    it('should call saveStatus when active toggle changes', async () => {
+    it('should call saveFaqStatus when the status select changes', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
         <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
@@ -379,7 +426,7 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'draft',
             isAllowedToPublish: true,
           },
         ],
@@ -388,7 +435,7 @@ describe('FAQ Overview Functions', () => {
 
       const fetchMock = vi.fn().mockResolvedValue({
         ok: true,
-        json: vi.fn().mockResolvedValue({ success: 'Activated' }),
+        json: vi.fn().mockResolvedValue({ success: 'Status updated' }),
       });
       vi.stubGlobal('fetch', fetchMock);
 
@@ -399,15 +446,15 @@ describe('FAQ Overview Functions', () => {
 
       await flushPromises();
 
-      const activeCheckbox = document.querySelector('.pmf-admin-active-faq') as HTMLInputElement;
-      expect(activeCheckbox).not.toBeNull();
-      activeCheckbox.checked = false;
-      activeCheckbox.dispatchEvent(new Event('change'));
+      const statusSelect = document.querySelector('.pmf-admin-status-faq') as HTMLSelectElement;
+      expect(statusSelect).not.toBeNull();
+      statusSelect.value = 'published';
+      statusSelect.dispatchEvent(new Event('change'));
 
       await flushPromises();
 
       expect(fetchMock).toHaveBeenCalledWith(
-        './api/faq/activate',
+        './api/faq/status',
         expect.objectContaining({
           method: 'POST',
         })
@@ -432,7 +479,7 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'published',
             isAllowedToPublish: true,
           },
         ],
@@ -478,7 +525,7 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'published',
             isAllowedToPublish: true,
           },
         ],
@@ -521,7 +568,7 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'published',
             isAllowedToPublish: true,
           },
         ],
@@ -541,8 +588,8 @@ describe('FAQ Overview Functions', () => {
 
       await flushPromises();
 
-      const activeCheckbox = document.querySelector('.pmf-admin-active-faq') as HTMLInputElement;
-      activeCheckbox.dispatchEvent(new Event('change'));
+      const statusSelect = document.querySelector('.pmf-admin-status-faq') as HTMLSelectElement;
+      statusSelect.dispatchEvent(new Event('change'));
 
       await flushPromises();
 
