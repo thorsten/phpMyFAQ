@@ -256,6 +256,47 @@ describe('FAQ Overview Functions', () => {
       expect(tableBody.querySelectorAll('tr').length).toBe(1);
     });
 
+    it('should re-fetch expanded categories when the status filter changes', async () => {
+      document.body.innerHTML = `
+        <select id="pmf-status-filter">
+          <option value="">All</option>
+          <option value="draft">Draft</option>
+        </select>
+        <div class="accordion-collapse show" data-pmf-categoryId="3" data-pmf-language="en"></div>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+      `;
+
+      (fetchAllFaqsByCategory as Mock).mockResolvedValue({
+        faqs: [
+          {
+            id: 7,
+            language: 'en',
+            solution_id: 1007,
+            question: 'Draft question',
+            created: '2026-03-01',
+            category_id: 3,
+            sticky: 'no',
+            status: 'draft',
+            isAllowedToPublish: true,
+          },
+        ],
+        isAllowedToTranslate: false,
+      });
+
+      await handleFaqOverview();
+
+      const statusFilter = document.getElementById('pmf-status-filter') as HTMLSelectElement;
+      statusFilter.value = 'draft';
+      statusFilter.dispatchEvent(new Event('change'));
+
+      await flushPromises();
+
+      expect(fetchAllFaqsByCategory).toHaveBeenCalledWith('3', 'en', 'draft', false);
+
+      const tableBody = document.getElementById('tbody-category-id-3') as HTMLElement;
+      expect(tableBody.querySelectorAll('tr').length).toBe(1);
+    });
+
     it('should use localStorage filter states when fetching FAQs', async () => {
       localStorage.setItem('pmfStatusFilter', 'published');
       localStorage.setItem('pmfCheckboxFilterNew', 'true');

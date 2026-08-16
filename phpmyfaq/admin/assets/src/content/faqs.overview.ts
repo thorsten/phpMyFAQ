@@ -27,90 +27,107 @@ export const handleFaqOverview = async (): Promise<void> => {
 
     collapsedCategories.forEach((category: Element): void => {
       const categoryId = category.getAttribute('data-pmf-categoryId') as string;
-      const language = category.getAttribute('data-pmf-language') as string;
 
       category.addEventListener('hidden.bs.collapse', (): void => {
         clearCategoryTable(categoryId);
       });
 
       category.addEventListener('shown.bs.collapse', async (): Promise<void> => {
-        const statusFilter: string = getStatusFilterState();
-        const onlyNew: boolean = getNewCheckboxState();
-
-        const faqs = await fetchAllFaqsByCategory(categoryId, language, statusFilter, onlyNew);
-        await populateCategoryTable(categoryId, faqs.faqs, faqs.isAllowedToTranslate);
-        const toggleStickyFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-sticky-faq');
-        const toggleStatusFaq: NodeListOf<HTMLSelectElement> = document.querySelectorAll('.pmf-admin-status-faq');
-        const translationDropdown: NodeListOf<HTMLElement> = document.querySelectorAll('#dropdownAddNewTranslation');
-
-        translationDropdown.forEach((element: Element): void => {
-          element.addEventListener('click', async (event: Event): Promise<void> => {
-            event.preventDefault();
-
-            const translations = await fetchCategoryTranslations(categoryId);
-            const parentElement = element.parentElement;
-            if (!parentElement) return;
-
-            const dropdownMenu = parentElement.querySelector('.dropdown-menu') as HTMLElement;
-            const faqId = element.getAttribute('data-pmf-faq-id') as string;
-            const options: string[] = [];
-
-            dropdownMenu.querySelectorAll('#dropdownTranslation').forEach((link) => {
-              options.push((link as HTMLElement).innerText);
-            });
-
-            for (const [languageCode] of Object.entries(translations as Record<string, unknown>)) {
-              if (languageCode !== language) {
-                let displayName;
-                try {
-                  const normalizedCode: string = normalizeLanguageCode(languageCode);
-                  displayName = new Intl.DisplayNames([language], { type: 'language' }).of(normalizedCode);
-                } catch {
-                  displayName = null;
-                }
-
-                if (displayName && !options.includes(`→ ${displayName}`)) {
-                  const newTranslationLink: HTMLElement = addElement('a', {
-                    classList: 'dropdown-item',
-                    id: 'dropdownTranslation',
-                    href: `./faq/translate/${faqId}/${languageCode}`,
-                    innerText: `→ ${displayName}`,
-                  });
-                  dropdownMenu.appendChild(newTranslationLink);
-                }
-              }
-            }
-          });
-        });
-
-        toggleStickyFaq.forEach((element: Element): void => {
-          element.addEventListener('change', async (event: Event): Promise<void> => {
-            event.preventDefault();
-
-            const target = event.target as HTMLInputElement;
-            const categoryId = target.getAttribute('data-pmf-category-id-sticky') as string;
-            const faqId = target.getAttribute('data-pmf-faq-id') as string;
-            const token = target.getAttribute('data-pmf-csrf') as string;
-
-            await saveStickyFlag(categoryId, [faqId], token, target.checked);
-          });
-        });
-
-        toggleStatusFaq.forEach((element: Element): void => {
-          element.addEventListener('change', async (event: Event): Promise<void> => {
-            event.preventDefault();
-
-            const target = event.target as HTMLSelectElement;
-            const categoryId = target.getAttribute('data-pmf-category-id-status') as string;
-            const faqId = target.getAttribute('data-pmf-faq-id') as string;
-            const token = target.getAttribute('data-pmf-csrf') as string;
-
-            await saveFaqStatus(categoryId, [faqId], token, target.value);
-          });
-        });
+        await refreshCategoryTable(category);
       });
     });
   }
+};
+
+/**
+ * A filter change must re-fetch every currently expanded category — persisting
+ * the value alone would only apply it on the next collapse/expand cycle.
+ */
+const refreshExpandedCategoryTables = async (): Promise<void> => {
+  const expandedCategories: NodeListOf<Element> = document.querySelectorAll('.accordion-collapse.show');
+  for (const category of Array.from(expandedCategories)) {
+    await refreshCategoryTable(category);
+  }
+};
+
+const refreshCategoryTable = async (category: Element): Promise<void> => {
+  const categoryId = category.getAttribute('data-pmf-categoryId') as string;
+  const language = category.getAttribute('data-pmf-language') as string;
+  const statusFilter: string = getStatusFilterState();
+  const onlyNew: boolean = getNewCheckboxState();
+
+  clearCategoryTable(categoryId);
+  const faqs = await fetchAllFaqsByCategory(categoryId, language, statusFilter, onlyNew);
+  await populateCategoryTable(categoryId, faqs.faqs, faqs.isAllowedToTranslate);
+  const toggleStickyFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-sticky-faq');
+  const toggleStatusFaq: NodeListOf<HTMLSelectElement> = document.querySelectorAll('.pmf-admin-status-faq');
+  const translationDropdown: NodeListOf<HTMLElement> = document.querySelectorAll('#dropdownAddNewTranslation');
+
+  translationDropdown.forEach((element: Element): void => {
+    element.addEventListener('click', async (event: Event): Promise<void> => {
+      event.preventDefault();
+
+      const translations = await fetchCategoryTranslations(categoryId);
+      const parentElement = element.parentElement;
+      if (!parentElement) return;
+
+      const dropdownMenu = parentElement.querySelector('.dropdown-menu') as HTMLElement;
+      const faqId = element.getAttribute('data-pmf-faq-id') as string;
+      const options: string[] = [];
+
+      dropdownMenu.querySelectorAll('#dropdownTranslation').forEach((link) => {
+        options.push((link as HTMLElement).innerText);
+      });
+
+      for (const [languageCode] of Object.entries(translations as Record<string, unknown>)) {
+        if (languageCode !== language) {
+          let displayName;
+          try {
+            const normalizedCode: string = normalizeLanguageCode(languageCode);
+            displayName = new Intl.DisplayNames([language], { type: 'language' }).of(normalizedCode);
+          } catch {
+            displayName = null;
+          }
+
+          if (displayName && !options.includes(`→ ${displayName}`)) {
+            const newTranslationLink: HTMLElement = addElement('a', {
+              classList: 'dropdown-item',
+              id: 'dropdownTranslation',
+              href: `./faq/translate/${faqId}/${languageCode}`,
+              innerText: `→ ${displayName}`,
+            });
+            dropdownMenu.appendChild(newTranslationLink);
+          }
+        }
+      }
+    });
+  });
+
+  toggleStickyFaq.forEach((element: Element): void => {
+    element.addEventListener('change', async (event: Event): Promise<void> => {
+      event.preventDefault();
+
+      const target = event.target as HTMLInputElement;
+      const categoryId = target.getAttribute('data-pmf-category-id-sticky') as string;
+      const faqId = target.getAttribute('data-pmf-faq-id') as string;
+      const token = target.getAttribute('data-pmf-csrf') as string;
+
+      await saveStickyFlag(categoryId, [faqId], token, target.checked);
+    });
+  });
+
+  toggleStatusFaq.forEach((element: Element): void => {
+    element.addEventListener('change', async (event: Event): Promise<void> => {
+      event.preventDefault();
+
+      const target = event.target as HTMLSelectElement;
+      const categoryId = target.getAttribute('data-pmf-category-id-status') as string;
+      const faqId = target.getAttribute('data-pmf-faq-id') as string;
+      const token = target.getAttribute('data-pmf-csrf') as string;
+
+      await saveFaqStatus(categoryId, [faqId], token, target.value);
+    });
+  });
 };
 
 export const handleDeleteFaqModal = (): void => {
@@ -429,14 +446,16 @@ const initializeFilterState = (): void => {
   }
 
   if (statusFilter) {
-    statusFilter.addEventListener('change', (): void => {
+    statusFilter.addEventListener('change', async (): Promise<void> => {
       localStorage.setItem('pmfStatusFilter', statusFilter.value);
+      await refreshExpandedCategoryTables();
     });
   }
 
   if (filterForNew) {
-    filterForNew.addEventListener('change', (): void => {
+    filterForNew.addEventListener('change', async (): Promise<void> => {
       localStorage.setItem('pmfCheckboxFilterNew', JSON.stringify(filterForNew.checked));
+      await refreshExpandedCategoryTables();
     });
   }
 };
