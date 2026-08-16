@@ -13,9 +13,9 @@ The following branches are supported for security fixes:
 
 | Version | Status              | Minimum PHP | Supported until       |
 |---------|---------------------|-------------|-----------------------|
-| 4.2.x   | Active support      | 8.2         | Until 4.3.0 + 6 months |
-| 4.1.x   | Security fixes only | 8.2         | 2027-06-30            |
-| < 4.1   | End of life (EOL)   | —           | Unsupported           |
+| 4.2.x   | Active support      | 8.4         | Until 4.3.0 + 6 months |
+| 4.1.x   | Security fixes only | 8.3         | 2027-06-30            |
+| < 4.1   | End of life (EOL)   | 8.2         | Unsupported           |
 
 We may backport critical fixes at our discretion. Users should keep up to date with the latest
 minor/patch releases. Running an EOL version is not a supported configuration; reports affecting
