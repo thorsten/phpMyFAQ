@@ -14,22 +14,22 @@ import { ADMIN, SEEDED } from './fixtures/seeded-data';
  * content is distinguishable, status is respected by the API) without that
  * extra UI surface.
  *
- * A real browser session (`page`, not the request-only `request` fixture) is
- * required here: the admin session cookie is set with the `Secure` attribute
- * unconditionally (phpMyFAQ\Bootstrap\PhpConfigurator::configureSession hard
- * -codes `session.cookie_secure=1`), even though the local e2e harness serves
- * plain HTTP. A browser resends `Secure` cookies to `localhost`/`127.0.0.1`
- * under the "potentially trustworthy origin" exemption; Playwright's
- * standalone `request` fixture is a plain HTTP client with no such exemption
- * and silently drops the cookie, so the admin session never survives past the
- * login redirect. `page.request` shares the page's browser-managed cookie
- * jar and does not have this problem, so it is used for the plain API calls
- * once logged in.
+ * Cookie-handling constraints shape how requests are issued here. The admin
+ * session cookie is set with the `Secure` attribute unconditionally
+ * (phpMyFAQ\Bootstrap\PhpConfigurator::configureSession hard-codes
+ * `session.cookie_secure=1`) while the e2e harness serves plain HTTP. A
+ * browser still sends `Secure` cookies to `localhost`/`127.0.0.1` under the
+ * "potentially trustworthy origin" exemption, but every Playwright HTTP
+ * client outside the browser (`request` AND `page.request`) drops them over
+ * plain http — so the authenticated status POST must run as an in-page
+ * fetch. The anonymous public API reads use the standalone `request`
+ * fixture on purpose: its isolated cookie jar means the anonymous session
+ * cookie those responses set can never clobber the browser's admin session.
  */
 test.describe('FAQ editorial status workflow', () => {
   const faq = SEEDED.faqs.upgradeGuide;
 
-  test('a draft FAQ disappears from the public API and reappears once published', async ({ page }) => {
+  test('a draft FAQ disappears from the public API and reappears once published', async ({ page, request }) => {
     // 1. Log in exactly like the admin login spec does, so the browser holds
     // a real, usable session cookie.
     await page.goto('/admin/login');
@@ -50,7 +50,7 @@ test.describe('FAQ editorial status workflow', () => {
 
     // 3. Locate the seeded FAQ's id via the public listing API (no auth
     // required) rather than hard-coding a database id.
-    const listResponse = await page.request.get('/api/v4.0/faqs?per_page=100&sort=id&order=asc', {
+    const listResponse = await request.get('/api/v4.0/faqs?per_page=100&sort=id&order=asc', {
       headers: { 'Accept-Language': 'en' },
     });
     expect(listResponse.ok()).toBeTruthy();
@@ -64,14 +64,29 @@ test.describe('FAQ editorial status workflow', () => {
     const faqId = (seededFaq as { id: number }).id;
     const categoryId = (seededFaq as { category_id: number }).category_id;
 
+    // The status POST must go through the browser (in-page fetch), not
+    // page.request: the app marks its session cookie Secure, which browsers
+    // still send to the trustworthy origin http://127.0.0.1 but Playwright's
+    // separate request stack refuses to attach over plain http — the call
+    // would arrive session-less and 401. This also mirrors how the admin UI
+    // itself invokes the endpoint.
+    const postStatus = async (status: string): Promise<{ ok: boolean; body: { success?: string; error?: string } }> =>
+      await page.evaluate(
+        async (payload) => {
+          const response = await fetch('/admin/api/faq/status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          return { ok: response.ok, body: (await response.json()) as { success?: string; error?: string } };
+        },
+        { csrf, categoryId, faqIds: [faqId], faqLanguage: 'en', status }
+      );
+
     const setStatus = async (status: string): Promise<void> => {
-      const response = await page.request.post('/admin/api/faq/status', {
-        headers: { 'Content-Type': 'application/json' },
-        data: { csrf, categoryId, faqIds: [faqId], faqLanguage: 'en', status },
-      });
-      expect(response.ok(), `Failed to set status to "${status}"`).toBeTruthy();
-      const body = (await response.json()) as { success?: string; error?: string };
-      expect(body.success, body.error).toBeTruthy();
+      const result = await postStatus(status);
+      expect(result.ok, `Failed to set status to "${status}"`).toBeTruthy();
+      expect(result.body.success, result.body.error).toBeTruthy();
     };
 
     let fixtureRestored = false;
@@ -82,7 +97,7 @@ test.describe('FAQ editorial status workflow', () => {
       // onlyActive=true) and must now 404 — the acceptance criterion that a
       // draft is not visible on the read surface.
       await setStatus('draft');
-      const draftResponse = await page.request.get(`/api/v4.0/faq/${categoryId}/${faqId}`, {
+      const draftResponse = await request.get(`/api/v4.0/faq/${categoryId}/${faqId}`, {
         headers: { 'Accept-Language': 'en' },
       });
       expect(draftResponse.status()).toBe(404);
@@ -91,7 +106,7 @@ test.describe('FAQ editorial status workflow', () => {
       // field in the REST response reflecting the change.
       await setStatus('published');
       fixtureRestored = true;
-      const publishedResponse = await page.request.get(`/api/v4.0/faq/${categoryId}/${faqId}`, {
+      const publishedResponse = await request.get(`/api/v4.0/faq/${categoryId}/${faqId}`, {
         headers: { 'Accept-Language': 'en' },
       });
       expect(publishedResponse.ok()).toBeTruthy();
@@ -102,14 +117,9 @@ test.describe('FAQ editorial status workflow', () => {
       // when an earlier failure skipped the in-test restoration, and without
       // asserting, so a cleanup hiccup cannot shadow the original test failure.
       if (!fixtureRestored) {
-        await page.request
-          .post('/admin/api/faq/status', {
-            headers: { 'Content-Type': 'application/json' },
-            data: { csrf, categoryId, faqIds: [faqId], faqLanguage: 'en', status: 'published' },
-          })
-          .catch(() => {
-            // Best-effort cleanup; the test outcome is already decided.
-          });
+        await postStatus('published').catch(() => {
+          // Best-effort cleanup; the test outcome is already decided.
+        });
       }
     }
   });

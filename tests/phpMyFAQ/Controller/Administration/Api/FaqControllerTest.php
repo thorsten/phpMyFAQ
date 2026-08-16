@@ -1408,7 +1408,7 @@ final class FaqControllerTest extends TestCase
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        self::assertSame('Invalid or missing status value.', $payload['error']);
+        self::assertSame(Translation::get('msgInvalidFaqStatus'), $payload['error']);
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
@@ -1434,7 +1434,7 @@ final class FaqControllerTest extends TestCase
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        self::assertSame('Invalid or missing status value.', $payload['error']);
+        self::assertSame(Translation::get('msgInvalidFaqStatus'), $payload['error']);
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
@@ -1518,6 +1518,7 @@ final class FaqControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+        self::assertSame(FaqStatus::Review->value, $this->getPersistedFaqStatus(1, 'en'));
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
