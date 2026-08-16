@@ -37,6 +37,8 @@ class Migration420Alpha2Test extends TestCase
 
     protected function tearDown(): void
     {
+        $this->configuration->getDb()->close();
+
         parent::tearDown();
 
         @unlink($this->databaseFile);

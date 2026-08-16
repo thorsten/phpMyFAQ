@@ -918,7 +918,15 @@ final class FaqController extends AbstractApiController
 
         $isActive = $isActive === true;
         $isSticky = $isSticky === true;
-        $status = $isActive ? FaqStatus::Published : FaqStatus::Draft;
+
+        // The boolean can only express published/not-published; a deactivating update must
+        // not flatten an editorial state it cannot see, so review stays review.
+        $currentStatus = $this->faq->getStatus($faqId, $languageCode);
+        $status = match (true) {
+            $isActive => FaqStatus::Published,
+            $currentStatus === FaqStatus::Published => FaqStatus::Draft,
+            default => $currentStatus,
+        };
 
         // Editing an FAQ and deciding that it goes live are separate rights, so a change of
         // the publication state needs FAQ_PUBLISH on top of the FAQ_EDIT guard above.

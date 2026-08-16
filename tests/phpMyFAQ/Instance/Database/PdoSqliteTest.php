@@ -194,8 +194,7 @@ class PdoSqliteTest extends TestCase
 
         foreach ([$faqdataQuery, $faqdataRevisionsQuery] as $query) {
             $this->assertStringContainsString('status', $query);
-            $this->assertStringNotContainsString('active char(3)', $query);
-            $this->assertStringNotContainsString('active VARCHAR(3)', $query);
+            $this->assertDoesNotMatchRegularExpression('/\bactive\b/i', $query);
         }
     }
 

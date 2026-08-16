@@ -193,7 +193,8 @@ class Faq
     public function getInactiveFaqsData(): array
     {
         $language = $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage());
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
@@ -203,11 +204,15 @@ class Faq
             WHERE
                 fd.lang = '%s'
             AND
-                fd.status != 'published'
+                fd.status != '%s'
             GROUP BY
                 fd.id, fd.lang, fd.thema
             ORDER BY
-                fd.id DESC", Database::getTablePrefix(), $language);
+                fd.id DESC",
+            Database::getTablePrefix(),
+            $language,
+            FaqStatus::Published->value,
+        );
 
         $result = $this->configuration->getDb()->query($query);
         $inactive = [];

@@ -361,6 +361,12 @@ class Elasticsearch
             ++$i;
         }
 
+        // Nothing left to send — every FAQ was filtered out (e.g. none published) or the
+        // last full batch drained the buffer; an empty bulk request would be rejected.
+        if (($params['body'] ?? []) === []) {
+            return ['success' => []];
+        }
+
         // Send the last batch if it exists
         try {
             $responses = $this->unwrapResponse($this->client->bulk($params));

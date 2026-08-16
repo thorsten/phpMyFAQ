@@ -310,6 +310,10 @@ class PermissionBackfillOperationTest extends TestCase
      */
     private function seedApproveRight(): int
     {
+        // A bootstrap database predating the approverec retirement may still carry the
+        // right — remove it so the seed below cannot produce a duplicate source right.
+        $this->dbHandle->query("DELETE FROM faqright WHERE name = 'approverec'");
+
         $result = $this->dbHandle->query('SELECT MAX(right_id) AS max_id FROM faqright');
         $row = $this->dbHandle->fetchArray($result);
         $rightId = (is_array($row) ? (int) $row['max_id'] : 0) + 1;

@@ -1876,6 +1876,7 @@ $PMF_LANG['msgStatusDraft'] = 'Draft';
 $PMF_LANG['msgStatusReview'] = 'In review';
 $PMF_LANG['msgStatusPublished'] = 'Published';
 $PMF_LANG['msgStatusFilterAll'] = 'All statuses';
+$PMF_LANG['msgInvalidFaqStatus'] = 'Invalid or missing status value.';
 
 // added v4.2.0-alpha.2 - 2026-08-15 by Thorsten Rinne - question metadata tracking
 $PMF_LANG['msgQuestionReopened'] = 'The question was reopened.';

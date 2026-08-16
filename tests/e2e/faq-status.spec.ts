@@ -74,6 +74,8 @@ test.describe('FAQ editorial status workflow', () => {
       expect(body.success, body.error).toBeTruthy();
     };
 
+    let fixtureRestored = false;
+
     try {
       // 4. Draft: the public "by id" endpoint always scopes to published
       // content (phpMyFAQ\Faq::getFaqByIdAndCategoryId defaults to
@@ -88,6 +90,7 @@ test.describe('FAQ editorial status workflow', () => {
       // 5. Published again: the FAQ is visible once more, with the `status`
       // field in the REST response reflecting the change.
       await setStatus('published');
+      fixtureRestored = true;
       const publishedResponse = await page.request.get(`/api/v4.0/faq/${categoryId}/${faqId}`, {
         headers: { 'Accept-Language': 'en' },
       });
@@ -95,10 +98,19 @@ test.describe('FAQ editorial status workflow', () => {
       const publishedBody = (await publishedResponse.json()) as { status: string };
       expect(publishedBody.status).toBe('published');
     } finally {
-      // Always leave the seeded fixture published, regardless of assertion
-      // outcome, so later specs (and reruns against the same database) see
-      // the fixture data unchanged.
-      await setStatus('published');
+      // Leave the seeded fixture published for later specs and reruns — but only
+      // when an earlier failure skipped the in-test restoration, and without
+      // asserting, so a cleanup hiccup cannot shadow the original test failure.
+      if (!fixtureRestored) {
+        await page.request
+          .post('/admin/api/faq/status', {
+            headers: { 'Content-Type': 'application/json' },
+            data: { csrf, categoryId, faqIds: [faqId], faqLanguage: 'en', status: 'published' },
+          })
+          .catch(() => {
+            // Best-effort cleanup; the test outcome is already decided.
+          });
+      }
     }
   });
 });

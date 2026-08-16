@@ -80,17 +80,15 @@ class RevisionTest extends TestCase
             ->expects($this->once())
             ->method('query')
             ->willReturnCallback(function ($query) {
+                $pattern = '/INSERT\s+INTO\s+\w*faqdata_revisions\s*\(([^)]+)\)\s*SELECT\s+([^F]+?)\s*FROM/s';
+
                 $this->assertMatchesRegularExpression(
-                    '/INSERT\s+INTO\s+faqdata_revisions\s*\(([^)]+)\)\s*SELECT\s+([^F]+?)\s*FROM/s',
+                    $pattern,
                     $query,
                     'Expected an explicit destination column list before SELECT.',
                 );
 
-                preg_match(
-                    '/INSERT\s+INTO\s+faqdata_revisions\s*\(([^)]+)\)\s*SELECT\s+([^F]+?)\s*FROM/s',
-                    $query,
-                    $matches,
-                );
+                preg_match($pattern, $query, $matches);
                 $destinationColumns = array_map('trim', explode(',', $matches[1]));
                 $selectedExpressions = array_map('trim', explode(',', $matches[2]));
 

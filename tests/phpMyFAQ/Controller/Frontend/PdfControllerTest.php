@@ -220,6 +220,18 @@ final class PdfControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testIndexReturnsNotFoundForReviewFaq(): void
+    {
+        $this->seedFaqRow(faqId: 990103, status: 'review');
+
+        $response = $this->requestPdf(faqId: 990103);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testIndexReturnsNotFoundForExpiredFaq(): void
     {
         $this->seedFaqRow(faqId: 990102, dateEnd: '20200101000000');

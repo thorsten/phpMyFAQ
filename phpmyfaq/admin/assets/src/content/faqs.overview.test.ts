@@ -564,6 +564,58 @@ describe('FAQ Overview Functions', () => {
           method: 'POST',
         })
       );
+      const requestBody = JSON.parse((fetchMock.mock.calls[0][1] as { body: string }).body) as Record<string, unknown>;
+      expect(requestBody.status).toBe('published');
+      expect(requestBody.faqIds).toEqual(['7']);
+
+      vi.unstubAllGlobals();
+    });
+
+    it('should roll the status select back when the API rejects the change', async () => {
+      document.body.innerHTML = `
+        <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
+      `;
+
+      (fetchAllFaqsByCategory as Mock).mockResolvedValue({
+        faqs: [
+          {
+            id: 7,
+            language: 'en',
+            solution_id: 1007,
+            question: 'Test FAQ',
+            created: '2026-03-01',
+            category_id: 3,
+            sticky: 'no',
+            status: 'draft',
+            isAllowedToPublish: true,
+          },
+        ],
+        isAllowedToTranslate: false,
+      });
+
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({ error: 'No permission' }),
+      });
+      vi.stubGlobal('fetch', fetchMock);
+
+      await handleFaqOverview();
+
+      const category = document.querySelector('.accordion-collapse') as HTMLElement;
+      category.dispatchEvent(new Event('shown.bs.collapse'));
+
+      await flushPromises();
+
+      const statusSelect = document.querySelector('.pmf-admin-status-faq') as HTMLSelectElement;
+      statusSelect.value = 'published';
+      statusSelect.dispatchEvent(new Event('change'));
+
+      await flushPromises();
+
+      expect(statusSelect.value).toBe('draft');
 
       vi.unstubAllGlobals();
     });

@@ -193,6 +193,26 @@ readonly class Migration420Alpha2 extends AbstractMigration
                     sprintf('Backfill editorial status from the active flag in %s', $table),
                 );
 
+                // SQL Server refuses to drop a column while a default constraint is bound to
+                // it, and constraint names are auto-generated per installation — resolve and
+                // drop it dynamically. Guarded (IF NOT NULL), so re-runs stay safe.
+                if ($this->isSqlServer()) {
+                    $recorder->addSql(
+                        sprintf(
+                            'DECLARE @constraintName nvarchar(200); '
+                            . 'SELECT @constraintName = dc.name FROM sys.default_constraints dc '
+                            . 'JOIN sys.columns c ON dc.parent_object_id = c.object_id '
+                            . 'AND dc.parent_column_id = c.column_id '
+                            . "WHERE dc.parent_object_id = OBJECT_ID('%s') AND c.name = 'active'; "
+                            . 'IF @constraintName IS NOT NULL '
+                            . "EXEC('ALTER TABLE %s DROP CONSTRAINT ' + @constraintName)",
+                            $this->table($table),
+                            $this->table($table),
+                        ),
+                        sprintf('Drop the default constraint bound to %s.active (SQL Server)', $table),
+                    );
+                }
+
                 $recorder->addSql(
                     $this->dropColumn($table, 'active'),
                     sprintf('Drop the legacy active column from %s', $table),

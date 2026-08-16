@@ -38,6 +38,12 @@ final readonly class IndexFaqHandler
     ) {
     }
 
+    /**
+     * The solution ID Faq::getFaq() stamps on its placeholder for records that do not
+     * exist or that the requester has no permission for (see RecordVisibility).
+     */
+    private const int ACCESS_DENIED_SOLUTION_ID = 42;
+
     public function __invoke(IndexFaqMessage $message): void
     {
         if (!$this->configuration->isElasticsearchActive()) {
@@ -55,6 +61,20 @@ final readonly class IndexFaqHandler
         $faq ??= new Faq($this->configuration);
         $faq->getFaq($message->faqId);
 
+        // A FAQ that left the published state must also leave the index, mirroring the
+        // synchronous admin API behaviour — re-indexing only on publish would strand
+        // stale documents for unpublished content. Missing records are excluded: getFaq()
+        // stamps its not-found placeholder with the access-denied sentinel solution ID,
+        // and deleting that document would hit an unrelated index entry.
+        if (
+            $faq->faqRecord['id'] === $message->faqId
+            && (int) $faq->faqRecord['solution_id'] !== self::ACCESS_DENIED_SOLUTION_ID
+            && $faq->faqRecord['status'] !== FaqStatus::Published->value
+        ) {
+            $this->createElasticsearch()->delete((int) $faq->faqRecord['solution_id']);
+            return;
+        }
+
         if (
             $faq->faqRecord['id'] === $message->faqId
             && $faq->faqRecord['status'] === FaqStatus::Published->value
@@ -71,16 +91,7 @@ final readonly class IndexFaqHandler
             $category ??= new Category($this->configuration);
             $categoryId = $category->getCategoryIdFromFaq($message->faqId);
 
-            $elasticsearch = null;
-            if ($this->elasticsearchFactory instanceof Closure) {
-                $createdElasticsearch = ($this->elasticsearchFactory)();
-                if ($createdElasticsearch instanceof Elasticsearch) {
-                    $elasticsearch = $createdElasticsearch;
-                }
-            }
-
-            $elasticsearch ??= new Elasticsearch($this->configuration);
-            $elasticsearch->index([
+            $this->createElasticsearch()->index([
                 'id' => (int) $faq->faqRecord['id'],
                 'lang' => $message->language !== '' ? $message->language : (string) $faq->faqRecord['lang'],
                 'solution_id' => (int) $faq->faqRecord['solution_id'],
@@ -90,5 +101,17 @@ final readonly class IndexFaqHandler
                 'category_id' => $categoryId,
             ]);
         }
+    }
+
+    private function createElasticsearch(): Elasticsearch
+    {
+        if ($this->elasticsearchFactory instanceof Closure) {
+            $createdElasticsearch = ($this->elasticsearchFactory)();
+            if ($createdElasticsearch instanceof Elasticsearch) {
+                return $createdElasticsearch;
+            }
+        }
+
+        return new Elasticsearch($this->configuration);
     }
 }

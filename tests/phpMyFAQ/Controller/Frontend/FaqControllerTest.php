@@ -215,6 +215,44 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * A record in review is just as unpublished as a draft — the detail page must not
+     * disclose it either.
+     *
+     * @throws \Exception
+     */
+    public function testShowReturnsNotFoundForReviewFaq(): void
+    {
+        $this->seedFaqRow(faqId: 3, status: 'review');
+
+        $faq = new Faq($this->configuration);
+
+        $category = $this
+            ->getMockBuilder(Category::class)
+            ->setConstructorArgs([$this->configuration, [-1]])
+            ->onlyMethods(['categoryHasLinkToFaq'])
+            ->getMock();
+        $category->expects(self::never())->method('categoryHasLinkToFaq');
+
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            $faq,
+            $category,
+        );
+
+        $response = $controller->show(
+            new \Symfony\Component\HttpFoundation\Request(
+                [],
+                [],
+                ['categoryId' => '1', 'faqId' => '3', 'faqLang' => 'en', 'slug' => 'faq-title'],
+            ),
+        );
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
+    /**
      * Seeds a guest-readable FAQ. Defaults describe a visible record.
      */
     private function seedFaqRow(int $faqId, string $status = 'published'): void

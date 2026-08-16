@@ -30,7 +30,8 @@
   <div class="accordion shadow" id="pm-admin-faq-overview">
     <div class="accordion-item d-flex justify-content-start flex-wrap flex-md-nowrap align-items-center p-3 bg-secondary-subtle">
       <div class="col-2">
-        <select class="form-select form-select-sm w-auto" id="pmf-status-filter">
+        <select class="form-select form-select-sm w-auto" id="pmf-status-filter"
+                aria-label="{{ 'ad_entry_status' | translate }}">
           <option value="">{{ 'msgStatusFilterAll' | translate }}</option>
           <option value="draft">{{ 'msgStatusDraft' | translate }}</option>
           <option value="review">{{ 'msgStatusReview' | translate }}</option>

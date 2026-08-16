@@ -6,7 +6,7 @@ namespace phpMyFAQ\Faq;
 
 use PHPUnit\Framework\TestCase;
 
-class StatusScopeTest extends TestCase
+final class StatusScopeTest extends TestCase
 {
     public function testPublishedOnlyRendersAStatusCondition(): void
     {

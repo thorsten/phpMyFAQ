@@ -117,6 +117,8 @@ const refreshCategoryTable = async (category: Element): Promise<void> => {
   });
 
   toggleStatusFaq.forEach((element: Element): void => {
+    let previousStatus = (element as HTMLSelectElement).value;
+
     element.addEventListener('change', async (event: Event): Promise<void> => {
       event.preventDefault();
 
@@ -125,7 +127,15 @@ const refreshCategoryTable = async (category: Element): Promise<void> => {
       const faqId = target.getAttribute('data-pmf-faq-id') as string;
       const token = target.getAttribute('data-pmf-csrf') as string;
 
-      await saveFaqStatus(categoryId, [faqId], token, target.value);
+      const succeeded = await saveFaqStatus(categoryId, [faqId], token, target.value);
+      if (succeeded) {
+        previousStatus = target.value;
+        return;
+      }
+
+      // A rejected change must not keep pretending in the UI — roll the select back
+      // to the last state the server accepted.
+      target.value = previousStatus;
     });
   });
 };
@@ -181,7 +191,7 @@ export const handleDeleteFaqModal = (): void => {
   }
 };
 
-const postStatusChange = async (url: string, body: Record<string, unknown>): Promise<void> => {
+const postStatusChange = async (url: string, body: Record<string, unknown>): Promise<boolean> => {
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -196,17 +206,20 @@ const postStatusChange = async (url: string, body: Record<string, unknown>): Pro
       const result = await response.json();
       if (result.success) {
         pushNotification(result.success);
-      } else {
-        pushErrorNotification(result.error);
+        return true;
       }
-    } else {
-      const errorText = await response.text();
-      console.error('Network response was not ok:', errorText);
-      pushErrorNotification('Network response was not ok: ' + errorText);
+      pushErrorNotification(result.error);
+      return false;
     }
+
+    const errorText = await response.text();
+    console.error('Network response was not ok:', errorText);
+    pushErrorNotification('Network response was not ok: ' + errorText);
+    return false;
   } catch (error: unknown) {
     console.error('Error saving status:', error instanceof Error ? error.message : String(error));
     pushErrorNotification('An error occurred while saving the status.');
+    return false;
   }
 };
 
@@ -223,11 +236,11 @@ const saveStickyFlag = async (categoryId: string, faqIds: string[], token: strin
   });
 };
 
-const saveFaqStatus = async (categoryId: string, faqIds: string[], token: string, status: string): Promise<void> => {
+const saveFaqStatus = async (categoryId: string, faqIds: string[], token: string, status: string): Promise<boolean> => {
   const languageElement = document.getElementById(`status_record_${categoryId}_${faqIds[0]}`) as HTMLElement;
   const faqLanguage = languageElement.getAttribute('lang') as string;
 
-  await postStatusChange('./api/faq/status', {
+  return await postStatusChange('./api/faq/status', {
     csrf: token,
     categoryId: categoryId,
     faqIds: faqIds,

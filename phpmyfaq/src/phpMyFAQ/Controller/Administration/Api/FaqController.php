@@ -139,7 +139,7 @@ final class FaqController extends AbstractAdministrationApiController
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $status =
-            FaqStatus::tryFrom(Filter::filterVar($data->status ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''))
+            FaqStatus::tryFrom((string) Filter::filterVar($data->status ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''))
             ?? FaqStatus::Draft;
 
         // Creating an FAQ and making it public are separate rights.
@@ -408,7 +408,13 @@ final class FaqController extends AbstractAdministrationApiController
         $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $faqLang);
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $status = $this->resolveStatusChange($data, $faqId, $faqLang, [...$categories, ...$currentCategoryIds]);
+        $previousStatus = $this->faq->getStatus($faqId, $faqLang);
+        $status = $this->resolveStatusChange(
+            $data,
+            $previousStatus,
+            $faqLang,
+            [...$categories, ...$currentCategoryIds],
+        );
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
         $content = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -432,14 +438,16 @@ final class FaqController extends AbstractAdministrationApiController
         $permissions = $faqPermission->createPermissionArray();
 
         $this->logging->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
-        if ($status !== $this->faq->getStatus($faqId, $faqLang)) {
+        if ($status !== $previousStatus) {
             $this->logging->log(
                 $this->currentUser,
                 AdminLogType::FAQ_STATUS_CHANGE->value . ':' . $faqId . ':' . $status->value,
             );
-        }
-        if ($status === FaqStatus::Published) {
-            $this->logging->log($this->currentUser, AdminLogType::FAQ_PUBLISH->value . ':' . $faqId);
+
+            // An ordinary save of an already-published FAQ is an edit, not a publication.
+            if ($status === FaqStatus::Published) {
+                $this->logging->log($this->currentUser, AdminLogType::FAQ_PUBLISH->value . ':' . $faqId);
+            }
         }
 
         if ('yes' === $revision && true === $this->configuration->get(item: 'records.enableAutoRevisions')) {
@@ -651,7 +659,11 @@ final class FaqController extends AbstractAdministrationApiController
         $rawFaqIds = $data->faqIds ?? null;
         $faqIds = is_array($rawFaqIds) ? array_map(static fn(mixed $faqId): int => (int) $faqId, $rawFaqIds) : [];
         $faqLanguage = Filter::filterVar($data->faqLanguage ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $targetStatus = FaqStatus::tryFrom(Filter::filterVar($data->status ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''));
+        $targetStatus = FaqStatus::tryFrom((string) Filter::filterVar(
+            $data->status ?? '',
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            '',
+        ));
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'pmf-csrf-token',
@@ -661,7 +673,7 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         if ($targetStatus === null) {
-            return $this->json(['error' => 'Invalid or missing status value.'], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(key: 'msgInvalidFaqStatus')], Response::HTTP_BAD_REQUEST);
         }
 
         if ($faqIds !== []) {
@@ -1161,13 +1173,15 @@ final class FaqController extends AbstractAdministrationApiController
      * @param int[] $categoryIds the FAQ's current and submitted categories
      * @throws ForbiddenException|Exception
      */
-    private function resolveStatusChange(stdClass $data, int $faqId, string $faqLanguage, array $categoryIds): FaqStatus
-    {
+    private function resolveStatusChange(
+        stdClass $data,
+        FaqStatus $currentStatus,
+        string $faqLanguage,
+        array $categoryIds,
+    ): FaqStatus {
         $requestedStatus = property_exists($data, 'status')
-            ? FaqStatus::tryFrom(Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS, ''))
+            ? FaqStatus::tryFrom((string) Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS, ''))
             : null;
-
-        $currentStatus = $this->faq->getStatus($faqId, $faqLanguage);
 
         if ($requestedStatus === null || $requestedStatus === $currentStatus) {
             return $currentStatus;

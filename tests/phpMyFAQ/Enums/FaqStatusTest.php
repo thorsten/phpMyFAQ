@@ -7,7 +7,7 @@ namespace phpMyFAQ\Enums;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class FaqStatusTest extends TestCase
+final class FaqStatusTest extends TestCase
 {
     public function testBackedValuesMatchTheDatabaseRepresentation(): void
     {

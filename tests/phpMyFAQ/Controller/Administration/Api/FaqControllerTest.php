@@ -302,8 +302,8 @@ final class FaqControllerTest extends TestCase
         $this->configuration
             ->getDb()
             ->query(sprintf(
-                "INSERT INTO faqdata (id, lang, solution_id, revision_id, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
-             VALUES (%d, '%s', %d, 0, 0, '', '%s', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (%d, '%s', %d, 0, 'draft', 0, '', '%s', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
                 $faqId,
                 $language,
                 $faqId + 1000,
@@ -2424,8 +2424,8 @@ final class FaqControllerTest extends TestCase
         $this->configuration
             ->getDb()
             ->query(sprintf(
-                "INSERT INTO faqdata (id, lang, solution_id, revision_id, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
-             VALUES (%d, '%s', %d, 0, 0, '', 'Orphaned FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (%d, '%s', %d, 0, 'draft', 0, '', 'Orphaned FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
                 $faqId,
                 $language,
                 $faqId + 1000,
