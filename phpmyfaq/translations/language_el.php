@@ -843,7 +843,7 @@ $PMF_LANG["rememberMe"] = 'Αυτόματη σύνδεση την επόμενη
 $PMF_LANG["ad_menu_instances"] = "FAQ Multisites";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQs ανενεργά';
+$PMF_LANG['ad_record_inactive'] = 'Μη δημοσιευμένα FAQs';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Ορισμός FAQ σε λειτουργία συντήρησης"];
 $PMF_LANG['msgMode'] = "Λειτουργία";
 $PMF_LANG['msgMaintenanceMode'] = "Το FAQ είναι σε συντήρηση";

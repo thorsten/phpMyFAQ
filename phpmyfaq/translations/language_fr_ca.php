@@ -815,7 +815,7 @@ $PMF_LANG["rememberMe"] = 'Me connecter automatiquement la prochaine fois';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multisites";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQ inactives';
+$PMF_LANG['ad_record_inactive'] = 'FAQ non publiées';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Mettre la FAQ en mode maintenance"];
 $PMF_LANG['msgMode'] = "Mode";
 $PMF_LANG['msgMaintenanceMode'] = "La FAQ est en maintenance";

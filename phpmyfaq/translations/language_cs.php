@@ -809,7 +809,7 @@ $PMF_LANG["rememberMe"] = 'Příště mě přihlásit automaticky';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multisite";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQ neaktivní';
+$PMF_LANG['ad_record_inactive'] = 'Nepublikované FAQ';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Nastavit FAQ do režimu údržby"];
 $PMF_LANG['msgMode'] = "Režim";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ je v údržbě";

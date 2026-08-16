@@ -848,7 +848,7 @@ $PMF_LANG["rememberMe"] = 'התחבר אותי אוטומטית בפעם הבא�
 $PMF_LANG["ad_menu_instances"] = "אתרים מרובים של שאלות נפוצות";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'שאלות נפוצות לא פעילות';
+$PMF_LANG['ad_record_inactive'] = 'שאלות נפוצות שלא פורסמו';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "הגדר שאלות נפוצות במצב תחזוקה"];
 $PMF_LANG['msgMode'] = "מצב";
 $PMF_LANG['msgMaintenanceMode'] = "שאלות נפוצות במצב תחזוקה";

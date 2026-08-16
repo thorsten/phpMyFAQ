@@ -1030,7 +1030,7 @@ $PMF_LANG["rememberMe"] = 'تسجيل دخولي تلقائياً في المر�
 $PMF_LANG["ad_menu_instances"] = "مواقع متعددة للأسئلة الشائعة";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'الأسئلة الشائعة غير نشطة';
+$PMF_LANG['ad_record_inactive'] = 'الأسئلة الشائعة غير المنشورة';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "تعيين الأسئلة الشائعة في وضع الصيانة"];
 $PMF_LANG['msgMode'] = "الوضع";
 $PMF_LANG['msgMaintenanceMode'] = "الأسئلة الشائعة في وضع الصيانة";

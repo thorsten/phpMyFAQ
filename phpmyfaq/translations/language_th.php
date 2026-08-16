@@ -823,7 +823,7 @@ $PMF_LANG["rememberMe"] = 'เข้าสู่ระบบอัตโนม�
 $PMF_LANG["ad_menu_instances"] = "FAQ หลายไซต์";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQ ไม่ทำงาน';
+$PMF_LANG['ad_record_inactive'] = 'FAQ ที่ยังไม่เผยแพร่';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "ตั้งค่า FAQ ในโหมดบำรุงรักษา"];
 $PMF_LANG['msgMode'] = "โหมด";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ อยู่ในโหมดบำรุงรักษา";

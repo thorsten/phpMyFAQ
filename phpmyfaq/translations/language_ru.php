@@ -1024,7 +1024,7 @@ $PMF_LANG["rememberMe"] = 'Автоматически входить в след
 $PMF_LANG["ad_menu_instances"] = "Мультисайты FAQ";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQs неактивные';
+$PMF_LANG['ad_record_inactive'] = 'Неопубликованные FAQ';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Установить FAQ в режим обслуживания"];
 $PMF_LANG['msgMode'] = "Режим";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ в режиме обслуживания";

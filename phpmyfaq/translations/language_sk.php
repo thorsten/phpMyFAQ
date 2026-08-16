@@ -1035,7 +1035,7 @@ $PMF_LANG["rememberMe"] = 'Automaticky ma prihlásiť nabudúce';
 $PMF_LANG["ad_menu_instances"] = "FAQ viacnásobné stránky";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQ neaktívne';
+$PMF_LANG['ad_record_inactive'] = 'Nepublikované FAQ';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Nastaviť FAQ do režimu údržby"];
 $PMF_LANG['msgMode'] = "Režim";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ je v údržbe";

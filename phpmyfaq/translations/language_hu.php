@@ -1025,7 +1025,7 @@ $PMF_LANG["rememberMe"] = 'Automatikus bejelentkezés legközelebb';
 $PMF_LANG["ad_menu_instances"] = "GYIK Többoldalas";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'GYIK-ek inaktívak';
+$PMF_LANG['ad_record_inactive'] = 'Nem publikált GYIK-ek';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "GYIK karbantartási módba állítása"];
 $PMF_LANG['msgMode'] = "Mód";
 $PMF_LANG['msgMaintenanceMode'] = "GYIK karbantartás alatt";

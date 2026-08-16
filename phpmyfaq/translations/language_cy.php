@@ -1032,7 +1032,7 @@ $PMF_LANG["rememberMe"] = 'Mewngofnodwch fi\'n awtomatig tro nesaf';
 $PMF_LANG["ad_menu_instances"] = "Aml-safleoedd FAQ";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQs anweithredol';
+$PMF_LANG['ad_record_inactive'] = 'FAQs heb eu cyhoeddi';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Gosod FAQ mewn modd cynnal a chadw"];
 $PMF_LANG['msgMode'] = "Modd";
 $PMF_LANG['msgMaintenanceMode'] = "Mae FAQ mewn modd cynnal a chadw";

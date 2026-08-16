@@ -1032,7 +1032,7 @@ $PMF_LANG["rememberMe"] = 'Samodejno me prijavi naslednjič';
 $PMF_LANG["ad_menu_instances"] = "FAQ Večstranišča";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQji neaktivni';
+$PMF_LANG['ad_record_inactive'] = 'Neobjavljeni FAQji';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Nastavi FAQ v način vzdrževanja"];
 $PMF_LANG['msgMode'] = "Način";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ je v vzdrževanju";

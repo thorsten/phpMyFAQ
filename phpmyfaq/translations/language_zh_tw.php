@@ -1033,7 +1033,7 @@ $PMF_LANG["rememberMe"] = "記住我";
 $PMF_LANG["ad_menu_instances"] = "多個 FAQ 站台 (Multi-sites)";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten 開發者
-$PMF_LANG['ad_record_inactive'] = "FAQS 目前沒有作用 (FAQs inactive)";
+$PMF_LANG['ad_record_inactive'] = "未發布的 FAQ";
 $LANG_CONF["main.maintenanceMode"] = ['checkbox', "設定 FAQ 為維護模式 Set FAQ in maintenance mode"];
 $PMF_LANG['msgMode'] = "樣式 (Modus)";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ 在維護中 (is in maintenance)";

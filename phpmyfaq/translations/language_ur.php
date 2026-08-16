@@ -1013,7 +1013,7 @@ $PMF_LANG["rememberMe"] = 'مجھے خودکار طور پر اگلی بار ل�
 $PMF_LANG["ad_menu_instances"] = "کثیر سائٹ عمومی سوالات";
 
 // شامل کیا گیا v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'غیر فعال عمومی سوالات';
+$PMF_LANG['ad_record_inactive'] = 'غیر شائع شدہ عمومی سوالات';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "عمومی سوالات کو مرمت کے موڈ میں رکھیں"];
 $PMF_LANG['msgMode'] = "موڈ";
 $PMF_LANG['msgMaintenanceMode'] = "عمومی سوالات مرمت کے موڈ میں ہے";

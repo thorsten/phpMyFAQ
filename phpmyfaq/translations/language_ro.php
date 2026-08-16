@@ -1024,7 +1024,7 @@ $PMF_LANG["rememberMe"] = 'Autentifică-mă automat data viitoare';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multisite";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQs inactive';
+$PMF_LANG['ad_record_inactive'] = 'FAQs nepublicate';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Setează FAQ în modul mentenanță"];
 $PMF_LANG['msgMode'] = "Mod";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ este în mentenanță";

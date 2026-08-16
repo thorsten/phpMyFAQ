@@ -1027,7 +1027,7 @@ $PMF_LANG["rememberMe"] = 'دفعه بعد به صورت خودکار وارد �
 $PMF_LANG["ad_menu_instances"] = "چندسایته پرسش و پاسخ";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'پرسش و پاسخ‌های غیرفعال';
+$PMF_LANG['ad_record_inactive'] = 'پرسش و پاسخ‌های منتشرنشده';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "تنظیم پرسش و پاسخ در حالت تعمیر و نگهداری"];
 $PMF_LANG['msgMode'] = "حالت";
 $PMF_LANG['msgMaintenanceMode'] = "پرسش و پاسخ در حالت تعمیر است";

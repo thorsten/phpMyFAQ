@@ -1035,7 +1035,7 @@ $PMF_LANG["rememberMe"] = 'Masuk otomatis untuk kunjungan berikutnya';
 $PMF_LANG["ad_menu_instances"] = "Multisite FAQ";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQ tidak aktif';
+$PMF_LANG['ad_record_inactive'] = 'FAQ yang belum diterbitkan';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Setel FAQ dalam mode pemeliharaan"];
 $PMF_LANG['msgMode'] = "Modus";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ dalam pemeliharaan";

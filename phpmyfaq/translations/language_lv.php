@@ -1027,7 +1027,7 @@ $PMF_LANG["rememberMe"] = 'Pieteikt mani automātiski nākamreiz';
 $PMF_LANG["ad_menu_instances"] = "BUJ daudzvietņu";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'BUJ neaktīvi';
+$PMF_LANG['ad_record_inactive'] = 'Nepublicēti BUJ';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Iestatīt BUJ apkopes režīmā"];
 $PMF_LANG['msgMode'] = "Režīms";
 $PMF_LANG['msgMaintenanceMode'] = "BUJ ir apkopē";

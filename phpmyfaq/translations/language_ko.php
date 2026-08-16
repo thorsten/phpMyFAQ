@@ -1031,7 +1031,7 @@ $PMF_LANG["rememberMe"] = '다음에 자동으로 로그인';
 $PMF_LANG["ad_menu_instances"] = "FAQ 멀티사이트";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = '비활성 FAQ';
+$PMF_LANG['ad_record_inactive'] = '게시되지 않은 FAQ';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "FAQ를 유지보수 모드로 설정"];
 $PMF_LANG['msgMode'] = "모드";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ가 유지보수 중입니다";

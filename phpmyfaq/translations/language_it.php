@@ -718,7 +718,7 @@ $PMF_LANG['msg2answerFAQ'] = 'Risposto';
 $PMF_LANG['headerUserControlPanel'] = 'Pannello di controllo dell\'utente';
 $PMF_LANG['rememberMe'] = 'Ricordami';
 $PMF_LANG['ad_menu_instances'] = 'FAQ Multi-sito';
-$PMF_LANG['ad_record_inactive'] = 'FAQ inattiva';
+$PMF_LANG['ad_record_inactive'] = 'FAQ non pubblicate';
 $PMF_LANG['msgMode'] = 'Modi';
 $PMF_LANG['msgMaintenanceMode'] = 'FAQ in manutenzione';
 $PMF_LANG['msgOnlineMode'] = 'FAQ online';
@@ -919,7 +919,7 @@ $PMF_LANG["rememberMe"] = 'Accedi automaticamente la prossima volta';
 $PMF_LANG["ad_menu_instances"] = "Multisiti FAQ";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQ inattive';
+$PMF_LANG['ad_record_inactive'] = 'FAQ non pubblicate';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Imposta FAQ in modalità manutenzione"];
 $PMF_LANG['msgMode'] = "Modalità";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ in manutenzione";

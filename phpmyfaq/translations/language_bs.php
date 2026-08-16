@@ -1031,7 +1031,7 @@ $PMF_LANG["rememberMe"] = 'Automatski me prijavi sljedeći put';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multisajtovi";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQ-ovi neaktivni';
+$PMF_LANG['ad_record_inactive'] = 'Neobjavljeni FAQ-ovi';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Postavi FAQ u režim održavanja"];
 $PMF_LANG['msgMode'] = "Režim";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ je u održavanju";

@@ -1026,7 +1026,7 @@ $PMF_LANG["rememberMe"] = 'Tự động đăng nhập lần sau';
 $PMF_LANG["ad_menu_instances"] = "FAQ đa site";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQs không hoạt động';
+$PMF_LANG['ad_record_inactive'] = 'FAQs chưa xuất bản';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Đặt FAQ ở chế độ bảo trì"];
 $PMF_LANG['msgMode'] = "Chế độ";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ đang bảo trì";

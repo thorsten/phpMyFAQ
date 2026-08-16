@@ -1031,7 +1031,7 @@ $PMF_LANG["rememberMe"] = 'Hasi saioa automatikoki hurrengo aldian';
 $PMF_LANG["ad_menu_instances"] = "FAQ Gune Anitzak";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQs inaktibo';
+$PMF_LANG['ad_record_inactive'] = 'Argitaratu gabeko FAQak';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Ezarri FAQ mantentze moduan"];
 $PMF_LANG['msgMode'] = "Modua";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ mantentze moduan dago";

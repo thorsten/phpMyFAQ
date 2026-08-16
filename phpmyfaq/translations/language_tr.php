@@ -1035,7 +1035,7 @@ $PMF_LANG["rememberMe"] = "Giriş bilgilerimi hatırla";
 $PMF_LANG["ad_menu_instances"] = "Çoklu site";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = "Pasif sorular";
+$PMF_LANG['ad_record_inactive'] = "Yayınlanmamış SSS";
 $LANG_CONF["main.maintenanceMode"] = array("checkbox", "Set FAQ in maintenance mode");
 $PMF_LANG['msgMode'] = "Modus";
 $PMF_LANG['msgMaintenanceMode'] = "Site bakımda";

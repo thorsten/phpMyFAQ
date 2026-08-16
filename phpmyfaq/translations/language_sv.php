@@ -1240,7 +1240,7 @@ $PMF_LANG["rememberMe"] = 'Logga in mig automatiskt nästa gång';
 $PMF_LANG["ad_menu_instances"] = "FAQ-multisajter";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQs inaktiva';
+$PMF_LANG['ad_record_inactive'] = 'Opublicerade FAQs';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Sätt FAQ i underhållsläge"];
 $PMF_LANG['msgMode'] = "Läge";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ är i underhåll";

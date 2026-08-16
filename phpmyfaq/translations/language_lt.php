@@ -1043,7 +1043,7 @@ $PMF_LANG["rememberMe"] = 'Automatiškai prijungti mane kitą kartą';
 $PMF_LANG["ad_menu_instances"] = "DUK kelios svetainės";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'DUK neaktyvūs';
+$PMF_LANG['ad_record_inactive'] = 'Nepublikuoti DUK';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Nustatyti DUK priežiūros režimą"];
 $PMF_LANG['msgMode'] = "Režimas";
 $PMF_LANG['msgMaintenanceMode'] = "DUK yra priežiūroje";

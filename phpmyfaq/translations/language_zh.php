@@ -875,7 +875,7 @@ $PMF_LANG["rememberMe"] = '下次自动登录';
 $PMF_LANG["ad_menu_instances"] = "FAQ 多站点";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQ 未激活';
+$PMF_LANG['ad_record_inactive'] = '未发布的 FAQ';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "将 FAQ 设置为维护模式"];
 $PMF_LANG['msgMode'] = "模式";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ 处于维护中";

@@ -1035,7 +1035,7 @@ $PMF_LANG["rememberMe"] = 'अगली बार मुझे स्वचा�
 $PMF_LANG["ad_menu_instances"] = "FAQ मल्टीसाइट्स";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQs निष्क्रिय';
+$PMF_LANG['ad_record_inactive'] = 'अप्रकाशित FAQs';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "FAQ को रखरखाव मोड में सेट करें"];
 $PMF_LANG['msgMode'] = "मोड";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ रखरखाव में है";

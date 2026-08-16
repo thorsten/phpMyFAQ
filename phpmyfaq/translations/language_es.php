@@ -1025,7 +1025,7 @@ $PMF_LANG['rememberMe'] = 'Recordarme';
 $PMF_LANG['ad_menu_instances'] = 'FAQ Multi-sites';
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQs inactivas';
+$PMF_LANG['ad_record_inactive'] = 'FAQs no publicadas';
 $LANG_CONF['main.maintenanceMode'] = ['checkbox', 'FAQ en modo de mantenimiento'];
 $PMF_LANG['msgMode'] = 'Modo';
 $PMF_LANG['msgMaintenanceMode'] = 'FAQ en mantenimiento';

@@ -1034,7 +1034,7 @@ $PMF_LANG["rememberMe"] = 'পরের বার স্বয়ংক্রি
 $PMF_LANG["ad_menu_instances"] = "FAQ মাল্টিসাইট";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQ নিষ্ক্রিয়';
+$PMF_LANG['ad_record_inactive'] = 'অপ্রকাশিত FAQ';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "FAQ রক্ষণাবেক্ষণ মোডে সেট করুন"];
 $PMF_LANG['msgMode'] = "মোডাস";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ রক্ষণাবেক্ষণে আছে";

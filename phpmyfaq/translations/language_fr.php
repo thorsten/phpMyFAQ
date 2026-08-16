@@ -1030,7 +1030,7 @@ $PMF_LANG["ad_menu_instances"] = "Instances Multisites";
 
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG["ad_record_inactive"] = "FAQs inactive";
+$PMF_LANG["ad_record_inactive"] = "FAQ non publiées";
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Placer la FAQ en mode maintenance"];
 $PMF_LANG["msgMode"] = "Modus";
 $PMF_LANG["msgMaintenanceMode"] = "La FAQ est en maintenance";

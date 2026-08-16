@@ -988,7 +988,7 @@ $PMF_LANG["rememberMe"] = 'Następnym razem zaloguj mnie automatycznie';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multisites";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQs nieaktywny';
+$PMF_LANG['ad_record_inactive'] = 'Nieopublikowane FAQ';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Ustaw FAQ w trybie konserwacji"];
 $PMF_LANG['msgMode'] = "Modus";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ jest w konserwacji";

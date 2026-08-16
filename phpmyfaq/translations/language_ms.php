@@ -1023,7 +1023,7 @@ $PMF_LANG["rememberMe"] = 'Log masuk saya secara automatik pada masa akan datang
 $PMF_LANG["ad_menu_instances"] = "FAQ Pelbagai Tapak";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
-$PMF_LANG['ad_record_inactive'] = 'FAQ tidak aktif';
+$PMF_LANG['ad_record_inactive'] = 'FAQ belum diterbitkan';
 $LANG_CONF["main.maintenanceMode"] = ["checkbox", "Tetapkan FAQ dalam mod penyelenggaraan"];
 $PMF_LANG['msgMode'] = "Mod";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ dalam penyelenggaraan";
