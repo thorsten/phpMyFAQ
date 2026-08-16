@@ -16,7 +16,7 @@ including:
 * statistics about visits, entries, news, and comments
 * the latest current version number fetched from phpmyfaq.de
 * a chart showing the number of visitors over the last 30 days
-* a list of inactive FAQs
+* a list of unpublished FAQs (drafts and FAQs in review)
 * a list of the latest user registrations
 * information about the date of the most recently verified backup
 * a button to verify the integrity of the phpMyFAQ installation
@@ -115,7 +115,7 @@ Reading FAQs, changing them, and deciding that a change goes public are three in
   FAQ, the editor shows the status read-only instead of the status radio buttons, and saving leaves that state alone.
   The status selector in the FAQ overview is likewise shown read-only.
 - `Publish FAQs` is separate from the older `Approve FAQs` (`approverec`) right, which continues to gate the list of
-  inactive FAQs. Upgrades grant `faq_publish` to everyone who already held `approverec`, carrying their category and
+  unpublished FAQs. Upgrades grant `faq_publish` to everyone who already held `approverec`, carrying their category and
   language restrictions across, so no one loses or gains an ability.
 - **`View FAQs` is only enforced for logged-in users.** Anonymous visitors are unaffected by it; what they may see is
   still governed by `security.enableLoginOnly` and by the per-FAQ user and group permissions set in the FAQ editor.
