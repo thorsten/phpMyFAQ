@@ -273,12 +273,15 @@ class Update extends AbstractSetup
                 continue;
             }
 
-            $appliedChecksum = $appliedChecksums[$version];
-            if ($appliedChecksum === null || !$migration instanceof AbstractMigration) {
+            if (!$migration instanceof AbstractMigration) {
                 continue;
             }
 
-            if ($appliedChecksum !== $migration->getChecksum()) {
+            // A NULL checksum means the row predates checksum recording; such an
+            // installation can never match and would silently miss every amendment,
+            // so treat it as amended — migrations are required to be re-run safe.
+            $appliedChecksum = $appliedChecksums[$version];
+            if ($appliedChecksum === null || $appliedChecksum !== $migration->getChecksum()) {
                 $amendedMigrations[$version] = $migration;
             }
         }

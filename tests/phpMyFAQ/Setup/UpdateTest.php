@@ -147,6 +147,33 @@ class UpdateTest extends TestCase
         $this->assertNotEmpty($queries, 'Amended migration must be re-run for installations that already applied it');
     }
 
+    public function testApplyUpdatesReRunsMigrationRecordedWithoutChecksum(): void
+    {
+        // Simulate an installation that executed 4.2.0-alpha.2 before checksums were
+        // recorded at all: the tracker row exists with a NULL checksum. Such an
+        // installation can never match the registered checksum, so it must be treated
+        // as amended — skipping it silently misses every later amendment.
+        $configuration = new Configuration($this->dbHandle);
+        $tracker = new MigrationTracker($configuration);
+        $tracker->ensureTableExists();
+        $tracker->recordMigration('4.2.0-alpha.2', 1, null, 'pre-checksum state');
+
+        $update = new Update(new System(), $configuration);
+        $update->version = '4.2.0-alpha.2';
+        $update->dryRun = true;
+        $update->applyUpdates();
+
+        $queries = array_filter(
+            $update->dryRunQueries,
+            static fn(string $query): bool => str_contains($query, 'faqquestion_history'),
+        );
+
+        $this->assertNotEmpty(
+            $queries,
+            'A migration recorded without a checksum must be re-run so pre-checksum installations pick up amendments',
+        );
+    }
+
     public function testApplyUpdatesCreatesMissingTables(): void
     {
         // Simulate a fresh installation made at 4.2.0-alpha.2 before the migration was
