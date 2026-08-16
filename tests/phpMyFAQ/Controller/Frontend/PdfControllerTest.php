@@ -7,7 +7,6 @@ namespace phpMyFAQ\Controller\Frontend;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
@@ -266,8 +265,6 @@ final class PdfControllerTest extends TestCase
         string $dateStart = '00000000000000',
         string $dateEnd = '99991231235959',
     ): void {
-        $active = FaqStatus::Published->value === $status ? 'yes' : 'no';
-
         $this->dbHandle->query(sprintf('DELETE FROM faqdata WHERE id = %d', $faqId));
         $this->dbHandle->query(sprintf('DELETE FROM faqdata_user WHERE record_id = %d', $faqId));
         $this->dbHandle->query(sprintf('DELETE FROM faqdata_group WHERE record_id = %d', $faqId));
@@ -275,14 +272,13 @@ final class PdfControllerTest extends TestCase
 
         $this->dbHandle->query(sprintf(
             "INSERT INTO faqdata
-                (id, lang, solution_id, revision_id, active, status, sticky, keywords, thema, content,
+                (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content,
                  author, email, comment, updated, date_start, date_end, notes)
              VALUES
-                (%d, 'en', %d, 0, '%s', '%s', 0, 'secret keyword', 'Unreleased product name', 'Draft answer body',
+                (%d, 'en', %d, 0, '%s', 0, 'secret keyword', 'Unreleased product name', 'Draft answer body',
                  'Draft Author', 'draft@example.org', 'n', '20260101120000', '%s', '%s', 'internal notes')",
             $faqId,
             $faqId,
-            $active,
             $status,
             $dateStart,
             $dateEnd,

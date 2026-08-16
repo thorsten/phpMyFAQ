@@ -232,12 +232,12 @@ class TagsTest extends TestCase
         $status = 'yes' === $active ? FaqStatus::Published->value : FaqStatus::Draft->value;
 
         $query = sprintf("INSERT OR REPLACE INTO faqdata (
-                id, lang, solution_id, revision_id, active, status, sticky, keywords, thema, content, author, email,
+                id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email,
                 comment, updated, date_start, date_end, created, notes, sticky_order
             ) VALUES (
-                %d, '%s', %d, 0, '%s', '%s', 0, '', 'Test question %d', 'Test answer %d', 'Tester', 'test@example.com',
+                %d, '%s', %d, 0, '%s', 0, '', 'Test question %d', 'Test answer %d', 'Tester', 'test@example.com',
                 'y', '20260101000000', '00000000000000', '99991231235959', CURRENT_TIMESTAMP, '', NULL
-            )", $id, $lang, $id, $active, $status, $id, $id);
+            )", $id, $lang, $id, $status, $id, $id);
 
         $this->dbHandle->query($query);
     }

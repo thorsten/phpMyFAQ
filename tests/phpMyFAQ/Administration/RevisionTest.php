@@ -99,7 +99,6 @@ class RevisionTest extends TestCase
                     'lang',
                     'solution_id',
                     'revision_id',
-                    'active',
                     'status',
                     'sticky',
                     'keywords',
@@ -121,7 +120,7 @@ class RevisionTest extends TestCase
                 // (allowing for "revision_id + 1" instead of the bare "revision_id").
                 $this->assertCount(count($destinationColumns), $selectedExpressions);
                 $this->assertSame('revision_id + 1', $selectedExpressions[3]);
-                $this->assertSame('status', $selectedExpressions[5]);
+                $this->assertSame('status', $selectedExpressions[4]);
 
                 return true;
             });

@@ -134,17 +134,13 @@ class Faq
 
     /**
      * Sets the editorial status of a FAQ record.
-     *
-     * The `active` assignment is transitional: it keeps the legacy column in sync so the
-     * remaining `active`-based read paths stay correct until Task 7 drops the column.
      */
     public function updateRecordStatus(int $faqId, string $faqLanguage, FaqStatus $status): bool
     {
         $update = sprintf(
-            "UPDATE %sfaqdata SET status = '%s', active = '%s' WHERE id = %d AND lang = '%s'",
+            "UPDATE %sfaqdata SET status = '%s' WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $status->value,
-            $status === FaqStatus::Published ? 'yes' : 'no',
             $faqId,
             $this->configuration->getDb()->escape($faqLanguage),
         );
@@ -248,7 +244,8 @@ class Faq
      */
     public function getOrphanedFaqs(): array
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
                 SELECT
                     fd.id AS id,
                     fd.lang AS lang,
@@ -256,7 +253,7 @@ class Faq
                 FROM
                     %sfaqdata fd
                 WHERE
-                    fd.active = 'yes'
+                    fd.status = '%s'
                 AND
                     fd.id NOT IN (
                         SELECT
@@ -269,7 +266,11 @@ class Faq
                 GROUP BY
                     fd.id, fd.lang, fd.thema
                 ORDER BY
-                    fd.id DESC", Database::getTablePrefix(), Database::getTablePrefix());
+                    fd.id DESC",
+            Database::getTablePrefix(),
+            FaqStatus::Published->value,
+            Database::getTablePrefix(),
+        );
 
         $result = $this->configuration->getDb()->query($query);
         $orphaned = [];
@@ -314,10 +315,11 @@ class Faq
         $prefix = Database::getTablePrefix();
 
         $orphanedQuery = sprintf(
-            "SELECT COUNT(*) AS num FROM %sfaqdata fd WHERE fd.active = 'yes' "
+            "SELECT COUNT(*) AS num FROM %sfaqdata fd WHERE fd.status = '%s' "
             . 'AND fd.id NOT IN ('
             . 'SELECT record_id FROM %sfaqcategoryrelations WHERE record_lang = fd.lang)',
             $prefix,
+            FaqStatus::Published->value,
             $prefix,
         );
 
@@ -325,8 +327,9 @@ class Faq
         $threshold = date('YmdHis', (int) strtotime(sprintf('-%d days', $staleDays)));
         $staleQuery = sprintf(
             'SELECT COUNT(*) AS num FROM %sfaqdata fd '
-            . "WHERE fd.active = 'yes' AND fd.updated <> '' AND fd.updated < '%s'",
+            . "WHERE fd.status = '%s' AND fd.updated <> '' AND fd.updated < '%s'",
             $prefix,
+            FaqStatus::Published->value,
             $threshold,
         );
 

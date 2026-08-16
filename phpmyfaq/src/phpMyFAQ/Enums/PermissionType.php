@@ -48,8 +48,6 @@ enum PermissionType: string
 
     case FAQ_ADD = 'add_faq';
 
-    case FAQ_APPROVE = 'approverec';
-
     case FAQ_DELETE = 'delete_faq';
 
     case FAQ_EDIT = 'edit_faq';

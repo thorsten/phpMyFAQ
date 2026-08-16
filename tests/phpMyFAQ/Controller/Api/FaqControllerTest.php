@@ -9,6 +9,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData as FaqMetaData;
 use phpMyFAQ\Faq\Statistics as FaqStatistics;
@@ -1207,7 +1208,7 @@ class FaqControllerTest extends TestCase
                     && $entity->getKeywords() === 'api, faq'
                     && $entity->getAuthor() === 'API Author'
                     && $entity->getEmail() === 'api@example.com'
-                    && $entity->isActive() === true
+                    && $entity->getStatus() === FaqStatus::Published
                     && $entity->isSticky() === true
                 );
             }))
@@ -1440,7 +1441,7 @@ class FaqControllerTest extends TestCase
                     && $entity->getKeywords() === 'update, faq'
                     && $entity->getAuthor() === 'API Updater'
                     && $entity->getEmail() === 'update@example.com'
-                    && $entity->isActive() === true
+                    && $entity->getStatus() === FaqStatus::Published
                     && $entity->isSticky() === true
                 );
             }))

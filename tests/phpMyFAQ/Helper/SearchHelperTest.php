@@ -210,8 +210,8 @@ class SearchHelperTest extends TestCase
         $configuration->setLanguage($language);
 
         $db->query(
-            "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, notes, sticky_order)
-             VALUES (9001, 'en', 777001, 0, 'yes', 0, '', 'Helper FAQ', 'Content', 'Author', 'author@example.com', 'y', '20260101000000', '00000000000000', '99991231235959', '', NULL)",
+            "INSERT INTO faqdata (id, lang, solution_id, revision_id, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, notes, sticky_order)
+             VALUES (9001, 'en', 777001, 0, 0, '', 'Helper FAQ', 'Content', 'Author', 'author@example.com', 'y', '20260101000000', '00000000000000', '99991231235959', '', NULL)",
         );
 
         $helper = new SearchHelper($configuration);

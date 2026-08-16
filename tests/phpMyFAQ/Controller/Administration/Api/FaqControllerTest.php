@@ -214,7 +214,7 @@ final class FaqControllerTest extends TestCase
                         PermissionType::FAQ_ADD->value,
                         PermissionType::FAQ_EDIT->value,
                         PermissionType::FAQ_DELETE->value,
-                        PermissionType::FAQ_APPROVE->value,
+                        'approverec',
                         PermissionType::FAQ_PUBLISH->value,
                         PermissionType::FAQ_TRANSLATE->value,
                     ],
@@ -231,7 +231,7 @@ final class FaqControllerTest extends TestCase
                         PermissionType::FAQ_ADD->value,
                         PermissionType::FAQ_EDIT->value,
                         PermissionType::FAQ_DELETE->value,
-                        PermissionType::FAQ_APPROVE->value,
+                        'approverec',
                         PermissionType::FAQ_PUBLISH->value,
                         PermissionType::FAQ_TRANSLATE->value,
                     ],
@@ -250,7 +250,7 @@ final class FaqControllerTest extends TestCase
                         PermissionType::FAQ_ADD->value,
                         PermissionType::FAQ_EDIT->value,
                         PermissionType::FAQ_DELETE->value,
-                        PermissionType::FAQ_APPROVE->value,
+                        'approverec',
                         PermissionType::FAQ_PUBLISH->value,
                         PermissionType::FAQ_TRANSLATE->value,
                     ],
@@ -302,8 +302,8 @@ final class FaqControllerTest extends TestCase
         $this->configuration
             ->getDb()
             ->query(sprintf(
-                "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
-             VALUES (%d, '%s', %d, 0, 'no', 0, '', '%s', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (%d, '%s', %d, 0, 0, '', '%s', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
                 $faqId,
                 $language,
                 $faqId + 1000,
@@ -691,7 +691,7 @@ final class FaqControllerTest extends TestCase
             ->setId(123)
             ->setLanguage('en')
             ->setSolutionId(1123)
-            ->setActive(true)
+            ->setStatus(FaqStatus::Published)
             ->setSticky(false)
             ->setQuestion('Created FAQ')
             ->setAnswer('Created answer')
@@ -785,7 +785,7 @@ final class FaqControllerTest extends TestCase
             ->setId(321)
             ->setLanguage('en')
             ->setSolutionId(1321)
-            ->setActive(true)
+            ->setStatus(FaqStatus::Published)
             ->setSticky(false)
             ->setQuestion('Answered FAQ')
             ->setAnswer('Answered answer')
@@ -868,7 +868,7 @@ final class FaqControllerTest extends TestCase
             ->setId(322)
             ->setLanguage('en')
             ->setSolutionId(1322)
-            ->setActive(true)
+            ->setStatus(FaqStatus::Published)
             ->setSticky(false)
             ->setQuestion('Answered FAQ 2')
             ->setAnswer('Answered answer 2')
@@ -961,8 +961,8 @@ final class FaqControllerTest extends TestCase
         $this->seedFaqRecord(faqId: 1, question: 'Draft FAQ');
 
         $this->configuration->getDb()->query(
-            "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
-             VALUES (2, 'en', 1002, 0, 'yes', 'published', 0, '', 'Published FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+            "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (2, 'en', 1002, 0, 'published', 0, '', 'Published FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
         );
         $this->configuration->getDb()->query(
             "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
@@ -1242,7 +1242,7 @@ final class FaqControllerTest extends TestCase
             ->setLanguage('en')
             ->setRevisionId(0)
             ->setSolutionId(1001)
-            ->setActive(false)
+            ->setStatus(FaqStatus::Draft)
             ->setSticky(false)
             ->setQuestion('Updated FAQ')
             ->setAnswer('Updated answer')
@@ -2364,8 +2364,8 @@ final class FaqControllerTest extends TestCase
         $this->configuration
             ->getDb()
             ->query(sprintf(
-                "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
-             VALUES (%d, '%s', %d, 0, 'no', 0, '', 'Orphaned FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (%d, '%s', %d, 0, 0, '', 'Orphaned FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
                 $faqId,
                 $language,
                 $faqId + 1000,
@@ -2727,7 +2727,7 @@ final class FaqControllerTest extends TestCase
             PermissionType::FAQ_ADD->value,
             PermissionType::FAQ_EDIT->value,
             PermissionType::FAQ_DELETE->value,
-            PermissionType::FAQ_APPROVE->value,
+            'approverec',
             PermissionType::FAQ_TRANSLATE->value,
             PermissionType::FAQS_VIEW->value,
         ];

@@ -261,11 +261,11 @@ class FaqTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testUpdateRecordStatusSetsStatusAndDerivesActiveYesForPublished(): void
+    public function testUpdateRecordStatusSetsStatusToPublished(): void
     {
         $this->mockDb->method('escape')->willReturn('en');
 
-        $expectedQuery = "UPDATE faqdata SET status = 'published', active = 'yes' WHERE id = 123 AND lang = 'en'";
+        $expectedQuery = "UPDATE faqdata SET status = 'published' WHERE id = 123 AND lang = 'en'";
         $this->mockDb->expects($this->once())->method('query')->with($expectedQuery)->willReturn(true);
 
         $result = $this->faq->updateRecordStatus(123, 'en', FaqStatus::Published);
@@ -273,11 +273,11 @@ class FaqTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testUpdateRecordStatusDerivesActiveNoForNonPublishedStatus(): void
+    public function testUpdateRecordStatusSetsStatusToNonPublishedValue(): void
     {
         $this->mockDb->method('escape')->willReturn('de');
 
-        $expectedQuery = "UPDATE faqdata SET status = 'review', active = 'no' WHERE id = 456 AND lang = 'de'";
+        $expectedQuery = "UPDATE faqdata SET status = 'review' WHERE id = 456 AND lang = 'de'";
         $this->mockDb->expects($this->once())->method('query')->with($expectedQuery)->willReturn(true);
 
         $result = $this->faq->updateRecordStatus(456, 'de', FaqStatus::Review);

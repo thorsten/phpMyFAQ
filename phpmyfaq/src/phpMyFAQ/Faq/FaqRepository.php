@@ -164,20 +164,21 @@ final class FaqRepository implements FaqRepositoryInterface
 
     public function isActive(int $faqId, string $faqLang, string $commentType = 'faq'): bool
     {
-        $table = 'news' === $commentType ? 'faqnews' : 'faqdata';
+        if ('news' !== $commentType) {
+            return $this->getStatus($faqId, $faqLang) === FaqStatus::Published;
+        }
 
         $query = sprintf(
             "
             SELECT
                 active
             FROM
-                %s%s
+                %sfaqnews
             WHERE
                 id = %d
             AND
                 lang = '%s'",
             Database::getTablePrefix(),
-            $table,
             $faqId,
             $this->configuration->getDb()->escape($faqLang),
         );
@@ -783,16 +784,15 @@ final class FaqRepository implements FaqRepositoryInterface
     {
         $query = sprintf(
             "INSERT INTO %sfaqdata
-            (id, lang, solution_id, revision_id, active, status, sticky, keywords, thema, content, author, email,
+            (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email,
             comment, updated, date_start, date_end, created, notes)
             VALUES
-            (%d, '%s', %d, %d, '%s', '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+            (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $faqEntity->getId(),
             $this->configuration->getDb()->escape($faqEntity->getLanguage()),
             $faqEntity->getSolutionId(),
             $faqEntity->getRevisionId(),
-            $faqEntity->isActive() ? 'yes' : 'no',
             $faqEntity->getStatus()->value,
             $faqEntity->isSticky() ? 1 : 0,
             $this->configuration->getDb()->escape($faqEntity->getKeywords()),
@@ -816,7 +816,6 @@ final class FaqRepository implements FaqRepositoryInterface
         $query = sprintf(
             "UPDATE %sfaqdata SET
             revision_id = %d,
-            active = '%s',
             status = '%s',
             sticky = %d,
             keywords = '%s',
@@ -830,7 +829,6 @@ final class FaqRepository implements FaqRepositoryInterface
             notes = '%s'",
             Database::getTablePrefix(),
             $faqEntity->getRevisionId(),
-            $faqEntity->isActive() ? 'yes' : 'no',
             $faqEntity->getStatus()->value,
             $faqEntity->isSticky() ? 1 : 0,
             $this->configuration->getDb()->escape($faqEntity->getKeywords()),

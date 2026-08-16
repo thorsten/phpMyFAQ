@@ -682,7 +682,7 @@ class FaqTest extends TestCase
     public function testIsFaqAccessibleForUserReturnsFalseForInactiveFaq(): void
     {
         $faqEntity = $this->getFaqEntity();
-        $faqEntity->setActive(false);
+        $faqEntity->setStatus(FaqStatus::Draft);
         $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
         $this->grantPublicAccess($faqEntity);
 
@@ -731,7 +731,7 @@ class FaqTest extends TestCase
     public function testIsFaqRecordVisibleReturnsFalseForInactiveFaq(): void
     {
         $faqEntity = $this->getFaqEntity();
-        $faqEntity->setActive(false);
+        $faqEntity->setStatus(FaqStatus::Draft);
         $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
         $this->grantPublicAccess($faqEntity);
 
@@ -804,7 +804,7 @@ class FaqTest extends TestCase
         $faqEntity
             ->setRevisionId(0)
             ->setLanguage('en')
-            ->setActive(true)
+            ->setStatus(FaqStatus::Published)
             ->setSticky(true)
             ->setKeywords('Keywords')
             ->setQuestion('Question')
@@ -944,12 +944,11 @@ class FaqTest extends TestCase
         $this->configuration
             ->getDb()
             ->query(sprintf(
-                "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
-                 VALUES (%d, '%s', %d, 0, '%s', '%s', %d, '%s', '%s', '%s', 'Author', 'author@example.com', 'y', '20260301010101', '00000000000000', '%s', '2026-03-01 01:01:01', '%s', %d)",
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
+                 VALUES (%d, '%s', %d, 0, '%s', %d, '%s', '%s', '%s', 'Author', 'author@example.com', 'y', '20260301010101', '00000000000000', '%s', '2026-03-01 01:01:01', '%s', %d)",
                 $id,
                 $lang,
                 $solutionId,
-                $active,
                 $status,
                 $sticky,
                 $keywords,

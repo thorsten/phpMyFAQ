@@ -50,8 +50,8 @@ class LanguageTest extends TestCase
     public function testIsLanguageAvailableWithId(): void
     {
         $this->dbHandle->query(
-            'INSERT INTO faqdata (id, lang, solution_id, active, sticky, thema, author, email, updated) VALUES'
-            . '(999, "en", 1001, 1, 1, "Test", "Author", "test@example.org", DATETIME("now", "localtime"))',
+            'INSERT INTO faqdata (id, lang, solution_id, sticky, thema, author, email, updated) VALUES'
+            . '(999, "en", 1001, 1, "Test", "Author", "test@example.org", DATETIME("now", "localtime"))',
         );
         $result = $this->language->isLanguageAvailable(999);
 

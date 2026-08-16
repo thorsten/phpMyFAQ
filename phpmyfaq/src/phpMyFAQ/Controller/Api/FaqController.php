@@ -776,7 +776,7 @@ final class FaqController extends AbstractApiController
             ->setKeywords($keywords)
             ->setAuthor($author)
             ->setEmail($email)
-            ->setActive($isActive)
+            ->setStatus($isActive ? FaqStatus::Published : FaqStatus::Draft)
             ->setSticky($isSticky)
             ->setComment(comment: false)
             ->setNotes(notes: '');
@@ -918,6 +918,7 @@ final class FaqController extends AbstractApiController
 
         $isActive = $isActive === true;
         $isSticky = $isSticky === true;
+        $status = $isActive ? FaqStatus::Published : FaqStatus::Draft;
 
         // Editing an FAQ and deciding that it goes live are separate rights, so a change of
         // the publication state needs FAQ_PUBLISH on top of the FAQ_EDIT guard above.
@@ -939,7 +940,7 @@ final class FaqController extends AbstractApiController
             ->setKeywords($keywords)
             ->setAuthor($author)
             ->setEmail($email)
-            ->setActive($isActive)
+            ->setStatus($status)
             ->setSticky($isSticky)
             ->setComment(comment: false)
             ->setNotes(notes: '');

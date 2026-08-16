@@ -173,8 +173,8 @@ final class FaqControllerRedirectTest extends TestCase
         $this->configuration
             ->getDb()
             ->query(sprintf(
-                "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
-                 VALUES (%d, '%s', %d, 0, 'yes', 0, '', '%s', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+                 VALUES (%d, '%s', %d, 0, 'published', 0, '', '%s', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
                 $faqId,
                 $language,
                 $solutionId,

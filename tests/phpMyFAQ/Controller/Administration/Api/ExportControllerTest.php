@@ -267,8 +267,8 @@ final class ExportControllerTest extends TestCase
         // the report join yields NULL for both parent category and last author.
         $this->dbHandle->query(
             'INSERT INTO faqdata '
-            . '(id, lang, solution_id, revision_id, active, sticky, thema, content, author, email, updated) '
-            . "VALUES (4242, 'en', 9999, 0, 'yes', 0, 'A question without a last author', "
+            . '(id, lang, solution_id, revision_id, status, sticky, thema, content, author, email, updated) '
+            . "VALUES (4242, 'en', 9999, 0, 'published', 0, 'A question without a last author', "
             . "'body', 'Admin', 'admin@example.org', '20240101120000')",
         );
 

@@ -316,10 +316,10 @@ final class FaqController extends AbstractAdministrationApiController
                 ]);
             }
 
-            // Send Web Push notification for new active FAQs.
+            // Send Web Push notification for newly published FAQs.
             // This is done here (not in Notification::sendNewFaqAdded) to provide
             // the public FAQ URL, which is more useful for end-users.
-            if ($faqData->isActive()) {
+            if ($faqData->getStatus() === FaqStatus::Published) {
                 try {
                     $faqUrl = sprintf(
                         '%scontent/%d/%d/%s/%s.html',

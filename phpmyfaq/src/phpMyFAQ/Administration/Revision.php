@@ -43,19 +43,18 @@ readonly class Revision
     public function create(int $faqId, string $faqLanguage): bool
     {
         // The destination column list is required, not cosmetic: without it, values bind to
-        // %sfaqdata_revisions by physical column position. A fresh install and an upgraded
-        // install do not agree on where "status" physically sits (ALTER TABLE ADD COLUMN
-        // appends it at the end on every dialect, while a fresh install places it between
-        // "active" and "sticky"), so a positional INSERT silently shifts every value after
-        // "active" by one column on upgraded installations.
+        // %sfaqdata_revisions by physical column position, and a fresh install does not agree
+        // with an upgraded install on where every column physically sits (ALTER TABLE ADD
+        // COLUMN appends a column at the end on every dialect, while a fresh install places it
+        // wherever DatabaseSchema declares it).
         $query = sprintf(
             "
             INSERT INTO
                 %sfaqdata_revisions
-                (id, lang, solution_id, revision_id, active, status, sticky, keywords, thema, content, author,
+                (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author,
                 email, comment, updated, date_start, date_end, created, notes, sticky_order)
             SELECT
-                id, lang, solution_id, revision_id + 1, active, status, sticky, keywords, thema, content, author,
+                id, lang, solution_id, revision_id + 1, status, sticky, keywords, thema, content, author,
                 email, comment, updated, date_start, date_end, created, notes, sticky_order
             FROM
                 %sfaqdata

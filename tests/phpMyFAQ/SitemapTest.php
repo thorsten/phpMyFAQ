@@ -191,8 +191,8 @@ class SitemapTest extends TestCase
         // Default user is -1, verify setUser changes the value used in queries.
         // Insert a record only visible to user_id=42
         $this->db->query(sprintf(
-            'INSERT INTO faqdata (id, lang, solution_id, sticky, thema, content, keywords, active, status, author, email, updated) '
-            . "VALUES (%d, 'en', %d, 'yes', 'user42 question', 'answer', 'kw', 'yes', 'published', 'Author', 'a@b.com', 'date')",
+            'INSERT INTO faqdata (id, lang, solution_id, sticky, thema, content, keywords, status, author, email, updated) '
+            . "VALUES (%d, 'en', %d, 'yes', 'user42 question', 'answer', 'kw', 'published', 'Author', 'a@b.com', 'date')",
             self::FAQ_ID_2,
             self::FAQ_ID_2 + 1000,
         ));
@@ -394,8 +394,8 @@ class SitemapTest extends TestCase
     private function insertTestFaq(int $faqId, string $thema, string $content, int $categoryId): void
     {
         $this->db->query(sprintf(
-            'INSERT INTO faqdata (id, lang, solution_id, sticky, thema, content, keywords, active, status, author, email, updated) '
-            . "VALUES (%d, 'en', %d, 'yes', '%s', '%s', 'test keywords', 'yes', 'published', 'Author', 'test@example.org', 'date')",
+            'INSERT INTO faqdata (id, lang, solution_id, sticky, thema, content, keywords, status, author, email, updated) '
+            . "VALUES (%d, 'en', %d, 'yes', '%s', '%s', 'test keywords', 'published', 'Author', 'test@example.org', 'date')",
             $faqId,
             $faqId + 1000,
             $thema,

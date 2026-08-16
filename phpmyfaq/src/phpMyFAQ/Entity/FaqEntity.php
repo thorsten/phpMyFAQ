@@ -118,20 +118,6 @@ class FaqEntity
         return $this;
     }
 
-    /**
-     * Transitional shim until the active flag is removed: published is the only
-     * live state, everything else reads as inactive.
-     */
-    public function isActive(): bool
-    {
-        return $this->status === FaqStatus::Published;
-    }
-
-    public function setActive(bool $active): FaqEntity
-    {
-        return $this->setStatus($active ? FaqStatus::Published : FaqStatus::Draft);
-    }
-
     public function isSticky(): bool
     {
         return $this->sticky ?? false;

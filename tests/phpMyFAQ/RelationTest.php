@@ -61,9 +61,9 @@ class RelationTest extends TestCase
 
         $this->db->query(
             'INSERT INTO faqdata '
-                . '(id, lang, solution_id, sticky, thema, content, keywords, active, author, email, updated) VALUES '
+                . '(id, lang, solution_id, sticky, thema, content, keywords, author, email, updated) VALUES '
                 . sprintf(
-                    '(%d, \'en\', 1000, \'yes\', \'sample question\', \'sample answer\', \'sample keywords\', \'yes\', \'Author\', \'test@example.org\', \'date\')',
+                    '(%d, \'en\', 1000, \'yes\', \'sample question\', \'sample answer\', \'sample keywords\', \'Author\', \'test@example.org\', \'date\')',
                     $faqId,
                 ),
         );

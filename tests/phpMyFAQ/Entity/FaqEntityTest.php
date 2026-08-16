@@ -87,42 +87,17 @@ class FaqEntityTest extends TestCase
     }
 
     /**
-     * Test active getter and setter
+     * Test status getter and setter
      */
-    public function testActiveGetterAndSetter(): void
+    public function testStatusGetterAndSetter(): void
     {
-        $result = $this->faqEntity->setActive(true);
+        $result = $this->faqEntity->setStatus(FaqStatus::Published);
 
         $this->assertInstanceOf(FaqEntity::class, $result); // Test fluent interface
-        $this->assertTrue($this->faqEntity->isActive());
+        $this->assertSame(FaqStatus::Published, $this->faqEntity->getStatus());
 
-        $this->faqEntity->setActive(false);
-        $this->assertFalse($this->faqEntity->isActive());
-    }
-
-    /**
-     * Test setting the status derives the legacy active flag
-     */
-    public function testSettingTheStatusDerivesTheActiveFlag(): void
-    {
-        $entity = new FaqEntity()->setStatus(FaqStatus::Published);
-        $this->assertTrue($entity->isActive());
-        $this->assertSame(FaqStatus::Published, $entity->getStatus());
-
-        $entity->setStatus(FaqStatus::Review);
-        $this->assertFalse($entity->isActive());
-    }
-
-    /**
-     * Test setting the legacy active flag derives the status
-     */
-    public function testSettingTheLegacyActiveFlagDerivesTheStatus(): void
-    {
-        $entity = new FaqEntity()->setActive(true);
-        $this->assertSame(FaqStatus::Published, $entity->getStatus());
-
-        $entity->setActive(false);
-        $this->assertSame(FaqStatus::Draft, $entity->getStatus());
+        $this->faqEntity->setStatus(FaqStatus::Draft);
+        $this->assertSame(FaqStatus::Draft, $this->faqEntity->getStatus());
     }
 
     /**
@@ -325,7 +300,7 @@ class FaqEntityTest extends TestCase
             ->setLanguage('en')
             ->setSolutionId(1000)
             ->setRevisionId(2)
-            ->setActive(true)
+            ->setStatus(FaqStatus::Published)
             ->setSticky(false)
             ->setKeywords('keyword')
             ->setQuestion('Question?')
@@ -344,7 +319,7 @@ class FaqEntityTest extends TestCase
         $this->assertEquals('en', $this->faqEntity->getLanguage());
         $this->assertSame(1000, $this->faqEntity->getSolutionId());
         $this->assertSame(2, $this->faqEntity->getRevisionId());
-        $this->assertTrue($this->faqEntity->isActive());
+        $this->assertSame(FaqStatus::Published, $this->faqEntity->getStatus());
         $this->assertFalse($this->faqEntity->isSticky());
         $this->assertEquals('keyword', $this->faqEntity->getKeywords());
         $this->assertEquals('Question?', $this->faqEntity->getQuestion());
