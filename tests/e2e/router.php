@@ -47,6 +47,14 @@ $dispatch = static function (string $frontController) use ($canonicalRoot): void
     $_SERVER['SCRIPT_NAME'] = $frontController;
     $_SERVER['PHP_SELF'] = $frontController;
     $_SERVER['SCRIPT_FILENAME'] = $canonicalRoot . $frontController;
+    // Under Apache/nginx/FrankenPHP the front controller is executed directly, so
+    // its own bare-relative `require '../src/Bootstrap.php'` resolves against its
+    // own directory. Here it is instead require()'d *from* this router script, so
+    // PHP would otherwise resolve that relative path against the router's
+    // directory (tests/e2e/) and fail. Chdir into the front controller's own
+    // directory first to reproduce the same working directory a real web server
+    // would give it — api/index.php and admin/api/index.php rely on this.
+    chdir(dirname($canonicalRoot . $frontController));
     require $canonicalRoot . $frontController;
 };
 
