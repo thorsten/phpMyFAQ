@@ -229,11 +229,18 @@ const readStatusLabels = (tableBody: HTMLElement): Record<Faq['status'], string>
   published: tableBody.dataset.pmfStatusPublished || 'Published',
 });
 
+// The tbody carries the translated column-header wording (data-pmf-status-select-label,
+// rendered server-side via the `translate` filter, see faq.overview.twig) so the select's
+// accessible name matches the visible "status" wording in the current install's language.
+const readStatusSelectAriaLabel = (tableBody: HTMLElement): string =>
+  tableBody.dataset.pmfStatusSelectLabel || 'FAQ status';
+
 const buildStatusSelect = (
   faq: Faq,
   csrfToken: string,
   options: Faq['status'][],
-  statusLabels: Record<Faq['status'], string>
+  statusLabels: Record<Faq['status'], string>,
+  ariaLabel: string
 ): HTMLElement => {
   return addElement(
     'select',
@@ -244,6 +251,7 @@ const buildStatusSelect = (
       'data-pmf-csrf': csrfToken,
       lang: faq.language,
       id: `status_record_${faq.category_id}_${faq.id.toString()}`,
+      'aria-label': ariaLabel,
     },
     options.map((status: Faq['status']) =>
       addElement('option', {
@@ -257,17 +265,23 @@ const buildStatusSelect = (
 
 // A user without the publish right for every category of this FAQ cannot move it into or
 // out of "published" — offering that transition would only ever produce a 403. Once the FAQ
-// is live, such a user gets a read-only badge instead of a select they cannot act on.
-const buildStatusCell = (faq: Faq, csrfToken: string, statusLabels: Record<Faq['status'], string>): HTMLElement => {
+// is live, such a user gets a read-only badge instead of a select they cannot act on. The
+// badge already renders the status as visible text, so it needs no extra label of its own.
+const buildStatusCell = (
+  faq: Faq,
+  csrfToken: string,
+  statusLabels: Record<Faq['status'], string>,
+  ariaLabel: string
+): HTMLElement => {
   if (faq.isAllowedToPublish) {
     return addElement('td', { classList: 'align-middle' }, [
-      buildStatusSelect(faq, csrfToken, ['draft', 'review', 'published'], statusLabels),
+      buildStatusSelect(faq, csrfToken, ['draft', 'review', 'published'], statusLabels, ariaLabel),
     ]);
   }
 
   if (faq.status !== 'published') {
     return addElement('td', { classList: 'align-middle' }, [
-      buildStatusSelect(faq, csrfToken, ['draft', 'review'], statusLabels),
+      buildStatusSelect(faq, csrfToken, ['draft', 'review'], statusLabels, ariaLabel),
     ]);
   }
 
@@ -280,6 +294,7 @@ const populateCategoryTable = async (categoryId: string, faqs: Faq[], isAllowedT
   const tableBody = document.getElementById(`tbody-category-id-${categoryId}`) as HTMLElement;
   const csrfToken = tableBody.getAttribute('data-pmf-csrf') as string;
   const statusLabels = readStatusLabels(tableBody);
+  const statusSelectAriaLabel = readStatusSelectAriaLabel(tableBody);
 
   faqs.forEach((faq: Faq): void => {
     const row: HTMLTableRowElement = document.createElement('tr');
@@ -328,7 +343,7 @@ const populateCategoryTable = async (categoryId: string, faqs: Faq[], isAllowedT
         }),
       ])
     );
-    row.append(buildStatusCell(faq, csrfToken, statusLabels));
+    row.append(buildStatusCell(faq, csrfToken, statusLabels, statusSelectAriaLabel));
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [
         addElement('a', { classList: 'btn btn-primary', href: `./faq/edit/${faq.id.toString()}/${faq.language}` }, [

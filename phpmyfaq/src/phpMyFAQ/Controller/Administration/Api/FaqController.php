@@ -288,8 +288,13 @@ final class FaqController extends AbstractAdministrationApiController
                 $this->configuration->getLogger()->error('Send moderator notification failed: ' . $e->getMessage());
             }
 
-            // If Elasticsearch is enabled, index the new FAQ document
-            if ($this->configuration->get(item: 'search.enableElasticsearch')) {
+            // Only a Published FAQ is public content: index it in Elasticsearch, if enabled,
+            // so a freshly created draft/review FAQ is never findable via search before its
+            // first publish.
+            if (
+                FaqStatus::Published === $faqData->getStatus()
+                && (bool) $this->configuration->get(item: 'search.enableElasticsearch')
+            ) {
                 $elasticsearch = new Elasticsearch($this->configuration);
                 $elasticsearch->index([
                     'id' => $faqId,
@@ -302,8 +307,13 @@ final class FaqController extends AbstractAdministrationApiController
                 ]);
             }
 
-            // If OpenSearch is enabled, index the new FAQ document
-            if ($this->configuration->get(item: 'search.enableOpenSearch')) {
+            // Only a Published FAQ is public content: index it in OpenSearch, if enabled, so a
+            // freshly created draft/review FAQ is never findable via search before its first
+            // publish.
+            if (
+                FaqStatus::Published === $faqData->getStatus()
+                && (bool) $this->configuration->get(item: 'search.enableOpenSearch')
+            ) {
                 $openSearch = new OpenSearch($this->configuration);
                 $openSearch->index([
                     'id' => $faqId,
@@ -655,17 +665,21 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         if ($faqIds !== []) {
+            if (!Language::isASupportedLanguage($faqLanguage)) {
+                return $this->json([
+                    'error' => Translation::get(key: 'ad_entry_savedfail'),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
             $statusCategory = new Category($this->configuration, [], withPermission: false);
             $categoryRelation = new Relation($this->configuration, $statusCategory);
 
-            $faq = new FaqAdministration($this->configuration);
-            $success = false;
-
+            // First pass: validate every FAQ in the batch — permission checks throw on
+            // denial — before mutating any of them. Without this, a multi-ID request that
+            // 403s partway through would leave the earlier FAQs already updated and
+            // index-synced, with no way for the caller to tell which ones went through.
+            $categoryIdsByFaq = [];
             foreach ($faqIds as $faqId) {
-                if (!Language::isASupportedLanguage($faqLanguage)) {
-                    continue;
-                }
-
                 $currentStatus = $this->faq->getStatus($faqId, $faqLanguage);
                 $permission = $currentStatus->transitionRequiresPublishRight($targetStatus)
                     ? PermissionType::FAQ_PUBLISH
@@ -675,9 +689,18 @@ final class FaqController extends AbstractAdministrationApiController
                 $faqCategoryIds = array_keys($categoryRelation->getCategories($faqId, $faqLanguage));
                 $this->userHasPermissionForCategories($permission, $faqCategoryIds);
 
-                $success = $faq->updateRecordStatus($faqId, $faqLanguage, $targetStatus);
+                $categoryIdsByFaq[$faqId] = $faqCategoryIds;
+            }
 
-                if ($success) {
+            // Second pass: every FAQ in the batch passed validation, now apply the change.
+            $faq = new FaqAdministration($this->configuration);
+            $allSucceeded = true;
+
+            foreach ($faqIds as $faqId) {
+                $succeeded = $faq->updateRecordStatus($faqId, $faqLanguage, $targetStatus);
+                $allSucceeded = $allSucceeded && $succeeded;
+
+                if ($succeeded) {
                     $this->adminLog->log(
                         $this->currentUser,
                         AdminLogType::FAQ_STATUS_CHANGE->value . ':' . $faqId . ':' . $targetStatus->value,
@@ -687,11 +710,11 @@ final class FaqController extends AbstractAdministrationApiController
                         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_PUBLISH->value . ':' . $faqId);
                     }
 
-                    $this->syncSearchIndexForStatus($faqId, $faqLanguage, $targetStatus, $faqCategoryIds);
+                    $this->syncSearchIndexForStatus($faqId, $faqLanguage, $targetStatus, $categoryIdsByFaq[$faqId]);
                 }
             }
 
-            if ($success) {
+            if ($allSucceeded) {
                 return $this->json(['success' => Translation::get(key: 'ad_entry_savedsuc')], Response::HTTP_OK);
             }
 

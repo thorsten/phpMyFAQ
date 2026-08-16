@@ -315,6 +315,22 @@ final class FaqControllerTest extends TestCase
              VALUES (%d, '%s', %d, '%s')", $categoryId, $language, $faqId, $language));
     }
 
+    private function getPersistedFaqStatus(int $faqId, string $language): string
+    {
+        $result = $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "SELECT status FROM faqdata WHERE id = %d AND lang = '%s'",
+                $faqId,
+                $language,
+            ));
+        self::assertNotFalse($result);
+        $row = $this->configuration->getDb()->fetchObject($result);
+        self::assertIsObject($row);
+
+        return (string) $row->status;
+    }
+
     private function countFaqRevisions(int $faqId, string $language): int
     {
         $result = $this->configuration
@@ -2231,6 +2247,50 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * A batch status change must validate every FAQ before mutating any of them. When the
+     * second FAQ in the batch sits in a category the user has no right in, the request must
+     * 403 and the first FAQ — which passed its own check and would previously have already
+     * been persisted and index-synced by the time the second one was rejected — must be left
+     * completely untouched.
+     *
+     * @throws \Exception
+     */
+    public function testStatusRejectsWholeBatchAndLeavesEarlierFaqUnchangedWhenALaterFaqIsForbidden(): void
+    {
+        $this->seedFaqRecord(categoryId: 1, faqId: 1, question: 'First FAQ');
+        $this->seedFaqRecord(categoryId: 666, faqId: 2, question: 'Second FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1, 2],
+            'faqLanguage' => 'en',
+            'status' => 'review',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        try {
+            $controller->status($request);
+            self::fail('Expected a ForbiddenException for the restricted second FAQ.');
+        } catch (ForbiddenException $exception) {
+            self::assertSame('User has no "FAQ_EDIT" permission for category 666.', $exception->getMessage());
+        } finally {
+            $this->removeCsrfCookie('pmf-csrf-token');
+        }
+
+        self::assertSame(
+            'draft',
+            $this->getPersistedFaqStatus(1, 'en'),
+            'The first FAQ must stay unchanged once a later FAQ in the same batch is rejected.',
+        );
+    }
+
+    /**
      * @throws \Exception
      */
     public function testStickyReturnsForbiddenWhenFaqIsInRestrictedCategory(): void
@@ -2484,6 +2544,75 @@ final class FaqControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * A newly created draft/review FAQ must not become publicly findable via search before
+     * its first publish: create() must not index it into Elasticsearch or OpenSearch. No
+     * search client is registered on Configuration in this test, so reaching either indexing
+     * branch would throw a LogicException when constructing the client wrapper — a clean OK
+     * response is proof neither branch ran.
+     *
+     * @throws \Exception
+     */
+    public function testCreateDoesNotIndexDraftFaqWhenSearchIsEnabled(): void
+    {
+        self::assertTrue($this->configuration->set('search.enableElasticsearch', true));
+        self::assertTrue($this->configuration->set('search.enableOpenSearch', true));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForNewFaq($csrfToken, status: 'draft');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * A newly published FAQ is public content and must be indexed immediately: create() must
+     * attempt to index it into Elasticsearch when the created FAQ's status is Published. No
+     * Elasticsearch client is registered on Configuration in this test, so the attempt itself
+     * surfaces as a LogicException from the client wrapper's constructor.
+     *
+     * @throws \Exception
+     */
+    public function testCreateAttemptsToIndexPublishedFaqIntoElasticsearchWhenEnabled(): void
+    {
+        self::assertTrue($this->configuration->set('search.enableElasticsearch', true));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForNewFaq($csrfToken, status: 'published');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(\LogicException::class);
+
+        try {
+            $controller->create($request);
+        } finally {
+            $this->removeCsrfCookie('pmf-csrf-token');
+        }
     }
 
     /**

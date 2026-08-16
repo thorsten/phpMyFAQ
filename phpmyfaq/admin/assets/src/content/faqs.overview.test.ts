@@ -334,7 +334,7 @@ describe('FAQ Overview Functions', () => {
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
         <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
                       data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
-                      data-pmf-status-published="Veröffentlicht"></tbody></table>
+                      data-pmf-status-published="Veröffentlicht" data-pmf-status-select-label="Status der FAQ"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -370,6 +370,10 @@ describe('FAQ Overview Functions', () => {
       // English fallback.
       const optionLabels = Array.from(statusSelect.options).map((option) => option.innerText);
       expect(optionLabels).toEqual(['Entwurf', 'In Prüfung']);
+
+      // The select's accessible name comes from the tbody's data-pmf-status-select-label
+      // attribute, matching the translated column header.
+      expect(statusSelect.getAttribute('aria-label')).toBe('Status der FAQ');
     });
 
     it('should fall back to the English status labels when the data attributes are missing', async () => {
@@ -406,6 +410,9 @@ describe('FAQ Overview Functions', () => {
       expect(statusSelect).not.toBeNull();
       const optionLabels = Array.from(statusSelect.options).map((option) => option.innerText);
       expect(optionLabels).toEqual(['Draft', 'In review', 'Published']);
+
+      // Falls back to the English wording when data-pmf-status-select-label is missing too.
+      expect(statusSelect.getAttribute('aria-label')).toBe('FAQ status');
     });
 
     it('should call saveStatus when sticky toggle changes', async () => {

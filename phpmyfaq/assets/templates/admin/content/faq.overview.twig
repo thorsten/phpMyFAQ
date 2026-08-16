@@ -77,7 +77,7 @@
                 {{ 'msgStickyFAQ' | translate }}
               </th>
               <th class="align-middle">
-                {{ 'msgActive' | translate }}
+                {{ 'ad_entry_status' | translate }}
               </th>
               <th colspan="4" class="align-middle">
                 Actions
@@ -87,7 +87,8 @@
             <tbody id="tbody-category-id-{{ category.id }}" data-pmf-csrf="{{ csrfTokenOverview }}"
                    data-pmf-status-draft="{{ 'msgStatusDraft' | translate }}"
                    data-pmf-status-review="{{ 'msgStatusReview' | translate }}"
-                   data-pmf-status-published="{{ 'msgStatusPublished' | translate }}">
+                   data-pmf-status-published="{{ 'msgStatusPublished' | translate }}"
+                   data-pmf-status-select-label="{{ 'ad_entry_status' | translate }}">
 
             </tbody>
           </table>
