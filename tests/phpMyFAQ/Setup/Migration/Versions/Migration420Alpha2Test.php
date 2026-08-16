@@ -99,4 +99,58 @@ class Migration420Alpha2Test extends TestCase
 
         $this->assertSame([], $recorder->getSqlQueries());
     }
+
+    /**
+     * Exercises up() itself (not the private method via reflection) against a schema still
+     * missing "status", so this fails if the `$this->introduceEditorialWorkflowStatus($recorder);`
+     * call is ever removed or reordered out of up(). Calling up() is safe here: every branch only
+     * records operations on the recorder, it never executes SQL against the database.
+     */
+    public function testUpRecordsEditorialWorkflowStatusSqlWhenMissing(): void
+    {
+        $db = $this->configuration->getDb();
+        $db->query('CREATE TABLE faqdata (id INTEGER, lang VARCHAR(5), active CHAR(3))');
+        $db->query('CREATE TABLE faqdata_revisions (id INTEGER, lang VARCHAR(5), active CHAR(3))');
+
+        $recorder = new OperationRecorder($this->configuration);
+        $this->migration->up($recorder);
+
+        $joined = implode("\n", $recorder->getSqlQueries());
+
+        $this->assertStringContainsString('ALTER TABLE faqdata ADD COLUMN status', $joined);
+        $this->assertStringContainsString('ALTER TABLE faqdata_revisions ADD COLUMN status', $joined);
+        $this->assertStringContainsString(
+            "UPDATE faqdata SET status = CASE WHEN active = 'yes' THEN 'published' ELSE 'draft' END",
+            $joined,
+        );
+        $this->assertStringContainsString(
+            "UPDATE faqdata_revisions SET status = CASE WHEN active = 'yes' THEN 'published' ELSE 'draft' END",
+            $joined,
+        );
+    }
+
+    /**
+     * Companion re-run-safety check driven through up() rather than the private method directly.
+     * up() also records unrelated SQL (the faquser_right_language/faqgroup_right_language/
+     * faqquestion_history table creation), so this asserts the specific absence of the editorial
+     * status SQL rather than asserting the whole recorder is empty.
+     */
+    public function testUpDoesNotRecordEditorialWorkflowStatusSqlWhenAlreadyPresent(): void
+    {
+        $db = $this->configuration->getDb();
+        $db->query('CREATE TABLE faqdata (id INTEGER, lang VARCHAR(5), active CHAR(3), status VARCHAR(12))');
+        $db->query(
+            'CREATE TABLE faqdata_revisions (id INTEGER, lang VARCHAR(5), active CHAR(3), status VARCHAR(12))',
+        );
+
+        $recorder = new OperationRecorder($this->configuration);
+        $this->migration->up($recorder);
+
+        $queries = $recorder->getSqlQueries();
+        $joined = implode("\n", $queries);
+
+        $this->assertNotEmpty($queries, 'Expected up() to still record its other, unrelated operations.');
+        $this->assertStringNotContainsString('ADD COLUMN status', $joined);
+        $this->assertStringNotContainsString('SET status = CASE', $joined);
+    }
 }
