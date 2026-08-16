@@ -142,6 +142,44 @@ class SchemaInstaller implements DriverInterface
     }
 
     /**
+     * Creates any tables the authoritative DatabaseSchema defines that are missing from
+     * the live database. Catches installations whose recorded update state cannot see a
+     * new table — e.g. a fresh installation made at a version whose migration gained the
+     * table later. Creation only: existing tables are never modified.
+     */
+    public function createMissingTables(): void
+    {
+        foreach ($this->schema->getAllTables() as $tableName => $tableBuilder) {
+            if ($this->tableExists(Database::getTablePrefix() . $tableName)) {
+                continue;
+            }
+
+            $this->executeSql($tableBuilder->build());
+            foreach ($tableBuilder->buildIndexStatements() as $indexStatement) {
+                $this->executeSql($indexStatement);
+            }
+        }
+    }
+
+    /**
+     * Checks whether a table exists in the live database, mirroring the catalog
+     * queries used by MigrationTracker::tableExists().
+     */
+    private function tableExists(string $tableName): bool
+    {
+        $query = match (Database::getType()) {
+            'mysqli', 'pdo_mysql' => "SHOW TABLES LIKE '{$tableName}'",
+            'pgsql', 'pdo_pgsql' => "SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '{$tableName}'",
+            'sqlite3', 'pdo_sqlite' => "SELECT name FROM sqlite_master WHERE type='table' AND name='{$tableName}'",
+            'sqlsrv', 'pdo_sqlsrv' => "SELECT * FROM sysobjects WHERE name='{$tableName}' AND xtype='U'",
+            default => throw new \RuntimeException('Unsupported database type: ' . Database::getType()),
+        };
+
+        $result = $this->configuration->getDb()->query($query);
+        return $this->configuration->getDb()->numRows($result) > 0;
+    }
+
+    /**
      * Executes all DROP TABLE statements for the schema tables.
      */
     public function dropTables(string $prefix = ''): bool

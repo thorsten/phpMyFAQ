@@ -147,6 +147,28 @@ class UpdateTest extends TestCase
         $this->assertNotEmpty($queries, 'Amended migration must be re-run for installations that already applied it');
     }
 
+    public function testApplyUpdatesCreatesMissingTables(): void
+    {
+        // Simulate a fresh installation made at 4.2.0-alpha.2 before the migration was
+        // amended: current version matches the code, no migration tracker rows exist,
+        // and the faqquestion_history table is missing. Neither version-based nor
+        // checksum-based selection can see this state — the schema convergence must.
+        $this->dbHandle->query('DROP TABLE IF EXISTS faqquestion_history');
+        $this->dbHandle->query('DROP TABLE IF EXISTS faqmigrations');
+
+        $configuration = new Configuration($this->dbHandle);
+        $configuration->set('main.currentVersion', '4.2.0-alpha.2');
+
+        $update = new Update(new System(), $configuration);
+        $update->version = '4.2.0-alpha.2';
+        $this->assertTrue($update->applyUpdates());
+
+        $result = $this->dbHandle->query(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='faqquestion_history'",
+        );
+        $this->assertSame(1, $this->dbHandle->numRows($result), 'Missing table must be created by the update');
+    }
+
     public function testApplyUpdatesSkipsAppliedMigrationWithUnchangedChecksum(): void
     {
         $configuration = new Configuration($this->dbHandle);

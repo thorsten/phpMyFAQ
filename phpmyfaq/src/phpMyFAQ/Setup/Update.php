@@ -27,6 +27,7 @@ use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Setup\Installation\DefaultDataSeeder;
+use phpMyFAQ\Setup\Installation\SchemaInstaller;
 use phpMyFAQ\Setup\Migration\AbstractMigration;
 use phpMyFAQ\Setup\Migration\MigrationExecutor;
 use phpMyFAQ\Setup\Migration\MigrationInterface;
@@ -221,6 +222,7 @@ class Update extends AbstractSetup
 
         // Special handling for migrations that require immediate execution
         $this->runPostMigrationTasks();
+        $this->createMissingTables();
         $this->optimizeTables();
         $this->executeQueries();
         $this->updateVersion();
@@ -234,6 +236,16 @@ class Update extends AbstractSetup
     private function allMigrationsSucceeded(): bool
     {
         return array_all($this->migrationResults, static fn($result) => $result->isSuccess());
+    }
+
+    /**
+     * Creates any tables the authoritative DatabaseSchema defines that are missing from
+     * the live database — e.g. for a fresh installation made at a version whose
+     * migration gained a table later.
+     */
+    private function createMissingTables(): void
+    {
+        new SchemaInstaller($this->configuration)->createMissingTables();
     }
 
     /**
