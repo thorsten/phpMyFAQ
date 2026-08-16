@@ -251,8 +251,7 @@ readonly class QueryHelper
             case self::FAQ_QUERY_TYPE_EXPORT_PDF:
             case self::FAQ_QUERY_TYPE_EXPORT_JSON:
             default:
-                $query .= ' AND';
-                $query .= " fd.status = '" . FaqStatus::Published->value . "'";
+                $query .= StatusScope::publishedOnly()->toSqlFragment('fd');
                 break;
         }
 

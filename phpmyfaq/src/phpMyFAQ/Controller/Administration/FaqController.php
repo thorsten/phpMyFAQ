@@ -30,6 +30,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\AdminLogType;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq;
@@ -387,8 +388,8 @@ final class FaqController extends AbstractAdministrationController
             // Scoped to this FAQ, so a publisher restricted to other categories or languages is
             // not offered a control that the API would reject.
             'hasPermissionForPublish' => $this->userMayPublishIn(array_keys($categories), $faqLanguage),
-            'isActive' => $faqData['active'] === 'yes' ? 'checked' : null,
-            'isInActive' => $faqData['active'] !== 'yes' ? 'checked' : null,
+            'isActive' => $faqData['status'] === FaqStatus::Published->value ? 'checked' : null,
+            'isInActive' => $faqData['status'] !== FaqStatus::Published->value ? 'checked' : null,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);

@@ -22,7 +22,7 @@ namespace phpMyFAQ\Category;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
-use phpMyFAQ\Enums\FaqStatus;
+use phpMyFAQ\Faq\StatusScope;
 
 /**
  * Class CategoryRelation
@@ -151,10 +151,9 @@ class Relation
             );
         }
 
-        $query .= sprintf(
-            " AND fd.status = '%s' GROUP BY fcr.category_id, fc.parent_id, fc.name, fc.description",
-            FaqStatus::Published->value,
-        );
+        $query .=
+            StatusScope::publishedOnly()->toSqlFragment('fd')
+            . ' GROUP BY fcr.category_id, fc.parent_id, fc.name, fc.description';
 
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
@@ -211,7 +210,7 @@ class Relation
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 (int) ($this->groups[0] ?? -1),
-                $onlyActive ? sprintf(" AND fd.status = '%s'", FaqStatus::Published->value) : '',
+                $onlyActive ? StatusScope::publishedOnly()->toSqlFragment('fd') : '',
             );
         }
 
@@ -236,7 +235,7 @@ class Relation
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
-                $onlyActive ? sprintf(" AND fd.status = '%s'", FaqStatus::Published->value) : '',
+                $onlyActive ? StatusScope::publishedOnly()->toSqlFragment('fd') : '',
             );
         }
 

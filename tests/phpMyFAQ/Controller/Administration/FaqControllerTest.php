@@ -129,7 +129,7 @@ final class FaqControllerTest extends TestCase
             'lang' => 'en',
             'title' => 'Prepared FAQ',
             'revision_id' => 0,
-            'active' => 'yes',
+            'status' => 'published',
             'author' => 'Test Author',
             'email' => 'test@example.com',
         ];
@@ -297,7 +297,7 @@ final class FaqControllerTest extends TestCase
             'lang' => 'en',
             'title' => 'Prepared FAQ',
             'revision_id' => 0,
-            'active' => 'yes',
+            'status' => 'published',
             'author' => 'Test Author',
             'email' => 'test@example.com',
         ];
@@ -335,6 +335,19 @@ final class FaqControllerTest extends TestCase
         self::assertStringContainsString('tag-one, tag-two', (string) $response->getContent());
         self::assertStringContainsString('SEO title', (string) $response->getContent());
         self::assertStringContainsString('SEO description', (string) $response->getContent());
+
+        // Regression guard: the editor used to key off faqRecord['active'], a field
+        // Faq::getFaq() stopped hydrating in favour of 'status'. A published FAQ must
+        // still pre-select the "active" radio, not the "not visible" one.
+        $content = (string) $response->getContent();
+        self::assertMatchesRegularExpression(
+            '/id="active" name="active" value="yes" class="form-check-input" checked/',
+            $content,
+        );
+        self::assertDoesNotMatchRegularExpression(
+            '/id="inactive" name="active" value="no" class="form-check-input" checked/',
+            $content,
+        );
     }
 
     /**
@@ -348,7 +361,7 @@ final class FaqControllerTest extends TestCase
             'lang' => 'fr',
             'title' => 'Prepared FAQ',
             'revision_id' => 0,
-            'active' => 'yes',
+            'status' => 'published',
             'author' => 'Test Author',
             'email' => 'test@example.com',
         ];
