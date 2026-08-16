@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-require '../src/Bootstrap.php';
+require dirname(__DIR__) . '/src/Bootstrap.php';
 
 //
 // Service Containers

@@ -74,7 +74,7 @@ if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
 }
 
 if (isset($lang) && Language::isASupportedLanguage($lang)) {
-    require_once 'translations/language_' . strtolower((string) $lang) . '.php';
+    require_once __DIR__ . '/translations/language_' . strtolower((string) $lang) . '.php';
 } else {
     $lang = 'en';
     require_once __DIR__ . '/translations/language_en.php';

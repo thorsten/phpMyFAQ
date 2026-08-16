@@ -20,7 +20,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
-require '../src/Bootstrap.php';
+require dirname(__DIR__) . '/src/Bootstrap.php';
 
 //
 // Service Containers

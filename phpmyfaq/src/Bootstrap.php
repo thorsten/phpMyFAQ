@@ -61,12 +61,12 @@ ini_set('pcre.recursion_limit', '100000000');
 //
 // Include constants
 //
-require 'constants.php';
+require __DIR__ . '/constants.php';
 
 //
 // Setting up autoloader
 //
-require 'autoload.php';
+require __DIR__ . '/autoload.php';
 
 //
 // Initialize environment configuration
