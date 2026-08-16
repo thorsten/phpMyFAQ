@@ -21,6 +21,7 @@ namespace phpMyFAQ\Instance\Search;
 
 use Exception;
 use OpenSearch\Client;
+use OpenSearch\Exception\HttpException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Enums\FaqStatus;
@@ -293,7 +294,11 @@ readonly class OpenSearch
             'id' => (string) $solutionId,
         ];
 
-        return $this->client->delete($params);
+        try {
+            return $this->client->delete($params);
+        } catch (HttpException $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
     /**

@@ -457,7 +457,7 @@ final class FaqController extends AbstractAdministrationController
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_PUBLISH->value,
             ),
-            'faqStatus' => $faqData['status'] ?? FaqStatus::Draft->value,
+            'faqStatus' => FaqStatus::Draft->value,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
@@ -528,7 +528,7 @@ final class FaqController extends AbstractAdministrationController
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_PUBLISH->value,
             ),
-            'faqStatus' => $faqData['status'] ?? FaqStatus::Draft->value,
+            'faqStatus' => FaqStatus::Draft->value,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);

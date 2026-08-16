@@ -233,6 +233,20 @@ final class FaqControllerTest extends TestCase
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('Copy of Prepared FAQ', (string) $response->getContent());
+
+        // Regression guard: copy() posts to create(), which defaults an omitted/absent
+        // status to Draft — pre-selecting the source FAQ's status (here 'published') would
+        // make an untouched save of the copy go live immediately. The editor must always
+        // default a copy to "draft", regardless of the source record's status.
+        $content = (string) $response->getContent();
+        self::assertMatchesRegularExpression(
+            '/id="status-draft" name="status" value="draft" class="form-check-input"\s+checked/',
+            $content,
+        );
+        self::assertDoesNotMatchRegularExpression(
+            '/id="status-published" name="status" value="published" class="form-check-input"\s+checked/',
+            $content,
+        );
     }
 
     /**
@@ -251,6 +265,20 @@ final class FaqControllerTest extends TestCase
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('Translation of Prepared FAQ', (string) $response->getContent());
+
+        // Regression guard: translate() posts to create(), which defaults an omitted/absent
+        // status to Draft — pre-selecting the source FAQ's status (here 'published') would
+        // make an untouched save of the translation go live immediately. The editor must
+        // always default a translation to "draft", regardless of the source record's status.
+        $content = (string) $response->getContent();
+        self::assertMatchesRegularExpression(
+            '/id="status-draft" name="status" value="draft" class="form-check-input"\s+checked/',
+            $content,
+        );
+        self::assertDoesNotMatchRegularExpression(
+            '/id="status-published" name="status" value="published" class="form-check-input"\s+checked/',
+            $content,
+        );
     }
 
     /**
