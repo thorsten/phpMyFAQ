@@ -336,16 +336,20 @@ final class FaqControllerTest extends TestCase
         self::assertStringContainsString('SEO title', (string) $response->getContent());
         self::assertStringContainsString('SEO description', (string) $response->getContent());
 
-        // Regression guard: the editor used to key off faqRecord['active'], a field
-        // Faq::getFaq() stopped hydrating in favour of 'status'. A published FAQ must
-        // still pre-select the "active" radio, not the "not visible" one.
+        // Regression guard: the editor keys off faqRecord['status'], the field
+        // Faq::getFaq() hydrates instead of the removed 'active' flag. A published
+        // FAQ must pre-select the "published" status radio, not draft or review.
         $content = (string) $response->getContent();
         self::assertMatchesRegularExpression(
-            '/id="active" name="active" value="yes" class="form-check-input" checked/',
+            '/id="status-published" name="status" value="published" class="form-check-input"\s+checked/',
             $content,
         );
         self::assertDoesNotMatchRegularExpression(
-            '/id="inactive" name="active" value="no" class="form-check-input" checked/',
+            '/id="status-draft" name="status" value="draft" class="form-check-input"\s+checked/',
+            $content,
+        );
+        self::assertDoesNotMatchRegularExpression(
+            '/id="status-review" name="status" value="review" class="form-check-input"\s+checked/',
             $content,
         );
     }

@@ -26,6 +26,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\QuestionHistoryEntity;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\QuestionHistoryEventType;
 use phpMyFAQ\Faq;
@@ -181,7 +182,7 @@ final class FaqController extends AbstractController
             $faqEntity
                 ->setLanguage($languageCode)
                 ->setQuestion($questionText)
-                ->setActive((bool) $autoActivate)
+                ->setStatus($autoActivate ? FaqStatus::Published : FaqStatus::Draft)
                 ->setSticky(false)
                 ->setAnswer($answer)
                 ->setKeywords($keywords)

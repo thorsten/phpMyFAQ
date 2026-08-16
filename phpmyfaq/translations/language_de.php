@@ -1821,4 +1821,10 @@ $PMF_LANG['ad_category_delete_has_children'] = 'Löschen nicht möglich: Diese K
 $PMF_LANG['ad_category_inactive'] = 'inaktiv';
 $PMF_LANG['ad_category_toggle'] = 'Unterkategorien ein-/ausblenden von';
 
+// added v4.2.0-alpha.2 - 2026-08-16 by Thorsten Rinne - editorial workflow status
+$PMF_LANG['msgStatusDraft'] = 'Entwurf';
+$PMF_LANG['msgStatusReview'] = 'In Prüfung';
+$PMF_LANG['msgStatusPublished'] = 'Veröffentlicht';
+$PMF_LANG['msgStatusFilterAll'] = 'Alle Status';
+
 return $PMF_LANG;

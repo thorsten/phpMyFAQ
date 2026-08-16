@@ -177,8 +177,7 @@ final class FaqController extends AbstractAdministrationController
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_PUBLISH->value,
             ),
-            'isActive' => null,
-            'isInActive' => 'checked',
+            'faqStatus' => FaqStatus::Draft->value,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
@@ -249,8 +248,7 @@ final class FaqController extends AbstractAdministrationController
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_PUBLISH->value,
             ),
-            'isActive' => null,
-            'isInActive' => 'checked',
+            'faqStatus' => FaqStatus::Draft->value,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
@@ -388,8 +386,7 @@ final class FaqController extends AbstractAdministrationController
             // Scoped to this FAQ, so a publisher restricted to other categories or languages is
             // not offered a control that the API would reject.
             'hasPermissionForPublish' => $this->userMayPublishIn(array_keys($categories), $faqLanguage),
-            'isActive' => $faqData['status'] === FaqStatus::Published->value ? 'checked' : null,
-            'isInActive' => $faqData['status'] !== FaqStatus::Published->value ? 'checked' : null,
+            'faqStatus' => $faqData['status'] ?? FaqStatus::Draft->value,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
@@ -460,8 +457,7 @@ final class FaqController extends AbstractAdministrationController
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_PUBLISH->value,
             ),
-            'isActive' => null,
-            'isInActive' => null,
+            'faqStatus' => $faqData['status'] ?? FaqStatus::Draft->value,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
@@ -532,8 +528,7 @@ final class FaqController extends AbstractAdministrationController
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_PUBLISH->value,
             ),
-            'isActive' => null,
-            'isInActive' => null,
+            'faqStatus' => $faqData['status'] ?? FaqStatus::Draft->value,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);
@@ -615,8 +610,7 @@ final class FaqController extends AbstractAdministrationController
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_PUBLISH->value,
             ),
-            'isActive' => null,
-            'isInActive' => null,
+            'faqStatus' => FaqStatus::Draft->value,
             'nextSolutionId' => $this->faq->getNextSolutionId(),
             'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
         ]);

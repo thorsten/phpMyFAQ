@@ -1872,6 +1872,10 @@ $PMF_LANG['msgImportRowNoLanguagePermission'] = 'Row %d: no "%s" permission for 
 // added v4.2.0-alpha.2 - 2026-08-12 by Thorsten
 $PMF_LANG['permission::faq_publish'] = 'Publish FAQs';
 $PMF_LANG['msgNoPublishPermission'] = 'You are not allowed to change the publication state of this FAQ.';
+$PMF_LANG['msgStatusDraft'] = 'Draft';
+$PMF_LANG['msgStatusReview'] = 'In review';
+$PMF_LANG['msgStatusPublished'] = 'Published';
+$PMF_LANG['msgStatusFilterAll'] = 'All statuses';
 
 // added v4.2.0-alpha.2 - 2026-08-15 by Thorsten Rinne - question metadata tracking
 $PMF_LANG['msgQuestionReopened'] = 'The question was reopened.';
