@@ -38,9 +38,14 @@ export default defineConfig({
         },
       },
       preserveEntrySignatures: 'exports-only',
+      // The plugin-timing warning always fires here: sass compilation of the
+      // Bootstrap-based stylesheets dominates the build and is not avoidable.
+      checks: { pluginTimings: false },
     },
     sourcemap: true,
-    minify: 'terser',
+    // Jodit is a monolithic WYSIWYG editor (~640 kB minified) that cannot be
+    // code-split further; it already lives in its own manual chunk.
+    chunkSizeWarningLimit: 700,
   },
   plugins: [
     createHtmlPlugin(),

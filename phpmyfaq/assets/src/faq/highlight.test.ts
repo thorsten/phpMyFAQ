@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 const mockHighlightElement = vi.fn();
 
-vi.mock('highlight.js', () => ({
+vi.mock('highlight.js/lib/common', () => ({
   default: {
     highlightElement: mockHighlightElement,
   },

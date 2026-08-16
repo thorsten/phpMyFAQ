@@ -43,7 +43,7 @@ import 'jodit/esm/plugins/video/video.js';
 import '../plugins/phpmyfaq/phpmyfaq.js';
 import '../plugins/code-snippet/code-snippet.js';
 import '../plugins/show-blocks/show-blocks.js';
-import hljs from 'highlight.js';
+import hljs from 'highlight.js/lib/common';
 
 interface UploaderResponse {
   error?: string;

@@ -59,7 +59,7 @@ vi.mock('jodit', () => ({
   },
 }));
 
-vi.mock('highlight.js', () => ({
+vi.mock('highlight.js/lib/common', () => ({
   default: {
     highlightElement: vi.fn(),
   },

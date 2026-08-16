@@ -13,7 +13,7 @@
  * @since     2018-01-06
  */
 
-import hljs from 'highlight.js';
+import hljs from 'highlight.js/lib/common';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Highlight.js
