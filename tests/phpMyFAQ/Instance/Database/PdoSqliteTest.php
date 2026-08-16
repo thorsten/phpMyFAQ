@@ -160,6 +160,45 @@ class PdoSqliteTest extends TestCase
         }
     }
 
+    /**
+     * Regression guard for the editorial workflow migration (Task 7): a freshly created
+     * multi-site instance must get the same faqdata/faqdata_revisions shape as the main
+     * schema (DatabaseSchema.php) -- a "status" column, no legacy "active" column -- or
+     * FaqRepository::insert()/update() fail against it with an unknown-column error.
+     */
+    public function testCreateTablesFaqdataAndRevisionsUseStatusNotActive(): void
+    {
+        $executedQueries = [];
+        $this->dbMock
+            ->method('query')
+            ->willReturnCallback(function (string $query) use (&$executedQueries) {
+                $executedQueries[] = $query;
+                return true;
+            });
+
+        $this->pdoSqlite->createTables();
+
+        $faqdataQuery = null;
+        $faqdataRevisionsQuery = null;
+        foreach ($executedQueries as $query) {
+            if (str_contains($query, 'CREATE TABLE faqdata (')) {
+                $faqdataQuery = $query;
+            }
+            if (str_contains($query, 'CREATE TABLE faqdata_revisions (')) {
+                $faqdataRevisionsQuery = $query;
+            }
+        }
+
+        $this->assertNotNull($faqdataQuery, 'Expected a CREATE TABLE faqdata statement.');
+        $this->assertNotNull($faqdataRevisionsQuery, 'Expected a CREATE TABLE faqdata_revisions statement.');
+
+        foreach ([$faqdataQuery, $faqdataRevisionsQuery] as $query) {
+            $this->assertStringContainsString('status', $query);
+            $this->assertStringNotContainsString('active char(3)', $query);
+            $this->assertStringNotContainsString('active VARCHAR(3)', $query);
+        }
+    }
+
     public function testCreateTablesIncludesIndexStatements(): void
     {
         $executedQueries = [];

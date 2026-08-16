@@ -300,6 +300,18 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
             $where .= ')';
         }
 
+        // With more than one search term, the per-term groups above are joined by a bare
+        // "OR" with no enclosing parentheses. A caller appending "AND ..." conditions (see
+        // getConditions()) binds tighter than that bare "OR", so it would only constrain the
+        // last term's group — e.g. "(A) OR (B) AND status = 'published'" only filters B by
+        // status, silently leaking every other term's matches regardless of status (or,
+        // previously, regardless of the legacy active flag). Wrapping the whole disjunction
+        // closes that gap; a single term's group is already self-contained and does not need
+        // the extra wrap.
+        if ($numKeys > 1) {
+            $where = ' (' . trim($where) . ')';
+        }
+
         return $where;
     }
 
