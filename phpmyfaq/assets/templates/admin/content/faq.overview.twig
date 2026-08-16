@@ -84,7 +84,10 @@
               </th>
             </tr>
             </thead>
-            <tbody id="tbody-category-id-{{ category.id }}" data-pmf-csrf="{{ csrfTokenOverview }}">
+            <tbody id="tbody-category-id-{{ category.id }}" data-pmf-csrf="{{ csrfTokenOverview }}"
+                   data-pmf-status-draft="{{ 'msgStatusDraft' | translate }}"
+                   data-pmf-status-review="{{ 'msgStatusReview' | translate }}"
+                   data-pmf-status-published="{{ 'msgStatusPublished' | translate }}">
 
             </tbody>
           </table>

@@ -219,13 +219,22 @@ const saveFaqStatus = async (categoryId: string, faqIds: string[], token: string
   });
 };
 
-const statusLabels: Record<Faq['status'], string> = {
-  draft: 'Draft',
-  review: 'In review',
-  published: 'Published',
-};
+// The tbody carries the translated status labels as data attributes (rendered server-side via
+// the `translate` filter, see faq.overview.twig) so a non-English install shows the same
+// language in the row controls as in the filter dropdown above them. The English literals are
+// only a fallback for the (unexpected) case the attribute is missing.
+const readStatusLabels = (tableBody: HTMLElement): Record<Faq['status'], string> => ({
+  draft: tableBody.dataset.pmfStatusDraft || 'Draft',
+  review: tableBody.dataset.pmfStatusReview || 'In review',
+  published: tableBody.dataset.pmfStatusPublished || 'Published',
+});
 
-const buildStatusSelect = (faq: Faq, csrfToken: string, options: Faq['status'][]): HTMLElement => {
+const buildStatusSelect = (
+  faq: Faq,
+  csrfToken: string,
+  options: Faq['status'][],
+  statusLabels: Record<Faq['status'], string>
+): HTMLElement => {
   return addElement(
     'select',
     {
@@ -249,15 +258,17 @@ const buildStatusSelect = (faq: Faq, csrfToken: string, options: Faq['status'][]
 // A user without the publish right for every category of this FAQ cannot move it into or
 // out of "published" — offering that transition would only ever produce a 403. Once the FAQ
 // is live, such a user gets a read-only badge instead of a select they cannot act on.
-const buildStatusCell = (faq: Faq, csrfToken: string): HTMLElement => {
+const buildStatusCell = (faq: Faq, csrfToken: string, statusLabels: Record<Faq['status'], string>): HTMLElement => {
   if (faq.isAllowedToPublish) {
     return addElement('td', { classList: 'align-middle' }, [
-      buildStatusSelect(faq, csrfToken, ['draft', 'review', 'published']),
+      buildStatusSelect(faq, csrfToken, ['draft', 'review', 'published'], statusLabels),
     ]);
   }
 
   if (faq.status !== 'published') {
-    return addElement('td', { classList: 'align-middle' }, [buildStatusSelect(faq, csrfToken, ['draft', 'review'])]);
+    return addElement('td', { classList: 'align-middle' }, [
+      buildStatusSelect(faq, csrfToken, ['draft', 'review'], statusLabels),
+    ]);
   }
 
   return addElement('td', { classList: 'align-middle' }, [
@@ -268,6 +279,7 @@ const buildStatusCell = (faq: Faq, csrfToken: string): HTMLElement => {
 const populateCategoryTable = async (categoryId: string, faqs: Faq[], isAllowedToTranslate: boolean): Promise<void> => {
   const tableBody = document.getElementById(`tbody-category-id-${categoryId}`) as HTMLElement;
   const csrfToken = tableBody.getAttribute('data-pmf-csrf') as string;
+  const statusLabels = readStatusLabels(tableBody);
 
   faqs.forEach((faq: Faq): void => {
     const row: HTMLTableRowElement = document.createElement('tr');
@@ -316,7 +328,7 @@ const populateCategoryTable = async (categoryId: string, faqs: Faq[], isAllowedT
         }),
       ])
     );
-    row.append(buildStatusCell(faq, csrfToken));
+    row.append(buildStatusCell(faq, csrfToken, statusLabels));
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [
         addElement('a', { classList: 'btn btn-primary', href: `./faq/edit/${faq.id.toString()}/${faq.language}` }, [

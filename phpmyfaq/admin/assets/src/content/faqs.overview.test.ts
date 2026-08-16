@@ -221,7 +221,9 @@ describe('FAQ Overview Functions', () => {
     it('should fetch FAQs and populate table on shown.bs.collapse', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -265,7 +267,9 @@ describe('FAQ Overview Functions', () => {
         </select>
         <input type="checkbox" id="pmf-checkbox-filter-new" />
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -286,7 +290,9 @@ describe('FAQ Overview Functions', () => {
     it('should render the status read-only without the publish permission once published', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -314,15 +320,21 @@ describe('FAQ Overview Functions', () => {
       await flushPromises();
 
       // No select to change, but the state stays visible, and the sticky toggle is unaffected.
+      // The label text comes from the tbody's data-pmf-status-published attribute (rendered via
+      // the `translate` filter server-side), not the hardcoded English fallback.
       expect(document.querySelector('.pmf-admin-status-faq')).toBeNull();
-      expect(document.querySelector('.badge')).not.toBeNull();
+      const badge = document.querySelector('.badge');
+      expect(badge).not.toBeNull();
+      expect((badge as HTMLElement)?.innerText).toBe('Veröffentlicht');
       expect(document.querySelector('.pmf-admin-sticky-faq')).not.toBeNull();
     });
 
     it('should render a draft/review select for a non-published FAQ without the publish permission', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -353,12 +365,55 @@ describe('FAQ Overview Functions', () => {
       expect(statusSelect).not.toBeNull();
       const optionValues = Array.from(statusSelect.options).map((option) => option.value);
       expect(optionValues).toEqual(['draft', 'review']);
+
+      // Option text comes from the tbody's data-pmf-status-* attributes, not the hardcoded
+      // English fallback.
+      const optionLabels = Array.from(statusSelect.options).map((option) => option.innerText);
+      expect(optionLabels).toEqual(['Entwurf', 'In Prüfung']);
+    });
+
+    it('should fall back to the English status labels when the data attributes are missing', async () => {
+      document.body.innerHTML = `
+        <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+      `;
+
+      (fetchAllFaqsByCategory as Mock).mockResolvedValue({
+        faqs: [
+          {
+            id: 7,
+            language: 'en',
+            solution_id: 1007,
+            question: 'Test FAQ',
+            created: '2026-03-01',
+            category_id: 3,
+            sticky: 'no',
+            status: 'draft',
+            isAllowedToPublish: true,
+          },
+        ],
+        isAllowedToTranslate: false,
+      });
+
+      await handleFaqOverview();
+
+      const category = document.querySelector('.accordion-collapse') as HTMLElement;
+      category.dispatchEvent(new Event('shown.bs.collapse'));
+
+      await flushPromises();
+
+      const statusSelect = document.querySelector('.pmf-admin-status-faq') as HTMLSelectElement;
+      expect(statusSelect).not.toBeNull();
+      const optionLabels = Array.from(statusSelect.options).map((option) => option.innerText);
+      expect(optionLabels).toEqual(['Draft', 'In review', 'Published']);
     });
 
     it('should call saveStatus when sticky toggle changes', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -413,7 +468,9 @@ describe('FAQ Overview Functions', () => {
     it('should call saveFaqStatus when the status select changes', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -466,7 +523,9 @@ describe('FAQ Overview Functions', () => {
     it('should show error notification when saveStatus API returns error', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -512,7 +571,9 @@ describe('FAQ Overview Functions', () => {
     it('should show error notification when saveStatus network fails', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -555,7 +616,9 @@ describe('FAQ Overview Functions', () => {
     it('should show error when saveStatus response is not ok', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({

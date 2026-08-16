@@ -724,18 +724,27 @@ final class FaqController extends AbstractAdministrationApiController
         $solutionId = $this->faq->getSolutionIdFromId($faqId, $faqLanguage);
         $document = null;
 
+        // getFaq() resolves against the admin's own UI language (with a default-language
+        // fallback), not the $faqLanguage being published — an admin browsing in German who
+        // publishes the French row would otherwise index English content under 'lang' => 'fr',
+        // or the placeholder record when neither language exists. getFaqResult() is the
+        // language-explicit query getFaq() itself calls internally, so fetch that row directly
+        // instead and skip the upsert (falling through to the delete branch) when it's missing.
         if (FaqStatus::Published === $status) {
-            $this->faq->getFaq($faqId, null, true);
-            $faqRecord = $this->faq->faqRecord;
-            $document = [
-                'id' => $faqId,
-                'lang' => $faqLanguage,
-                'solution_id' => (int) $faqRecord['solution_id'],
-                'question' => (string) $faqRecord['title'],
-                'answer' => (string) $faqRecord['content'],
-                'keywords' => (string) $faqRecord['keywords'],
-                'category_id' => $categoryIds[0] ?? 0,
-            ];
+            $result = $this->faq->getFaqResult($faqId, $faqLanguage, null, true);
+            $row = $this->configuration->getDb()->fetchObject($result);
+
+            if ($row instanceof stdClass) {
+                $document = [
+                    'id' => $faqId,
+                    'lang' => $faqLanguage,
+                    'solution_id' => $solutionId,
+                    'question' => (string) $row->thema,
+                    'answer' => (string) $row->content,
+                    'keywords' => (string) $row->keywords,
+                    'category_id' => $categoryIds[0] ?? 0,
+                ];
+            }
         }
 
         if ($elasticsearchEnabled) {

@@ -1571,6 +1571,51 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * Publishing must source the search-index document via the language-scoped
+     * getFaqResult($faqId, $faqLanguage, ...), never via getFaq() — getFaq() resolves against
+     * the admin's own configured UI language (with a default-language fallback), which is not
+     * necessarily the $faqLanguage being published, and would index either the wrong
+     * language's content or the placeholder record under the wrong language.
+     *
+     * @throws \Exception
+     */
+    public function testStatusPublishFetchesDocumentContentForTheRequestedLanguageNotGetFaq(): void
+    {
+        $this->seedFaqRecord(question: 'Publishable FAQ');
+        self::assertTrue($this->configuration->set('search.enableElasticsearch', true));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Review);
+        $faq->method('getSolutionIdFromId')->willReturn(1001);
+        $faq->expects($this->never())->method('getFaq');
+        $faq->expects($this->once())->method('getFaqResult')->with(1, 'en', null, true)->willReturn(false);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'published',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        // No Elasticsearch client is registered on Configuration, so constructing the
+        // Elasticsearch wrapper throws once the document-building step above has already run;
+        // the assertions on the Faq mock are what this test actually verifies.
+        try {
+            $controller->status($request);
+        } catch (\LogicException) {
+        }
+
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
      * @throws \Exception
      */
     public function testStickyReturnsBadRequestWhenLanguageIsUnsupportedWithValidCsrf(): void
