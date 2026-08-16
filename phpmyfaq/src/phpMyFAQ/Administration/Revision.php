@@ -44,13 +44,13 @@ readonly class Revision
     {
         $query = sprintf(
             "
-            INSERT INTO 
-                %sfaqdata_revisions 
-            SELECT 
-                id, lang, solution_id, revision_id + 1, active, sticky, keywords, thema, content, author, email, 
-                comment, updated, date_start, date_end, created, notes, sticky_order 
-            FROM 
-                %sfaqdata 
+            INSERT INTO
+                %sfaqdata_revisions
+            SELECT
+                id, lang, solution_id, revision_id + 1, active, status, sticky, keywords, thema, content, author,
+                email, comment, updated, date_start, date_end, created, notes, sticky_order
+            FROM
+                %sfaqdata
             WHERE 
                 id = %d 
               AND 

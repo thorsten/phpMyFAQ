@@ -41,6 +41,7 @@ readonly class Migration420Alpha2 extends AbstractMigration
             'Add faquser_right_language and faqgroup_right_language tables for granular '
             . 'language-based permissions, separate the FAQ read and publish rights, '
             . 'and add the faqquestion_history table for open question lifecycle metadata tracking'
+            . ', and introduce the editorial workflow status on faqdata'
         );
     }
 
@@ -162,6 +163,66 @@ readonly class Migration420Alpha2 extends AbstractMigration
 
         $this->separateReadAndPublishRights($recorder);
         $this->createQuestionHistoryTable($recorder);
+        $this->introduceEditorialWorkflowStatus($recorder);
+    }
+
+    /**
+     * Adds the editorial workflow status column and backfills it from the legacy
+     * active flag. Guarded per step because this migration re-runs on
+     * installations whose recorded checksum predates the amendment.
+     */
+    private function introduceEditorialWorkflowStatus(OperationRecorder $recorder): void
+    {
+        foreach (['faqdata', 'faqdata_revisions'] as $table) {
+            if (!$this->columnExists($table, 'status')) {
+                $recorder->addSql(
+                    $this->addColumn($table, 'status', $this->varcharType(12) . ' NOT NULL', "'draft'"),
+                    sprintf('Add editorial status column to %s', $table),
+                );
+
+                // The column is new, so existing rows still carry their state in
+                // "active" only — bring status in line in the same run.
+                $recorder->addSql(
+                    sprintf(
+                        "UPDATE %s SET status = CASE WHEN active = 'yes' THEN 'published' ELSE 'draft' END",
+                        $this->table($table),
+                    ),
+                    sprintf('Backfill editorial status from the active flag in %s', $table),
+                );
+            }
+        }
+    }
+
+    /**
+     * Record-time column check so re-running this amended migration never issues
+     * an ALTER TABLE that would fail on the second pass.
+     */
+    private function columnExists(string $table, string $column): bool
+    {
+        $tableName = $this->table($table);
+
+        $query = match (true) {
+            $this->isMySql() => sprintf("SHOW COLUMNS FROM %s LIKE '%s'", $tableName, $column),
+            $this->isPostgreSql() => sprintf(
+                "SELECT column_name FROM information_schema.columns WHERE table_name = '%s' AND column_name = '%s'",
+                $tableName,
+                $column,
+            ),
+            $this->isSqlite() => sprintf(
+                "SELECT name FROM pragma_table_info('%s') WHERE name = '%s'",
+                $tableName,
+                $column,
+            ),
+            default => sprintf(
+                "SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('%s') AND name = '%s'",
+                $tableName,
+                $column,
+            ),
+        };
+
+        $result = $this->configuration->getDb()->query($query);
+
+        return $this->configuration->getDb()->numRows($result) > 0;
     }
 
     /**

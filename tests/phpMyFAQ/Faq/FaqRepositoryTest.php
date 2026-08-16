@@ -7,6 +7,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Language;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
@@ -328,6 +329,19 @@ class FaqRepositoryTest extends TestCase
         $this->faqRepository->update($faqEntity);
 
         $this->assertSame('After', $this->faqRepository->fetchQuestion(5051, 'en'));
+    }
+
+    public function testInsertPersistsStatusAndGetStatusReturnsIt(): void
+    {
+        $faqEntity = $this->makeFaqEntity(5053, 7430, 'Review Question')->setStatus(FaqStatus::Review);
+        $this->faqRepository->insert($faqEntity);
+
+        $this->assertSame(FaqStatus::Review, $this->faqRepository->getStatus(5053, 'en'));
+    }
+
+    public function testGetStatusReturnsDraftForMissingRow(): void
+    {
+        $this->assertSame(FaqStatus::Draft, $this->faqRepository->getStatus(999997, 'en'));
     }
 
     public function testDeleteByIdAndLanguageRemovesFaqRow(): void

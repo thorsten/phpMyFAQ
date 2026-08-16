@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Entity;
 
 use DateTime;
+use phpMyFAQ\Enums\FaqStatus;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -97,6 +98,39 @@ class FaqEntityTest extends TestCase
 
         $this->faqEntity->setActive(false);
         $this->assertFalse($this->faqEntity->isActive());
+    }
+
+    /**
+     * Test setting the status derives the legacy active flag
+     */
+    public function testSettingTheStatusDerivesTheActiveFlag(): void
+    {
+        $entity = new FaqEntity()->setStatus(FaqStatus::Published);
+        $this->assertTrue($entity->isActive());
+        $this->assertSame(FaqStatus::Published, $entity->getStatus());
+
+        $entity->setStatus(FaqStatus::Review);
+        $this->assertFalse($entity->isActive());
+    }
+
+    /**
+     * Test setting the legacy active flag derives the status
+     */
+    public function testSettingTheLegacyActiveFlagDerivesTheStatus(): void
+    {
+        $entity = new FaqEntity()->setActive(true);
+        $this->assertSame(FaqStatus::Published, $entity->getStatus());
+
+        $entity->setActive(false);
+        $this->assertSame(FaqStatus::Draft, $entity->getStatus());
+    }
+
+    /**
+     * Test a new entity starts as draft
+     */
+    public function testANewEntityStartsAsDraft(): void
+    {
+        $this->assertSame(FaqStatus::Draft, new FaqEntity()->getStatus());
     }
 
     /**
@@ -341,6 +375,7 @@ class FaqEntityTest extends TestCase
         $this->assertSame('de', $decoded['language']);
         $this->assertSame('Frage?', $decoded['question']);
         $this->assertSame('Antwort.', $decoded['answer']);
+        $this->assertSame('draft', $decoded['status']);
     }
 
     /**

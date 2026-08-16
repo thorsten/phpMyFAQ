@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Entity;
 
 use DateTime;
+use phpMyFAQ\Enums\FaqStatus;
 
 /**
  * Class FaqEntity
@@ -36,7 +37,7 @@ class FaqEntity
 
     private ?int $revisionId = null;
 
-    private ?bool $active = null;
+    private FaqStatus $status = FaqStatus::Draft;
 
     private ?bool $sticky = null;
 
@@ -106,15 +107,29 @@ class FaqEntity
         return $this;
     }
 
+    public function getStatus(): FaqStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(FaqStatus $status): FaqEntity
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * Transitional shim until the active flag is removed: published is the only
+     * live state, everything else reads as inactive.
+     */
     public function isActive(): bool
     {
-        return $this->active ?? false;
+        return $this->status === FaqStatus::Published;
     }
 
     public function setActive(bool $active): FaqEntity
     {
-        $this->active = $active;
-        return $this;
+        return $this->setStatus($active ? FaqStatus::Published : FaqStatus::Draft);
     }
 
     public function isSticky(): bool

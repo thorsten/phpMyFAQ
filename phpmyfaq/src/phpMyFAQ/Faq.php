@@ -28,6 +28,7 @@ use Exception;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq\FaqRepository;
 use phpMyFAQ\Faq\QueryHelper;
 use phpMyFAQ\Faq\ReadScope;
@@ -810,6 +811,11 @@ class Faq
     public function isActive(int $faqId, string $faqLang, string $commentType = 'faq'): bool
     {
         return $this->faqRepository->isActive($faqId, $faqLang, $commentType);
+    }
+
+    public function getStatus(int $faqId, string $faqLang): FaqStatus
+    {
+        return $this->faqRepository->getStatus($faqId, $faqLang);
     }
 
     /**
