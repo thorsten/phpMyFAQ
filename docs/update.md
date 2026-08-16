@@ -197,6 +197,14 @@ currently do:
 Afterwards you can revoke `faq_publish` from editors who should be able to write but not publish. See section 5.1.5 of
 the administration documentation for the details.
 
+### Editorial workflow in phpMyFAQ 4.2
+
+phpMyFAQ 4.2 replaces the boolean active flag on FAQs with a per-language editorial status: **Draft**, **Review**, or
+**Published**. The update migrates every existing FAQ automatically — active FAQs become published, inactive ones become
+drafts — so public visibility does not change. Transitions into or out of the published state require the `Publish FAQs`
+right described above; moving between draft and review only needs the edit rights. See section 5.2.3 of the
+administration documentation for how the workflow behaves in the FAQ editor and overview.
+
 ## Modifying templates for phpMyFAQ 4.2
 
 We recommend you take a look at the main [Bootstrap documentation](https://getbootstrap.com/).

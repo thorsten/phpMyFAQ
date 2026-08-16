@@ -108,9 +108,12 @@ Reading FAQs, changing them, and deciding that a change goes public are three in
 | Write | `Add`/`Edit`/`Delete FAQs` | Creating and changing FAQ content |
 | Publish | `Publish FAQs` (`faq_publish`) | Setting an FAQ live, on its own or in the FAQ overview |
 
-- **A user with write but not publish can edit a published FAQ without changing whether it is public.** The editor shows
-  the current publication state read-only instead of the visibility radio buttons, and saving leaves that state alone.
-  The activation checkbox in the FAQ overview is likewise shown read-only.
+- The publish right maps onto the editorial workflow described in 5.2.3: every FAQ is a **Draft**, in **Review**, or
+  **Published**, per language. Moving between draft and review only needs the edit rights, while every transition into
+  or out of the published state needs `Publish FAQs`.
+- **A user with write but not publish can edit a published FAQ without changing whether it is public.** For a published
+  FAQ, the editor shows the status read-only instead of the status radio buttons, and saving leaves that state alone.
+  The status selector in the FAQ overview is likewise shown read-only.
 - `Publish FAQs` is separate from the older `Approve FAQs` (`approverec`) right, which continues to gate the list of
   inactive FAQs. Upgrades grant `faq_publish` to everyone who already held `approverec`, carrying their category and
   language restrictions across, so no one loses or gains an ability.
@@ -211,9 +214,14 @@ time with all the relevant data of the specific entry. The meaning of the fields
   Every FAQ automatically generates a so-called solution ID. All records can be accessed directly by putting this ID
   into the search box.
 
-- **Active?**
-  If a FAQ is "active," it is visible in the public area and will be included in searches. Is it "deactivated" it will
-  be invisible. Suggested FAQs are deactivated by default to prevent any abuse.
+- **Status**
+  Every FAQ has an editorial status per language: **Draft**, **Review**, or **Published**. Only published FAQs are
+  visible in the public area and included in searches; drafts and FAQs in review are invisible to visitors. New
+  entries start as drafts, and suggested FAQs are stored as drafts by default to prevent any abuse. Moving a FAQ
+  between draft and review only requires the edit right, while any transition that makes content go live or takes
+  it down requires the `Publish FAQs` right (see 5.1.5). Users without that right see the status of a published
+  FAQ read-only, and saving leaves it unchanged. The "Edit FAQs" overview offers a status filter and lets you
+  change the status of an entry directly in the list.
 
 - **Sticky?**
   If a FAQ is "sticky," it is a crucial FAQ record and will always be shown on all pages on the right column.

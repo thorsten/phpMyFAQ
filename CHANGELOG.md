@@ -30,6 +30,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental per-tenant quota enforcement and API request rate limits (Thorsten)
 - added SBOM (Software Bill of Materials) generation (Thorsten)
 - added separate read, write and publish permissions for FAQs (Thorsten)
+- added an editorial workflow with per-language draft, review, and published states for FAQs (Thorsten)
 - added question metadata tracking, an audit log of the open question lifecycle (submitted, answered, reopened), issue #4415 (Thorsten)
 - improved audit and activity log with comprehensive security event tracking (Thorsten)
 - improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
