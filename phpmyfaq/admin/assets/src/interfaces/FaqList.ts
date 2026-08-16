@@ -2,7 +2,7 @@ export interface Faq {
   id: number;
   language: string;
   solution_id: number;
-  active: string;
+  status: 'draft' | 'review' | 'published';
   sticky: string;
   category_id: string;
   question: string;

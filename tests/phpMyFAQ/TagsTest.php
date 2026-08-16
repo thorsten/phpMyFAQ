@@ -5,6 +5,7 @@ namespace phpMyFAQ;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Entity\Tag;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Plugin\PluginException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
@@ -228,13 +229,15 @@ class TagsTest extends TestCase
 
     private function seedFaqRecord(int $id, string $lang = 'en', string $active = 'yes'): void
     {
+        $status = 'yes' === $active ? FaqStatus::Published->value : FaqStatus::Draft->value;
+
         $query = sprintf("INSERT OR REPLACE INTO faqdata (
-                id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email,
+                id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email,
                 comment, updated, date_start, date_end, created, notes, sticky_order
             ) VALUES (
                 %d, '%s', %d, 0, '%s', 0, '', 'Test question %d', 'Test answer %d', 'Tester', 'test@example.com',
                 'y', '20260101000000', '00000000000000', '99991231235959', CURRENT_TIMESTAMP, '', NULL
-            )", $id, $lang, $id, $active, $id, $id);
+            )", $id, $lang, $id, $status, $id, $id);
 
         $this->dbHandle->query($query);
     }

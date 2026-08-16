@@ -374,7 +374,6 @@ class DefaultDataSeeder
             ['name' => PermissionType::GROUP_ADD->value, 'description' => 'Right to add group accounts'],
             ['name' => PermissionType::GROUP_EDIT->value, 'description' => 'Right to edit group accounts'],
             ['name' => PermissionType::GROUP_DELETE->value, 'description' => 'Right to delete group accounts'],
-            ['name' => PermissionType::FAQ_APPROVE->value, 'description' => 'Right to approve FAQs'],
             ['name' => PermissionType::FAQ_PUBLISH->value, 'description' => 'Right to publish FAQs'],
             ['name' => PermissionType::ATTACHMENT_ADD->value, 'description' => 'Right to add attachments'],
             ['name' => PermissionType::ATTACHMENT_EDIT->value, 'description' => 'Right to edit attachments'],

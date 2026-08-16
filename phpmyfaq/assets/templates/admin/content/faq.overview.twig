@@ -30,12 +30,13 @@
   <div class="accordion shadow" id="pm-admin-faq-overview">
     <div class="accordion-item d-flex justify-content-start flex-wrap flex-md-nowrap align-items-center p-3 bg-secondary-subtle">
       <div class="col-2">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="pmf-checkbox-filter-inactive">
-          <label class="form-check-label" for="pmf-checkbox-filter-inactive">
-            {{ 'msgOnlyInactiveFAQs' | translate }}
-          </label>
-        </div>
+        <select class="form-select form-select-sm w-auto" id="pmf-status-filter"
+                aria-label="{{ 'ad_entry_status' | translate }}">
+          <option value="">{{ 'msgStatusFilterAll' | translate }}</option>
+          <option value="draft">{{ 'msgStatusDraft' | translate }}</option>
+          <option value="review">{{ 'msgStatusReview' | translate }}</option>
+          <option value="published">{{ 'msgStatusPublished' | translate }}</option>
+        </select>
       </div>
       <div class="col-2">
         <div class="form-check">
@@ -77,14 +78,18 @@
                 {{ 'msgStickyFAQ' | translate }}
               </th>
               <th class="align-middle">
-                {{ 'msgActive' | translate }}
+                {{ 'ad_entry_status' | translate }}
               </th>
               <th colspan="4" class="align-middle">
                 Actions
               </th>
             </tr>
             </thead>
-            <tbody id="tbody-category-id-{{ category.id }}" data-pmf-csrf="{{ csrfTokenOverview }}">
+            <tbody id="tbody-category-id-{{ category.id }}" data-pmf-csrf="{{ csrfTokenOverview }}"
+                   data-pmf-status-draft="{{ 'msgStatusDraft' | translate }}"
+                   data-pmf-status-review="{{ 'msgStatusReview' | translate }}"
+                   data-pmf-status-published="{{ 'msgStatusPublished' | translate }}"
+                   data-pmf-status-select-label="{{ 'ad_entry_status' | translate }}">
 
             </tbody>
           </table>

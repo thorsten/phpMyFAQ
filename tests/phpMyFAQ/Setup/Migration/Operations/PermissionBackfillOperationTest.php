@@ -207,7 +207,7 @@ class PermissionBackfillOperationTest extends TestCase
     {
         $this->dbHandle->query("DELETE FROM faqright WHERE name = 'faq_publish'");
         $this->dbHandle->query('DELETE FROM faquser_right');
-        $approveRightId = $this->rightId(PermissionType::FAQ_APPROVE->value);
+        $approveRightId = $this->seedApproveRight();
         $this->dbHandle->query(sprintf(
             'INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d)',
             $approveRightId,
@@ -222,7 +222,7 @@ class PermissionBackfillOperationTest extends TestCase
             $this->configuration,
             'faq_publish',
             'Right to publish FAQs',
-            mirrorFrom: PermissionType::FAQ_APPROVE->value,
+            mirrorFrom: 'approverec',
         );
 
         self::assertTrue($operation->execute());
@@ -238,7 +238,7 @@ class PermissionBackfillOperationTest extends TestCase
     public function testMirrorsCategoryAndLanguageRestrictions(): void
     {
         $this->dbHandle->query("DELETE FROM faqright WHERE name = 'faq_publish'");
-        $approveRightId = $this->rightId(PermissionType::FAQ_APPROVE->value);
+        $approveRightId = $this->seedApproveRight();
         $this->createGroup(7);
         $this->dbHandle->query(sprintf(
             'INSERT INTO faqgroup_right (group_id, right_id) VALUES (7, %d)',
@@ -254,7 +254,7 @@ class PermissionBackfillOperationTest extends TestCase
             $this->configuration,
             'faq_publish',
             'Right to publish FAQs',
-            mirrorFrom: PermissionType::FAQ_APPROVE->value,
+            mirrorFrom: 'approverec',
             mirrorRestrictions: true,
         );
 
@@ -278,7 +278,7 @@ class PermissionBackfillOperationTest extends TestCase
     public function testDoesNotInventRestrictionsForAnUnrestrictedGrant(): void
     {
         $this->dbHandle->query("DELETE FROM faqright WHERE name = 'faq_publish'");
-        $approveRightId = $this->rightId(PermissionType::FAQ_APPROVE->value);
+        $approveRightId = $this->seedApproveRight();
         $this->createGroup(7);
         $this->dbHandle->query(sprintf(
             'INSERT INTO faqgroup_right (group_id, right_id) VALUES (7, %d)',
@@ -289,7 +289,7 @@ class PermissionBackfillOperationTest extends TestCase
             $this->configuration,
             'faq_publish',
             'Right to publish FAQs',
-            mirrorFrom: PermissionType::FAQ_APPROVE->value,
+            mirrorFrom: 'approverec',
             mirrorRestrictions: true,
         );
 
@@ -301,6 +301,30 @@ class PermissionBackfillOperationTest extends TestCase
             new GroupCategoryPermissionRepository($this->configuration)
                 ->getCategoryRestrictions(7, $publishRightId),
         );
+    }
+
+    /**
+     * approverec is no longer seeded by DefaultDataSeeder (Task 7 retired it), but these tests
+     * use it as a stand-in source right to exercise the generic mirrorFrom mechanism, so they
+     * create it directly instead of relying on installation defaults.
+     */
+    private function seedApproveRight(): int
+    {
+        // A bootstrap database predating the approverec retirement may still carry the
+        // right — remove it so the seed below cannot produce a duplicate source right.
+        $this->dbHandle->query("DELETE FROM faqright WHERE name = 'approverec'");
+
+        $result = $this->dbHandle->query('SELECT MAX(right_id) AS max_id FROM faqright');
+        $row = $this->dbHandle->fetchArray($result);
+        $rightId = (is_array($row) ? (int) $row['max_id'] : 0) + 1;
+
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faqright (right_id, name, description, for_users, for_groups, for_sections) "
+            . "VALUES (%d, 'approverec', 'Right to approve FAQs', 1, 1, 1)",
+            $rightId,
+        ));
+
+        return $rightId;
     }
 
     private function createGroup(int $groupId): void

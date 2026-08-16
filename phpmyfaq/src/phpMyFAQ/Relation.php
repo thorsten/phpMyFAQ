@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Search\SearchFactory;
 
 /**
@@ -65,7 +66,7 @@ readonly class Relation
                 'fd.lang = fcr.record_lang',
             ])
             ->setConditions([
-                'fd.active' => 'yes',
+                'fd.status' => FaqStatus::Published->value,
                 'fd.lang' => $this->configuration->getLanguage()->getLanguage(),
             ])
             ->setMatchingColumns(['fd.keywords', 'fd.thema', 'fd.content'])

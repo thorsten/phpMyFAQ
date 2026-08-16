@@ -35,6 +35,7 @@ use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\QuestionHistoryEntity;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\AdminLogType;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\QuestionHistoryEventType;
 use phpMyFAQ\Enums\SeoType;
@@ -137,10 +138,21 @@ final class FaqController extends AbstractAdministrationApiController
         $this->userHasPermissionForLanguage(PermissionType::FAQ_ADD, $language);
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
+
+        // An absent status field means a new draft; a present but unsupported value is a
+        // malformed request and must fail loudly instead of silently creating a draft.
+        $status = FaqStatus::Draft;
+        if (property_exists($data, 'status')) {
+            $status = FaqStatus::tryFrom((string) Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS, ''));
+            if (!$status instanceof FaqStatus) {
+                return $this->json([
+                    'error' => Translation::get(key: 'msgInvalidFaqStatus'),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        }
 
         // Creating an FAQ and making it public are separate rights.
-        if ($active === 'yes') {
+        if ($status === FaqStatus::Published) {
             $this->userMayPublish($categories, $language);
         }
 
@@ -168,7 +180,7 @@ final class FaqController extends AbstractAdministrationApiController
         $faqData = new FaqEntity();
         $faqData
             ->setLanguage($language)
-            ->setActive($active === 'yes')
+            ->setStatus($status)
             ->setSticky($sticky !== 'no')
             ->setQuestion(Filter::removeAttributes(html_entity_decode(
                 $question,
@@ -285,8 +297,13 @@ final class FaqController extends AbstractAdministrationApiController
                 $this->configuration->getLogger()->error('Send moderator notification failed: ' . $e->getMessage());
             }
 
-            // If Elasticsearch is enabled, index the new FAQ document
-            if ($this->configuration->get(item: 'search.enableElasticsearch')) {
+            // Only a Published FAQ is public content: index it in Elasticsearch, if enabled,
+            // so a freshly created draft/review FAQ is never findable via search before its
+            // first publish.
+            if (
+                FaqStatus::Published === $faqData->getStatus()
+                && (bool) $this->configuration->get(item: 'search.enableElasticsearch')
+            ) {
                 $elasticsearch = new Elasticsearch($this->configuration);
                 $elasticsearch->index([
                     'id' => $faqId,
@@ -299,8 +316,13 @@ final class FaqController extends AbstractAdministrationApiController
                 ]);
             }
 
-            // If OpenSearch is enabled, index the new FAQ document
-            if ($this->configuration->get(item: 'search.enableOpenSearch')) {
+            // Only a Published FAQ is public content: index it in OpenSearch, if enabled, so a
+            // freshly created draft/review FAQ is never findable via search before its first
+            // publish.
+            if (
+                FaqStatus::Published === $faqData->getStatus()
+                && (bool) $this->configuration->get(item: 'search.enableOpenSearch')
+            ) {
                 $openSearch = new OpenSearch($this->configuration);
                 $openSearch->index([
                     'id' => $faqId,
@@ -313,10 +335,10 @@ final class FaqController extends AbstractAdministrationApiController
                 ]);
             }
 
-            // Send Web Push notification for new active FAQs.
+            // Send Web Push notification for newly published FAQs.
             // This is done here (not in Notification::sendNewFaqAdded) to provide
             // the public FAQ URL, which is more useful for end-users.
-            if ($faqData->isActive()) {
+            if ($faqData->getStatus() === FaqStatus::Published) {
                 try {
                     $faqUrl = sprintf(
                         '%scontent/%d/%d/%s/%s.html',
@@ -395,7 +417,30 @@ final class FaqController extends AbstractAdministrationApiController
         $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $faqLang);
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $active = $this->resolvePublicationState($data, $faqId, $faqLang, [...$categories, ...$currentCategoryIds]);
+
+        // An absent status field keeps the stored state; a present but unsupported value
+        // is a malformed request and must fail loudly instead of being silently ignored.
+        $requestedStatus = null;
+        if (property_exists($data, 'status')) {
+            $requestedStatus = FaqStatus::tryFrom((string) Filter::filterVar(
+                $data->status,
+                FILTER_SANITIZE_SPECIAL_CHARS,
+                '',
+            ));
+            if (!$requestedStatus instanceof FaqStatus) {
+                return $this->json([
+                    'error' => Translation::get(key: 'msgInvalidFaqStatus'),
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        }
+
+        $previousStatus = $this->faq->getStatus($faqId, $faqLang);
+        $status = $this->resolveStatusChange(
+            $requestedStatus,
+            $previousStatus,
+            $faqLang,
+            [...$categories, ...$currentCategoryIds],
+        );
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
         $content = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -419,8 +464,16 @@ final class FaqController extends AbstractAdministrationApiController
         $permissions = $faqPermission->createPermissionArray();
 
         $this->logging->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
-        if ($active === 'yes') {
-            $this->logging->log($this->currentUser, AdminLogType::FAQ_PUBLISH->value . ':' . $faqId);
+        if ($status !== $previousStatus) {
+            $this->logging->log(
+                $this->currentUser,
+                AdminLogType::FAQ_STATUS_CHANGE->value . ':' . $faqId . ':' . $status->value,
+            );
+
+            // An ordinary save of an already-published FAQ is an edit, not a publication.
+            if ($status === FaqStatus::Published) {
+                $this->logging->log($this->currentUser, AdminLogType::FAQ_PUBLISH->value . ':' . $faqId);
+            }
         }
 
         if ('yes' === $revision && true === $this->configuration->get(item: 'records.enableAutoRevisions')) {
@@ -435,7 +488,7 @@ final class FaqController extends AbstractAdministrationApiController
             ->setLanguage($faqLang)
             ->setRevisionId($revisionId)
             ->setSolutionId($solutionId)
-            ->setActive($active === 'yes')
+            ->setStatus($status)
             ->setSticky($sticky !== 'no')
             ->setQuestion(Filter::removeAttributes(html_entity_decode(
                 $question,
@@ -521,10 +574,10 @@ final class FaqController extends AbstractAdministrationApiController
             $faqPermission->add(FaqPermission::GROUP, $faqId, $permissions['restricted_groups']);
         }
 
-        // If Elasticsearch is enabled, update an active or delete inactive FAQ document
+        // If Elasticsearch is enabled, update a published or delete a non-published FAQ document
         if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             $elasticsearch = new Elasticsearch($this->configuration);
-            if ('yes' === $active) {
+            if (FaqStatus::Published === $status) {
                 $elasticsearch->update([
                     'id' => $faqId,
                     'lang' => $faqLang,
@@ -534,13 +587,15 @@ final class FaqController extends AbstractAdministrationApiController
                     'keywords' => $faqData->getKeywords(),
                     'category_id' => $categories[0] ?? 0,
                 ]);
+            } else {
+                $elasticsearch->delete((int) $faqData->getSolutionId());
             }
         }
 
-        // If OpenSearch is enabled, update an active or delete an inactive FAQ document
+        // If OpenSearch is enabled, update a published or delete a non-published FAQ document
         if ($this->configuration->get(item: 'search.enableOpenSearch')) {
             $openSearch = new OpenSearch($this->configuration);
-            if ('yes' === $active) {
+            if (FaqStatus::Published === $status) {
                 $openSearch->update([
                     'id' => $faqId,
                     'lang' => $faqLang,
@@ -550,6 +605,8 @@ final class FaqController extends AbstractAdministrationApiController
                     'keywords' => $faqData->getKeywords(),
                     'category_id' => $categories[0] ?? 0,
                 ]);
+            } else {
+                $openSearch->delete((int) $faqData->getSolutionId());
             }
         }
 
@@ -591,17 +648,13 @@ final class FaqController extends AbstractAdministrationApiController
         $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, [$categoryId]);
         $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $language);
 
-        $onlyInactive = Filter::filterVar(
-            $request->query->get(key: 'only-inactive'),
-            FILTER_VALIDATE_BOOLEAN,
-            default: false,
-        );
+        $statusFilter = FaqStatus::tryFrom((string) $request->query->get(key: 'status'));
         $onlyNew = Filter::filterVar($request->query->get(key: 'only-new'), FILTER_VALIDATE_BOOLEAN, default: false);
 
         $faq = new FaqAdministration($this->configuration);
         $faq->setLanguage($language);
 
-        $faqs = $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew);
+        $faqs = $faq->getAllFaqsByCategory($categoryId, $statusFilter, $onlyNew);
 
         return $this->json([
             'faqs' => $this->withPublishCapability($faqs, $language),
@@ -622,17 +675,21 @@ final class FaqController extends AbstractAdministrationApiController
     /**
      * @throws Exception
      */
-    #[Route(path: 'faq/activate', name: 'admin.api.faq.activate', methods: ['POST'])]
-    public function activate(Request $request): JsonResponse
+    #[Route(path: 'faq/status', name: 'admin.api.faq.status', methods: ['POST'])]
+    public function status(Request $request): JsonResponse
     {
-        $this->userHasPermission(PermissionType::FAQ_PUBLISH);
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $data = $this->getJsonObject($request);
 
         $rawFaqIds = $data->faqIds ?? null;
         $faqIds = is_array($rawFaqIds) ? array_map(static fn(mixed $faqId): int => (int) $faqId, $rawFaqIds) : [];
         $faqLanguage = Filter::filterVar($data->faqLanguage ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $checked = Filter::filterVar($data->checked ?? false, FILTER_VALIDATE_BOOLEAN, false);
+        $targetStatus = FaqStatus::tryFrom((string) Filter::filterVar(
+            $data->status ?? '',
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            '',
+        ));
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'pmf-csrf-token',
@@ -641,34 +698,61 @@ final class FaqController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
+        if ($targetStatus === null) {
+            return $this->json(['error' => Translation::get(key: 'msgInvalidFaqStatus')], Response::HTTP_BAD_REQUEST);
+        }
+
         if ($faqIds !== []) {
-            $this->userHasPermissionForLanguage(PermissionType::FAQ_PUBLISH, $faqLanguage);
-
-            $activateCategory = new Category($this->configuration, [], withPermission: false);
-            $activateCategoryRelation = new Relation($this->configuration, $activateCategory);
-            foreach ($faqIds as $faqId) {
-                $this->userHasPermissionForCategories(
-                    PermissionType::FAQ_PUBLISH,
-                    array_keys($activateCategoryRelation->getCategories($faqId, $faqLanguage)),
-                );
+            if (!Language::isASupportedLanguage($faqLanguage)) {
+                return $this->json([
+                    'error' => Translation::get(key: 'ad_entry_savedfail'),
+                ], Response::HTTP_BAD_REQUEST);
             }
 
+            $statusCategory = new Category($this->configuration, [], withPermission: false);
+            $categoryRelation = new Relation($this->configuration, $statusCategory);
+
+            // First pass: validate every FAQ in the batch — permission checks throw on
+            // denial — before mutating any of them. Without this, a multi-ID request that
+            // 403s partway through would leave the earlier FAQs already updated and
+            // index-synced, with no way for the caller to tell which ones went through.
+            $categoryIdsByFaq = [];
+            foreach ($faqIds as $faqId) {
+                $currentStatus = $this->faq->getStatus($faqId, $faqLanguage);
+                $permission = $currentStatus->transitionRequiresPublishRight($targetStatus)
+                    ? PermissionType::FAQ_PUBLISH
+                    : PermissionType::FAQ_EDIT;
+
+                $this->userHasPermissionForLanguage($permission, $faqLanguage);
+                $faqCategoryIds = array_keys($categoryRelation->getCategories($faqId, $faqLanguage));
+                $this->userHasPermissionForCategories($permission, $faqCategoryIds);
+
+                $categoryIdsByFaq[$faqId] = $faqCategoryIds;
+            }
+
+            // Second pass: every FAQ in the batch passed validation, now apply the change.
             $faq = new FaqAdministration($this->configuration);
-            $success = false;
+            $allSucceeded = true;
 
             foreach ($faqIds as $faqId) {
-                if (!Language::isASupportedLanguage($faqLanguage)) {
-                    continue;
-                }
+                $succeeded = $faq->updateRecordStatus($faqId, $faqLanguage, $targetStatus);
+                $allSucceeded = $allSucceeded && $succeeded;
 
-                $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked, type: 'active');
+                if ($succeeded) {
+                    $this->adminLog->log(
+                        $this->currentUser,
+                        AdminLogType::FAQ_STATUS_CHANGE->value . ':' . $faqId . ':' . $targetStatus->value,
+                    );
+
+                    if ($targetStatus === FaqStatus::Published) {
+                        $this->adminLog->log($this->currentUser, AdminLogType::FAQ_PUBLISH->value . ':' . $faqId);
+                    }
+
+                    $this->syncSearchIndexForStatus($faqId, $faqLanguage, $targetStatus, $categoryIdsByFaq[$faqId]);
+                }
             }
 
-            if ($success) {
-                $this->adminLog->log(
-                    $this->currentUser,
-                    ($checked ? AdminLogType::FAQ_PUBLISH : AdminLogType::FAQ_EDIT)->value,
-                );
+            if ($allSucceeded) {
                 return $this->json(['success' => Translation::get(key: 'ad_entry_savedsuc')], Response::HTTP_OK);
             }
 
@@ -676,6 +760,71 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         return $this->json(['error' => 'No FAQ IDs provided.'], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Mirrors the search-index sync in update(): entering Published upserts the document,
+     * any other status removes it, since only published FAQs are searchable content.
+     *
+     * @param int[] $categoryIds the FAQ's current categories
+     * @throws Exception
+     */
+    private function syncSearchIndexForStatus(
+        int $faqId,
+        string $faqLanguage,
+        FaqStatus $status,
+        array $categoryIds,
+    ): void {
+        $elasticsearchEnabled = (bool) $this->configuration->get(item: 'search.enableElasticsearch');
+        $openSearchEnabled = (bool) $this->configuration->get(item: 'search.enableOpenSearch');
+
+        if (!$elasticsearchEnabled && !$openSearchEnabled) {
+            return;
+        }
+
+        $solutionId = $this->faq->getSolutionIdFromId($faqId, $faqLanguage);
+        $document = null;
+
+        // getFaq() resolves against the admin's own UI language (with a default-language
+        // fallback), not the $faqLanguage being published — an admin browsing in German who
+        // publishes the French row would otherwise index English content under 'lang' => 'fr',
+        // or the placeholder record when neither language exists. getFaqResult() is the
+        // language-explicit query getFaq() itself calls internally, so fetch that row directly
+        // instead and skip the upsert (falling through to the delete branch) when it's missing.
+        if (FaqStatus::Published === $status) {
+            $result = $this->faq->getFaqResult($faqId, $faqLanguage, null, true);
+            $row = $this->configuration->getDb()->fetchObject($result);
+
+            if ($row instanceof stdClass) {
+                $document = [
+                    'id' => $faqId,
+                    'lang' => $faqLanguage,
+                    'solution_id' => $solutionId,
+                    'question' => (string) $row->thema,
+                    'answer' => (string) $row->content,
+                    'keywords' => (string) $row->keywords,
+                    'category_id' => $categoryIds[0] ?? 0,
+                ];
+            }
+        }
+
+        if ($elasticsearchEnabled) {
+            $elasticsearch = new Elasticsearch($this->configuration);
+            if ($document !== null) {
+                $elasticsearch->update($document);
+            } else {
+                $elasticsearch->delete($solutionId);
+            }
+        }
+
+        if ($openSearchEnabled) {
+            $openSearch = new OpenSearch($this->configuration);
+            if ($document !== null) {
+                $openSearch->update($document);
+            } else {
+                $openSearch->delete($solutionId);
+            }
+        }
     }
 
     /**
@@ -1039,41 +1188,37 @@ final class FaqController extends AbstractAdministrationApiController
     }
 
     /**
-     * Decides the publication state an update should persist.
+     * Decides the editorial status an update should persist.
      *
-     * A user without the publish right may still edit a published FAQ; their save simply must
-     * not change whether it is live. The editor omits the field entirely for those users, and an
-     * absent field is deliberately distinct from an explicit "no" — treating the two alike would
-     * unpublish an FAQ on every ordinary save. A request that does try to change the state
-     * without the right is rejected rather than silently downgraded, so the caller never gets a
-     * success response for something that did not happen.
+     * A user without the publish right may still edit a published FAQ; their save must
+     * not change whether it is live. The editor omits the field for those users, and an
+     * absent field is deliberately distinct from an explicit status — treating the two
+     * alike would unpublish an FAQ on every ordinary save. A request that does try a
+     * gated transition without the right is rejected rather than silently downgraded.
      *
      * @param int[] $categoryIds the FAQ's current and submitted categories
      * @throws ForbiddenException|Exception
      */
-    private function resolvePublicationState(
-        stdClass $data,
-        int $faqId,
+    private function resolveStatusChange(
+        ?FaqStatus $requestedStatus,
+        FaqStatus $currentStatus,
         string $faqLanguage,
         array $categoryIds,
-    ): string {
-        $requestedActive = property_exists($data, 'active')
-            ? Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS, 'no')
-            : null;
-
-        $currentActive = $this->faq->isActive($faqId, $faqLanguage) ? 'yes' : 'no';
-
-        if ($this->userMayPublishIn($categoryIds, $faqLanguage)) {
-            return $requestedActive ?? $currentActive;
+    ): FaqStatus {
+        if ($requestedStatus === null || $requestedStatus === $currentStatus) {
+            return $currentStatus;
         }
 
-        if ($requestedActive !== null && $requestedActive !== $currentActive) {
+        if (
+            $currentStatus->transitionRequiresPublishRight($requestedStatus)
+            && !$this->userMayPublishIn($categoryIds, $faqLanguage)
+        ) {
             throw new ForbiddenException(message: sprintf(
                 'User has no "%s" permission.',
                 PermissionType::FAQ_PUBLISH->name,
             ));
         }
 
-        return $currentActive;
+        return $requestedStatus;
     }
 }

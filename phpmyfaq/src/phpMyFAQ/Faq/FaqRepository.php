@@ -23,6 +23,7 @@ use DateTime;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\FaqStatus;
 
 /* @mago-expect lint:too-many-methods - one query method per FAQ lookup; a split is planned with the Faq facade rework */
 final class FaqRepository implements FaqRepositoryInterface
@@ -139,7 +140,7 @@ final class FaqRepository implements FaqRepositoryInterface
             AND
                 fd.lang = '%s'
             AND
-                fd.active = 'yes'
+                fd.status = '%s'
             AND
                 fd.date_start <= '%s'
             AND
@@ -150,6 +151,7 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             $faqId,
             $this->configuration->getDb()->escape($faqLang),
+            FaqStatus::Published->value,
             $now,
             $now,
             $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope(),
@@ -162,20 +164,21 @@ final class FaqRepository implements FaqRepositoryInterface
 
     public function isActive(int $faqId, string $faqLang, string $commentType = 'faq'): bool
     {
-        $table = 'news' === $commentType ? 'faqnews' : 'faqdata';
+        if ('news' !== $commentType) {
+            return $this->getStatus($faqId, $faqLang) === FaqStatus::Published;
+        }
 
         $query = sprintf(
             "
             SELECT
                 active
             FROM
-                %s%s
+                %sfaqnews
             WHERE
                 id = %d
             AND
                 lang = '%s'",
             Database::getTablePrefix(),
-            $table,
             $faqId,
             $this->configuration->getDb()->escape($faqLang),
         );
@@ -192,6 +195,24 @@ final class FaqRepository implements FaqRepositoryInterface
         }
 
         return false;
+    }
+
+    public function getStatus(int $faqId, string $faqLang): FaqStatus
+    {
+        $query = sprintf(
+            "SELECT status FROM %sfaqdata WHERE id = %d AND lang = '%s'",
+            Database::getTablePrefix(),
+            $faqId,
+            $this->configuration->getDb()->escape($faqLang),
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        $row = $this->configuration->getDb()->fetchObject($result);
+        if (!$row) {
+            return FaqStatus::Draft;
+        }
+
+        return FaqStatus::tryFrom((string) $row->status) ?? FaqStatus::Draft;
     }
 
     public function getIdFromSolutionId(int $solutionId, int $userId, array $groups, bool $groupSupport): array
@@ -307,7 +328,7 @@ final class FaqRepository implements FaqRepositoryInterface
         $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             "SELECT
-                 id, lang, solution_id, revision_id, active, sticky, keywords,
+                 id, lang, solution_id, revision_id, status, sticky, keywords,
                  thema, content, author, email, comment, updated, date_start,
                  date_end, created, notes
             FROM
@@ -358,7 +379,7 @@ final class FaqRepository implements FaqRepositoryInterface
                 fd.lang AS lang,
                 fd.solution_id AS solution_id,
                 fd.revision_id AS revision_id,
-                fd.active AS active,
+                fd.status AS status,
                 fd.sticky AS sticky,
                 fd.keywords AS keywords,
                 fd.thema AS question,
@@ -403,7 +424,12 @@ final class FaqRepository implements FaqRepositoryInterface
             $categoryId,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             $onlyActive
-                ? sprintf("AND fd.active = 'yes' AND fd.date_start <= '%s' AND fd.date_end >= '%s'", $now, $now)
+                ? sprintf(
+                    "AND fd.status = '%s' AND fd.date_start <= '%s' AND fd.date_end >= '%s'",
+                    FaqStatus::Published->value,
+                    $now,
+                    $now,
+                )
                 : '',
             $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
@@ -524,7 +550,7 @@ final class FaqRepository implements FaqRepositoryInterface
             AND
                 fd.date_end   >= '%s'
             AND
-                fd.active = 'yes'
+                fd.status = '%s'
             AND
                 fcr.category_id = %d
             AND
@@ -537,6 +563,7 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             $now,
             $now,
+            FaqStatus::Published->value,
             $categoryId,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             $queryHelper->queryPermissionExistsAny($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
@@ -606,7 +633,12 @@ final class FaqRepository implements FaqRepositoryInterface
             $records,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             $onlyActive
-                ? sprintf("AND fd.active = 'yes' AND fd.date_start <= '%s' AND fd.date_end >= '%s'", $now, $now)
+                ? sprintf(
+                    "AND fd.status = '%s' AND fd.date_start <= '%s' AND fd.date_end >= '%s'",
+                    FaqStatus::Published->value,
+                    $now,
+                    $now,
+                )
                 : '',
             $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
@@ -654,7 +686,7 @@ final class FaqRepository implements FaqRepositoryInterface
             WHERE
                 fd.lang = '%s'
             AND
-                fd.active = 'yes'
+                fd.status = '%s'
             AND
                 fd.sticky = 1
             %s
@@ -668,6 +700,7 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
+            FaqStatus::Published->value,
             $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
 
@@ -688,7 +721,7 @@ final class FaqRepository implements FaqRepositoryInterface
 
         // prevents multiple display of FAQ in case it is tagged under multiple groups.
         $groupBy =
-            ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.active,fd.sticky,fd.keywords,'
+            ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.status,fd.sticky,fd.keywords,'
             . 'fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,'
             . 'fd.date_start,fd.date_end,fd.sticky,fd.created,fd.notes,fd.lang ';
         $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
@@ -700,7 +733,7 @@ final class FaqRepository implements FaqRepositoryInterface
                 fcr.category_id AS category_id,
                 fd.solution_id AS solution_id,
                 fd.revision_id AS revision_id,
-                fd.active AS active,
+                fd.status AS status,
                 fd.sticky AS sticky,
                 fd.keywords AS keywords,
                 fd.thema AS thema,
@@ -751,8 +784,8 @@ final class FaqRepository implements FaqRepositoryInterface
     {
         $query = sprintf(
             "INSERT INTO %sfaqdata
-            (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment,
-            updated, date_start, date_end, created, notes)
+            (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email,
+            comment, updated, date_start, date_end, created, notes)
             VALUES
             (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
@@ -760,7 +793,7 @@ final class FaqRepository implements FaqRepositoryInterface
             $this->configuration->getDb()->escape($faqEntity->getLanguage()),
             $faqEntity->getSolutionId(),
             $faqEntity->getRevisionId(),
-            $faqEntity->isActive() ? 'yes' : 'no',
+            $faqEntity->getStatus()->value,
             $faqEntity->isSticky() ? 1 : 0,
             $this->configuration->getDb()->escape($faqEntity->getKeywords()),
             $this->configuration->getDb()->escape($faqEntity->getQuestion()),
@@ -783,7 +816,7 @@ final class FaqRepository implements FaqRepositoryInterface
         $query = sprintf(
             "UPDATE %sfaqdata SET
             revision_id = %d,
-            active = '%s',
+            status = '%s',
             sticky = %d,
             keywords = '%s',
             thema = '%s',
@@ -796,7 +829,7 @@ final class FaqRepository implements FaqRepositoryInterface
             notes = '%s'",
             Database::getTablePrefix(),
             $faqEntity->getRevisionId(),
-            $faqEntity->isActive() ? 'yes' : 'no',
+            $faqEntity->getStatus()->value,
             $faqEntity->isSticky() ? 1 : 0,
             $this->configuration->getDb()->escape($faqEntity->getKeywords()),
             $this->configuration->getDb()->escape($faqEntity->getQuestion()),
@@ -917,7 +950,7 @@ final class FaqRepository implements FaqRepositoryInterface
             AND
                 fd.date_end   >= '%s'
             AND
-                fd.active = 'yes'
+                fd.status = '%s'
             AND
                 fcr.category_id = %d
             AND
@@ -929,6 +962,7 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             $now,
             $now,
+            FaqStatus::Published->value,
             $categoryId,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             $queryHelper->queryPermissionExistsAny($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
@@ -952,7 +986,7 @@ final class FaqRepository implements FaqRepositoryInterface
         $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             'SELECT COUNT(*) AS total FROM %sfaqdata fd '
-            . "WHERE fd.date_start <= '%s' AND fd.date_end >= '%s' AND fd.active = 'yes' AND fd.lang = '%s' "
+            . "WHERE fd.date_start <= '%s' AND fd.date_end >= '%s' AND fd.status = '%s' AND fd.lang = '%s' "
             // The scope constraint lives inside the EXISTS so the count matches
             // queryRenderableFaqsByCategoryId(), which constrains its fcr join the same way.
             . 'AND EXISTS (SELECT 1 FROM %sfaqcategoryrelations fcr '
@@ -960,6 +994,7 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             $now,
             $now,
+            FaqStatus::Published->value,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             Database::getTablePrefix(),
             $categoryId,
@@ -1011,7 +1046,7 @@ final class FaqRepository implements FaqRepositoryInterface
             AND
                 fd.date_end   >= '%s'
             AND
-                fd.active = 'yes'
+                fd.status = '%s'
             AND
                 fd.id IN (%s)
             AND
@@ -1024,6 +1059,7 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             $now,
             $now,
+            FaqStatus::Published->value,
             $records,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             $queryHelper->queryPermissionExistsAny($groupSupport) . $queryHelper->queryReadScope(),

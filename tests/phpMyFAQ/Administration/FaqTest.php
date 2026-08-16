@@ -4,6 +4,7 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -54,7 +55,7 @@ class FaqTest extends TestCase
         $mockResult->id = 1;
         $mockResult->lang = 'en';
         $mockResult->solution_id = 101;
-        $mockResult->active = 'yes';
+        $mockResult->status = 'published';
         $mockResult->sticky = 1;
         $mockResult->category_id = 1;
         $mockResult->question = 'What is PHP?';
@@ -81,7 +82,7 @@ class FaqTest extends TestCase
                 'id' => 1,
                 'language' => 'en',
                 'solution_id' => 101,
-                'active' => 'yes',
+                'status' => 'published',
                 'sticky' => 'yes',
                 'category_id' => 1,
                 'question' => 'What is PHP?',
@@ -93,6 +94,22 @@ class FaqTest extends TestCase
 
         // Assert the expected result
         $this->assertEquals($expected, $result);
+    }
+
+    public function testGetAllFaqsByCategoryAppliesStatusFilter(): void
+    {
+        $this->faq->setLanguage('en');
+
+        $this->mockDb
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains("AND fd.status = 'draft'"))
+            ->willReturn(true);
+        $this->mockDb->method('numRows')->willReturn(0);
+
+        $result = $this->faq->getAllFaqsByCategory(1, FaqStatus::Draft);
+
+        $this->assertEmpty($result);
     }
 
     public function testUpdateRecordFlagReturnsFalseForInvalidType(): void
@@ -231,23 +248,39 @@ class FaqTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testUpdateRecordFlagForActiveType(): void
+    /**
+     * The 'active' flag is now set exclusively through updateRecordStatus(); updateRecordFlag()
+     * only understands 'sticky' and falls back to the invalid-type branch for anything else.
+     */
+    public function testUpdateRecordFlagForActiveTypeIsNoLongerSupported(): void
+    {
+        $this->mockDb->expects($this->never())->method('query');
+
+        $result = $this->faq->updateRecordFlag(456, 'de', false, 'active');
+
+        $this->assertFalse($result);
+    }
+
+    public function testUpdateRecordStatusSetsStatusToPublished(): void
+    {
+        $this->mockDb->method('escape')->willReturn('en');
+
+        $expectedQuery = "UPDATE faqdata SET status = 'published' WHERE id = 123 AND lang = 'en'";
+        $this->mockDb->expects($this->once())->method('query')->with($expectedQuery)->willReturn(true);
+
+        $result = $this->faq->updateRecordStatus(123, 'en', FaqStatus::Published);
+
+        $this->assertTrue($result);
+    }
+
+    public function testUpdateRecordStatusSetsStatusToNonPublishedValue(): void
     {
         $this->mockDb->method('escape')->willReturn('de');
 
-        // Test setting active flag to false - match the actual formatted query
-        $expectedQuery = "
-                UPDATE 
-                    faqdata 
-                SET 
-                    active = 'no' 
-                WHERE 
-                    id = 456 
-                AND 
-                    lang = 'de'";
+        $expectedQuery = "UPDATE faqdata SET status = 'review' WHERE id = 456 AND lang = 'de'";
         $this->mockDb->expects($this->once())->method('query')->with($expectedQuery)->willReturn(true);
 
-        $result = $this->faq->updateRecordFlag(456, 'de', false, 'active');
+        $result = $this->faq->updateRecordStatus(456, 'de', FaqStatus::Review);
 
         $this->assertTrue($result);
     }

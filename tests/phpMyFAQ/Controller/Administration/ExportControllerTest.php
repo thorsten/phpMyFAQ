@@ -106,8 +106,8 @@ final class ExportControllerTest extends TestCase
         $this->configuration
             ->getDb()
             ->query(
-                "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
-             VALUES (1, 'en', 1000, 0, 'yes', 0, '', 'Export FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (1, 'en', 1000, 0, 'published', 0, '', 'Export FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
             );
         $this->configuration->getDb()->query("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
              VALUES (1, 'en', 1, 'en')");

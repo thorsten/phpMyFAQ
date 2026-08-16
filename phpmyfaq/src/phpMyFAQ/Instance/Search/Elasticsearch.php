@@ -28,6 +28,7 @@ use Http\Promise\Promise;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\FaqStatus;
 
 /**
  * Class Elasticsearch
@@ -325,7 +326,7 @@ class Elasticsearch
         $i = 1;
 
         foreach ($faqs as $faq) {
-            if ('no' === ($faq['active'] ?? 'no')) {
+            if (FaqStatus::Published->value !== ($faq['status'] ?? null)) {
                 continue;
             }
 
@@ -358,6 +359,12 @@ class Elasticsearch
             }
 
             ++$i;
+        }
+
+        // Nothing left to send — every FAQ was filtered out (e.g. none published) or the
+        // last full batch drained the buffer; an empty bulk request would be rejected.
+        if (($params['body'] ?? []) === []) {
+            return ['success' => []];
         }
 
         // Send the last batch if it exists

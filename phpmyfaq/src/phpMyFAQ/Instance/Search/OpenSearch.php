@@ -21,8 +21,10 @@ namespace phpMyFAQ\Instance\Search;
 
 use Exception;
 use OpenSearch\Client;
+use OpenSearch\Exception\HttpException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
+use phpMyFAQ\Enums\FaqStatus;
 
 /**
  * Class OpenSearch
@@ -212,7 +214,7 @@ readonly class OpenSearch
         $i = 1;
 
         foreach ($faqs as $faq) {
-            if ('no' === ($faq['active'] ?? 'no')) {
+            if (FaqStatus::Published->value !== ($faq['status'] ?? null)) {
                 continue;
             }
 
@@ -241,6 +243,12 @@ readonly class OpenSearch
             }
 
             ++$i;
+        }
+
+        // Nothing left to send — every FAQ was filtered out (e.g. none published) or the
+        // last full batch drained the buffer; an empty bulk request would be rejected.
+        if (($params['body'] ?? []) === []) {
+            return ['success' => []];
         }
 
         // Send the last batch if it exists
@@ -292,7 +300,11 @@ readonly class OpenSearch
             'id' => (string) $solutionId,
         ];
 
-        return $this->client->delete($params);
+        try {
+            return $this->client->delete($params);
+        } catch (HttpException $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
     /**

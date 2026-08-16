@@ -112,10 +112,10 @@ class StatisticsIntegrationTest extends TestCase
         $database = $this->configuration->getDb();
 
         $database->query(sprintf(
-            "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, "
-            . "author, email, comment, updated, date_start, date_end, created, notes, sticky_order) "
-            . "VALUES (%d, 'en', %d, 0, 'yes', 0, '', '%s', 'Answer', 'Author', 'author@example.com', 'y', "
-            . "'%s', '00000000000000', '99991231235959', '2026-03-01 01:01:01', '', 0)",
+            "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, "
+            . "content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order) "
+            . "VALUES (%d, 'en', %d, 0, 'published', 0, '', '%s', 'Answer', 'Author', 'author@example.com', "
+            . "'y', '%s', '00000000000000', '99991231235959', '2026-03-01 01:01:01', '', 0)",
             $id,
             1000 + $id,
             $database->escape($question),

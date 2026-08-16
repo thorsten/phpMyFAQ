@@ -12,6 +12,7 @@ use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
@@ -110,8 +111,11 @@ final class FaqControllerTest extends TestCase
 
     private function createController(): FaqController
     {
+        $faq = $this->createStub(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
+
         return new FaqController(
-            $this->createStub(Faq::class),
+            $faq,
             $this->createStub(FaqAdministration::class),
             $this->createStub(Tags::class),
             $this->createStub(Notification::class),
@@ -210,7 +214,6 @@ final class FaqControllerTest extends TestCase
                         PermissionType::FAQ_ADD->value,
                         PermissionType::FAQ_EDIT->value,
                         PermissionType::FAQ_DELETE->value,
-                        PermissionType::FAQ_APPROVE->value,
                         PermissionType::FAQ_PUBLISH->value,
                         PermissionType::FAQ_TRANSLATE->value,
                     ],
@@ -227,7 +230,6 @@ final class FaqControllerTest extends TestCase
                         PermissionType::FAQ_ADD->value,
                         PermissionType::FAQ_EDIT->value,
                         PermissionType::FAQ_DELETE->value,
-                        PermissionType::FAQ_APPROVE->value,
                         PermissionType::FAQ_PUBLISH->value,
                         PermissionType::FAQ_TRANSLATE->value,
                     ],
@@ -246,7 +248,6 @@ final class FaqControllerTest extends TestCase
                         PermissionType::FAQ_ADD->value,
                         PermissionType::FAQ_EDIT->value,
                         PermissionType::FAQ_DELETE->value,
-                        PermissionType::FAQ_APPROVE->value,
                         PermissionType::FAQ_PUBLISH->value,
                         PermissionType::FAQ_TRANSLATE->value,
                     ],
@@ -298,8 +299,8 @@ final class FaqControllerTest extends TestCase
         $this->configuration
             ->getDb()
             ->query(sprintf(
-                "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
-             VALUES (%d, '%s', %d, 0, 'no', 0, '', '%s', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (%d, '%s', %d, 0, 'draft', 0, '', '%s', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
                 $faqId,
                 $language,
                 $faqId + 1000,
@@ -309,6 +310,22 @@ final class FaqControllerTest extends TestCase
             ->getDb()
             ->query(sprintf("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
              VALUES (%d, '%s', %d, '%s')", $categoryId, $language, $faqId, $language));
+    }
+
+    private function getPersistedFaqStatus(int $faqId, string $language): string
+    {
+        $result = $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "SELECT status FROM faqdata WHERE id = %d AND lang = '%s'",
+                $faqId,
+                $language,
+            ));
+        self::assertNotFalse($result);
+        $row = $this->configuration->getDb()->fetchObject($result);
+        self::assertIsObject($row);
+
+        return (string) $row->status;
     }
 
     private function countFaqRevisions(int $faqId, string $language): int
@@ -370,13 +387,13 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateRequiresAuthentication(): void
+    public function testStatusRequiresAuthentication(): void
     {
         $request = new Request([], [], [], [], [], [], json_encode(['csrfToken' => 'test-token'], JSON_THROW_ON_ERROR));
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->activate($request);
+        $controller->status($request);
     }
 
     /**
@@ -469,7 +486,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => 1,
                 'lang' => 'en',
                 'tags' => '',
-                'active' => 'yes',
+                'status' => 'published',
                 'answer' => 'Answer',
                 'keywords' => '',
                 'author' => 'Author',
@@ -512,7 +529,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => [666],
                 'lang' => 'en',
                 'tags' => '',
-                'active' => 'yes',
+                'status' => 'published',
                 'answer' => 'Restricted answer',
                 'keywords' => '',
                 'author' => 'Author',
@@ -553,7 +570,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => [1],
                 'lang' => 'fr',
                 'tags' => '',
-                'active' => 'yes',
+                'status' => 'published',
                 'answer' => 'Restricted answer',
                 'keywords' => '',
                 'author' => 'Author',
@@ -594,7 +611,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => 1,
                 'lang' => 'en',
                 'tags' => '',
-                'active' => 'yes',
+                'status' => 'published',
                 'answer' => '',
                 'keywords' => '',
                 'author' => 'Author',
@@ -644,7 +661,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => 1,
                 'lang' => 'en',
                 'tags' => '',
-                'active' => 'yes',
+                'status' => 'published',
                 'answer' => 'Answer',
                 'keywords' => '',
                 'author' => 'Author',
@@ -687,7 +704,7 @@ final class FaqControllerTest extends TestCase
             ->setId(123)
             ->setLanguage('en')
             ->setSolutionId(1123)
-            ->setActive(true)
+            ->setStatus(FaqStatus::Published)
             ->setSticky(false)
             ->setQuestion('Created FAQ')
             ->setAnswer('Created answer')
@@ -726,7 +743,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => 1,
                 'lang' => 'en',
                 'tags' => 'first-tag, second-tag',
-                'active' => 'yes',
+                'status' => 'published',
                 'sticky' => 'no',
                 'answer' => 'Created answer',
                 'keywords' => 'created',
@@ -781,7 +798,7 @@ final class FaqControllerTest extends TestCase
             ->setId(321)
             ->setLanguage('en')
             ->setSolutionId(1321)
-            ->setActive(true)
+            ->setStatus(FaqStatus::Published)
             ->setSticky(false)
             ->setQuestion('Answered FAQ')
             ->setAnswer('Answered answer')
@@ -808,7 +825,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => 1,
                 'lang' => 'en',
                 'tags' => '',
-                'active' => 'yes',
+                'status' => 'published',
                 'sticky' => 'no',
                 'answer' => 'Answered answer',
                 'keywords' => 'answered',
@@ -864,7 +881,7 @@ final class FaqControllerTest extends TestCase
             ->setId(322)
             ->setLanguage('en')
             ->setSolutionId(1322)
-            ->setActive(true)
+            ->setStatus(FaqStatus::Published)
             ->setSticky(false)
             ->setQuestion('Answered FAQ 2')
             ->setAnswer('Answered answer 2')
@@ -891,7 +908,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => 1,
                 'lang' => 'en',
                 'tags' => '',
-                'active' => 'yes',
+                'status' => 'published',
                 'sticky' => 'no',
                 'answer' => 'Answered answer 2',
                 'keywords' => 'answered',
@@ -952,19 +969,49 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    public function testListByCategoryFiltersByStatusQueryParameter(): void
+    {
+        $this->seedFaqRecord(faqId: 1, question: 'Draft FAQ');
+
+        $this->configuration->getDb()->query(
+            "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (2, 'en', 1002, 0, 'published', 0, '', 'Published FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+        );
+        $this->configuration->getDb()->query(
+            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+             VALUES (1, 'en', 2, 'en')",
+        );
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->listByCategory(
+            new Request(['status' => 'published'], [], ['categoryId' => 1, 'language' => 'en']),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertCount(1, $payload['faqs']);
+        self::assertSame(2, $payload['faqs'][0]['id']);
+        self::assertSame('published', $payload['faqs'][0]['status']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatusReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
     {
         $request = new Request([], [], [], [], [], [], json_encode([
             'csrf' => 'invalid-token',
             'faqIds' => [1],
             'faqLanguage' => 'en',
-            'checked' => true,
+            'status' => 'published',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $response = $controller->activate($request);
+        $response = $controller->status($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
@@ -1049,7 +1096,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => 1,
                 'lang' => 'en',
                 'tags' => '',
-                'active' => 'yes',
+                'status' => 'published',
                 'answer' => 'Updated answer',
                 'keywords' => '',
                 'author' => 'Author',
@@ -1097,7 +1144,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => 1,
                 'lang' => 'en',
                 'tags' => '',
-                'active' => 'yes',
+                'status' => 'published',
                 'answer' => '',
                 'keywords' => '',
                 'author' => 'Author',
@@ -1149,7 +1196,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => 1,
                 'lang' => 'en',
                 'tags' => '',
-                'active' => 'yes',
+                'status' => 'published',
                 'sticky' => 'no',
                 'answer' => 'Updated answer',
                 'keywords' => 'updated',
@@ -1170,6 +1217,7 @@ final class FaqControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $faq = $this->createMock(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
         $faq->expects($this->exactly(2))->method('hasTranslation')->with(1, 'en')->willReturn(true);
         $faq
             ->expects($this->once())
@@ -1207,7 +1255,7 @@ final class FaqControllerTest extends TestCase
             ->setLanguage('en')
             ->setRevisionId(0)
             ->setSolutionId(1001)
-            ->setActive(false)
+            ->setStatus(FaqStatus::Draft)
             ->setSticky(false)
             ->setQuestion('Updated FAQ')
             ->setAnswer('Updated answer')
@@ -1218,6 +1266,7 @@ final class FaqControllerTest extends TestCase
             ->setNotes('Updated notes');
 
         $faq = $this->createMock(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
         $faq->expects($this->exactly(2))->method('hasTranslation')->with(1, 'en')->willReturn(true);
         $faq->expects($this->once())->method('update')->willReturn($faqEntity);
 
@@ -1247,7 +1296,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => 1,
                 'lang' => 'en',
                 'tags' => '',
-                'active' => 'no',
+                'status' => 'draft',
                 'sticky' => 'no',
                 'answer' => 'Updated answer',
                 'keywords' => 'updated',
@@ -1309,7 +1358,7 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateReturnsBadRequestWhenFaqIdsAreMissingWithValidCsrf(): void
+    public function testStatusReturnsBadRequestWhenFaqIdsAreMissingWithValidCsrf(): void
     {
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
@@ -1319,17 +1368,70 @@ final class FaqControllerTest extends TestCase
             'csrf' => $csrfToken,
             'faqIds' => [],
             'faqLanguage' => 'en',
-            'checked' => true,
+            'status' => 'published',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->activate($request);
+        $response = $controller->status($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame('No FAQ IDs provided.', $payload['error']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatusReturnsBadRequestForInvalidStatusValueWithValidCsrf(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'not-a-real-status',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->status($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgInvalidFaqStatus'), $payload['error']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatusReturnsBadRequestWhenStatusValueIsMissingWithValidCsrf(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->status($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgInvalidFaqStatus'), $payload['error']);
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
@@ -1363,7 +1465,7 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateReturnsBadRequestWhenLanguageIsUnsupportedWithValidCsrf(): void
+    public function testStatusReturnsBadRequestWhenLanguageIsUnsupportedWithValidCsrf(): void
     {
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
@@ -1373,13 +1475,13 @@ final class FaqControllerTest extends TestCase
             'csrf' => $csrfToken,
             'faqIds' => [1],
             'faqLanguage' => 'zz',
-            'checked' => true,
+            'status' => 'published',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->activate($request);
+        $response = $controller->status($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
@@ -1390,9 +1492,9 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateReturnsSuccessWithValidCsrf(): void
+    public function testStatusReturnsSuccessWithValidCsrf(): void
     {
-        $this->seedFaqRecord(question: 'Activatable FAQ');
+        $this->seedFaqRecord(question: 'Publishable FAQ');
 
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
@@ -1402,17 +1504,136 @@ final class FaqControllerTest extends TestCase
             'csrf' => $csrfToken,
             'faqIds' => [1],
             'faqLanguage' => 'en',
-            'checked' => true,
+            'status' => 'review',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->activate($request);
+        $response = $controller->status($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+        self::assertSame(FaqStatus::Review->value, $this->getPersistedFaqStatus(1, 'en'));
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * Draft to review is an editorial step, not a publication one — the edit right is enough.
+     *
+     * @throws \Exception
+     */
+    public function testStatusAllowsDraftToReviewWithoutPublishPermission(): void
+    {
+        $this->seedFaqRecord(question: 'Publishable FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'review',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $response = $controller->status($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * Review to published is a gated transition; a user holding the publish right may complete it.
+     *
+     * @throws \Exception
+     */
+    public function testStatusAllowsReviewToPublishedWithPublishPermission(): void
+    {
+        $this->seedFaqRecord(question: 'Publishable FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Review);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'published',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->status($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+        self::assertSame(FaqStatus::Published->value, $this->getPersistedFaqStatus(1, 'en'));
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * Publishing must source the search-index document via the language-scoped
+     * getFaqResult($faqId, $faqLanguage, ...), never via getFaq() — getFaq() resolves against
+     * the admin's own configured UI language (with a default-language fallback), which is not
+     * necessarily the $faqLanguage being published, and would index either the wrong
+     * language's content or the placeholder record under the wrong language.
+     *
+     * @throws \Exception
+     */
+    public function testStatusPublishFetchesDocumentContentForTheRequestedLanguageNotGetFaq(): void
+    {
+        $this->seedFaqRecord(question: 'Publishable FAQ');
+        self::assertTrue($this->configuration->set('search.enableElasticsearch', true));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Review);
+        $faq->method('getSolutionIdFromId')->willReturn(1001);
+        $faq->expects($this->never())->method('getFaq');
+        // A real one-row result so the controller actually builds the index document from the
+        // language-scoped row instead of silently falling through to the delete branch.
+        $englishRow = $this->configuration
+            ->getDb()
+            ->query("SELECT 'Publishable FAQ' AS thema, 'Answer' AS content, '' AS keywords");
+        self::assertNotFalse($englishRow);
+        $faq->expects($this->once())->method('getFaqResult')->with(1, 'en', null, true)->willReturn($englishRow);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'published',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        // No Elasticsearch client is registered on Configuration, so constructing the
+        // Elasticsearch wrapper throws — but only after the language-scoped row above has been
+        // fetched and the index document built from it; the assertions on the Faq mock are what
+        // this test actually verifies.
+        try {
+            $controller->status($request);
+        } catch (\LogicException) {
+        }
+
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
@@ -1797,7 +2018,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => [666],
                 'lang' => 'en',
                 'tags' => '',
-                'active' => 'yes',
+                'status' => 'published',
                 'answer' => 'Updated answer',
                 'keywords' => '',
                 'author' => 'Author',
@@ -1843,7 +2064,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => [1],
                 'lang' => 'fr',
                 'tags' => '',
-                'active' => 'yes',
+                'status' => 'published',
                 'answer' => 'Updated answer',
                 'keywords' => '',
                 'author' => 'Author',
@@ -1923,7 +2144,7 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testActivateReturnsForbiddenWhenFaqIsInRestrictedCategory(): void
+    public function testStatusReturnsForbiddenWhenFaqIsInRestrictedCategory(): void
     {
         $this->seedFaqRecord(categoryId: 666);
 
@@ -1935,7 +2156,7 @@ final class FaqControllerTest extends TestCase
             'csrf' => $csrfToken,
             'faqIds' => [1],
             'faqLanguage' => 'en',
-            'checked' => true,
+            'status' => 'published',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
@@ -1943,13 +2164,13 @@ final class FaqControllerTest extends TestCase
 
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission for category 666.');
-        $controller->activate($request);
+        $controller->status($request);
     }
 
     /**
      * @throws \Exception
      */
-    public function testActivateReturnsForbiddenWhenLanguageIsRestricted(): void
+    public function testStatusReturnsForbiddenWhenLanguageIsRestricted(): void
     {
         $this->seedFaqRecord(categoryId: 1, language: 'fr');
 
@@ -1961,7 +2182,7 @@ final class FaqControllerTest extends TestCase
             'csrf' => $csrfToken,
             'faqIds' => [1],
             'faqLanguage' => 'fr',
-            'checked' => true,
+            'status' => 'published',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
@@ -1969,7 +2190,110 @@ final class FaqControllerTest extends TestCase
 
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission for language "fr".');
-        $controller->activate($request);
+        $controller->status($request);
+    }
+
+    /**
+     * Publishing without the publish right must fail even when the user otherwise holds
+     * FAQ_EDIT and every category/language right — the transition itself is gated.
+     *
+     * @throws \Exception
+     */
+    public function testStatusReturnsForbiddenWhenPublishingWithoutPublishPermission(): void
+    {
+        $this->seedFaqRecord(question: 'Publishable FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'published',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission for language "en".');
+        $controller->status($request);
+    }
+
+    /**
+     * Unpublishing without the publish right must also fail — going from Published to any
+     * other status is a publication decision, not an ordinary edit.
+     *
+     * @throws \Exception
+     */
+    public function testStatusReturnsForbiddenWhenUnpublishingWithoutPublishPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'draft',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission for language "en".');
+        $controller->status($request);
+    }
+
+    /**
+     * A batch status change must validate every FAQ before mutating any of them. When the
+     * second FAQ in the batch sits in a category the user has no right in, the request must
+     * 403 and the first FAQ — which passed its own check and would previously have already
+     * been persisted and index-synced by the time the second one was rejected — must be left
+     * completely untouched.
+     *
+     * @throws \Exception
+     */
+    public function testStatusRejectsWholeBatchAndLeavesEarlierFaqUnchangedWhenALaterFaqIsForbidden(): void
+    {
+        $this->seedFaqRecord(categoryId: 1, faqId: 1, question: 'First FAQ');
+        $this->seedFaqRecord(categoryId: 666, faqId: 2, question: 'Second FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1, 2],
+            'faqLanguage' => 'en',
+            'status' => 'review',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        try {
+            $controller->status($request);
+            self::fail('Expected a ForbiddenException for the restricted second FAQ.');
+        } catch (ForbiddenException $exception) {
+            self::assertSame('User has no "FAQ_EDIT" permission for category 666.', $exception->getMessage());
+        } finally {
+            $this->removeCsrfCookie('pmf-csrf-token');
+        }
+
+        self::assertSame(
+            'draft',
+            $this->getPersistedFaqStatus(1, 'en'),
+            'The first FAQ must stay unchanged once a later FAQ in the same batch is rejected.',
+        );
     }
 
     /**
@@ -2106,8 +2430,8 @@ final class FaqControllerTest extends TestCase
         $this->configuration
             ->getDb()
             ->query(sprintf(
-                "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
-             VALUES (%d, '%s', %d, 0, 'no', 0, '', 'Orphaned FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (%d, '%s', %d, 0, 'draft', 0, '', 'Orphaned FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
                 $faqId,
                 $language,
                 $faqId + 1000,
@@ -2185,13 +2509,13 @@ final class FaqControllerTest extends TestCase
     // but only faq_publish decides whether it goes live.
     // =====================================================================
 
-    public function testCreateReturnsForbiddenForActiveFaqWithoutPublishPermission(): void
+    public function testCreateReturnsForbiddenForPublishedFaqWithoutPublishPermission(): void
     {
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
         $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
 
-        $request = $this->createRequestForNewFaq($csrfToken, active: 'yes');
+        $request = $this->createRequestForNewFaq($csrfToken, status: 'published');
 
         $controller = $this->createController();
         $controller->setContainer($this->createContainerWithoutPublishPermission($session));
@@ -2206,13 +2530,13 @@ final class FaqControllerTest extends TestCase
         }
     }
 
-    public function testCreateSucceedsForInactiveFaqWithoutPublishPermission(): void
+    public function testCreateSucceedsForDraftFaqWithoutPublishPermission(): void
     {
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
         $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
 
-        $request = $this->createRequestForNewFaq($csrfToken, active: 'no');
+        $request = $this->createRequestForNewFaq($csrfToken, status: 'draft');
 
         $faq = $this->createMock(Faq::class);
         $faq->expects($this->once())
@@ -2229,24 +2553,119 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
-     * The editor omits the "active" field for a user without the publish right, and an absent
-     * field must not be read as "no" — that would unpublish a live FAQ on an ordinary save.
+     * A present but unsupported status value is a malformed request — it must 400 instead
+     * of silently creating a draft; only an absent field falls back to Draft.
      */
-    public function testUpdateKeepsAPublishedFaqLiveWhenTheFieldIsOmitted(): void
+    public function testCreateRejectsUnsupportedStatusValue(): void
     {
-        $this->seedFaqRecord(question: 'Original FAQ');
-        $this->configuration->getDb()->query("UPDATE faqdata SET active = 'yes' WHERE id = 1 AND lang = 'en'");
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForNewFaq($csrfToken, status: 'bogus');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('create');
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($request);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * A newly created draft/review FAQ must not become publicly findable via search before
+     * its first publish: create() must not index it into Elasticsearch or OpenSearch. No
+     * search client is registered on Configuration in this test, so reaching either indexing
+     * branch would throw a LogicException when constructing the client wrapper — a clean OK
+     * response is proof neither branch ran.
+     *
+     * @throws \Exception
+     */
+    public function testCreateDoesNotIndexDraftOrReviewFaqWhenSearchIsEnabled(): void
+    {
+        self::assertTrue($this->configuration->set('search.enableElasticsearch', true));
+        self::assertTrue($this->configuration->set('search.enableOpenSearch', true));
 
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
         $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
 
-        $request = $this->createRequestForFaqUpdate($csrfToken, active: null);
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        foreach (['draft', 'review'] as $status) {
+            $request = $this->createRequestForNewFaq($csrfToken, status: $status);
+
+            $response = $controller->create($request);
+
+            self::assertSame(Response::HTTP_OK, $response->getStatusCode(), 'status: ' . $status);
+        }
+
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * A newly published FAQ is public content and must be indexed immediately: create() must
+     * attempt to index it into Elasticsearch when the created FAQ's status is Published. No
+     * Elasticsearch client is registered on Configuration in this test, so the attempt itself
+     * surfaces as a LogicException from the client wrapper's constructor.
+     *
+     * @throws \Exception
+     */
+    public function testCreateAttemptsToIndexPublishedFaqIntoElasticsearchWhenEnabled(): void
+    {
+        self::assertTrue($this->configuration->set('search.enableElasticsearch', true));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForNewFaq($csrfToken, status: 'published');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(\LogicException::class);
+
+        try {
+            $controller->create($request);
+        } finally {
+            $this->removeCsrfCookie('pmf-csrf-token');
+        }
+    }
+
+    /**
+     * The editor omits the "status" field for a user without the publish right, and an absent
+     * field must not be read as "draft" — that would unpublish a live FAQ on an ordinary save.
+     */
+    public function testUpdateKeepsAPublishedFaqLiveWhenTheFieldIsOmitted(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForFaqUpdate($csrfToken, status: null);
 
         $persisted = null;
         $faq = $this->createMock(Faq::class);
         $faq->method('hasTranslation')->willReturn(true);
-        $faq->method('isActive')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
         $faq->expects($this->once())
             ->method('update')
             ->willReturnCallback(static function (\phpMyFAQ\Entity\FaqEntity $faqEntity) use (&$persisted): \phpMyFAQ\Entity\FaqEntity {
@@ -2262,11 +2681,19 @@ final class FaqControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertInstanceOf(\phpMyFAQ\Entity\FaqEntity::class, $persisted);
-        self::assertTrue($persisted->isActive(), 'A save without the publish right must not unpublish the FAQ.');
+        self::assertSame(
+            FaqStatus::Published,
+            $persisted->getStatus(),
+            'A save without the publish right must not unpublish the FAQ.',
+        );
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
-    public function testUpdateReturnsForbiddenWhenChangingTheStateWithoutPublishPermission(): void
+    /**
+     * Submitting the FAQ's current status is a no-op: it must succeed even without the
+     * publish right, because resolveStatusChange() only gates an actual transition.
+     */
+    public function testUpdateSucceedsWhenSubmittedStatusMatchesTheCurrentStatus(): void
     {
         $this->seedFaqRecord(question: 'Original FAQ');
 
@@ -2274,11 +2701,101 @@ final class FaqControllerTest extends TestCase
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
         $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
 
-        $request = $this->createRequestForFaqUpdate($csrfToken, active: 'yes');
+        $request = $this->createRequestForFaqUpdate($csrfToken, status: 'draft');
 
         $faq = $this->createMock(Faq::class);
         $faq->method('hasTranslation')->willReturn(true);
-        $faq->method('isActive')->willReturn(false);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
+        $faq->expects($this->once())->method('update')->willReturnCallback(
+            static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity,
+        );
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $response = $controller->update($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * A present but unsupported status value is a malformed request — it must 400 instead
+     * of being silently ignored; only an absent field keeps the stored state.
+     */
+    public function testUpdateRejectsUnsupportedStatusValue(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForFaqUpdate($csrfToken, status: 'PUBLISHED');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
+        $faq->expects($this->never())->method('update');
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $response = $controller->update($request);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * Draft to review is an editorial step, not a publication one — the edit right is enough.
+     */
+    public function testUpdateAllowsDraftToReviewWithoutPublishPermission(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForFaqUpdate($csrfToken, status: 'review');
+
+        $persisted = null;
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
+        $faq->expects($this->once())
+            ->method('update')
+            ->willReturnCallback(static function (\phpMyFAQ\Entity\FaqEntity $faqEntity) use (&$persisted): \phpMyFAQ\Entity\FaqEntity {
+                $persisted = $faqEntity;
+
+                return $faqEntity;
+            });
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $response = $controller->update($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertInstanceOf(\phpMyFAQ\Entity\FaqEntity::class, $persisted);
+        self::assertSame(FaqStatus::Review, $persisted->getStatus());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    public function testUpdateReturnsForbiddenWhenPublishingWithoutPublishPermission(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForFaqUpdate($csrfToken, status: 'published');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
         $faq->expects($this->never())->method('update');
 
         $controller = $this->createControllerWithFaq($faq);
@@ -2294,8 +2811,80 @@ final class FaqControllerTest extends TestCase
         }
     }
 
-    public function testActivateReturnsForbiddenWithoutPublishPermission(): void
+    public function testUpdateReturnsForbiddenWhenUnpublishingWithoutPublishPermission(): void
     {
+        $this->seedFaqRecord(question: 'Original FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForFaqUpdate($csrfToken, status: 'draft');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->never())->method('update');
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission.');
+
+        try {
+            $controller->update($request);
+        } finally {
+            $this->removeCsrfCookie('pmf-csrf-token');
+        }
+    }
+
+    /**
+     * Review to published is a gated transition; a user holding the publish right may complete it.
+     */
+    public function testUpdateAllowsReviewToPublishedWithPublishPermission(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->createRequestForFaqUpdate($csrfToken, status: 'published');
+
+        $persisted = null;
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Review);
+        $faq->expects($this->once())
+            ->method('update')
+            ->willReturnCallback(static function (\phpMyFAQ\Entity\FaqEntity $faqEntity) use (&$persisted): \phpMyFAQ\Entity\FaqEntity {
+                $persisted = $faqEntity;
+
+                return $faqEntity;
+            });
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->update($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertInstanceOf(\phpMyFAQ\Entity\FaqEntity::class, $persisted);
+        self::assertSame(FaqStatus::Published, $persisted->getStatus());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * Submitting the FAQ's current status is a no-op that must succeed without the publish
+     * right, since transitionRequiresPublishRight() only gates an actual transition.
+     *
+     * @throws \Exception
+     */
+    public function testStatusSucceedsWhenSubmittedStatusMatchesTheCurrentStatusWithoutPublishPermission(): void
+    {
+        $this->seedFaqRecord(question: 'Publishable FAQ');
+
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
         $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
@@ -2304,20 +2893,18 @@ final class FaqControllerTest extends TestCase
             'csrf' => $csrfToken,
             'faqIds' => [1],
             'faqLanguage' => 'en',
-            'checked' => true,
+            'status' => 'draft',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
         $controller->setContainer($this->createContainerWithoutPublishPermission($session));
 
-        $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission.');
+        $response = $controller->status($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        try {
-            $controller->activate($request);
-        } finally {
-            $this->removeCsrfCookie('pmf-csrf-token');
-        }
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+        $this->removeCsrfCookie('pmf-csrf-token');
     }
 
     /**
@@ -2330,7 +2917,6 @@ final class FaqControllerTest extends TestCase
             PermissionType::FAQ_ADD->value,
             PermissionType::FAQ_EDIT->value,
             PermissionType::FAQ_DELETE->value,
-            PermissionType::FAQ_APPROVE->value,
             PermissionType::FAQ_TRANSLATE->value,
             PermissionType::FAQS_VIEW->value,
         ];
@@ -2380,7 +2966,7 @@ final class FaqControllerTest extends TestCase
         return $container;
     }
 
-    private function createRequestForNewFaq(string $csrfToken, string $active): Request
+    private function createRequestForNewFaq(string $csrfToken, string $status): Request
     {
         return new Request([], [], [], [], [], [], json_encode([
             'data' => [
@@ -2389,7 +2975,7 @@ final class FaqControllerTest extends TestCase
                 'categories[]' => 1,
                 'lang' => 'en',
                 'tags' => '',
-                'active' => $active,
+                'status' => $status,
                 'sticky' => 'no',
                 'answer' => 'New answer',
                 'keywords' => '',
@@ -2408,7 +2994,7 @@ final class FaqControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
     }
 
-    private function createRequestForFaqUpdate(string $csrfToken, ?string $active): Request
+    private function createRequestForFaqUpdate(string $csrfToken, ?string $status): Request
     {
         $data = [
             'pmf-csrf-token' => $csrfToken,
@@ -2435,10 +3021,10 @@ final class FaqControllerTest extends TestCase
             'serpDescription' => '',
         ];
 
-        // A null $active omits the field entirely, which is what the editor sends for a user
+        // A null $status omits the field entirely, which is what the editor sends for a user
         // without the publish right.
-        if ($active !== null) {
-            $data['active'] = $active;
+        if ($status !== null) {
+            $data['status'] = $status;
         }
 
         return new Request([], [], [], [], [], [], json_encode(['data' => $data], JSON_THROW_ON_ERROR));

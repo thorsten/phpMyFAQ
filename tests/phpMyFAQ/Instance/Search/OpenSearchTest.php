@@ -6,6 +6,7 @@ namespace phpMyFAQ\Instance\Search;
 
 use Monolog\Logger;
 use OpenSearch\Client;
+use OpenSearch\Exception\NotFoundHttpException;
 use OpenSearch\Namespaces\IndicesNamespace;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
@@ -336,6 +337,26 @@ class OpenSearchTest extends TestCase
         $this->assertSame(['result' => 'deleted'], $result);
     }
 
+    /**
+     * Regression guard: a non-published FAQ save (e.g. a second consecutive draft save)
+     * deletes a document that may already be absent from the index. The OpenSearch client
+     * throws NotFoundHttpException (extends the client's base HttpException) for a 404 on
+     * delete, with no built-in catch — unlike Elasticsearch::delete(), which already
+     * swallows this class of error. delete() must catch it and report an error array
+     * instead of letting it escape into the FaqController update() flow as a 500.
+     */
+    public function testDeleteFaqReturnsErrorWhenDocumentIsMissing(): void
+    {
+        $this->clientMock
+            ->method('delete')
+            ->willThrowException(new NotFoundHttpException('document missing'));
+
+        $result = $this->openSearch->delete(42);
+
+        $this->assertArrayHasKey('error', $result);
+        $this->assertSame('document missing', $result['error']);
+    }
+
     public function testIsAvailableReturnsTrueOnPing(): void
     {
         $this->clientMock->method('ping')->willReturn(true);
@@ -437,7 +458,7 @@ class OpenSearchTest extends TestCase
     {
         $faqs = [
             [
-                'active' => 'no',
+                'status' => 'draft',
                 'solution_id' => '1',
                 'id' => '1',
                 'lang' => 'en',
@@ -447,7 +468,7 @@ class OpenSearchTest extends TestCase
                 'category_id' => '1',
             ],
             [
-                'active' => 'yes',
+                'status' => 'published',
                 'solution_id' => '2',
                 'id' => '2',
                 'lang' => 'en',
@@ -601,7 +622,7 @@ class OpenSearchTest extends TestCase
     {
         $faqs = [
             [
-                'active' => 'yes',
+                'status' => 'published',
                 'solution_id' => '1',
                 'id' => '1',
                 'lang' => 'en',

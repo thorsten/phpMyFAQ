@@ -580,32 +580,46 @@
             </div>
           </div>
 
-          <div class="form-group border-top mb-2">
-            <h5 class="my-2">
+          <fieldset class="form-group border-top mb-2">
+            <legend class="h5 my-2">
               {{ ad_entry_status }}
-            </h5>
-            <!-- active or not -->
+            </legend>
             {% if hasPermissionForPublish %}
               <div class="form-check">
-                <input type="radio" id="active" name="active" value="yes" class="form-check-input" {{ isActive }}>
-                <label class="form-check-label" for="active">
-                  {{ ad_entry_visibility }}
-                </label>
+                <input type="radio" id="status-draft" name="status" value="draft" class="form-check-input"
+                  {{ faqStatus == 'draft' ? 'checked' : '' }}>
+                <label class="form-check-label" for="status-draft">{{ 'msgStatusDraft' | translate }}</label>
               </div>
               <div class="form-check">
-                <input type="radio" id="inactive" name="active" value="no" class="form-check-input" {{ isInActive }}>
-                <label class="form-check-label" for="inactive">
-                  {{ ad_entry_not_visibility }}
-                </label>
+                <input type="radio" id="status-review" name="status" value="review" class="form-check-input"
+                  {{ faqStatus == 'review' ? 'checked' : '' }}>
+                <label class="form-check-label" for="status-review">{{ 'msgStatusReview' | translate }}</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" id="status-published" name="status" value="published" class="form-check-input"
+                  {{ faqStatus == 'published' ? 'checked' : '' }}>
+                <label class="form-check-label" for="status-published">{{ 'msgStatusPublished' | translate }}</label>
+              </div>
+            {% elseif faqStatus != 'published' %}
+              {# Draft and review are open to editors; going live is not. #}
+              <div class="form-check">
+                <input type="radio" id="status-draft" name="status" value="draft" class="form-check-input"
+                  {{ faqStatus == 'draft' ? 'checked' : '' }}>
+                <label class="form-check-label" for="status-draft">{{ 'msgStatusDraft' | translate }}</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" id="status-review" name="status" value="review" class="form-check-input"
+                  {{ faqStatus == 'review' ? 'checked' : '' }}>
+                <label class="form-check-label" for="status-review">{{ 'msgStatusReview' | translate }}</label>
               </div>
             {% else %}
-              {# No "active" field is submitted, so saving preserves the stored publication state. #}
+              {# No "status" field is submitted, so saving preserves the stored publication state. #}
               <p class="form-text mb-0">
-                {{ isActive ? ad_entry_visibility : ad_entry_not_visibility }}
+                {{ 'msgStatusPublished' | translate }}
                 <span class="text-muted d-block">{{ msgNoPublishPermission }}</span>
               </p>
             {% endif %}
-          </div>
+          </fieldset>
 
           {% if canBeNewRevision %}
             <div class="form-group border-top mb-2">

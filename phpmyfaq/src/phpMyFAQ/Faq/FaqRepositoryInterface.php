@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Faq;
 
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\FaqStatus;
 
 interface FaqRepositoryInterface
 {
@@ -57,6 +58,11 @@ interface FaqRepositoryInterface
      * Checks whether a FAQ (or news) record is active.
      */
     public function isActive(int $faqId, string $faqLang, string $commentType = 'faq'): bool;
+
+    /**
+     * Returns the editorial status of a FAQ record, or Draft when the record does not exist.
+     */
+    public function getStatus(int $faqId, string $faqLang): FaqStatus;
 
     /**
      * Resolves a solution id to the FAQ id, language, question, content and category id,

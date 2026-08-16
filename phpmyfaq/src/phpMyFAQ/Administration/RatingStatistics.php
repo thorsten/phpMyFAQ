@@ -78,7 +78,6 @@ readonly class RatingStatistics
                     GROUP BY
                         fd.id,
                         fd.lang,
-                        fd.active,
                         fcr.category_id,
                         CAST(fd.thema as char(2000)),
                         fv.vote,
@@ -107,7 +106,6 @@ readonly class RatingStatistics
                     GROUP BY
                         fd.id,
                         fd.lang,
-                        fd.active,
                         fcr.category_id,
                         fd.thema,
                         fv.vote,

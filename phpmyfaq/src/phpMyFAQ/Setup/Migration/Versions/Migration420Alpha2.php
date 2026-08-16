@@ -41,6 +41,8 @@ readonly class Migration420Alpha2 extends AbstractMigration
             'Add faquser_right_language and faqgroup_right_language tables for granular '
             . 'language-based permissions, separate the FAQ read and publish rights, '
             . 'and add the faqquestion_history table for open question lifecycle metadata tracking'
+            . ', and introduce the editorial workflow status on faqdata'
+            . ', replace the active flag with it, and retire the unused approverec right'
         );
     }
 
@@ -162,6 +164,121 @@ readonly class Migration420Alpha2 extends AbstractMigration
 
         $this->separateReadAndPublishRights($recorder);
         $this->createQuestionHistoryTable($recorder);
+        $this->introduceEditorialWorkflowStatus($recorder);
+        $this->retireApproveRight($recorder);
+    }
+
+    /**
+     * Adds the editorial workflow status column, backfills it from the legacy active flag
+     * whenever both columns exist (covering a re-run that died between add and drop), and
+     * then drops the legacy column. Guarded per step because this migration re-runs on
+     * installations whose recorded checksum predates the amendment.
+     */
+    private function introduceEditorialWorkflowStatus(OperationRecorder $recorder): void
+    {
+        foreach (['faqdata', 'faqdata_revisions'] as $table) {
+            if (!$this->columnExists($table, 'status')) {
+                $recorder->addSql(
+                    $this->addColumn($table, 'status', $this->varcharType(12) . ' NOT NULL', "'draft'"),
+                    sprintf('Add editorial status column to %s', $table),
+                );
+            }
+
+            if ($this->columnExists($table, 'active')) {
+                $recorder->addSql(
+                    sprintf(
+                        "UPDATE %s SET status = CASE WHEN active = 'yes' THEN 'published' ELSE 'draft' END",
+                        $this->table($table),
+                    ),
+                    sprintf('Backfill editorial status from the active flag in %s', $table),
+                );
+
+                // SQL Server refuses to drop a column while a default constraint is bound to
+                // it, and constraint names are auto-generated per installation — resolve and
+                // drop it dynamically. Guarded (IF NOT NULL), so re-runs stay safe.
+                if ($this->isSqlServer()) {
+                    $recorder->addSql(
+                        sprintf(
+                            'DECLARE @constraintName nvarchar(200); '
+                            . 'SELECT @constraintName = dc.name FROM sys.default_constraints dc '
+                            . 'JOIN sys.columns c ON dc.parent_object_id = c.object_id '
+                            . 'AND dc.parent_column_id = c.column_id '
+                            . "WHERE dc.parent_object_id = OBJECT_ID('%s') AND c.name = 'active'; "
+                            . 'IF @constraintName IS NOT NULL '
+                            . "EXEC('ALTER TABLE %s DROP CONSTRAINT ' + @constraintName)",
+                            $this->table($table),
+                            $this->table($table),
+                        ),
+                        sprintf('Drop the default constraint bound to %s.active (SQL Server)', $table),
+                    );
+                }
+
+                $recorder->addSql(
+                    $this->dropColumn($table, 'active'),
+                    sprintf('Drop the legacy active column from %s', $table),
+                );
+            }
+        }
+    }
+
+    /**
+     * approverec was seeded and translated for years but never checked anywhere;
+     * the editorial workflow gates publishing on faq_publish instead. Idempotent
+     * DELETEs so the amended-migration re-run stays safe.
+     */
+    private function retireApproveRight(OperationRecorder $recorder): void
+    {
+        $rightIdSelect = sprintf("SELECT right_id FROM %sfaqright WHERE name = 'approverec'", $this->tablePrefix);
+
+        foreach ([
+            'faquser_right',
+            'faqgroup_right',
+            'faquser_right_language',
+            'faqgroup_right_language',
+            'faqgroup_right_category',
+        ] as $mappingTable) {
+            $recorder->addSql(
+                sprintf('DELETE FROM %s WHERE right_id IN (%s)', $this->table($mappingTable), $rightIdSelect),
+                sprintf('Remove approverec grants from %s', $mappingTable),
+            );
+        }
+
+        $recorder->addSql(
+            sprintf("DELETE FROM %sfaqright WHERE name = 'approverec'", $this->tablePrefix),
+            'Remove the unused approverec right',
+        );
+    }
+
+    /**
+     * Record-time column check so re-running this amended migration never issues
+     * an ALTER TABLE that would fail on the second pass.
+     */
+    private function columnExists(string $table, string $column): bool
+    {
+        $tableName = $this->table($table);
+
+        $query = match (true) {
+            $this->isMySql() => sprintf("SHOW COLUMNS FROM %s LIKE '%s'", $tableName, $column),
+            $this->isPostgreSql() => sprintf(
+                "SELECT column_name FROM information_schema.columns WHERE table_name = '%s' AND column_name = '%s'",
+                $tableName,
+                $column,
+            ),
+            $this->isSqlite() => sprintf(
+                "SELECT name FROM pragma_table_info('%s') WHERE name = '%s'",
+                $tableName,
+                $column,
+            ),
+            default => sprintf(
+                "SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('%s') AND name = '%s'",
+                $tableName,
+                $column,
+            ),
+        };
+
+        $result = $this->configuration->getDb()->query($query);
+
+        return $this->configuration->getDb()->numRows($result) > 0;
     }
 
     /**
@@ -311,7 +428,7 @@ readonly class Migration420Alpha2 extends AbstractMigration
         $recorder->backfillPermission(
             PermissionType::FAQ_PUBLISH->value,
             'Right to publish FAQs',
-            mirrorFrom: PermissionType::FAQ_APPROVE->value,
+            mirrorFrom: 'approverec',
             mirrorRestrictions: true,
         );
     }

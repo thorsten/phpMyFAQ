@@ -210,9 +210,21 @@ final class PdfControllerTest extends TestCase
      */
     public function testIndexReturnsNotFoundForInactiveFaq(): void
     {
-        $this->seedFaqRow(faqId: 990101, active: 'no');
+        $this->seedFaqRow(faqId: 990101, status: 'draft');
 
         $response = $this->requestPdf(faqId: 990101);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexReturnsNotFoundForReviewFaq(): void
+    {
+        $this->seedFaqRow(faqId: 990103, status: 'review');
+
+        $response = $this->requestPdf(faqId: 990103);
 
         self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
@@ -261,7 +273,7 @@ final class PdfControllerTest extends TestCase
      */
     private function seedFaqRow(
         int $faqId,
-        string $active = 'yes',
+        string $status = 'published',
         string $dateStart = '00000000000000',
         string $dateEnd = '99991231235959',
     ): void {
@@ -272,14 +284,14 @@ final class PdfControllerTest extends TestCase
 
         $this->dbHandle->query(sprintf(
             "INSERT INTO faqdata
-                (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content,
+                (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content,
                  author, email, comment, updated, date_start, date_end, notes)
              VALUES
                 (%d, 'en', %d, 0, '%s', 0, 'secret keyword', 'Unreleased product name', 'Draft answer body',
                  'Draft Author', 'draft@example.org', 'n', '20260101120000', '%s', '%s', 'internal notes')",
             $faqId,
             $faqId,
-            $active,
+            $status,
             $dateStart,
             $dateEnd,
         ));

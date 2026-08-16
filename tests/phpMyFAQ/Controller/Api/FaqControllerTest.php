@@ -9,6 +9,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData as FaqMetaData;
 use phpMyFAQ\Faq\Statistics as FaqStatistics;
@@ -1112,7 +1113,7 @@ class FaqControllerTest extends TestCase
             ->with(9, 4)
             ->willReturn([
                 'solution_id' => 123,
-                'active' => 'yes',
+                'status' => 'published',
                 'question' => 'Active FAQ',
             ]);
 
@@ -1152,7 +1153,7 @@ class FaqControllerTest extends TestCase
             ->with(9, 4)
             ->willReturn([
                 'solution_id' => 123,
-                'active' => 'no',
+                'status' => 'draft',
             ]);
 
         $controller = new FaqController(
@@ -1207,7 +1208,7 @@ class FaqControllerTest extends TestCase
                     && $entity->getKeywords() === 'api, faq'
                     && $entity->getAuthor() === 'API Author'
                     && $entity->getEmail() === 'api@example.com'
-                    && $entity->isActive() === true
+                    && $entity->getStatus() === FaqStatus::Published
                     && $entity->isSticky() === true
                 );
             }))
@@ -1427,6 +1428,7 @@ class FaqControllerTest extends TestCase
         $faq->expects($this->once())->method('setUser')->with(-1);
         $faq->expects($this->once())->method('setGroups')->with([-1]);
         $faq->expects($this->once())->method('hasTitleAHash')->with('Updated via API?')->willReturn(false);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
         $faq
             ->expects($this->once())
             ->method('update')
@@ -1440,7 +1442,7 @@ class FaqControllerTest extends TestCase
                     && $entity->getKeywords() === 'update, faq'
                     && $entity->getAuthor() === 'API Updater'
                     && $entity->getEmail() === 'update@example.com'
-                    && $entity->isActive() === true
+                    && $entity->getStatus() === FaqStatus::Published
                     && $entity->isSticky() === true
                 );
             }))
@@ -1460,6 +1462,58 @@ class FaqControllerTest extends TestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('{"stored":true}', (string) $response->getContent());
+    }
+
+    /**
+     * The boolean "is-active" field cannot express the review state, so a deactivating
+     * update must preserve it instead of silently demoting the FAQ to draft.
+     *
+     * @throws \JsonException|\Exception
+     */
+    public function testUpdatePreservesReviewStatusWhenIsActiveIsFalse(): void
+    {
+        $this->authenticateApiToken();
+
+        $request = Request::create('/api/v4.0/faq/7', 'PUT', server: [
+            'CONTENT_TYPE' => 'application/json',
+        ], content: json_encode([
+            'faq-id' => 7,
+            'language' => 'en',
+            'category-id' => 1,
+            'question' => 'Updated via API?',
+            'answer' => 'Still yes.',
+            'keywords' => 'update, faq',
+            'author' => 'API Updater',
+            'email' => 'update@example.com',
+            'is-active' => 'false',
+            'is-sticky' => 'false',
+        ], JSON_THROW_ON_ERROR));
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTitleAHash')->willReturn(false);
+        $faq->method('getStatus')->willReturn(FaqStatus::Review);
+        $faq->method('isActive')->willReturn(false);
+        $faq
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->callback(
+                static fn(FaqEntity $entity): bool => $entity->getStatus() === FaqStatus::Review,
+            ))
+            ->willReturn(new FaqEntity()->setId(7));
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
+        );
+
+        $this->authorizeCurrentUser($controller);
+
+        $response = $controller->update($request);
+
+        $this->assertSame(200, $response->getStatusCode());
     }
 
     /**

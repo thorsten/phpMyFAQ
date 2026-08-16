@@ -23,6 +23,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Entity\Tag;
 use phpMyFAQ\Faq\ReadScope;
+use phpMyFAQ\Faq\StatusScope;
 
 /**
  * Class Tags
@@ -282,7 +283,7 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $showInactive ? '' : "AND d.active = 'yes'",
+            $showInactive ? '' : StatusScope::publishedOnly()->toSqlFragment('d'),
             $search !== null && $search !== ''
                 ? 'AND tagging_name ' . $like . " '" . $this->configuration->getDb()->escape($search) . "%'"
                 : '',
@@ -466,7 +467,7 @@ class Tags
                 %sfaqdata_group fdg ON d.id = fdg.record_id
             WHERE
                 d.lang = '%s'
-                AND d.active = 'yes'
+                %s
                 %s
             GROUP BY dt.tagging_id
             ORDER BY freq DESC",
@@ -475,6 +476,7 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->configuration->getLanguage()->getLanguage(),
+            StatusScope::publishedOnly()->toSqlFragment('d'),
             $permissionCheck,
         );
 

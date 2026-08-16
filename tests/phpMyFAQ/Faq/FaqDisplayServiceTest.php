@@ -68,7 +68,7 @@ class FaqDisplayServiceTest extends TestCase
             'id' => 1,
             'lang' => 'en',
             'solution_id' => 1000,
-            'active' => 'yes',
+            'status' => 'published',
             'content' => 'Test answer content',
             'title' => 'Test Question',
             'keywords' => 'test, keywords',
@@ -255,7 +255,7 @@ class FaqDisplayServiceTest extends TestCase
     public function testGetAttachmentListWhenFaqInactive(): void
     {
         $this->configuration->set('records.disableAttachments', true);
-        $this->faq->faqRecord['active'] = 'no';
+        $this->faq->faqRecord['status'] = 'draft';
 
         $result = $this->service->getAttachmentList(1);
 

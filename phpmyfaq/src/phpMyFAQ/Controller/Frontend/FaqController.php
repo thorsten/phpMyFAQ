@@ -27,6 +27,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\SeoEntity;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq;
@@ -376,7 +377,7 @@ final class FaqController extends AbstractFrontController
         );
         if (
             -1 === $this->currentUser->getUserId() && !$this->configuration->get('records.allowCommentsForGuests')
-            || $faq->faqRecord['active'] === 'no'
+            || $faq->faqRecord['status'] !== FaqStatus::Published->value
             || 'n' === $faq->faqRecord['comment']
             || $expired
         ) {

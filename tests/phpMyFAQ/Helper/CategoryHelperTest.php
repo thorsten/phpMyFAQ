@@ -236,8 +236,8 @@ class CategoryHelperTest extends TestCase
         $db->query("INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
              VALUES (9001, 'en', 0, 'Rendered Root', 'Rendered description', -1, -1, 1, NULL, 1)");
         $db->query(
-            "INSERT INTO faqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, notes, sticky_order)
-             VALUES (9001, 'en', 99001, 0, 'yes', 0, '', 'Rendered FAQ', 'Content', 'Author', 'author@example.com', 'y', '20260101000000', '00000000000000', '99991231235959', '', NULL)",
+            "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, notes, sticky_order)
+             VALUES (9001, 'en', 99001, 0, 'published', 0, '', 'Rendered FAQ', 'Content', 'Author', 'author@example.com', 'y', '20260101000000', '00000000000000', '99991231235959', '', NULL)",
         );
         $db->query("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
              VALUES (9001, 'en', 9001, 'en')");

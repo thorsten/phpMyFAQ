@@ -178,7 +178,7 @@ class CommentsRepositoryTest extends TestCase
         $this->configuration
             ->getDb()
             ->query(
-                "INSERT OR IGNORE INTO {$prefix}faqdata (id, lang, solution_id, revision_id, active, sticky, thema, author, email, comment, updated, date_start, date_end) VALUES (1, 'en', 1, 0, 'yes', 0, 'Test', 'Admin', 'admin@example.org', 'n', '20200101000000', '00000000000000', '99991231235959')",
+                "INSERT OR IGNORE INTO {$prefix}faqdata (id, lang, solution_id, revision_id, sticky, thema, author, email, comment, updated, date_start, date_end) VALUES (1, 'en', 1, 0, 0, 'Test', 'Admin', 'admin@example.org', 'n', '20200101000000', '00000000000000', '99991231235959')",
             );
         // Set comment flag to 'y'
         $this->configuration

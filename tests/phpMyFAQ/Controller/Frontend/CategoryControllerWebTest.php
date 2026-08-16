@@ -105,9 +105,9 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
 
         $db->query(sprintf(
             "INSERT INTO faqdata
-                (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
+                (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
              VALUES
-                (%d, 'en', 2000, 0, 'yes', 0, 'test', '%s', 'Answer for %s', 'Unit Test', 'test@example.com', 'y', '20260305120000', '00000000000000', '99991231235959', '2026-03-05 12:00:00', '', 0)",
+                (%d, 'en', 2000, 0, 'published', 0, 'test', '%s', 'Answer for %s', 'Unit Test', 'test@example.com', 'y', '20260305120000', '00000000000000', '99991231235959', '2026-03-05 12:00:00', '', 0)",
             $faqId,
             $db->escape($question),
             $db->escape($question),

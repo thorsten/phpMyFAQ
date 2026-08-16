@@ -184,7 +184,7 @@ final class FaqControllerTest extends TestCase
      */
     public function testShowReturnsNotFoundForInactiveFaq(): void
     {
-        $this->seedFaqRow(faqId: 2, active: 'no');
+        $this->seedFaqRow(faqId: 2, status: 'draft');
 
         $faq = new Faq($this->configuration);
 
@@ -215,9 +215,47 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * A record in review is just as unpublished as a draft — the detail page must not
+     * disclose it either.
+     *
+     * @throws \Exception
+     */
+    public function testShowReturnsNotFoundForReviewFaq(): void
+    {
+        $this->seedFaqRow(faqId: 3, status: 'review');
+
+        $faq = new Faq($this->configuration);
+
+        $category = $this
+            ->getMockBuilder(Category::class)
+            ->setConstructorArgs([$this->configuration, [-1]])
+            ->onlyMethods(['categoryHasLinkToFaq'])
+            ->getMock();
+        $category->expects(self::never())->method('categoryHasLinkToFaq');
+
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            $faq,
+            $category,
+        );
+
+        $response = $controller->show(
+            new \Symfony\Component\HttpFoundation\Request(
+                [],
+                [],
+                ['categoryId' => '1', 'faqId' => '3', 'faqLang' => 'en', 'slug' => 'faq-title'],
+            ),
+        );
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
+    /**
      * Seeds a guest-readable FAQ. Defaults describe a visible record.
      */
-    private function seedFaqRow(int $faqId, string $active = 'yes'): void
+    private function seedFaqRow(int $faqId, string $status = 'published'): void
     {
         $this->dbHandle->query(sprintf('DELETE FROM faqdata WHERE id = %d', $faqId));
         $this->dbHandle->query(sprintf('DELETE FROM faqdata_user WHERE record_id = %d', $faqId));
@@ -225,7 +263,7 @@ final class FaqControllerTest extends TestCase
 
         $this->dbHandle->query(sprintf(
             "INSERT INTO faqdata
-                (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content,
+                (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content,
                  author, email, comment, updated, date_start, date_end, notes)
              VALUES
                 (%d, 'en', %d, 0, '%s', 0, 'keyword', 'Unreleased product name', 'Answer body',
@@ -233,7 +271,7 @@ final class FaqControllerTest extends TestCase
                  '00000000000000', '99991231235959', 'internal notes')",
             $faqId,
             1000 + $faqId,
-            $active,
+            $status,
         ));
         $this->dbHandle->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)', $faqId));
         $this->dbHandle->query(sprintf('INSERT INTO faqdata_group (record_id, group_id) VALUES (%d, -1)', $faqId));

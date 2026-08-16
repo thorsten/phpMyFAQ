@@ -22,6 +22,7 @@ namespace phpMyFAQ\Faq;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
@@ -70,8 +71,9 @@ class Statistics
         $queryHelper = new QueryHelper($this->user, $this->groups, $this->readScope);
 
         $query = sprintf(
-            "SELECT fd.id FROM %sfaqdata fd WHERE fd.active = 'yes' %s AND fd.date_start <= '%s' AND fd.date_end >= '%s'%s",
+            "SELECT fd.id FROM %sfaqdata fd WHERE fd.status = '%s' %s AND fd.date_start <= '%s' AND fd.date_end >= '%s'%s",
             Database::getTablePrefix(),
+            FaqStatus::Published->value,
             null === $language ? '' : "AND fd.lang = '" . $this->configuration->getDb()->escape($language) . "'",
             $now,
             $now,
@@ -449,7 +451,7 @@ class Statistics
             'SELECT %s, (SELECT MIN(fcr.category_id) FROM %sfaqcategoryrelations fcr '
             . 'WHERE fcr.record_id = fd.id AND fcr.record_lang = fd.lang%s) AS category_id '
             . 'FROM %sfaqdata fd, %s%s fv '
-            . "WHERE %s AND fd.active = 'yes' AND fd.date_start <= '%s' AND fd.date_end >= '%s'",
+            . "WHERE %s AND fd.status = '%s' AND fd.date_start <= '%s' AND fd.date_end >= '%s'",
             $selectList,
             $prefix,
             $categoryFilter,
@@ -457,6 +459,7 @@ class Statistics
             $prefix,
             $sourceTable,
             $joinCondition,
+            FaqStatus::Published->value,
             $now,
             $now,
         );

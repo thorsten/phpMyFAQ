@@ -66,6 +66,68 @@ class RevisionTest extends TestCase
         $this->assertTrue($result);
     }
 
+    /**
+     * Regression test: the INSERT must bind by an explicit destination column list, not by the
+     * physical column position of %sfaqdata_revisions. A positional INSERT (no column list)
+     * silently shifts values on upgraded installations, where ALTER TABLE ADD COLUMN appends
+     * "status" at the end instead of between "active" and "sticky" as on a fresh install.
+     */
+    public function testCreateUsesExplicitDestinationColumnList(): void
+    {
+        $this->mockDb->method('escape')->willReturn('en');
+
+        $this->mockDb
+            ->expects($this->once())
+            ->method('query')
+            ->willReturnCallback(function ($query) {
+                $pattern = '/INSERT\s+INTO\s+\w*faqdata_revisions\s*\(([^)]+)\)\s*SELECT\s+([^F]+?)\s*FROM/s';
+
+                $this->assertMatchesRegularExpression(
+                    $pattern,
+                    $query,
+                    'Expected an explicit destination column list before SELECT.',
+                );
+
+                preg_match($pattern, $query, $matches);
+                $destinationColumns = array_map('trim', explode(',', $matches[1]));
+                $selectedExpressions = array_map('trim', explode(',', $matches[2]));
+
+                $this->assertSame([
+                    'id',
+                    'lang',
+                    'solution_id',
+                    'revision_id',
+                    'status',
+                    'sticky',
+                    'keywords',
+                    'thema',
+                    'content',
+                    'author',
+                    'email',
+                    'comment',
+                    'updated',
+                    'date_start',
+                    'date_end',
+                    'created',
+                    'notes',
+                    'sticky_order',
+                ], $destinationColumns);
+
+                // Same column count and the same relative order of source expressions, so each
+                // selected value lands under the destination column with the matching name
+                // (allowing for "revision_id + 1" instead of the bare "revision_id").
+                $this->assertCount(count($destinationColumns), $selectedExpressions);
+                $this->assertSame('revision_id + 1', $selectedExpressions[3]);
+                $this->assertSame('status', $selectedExpressions[4]);
+
+                return true;
+            });
+
+        $result = $this->revision->create(123, 'en');
+
+        $this->assertTrue($result);
+    }
+
     public function testCreateEscapesFaqLanguage(): void
     {
         // Test SQL injection protection

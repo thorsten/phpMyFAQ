@@ -154,39 +154,47 @@ describe('FAQ Overview Functions', () => {
       expect(fetchAllFaqsByCategory).not.toHaveBeenCalled();
     });
 
-    it('should initialize checkbox state from localStorage', async () => {
-      localStorage.setItem('pmfCheckboxFilterInactive', 'true');
+    it('should initialize status filter state from localStorage', async () => {
+      localStorage.setItem('pmfStatusFilter', 'review');
       localStorage.setItem('pmfCheckboxFilterNew', 'false');
 
       document.body.innerHTML = `
-        <input type="checkbox" id="pmf-checkbox-filter-inactive" />
+        <select id="pmf-status-filter">
+          <option value="">All</option>
+          <option value="draft">Draft</option>
+          <option value="review">In review</option>
+          <option value="published">Published</option>
+        </select>
         <input type="checkbox" id="pmf-checkbox-filter-new" />
         <div class="accordion-collapse" data-pmf-categoryId="1" data-pmf-language="en"></div>
       `;
 
       await handleFaqOverview();
 
-      const inactiveCheckbox = document.getElementById('pmf-checkbox-filter-inactive') as HTMLInputElement;
+      const statusFilter = document.getElementById('pmf-status-filter') as HTMLSelectElement;
       const newCheckbox = document.getElementById('pmf-checkbox-filter-new') as HTMLInputElement;
 
-      expect(inactiveCheckbox.checked).toBe(true);
+      expect(statusFilter.value).toBe('review');
       expect(newCheckbox.checked).toBe(false);
     });
 
-    it('should persist checkbox state to localStorage on change', async () => {
+    it('should persist status filter state to localStorage on change', async () => {
       document.body.innerHTML = `
-        <input type="checkbox" id="pmf-checkbox-filter-inactive" />
+        <select id="pmf-status-filter">
+          <option value="">All</option>
+          <option value="draft">Draft</option>
+        </select>
         <input type="checkbox" id="pmf-checkbox-filter-new" />
         <div class="accordion-collapse" data-pmf-categoryId="1" data-pmf-language="en"></div>
       `;
 
       await handleFaqOverview();
 
-      const inactiveCheckbox = document.getElementById('pmf-checkbox-filter-inactive') as HTMLInputElement;
-      inactiveCheckbox.checked = true;
-      inactiveCheckbox.dispatchEvent(new Event('change'));
+      const statusFilter = document.getElementById('pmf-status-filter') as HTMLSelectElement;
+      statusFilter.value = 'draft';
+      statusFilter.dispatchEvent(new Event('change'));
 
-      expect(localStorage.getItem('pmfCheckboxFilterInactive')).toBe('true');
+      expect(localStorage.getItem('pmfStatusFilter')).toBe('draft');
 
       const newCheckbox = document.getElementById('pmf-checkbox-filter-new') as HTMLInputElement;
       newCheckbox.checked = true;
@@ -213,7 +221,9 @@ describe('FAQ Overview Functions', () => {
     it('should fetch FAQs and populate table on shown.bs.collapse', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -226,7 +236,7 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'published',
             isAllowedToPublish: true,
           },
         ],
@@ -240,21 +250,67 @@ describe('FAQ Overview Functions', () => {
 
       await flushPromises();
 
-      expect(fetchAllFaqsByCategory).toHaveBeenCalledWith('3', 'en', false, false);
+      expect(fetchAllFaqsByCategory).toHaveBeenCalledWith('3', 'en', '', false);
+
+      const tableBody = document.getElementById('tbody-category-id-3') as HTMLElement;
+      expect(tableBody.querySelectorAll('tr').length).toBe(1);
+    });
+
+    it('should re-fetch expanded categories when the status filter changes', async () => {
+      document.body.innerHTML = `
+        <select id="pmf-status-filter">
+          <option value="">All</option>
+          <option value="draft">Draft</option>
+        </select>
+        <div class="accordion-collapse show" data-pmf-categoryId="3" data-pmf-language="en"></div>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+      `;
+
+      (fetchAllFaqsByCategory as Mock).mockResolvedValue({
+        faqs: [
+          {
+            id: 7,
+            language: 'en',
+            solution_id: 1007,
+            question: 'Draft question',
+            created: '2026-03-01',
+            category_id: 3,
+            sticky: 'no',
+            status: 'draft',
+            isAllowedToPublish: true,
+          },
+        ],
+        isAllowedToTranslate: false,
+      });
+
+      await handleFaqOverview();
+
+      const statusFilter = document.getElementById('pmf-status-filter') as HTMLSelectElement;
+      statusFilter.value = 'draft';
+      statusFilter.dispatchEvent(new Event('change'));
+
+      await flushPromises();
+
+      expect(fetchAllFaqsByCategory).toHaveBeenCalledWith('3', 'en', 'draft', false);
 
       const tableBody = document.getElementById('tbody-category-id-3') as HTMLElement;
       expect(tableBody.querySelectorAll('tr').length).toBe(1);
     });
 
     it('should use localStorage filter states when fetching FAQs', async () => {
-      localStorage.setItem('pmfCheckboxFilterInactive', 'true');
+      localStorage.setItem('pmfStatusFilter', 'published');
       localStorage.setItem('pmfCheckboxFilterNew', 'true');
 
       document.body.innerHTML = `
-        <input type="checkbox" id="pmf-checkbox-filter-inactive" />
+        <select id="pmf-status-filter">
+          <option value="">All</option>
+          <option value="published">Published</option>
+        </select>
         <input type="checkbox" id="pmf-checkbox-filter-new" />
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -269,13 +325,15 @@ describe('FAQ Overview Functions', () => {
 
       await flushPromises();
 
-      expect(fetchAllFaqsByCategory).toHaveBeenCalledWith('3', 'en', true, true);
+      expect(fetchAllFaqsByCategory).toHaveBeenCalledWith('3', 'en', 'published', true);
     });
 
-    it('should render the active state read-only without the publish permission', async () => {
+    it('should render the status read-only without the publish permission once published', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -288,7 +346,7 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'published',
             isAllowedToPublish: false,
           },
         ],
@@ -302,13 +360,64 @@ describe('FAQ Overview Functions', () => {
 
       await flushPromises();
 
-      // No checkbox to click, but the state stays visible, and the sticky toggle is unaffected.
-      expect(document.querySelector('.pmf-admin-active-faq')).toBeNull();
-      expect(document.querySelector('.bi-check-lg')).not.toBeNull();
+      // No select to change, but the state stays visible, and the sticky toggle is unaffected.
+      // The label text comes from the tbody's data-pmf-status-published attribute (rendered via
+      // the `translate` filter server-side), not the hardcoded English fallback.
+      expect(document.querySelector('.pmf-admin-status-faq')).toBeNull();
+      const badge = document.querySelector('.badge');
+      expect(badge).not.toBeNull();
+      expect((badge as HTMLElement)?.innerText).toBe('Veröffentlicht');
       expect(document.querySelector('.pmf-admin-sticky-faq')).not.toBeNull();
     });
 
-    it('should call saveStatus when sticky toggle changes', async () => {
+    it('should render a draft/review select for a non-published FAQ without the publish permission', async () => {
+      document.body.innerHTML = `
+        <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht" data-pmf-status-select-label="Status der FAQ"></tbody></table>
+      `;
+
+      (fetchAllFaqsByCategory as Mock).mockResolvedValue({
+        faqs: [
+          {
+            id: 7,
+            language: 'en',
+            solution_id: 1007,
+            question: 'Test FAQ',
+            created: '2026-03-01',
+            category_id: 3,
+            sticky: 'no',
+            status: 'draft',
+            isAllowedToPublish: false,
+          },
+        ],
+        isAllowedToTranslate: false,
+      });
+
+      await handleFaqOverview();
+
+      const category = document.querySelector('.accordion-collapse') as HTMLElement;
+      category.dispatchEvent(new Event('shown.bs.collapse'));
+
+      await flushPromises();
+
+      const statusSelect = document.querySelector('.pmf-admin-status-faq') as HTMLSelectElement;
+      expect(statusSelect).not.toBeNull();
+      const optionValues = Array.from(statusSelect.options).map((option) => option.value);
+      expect(optionValues).toEqual(['draft', 'review']);
+
+      // Option text comes from the tbody's data-pmf-status-* attributes, not the hardcoded
+      // English fallback.
+      const optionLabels = Array.from(statusSelect.options).map((option) => option.innerText);
+      expect(optionLabels).toEqual(['Entwurf', 'In Prüfung']);
+
+      // The select's accessible name comes from the tbody's data-pmf-status-select-label
+      // attribute, matching the translated column header.
+      expect(statusSelect.getAttribute('aria-label')).toBe('Status der FAQ');
+    });
+
+    it('should fall back to the English status labels when the data attributes are missing', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
         <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
@@ -324,7 +433,48 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'draft',
+            isAllowedToPublish: true,
+          },
+        ],
+        isAllowedToTranslate: false,
+      });
+
+      await handleFaqOverview();
+
+      const category = document.querySelector('.accordion-collapse') as HTMLElement;
+      category.dispatchEvent(new Event('shown.bs.collapse'));
+
+      await flushPromises();
+
+      const statusSelect = document.querySelector('.pmf-admin-status-faq') as HTMLSelectElement;
+      expect(statusSelect).not.toBeNull();
+      const optionLabels = Array.from(statusSelect.options).map((option) => option.innerText);
+      expect(optionLabels).toEqual(['Draft', 'In review', 'Published']);
+
+      // Falls back to the English wording when data-pmf-status-select-label is missing too.
+      expect(statusSelect.getAttribute('aria-label')).toBe('FAQ status');
+    });
+
+    it('should call saveStatus when sticky toggle changes', async () => {
+      document.body.innerHTML = `
+        <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
+      `;
+
+      (fetchAllFaqsByCategory as Mock).mockResolvedValue({
+        faqs: [
+          {
+            id: 7,
+            language: 'en',
+            solution_id: 1007,
+            question: 'Test FAQ',
+            created: '2026-03-01',
+            category_id: 3,
+            sticky: 'no',
+            status: 'published',
             isAllowedToPublish: true,
           },
         ],
@@ -363,10 +513,12 @@ describe('FAQ Overview Functions', () => {
       vi.unstubAllGlobals();
     });
 
-    it('should call saveStatus when active toggle changes', async () => {
+    it('should call saveFaqStatus when the status select changes', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -379,7 +531,7 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'draft',
             isAllowedToPublish: true,
           },
         ],
@@ -388,7 +540,7 @@ describe('FAQ Overview Functions', () => {
 
       const fetchMock = vi.fn().mockResolvedValue({
         ok: true,
-        json: vi.fn().mockResolvedValue({ success: 'Activated' }),
+        json: vi.fn().mockResolvedValue({ success: 'Status updated' }),
       });
       vi.stubGlobal('fetch', fetchMock);
 
@@ -399,27 +551,32 @@ describe('FAQ Overview Functions', () => {
 
       await flushPromises();
 
-      const activeCheckbox = document.querySelector('.pmf-admin-active-faq') as HTMLInputElement;
-      expect(activeCheckbox).not.toBeNull();
-      activeCheckbox.checked = false;
-      activeCheckbox.dispatchEvent(new Event('change'));
+      const statusSelect = document.querySelector('.pmf-admin-status-faq') as HTMLSelectElement;
+      expect(statusSelect).not.toBeNull();
+      statusSelect.value = 'published';
+      statusSelect.dispatchEvent(new Event('change'));
 
       await flushPromises();
 
       expect(fetchMock).toHaveBeenCalledWith(
-        './api/faq/activate',
+        './api/faq/status',
         expect.objectContaining({
           method: 'POST',
         })
       );
+      const requestBody = JSON.parse((fetchMock.mock.calls[0][1] as { body: string }).body) as Record<string, unknown>;
+      expect(requestBody.status).toBe('published');
+      expect(requestBody.faqIds).toEqual(['7']);
 
       vi.unstubAllGlobals();
     });
 
-    it('should show error notification when saveStatus API returns error', async () => {
+    it('should roll the status select back when the API rejects the change', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -432,7 +589,57 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'draft',
+            isAllowedToPublish: true,
+          },
+        ],
+        isAllowedToTranslate: false,
+      });
+
+      // The API rejects unauthorized transitions with a non-OK response (403).
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: false,
+        text: vi.fn().mockResolvedValue('No permission'),
+      });
+      vi.stubGlobal('fetch', fetchMock);
+
+      await handleFaqOverview();
+
+      const category = document.querySelector('.accordion-collapse') as HTMLElement;
+      category.dispatchEvent(new Event('shown.bs.collapse'));
+
+      await flushPromises();
+
+      const statusSelect = document.querySelector('.pmf-admin-status-faq') as HTMLSelectElement;
+      statusSelect.value = 'published';
+      statusSelect.dispatchEvent(new Event('change'));
+
+      await flushPromises();
+
+      expect(statusSelect.value).toBe('draft');
+
+      vi.unstubAllGlobals();
+    });
+
+    it('should show error notification when saveStatus API returns error', async () => {
+      document.body.innerHTML = `
+        <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
+      `;
+
+      (fetchAllFaqsByCategory as Mock).mockResolvedValue({
+        faqs: [
+          {
+            id: 7,
+            language: 'en',
+            solution_id: 1007,
+            question: 'Test FAQ',
+            created: '2026-03-01',
+            category_id: 3,
+            sticky: 'no',
+            status: 'published',
             isAllowedToPublish: true,
           },
         ],
@@ -465,7 +672,9 @@ describe('FAQ Overview Functions', () => {
     it('should show error notification when saveStatus network fails', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -478,7 +687,7 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'published',
             isAllowedToPublish: true,
           },
         ],
@@ -508,7 +717,9 @@ describe('FAQ Overview Functions', () => {
     it('should show error when saveStatus response is not ok', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>
-        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"></tbody></table>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
       `;
 
       (fetchAllFaqsByCategory as Mock).mockResolvedValue({
@@ -521,7 +732,7 @@ describe('FAQ Overview Functions', () => {
             created: '2026-03-01',
             category_id: 3,
             sticky: 'no',
-            active: 'yes',
+            status: 'published',
             isAllowedToPublish: true,
           },
         ],
@@ -541,8 +752,8 @@ describe('FAQ Overview Functions', () => {
 
       await flushPromises();
 
-      const activeCheckbox = document.querySelector('.pmf-admin-active-faq') as HTMLInputElement;
-      activeCheckbox.dispatchEvent(new Event('change'));
+      const statusSelect = document.querySelector('.pmf-admin-status-faq') as HTMLSelectElement;
+      statusSelect.dispatchEvent(new Event('change'));
 
       await flushPromises();
 

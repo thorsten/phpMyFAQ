@@ -23,6 +23,7 @@ use Exception;
 use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq\ReadScope;
 use phpMyFAQ\Link\Util\TitleSlugifier;
 use stdClass;
@@ -129,7 +130,7 @@ class Sitemap
             WHERE
                 fd.lang = '%s'
             AND
-                fd.active = 'yes'
+                fd.status = '%s'
             AND
                 %s
             ORDER BY
@@ -139,6 +140,7 @@ class Sitemap
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
+            FaqStatus::Published->value,
             $permPart . $this->readScopeFragment(),
         );
 
@@ -221,7 +223,7 @@ class Sitemap
                     AND
                         fd.lang = '%s'
                     AND
-                        fd.active = 'yes'
+                        fd.status = '%s'
                     AND
                         %s",
             Database::getTablePrefix(),
@@ -230,6 +232,7 @@ class Sitemap
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($letter),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
+            FaqStatus::Published->value,
             $permPart . $this->readScopeFragment(),
         );
 

@@ -28,6 +28,7 @@ use Exception;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq\FaqRepository;
 use phpMyFAQ\Faq\QueryHelper;
 use phpMyFAQ\Faq\ReadScope;
@@ -476,7 +477,7 @@ class Faq
             'lang' => $currentLanguage,
             'solution_id' => 42,
             'revision_id' => $faqRevisionId,
-            'active' => 'no',
+            'status' => FaqStatus::Draft->value,
             'sticky' => 0,
             'keywords' => '',
             'title' => '',
@@ -495,11 +496,11 @@ class Faq
         if ($row instanceof stdClass) {
             $question = nl2br((string) $row->thema);
             $answer = (string) $row->content;
-            $active = 'yes' === $row->active;
+            $published = FaqStatus::Published->value === $row->status;
             $expired = date(format: 'YmdHis') > (string) $row->date_end;
 
             if (!$isAdmin) {
-                if (!$active) {
+                if (!$published) {
                     $answer = Translation::getString(key: 'err_inactiveArticle');
                 }
 
@@ -513,7 +514,7 @@ class Faq
                 'lang' => $row->lang,
                 'solution_id' => $row->solution_id,
                 'revision_id' => $row->revision_id,
-                'active' => $row->active,
+                'status' => $row->status,
                 'sticky' => $row->sticky,
                 'keywords' => $row->keywords,
                 'title' => $question,
@@ -692,7 +693,7 @@ class Faq
                 'lang' => $row->lang,
                 'solution_id' => (int) $row->solution_id,
                 'revision_id' => (int) $row->revision_id,
-                'active' => $row->active,
+                'status' => $row->status,
                 'sticky' => (int) $row->sticky,
                 'keywords' => $row->keywords,
                 'question' => $question,
@@ -812,6 +813,11 @@ class Faq
         return $this->faqRepository->isActive($faqId, $faqLang, $commentType);
     }
 
+    public function getStatus(int $faqId, string $faqLang): FaqStatus
+    {
+        return $this->faqRepository->getStatus($faqId, $faqLang);
+    }
+
     /**
      * Returns an array with all data from a FAQ record.
      *
@@ -829,10 +835,10 @@ class Faq
         if ($row instanceof \stdClass) {
             $question = nl2br((string) $row->thema);
             $content = (string) $row->content;
-            $active = 'yes' === $row->active;
+            $published = FaqStatus::Published->value === $row->status;
             $expired = date(format: 'YmdHis') > (string) $row->date_end;
 
-            if (!$active) {
+            if (!$published) {
                 $content = Translation::getString(key: 'err_inactiveArticle');
             }
 
@@ -845,7 +851,7 @@ class Faq
                 'lang' => $row->lang,
                 'solution_id' => $row->solution_id,
                 'revision_id' => $row->revision_id,
-                'active' => $row->active,
+                'status' => $row->status,
                 'sticky' => $row->sticky,
                 'keywords' => $row->keywords,
                 'title' => $question,
@@ -903,10 +909,10 @@ class Faq
 
         foreach ($rows as $row) {
             $content = (string) $row->content;
-            $active = 'yes' === $row->active;
+            $published = FaqStatus::Published->value === $row->status;
             $expired = date(format: 'YmdHis') > (string) $row->date_end;
 
-            if (!$active) {
+            if (!$published) {
                 $content = Translation::getString(key: 'err_inactiveArticle');
             }
 
@@ -920,7 +926,7 @@ class Faq
                 'lang' => $row->lang,
                 'solution_id' => $row->solution_id,
                 'revision_id' => $row->revision_id,
-                'active' => $row->active,
+                'status' => $row->status,
                 'sticky' => $row->sticky,
                 'keywords' => $row->keywords,
                 'title' => $row->thema,
@@ -999,7 +1005,7 @@ class Faq
                 $faq['revision_id'] = $row->revision_id;
                 $faq['lang'] = $row->lang;
                 $faq['category_id'] = $row->category_id;
-                $faq['active'] = $row->active;
+                $faq['status'] = $row->status;
                 $faq['sticky'] = $row->sticky;
                 $faq['keywords'] = $row->keywords;
                 $faq['topic'] = $row->thema;

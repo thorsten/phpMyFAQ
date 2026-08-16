@@ -5,6 +5,7 @@ namespace phpMyFAQ\Queue\Handler;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Language;
@@ -83,7 +84,7 @@ class HandlersTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->faqRecord = [
             'id' => 42,
-            'active' => 'yes',
+            'status' => FaqStatus::Published->value,
             'content' => 'Answer',
             'lang' => 'de',
             'solution_id' => 99,
@@ -113,6 +114,37 @@ class HandlersTest extends TestCase
             $configuration,
             static fn(): Faq => $faq,
             static fn(): Category => $category,
+            static fn(): Elasticsearch => $elasticsearch,
+        );
+
+        $handler(new IndexFaqMessage(42));
+    }
+
+    public function testIndexFaqHandlerRemovesUnpublishedFaqFromIndex(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('isElasticsearchActive')->willReturn(true);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = [
+            'id' => 42,
+            'status' => FaqStatus::Review->value,
+            'content' => 'Answer',
+            'lang' => 'de',
+            'solution_id' => 99,
+            'title' => 'Question',
+            'keywords' => 'foo,bar',
+        ];
+        $faq->expects($this->once())->method('getFaq')->with(42);
+
+        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch->expects($this->once())->method('delete')->with(99);
+        $elasticsearch->expects($this->never())->method('index');
+
+        $handler = new IndexFaqHandler(
+            $configuration,
+            static fn(): Faq => $faq,
+            null,
             static fn(): Elasticsearch => $elasticsearch,
         );
 

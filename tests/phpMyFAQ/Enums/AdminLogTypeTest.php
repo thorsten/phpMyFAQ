@@ -35,6 +35,7 @@ class AdminLogTypeTest extends TestCase
     public function testRepresentativeValues(): void
     {
         $this->assertSame('faq-add', AdminLogType::FAQ_ADD->value);
+        $this->assertSame('faq-status-change', AdminLogType::FAQ_STATUS_CHANGE->value);
         $this->assertSame('category-delete', AdminLogType::CATEGORY_DELETE->value);
         $this->assertSame('auth-login-success', AdminLogType::AUTH_LOGIN_SUCCESS->value);
         $this->assertSame('security-csrf-violation', AdminLogType::SECURITY_CSRF_VIOLATION->value);

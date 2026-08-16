@@ -69,7 +69,7 @@ class DefaultDataSeederTest extends TestCase
     {
         $rights = $this->seeder->getMainRights();
         $this->assertNotEmpty($rights);
-        $this->assertEquals(50, count($rights));
+        $this->assertEquals(49, count($rights));
     }
 
     public function testGetMainRightsHasCorrectStructure(): void

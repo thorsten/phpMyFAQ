@@ -25,6 +25,7 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Relation as CategoryRelation;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData as FaqMetaData;
@@ -150,7 +151,7 @@ final class FaqController extends AbstractApiController
         'lang' => 'en',
         'solution_id' => 1000,
         'revision_id' => 0,
-        'active' => 'yes',
+        'status' => 'published',
         'sticky' => 0,
         'keywords' => '',
         'question' => 'Is there life after death?',
@@ -188,7 +189,7 @@ final class FaqController extends AbstractApiController
             if (
                 (is_countable($result) ? count($result) : 0) === 0
                 || $result['solution_id'] === 42
-                || $onlyActive && $result['active'] !== 'yes'
+                || $onlyActive && $result['status'] !== FaqStatus::Published->value
             ) {
                 $result = new stdClass();
                 return $this->json($result, Response::HTTP_NOT_FOUND);
@@ -528,7 +529,7 @@ final class FaqController extends AbstractApiController
             'lang' => 'en',
             'solution_id' => '1000',
             'revision_id' => '0',
-            'active' => 'yes',
+            'status' => 'published',
             'sticky' => '0',
             'keywords' => '',
             'title' => 'Is there life after death?',
@@ -590,7 +591,7 @@ final class FaqController extends AbstractApiController
                 [
                     'lang' => $this->configuration->getLanguage()->getLanguage(),
                     'fcr.category_id' => $ignoreOrphanedFaqs ? 'IS NOT NULL' : null,
-                    'fd.active' => $onlyActive ? 'yes' : null,
+                    'fd.status' => $onlyActive ? FaqStatus::Published->value : null,
                 ],
                 $sort->getOrderSql(),
             );
@@ -775,7 +776,7 @@ final class FaqController extends AbstractApiController
             ->setKeywords($keywords)
             ->setAuthor($author)
             ->setEmail($email)
-            ->setActive($isActive)
+            ->setStatus($isActive ? FaqStatus::Published : FaqStatus::Draft)
             ->setSticky($isSticky)
             ->setComment(comment: false)
             ->setNotes(notes: '');
@@ -918,9 +919,18 @@ final class FaqController extends AbstractApiController
         $isActive = $isActive === true;
         $isSticky = $isSticky === true;
 
+        // The boolean can only express published/not-published; a deactivating update must
+        // not flatten an editorial state it cannot see, so review stays review.
+        $currentStatus = $this->faq->getStatus($faqId, $languageCode);
+        $status = match (true) {
+            $isActive => FaqStatus::Published,
+            $currentStatus === FaqStatus::Published => FaqStatus::Draft,
+            default => $currentStatus,
+        };
+
         // Editing an FAQ and deciding that it goes live are separate rights, so a change of
         // the publication state needs FAQ_PUBLISH on top of the FAQ_EDIT guard above.
-        if ($isActive !== $this->faq->isActive($faqId, $languageCode)) {
+        if ($isActive !== ($currentStatus === FaqStatus::Published)) {
             $faqCategories = new CategoryRelation($this->configuration, $category)->getCategories(
                 $faqId,
                 $languageCode,
@@ -938,7 +948,7 @@ final class FaqController extends AbstractApiController
             ->setKeywords($keywords)
             ->setAuthor($author)
             ->setEmail($email)
-            ->setActive($isActive)
+            ->setStatus($status)
             ->setSticky($isSticky)
             ->setComment(comment: false)
             ->setNotes(notes: '');

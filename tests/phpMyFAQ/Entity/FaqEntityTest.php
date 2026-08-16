@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Entity;
 
 use DateTime;
+use phpMyFAQ\Enums\FaqStatus;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -86,17 +87,25 @@ class FaqEntityTest extends TestCase
     }
 
     /**
-     * Test active getter and setter
+     * Test status getter and setter
      */
-    public function testActiveGetterAndSetter(): void
+    public function testStatusGetterAndSetter(): void
     {
-        $result = $this->faqEntity->setActive(true);
+        $result = $this->faqEntity->setStatus(FaqStatus::Published);
 
         $this->assertInstanceOf(FaqEntity::class, $result); // Test fluent interface
-        $this->assertTrue($this->faqEntity->isActive());
+        $this->assertSame(FaqStatus::Published, $this->faqEntity->getStatus());
 
-        $this->faqEntity->setActive(false);
-        $this->assertFalse($this->faqEntity->isActive());
+        $this->faqEntity->setStatus(FaqStatus::Draft);
+        $this->assertSame(FaqStatus::Draft, $this->faqEntity->getStatus());
+    }
+
+    /**
+     * Test a new entity starts as draft
+     */
+    public function testANewEntityStartsAsDraft(): void
+    {
+        $this->assertSame(FaqStatus::Draft, new FaqEntity()->getStatus());
     }
 
     /**
@@ -291,7 +300,7 @@ class FaqEntityTest extends TestCase
             ->setLanguage('en')
             ->setSolutionId(1000)
             ->setRevisionId(2)
-            ->setActive(true)
+            ->setStatus(FaqStatus::Published)
             ->setSticky(false)
             ->setKeywords('keyword')
             ->setQuestion('Question?')
@@ -310,7 +319,7 @@ class FaqEntityTest extends TestCase
         $this->assertEquals('en', $this->faqEntity->getLanguage());
         $this->assertSame(1000, $this->faqEntity->getSolutionId());
         $this->assertSame(2, $this->faqEntity->getRevisionId());
-        $this->assertTrue($this->faqEntity->isActive());
+        $this->assertSame(FaqStatus::Published, $this->faqEntity->getStatus());
         $this->assertFalse($this->faqEntity->isSticky());
         $this->assertEquals('keyword', $this->faqEntity->getKeywords());
         $this->assertEquals('Question?', $this->faqEntity->getQuestion());
@@ -341,6 +350,7 @@ class FaqEntityTest extends TestCase
         $this->assertSame('de', $decoded['language']);
         $this->assertSame('Frage?', $decoded['question']);
         $this->assertSame('Antwort.', $decoded['answer']);
+        $this->assertSame('draft', $decoded['status']);
     }
 
     /**

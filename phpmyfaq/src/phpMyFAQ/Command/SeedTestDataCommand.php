@@ -31,6 +31,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\NewsMessage;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission as FaqPermission;
@@ -270,7 +271,7 @@ class SeedTestDataCommand extends Command
                     $entity->setId($sharedFaqId);
                 }
                 $entity->setLanguage($locale);
-                $entity->setActive(true);
+                $entity->setStatus(FaqStatus::Published);
                 $entity->setSticky(false);
                 $entity->setComment(true);
                 $entity->setQuestion((string) $translation['question']);

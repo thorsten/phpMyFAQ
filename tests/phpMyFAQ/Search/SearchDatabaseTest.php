@@ -159,10 +159,37 @@ class SearchDatabaseTest extends TestCase
     {
         $this->searchDatabase->setMatchingColumns(['faqdata.author']);
         $this->assertEquals(
-            " (faqdata.author LIKE '%Thorsten%' ESCAPE '|') OR (faqdata.author LIKE '%Rinne%' ESCAPE '|')",
+            " ((faqdata.author LIKE '%Thorsten%' ESCAPE '|') OR (faqdata.author LIKE '%Rinne%' ESCAPE '|'))",
             $this->searchDatabase->getMatchClause('Thorsten Rinne'),
         );
         $this->assertIsString($this->searchDatabase->getMatchClause('Thorsten'));
+    }
+
+    /**
+     * Regression test: a multi-term match clause must be wrapped in one outer set of
+     * parentheses so that a caller's appended "AND ..." conditions (see getConditions())
+     * bind across the whole disjunction of per-term groups, not just the last one. Without
+     * the outer wrap, "WHERE (A) OR (B) AND status = 'published'" only constrains B by
+     * status — SQL's AND binds tighter than a bare OR — so a two-term search would leak
+     * non-published (or, previously, inactive) records matched only by the first term.
+     */
+    public function testGetMatchClauseWrapsMultiTermDisjunctionSoConditionsApplyToEveryTerm(): void
+    {
+        $this->searchDatabase->setMatchingColumns(['faqdata.thema']);
+        $this->searchDatabase->setConditions(['faqdata.status' => 'published']);
+
+        $matchClause = $this->searchDatabase->getMatchClause('foo bar');
+        $conditions = $this->searchDatabase->getConditions();
+        $where = $matchClause . $conditions;
+
+        // The whole multi-term disjunction is enclosed in one outer parenthesis pair,
+        // placed immediately before the appended AND condition.
+        $this->assertStringStartsWith(' ((', $matchClause);
+        $this->assertStringEndsWith('))', $matchClause);
+        $this->assertMatchesRegularExpression(
+            "/^ \(\(.*\)\) AND faqdata\.status = 'published'$/",
+            $where,
+        );
     }
 
     public function testGetMatchClauseWithTwoColumns()

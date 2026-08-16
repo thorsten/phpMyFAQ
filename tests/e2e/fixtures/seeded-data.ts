@@ -22,6 +22,12 @@ export const SEEDED = {
       searchTerm: { en: 'databases', de: 'Datenbanken' },
       answerFragment: 'MySQL',
     },
+    // Used only by the admin status-workflow round trip, so it is kept distinct
+    // from the FAQs the search/content specs assert against — flipping its
+    // status must never race or interfere with those read-only checks.
+    upgradeGuide: {
+      en: 'How do I upgrade from phpMyFAQ 4.1 to 4.2?',
+    },
   },
 } as const;
 

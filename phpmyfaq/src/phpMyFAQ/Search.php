@@ -24,6 +24,7 @@ namespace phpMyFAQ;
 use DateTime;
 use Exception;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Search\Search\Elasticsearch;
 use phpMyFAQ\Search\Search\OpenSearch;
 use phpMyFAQ\Search\SearchFactory;
@@ -144,7 +145,7 @@ class Search
     {
         $fdTable = Database::getTablePrefix() . 'faqdata AS fd';
         $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
-        $condition = ['fd.active' => 'yes'];
+        $condition = ['fd.status' => FaqStatus::Published->value];
         $searchDatabase = SearchFactory::create($this->configuration, [
             'database' => $this->resolveSearchDatabaseType(),
         ]);

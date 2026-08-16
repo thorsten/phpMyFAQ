@@ -23,6 +23,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\User\CurrentUser;
@@ -88,7 +89,7 @@ readonly class Import
             ->setKeywords($keywords)
             ->setAuthor($author)
             ->setEmail($email)
-            ->setActive($isActive)
+            ->setStatus($isActive ? FaqStatus::Published : FaqStatus::Draft)
             ->setSticky($isSticky)
             ->setComment(false)
             ->setNotes('');

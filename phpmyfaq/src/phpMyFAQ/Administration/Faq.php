@@ -21,6 +21,7 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\FaqStatus;
 use stdClass;
 
 class Faq
@@ -39,7 +40,7 @@ class Faq
      *     id: int,
      *     language: string,
      *     solution_id: int,
-     *     active: string,
+     *     status: string,
      *     sticky: string,
      *     category_id: int,
      *     question: string,
@@ -48,7 +49,7 @@ class Faq
      *     created: string,
      * }>
      */
-    public function getAllFaqsByCategory(int $categoryId, bool $onlyInactive = false, bool $onlyNew = false): array
+    public function getAllFaqsByCategory(int $categoryId, ?FaqStatus $statusFilter = null, bool $onlyNew = false): array
     {
         $faqData = [];
 
@@ -58,7 +59,7 @@ class Faq
                 fd.id AS id,
                 fd.lang AS lang,
                 fd.solution_id AS solution_id,
-                fd.active AS active,
+                fd.status AS status,
                 fd.sticky AS sticky,
                 fd.thema AS question,
                 fd.updated AS updated,
@@ -92,7 +93,7 @@ class Faq
             Database::getTablePrefix(),
             $categoryId,
             $this->configuration->getDb()->escape($this->getLanguage() ?? ''),
-            $onlyInactive ? "AND fd.active = 'no'" : '',
+            $statusFilter !== null ? sprintf("AND fd.status = '%s'", $statusFilter->value) : '',
             $onlyNew
                 ? sprintf("AND fd.created > '%s'", date(
                     format: 'Y-m-d H:i:s',
@@ -117,7 +118,7 @@ class Faq
                     'id' => (int) $row->id,
                     'language' => (string) $row->lang,
                     'solution_id' => (int) $row->solution_id,
-                    'active' => (string) $row->active,
+                    'status' => (string) $row->status,
                     'sticky' => $row->sticky ? 'yes' : 'no',
                     'category_id' => (int) $row->category_id,
                     'question' => (string) $row->question,
@@ -132,6 +133,22 @@ class Faq
     }
 
     /**
+     * Sets the editorial status of a FAQ record.
+     */
+    public function updateRecordStatus(int $faqId, string $faqLanguage, FaqStatus $status): bool
+    {
+        $update = sprintf(
+            "UPDATE %sfaqdata SET status = '%s' WHERE id = %d AND lang = '%s'",
+            Database::getTablePrefix(),
+            $status->value,
+            $faqId,
+            $this->configuration->getDb()->escape($faqLanguage),
+        );
+
+        return (bool) $this->configuration->getDb()->query($update);
+    }
+
+    /**
      * Set or unset a faq item flag.
      *
      * @param int    $faqId       FAQ id
@@ -143,7 +160,6 @@ class Faq
     {
         $flag = match ($type) {
             'sticky' => $flag ? 1 : 0,
-            'active' => $flag ? "'yes'" : "'no'",
             default => null,
         };
 
@@ -177,7 +193,8 @@ class Faq
     public function getInactiveFaqsData(): array
     {
         $language = $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage());
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
@@ -186,12 +203,16 @@ class Faq
                 %sfaqdata fd
             WHERE
                 fd.lang = '%s'
-            AND 
-                fd.active = 'no'
+            AND
+                fd.status != '%s'
             GROUP BY
                 fd.id, fd.lang, fd.thema
             ORDER BY
-                fd.id DESC", Database::getTablePrefix(), $language);
+                fd.id DESC",
+            Database::getTablePrefix(),
+            $language,
+            FaqStatus::Published->value,
+        );
 
         $result = $this->configuration->getDb()->query($query);
         $inactive = [];
@@ -228,7 +249,8 @@ class Faq
      */
     public function getOrphanedFaqs(): array
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
                 SELECT
                     fd.id AS id,
                     fd.lang AS lang,
@@ -236,7 +258,7 @@ class Faq
                 FROM
                     %sfaqdata fd
                 WHERE
-                    fd.active = 'yes'
+                    fd.status = '%s'
                 AND
                     fd.id NOT IN (
                         SELECT
@@ -249,7 +271,11 @@ class Faq
                 GROUP BY
                     fd.id, fd.lang, fd.thema
                 ORDER BY
-                    fd.id DESC", Database::getTablePrefix(), Database::getTablePrefix());
+                    fd.id DESC",
+            Database::getTablePrefix(),
+            FaqStatus::Published->value,
+            Database::getTablePrefix(),
+        );
 
         $result = $this->configuration->getDb()->query($query);
         $orphaned = [];
@@ -294,10 +320,11 @@ class Faq
         $prefix = Database::getTablePrefix();
 
         $orphanedQuery = sprintf(
-            "SELECT COUNT(*) AS num FROM %sfaqdata fd WHERE fd.active = 'yes' "
+            "SELECT COUNT(*) AS num FROM %sfaqdata fd WHERE fd.status = '%s' "
             . 'AND fd.id NOT IN ('
             . 'SELECT record_id FROM %sfaqcategoryrelations WHERE record_lang = fd.lang)',
             $prefix,
+            FaqStatus::Published->value,
             $prefix,
         );
 
@@ -305,8 +332,9 @@ class Faq
         $threshold = date('YmdHis', (int) strtotime(sprintf('-%d days', $staleDays)));
         $staleQuery = sprintf(
             'SELECT COUNT(*) AS num FROM %sfaqdata fd '
-            . "WHERE fd.active = 'yes' AND fd.updated <> '' AND fd.updated < '%s'",
+            . "WHERE fd.status = '%s' AND fd.updated <> '' AND fd.updated < '%s'",
             $prefix,
+            FaqStatus::Published->value,
             $threshold,
         );
 

@@ -246,7 +246,7 @@ class StatisticsTest extends TestCase
         $this->dbMock
             ->expects($this->once())
             ->method('query')
-            ->with($this->stringContains("SELECT fd.id FROM faqdata fd WHERE fd.active = 'yes'"))
+            ->with($this->stringContains("SELECT fd.id FROM faqdata fd WHERE fd.status = 'published'"))
             ->willReturn($resultMock);
 
         $this->dbMock->expects($this->once())->method('numRows')->with($resultMock)->willReturn(5);

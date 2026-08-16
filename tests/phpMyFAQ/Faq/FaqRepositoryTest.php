@@ -7,6 +7,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Language;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
@@ -78,15 +79,16 @@ class FaqRepositoryTest extends TestCase
     ): void {
         $database = $this->configuration->getDb();
         $prefix = Database::getTablePrefix();
+        $status = 'yes' === $active ? FaqStatus::Published->value : FaqStatus::Draft->value;
 
         $database->query(sprintf(
-            "INSERT INTO %sfaqdata (id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
+            "INSERT INTO %sfaqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
              VALUES (%d, '%s', %d, 0, '%s', %d, '%s', '%s', 'Answer', 'Author', 'author@example.com', 'y', '20260301010101', '00000000000000', '99991231235959', '2026-03-01 01:01:01', '', 0)",
             $prefix,
             $id,
             $lang,
             $solutionId,
-            $active,
+            $status,
             $sticky,
             $database->escape($keywords),
             $database->escape($question),
@@ -330,6 +332,19 @@ class FaqRepositoryTest extends TestCase
         $this->assertSame('After', $this->faqRepository->fetchQuestion(5051, 'en'));
     }
 
+    public function testInsertPersistsStatusAndGetStatusReturnsIt(): void
+    {
+        $faqEntity = $this->makeFaqEntity(5053, 7430, 'Review Question')->setStatus(FaqStatus::Review);
+        $this->faqRepository->insert($faqEntity);
+
+        $this->assertSame(FaqStatus::Review, $this->faqRepository->getStatus(5053, 'en'));
+    }
+
+    public function testGetStatusReturnsDraftForMissingRow(): void
+    {
+        $this->assertSame(FaqStatus::Draft, $this->faqRepository->getStatus(999997, 'en'));
+    }
+
     public function testDeleteByIdAndLanguageRemovesFaqRow(): void
     {
         $this->faqRepository->insert($this->makeFaqEntity(5052, 7420, 'To Delete'));
@@ -454,7 +469,7 @@ class FaqRepositoryTest extends TestCase
             ->setLanguage('en')
             ->setSolutionId($solutionId)
             ->setRevisionId(0)
-            ->setActive(true)
+            ->setStatus(FaqStatus::Published)
             ->setSticky(false)
             ->setKeywords('Keywords')
             ->setQuestion($question)
