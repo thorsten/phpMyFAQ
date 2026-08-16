@@ -1190,12 +1190,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "mixed-operand"
-message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 2
