@@ -214,7 +214,6 @@ final class FaqControllerTest extends TestCase
                         PermissionType::FAQ_ADD->value,
                         PermissionType::FAQ_EDIT->value,
                         PermissionType::FAQ_DELETE->value,
-                        'approverec',
                         PermissionType::FAQ_PUBLISH->value,
                         PermissionType::FAQ_TRANSLATE->value,
                     ],
@@ -231,7 +230,6 @@ final class FaqControllerTest extends TestCase
                         PermissionType::FAQ_ADD->value,
                         PermissionType::FAQ_EDIT->value,
                         PermissionType::FAQ_DELETE->value,
-                        'approverec',
                         PermissionType::FAQ_PUBLISH->value,
                         PermissionType::FAQ_TRANSLATE->value,
                     ],
@@ -250,7 +248,6 @@ final class FaqControllerTest extends TestCase
                         PermissionType::FAQ_ADD->value,
                         PermissionType::FAQ_EDIT->value,
                         PermissionType::FAQ_DELETE->value,
-                        'approverec',
                         PermissionType::FAQ_PUBLISH->value,
                         PermissionType::FAQ_TRANSLATE->value,
                     ],
@@ -1584,6 +1581,7 @@ final class FaqControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+        self::assertSame(FaqStatus::Published->value, $this->getPersistedFaqStatus(1, 'en'));
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
@@ -1609,7 +1607,13 @@ final class FaqControllerTest extends TestCase
         $faq->method('getStatus')->willReturn(FaqStatus::Review);
         $faq->method('getSolutionIdFromId')->willReturn(1001);
         $faq->expects($this->never())->method('getFaq');
-        $faq->expects($this->once())->method('getFaqResult')->with(1, 'en', null, true)->willReturn(false);
+        // A real one-row result so the controller actually builds the index document from the
+        // language-scoped row instead of silently falling through to the delete branch.
+        $englishRow = $this->configuration
+            ->getDb()
+            ->query("SELECT 'Publishable FAQ' AS thema, 'Answer' AS content, '' AS keywords");
+        self::assertNotFalse($englishRow);
+        $faq->expects($this->once())->method('getFaqResult')->with(1, 'en', null, true)->willReturn($englishRow);
 
         $request = new Request([], [], [], [], [], [], json_encode([
             'csrf' => $csrfToken,
@@ -1622,8 +1626,9 @@ final class FaqControllerTest extends TestCase
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
         // No Elasticsearch client is registered on Configuration, so constructing the
-        // Elasticsearch wrapper throws once the document-building step above has already run;
-        // the assertions on the Faq mock are what this test actually verifies.
+        // Elasticsearch wrapper throws — but only after the language-scoped row above has been
+        // fetched and the index document built from it; the assertions on the Faq mock are what
+        // this test actually verifies.
         try {
             $controller->status($request);
         } catch (\LogicException) {
@@ -2548,15 +2553,6 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
-     * A newly created draft/review FAQ must not become publicly findable via search before
-     * its first publish: create() must not index it into Elasticsearch or OpenSearch. No
-     * search client is registered on Configuration in this test, so reaching either indexing
-     * branch would throw a LogicException when constructing the client wrapper — a clean OK
-     * response is proof neither branch ran.
-     *
-     * @throws \Exception
-     */
-    /**
      * A present but unsupported status value is a malformed request — it must 400 instead
      * of silently creating a draft; only an absent field falls back to Draft.
      */
@@ -2580,7 +2576,16 @@ final class FaqControllerTest extends TestCase
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
-    public function testCreateDoesNotIndexDraftFaqWhenSearchIsEnabled(): void
+    /**
+     * A newly created draft/review FAQ must not become publicly findable via search before
+     * its first publish: create() must not index it into Elasticsearch or OpenSearch. No
+     * search client is registered on Configuration in this test, so reaching either indexing
+     * branch would throw a LogicException when constructing the client wrapper — a clean OK
+     * response is proof neither branch ran.
+     *
+     * @throws \Exception
+     */
+    public function testCreateDoesNotIndexDraftOrReviewFaqWhenSearchIsEnabled(): void
     {
         self::assertTrue($this->configuration->set('search.enableElasticsearch', true));
         self::assertTrue($this->configuration->set('search.enableOpenSearch', true));
@@ -2589,19 +2594,22 @@ final class FaqControllerTest extends TestCase
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
         $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
 
-        $request = $this->createRequestForNewFaq($csrfToken, status: 'draft');
-
         $faq = $this->createMock(Faq::class);
-        $faq->expects($this->once())
+        $faq->expects($this->exactly(2))
             ->method('create')
             ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1));
 
         $controller = $this->createControllerWithFaq($faq);
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->create($request);
+        foreach (['draft', 'review'] as $status) {
+            $request = $this->createRequestForNewFaq($csrfToken, status: $status);
 
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+            $response = $controller->create($request);
+
+            self::assertSame(Response::HTTP_OK, $response->getStatusCode(), 'status: ' . $status);
+        }
+
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
@@ -2909,7 +2917,6 @@ final class FaqControllerTest extends TestCase
             PermissionType::FAQ_ADD->value,
             PermissionType::FAQ_EDIT->value,
             PermissionType::FAQ_DELETE->value,
-            'approverec',
             PermissionType::FAQ_TRANSLATE->value,
             PermissionType::FAQS_VIEW->value,
         ];
