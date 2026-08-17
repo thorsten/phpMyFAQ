@@ -58,15 +58,15 @@ class Sqlsrv extends Database implements DriverInterface
             contents NVARCHAR(MAX) NOT NULL,
             PRIMARY KEY (virtual_hash))',
         'faqbackup' => 'CREATE TABLE %sfaqbackup (
-            id INT(11) NOT NULL,
+            id INTEGER NOT NULL,
             filename VARCHAR(255) NOT NULL,
             authkey VARCHAR(255) NOT NULL,
             authcode VARCHAR(255) NOT NULL,
-            created timestamp NOT NULL,
+            created DATETIME NOT NULL,
             PRIMARY KEY (id))',
         'faqbookmarks' => 'CREATE TABLE %sfaqbookmarks (
-            userid INT(11) DEFAULT NULL,
-            faqid INT(11) DEFAULT NULL)',
+            userid INTEGER DEFAULT NULL,
+            faqid INTEGER DEFAULT NULL)',
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
             id NVARCHAR(6) NOT NULL,
             useragent NVARCHAR(255) NOT NULL,

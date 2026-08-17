@@ -82,6 +82,41 @@ class SqlsrvTest extends TestCase
         }
     }
 
+    /**
+     * INT(11) is invalid T-SQL and "timestamp" is an alias for rowversion on SQL Server,
+     * not a date type — both made the fresh-install CREATE TABLE statements fail.
+     */
+    public function testBackupAndBookmarkTablesUseValidSqlServerTypes(): void
+    {
+        $executedQueries = [];
+        $this->dbMock
+            ->method('query')
+            ->willReturnCallback(function (string $query) use (&$executedQueries) {
+                $executedQueries[] = $query;
+                return true;
+            });
+
+        $this->sqlsrv->createTables();
+
+        foreach (['faqbackup', 'faqbookmarks'] as $tableName) {
+            $tableQueries = array_filter(
+                $executedQueries,
+                static fn(string $query): bool => str_contains($query, 'CREATE TABLE ' . $tableName),
+            );
+
+            $this->assertNotEmpty($tableQueries, "Missing CREATE TABLE for: $tableName");
+
+            foreach ($tableQueries as $query) {
+                $this->assertStringNotContainsString('INT(11)', $query, "Invalid INT(11) in $tableName");
+                $this->assertDoesNotMatchRegularExpression(
+                    '/\btimestamp\b/i',
+                    $query,
+                    "Rowversion timestamp column in $tableName",
+                );
+            }
+        }
+    }
+
     public function testCreateTablesWithPrefixAppliesPrefix(): void
     {
         $executedQueries = [];
