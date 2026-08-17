@@ -233,4 +233,87 @@ class Migration420Alpha2Test extends TestCase
         $this->assertStringContainsString('replace the active flag with it', $description);
         $this->assertStringContainsString('retire the unused approverec right', $description);
     }
+
+    /**
+     * The lossy VARCHAR/TEXT columns must become NVARCHAR on SQL Server (#1896). Columns bound
+     * to a default constraint (seo_robots, the faquser token columns) or used in an index
+     * (faqcustompages.slug) cannot change their type directly, so those constraints have to be
+     * dropped first and restored afterwards.
+     */
+    public function testConvertSqlServerColumnsToUnicodeRecordsAltersOnSqlServer(): void
+    {
+        Database::factory('pdo_sqlsrv');
+
+        try {
+            $migration = new Migration420Alpha2($this->configuration);
+            $recorder = new OperationRecorder($this->configuration);
+            $method = new ReflectionMethod($migration, 'convertSqlServerColumnsToUnicode');
+            $method->invoke($migration, $recorder);
+
+            $joined = implode("\n", $recorder->getSqlQueries());
+
+            $this->assertStringContainsString(
+                'ALTER TABLE faqcustompages ALTER COLUMN page_title NVARCHAR(255) NOT NULL',
+                $joined,
+            );
+            $this->assertStringContainsString('DROP INDEX idx_custompages_slug ON faqcustompages', $joined);
+            $this->assertStringContainsString(
+                'ALTER TABLE faqcustompages ALTER COLUMN slug NVARCHAR(255) NOT NULL',
+                $joined,
+            );
+            $this->assertStringContainsString(
+                'CREATE INDEX idx_custompages_slug ON faqcustompages (slug, lang)',
+                $joined,
+            );
+            $this->assertStringContainsString(
+                'ALTER TABLE faqcustompages ALTER COLUMN seo_robots NVARCHAR(50) NOT NULL',
+                $joined,
+            );
+            $this->assertStringContainsString("ADD DEFAULT 'index,follow' FOR seo_robots", $joined);
+            $this->assertStringContainsString('ALTER TABLE faqseo ALTER COLUMN title NVARCHAR(MAX) NULL', $joined);
+            $this->assertStringContainsString('ALTER TABLE faqseo ALTER COLUMN slug NVARCHAR(MAX) NULL', $joined);
+            $this->assertStringContainsString(
+                'ALTER TABLE faquser ALTER COLUMN refresh_token NVARCHAR(MAX) NULL',
+                $joined,
+            );
+            $this->assertStringContainsString(
+                'ALTER TABLE faquser ALTER COLUMN webauthnkeys NVARCHAR(MAX) NULL',
+                $joined,
+            );
+            $this->assertStringContainsString(
+                'ALTER TABLE faquser ALTER COLUMN code_verifier NVARCHAR(255) NULL',
+                $joined,
+            );
+            $this->assertStringContainsString("c.name = 'refresh_token'", $joined);
+        } finally {
+            Database::factory('pdo_sqlite');
+        }
+    }
+
+    public function testConvertSqlServerColumnsToUnicodeRecordsNothingForOtherDatabases(): void
+    {
+        $recorder = new OperationRecorder($this->configuration);
+        $method = new ReflectionMethod($this->migration, 'convertSqlServerColumnsToUnicode');
+        $method->invoke($this->migration, $recorder);
+
+        $this->assertSame([], $recorder->getSqlQueries());
+    }
+
+    public function testUpRecordsUnicodeColumnConversionsOnSqlServer(): void
+    {
+        Database::factory('pdo_sqlsrv');
+
+        try {
+            $migration = new Migration420Alpha2($this->configuration);
+            $recorder = new OperationRecorder($this->configuration);
+            $migration->up($recorder);
+
+            $this->assertStringContainsString(
+                'ALTER TABLE faqseo ALTER COLUMN title NVARCHAR(MAX) NULL',
+                implode("\n", $recorder->getSqlQueries()),
+            );
+        } finally {
+            Database::factory('pdo_sqlite');
+        }
+    }
 }

@@ -548,6 +548,19 @@ class SqlsrvTest extends TestCase
         $this->assertSame('42000: broken', $this->sqlsrv->error());
     }
 
+    public function testQueryPrefixesNonAsciiLiteralsWithNationalMarker(): void
+    {
+        $this->setConnectionProperty($this->createFakeResource());
+        $GLOBALS['pmfSqlsrvTestState']['query_result'] = 'sqlsrv-result';
+
+        $this->sqlsrv->query("INSERT INTO faqdata (thema) VALUES ('こんにちは')");
+
+        $this->assertSame(
+            "INSERT INTO faqdata (thema) VALUES (N'こんにちは')",
+            $GLOBALS['pmfSqlsrvTestState']['last_query'],
+        );
+    }
+
     public function testFetchMethodsAndNumRowsUseSqlsrvShims(): void
     {
         $GLOBALS['pmfSqlsrvTestState']['fetch_array_rows'] = [['id' => 1], false];

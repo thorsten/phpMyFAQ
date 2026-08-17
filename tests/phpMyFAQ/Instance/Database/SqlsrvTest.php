@@ -51,6 +51,37 @@ class SqlsrvTest extends TestCase
         $this->assertStringContainsString('CREATE TABLE faqadminlog', $executedQueries[0]);
     }
 
+    public function testUserContentColumnsUseUnicodeCapableTypes(): void
+    {
+        $executedQueries = [];
+        $this->dbMock
+            ->method('query')
+            ->willReturnCallback(function (string $query) use (&$executedQueries) {
+                $executedQueries[] = $query;
+                return true;
+            });
+
+        $this->sqlsrv->createTables();
+
+        foreach (['faqconfig', 'faqcustompages', 'faqseo', 'faquser'] as $tableName) {
+            $tableQueries = array_filter(
+                $executedQueries,
+                static fn(string $query): bool => str_contains($query, 'CREATE TABLE ' . $tableName),
+            );
+
+            $this->assertNotEmpty($tableQueries, "Missing CREATE TABLE for: $tableName");
+
+            foreach ($tableQueries as $query) {
+                $this->assertDoesNotMatchRegularExpression(
+                    '/(?<!N)VARCHAR/',
+                    $query,
+                    "Lossy VARCHAR column in $tableName",
+                );
+                $this->assertDoesNotMatchRegularExpression('/\bTEXT\b/', $query, "Lossy TEXT column in $tableName");
+            }
+        }
+    }
+
     public function testCreateTablesWithPrefixAppliesPrefix(): void
     {
         $executedQueries = [];

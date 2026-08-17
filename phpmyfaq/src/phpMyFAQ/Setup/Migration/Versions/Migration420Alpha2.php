@@ -43,6 +43,7 @@ readonly class Migration420Alpha2 extends AbstractMigration
             . 'and add the faqquestion_history table for open question lifecycle metadata tracking'
             . ', and introduce the editorial workflow status on faqdata'
             . ', replace the active flag with it, and retire the unused approverec right'
+            . ', and convert the lossy SQL Server character columns to Unicode types'
         );
     }
 
@@ -166,6 +167,142 @@ readonly class Migration420Alpha2 extends AbstractMigration
         $this->createQuestionHistoryTable($recorder);
         $this->introduceEditorialWorkflowStatus($recorder);
         $this->retireApproveRight($recorder);
+        $this->convertSqlServerColumnsToUnicode($recorder);
+    }
+
+    /**
+     * SQL Server typed several user-content columns as VARCHAR/TEXT, which silently mangles
+     * characters outside the collation's code page (CJK, Thai, Cyrillic, ...) — see #1896.
+     * Converts them to their NVARCHAR equivalents. ALTER COLUMN refuses to change the type of
+     * a column that is used in an index (faqcustompages.slug) or bound to a default constraint
+     * (seo_robots and the faquser token columns), so those are dropped first and restored
+     * afterwards. Every statement is idempotent, keeping the amended-migration re-run safe.
+     */
+    private function convertSqlServerColumnsToUnicode(OperationRecorder $recorder): void
+    {
+        if (!$this->isSqlServer()) {
+            return;
+        }
+
+        $unconstrainedColumns = [
+            'faqcustompages' => [
+                'page_title' => 'NVARCHAR(255) NOT NULL',
+                'author_name' => 'NVARCHAR(255) NOT NULL',
+                'author_email' => 'NVARCHAR(255) NOT NULL',
+                'seo_title' => 'NVARCHAR(60) NULL',
+                'seo_description' => 'NVARCHAR(160) NULL',
+            ],
+            'faqseo' => [
+                'type' => 'NVARCHAR(32) NOT NULL',
+                'reference_language' => 'NVARCHAR(5) NOT NULL',
+                'title' => 'NVARCHAR(MAX) NULL',
+                'description' => 'NVARCHAR(MAX) NULL',
+                'slug' => 'NVARCHAR(MAX) NULL',
+            ],
+        ];
+
+        foreach ($unconstrainedColumns as $table => $columns) {
+            foreach ($columns as $column => $type) {
+                $recorder->addSql(
+                    sprintf('ALTER TABLE %s ALTER COLUMN %s %s', $this->table($table), $column, $type),
+                    sprintf('Convert %s.%s to Unicode (SQL Server)', $table, $column),
+                );
+            }
+        }
+
+        $recorder->addSql(
+            sprintf(
+                "IF EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_custompages_slug'"
+                . " AND object_id = OBJECT_ID('%s'))"
+                . ' DROP INDEX idx_custompages_slug ON %s',
+                $this->table('faqcustompages'),
+                $this->table('faqcustompages'),
+            ),
+            'Drop the slug index before converting faqcustompages.slug (SQL Server)',
+        );
+
+        $recorder->addSql(
+            sprintf('ALTER TABLE %s ALTER COLUMN slug NVARCHAR(255) NOT NULL', $this->table('faqcustompages')),
+            'Convert faqcustompages.slug to Unicode (SQL Server)',
+        );
+
+        $recorder->addSql(
+            sprintf(
+                "IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_custompages_slug'"
+                . " AND object_id = OBJECT_ID('%s'))"
+                . ' CREATE INDEX idx_custompages_slug ON %s (slug, lang)',
+                $this->table('faqcustompages'),
+                $this->table('faqcustompages'),
+            ),
+            'Recreate the slug index on faqcustompages (SQL Server)',
+        );
+
+        $recorder->addSql(
+            $this->dropDefaultConstraint('faqcustompages', 'seo_robots'),
+            'Drop the default constraint bound to faqcustompages.seo_robots (SQL Server)',
+        );
+
+        $recorder->addSql(
+            sprintf('ALTER TABLE %s ALTER COLUMN seo_robots NVARCHAR(50) NOT NULL', $this->table('faqcustompages')),
+            'Convert faqcustompages.seo_robots to Unicode (SQL Server)',
+        );
+
+        $recorder->addSql(
+            sprintf(
+                'IF NOT EXISTS (SELECT 1 FROM sys.default_constraints dc'
+                . ' JOIN sys.columns c ON dc.parent_object_id = c.object_id'
+                . ' AND dc.parent_column_id = c.column_id'
+                . " WHERE dc.parent_object_id = OBJECT_ID('%s') AND c.name = 'seo_robots')"
+                . " ALTER TABLE %s ADD DEFAULT 'index,follow' FOR seo_robots",
+                $this->table('faqcustompages'),
+                $this->table('faqcustompages'),
+            ),
+            'Restore the default on faqcustompages.seo_robots (SQL Server)',
+        );
+
+        // The token columns were added as the deprecated TEXT type (which also breaks equality
+        // comparisons on SQL Server) with DEFAULT NULL constraints bound to them.
+        $tokenColumns = [
+            /* @mago-expect lint:no-literal-password - column names and SQL types, not credentials */
+            'refresh_token' => 'NVARCHAR(MAX) NULL',
+            /* @mago-expect lint:no-literal-password - column names and SQL types, not credentials */
+            'access_token' => 'NVARCHAR(MAX) NULL',
+            'jwt' => 'NVARCHAR(MAX) NULL',
+            'webauthnkeys' => 'NVARCHAR(MAX) NULL',
+            'code_verifier' => 'NVARCHAR(255) NULL',
+        ];
+
+        foreach ($tokenColumns as $column => $type) {
+            $recorder->addSql(
+                $this->dropDefaultConstraint('faquser', $column),
+                sprintf('Drop the default constraint bound to faquser.%s (SQL Server)', $column),
+            );
+
+            $recorder->addSql(
+                sprintf('ALTER TABLE %s ALTER COLUMN %s %s', $this->table('faquser'), $column, $type),
+                sprintf('Convert faquser.%s to Unicode (SQL Server)', $column),
+            );
+        }
+    }
+
+    /**
+     * Default constraint names are auto-generated per installation, so the constraint has to be
+     * resolved and dropped dynamically. Guarded (IF NOT NULL), so re-runs stay safe.
+     */
+    private function dropDefaultConstraint(string $table, string $column): string
+    {
+        return sprintf(
+            'DECLARE @constraintName nvarchar(200); '
+            . 'SELECT @constraintName = dc.name FROM sys.default_constraints dc '
+            . 'JOIN sys.columns c ON dc.parent_object_id = c.object_id '
+            . 'AND dc.parent_column_id = c.column_id '
+            . "WHERE dc.parent_object_id = OBJECT_ID('%s') AND c.name = '%s'; "
+            . 'IF @constraintName IS NOT NULL '
+            . "EXEC('ALTER TABLE %s DROP CONSTRAINT ' + @constraintName)",
+            $this->table($table),
+            $column,
+            $this->table($table),
+        );
     }
 
     /**

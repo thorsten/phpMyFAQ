@@ -503,6 +503,25 @@ class PdoSqlsrvTest extends TestCase
         $this->assertSame(3, $this->pdoSqlsrv->lastInsertId());
     }
 
+    public function testQueryPrefixesNonAsciiLiteralsWithNationalMarker(): void
+    {
+        $pdo = new class ('sqlite::memory:') extends PDO {
+            public string $lastQuery = '';
+
+            public function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PDOStatement|false
+            {
+                $this->lastQuery = $query;
+
+                return parent::query('SELECT 1');
+            }
+        };
+        $this->setPdo($pdo);
+
+        $this->pdoSqlsrv->query("INSERT INTO faqdata (thema) VALUES ('こんにちは')");
+
+        $this->assertSame("INSERT INTO faqdata (thema) VALUES (N'こんにちは')", $pdo->lastQuery);
+    }
+
     public function testNextIdReturnsIncrementedMaximumId(): void
     {
         $pdo = new PDO('sqlite::memory:');

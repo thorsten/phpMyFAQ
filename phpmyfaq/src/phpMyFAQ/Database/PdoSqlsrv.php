@@ -325,6 +325,7 @@ class PdoSqlsrv implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {
+        $query = SqlServerUnicodeLiterals::apply($query);
         $this->sqlLog .= $query;
 
         if (0 < $rowcount) {
