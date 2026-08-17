@@ -56,7 +56,9 @@ We aim to meet the following response targets:
 
 Severity is assessed using CVSS v3.1 (and v4.0 where applicable). These are targets, not contractual
 guarantees; phpMyFAQ is provided without warranty under the terms of its licence. Organisations that
-require contractual response times should get in touch about commercial support.
+require contractual response times can obtain professional support directly from the maintainer —
+see https://www.phpmyfaq.de/support. There are no third-party support vendors endorsed by the
+project.
 
 We provide periodic updates while triage and remediation are in progress.
 
@@ -124,9 +126,18 @@ run phpMyFAQ — do not test against installations you do not own or have writte
 
 ## Regulatory Context
 
-phpMyFAQ is developed and published as free and open source software. This policy, together with the
-process documented in [docs/security-process.md](docs/security-process.md), describes our
-coordinated vulnerability disclosure process and single reporting point.
+phpMyFAQ is free and open source software, licensed under the Mozilla Public License 2.0. The
+software itself is made available to everyone free of charge; development is funded by voluntary
+donations and sponsorship. Security fixes and advisories are published for all users at no cost,
+ship in public releases, and are never conditional on paid services.
+
+Optional professional services (custom development, consulting, installation, training, and
+prioritised handling of issues) are offered separately by the maintainer — see
+https://www.phpmyfaq.de/support. These services do not change how vulnerabilities are triaged,
+fixed, or disclosed under this policy.
+
+This policy, together with the process documented in [docs/security-process.md](docs/security-process.md),
+describes our coordinated vulnerability disclosure process and single reporting point.
 
 Organisations subject to their own regulatory requirements (for example the EU Cyber Resilience Act,
 NIS2, or ISO 27001) that need documented assurances beyond this policy should contact
