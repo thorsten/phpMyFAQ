@@ -571,6 +571,69 @@ describe('FAQ Overview Functions', () => {
       vi.unstubAllGlobals();
     });
 
+    it('should re-apply an active status filter after a row status change', async () => {
+      localStorage.setItem('pmfStatusFilter', 'draft');
+
+      document.body.innerHTML = `
+        <select id="pmf-status-filter">
+          <option value="">All</option>
+          <option value="draft">Draft</option>
+        </select>
+        <div class="accordion-collapse show" data-pmf-categoryId="3" data-pmf-language="en"></div>
+        <table><tbody id="tbody-category-id-3" data-pmf-csrf="csrf-token"
+                      data-pmf-status-draft="Entwurf" data-pmf-status-review="In Prüfung"
+                      data-pmf-status-published="Veröffentlicht"></tbody></table>
+      `;
+
+      // First fetch (on expand) returns the draft FAQ; after publishing it, the
+      // server-side draft filter no longer matches it.
+      (fetchAllFaqsByCategory as Mock)
+        .mockResolvedValueOnce({
+          faqs: [
+            {
+              id: 7,
+              language: 'en',
+              solution_id: 1007,
+              question: 'Draft question',
+              created: '2026-03-01',
+              category_id: 3,
+              sticky: 'no',
+              status: 'draft',
+              isAllowedToPublish: true,
+            },
+          ],
+          isAllowedToTranslate: false,
+        })
+        .mockResolvedValue({ faqs: [], isAllowedToTranslate: false });
+
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({ success: 'Status updated' }),
+      });
+      vi.stubGlobal('fetch', fetchMock);
+
+      await handleFaqOverview();
+
+      const category = document.querySelector('.accordion-collapse') as HTMLElement;
+      category.dispatchEvent(new Event('shown.bs.collapse'));
+
+      await flushPromises();
+
+      const statusSelect = document.querySelector('.pmf-admin-status-faq') as HTMLSelectElement;
+      statusSelect.value = 'published';
+      statusSelect.dispatchEvent(new Event('change'));
+
+      await flushPromises();
+
+      // The published FAQ no longer matches the draft filter — its row must be
+      // gone without collapsing and re-expanding the category.
+      expect(fetchAllFaqsByCategory).toHaveBeenLastCalledWith('3', 'en', 'draft', false);
+      const tableBody = document.getElementById('tbody-category-id-3') as HTMLElement;
+      expect(tableBody.querySelectorAll('tr').length).toBe(0);
+
+      vi.unstubAllGlobals();
+    });
+
     it('should roll the status select back when the API rejects the change', async () => {
       document.body.innerHTML = `
         <div class="accordion-collapse" data-pmf-categoryId="3" data-pmf-language="en"></div>

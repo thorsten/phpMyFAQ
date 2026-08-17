@@ -135,6 +135,15 @@ const refreshCategoryTable = async (category: Element): Promise<void> => {
       const succeeded = await saveFaqStatus(categoryId, [faqId], token, target.value);
       if (succeeded) {
         previousStatus = target.value;
+
+        // Under an active status filter every visible row matches that filter, so a
+        // successful change always moves the FAQ out of the filtered view. Re-fetch all
+        // expanded categories (the FAQ may be listed in several) instead of leaving
+        // stale rows behind until the next collapse/expand cycle.
+        if (getStatusFilterState() !== '') {
+          await refreshExpandedCategoryTables();
+        }
+
         return;
       }
 
