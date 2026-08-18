@@ -92,7 +92,7 @@
     "autoprefixer": "10.5.4",
     "husky": "9.1.7",
     "jsdom": "30.0.1",
-    "oxfmt": "0.62.0",
+    "oxfmt": "0.63.0",
     "oxlint": "1.77.0",
     "postcss": "8.5.26",
     "sass": "1.102.0",
