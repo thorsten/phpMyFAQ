@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ;
 
+use Elastic\Elasticsearch\ClientBuilder as ElasticsearchClientBuilder;
 use Exception;
 use OpenSearch\Client as OpenSearchClient;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
@@ -148,6 +149,10 @@ class SearchTest extends TestCase
     {
         $this->setConfigValue('search.searchForSolutionId', 'false');
         $this->setConfigValue('search.enableElasticsearch', 'true');
+        $this->setConfigValue(
+            'core.elasticsearch',
+            ElasticsearchClientBuilder::create()->setHosts(['http://localhost:9200'])->build(),
+        );
 
         $this->search = $this
             ->getMockBuilder(Search::class)
@@ -168,6 +173,7 @@ class SearchTest extends TestCase
         $this->setConfigValue('search.searchForSolutionId', 'false');
         $this->setConfigValue('search.enableElasticsearch', 'false');
         $this->setConfigValue('search.enableOpenSearch', 'true');
+        $this->setConfigValue('core.opensearch', $this->createMock(OpenSearchClient::class));
 
         $this->search = $this
             ->getMockBuilder(Search::class)
@@ -178,6 +184,86 @@ class SearchTest extends TestCase
         $this->search->expects($this->once())->method('searchOpenSearch')->with('123', true)->willReturn([]);
 
         $this->assertEquals([], $this->search->search('123'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchFallsBackToDatabaseWhenElasticsearchClientIsMissing(): void
+    {
+        $this->setConfigValue('search.searchForSolutionId', 'false');
+        $this->setConfigValue('search.enableElasticsearch', 'true');
+        $this->setConfigValue('search.enableOpenSearch', 'false');
+
+        $search = $this
+            ->getMockBuilder(Search::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['searchDatabase', 'searchElasticsearch'])
+            ->getMock();
+
+        $search->expects($this->never())->method('searchElasticsearch');
+        $search->expects($this->once())->method('searchDatabase')->with('test', true)->willReturn([]);
+
+        $this->assertSame([], $search->search('test'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchFallsBackToDatabaseWhenOpenSearchClientIsMissing(): void
+    {
+        $this->setConfigValue('search.searchForSolutionId', 'false');
+        $this->setConfigValue('search.enableElasticsearch', 'false');
+        $this->setConfigValue('search.enableOpenSearch', 'true');
+
+        $search = $this
+            ->getMockBuilder(Search::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['searchDatabase', 'searchOpenSearch'])
+            ->getMock();
+
+        $search->expects($this->never())->method('searchOpenSearch');
+        $search->expects($this->once())->method('searchDatabase')->with('test', true)->willReturn([]);
+
+        $this->assertSame([], $search->search('test'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAutoCompleteFallsBackToDatabaseWhenElasticsearchClientIsMissing(): void
+    {
+        $this->setConfigValue('search.enableElasticsearch', 'true');
+        $this->setConfigValue('search.enableOpenSearch', 'false');
+
+        $search = $this
+            ->getMockBuilder(Search::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['searchDatabase'])
+            ->getMock();
+
+        $search->expects($this->once())->method('searchDatabase')->with('foo', false)->willReturn([]);
+
+        $this->assertSame([], $search->autoComplete('foo'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAutoCompleteFallsBackToDatabaseWhenOpenSearchClientIsMissing(): void
+    {
+        $this->setConfigValue('search.enableElasticsearch', 'false');
+        $this->setConfigValue('search.enableOpenSearch', 'true');
+
+        $search = $this
+            ->getMockBuilder(Search::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['searchDatabase'])
+            ->getMock();
+
+        $search->expects($this->once())->method('searchDatabase')->with('foo', false)->willReturn([]);
+
+        $this->assertSame([], $search->autoComplete('foo'));
     }
 
     /**
@@ -360,6 +446,7 @@ class SearchTest extends TestCase
                 default => null,
             });
         $config->method('getLanguage')->willReturn($language);
+        $config->method('hasOpenSearch')->willReturn(true);
         $config->method('getOpenSearch')->willReturn($client);
         $config->method('getOpenSearchConfig')->willReturn(new OpenSearchConfiguration($openSearchConfigFile));
 

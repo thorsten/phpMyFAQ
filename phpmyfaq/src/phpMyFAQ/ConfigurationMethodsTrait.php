@@ -393,6 +393,14 @@ trait ConfigurationMethodsTrait
         return $this->runtimeObject('core.elasticsearch', Client::class);
     }
 
+    /**
+     * Returns true if an Elasticsearch client instance has been registered.
+     */
+    public function hasElasticsearch(): bool
+    {
+        return ($this->config['core.elasticsearch'] ?? null) instanceof Client;
+    }
+
     public function setOpenSearch(\OpenSearch\Client $osClient): void
     {
         $this->config['core.opensearch'] = $osClient;
@@ -401,6 +409,14 @@ trait ConfigurationMethodsTrait
     public function getOpenSearch(): \OpenSearch\Client
     {
         return $this->runtimeObject('core.opensearch', \OpenSearch\Client::class);
+    }
+
+    /**
+     * Returns true if an OpenSearch client instance has been registered.
+     */
+    public function hasOpenSearch(): bool
+    {
+        return ($this->config['core.opensearch'] ?? null) instanceof \OpenSearch\Client;
     }
 
     /**

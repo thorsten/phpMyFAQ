@@ -88,11 +88,11 @@ class Search
             return $this->searchDatabase($searchTerm, $allLanguages);
         }
 
-        if (true === $this->configuration->get(item: 'search.enableElasticsearch')) {
+        if (true === $this->configuration->get(item: 'search.enableElasticsearch') && $this->hasElasticsearchClient()) {
             return $this->searchElasticsearch($searchTerm, $allLanguages);
         }
 
-        if (true === $this->configuration->get(item: 'search.enableOpenSearch')) {
+        if (true === $this->configuration->get(item: 'search.enableOpenSearch') && $this->hasOpenSearchClient()) {
             return $this->searchOpenSearch($searchTerm, $allLanguages);
         }
 
@@ -108,7 +108,7 @@ class Search
      */
     public function autoComplete(string $searchTerm): array
     {
-        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
+        if (true === $this->configuration->get(item: 'search.enableElasticsearch') && $this->hasElasticsearchClient()) {
             $elasticsearch = new Elasticsearch($this->configuration);
             $allCategories = $this->getCategory()->getAllCategoryIds();
 
@@ -119,7 +119,7 @@ class Search
             return $elasticsearch->autoComplete($searchTerm);
         }
 
-        if ($this->configuration->get(item: 'search.enableOpenSearch')) {
+        if (true === $this->configuration->get(item: 'search.enableOpenSearch') && $this->hasOpenSearchClient()) {
             $opensearch = new OpenSearch($this->configuration);
             $allCategories = $this->getCategory()->getAllCategoryIds();
 
@@ -131,6 +131,37 @@ class Search
         }
 
         return $this->searchDatabase($searchTerm, false);
+    }
+
+    /**
+     * Returns true when the Elasticsearch client is available; logs a warning and
+     * triggers the database fallback otherwise, so a missing or unreachable search
+     * engine degrades search instead of breaking it.
+     */
+    private function hasElasticsearchClient(): bool
+    {
+        if ($this->configuration->hasElasticsearch()) {
+            return true;
+        }
+
+        $this->configuration
+            ->getLogger()
+            ->warning('Elasticsearch is enabled, but no client is available. Falling back to database search.');
+
+        return false;
+    }
+
+    private function hasOpenSearchClient(): bool
+    {
+        if ($this->configuration->hasOpenSearch()) {
+            return true;
+        }
+
+        $this->configuration
+            ->getLogger()
+            ->warning('OpenSearch is enabled, but no client is available. Falling back to database search.');
+
+        return false;
     }
 
     /**
