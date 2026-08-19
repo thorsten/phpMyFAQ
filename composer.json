@@ -50,7 +50,7 @@
     "mcp/sdk": "~0.7.0",
     "minishlink/web-push": "~11.0.0",
     "monolog/monolog": "~3.10.0",
-    "myclabs/deep-copy": "~1.13.4",
+    "myclabs/deep-copy": "~1.14.0",
     "opensearch-project/opensearch-php": "~2.6.0",
     "phpseclib/phpseclib": "~3.0.50",
     "robthree/twofactorauth": "~3.0.3",
