@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 try {
-    require '../src/Bootstrap.php';
+    require dirname(__DIR__) . '/src/Bootstrap.php';
 } catch (DatabaseConnectionException $exception) {
     $errorMessage = Environment::isDebugMode()
         ? $exception->getMessage()
