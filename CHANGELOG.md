@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.2.0-alpha.2 - unreleased
+### phpMyFAQ v4.2.0-alpha.2 - 2026-08-20
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
 - added Symfony Router for frontend (Thorsten)
@@ -49,8 +49,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated from Prettier to oxfmt for JavaScript/TypeScript formatting (Thorsten)
 - migrated experimental MCP Server to mcp/sdk (Thorsten)
 - upgraded PDF engine to TCPDF 7 / tc-lib-pdf; PDF fonts are now JSON descriptors in src/fonts (Thorsten)
-- fixed security vulnerabilities (Thorsten)
 - updated third party dependencies (Thorsten)
+- fixed security vulnerabilities (Thorsten)
 - fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.8 - 2026-08-20
