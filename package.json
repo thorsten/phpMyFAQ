@@ -42,7 +42,7 @@
     "chart.js": "^4.5.1",
     "choices.js": "^11.2.3",
     "highlight.js": "^11.12.0",
-    "jodit": "^4.13.22",
+    "jodit": "^4.13.23",
     "masonry-layout": "^4.2.2",
     "sortablejs": "^1.15.7",
     "vanilla-cookieconsent": "^3.1.0"
@@ -59,8 +59,8 @@
     "@types/masonry-layout": "^4.2.8",
     "@types/node": "^24.13.3",
     "@types/sortablejs": "^1.15.9",
-    "@vitest/coverage-istanbul": "^4.1.10",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-istanbul": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.11",
     "autoprefixer": "^10.5.4",
     "eslint": "^9.39.5",
     "husky": "^9.1.7",
@@ -68,7 +68,7 @@
     "postcss": "^8.5.26",
     "prettier": "^3.9.6",
     "pretty-quick": "^4.2.2",
-    "sass": "^1.102.0",
+    "sass": "^1.103.0",
     "sigmund": "^1.0.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.67.0",
@@ -77,7 +77,7 @@
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-minify": "^2.1.0",
     "vite-plugin-static-copy": "^3.4.0",
-    "vitest": "^4.1.10",
+    "vitest": "^4.1.11",
     "vitest-fetch-mock": "^0.4.5"
   },
   "husky": {
