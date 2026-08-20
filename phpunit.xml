@@ -29,7 +29,9 @@
             <html outputDirectory="html-coverage" lowUpperBound="50" highLowerBound="80"/>
         </report>
     </coverage>
-    <source>
+    <source restrictNotices="true"
+            restrictWarnings="true"
+            ignoreIndirectDeprecations="true">
         <include>
             <directory suffix=".php">./phpmyfaq/src/phpMyFAQ</directory>
         </include>
