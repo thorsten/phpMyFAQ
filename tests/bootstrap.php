@@ -86,9 +86,21 @@ Request::setTrustedHosts(['^.*$']); // Trust all hosts for testing
 //
 if (getenv('PMF_TEST_BOOTSTRAPPED') === false) {
     //
-    // Delete possible leftover files from previous test runs
+    // Delete possible leftover files from previous test runs. If test.db is a
+    // symlink, keep the link and delete only its target: linking the SQLite
+    // file onto a filesystem with stable inodes is the workaround for network
+    // or virtiofs mounts, where SQLite fails with SQLITE_READONLY_DBMOVED.
     //
-    @unlink(PMF_TEST_DIR . '/test.db');
+    $testDbFile = PMF_TEST_DIR . '/test.db';
+    if (is_link($testDbFile)) {
+        $testDbTarget = readlink($testDbFile);
+        if (!is_dir(dirname($testDbTarget))) {
+            @mkdir(dirname($testDbTarget), 0777, true);
+        }
+        @unlink($testDbTarget);
+    } else {
+        @unlink($testDbFile);
+    }
     @unlink(PMF_TEST_DIR . '/content/core/config/database.php');
 
     //
