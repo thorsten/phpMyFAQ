@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller;
 use JsonException;
 use LogicException;
 use OpenApi\Attributes as OA;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Container\ContainerRegistry;
@@ -125,6 +126,12 @@ abstract class AbstractController
         }
 
         $this->session = $session;
+
+        AttachmentFactory::init(
+            (string) $this->configuration->get(item: 'records.defaultAttachmentEncKey'),
+            (bool) $this->configuration->get(item: 'records.enableAttachmentEncryption'),
+            (int) $this->configuration->get(item: 'records.attachmentsStorageType'),
+        );
 
         TwigWrapper::setTemplateSetName($this->configuration->getTemplateSet());
         $this->isSecured();

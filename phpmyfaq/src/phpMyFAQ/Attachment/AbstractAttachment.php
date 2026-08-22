@@ -155,12 +155,24 @@ abstract class AbstractAttachment implements AttachmentInterface
     /**
      * Set the encryption key.
      *
+     * A missing key must never downgrade metadata that already reported this
+     * attachment as encrypted — that would flip storage-path resolution to the
+     * unencrypted path and silently expose or lose the file. Callers without a
+     * key for an already-encrypted attachment get an explicit failure instead
+     * (see File::getFile()), not a wrong storage path.
+     *
      * @param string|null $key Encryption key
      */
     public function setKey(?string $key): void
     {
         $this->key = $key;
-        $this->encrypted = null !== $key;
+
+        if ($key !== null) {
+            $this->encrypted = true;
+            return;
+        }
+
+        $this->encrypted ??= false;
     }
 
     /**

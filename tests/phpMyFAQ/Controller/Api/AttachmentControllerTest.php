@@ -375,12 +375,16 @@ class AttachmentControllerTest extends TestCase
     {
         $fixtureId = 990001;
         $this->insertAttachmentFixture($fixtureId, 1);
-        $this->setAttachmentFactoryStorageType(999);
 
         $request = new Request();
         $request->attributes->set('faqId', '1');
 
+        // The controller constructor now bootstraps AttachmentFactory from
+        // configuration (records.attachmentsStorageType), so the invalid
+        // storage type must be injected after construction, right before the
+        // call that reads it.
         $controller = new AttachmentController();
+        $this->setAttachmentFactoryStorageType(999);
         $response = $controller->list($request);
         $payload = json_decode($response->getContent(), true);
 

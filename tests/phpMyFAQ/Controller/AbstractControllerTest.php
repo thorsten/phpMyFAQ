@@ -511,7 +511,12 @@ class AbstractControllerTest extends TestCase
 
         $secondConfiguration = $this->createMock(Configuration::class);
         $secondConfiguration->expects($this->once())->method('getTemplateSet')->willReturn('default');
-        $secondConfiguration->expects($this->once())->method('get')->with('security.enableLoginOnly')->willReturn(true);
+        $secondConfiguration
+            ->method('get')
+            ->willReturnCallback(static fn(string $item) => match ($item) {
+                'security.enableLoginOnly' => true,
+                default => null,
+            });
 
         $secondCurrentUser = $this->createMock(CurrentUser::class);
         $secondCurrentUser->expects($this->once())->method('isLoggedIn')->willReturn(false);
