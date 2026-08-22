@@ -49,20 +49,25 @@ final readonly class AttachmentService
 
     /**
      * Checks if the current user has permission to download an attachment.
+     *
+     * The per-record ACL (group and user permission) is always enforced first.
+     * records.allowDownloadsForGuests only ever waives the "dlattachment" right
+     * requirement for anonymous visitors — it must never bypass the ACL itself,
+     * and it must never affect logged-in users, who always need their own right.
      */
     public function canDownloadAttachment(AbstractAttachment $attachment): bool
     {
-        // Allow downloads for guests if configured
-        if ($this->configuration->get('records.allowDownloadsForGuests')) {
-            return true;
+        if (!$this->checkGroupPermission($attachment) || !$this->checkUserPermission($attachment)) {
+            return false;
         }
 
-        // Check group and user permissions
-        $hasGroupPermission = $this->checkGroupPermission($attachment);
-        $hasUserPermission = $this->checkUserPermission($attachment);
+        if (!$this->currentUser->isLoggedIn()) {
+            return (bool) $this->configuration->get('records.allowDownloadsForGuests');
+        }
+
         $userRights = $this->getUserRights();
 
-        return $hasGroupPermission && $hasUserPermission && ($userRights['dlattachment'] ?? false);
+        return $userRights['dlattachment'] ?? false;
     }
 
     /**

@@ -50,19 +50,74 @@ final class AttachmentServiceTest extends TestCase
         return new AttachmentService($this->configuration, $this->currentUser, $this->faqPermission);
     }
 
-    public function testCanDownloadAttachmentAllowsGuestDownload(): void
+    public function testCanDownloadAttachmentAllowsGuestDownloadOnAPublicRecord(): void
     {
-        $this->configuration
-            ->expects($this->once())
-            ->method('get')
-            ->with('records.allowDownloadsForGuests')
-            ->willReturn(true);
+        $this->configuration->method('get')->willReturn(true);
+
+        $this->currentUser->perm = $this->createBasicPermission([], []);
+        $this->currentUser->method('isLoggedIn')->willReturn(false);
+        $this->currentUser->method('getUserId')->willReturn(-1);
 
         $attachment = $this->createMock(AbstractAttachment::class);
+        $attachment->method('getRecordId')->willReturn(1);
+
+        // -1 = open to all users/groups, so a guest's per-record ACL check passes.
+        $this->faqPermission->method('get')->willReturn([-1]);
 
         $service = $this->createService();
 
         self::assertTrue($service->canDownloadAttachment($attachment));
+    }
+
+    /**
+     * Regression: records.allowDownloadsForGuests must only waive the "dlattachment"
+     * right for anonymous visitors — it must never bypass the per-record ACL. A guest
+     * previously got every attachment on every FAQ, including ones restricted to a
+     * specific user or group, as soon as the setting was enabled.
+     */
+    public function testCanDownloadAttachmentGuestFlagDoesNotBypassPerRecordAcl(): void
+    {
+        $this->configuration->method('get')->willReturn(true);
+
+        $this->currentUser->perm = $this->createBasicPermission([], []);
+        $this->currentUser->method('isLoggedIn')->willReturn(false);
+        $this->currentUser->method('getUserId')->willReturn(-1);
+
+        $attachment = $this->createMock(AbstractAttachment::class);
+        $attachment->method('getRecordId')->willReturn(1);
+
+        // Restricted to a specific user - a guest (userId -1) must not match.
+        $this->faqPermission->method('get')->willReturn([42]);
+
+        $service = $this->createService();
+
+        self::assertFalse($service->canDownloadAttachment($attachment));
+    }
+
+    /**
+     * Regression: records.allowDownloadsForGuests must have no effect on logged-in
+     * users - they always need their own "dlattachment" right. The previous
+     * implementation granted every logged-in user a free pass whenever the guest
+     * setting was enabled, regardless of their actual rights.
+     */
+    public function testCanDownloadAttachmentGuestFlagDoesNotGrantLoggedInUserWithoutRight(): void
+    {
+        $this->configuration->method('get')->willReturn(true);
+
+        $this->currentUser->perm = $this->createBasicPermission([
+            ['right_id' => 1, 'name' => 'someotherright'],
+        ], [1]);
+        $this->currentUser->method('isLoggedIn')->willReturn(true);
+        $this->currentUser->method('getUserId')->willReturn(42);
+
+        $attachment = $this->createMock(AbstractAttachment::class);
+        $attachment->method('getRecordId')->willReturn(1);
+
+        $this->faqPermission->method('get')->willReturn([-1]);
+
+        $service = $this->createService();
+
+        self::assertFalse($service->canDownloadAttachment($attachment));
     }
 
     public function testCanDownloadAttachmentDeniedWhenNotLoggedIn(): void

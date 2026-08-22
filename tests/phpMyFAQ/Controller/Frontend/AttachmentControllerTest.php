@@ -385,6 +385,13 @@ final class AttachmentControllerTest extends TestCase
         );
         $this->dbHandle->query($query);
 
+        // canDownloadAttachment() enforces the FAQ record's per-user AND per-group ACL
+        // (security.permLevel is "medium" in test.db) before the guest-downloads flag
+        // is even considered, so record_id 1 needs explicit "open to all" grants on
+        // both - it has no faqdata row of its own in test.db.
+        $this->dbHandle->query('INSERT OR IGNORE INTO faqdata_user (record_id, user_id) VALUES (1, -1)');
+        $this->dbHandle->query('INSERT OR IGNORE INTO faqdata_group (record_id, group_id) VALUES (1, -1)');
+
         return $attachmentId;
     }
 
