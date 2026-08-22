@@ -69,6 +69,8 @@ export const handleAttachmentUploads = (): void => {
       }
       formData.append('record_id', (document.getElementById('attachment_record_id') as HTMLInputElement).value);
       formData.append('record_lang', (document.getElementById('attachment_record_lang') as HTMLInputElement).value);
+      const csrfToken = document.getElementById('pmf-csrf-token') as HTMLInputElement | null;
+      formData.append('pmf-csrf-token', csrfToken ? csrfToken.value : '');
 
       try {
         const response = (await uploadAttachments(formData)) as unknown as Attachment[];

@@ -20,6 +20,7 @@ declare(strict_types=1);
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Exception\AuthenticationException;
 use OpenSearch\SymfonyClientFactory;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
@@ -167,17 +168,6 @@ try {
 $faqConfig = new Configuration($db);
 $faqConfig->getAll();
 
-//
-// If the installed database is older than the current code base, the
-// installation must be updated first, otherwise outdated schema (e.g. tables or
-// columns added by a later release) causes fatal errors. Front-facing requests
-// are redirected to the public updater; administration requests are redirected
-// to the in-admin updater so administrators stay inside /admin/ and can log in
-// and run the upgrade there. The updater itself, the installer, all REST
-// endpoints and the admin login and upgrade pages are excluded to avoid
-// redirect loops and to keep the recovery process reachable
-// (see System::isUpdateExemptRequest()).
-//
 $scriptName = (string) $request->getScriptName();
 $pathInfo = (string) $request->getPathInfo();
 
@@ -186,10 +176,6 @@ $isUpdateContext = System::isUpdateExemptRequest($scriptName, $pathInfo);
 if (!$isUpdateContext && System::isUpdateNecessary((string) $faqConfig->get('main.currentVersion'))) {
     $systemUri = (new System())->getSystemUri($faqConfig);
 
-    // Administration requests stay within the admin area: redirect them to the
-    // in-admin updater, which is update-exempt and enforces authentication
-    // itself (so unauthenticated admins still get the login form). Front-facing
-    // requests are sent to the public standalone updater instead.
     $redirectTarget = str_contains($scriptName, '/admin/')
         ? $systemUri . 'admin/update'
         : $systemUri . 'update/';
@@ -326,6 +312,11 @@ if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:[\\/]%i', $confAttachm
         define('PMF_ATTACHMENTS_DIR', false);
     }
 }
+
+AttachmentFactory::init(
+    (string) $faqConfig->get('records.defaultAttachmentEncKey'),
+    (bool) $faqConfig->get('records.enableAttachmentEncryption'),
+);
 
 //
 // Fix if phpMyFAQ is running behind a proxy server

@@ -119,6 +119,13 @@ final class AttachmentController extends AbstractController
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_ADD);
 
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            'upload-attachment',
+            $request->request->get('pmf-csrf-token'),
+        )) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
         $files = $request->files->get('filesToUpload');
         $recordId = Filter::filterVar($request->request->get('record_id'), FILTER_VALIDATE_INT);
         $recordLang = Filter::filterVar($request->request->get('record_lang'), FILTER_SANITIZE_SPECIAL_CHARS);

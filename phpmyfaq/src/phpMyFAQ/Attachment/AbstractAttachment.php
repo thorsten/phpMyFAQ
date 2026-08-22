@@ -155,7 +155,16 @@ abstract class AbstractAttachment
     public function setKey(?string $key): void
     {
         $this->key = $key;
-        $this->encrypted = null !== $key;
+
+        if (null !== $key) {
+            $this->encrypted = true;
+
+            return;
+        }
+
+        if (true !== $this->encrypted) {
+            $this->encrypted = false;
+        }
     }
 
     /**
@@ -213,7 +222,7 @@ abstract class AbstractAttachment
     {
         $attachmentTableName = sprintf('%sfaqattachment', Database::getTablePrefix());
 
-        if (null === $this->id) {
+        if (null === $this->id || 0 === (int) $this->id) {
             $this->id = $this->databaseDriver->nextId($attachmentTableName, 'id');
 
             $sql = sprintf(

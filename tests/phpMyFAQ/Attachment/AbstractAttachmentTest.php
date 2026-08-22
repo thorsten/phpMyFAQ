@@ -228,6 +228,26 @@ class AbstractAttachmentTest extends TestCase
         $this->assertFalse($encryptedProperty->getValue($this->attachment));
     }
 
+    public function testSetKeyNullDoesNotDowngradeEncryptedMetadata(): void
+    {
+        $reflection = new ReflectionClass($this->attachment);
+
+        // Simulate an attachment whose persisted metadata says encrypted=1.
+        $encryptedProperty = $reflection->getProperty('encrypted');
+        $encryptedProperty->setValue($this->attachment, true);
+
+        // A missing key (e.g. factory not configured) must not silently flip the
+        // attachment to unencrypted, which would resolve the wrong storage path.
+        $this->attachment->setKey(null);
+
+        $keyProperty = $reflection->getProperty('key');
+        $this->assertNull($keyProperty->getValue($this->attachment));
+        $this->assertTrue(
+            $encryptedProperty->getValue($this->attachment),
+            'A null key must not downgrade an attachment that metadata marks as encrypted',
+        );
+    }
+
     /**
      * @throws \ReflectionException
      */
@@ -259,6 +279,43 @@ class AbstractAttachmentTest extends TestCase
         $this->mockDb->method('nextId')->willReturn(42);
         $this->mockDb->method('escape')->willReturnArgument(0);
         $this->mockDb->method('query')->willReturn(true);
+
+        $savedId = $this->attachment->saveMeta();
+
+        $this->assertEquals(42, $savedId);
+        $this->assertEquals(42, $this->attachment->getId());
+    }
+
+    /**
+     * A freshly created attachment (create() without an id) keeps the id
+     * property at its default of 0. saveMeta() must treat that as a new
+     * attachment and insert the metadata row, assigning the real id.
+     *
+     * @throws \ReflectionException
+     */
+    public function testSaveMetaTreatsZeroIdAsNewAttachment(): void
+    {
+        $reflection = new ReflectionClass($this->attachment);
+        $properties = [
+            'id' => 0,
+            'recordId' => 123,
+            'recordLang' => 'en',
+            'realHash' => 'real123',
+            'virtualHash' => 'virtual456',
+            'filename' => 'test.pdf',
+            'filesize' => 1024,
+            'encrypted' => false,
+            'mimeType' => 'application/pdf',
+        ];
+
+        foreach ($properties as $prop => $value) {
+            $property = $reflection->getProperty($prop);
+            $property->setValue($this->attachment, $value);
+        }
+
+        $this->mockDb->method('nextId')->willReturn(42);
+        $this->mockDb->method('escape')->willReturnArgument(0);
+        $this->mockDb->expects($this->once())->method('query')->with($this->stringContains('INSERT INTO'))->willReturn(true);
 
         $savedId = $this->attachment->saveMeta();
 

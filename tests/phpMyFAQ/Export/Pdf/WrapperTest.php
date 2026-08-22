@@ -517,4 +517,111 @@ class WrapperTest extends TestCase
         $this->wrapper->categories = $categories;
         $this->assertEquals($categories, $this->wrapper->categories);
     }
+
+    // SSRF hardening: media host allowlist and redirect handling
+
+    private function invokePrivate(string $method, mixed ...$args): mixed
+    {
+        $reflection = new ReflectionClass($this->wrapper);
+
+        return $reflection->getMethod($method)->invoke($this->wrapper, ...$args);
+    }
+
+    public function testIsHostAllowedMatchesExactAndSubdomain(): void
+    {
+        $allowed = ['example.com', ' cdn.test '];
+
+        $this->assertTrue($this->invokePrivate('isHostAllowed', 'example.com', $allowed));
+        $this->assertTrue($this->invokePrivate('isHostAllowed', 'images.example.com', $allowed));
+        // Trimming and case-insensitive matching
+        $this->assertTrue($this->invokePrivate('isHostAllowed', 'CDN.TEST', $allowed));
+    }
+
+    public function testIsHostAllowedRejectsDisallowedAndTricks(): void
+    {
+        $allowed = ['example.com'];
+
+        $this->assertFalse($this->invokePrivate('isHostAllowed', 'blocked.test', $allowed));
+        // "example.com.evil.com" must not match "example.com"
+        $this->assertFalse($this->invokePrivate('isHostAllowed', 'example.com.evil.com', $allowed));
+        // Substring that is not a subdomain boundary must not match
+        $this->assertFalse($this->invokePrivate('isHostAllowed', 'notexample.com', $allowed));
+        $this->assertFalse($this->invokePrivate('isHostAllowed', '', $allowed));
+    }
+
+    public function testIsHostAllowedIgnoresEmptyAndDisabledSentinel(): void
+    {
+        $this->assertFalse($this->invokePrivate('isHostAllowed', 'example.com', ['']));
+        $this->assertFalse($this->invokePrivate('isHostAllowed', 'example.com', ['0']));
+    }
+
+    public function testParseHttpResponseExtractsStatusAndLocation(): void
+    {
+        $headers = [
+            'HTTP/1.1 302 Found',
+            'Server: nginx',
+            'Location: http://blocked.test/tiny.png',
+            'Content-Length: 0',
+        ];
+
+        [$status, $location] = $this->invokePrivate('parseHttpResponse', $headers);
+
+        $this->assertSame(302, $status);
+        $this->assertSame('http://blocked.test/tiny.png', $location);
+    }
+
+    public function testParseHttpResponseUsesLastStatusBlock(): void
+    {
+        // A redirect chain surfaced as multiple response blocks: the final
+        // 200 response has no Location, which must be reflected.
+        $headers = [
+            'HTTP/1.1 301 Moved Permanently',
+            'Location: http://example.com/next',
+            'HTTP/1.1 200 OK',
+            'Content-Type: image/png',
+        ];
+
+        [$status, $location] = $this->invokePrivate('parseHttpResponse', $headers);
+
+        $this->assertSame(200, $status);
+        $this->assertNull($location);
+    }
+
+    public function testResolveRedirectUrlWithAbsoluteTarget(): void
+    {
+        $result = $this->invokePrivate(
+            'resolveRedirectUrl',
+            'http://allowed.test/redirect',
+            'http://blocked.test/tiny.png',
+        );
+
+        $this->assertSame('http://blocked.test/tiny.png', $result);
+    }
+
+    public function testResolveRedirectUrlWithAbsolutePath(): void
+    {
+        $result = $this->invokePrivate(
+            'resolveRedirectUrl',
+            'http://allowed.test:8081/a/b/redirect',
+            '/tiny.png',
+        );
+
+        $this->assertSame('http://allowed.test:8081/tiny.png', $result);
+    }
+
+    public function testResolveRedirectUrlWithRelativePath(): void
+    {
+        $result = $this->invokePrivate(
+            'resolveRedirectUrl',
+            'http://allowed.test/a/b/redirect',
+            'tiny.png',
+        );
+
+        $this->assertSame('http://allowed.test/a/b/tiny.png', $result);
+    }
+
+    public function testResolveRedirectUrlRejectsEmptyLocation(): void
+    {
+        $this->assertNull($this->invokePrivate('resolveRedirectUrl', 'http://allowed.test/x', ''));
+    }
 }

@@ -20,7 +20,6 @@
  * @since     2001-02-12
  */
 
-use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Core\Exception;
@@ -118,14 +117,6 @@ Strings::init($faqLangCode);
 // Set actual template set name
 //
 TwigWrapper::setTemplateSetName($faqConfig->getTemplateSet());
-
-/*
- * Initialize attachment factory
- */
-AttachmentFactory::init(
-    $faqConfig->get('records.defaultAttachmentEncKey'),
-    $faqConfig->get('records.enableAttachmentEncryption'),
-);
 
 //
 // Get user action

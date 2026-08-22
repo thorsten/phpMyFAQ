@@ -758,31 +758,13 @@ class Wrapper extends TCPDF
 
                 $host = $parsedUrl['host'];
                 // Check if the host is in the allowed list
-                $isAllowed = false;
-                foreach ($allowedHosts as $allowedHost) {
-                    $allowedHost = trim($allowedHost);
-                    if ($allowedHost === '') {
-                        continue;
-                    }
-
-                    if ($allowedHost === '0') {
-                        continue;
-                    }
-
-                    // Allow exact match or subdomain match
-                    if ($host === $allowedHost || str_ends_with($host, '.' . $allowedHost)) {
-                        $isAllowed = true;
-                        break;
-                    }
-                }
-
-                if (!$isAllowed) {
+                if (!$this->isHostAllowed($host, $allowedHosts)) {
                     return $fullMatch; // Return original if host not allowed
                 }
 
                 // Try to fetch the image and convert to base64
                 try {
-                    $imageData = $this->fetchExternalImage($imageUrl);
+                    $imageData = $this->fetchExternalImage($imageUrl, $allowedHosts);
                     if ($imageData !== false) {
                         $base64Image = base64_encode($imageData);
                         $mimeType = $this->getImageMimeType($imageData);
@@ -804,39 +786,204 @@ class Wrapper extends TCPDF
     }
 
     /**
-     * Fetches an external image with the appropriate error handling.
+     * Checks whether a host is covered by the configured media host allowlist.
      *
-     * @param string $url The image URL to fetch
+     * Matches an exact hostname or any subdomain of an allowed host. Empty
+     * entries and the disabled sentinel "0" are ignored.
+     *
+     * @param string   $host         The hostname to check
+     * @param string[] $allowedHosts The configured allowlist
+     * @return bool True if the host is allowed
+     */
+    private function isHostAllowed(string $host, array $allowedHosts): bool
+    {
+        $host = strtolower(trim($host));
+        if ($host === '') {
+            return false;
+        }
+
+        foreach ($allowedHosts as $allowedHost) {
+            $allowedHost = strtolower(trim($allowedHost));
+            if ($allowedHost === '' || $allowedHost === '0') {
+                continue;
+            }
+
+            // Allow exact match or subdomain match
+            if ($host === $allowedHost || str_ends_with($host, '.' . $allowedHost)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Fetches an external image, following redirects manually so that the media
+     * host allowlist is re-applied to every redirect destination. Delegating
+     * redirects to the PHP stream wrapper would let an allowed origin redirect
+     * the server-side request to a disallowed host (SSRF, CWE-918).
+     *
+     * @param string   $url          The image URL to fetch
+     * @param string[] $allowedHosts The configured allowlist
      * @return string|false The image data or false on failure
      */
-    private function fetchExternalImage(string $url): false|string
+    private function fetchExternalImage(string $url, array $allowedHosts): false|string
     {
-        $context = stream_context_create([
-            'http' => [
-                'timeout' => 10, // 10-second timeout
-                'user_agent' => 'phpMyFAQ PDF Generator/1.0',
-                'follow_location' => true,
-                'max_redirects' => 3,
-            ],
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-            ],
-        ]);
+        $maxRedirects = 3;
+        $currentUrl = $url;
 
-        $imageData = file_get_contents($url, use_include_path: false, context: $context);
+        for ($hop = 0; $hop <= $maxRedirects; ++$hop) {
+            $parsedUrl = parse_url($currentUrl);
+            if ($parsedUrl === false || !isset($parsedUrl['scheme'], $parsedUrl['host'])) {
+                return false;
+            }
 
-        // Validate that we actually got image data
-        if ($imageData === false || $imageData === '') {
-            return false;
+            // Only permit HTTP(S); reject file://, php://, data://, etc.
+            $scheme = strtolower($parsedUrl['scheme']);
+            if ($scheme !== 'http' && $scheme !== 'https') {
+                return false;
+            }
+
+            // Re-apply the allowlist to the current hop, not just the first URL.
+            if (!$this->isHostAllowed($parsedUrl['host'], $allowedHosts)) {
+                return false;
+            }
+
+            $context = stream_context_create([
+                'http' => [
+                    'method' => 'GET',
+                    'timeout' => 10, // 10-second timeout
+                    'user_agent' => 'phpMyFAQ PDF Generator/1.0',
+                    'follow_location' => 0, // do not let the wrapper follow redirects
+                    'max_redirects' => 1,
+                    'ignore_errors' => true, // read the body of 3xx/4xx responses
+                ],
+                'ssl' => [
+                    'verify_peer' => true,
+                    'verify_peer_name' => true,
+                ],
+            ]);
+
+            // Clear any headers left over from a previous hop so a failed
+            // connection cannot be misread using stale redirect headers.
+            unset($http_response_header);
+            $responseHeaders = [];
+            $body = @file_get_contents($currentUrl, use_include_path: false, context: $context);
+            // $http_response_header is populated in the local scope by the wrapper.
+            if (isset($http_response_header) && is_array($http_response_header)) {
+                $responseHeaders = $http_response_header;
+            }
+
+            [$statusCode, $location] = $this->parseHttpResponse($responseHeaders);
+
+            // Handle redirects explicitly.
+            if ($statusCode >= 300 && $statusCode < 400) {
+                if ($location === null || $hop === $maxRedirects) {
+                    return false; // no target, or redirect budget exhausted
+                }
+
+                $nextUrl = $this->resolveRedirectUrl($currentUrl, $location);
+                if ($nextUrl === null) {
+                    return false;
+                }
+
+                $currentUrl = $nextUrl;
+                continue;
+            }
+
+            // Validate that we actually got image data
+            if ($body === false || $body === '') {
+                return false;
+            }
+
+            // Quick validation that this looks like image data
+            if (!$this->validateImageData($body)) {
+                return false;
+            }
+
+            return $body;
         }
 
-        // Quick validation that this looks like image data
-        if (!$this->validateImageData($imageData)) {
-            return false;
+        return false;
+    }
+
+    /**
+     * Extracts the HTTP status code and Location header from a raw response
+     * header list as produced by $http_response_header.
+     *
+     * @param string[] $headers Raw response header lines
+     * @return array{0: int, 1: string|null} Status code and Location value
+     */
+    private function parseHttpResponse(array $headers): array
+    {
+        $statusCode = 0;
+        $location = null;
+
+        foreach ($headers as $header) {
+            // A new status line resets the parse for the current response
+            // (relevant if the wrapper ever surfaces multiple response blocks).
+            if (preg_match('#^HTTP/\d(?:\.\d)?\s+(\d{3})#i', $header, $matches)) {
+                $statusCode = (int) $matches[1];
+                $location = null;
+                continue;
+            }
+
+            if (stripos($header, 'Location:') === 0) {
+                $location = trim(substr($header, strlen('Location:')));
+            }
         }
 
-        return $imageData;
+        return [$statusCode, $location];
+    }
+
+    /**
+     * Resolves a (possibly relative) Location header against the current URL.
+     * Returns null when the result cannot be turned into an absolute HTTP(S) URL.
+     *
+     * @param string $baseUrl  The URL that produced the redirect
+     * @param string $location The raw Location header value
+     * @return string|null The absolute redirect target, or null on failure
+     */
+    private function resolveRedirectUrl(string $baseUrl, string $location): ?string
+    {
+        $location = trim($location);
+        if ($location === '') {
+            return null;
+        }
+
+        $target = parse_url($location);
+        if ($target === false) {
+            return null;
+        }
+
+        // Absolute URL with its own scheme and host.
+        if (isset($target['scheme'], $target['host'])) {
+            return $location;
+        }
+
+        $base = parse_url($baseUrl);
+        if ($base === false || !isset($base['scheme'], $base['host'])) {
+            return null;
+        }
+
+        $authority = $base['scheme'] . '://' . $base['host'];
+        if (isset($base['port'])) {
+            $authority .= ':' . $base['port'];
+        }
+
+        // Scheme-relative ("//host/path") is handled by the absolute branch above;
+        // here we resolve absolute-path and relative-path references.
+        if (str_starts_with($location, '/')) {
+            return $authority . $location;
+        }
+
+        $basePath = $base['path'] ?? '/';
+        $basePath = substr($basePath, 0, (int) strrpos($basePath, '/') + 1);
+        if ($basePath === '') {
+            $basePath = '/';
+        }
+
+        return $authority . $basePath . $location;
     }
 
     /**
