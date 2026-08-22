@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
+use phpMyFAQ\Attachment\AttachmentPermission;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
@@ -74,24 +75,22 @@ try {
         Translation::get(key: 'msgAttachmentInvalid') . ' (' . $attachmentException->getMessage() . ')';
 }
 
-// Check on group permissions
-if ($user->perm instanceof MediumPermission) {
-    if ($groupPermission !== []) {
-        foreach ($user->perm->getUserGroups($user->getUserId()) as $userGroups) {
-            if (in_array($userGroups, $groupPermission)) {
-                $groupPermission = true;
-                break;
-            }
-        }
-    } else {
-        $groupPermission = false;
-    }
-} else {
-    $groupPermission = true;
-}
+$userId = $user->getUserId();
 
-// Check user's permissions
-$userPermission = in_array($user->getUserId(), $userPermission);
+// The per-record ACL (user + group permissions, incl. the -1 "all" sentinel)
+// must always be satisfied before an attachment is served. Groups are only
+// enforced when the permission layer actually supports them (security.permLevel
+// other than "basic").
+$groupSupport = $user->perm instanceof MediumPermission;
+$userGroups = $groupSupport ? $user->perm->getUserGroups($userId) : [];
+
+$hasRecordAccess = AttachmentPermission::hasRecordAccess(
+    $userId,
+    $userPermission,
+    $groupPermission,
+    $userGroups,
+    $groupSupport,
+);
 
 // get user rights
 $permission = [];
@@ -103,7 +102,7 @@ if ($user->isLoggedIn()) {
     }
 
     // check user rights, set true
-    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
+    $allUserRights = $user->perm->getAllUserRights($userId);
     foreach ($allRights as $allRight) {
         if (in_array($allRight['right_id'], $allUserRights)) {
             $permission[$allRight['name']] = true;
@@ -111,10 +110,16 @@ if ($user->isLoggedIn()) {
     }
 }
 
-if (
-    $attachment && $attachment->getRecordId() > 0 && ($faqConfig->get('records.allowDownloadsForGuests') ||
-        (($groupPermission || $userPermission) && isset($permission['dlattachment']) && $permission['dlattachment'] === true))
-) {
+// Logged-in users need the "dlattachment" right; anonymous users are only
+// permitted when records.allowDownloadsForGuests is enabled. This flag only
+// waives the right requirement for guests - it never widens the per-record ACL.
+$hasDownloadRight = AttachmentPermission::hasDownloadRight(
+    $user->isLoggedIn(),
+    isset($permission['dlattachment']) && $permission['dlattachment'] === true,
+    (bool) $faqConfig->get('records.allowDownloadsForGuests'),
+);
+
+if ($attachment && $attachment->getRecordId() > 0 && $hasRecordAccess && $hasDownloadRight) {
     $response = new StreamedResponse(function () use ($attachment) {
         $attachment->rawOut();
     });
