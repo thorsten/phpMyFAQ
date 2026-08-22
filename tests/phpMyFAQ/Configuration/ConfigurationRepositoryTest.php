@@ -38,7 +38,9 @@ class ConfigurationRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->databaseFile = PMF_TEST_DIR . '/configuration-repository-' . uniqid('', true) . '.db';
+        // sys_get_temp_dir(), not PMF_TEST_DIR: SQLite's locking can misbehave when the
+        // database file lives on a network/virtiofs-mounted checkout.
+        $this->databaseFile = sys_get_temp_dir() . '/configuration-repository-' . uniqid('', true) . '.db';
         $this->databaseDriver = new Sqlite3();
         $this->databaseDriver->connect($this->databaseFile, '', '');
 
