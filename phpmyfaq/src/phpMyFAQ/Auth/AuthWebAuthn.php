@@ -146,16 +146,27 @@ class AuthWebAuthn extends Auth
      *
      * @param string $info Info provided by the key
      * @param string $userWebAuthn The existing WebAuthn field for the user
+     * @param string $expectedChallenge The challenge issued by prepareChallengeForRegistration()
+     *                                   for this session; the ceremony is rejected unless the
+     *                                   client's clientDataJSON challenge matches it.
      * @throws Exception
      * @throws \Exception
      */
-    public function register(string $info, string $userWebAuthn): string
+    public function register(string $info, string $userWebAuthn, string $expectedChallenge = ''): string
     {
         $info = html_entity_decode($info);
         $info = json_decode($info, false);
 
         if (empty($info)) {
             throw new Exception('info is not properly JSON encoded');
+        }
+
+        // Bind the attestation to the challenge this server issued for this session. Without this
+        // the ceremony is not tied to any server-side state and a fabricated or replayed
+        // attestation would be accepted. Fails closed: a missing expected challenge is rejected.
+        $clientChallenge = (string) ($info->response->clientDataJSON->challenge ?? '');
+        if ($expectedChallenge === '' || !hash_equals($expectedChallenge, $clientChallenge)) {
+            throw new Exception('Registration challenge mismatch or missing');
         }
 
         if (empty($info->response->attestationObject)) {

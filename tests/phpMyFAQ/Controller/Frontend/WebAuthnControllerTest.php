@@ -18,14 +18,19 @@
 namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
 class WebAuthnControllerTest extends TestCase
@@ -199,5 +204,113 @@ class WebAuthnControllerTest extends TestCase
 
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         $this->assertStringContainsString('WebAuthn support is disabled', $response->getContent());
+    }
+
+    public function testPrepareRejectsExistingAccountForAnonymousCaller(): void
+    {
+        // Core takeover guard: an unauthenticated caller must not be able to stage an existing
+        // account (e.g. admin) and attach a passkey to it, even with a valid CSRF token.
+        $this->enableWebAuthnAndRegistration();
+        $this->primeCsrfToken('webauthn-prepare', 'valid-token');
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUserByLogin')->with('admin', false)->willReturn(true);
+        $userMock->method('getUserId')->willReturn(1);
+        $this->injectUser($userMock);
+
+        $currentUserMock = $this->createMock(CurrentUser::class);
+        $currentUserMock->method('isLoggedIn')->willReturn(false);
+        $this->injectCurrentUser($currentUserMock);
+
+        $request = Request::create('/api/webauthn/prepare', 'POST', [], [], [], [], json_encode([
+            'username' => 'admin',
+            'csrfToken' => 'valid-token',
+        ]));
+
+        $response = $this->controller->prepare($request);
+
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    public function testPrepareRejectsExistingAccountForNonOwner(): void
+    {
+        // A logged-in user must not be able to attach a passkey to a different existing account.
+        $this->enableWebAuthnAndRegistration();
+        $this->primeCsrfToken('webauthn-prepare', 'valid-token');
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUserByLogin')->with('admin', false)->willReturn(true);
+        $userMock->method('getUserId')->willReturn(1);
+        $this->injectUser($userMock);
+
+        $currentUserMock = $this->createMock(CurrentUser::class);
+        $currentUserMock->method('isLoggedIn')->willReturn(true);
+        $currentUserMock->method('getUserId')->willReturn(2);
+        $this->injectCurrentUser($currentUserMock);
+
+        $request = Request::create('/api/webauthn/prepare', 'POST', [], [], [], [], json_encode([
+            'username' => 'admin',
+            'csrfToken' => 'valid-token',
+        ]));
+
+        $response = $this->controller->prepare($request);
+
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    private function enableWebAuthnAndRegistration(): void
+    {
+        $this->configurationMock
+            ->method('get')
+            ->willReturnCallback(fn(string $item) => match ($item) {
+                'security.enableWebAuthnSupport' => true,
+                'security.enableRegistration' => true,
+                default => null,
+            });
+    }
+
+    /**
+     * Primes a valid CSRF token in a real session plus its matching cookie, so that
+     * Token::verifyToken() succeeds and the controller logic beyond the CSRF check runs.
+     */
+    private function primeCsrfToken(string $page, string $tokenValue): void
+    {
+        Token::resetInstanceForTests();
+
+        $session = new Session(new MockArraySessionStorage());
+
+        $tokenReflection = new ReflectionClass(Token::class);
+        $token = $tokenReflection->newInstanceWithoutConstructor();
+        $token->setPage($page)
+            ->setExpiry(time() + 3600)
+            ->setSessionToken($tokenValue)
+            ->setCookieToken($tokenValue);
+
+        $session->set(sprintf('%s.%s', Token::PMF_SESSION_NAME, $page), $token);
+
+        $this->containerMock->method('get')->with('session')->willReturn($session);
+
+        $_COOKIE[sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(md5($page), 0, 10))] = $tokenValue;
+    }
+
+    private function injectUser(User $user): void
+    {
+        $reflection = new ReflectionClass(WebAuthnController::class);
+        $userProp = $reflection->getProperty('user');
+        $userProp->setValue($this->controller, $user);
+    }
+
+    private function injectCurrentUser(CurrentUser $currentUser): void
+    {
+        $reflection = new ReflectionClass(WebAuthnController::class);
+        $currentUserProp = $reflection->getParentClass()->getProperty('currentUser');
+        $currentUserProp->setValue($this->controller, $currentUser);
+    }
+
+    protected function tearDown(): void
+    {
+        Token::resetInstanceForTests();
+        $_COOKIE = [];
+        parent::tearDown();
     }
 }

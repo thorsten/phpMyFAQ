@@ -74,7 +74,24 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
 
         $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!$this->user->getUserByLogin($username, raiseError: false)) {
+        $userExists = $this->user->getUserByLogin($username, raiseError: false);
+
+        // Adding a passkey to an existing account is only allowed for the authenticated owner of
+        // that account; otherwise an anonymous caller could attach a credential to any account
+        // (e.g. admin) and take it over. A non-existing username is a passwordless sign-up and is
+        // created below.
+        if (
+            $userExists
+            && (
+                !$this->currentUser instanceof CurrentUser
+                || !$this->currentUser->isLoggedIn()
+                || $this->currentUser->getUserId() !== $this->user->getUserId()
+            )
+        ) {
+            return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if (!$userExists) {
             try {
                 $this->user->createUser($username);
                 $this->user->setStatus(status: 'active');
@@ -88,19 +105,19 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
             }
         }
 
+        $challenge = $this->authWebAuthn->prepareChallengeForRegistration($username, (string) $this->user->getUserId());
+
         $webAuthnUser = new WebAuthnUser();
         $webAuthnUser
             ->setName($username)
             ->setId((string) $this->user->getUserId())
-            ->setWebAuthnKeys(webAuthnKeys: '');
+            ->setWebAuthnKeys(webAuthnKeys: '')
+            ->setChallenge($challenge['b64challenge']);
 
         $this->authWebAuthn->storeUserInSession($webAuthnUser);
 
         return $this->json([
-            'challenge' => $this->authWebAuthn->prepareChallengeForRegistration(
-                $username,
-                (string) $this->user->getUserId(),
-            ),
+            'challenge' => $challenge,
             'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString(
                 'webauthn-register',
             ),
@@ -128,7 +145,25 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
         $register = Filter::filterVar($data->register, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $webAuthnUser = $this->authWebAuthn->getUserFromSession();
-        $webAuthnUser->setWebAuthnKeys($this->authWebAuthn->register($register, $webAuthnUser->getWebAuthnKeys()));
+        if (!$webAuthnUser instanceof WebAuthnUser) {
+            return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        try {
+            $webAuthnKeys = $this->authWebAuthn->register(
+                $register,
+                $webAuthnUser->getWebAuthnKeys(),
+                $webAuthnUser->getChallenge(),
+            );
+        } catch (Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+        $webAuthnUser->setWebAuthnKeys($webAuthnKeys);
+
+        // Burn the registration challenge so the ceremony cannot be replayed against this session.
+        $webAuthnUser->setChallenge('');
+        $this->authWebAuthn->storeUserInSession($webAuthnUser);
 
         try {
             $this->user->getUserByLogin($webAuthnUser->getName());
@@ -209,6 +244,28 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
 
             if ($currentUser->isBlocked()) {
                 return $this->json(['error' => Translation::get(key: 'ad_auth_fail')], Response::HTTP_UNAUTHORIZED);
+            }
+
+            // A passkey is sufficient as the sole factor only for passwordless accounts. If the
+            // account has TOTP two-factor enabled, the passkey counts as the first factor only:
+            // defer to the token step instead of granting the session, mirroring the password
+            // login flow, so a passkey cannot bypass two-factor authentication.
+            if ((int) $currentUser->getUserData('twofactor_enabled') === 1) {
+                if ($currentUser->isTwoFactorLockedOut()) {
+                    return $this->json(['error' => Translation::get(key: 'ad_auth_fail')], Response::HTTP_UNAUTHORIZED);
+                }
+
+                $session = $this->container->get(id: 'session');
+                $session->set('2fa_pending_user_id', $currentUser->getUserId());
+                // The WebAuthn login form has no remember-me option; the token step decides
+                // cookie issuance, so carry an explicit "false" through it.
+                $session->set('2fa_pending_remember_me', false);
+
+                return $this->json([
+                    'success' => 'ok',
+                    'redirect' =>
+                        $this->configuration->getDefaultUrl() . 'admin/token?user-id=' . $currentUser->getUserId(),
+                ], Response::HTTP_OK);
             }
 
             $currentUser->setLoggedIn(loggedIn: true);
