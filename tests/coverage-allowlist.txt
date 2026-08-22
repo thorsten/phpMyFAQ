@@ -146,7 +146,6 @@ phpMyFAQ\Controller\Frontend\NewsController
 phpMyFAQ\Controller\Frontend\SearchController
 phpMyFAQ\Controller\Frontend\SetupController
 phpMyFAQ\Controller\Frontend\UserController
-phpMyFAQ\Controller\Frontend\WebAuthnController
 phpMyFAQ\Database\DatabaseHelper
 phpMyFAQ\Database\Mysqli
 phpMyFAQ\Database\PdoMysql

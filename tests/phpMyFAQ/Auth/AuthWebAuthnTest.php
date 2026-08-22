@@ -2,6 +2,8 @@
 
 namespace phpMyFAQ\Auth;
 
+use CBOR\CBOREncoder;
+use CBOR\Types\CBORByteString;
 use phpMyFAQ\Auth\WebAuthn\WebAuthnUser;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
@@ -79,7 +81,7 @@ class AuthWebAuthnTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('info is not properly JSON encoded');
 
-        $this->authWebAuthn->register($info, '');
+        $this->authWebAuthn->register($info, '', '');
     }
 
     public function testStoreUserInSession(): void
@@ -296,7 +298,7 @@ class AuthWebAuthnTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('no attestationObject in info');
 
-        $this->authWebAuthn->register($info, '');
+        $this->authWebAuthn->register($info, '', '');
     }
 
     public function testRegisterThrowsWhenRawIdIsMissing(): void
@@ -308,7 +310,159 @@ class AuthWebAuthnTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('no rawId in info');
 
-        $this->authWebAuthn->register($info, '');
+        $this->authWebAuthn->register($info, '', '');
+    }
+
+    public function testRegisterThrowsWhenClientDataJsonIsMissing(): void
+    {
+        $info = json_encode([
+            'response' => ['attestationObject' => [1, 2, 3]],
+            'rawId' => [1, 2, 3],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('no clientDataJSON in info');
+
+        $this->authWebAuthn->register($info, '', 'issued-challenge');
+    }
+
+    public function testRegisterThrowsWhenChallengeDoesNotMatch(): void
+    {
+        $info = $this->createRegistrationInfo(challenge: 'attacker-supplied-challenge');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Challenge mismatch');
+
+        $this->authWebAuthn->register($info, '', 'issued-challenge');
+    }
+
+    /**
+     * Regression test: register() must reject the ceremony outright when no challenge was ever
+     * issued for it (e.g. register() called without a preceding prepare() in this session),
+     * rather than accepting whatever challenge the caller claims.
+     */
+    public function testRegisterThrowsWhenNoChallengeWasIssued(): void
+    {
+        $info = $this->createRegistrationInfo(challenge: 'anything');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Challenge mismatch');
+
+        $this->authWebAuthn->register($info, '', '');
+    }
+
+    public function testRegisterThrowsWhenTypeDoesNotMatch(): void
+    {
+        $info = $this->createRegistrationInfo(challenge: 'issued-challenge', type: 'webauthn.get');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Type mismatch for 'webauthn.get'");
+
+        $this->authWebAuthn->register($info, '', 'issued-challenge');
+    }
+
+    public function testRegisterThrowsWhenOriginDoesNotMatch(): void
+    {
+        $info = $this->createRegistrationInfo(challenge: 'issued-challenge', origin: 'https://evil.example');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Origin mismatch for 'https://evil.example'");
+
+        $this->authWebAuthn->register($info, '', 'issued-challenge');
+    }
+
+    /**
+     * End-to-end: a well-formed fmt=none attestation answering the issued challenge is accepted
+     * and produces a stored key for the credential ID carried in the attestation.
+     */
+    public function testRegisterAcceptsWellFormedAttestationForIssuedChallenge(): void
+    {
+        [$info, $credId] = $this->createSignedRegistrationInfo(challenge: 'issued-challenge');
+
+        $result = $this->authWebAuthn->register($info, '', 'issued-challenge');
+
+        $keys = json_decode($result);
+        self::assertIsArray($keys);
+        self::assertCount(1, $keys);
+        self::assertSame(array_values(unpack('C*', $credId)), $keys[0]->id);
+        self::assertStringContainsString('BEGIN PUBLIC KEY', (string) $keys[0]->key);
+    }
+
+    /**
+     * Builds a minimal registration payload with a forged (unsigned) attestation, whose
+     * clientDataJSON carries the given challenge/origin/type. Used to exercise the ceremony-level
+     * validation guard clauses without needing a real authenticator key pair.
+     */
+    private function createRegistrationInfo(
+        string $challenge,
+        string $origin = 'https://example.com',
+        string $type = 'webauthn.create',
+    ): string {
+        return (string) json_encode([
+            'rawId' => [1, 2, 3],
+            'response' => [
+                'attestationObject' => [1, 2, 3],
+                'clientDataJSON' => (object) [
+                    'challenge' => $challenge,
+                    'origin' => $origin,
+                    'type' => $type,
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Builds a complete, well-formed fmt=none registration payload: a fresh EC P-256 key pair
+     * encoded as a COSE key, wrapped in an authenticator data structure with the appId's RP ID
+     * hash, and a matching clientDataJSON. Mirrors what a real browser ceremony produces for a
+     * relying party that does not request attestation.
+     *
+     * @return array{0: string, 1: string} the JSON-encoded info payload and the raw credential ID
+     */
+    private function createSignedRegistrationInfo(
+        string $challenge,
+        string $origin = 'https://example.com',
+    ): array {
+        $key = openssl_pkey_new(['curve_name' => 'prime256v1', 'private_key_type' => OPENSSL_KEYTYPE_EC]);
+        $details = openssl_pkey_get_details($key);
+
+        $cosePublicKey = [
+            1 => 2,
+            3 => -7,
+            -1 => 1,
+            -2 => new CBORByteString($details['ec']['x']),
+            -3 => new CBORByteString($details['ec']['y']),
+        ];
+        $cborPublicKey = (string) CBOREncoder::encode($cosePublicKey);
+
+        $credId = random_bytes(32);
+        $rpIdHash = hash('sha256', 'example.com', true);
+        $flags = chr(0x45);
+        $counter = "\x00\x00\x00\x00";
+        $aaguid = str_repeat("\x00", 16);
+        $credIdLength = pack('n', strlen($credId));
+
+        $authData = $rpIdHash . $flags . $counter . $aaguid . $credIdLength . $credId . $cborPublicKey;
+
+        $attestationObject = (string) CBOREncoder::encode([
+            'fmt' => 'none',
+            'attStmt' => [],
+            'authData' => new CBORByteString($authData),
+        ]);
+
+        $info = (string) json_encode([
+            'rawId' => array_values(unpack('C*', $credId)),
+            'response' => [
+                'attestationObject' => array_values(unpack('C*', $attestationObject)),
+                'clientDataJSON' => (object) [
+                    'challenge' => $challenge,
+                    'origin' => $origin,
+                    'type' => 'webauthn.create',
+                ],
+            ],
+        ]);
+
+        return [$info, $credId];
     }
 
     public function testAuthenticateThrowsWhenNoMatchingKeyExists(): void

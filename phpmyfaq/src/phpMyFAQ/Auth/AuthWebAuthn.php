@@ -150,10 +150,12 @@ class AuthWebAuthn extends Auth
      *
      * @param string $info Info provided by the key
      * @param string $userWebAuthn The existing WebAuthn field for the user
+     * @param string $expectedChallenge The b64 challenge issued for this ceremony by
+     *   prepareChallengeForRegistration(), as persisted on the session-bound WebAuthnUser
      * @throws Exception
      * @throws \Exception
      */
-    public function register(string $info, string $userWebAuthn): string
+    public function register(string $info, string $userWebAuthn, string $expectedChallenge): string
     {
         $info = html_entity_decode($info);
         $info = json_decode(json: $info, associative: false);
@@ -173,6 +175,39 @@ class AuthWebAuthn extends Auth
 
         if (!property_exists($info, 'rawId') || $info->rawId === null || $info->rawId === []) {
             throw new Exception('no rawId in info');
+        }
+
+        // The ceremony has no attestation signature to bind the response to the challenge
+        // (fmt=none/packed without a verified cert), so the only proof this was a genuine
+        // registration and not a forged HTTP request is the one-time challenge minted by
+        // prepareChallengeForRegistration() and matched here.
+        if (
+            !property_exists($info->response, 'clientDataJSON') || !$info->response->clientDataJSON instanceof stdClass
+        ) {
+            throw new Exception('no clientDataJSON in info');
+        }
+
+        $clientDataObject = $info->response->clientDataJSON;
+
+        $presentedChallenge = $clientDataObject->challenge ?? null;
+        if (
+            $expectedChallenge === ''
+            || !is_string($presentedChallenge)
+            || !hash_equals($expectedChallenge, $presentedChallenge)
+        ) {
+            throw new Exception('Challenge mismatch');
+        }
+
+        $clientType = is_string($clientDataObject->type ?? null) ? $clientDataObject->type : '';
+        if ($clientType !== 'webauthn.create') {
+            throw new Exception(sprintf("Type mismatch for '%s'", $clientType));
+        }
+
+        $clientOrigin = is_string($clientDataObject->origin ?? null) ? $clientDataObject->origin : '';
+        $origin = parse_url($clientOrigin);
+        $originHost = is_array($origin) ? $origin['host'] ?? null : null;
+        if ($originHost !== $this->appId) {
+            throw new Exception(sprintf("Origin mismatch for '%s'", $clientOrigin));
         }
 
         $attestationString = $this->byteString($info->response->attestationObject);

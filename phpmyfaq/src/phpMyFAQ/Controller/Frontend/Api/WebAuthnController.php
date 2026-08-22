@@ -115,19 +115,23 @@ final class WebAuthnController extends AbstractController
             }
         }
 
+        $challengeData = $this->authWebAuthn->prepareChallengeForRegistration(
+            $username,
+            (string) $this->user->getUserId(),
+        );
+        $b64Challenge = $challengeData['b64challenge'] ?? '';
+
         $webAuthnUser = new WebAuthnUser();
         $webAuthnUser
             ->setName($username)
             ->setId((string) $this->user->getUserId())
-            ->setWebAuthnKeys(webAuthnKeys: '');
+            ->setWebAuthnKeys(webAuthnKeys: '')
+            ->setChallenge(is_string($b64Challenge) ? $b64Challenge : '');
 
         $this->authWebAuthn->storeUserInSession($webAuthnUser);
 
         return $this->json([
-            'challenge' => $this->authWebAuthn->prepareChallengeForRegistration(
-                $username,
-                (string) $this->user->getUserId(),
-            ),
+            'challenge' => $challengeData,
         ], Response::HTTP_OK);
     }
 
@@ -148,6 +152,11 @@ final class WebAuthnController extends AbstractController
             throw new Exception('Missing register data');
         }
 
+        $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->session)->verifyToken('webauthn', $csrfToken)) {
+            return $this->json(['error' => Translation::get(key: 'msgSessionExpired')], Response::HTTP_UNAUTHORIZED);
+        }
+
         $register = Filter::filterVar($data->register, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $webAuthnUser = $this->authWebAuthn->getUserFromSession();
@@ -156,7 +165,11 @@ final class WebAuthnController extends AbstractController
             throw new Exception('User not found in session');
         }
 
-        $webAuthnUser->setWebAuthnKeys($this->authWebAuthn->register($register, $webAuthnUser->getWebAuthnKeys()));
+        $webAuthnUser->setWebAuthnKeys($this->authWebAuthn->register(
+            $register,
+            $webAuthnUser->getWebAuthnKeys(),
+            $webAuthnUser->getChallenge(),
+        ));
 
         try {
             $this->user->getUserByLogin($webAuthnUser->getName());

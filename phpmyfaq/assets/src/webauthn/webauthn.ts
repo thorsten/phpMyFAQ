@@ -50,7 +50,7 @@ export const handleWebAuthn = (): void => {
                   headers: {
                     'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({ register: info }),
+                  body: JSON.stringify({ register: info, 'pmf-csrf-token': csrfToken }),
                 });
 
                 const jsonResponse = await response.json();

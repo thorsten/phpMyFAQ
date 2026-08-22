@@ -64,6 +64,12 @@ describe('handleWebAuthn', () => {
       expect(fetch).toHaveBeenCalledWith('./api/webauthn/register', expect.any(Object));
     });
 
+    const registerCall = vi.mocked(fetch).mock.calls.find(([url]) => url === './api/webauthn/register');
+    expect(JSON.parse((registerCall?.[1]?.body as string) ?? '{}')).toEqual({
+      register: 'signed-registration',
+      'pmf-csrf-token': 'csrf-123',
+    });
+
     const successMessage = document.getElementById('pmf-webauthn-success') as HTMLElement;
     const errorMessage = document.getElementById('pmf-webauthn-error') as HTMLElement;
 

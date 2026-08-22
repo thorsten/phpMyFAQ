@@ -27,6 +27,8 @@ class WebAuthnUser
 
     private string $webAuthnKeys;
 
+    private string $challenge = '';
+
     public function getId(): string
     {
         return $this->id;
@@ -57,6 +59,17 @@ class WebAuthnUser
     public function setWebAuthnKeys(string $webAuthnKeys): WebAuthnUser
     {
         $this->webAuthnKeys = $webAuthnKeys;
+        return $this;
+    }
+
+    public function getChallenge(): string
+    {
+        return $this->challenge;
+    }
+
+    public function setChallenge(string $challenge): WebAuthnUser
+    {
+        $this->challenge = $challenge;
         return $this;
     }
 }

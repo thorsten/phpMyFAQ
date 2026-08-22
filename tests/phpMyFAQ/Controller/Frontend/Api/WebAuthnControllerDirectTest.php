@@ -253,17 +253,22 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         $this->configuration->getAll();
         $this->overrideConfigurationValues(['security.enableWebAuthnSupport' => '1']);
 
+        $session = $this->createSession();
+        $csrfToken = Token::getInstance($session)->getTokenString('webauthn');
+        $_COOKIE[sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(md5('webauthn'), 0, 10))] = $csrfToken;
+
         $webAuthnUser = new WebAuthnUser()
             ->setName('alice')
             ->setId('1')
-            ->setWebAuthnKeys('existing-keys');
+            ->setWebAuthnKeys('existing-keys')
+            ->setChallenge('issued-challenge');
 
         $authWebAuthn = $this->createMock(AuthWebAuthn::class);
         $authWebAuthn->expects($this->once())->method('getUserFromSession')->willReturn($webAuthnUser);
         $authWebAuthn
             ->expects($this->once())
             ->method('register')
-            ->with('register-payload', 'existing-keys')
+            ->with('register-payload', 'existing-keys', 'issued-challenge')
             ->willReturn('new-keys');
 
         $user = $this->createMock(User::class);
@@ -271,10 +276,11 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         $user->expects($this->once())->method('setWebAuthnKeys')->with('new-keys')->willReturn(true);
 
         $controller = new WebAuthnController($authWebAuthn, $user);
-        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $session);
 
         $request = Request::create('/api/webauthn/register', 'POST', content: json_encode([
             'register' => 'register-payload',
+            'pmf-csrf-token' => $csrfToken,
         ], JSON_THROW_ON_ERROR));
 
         $response = $controller->register($request);
@@ -290,17 +296,22 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         $this->configuration->getAll();
         $this->overrideConfigurationValues(['security.enableWebAuthnSupport' => '1']);
 
+        $session = $this->createSession();
+        $csrfToken = Token::getInstance($session)->getTokenString('webauthn');
+        $_COOKIE[sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(md5('webauthn'), 0, 10))] = $csrfToken;
+
         $webAuthnUser = new WebAuthnUser()
             ->setName('alice')
             ->setId('1')
-            ->setWebAuthnKeys('existing-keys');
+            ->setWebAuthnKeys('existing-keys')
+            ->setChallenge('issued-challenge');
 
         $authWebAuthn = $this->createMock(AuthWebAuthn::class);
         $authWebAuthn->expects($this->once())->method('getUserFromSession')->willReturn($webAuthnUser);
         $authWebAuthn
             ->expects($this->once())
             ->method('register')
-            ->with('register-payload', 'existing-keys')
+            ->with('register-payload', 'existing-keys', 'issued-challenge')
             ->willReturn('new-keys');
 
         $user = $this->createMock(User::class);
@@ -308,10 +319,11 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         $user->expects($this->once())->method('setWebAuthnKeys')->with('new-keys')->willReturn(false);
 
         $controller = new WebAuthnController($authWebAuthn, $user);
-        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $session);
 
         $request = Request::create('/api/webauthn/register', 'POST', content: json_encode([
             'register' => 'register-payload',
+            'pmf-csrf-token' => $csrfToken,
         ], JSON_THROW_ON_ERROR));
 
         $response = $controller->register($request);
@@ -319,6 +331,37 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame('Cannot set WebAuthn keys', $payload['error']);
+    }
+
+    /**
+     * Regression test: register() must not persist a forged credential submitted without the
+     * CSRF token minted for this session's ceremony.
+     */
+    public function testRegisterRejectsRequestWithoutValidCsrfToken(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['security.enableWebAuthnSupport' => '1']);
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->never())->method('getUserFromSession');
+        $authWebAuthn->expects($this->never())->method('register');
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->never())->method('setWebAuthnKeys');
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+
+        $request = Request::create('/api/webauthn/register', 'POST', content: json_encode([
+            'register' => 'register-payload',
+            'pmf-csrf-token' => 'invalid',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->register($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgSessionExpired'), $payload['error']);
     }
 
     public function testLoginReturnsUnauthorizedWhenAuthenticationFails(): void
