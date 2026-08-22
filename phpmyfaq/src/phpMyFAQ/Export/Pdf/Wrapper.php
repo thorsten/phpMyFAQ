@@ -125,12 +125,15 @@ class Wrapper
 
     private readonly PdfEngineInterface $engine;
 
+    private readonly ExternalImageFetcher $externalImageFetcher;
+
     /**
      * Constructor.
      */
-    public function __construct(?PdfEngineInterface $engine = null)
+    public function __construct(?PdfEngineInterface $engine = null, ?ExternalImageFetcher $externalImageFetcher = null)
     {
         $this->engine = $engine ?? new TcpdfEngine();
+        $this->externalImageFetcher = $externalImageFetcher ?? new ExternalImageFetcher();
 
         // Check on RTL
         if ('rtl' === Translation::get(key: 'direction')) {
@@ -650,34 +653,12 @@ class Wrapper
                     return $fullMatch; // Return original if URL is malformed
                 }
 
-                $host = $parsedUrl['host'];
-                // Check if the host is in the allowed list
-                $isAllowed = false;
-                foreach ($allowedHosts as $allowedHost) {
-                    $allowedHost = trim($allowedHost);
-                    if ($allowedHost === '') {
-                        continue;
-                    }
-
-                    if ($allowedHost === '0') {
-                        continue;
-                    }
-
-                    // Allow exact match or subdomain match
-                    if ($host === $allowedHost || str_ends_with($host, '.' . $allowedHost)) {
-                        $isAllowed = true;
-                        break;
-                    }
-                }
-
-                if (!$isAllowed) {
-                    return $fullMatch; // Return original if host not allowed
-                }
-
-                // Try to fetch the image and convert to base64
+                // Try to fetch the image and convert to base64. The fetcher itself
+                // re-checks the host allowlist on every redirect hop, so a
+                // disallowed or unfetchable URL simply returns false here.
                 try {
-                    $imageData = $this->fetchExternalImage($imageUrl);
-                    if ($imageData !== false) {
+                    $imageData = $this->externalImageFetcher->fetch($imageUrl, $allowedHosts);
+                    if ($imageData !== false && $this->validateImageData($imageData)) {
                         $base64Image = base64_encode($imageData);
                         $mimeType = $this->getImageMimeType($imageData);
                         if ($mimeType && $base64Image) {
@@ -695,42 +676,6 @@ class Wrapper
             },
             $html,
         ) ?? '';
-    }
-
-    /**
-     * Fetches an external image with the appropriate error handling.
-     *
-     * @param string $url The image URL to fetch
-     * @return string|false The image data or false on failure
-     */
-    private function fetchExternalImage(string $url): false|string
-    {
-        $context = stream_context_create([
-            'http' => [
-                'timeout' => 10, // 10-second timeout
-                'user_agent' => 'phpMyFAQ PDF Generator/1.0',
-                'follow_location' => true,
-                'max_redirects' => 3,
-            ],
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-            ],
-        ]);
-
-        $imageData = file_get_contents($url, use_include_path: false, context: $context);
-
-        // Validate that we actually got image data
-        if ($imageData === false || $imageData === '') {
-            return false;
-        }
-
-        // Quick validation that this looks like image data
-        if (!$this->validateImageData($imageData)) {
-            return false;
-        }
-
-        return $imageData;
     }
 
     /**
