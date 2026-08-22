@@ -34,12 +34,15 @@
         </report>
     </coverage>
     <source restrictNotices="true" restrictWarnings="true" ignoreIndirectDeprecations="true">
+        <!--
+            Composer installs third-party code to ./phpmyfaq/src/libs, which sits
+            outside the included directory below and is therefore never measured.
+            An <exclude> for it matched nothing and has been removed; add excludes
+            here only for paths actually inside ./phpmyfaq/src/phpMyFAQ.
+        -->
         <include>
             <directory suffix=".php">./phpmyfaq/src/phpMyFAQ</directory>
         </include>
-        <exclude>
-            <directory suffix=".php">./phpmyfaq/src/libs</directory>
-        </exclude>
     </source>
     <php>
         <server name="HTTP_HOST" value="localhost" />
