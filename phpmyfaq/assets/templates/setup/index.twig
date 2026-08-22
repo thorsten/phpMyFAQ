@@ -5,7 +5,9 @@
     <section id="content">
 
       <div class="container shadow-lg p-5 mt-5 bg-light-subtle">
-        <form action="./install" method="post" id="phpmyfaq-setup-form" name="phpmyfaq-setup-form"
+        {# Post via the front controller with PATH_INFO so the setup works even
+           when URL rewriting (mod_rewrite / try_files) is not configured yet #}
+        <form action="./index.php/install" method="post" id="phpmyfaq-setup-form" name="phpmyfaq-setup-form"
               class="needs-validation" novalidate>
 
           <div class="px-4 pt-2 my-2 text-center border-bottom">
