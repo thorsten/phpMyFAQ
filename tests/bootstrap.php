@@ -173,7 +173,24 @@ Strings::init();
 Request::setTrustedHosts(['^.*$']); // Trust all hosts for testing
 
 if (!canReusePreparedTestDatabase($testDbAlias, $databaseConfigFile)) {
-    if (file_exists($testDbAlias) && !is_dir($testDbAlias)) {
+    if (is_link($testDbAlias)) {
+        // test.db may deliberately be a symlink onto a filesystem with stable inodes:
+        // the workaround for network or virtiofs mounts, where SQLite otherwise fails
+        // with SQLITE_READONLY_DBMOVED. Keep such a link and rebuild only its target.
+        $testDbTarget = readlink($testDbAlias);
+
+        if ($testDbTarget !== false && is_dir(dirname($testDbTarget))) {
+            // nosemgrep: php.lang.security.unlink-use.unlink-use - fixed test database path
+            @unlink($testDbTarget);
+        } else {
+            // A dangling link, e.g. one created on another machine whose target path
+            // does not exist here. file_exists() follows symlinks and reports false for
+            // these, so without an explicit is_link() check the link would survive and
+            // every install would fail with "unable to open database file".
+            // nosemgrep: php.lang.security.unlink-use.unlink-use - fixed test database path
+            @unlink($testDbAlias);
+        }
+    } elseif (file_exists($testDbAlias) && !is_dir($testDbAlias)) {
         // nosemgrep: php.lang.security.unlink-use.unlink-use - fixed test database path
         @unlink($testDbAlias);
     }
