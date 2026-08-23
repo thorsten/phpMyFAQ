@@ -171,6 +171,10 @@ final class WebAuthnController extends AbstractController
             $webAuthnUser->getChallenge(),
         ));
 
+        // Burn the registration challenge so the ceremony cannot be replayed against this session.
+        $webAuthnUser->setChallenge('');
+        $this->authWebAuthn->storeUserInSession($webAuthnUser);
+
         try {
             $this->user->getUserByLogin($webAuthnUser->getName());
         } catch (Exception) {
@@ -265,6 +269,26 @@ final class WebAuthnController extends AbstractController
 
             if ($currentUser->isBlocked()) {
                 return $this->json(['error' => Translation::get(key: 'ad_auth_fail')], Response::HTTP_UNAUTHORIZED);
+            }
+
+            // A passkey is sufficient as the sole factor only for passwordless accounts. If the
+            // account has TOTP two-factor enabled, the passkey counts as the first factor only:
+            // defer to the token step instead of granting the session, mirroring the password
+            // login flow, so a passkey cannot bypass two-factor authentication.
+            if ((int) $currentUser->getUserData('twofactor_enabled') === 1) {
+                if ($currentUser->isTwoFactorLockedOut()) {
+                    return $this->json(['error' => Translation::get(key: 'ad_auth_fail')], Response::HTTP_UNAUTHORIZED);
+                }
+
+                $this->session->set('2fa_pending_user_id', $currentUser->getUserId());
+                // The WebAuthn login form has no remember-me option; the token step decides
+                // cookie issuance, so carry an explicit "false" through it.
+                $this->session->set('2fa_pending_remember_me', false);
+
+                return $this->json([
+                    'success' => 'ok',
+                    'redirect' => $this->configuration->getDefaultUrl() . 'token?user-id=' . $currentUser->getUserId(),
+                ], Response::HTTP_OK);
             }
 
             $currentUser->setLoggedIn(loggedIn: true);

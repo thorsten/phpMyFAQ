@@ -143,4 +143,32 @@ final class EncryptedFileTest extends TestCase
 
         self::assertSame('', $file->getChunk());
     }
+
+    public function testEncryptionFromVanillaSourceAsInSave(): void
+    {
+        // Mirrors File::save(): a VanillaFile source is moved into an
+        // EncryptedFile target via copyTo()/putChunk().
+        $key = str_repeat('f', 16);
+        $sourcePath = $this->tempDir . '/upload.tmp';
+        $targetPath = $this->tempDir . '/stored.bin';
+        $plaintext = str_repeat('phpMyFAQ attachment content. ', 40);
+
+        file_put_contents($sourcePath, $plaintext);
+
+        $source = new VanillaFile($sourcePath, 'rb');
+        $target = new EncryptedFile($targetPath, 'wb', $key);
+
+        self::assertTrue($source->copyTo($target));
+        unset($source, $target);
+
+        self::assertStringNotContainsString('phpMyFAQ', (string) file_get_contents($targetPath));
+
+        $reader = new EncryptedFile($targetPath, 'rb', $key);
+        $decrypted = '';
+        while (!$reader->eof()) {
+            $decrypted .= $reader->getChunk();
+        }
+
+        self::assertSame($plaintext, $decrypted);
+    }
 }

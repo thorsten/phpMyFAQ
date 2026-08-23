@@ -231,15 +231,15 @@ class AttachmentFactoryTest extends TestCase
         $this->assertTrue($encryptionEnabledProperty->getValue());
     }
 
-    public function testInitSecondTimeDoesNotOverwrite(): void
+    public function testInitSecondTimeAppliesCurrentSettings(): void
     {
-        // First initialization
+        // First initialization, e.g. before encryption was configured
+        AttachmentFactory::init('', false);
+
+        // Second initialization with the current configuration values
         AttachmentFactory::init('secret123', true);
 
-        // Second initialization with different values
-        AttachmentFactory::init('different_secret', false);
-
-        // Verify that original values are preserved
+        // A long-running process must not keep a stale plaintext configuration
         $reflection = new ReflectionClass(AttachmentFactory::class);
 
         $defaultKeyProperty = $reflection->getProperty('defaultKey');

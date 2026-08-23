@@ -84,6 +84,43 @@ class AuthWebAuthnTest extends TestCase
         $this->authWebAuthn->register($info, '', '');
     }
 
+    public function testRegisterRejectsMismatchedChallenge(): void
+    {
+        // A ceremony whose clientDataJSON challenge does not match the challenge issued by
+        // prepareChallengeForRegistration() must be rejected, so a fabricated or replayed
+        // attestation cannot register a credential.
+        $info = json_encode([
+            'rawId' => [1, 2, 3],
+            'response' => [
+                'attestationObject' => [1, 2, 3],
+                'clientDataJSON' => ['challenge' => 'attacker-supplied-challenge'],
+            ],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Challenge mismatch');
+
+        $this->authWebAuthn->register($info, '', 'server-issued-challenge');
+    }
+
+    public function testRegisterRejectsMissingExpectedChallenge(): void
+    {
+        // Fail closed: if no challenge was issued for this session, registration must be rejected
+        // rather than accepting any client-supplied value.
+        $info = json_encode([
+            'rawId' => [1, 2, 3],
+            'response' => [
+                'attestationObject' => [1, 2, 3],
+                'clientDataJSON' => ['challenge' => ''],
+            ],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Challenge mismatch');
+
+        $this->authWebAuthn->register($info, '', '');
+    }
+
     public function testStoreUserInSession(): void
     {
         $webAuthnUser = new \phpMyFAQ\Auth\WebAuthn\WebAuthnUser();

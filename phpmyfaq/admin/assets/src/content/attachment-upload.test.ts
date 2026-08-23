@@ -45,6 +45,8 @@ describe('handleAttachmentUploads', () => {
     vi.clearAllMocks();
 
     // Setup comprehensive DOM structure
+    // The general FAQ editor token comes first in DOM order on the real page,
+    // so the upload token must be selected by its own unique id.
     document.body.innerHTML = `
       <input type="file" id="filesToUpload" data-pmf-custom-name-label="Custom filename (optional)" multiple />
       <button id="pmf-attachment-modal-upload">Upload</button>
@@ -552,6 +554,39 @@ describe('handleAttachmentUploads', () => {
       expect(formDataCall.get('record_id')).toBe('123');
       expect(formDataCall.get('record_lang')).toBe('en');
       expect(formDataCall.get('pmf-csrf-token')).toBe('upload-token-xyz');
+    });
+
+    it('should include the CSRF token in the upload FormData', async () => {
+      handleAttachmentUploads();
+
+      mockUploadAttachments.mockResolvedValue([{ attachmentId: '1', fileName: 'test.txt' }]);
+
+      const clickEvent = new Event('click');
+      mockFileUploadButton.dispatchEvent(clickEvent);
+
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(mockUploadAttachments).toHaveBeenCalledWith(expect.any(FormData));
+
+      const formDataCall = mockUploadAttachments.mock.calls[0][0] as FormData;
+      expect(formDataCall.get('pmf-csrf-token')).toBe('upload-token-xyz');
+    });
+
+    it('should send an empty CSRF token when the token input is missing', async () => {
+      document.getElementById('pmf-attachment-csrf-token')?.remove();
+      handleAttachmentUploads();
+
+      mockUploadAttachments.mockResolvedValue([{ attachmentId: '1', fileName: 'test.txt' }]);
+
+      const clickEvent = new Event('click');
+      mockFileUploadButton.dispatchEvent(clickEvent);
+
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      const formDataCall = mockUploadAttachments.mock.calls[0][0] as FormData;
+      // The token field is always present (empty when absent) so the server-side
+      // CSRF check rejects the request rather than seeing no field at all.
+      expect(formDataCall.get('pmf-csrf-token')).toBe('');
     });
 
     it('should successfully upload files and update UI', async () => {

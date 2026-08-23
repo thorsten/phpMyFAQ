@@ -137,9 +137,11 @@ export const handleAttachmentUploads = (): void => {
       }
       formData.append('record_id', (document.getElementById('attachment_record_id') as HTMLInputElement).value);
       formData.append('record_lang', (document.getElementById('attachment_record_lang') as HTMLInputElement).value);
+      // The field is always sent, empty when the input is missing, so the server-side
+      // CSRF check rejects the request rather than seeing no field at all.
       formData.append(
         'pmf-csrf-token',
-        (document.getElementById('pmf-attachment-csrf-token') as HTMLInputElement).value
+        (document.getElementById('pmf-attachment-csrf-token') as HTMLInputElement | null)?.value ?? ''
       );
 
       try {
