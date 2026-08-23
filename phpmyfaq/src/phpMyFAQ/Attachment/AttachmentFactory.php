@@ -110,12 +110,10 @@ class AttachmentFactory
      */
     public static function init(string $defaultKey, bool $encryptionEnabled): void
     {
-        if (null === self::$defaultKey) {
-            self::$defaultKey = $defaultKey;
-        }
-
-        if (null === self::$encryptionEnabled) {
-            self::$encryptionEnabled = $encryptionEnabled;
-        }
+        // Always apply the given settings: keeping the first-ever values would
+        // let a long-running process retain a stale plaintext configuration
+        // after attachment encryption has been enabled.
+        self::$defaultKey = $defaultKey;
+        self::$encryptionEnabled = $encryptionEnabled;
     }
 }

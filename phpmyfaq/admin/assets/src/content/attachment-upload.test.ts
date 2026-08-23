@@ -24,7 +24,10 @@ describe('handleAttachmentUploads', () => {
     vi.clearAllMocks();
 
     // Setup comprehensive DOM structure
+    // The general FAQ editor token comes first in DOM order on the real page,
+    // so the upload token must be selected by its own unique id.
     document.body.innerHTML = `
+      <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="test-general-csrf-token" />
       <input type="file" id="filesToUpload" multiple />
       <button id="pmf-attachment-modal-upload">Upload</button>
       <div id="filesize"></div>
@@ -34,7 +37,7 @@ describe('handleAttachmentUploads', () => {
       <ul class="adminAttachments" data-pmf-csrf-token="test-csrf-token"></ul>
       <input id="attachment_record_id" value="123" />
       <input id="attachment_record_lang" value="en" />
-      <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="test-upload-csrf-token" />
+      <input type="hidden" id="pmf-csrf-token-upload-attachment" name="pmf-csrf-token" value="test-upload-csrf-token" />
     `;
 
     mockFilesToUpload = document.getElementById('filesToUpload') as HTMLInputElement;
@@ -476,7 +479,7 @@ describe('handleAttachmentUploads', () => {
     });
 
     it('should send an empty CSRF token when the token input is missing', async () => {
-      document.getElementById('pmf-csrf-token')?.remove();
+      document.getElementById('pmf-csrf-token-upload-attachment')?.remove();
       handleAttachmentUploads();
 
       mockUploadAttachments.mockResolvedValue([{ attachmentId: '1', fileName: 'test.txt' }]);

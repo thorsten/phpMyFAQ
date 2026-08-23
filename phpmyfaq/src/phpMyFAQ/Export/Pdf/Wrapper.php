@@ -866,12 +866,28 @@ class Wrapper extends TCPDF
 
             // Clear any headers left over from a previous hop so a failed
             // connection cannot be misread using stale redirect headers.
-            unset($http_response_header);
+            // The legacy variable is only ever named indirectly: PHP 8.5 emits a
+            // compile-time deprecation for every literal $http_response_header
+            // in the source, even inside branches that never run.
+            $legacyHeaderVariable = 'http_response_header';
+            if (function_exists('http_clear_last_response_headers')) {
+                http_clear_last_response_headers();
+            } else {
+                unset(${$legacyHeaderVariable});
+            }
+
             $responseHeaders = [];
             $body = @file_get_contents($currentUrl, use_include_path: false, context: $context);
-            // $http_response_header is populated in the local scope by the wrapper.
-            if (isset($http_response_header) && is_array($http_response_header)) {
-                $responseHeaders = $http_response_header;
+
+            if (function_exists('http_get_last_response_headers')) {
+                // PHP 8.5+: replaces the deprecated predefined variable.
+                $responseHeaders = http_get_last_response_headers() ?? [];
+            } else {
+                // PHP < 8.5: the HTTP wrapper populates the variable in the local scope.
+                $legacyHeaders = ${$legacyHeaderVariable} ?? null;
+                if (is_array($legacyHeaders)) {
+                    $responseHeaders = $legacyHeaders;
+                }
             }
 
             [$statusCode, $location] = $this->parseHttpResponse($responseHeaders);

@@ -69,7 +69,9 @@ export const handleAttachmentUploads = (): void => {
       }
       formData.append('record_id', (document.getElementById('attachment_record_id') as HTMLInputElement).value);
       formData.append('record_lang', (document.getElementById('attachment_record_lang') as HTMLInputElement).value);
-      const csrfToken = document.getElementById('pmf-csrf-token') as HTMLInputElement | null;
+      // The FAQ editor page renders a general token with id="pmf-csrf-token" earlier
+      // in the DOM, so the upload token needs its own unique id.
+      const csrfToken = document.getElementById('pmf-csrf-token-upload-attachment') as HTMLInputElement | null;
       formData.append('pmf-csrf-token', csrfToken ? csrfToken.value : '');
 
       try {

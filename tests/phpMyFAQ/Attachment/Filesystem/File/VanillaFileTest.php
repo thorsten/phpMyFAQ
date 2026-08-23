@@ -35,11 +35,11 @@ class VanillaFileTest extends TestCase
     {
         $data = 'test chunk data';
 
-        // Write data to the virtual file
-        $this->mockFile->expects($this->once())->method('putChunk')->with($data)->willReturn(true);
+        // Write data to the virtual file; putChunk() returns the bytes written, as fwrite() does
+        $this->mockFile->expects($this->once())->method('putChunk')->with($data)->willReturn(strlen($data));
 
         // Write the chunk and assert it's written correctly
-        $this->assertTrue($this->mockFile->putChunk($data));
+        $this->assertSame(strlen($data), $this->mockFile->putChunk($data));
     }
 
     public function testGetChunkReadsData(): void
