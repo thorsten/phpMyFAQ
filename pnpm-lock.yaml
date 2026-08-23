@@ -107,8 +107,8 @@ devDependencies:
     specifier: ^4.2.2
     version: 4.2.2(prettier@3.9.6)
   sass:
-    specifier: ^1.103.0
-    version: 1.103.0
+    specifier: ^1.103.1
+    version: 1.103.1
   sigmund:
     specifier: ^1.0.1
     version: 1.0.1
@@ -120,7 +120,7 @@ devDependencies:
     version: 8.67.0(eslint@9.39.5)(typescript@5.9.3)
   vite:
     specifier: ^7.3.6
-    version: 7.3.6(@types/node@24.13.3)(sass@1.103.0)
+    version: 7.3.6(@types/node@24.13.3)(sass@1.103.1)
   vite-plugin-compression:
     specifier: ^0.5.1
     version: 0.5.1(vite@7.3.6)
@@ -2539,7 +2539,7 @@ packages:
       '@vitest/spy': 4.1.11
       estree-walker: 3.0.3
       magic-string: 0.30.21
-      vite: 7.3.6(@types/node@24.13.3)(sass@1.103.0)
+      vite: 7.3.6(@types/node@24.13.3)(sass@1.103.1)
     dev: true
 
   /@vitest/pretty-format@4.1.11:
@@ -2608,7 +2608,7 @@ packages:
     resolution: {integrity: sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==}
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.5
+      fast-uri: 3.1.6
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
     dev: true
@@ -2727,8 +2727,8 @@ packages:
     engines: {node: 18 || 20 || >=22}
     dev: true
 
-  /baseline-browser-mapping@2.11.16:
-    resolution: {integrity: sha512-H/bNPUFHewJHyCTdjn1n3Pit5+2GmWT6mmeHImPX+8MA9NA6b67jO4gYmi4jTbCJb2otq34KMZnovndDPqJwhQ==}
+  /baseline-browser-mapping@2.11.18:
+    resolution: {integrity: sha512-1iEmLEYSiE1SeBoAfPo/Mnx3PzfzHUkDK61ASkCpuk3YXugYLH5DYK1SzqV55F8FMI6s0F+/tCP7Polz1QRjxw==}
     engines: {node: '>=6.0.0'}
     hasBin: true
     dev: true
@@ -2798,9 +2798,9 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      baseline-browser-mapping: 2.11.16
+      baseline-browser-mapping: 2.11.18
       caniuse-lite: 1.0.30001809
-      electron-to-chromium: 1.5.411
+      electron-to-chromium: 1.5.412
       node-releases: 2.0.53
       update-browserslist-db: 1.3.1(browserslist@4.28.8)
     dev: true
@@ -3142,8 +3142,8 @@ packages:
       jake: 10.9.4
     dev: true
 
-  /electron-to-chromium@1.5.411:
-    resolution: {integrity: sha512-gglkxzokjHfawpGxq75XdBV2/l3BAPzrsMs70qgaZdTW5rpV1tC4MdgJVP9fN126bODA4ZJQkn1wryEzJyQXIg==}
+  /electron-to-chromium@1.5.412:
+    resolution: {integrity: sha512-z4rMe3esBzlzovKHj4gxJnsCGZRK5l4baUvm+gCGJBPE+gsyUMKsuU9tnEUtI1dOebXz1ytAPGjvXhmQ7rIPwA==}
     dev: true
 
   /emoji-regex@8.0.0:
@@ -3263,6 +3263,7 @@ packages:
   /eslint@9.39.5:
     resolution: {integrity: sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -3384,8 +3385,8 @@ packages:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
     dev: true
 
-  /fast-uri@3.1.5:
-    resolution: {integrity: sha512-gHwA1O9LDIcKunMKhObS/HimwtehO1nPUECKAu5TpKgaO19fcWEl4bliWe1jWxVFvIXztJjjQ4L8XQ1EU9f7Jw==}
+  /fast-uri@3.1.6:
+    resolution: {integrity: sha512-7Ical1vFEMr0onbVzEDIreM22I4khW+fzyQPwvAFWBp1iwdshSZRsL4jjRvPG9JP1uiqMHRto+YU6R2/CzDz5Q==}
     dev: true
 
   /fastq@1.20.1:
@@ -4344,8 +4345,8 @@ packages:
       queue-microtask: 1.2.3
     dev: true
 
-  /sass@1.103.0:
-    resolution: {integrity: sha512-+QpdXUDw19lVqRDlYIyje1Lq/0gHsnNHIl4x1CqeUg13zRhaQN11UvTvouwHWLXc9Q3rQVT6oBhFGRYJ5Z8gHw==}
+  /sass@1.103.1:
+    resolution: {integrity: sha512-9icZURbP51S6S0QGoyaeqk9uB06GNWxsFYWfH5RgpFgqK5FA8tJcM3AdVxrZEVJ7dz+L87nG95gBKf4VuaMHGw==}
     engines: {node: '>=20.19.0'}
     hasBin: true
     dependencies:
@@ -4634,7 +4635,7 @@ packages:
       chalk: 4.1.2
       debug: 4.4.3
       fs-extra: 10.1.0
-      vite: 7.3.6(@types/node@24.13.3)(sass@1.103.0)
+      vite: 7.3.6(@types/node@24.13.3)(sass@1.103.1)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4656,7 +4657,7 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 7.3.6(@types/node@24.13.3)(sass@1.103.0)
+      vite: 7.3.6(@types/node@24.13.3)(sass@1.103.1)
     dev: true
 
   /vite-plugin-minify@2.1.0(vite@7.3.6):
@@ -4666,7 +4667,7 @@ packages:
     dependencies:
       '@types/html-minifier-terser': 7.0.2
       html-minifier-terser: 7.2.0
-      vite: 7.3.6(@types/node@24.13.3)(sass@1.103.0)
+      vite: 7.3.6(@types/node@24.13.3)(sass@1.103.1)
     dev: true
 
   /vite-plugin-static-copy@3.4.0(vite@7.3.6):
@@ -4679,10 +4680,10 @@ packages:
       p-map: 7.0.6
       picocolors: 1.1.1
       tinyglobby: 0.2.17
-      vite: 7.3.6(@types/node@24.13.3)(sass@1.103.0)
+      vite: 7.3.6(@types/node@24.13.3)(sass@1.103.1)
     dev: true
 
-  /vite@7.3.6(@types/node@24.13.3)(sass@1.103.0):
+  /vite@7.3.6(@types/node@24.13.3)(sass@1.103.1):
     resolution: {integrity: sha512-4XP60spRGjSZFf1qYH+dJIkK2znL3zQfl9KkOV9MkkRR/3Dls0dxaBsQPTloEc5BLXWPL9vsOxopxyKoMmDueg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
@@ -4728,7 +4729,7 @@ packages:
       picomatch: 4.0.5
       postcss: 8.5.26
       rollup: 4.62.5
-      sass: 1.103.0
+      sass: 1.103.1
       tinyglobby: 0.2.17
     optionalDependencies:
       fsevents: 2.3.3
@@ -4806,7 +4807,7 @@ packages:
       tinyexec: 1.3.0
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.1
-      vite: 7.3.6(@types/node@24.13.3)(sass@1.103.0)
+      vite: 7.3.6(@types/node@24.13.3)(sass@1.103.1)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
       - msw

@@ -68,7 +68,7 @@
     "postcss": "^8.5.26",
     "prettier": "^3.9.6",
     "pretty-quick": "^4.2.2",
-    "sass": "^1.103.0",
+    "sass": "^1.103.1",
     "sigmund": "^1.0.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.67.0",

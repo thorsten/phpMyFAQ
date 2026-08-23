@@ -229,7 +229,13 @@ class SmtpTest extends TestCase
             ->expects($this->once())
             ->method('send')
             ->with($this->callback(function (Email $email): bool {
-                return $email->getSubject() === 'Multiple Recipients';
+                $to = $email->getTo();
+                return (
+                    $email->getSubject() === 'Multiple Recipients'
+                    && count($to) === 2
+                    && $to[0]->getAddress() === 'test1@example.com'
+                    && $to[1]->getAddress() === 'test2@example.com'
+                );
             }));
 
         $result = $this->smtp->send($recipients, $headers, $body);

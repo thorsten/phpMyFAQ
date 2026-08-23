@@ -65,18 +65,18 @@ class Smtp implements MailUserAgentInterface
 
         $email = (new Email())
             ->from(empty($sender) ? $this->user : $sender)
-            ->to($recipients)
+            ->to(...$this->splitAddresses($recipients))
             ->subject($headers['Subject'])
             ->text($body)
             ->html($body);
 
         if (isset($headers['CC']) || isset($headers['Cc'])) {
             $cc = $headers['CC'] ?? $headers['Cc'];
-            $email->cc($cc);
+            $email->cc(...$this->splitAddresses($cc));
         }
 
         if (isset($headers['Bcc'])) {
-            $email->bcc($headers['Bcc']);
+            $email->bcc(...$this->splitAddresses($headers['Bcc']));
         }
 
         if (isset($headers['Reply-To'])) {
@@ -86,5 +86,19 @@ class Smtp implements MailUserAgentInterface
         $this->mailer->send($email);
 
         return 1;
+    }
+
+    /**
+     * Split a comma-separated address list into single addresses,
+     * as Symfony Mime accepts only one address per string.
+     *
+     * @return string[]
+     */
+    private function splitAddresses(string $addresses): array
+    {
+        return array_filter(
+            array_map('trim', explode(',', $addresses)),
+            static fn(string $address): bool => $address !== '',
+        );
     }
 }
