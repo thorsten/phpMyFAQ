@@ -95,7 +95,7 @@
     "oxfmt": "0.63.0",
     "oxlint": "1.78.0",
     "postcss": "8.5.26",
-    "sass": "1.102.0",
+    "sass": "1.103.0",
     "stylelint": "^17.14.1",
     "stylelint-config-standard-scss": "^17.0.0",
     "typescript": "7.0.2",
