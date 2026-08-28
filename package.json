@@ -99,7 +99,7 @@
     "stylelint": "^17.14.1",
     "stylelint-config-standard-scss": "^17.0.0",
     "typescript": "7.0.2",
-    "vite": "8.2.1",
+    "vite": "8.2.2",
     "vite-plugin-compression": "0.5.1",
     "vite-plugin-html": "3.2.2",
     "vite-plugin-minify": "3.0.0",
