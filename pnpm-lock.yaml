@@ -21,8 +21,8 @@ dependencies:
     specifier: 4.5.1
     version: 4.5.1
   choices.js:
-    specifier: 11.2.3
-    version: 11.2.3
+    specifier: 11.2.4
+    version: 11.2.4
   highlight.js:
     specifier: 11.12.0
     version: 11.12.0
@@ -1862,8 +1862,8 @@ packages:
       '@kurkle/color': 0.3.4
     dev: false
 
-  /choices.js@11.2.3:
-    resolution: {integrity: sha512-K+HA8ShsWWNOVs4ahahjIOtzsvcC/cOFGTdU1BZgMZRhGi/uCQARlFd/80B0hlVVdRIjnrsW7QLDUnpJaW6N7A==}
+  /choices.js@11.2.4:
+    resolution: {integrity: sha512-3ESJ42LC1cFPIK2sRxa+Y1zEM5vpeOL/FrZHh6dqqqTHf23FStbjKhxP+eMC0F3O0xRUkhQmOOtUxIi83RxhTg==}
     dependencies:
       fuse.js: 7.5.0
     dev: false
