@@ -123,12 +123,13 @@ export const startInstallation = async (csrfToken: string): Promise<Response> =>
   });
 };
 
-export const startDatabaseUpdate = async (): Promise<Response> => {
+export const startDatabaseUpdate = async (csrfToken: string): Promise<Response> => {
   return await fetch('./api/update-database', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ csrf: csrfToken }),
   });
 };

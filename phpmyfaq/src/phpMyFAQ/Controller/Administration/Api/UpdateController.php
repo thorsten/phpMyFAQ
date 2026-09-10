@@ -273,9 +273,13 @@ final class UpdateController extends AbstractController
     }
 
     #[Route(path: 'admin/api/update-database')]
-    public function updateDatabase(): JsonResponse
+    public function updateDatabase(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidUpdatePackageToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         $update = $this->container->get(id: 'phpmyfaq.setup.update');
         $update->setVersion($this->configuration->get('main.currentVersion'));
@@ -300,9 +304,13 @@ final class UpdateController extends AbstractController
      * @throws Exception|\Exception
      */
     #[Route(path: 'admin/api/cleanup')]
-    public function cleanUp(): JsonResponse
+    public function cleanUp(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidUpdatePackageToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
         $upgrade->cleanUp();

@@ -168,13 +168,14 @@ describe('Upgrade API', (): void => {
       headers: { 'Content-Type': 'application/json' },
     });
     (fetch as Mock).mockResolvedValue(mockResponse);
-    await startDatabaseUpdate();
+    await startDatabaseUpdate('csrfToken');
     expect(fetch).toHaveBeenCalledWith('./api/update-database', {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ csrf: 'csrfToken' }),
     });
   });
 });
