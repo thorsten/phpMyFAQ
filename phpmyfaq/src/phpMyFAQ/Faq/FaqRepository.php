@@ -84,6 +84,20 @@ final class FaqRepository implements FaqRepositoryInterface
         return $this->getNextSolutionId();
     }
 
+    public function exists(int $faqId): bool
+    {
+        $query = sprintf('
+            SELECT
+                id
+            FROM
+                %sfaqdata
+            WHERE
+                id = %d', Database::getTablePrefix(), $faqId);
+
+        $result = $this->configuration->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->numRows($result);
+    }
+
     public function hasTranslation(int $faqId, string $faqLang): bool
     {
         $query = sprintf(

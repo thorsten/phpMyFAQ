@@ -134,6 +134,14 @@ class FaqRepositoryTest extends TestCase
         );
     }
 
+    public function testExists(): void
+    {
+        $this->seedFaqRecord(id: 5099, solutionId: 7035, lang: 'de');
+
+        $this->assertTrue($this->faqRepository->exists(5099));
+        $this->assertFalse($this->faqRepository->exists(999999));
+    }
+
     public function testHasTranslation(): void
     {
         $this->seedFaqRecord(id: 5013, solutionId: 7040);

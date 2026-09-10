@@ -689,6 +689,46 @@ class FaqTest extends TestCase
         $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId()));
     }
 
+    public function testIsFaqAccessibleForUserReturnsFalseForInactiveFaqRequestedInAnotherLanguage(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setStatus(FaqStatus::Draft);
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        // A mismatched Accept-Language must not bypass the published/ACL check.
+        Language::$language = 'de';
+
+        $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId()));
+    }
+
+    public function testIsFaqAccessibleForUserReturnsFalseForRestrictedFaqRequestedInAnotherLanguage(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantUserAccess($faqEntity, 1);
+
+        Language::$language = 'de';
+
+        $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId()));
+    }
+
+    public function testIsFaqAccessibleForUserReturnsFalseForPublicFaqWithoutTranslationInCurrentLanguage(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        Language::$language = 'de';
+
+        $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId()));
+    }
+
+    public function testIsFaqAccessibleForUserReturnsTrueForNonExistentFaq(): void
+    {
+        $this->assertTrue($this->faq->isFaqAccessibleForUser(999999));
+    }
+
     public function testGetAllAvailableFaqsByCategoryIdSanitizesLanguageAndSorting(): void
     {
         Language::$language = "en' OR 1=1 -- ";

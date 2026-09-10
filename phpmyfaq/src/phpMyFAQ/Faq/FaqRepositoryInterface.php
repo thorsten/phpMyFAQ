@@ -36,6 +36,11 @@ interface FaqRepositoryInterface
     public function getSolutionIdFromId(int $faqId, string $faqLang): int;
 
     /**
+     * Checks whether a FAQ record with the given id exists in any language.
+     */
+    public function exists(int $faqId): bool;
+
+    /**
      * Checks whether a FAQ already exists in the given language.
      */
     public function hasTranslation(int $faqId, string $faqLang): bool;

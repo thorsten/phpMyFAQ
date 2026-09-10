@@ -624,22 +624,24 @@ class Faq
      * active, within its active date window, and permitted for the current user
      * and groups.
      *
-     * A record that does not exist at all is reported as accessible: there is
-     * nothing to protect, and the child resource lookup simply comes back empty.
+     * A record that does not exist in any language is reported as accessible:
+     * there is nothing to protect, and the child resource lookup simply comes
+     * back empty. A record that exists but has no visible translation in the
+     * current language is denied, so that a mismatched Accept-Language cannot
+     * be used to bypass the published/date window/ACL checks.
      */
     public function isFaqAccessibleForUser(int $faqId): bool
     {
-        $currentLanguage = $this->getCurrentLanguage();
+        if (!$this->faqRepository->exists($faqId)) {
+            return true;
+        }
 
-        return (
-            !$this->faqRepository->hasTranslation($faqId, $currentLanguage)
-            || $this->faqRepository->isFaqVisibleForUser(
-                $faqId,
-                $currentLanguage,
-                $this->user,
-                $this->groups,
-                $this->groupSupport,
-            )
+        return $this->faqRepository->isFaqVisibleForUser(
+            $faqId,
+            $this->getCurrentLanguage(),
+            $this->user,
+            $this->groups,
+            $this->groupSupport,
         );
     }
 
