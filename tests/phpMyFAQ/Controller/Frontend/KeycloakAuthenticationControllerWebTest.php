@@ -9,6 +9,9 @@ use phpMyFAQ\Auth\Oidc\OidcClient;
 use phpMyFAQ\Auth\Oidc\OidcDiscoveryService;
 use phpMyFAQ\Auth\Oidc\OidcIdTokenValidator;
 use phpMyFAQ\Functional\ControllerWebTestCase;
+use phpMyFAQ\Session\SessionWrapper;
+use phpMyFAQ\User;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -26,6 +29,8 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
 
     /** @var array<string, mixed> */
     private array $jwk;
+
+    private bool $adminLinked = false;
 
     protected function setUp(): void
     {
@@ -70,6 +75,7 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
             'keycloak.scopes' => 'openid profile email',
             'keycloak.autoProvision' => false,
         ]);
+        $this->linkAdminToKeycloakSubject('subject-123');
 
         $container = self::$kernel?->getContainer();
         self::assertInstanceOf(ContainerInterface::class, $container);
@@ -157,6 +163,96 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
         self::assertResponseStatusCodeSame(302, $response);
         self::assertSame($configuration->getDefaultUrl(), $response->headers->get('Location'));
         self::assertNotSame('', $idToken);
+        self::assertSame($idToken, $oidcSession->getIdToken());
+        self::assertSame(1, (int) (new SessionWrapper())->get(CurrentUser::SESSION_CURRENT_USER));
+    }
+
+    public function testCallbackRejectsUnlinkedLocalAccountAndDoesNotBindSubject(): void
+    {
+        $configuration = $this->getConfiguration();
+        $this->overrideConfigurationValues([
+            'keycloak.enable' => true,
+            'keycloak.baseUrl' => 'https://sso.example.test',
+            'keycloak.realm' => 'phpmyfaq',
+            'keycloak.clientId' => 'phpmyfaq',
+            'keycloak.clientSecret' => 'secret',
+            'keycloak.redirectUri' => 'https://localhost/auth/keycloak/callback',
+            'keycloak.scopes' => 'openid profile email',
+            'keycloak.autoProvision' => false,
+        ]);
+        self::assertSame('', $this->getAdminKeycloakSubject(), 'Precondition: the admin account is not linked.');
+
+        $container = self::$kernel?->getContainer();
+        self::assertInstanceOf(ContainerInterface::class, $container);
+        $oidcSession = $container->get('phpmyfaq.auth.oidc.session');
+        self::assertInstanceOf(\phpMyFAQ\Auth\Oidc\OidcSession::class, $oidcSession);
+        $oidcSession->clearIdToken();
+        $expectedNonce = '';
+        $expectedVerifier = '';
+
+        $responseIndex = 0;
+        $httpClient = new MockHttpClient(function (string $method, string $url) use (
+            &$responseIndex,
+            &$expectedNonce,
+        ): MockResponse {
+            $responseIndex++;
+
+            return match ($responseIndex) {
+                1, 2 => new MockResponse(
+                    '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
+                ),
+                3 => new MockResponse(
+                    '{"access_token":"access-token","refresh_token":"refresh-token","id_token":"'
+                    . $this->signToken([
+                        'iss' => 'https://sso.example.test/realms/phpmyfaq',
+                        'sub' => 'attacker-subject',
+                        'aud' => 'phpmyfaq',
+                        'azp' => 'phpmyfaq',
+                        'nonce' => $expectedNonce,
+                        'iat' => time(),
+                        'exp' => time() + 300,
+                    ])
+                    . '"}',
+                ),
+                4 => new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
+                5 => new MockResponse(
+                    '{"sub":"attacker-subject","preferred_username":"admin","email":"attacker@example.com","name":"Attacker"}',
+                ),
+                default => throw new \RuntimeException('Unexpected HTTP call in rejection test: ' . $url),
+            };
+        });
+
+        $container->set('phpmyfaq.http-client', $httpClient);
+        $container->set('phpmyfaq.auth.oidc.client', new OidcClient($httpClient));
+        $container->set('phpmyfaq.auth.oidc.discovery-service', new OidcDiscoveryService($httpClient));
+        $container->set('phpmyfaq.auth.oidc.id-token-validator', new OidcIdTokenValidator($httpClient));
+
+        $authorizeResponse = $this->requestPublic('GET', '/auth/keycloak/authorize');
+        self::assertResponseStatusCodeSame(Response::HTTP_FOUND, $authorizeResponse);
+
+        parse_str(
+            (string) parse_url((string) $authorizeResponse->headers->get('Location'), PHP_URL_QUERY),
+            $authorizeQuery,
+        );
+        $authorizationState = $oidcSession->getAuthorizationState();
+        $expectedNonce = $authorizationState['nonce'];
+        $expectedVerifier = $authorizationState['verifier'];
+        self::assertNotSame('', $expectedVerifier);
+
+        $response = $this->requestPublic('GET', '/auth/keycloak/callback', [
+            'code' => 'auth-code',
+            'state' => (string) ($authorizeQuery['state'] ?? ''),
+        ]);
+
+        self::assertResponseStatusCodeSame(302, $response);
+        self::assertSame($configuration->getDefaultUrl(), $response->headers->get('Location'));
+        self::assertSame(5, $responseIndex, 'The callback must complete the OIDC exchange before rejecting.');
+        self::assertSame('', $oidcSession->getIdToken(), 'The attacker must not be logged in.');
+        self::assertNull(
+            (new SessionWrapper())->get(CurrentUser::SESSION_CURRENT_USER),
+            'No user may be stored in the session after the rejected callback.',
+        );
+        self::assertSame('', $this->getAdminKeycloakSubject(), 'The admin account must not be bound to the attacker.');
     }
 
     public function testLogoutBuildsProviderRedirectWithSessionIdToken(): void
@@ -171,6 +267,7 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
             'keycloak.redirectUri' => 'https://localhost/auth/keycloak/callback',
             'keycloak.logoutRedirectUrl' => 'https://localhost/',
         ]);
+        $this->linkAdminToKeycloakSubject('subject-123');
 
         $container = self::$kernel?->getContainer();
         self::assertInstanceOf(ContainerInterface::class, $container);
@@ -255,6 +352,38 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
         );
         self::assertStringContainsString('id_token_hint=', (string) $response->headers->get('Location'));
         self::assertNotSame($configuration->getDefaultUrl(), $response->headers->get('Location'));
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->adminLinked) {
+            $this->setAdminKeycloakSubject('');
+            $this->adminLinked = false;
+        }
+
+        parent::tearDown();
+    }
+
+    private function linkAdminToKeycloakSubject(string $subject): void
+    {
+        $this->setAdminKeycloakSubject($subject);
+        $this->adminLinked = true;
+        self::assertSame($subject, $this->getAdminKeycloakSubject());
+    }
+
+    private function setAdminKeycloakSubject(string $subject): void
+    {
+        $user = new User($this->getConfiguration());
+        self::assertTrue($user->getUserById(1));
+        self::assertTrue($user->setUserData(['keycloak_sub' => $subject]));
+    }
+
+    private function getAdminKeycloakSubject(): string
+    {
+        $user = new User($this->getConfiguration());
+        self::assertTrue($user->getUserById(1));
+
+        return trim((string) $user->getUserData('keycloak_sub'));
     }
 
     /**

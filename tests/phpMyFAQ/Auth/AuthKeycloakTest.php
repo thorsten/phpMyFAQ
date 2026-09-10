@@ -22,20 +22,64 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(OidcProviderConfig::class)]
 final class AuthKeycloakTest extends TestCase
 {
-    public function testCheckCredentialsReturnsTrueForExistingUser(): void
+    public function testCheckCredentialsReturnsTrueForExistingLinkedUser(): void
     {
         $user = $this->createMock(User::class);
         $user->expects($this->once())->method('getUserByLogin')->with('john', false)->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('subject-123');
 
         $auth = new AuthKeycloak(
             $this->createStub(Configuration::class),
             $this->createProviderConfig(autoProvision: false),
-            ['preferred_username' => 'john'],
+            ['sub' => 'subject-123', 'preferred_username' => 'john'],
             'john',
             static fn(): User => $user,
         );
 
         $this->assertTrue($auth->checkCredentials('john', ''));
+    }
+
+    public function testCheckCredentialsRejectsExistingUserWithoutStoredSubject(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getLogger')->willReturn($this->createMock(Logger::class));
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('john', false)->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('');
+        $user->expects($this->never())->method('createUser');
+        $user->expects($this->never())->method('setUserData');
+
+        $auth = new AuthKeycloak(
+            $configuration,
+            $this->createProviderConfig(autoProvision: true),
+            ['sub' => 'subject-123', 'preferred_username' => 'john', 'email' => 'john@example.com'],
+            'john',
+            static fn(): User => $user,
+        );
+
+        $this->assertFalse($auth->checkCredentials('john', ''));
+    }
+
+    public function testCheckCredentialsRejectsExistingUserLinkedToAnotherSubject(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getLogger')->willReturn($this->createMock(Logger::class));
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('john', false)->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('other-subject');
+        $user->expects($this->never())->method('setUserData');
+
+        $auth = new AuthKeycloak(
+            $configuration,
+            $this->createProviderConfig(autoProvision: true),
+            ['sub' => 'subject-123', 'preferred_username' => 'john'],
+            'john',
+            static fn(): User => $user,
+        );
+
+        $this->assertFalse($auth->checkCredentials('john', ''));
     }
 
     public function testCheckCredentialsSynchronizesGroupsForExistingUserWhenEnabled(): void
@@ -54,6 +98,7 @@ final class AuthKeycloakTest extends TestCase
 
         $user = $this->createMock(User::class);
         $user->expects($this->once())->method('getUserByLogin')->with('john', false)->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('subject-123');
         $user->expects($this->once())->method('getUserId')->willReturn(42);
 
         $permission = $this->createMock(MediumPermission::class);
@@ -74,6 +119,7 @@ final class AuthKeycloakTest extends TestCase
             $configuration,
             $this->createProviderConfig(autoProvision: false),
             [
+                'sub' => 'subject-123',
                 'preferred_username' => 'john',
                 'realm_access' => ['roles' => ['manage-users']],
                 'resource_access' => ['phpmyfaq' => ['roles' => []]],

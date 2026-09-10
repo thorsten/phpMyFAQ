@@ -61,13 +61,17 @@ Optional user and group settings:
 phpMyFAQ resolves Keycloak users in this order:
 
 1. existing user linked by stored Keycloak subject (`sub`)
-2. preferred username from Keycloak
-3. existing user by email address
-4. automatic provisioning, if enabled
+2. automatic provisioning of a new user, if enabled, named after the preferred username (or the email address if no preferred username is present)
 
-The stored Keycloak subject is the durable link between a local phpMyFAQ account and the external identity.
+The stored Keycloak subject is the only link between a local phpMyFAQ account and the external identity.
+A Keycloak identity is never matched to an existing local account by username or email address: the
+`preferred_username` and `email` claims are chosen by whoever controls the Keycloak account, so such a
+match would let any Keycloak user take over a local account with a colliding name, including
+administrators. If the login derived from the claims collides with an existing local account, or the
+email address already belongs to a local account, the login is rejected and a warning is logged.
 
-If automatic provisioning is disabled, users must already exist in phpMyFAQ before they can sign in.
+If automatic provisioning is disabled, only accounts that already store the Keycloak subject can sign in.
+Accounts that predate Keycloak are not linked automatically.
 
 ## 5. Group mapping behavior
 
@@ -125,3 +129,5 @@ If group synchronization removes the wrong memberships:
 If an existing user cannot log in:
 
 - check whether the stored Keycloak subject (`sub`) is already linked to another local account
+- check whether the account stores the Keycloak subject at all; a local account whose username or email
+  merely matches the Keycloak claims is rejected with a `not linked to the Keycloak subject` warning

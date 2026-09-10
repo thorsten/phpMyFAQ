@@ -222,7 +222,7 @@ final class KeycloakAuthenticationController extends AbstractFrontController
                 return $redirect;
             }
 
-            if (!$this->synchronizeKeycloakSubject($user, $claims)) {
+            if (!$this->isLinkedToKeycloakSubject($user, $claims)) {
                 $this->configuration
                     ->getLogger()
                     ->warning(sprintf('Keycloak subject mismatch for user: %s', $this->maskLogin($login)));
@@ -258,48 +258,78 @@ final class KeycloakAuthenticationController extends AbstractFrontController
         }
     }
 
-    /** @param array<string, mixed> $claims */
+    /**
+     * Resolves the local login for the authenticated Keycloak identity.
+     *
+     * An existing local account is only ever resolved through its stored Keycloak
+     * subject. Matching by preferred username or email would let any Keycloak user
+     * who controls a colliding claim take over a local account they never proved
+     * ownership of, so an unlinked identity may only provision a new account.
+     *
+     * @param array<string, mixed> $claims
+     */
     private function resolveLocalLogin(array $claims): string
+    {
+        $subject = trim((string) ($claims['sub'] ?? ''));
+        if ($subject === '') {
+            $this->configuration->getLogger()->warning('Keycloak login rejected: claims are missing the sub.');
+            return '';
+        }
+
+        $linkedUser = $this->createUser();
+        $linkedUserId = $linkedUser->getUserIdByKeycloakSub($subject);
+        if ($linkedUserId > 0 && $linkedUser->getUserById($linkedUserId)) {
+            return $linkedUser->getLogin();
+        }
+
+        return $this->resolveProvisioningLogin($claims);
+    }
+
+    /**
+     * Returns the login for a Keycloak identity that is not linked to any local account.
+     * The login is rejected when it would collide with an existing local account.
+     *
+     * @param array<string, mixed> $claims
+     */
+    private function resolveProvisioningLogin(array $claims): string
     {
         $preferredUsername = trim((string) ($claims['preferred_username'] ?? ''));
         $email = trim((string) ($claims['email'] ?? ''));
-        $subject = trim((string) ($claims['sub'] ?? ''));
+        $login = $preferredUsername !== '' ? $preferredUsername : $email;
 
-        if ($subject !== '') {
-            $user = $this->createUser();
-            $userId = $user->getUserIdByKeycloakSub($subject);
-            if ($userId > 0 && $user->getUserById($userId)) {
-                return $user->getLogin();
-            }
+        if ($login === '') {
+            $this->configuration
+                ->getLogger()
+                ->warning(
+                    'Keycloak login rejected: claims are missing both preferred_username and email; refusing to auto-provision the sub.',
+                );
+
+            return '';
         }
 
-        if ($preferredUsername !== '' && $this->createUser()->getUserByLogin($preferredUsername, false)) {
-            return $preferredUsername;
+        if ($this->createUser()->getUserByLogin($login, false)) {
+            $this->configuration
+                ->getLogger()
+                ->warning(sprintf(
+                    'Keycloak login rejected: local account %s exists but is not linked to the Keycloak subject.',
+                    $this->maskLogin($login),
+                ));
+
+            return '';
         }
 
-        if ($email !== '') {
-            $user = $this->createUser();
-            $userId = $user->getUserIdByEmail($email);
-            if ($userId > 0 && $user->getUserById($userId)) {
-                return $user->getLogin();
-            }
+        if ($email !== '' && $this->createUser()->getUserIdByEmail($email) > 0) {
+            $this->configuration
+                ->getLogger()
+                ->warning(sprintf(
+                    'Keycloak login rejected: email of %s belongs to a local account that is not linked to the Keycloak subject.',
+                    $this->maskLogin($login),
+                ));
+
+            return '';
         }
 
-        if ($preferredUsername !== '') {
-            return $preferredUsername;
-        }
-
-        if ($email !== '') {
-            return $email;
-        }
-
-        $this->configuration
-            ->getLogger()
-            ->warning(
-                'Keycloak login rejected: claims are missing both preferred_username and email; refusing to auto-provision the sub.',
-            );
-
-        return '';
+        return $login;
     }
 
     private function maskLogin(string $login): string
@@ -314,24 +344,19 @@ final class KeycloakAuthenticationController extends AbstractFrontController
         return 'hmac:' . substr(hash_hmac('sha256', $login, $secret), offset: 0, length: 12);
     }
 
-    /** @param array<string, mixed> $claims */
-    private function synchronizeKeycloakSubject(CurrentUser $user, array $claims): bool
+    /**
+     * The loaded account must already carry the subject of the authenticated identity.
+     * A missing binding is never filled in at login time: doing so would silently hand
+     * the account to whichever Keycloak identity reaches this point first.
+     *
+     * @param array<string, mixed> $claims
+     */
+    private function isLinkedToKeycloakSubject(CurrentUser $user, array $claims): bool
     {
         $subject = trim((string) ($claims['sub'] ?? ''));
-        if ($subject === '') {
-            return true;
-        }
-
         $linkedSubject = trim((string) $user->getUserData('keycloak_sub'));
-        if ($linkedSubject !== '' && !hash_equals($linkedSubject, $subject)) {
-            return false;
-        }
 
-        if ($linkedSubject === '') {
-            return $user->setUserData(['keycloak_sub' => $subject]);
-        }
-
-        return true;
+        return $subject !== '' && $linkedSubject !== '' && hash_equals($linkedSubject, $subject);
     }
 
     private function resolveLogoutIdToken(CurrentUser $user): string

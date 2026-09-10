@@ -22,6 +22,7 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -235,7 +236,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
     }
 
-    public function testCallbackStoresUserSessionDataOnSuccessfulLogin(): void
+    public function testCallbackProvisionsNewUserAndStoresSessionDataOnSuccessfulLogin(): void
     {
         $idToken = $this->signToken([
             'iss' => 'https://sso.example.test/realms/phpmyfaq',
@@ -254,8 +255,8 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->expects($this->once())->method('getUserByLogin')->with('john')->willReturn(true);
-        $currentUser->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('');
-        $currentUser->expects($this->once())->method('setUserData')->with(['keycloak_sub' => '123'])->willReturn(true);
+        $currentUser->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('123');
+        $currentUser->expects($this->never())->method('setUserData');
         $currentUser->expects($this->once())->method('setLoggedIn')->with(true);
         $currentUser->expects($this->once())->method('setAuthSource')->with('keycloak');
         $currentUser->expects($this->once())->method('updateSessionId')->with(true);
@@ -280,7 +281,15 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $currentUser->expects($this->once())->method('setSuccess')->with(true);
 
         $authUser = $this->createMock(User::class);
-        $authUser->expects($this->exactly(2))->method('getUserByLogin')->with('john', false)->willReturn(true);
+        $authUser->expects($this->once())->method('getUserIdByKeycloakSub')->with('123')->willReturn(0);
+        $authUser->expects($this->exactly(2))->method('getUserByLogin')->with('john', false)->willReturn(false);
+        $authUser->expects($this->once())->method('getUserIdByEmail')->with('john@example.com')->willReturn(0);
+        $authUser->expects($this->once())->method('createUser')->with('john', '', '')->willReturn(true);
+        $authUser
+            ->expects($this->once())
+            ->method('setUserData')
+            ->with(['display_name' => 'John Doe', 'email' => 'john@example.com', 'keycloak_sub' => '123'])
+            ->willReturn(true);
 
         $controller = $this->createController(
             [
@@ -331,6 +340,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $resolverUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
         $resolverUser->expects($this->once())->method('getLogin')->willReturn('linked-user');
         $resolverUser->expects($this->once())->method('getUserByLogin')->with('linked-user', false)->willReturn(true);
+        $resolverUser->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('subject-123');
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->expects($this->once())->method('getUserByLogin')->with('linked-user')->willReturn(true);
@@ -392,28 +402,20 @@ final class KeycloakAuthenticationControllerTest extends TestCase
             ->method('getUserData')
             ->with('keycloak_sub')
             ->willReturn('different-subject');
-        $currentUser->expects($this->never())->method('setUserData');
-        $currentUser->expects($this->never())->method('setLoggedIn');
-        $currentUser->expects($this->never())->method('setAuthSource');
-        $currentUser->expects($this->never())->method('updateSessionId');
-        $currentUser->expects($this->never())->method('saveToSession');
-        $currentUser->expects($this->never())->method('setTokenData');
-        $currentUser->expects($this->never())->method('setSuccess');
+        $this->expectNoLogin($currentUser);
 
         $authUser = $this->createMock(User::class);
-        $authUser->expects($this->exactly(2))->method('getUserByLogin')->with('john', false)->willReturn(true);
+        $authUser->expects($this->once())->method('getUserIdByKeycloakSub')->with('subject-123')->willReturn(55);
+        $authUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
+        $authUser->expects($this->once())->method('getLogin')->willReturn('john');
+        $authUser->expects($this->once())->method('getUserByLogin')->with('john', false)->willReturn(true);
+        $authUser->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('subject-123');
 
         $controller = $this->createController(
-            [
-                new MockResponse(
-                    '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
-                ),
-                new MockResponse('{"access_token":"access","refresh_token":"refresh","id_token":"' . $idToken . '"}'),
-                new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
-                new MockResponse(
-                    '{"sub":"subject-123","preferred_username":"john","email":"john@example.com","name":"John Doe"}',
-                ),
-            ],
+            $this->createSuccessfulProviderResponses(
+                $idToken,
+                '{"sub":"subject-123","preferred_username":"john","email":"john@example.com","name":"John Doe"}',
+            ),
             $oidcSession,
             static fn(): CurrentUser => $currentUser,
             static fn(): User => $authUser,
@@ -427,6 +429,106 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
         $this->assertSame('', $oidcSession->getAuthorizationState()['state']);
+        $this->assertSame('', $oidcSession->getIdToken());
+    }
+
+    public function testCallbackRejectsUnlinkedLocalAccountMatchedByPreferredUsername(): void
+    {
+        $idToken = $this->signToken([
+            'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => 'attacker-subject',
+            'aud' => ['phpmyfaq'],
+            'azp' => 'phpmyfaq',
+            'nonce' => 'nonce-456',
+            'iat' => time(),
+            'exp' => time() + 300,
+        ]);
+
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session);
+        $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->never())->method('getUserByLogin');
+        $this->expectNoLogin($currentUser);
+
+        $authUser = $this->createMock(User::class);
+        $authUser->expects($this->once())->method('getUserIdByKeycloakSub')->with('attacker-subject')->willReturn(0);
+        $authUser->expects($this->never())->method('getUserIdByEmail');
+        $authUser->expects($this->once())->method('getUserByLogin')->with('admin', false)->willReturn(true);
+        $authUser->expects($this->never())->method('createUser');
+        $authUser->expects($this->never())->method('setUserData');
+
+        $controller = $this->createController(
+            $this->createSuccessfulProviderResponses(
+                $idToken,
+                '{"sub":"attacker-subject","preferred_username":"admin","email":"attacker@example.com","name":"Attacker"}',
+            ),
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+            static fn(): User => $authUser,
+        );
+
+        $response = $controller->callback(new Request([
+            'code' => 'test-code',
+            'state' => 'state-123',
+        ]));
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $this->assertSame('', $oidcSession->getAuthorizationState()['state']);
+        $this->assertSame('', $oidcSession->getIdToken());
+    }
+
+    public function testCallbackRejectsUnlinkedLocalAccountMatchedByEmail(): void
+    {
+        $idToken = $this->signToken([
+            'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => 'attacker-subject',
+            'aud' => ['phpmyfaq'],
+            'azp' => 'phpmyfaq',
+            'nonce' => 'nonce-456',
+            'iat' => time(),
+            'exp' => time() + 300,
+        ]);
+
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session);
+        $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->never())->method('getUserByLogin');
+        $this->expectNoLogin($currentUser);
+
+        $authUser = $this->createMock(User::class);
+        $authUser->expects($this->once())->method('getUserIdByKeycloakSub')->with('attacker-subject')->willReturn(0);
+        $authUser->expects($this->once())->method('getUserByLogin')->with('attacker', false)->willReturn(false);
+        $authUser->expects($this->once())->method('getUserIdByEmail')->with('admin@example.com')->willReturn(1);
+        $authUser->expects($this->never())->method('getUserById');
+        $authUser->expects($this->never())->method('createUser');
+        $authUser->expects($this->never())->method('setUserData');
+
+        $controller = $this->createController(
+            $this->createSuccessfulProviderResponses(
+                $idToken,
+                '{"sub":"attacker-subject","preferred_username":"attacker","email":"admin@example.com","name":"Attacker"}',
+            ),
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+            static fn(): User => $authUser,
+        );
+
+        $response = $controller->callback(new Request([
+            'code' => 'test-code',
+            'state' => 'state-123',
+        ]));
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $this->assertSame('', $oidcSession->getAuthorizationState()['state']);
+        $this->assertSame('', $oidcSession->getIdToken());
     }
 
     public function testCallbackReturnsFailureWhenIdTokenSubjectDoesNotMatchUserInfoSubject(): void
@@ -662,6 +764,32 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     /**
      * @param list<MockResponse> $responses
      */
+    private function expectNoLogin(CurrentUser&MockObject $currentUser): void
+    {
+        $currentUser->expects($this->never())->method('setUserData');
+        $currentUser->expects($this->never())->method('setLoggedIn');
+        $currentUser->expects($this->never())->method('setAuthSource');
+        $currentUser->expects($this->never())->method('updateSessionId');
+        $currentUser->expects($this->never())->method('saveToSession');
+        $currentUser->expects($this->never())->method('setTokenData');
+        $currentUser->expects($this->never())->method('setSuccess');
+    }
+
+    /**
+     * @return array<MockResponse>
+     */
+    private function createSuccessfulProviderResponses(string $idToken, string $userInfo): array
+    {
+        return [
+            new MockResponse(
+                '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
+            ),
+            new MockResponse('{"access_token":"access","refresh_token":"refresh","id_token":"' . $idToken . '"}'),
+            new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
+            new MockResponse($userInfo),
+        ];
+    }
+
     private function createController(
         array $responses = [],
         ?OidcSession $oidcSession = null,

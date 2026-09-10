@@ -129,6 +129,16 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
 
         $existingUser = $this->findUser($login);
         if ($existingUser instanceof User) {
+            if (!$this->isLinkedToSubject($existingUser)) {
+                $this->configuration
+                    ->getLogger()
+                    ->warning(sprintf(
+                        'Keycloak login rejected for "%s": the local account is not linked to the Keycloak subject.',
+                        $this->redactIdentifier($login),
+                    ));
+                return false;
+            }
+
             if ($this->shouldSynchronizeGroupsOnLogin()) {
                 $this->assignUserToGroups($existingUser->getUserId());
             }
@@ -171,6 +181,18 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
     private function getSubject(): string
     {
         return trim((string) ($this->claims['sub'] ?? ''));
+    }
+
+    /**
+     * An existing local account may only be used by the Keycloak identity whose subject
+     * it stores. Accounts without a stored subject are never claimed by username or email.
+     */
+    private function isLinkedToSubject(User $user): bool
+    {
+        $subject = $this->getSubject();
+        $linkedSubject = trim((string) $user->getUserData('keycloak_sub'));
+
+        return $subject !== '' && $linkedSubject !== '' && hash_equals($linkedSubject, $subject);
     }
 
     private function findUser(string $login): ?User
