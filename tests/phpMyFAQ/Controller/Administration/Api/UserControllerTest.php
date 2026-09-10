@@ -7,6 +7,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserData;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -35,15 +36,22 @@ class UserControllerTest extends TestCase
         $_COOKIE = [];
     }
 
-    private function buildController(Session $session, CurrentUser $actingUser): UserController
-    {
+    private function buildController(
+        Session $session,
+        CurrentUser $actingUser,
+        ?CurrentUser $targetUser = null,
+    ): UserController {
         $controller = (new ReflectionClass(UserController::class))->newInstanceWithoutConstructor();
 
         $container = $this->createMock(ContainerBuilder::class);
         $container
             ->method('get')
-            ->willReturnCallback(static function (string $id) use ($session) {
-                return $id === 'session' ? $session : null;
+            ->willReturnCallback(static function (string $id) use ($session, $targetUser) {
+                return match ($id) {
+                    'session' => $session,
+                    'phpmyfaq.user.current_user' => $targetUser,
+                    default => null,
+                };
             });
 
         $parent = (new ReflectionClass(UserController::class))->getParentClass();
@@ -332,5 +340,123 @@ class UserControllerTest extends TestCase
 
         $this->expectException(UnauthorizedHttpException::class);
         $controller->list(new Request());
+    }
+
+    /**
+     * IDOR guard: a delegated admin who is not a SuperAdmin must not be able to read a
+     * SuperAdmin account's data through GET admin/api/user/data/{userId}.
+     */
+    public function testUserDataNonSuperAdminCannotReadSuperAdminAccount(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        // Acting admin holds USER_ADD/EDIT/DELETE but is NOT a SuperAdmin.
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+
+        // The requested target (user id 1) is a SuperAdmin.
+        $targetUser = $this->createMock(CurrentUser::class);
+        $targetUser->method('isSuperAdmin')->willReturn(true);
+        $targetUser->method('getStatus')->willReturn('active');
+
+        $controller = $this->buildController($session, $actingUser, $targetUser);
+
+        $request = new Request();
+        $request->attributes->set('userId', 1);
+
+        $response = $controller->userData($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        $this->assertStringContainsString('error', (string) $response->getContent());
+    }
+
+    /**
+     * The admin read endpoint must never serialise secret material: the live TOTP seed
+     * (secret) and the OIDC subject (keycloak_sub) have to be stripped from the response.
+     */
+    public function testUserDataStripsSecretAndKeycloakSubFromResponse(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        // A SuperAdmin acting user passes the target guard, isolating the field-stripping.
+        $actingUser = $this->buildActingUser(userId: 1, isSuperAdmin: true);
+
+        $userData = $this->createMock(UserData::class);
+        $userData->method('get')->willReturn([
+            'user_id' => 7,
+            'last_modified' => '20260101000000',
+            'display_name' => 'Jane Doe',
+            'email' => 'jane@example.test',
+            'is_visible' => 1,
+            'twofactor_enabled' => 1,
+            'secret' => 'TOPSECRETTOTPSEEDVALUE',
+            'keycloak_sub' => 'kc-subject-uuid-123',
+        ]);
+
+        $targetUser = $this->createMock(CurrentUser::class);
+        $targetUser->userdata = $userData;
+        $targetUser->method('isSuperAdmin')->willReturn(false);
+        $targetUser->method('getStatus')->willReturn('active');
+        $targetUser->method('getUserId')->willReturn(7);
+        $targetUser->method('getLogin')->willReturn('jane');
+        $targetUser->method('getUserAuthSource')->willReturn('local');
+
+        $controller = $this->buildController($session, $actingUser, $targetUser);
+
+        $request = new Request();
+        $request->attributes->set('userId', 7);
+
+        $response = $controller->userData($request);
+        $body = (string) $response->getContent();
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // The live TOTP seed and OIDC subject must never leave the server.
+        $this->assertStringNotContainsString('TOPSECRETTOTPSEEDVALUE', $body);
+        $this->assertStringNotContainsString('kc-subject-uuid-123', $body);
+        $this->assertStringNotContainsString('secret', $body);
+        $this->assertStringNotContainsString('keycloak_sub', $body);
+        // Non-sensitive fields must still be present.
+        $this->assertStringContainsString('jane@example.test', $body);
+    }
+
+    /**
+     * IDOR guard: a non-SuperAdmin admin must not be able to read a SuperAdmin account's
+     * permissions through GET admin/api/user/permissions/{userId}.
+     */
+    public function testUserPermissionsNonSuperAdminCannotReadSuperAdminAccount(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        // Acting admin holds USER_ADD/EDIT/DELETE but is NOT a SuperAdmin.
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $controller = $this->buildController($session, $actingUser);
+
+        // CurrentUser::getCurrentUser() builds a fresh user and loads the target (id 7)
+        // from the database; the stub returns a SuperAdmin row.
+        $database = $this->createStub(Sqlite3::class);
+        $database->method('query')->willReturn(true);
+        $database->method('numRows')->willReturn(1);
+        $database->method('fetchArray')->willReturn([
+            'user_id' => 7,
+            'login' => 'second_superadmin',
+            'account_status' => 'active',
+            'is_superadmin' => 1,
+            'auth_source' => 'ldap',
+        ]);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['security.permLevel', 'basic'],
+            ]);
+
+        $parent = (new ReflectionClass(UserController::class))->getParentClass();
+        $parent->getProperty('configuration')->setValue($controller, $configuration);
+
+        $request = new Request();
+        $request->attributes->set('userId', 7);
+
+        $response = $controller->userPermissions($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        $this->assertStringContainsString('error', (string) $response->getContent());
     }
 }

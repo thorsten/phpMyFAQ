@@ -148,14 +148,29 @@ final class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
+        // Capture the acting user's privilege level before the shared current-user
+        // service is rebound to the requested target below. $this->currentUser and the
+        // service fetched into $user are the same shared instance, so getUserById()
+        // below would otherwise overwrite the acting user's identity with the target's.
+        $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
+
         $user = $this->container->get(id: 'phpmyfaq.user.current_user');
 
         $user->getUserById((int) $request->attributes->get(key: 'userId'), allowBlockedUsers: true);
+
+        // A non-SuperAdmin must never be able to read a SuperAdmin or protected account.
+        if (!$actingIsSuperAdmin && ($user->isSuperAdmin() || $user->getStatus() === 'protected')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
 
         $userData = [];
 
         $data = $user->userdata->get(field: '*');
         if (is_array($data)) {
+            // Never expose secret material in the admin read API: the live TOTP seed
+            // (secret) and the OIDC subject (keycloak_sub) must not leave the server.
+            unset($data['secret'], $data['keycloak_sub']);
+
             $userData = $data;
             $userData['userId'] = $user->getUserId();
             $userData['status'] = $user->getStatus();
@@ -183,6 +198,14 @@ final class UserController extends AbstractController
 
         $userId = $request->attributes->get(key: 'userId');
         $currentUser->getUserById((int) $userId, allowBlockedUsers: true);
+
+        // A non-SuperAdmin must never be able to read a SuperAdmin or protected account's rights.
+        if (
+            !$this->currentUser->isSuperAdmin()
+            && ($currentUser->isSuperAdmin() || $currentUser->getStatus() === 'protected')
+        ) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
 
         return $this->json($currentUser->perm->getUserRights((int) $userId), Response::HTTP_OK);
     }
