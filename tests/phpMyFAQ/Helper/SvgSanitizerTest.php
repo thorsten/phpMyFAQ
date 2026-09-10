@@ -1226,6 +1226,173 @@ class SvgSanitizerTest extends TestCase
     }
 
     // =========================================================================
+    // DTD custom entities: <!ENTITY j "javascript"> + &j;:alert() bypass
+    // =========================================================================
+
+    public function testIsSafeReturnsFalseForDtdEntityEncodedJavascriptUrl(): void
+    {
+        $maliciousSvg = <<<'SVG'
+            <?xml version="1.0"?>
+            <!DOCTYPE svg [<!ENTITY j "javascript">]>
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <a href="&j;:alert(document.domain)">
+                <text x="20" y="40" fill="red">Click me</text>
+              </a>
+            </svg>
+            SVG;
+
+        $filePath = $this->testDir . '/dtd_entity_javascript.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+        $this->assertTrue($this->sanitizer->shouldReject($filePath));
+    }
+
+    public function testIsSafeReturnsFalseForMultilineDtdEntityPoC(): void
+    {
+        $maliciousSvg = <<<'SVG'
+            <?xml version="1.0"?>
+            <!DOCTYPE svg [
+              <!ENTITY j "javascript">
+            ]>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150">
+              <rect width="300" height="150" fill="#c0392b" rx="10"/>
+              <a href="&j;:alert('XSS:'+document.domain)">
+                <rect x="75" y="70" width="150" height="50" fill="white" rx="8" cursor="pointer"/>
+                <text x="150" y="102" text-anchor="middle" fill="#c0392b">Click me</text>
+              </a>
+            </svg>
+            SVG;
+
+        $filePath = $this->testDir . '/dtd_entity_multiline.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testIsSafeReturnsFalseForSingleQuotedDtdEntity(): void
+    {
+        $maliciousSvg = <<<'SVG'
+            <!DOCTYPE svg [<!ENTITY j 'javascript'>]>
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <a xlink:href="&j;:alert(1)"><text>Click</text></a>
+            </svg>
+            SVG;
+
+        $filePath = $this->testDir . '/dtd_entity_single_quoted.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testIsSafeReturnsFalseForNestedDtdEntities(): void
+    {
+        $maliciousSvg = <<<'SVG'
+            <!DOCTYPE svg [<!ENTITY a "java"><!ENTITY b "&a;script"><!ENTITY c "&#x26;b;">]>
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <a href="&b;:alert(1)"><text>Click</text></a>
+            </svg>
+            SVG;
+
+        $filePath = $this->testDir . '/dtd_entity_nested.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testIsSafeReturnsFalseForDtdEntityContainingMarkup(): void
+    {
+        $maliciousSvg = <<<'SVG'
+            <!DOCTYPE svg [<!ENTITY payload "&#60;script&#62;alert(1)&#60;/script&#62;">]>
+            <svg xmlns="http://www.w3.org/2000/svg">
+              &payload;
+              <circle cx="50" cy="50" r="40"/>
+            </svg>
+            SVG;
+
+        $filePath = $this->testDir . '/dtd_entity_markup.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testIsSafeReturnsFalseForAnyDoctypeInternalSubset(): void
+    {
+        $maliciousSvg = <<<'SVG'
+            <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+              <!ENTITY % ext SYSTEM "http://evil.example/evil.dtd">
+              %ext;
+            ]>
+            <svg xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40"/></svg>
+            SVG;
+
+        $filePath = $this->testDir . '/dtd_internal_subset.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testIsSafeReturnsTrueForExternalDoctypeWithoutInternalSubset(): void
+    {
+        $safeSvg = <<<'SVG'
+            <?xml version="1.0" encoding="UTF-8"?>
+            <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+                <circle cx="50" cy="50" r="40" fill="blue"/>
+            </svg>
+            SVG;
+
+        $filePath = $this->testDir . '/external_doctype.svg';
+        file_put_contents($filePath, $safeSvg);
+
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testDetectIssuesReportsDtdEntityJavascriptUrl(): void
+    {
+        $maliciousSvg = <<<'SVG'
+            <!DOCTYPE svg [<!ENTITY j "javascript">]>
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <a href="&j;:alert(1)"><text>Click</text></a>
+            </svg>
+            SVG;
+
+        $issues = $this->sanitizer->detectIssues($maliciousSvg);
+
+        $this->assertNotEmpty($issues);
+        $this->assertStringContainsString('javascript', implode("\n", $issues));
+        $this->assertStringContainsString('DOCTYPE', implode("\n", $issues));
+    }
+
+    public function testSanitizeRemovesDtdEntityJavascriptUrls(): void
+    {
+        $maliciousSvg = <<<'SVG'
+            <?xml version="1.0"?>
+            <!DOCTYPE svg [<!ENTITY j "javascript">]>
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <a href="&j;:alert(document.domain)">
+                <text x="20" y="40" fill="red">Click me</text>
+              </a>
+              <circle cx="50" cy="50" r="40" fill="blue"/>
+            </svg>
+            SVG;
+
+        $filePath = $this->testDir . '/sanitize_dtd_entity.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+
+        $sanitizedContent = file_get_contents($filePath);
+        $this->assertStringNotContainsString('DOCTYPE', $sanitizedContent);
+        $this->assertStringNotContainsString('ENTITY', $sanitizedContent);
+        $this->assertStringNotContainsString('&j;', $sanitizedContent);
+        $this->assertStringNotContainsString('javascript', $sanitizedContent);
+        $this->assertStringNotContainsString('alert', $sanitizedContent);
+        $this->assertStringContainsString('circle', $sanitizedContent);
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
+    }
+
+    // =========================================================================
     // Sanitize method: verifying dangerous content is properly stripped
     // =========================================================================
 

@@ -6,6 +6,9 @@
  *
  * Decodes all HTML/XML entities before pattern matching to prevent
  * encoding-based bypasses (e.g., &#106;&#97;&#118;&#97;... → javascript:).
+ * Custom entities declared in a DOCTYPE internal subset
+ * (<!ENTITY j "javascript">) are expanded as well, and the declaring
+ * DOCTYPE is rejected, so &j;:alert() cannot slip past the patterns.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -67,6 +70,12 @@ class SvgSanitizer
 
         // XML processing instructions (but allow standard XML declaration)
         '/<\?(?!xml\b)[^?]*\?>/is',
+
+        // DOCTYPE with an internal subset and custom entity declarations.
+        // Browsers resolve <!ENTITY j "javascript"> into &j;:alert(), which
+        // html_entity_decode() cannot see.
+        '/<!DOCTYPE\b[^\[>]*\[.*?\]\s*>/is',
+        '/<!ENTITY\b[^>]*>/i',
 
         // HTML tags that shouldn't be in SVG
         '/<(iframe|embed|object|applet|meta|link|base)\b[^>]*>/i',
@@ -217,7 +226,8 @@ class SvgSanitizer
     }
 
     /**
-     * Decodes all HTML/XML entities (named, decimal, hex) recursively until stable.
+     * Decodes all HTML/XML entities (named, decimal, hex, and custom entities
+     * declared in a DOCTYPE internal subset) recursively until stable.
      * This ensures that double-encoded or nested-encoded payloads are fully decoded
      * before pattern matching.
      */
@@ -229,6 +239,8 @@ class SvgSanitizer
 
         while ($decoded !== $previous && $maxIterations-- > 0) {
             $previous = $decoded;
+            // Expand custom entities (<!ENTITY j "javascript"> + &j; → javascript)
+            $decoded = $this->expandCustomEntities($decoded);
             // Decode decimal entities (&#106; → j)
             $decoded =
                 preg_replace_callback(
@@ -265,6 +277,33 @@ class SvgSanitizer
         // Strip null bytes and control characters that could break regex matching
         // Fail closed: a regex failure must never leak partially decoded content
         return preg_replace('/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/', replacement: '', subject: $decoded) ?? '';
+    }
+
+    /**
+     * Expands references to custom entities declared in a DOCTYPE internal subset.
+     * The browser's XML parser performs the same substitution, so the sanitizer
+     * must inspect the resolved text rather than the raw &name; reference.
+     */
+    private function expandCustomEntities(string $content): string
+    {
+        $declarations = [];
+        if (!preg_match_all(
+            '/<!ENTITY\s+([A-Za-z_:][\w.:-]*)\s+(?:"([^"]*)"|\'([^\']*)\')\s*>/i',
+            $content,
+            $declarations,
+            PREG_SET_ORDER,
+        )) {
+            return $content;
+        }
+
+        $replacements = [];
+        foreach ($declarations as $declaration) {
+            $replacements['&' . $declaration[1] . ';'] = $declaration[2] !== ''
+                ? $declaration[2]
+                : $declaration[3] ?? '';
+        }
+
+        return strtr($content, $replacements);
     }
 
     /**
