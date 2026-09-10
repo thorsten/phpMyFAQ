@@ -732,6 +732,11 @@ final class FaqController extends AbstractController
         ),
     )]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
+    #[OA\Response(
+        response: 404,
+        description: 'If the FAQ does not exist or the user is not permitted to access it.',
+        content: new OA\JsonContent(example: '{ "stored": false, "error": "The given FAQ was not found." }'),
+    )]
     public function update(Request $request): JsonResponse
     {
         $this->hasValidToken();
@@ -761,6 +766,18 @@ final class FaqController extends AbstractController
         $email = Filter::filterVar($data->email, FILTER_SANITIZE_EMAIL);
         $isActive = Filter::filterVar($data->{'is-active'}, FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($data->{'is-sticky'}, FILTER_VALIDATE_BOOLEAN);
+
+        // Object-level authorization: the global "edit FAQ" right alone is not sufficient.
+        // The requester must also be permitted to access the very record they want to modify,
+        // otherwise a valid FAQ ID would be enough to rewrite restricted or pending records.
+        // Non-existing and non-permitted records are treated alike to mirror the read path.
+        if ($faqId === false || !is_string($languageCode) || !$faq->isFaqEditableForUser($faqId, $languageCode)) {
+            $result = [
+                'stored' => false,
+                'error' => 'The given FAQ was not found.',
+            ];
+            return $this->json($result, Response::HTTP_NOT_FOUND);
+        }
 
         if ($faq->hasTitleAHash($question)) {
             $result = [

@@ -898,6 +898,51 @@ class Faq
     }
 
     /**
+     * Checks whether the current user and groups are permitted to modify the given FAQ record.
+     *
+     * This is the object-level authorization for write operations. It applies the same
+     * user/group ACL as the read paths, but deliberately ignores the publication state:
+     * an editor must be able to work on inactive, not yet published or expired records
+     * they are permitted to access. A non-existing record is reported as not editable,
+     * so that callers can answer with a 404 without disclosing whether the ID exists.
+     */
+    public function isFaqEditableForUser(int $faqId, string $faqLanguage): bool
+    {
+        $queryHelper = new QueryHelper($this->user, $this->groups);
+
+        $query = sprintf(
+            "
+            SELECT
+                fd.id
+            FROM
+                %sfaqdata AS fd
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fd.id = %d
+            AND
+                fd.lang = '%s'
+                %s",
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $faqId,
+            $this->escapeSqlValue($faqLanguage),
+            $queryHelper->queryPermission($this->groupSupport),
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+
+        return $this->configuration->getDb()->numRows($result) > 0;
+    }
+
+    /**
      * Returns a FAQ by ID and category ID.
      *
      * @param int $faqId FAQ ID

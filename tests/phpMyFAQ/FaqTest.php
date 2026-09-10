@@ -277,6 +277,92 @@ class FaqTest extends TestCase
         $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId()));
     }
 
+    public function testIsFaqEditableForUserReturnsTrueForPublicFaq(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        $this->faq->setUser(23);
+
+        $this->assertTrue($this->faq->isFaqEditableForUser($faqEntity->getId(), 'en'));
+    }
+
+    /**
+     * Security regression: an editor holding the global "edit FAQ" right must not be able
+     * to modify a record that is restricted to another user (BOLA on PUT /faq/update).
+     */
+    public function testIsFaqEditableForUserReturnsFalseForFaqRestrictedToAnotherUser(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantUserAccess($faqEntity, 1);
+
+        $this->faq->setUser(23);
+
+        $this->assertFalse($this->faq->isFaqEditableForUser($faqEntity->getId(), 'en'));
+    }
+
+    public function testIsFaqEditableForUserReturnsTrueForAuthorizedUser(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantUserAccess($faqEntity, 23);
+
+        $this->faq->setUser(23);
+
+        $this->assertTrue($this->faq->isFaqEditableForUser($faqEntity->getId(), 'en'));
+    }
+
+    public function testIsFaqEditableForUserReturnsTrueForInactiveFaqOfAuthorizedUser(): void
+    {
+        // Unlike the public read path, editors must be able to work on unpublished records.
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setActive(false);
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantUserAccess($faqEntity, 23);
+
+        $this->faq->setUser(23);
+
+        $this->assertTrue($this->faq->isFaqEditableForUser($faqEntity->getId(), 'en'));
+    }
+
+    public function testIsFaqEditableForUserReturnsFalseForOtherLanguage(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        $this->assertFalse($this->faq->isFaqEditableForUser($faqEntity->getId(), 'de'));
+    }
+
+    public function testIsFaqEditableForUserReturnsFalseForNonExistingFaq(): void
+    {
+        $this->faq->setUser(23);
+
+        $this->assertFalse($this->faq->isFaqEditableForUser(987654321, 'en'));
+    }
+
+    public function testIsFaqEditableForUserRespectsGroupPermissions(): void
+    {
+        $this->configuration->set('security.permLevel', 'medium');
+        $groupConfiguration = new Configuration($this->configuration->getDb());
+        $groupConfiguration->set('security.permLevel', 'medium');
+        $groupConfiguration->setLanguage($this->configuration->getLanguage());
+        $faq = new Faq($groupConfiguration);
+
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity, $faq)->getId());
+        $this->grantGroupAccess($faqEntity, 7);
+
+        $faq->setUser(23);
+        $faq->setGroups([5]);
+        $this->assertFalse($faq->isFaqEditableForUser($faqEntity->getId(), 'en'));
+
+        $faq->setGroups([7]);
+        $this->assertTrue($faq->isFaqEditableForUser($faqEntity->getId(), 'en'));
+    }
+
     public function testGetAllAvailableFaqsByCategoryIdSanitizesLanguageAndSorting(): void
     {
         Language::$language = "en' OR 1=1 -- ";

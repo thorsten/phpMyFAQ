@@ -1059,6 +1059,25 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "If the FAQ does not exist or the user is not permitted to access it.",
+            "headers": {
+              "Accept-Language": {
+                "description": "The language code for the login.",
+                "schema": { "type": "string" }
+              },
+              "x-pmf-token": {
+                "description": "phpMyFAQ client API Token, generated in admin backend",
+                "schema": { "type": "string" }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": "{ \"stored\": false, \"error\": \"The given FAQ was not found.\" }"
+              }
+            }
           }
         }
       }
