@@ -844,18 +844,26 @@ class Faq
 
     /**
      * Checks whether the FAQ record with the given ID is visible to the current
-     * user and groups in the current language. This is used to gate access to
-     * child resources such as comments and attachments, which are keyed only by
-     * the record ID and would otherwise leak data from restricted FAQs.
+     * user and groups. This is used to gate access to child resources such as
+     * comments and attachments, which are keyed only by the record ID and would
+     * otherwise leak data from restricted or unpublished FAQs.
      *
      * The visibility rules mirror getFaqByIdAndCategoryId(): the record must be
      * active, within its active date window, and permitted for the current user
      * and groups.
+     *
+     * @param int         $faqId   FAQ ID
+     * @param string|null $faqLang Language of the record to check; defaults to the
+     *                             current language. Pass the child resource's own
+     *                             record language (e.g. an attachment's) so the
+     *                             check does not depend on the requester's UI language.
      */
-    public function isFaqAccessibleForUser(int $faqId): bool
+    public function isFaqAccessibleForUser(int $faqId, ?string $faqLang = null): bool
     {
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $now = date(format: 'YmdHis');
+        $language =
+            null === $faqLang || '' === $faqLang ? $this->getEscapedCurrentLanguage() : $this->escapeSqlValue($faqLang);
 
         $query = sprintf(
             "
@@ -886,7 +894,7 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $faqId,
-            $this->getEscapedCurrentLanguage(),
+            $language,
             $now,
             $now,
             $queryHelper->queryPermission($this->groupSupport),

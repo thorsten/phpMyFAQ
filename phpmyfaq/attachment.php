@@ -15,6 +15,7 @@
  * @since 2009-06-23
  */
 
+use phpMyFAQ\Attachment\AbstractAttachment;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Attachment\AttachmentPermission;
@@ -23,6 +24,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
@@ -41,6 +43,7 @@ if (headers_sent()) {
 }
 
 $attachmentErrors = [];
+$attachment = null;
 
 //
 // Service Containers
@@ -92,6 +95,21 @@ $hasRecordAccess = AttachmentPermission::hasRecordAccess(
     $groupSupport,
 );
 
+// The parent FAQ must also be published (active and inside its publication
+// window) and visible to the requester, exactly as the FAQ page and the REST
+// API enforce it. Otherwise a draft, scheduled or expired FAQ that answers 404
+// would still hand out its attached files to anyone holding "dlattachment".
+$isParentFaqVisible = false;
+if ($attachment instanceof AbstractAttachment && $attachment->getRecordId() > 0) {
+    [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($user);
+    $faq = $container->get('phpmyfaq.faq');
+    $faq->setUser($currentUser)->setGroups($currentGroups);
+    $isParentFaqVisible = $faq->isFaqAccessibleForUser(
+        $attachment->getRecordId(),
+        $attachment->getRecordLang(),
+    );
+}
+
 // get user rights
 $permission = [];
 if ($user->isLoggedIn()) {
@@ -119,7 +137,13 @@ $hasDownloadRight = AttachmentPermission::hasDownloadRight(
     (bool) $faqConfig->get('records.allowDownloadsForGuests'),
 );
 
-if ($attachment && $attachment->getRecordId() > 0 && $hasRecordAccess && $hasDownloadRight) {
+if (
+    $attachment instanceof AbstractAttachment
+    && $attachment->getRecordId() > 0
+    && $hasRecordAccess
+    && $isParentFaqVisible
+    && $hasDownloadRight
+) {
     $response = new StreamedResponse(function () use ($attachment) {
         $attachment->rawOut();
     });

@@ -106,6 +106,7 @@ class AbstractAttachmentTest extends TestCase
 
         $this->assertEquals(5, $attachment->getId());
         $this->assertEquals(123, $attachment->getRecordId());
+        $this->assertEquals('en', $attachment->getRecordLang());
         $this->assertEquals('test.pdf', $attachment->getFilename());
         $this->assertEquals(1024, $attachment->getFilesize());
         $this->assertEquals('application/pdf', $attachment->getMimeType());
@@ -202,6 +203,12 @@ class AbstractAttachmentTest extends TestCase
         $property = $reflection->getProperty('recordLang');
 
         $this->assertEquals('fr', $property->getValue($this->attachment));
+        $this->assertEquals('fr', $this->attachment->getRecordLang());
+    }
+
+    public function testGetRecordLangWhenNotSet(): void
+    {
+        $this->assertSame('', $this->attachment->getRecordLang());
     }
 
     public function testSetKeyWithEncryption(): void

@@ -178,6 +178,14 @@ abstract class AbstractAttachment
     }
 
     /**
+     * Get the language of the FAQ record the attachment belongs to.
+     */
+    public function getRecordLang(): string
+    {
+        return $this->recordLang ?? '';
+    }
+
+    /**
      * Get attachment id.
      */
     public function getId(): int

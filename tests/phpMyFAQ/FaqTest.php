@@ -277,6 +277,65 @@ class FaqTest extends TestCase
         $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId()));
     }
 
+    /**
+     * Security regression: an attachment of a draft FAQ must not be downloadable even though
+     * the requester holds "dlattachment" and the record ACL is public (-1). The download
+     * endpoint gates on this check with the attachment's own record language.
+     */
+    public function testIsFaqAccessibleForUserReturnsFalseForDraftFaqWithPublicAcl(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setActive(false);
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        $this->faq->setUser(23);
+
+        $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId(), 'en'));
+    }
+
+    public function testIsFaqAccessibleForUserReturnsFalseForNotYetPublishedFaq(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+        $this->setPublicationWindow($faqEntity, '99990101000000', '99991231235959');
+
+        $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId(), 'en'));
+    }
+
+    public function testIsFaqAccessibleForUserReturnsFalseForExpiredFaq(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+        $this->setPublicationWindow($faqEntity, '00000000000000', '20200101000000');
+
+        $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId(), 'en'));
+    }
+
+    public function testIsFaqAccessibleForUserUsesGivenRecordLanguage(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        // The record only exists in "en"; checking it under its own language must succeed
+        // regardless of the requester's UI language, while a language without a translation
+        // must not be reported as accessible.
+        $this->assertTrue($this->faq->isFaqAccessibleForUser($faqEntity->getId(), 'en'));
+        $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId(), 'de'));
+    }
+
+    public function testIsFaqAccessibleForUserFallsBackToCurrentLanguageForEmptyLanguage(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        $this->assertTrue($this->faq->isFaqAccessibleForUser($faqEntity->getId(), ''));
+    }
+
     public function testIsFaqEditableForUserReturnsTrueForPublicFaq(): void
     {
         $faqEntity = $this->getFaqEntity();
