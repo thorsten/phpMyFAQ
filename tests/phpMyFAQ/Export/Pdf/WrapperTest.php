@@ -93,10 +93,10 @@ class WrapperTest extends TestCase
 
     public function testConvertExternalImagesToBase64WithNoConfig(): void
     {
-        $html = '<img src="https://example.com/image.jpg" alt="test">';
+        $html = '<p>before</p><img src="https://example.com/image.jpg" alt="test"><p>after</p>';
         $result = $this->wrapper->convertExternalImagesToBase64($html);
-        // Should return original HTML when no config is set
-        $this->assertEquals($html, $result);
+        // Without a configuration there is no allowlist: external images are removed
+        $this->assertEquals('<p>before</p><p>after</p>', $result);
     }
 
     public function testConvertExternalImagesToBase64WithEmptyAllowedHosts(): void
@@ -107,8 +107,8 @@ class WrapperTest extends TestCase
 
         $html = '<img src="https://example.com/image.jpg" alt="test">';
         $result = $this->wrapper->convertExternalImagesToBase64($html);
-        // Should return original HTML when allowed hosts is empty
-        $this->assertEquals($html, $result);
+        // With an empty allowlist no external image may reach TCPDF
+        $this->assertEquals('', $result);
     }
 
     public function testConvertExternalImagesToBase64WithDisallowedHost(): void
@@ -119,8 +119,8 @@ class WrapperTest extends TestCase
 
         $html = '<img src="https://badsite.com/image.jpg" alt="test">';
         $result = $this->wrapper->convertExternalImagesToBase64($html);
-        // Should return original HTML when host is not allowed
-        $this->assertEquals($html, $result);
+        // Images from hosts outside the policy are removed, not passed to TCPDF
+        $this->assertEquals('', $result);
     }
 
     public function testConvertExternalImagesToBase64WithLocalImage(): void
@@ -468,7 +468,10 @@ class WrapperTest extends TestCase
             @unlink($secretFile);
         }
 
-        $this->assertFalse($handlerFired, 'Probing a non-image file must not emit a warning that could leak its contents');
+        $this->assertFalse(
+            $handlerFired,
+            'Probing a non-image file must not emit a warning that could leak its contents',
+        );
     }
 
     public function testCheckBase64ImageSwallowsWarningsForNonImageData(): void
@@ -600,22 +603,14 @@ class WrapperTest extends TestCase
 
     public function testResolveRedirectUrlWithAbsolutePath(): void
     {
-        $result = $this->invokePrivate(
-            'resolveRedirectUrl',
-            'http://allowed.test:8081/a/b/redirect',
-            '/tiny.png',
-        );
+        $result = $this->invokePrivate('resolveRedirectUrl', 'http://allowed.test:8081/a/b/redirect', '/tiny.png');
 
         $this->assertSame('http://allowed.test:8081/tiny.png', $result);
     }
 
     public function testResolveRedirectUrlWithRelativePath(): void
     {
-        $result = $this->invokePrivate(
-            'resolveRedirectUrl',
-            'http://allowed.test/a/b/redirect',
-            'tiny.png',
-        );
+        $result = $this->invokePrivate('resolveRedirectUrl', 'http://allowed.test/a/b/redirect', 'tiny.png');
 
         $this->assertSame('http://allowed.test/a/b/tiny.png', $result);
     }
@@ -623,5 +618,238 @@ class WrapperTest extends TestCase
     public function testResolveRedirectUrlRejectsEmptyLocation(): void
     {
         $this->assertNull($this->invokePrivate('resolveRedirectUrl', 'http://allowed.test/x', ''));
+    }
+
+    /**
+     * Replaces the http:// stream wrapper with a spy for the duration of the callback.
+     *
+     * @return string[] Every URL PHP tried to open or stat
+     */
+    private function spyOnHttpRequests(callable $callback): array
+    {
+        HttpSpyStreamWrapper::$requests = [];
+        stream_wrapper_unregister('http');
+        stream_wrapper_register('http', HttpSpyStreamWrapper::class);
+
+        try {
+            $callback();
+        } finally {
+            stream_wrapper_restore('http');
+        }
+
+        return HttpSpyStreamWrapper::$requests;
+    }
+
+    private function inlineSvg(string $svg): string
+    {
+        return '@' . base64_encode($svg);
+    }
+
+    /**
+     * Configures the wrapper far enough for AddPage() (header/footer rendering).
+     *
+     * @param string[] $allowedHosts
+     */
+    private function preparePage(array $allowedHosts): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn($allowedHosts);
+        $config->method('get')->willReturn('');
+        $config->method('getDefaultUrl')->willReturn('https://localhost/');
+        $config->method('getAdminEmail')->willReturn('admin@example.org');
+
+        $this->wrapper->setConfig($config);
+        $this->wrapper->setCategory(0);
+        $this->wrapper->setCategories([]);
+        $this->wrapper->setFaq(['id' => 1, 'lang' => 'en']);
+        $this->wrapper->AddPage();
+    }
+
+    public function testConvertExternalImagesStripsVectorImagesFromDisallowedHost(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['127.0.0.1']);
+        $this->wrapper->setConfig($config);
+
+        foreach (['svg', 'eps', 'ai'] as $extension) {
+            $html = sprintf('<p>x</p><img src="http://localhost/direct.%s"><p>y</p>', $extension);
+            $this->assertEquals('<p>x</p><p>y</p>', $this->wrapper->convertExternalImagesToBase64($html));
+        }
+    }
+
+    public function testConvertExternalImagesStripsAllowedImageThatCannotBeFetched(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['127.0.0.1']);
+        $this->wrapper->setConfig($config);
+
+        $result = null;
+        $requests = $this->spyOnHttpRequests(function () use (&$result): void {
+            $result = $this->wrapper->convertExternalImagesToBase64(
+                '<img src="http://127.0.0.1/redirect.svg"><img src="http://127.0.0.1/redirect.png">',
+            );
+        });
+
+        // The policy-checked fetcher may try the allowed origin, but an image
+        // that cannot be converted must never survive into the TCPDF input.
+        $this->assertEquals('', $result);
+        $this->assertNotEmpty($requests);
+        foreach ($requests as $url) {
+            $this->assertStringStartsWith('http://127.0.0.1/', $url);
+        }
+    }
+
+    public function testConvertExternalImagesDecodesEntitiesBeforeApplyingPolicy(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['allowed.example']);
+        $this->wrapper->setConfig($config);
+
+        // Decoded, this URL points at evil.example (userinfo trick).
+        $html = '<img src="http://allowed.example&#64;evil.example/image.png">';
+        $this->assertEquals('', $this->wrapper->convertExternalImagesToBase64($html));
+    }
+
+    public function testConvertExternalImagesKeepsLocalReferences(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['127.0.0.1']);
+        $this->wrapper->setConfig($config);
+
+        $html = '<img src="/content/user/images/local.svg"><img src="' . $this->inlineSvg('<svg/>') . '">';
+        $this->assertEquals($html, $this->wrapper->convertExternalImagesToBase64($html));
+    }
+
+    public function testStripExternalStylesheetLinks(): void
+    {
+        $html = '<link rel="stylesheet" type="text/css" href="http://localhost/x.css"><p>text</p><LINK href="a">';
+        $this->assertEquals('<p>text</p>', $this->wrapper->stripExternalStylesheetLinks($html));
+    }
+
+    public function testVectorLoadersNeverResolveRemoteUrls(): void
+    {
+        $reflection = new ReflectionClass($this->wrapper);
+        $loadVectorImage = $reflection->getMethod('loadVectorImage');
+        $resolveLocalImagePath = $reflection->getMethod('resolveLocalImagePath');
+
+        foreach ([
+            'http://localhost/direct.svg',
+            'https://localhost/direct.eps',
+            'http://localhost/redirect.ai',
+            'http://localhost/content/user/images/missing.svg',
+            '//localhost/direct.svg',
+            '*http://localhost/direct.png',
+            'file:///etc/passwd',
+            '',
+        ] as $reference) {
+            $this->assertNull($loadVectorImage->invoke($this->wrapper, $reference), $reference);
+            $this->assertNull($resolveLocalImagePath->invoke($this->wrapper, $reference), $reference);
+        }
+
+        $this->assertNull($loadVectorImage->invoke($this->wrapper, null));
+        $this->assertSame('<svg/>', $loadVectorImage->invoke($this->wrapper, '@<svg/>'));
+    }
+
+    public function testVectorLoadersReadFilesBelowContentDirectory(): void
+    {
+        $dir = PMF_ROOT_DIR . '/content/user/images';
+        $file = $dir . '/pmf-test-vector.svg';
+        file_put_contents($file, '<svg xmlns="http://www.w3.org/2000/svg"/>');
+
+        try {
+            $reflection = new ReflectionClass($this->wrapper);
+            $loadVectorImage = $reflection->getMethod('loadVectorImage');
+
+            $this->assertSame('<svg xmlns="http://www.w3.org/2000/svg"/>', $loadVectorImage->invoke(
+                $this->wrapper,
+                'http://localhost/content/user/images/pmf-test-vector.svg',
+            ));
+            $this->assertSame('<svg xmlns="http://www.w3.org/2000/svg"/>', $loadVectorImage->invoke(
+                $this->wrapper,
+                '/content/user/images/pmf-test-vector.svg',
+            ));
+        } finally {
+            @unlink($file);
+        }
+    }
+
+    public function testWriteHtmlNeverFetchesVectorImageUrls(): void
+    {
+        $this->preparePage(['127.0.0.1']);
+
+        $nestedSvg =
+            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" '
+            . 'width="10" height="10">'
+            . '<image xlink:href="http://localhost/nested.png" width="10" height="10"/>'
+            . '<image xlink:href="http://localhost/nested.svg" width="10" height="10"/>'
+            . '<image xlink:href="http://localhost/nested.eps" width="10" height="10"/>'
+            . '</svg>';
+
+        $html =
+            '<p>start</p>'
+            . '<img src="http://localhost/direct.svg" width="10" height="10">'
+            . '<img src="http://localhost/direct.eps" width="10" height="10">'
+            . '<img src="http://localhost/direct.ai" width="10" height="10">'
+            . '<img src="http://127.0.0.1/redirect.svg" width="10" height="10">'
+            . '<img src="http://127.0.0.1/redirect.eps" width="10" height="10">'
+            . '<img src="http://127.0.0.1/redirect.ai" width="10" height="10">'
+            . '<img src="'
+            . $this->inlineSvg($nestedSvg)
+            . '" width="10" height="10">'
+            . '<link rel="stylesheet" type="text/css" href="http://localhost/style.css">'
+            . '<p>end</p>';
+
+        $requests = $this->spyOnHttpRequests(function () use ($html): void {
+            $this->wrapper->WriteHTML($html);
+        });
+
+        // Only the policy-checked fetcher may talk to the allowed origin; the
+        // disallowed host must never be contacted, directly, via redirect or
+        // via a nested SVG resource.
+        foreach ($requests as $url) {
+            $this->assertStringStartsWith('http://127.0.0.1/', $url, 'Unexpected request to ' . $url);
+        }
+
+        $this->assertGreaterThanOrEqual(1, $this->wrapper->getNumPages(), 'WriteHTML must still render the page');
+    }
+
+    public function testImageSvgAndImageEpsIgnoreRemoteUrlsWhenCalledDirectly(): void
+    {
+        $this->preparePage([]);
+
+        $requests = $this->spyOnHttpRequests(function (): void {
+            $this->wrapper->ImageSVG('http://localhost/direct.svg', 10, 10, 10, 10);
+            $this->wrapper->ImageEps('http://localhost/direct.eps', 10, 10, 10, 10);
+            $this->wrapper->ImageEps('http://localhost/direct.ai', 10, 10, 10, 10);
+            $this->wrapper->Image('*http://localhost/direct.png', 10, 10, 10, 10);
+        });
+
+        $this->assertSame([], $requests);
+    }
+}
+
+/**
+ * Stream wrapper that records every http:// URL PHP tries to open and refuses it.
+ */
+final class HttpSpyStreamWrapper
+{
+    /** @var string[] */
+    public static array $requests = [];
+
+    /** @var resource|null */
+    public $context;
+
+    public function stream_open(string $path, string $mode, int $options, ?string &$openedPath): bool
+    {
+        self::$requests[] = $path;
+
+        return false;
+    }
+
+    public function url_stat(string $path, int $flags): array|false
+    {
+        self::$requests[] = $path;
+
+        return false;
     }
 }

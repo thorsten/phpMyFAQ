@@ -19,10 +19,12 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Attachment;
 
+use LengthException;
 use phpMyFAQ\Attachment\Filesystem\AbstractFile as FilesystemFile;
 use phpMyFAQ\Attachment\Filesystem\File\EncryptedFile;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Attachment\Filesystem\File\VanillaFile;
+use Throwable;
 
 /**
  * Class File
@@ -90,44 +92,75 @@ class File extends AbstractAttachment implements AttachmentInterface
      *
      * @param string $filePath full path to the attachment file
      * @throws FileException|AttachmentException
-     * @todo rollback if something went wrong
      */
     public function save(string $filePath, ?string $filename = null): bool
     {
-        $success = false;
+        if (!file_exists($filePath)) {
+            return false;
+        }
 
-        if (file_exists($filePath)) {
-            $this->realHash = md5_file($filePath);
-            $this->filesize = filesize($filePath);
-            $this->filename = $filename ?? basename($filePath);
+        // Validate the key before the metadata row exists, so a misconfigured
+        // key cannot leave an orphaned encrypted=1 record behind.
+        if ($this->encrypted && (null === $this->key || !AttachmentFactory::isSupportedKey($this->key))) {
+            throw new AttachmentException(
+                'Attachment encryption is enabled, but the configured encryption key is not 16, 24 or 32 bytes long',
+            );
+        }
 
-            $this->saveMeta();
+        $this->realHash = md5_file($filePath);
+        $this->filesize = filesize($filePath);
+        $this->filename = $filename ?? basename($filePath);
 
-            $targetFile = $this->buildFilePath();
+        $this->saveMeta();
 
-            if ($this->createSubDirs($targetFile)) {
-                // Doing this check, we're sure not to unnecessarily
-                // overwrite existing unencrypted file duplicates.
-                if (!$this->linkedRecords()) {
-                    $vanillaFile = new VanillaFile($filePath);
-                    $target = $this->getFile(FilesystemFile::MODE_WRITE);
+        try {
+            $success = $this->storeFile($filePath);
+        } catch (Throwable $throwable) {
+            // Roll back the metadata written above; the file was not stored.
+            $this->deleteMeta();
 
-                    $success = $vanillaFile->moveTo($target);
-                } else {
-                    $success = true;
-                }
+            throw $throwable;
+        }
 
-                if ($success) {
-                    $this->postUpdateMeta();
-                } else {
-                    // File wasn't saved
-                    $this->delete();
-                    $success = false;
-                }
-            }
+        if (!$success) {
+            // File wasn't saved
+            $this->delete();
         }
 
         return $success;
+    }
+
+    /**
+     * Moves the uploaded file to its final location and updates the metadata.
+     *
+     * @throws FileException|AttachmentException
+     */
+    protected function storeFile(string $filePath): bool
+    {
+        $targetFile = $this->buildFilePath();
+
+        if (!$this->createSubDirs($targetFile)) {
+            return false;
+        }
+
+        // Doing this check, we're sure not to unnecessarily
+        // overwrite existing unencrypted file duplicates.
+        if ($this->linkedRecords()) {
+            $this->postUpdateMeta();
+
+            return true;
+        }
+
+        $vanillaFile = new VanillaFile($filePath);
+        $target = $this->getFile(FilesystemFile::MODE_WRITE);
+
+        if (!$vanillaFile->moveTo($target)) {
+            return false;
+        }
+
+        $this->postUpdateMeta();
+
+        return true;
     }
 
     /**
@@ -176,7 +209,15 @@ class File extends AbstractAttachment implements AttachmentInterface
     private function getFile(string $mode = FilesystemFile::MODE_READ): EncryptedFile|VanillaFile
     {
         if ($this->encrypted) {
-            return new EncryptedFile($this->buildFilePath(), $mode, $this->key);
+            // buildFilePath() already guarantees a non-null key for encrypted files.
+            try {
+                return new EncryptedFile($this->buildFilePath(), $mode, (string) $this->key);
+            } catch (LengthException $lengthException) {
+                throw new AttachmentException(
+                    'The configured attachment encryption key is not 16, 24 or 32 bytes long',
+                    previous: $lengthException,
+                );
+            }
         }
 
         return new VanillaFile($this->buildFilePath(), $mode);

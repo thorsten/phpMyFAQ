@@ -11,6 +11,7 @@ use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use RuntimeException;
 
 /**
  * Class FileTest
@@ -220,5 +221,94 @@ class FileTest extends TestCase
 
         $this->assertNotNull($hash);
         $this->assertIsString($hash);
+    }
+
+    public function testSaveRejectsUnsupportedKeyLengthBeforeWritingMeta(): void
+    {
+        $upload = vfsStream::newFile('upload.txt')->at($this->vfsRoot)->setContent('payload');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->expects($this->never())->method('query');
+        $db->expects($this->never())->method('nextId');
+
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('databaseDriver')->setValue($this->file, $db);
+        $reflection->getProperty('encrypted')->setValue($this->file, true);
+        $reflection->getProperty('key')->setValue($this->file, '123456789012345'); // 15 bytes
+        $this->file->setRecordId(1);
+        $this->file->setRecordLang('en');
+
+        $this->expectException(AttachmentException::class);
+        $this->expectExceptionMessage('not 16, 24 or 32 bytes long');
+
+        $this->file->save($upload->url());
+    }
+
+    public function testSaveRollsBackMetaWhenStoringThrows(): void
+    {
+        $upload = vfsStream::newFile('upload.txt')->at($this->vfsRoot)->setContent('payload');
+
+        $queries = [];
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('nextId')->willReturn(42);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('query')->willReturnCallback(static function (string $sql) use (&$queries): bool {
+            $queries[] = $sql;
+            return true;
+        });
+
+        $file = new class($db) extends File {
+            public function __construct(DatabaseDriver $mockDb)
+            {
+                parent::__construct();
+                $this->databaseDriver = $mockDb;
+            }
+
+            protected function storeFile(string $filePath): bool
+            {
+                throw new RuntimeException('storage failed');
+            }
+        };
+        $file->setRecordId(1);
+        $file->setRecordLang('en');
+        $file->setKey(null);
+
+        try {
+            $file->save($upload->url());
+            $this->fail('The storage failure must be re-thrown');
+        } catch (RuntimeException $runtimeException) {
+            $this->assertSame('storage failed', $runtimeException->getMessage());
+        }
+
+        $this->assertCount(2, $queries);
+        $this->assertStringContainsString('INSERT INTO', $queries[0]);
+        $this->assertStringContainsString('DELETE FROM', $queries[1]);
+        $this->assertStringContainsString('id = 42', $queries[1]);
+    }
+
+    public function testGetFileConvertsUnsupportedKeyLengthIntoAttachmentException(): void
+    {
+        if (!defined('PMF_ATTACHMENTS_DIR')) {
+            define('PMF_ATTACHMENTS_DIR', '/tmp/attachments');
+        }
+
+        $reflection = new ReflectionClass($this->file);
+        $properties = [
+            'encrypted' => true,
+            'id' => 7,
+            'recordId' => 1,
+            'realHash' => 'abcdefghijklmnopqrstuvwxyz123456',
+            'filename' => 'test.txt',
+            'key' => '123456789012345', // 15 bytes
+        ];
+
+        foreach ($properties as $prop => $value) {
+            $reflection->getProperty($prop)->setValue($this->file, $value);
+        }
+
+        $this->expectException(AttachmentException::class);
+        $this->expectExceptionMessage('not 16, 24 or 32 bytes long');
+
+        $this->file->testGetFile();
     }
 }

@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\Helper;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -192,6 +193,10 @@ final class ConfigurationTabController extends AbstractController
         }
 
         $this->configuration->update($newConfigValues);
+
+        // Long-running workers bootstrap only once: refresh the attachment
+        // factory so new uploads honour the saved encryption settings.
+        AttachmentFactory::initFromConfiguration($this->configuration);
 
         return $this->json(['success' => Translation::get(key: 'ad_config_saved')], Response::HTTP_OK);
     }

@@ -313,10 +313,7 @@ if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:[\\/]%i', $confAttachm
     }
 }
 
-AttachmentFactory::init(
-    (string) $faqConfig->get('records.defaultAttachmentEncKey'),
-    (bool) $faqConfig->get('records.enableAttachmentEncryption'),
-);
+AttachmentFactory::initFromConfiguration($faqConfig);
 
 //
 // Fix if phpMyFAQ is running behind a proxy server

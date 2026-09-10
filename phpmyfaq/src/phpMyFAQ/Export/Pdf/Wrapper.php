@@ -567,9 +567,10 @@ class Wrapper extends TCPDF
         $alt = false,
         $alternateImages = [],
     ): void {
-        // Pass through raw image data ('@' prefix), non-embedded links ('*' prefix),
-        // and data URIs without filesystem lookup.
-        if (is_string($file) && $file !== '' && ($file[0] === '@' || $file[0] === '*')) {
+        // Pass through raw image data ('@' prefix) and data URIs without
+        // filesystem lookup. Nested references inside inline SVG data are still
+        // routed through the overridden loaders below.
+        if (is_string($file) && $file !== '' && $file[0] === '@') {
             parent::Image(
                 $file,
                 $x,
@@ -625,33 +626,19 @@ class Wrapper extends TCPDF
             return;
         }
 
-        $file = parse_url((string) $file, PHP_URL_PATH);
-        if ($file === false || $file === null || $file === '') {
-            return;
-        }
-
-        // URL-decode the file path to handle filenames with spaces and other special characters
-        $file = urldecode($file);
-
-        $type = pathinfo($file, PATHINFO_EXTENSION);
-        $resolvedPath = $this->concatenatePaths(PMF_ROOT_DIR, $file);
-        if ($resolvedPath === '' || !$this->isWithinRoot($resolvedPath)) {
-            return;
-        }
-
-        if (!is_file($resolvedPath) || !is_readable($resolvedPath)) {
+        // Everything else is resolved against the local content directory;
+        // remote URLs are never fetched here.
+        $resolvedPath = $this->resolveLocalImagePath((string) $file);
+        if ($resolvedPath === null) {
             return;
         }
 
         $data = file_get_contents($resolvedPath);
-        if ($data === false) {
+        if ($data === false || !$this->checkBase64Image($data)) {
             return;
         }
 
-        if (!$this->checkBase64Image($data)) {
-            return;
-        }
-
+        $type = pathinfo($resolvedPath, PATHINFO_EXTENSION);
         $file = '@' . $data;
 
         parent::Image(
@@ -675,6 +662,160 @@ class Wrapper extends TCPDF
             $alt,
             $alternateImages,
         );
+    }
+
+    /**
+     * Extends TCPDF::ImageSVG() so that SVG references are never fetched from
+     * the network. TCPDF dispatches ".svg" sources (and nested <image> elements
+     * inside SVG documents) here instead of Image(), and its loader follows
+     * redirects without any host policy (SSRF, CWE-918). Only inline data and
+     * files below the local content directory are rendered.
+     *
+     * @param string     $file      Name of the SVG file or a '@' character followed by the SVG data string
+     * @param float|null $x         Abscissa of the upper-left corner
+     * @param float|null $y         Ordinate of the upper-left corner
+     * @param float      $w         Width of the image in the page
+     * @param float      $h         Height of the image in the page
+     * @param string     $link      URL or identifier returned by AddLink()
+     * @param string     $align     Alignment of the pointer next to image insertion
+     * @param string     $palign    Centering or aligning the image on the current line
+     * @param int        $border    Indicates if borders must be drawn around the cell
+     * @param bool       $fitonpage If true, the image is resized to not exceed page dimensions
+     */
+    #[\Override]
+    /* @mago-ignore lint:excessive-parameter-list */
+    public function ImageSVG(
+        $file,
+        $x = null,
+        $y = null,
+        $w = 0,
+        $h = 0,
+        $link = '',
+        $align = '',
+        $palign = '',
+        $border = 0,
+        $fitonpage = false,
+    ): void {
+        $data = $this->loadVectorImage($file);
+        if ($data === null) {
+            return;
+        }
+
+        parent::ImageSVG('@' . $data, $x, $y, $w, $h, $link, $align, $palign, $border, $fitonpage);
+    }
+
+    /**
+     * Extends TCPDF::ImageEps() so that EPS/AI references are never fetched from
+     * the network. See ImageSVG() for the rationale.
+     *
+     * @param string     $file           Name of the EPS/AI file or a '@' character followed by the data string
+     * @param float|null $x              Abscissa of the upper-left corner
+     * @param float|null $y              Ordinate of the upper-left corner
+     * @param float      $w              Width of the image in the page
+     * @param float      $h              Height of the image in the page
+     * @param string     $link           URL or identifier returned by AddLink()
+     * @param bool       $useBoundingBox Specifies whether to position the bounding box (true) or the complete canvas
+     * @param string     $align          Alignment of the pointer next to image insertion
+     * @param string     $palign         Centering or aligning the image on the current line
+     * @param int        $border         Indicates if borders must be drawn around the cell
+     * @param bool       $fitonpage      If true, the image is resized to not exceed page dimensions
+     * @param bool       $fixoutvals     If true, remove values outside the bounding box
+     */
+    #[\Override]
+    /* @mago-ignore lint:excessive-parameter-list */
+    public function ImageEps(
+        $file,
+        $x = null,
+        $y = null,
+        $w = 0,
+        $h = 0,
+        $link = '',
+        $useBoundingBox = true,
+        $align = '',
+        $palign = '',
+        $border = 0,
+        $fitonpage = false,
+        $fixoutvals = false,
+    ): void {
+        $data = $this->loadVectorImage($file);
+        if ($data === null) {
+            return;
+        }
+
+        parent::ImageEps(
+            '@' . $data,
+            $x,
+            $y,
+            $w,
+            $h,
+            $link,
+            $useBoundingBox,
+            $align,
+            $palign,
+            $border,
+            $fitonpage,
+            $fixoutvals,
+        );
+    }
+
+    /**
+     * Loads vector image data for ImageSVG()/ImageEps() from inline data or a
+     * file below the local content directory. Returns null for anything else,
+     * in particular for remote URLs.
+     */
+    private function loadVectorImage(mixed $file): ?string
+    {
+        if (!is_string($file) || $file === '') {
+            return null;
+        }
+
+        if ($file[0] === '@') {
+            return substr($file, 1);
+        }
+
+        $resolvedPath = $this->resolveLocalImagePath($file);
+        if ($resolvedPath === null) {
+            return null;
+        }
+
+        $data = file_get_contents($resolvedPath);
+
+        return $data === false ? null : $data;
+    }
+
+    /**
+     * Resolves an image reference (local path or URL) to a readable file below
+     * the phpMyFAQ content directory. Only the path component of a URL is used,
+     * so no reference handed to a TCPDF loader can trigger a network request.
+     *
+     * @return string|null The resolved filesystem path, or null if it cannot be served
+     */
+    private function resolveLocalImagePath(string $file): ?string
+    {
+        // TCPDF marks non-embedded external streams with a leading '*'; we treat
+        // them like any other reference and never fetch them.
+        if ($file !== '' && $file[0] === '*') {
+            $file = substr($file, 1);
+        }
+
+        $path = parse_url($file, PHP_URL_PATH);
+        if ($path === false || $path === null || $path === '') {
+            return null;
+        }
+
+        // URL-decode the file path to handle filenames with spaces and other special characters
+        $path = urldecode($path);
+
+        $resolvedPath = $this->concatenatePaths(PMF_ROOT_DIR, $path);
+        if ($resolvedPath === '' || !$this->isWithinRoot($resolvedPath)) {
+            return null;
+        }
+
+        if (!is_file($resolvedPath) || !is_readable($resolvedPath)) {
+            return null;
+        }
+
+        return $resolvedPath;
     }
 
     private function checkBase64Image(string $base64): bool
@@ -729,19 +870,19 @@ class Wrapper extends TCPDF
      * Converts external images from allowed hosts to base64 data URIs in HTML content.
      * This enables TCPDF to display external images that would otherwise fail due to SSL/certificate issues.
      *
+     * Any external image that cannot be converted under the media host policy
+     * (disallowed host, no allowlist, failed fetch, non-raster data) is removed
+     * from the HTML instead of being handed to TCPDF: its own loaders would
+     * otherwise fetch the URL and follow redirects without any host check.
+     * Local references without a host are left untouched and resolved against
+     * the content directory by the Image()/ImageSVG()/ImageEps() overrides.
+     *
      * @param string $html The HTML content to process
      * @return string The processed HTML content with external images converted to base64
      */
     public function convertExternalImagesToBase64(string $html): string
     {
-        if (!$this->config instanceof Configuration) {
-            return $html;
-        }
-
-        $allowedHosts = $this->config->getAllowedMediaHosts();
-        if ($allowedHosts === [] || count($allowedHosts) === 1 && trim($allowedHosts[0]) === '') {
-            return $html;
-        }
+        $allowedHosts = $this->config instanceof Configuration ? $this->config->getAllowedMediaHosts() : [];
 
         // Pattern to match img tags with src attributes
         $pattern = '/<img\s+[^>]*src\s*=\s*["\']([^"\']+)["\'][^>]*>/i';
@@ -749,40 +890,55 @@ class Wrapper extends TCPDF
             $pattern,
             function (array $matches) use ($allowedHosts): string {
                 $fullMatch = $matches[0];
-                $imageUrl = $matches[1];
+                // Decode entities so the URL we check is the URL that would be fetched
+                $imageUrl = html_entity_decode(trim($matches[1]), ENT_QUOTES | ENT_HTML5, encoding: 'UTF-8');
+
                 // Parse the URL to get the host
                 $parsedUrl = parse_url($imageUrl);
-                if (!$parsedUrl || !isset($parsedUrl['host'])) {
-                    return $fullMatch; // Return original if URL is malformed
+                if ($parsedUrl === false || !isset($parsedUrl['host'])) {
+                    return $fullMatch; // Local reference, resolved by the image loaders
                 }
 
-                $host = $parsedUrl['host'];
                 // Check if the host is in the allowed list
-                if (!$this->isHostAllowed($host, $allowedHosts)) {
-                    return $fullMatch; // Return original if host not allowed
+                if (!$this->isHostAllowed($parsedUrl['host'], $allowedHosts)) {
+                    return ''; // Neutralize images from hosts outside the policy
                 }
 
                 // Try to fetch the image and convert to base64
                 try {
                     $imageData = $this->fetchExternalImage($imageUrl, $allowedHosts);
-                    if ($imageData !== false) {
-                        $base64Image = base64_encode($imageData);
-                        $mimeType = $this->getImageMimeType($imageData);
-                        if ($mimeType && $base64Image) {
-                            $fmt = 'data:%s;base64,%s';
-                            $dataUri = sprintf($fmt, $mimeType, $base64Image);
-                            return str_replace($imageUrl, $dataUri, $fullMatch);
-                        }
-                    }
                 } catch (Exception) {
-                    // If fetching fails, return the original
-                    return $fullMatch;
+                    return '';
                 }
 
-                return $fullMatch;
+                if ($imageData === false) {
+                    return '';
+                }
+
+                $mimeType = $this->getImageMimeType($imageData);
+                if ($mimeType === false) {
+                    return '';
+                }
+
+                $dataUri = sprintf('data:%s;base64,%s', $mimeType, base64_encode($imageData));
+
+                return str_replace($matches[1], $dataUri, $fullMatch);
             },
             $html,
         ) ?? '';
+    }
+
+    /**
+     * Removes <link> elements from HTML content. TCPDF fetches external
+     * stylesheets referenced by <link type="text/css" href="..."> without any
+     * host policy, which would reopen the server-side request vector.
+     *
+     * @param string $html The HTML content to process
+     * @return string The HTML content without <link> elements
+     */
+    public function stripExternalStylesheetLinks(string $html): string
+    {
+        return preg_replace('/<link\b[^>]*>/i', '', $html) ?? '';
     }
 
     /**
@@ -1105,8 +1261,10 @@ class Wrapper extends TCPDF
         $cell = false,
         $align = '',
     ): void {
-        // Pre-process HTML content to convert external images to base64
-        $processedHtml = $this->convertExternalImagesToBase64($html);
+        // Pre-process HTML content: drop external stylesheet references and
+        // convert external images from allowed hosts to base64
+        $processedHtml = $this->stripExternalStylesheetLinks((string) $html);
+        $processedHtml = $this->convertExternalImagesToBase64($processedHtml);
 
         // Call the parent WriteHTML method with processed content
         parent::WriteHTML($processedHtml, $ln, $fill, $reseth, $cell, $align);
