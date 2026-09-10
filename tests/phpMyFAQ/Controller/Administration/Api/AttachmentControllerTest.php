@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -479,6 +480,281 @@ final class AttachmentControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testDeleteDeniesAttachmentOfFaqOutsideAllowedCategories(): void
+    {
+        $this->seedAttachment(7, 5, 'en');
+        $this->seedCategoryRelation(666, 5, 'en');
+
+        $container = $this->createAuthenticatedContainer([3]);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        try {
+            $controller->delete(new Request([], [], [], [], [], [], json_encode([
+                'csrf' => $token,
+                'attId' => 7,
+            ], JSON_THROW_ON_ERROR)));
+            self::fail('Expected a ForbiddenException for an attachment outside the allowed categories.');
+        } catch (ForbiddenException) {
+            // expected
+        }
+
+        self::assertSame(1, $this->countAttachments(7));
+    }
+
+    /**
+     * A restricted user must not delete attachments of an uncategorized FAQ either, since
+     * there is no category membership that could put it inside their scope.
+     *
+     * @throws \Exception
+     */
+    public function testDeleteDeniesRestrictedUserForAttachmentOfUncategorizedFaq(): void
+    {
+        $this->seedAttachment(7, 5, 'en');
+
+        $container = $this->createAuthenticatedContainer([3]);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $this->expectException(ForbiddenException::class);
+        $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'attId' => 7,
+        ], JSON_THROW_ON_ERROR)));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteAllowsAttachmentOfFaqInsideAllowedCategories(): void
+    {
+        if (!defined('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR')) {
+            define('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR', sys_get_temp_dir() . '/');
+        }
+
+        $this->seedAttachment(7, 5, 'en');
+        $this->seedCategoryRelation(3, 5, 'en');
+
+        $container = $this->createAuthenticatedContainer([3]);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'attId' => 7,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('msgAttachmentsDeleted'), $payload['success']);
+        self::assertSame(0, $this->countAttachments(7));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRefreshDeniesAttachmentOfFaqOutsideAllowedCategories(): void
+    {
+        $this->seedAttachment(7, 5, 'en');
+        $this->seedCategoryRelation(666, 5, 'en');
+
+        $container = $this->createAuthenticatedContainer([3]);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'refresh-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        try {
+            $controller->refresh(new Request([], [], [], [], [], [], json_encode([
+                'csrf' => $token,
+                'attId' => 7,
+            ], JSON_THROW_ON_ERROR)));
+            self::fail('Expected a ForbiddenException for an attachment outside the allowed categories.');
+        } catch (ForbiddenException) {
+            // expected
+        }
+
+        self::assertSame(1, $this->countAttachments(7));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadDeniesFaqOutsideAllowedCategories(): void
+    {
+        if (!defined('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR')) {
+            define('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR', sys_get_temp_dir() . '/');
+        }
+
+        $this->seedCategoryRelation(666, 5, 'en');
+
+        $uploadPath = tempnam(sys_get_temp_dir(), 'pmf-attachment-upload-');
+        self::assertNotFalse($uploadPath);
+        file_put_contents($uploadPath, 'attachment payload');
+
+        $file = $this->createMock(UploadedFile::class);
+        $file->method('isValid')->willReturn(true);
+        $file->method('getSize')->willReturn(18);
+        $file->method('getMimeType')->willReturn('text/plain');
+        $file->method('getPathname')->willReturn($uploadPath);
+        $file->method('getClientOriginalName')->willReturn('upload.txt');
+
+        $container = $this->createAuthenticatedContainer([3]);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $request = new Request(
+            [],
+            ['pmf-csrf-token' => $token, 'record_id' => 5, 'record_lang' => 'en'],
+            [],
+            [],
+            ['filesToUpload' => [$file]],
+        );
+
+        try {
+            $controller->upload($request);
+            self::fail('Expected a ForbiddenException for an FAQ outside the allowed categories.');
+        } catch (ForbiddenException) {
+            // expected
+        } finally {
+            @unlink($uploadPath);
+        }
+
+        self::assertSame(0, $this->countAttachmentsOfFaq(5, 'en'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadDeniesRestrictedUserForUncategorizedFaq(): void
+    {
+        $file = $this->createMock(UploadedFile::class);
+        $file->method('isValid')->willReturn(true);
+        $file->method('getSize')->willReturn(128);
+        $file->method('getMimeType')->willReturn('image/png');
+
+        $container = $this->createAuthenticatedContainer([3]);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $this->expectException(ForbiddenException::class);
+        $controller->upload(new Request(
+            [],
+            ['pmf-csrf-token' => $token, 'record_id' => 5, 'record_lang' => 'en'],
+            [],
+            [],
+            ['filesToUpload' => [$file]],
+        ));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadPassesScopeCheckForFaqInsideAllowedCategories(): void
+    {
+        if (!defined('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR')) {
+            define('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR', sys_get_temp_dir() . '/');
+        }
+
+        $this->seedCategoryRelation(3, 5, 'en');
+
+        $missingFile = $this->createMock(UploadedFile::class);
+        $missingFile->method('isValid')->willReturn(true);
+        $missingFile->method('getSize')->willReturn(128);
+        $missingFile->method('getMimeType')->willReturn('image/png');
+        $missingFile->method('getPathname')->willReturn(sys_get_temp_dir() . '/pmf-missing-upload.png');
+        $missingFile->method('getClientOriginalName')->willReturn('upload.png');
+
+        $container = $this->createAuthenticatedContainer([3]);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $response = $controller->upload(new Request(
+            [],
+            ['pmf-csrf-token' => $token, 'record_id' => 5, 'record_lang' => 'en'],
+            [],
+            [],
+            ['filesToUpload' => [$missingFile]],
+        ));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        // The scope check passes; the save itself still fails because the file is missing.
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
+    }
+
+    private function seedAttachment(int $attachmentId, int $recordId, string $recordLang): void
+    {
+        self::assertNotFalse($this->dbHandle->query(sprintf(
+            "INSERT INTO faqattachment (id, record_id, record_lang, real_hash, virtual_hash, filename, filesize,"
+            . " encrypted, mime_type) VALUES (%d, %d, '%s', '%s', '%s', 'file.txt', 18, 0, 'text/plain')",
+            $attachmentId,
+            $recordId,
+            $recordLang,
+            md5('real-' . $attachmentId),
+            md5('virtual-' . $attachmentId),
+        )));
+    }
+
+    private function seedCategoryRelation(int $categoryId, int $recordId, string $recordLang): void
+    {
+        self::assertNotFalse($this->dbHandle->query(sprintf(
+            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)"
+            . " VALUES (%d, '%s', %d, '%s')",
+            $categoryId,
+            $recordLang,
+            $recordId,
+            $recordLang,
+        )));
+    }
+
+    private function countAttachments(int $attachmentId): int
+    {
+        $result = $this->dbHandle->query(sprintf('SELECT id FROM faqattachment WHERE id = %d', $attachmentId));
+
+        return $this->dbHandle->numRows($result);
+    }
+
+    private function countAttachmentsOfFaq(int $recordId, string $recordLang): int
+    {
+        $result = $this->dbHandle->query(sprintf(
+            "SELECT id FROM faqattachment WHERE record_id = %d AND record_lang = '%s'",
+            $recordId,
+            $recordLang,
+        ));
+
+        return $this->dbHandle->numRows($result);
+    }
+
+    /**
+     * @throws \Exception
+     */
     private function createValidCsrfToken(Session $session, string $page): string
     {
         Token::resetInstanceForTests();
@@ -488,22 +764,39 @@ final class AttachmentControllerTest extends TestCase
         return $token;
     }
 
-    private function createAuthenticatedContainer(): ContainerInterface
+    /**
+     * @param int[]|null $allowedCategories null grants an unrestricted right; a list restricts the
+     *                                      attachment rights to those categories, with 666 always denied
+     */
+    private function createAuthenticatedContainer(?array $allowedCategories = null): ContainerInterface
     {
+        $attachmentRights = [
+            PermissionType::ATTACHMENT_ADD->value,
+            PermissionType::ATTACHMENT_DELETE->value,
+        ];
+
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
-            ->willReturnCallback(static function (int $userId, mixed $right): bool {
-                return $userId === 42
-                && in_array(
-                    $right,
-                    [
-                        PermissionType::ATTACHMENT_ADD->value,
-                        PermissionType::ATTACHMENT_DELETE->value,
-                    ],
-                    true,
-                );
-            });
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array($right, $attachmentRights, true),
+            );
+        $permission
+            ->method('hasPermissionForCategory')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right, int $categoryId): bool => $userId === 42
+                && in_array($right, $attachmentRights, true)
+                && $categoryId !== 666 // sentinel forbidden category for tests
+                && ($allowedCategories === null || in_array($categoryId, $allowedCategories, true)),
+            );
+        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
+        $permission
+            ->method('hasPermissionForLanguage')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right, string $language): bool => $userId === 42
+                && in_array($right, $attachmentRights, true),
+            );
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;

@@ -117,10 +117,81 @@ final class AttachmentsControllerTest extends TestCase
         self::assertStringContainsString('page=2', (string) $response->getContent());
     }
 
-    private function createControllerContainer(): ContainerInterface
+    /**
+     * A restricted user only sees attachments of FAQs that lie entirely within the
+     * categories their delete right is restricted to; uncategorized FAQs stay hidden.
+     *
+     * @throws \Exception
+     */
+    public function testIndexHidesAttachmentsOutsideAllowedCategoriesForRestrictedUser(): void
+    {
+        $this->seedCategoryRelation(3, 1, 'en');
+        $this->seedCategoryRelation(666, 2, 'en');
+        $this->seedCategoryRelation(3, 4, 'en');
+        $this->seedCategoryRelation(666, 4, 'en');
+        // FAQ 3 stays uncategorized.
+
+        $collection = $this->createMock(AttachmentCollection::class);
+        $collection->method('getBreadcrumbs')->willReturn(array_slice($this->buildBreadcrumbs(), 0, 4));
+
+        $controller = new AttachmentsController($collection);
+        $controller->setContainer($this->createControllerContainer([3]));
+
+        $request = Request::create('https://localhost/admin/attachments');
+        $request->attributes->set('_route', 'admin.attachments');
+        $response = $controller->index($request);
+        $content = (string) $response->getContent();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('file1.pdf', $content);
+        self::assertStringNotContainsString('file2.pdf', $content);
+        self::assertStringNotContainsString('file3.pdf', $content);
+        self::assertStringNotContainsString('file4.pdf', $content);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexHidesAllAttachmentsWhenRestrictedUserHasNoAllowedCategory(): void
+    {
+        $this->seedCategoryRelation(3, 1, 'en');
+
+        $collection = $this->createMock(AttachmentCollection::class);
+        $collection->method('getBreadcrumbs')->willReturn(array_slice($this->buildBreadcrumbs(), 0, 2));
+
+        $controller = new AttachmentsController($collection);
+        $controller->setContainer($this->createControllerContainer([]));
+
+        $request = Request::create('https://localhost/admin/attachments');
+        $request->attributes->set('_route', 'admin.attachments');
+        $response = $controller->index($request);
+        $content = (string) $response->getContent();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringNotContainsString('file1.pdf', $content);
+        self::assertStringNotContainsString('file2.pdf', $content);
+    }
+
+    private function seedCategoryRelation(int $categoryId, int $recordId, string $recordLang): void
+    {
+        self::assertNotFalse($this->dbHandle->query(sprintf(
+            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)"
+            . " VALUES (%d, '%s', %d, '%s')",
+            $categoryId,
+            $recordLang,
+            $recordId,
+            $recordLang,
+        )));
+    }
+
+    /**
+     * @param int[]|null $allowedCategories null grants an unrestricted delete right
+     */
+    private function createControllerContainer(?array $allowedCategories = null): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
+        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -159,13 +230,15 @@ final class AttachmentsControllerTest extends TestCase
     }
 
     /**
-     * @return list<array<string, int|string>>
+     * Rows are objects, the shape the database drivers' fetchAll() returns.
+     *
+     * @return list<object>
      */
     private function buildBreadcrumbs(): array
     {
         $items = [];
         for ($id = 1; $id <= 25; $id++) {
-            $items[] = [
+            $items[] = (object) [
                 'id' => $id,
                 'filename' => 'file' . $id . '.pdf',
                 'record_lang' => 'en',

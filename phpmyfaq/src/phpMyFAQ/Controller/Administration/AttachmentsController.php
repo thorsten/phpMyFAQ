@@ -20,6 +20,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Attachment\AttachmentCollection;
+use phpMyFAQ\Category;
+use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -58,7 +60,9 @@ final class AttachmentsController extends AbstractAdministrationController
         $collection = $this->attachmentCollection;
 
         $itemsPerPage = 24;
+        /** @var list<array<string, mixed>|\stdClass> $allCrumbs */
         $allCrumbs = $collection->getBreadcrumbs();
+        $allCrumbs = $this->restrictToAllowedCategories($allCrumbs);
 
         $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
@@ -85,5 +89,73 @@ final class AttachmentsController extends AbstractAdministrationController
             'adminMsgFaqTitle' => Translation::get(key: 'ad_entry_faq_record'),
             'adminAttachmentPagination' => $pagination->render(),
         ]);
+    }
+
+    /**
+     * Keeps only the attachments whose FAQ lies entirely within the categories the user's
+     * delete right is restricted to, so the overview offers no attachment the API would
+     * then reject with a 403. Mirrors the empty-list policy of
+     * userHasPermissionForCategories(): an uncategorized FAQ is hidden from restricted users.
+     *
+     * @param list<array<string, mixed>|\stdClass> $crumbs
+     * @return list<array<string, mixed>|\stdClass>
+     * @throws \Exception
+     */
+    private function restrictToAllowedCategories(array $crumbs): array
+    {
+        $allowedCategoryIds = $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            PermissionType::ATTACHMENT_DELETE->value,
+        );
+
+        if ($allowedCategoryIds === null) {
+            return $crumbs;
+        }
+
+        if ($allowedCategoryIds === [] || $crumbs === []) {
+            return [];
+        }
+
+        $categoryRelation = new Relation(
+            $this->configuration,
+            new Category($this->configuration, [], withPermission: false),
+        );
+
+        $recordIdsByLanguage = [];
+        foreach ($crumbs as $crumb) {
+            [$language, $recordId] = self::faqOfCrumb($crumb);
+            $recordIdsByLanguage[$language][] = $recordId;
+        }
+
+        $categoryIdsByRecord = [];
+        foreach ($recordIdsByLanguage as $language => $recordIds) {
+            $categoryIdsByRecord[$language] = $categoryRelation->getCategoryIdsForRecords($recordIds, $language);
+        }
+
+        return array_values(array_filter($crumbs, static function (array|\stdClass $crumb) use (
+            $categoryIdsByRecord,
+            $allowedCategoryIds,
+        ): bool {
+            /** @var array<string, mixed>|\stdClass $crumb */
+            [$language, $recordId] = self::faqOfCrumb($crumb);
+            $faqCategoryIds = $categoryIdsByRecord[$language][$recordId] ?? [];
+
+            return $faqCategoryIds !== [] && array_diff($faqCategoryIds, $allowedCategoryIds) === [];
+        }));
+    }
+
+    /**
+     * The database drivers return rows as objects, while callers may also pass plain arrays.
+     *
+     * @param array<string, mixed>|\stdClass $crumb
+     * @return array{0: string, 1: int} the language and id of the FAQ the attachment belongs to
+     */
+    private static function faqOfCrumb(array|\stdClass $crumb): array
+    {
+        if ($crumb instanceof \stdClass) {
+            return [(string) $crumb->record_lang, (int) $crumb->record_id];
+        }
+
+        return [(string) $crumb['record_lang'], (int) $crumb['record_id']];
     }
 }

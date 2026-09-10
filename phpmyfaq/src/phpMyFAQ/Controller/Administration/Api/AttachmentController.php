@@ -23,6 +23,9 @@ use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Attachment\Filename;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
+use phpMyFAQ\Category;
+use phpMyFAQ\Category\Relation;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
@@ -33,6 +36,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class AttachmentController extends AbstractAdministrationApiController
@@ -58,6 +62,12 @@ final class AttachmentController extends AbstractAdministrationApiController
 
             $attId = (int) $attId;
             $attachment = AttachmentFactory::create($attId);
+            $this->userHasPermissionForFaq(
+                PermissionType::ATTACHMENT_DELETE,
+                $attachment->getRecordId(),
+                $attachment->getRecordLang(),
+            );
+
             if ($attachment->delete()) {
                 $this->adminLog->log($this->currentUser, AdminLogType::ATTACHMENT_DELETE->value . ':' . $attId);
 
@@ -92,6 +102,12 @@ final class AttachmentController extends AbstractAdministrationApiController
 
             $attId = (int) $attId;
             $attachment = AttachmentFactory::create($attId);
+            $this->userHasPermissionForFaq(
+                PermissionType::ATTACHMENT_DELETE,
+                $attachment->getRecordId(),
+                $attachment->getRecordLang(),
+            );
+
             $result = [
                 'success' => Translation::get(key: 'msgAdminAttachmentRefreshed'),
                 'delete' => false,
@@ -134,9 +150,11 @@ final class AttachmentController extends AbstractAdministrationApiController
         }
 
         $files = is_array($files) ? $files : [$files];
-        $uploadedFiles = [];
-        $customFileNames = $request->request->all('customFileNames');
 
+        // Validate every file and the target FAQ before anything is written, so a
+        // rejected request never leaves a partial set of attachments behind.
+        /** @var array<array-key, UploadedFile> $validatedFiles */
+        $validatedFiles = [];
         foreach ($files as $index => $file) {
             if (!$file instanceof UploadedFile) {
                 return $this->json([
@@ -152,21 +170,33 @@ final class AttachmentController extends AbstractAdministrationApiController
                 return $this->json(['error' => Translation::get(key: 'msgImageTooLarge')], Response::HTTP_BAD_REQUEST);
             }
 
-            $recordId = Filter::filterVar($request->request->get('record_id'), FILTER_VALIDATE_INT);
+            $validatedFiles[$index] = $file;
+        }
 
-            if ($recordId === null) {
-                return $this->json([
-                    'error' => Translation::get(key: 'msgNoImagesForUpload'),
-                ], Response::HTTP_BAD_REQUEST);
-            }
+        $recordId = Filter::filterVar($request->request->get('record_id'), FILTER_VALIDATE_INT);
 
+        if ($recordId === null) {
+            return $this->json([
+                'error' => Translation::get(key: 'msgNoImagesForUpload'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $recordId = (int) $recordId;
+        $recordLang = (string) Filter::filterVar(
+            $request->request->get('record_lang'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            '',
+        );
+
+        $this->userHasPermissionForFaq(PermissionType::ATTACHMENT_ADD, $recordId, $recordLang);
+
+        $uploadedFiles = [];
+        $customFileNames = $request->request->all('customFileNames');
+
+        foreach ($validatedFiles as $index => $file) {
             $attachment = AttachmentFactory::create();
-            $attachment->setRecordId((int) $recordId);
-            $attachment->setRecordLang((string) Filter::filterVar(
-                $request->request->get('record_lang'),
-                FILTER_SANITIZE_SPECIAL_CHARS,
-                '',
-            ));
+            $attachment->setRecordId($recordId);
+            $attachment->setRecordLang($recordLang);
             try {
                 $customFileName = array_key_exists($index, $customFileNames) ? $customFileNames[$index] : null;
                 $filename = Filename::compose(
@@ -199,5 +229,26 @@ final class AttachmentController extends AbstractAdministrationApiController
         }
 
         return $this->json($uploadedFiles, Response::HTTP_OK);
+    }
+
+    /**
+     * Attachments inherit the authorization scope of the FAQ they belong to: the global
+     * attachment right alone must not let a category- or language-restricted editor touch
+     * files of FAQs outside the categories assigned to their group.
+     *
+     * @throws UnauthorizedHttpException|ForbiddenException|Exception
+     */
+    private function userHasPermissionForFaq(PermissionType $permissionType, int $faqId, string $faqLanguage): void
+    {
+        $categoryRelation = new Relation(
+            $this->configuration,
+            new Category($this->configuration, [], withPermission: false),
+        );
+
+        $this->userHasPermissionForCategories(
+            $permissionType,
+            array_keys($categoryRelation->getCategories($faqId, $faqLanguage)),
+        );
+        $this->userHasPermissionForLanguage($permissionType, $faqLanguage);
     }
 }
