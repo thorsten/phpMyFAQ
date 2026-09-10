@@ -326,6 +326,11 @@ final class UserController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
+        // A non-SuperAdmin must never be able to delete a SuperAdmin account.
+        if (!$this->currentUser->isSuperAdmin() && $currentUser->isSuperAdmin()) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         if (!$currentUser->deleteUser()) {
             return $this->json(['error' => Translation::get(key: 'ad_user_error_delete')], Response::HTTP_BAD_REQUEST);
         }

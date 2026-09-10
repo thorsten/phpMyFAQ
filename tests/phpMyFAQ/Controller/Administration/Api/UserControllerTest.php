@@ -2,6 +2,8 @@
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\User\CurrentUser;
@@ -269,6 +271,49 @@ class UserControllerTest extends TestCase
         $response = $controller->addUser($request);
 
         $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testDeleteUserNonSuperAdminCannotDeleteSuperAdminAccount(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        // Acting user holds USER_DELETE but is NOT a SuperAdmin.
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'delete-user');
+
+        // Target user 7 is a SuperAdmin, but neither protected nor user id 1,
+        // so only the target-SuperAdmin guard can stop the deletion.
+        $database = $this->createStub(Sqlite3::class);
+        $database->method('query')->willReturn(true);
+        $database->method('numRows')->willReturn(1);
+        $database->method('fetchArray')->willReturn([
+            'user_id' => 7,
+            'login' => 'second_superadmin',
+            'account_status' => 'active',
+            'is_superadmin' => 1,
+            'auth_source' => 'ldap', // non-'db' source: no password row lookup needed
+        ]);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['security.permLevel', 'basic'],
+            ]);
+
+        $parent = (new ReflectionClass(UserController::class))->getParentClass();
+        $parent->getProperty('configuration')->setValue($controller, $configuration);
+
+        $request = $this->jsonRequest([
+            'userId' => 7,
+            'csrfToken' => $csrf,
+        ]);
+
+        $response = $controller->deleteUser($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        $this->assertStringContainsString('error', (string) $response->getContent());
     }
 
     /**
