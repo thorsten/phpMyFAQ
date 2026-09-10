@@ -742,6 +742,30 @@ class FaqTest extends TestCase
         $this->assertTrue($this->faq->isFaqAccessibleForUser(999999));
     }
 
+    public function testIsFaqAccessibleForUserChecksTheGivenLanguageInsteadOfTheCurrentOne(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        Language::$language = 'de';
+
+        // Child resources such as attachments carry their own record language.
+        $this->assertTrue($this->faq->isFaqAccessibleForUser($faqEntity->getId(), 'en'));
+        $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId(), 'de'));
+        $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId()));
+    }
+
+    public function testIsFaqAccessibleForUserWithGivenLanguageStillDeniesDraftFaq(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setStatus(FaqStatus::Draft);
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->grantPublicAccess($faqEntity);
+
+        $this->assertFalse($this->faq->isFaqAccessibleForUser($faqEntity->getId(), 'en'));
+    }
+
     public function testGetAllAvailableFaqsByCategoryIdSanitizesLanguageAndSorting(): void
     {
         Language::$language = "en' OR 1=1 -- ";

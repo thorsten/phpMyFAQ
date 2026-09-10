@@ -8,14 +8,17 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\PdoSqlite;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\CurrentUserSessionLookupTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -26,17 +29,20 @@ use ReflectionClass;
 #[UsesClass(File::class)]
 #[UsesClass(PdoSqlite::class)]
 #[UsesClass(Translation::class)]
+#[UsesTrait(CurrentUserSessionLookupTrait::class)]
 final class AttachmentServiceTest extends TestCase
 {
     private Configuration $configuration;
     private CurrentUser $currentUser;
     private Permission $faqPermission;
+    private Faq $faq;
 
     protected function setUp(): void
     {
         $this->configuration = $this->createMock(Configuration::class);
         $this->currentUser = $this->createMock(CurrentUser::class);
         $this->faqPermission = $this->createMock(Permission::class);
+        $this->faq = $this->createMock(Faq::class);
 
         Translation::create()
             ->setTranslationsDir(PMF_TRANSLATION_DIR)
@@ -45,9 +51,93 @@ final class AttachmentServiceTest extends TestCase
             ->setMultiByteLanguage();
     }
 
-    private function createService(): AttachmentService
+    /**
+     * The parent FAQ is visible unless a test says otherwise, so that the ACL and
+     * right checks below are exercised on their own.
+     */
+    private function createService(bool $parentFaqVisible = true): AttachmentService
     {
-        return new AttachmentService($this->configuration, $this->currentUser, $this->faqPermission);
+        $this->faq->method('isFaqAccessibleForUser')->willReturn($parentFaqVisible);
+
+        return new AttachmentService($this->configuration, $this->currentUser, $this->faqPermission, $this->faq);
+    }
+
+    /**
+     * Regression: an attachment must not be downloadable while its parent FAQ is
+     * hidden (draft, expired, or restricted). A logged-in user with the
+     * "dlattachment" right and an open per-record ACL previously received the
+     * complete file of a draft FAQ that answered with 404 on the FAQ page and API.
+     */
+    public function testCanDownloadAttachmentDeniedForUserWithRightWhenParentFaqIsNotVisible(): void
+    {
+        $this->configuration->method('get')->willReturn(false);
+
+        $this->currentUser->perm = $this->createBasicPermission([
+            ['right_id' => 36, 'name' => 'dlattachment'],
+        ], [36]);
+        $this->currentUser->method('isLoggedIn')->willReturn(true);
+        $this->currentUser->method('getUserId')->willReturn(42);
+
+        $attachment = $this->createMock(AbstractAttachment::class);
+        $attachment->method('getRecordId')->willReturn(2);
+        $attachment->method('getRecordLang')->willReturn('en');
+
+        $this->faqPermission->method('get')->willReturn([-1]);
+
+        $service = $this->createService(parentFaqVisible: false);
+
+        self::assertFalse($service->canDownloadAttachment($attachment));
+    }
+
+    /**
+     * records.allowDownloadsForGuests must not expose attachments of hidden FAQs either.
+     */
+    public function testCanDownloadAttachmentDeniedForGuestWhenParentFaqIsNotVisible(): void
+    {
+        $this->configuration->method('get')->willReturn(true);
+
+        $this->currentUser->perm = $this->createBasicPermission([], []);
+        $this->currentUser->method('isLoggedIn')->willReturn(false);
+        $this->currentUser->method('getUserId')->willReturn(-1);
+
+        $attachment = $this->createMock(AbstractAttachment::class);
+        $attachment->method('getRecordId')->willReturn(2);
+        $attachment->method('getRecordLang')->willReturn('en');
+
+        $this->faqPermission->method('get')->willReturn([-1]);
+
+        $service = $this->createService(parentFaqVisible: false);
+
+        self::assertFalse($service->canDownloadAttachment($attachment));
+    }
+
+    /**
+     * The parent check must run as the requesting user and against the translation
+     * the attachment belongs to, not against the request language.
+     */
+    public function testCanDownloadAttachmentChecksParentFaqAsCurrentUserInAttachmentLanguage(): void
+    {
+        $this->configuration->method('get')->willReturn(false);
+
+        $this->currentUser->perm = $this->createBasicPermission([
+            ['right_id' => 36, 'name' => 'dlattachment'],
+        ], [36]);
+        $this->currentUser->method('isLoggedIn')->willReturn(true);
+        $this->currentUser->method('getUserId')->willReturn(42);
+
+        $attachment = $this->createMock(AbstractAttachment::class);
+        $attachment->method('getRecordId')->willReturn(7);
+        $attachment->method('getRecordLang')->willReturn('de');
+
+        $this->faqPermission->method('get')->willReturn([-1]);
+
+        $this->faq->expects($this->once())->method('setUser')->with(42);
+        $this->faq->expects($this->once())->method('setGroups')->with([-1]);
+        $this->faq->expects($this->once())->method('isFaqAccessibleForUser')->with(7, 'de')->willReturn(true);
+
+        $service = new AttachmentService($this->configuration, $this->currentUser, $this->faqPermission, $this->faq);
+
+        self::assertTrue($service->canDownloadAttachment($attachment));
     }
 
     public function testCanDownloadAttachmentAllowsGuestDownloadOnAPublicRecord(): void

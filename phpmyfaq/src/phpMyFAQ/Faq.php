@@ -633,8 +633,12 @@ class Faq
      * back empty. A record that exists but has no visible translation in the
      * current language is denied, so that a mismatched Accept-Language cannot
      * be used to bypass the published/date window/ACL checks.
+     *
+     * Child resources that carry their own record language (e.g. attachments)
+     * pass it as $faqLang so the check is made against the translation they
+     * actually belong to instead of the request language.
      */
-    public function isFaqAccessibleForUser(int $faqId): bool
+    public function isFaqAccessibleForUser(int $faqId, ?string $faqLang = null): bool
     {
         if (!$this->faqRepository->exists($faqId)) {
             return true;
@@ -642,7 +646,7 @@ class Faq
 
         return $this->faqRepository->isFaqVisibleForUser(
             $faqId,
-            $this->getCurrentLanguage(),
+            $faqLang === null || $faqLang === '' ? $this->getCurrentLanguage() : strtolower($faqLang),
             $this->user,
             $this->groups,
             $this->groupSupport,

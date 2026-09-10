@@ -10,6 +10,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\AttachmentStorageType;
+use phpMyFAQ\Enums\FaqStatus;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
@@ -40,6 +42,9 @@ final class AttachmentControllerTest extends TestCase
 
     /** @var list<int> */
     private array $createdAttachmentIds = [];
+
+    /** @var list<int> */
+    private array $createdFaqIds = [];
 
     protected function setUp(): void
     {
@@ -76,6 +81,12 @@ final class AttachmentControllerTest extends TestCase
     {
         foreach ($this->createdAttachmentIds as $attachmentId) {
             $this->dbHandle->query(sprintf('DELETE FROM faqattachment WHERE id = %d', $attachmentId));
+        }
+
+        foreach ($this->createdFaqIds as $faqId) {
+            $this->dbHandle->query(sprintf('DELETE FROM faqdata WHERE id = %d', $faqId));
+            $this->dbHandle->query(sprintf('DELETE FROM faqdata_user WHERE record_id = %d', $faqId));
+            $this->dbHandle->query(sprintf('DELETE FROM faqdata_group WHERE record_id = %d', $faqId));
         }
 
         foreach (array_reverse($this->createdFiles) as $path) {
@@ -181,6 +192,7 @@ final class AttachmentControllerTest extends TestCase
             $this->configuration,
             new CurrentUser($this->configuration),
             new Permission($this->configuration),
+            new Faq($this->configuration),
         );
         self::assertTrue((bool) $this->configuration->get('records.allowDownloadsForGuests'));
         $attachment = $attachmentService->getAttachment($attachmentId);
@@ -211,6 +223,7 @@ final class AttachmentControllerTest extends TestCase
             $this->configuration,
             new CurrentUser($this->configuration),
             new Permission($this->configuration),
+            new Faq($this->configuration),
         );
         self::assertTrue((bool) $this->configuration->get('records.allowDownloadsForGuests'));
         $attachment = $attachmentService->getAttachment($attachmentId);
@@ -231,6 +244,58 @@ final class AttachmentControllerTest extends TestCase
     }
 
     /**
+     * Regression: an attachment of a draft FAQ was downloadable although the FAQ
+     * itself answered with 404 - the download path never looked at the parent
+     * record's publication state. The per-record ACL is wide open here, so the
+     * only thing standing between the requester and the file is the draft status.
+     *
+     * @throws \Exception
+     */
+    public function testIndexDeniesDownloadWhenParentFaqIsDraft(): void
+    {
+        $faqId = $this->seedFaq(900010, FaqStatus::Draft);
+        $attachmentId = $this->seedAttachment(900004, 'canary.txt', 'text/plain', 'PMF-DRAFT-CANARY', $faqId);
+        $this->enableGuestDownloads();
+
+        $controller = $this->createController();
+
+        ob_start();
+        $response = $controller->index(new Request([], [], ['attachmentId' => (string) $attachmentId]));
+        $streamedOutput = (string) ob_get_clean();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('', $streamedOutput);
+        self::assertStringContainsString(
+            Translation::get(key: 'msgAttachmentInvalid'),
+            (string) $response->getContent(),
+        );
+        self::assertStringNotContainsString('PMF-DRAFT-CANARY', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexStreamsDownloadWhenParentFaqIsPublished(): void
+    {
+        $faqId = $this->seedFaq(900011, FaqStatus::Published);
+        $attachmentId = $this->seedAttachment(900005, 'public.txt', 'text/plain', 'PMF-PUBLISHED-CANARY', $faqId);
+        $this->enableGuestDownloads();
+
+        $controller = $this->createController();
+
+        ob_start();
+        $response = $controller->index(new Request([], [], ['attachmentId' => (string) $attachmentId]));
+        $streamedOutput = (string) ob_get_clean();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('PMF-PUBLISHED-CANARY', $streamedOutput);
+        self::assertStringNotContainsString(
+            Translation::get(key: 'msgAttachmentInvalid'),
+            (string) $response->getContent(),
+        );
+    }
+
+    /**
      * @throws \Exception
      */
     public function testDownloadResponseSetsNosniffHeader(): void
@@ -241,6 +306,7 @@ final class AttachmentControllerTest extends TestCase
             $this->configuration,
             new CurrentUser($this->configuration),
             new Permission($this->configuration),
+            new Faq($this->configuration),
         );
         $attachment = $attachmentService->getAttachment($attachmentId);
 
@@ -255,7 +321,7 @@ final class AttachmentControllerTest extends TestCase
     private function createController(): AttachmentController
     {
         $this->enableGuestDownloads();
-        $controller = new AttachmentController(new Permission($this->configuration));
+        $controller = new AttachmentController(new Permission($this->configuration), new Faq($this->configuration));
 
         $configurationProperty = new \ReflectionProperty($controller, 'configuration');
         $configurationProperty->setValue($controller, $this->configuration);
@@ -355,8 +421,37 @@ final class AttachmentControllerTest extends TestCase
         $defaultKeyProperty->setValue(null, $this->previousAttachmentDefaultKey);
     }
 
-    private function seedAttachment(int $attachmentId, string $filename, string $mimeType, string $contents): int
+    /**
+     * Inserts a FAQ record in English with an "open to all users and groups" ACL,
+     * so that only the given publication status decides its visibility.
+     */
+    private function seedFaq(int $faqId, FaqStatus $faqStatus): int
     {
+        $this->createdFaqIds[] = $faqId;
+
+        $query = sprintf(
+            "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
+            VALUES (%d, 'en', %d, 0, '%s', 0, '', 'Question', 'Answer', 'Author', 'author@example.org', 'n', '%s', '00000000000000', '99991231235959', '%s', '', 0)",
+            $faqId,
+            $faqId + 1000,
+            $this->dbHandle->escape($faqStatus->value),
+            date('YmdHis'),
+            date('Y-m-d H:i:s'),
+        );
+        $this->dbHandle->query($query);
+        $this->dbHandle->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)', $faqId));
+        $this->dbHandle->query(sprintf('INSERT INTO faqdata_group (record_id, group_id) VALUES (%d, -1)', $faqId));
+
+        return $faqId;
+    }
+
+    private function seedAttachment(
+        int $attachmentId,
+        string $filename,
+        string $mimeType,
+        string $contents,
+        int $recordId = 1,
+    ): int {
         $realHash = md5($contents);
         $virtualHash = $realHash;
         $storagePath = $this->buildStoragePath($realHash);
@@ -376,7 +471,7 @@ final class AttachmentControllerTest extends TestCase
             "INSERT INTO faqattachment (id, record_id, record_lang, real_hash, virtual_hash, password_hash, filename, filesize, encrypted, mime_type)
             VALUES (%d, %d, 'en', '%s', '%s', '', '%s', %d, 0, '%s')",
             $attachmentId,
-            1,
+            $recordId,
             $this->dbHandle->escape($realHash),
             $this->dbHandle->escape($virtualHash),
             $this->dbHandle->escape($filename),

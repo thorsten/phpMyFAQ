@@ -159,6 +159,12 @@ class AbstractAttachmentTest extends TestCase
         $property = $reflection->getProperty('recordLang');
 
         $this->assertEquals('fr', $property->getValue($this->attachment));
+        $this->assertSame('fr', $this->attachment->getRecordLang());
+    }
+
+    public function testGetRecordLangDefaultsToEmptyString(): void
+    {
+        $this->assertSame('', $this->attachment->getRecordLang());
     }
 
     public function testSetKeyWithEncryption(): void

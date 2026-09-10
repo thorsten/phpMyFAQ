@@ -958,6 +958,7 @@ return static function (ContainerConfigurator $container): void {
     // Batch 4: Controller/Frontend/
     $services->set(AttachmentController::class, AttachmentController::class)->args([
         service('phpmyfaq.faq.permission'),
+        service('phpmyfaq.faq'),
     ]);
     $services->set(FrontendAuthenticationController::class, FrontendAuthenticationController::class)->args([
         service('phpmyfaq.user.session'),

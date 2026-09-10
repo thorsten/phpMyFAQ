@@ -24,6 +24,7 @@ use phpMyFAQ\Attachment\AbstractAttachment;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentService;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +36,7 @@ final class AttachmentController extends AbstractFrontController
 {
     public function __construct(
         private readonly Permission $faqPermission,
+        private readonly Faq $faq,
     ) {
         parent::__construct();
     }
@@ -55,7 +57,12 @@ final class AttachmentController extends AbstractFrontController
         $attachmentErrors = [];
         $attachment = null;
 
-        $attachmentService = new AttachmentService($this->configuration, $this->currentUser, $this->faqPermission);
+        $attachmentService = new AttachmentService(
+            $this->configuration,
+            $this->currentUser,
+            $this->faqPermission,
+            $this->faq,
+        );
 
         if ($id === null) {
             $attachmentErrors[] = $attachmentService->getGenericErrorMessage();

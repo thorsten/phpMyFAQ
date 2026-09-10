@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Attachment;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Translation;
@@ -34,6 +35,7 @@ final readonly class AttachmentService
         private Configuration $configuration,
         private CurrentUser $currentUser,
         private Permission $faqPermission,
+        private Faq $faq,
     ) {
     }
 
@@ -50,24 +52,46 @@ final readonly class AttachmentService
     /**
      * Checks if the current user has permission to download an attachment.
      *
-     * The per-record ACL (group and user permission) is always enforced first.
+     * The parent FAQ record must be visible to the requester (published, within
+     * its date window, and permitted by its ACL) — an attachment must never be
+     * retrievable while its parent FAQ answers with 404. The per-record ACL
+     * (group and user permission) is then enforced explicitly as well.
      * records.allowDownloadsForGuests only ever waives the "dlattachment" right
      * requirement for anonymous visitors — it must never bypass the ACL itself,
      * and it must never affect logged-in users, who always need their own right.
      */
     public function canDownloadAttachment(AbstractAttachment $attachment): bool
     {
+        if (!$this->isParentFaqVisible($attachment)) {
+            return false;
+        }
+
         if (!$this->checkGroupPermission($attachment) || !$this->checkUserPermission($attachment)) {
             return false;
         }
 
         if (!$this->currentUser->isLoggedIn()) {
-            return (bool) $this->configuration->get('records.allowDownloadsForGuests');
+            return $this->configuration->get('records.allowDownloadsForGuests') === true;
         }
 
         $userRights = $this->getUserRights();
 
         return $userRights['dlattachment'] ?? false;
+    }
+
+    /**
+     * Checks whether the FAQ record the attachment belongs to is visible to the
+     * current user, applying the same publication-state, date window and ACL
+     * rules as the FAQ page and the public API.
+     */
+    private function isParentFaqVisible(AbstractAttachment $attachment): bool
+    {
+        [$userId, $groups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $this->faq->setUser($userId);
+        $this->faq->setGroups($groups);
+
+        return $this->faq->isFaqAccessibleForUser($attachment->getRecordId(), $attachment->getRecordLang());
     }
 
     /**
