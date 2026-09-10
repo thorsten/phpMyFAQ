@@ -111,9 +111,10 @@ class UpdateTest extends TestCase
     {
         $queries = $this->collectQueriesForPostgres('applyUpdates405', '4.0.4');
 
-        $alterStatements = array_values(
-            array_filter($queries, static fn(string $query): bool => str_contains($query, 'input_label')),
-        );
+        $alterStatements = array_values(array_filter($queries, static fn(string $query): bool => str_contains(
+            $query,
+            'input_label',
+        )));
 
         $this->assertNotEmpty($alterStatements, 'The faqforms migration should emit statements.');
         $this->assertStringContainsString(
@@ -143,10 +144,7 @@ class UpdateTest extends TestCase
             "ALTER TABLE faq_faqseo ALTER COLUMN id SET DEFAULT nextval('faq_faqseo_id_seq')",
             $queries,
         );
-        $this->assertContains(
-            "SELECT setval('faq_faqseo_id_seq', (SELECT MAX(id) FROM faq_faqseo));",
-            $queries,
-        );
+        $this->assertContains("SELECT setval('faq_faqseo_id_seq', (SELECT MAX(id) FROM faq_faqseo));", $queries);
     }
 
     /**
@@ -220,16 +218,32 @@ class UpdateTest extends TestCase
         string $prefix = '',
         ?Update $update = null,
     ): array {
+        return $this->collectQueriesFor('pgsql', $method, $fromVersion, $prefix, $update);
+    }
+
+    /**
+     * Invokes a version-specific update step for the given database type and
+     * returns the SQL it queued, without touching a real database.
+     *
+     * @return string[]
+     */
+    private function collectQueriesFor(
+        string $databaseType,
+        string $method,
+        string $fromVersion,
+        string $prefix = '',
+        ?Update $update = null,
+    ): array {
         $update ??= $this->update;
 
-        $databaseType = new \ReflectionProperty(Database::class, 'dbType');
+        $databaseTypeProperty = new \ReflectionProperty(Database::class, 'dbType');
         $tablePrefix = new \ReflectionProperty(Database::class, 'tablePrefix');
 
-        $hadType = $databaseType->isInitialized();
-        $previousType = $hadType ? $databaseType->getValue() : null;
+        $hadType = $databaseTypeProperty->isInitialized();
+        $previousType = $hadType ? $databaseTypeProperty->getValue() : null;
         $previousPrefix = $tablePrefix->getValue();
 
-        $databaseType->setValue(null, 'pgsql');
+        $databaseTypeProperty->setValue(null, $databaseType);
         $tablePrefix->setValue(null, $prefix);
 
         try {
@@ -242,7 +256,7 @@ class UpdateTest extends TestCase
         } finally {
             // Database keeps this state statically, so leave it exactly as found.
             if ($hadType) {
-                $databaseType->setValue(null, $previousType);
+                $databaseTypeProperty->setValue(null, $previousType);
             }
 
             $tablePrefix->setValue(null, $previousPrefix);
@@ -262,7 +276,9 @@ class UpdateTest extends TestCase
         $this->assertTrue($permission->renameRight('add_faq', 'addfaq'));
 
         $this->update->setVersion('4.1.7');
-        (new \ReflectionClass($this->update))->getMethod('applyUpdates418')->invoke($this->update);
+        (new \ReflectionClass($this->update))
+            ->getMethod('applyUpdates418')
+            ->invoke($this->update);
 
         $this->assertSame(0, $permission->getRightId('addfaq'));
         $this->assertGreaterThan(0, $permission->getRightId('add_faq'));
@@ -275,7 +291,9 @@ class UpdateTest extends TestCase
         $this->assertGreaterThan(0, $rightId);
 
         $this->update->setVersion('4.1.7');
-        (new \ReflectionClass($this->update))->getMethod('applyUpdates418')->invoke($this->update);
+        (new \ReflectionClass($this->update))
+            ->getMethod('applyUpdates418')
+            ->invoke($this->update);
 
         $this->assertSame($rightId, $permission->getRightId('add_faq'));
     }
@@ -307,6 +325,48 @@ class UpdateTest extends TestCase
                 'The config_value widening must not wait for the final query batch.',
             );
         }
+    }
+
+    /**
+     * faqvisits.visits was created as SMALLINT before v3.2.0 and the fix for #2124
+     * only changed the CREATE TABLE statement, so upgraded installations kept a
+     * counter that is capped at 32767 (#4624).
+     */
+    public function testApplyUpdates419WidensVisitsColumn(): void
+    {
+        $expected = [
+            'mysqli' => 'ALTER TABLE faq_faqvisits MODIFY visits INT(11) NOT NULL',
+            'pdo_mysql' => 'ALTER TABLE faq_faqvisits MODIFY visits INT(11) NOT NULL',
+            'pgsql' => 'ALTER TABLE faq_faqvisits ALTER COLUMN visits TYPE INTEGER',
+            'pdo_pgsql' => 'ALTER TABLE faq_faqvisits ALTER COLUMN visits TYPE INTEGER',
+            'sqlsrv' => 'ALTER TABLE faq_faqvisits ALTER COLUMN visits INTEGER NOT NULL',
+            'pdo_sqlsrv' => 'ALTER TABLE faq_faqvisits ALTER COLUMN visits INTEGER NOT NULL',
+        ];
+
+        foreach ($expected as $databaseType => $statement) {
+            $update = new Update(new System(), $this->createMock(Configuration::class));
+            $queries = $this->collectQueriesFor($databaseType, 'applyUpdates419', '4.1.8', 'faq_', $update);
+
+            $this->assertSame([$statement], $queries, sprintf('Unexpected queries for %s', $databaseType));
+        }
+    }
+
+    public function testApplyUpdates419SkipsSqliteBecauseSmallintHasNoRangeLimit(): void
+    {
+        foreach (['sqlite3', 'pdo_sqlite'] as $databaseType) {
+            $update = new Update(new System(), $this->createMock(Configuration::class));
+            $queries = $this->collectQueriesFor($databaseType, 'applyUpdates419', '4.1.8', '', $update);
+
+            $this->assertSame([], $queries, sprintf('SQLite must not be altered (%s)', $databaseType));
+        }
+    }
+
+    public function testApplyUpdates419IsSkippedForAlreadyMigratedInstallations(): void
+    {
+        $update = new Update(new System(), $this->createMock(Configuration::class));
+        $queries = $this->collectQueriesFor('mysqli', 'applyUpdates419', '4.1.9', '', $update);
+
+        $this->assertSame([], $queries);
     }
 
     public function testSetDryRun()

@@ -191,6 +191,7 @@ class Update extends AbstractSetup
         $this->applyUpdates410Alpha3();
         $this->applyUpdates413();
         $this->applyUpdates418();
+        $this->applyUpdates419();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -1330,6 +1331,40 @@ class Update extends AbstractSetup
             $user = new User($this->configuration);
             if ($user->perm->getRightId(PermissionType::FAQ_ADD->value) === 0) {
                 $user->perm->renameRight('addfaq', PermissionType::FAQ_ADD->value);
+            }
+        }
+    }
+
+    private function applyUpdates419(): void
+    {
+        if (version_compare($this->version, '4.1.9', '<')) {
+            // faqvisits.visits was created as SMALLINT before v3.2.0, and the fix for #2124
+            // only changed the CREATE TABLE statement, so upgraded installations still
+            // have a counter that is capped at 32767 (see #4624)
+            $tablePrefix = Database::getTablePrefix();
+            switch (Database::getType()) {
+                case 'mysqli':
+                case 'pdo_mysql':
+                    $this->queries[] = sprintf('ALTER TABLE %sfaqvisits MODIFY visits INT(11) NOT NULL', $tablePrefix);
+                    break;
+                case 'pgsql':
+                case 'pdo_pgsql':
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaqvisits ALTER COLUMN visits TYPE INTEGER',
+                        $tablePrefix,
+                    );
+                    break;
+                case 'sqlsrv':
+                case 'pdo_sqlsrv':
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaqvisits ALTER COLUMN visits INTEGER NOT NULL',
+                        $tablePrefix,
+                    );
+                    break;
+                default:
+                    // SQLite: SMALLINT only sets INTEGER affinity without a range limit,
+                    // so there is nothing to migrate
+                    break;
             }
         }
     }
