@@ -96,7 +96,7 @@
     "oxlint": "1.78.0",
     "postcss": "8.5.26",
     "sass": "1.102.0",
-    "stylelint": "^17.14.1",
+    "stylelint": "^17.15.0",
     "stylelint-config-standard-scss": "^17.0.0",
     "typescript": "7.0.2",
     "vite": "8.2.1",
