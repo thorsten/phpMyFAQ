@@ -129,7 +129,8 @@ final class OpenQuestionController extends AbstractApiController
     public function list(?Request $request = null): JsonResponse
     {
         $request ??= Request::createFromGlobals();
-        $onlyPublic = (bool) $this->configuration->get('api.onlyPublicQuestions');
+        // The flag restricts the API to public questions, so "show all" is its inverse.
+        $showAll = !(bool) $this->configuration->get('api.onlyPublicQuestions');
 
         // Get pagination and sorting parameters
         $pagination = $this->getPaginationRequest($request);
@@ -151,7 +152,7 @@ final class OpenQuestionController extends AbstractApiController
             'language' => $questionEntity->getLanguage(),
             'answerId' => $questionEntity->getAnswerId(),
             'isVisible' => $questionEntity->isVisible(),
-        ], $this->question->getAll($onlyPublic));
+        ], $this->question->getAll(showAll: $showAll));
         $total = count($allQuestions);
 
         // Apply sorting if needed

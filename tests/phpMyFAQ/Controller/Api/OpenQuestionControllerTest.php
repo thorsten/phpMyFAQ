@@ -135,7 +135,7 @@ class OpenQuestionControllerTest extends TestCase
         $question
             ->expects($this->once())
             ->method('getAll')
-            ->with(true)
+            ->with(false)
             ->willReturn([
                 self::createQuestionEntity(1, 'Alice', '20240101', 5),
                 self::createQuestionEntity(3, 'Charlie', '20240103', 3),
@@ -161,6 +161,28 @@ class OpenQuestionControllerTest extends TestCase
         $this->assertSame('id', $data['meta']['sorting']['field']);
         $this->assertSame('desc', $data['meta']['sorting']['order']);
         $this->assertSame(3, $data['meta']['pagination']['total']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testListShowsAllQuestionsWhenOnlyPublicFlagIsDisabled(): void
+    {
+        $question = $this->createMock(Question::class);
+        $question
+            ->expects($this->once())
+            ->method('getAll')
+            ->with(true)
+            ->willReturn([self::createQuestionEntity(1, 'Alice', '20240101', 5)]);
+
+        $controller = new OpenQuestionController($question);
+        $this->configuration->set('api.onlyPublicQuestions', false);
+
+        $response = $controller->list(Request::create('/api/v4.0/open-questions', 'GET'));
+
+        $data = json_decode((string) $response->getContent(), true);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertCount(1, $data['data']);
     }
 
     private static function createQuestionEntity(
