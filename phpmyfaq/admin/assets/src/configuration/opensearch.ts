@@ -91,10 +91,12 @@ export const handleOpenSearch = async (): Promise<void> => {
       element.addEventListener('click', async (event: Event): Promise<void> => {
         event.preventDefault();
 
-        const action = (event.target as HTMLButtonElement).getAttribute('data-action') as string;
+        const button = (event.target as HTMLElement).closest('button') as HTMLButtonElement;
+        const action = button.getAttribute('data-action') as string;
+        const csrfToken = button.getAttribute('data-pmf-csrf-token') as string;
 
         try {
-          const response = (await fetchOpenSearchAction(action)) as unknown as Response;
+          const response = (await fetchOpenSearchAction(action, csrfToken)) as unknown as Response;
 
           if (typeof response.success !== 'undefined') {
             pushNotification(response.success);

@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Session\Token;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -46,6 +47,7 @@ final class ElasticsearchController extends AbstractAdministrationController
         return $this->render('@admin/configuration/elasticsearch.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
+            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('elasticsearch'),
         ]);
     }
 }

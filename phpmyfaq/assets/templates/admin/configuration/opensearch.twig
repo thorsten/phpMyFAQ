@@ -8,16 +8,16 @@
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
-        <button class="btn btn-outline-primary pmf-opensearch" data-action="create">
+        <button class="btn btn-outline-primary pmf-opensearch" data-action="create" data-pmf-csrf-token="{{ csrfToken }}">
           <i aria-hidden="true" class="bi bi-database-fill-add"></i>
           {{ 'msgAdminOpenSearchCreateIndex' | translate }}
         </button>
 
-        <button class="btn btn-outline-success pmf-opensearch" data-action="import">
+        <button class="btn btn-outline-success pmf-opensearch" data-action="import" data-pmf-csrf-token="{{ csrfToken }}">
           <i aria-hidden="true" class="bi bi-database-fill-gear"></i> {{ 'msgAdminOpenSearchImportIndex' | translate }}
         </button>
 
-        <button class="btn btn-outline-danger pmf-opensearch" data-action="drop">
+        <button class="btn btn-outline-danger pmf-opensearch" data-action="drop" data-pmf-csrf-token="{{ csrfToken }}">
           <i aria-hidden="true" class="bi bi-database-slash"></i> {{ 'msgAdminOpenSearchDropIndex' | translate }}
         </button>
       </div>

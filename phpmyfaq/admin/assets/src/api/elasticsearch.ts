@@ -15,7 +15,7 @@
 
 import { ElasticsearchResponse, Response } from '../interfaces';
 
-export const fetchElasticsearchAction = async (action: string): Promise<Response> => {
+export const fetchElasticsearchAction = async (action: string, csrfToken: string): Promise<Response> => {
   const response = await fetch(`./api/elasticsearch/${action}`, {
     method: 'POST',
     cache: 'no-cache',
@@ -24,6 +24,7 @@ export const fetchElasticsearchAction = async (action: string): Promise<Response
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
+    body: JSON.stringify({ csrf: csrfToken }),
   });
 
   return await response.json();
