@@ -1563,4 +1563,40 @@ class FaqControllerTest extends TestCase
             $payload,
         );
     }
+
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testListPagesAndSortsInTheDatabaseInsteadOfSlicingEveryFaq(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [['id' => 11, 'title' => 'Zulu'], ['id' => 12, 'title' => 'Yankee']];
+        $faq
+            ->expects($this->once())
+            ->method('getAllFaqs')
+            ->with(
+                Faq::SORTING_TYPE_FAQTITLE,
+                $this->callback(static fn(array $condition): bool => $condition['lang'] === 'en'),
+                'DESC',
+                10,
+                10,
+            );
+        $faq->expects($this->once())->method('countAllFaqs')->willReturn(37);
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
+        );
+        $response = $controller->list(new Request(['sort' => 'title', 'order' => 'desc', 'page' => 2, 'per_page' => 10]));
+        $payload = json_decode((string) $response->getContent(), true);
+
+        $this->assertSame([11, 12], array_column($payload['data'], 'id'));
+        $this->assertSame(37, $payload['meta']['pagination']['total']);
+        $this->assertSame(4, $payload['meta']['pagination']['total_pages']);
+        $this->assertSame(2, $payload['meta']['pagination']['current_page']);
+    }
 }

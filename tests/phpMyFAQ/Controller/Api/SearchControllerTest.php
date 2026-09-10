@@ -282,4 +282,40 @@ class SearchControllerTest extends TestCase
         $this->assertStringContainsString('/faq/1/0/en/', $payload['data'][0]['link']);
         $this->assertSame(1, $payload['meta']['pagination']['total']);
     }
+
+    public function testSearchShapesOnlyTheRequestedPageOfHits(): void
+    {
+        $hits = [];
+        for ($id = 1; $id <= 30; ++$id) {
+            // Grant the anonymous user and group access, whichever permission level the test database uses.
+            $this->dbHandle->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)', $id));
+            $this->dbHandle->query(sprintf('INSERT INTO faqdata_group (record_id, group_id) VALUES (%d, -1)', $id));
+
+            $hit = new stdClass();
+            $hit->id = $id;
+            $hit->lang = 'en';
+            $hit->category_id = 1;
+            $hit->question = 'Question ' . $id;
+            $hit->answer = '<p>Answer ' . $id . '</p>';
+            $hits[] = $hit;
+        }
+
+        $search = $this->createMock(Search::class);
+        $search->method('search')->willReturn($hits);
+
+        $request = new Request(['q' => 'question', 'page' => 2, 'per_page' => 10]);
+        $response = (new SearchController($search))->search($request);
+        $payload = json_decode((string) $response->getContent(), true);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertSame(range(11, 20), array_column($payload['data'], 'id'));
+        $this->assertSame('Answer 11', $payload['data'][0]['answer']);
+        $this->assertStringContainsString('/faq/1/11/en/question-11', $payload['data'][0]['link']);
+        $this->assertSame(30, $payload['meta']['pagination']['total']);
+
+        // Hits outside the requested page are left untouched: no tag stripping, no link building.
+        $this->assertSame('<p>Answer 1</p>', $hits[0]->answer);
+        $this->assertFalse(property_exists($hits[0], 'link'));
+        $this->assertSame('<p>Answer 30</p>', $hits[29]->answer);
+    }
 }

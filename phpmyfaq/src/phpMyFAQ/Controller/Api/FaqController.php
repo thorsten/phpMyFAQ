@@ -585,36 +585,27 @@ final class FaqController extends AbstractApiController
             $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
             $ignoreOrphanedFaqs = (bool) $this->configuration->get('api.ignoreOrphanedFaqs');
 
-            // Get all FAQs (this populates $this->faq->faqRecords)
+            $condition = [
+                'lang' => $this->configuration->getLanguage()->getLanguage(),
+                'fcr.category_id' => $ignoreOrphanedFaqs ? 'IS NOT NULL' : null,
+                'fd.status' => $onlyActive ? FaqStatus::Published->value : null,
+            ];
+
+            // Sorting and paging happen in the database: loading every FAQ into PHP only to
+            // slice one page out of it would let a single unauthenticated request exhaust
+            // memory and CPU on a large installation.
             $this->faq->getAllFaqs(
-                Faq::SORTING_TYPE_CATID_FAQID,
-                [
-                    'lang' => $this->configuration->getLanguage()->getLanguage(),
-                    'fcr.category_id' => $ignoreOrphanedFaqs ? 'IS NOT NULL' : null,
-                    'fd.status' => $onlyActive ? FaqStatus::Published->value : null,
-                ],
+                $this->sortTypeForField($sort->getField()),
+                $condition,
                 $sort->getOrderSql(),
+                $pagination->limit,
+                $pagination->offset,
             );
-
-            $allFaqs = $this->faq->faqRecords;
-            $total = is_countable($allFaqs) ? count($allFaqs) : 0;
-
-            if ($sort->getField() && $sort->getField() !== 'id') {
-                usort($allFaqs, static function (array $a, array $b) use ($sort): int {
-                    $field = (string) $sort->getField();
-                    $aVal = (string) ($a[$field] ?? '');
-                    $bVal = (string) ($b[$field] ?? '');
-                    $result = $aVal <=> $bVal;
-                    return $sort->getOrderSql() === 'DESC' ? -$result : $result;
-                });
-            }
-
-            $result = array_slice($allFaqs, $pagination->offset, $pagination->limit);
 
             return $this->paginatedResponse(
                 $request,
-                data: array_values($result),
-                total: $total,
+                data: array_values($this->faq->faqRecords),
+                total: $this->faq->countAllFaqs($condition),
                 pagination: $pagination,
                 options: new PaginatedResponseOptions(sort: $sort),
             );
@@ -996,5 +987,19 @@ final class FaqController extends AbstractApiController
             $this->session->set(name: 'lang', value: Language::$language);
             $this->configuration->setLanguage($this->language);
         }
+    }
+
+    /**
+     * Maps a validated API sort field to the sorting the FAQ facade applies in SQL.
+     */
+    private function sortTypeForField(?string $field): int
+    {
+        return match ($field) {
+            'title' => Faq::SORTING_TYPE_FAQTITLE,
+            'author' => Faq::SORTING_TYPE_AUTHOR,
+            'updated' => Faq::SORTING_TYPE_UPDATED,
+            'created' => Faq::SORTING_TYPE_CREATED,
+            default => Faq::SORTING_TYPE_CATID_FAQID,
+        };
     }
 }

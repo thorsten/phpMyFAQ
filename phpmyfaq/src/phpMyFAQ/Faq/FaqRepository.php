@@ -730,15 +730,14 @@ final class FaqRepository implements FaqRepositoryInterface
         int $userId,
         array $groups,
         bool $groupSupport,
+        int $limit = 0,
+        int $offset = 0,
     ): array {
-        $where = $this->buildConditionWhereClause($condition);
-
         // prevents multiple display of FAQ in case it is tagged under multiple groups.
         $groupBy =
             ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.status,fd.sticky,fd.keywords,'
             . 'fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,'
             . 'fd.date_start,fd.date_end,fd.sticky,fd.created,fd.notes,fd.lang ';
-        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             '
             SELECT
@@ -761,6 +760,46 @@ final class FaqRepository implements FaqRepositoryInterface
                 fd.sticky AS sticky,
                 fd.created AS created,
                 fd.notes AS notes
+            %s
+            %s
+            %s',
+            $this->buildAllFaqsFromClause($condition, $userId, $groups, $groupSupport),
+            $groupBy,
+            $orderBy,
+        );
+
+        // The limit and offset are rendered by the database driver in its own dialect.
+        return $this->fetchAllRows($this->configuration->getDb()->query($query, $offset, $limit));
+    }
+
+    public function countAllFaqs(?array $condition, int $userId, array $groups, bool $groupSupport): int
+    {
+        // Counts the same rows fetchAllFaqs() returns: one per FAQ translation and category,
+        // whatever the number of matching user or group permission rows.
+        $query = sprintf('SELECT COUNT(*) AS total FROM (SELECT fd.id %s GROUP BY fd.id, fd.lang, fcr.category_id) AS faq_rows', $this->buildAllFaqsFromClause(
+            $condition,
+            $userId,
+            $groups,
+            $groupSupport,
+        ));
+
+        $row = $this->configuration->getDb()->fetchObject($this->configuration->getDb()->query($query));
+
+        return is_object($row) ? (int) $row->total : 0;
+    }
+
+    /**
+     * Builds the FROM, JOIN, WHERE and permission part shared by fetchAllFaqs() and countAllFaqs().
+     *
+     * @param array<string, mixed>|null $condition
+     * @param int[]                     $groups
+     */
+    private function buildAllFaqsFromClause(?array $condition, int $userId, array $groups, bool $groupSupport): string
+    {
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
+
+        return sprintf(
+            '
             FROM
                 %sfaqdata fd
             LEFT JOIN
@@ -778,20 +817,14 @@ final class FaqRepository implements FaqRepositoryInterface
             ON
                 fd.id = fdu.record_id
             %s
-            %s
-            %s
             %s',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $where,
+            $this->buildConditionWhereClause($condition),
             $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
-            $groupBy,
-            $orderBy,
         );
-
-        return $this->fetchAllRows($this->configuration->getDb()->query($query));
     }
 
     public function insert(FaqEntity $faqEntity): void

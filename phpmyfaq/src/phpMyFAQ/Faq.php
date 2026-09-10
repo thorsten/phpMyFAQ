@@ -57,6 +57,10 @@ class Faq
     public const int SORTING_TYPE_FAQTITLE_FAQID = 2;
     public const int SORTING_TYPE_DATE_FAQID = 3;
     public const int SORTING_TYPE_FAQID = 4;
+    public const int SORTING_TYPE_FAQTITLE = 5;
+    public const int SORTING_TYPE_AUTHOR = 6;
+    public const int SORTING_TYPE_UPDATED = 7;
+    public const int SORTING_TYPE_CREATED = 8;
 
     /**
      * The current FAQ record.
@@ -883,6 +887,9 @@ class Faq
     /**
      * Returns an array with all data from all FAQ records.
      *
+     * A limit greater than zero loads only one page of records, starting at the offset, so
+     * the database does the paging instead of PHP. Use countAllFaqs() for the total.
+     *
      * @param int        $sortType  Sorting type
      * @param array<string, mixed>|null $condition Condition
      * @param ?string    $sortOrder Sorting order
@@ -891,6 +898,8 @@ class Faq
         int $sortType = self::SORTING_TYPE_CATID_FAQID,
         ?array $condition = null,
         ?string $sortOrder = 'ASC',
+        int $limit = 0,
+        int $offset = 0,
     ): void {
         $sortDirection = $this->normalizeSortDirection((string) $sortOrder);
         $orderBy = match ($sortType) {
@@ -898,6 +907,10 @@ class Faq
             self::SORTING_TYPE_FAQID => sprintf('ORDER BY fd.id %s', $sortDirection),
             self::SORTING_TYPE_FAQTITLE_FAQID => sprintf('ORDER BY fcr.category_id, fd.thema %s', $sortDirection),
             self::SORTING_TYPE_DATE_FAQID => sprintf('ORDER BY fcr.category_id, fd.updated %s', $sortDirection),
+            self::SORTING_TYPE_FAQTITLE => sprintf('ORDER BY fd.thema %1$s, fd.id %1$s', $sortDirection),
+            self::SORTING_TYPE_AUTHOR => sprintf('ORDER BY fd.author %1$s, fd.id %1$s', $sortDirection),
+            self::SORTING_TYPE_UPDATED => sprintf('ORDER BY fd.updated %1$s, fd.id %1$s', $sortDirection),
+            self::SORTING_TYPE_CREATED => sprintf('ORDER BY fd.created %1$s, fd.id %1$s', $sortDirection),
             default => '',
         };
 
@@ -907,6 +920,8 @@ class Faq
             $this->user,
             $this->groups,
             $this->groupSupport,
+            $limit,
+            $offset,
         );
 
         foreach ($rows as $row) {
@@ -943,6 +958,16 @@ class Faq
                 'notes' => $row->notes,
             ];
         }
+    }
+
+    /**
+     * Counts the FAQ records getAllFaqs() would load for the same condition, without loading them.
+     *
+     * @param array<string, mixed>|null $condition Condition
+     */
+    public function countAllFaqs(?array $condition = null): int
+    {
+        return $this->faqRepository->countAllFaqs($condition, $this->user, $this->groups, $this->groupSupport);
     }
 
     /**

@@ -321,6 +321,42 @@ class FaqRepositoryTest extends TestCase
         $this->assertNotContains(5044, $ids);
     }
 
+    public function testFetchAllFaqsReturnsOnlyTheRequestedPage(): void
+    {
+        $this->seedFaqRecord(id: 5045, solutionId: 7350, question: 'Page A');
+        $this->seedFaqRecord(id: 5046, solutionId: 7360, question: 'Page B');
+        $this->seedFaqRecord(id: 5047, solutionId: 7370, question: 'Page C');
+        $condition = ['fd.id' => ['5045', '5046', '5047']];
+
+        $firstPage = $this->faqRepository->fetchAllFaqs($condition, 'ORDER BY fd.id ASC', -1, [-1], false, 2, 0);
+        $secondPage = $this->faqRepository->fetchAllFaqs($condition, 'ORDER BY fd.id ASC', -1, [-1], false, 2, 2);
+
+        $this->assertSame([5045, 5046], array_map(static fn(object $row): int => (int) $row->id, $firstPage));
+        $this->assertSame([5047], array_map(static fn(object $row): int => (int) $row->id, $secondPage));
+    }
+
+    public function testCountAllFaqsCountsTheRowsFetchAllFaqsReturns(): void
+    {
+        $this->seedFaqRecord(id: 5048, solutionId: 7380, question: 'Counted A');
+        $this->seedFaqRecord(id: 5049, solutionId: 7390, question: 'Counted B', active: 'no');
+        $condition = ['fd.id' => ['5048', '5049']];
+
+        $this->assertSame(2, $this->faqRepository->countAllFaqs($condition, -1, [-1], false));
+        $this->assertSame(
+            1,
+            $this->faqRepository->countAllFaqs(
+                [...$condition, 'fd.status' => FaqStatus::Published->value],
+                -1,
+                [-1],
+                false,
+            ),
+        );
+        $this->assertCount(
+            2,
+            $this->faqRepository->fetchAllFaqs($condition, 'ORDER BY fd.id ASC', -1, [-1], false),
+        );
+    }
+
     public function testInsertCreatesFaqRow(): void
     {
         $this->faqRepository->insert($this->makeFaqEntity(5050, 7400, 'Inserted Question'));

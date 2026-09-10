@@ -154,53 +154,42 @@ final class SearchController extends AbstractApiController
             defaultOrder: 'asc',
         );
 
-        if ($searchResultSet->getNumberOfResults() > 0) {
-            $allResults = [];
-            foreach ($searchResultSet->getResultSet() as $data) {
-                $data->answer = strip_tags((string) $data->answer);
-                $data->answer = Utils::makeShorterText(string: $data->answer, characters: 12);
-                $data->link = sprintf(
-                    '%sfaq/%d/%d/%s/%s.html',
-                    $this->configuration->getDefaultUrl(),
-                    (int) $data->category_id,
-                    (int) $data->id,
-                    (string) $data->lang,
-                    TitleSlugifier::slug((string) $data->question),
-                );
-                $allResults[] = $data;
-            }
+        $allResults = $searchResultSet->getResultSet();
+        $total = $searchResultSet->getNumberOfResults();
 
-            $total = count($allResults);
+        // Sort on the raw hits first and shape only the requested page afterwards: stripping,
+        // shortening and slugifying every hit before slicing made the cost of one request grow
+        // with the size of the whole FAQ instead of the size of the page.
+        $sortField = $sort->getField();
+        if ($sortField !== null && $sortField !== '') {
+            usort($allResults, static function (object $a, object $b) use ($sort, $sortField): int {
+                $aVal = $a->{$sortField} ?? '';
+                $bVal = $b->{$sortField} ?? '';
+                $result = is_numeric($aVal) && is_numeric($bVal)
+                    ? (float) $aVal <=> (float) $bVal
+                    : (string) $aVal <=> (string) $bVal;
+                return $sort->getOrderSql() === 'DESC' ? -$result : $result;
+            });
+        }
 
-            // Apply sorting if needed
-            $sortField = $sort->getField();
-            if ($sortField !== null && $sortField !== '') {
-                usort($allResults, static function (object $a, object $b) use ($sort, $sortField): int {
-                    $aVal = $a->{$sortField} ?? '';
-                    $bVal = $b->{$sortField} ?? '';
-                    $result = is_numeric($aVal) && is_numeric($bVal)
-                        ? (float) $aVal <=> (float) $bVal
-                        : (string) $aVal <=> (string) $bVal;
-                    return $sort->getOrderSql() === 'DESC' ? -$result : $result;
-                });
-            }
-
-            // Apply pagination
-            $result = array_slice($allResults, $pagination->offset, $pagination->limit);
-
-            return $this->paginatedResponse(
-                $request,
-                data: array_values($result),
-                total: $total,
-                pagination: $pagination,
-                options: new PaginatedResponseOptions(sort: $sort),
+        $page = array_slice($allResults, $pagination->offset, $pagination->limit);
+        foreach ($page as $data) {
+            $data->answer = strip_tags((string) $data->answer);
+            $data->answer = Utils::makeShorterText(string: $data->answer, characters: 12);
+            $data->link = sprintf(
+                '%sfaq/%d/%d/%s/%s.html',
+                $this->configuration->getDefaultUrl(),
+                (int) $data->category_id,
+                (int) $data->id,
+                (string) $data->lang,
+                TitleSlugifier::slug((string) $data->question),
             );
         }
 
         return $this->paginatedResponse(
             $request,
-            data: [],
-            total: 0,
+            data: array_values($page),
+            total: $total,
             pagination: $pagination,
             options: new PaginatedResponseOptions(sort: $sort),
         );

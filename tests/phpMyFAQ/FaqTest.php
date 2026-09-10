@@ -570,6 +570,19 @@ class FaqTest extends TestCase
         $this->assertSame(Translation::get(key: 'err_expiredArticle'), $this->faq->faqRecords[1]['content']);
     }
 
+    public function testGetAllFaqsLoadsOnePageWhileCountAllFaqsReportsTheTotal(): void
+    {
+        $this->seedFaqRecord(id: 5016, solutionId: 7016, categoryId: 114, question: 'Charlie');
+        $this->seedFaqRecord(id: 5017, solutionId: 7017, categoryId: 114, question: 'Alpha');
+        $this->seedFaqRecord(id: 5018, solutionId: 7018, categoryId: 114, question: 'Bravo');
+        $condition = ['fd.id' => ['5016', '5017', '5018']];
+
+        $this->faq->getAllFaqs(Faq::SORTING_TYPE_FAQTITLE, $condition, 'ASC', 2, 1);
+
+        $this->assertSame(['Bravo', 'Charlie'], array_column($this->faq->faqRecords, 'title'));
+        $this->assertSame(3, $this->faq->countAllFaqs($condition));
+    }
+
     public function testGetSolutionIdFromIdReturnsNextSolutionIdWhenRecordIsMissing(): void
     {
         $next = $this->faq->getNextSolutionId();

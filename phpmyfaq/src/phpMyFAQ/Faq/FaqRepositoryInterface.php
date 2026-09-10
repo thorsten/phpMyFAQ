@@ -175,7 +175,8 @@ interface FaqRepositoryInterface
 
     /**
      * Fetches all FAQs matching an optional field => condition map, with the given (already
-     * validated) ORDER BY clause and filtered by permissions. Returns the raw rows.
+     * validated) ORDER BY clause and filtered by permissions. Returns the raw rows. A limit
+     * greater than zero restricts the result to one page of rows starting at the offset.
      *
      * @param array<string, mixed>|null $condition
      * @param int[]                     $groups
@@ -187,7 +188,18 @@ interface FaqRepositoryInterface
         int $userId,
         array $groups,
         bool $groupSupport,
+        int $limit = 0,
+        int $offset = 0,
     ): array;
+
+    /**
+     * Counts the rows fetchAllFaqs() would return for the same condition and permissions,
+     * without loading them.
+     *
+     * @param array<string, mixed>|null $condition
+     * @param int[]                     $groups
+     */
+    public function countAllFaqs(?array $condition, int $userId, array $groups, bool $groupSupport): int;
 
     /**
      * Inserts a new FAQ row. The entity must already carry its id, solution id and revision id.
