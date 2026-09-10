@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend;
 
 use LogicException;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Seo;
@@ -21,6 +22,7 @@ use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(AbstractFrontController::class)]
 #[UsesClass(AbstractController::class)]
+#[UsesClass(AttachmentFactory::class)]
 #[UsesClass(\phpMyFAQ\Twig\TwigWrapper::class)]
 #[UsesClass(Seo::class)]
 #[UsesClass(SeoRepository::class)]

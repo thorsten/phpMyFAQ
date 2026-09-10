@@ -9,6 +9,7 @@ use phpMyFAQ\Api\Pagination\PaginationMetadata;
 use phpMyFAQ\Api\Pagination\PaginationRequest;
 use phpMyFAQ\Api\Response\ApiResponse;
 use phpMyFAQ\Api\Sorting\SortRequest;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Filter;
@@ -26,6 +27,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(AbstractApiController::class)]
 #[UsesClass(AbstractController::class)]
+#[UsesClass(AttachmentFactory::class)]
 #[UsesClass(\phpMyFAQ\Twig\TwigWrapper::class)]
 #[UsesClass(Filter::class)]
 #[UsesClass(PaginationRequest::class)]
