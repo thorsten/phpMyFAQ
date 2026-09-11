@@ -14,7 +14,7 @@ describe('OpenSearch Functions', () => {
   describe('handleOpenSearch', () => {
     it('should handle OpenSearch button clicks and fetch action', async () => {
       document.body.innerHTML = `
-        <button class="pmf-opensearch" data-action="reindex">Reindex</button>
+        <button class="pmf-opensearch" data-action="reindex" data-pmf-csrf-token="csrf-token">Reindex</button>
         <div id="pmf-opensearch-stats"></div>
         <div id="pmf-opensearch-healthcheck-alert"><span class="alert-message"></span></div>
       `;
@@ -40,7 +40,7 @@ describe('OpenSearch Functions', () => {
       const button = document.querySelector('button.pmf-opensearch') as HTMLButtonElement;
       button.click();
 
-      expect(fetchOpenSearchAction).toHaveBeenCalledWith('reindex');
+      expect(fetchOpenSearchAction).toHaveBeenCalledWith('reindex', 'csrf-token');
     });
 
     it('should handle OpenSearch statistics update when healthy', async () => {

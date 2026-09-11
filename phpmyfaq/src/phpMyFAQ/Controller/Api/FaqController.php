@@ -861,6 +861,11 @@ final class FaqController extends AbstractApiController
         'error' => 'It is not allowed, that the question title contains a hash.',
     ]))]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
+    #[OA\Response(
+        response: 404,
+        description: 'If the FAQ does not exist or the user is not permitted to access it.',
+        content: new OA\JsonContent(example: '{ "stored": false, "error": "The given FAQ was not found." }'),
+    )]
     #[Route(path: 'v4.0/faq/update', name: 'api.faq.update', methods: ['PUT'])]
     public function update(Request $request): JsonResponse
     {
@@ -897,6 +902,18 @@ final class FaqController extends AbstractApiController
                 'error' => 'Cannot update FAQ',
             ];
             return $this->json($result, Response::HTTP_BAD_REQUEST);
+        }
+
+        // Object-level authorization: the global "edit FAQ" right alone is not sufficient.
+        // The requester must also be permitted to access the very record they want to modify,
+        // otherwise a valid FAQ ID would be enough to rewrite restricted or pending records.
+        // Non-existing and non-permitted records are treated alike to mirror the read path.
+        if (!$this->faq->isFaqEditableForUser($faqId, $languageCode)) {
+            $result = [
+                'stored' => false,
+                'error' => 'The given FAQ was not found.',
+            ];
+            return $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
         if ($this->faq->hasTitleAHash($question)) {

@@ -176,6 +176,57 @@ final class FaqRepository implements FaqRepositoryInterface
         return $this->configuration->getDb()->numRows($result) > 0;
     }
 
+    /**
+     * Checks whether a FAQ record may be modified by the given user and groups.
+     *
+     * Applies the same user/group ACL as the read paths but deliberately ignores the
+     * publication state: an editor must be able to work on draft, not yet published
+     * or expired records they are permitted to access. A non-existing record is
+     * reported as not editable.
+     *
+     * @param int[] $groups
+     */
+    public function isFaqEditableForUser(
+        int $faqId,
+        string $faqLang,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): bool {
+        $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
+
+        $query = sprintf(
+            "
+            SELECT
+                fd.id
+            FROM
+                %sfaqdata AS fd
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fd.id = %d
+            AND
+                fd.lang = '%s'
+                %s",
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $faqId,
+            $this->configuration->getDb()->escape($faqLang),
+            $queryHelper->queryPermission($groupSupport),
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+
+        return $this->configuration->getDb()->numRows($result) > 0;
+    }
+
     public function isActive(int $faqId, string $faqLang, string $commentType = 'faq'): bool
     {
         if ('news' !== $commentType) {

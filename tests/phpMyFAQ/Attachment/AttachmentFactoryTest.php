@@ -20,6 +20,9 @@ use stdClass;
 #[AllowMockObjectsWithoutExpectations]
 class AttachmentFactoryTest extends TestCase
 {
+    private const string KEY_16 = '0123456789abcdef';
+    private const string KEY_32 = '0123456789abcdef0123456789abcdef';
+
     private Configuration $mockConfiguration;
     private DatabaseDriver $mockDb;
 
@@ -52,6 +55,31 @@ class AttachmentFactoryTest extends TestCase
         $this->resetFactoryState();
     }
 
+    /**
+     * Lets the mocked driver return a persisted attachment row so create($id) loads metadata.
+     */
+    private function primeAttachmentRow(bool $encrypted): void
+    {
+        $this->mockDb->method('query')->willReturn(true);
+        $this->mockDb->method('fetchArray')->willReturn([
+            'record_id' => 1,
+            'record_lang' => 'en',
+            'real_hash' => 'realhash',
+            'virtual_hash' => 'virtualhash',
+            'filename' => 'file.txt',
+            'filesize' => 10,
+            'encrypted' => $encrypted ? 1 : 0,
+            'mime_type' => 'text/plain',
+        ]);
+    }
+
+    private function getKey(File $file): ?string
+    {
+        $reflection = new ReflectionClass($file);
+
+        return $reflection->getProperty('key')->getValue($file);
+    }
+
     private function resetFactoryState(): void
     {
         $reflection = new ReflectionClass(AttachmentFactory::class);
@@ -78,7 +106,7 @@ class AttachmentFactoryTest extends TestCase
         // Set storage type to FILESYSTEM
         $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
 
-        $attachment = AttachmentFactory::create(123, 'testkey');
+        $attachment = AttachmentFactory::create(123, self::KEY_16);
 
         $this->assertInstanceOf(File::class, $attachment);
     }
@@ -117,9 +145,9 @@ class AttachmentFactoryTest extends TestCase
         $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
 
         // Initialize factory with encryption enabled
-        AttachmentFactory::init('default_secret', true);
+        AttachmentFactory::init(self::KEY_32, true);
 
-        $attachment = AttachmentFactory::create(123, 'custom_key');
+        $attachment = AttachmentFactory::create(123, self::KEY_16);
 
         $this->assertInstanceOf(File::class, $attachment);
     }
@@ -129,12 +157,14 @@ class AttachmentFactoryTest extends TestCase
         $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
 
         // Initialize factory with encryption enabled
-        AttachmentFactory::init('default_secret', true);
+        AttachmentFactory::init(self::KEY_32, true);
 
         // Call create without a custom key - should use the default key
         $attachment = AttachmentFactory::create(123);
 
         $this->assertInstanceOf(File::class, $attachment);
+        $this->assertTrue($attachment->isEncrypted());
+        $this->assertSame(self::KEY_32, $this->getKey($attachment));
     }
 
     public function testCreateWithEncryptionDisabled(): void
@@ -142,11 +172,13 @@ class AttachmentFactoryTest extends TestCase
         $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
 
         // Initialize factory with encryption disabled
-        AttachmentFactory::init('default_secret', false);
+        AttachmentFactory::init(self::KEY_32, false);
 
         $attachment = AttachmentFactory::create(123, 'ignored_key');
 
         $this->assertInstanceOf(File::class, $attachment);
+        $this->assertFalse($attachment->isEncrypted());
+        $this->assertNull($this->getKey($attachment));
     }
 
     public function testFetchByRecordIdWithResults(): void
@@ -399,14 +431,14 @@ class AttachmentFactoryTest extends TestCase
         $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
 
         // Initialize factory
-        AttachmentFactory::init('integration_key', true);
+        AttachmentFactory::init(self::KEY_32, true);
 
         // Create attachment - should use default key when none provided
         $attachment1 = AttachmentFactory::create(111);
         $this->assertInstanceOf(File::class, $attachment1);
 
         // Create attachment with custom key
-        $attachment2 = AttachmentFactory::create(222, 'custom_key');
+        $attachment2 = AttachmentFactory::create(222, self::KEY_16);
         $this->assertInstanceOf(File::class, $attachment2);
     }
 
@@ -423,5 +455,121 @@ class AttachmentFactoryTest extends TestCase
 
         $encryptionEnabledProperty = $reflection->getProperty('encryptionEnabled');
         $this->assertNull($encryptionEnabledProperty->getValue());
+    }
+
+    public function testCreateNewAttachmentRejectsUnsupportedKeyLengthBeforeAnythingIsWritten(): void
+    {
+        $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
+        AttachmentFactory::init('123456789012345', true); // 15 bytes
+
+        $this->expectException(AttachmentException::class);
+        $this->expectExceptionMessage('not 16, 24 or 32 bytes long');
+
+        AttachmentFactory::create();
+    }
+
+    public function testCreateNewAttachmentRejectsEmptyKeyWhenEncryptionIsEnabled(): void
+    {
+        $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
+        AttachmentFactory::init('', true);
+
+        $this->expectException(AttachmentException::class);
+
+        AttachmentFactory::create();
+    }
+
+    public function testCreateNewAttachmentWithEncryptionEnabledUsesKey(): void
+    {
+        $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
+        AttachmentFactory::init(self::KEY_32, true);
+
+        $attachment = AttachmentFactory::create();
+
+        $this->assertTrue($attachment->isEncrypted());
+        $this->assertSame(self::KEY_32, $this->getKey($attachment));
+    }
+
+    public function testCreateNewAttachmentWithEncryptionDisabledIsPlaintext(): void
+    {
+        $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
+        AttachmentFactory::init(self::KEY_32, false);
+
+        $attachment = AttachmentFactory::create();
+
+        $this->assertFalse($attachment->isEncrypted());
+        $this->assertNull($this->getKey($attachment));
+    }
+
+    public function testCreateExistingEncryptedAttachmentKeepsKeyWhenEncryptionIsDisabled(): void
+    {
+        $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
+        $this->primeAttachmentRow(true);
+
+        // Encryption switched off afterwards: the record must stay readable.
+        AttachmentFactory::init(self::KEY_32, false);
+
+        $attachment = AttachmentFactory::create(9001);
+
+        $this->assertTrue($attachment->hasMeta());
+        $this->assertTrue($attachment->isEncrypted(), 'The persisted flag decides how an existing record is read');
+        $this->assertSame(self::KEY_32, $this->getKey($attachment), 'The configured key must remain available');
+    }
+
+    public function testCreateExistingPlaintextAttachmentIgnoresKeyWhenEncryptionIsEnabled(): void
+    {
+        $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
+        $this->primeAttachmentRow(false);
+
+        // Encryption switched on afterwards: the plaintext record must stay readable.
+        AttachmentFactory::init(self::KEY_32, true);
+
+        $attachment = AttachmentFactory::create(9002);
+
+        $this->assertTrue($attachment->hasMeta());
+        $this->assertFalse($attachment->isEncrypted(), 'A plaintext record must not be read as encrypted');
+        $this->assertNull($this->getKey($attachment));
+    }
+
+    public function testCreateExistingEncryptedAttachmentDoesNotValidateKeyLength(): void
+    {
+        $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
+        $this->primeAttachmentRow(true);
+
+        // Listing attachments must not fail; the key is validated when the file is opened.
+        AttachmentFactory::init('short', false);
+
+        $attachment = AttachmentFactory::create(9003);
+
+        $this->assertTrue($attachment->isEncrypted());
+        $this->assertSame('short', $this->getKey($attachment));
+    }
+
+    public function testIsSupportedKey(): void
+    {
+        $this->assertTrue(AttachmentFactory::isSupportedKey(str_repeat('a', 16)));
+        $this->assertTrue(AttachmentFactory::isSupportedKey(str_repeat('a', 24)));
+        $this->assertTrue(AttachmentFactory::isSupportedKey(str_repeat('a', 32)));
+        $this->assertFalse(AttachmentFactory::isSupportedKey(''));
+        $this->assertFalse(AttachmentFactory::isSupportedKey(str_repeat('a', 15)));
+        $this->assertFalse(AttachmentFactory::isSupportedKey(str_repeat('a', 33)));
+    }
+
+    public function testInitFromConfigurationAppliesCurrentSettings(): void
+    {
+        AttachmentFactory::init('', false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['records.defaultAttachmentEncKey', self::KEY_16],
+                ['records.enableAttachmentEncryption', true],
+            ]);
+
+        AttachmentFactory::initFromConfiguration($configuration);
+
+        $reflection = new ReflectionClass(AttachmentFactory::class);
+        $this->assertSame(self::KEY_16, $reflection->getProperty('defaultKey')->getValue());
+        $this->assertTrue($reflection->getProperty('encryptionEnabled')->getValue());
     }
 }

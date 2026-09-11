@@ -367,9 +367,14 @@ Please be aware:
 
 - Disabling encryption will cause all files to be saved unencrypted.
   In this case, you'll benefit from sparing disk space because identical files are saved only once.
+- The default attachment encryption key must be exactly 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256).
+  Uploads are rejected before anything is written if the configured key has another length.
 - Do not change the default attachment encryption key once files were uploaded.
   Doing so will cause all the previously uploaded files to be wrongly decrypted.
   If you need to change the default key, you will have to re-upload all files.
+- Each attachment remembers whether it was stored encrypted. Toggling the global encryption
+  setting only affects new uploads; existing files stay readable as long as the key configured
+  when they were uploaded is still set.
 - Always memorize your encryption keys. There is no way to decrypt files without a correct key.
 - Files are always saved with names based on a virtual hash generated from several tokens (just like key and issue id
   etc), so there is no way to assess a file directly using the name it was uploaded under.

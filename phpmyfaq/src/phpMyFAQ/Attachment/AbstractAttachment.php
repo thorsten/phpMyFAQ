@@ -89,6 +89,11 @@ abstract class AbstractAttachment implements AttachmentInterface
     protected ?bool $encrypted = null;
 
     /**
+     * True once the metadata row of an existing attachment has been loaded.
+     */
+    protected bool $metaLoaded = false;
+
+    /**
      * Attachment file mime type.
      */
     protected string $mimeType = '';
@@ -141,6 +146,7 @@ abstract class AbstractAttachment implements AttachmentInterface
                 $this->mimeType = (string) $assoc['mime_type'];
 
                 $hasMeta = true;
+                $this->metaLoaded = true;
             }
         }
 
@@ -161,11 +167,20 @@ abstract class AbstractAttachment implements AttachmentInterface
      * key for an already-encrypted attachment get an explicit failure instead
      * (see File::getFile()), not a wrong storage path.
      *
+     * For an existing attachment the persisted "encrypted" flag is
+     * authoritative and is never changed by the key: it decides how the file
+     * is read and deleted. Only a new attachment derives its encryption state
+     * from whether a key was supplied.
+     *
      * @param string|null $key Encryption key
      */
     public function setKey(?string $key): void
     {
         $this->key = $key;
+
+        if ($this->metaLoaded) {
+            return;
+        }
 
         if ($key !== null) {
             $this->encrypted = true;
@@ -173,6 +188,22 @@ abstract class AbstractAttachment implements AttachmentInterface
         }
 
         $this->encrypted ??= false;
+    }
+
+    /**
+     * Whether the metadata of an existing attachment has been loaded.
+     */
+    public function hasMeta(): bool
+    {
+        return $this->metaLoaded;
+    }
+
+    /**
+     * Whether the attachment file is (to be) stored encrypted.
+     */
+    public function isEncrypted(): bool
+    {
+        return true === $this->encrypted;
     }
 
     /**

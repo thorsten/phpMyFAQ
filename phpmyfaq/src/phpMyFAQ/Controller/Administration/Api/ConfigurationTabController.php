@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\AdminMenuBuilder;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
@@ -245,6 +246,10 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         }
 
         $this->configuration->update($newConfigValues);
+
+        // Long-running workers bootstrap only once: refresh the attachment
+        // factory so new uploads honour the saved encryption settings.
+        AttachmentFactory::initFromConfiguration($this->configuration);
 
         // Filter out non-scalar values from old config before comparison
         $oldConfigComparable = array_filter(

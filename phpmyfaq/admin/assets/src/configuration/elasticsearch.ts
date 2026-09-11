@@ -90,10 +90,12 @@ export const handleElasticsearch = async (): Promise<void> => {
       element.addEventListener('click', async (event: Event): Promise<void> => {
         event.preventDefault();
 
-        const action = (event.target as HTMLButtonElement).getAttribute('data-action') as string;
+        const button = (event.target as HTMLElement).closest('button') as HTMLButtonElement;
+        const action = button.getAttribute('data-action') as string;
+        const csrfToken = button.getAttribute('data-pmf-csrf-token') as string;
 
         try {
-          const response = await fetchElasticsearchAction(action);
+          const response = await fetchElasticsearchAction(action, csrfToken);
 
           if (typeof response.success !== 'undefined') {
             pushNotification(response.success);

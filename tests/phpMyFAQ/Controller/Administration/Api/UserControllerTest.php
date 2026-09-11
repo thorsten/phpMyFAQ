@@ -251,8 +251,11 @@ final class UserControllerTest extends TestCase
      *
      * @throws \Exception
      */
-    private function buildController(Session $session, CurrentUser $actingUser): UserController
-    {
+    private function buildController(
+        Session $session,
+        CurrentUser $actingUser,
+        ?CurrentUser $userService = null,
+    ): UserController {
         $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('get')
@@ -266,7 +269,7 @@ final class UserControllerTest extends TestCase
                 };
             });
 
-        $controller = new UserController($this->createStub(CurrentUser::class));
+        $controller = new UserController($userService ?? $this->createStub(CurrentUser::class));
         $controller->setContainer($container);
 
         return $controller;
@@ -1510,5 +1513,102 @@ final class UserControllerTest extends TestCase
         $response = $controller->addUser($request);
 
         $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    /**
+     * IDOR guard: a delegated admin who is not a SuperAdmin must not be able to read a
+     * SuperAdmin account's data through GET admin/api/user/data/{userId}.
+     *
+     * @throws \Exception
+     */
+    public function testUserDataNonSuperAdminCannotReadSuperAdminAccount(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        // Acting admin holds USER_ADD/EDIT/DELETE but is NOT a SuperAdmin.
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+
+        // The requested target (user id 1) is a SuperAdmin.
+        $userService = $this->createMock(CurrentUser::class);
+        $userService->method('getUserById')->willReturn(true);
+        $userService->method('isSuperAdmin')->willReturn(true);
+        $userService->method('getStatus')->willReturn('active');
+        $userService->expects($this->never())->method('userData');
+
+        $controller = $this->buildController($session, $actingUser, $userService);
+
+        $response = $controller->userData(new Request([], [], ['userId' => 1]));
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertStringContainsString('error', (string) $response->getContent());
+    }
+
+    /**
+     * The admin read endpoint must never serialise secret material: the live TOTP seed
+     * (secret) and the OIDC subject (keycloak_sub) have to be stripped from the response.
+     *
+     * @throws \Exception
+     */
+    public function testUserDataStripsSecretAndKeycloakSubFromResponse(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        // A SuperAdmin acting user passes the target guard, isolating the field-stripping.
+        $actingUser = $this->buildActingUser(userId: 1, isSuperAdmin: true);
+
+        $userData = $this->createMock(UserData::class);
+        $userData->method('get')->willReturn([
+            'user_id' => 7,
+            'last_modified' => '20260101000000',
+            'display_name' => 'Jane Doe',
+            'email' => 'jane@example.test',
+            'is_visible' => 1,
+            'twofactor_enabled' => 1,
+            'secret' => 'TOPSECRETTOTPSEEDVALUE',
+            'keycloak_sub' => 'kc-subject-uuid-123',
+        ]);
+
+        $userService = $this->createMock(CurrentUser::class);
+        $userService->method('userData')->willReturn($userData);
+        $userService->method('getUserById')->willReturn(true);
+        $userService->method('isSuperAdmin')->willReturn(false);
+        $userService->method('getStatus')->willReturn('active');
+        $userService->method('getUserId')->willReturn(7);
+        $userService->method('getLogin')->willReturn('jane');
+        $userService->method('getUserAuthSource')->willReturn('local');
+
+        $controller = $this->buildController($session, $actingUser, $userService);
+
+        $response = $controller->userData(new Request([], [], ['userId' => 7]));
+        $body = (string) $response->getContent();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // The live TOTP seed and OIDC subject must never leave the server.
+        self::assertStringNotContainsString('TOPSECRETTOTPSEEDVALUE', $body);
+        self::assertStringNotContainsString('kc-subject-uuid-123', $body);
+        self::assertStringNotContainsString('secret', $body);
+        self::assertStringNotContainsString('keycloak_sub', $body);
+        // Non-sensitive fields must still be present.
+        self::assertStringContainsString('jane@example.test', $body);
+    }
+
+    /**
+     * IDOR guard: a non-SuperAdmin admin must not be able to read a SuperAdmin account's
+     * permissions through GET admin/api/user/permissions/{userId}.
+     *
+     * @throws \Exception
+     */
+    public function testUserPermissionsNonSuperAdminCannotReadSuperAdminAccount(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        // Acting admin holds USER_ADD/EDIT/DELETE but is NOT a SuperAdmin.
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $controller = $this->buildController($session, $actingUser);
+
+        // The target is loaded from the database and is a SuperAdmin.
+        $targetUserId = $this->seedManagedUser(login: 'second-superadmin', isSuperAdmin: 1);
+
+        $response = $controller->userPermissions(new Request([], [], ['userId' => $targetUserId]));
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertStringContainsString('error', (string) $response->getContent());
     }
 }

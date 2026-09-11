@@ -18,17 +18,18 @@ describe('Elasticsearch API', () => {
       );
 
       const action = 'some-action';
-      const result = await fetchElasticsearchAction(action);
+      const result = await fetchElasticsearchAction(action, 'csrf-token');
 
       expect(result).toEqual(mockResponse);
       expect(globalThis.fetch).toHaveBeenCalledWith('./api/elasticsearch/some-action', {
-        method: 'GET',
+        method: 'POST',
         cache: 'no-cache',
         headers: {
           'Content-Type': 'application/json',
         },
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
+        body: JSON.stringify({ csrf: 'csrf-token' }),
       });
     });
 
@@ -38,7 +39,7 @@ describe('Elasticsearch API', () => {
 
       const action = 'some-action';
 
-      await expect(fetchElasticsearchAction(action)).rejects.toThrow(mockError);
+      await expect(fetchElasticsearchAction(action, 'csrf-token')).rejects.toThrow(mockError);
     });
   });
 

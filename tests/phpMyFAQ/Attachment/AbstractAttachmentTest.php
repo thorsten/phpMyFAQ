@@ -63,6 +63,7 @@ class AbstractAttachmentTest extends TestCase
 
         $this->assertEquals(5, $attachment->getId());
         $this->assertEquals(123, $attachment->getRecordId());
+        $this->assertEquals('en', $attachment->getRecordLang());
         $this->assertEquals('test.pdf', $attachment->getFilename());
         $this->assertEquals(1024, $attachment->getFilesize());
         $this->assertEquals('application/pdf', $attachment->getMimeType());
@@ -278,7 +279,11 @@ class AbstractAttachmentTest extends TestCase
 
         $this->mockDb->method('nextId')->willReturn(42);
         $this->mockDb->method('escape')->willReturnArgument(0);
-        $this->mockDb->expects($this->once())->method('query')->with($this->stringContains('INSERT INTO'))->willReturn(true);
+        $this->mockDb
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains('INSERT INTO'))
+            ->willReturn(true);
 
         $savedId = $this->attachment->saveMeta();
 
@@ -486,6 +491,39 @@ class AbstractAttachmentTest extends TestCase
         $this->assertEquals('', $this->attachment->getMimeType());
         $this->assertEquals(0, $this->attachment->getFilesize());
         $this->assertEquals('', $this->attachment->getRealHash());
+    }
+
+    public function testSetKeyDoesNotChangePersistedEncryptionState(): void
+    {
+        $mockResult = [
+            'record_id' => 123,
+            'record_lang' => 'en',
+            'real_hash' => 'abc123',
+            'virtual_hash' => 'abc123',
+            'filename' => 'test.pdf',
+            'filesize' => 1024,
+            'encrypted' => '0',
+            'mime_type' => 'application/pdf',
+        ];
+
+        $this->mockDb->method('query')->willReturn(true);
+        $this->mockDb->method('fetchArray')->willReturn($mockResult);
+
+        $attachment = new AttachmentTestDouble($this->mockDb, 5);
+
+        $this->assertTrue($attachment->hasMeta());
+        $this->assertFalse($attachment->isEncrypted());
+
+        // A plaintext record must stay plaintext even if the global key is applied.
+        $attachment->setKey('0123456789abcdef');
+
+        $this->assertFalse($attachment->isEncrypted());
+    }
+
+    public function testHasMetaIsFalseForNewAttachment(): void
+    {
+        $this->assertFalse($this->attachment->hasMeta());
+        $this->assertFalse($this->attachment->isEncrypted());
     }
 }
 

@@ -18,17 +18,18 @@ describe('OpenSearch API', () => {
       );
 
       const action = 'index';
-      const result = await fetchOpenSearchAction(action);
+      const result = await fetchOpenSearchAction(action, 'csrf-token');
 
       expect(result).toEqual(mockResponse);
       expect(globalThis.fetch).toHaveBeenCalledWith('./api/opensearch/index', {
-        method: 'GET',
+        method: 'POST',
         cache: 'no-cache',
         headers: {
           'Content-Type': 'application/json',
         },
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
+        body: JSON.stringify({ csrf: 'csrf-token' }),
       });
     });
 
@@ -36,7 +37,7 @@ describe('OpenSearch API', () => {
       const mockError = new Error('Fetch failed');
       globalThis.fetch = vi.fn(() => Promise.reject(mockError));
 
-      await expect(fetchOpenSearchAction('index')).rejects.toThrow(mockError);
+      await expect(fetchOpenSearchAction('index', 'csrf-token')).rejects.toThrow(mockError);
     });
   });
 

@@ -19,14 +19,17 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use JsonException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\CustomPage;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\OpenSearch;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -44,9 +47,13 @@ final class OpenSearchController extends AbstractController
      * @throws \Exception
      */
     #[Route(path: 'opensearch/create', name: 'admin.api.opensearch.create', methods: ['POST'])]
-    public function create(): JsonResponse
+    public function create(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidCsrfToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         try {
             $this->openSearch->createIndex();
@@ -62,9 +69,13 @@ final class OpenSearchController extends AbstractController
      * @throws \Exception
      */
     #[Route(path: 'opensearch/drop', name: 'admin.api.opensearch.drop', methods: ['DELETE'])]
-    public function drop(): JsonResponse
+    public function drop(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidCsrfToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         try {
             $this->openSearch->dropIndex();
@@ -80,9 +91,13 @@ final class OpenSearchController extends AbstractController
      * @throws \Exception
      */
     #[Route(path: 'opensearch/import', name: 'admin.api.opensearch.import', methods: ['POST'])]
-    public function import(): JsonResponse
+    public function import(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidCsrfToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         $this->faq->getAllFaqs();
 
@@ -140,5 +155,16 @@ final class OpenSearchController extends AbstractController
             ],
             $isAvailable ? Response::HTTP_OK : Response::HTTP_SERVICE_UNAVAILABLE,
         );
+    }
+
+    private function isValidCsrfToken(Request $request): bool
+    {
+        try {
+            $csrfToken = (string) ($this->getJsonObject($request)->csrf ?? '');
+        } catch (JsonException) {
+            return false;
+        }
+
+        return Token::getInstance($this->session)->verifyToken('opensearch', $csrfToken);
     }
 }

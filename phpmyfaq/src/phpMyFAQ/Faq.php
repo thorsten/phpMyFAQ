@@ -620,9 +620,9 @@ class Faq
 
     /**
      * Checks whether the FAQ record with the given ID is visible to the current
-     * user and groups in the current language. This is used to gate access to
-     * child resources such as comments and attachments, which are keyed only by
-     * the record ID and would otherwise leak data from restricted FAQs.
+     * user and groups. This is used to gate access to child resources such as
+     * comments and attachments, which are keyed only by the record ID and would
+     * otherwise leak data from restricted or unpublished FAQs.
      *
      * The visibility rules mirror getFaqByIdAndCategoryId(): the record must be
      * active, within its active date window, and permitted for the current user
@@ -663,6 +663,26 @@ class Faq
         return Language::$language !== ''
             ? strtolower(Language::$language)
             : $this->configuration->getLanguage()->getLanguage();
+    }
+
+    /**
+     * Checks whether the current user and groups are permitted to modify the given FAQ record.
+     *
+     * This is the object-level authorization for write operations. It applies the same
+     * user/group ACL as the read paths, but deliberately ignores the publication state:
+     * an editor must be able to work on inactive, not yet published or expired records
+     * they are permitted to access. A non-existing record is reported as not editable,
+     * so that callers can answer with a 404 without disclosing whether the ID exists.
+     */
+    public function isFaqEditableForUser(int $faqId, string $faqLanguage): bool
+    {
+        return $this->faqRepository->isFaqEditableForUser(
+            $faqId,
+            strtolower($faqLanguage),
+            $this->user,
+            $this->groups,
+            $this->groupSupport,
+        );
     }
 
     /**

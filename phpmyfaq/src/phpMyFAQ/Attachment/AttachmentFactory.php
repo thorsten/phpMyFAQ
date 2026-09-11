@@ -32,6 +32,11 @@ use phpMyFAQ\Language;
 class AttachmentFactory
 {
     /**
+     * Key lengths in bytes accepted by AES (128, 192 and 256 bit).
+     */
+    private const array SUPPORTED_KEY_LENGTHS = [16, 24, 32];
+
+    /**
      * Default encryption key.
      */
     private static ?string $defaultKey = null;
@@ -49,6 +54,12 @@ class AttachmentFactory
     /**
      * Create an attachment exemplar.
      *
+     * For an existing attachment the persisted per-record "encrypted" flag
+     * decides whether a key is applied, independent of the global switch: the
+     * configured key stays available for records already marked encrypted,
+     * and records stored in plaintext are read as plaintext. The global switch
+     * only decides how new attachments are written.
+     *
      * @param int|null    $attachmentId  ID
      * @param string|null $key Key
      * @throws AttachmentException
@@ -60,16 +71,41 @@ class AttachmentFactory
             default => throw new AttachmentException('Unknown attachment storage type'),
         };
 
-        /*
-         * If encryption isn't enabled, just ignoring all keys
-         */
-        if (self::$encryptionEnabled) {
-            $key ??= self::$defaultKey;
+        $key ??= self::$defaultKey;
+        if ($key === '') {
+            $key = null;
+        }
+
+        if ($return->hasMeta()) {
+            $return->setKey($return->isEncrypted() ? $key : null);
+
+            return $return;
+        }
+
+        if (!self::$encryptionEnabled) {
+            $return->setKey(null);
+
+            return $return;
+        }
+
+        // Fail before any metadata or file is written, not inside the cipher.
+        if ($key === null || !self::isSupportedKey($key)) {
+            throw new AttachmentException(
+                'Attachment encryption is enabled, but the configured encryption key is not 16, 24 or 32 bytes long',
+            );
         }
 
         $return->setKey($key);
 
         return $return;
+    }
+
+    /**
+     * Checks whether the given key has a length supported by AES.
+     */
+    public static function isSupportedKey(string $key): bool
+    {
+        return in_array(strlen($key), self::SUPPORTED_KEY_LENGTHS, strict: true);
     }
 
     /**
@@ -200,5 +236,21 @@ class AttachmentFactory
         if ($storageType !== null) {
             self::$storageType = $storageType;
         }
+    }
+
+    /**
+     * (Re-)initializes the factory from the current configuration values.
+     *
+     * Long-running workers (e.g. FrankenPHP worker mode) run the bootstrap
+     * once, so this must be called again whenever the attachment settings are
+     * saved; otherwise the process keeps its startup settings until restart.
+     */
+    public static function initFromConfiguration(Configuration $configuration): void
+    {
+        self::init(
+            (string) $configuration->get('records.defaultAttachmentEncKey'),
+            $configuration->get('records.enableAttachmentEncryption') === true,
+            (int) $configuration->get('records.attachmentsStorageType'),
+        );
     }
 }

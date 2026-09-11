@@ -22,6 +22,7 @@ namespace phpMyFAQ\Faq;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\FaqStatus;
 
+/* @mago-expect lint:too-many-methods - one query method per FAQ lookup; a split is planned with the Faq facade rework */
 interface FaqRepositoryInterface
 {
     /**
@@ -52,6 +53,20 @@ interface FaqRepositoryInterface
      * @param int[] $groups
      */
     public function isFaqVisibleForUser(
+        int $faqId,
+        string $faqLang,
+        int $userId,
+        array $groups,
+        bool $groupSupport,
+    ): bool;
+
+    /**
+     * Checks whether a FAQ record may be modified by the given user and groups:
+     * the same ACL as the read paths, regardless of the publication state.
+     *
+     * @param int[] $groups
+     */
+    public function isFaqEditableForUser(
         int $faqId,
         string $faqLang,
         int $userId,

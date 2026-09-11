@@ -22,14 +22,17 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Elastic\Elasticsearch\Response\Elasticsearch as ElasticsearchResponse;
+use JsonException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\CustomPage;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\Elasticsearch;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -47,9 +50,13 @@ final class ElasticsearchController extends AbstractController
      * @throws \Exception
      */
     #[Route(path: 'elasticsearch/create', name: 'admin.api.elasticsearch.create', methods: ['POST'])]
-    public function create(): JsonResponse
+    public function create(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidCsrfToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         try {
             $this->elasticsearch->createIndex();
@@ -65,9 +72,13 @@ final class ElasticsearchController extends AbstractController
      * @throws \Exception
      */
     #[Route(path: 'elasticsearch/drop', name: 'admin.api.elasticsearch.drop', methods: ['DELETE'])]
-    public function drop(): JsonResponse
+    public function drop(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidCsrfToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         try {
             $this->elasticsearch->dropIndex();
@@ -83,9 +94,13 @@ final class ElasticsearchController extends AbstractController
      * @throws \Exception
      */
     #[Route(path: 'elasticsearch/import', name: 'admin.api.elasticsearch.import', methods: ['POST'])]
-    public function import(): JsonResponse
+    public function import(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        if (!$this->isValidCsrfToken($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
 
         $this->faq->getAllFaqs();
 
@@ -148,5 +163,16 @@ final class ElasticsearchController extends AbstractController
             ],
             $isAvailable ? Response::HTTP_OK : Response::HTTP_SERVICE_UNAVAILABLE,
         );
+    }
+
+    private function isValidCsrfToken(Request $request): bool
+    {
+        try {
+            $csrfToken = (string) ($this->getJsonObject($request)->csrf ?? '');
+        } catch (JsonException) {
+            return false;
+        }
+
+        return Token::getInstance($this->session)->verifyToken('elasticsearch', $csrfToken);
     }
 }

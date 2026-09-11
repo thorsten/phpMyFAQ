@@ -1427,6 +1427,7 @@ class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->expects($this->once())->method('setUser')->with(-1);
         $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq->method('isFaqEditableForUser')->willReturn(true);
         $faq->expects($this->once())->method('hasTitleAHash')->with('Updated via API?')->willReturn(false);
         $faq->method('getStatus')->willReturn(FaqStatus::Published);
         $faq
@@ -1490,6 +1491,7 @@ class FaqControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $faq = $this->createMock(Faq::class);
+        $faq->method('isFaqEditableForUser')->willReturn(true);
         $faq->method('hasTitleAHash')->willReturn(false);
         $faq->method('getStatus')->willReturn(FaqStatus::Review);
         $faq->method('isActive')->willReturn(false);
@@ -1541,6 +1543,7 @@ class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->expects($this->once())->method('setUser')->with(-1);
         $faq->expects($this->once())->method('setGroups')->with([-1]);
+        $faq->method('isFaqEditableForUser')->willReturn(true);
         $faq->expects($this->once())->method('hasTitleAHash')->with('Updated # bad?')->willReturn(true);
         $faq->expects($this->never())->method('update');
 
@@ -1598,5 +1601,113 @@ class FaqControllerTest extends TestCase
         $this->assertSame(37, $payload['meta']['pagination']['total']);
         $this->assertSame(4, $payload['meta']['pagination']['total_pages']);
         $this->assertSame(2, $payload['meta']['pagination']['current_page']);
+    }
+
+    /**
+     * @param array<string, mixed> $overrides
+     *
+     * @throws \JsonException
+     */
+    private function createUpdateRequest(array $overrides = []): Request
+    {
+        return new Request([], [], [], [], [], [], json_encode(
+            $overrides + [
+                'faq-id' => 7,
+                'language' => 'en',
+                'category-id' => 1,
+                'question' => 'Updated via API?',
+                'answer' => 'Still yes.',
+                'keywords' => 'update, faq',
+                'author' => 'API Updater',
+                'email' => 'update@example.com',
+                'is-active' => false,
+                'is-sticky' => false,
+            ],
+            JSON_THROW_ON_ERROR,
+        ));
+    }
+
+    private function createFaqControllerWith(Faq $faq): FaqController
+    {
+        return new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
+        );
+    }
+
+    /**
+     * Security regression: the global "edit FAQ" right must not be sufficient to modify
+     * a record the requester is not permitted to access (BOLA on PUT /faq/update).
+     *
+     * @throws \JsonException|\Exception
+     */
+    public function testUpdateReturnsNotFoundAndDoesNotWriteWhenFaqIsNotEditableForUser(): void
+    {
+        $this->authenticateApiToken();
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('isFaqEditableForUser')->with(7, 'en')->willReturn(false);
+        $faq->expects($this->never())->method('update');
+
+        $controller = $this->createFaqControllerWith($faq);
+        $this->authorizeCurrentUser($controller);
+
+        $response = $controller->update($this->createUpdateRequest());
+
+        $this->assertSame(404, $response->getStatusCode());
+        $this->assertSame(
+            ['stored' => false, 'error' => 'The given FAQ was not found.'],
+            json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR),
+        );
+    }
+
+    /**
+     * @throws \JsonException|\Exception
+     */
+    public function testUpdateScopesTheObjectCheckToTheRequestingUser(): void
+    {
+        $this->authenticateApiToken();
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('setUser')->with(23);
+        $faq->method('isFaqEditableForUser')->willReturn(false);
+
+        $controller = $this->createFaqControllerWith($faq);
+        $this->authorizeCurrentUser($controller, 23);
+
+        $response = $controller->update($this->createUpdateRequest());
+
+        $this->assertSame(404, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \JsonException|\Exception
+     */
+    public function testUpdateWritesWhenFaqIsEditableForUser(): void
+    {
+        $this->authenticateApiToken();
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('isFaqEditableForUser')->with(7, 'en')->willReturn(true);
+        $faq->method('hasTitleAHash')->willReturn(false);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
+        $faq
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->callback(
+                static fn(FaqEntity $entity): bool => $entity->getId() === 7 && $entity->getLanguage() === 'en',
+            ))
+            ->willReturn(new FaqEntity()->setId(7));
+
+        $controller = $this->createFaqControllerWith($faq);
+        $this->authorizeCurrentUser($controller);
+
+        $response = $controller->update($this->createUpdateRequest());
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('{"stored":true}', (string) $response->getContent());
     }
 }

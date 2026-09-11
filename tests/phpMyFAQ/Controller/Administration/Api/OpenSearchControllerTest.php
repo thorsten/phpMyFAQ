@@ -15,14 +15,17 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -80,6 +83,9 @@ final class OpenSearchControllerTest extends TestCase
 
     protected function tearDown(): void
     {
+        Token::resetInstanceForTests();
+        $_COOKIE = [];
+
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
         $configurationProperty->setValue(null, $this->previousConfiguration);
@@ -121,7 +127,7 @@ final class OpenSearchControllerTest extends TestCase
         return new OpenSearchController($openSearch, $faq, $customPage);
     }
 
-    private function createAuthenticatedContainer(): ContainerInterface
+    private function createAuthenticatedContainer(?Session $session = null): ContainerInterface
     {
         $permission = $this->createStub(PermissionInterface::class);
         $permission
@@ -140,7 +146,7 @@ final class OpenSearchControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
 
-        $session = new Session(new MockArraySessionStorage());
+        $session ??= new Session(new MockArraySessionStorage());
 
         $container = $this->createStub(ContainerInterface::class);
         $container
@@ -185,6 +191,42 @@ final class OpenSearchControllerTest extends TestCase
     }
 
     /**
+     * Primes a valid CSRF token for the given page in the supplied session.
+     *
+     * @throws \Exception
+     */
+    private function primeCsrf(Session $session, string $page): string
+    {
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString($page);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+
+        return $token;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @throws \JsonException
+     */
+    private function jsonRequest(array $payload): Request
+    {
+        return new Request([], [], [], [], [], [], json_encode($payload, JSON_THROW_ON_ERROR));
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string}>
+     */
+    public static function stateChangingActions(): array
+    {
+        return [
+            'create' => ['create', 'createIndex'],
+            'drop' => ['drop', 'dropIndex'],
+            'import' => ['import', 'bulkIndex'],
+        ];
+    }
+
+    /**
      * @throws \Exception
      */
     public function testStatisticsRequiresConfigurationEditPermission(): void
@@ -216,7 +258,7 @@ final class OpenSearchControllerTest extends TestCase
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->create();
+        $controller->create(new Request());
     }
 
     /**
@@ -227,7 +269,7 @@ final class OpenSearchControllerTest extends TestCase
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->drop();
+        $controller->drop(new Request());
     }
 
     /**
@@ -238,7 +280,7 @@ final class OpenSearchControllerTest extends TestCase
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
-        $controller->import();
+        $controller->import(new Request());
     }
 
     /**
@@ -295,9 +337,11 @@ final class OpenSearchControllerTest extends TestCase
             $this->createStub(Faq::class),
             $this->createStub(CustomPage::class),
         );
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $session = new Session(new MockArraySessionStorage());
+        $csrf = $this->primeCsrf($session, 'opensearch');
+        $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->create();
+        $response = $controller->create($this->jsonRequest(['csrf' => $csrf]));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
@@ -315,9 +359,11 @@ final class OpenSearchControllerTest extends TestCase
             $this->createStub(Faq::class),
             $this->createStub(CustomPage::class),
         );
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $session = new Session(new MockArraySessionStorage());
+        $csrf = $this->primeCsrf($session, 'opensearch');
+        $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->create();
+        $response = $controller->create($this->jsonRequest(['csrf' => $csrf]));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
@@ -337,9 +383,11 @@ final class OpenSearchControllerTest extends TestCase
             $this->createStub(Faq::class),
             $this->createStub(CustomPage::class),
         );
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $session = new Session(new MockArraySessionStorage());
+        $csrf = $this->primeCsrf($session, 'opensearch');
+        $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->drop();
+        $response = $controller->drop($this->jsonRequest(['csrf' => $csrf]));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
@@ -357,9 +405,11 @@ final class OpenSearchControllerTest extends TestCase
             $this->createStub(Faq::class),
             $this->createStub(CustomPage::class),
         );
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $session = new Session(new MockArraySessionStorage());
+        $csrf = $this->primeCsrf($session, 'opensearch');
+        $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->drop();
+        $response = $controller->drop($this->jsonRequest(['csrf' => $csrf]));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
@@ -398,9 +448,11 @@ final class OpenSearchControllerTest extends TestCase
         $faq->expects($this->once())->method('getAllFaqs');
 
         $controller = $this->createControllerWithDependencies($openSearch, $faq, $this->createStub(CustomPage::class));
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $session = new Session(new MockArraySessionStorage());
+        $csrf = $this->primeCsrf($session, 'opensearch');
+        $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->import();
+        $response = $controller->import($this->jsonRequest(['csrf' => $csrf]));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
@@ -431,9 +483,11 @@ final class OpenSearchControllerTest extends TestCase
             ->willReturn([['id' => 7, 'title' => 'Page']]);
 
         $controller = $this->createControllerWithDependencies($openSearch, $faq, $customPage);
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $session = new Session(new MockArraySessionStorage());
+        $csrf = $this->primeCsrf($session, 'opensearch');
+        $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->import();
+        $response = $controller->import($this->jsonRequest(['csrf' => $csrf]));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
@@ -464,12 +518,95 @@ final class OpenSearchControllerTest extends TestCase
             ->willReturn([['id' => 7, 'title' => 'Page']]);
 
         $controller = $this->createControllerWithDependencies($openSearch, $faq, $customPage);
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $session = new Session(new MockArraySessionStorage());
+        $csrf = $this->primeCsrf($session, 'opensearch');
+        $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->import();
+        $response = $controller->import($this->jsonRequest(['csrf' => $csrf]));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_os_create_import_success'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('stateChangingActions')]
+    public function testStateChangingActionRequiresConfigurationEdit(string $action, string $serviceMethod): void
+    {
+        $searchInstance = $this->createMock(OpenSearch::class);
+        $searchInstance->expects($this->never())->method($serviceMethod);
+
+        $controller = $this->createControllerWithOpenSearch($searchInstance);
+        $controller->setContainer($this->createAuthenticatedContainerWithoutPermission());
+
+        $this->expectException(ForbiddenException::class);
+        $controller->{$action}($this->jsonRequest([]));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('stateChangingActions')]
+    public function testStateChangingActionRejectsRequestWithoutCsrfToken(string $action, string $serviceMethod): void
+    {
+        $searchInstance = $this->createMock(OpenSearch::class);
+        $searchInstance->expects($this->never())->method($serviceMethod);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('getAllFaqs');
+
+        $controller = $this->createControllerWithDependencies($searchInstance, $faq, $this->createStub(CustomPage::class));
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->{$action}($this->jsonRequest([]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(['error' => Translation::get('msgNoPermission')], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('stateChangingActions')]
+    public function testStateChangingActionRejectsRequestWithWrongCsrfToken(string $action, string $serviceMethod): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $this->primeCsrf($session, 'opensearch');
+
+        $searchInstance = $this->createMock(OpenSearch::class);
+        $searchInstance->expects($this->never())->method($serviceMethod);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('getAllFaqs');
+
+        $controller = $this->createControllerWithDependencies($searchInstance, $faq, $this->createStub(CustomPage::class));
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->{$action}($this->jsonRequest(['csrf' => 'wrong-token']));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('stateChangingActions')]
+    public function testStateChangingActionRejectsTokenScopedToAnotherPage(string $action, string $serviceMethod): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $otherPageToken = $this->primeCsrf($session, 'update-package');
+
+        $searchInstance = $this->createMock(OpenSearch::class);
+        $searchInstance->expects($this->never())->method($serviceMethod);
+
+        $controller = $this->createControllerWithOpenSearch($searchInstance);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->{$action}($this->jsonRequest(['csrf' => $otherPageToken]));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 }

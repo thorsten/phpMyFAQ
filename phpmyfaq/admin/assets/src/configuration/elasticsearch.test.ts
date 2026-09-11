@@ -18,7 +18,7 @@ describe('Elasticsearch Functions', () => {
   describe('handleElasticsearch', () => {
     it('should handle Elasticsearch button clicks and fetch action', async () => {
       document.body.innerHTML = `
-        <button class="pmf-elasticsearch" data-action="reindex">Reindex</button>
+        <button class="pmf-elasticsearch" data-action="reindex" data-pmf-csrf-token="csrf-token">Reindex</button>
         <div id="pmf-elasticsearch-stats"></div>
         <div id="pmf-elasticsearch-healthcheck-alert"><span class="alert-message"></span></div>
       `;
@@ -44,7 +44,7 @@ describe('Elasticsearch Functions', () => {
       const button = document.querySelector('button.pmf-elasticsearch') as HTMLButtonElement;
       button.click();
 
-      expect(fetchElasticsearchAction).toHaveBeenCalledWith('reindex');
+      expect(fetchElasticsearchAction).toHaveBeenCalledWith('reindex', 'csrf-token');
     });
 
     it('should handle Elasticsearch statistics update when healthy', async () => {

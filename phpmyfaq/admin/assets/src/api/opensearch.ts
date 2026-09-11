@@ -16,15 +16,16 @@
 import { ApiResponse, ElasticsearchResponse } from '../interfaces';
 import { fetchWrapper, fetchJson } from './fetch-wrapper';
 
-export const fetchOpenSearchAction = async (action: string): Promise<ApiResponse> => {
+export const fetchOpenSearchAction = async (action: string, csrfToken: string): Promise<ApiResponse> => {
   return await fetchJson<ApiResponse>(`./api/opensearch/${action}`, {
-    method: 'GET',
+    method: 'POST',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json',
     },
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
+    body: JSON.stringify({ csrf: csrfToken }),
   });
 };
 

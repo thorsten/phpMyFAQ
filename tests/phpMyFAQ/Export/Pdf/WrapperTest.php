@@ -128,10 +128,10 @@ class WrapperTest extends TestCase
 
     public function testConvertExternalImagesToBase64WithNoConfig(): void
     {
-        $html = '<img src="https://example.com/image.jpg" alt="test">';
+        $html = '<p>before</p><img src="https://example.com/image.jpg" alt="test"><p>after</p>';
         $result = $this->wrapper->convertExternalImagesToBase64($html);
-        // Should return original HTML when no config is set
-        $this->assertEquals($html, $result);
+        // Without a configuration there is no allowlist: external images are removed
+        $this->assertEquals('<p>before</p><p>after</p>', $result);
     }
 
     public function testConvertExternalImagesToBase64WithEmptyAllowedHosts(): void
@@ -142,8 +142,8 @@ class WrapperTest extends TestCase
 
         $html = '<img src="https://example.com/image.jpg" alt="test">';
         $result = $this->wrapper->convertExternalImagesToBase64($html);
-        // Should return original HTML when allowed hosts is empty
-        $this->assertEquals($html, $result);
+        // With an empty allowlist no external image may reach the engine
+        $this->assertEquals('', $result);
     }
 
     public function testConvertExternalImagesToBase64WithDisallowedHost(): void
@@ -154,8 +154,8 @@ class WrapperTest extends TestCase
 
         $html = '<img src="https://badsite.com/image.jpg" alt="test">';
         $result = $this->wrapper->convertExternalImagesToBase64($html);
-        // Should return original HTML when host is not allowed
-        $this->assertEquals($html, $result);
+        // Images from hosts outside the policy are removed, not passed to the engine
+        $this->assertEquals('', $result);
     }
 
     public function testConvertExternalImagesToBase64WithLocalImage(): void
@@ -939,14 +939,14 @@ class WrapperTest extends TestCase
         $config->method('getAllowedMediaHosts')->willReturn(['example.com']);
         $this->wrapper->setConfig($config);
 
-        // Subdomain should match but fetch will fail, returning original HTML
+        // Subdomain should match but fetch will fail, so the image is removed
         $html = '<img src="https://images.example.com/photo.jpg" alt="test">';
 
         set_error_handler(static fn(): bool => true);
         try {
             $result = $this->wrapper->convertExternalImagesToBase64($html);
-            // Fetch fails, so original HTML is returned
-            $this->assertEquals($html, $result);
+            // Fetch fails, so the image must not survive into the engine input
+            $this->assertEquals('', $result);
         } finally {
             restore_error_handler();
         }
@@ -963,8 +963,8 @@ class WrapperTest extends TestCase
         set_error_handler(static fn(): bool => true);
         try {
             $result = $this->wrapper->convertExternalImagesToBase64($html);
-            // Fetch fails (404), returns original
-            $this->assertEquals($html, $result);
+            // Fetch fails (404), so the image is removed
+            $this->assertEquals('', $result);
         } finally {
             restore_error_handler();
         }
@@ -978,7 +978,7 @@ class WrapperTest extends TestCase
 
         $html = '<img src="https://example.com/image.jpg" alt="test">';
         $result = $this->wrapper->convertExternalImagesToBase64($html);
-        $this->assertEquals($html, $result);
+        $this->assertEquals('', $result);
     }
 
     public function testConvertExternalImagesToBase64WithNoImgTags(): void
@@ -1179,5 +1179,110 @@ class WrapperTest extends TestCase
         self::assertStringContainsString('data-src="lazy.jpg"', $result);
         self::assertStringContainsString('src="@', $result);
         self::assertStringNotContainsString('data:image/gif', $result);
+    }
+
+    public function testConvertExternalImagesStripsVectorImagesFromDisallowedHost(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['127.0.0.1']);
+        $this->wrapper->setConfig($config);
+
+        foreach (['svg', 'eps', 'ai'] as $extension) {
+            $html = sprintf('<p>x</p><img src="http://localhost/direct.%s"><p>y</p>', $extension);
+            $this->assertEquals('<p>x</p><p>y</p>', $this->wrapper->convertExternalImagesToBase64($html));
+        }
+    }
+
+    public function testConvertExternalImagesStripsAllowedImageThatCannotBeFetched(): void
+    {
+        $requests = [];
+        $httpRequester = $this->createStub(HttpRequesterInterface::class);
+        $httpRequester
+            ->method('request')
+            ->willReturnCallback(static function (string $url) use (&$requests): array {
+                $requests[] = $url;
+
+                return [500, [], false];
+            });
+
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['127.0.0.1']);
+
+        $wrapper = new Wrapper(null, new ExternalImageFetcher($httpRequester));
+        $wrapper->setConfig($config);
+
+        $result = $wrapper->convertExternalImagesToBase64(
+            '<img src="http://127.0.0.1/redirect.svg"><img src="http://127.0.0.1/redirect.png">',
+        );
+
+        // The policy-checked fetcher may try the allowed origin, but an image
+        // that cannot be converted must never survive into the engine input.
+        $this->assertEquals('', $result);
+        $this->assertNotEmpty($requests);
+        foreach ($requests as $url) {
+            $this->assertStringStartsWith('http://127.0.0.1/', $url);
+        }
+    }
+
+    public function testConvertExternalImagesDecodesEntitiesBeforeApplyingPolicy(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['allowed.example']);
+        $this->wrapper->setConfig($config);
+
+        // Decoded, this URL points at evil.example (userinfo trick).
+        $html = '<img src="http://allowed.example&#64;evil.example/image.png">';
+        $this->assertEquals('', $this->wrapper->convertExternalImagesToBase64($html));
+    }
+
+    public function testConvertExternalImagesKeepsLocalReferences(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['127.0.0.1']);
+        $this->wrapper->setConfig($config);
+
+        $html = '<img src="/content/user/images/local.svg"><img src="@' . base64_encode('<svg/>') . '">';
+        $this->assertEquals($html, $this->wrapper->convertExternalImagesToBase64($html));
+    }
+
+    public function testStripExternalStylesheetLinks(): void
+    {
+        $html = '<link rel="stylesheet" type="text/css" href="http://localhost/x.css"><p>text</p><LINK href="a">';
+        $this->assertEquals('<p>text</p>', $this->wrapper->stripExternalStylesheetLinks($html));
+    }
+
+    public function testWriteHtmlNeverHandsRemoteImagesOrStylesheetsToTheEngine(): void
+    {
+        $engine = $this->createMock(PdfEngineInterface::class);
+        $engine
+            ->expects($this->once())
+            ->method('writeHtml')
+            ->with($this->callback(static function (string $html): bool {
+                return (
+                    str_contains($html, '<p>start</p>')
+                    && str_contains($html, '<p>end</p>')
+                    && !str_contains($html, '<link')
+                    && !str_contains($html, 'localhost')
+                    && !str_contains($html, '127.0.0.1')
+                );
+            }));
+
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['127.0.0.1']);
+
+        $httpRequester = $this->createStub(HttpRequesterInterface::class);
+        $httpRequester->method('request')->willReturn([404, [], false]);
+
+        $wrapper = new Wrapper($engine, new ExternalImageFetcher($httpRequester));
+        $wrapper->setConfig($config);
+
+        $wrapper->WriteHTML(
+            '<p>start</p>'
+            . '<img src="http://localhost/direct.svg" width="10" height="10">'
+            . '<img src="http://localhost/direct.eps" width="10" height="10">'
+            . '<img src="http://127.0.0.1/content/user/images/missing.svg" width="10" height="10">'
+            . '<link rel="stylesheet" type="text/css" href="http://localhost/style.css">'
+            . '<p>end</p>',
+        );
     }
 }
