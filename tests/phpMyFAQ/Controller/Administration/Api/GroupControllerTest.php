@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[CoversClass(GroupController::class)]
 #[UsesNamespace('phpMyFAQ')]
@@ -142,6 +143,27 @@ final class GroupControllerTest extends TestCase
         $currentUser->method('getUserId')->willReturn(1);
 
         $session ??= new Session(new MockArraySessionStorage());
+        $adminLog = $this->createStub(AdminLog::class);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
+
+        return $container;
+    }
+
+    private function createContainerForUser(CurrentUser $currentUser): ContainerInterface
+    {
+        $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
 
         $container = $this->createStub(ContainerInterface::class);
@@ -1114,5 +1136,47 @@ final class GroupControllerTest extends TestCase
         // parent are appended as roots.
         self::assertSame(['Guides', 'Setup', 'News', 'Orphan'], array_column($payload, 'name'));
         self::assertSame([0, 1, 0, 0], array_column($payload, 'level'));
+    }
+
+    /**
+     * A logged-out caller must trigger UnauthorizedHttpException (translated to a login
+     * redirect / 401 by the application), not a bare 403, because the group permission gate
+     * authenticates first.
+     *
+     * @throws \Exception
+     */
+    public function testListGroupsRejectsUnauthenticatedUser(): void
+    {
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(false);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createContainerForUser($currentUser));
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->listGroups();
+    }
+
+    /**
+     * A logged-in caller without the group permissions is still rejected with
+     * ForbiddenException (403): authentication passes, the permission gate fails.
+     *
+     * @throws \Exception
+     */
+    public function testListGroupsForbidsAuthenticatedUserWithoutPermission(): void
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(false);
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(5);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createContainerForUser($currentUser));
+
+        $this->expectException(ForbiddenException::class);
+        $controller->listGroups();
     }
 }

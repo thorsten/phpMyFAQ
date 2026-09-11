@@ -50,7 +50,9 @@ class AdditionalMigrationVersionsTest extends TestCase
             '410alpha' => [Migration410Alpha::class, '4.1.0-alpha', ['4.0.9'], 'robots.txt'],
             '410alpha2' => [Migration410Alpha2::class, '4.1.0-alpha.2', ['4.1.0-alpha'], 'OpenSearch'],
             '410alpha3' => [Migration410Alpha3::class, '4.1.0-alpha.3', ['4.1.0-alpha.2'], 'LLMs.txt'],
-            '419' => [Migration419::class, '4.1.9', ['4.1.0-alpha.3'], 'faqvisits.visits'],
+            '413' => [Migration413::class, '4.1.3', ['4.1.0-alpha.3'], 'API client token'],
+            '418' => [Migration418::class, '4.1.8', ['4.1.3'], 'add_faq'],
+            '419' => [Migration419::class, '4.1.9', ['4.1.8'], 'faqvisits.visits'],
         ];
     }
 

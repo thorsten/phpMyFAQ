@@ -549,6 +549,36 @@ class WrapperTest extends TestCase
         self::assertNull($resolve('content/%2e%2e/%2e%2e/%2e%2e/etc/passwd', 'jpg'));
     }
 
+    /**
+     * A crafted <img src> pointing at a readable non-image file under content/ must be
+     * dropped before it reaches the PDF engine, and probing it must not emit a warning that
+     * could carry the file's contents into the output.
+     */
+    public function testResolveImageRefusesNonImageFileUnderContentWithoutLeaking(): void
+    {
+        $secretFile = PMF_ROOT_DIR . '/content/user/images/pmf-test-secret.php';
+        self::assertNotFalse(file_put_contents($secretFile, "<?php\n\$DB['password'] = 'super-secret-password';\n"));
+
+        $handlerFired = false;
+        set_error_handler(static function () use (&$handlerFired): bool {
+            $handlerFired = true;
+            throw new \ErrorException('warning promoted to exception');
+        }, E_WARNING | E_NOTICE);
+
+        try {
+            $result = $this->captureImageResolver()('/content/user/images/pmf-test-secret.php', 'php');
+        } finally {
+            restore_error_handler();
+            @unlink($secretFile);
+        }
+
+        self::assertNull($result, 'A readable non-image file must not be handed to the PDF engine');
+        self::assertFalse(
+            $handlerFired,
+            'Probing a non-image file must not emit a warning that could leak its contents',
+        );
+    }
+
     public function testCheckBase64ImageSwallowsWarningsForNonImageData(): void
     {
         set_error_handler(static function (): bool {

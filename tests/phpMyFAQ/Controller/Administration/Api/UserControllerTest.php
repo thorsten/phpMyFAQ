@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(UserController::class)]
@@ -1610,5 +1611,131 @@ final class UserControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertStringContainsString('error', (string) $response->getContent());
+    }
+
+    /**
+     * A logged-out caller must trigger UnauthorizedHttpException (translated to a login
+     * redirect / 401 by the application), not a bare 403, because the user permission gate
+     * authenticates first.
+     *
+     * @throws \Exception
+     */
+    public function testListRejectsUnauthenticatedUser(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->method('isLoggedIn')->willReturn(false);
+
+        $controller = $this->buildController($session, $actingUser);
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->list(new Request());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testOverwritePasswordRejectsBadCsrfTokenForNonSuperAdmin(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $controller = $this->buildController($session, $actingUser);
+
+        $response = $controller->overwritePassword($this->jsonRequest([
+            'userId' => 5,
+            'csrf' => 'nope',
+            'newPassword' => 'longenoughpw',
+            'passwordRepeat' => 'longenoughpw',
+        ]));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testOverwritePasswordRejectsZeroUserId(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'overwrite-password');
+
+        $response = $controller->overwritePassword($this->jsonRequest([
+            'userId' => 0,
+            'csrf' => $csrf,
+            'newPassword' => 'longenoughpw',
+            'passwordRepeat' => 'longenoughpw',
+        ]));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testOverwritePasswordRejectsShortPasswordForNonSuperAdmin(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'overwrite-password');
+
+        $response = $controller->overwritePassword($this->jsonRequest([
+            'userId' => 5,
+            'csrf' => $csrf,
+            'newPassword' => 'short',
+            'passwordRepeat' => 'short',
+        ]));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    /**
+     * The IDOR escalation case: an admin with USER_EDIT but without the SuperAdmin flag must
+     * not be able to overwrite the SuperAdmin's password.
+     *
+     * @throws \Exception
+     */
+    public function testOverwritePasswordNonSuperAdminCannotChangeSuperAdminPassword(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'overwrite-password');
+
+        $response = $controller->overwritePassword($this->jsonRequest([
+            'userId' => 1,
+            'csrf' => $csrf,
+            'newPassword' => 'NewSuperAdminP@ss123!',
+            'passwordRepeat' => 'NewSuperAdminP@ss123!',
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testOverwritePasswordNonSuperAdminCannotChangeArbitraryOtherUsersPassword(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'overwrite-password');
+
+        $response = $controller->overwritePassword($this->jsonRequest([
+            'userId' => 42,
+            'csrf' => $csrf,
+            'newPassword' => 'longenoughpw',
+            'passwordRepeat' => 'longenoughpw',
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
     }
 }

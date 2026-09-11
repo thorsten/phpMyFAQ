@@ -584,6 +584,41 @@ class AbstractControllerTest extends TestCase
         unset($_SERVER['HTTP_X_PMF_TOKEN']);
     }
 
+    /**
+     * @return array<string, array{0: mixed}>
+     */
+    public static function emptyConfiguredTokenProvider(): array
+    {
+        return [
+            'empty string' => [''],
+            'null' => [null],
+            'non-string' => [false],
+        ];
+    }
+
+    /**
+     * An installation whose api.apiClientToken is empty must not accept a request that simply
+     * omits or blanks the header: hash_equals('', '') would otherwise open the API to everybody.
+     */
+    #[DataProvider('emptyConfiguredTokenProvider')]
+    public function testHasValidTokenThrowsExceptionWithEmptyConfiguredToken(mixed $configuredToken): void
+    {
+        $this->configurationMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('api.apiClientToken')
+            ->willReturn($configuredToken);
+
+        $_SERVER['HTTP_X_PMF_TOKEN'] = '';
+
+        try {
+            $this->expectException(UnauthorizedHttpException::class);
+            $this->abstractController->hasValidTokenPublic();
+        } finally {
+            unset($_SERVER['HTTP_X_PMF_TOKEN']);
+        }
+    }
+
     public function testHasValidTokenSucceedsWithValidToken(): void
     {
         $this->configurationMock

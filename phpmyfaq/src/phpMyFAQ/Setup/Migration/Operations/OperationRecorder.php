@@ -123,6 +123,18 @@ class OperationRecorder
     }
 
     /**
+     * Records a permission rename operation.
+     *
+     * The rename only happens when the new name does not exist yet, so it is safe to re-run
+     * and a no-op on installations that already carry the new name.
+     */
+    public function renamePermission(string $oldName, string $newName): self
+    {
+        $this->operations[] = new PermissionRenameOperation($this->configuration, $oldName, $newName);
+        return $this;
+    }
+
+    /**
      * Records a permission backfill operation.
      *
      * Unlike grantPermission(), this succeeds on an already existing right and reaches every

@@ -125,6 +125,19 @@ class OperationRecorderTest extends TestCase
         $this->assertInstanceOf(PermissionGrantOperation::class, $operations[0]);
     }
 
+    public function testRenamePermission(): void
+    {
+        $recorder = new OperationRecorder($this->configuration);
+        $recorder->renamePermission('addfaq', 'add_faq');
+
+        $operations = $recorder->getOperations();
+
+        $this->assertCount(1, $operations);
+        $this->assertInstanceOf(PermissionRenameOperation::class, $operations[0]);
+        $this->assertSame('addfaq', $operations[0]->getOldName());
+        $this->assertSame('add_faq', $operations[0]->getNewName());
+    }
+
     public function testGetOperationsByType(): void
     {
         $recorder = new OperationRecorder($this->configuration);

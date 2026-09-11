@@ -31,7 +31,7 @@ readonly class Migration419 extends AbstractMigration
 
     public function getDependencies(): array
     {
-        return ['4.1.0-alpha.3'];
+        return ['4.1.8'];
     }
 
     public function getDescription(): string

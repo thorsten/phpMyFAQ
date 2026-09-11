@@ -497,11 +497,14 @@ class Wrapper
             return null;
         }
 
-        if ($this->checkBase64Image($data)) {
-            return ['@' . $data, $type];
+        // A readable file under content/ that is not an image (e.g. a PHP or config file
+        // referenced via a crafted <img src>) must never reach the PDF engine, which would
+        // otherwise try to parse it and could leak its contents.
+        if (!$this->checkBase64Image($data)) {
+            return null;
         }
 
-        return [$path, $type];
+        return ['@' . $data, $type];
     }
 
     /**
