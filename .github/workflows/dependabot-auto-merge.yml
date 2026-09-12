@@ -12,6 +12,7 @@ on:
       - "phpMyFAQ E2E Tests"
       - "CodeQL"
       - "Semgrep"
+      - "Lint GitHub Actions workflows"
     types: [completed]
 
 permissions:
@@ -58,6 +59,7 @@ jobs:
           # Every check run on the head commit (except this job) must have
           # completed successfully. If some are still running, a later
           # workflow_run event for this commit will re-evaluate.
+          # shellcheck disable=SC2016 # $self is a jq variable, not a shell one
           not_green="$(gh api --paginate "repos/$GH_REPO/commits/$HEAD_SHA/check-runs?per_page=100" \
             --jq --arg self "$SELF_CHECK_NAME" '
               .check_runs[]

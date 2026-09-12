@@ -1,0 +1,30 @@
+# Lints the GitHub Actions workflow files themselves: expression errors,
+# unknown action inputs, invalid triggers, and (via shellcheck) mistakes in
+# `run:` scripts. A broken workflow file otherwise only fails when it runs.
+name: "Lint GitHub Actions workflows"
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ '.github/**' ]
+  pull_request:
+    paths: [ '.github/**' ]
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    name: actionlint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - name: Install actionlint
+        run: |
+          bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/v1.7.12/scripts/download-actionlint.bash) 1.7.12 "$RUNNER_TEMP"
+
+      - name: Run actionlint
+        run: |
+          "$RUNNER_TEMP/actionlint" -no-color -oneline
