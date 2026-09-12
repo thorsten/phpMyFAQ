@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Attachment\Filesystem\File;
 
 use phpMyFAQ\Attachment\Filesystem\AbstractFile;
-use phpseclib3\Crypt\AES;
+use phpseclib4\Crypt\AES;
 
 /**
  * Class Encrypted

@@ -21,8 +21,8 @@ namespace phpMyFAQ\Auth\WebAuthn;
 
 use CBOR\CBOREncoder;
 use phpMyFAQ\Core\Exception;
-use phpseclib3\Crypt\PublicKeyLoader;
-use phpseclib3\Math\BigInteger;
+use phpseclib4\Crypt\PublicKeyLoader;
+use phpseclib4\Math\BigInteger;
 
 class PublicKeyConverter
 {

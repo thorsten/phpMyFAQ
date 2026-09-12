@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Attachment;
 
-use LengthException;
 use phpMyFAQ\Attachment\Filesystem\AbstractFile as FilesystemFile;
 use phpMyFAQ\Attachment\Filesystem\File\EncryptedFile;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
@@ -28,6 +27,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Storage\StorageException;
 use phpMyFAQ\Storage\StorageFactory;
 use phpMyFAQ\Storage\StorageInterface;
+use phpseclib4\Exception\LengthException;
 use Throwable;
 
 /**
