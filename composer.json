@@ -49,7 +49,7 @@
     "league/oauth2-server": "~9.4.0",
     "mcp/sdk": "~0.8.1",
     "minishlink/web-push": "~11.0.0",
-    "monolog/monolog": "~3.10.0",
+    "monolog/monolog": "~3.11.0",
     "myclabs/deep-copy": "~1.14.0",
     "opensearch-project/opensearch-php": "~2.6.0",
     "phpseclib/phpseclib": "~3.0.50",
