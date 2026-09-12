@@ -127,5 +127,8 @@ nbproject/
 # Python bytecode (mkdocs tooling)
 __pycache__/
 
-# Claude Code personal overrides (the shared project settings are tracked)
-.claude/settings.local.json
+# Claude Code: only the shared project settings and hooks are tracked;
+# personal overrides and runtime state stay local
+.claude/*
+!.claude/settings.json
+!.claude/hooks/
