@@ -52,7 +52,7 @@
     "monolog/monolog": "~3.11.0",
     "myclabs/deep-copy": "~1.14.0",
     "opensearch-project/opensearch-php": "~2.6.0",
-    "phpseclib/phpseclib": "~3.0.50",
+    "phpseclib/phpseclib": "~4.0.1",
     "robthree/twofactorauth": "~3.0.3",
     "symfony/cache": "~8.1.0",
     "symfony/config": "~8.1.0",
