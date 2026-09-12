@@ -72,6 +72,10 @@ CLI tools therefore live in `phpmyfaq/src/libs/bin/` (`phpunit`, `mago`, `rector
 - SCSS lint auto-fix: pnpm stylelint:fix
 - End-to-end tests (Playwright, fully automated setup via bin/e2e): pnpm e2e:local (SQLite + built-in PHP server) or pnpm e2e:docker (MariaDB container)
 - TypeScript errors have to be fixed before committing code.
+- Local hooks run PHPUnit without coverage, CI runs it with coverage. Risky-test failures from strict
+  coverage metadata (`beStrictAboutCoverageMetadata` + `failOnRisky`) therefore only appear in CI, as
+  exit code 1 with "0 failed" in the JUnit report. Reproduce locally with:
+  `./phpmyfaq/src/libs/bin/phpunit --coverage-text --coverage-clover /tmp/clover.xml`
 
 ### Mago baselines
 
@@ -150,6 +154,21 @@ When implementing changes:
 3. Run `composer test` / `pnpm test` — all tests must pass before finishing.
 4. Never commit with `--no-verify`.
 5. Clear route cache (`rm -rf phpmyfaq/cache/routes`) after adding or modifying routes.
+6. After editing anything under `.github/workflows/`, run `actionlint` (CI runs it too) — a broken
+   workflow file otherwise only fails once it runs.
+
+## Dependency Updates
+
+Dependabot opens the PRs. Minor and patch updates are merged automatically once every check on the
+PR is green (`.github/workflows/dependabot-auto-merge.yml`). Major updates are never auto-merged and
+need a review with a green build before a manual merge. When handling a major update:
+
+1. Read the upstream changelog or release notes for the new major version.
+2. Grep the code base for the old namespace, removed classes, or changed exception hierarchy
+   (e.g. phpseclib 4 renamed `phpseclib3\` to `phpseclib4\` and dropped the SPL `LengthException` base).
+3. Run `composer check` and `composer test` (or `pnpm oxlint` / `pnpm tsc` / `pnpm test`) against the
+   new lockfile — static analysis catches missing classes, only tests catch changed behaviour.
+4. Never merge with a red build, even if the failure looks unrelated.
 
 ## Dependency Injection
 
