@@ -1,28 +1,75 @@
 name: "Dependabot Auto-Merge"
 
+# Merges Dependabot minor and patch updates only after every check on the pull
+# request has finished successfully. Enabling auto-merge straight from the
+# pull_request event merges immediately when the base branch requires no status
+# checks, red build or not, so this workflow instead runs after each CI workflow
+# completes and inspects the full set of check runs for the PR's head commit.
 on:
-  pull_request:
+  workflow_run:
+    workflows:
+      - "phpMyFAQ Build"
+      - "phpMyFAQ E2E Tests"
+      - "CodeQL"
+      - "Semgrep"
+    types: [completed]
 
 permissions:
   contents: write
   pull-requests: write
+  checks: read
 
 jobs:
   auto-merge:
-    name: Enable auto-merge for Dependabot PRs
+    name: Merge Dependabot minor and patch updates
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'thorsten/phpMyFAQ'
+    if: >-
+      github.repository == 'thorsten/phpMyFAQ'
+      && github.event.workflow_run.event == 'pull_request'
+      && github.event.workflow_run.conclusion == 'success'
+      && github.event.workflow_run.actor.login == 'dependabot[bot]'
+      && github.event.workflow_run.pull_requests[0].number
 
     steps:
-      - name: Fetch Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v3.1.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Enable auto-merge for minor and patch updates
-        if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch'
-        run: gh pr merge --auto --squash "$PR_URL"
+      - name: Merge when all checks are green and the update is minor or patch
         env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          SELF_CHECK_NAME: Merge Dependabot minor and patch updates
+        run: |
+          set -euo pipefail
+
+          # Dependabot records the semver update type in its commit message
+          # ("update-type: version-update:semver-patch"). Grouped updates yield
+          # several lines and therefore never match a single type below.
+          update_type="$(gh api "repos/$GH_REPO/commits/$HEAD_SHA" --jq '.commit.message' \
+            | sed -n 's/^ *update-type: *//p' | sort -u)"
+
+          case "$update_type" in
+            version-update:semver-minor|version-update:semver-patch) ;;
+            *)
+              echo "Not merging PR #$PR_NUMBER: update type is '${update_type:-unknown}', only minor and patch updates are merged automatically."
+              exit 0
+              ;;
+          esac
+
+          # Every check run on the head commit (except this job) must have
+          # completed successfully. If some are still running, a later
+          # workflow_run event for this commit will re-evaluate.
+          not_green="$(gh api --paginate "repos/$GH_REPO/commits/$HEAD_SHA/check-runs?per_page=100" \
+            --jq --arg self "$SELF_CHECK_NAME" '
+              .check_runs[]
+              | select(.name != $self)
+              | select(.status != "completed" or (.conclusion != "success" and .conclusion != "skipped" and .conclusion != "neutral"))
+              | "\(.name): \(.status)/\(.conclusion // "pending")"')"
+
+          if [ -n "$not_green" ]; then
+            echo "Not merging PR #$PR_NUMBER yet, these checks are not green:"
+            echo "$not_green"
+            exit 0
+          fi
+
+          echo "All checks on $HEAD_SHA are green, merging PR #$PR_NUMBER."
+          gh pr merge --auto --squash --match-head-commit "$HEAD_SHA" "$PR_NUMBER"

@@ -52,11 +52,16 @@ jobs:
         run: php scripts/check-version.php
 
       - name: Test with PHPUnit
+        id: phpunit
         run: phpmyfaq/src/libs/bin/phpunit --coverage-text --coverage-clover coverage/clover.xml --log-junit junit.xml
 
+      # Only publish when PHPUnit actually ran. With a plain `if: always()` an
+      # earlier failure (e.g. Mago) skips PHPUnit and this step then reports a
+      # green "PHPUnit Test Results" check with zero tests, which makes a red
+      # pull request look partly green.
       - name: Publish PHPUnit test results
         uses: mikepenz/action-junit-report@v6.5.0
-        if: always()
+        if: ${{ !cancelled() && steps.phpunit.outcome != 'skipped' }}
         with:
           report_paths: junit.xml
           check_name: PHPUnit Test Results (PHP ${{ matrix.php-versions }})
