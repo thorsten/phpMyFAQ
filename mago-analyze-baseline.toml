@@ -176,12 +176,6 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
-code = "redundant-condition"
-message = "This condition (type `true`) will always evaluate to true."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
 code = "redundant-logical-operation"
 message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
 count = 1
@@ -818,12 +812,6 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
-code = "mixed-assignment"
-message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 3
@@ -1343,12 +1331,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SearchController.php"
 code = "redundant-cast"
 message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/WebAuthnController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 5
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
