@@ -126,3 +126,6 @@ nbproject/
 
 # Python bytecode (mkdocs tooling)
 __pycache__/
+
+# Claude Code personal overrides (the shared project settings are tracked)
+.claude/settings.local.json

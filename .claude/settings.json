@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(composer test:*)",
+      "Bash(composer check:*)",
+      "Bash(composer lint:*)",
+      "Bash(composer analyze:*)",
+      "Bash(composer format:*)",
+      "Bash(composer validate:*)",
+      "Bash(phpmyfaq/src/libs/bin/phpunit:*)",
+      "Bash(./phpmyfaq/src/libs/bin/phpunit:*)",
+      "Bash(phpmyfaq/src/libs/bin/mago:*)",
+      "Bash(./phpmyfaq/src/libs/bin/mago:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm tsc:*)",
+      "Bash(pnpm oxlint:*)",
+      "Bash(pnpm oxfmt:*)",
+      "Bash(pnpm stylelint:*)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm run test:*)",
+      "Bash(pnpm run tsc:*)",
+      "Bash(pnpm run oxlint:*)",
+      "Bash(pnpm run oxfmt:*)",
+      "Bash(pnpm run stylelint:*)",
+      "Bash(pnpm run build:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/format-file.sh",
+            "timeout": 60,
+            "statusMessage": "Formatting edited file"
+          }
+        ]
+      }
+    ]
+  }
+}
