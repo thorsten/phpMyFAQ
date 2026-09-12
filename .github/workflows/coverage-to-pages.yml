@@ -56,27 +56,6 @@ jobs:
             --coverage-html build/coverage \
             --coverage-clover build/coverage/clover.xml
 
-      # Optional: Coverage-Zusammenfassung in der GitHub Actions Summary anzeigen
-      - name: Coverage Summary
-        if: always()
-        run: |
-          if [ -f build/coverage/clover.xml ]; then
-            echo "## Code Coverage Report" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-
-            # Gesamtabdeckung aus clover.xml extrahieren
-            COVERED=$(grep -oP 'coveredstatements="\K[0-9]+' build/coverage/clover.xml | tail -1)
-            TOTAL=$(grep -oP 'statements="\K[0-9]+' build/coverage/clover.xml | tail -1)
-
-            if [ -n "$COVERED" ] && [ -n "$TOTAL" ] && [ "$TOTAL" -gt 0 ]; then
-              PERCENT=$(awk "BEGIN { printf \"%.1f\", ($COVERED/$TOTAL)*100 }")
-              echo "**Gesamtabdeckung: ${PERCENT}%** (${COVERED}/${TOTAL} Statements)" >> $GITHUB_STEP_SUMMARY
-            fi
-
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "📊 [Vollständiger Report](${{ steps.deployment.outputs.page_url }})" >> $GITHUB_STEP_SUMMARY
-          fi
-
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
@@ -88,3 +67,24 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+      # Runs after the deployment so the page URL of the published report is available.
+      - name: Coverage Summary
+        if: always()
+        run: |
+          if [ -f build/coverage/clover.xml ]; then
+            echo "## Code Coverage Report" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+
+            # Gesamtabdeckung aus clover.xml extrahieren
+            COVERED=$(grep -oP 'coveredstatements="\K[0-9]+' build/coverage/clover.xml | tail -1)
+            TOTAL=$(grep -oP 'statements="\K[0-9]+' build/coverage/clover.xml | tail -1)
+
+            if [ -n "$COVERED" ] && [ -n "$TOTAL" ] && [ "$TOTAL" -gt 0 ]; then
+              PERCENT=$(awk "BEGIN { printf \"%.1f\", ($COVERED/$TOTAL)*100 }")
+              echo "**Gesamtabdeckung: ${PERCENT}%** (${COVERED}/${TOTAL} Statements)" >> "$GITHUB_STEP_SUMMARY"
+            fi
+
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "📊 [Vollständiger Report](${{ steps.deployment.outputs.page_url }})" >> "$GITHUB_STEP_SUMMARY"
+          fi
