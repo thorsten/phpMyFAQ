@@ -286,6 +286,22 @@ class SvgSanitizer
                 $decoded,
             ) ?? '';
 
+        // Browsers drop tab, CR and LF anywhere inside a URL, so
+        // href="java&#9;script:..." executes. Drop them from URL attribute
+        // values too, so the scheme is matched the way the browser sees it.
+        $decoded =
+            preg_replace_callback(
+                '/((?:xlink:)?href|src)(\s*=\s*)(["\'])(.*?)\3/is',
+                static fn(array $matches): string => (
+                    $matches[1]
+                    . $matches[2]
+                    . $matches[3]
+                    . (preg_replace('/[\x09\x0a\x0d]/', replacement: '', subject: $matches[4]) ?? '')
+                    . $matches[3]
+                ),
+                $decoded,
+            ) ?? '';
+
         // Strip null bytes and control characters that could break regex matching
         // Fail closed: a regex failure must never leak partially decoded content
         return preg_replace('/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/', replacement: '', subject: $decoded) ?? '';

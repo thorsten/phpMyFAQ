@@ -2067,4 +2067,45 @@ class SvgSanitizerTest extends TestCase
             }
         }
     }
+
+    public function testIsSafeReturnsFalseForJavascriptUrlWithEncodedTabInScheme(): void
+    {
+        $maliciousSvg =
+            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">'
+            . '<a xlink:href="java&#9;script:alert(document.domain)"><text y="20">x</text></a></svg>';
+
+        $filePath = $this->testDir . '/tab_in_scheme.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testIsSafeReturnsFalseForJavascriptUrlWithRawNewlineInScheme(): void
+    {
+        $maliciousSvg =
+            "<svg xmlns=\"http://www.w3.org/2000/svg\"><a href=\"java\nscript:alert(1)\">"
+            . '<text y="20">x</text></a></svg>';
+
+        $filePath = $this->testDir . '/newline_in_scheme.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testSanitizeRemovesJavascriptUrlWithTabInScheme(): void
+    {
+        $maliciousSvg =
+            "<svg xmlns=\"http://www.w3.org/2000/svg\"><a href=\"java\tscript:alert(1)\">"
+            . '<text y="20">x</text></a><path d="M 0 0' . "\n" . 'L 10 10"/></svg>';
+
+        $filePath = $this->testDir . '/tab_in_scheme_sanitize.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+
+        $sanitizedContent = file_get_contents($filePath);
+        $this->assertStringNotContainsStringIgnoringCase('script', $sanitizedContent);
+        $this->assertStringContainsString('M 0 0 L 10 10', $sanitizedContent);
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
+    }
 }
