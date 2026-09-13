@@ -57,7 +57,7 @@ services:
 
   apache:
     profiles: ['apache']
-    image: ${PMF_IMAGE:-phpmyfaq/phpmyfaq}:${PMF_VERSION:-latest}
+    image: ${PMF_IMAGE:-ghcr.io/thorsten/phpmyfaq}:${PMF_VERSION:-latest}
     container_name: phpmyfaq-apache
     restart: unless-stopped
     environment:
@@ -83,7 +83,7 @@ services:
 
   frankenphp:
     profiles: ['frankenphp']
-    image: ${PMF_IMAGE:-phpmyfaq/phpmyfaq}:${PMF_VERSION:-latest}-frankenphp
+    image: ${PMF_IMAGE:-ghcr.io/thorsten/phpmyfaq}:${PMF_VERSION:-latest}-frankenphp
     container_name: phpmyfaq-frankenphp
     restart: unless-stopped
     environment:

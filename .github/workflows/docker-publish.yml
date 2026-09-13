@@ -1,6 +1,5 @@
 # Builds the production Docker images (.docker/production/Dockerfile) and
-# publishes them to Docker Hub (phpmyfaq/phpmyfaq) and the GitHub Container
-# Registry (ghcr.io/thorsten/phpmyfaq).
+# publishes them to the GitHub Container Registry (ghcr.io/thorsten/phpmyfaq).
 #
 # - Pull requests and pushes to main that touch the image build only build
 #   the amd64 image and run the smoke test; nothing is pushed.
@@ -11,12 +10,12 @@
 # - workflow_dispatch builds on demand; "push" additionally publishes
 #   ("edge" tag when run from a branch).
 # - After the "phpMyFAQ Nightly Development Build" workflow has published its
-#   nightly release, the same commit is built and pushed to GHCR only, tagged
-#   "nightly" and "nightly-YYYY-MM-DD". Docker Hub carries releases only.
+#   nightly release, the same commit is built and pushed, tagged "nightly"
+#   and "nightly-YYYY-MM-DD".
 #
-# Required repository secrets for publishing: DOCKERHUB_USERNAME and
-# DOCKERHUB_TOKEN (a Docker Hub access token with write scope). GHCR uses the
-# workflow token.
+# Publishing needs no secrets: GHCR accepts the workflow token. The package is
+# created private on the first push and must be made public once in the
+# repository's package settings.
 name: "Docker Image"
 
 on:
@@ -41,7 +40,7 @@ on:
   workflow_dispatch:
     inputs:
       push:
-        description: 'Publish the images to Docker Hub and GHCR'
+        description: 'Publish the images to GHCR'
         type: boolean
         default: false
   workflow_run:
@@ -70,7 +69,6 @@ jobs:
             suffix: '-frankenphp'
     env:
       PUBLISH: ${{ github.event_name == 'release' || github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && inputs.push) }}
-      NIGHTLY: ${{ github.event_name == 'workflow_run' }}
       SMOKE_IMAGE: phpmyfaq-smoke:${{ matrix.variant }}
 
     steps:
@@ -87,13 +85,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4.3.0
 
-      - name: Log in to Docker Hub
-        if: env.PUBLISH == 'true' && env.NIGHTLY != 'true'
-        uses: docker/login-action@v4.6.0
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
       - name: Log in to the GitHub Container Registry
         if: env.PUBLISH == 'true'
         uses: docker/login-action@v4.6.0
@@ -102,23 +93,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Select target registries
-        id: registries
-        run: |
-          {
-            echo 'images<<EOF'
-            if [ "$NIGHTLY" != "true" ]; then
-              echo 'phpmyfaq/phpmyfaq'
-            fi
-            echo "ghcr.io/${{ github.repository }}"
-            echo 'EOF'
-          } >> "$GITHUB_OUTPUT"
-
       - name: Collect image tags and labels
         id: meta
         uses: docker/metadata-action@v6.2.0
         with:
-          images: ${{ steps.registries.outputs.images }}
+          images: ghcr.io/${{ github.repository }}
           flavor: |
             latest=auto
             suffix=${{ matrix.suffix }},onlatest=true

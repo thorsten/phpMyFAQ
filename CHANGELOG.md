@@ -9,7 +9,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v4.2.0-beta - unreleased
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
-- added official Docker images (Apache and FrankenPHP) published to Docker Hub and GitHub Container Registry, nightly images on GHCR, with headless installation via environment variables (Thorsten)
+- added official Docker images (Apache and FrankenPHP) published to the GitHub Container Registry, including nightly images, with headless installation via environment variables (Thorsten)
 - added `GET /api/health` endpoint for container health checks (Thorsten)
 - added Symfony Router for frontend (Thorsten)
 - added API for glossary definitions (Thorsten)

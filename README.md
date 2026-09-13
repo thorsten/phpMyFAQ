@@ -39,8 +39,8 @@ and open http://www.example.org/phpmyfaq/setup/ in your preferred browser.
 
 #### Production images
 
-Every release is published as `phpmyfaq/phpmyfaq:<version>` (Apache) and
-`phpmyfaq/phpmyfaq:<version>-frankenphp` on Docker Hub and as `ghcr.io/thorsten/phpmyfaq` on GitHub.
+Every release is published to the GitHub Container Registry as `ghcr.io/thorsten/phpmyfaq:<version>` (Apache)
+and `ghcr.io/thorsten/phpmyfaq:<version>-frankenphp`.
 `docker-compose.prod.yml` together with `.env.production.example` runs them with MariaDB or PostgreSQL and an
 optional search engine; see [docs/deployment.md](docs/deployment.md).
 

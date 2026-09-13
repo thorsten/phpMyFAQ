@@ -4,7 +4,7 @@
 # lets the entrypoint install headlessly and checks the HTTP behaviour that
 # the compose file and the HEALTHCHECK rely on.
 #
-#   .docker/production/smoke-test.sh phpmyfaq/phpmyfaq:local [host port]
+#   .docker/production/smoke-test.sh ghcr.io/thorsten/phpmyfaq:local [host port]
 #
 # Set SMOKE_DB_TYPE=sqlite3 to install into a SQLite file instead of starting
 # a MariaDB container.

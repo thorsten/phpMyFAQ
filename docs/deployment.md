@@ -20,18 +20,17 @@ directly or through Portainer.
 
 ## Images
 
-Every phpMyFAQ release publishes the same images to Docker Hub and to the GitHub Container Registry:
+Every phpMyFAQ release publishes two images to the GitHub Container Registry:
 
-| Image                                   | Web server              | Ports          |
-|-----------------------------------------|-------------------------|----------------|
-| `phpmyfaq/phpmyfaq:<version>`            | Apache 2.4 + mod_php    | 80             |
-| `phpmyfaq/phpmyfaq:<version>-frankenphp` | FrankenPHP (Caddy)      | 80, 443, 443/udp |
+| Image                                             | Web server              | Ports            |
+|---------------------------------------------------|-------------------------|------------------|
+| `ghcr.io/thorsten/phpmyfaq:<version>`             | Apache 2.4 + mod_php    | 80               |
+| `ghcr.io/thorsten/phpmyfaq:<version>-frankenphp`  | FrankenPHP (Caddy)      | 80, 443, 443/udp |
 
-`ghcr.io/thorsten/phpmyfaq` carries identical tags. `<version>` is the release number, e.g. `4.2.1`;
-the floating tags `4.2`, `4` and `latest` follow the newest stable release, pre-releases only get their
-exact version. Nightly builds of the development branch are published to GHCR only, as
-`ghcr.io/thorsten/phpmyfaq:nightly` (and `nightly-<date>`, also with the `-frankenphp` suffix); they are
-untested snapshots, not for production. Images are built for `linux/amd64` and `linux/arm64`, and contain the same payload as the
+`<version>` is the release number, e.g. `4.2.1`; the floating tags `4.2`, `4` and `latest` follow the
+newest stable release, pre-releases only get their exact version. Nightly builds of the development
+branch are published as `nightly` and `nightly-<date>` (also with the `-frankenphp` suffix); they are
+untested snapshots, not for production. The images are public, no login is needed to pull them. Images are built for `linux/amd64` and `linux/arm64`, and contain the same payload as the
 release archive: PHP 8.4, all required extensions, production dependencies and the built frontend assets.
 
 The application writes only below `content/`. These directories are volumes in the compose file:
@@ -84,7 +83,7 @@ All settings live in `.env`; `.env.production.example` documents every variable.
 | Variable                          | Purpose                                                                            |
 |-----------------------------------|------------------------------------------------------------------------------------|
 | `COMPOSE_PROFILES`                | which services run: one web server, one database, optionally one search engine     |
-| `PMF_IMAGE`, `PMF_VERSION`        | image and tag; use `ghcr.io/thorsten/phpmyfaq` to pull from GitHub instead of Docker Hub |
+| `PMF_IMAGE`, `PMF_VERSION`        | image and tag                                                                      |
 | `PMF_HTTP_PORT`, `PMF_HTTPS_PORT` | published ports                                                                    |
 | `PMF_TIMEZONE`, `PMF_MEMORY_LIMIT`, `PHP_UPLOAD_MAX_FILESIZE`, `PHP_POST_MAX_SIZE` | PHP settings, applied on every start |
 | `PMF_DB_*`, `PMF_ADMIN_*`, `PMF_BASE_URL` | headless installation, read only while no installation exists               |
@@ -280,7 +279,7 @@ docker run -d --name phpmyfaq -p 80:80 \
   -v phpmyfaq_logs:/var/www/html/content/core/logs \
   -v phpmyfaq_attachments:/var/www/html/content/user/attachments \
   -v phpmyfaq_images:/var/www/html/content/user/images \
-  phpmyfaq/phpmyfaq:4.2.1
+  ghcr.io/thorsten/phpmyfaq:4.2.1
 ```
 
 SQLite works for small installations: `-e PMF_DB_TYPE=sqlite3 -e PMF_DB_HOST=/var/www/html/content/core/data/phpmyfaq.sqlite`.
@@ -288,14 +287,15 @@ SQLite works for small installations: `-e PMF_DB_TYPE=sqlite3 -e PMF_DB_HOST=/va
 ## Building the image yourself
 
 ```bash
-docker build -f .docker/production/Dockerfile --target apache -t phpmyfaq/phpmyfaq:local .
-docker build -f .docker/production/Dockerfile --target frankenphp -t phpmyfaq/phpmyfaq:local-frankenphp .
-.docker/production/smoke-test.sh phpmyfaq/phpmyfaq:local
+docker build -f .docker/production/Dockerfile --target apache -t ghcr.io/thorsten/phpmyfaq:local .
+docker build -f .docker/production/Dockerfile --target frankenphp -t ghcr.io/thorsten/phpmyfaq:local-frankenphp .
+.docker/production/smoke-test.sh ghcr.io/thorsten/phpmyfaq:local
 ```
 
 The GitHub Actions workflow `.github/workflows/docker-publish.yml` runs the same build and smoke test for
-pull requests and publishes multi-platform images on every release. Publishing needs the repository
-secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`; the GitHub registry uses the workflow token.
+pull requests and publishes multi-platform images on every release. Publishing needs no secrets, the
+registry accepts the workflow token. The package is created private on its first push; set it to public
+once under the repository's *Packages* settings.
 
 ## Support and Resources
 

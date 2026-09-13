@@ -140,13 +140,29 @@ in the database.
 
 ### 2.2.2 Cloud Hosting via Docker
 
-You first need a database, let's try with a MariaDB container:
+Official images are published to the GitHub Container Registry as `ghcr.io/thorsten/phpmyfaq`. The
+recommended way to run them is the production Compose file described in
+[Production Deployment](deployment.md). To run the image on its own, start a database first:
 
-    $ docker run -ti -n phpmyfaq-db mariadb
+    $ docker network create phpmyfaq
+    $ docker run -d --name phpmyfaq-db --network phpmyfaq \
+        -e MARIADB_ROOT_PASSWORD=change-me -e MARIADB_DATABASE=phpmyfaq \
+        -e MARIADB_USER=phpmyfaq -e MARIADB_PASSWORD=change-me mariadb:11
 
-Then start the phpMyFAQ web application:
+Then start phpMyFAQ. With the `PMF_*` variables set, it installs itself on the first start:
 
-    $ docker run -ti --link phpmyfaq-db:db -p 8080:80 phpmyfaq/phpmyfaq
+    $ docker run -d --name phpmyfaq --network phpmyfaq -p 8080:80 \
+        -e PMF_DB_HOST=phpmyfaq-db -e PMF_DB_USER=phpmyfaq -e PMF_DB_PASS=change-me \
+        -e PMF_ADMIN_PASSWORD=change-me -e PMF_BASE_URL=http://localhost:8080 \
+        -v phpmyfaq_config:/var/www/html/content/core/config \
+        -v phpmyfaq_data:/var/www/html/content/core/data \
+        -v phpmyfaq_logs:/var/www/html/content/core/logs \
+        -v phpmyfaq_attachments:/var/www/html/content/user/attachments \
+        -v phpmyfaq_images:/var/www/html/content/user/images \
+        ghcr.io/thorsten/phpmyfaq:latest
+
+Open http://localhost:8080/ and log in at `/admin/` with the user `admin` and the password you set.
+Without the `PMF_DB_*` variables the web installer at `/setup/` is used instead.
 
 ### 2.2.3 Cloud or On-Premise Hosting via Kubernetes
 

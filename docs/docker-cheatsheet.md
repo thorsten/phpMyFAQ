@@ -319,7 +319,7 @@ docker-compose -f docker-compose.prod.yml down
 docker-compose -f docker-compose.prod.yml down -v
 
 # Remove images
-docker rmi phpmyfaq/phpmyfaq:latest
+docker rmi ghcr.io/thorsten/phpmyfaq:latest
 docker rmi mariadb:11.6
 docker rmi elasticsearch:8.16.5
 ```
@@ -362,7 +362,7 @@ docker stats --no-stream
 docker events --filter container=phpmyfaq-apache
 
 # Analyze image layers
-docker history phpmyfaq/phpmyfaq:latest
+docker history ghcr.io/thorsten/phpmyfaq:latest
 ```
 
 ## Environment Variables
@@ -420,13 +420,13 @@ docker network connect phpmyfaq-custom phpmyfaq-apache
 ### Export/Import Images
 ```bash
 # Export image
-docker save phpmyfaq/phpmyfaq:latest | gzip > phpmyfaq-image.tar.gz
+docker save ghcr.io/thorsten/phpmyfaq:latest | gzip > phpmyfaq-image.tar.gz
 
 # Import image
 gunzip < phpmyfaq-image.tar.gz | docker load
 
 # Transfer between servers
-docker save phpmyfaq/phpmyfaq:latest | ssh user@server 'docker load'
+docker save ghcr.io/thorsten/phpmyfaq:latest | ssh user@server 'docker load'
 ```
 
 ## Useful Aliases

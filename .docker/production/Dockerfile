@@ -6,10 +6,10 @@
 # built frontend assets, no development tooling. Pick the web server with
 # --target:
 #
-#   apache      Apache 2.4 + mod_php          published as phpmyfaq/phpmyfaq:<version>
-#   frankenphp  FrankenPHP (Caddy, HTTP/2+3)  published as phpmyfaq/phpmyfaq:<version>-frankenphp
+#   apache      Apache 2.4 + mod_php          published as ghcr.io/thorsten/phpmyfaq:<version>
+#   frankenphp  FrankenPHP (Caddy, HTTP/2+3)  published as ghcr.io/thorsten/phpmyfaq:<version>-frankenphp
 #
-#   docker build -f .docker/production/Dockerfile --target apache -t phpmyfaq/phpmyfaq:local .
+#   docker build -f .docker/production/Dockerfile --target apache -t ghcr.io/thorsten/phpmyfaq:local .
 #
 # See docs/deployment.md and docker-compose.prod.yml for how to run it.
 

@@ -104,8 +104,8 @@ The production image is built from `.docker/production/Dockerfile` (targets `apa
 and published by `.github/workflows/docker-publish.yml` on every GitHub release. Build and verify
 it locally with:
 
-    docker build -f .docker/production/Dockerfile --target apache -t phpmyfaq/phpmyfaq:local .
-    .docker/production/smoke-test.sh phpmyfaq/phpmyfaq:local
+    docker build -f .docker/production/Dockerfile --target apache -t ghcr.io/thorsten/phpmyfaq:local .
+    .docker/production/smoke-test.sh ghcr.io/thorsten/phpmyfaq:local
 
 `docker-compose.prod.yml` and `.env.production.example` are the user-facing deployment files
 (see `docs/deployment.md`); keep the volume paths in sync with the writable directories the
