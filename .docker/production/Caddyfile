@@ -1,0 +1,64 @@
+# Caddyfile of the phpMyFAQ FrankenPHP production image.
+#
+# SERVER_NAME=":80" (the image default) serves plain HTTP, for use behind a
+# reverse proxy. Set SERVER_NAME to a public host name to enable automatic
+# HTTPS with Let's Encrypt certificates and HTTP/3.
+{
+	frankenphp
+	order php_server before file_server
+}
+
+{$SERVER_NAME} {
+	root * /var/www/html
+	encode zstd gzip
+
+	# Server-side internals and raw attachments are never served directly;
+	# attachments go through the permission-checked /attachment/{id} route.
+	@internal path /content/core/* /content/user/attachments/* /cache/*
+	respond @internal 403
+	@archives path_regexp ^/content/.*\.zip$
+	respond @archives 403
+
+	# Front controllers of the sub applications
+	@admin_api path /admin/api/*
+	rewrite @admin_api /admin/api/index.php
+
+	@admin_root path /admin
+	redir @admin_root /admin/ 301
+
+	@admin {
+		path /admin/*
+		not path /admin/assets/*
+	}
+	rewrite @admin /admin/index.php
+
+	@api path /api/*
+	rewrite @api /api/index.php
+
+	@setup path /setup/*
+	rewrite @setup /setup/index.php
+
+	@update path /update /update/*
+	rewrite @update /index.php
+
+	# Everything else: static files, otherwise the Symfony front controller
+	php_server
+
+	handle_errors 404 {
+		rewrite * /404.html
+		php_server
+	}
+
+	header {
+		X-Frame-Options SAMEORIGIN
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+
+	log {
+		output stdout
+		format console
+		level INFO
+	}
+}

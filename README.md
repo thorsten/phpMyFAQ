@@ -37,6 +37,13 @@ and open http://www.example.org/phpmyfaq/setup/ in your preferred browser.
 
 ### phpMyFAQ installation with Docker
 
+#### Production images
+
+Every release is published as `phpmyfaq/phpmyfaq:<version>` (Apache) and
+`phpmyfaq/phpmyfaq:<version>-frankenphp` on Docker Hub and as `ghcr.io/thorsten/phpmyfaq` on GitHub.
+`docker-compose.prod.yml` together with `.env.production.example` runs them with MariaDB or PostgreSQL and an
+optional search engine; see [docs/deployment.md](docs/deployment.md).
+
 #### Dockerfile
 
 The Dockerfile provided in this repo only builds an environment to run any release for development purpose.

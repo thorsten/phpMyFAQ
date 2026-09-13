@@ -100,6 +100,17 @@ search engine — every service is gated behind a Compose profile):
 - Status / logs: pnpm dev:ps / pnpm dev:logs
 - Presets: pnpm dev:default, pnpm dev:full
 
+The production image is built from `.docker/production/Dockerfile` (targets `apache` and `frankenphp`)
+and published by `.github/workflows/docker-publish.yml` on every GitHub release. Build and verify
+it locally with:
+
+    docker build -f .docker/production/Dockerfile --target apache -t phpmyfaq/phpmyfaq:local .
+    .docker/production/smoke-test.sh phpmyfaq/phpmyfaq:local
+
+`docker-compose.prod.yml` and `.env.production.example` are the user-facing deployment files
+(see `docs/deployment.md`); keep the volume paths in sync with the writable directories the
+entrypoint creates.
+
 ## Git Hooks and Commit Messages
 
 - Commit messages must follow Conventional Commits (`fix:`, `feat:`, `test:`, `chore:`, `docs:`, `refactor:`, ...);

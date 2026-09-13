@@ -1,38 +1,40 @@
-# Include any files or directories that you don't want to be copied to your
-# container here (e.g., local build artifacts, temporary files, etc.).
-#
-# For more help, visit the .dockerignore file reference guide at
-# https://docs.docker.com/engine/reference/builder/#dockerignore-file
-
-# explicitly include essential files
-!composer.json
-!composer.lock
-!src
-!tests
-
-# ignore unneeded files
+# Build context rules for both the test image (./Dockerfile) and the
+# production image (.docker/production/Dockerfile). Dependencies and frontend
+# assets are built inside the images; local runtime state never ends up in one.
+.git
+.github
+.claude
+.husky
+.idea
+.vscode
+.pnpm-store
+node_modules
+build
+coverage
+html-coverage
+site
+volumes
+docs
+*.pem
+docker-compose*.yml
+.env
+.env.*
+phpmyfaq/.env
+phpmyfaq/src/libs
+phpmyfaq/assets/public
+phpmyfaq/content/core/cache
+phpmyfaq/content/core/data/*
+!phpmyfaq/content/core/data/.gitkeep
+phpmyfaq/content/core/logs/*
+!phpmyfaq/content/core/logs/.gitkeep
+phpmyfaq/content/upgrades/*
+!phpmyfaq/content/upgrades/.gitkeep
+phpmyfaq/content/core/config/database.php
+phpmyfaq/content/core/config/*.bak.php
+phpmyfaq/content/core/config/ldap.php
+phpmyfaq/content/core/config/elasticsearch.php
+phpmyfaq/content/core/config/opensearch.php
+phpmyfaq/content/core/config/azure.php
+phpmyfaq/content/core/config/update-token.php
+phpmyfaq/content/core/config/*.zip
 **/.DS_Store
-**/.venv
-**/.classpath
-**/.dockerignore
-**/.git
-**/.gitignore
-**/.project
-**/.settings
-**/.toolstarget
-**/.vs
-**/*.*proj.user
-**/*.dbmdl
-**/*.jfm
-**/bin
-**/charts
-**/docker-compose*
-.docker/apache/Dockerfile
-**/node_modules
-**/npm-debug.log
-**/obj
-**/secrets.dev.yaml
-**/values.dev.yaml
-LICENSE
-README.md
-SECURITY.md

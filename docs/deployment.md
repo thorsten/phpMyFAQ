@@ -1,516 +1,299 @@
 # 3. Production Deployment
 
-This guide explains how to deploy phpMyFAQ in production using Docker Compose with Portainer or standalone.
+This guide explains how to run phpMyFAQ in production with the official Docker images, using Docker Compose
+directly or through Portainer.
 
 ## Table of Contents
 
+- [Images](#images)
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
+- [Configuration](#configuration)
 - [Deployment with Portainer](#deployment-with-portainer)
-- [Manual Docker Compose Deployment](#manual-docker-compose-deployment)
 - [Architecture Options](#architecture-options)
-- [SSL/TLS Configuration](#ssltls-configuration)
+- [HTTPS](#https)
 - [Backup and Restore](#backup-and-restore)
-- [Monitoring and Maintenance](#monitoring-and-maintenance)
-- [Troubleshooting](#troubleshooting)
+- [Updates](#updates)
+- [Monitoring and Troubleshooting](#monitoring-and-troubleshooting)
+- [Running the image without Compose](#running-the-image-without-compose)
+- [Building the image yourself](#building-the-image-yourself)
+
+## Images
+
+Every phpMyFAQ release publishes the same images to Docker Hub and to the GitHub Container Registry:
+
+| Image                                   | Web server              | Ports          |
+|-----------------------------------------|-------------------------|----------------|
+| `phpmyfaq/phpmyfaq:<version>`            | Apache 2.4 + mod_php    | 80             |
+| `phpmyfaq/phpmyfaq:<version>-frankenphp` | FrankenPHP (Caddy)      | 80, 443, 443/udp |
+
+`ghcr.io/thorsten/phpmyfaq` carries identical tags. `<version>` is the release number, e.g. `4.2.1`;
+the floating tags `4.2`, `4` and `latest` follow the newest stable release, pre-releases only get their
+exact version. Images are built for `linux/amd64` and `linux/arm64`, and contain the same payload as the
+release archive: PHP 8.4, all required extensions, production dependencies and the built frontend assets.
+
+The application writes only below `content/`. These directories are volumes in the compose file:
+
+| Path in the container                    | Content                                             |
+|------------------------------------------|-----------------------------------------------------|
+| `/var/www/html/content/core/config`      | database and service configuration                  |
+| `/var/www/html/content/core/data`        | application data (SQLite databases, exports)        |
+| `/var/www/html/content/core/logs`        | application logs                                    |
+| `/var/www/html/content/user/attachments` | uploaded attachments                                |
+| `/var/www/html/content/user/images`      | uploaded images                                     |
 
 ## Prerequisites
 
-- Docker Engine 20.10+ and Docker Compose 2.0+
-- At least 4GB RAM (8GB+ recommended for production with search)
-- 20GB+ disk space
-- Domain name (optional, for SSL/HTTPS)
-- Basic understanding of Docker and networking
+- Docker Engine 24+ with the Compose plugin (`docker compose`, v2.20 or newer)
+- 2 GB RAM for phpMyFAQ and its database; 4 GB or more when running Elasticsearch or OpenSearch
+- A domain name and a reverse proxy or FrankenPHP for HTTPS
 
 ## Quick Start
 
-1. **Clone the repository or download the production files**
+1. **Get the deployment files** (the two files are all you need, no checkout required)
    ```bash
-   git clone https://github.com/thorsten/phpMyFAQ.git
-   cd phpMyFAQ
+   mkdir phpmyfaq && cd phpmyfaq
+   curl -fsSLO https://raw.githubusercontent.com/thorsten/phpMyFAQ/main/docker-compose.prod.yml
+   curl -fsSL -o .env https://raw.githubusercontent.com/thorsten/phpMyFAQ/main/.env.production.example
    ```
 
-2. **Create and configure your environment file**
+2. **Edit `.env`**
+   - choose the services in `COMPOSE_PROFILES`, e.g. `apache,mariadb`
+   - set all passwords marked `change-me`
+   - set `PMF_BASE_URL` to the public URL of your FAQ
+   - pin `PMF_VERSION` to a release
+
+3. **Start**
    ```bash
-   cp .env.production.example .env
-   nano .env  # or use your preferred editor
+   docker compose -f docker-compose.prod.yml up -d
+   docker compose -f docker-compose.prod.yml logs -f apache   # or frankenphp
    ```
 
-3. **Configure your deployment**
-   - Set strong passwords for all database credentials
-   - Choose your database (MariaDB or PostgreSQL)
-   - Choose your web server (Apache, Nginx+PHP-FPM, or FrankenPHP)
-   - Configure timezone and other settings
+4. **Log in** at `http://<host>/admin/` with `PMF_ADMIN_USER` and `PMF_ADMIN_PASSWORD`.
 
-4. **Deploy**
-   ```bash
-   docker-compose -f docker-compose.prod.yml up -d
-   ```
+The container installs phpMyFAQ on its first start when `PMF_DB_HOST` and `PMF_ADMIN_PASSWORD` are set.
+Leave `PMF_DB_HOST` empty to use the web installer at `http://<host>/setup/` instead; enter the service
+name (`mariadb` or `postgres`) as the database host there.
 
-5. **Access phpMyFAQ**
-   - Open your browser to `http://your-server-ip`
-   - Complete the installation wizard
+## Configuration
+
+All settings live in `.env`; `.env.production.example` documents every variable. The important ones:
+
+| Variable                          | Purpose                                                                            |
+|-----------------------------------|------------------------------------------------------------------------------------|
+| `COMPOSE_PROFILES`                | which services run: one web server, one database, optionally one search engine     |
+| `PMF_IMAGE`, `PMF_VERSION`        | image and tag; use `ghcr.io/thorsten/phpmyfaq` to pull from GitHub instead of Docker Hub |
+| `PMF_HTTP_PORT`, `PMF_HTTPS_PORT` | published ports                                                                    |
+| `PMF_TIMEZONE`, `PMF_MEMORY_LIMIT`, `PHP_UPLOAD_MAX_FILESIZE`, `PHP_POST_MAX_SIZE` | PHP settings, applied on every start |
+| `PMF_DB_*`, `PMF_ADMIN_*`, `PMF_BASE_URL` | headless installation, read only while no installation exists               |
+| `MYSQL_*`, `POSTGRES_*`           | credentials the database container is created with; `PMF_DB_*` must match them     |
+| `SERVER_NAME`                     | FrankenPHP only: a public host name turns on automatic HTTPS                        |
+| `ELASTICSEARCH_BASE_URI`, `OPENSEARCH_BASE_URI` | search engine URL, e.g. `http://elasticsearch:9200`                   |
+
+Values that are already stored in the installation (database credentials, base URL) are changed in the
+administration or in the files of the `phpmyfaq_config` volume, not by editing `.env` afterwards.
 
 ## Deployment with Portainer
 
-### Method 1: Using Portainer Stacks (Recommended)
+1. **Stacks → Add stack**, name it `phpmyfaq`.
+2. Choose **Repository** with the URL `https://github.com/thorsten/phpMyFAQ`, reference `refs/heads/main`
+   and compose path `docker-compose.prod.yml`, or paste the file into the web editor.
+3. Under **Environment variables** add the variables from `.env.production.example`. `COMPOSE_PROFILES`
+   is required, otherwise no service starts. The minimum is:
+   ```
+   COMPOSE_PROFILES=apache,mariadb
+   PMF_VERSION=4.2.1
+   PMF_BASE_URL=https://faq.example.com
+   MYSQL_ROOT_PASSWORD=...
+   MYSQL_PASSWORD=...
+   PMF_DB_HOST=mariadb
+   PMF_DB_PASS=...          # same value as MYSQL_PASSWORD
+   PMF_ADMIN_PASSWORD=...
+   ```
+4. **Deploy the stack** and watch the container health under *Containers*. The web container reports
+   healthy once the installation finished and `/api/health` answers.
 
-1. **Login to Portainer**
-   - Navigate to `https://your-portainer-instance:9443`
-   - Login with your credentials
-
-2. **Create a new Stack**
-   - Go to **Stacks** → **Add stack**
-   - Give it a name: `phpmyfaq`
-
-3. **Upload or paste the docker-compose file**
-   - **Option A**: Use the Web editor
-     - Paste the contents of `docker-compose.prod.yml`
-
-   - **Option B**: Use Git repository
-     - Repository URL: `https://github.com/thorsten/phpMyFAQ`
-     - Compose path: `docker-compose.prod.yml`
-     - Enable automatic updates (optional)
-
-4. **Configure Environment Variables**
-   - Click on **Environment variables** tab
-   - Add variables from `.env.production.example`:
-     ```
-     PMF_DB_TYPE=mysqli
-     PMF_DB_HOST=mariadb
-     PMF_DB_NAME=phpmyfaq
-     PMF_DB_USER=phpmyfaq
-     PMF_DB_PASS=your_secure_password
-     MYSQL_ROOT_PASSWORD=your_secure_root_password
-     MYSQL_PASSWORD=your_secure_password
-     PMF_TIMEZONE=UTC
-     PMF_MEMORY_LIMIT=512M
-     ```
-
-5. **Edit the compose file** (in Portainer editor)
-   - Choose ONE database service (comment out the other)
-   - Choose ONE web server service (comment out the others)
-   - Adjust resource limits if needed
-
-6. **Deploy the stack**
-   - Click **Deploy the stack**
-   - Wait for all services to start (check logs if issues occur)
-
-7. **Verify deployment**
-   - Go to **Containers** to see running services
-   - Check the health status of each container
-   - Access the application at the configured port
-
-### Method 2: Using Portainer Custom Templates
-
-1. **Create a Custom Template**
-   - Go to **App Templates** → **Custom Templates**
-   - Create a new template
-   - Name: `phpMyFAQ Production`
-   - Platform: `Linux`
-   - Type: `Stack`
-
-2. **Paste the docker-compose.prod.yml content**
-
-3. **Define template variables**
-   - Add all environment variables from `.env.production.example`
-   - Set descriptions for each variable
-
-4. **Save and Deploy**
-   - Templates can now be reused for multiple deployments
-
-## Manual Docker Compose Deployment
-
-### Standard Deployment
-
-```bash
-# 1. Prepare environment
-cp .env.production.example .env
-nano .env  # Configure all variables
-
-# 2. Edit docker-compose.prod.yml
-nano docker-compose.prod.yml
-# - Choose your database service
-# - Choose your web server
-# - Comment out unused services
-
-# 3. Deploy
-docker-compose -f docker-compose.prod.yml up -d
-
-# 4. Check status
-docker-compose -f docker-compose.prod.yml ps
-docker-compose -f docker-compose.prod.yml logs -f
-
-# 5. Stop/Update
-docker-compose -f docker-compose.prod.yml down
-docker-compose -f docker-compose.prod.yml pull
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-### Using Docker Stack (Swarm Mode)
-
-```bash
-# 1. Initialize Swarm (if not already)
-docker swarm init
-
-# 2. Deploy stack
-docker stack deploy -c docker-compose.prod.yml phpmyfaq
-
-# 3. Check status
-docker stack services phpmyfaq
-docker stack ps phpmyfaq
-
-# 4. Remove stack
-docker stack rm phpmyfaq
-```
+Portainer stacks do not run `docker compose`'s profile expansion from a `.env` file, which is why
+`COMPOSE_PROFILES` is set as a stack variable.
 
 ## Architecture Options
 
-### Database Options
+### Web server
 
-#### Option 1: MariaDB (Recommended)
-- Best compatibility with MySQL
-- Excellent performance
-- Wide community support
+- **Apache + mod_php** (`apache` profile) is the default. It serves plain HTTP on port 80 and expects a
+  reverse proxy for TLS. URL rewriting comes from the shipped `.htaccess`.
+- **FrankenPHP** (`frankenphp` profile) is a Caddy-based PHP application server with HTTP/2, HTTP/3 and
+  built-in certificate management. With `SERVER_NAME=faq.example.com` it obtains Let's Encrypt
+  certificates itself; ports 80 and 443 must be reachable from the internet for that. With the default
+  `SERVER_NAME=:80` it behaves like the Apache image.
 
-**Configuration:**
-- Keep `mariadb` service enabled
-- Comment out `postgres` service
-- Set `PMF_DB_TYPE=mysqli`
-- Set `PMF_DB_HOST=mariadb`
+Nginx + PHP-FPM is not offered as an image: it needs a second container that shares the static files,
+which has no clean equivalent with immutable images. Put nginx in front of the Apache or FrankenPHP
+container as a reverse proxy instead.
 
-#### Option 2: PostgreSQL
-- Advanced features
-- Better for complex queries
-- ACID compliance
+### Database
 
-**Configuration:**
-- Keep `postgres` service enabled
-- Comment out `mariadb` service
-- Set `PMF_DB_TYPE=pgsql`
-- Set `PMF_DB_HOST=postgres`
+- **MariaDB** (`mariadb` profile): `PMF_DB_TYPE=mysqli`, `PMF_DB_HOST=mariadb`.
+- **PostgreSQL** (`postgres` profile): `PMF_DB_TYPE=pgsql`, `PMF_DB_HOST=postgres`.
 
-### Web Server Options
+Both listen on the internal network only. To use an existing database server instead, drop the database
+profile and point `PMF_DB_HOST` at it.
 
-#### Option 1: Apache + mod_php (Default)
-- Simple, widely used
-- Good for most use cases
-- Easy to configure
+### Search engine (optional)
 
-**Pros:**
-- Simple setup
-- Well-documented
-- .htaccess support
+- **Elasticsearch** (`elasticsearch` profile): set `ELASTICSEARCH_BASE_URI=http://elasticsearch:9200`.
+- **OpenSearch** (`opensearch` profile): set `OPENSEARCH_BASE_URI=http://opensearch:9200`.
 
-**Cons:**
-- Slightly higher memory usage
-- No HTTP/3 support
+Enable the search engine in the administration afterwards. Both containers run without authentication
+and are only reachable on the internal network. Elasticsearch needs `vm.max_map_count=262144` on the host:
 
-#### Option 2: Nginx + PHP-FPM
-- Better performance under high load
-- Lower memory footprint
-- More granular control
+```bash
+echo "vm.max_map_count=262144" | sudo tee /etc/sysctl.d/99-elasticsearch.conf && sudo sysctl --system
+```
 
-**Pros:**
-- Excellent performance
-- Better resource usage
-- Advanced caching options
+## HTTPS
 
-**Cons:**
-- More complex configuration
-- No .htaccess support (use nginx.conf)
+### Option 1: FrankenPHP with automatic certificates
 
-#### Option 3: FrankenPHP
-- Modern PHP application server
-- HTTP/2, HTTP/3 support
-- Built-in HTTPS with automatic certificates
+Set `COMPOSE_PROFILES=frankenphp,...`, `SERVER_NAME=faq.example.com` and `PMF_BASE_URL=https://faq.example.com`.
+Certificates are stored in the `caddy_data` volume.
 
-**Pros:**
-- Best performance
-- Modern HTTP protocols
-- Automatic HTTPS
-- Built-in Caddy server
+### Option 2: A reverse proxy in front of the Apache image
 
-**Cons:**
-- Newer technology
-- Smaller community
-
-### Search Engine Options
-
-#### Elasticsearch
-- Powerful full-text search
-- Better for larger deployments
-- More features
-
-**Resource Requirements:**
-- Minimum: 1GB RAM
-- Recommended: 2GB+ RAM
-
-#### OpenSearch
-- Open-source Elasticsearch alternative
-- Compatible with Elasticsearch
-- Similar features
-
-**Configuration:**
-- Set `ELASTICSEARCH_BASE_URI` or `OPENSEARCH_BASE_URI`
-- Choose one search engine
-- Optional: can run without search engine
-
-## SSL/TLS Configuration
-
-### Option 1: Let's Encrypt with Traefik Reverse Proxy
-
-Create a `docker-compose.override.yml`:
+Add a `docker-compose.override.yml` with your proxy. The example uses Traefik with Let's Encrypt:
 
 ```yaml
-version: '3.8'
-
 services:
   traefik:
     image: traefik:v3.2
+    restart: unless-stopped
     command:
       - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
-      - "--certificatesresolvers.letsencrypt.acme.email=your-email@example.com"
+      - "--certificatesresolvers.letsencrypt.acme.email=you@example.com"
       - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - traefik_letsencrypt:/letsencrypt
     networks:
-      - phpmyfaq-network
+      - phpmyfaq
 
   apache:
+    ports: !override []
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.phpmyfaq.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.phpmyfaq.rule=Host(`faq.example.com`)"
       - "traefik.http.routers.phpmyfaq.entrypoints=websecure"
       - "traefik.http.routers.phpmyfaq.tls.certresolver=letsencrypt"
-    ports: []  # Remove direct port exposure
+      - "traefik.http.services.phpmyfaq.loadbalancer.server.port=80"
 
 volumes:
   traefik_letsencrypt:
 ```
 
-### Option 2: Custom SSL Certificates
-
-1. **Prepare certificates**
-   ```bash
-   mkdir -p ssl
-   # Copy your certificate files
-   cp your-cert.pem ssl/cert.pem
-   cp your-key.pem ssl/cert-key.pem
-   chmod 644 ssl/cert.pem
-   chmod 600 ssl/cert-key.pem
-   ```
-
-2. **Update docker-compose.prod.yml**
-   - Uncomment SSL volume mounts in your chosen web server service
-
-### Option 3: FrankenPHP Automatic HTTPS
-
-If using FrankenPHP:
-- Set `SERVER_NAME=your-domain.com` in .env
-- FrankenPHP will automatically obtain Let's Encrypt certificates
-- No additional configuration needed
+Set `PMF_BASE_URL=https://faq.example.com` so that generated links use the public scheme and host.
 
 ## Backup and Restore
 
-### Automated Backup Script
-
-Create `backup.sh`:
+Back up the database and the five `phpmyfaq_*` volumes together. Stopping the web container first gives
+a consistent snapshot.
 
 ```bash
 #!/bin/bash
+set -euo pipefail
 BACKUP_DIR="/backup/phpmyfaq"
 DATE=$(date +%Y%m%d_%H%M%S)
-
-# Create backup directory
+COMPOSE="docker compose -f docker-compose.prod.yml"
 mkdir -p "$BACKUP_DIR"
 
-# Backup database
-docker exec phpmyfaq-mariadb mysqldump -u phpmyfaq -p$MYSQL_PASSWORD phpmyfaq | gzip > "$BACKUP_DIR/db_$DATE.sql.gz"
+# Database (MariaDB; for PostgreSQL use: docker exec phpmyfaq-postgres pg_dump -U phpmyfaq phpmyfaq)
+docker exec phpmyfaq-mariadb sh -c 'mariadb-dump -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DATABASE"' \
+  | gzip > "$BACKUP_DIR/db_$DATE.sql.gz"
 
-# Backup volumes
-docker run --rm -v phpmyfaq_data:/data -v $BACKUP_DIR:/backup alpine tar czf /backup/data_$DATE.tar.gz -C /data .
-docker run --rm -v phpmyfaq_images:/images -v $BACKUP_DIR:/backup alpine tar czf /backup/images_$DATE.tar.gz -C /images .
-docker run --rm -v phpmyfaq_attachments:/attachments -v $BACKUP_DIR:/backup alpine tar czf /backup/attachments_$DATE.tar.gz -C /attachments .
-docker run --rm -v phpmyfaq_config:/config -v $BACKUP_DIR:/backup alpine tar czf /backup/config_$DATE.tar.gz -C /config .
+# Volumes (names are prefixed with the compose project name, "phpmyfaq" by default)
+for volume in config data logs attachments images; do
+  docker run --rm -v "phpmyfaq_phpmyfaq_${volume}:/data:ro" -v "$BACKUP_DIR:/backup" alpine \
+    tar czf "/backup/${volume}_$DATE.tar.gz" -C /data .
+done
 
-# Remove old backups (keep last 7 days)
 find "$BACKUP_DIR" -name "*.gz" -mtime +7 -delete
-
 echo "Backup completed: $DATE"
 ```
 
-### Restore from Backup
+Restore by loading the dump into the database container and extracting each archive into its volume with
+the same `docker run ... alpine tar xzf` pattern, then restart the web container. `docker volume ls`
+shows the exact volume names of your project.
+
+## Updates
 
 ```bash
-#!/bin/bash
-BACKUP_FILE="$1"
-
-# Restore database
-gunzip < db_backup.sql.gz | docker exec -i phpmyfaq-mariadb mysql -u phpmyfaq -p$MYSQL_PASSWORD phpmyfaq
-
-# Restore volumes
-docker run --rm -v phpmyfaq_data:/data -v /backup:/backup alpine tar xzf /backup/data_backup.tar.gz -C /data
-
-echo "Restore completed"
-```
-
-### Schedule Regular Backups
-
-Add to crontab:
-```bash
-# Daily backup at 2 AM
-0 2 * * * /path/to/backup.sh >> /var/log/phpmyfaq-backup.log 2>&1
-```
-
-## Monitoring and Maintenance
-
-### Health Checks
-
-Check container health:
-```bash
-docker-compose -f docker-compose.prod.yml ps
-docker inspect phpmyfaq-apache | grep -A 10 Health
-```
-
-### Log Management
-
-View logs:
-```bash
-# All services
-docker-compose -f docker-compose.prod.yml logs -f
-
-# Specific service
-docker-compose -f docker-compose.prod.yml logs -f apache
-
-# Last 100 lines
-docker-compose -f docker-compose.prod.yml logs --tail=100
-```
-
-Configure log rotation in `/etc/docker/daemon.json`:
-```json
-{
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "10m",
-    "max-file": "3"
-  }
-}
-```
-
-### Update phpMyFAQ
-
-```bash
-# 1. Backup first!
 ./backup.sh
-
-# 2. Pull new images
-docker-compose -f docker-compose.prod.yml pull
-
-# 3. Recreate containers
-docker-compose -f docker-compose.prod.yml up -d
-
-# 4. Verify
-docker-compose -f docker-compose.prod.yml ps
+sed -i 's/^PMF_VERSION=.*/PMF_VERSION=4.2.2/' .env
+docker compose -f docker-compose.prod.yml pull
+docker compose -f docker-compose.prod.yml up -d
 ```
 
-### Resource Monitoring
+After a version change, open `http://<host>/update/` or the administration; the updater migrates the
+database schema when necessary.
 
-Monitor resource usage:
-```bash
-# Container stats
-docker stats
+## Monitoring and Troubleshooting
 
-# Disk usage
-docker system df
-
-# Cleanup
-docker system prune -a --volumes  # WARNING: removes unused data
-```
-
-## Troubleshooting
-
-### Container Won't Start
+Every image has a `HEALTHCHECK` on `GET /api/health`. The endpoint answers `{"status":"ok"}` when the
+application bootstrapped and reached its database, and it does not depend on the public API being enabled.
 
 ```bash
-# Check logs
-docker-compose -f docker-compose.prod.yml logs service-name
-
-# Common issues:
-# - Port already in use: Change ports in .env
-# - Permission issues: Check volume permissions
-# - Out of memory: Increase Docker memory limit
+docker compose -f docker-compose.prod.yml ps                 # health column
+docker inspect --format '{{json .State.Health}}' phpmyfaq-apache | jq
+docker compose -f docker-compose.prod.yml logs --tail=100 apache
 ```
 
-### Database Connection Failed
+Common problems:
+
+- **Nothing starts**: `COMPOSE_PROFILES` is empty. Set it in `.env` or pass `--profile`.
+- **Headless installation failed**: the log shows the installer output. Typical causes are a database
+  that was still initialising (the entrypoint retries for a minute), or `PMF_DB_PASS` not matching
+  `MYSQL_PASSWORD` / `POSTGRES_PASSWORD`. The web installer at `/setup/` stays available.
+- **Wrong links or redirects to the wrong host**: `PMF_BASE_URL` was wrong at installation time. Change
+  the reference URL in the administration under *Configuration*.
+- **Uploads fail**: raise `PHP_UPLOAD_MAX_FILESIZE` and `PHP_POST_MAX_SIZE` in `.env` and recreate the
+  container.
+- **Permissions**: the entrypoint gives the `content/` volumes to `www-data` on every start; run
+  `docker exec phpmyfaq-apache chown -R www-data:www-data content` if files were added from outside.
+
+## Running the image without Compose
 
 ```bash
-# Check database is running
-docker-compose -f docker-compose.prod.yml ps mariadb
-
-# Test connection
-docker exec phpmyfaq-mariadb mysql -u phpmyfaq -p$MYSQL_PASSWORD -e "SELECT 1"
-
-# Verify credentials in .env match database
+docker run -d --name phpmyfaq -p 80:80 \
+  -e PMF_DB_HOST=db.example.com -e PMF_DB_USER=phpmyfaq -e PMF_DB_PASS=secret \
+  -e PMF_ADMIN_PASSWORD=secret -e PMF_BASE_URL=https://faq.example.com \
+  -v phpmyfaq_config:/var/www/html/content/core/config \
+  -v phpmyfaq_data:/var/www/html/content/core/data \
+  -v phpmyfaq_logs:/var/www/html/content/core/logs \
+  -v phpmyfaq_attachments:/var/www/html/content/user/attachments \
+  -v phpmyfaq_images:/var/www/html/content/user/images \
+  phpmyfaq/phpmyfaq:4.2.1
 ```
 
-### Application Errors
+SQLite works for small installations: `-e PMF_DB_TYPE=sqlite3 -e PMF_DB_HOST=/var/www/html/content/core/data/phpmyfaq.sqlite`.
+
+## Building the image yourself
 
 ```bash
-# Check PHP logs
-docker-compose -f docker-compose.prod.yml logs apache | grep -i error
-
-# Check permissions
-docker exec phpmyfaq-apache ls -la /var/www/html/data
-
-# Reset permissions
-docker exec phpmyfaq-apache chown -R www-data:www-data /var/www/html/data
+docker build -f .docker/production/Dockerfile --target apache -t phpmyfaq/phpmyfaq:local .
+docker build -f .docker/production/Dockerfile --target frankenphp -t phpmyfaq/phpmyfaq:local-frankenphp .
+.docker/production/smoke-test.sh phpmyfaq/phpmyfaq:local
 ```
 
-### Performance Issues
-
-1. **Check resource usage**
-   ```bash
-   docker stats
-   ```
-
-2. **Adjust resource limits** in docker-compose.prod.yml
-
-3. **Enable caching** (Redis, Memcached)
-
-4. **Optimize database** (indexes, query cache)
-
-5. **Use CDN** for static assets
-
-### Elasticsearch Won't Start
-
-```bash
-# Increase vm.max_map_count on host
-sudo sysctl -w vm.max_map_count=262144
-
-# Make permanent
-echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
-```
-
-## Security Best Practices
-
-1. **Change all default passwords** before deploying
-2. **Use strong passwords** (minimum 16 characters, mixed case, numbers, symbols)
-3. **Don't expose database ports** to the host
-4. **Use SSL/TLS** for all connections
-5. **Keep software updated** regularly
-6. **Enable firewall** rules
-7. **Use Docker secrets** for sensitive data (Swarm mode)
-8. **Regular security audits** and vulnerability scans
-9. **Implement rate limiting** (e.g., with Nginx)
-10. **Monitor logs** for suspicious activity
+The GitHub Actions workflow `.github/workflows/docker-publish.yml` runs the same build and smoke test for
+pull requests and publishes multi-platform images on every release. Publishing needs the repository
+secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`; the GitHub registry uses the workflow token.
 
 ## Support and Resources
 
