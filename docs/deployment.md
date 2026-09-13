@@ -29,7 +29,9 @@ Every phpMyFAQ release publishes the same images to Docker Hub and to the GitHub
 
 `ghcr.io/thorsten/phpmyfaq` carries identical tags. `<version>` is the release number, e.g. `4.2.1`;
 the floating tags `4.2`, `4` and `latest` follow the newest stable release, pre-releases only get their
-exact version. Images are built for `linux/amd64` and `linux/arm64`, and contain the same payload as the
+exact version. Nightly builds of the development branch are published to GHCR only, as
+`ghcr.io/thorsten/phpmyfaq:nightly` (and `nightly-<date>`, also with the `-frankenphp` suffix); they are
+untested snapshots, not for production. Images are built for `linux/amd64` and `linux/arm64`, and contain the same payload as the
 release archive: PHP 8.4, all required extensions, production dependencies and the built frontend assets.
 
 The application writes only below `content/`. These directories are volumes in the compose file:

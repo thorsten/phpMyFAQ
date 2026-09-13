@@ -10,6 +10,9 @@
 #   suffix.
 # - workflow_dispatch builds on demand; "push" additionally publishes
 #   ("edge" tag when run from a branch).
+# - After the "phpMyFAQ Nightly Development Build" workflow has published its
+#   nightly release, the same commit is built and pushed to GHCR only, tagged
+#   "nightly" and "nightly-YYYY-MM-DD". Docker Hub carries releases only.
 #
 # Required repository secrets for publishing: DOCKERHUB_USERNAME and
 # DOCKERHUB_TOKEN (a Docker Hub access token with write scope). GHCR uses the
@@ -41,6 +44,9 @@ on:
         description: 'Publish the images to Docker Hub and GHCR'
         type: boolean
         default: false
+  workflow_run:
+    workflows: ["phpMyFAQ Nightly Development Build"]
+    types: [completed]
 
 permissions:
   contents: read
@@ -49,6 +55,9 @@ permissions:
 jobs:
   image:
     name: ${{ matrix.variant }}
+    # A nightly is only built when the nightly workflow succeeded; every other
+    # trigger always runs.
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 120
     strategy:
@@ -60,12 +69,16 @@ jobs:
           - variant: frankenphp
             suffix: '-frankenphp'
     env:
-      PUBLISH: ${{ github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.push) }}
+      PUBLISH: ${{ github.event_name == 'release' || github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && inputs.push) }}
+      NIGHTLY: ${{ github.event_name == 'workflow_run' }}
       SMOKE_IMAGE: phpmyfaq-smoke:${{ matrix.variant }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7.0.1
+        with:
+          # For a nightly, build exactly the commit the nightly release was made from
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Set up QEMU for the arm64 build
         if: env.PUBLISH == 'true'
@@ -75,7 +88,7 @@ jobs:
         uses: docker/setup-buildx-action@v4.3.0
 
       - name: Log in to Docker Hub
-        if: env.PUBLISH == 'true'
+        if: env.PUBLISH == 'true' && env.NIGHTLY != 'true'
         uses: docker/login-action@v4.6.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -89,13 +102,23 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Select target registries
+        id: registries
+        run: |
+          {
+            echo 'images<<EOF'
+            if [ "$NIGHTLY" != "true" ]; then
+              echo 'phpmyfaq/phpmyfaq'
+            fi
+            echo "ghcr.io/${{ github.repository }}"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
       - name: Collect image tags and labels
         id: meta
         uses: docker/metadata-action@v6.2.0
         with:
-          images: |
-            phpmyfaq/phpmyfaq
-            ghcr.io/${{ github.repository }}
+          images: ${{ steps.registries.outputs.images }}
           flavor: |
             latest=auto
             suffix=${{ matrix.suffix }},onlatest=true
@@ -103,7 +126,9 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
-            type=raw,value=edge,enable=${{ github.ref_type == 'branch' }}
+            type=raw,value=edge,enable=${{ github.event_name == 'workflow_dispatch' && github.ref_type == 'branch' }}
+            type=raw,value=nightly,enable=${{ github.event_name == 'workflow_run' }}
+            type=raw,value=nightly-{{date 'YYYY-MM-DD'}},enable=${{ github.event_name == 'workflow_run' }}
           labels: |
             org.opencontainers.image.title=phpMyFAQ
             org.opencontainers.image.vendor=phpMyFAQ Team
