@@ -9,6 +9,9 @@
  * Custom entities declared in a DOCTYPE internal subset
  * (<!ENTITY j "javascript">) are expanded as well, and the declaring
  * DOCTYPE is rejected, so &j;:alert() cannot slip past the patterns.
+ * Removal runs until the output stops changing and the result is verified
+ * again, so a tag split around a token that is itself removed
+ * (<scr<?php?>ipt>) cannot be reassembled by the sanitizer.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -134,6 +137,10 @@ class SvgSanitizer
             return false;
         }
 
+        if ($this->containsDangerousContent($this->decodeAllEntities($sanitized))) {
+            return false;
+        }
+
         return file_put_contents($filePath, $sanitized) !== false;
     }
 
@@ -159,25 +166,30 @@ class SvgSanitizer
             return false;
         }
 
-        // Decode all HTML/XML entities so encoded payloads become plaintext
-        // before regex matching. This defeats &#106;&#97;&#118;... → javascript: bypasses.
         $decoded = $this->decodeAllEntities($content);
 
-        // Check for dangerous patterns on decoded content
-        foreach (self::DANGEROUS_PATTERNS as $pattern) {
-            if (preg_match($pattern, $decoded)) {
-                return false;
-            }
+        return !$this->containsDangerousContent($decoded);
+    }
+
+    /**
+     * Checks already entity-decoded content against every dangerous pattern
+     * and element.
+     */
+    private function containsDangerousContent(string $decoded): bool
+    {
+        if (array_any(
+            self::DANGEROUS_PATTERNS,
+            static fn(string $pattern): bool => preg_match($pattern, $decoded) === 1,
+        )) {
+            return true;
         }
 
-        // Check for dangerous element tags on decoded content
-        foreach (self::DANGEROUS_ELEMENTS as $element) {
-            if (preg_match('/<' . preg_quote($element, delimiter: '/') . '\b/i', $decoded)) {
-                return false;
-            }
-        }
-
-        return true;
+        return array_any(
+            self::DANGEROUS_ELEMENTS,
+            static fn(string $element): bool => (
+                preg_match('/<' . preg_quote($element, delimiter: '/') . '\b/i', $decoded) === 1
+            ),
+        );
     }
 
     /**
@@ -314,12 +326,35 @@ class SvgSanitizer
      */
     private function removeDangerousContent(string $content): string
     {
+        // First: decode all entities so encoded payloads become plaintext
+        $sanitized = $this->decodeAllEntities($content);
+
+        // preg_replace never re-examines the text it has just produced, so a
+        // single pass reassembles split tags: removing a processing instruction
+        // between "scr" and "ipt" yields <script>. Repeat until nothing changes.
+        $previous = '';
+        $maxIterations = 10;
+
+        while ($sanitized !== $previous && $maxIterations-- > 0) {
+            $previous = $sanitized;
+            $sanitized = $this->removeDangerousContentOnce($sanitized);
+        }
+
+        // Normalize whitespace (optional, for cleaner output)
+        $sanitized = preg_replace('/\s+/', replacement: ' ', subject: $sanitized) ?? '';
+
+        // Fail closed: a regex failure must never leak unsanitized SVG content
+        return preg_replace('/>\s+</', replacement: '><', subject: $sanitized) ?? '';
+    }
+
+    /**
+     * Applies every removal rule exactly once to already entity-decoded content.
+     */
+    private function removeDangerousContentOnce(string $content): string
+    {
         $sanitized = $content;
 
-        // First: decode all entities so encoded payloads become plaintext
-        $sanitized = $this->decodeAllEntities($sanitized);
-
-        // Second: Remove dangerous element tags with their content
+        // Remove dangerous element tags with their content
         foreach (self::DANGEROUS_ELEMENTS as $element) {
             // Remove opening and closing tags with content
             $sanitized =
@@ -350,15 +385,15 @@ class SvgSanitizer
                 ) ?? '';
         }
 
-        // Third: Remove dangerous patterns using regex
+        // Remove dangerous patterns using regex
         foreach (self::DANGEROUS_PATTERNS as $pattern) {
             $sanitized = preg_replace($pattern, replacement: '', subject: $sanitized) ?? '';
         }
 
-        // Fourth: Additional cleanup for remaining event handlers
+        // Additional cleanup for remaining event handlers
         $sanitized = preg_replace('/\s+on\w+\s*=\s*[^\s>]+/i', replacement: '', subject: $sanitized) ?? '';
 
-        // Fifth: Clean up any remaining dangerous URIs in attributes
+        // Clean up any remaining dangerous URIs in attributes
         $sanitized =
             preg_replace(
                 '/(href|xlink:href|src)\s*=\s*(["\'])[\s]*(javascript|vbscript|data)\s*:[^\2]*?\2/i',
@@ -366,13 +401,8 @@ class SvgSanitizer
                 subject: $sanitized,
             ) ?? '';
 
-        // Sixth: Remove CDATA sections with script content
-        $sanitized = preg_replace('/<!\[CDATA\[.*?<script.*?\]\]>/is', replacement: '', subject: $sanitized) ?? '';
-
-        // Normalize whitespace (optional, for cleaner output)
-        $sanitized = preg_replace('/\s+/', replacement: ' ', subject: $sanitized) ?? '';
-
-        // Fail closed: a regex failure must never leak unsanitized SVG content
-        return preg_replace('/>\s+</', replacement: '><', subject: $sanitized) ?? '';
+        // Remove CDATA sections with script content. Fail closed: a regex
+        // failure must never leak unsanitized SVG content.
+        return preg_replace('/<!\[CDATA\[.*?<script.*?\]\]>/is', replacement: '', subject: $sanitized) ?? '';
     }
 }

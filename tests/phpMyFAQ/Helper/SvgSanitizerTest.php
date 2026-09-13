@@ -1973,4 +1973,98 @@ class SvgSanitizerTest extends TestCase
         $this->assertStringNotContainsString('javascript', $sanitizedContent);
         $this->assertStringContainsString('<svg', $sanitizedContent);
     }
+
+    public function testSanitizeDoesNotReassembleScriptTagSplitByProcessingInstruction(): void
+    {
+        $maliciousSvg =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">'
+            . '<scr<?php?>ipt>alert(document.domain)</scr<?php?>ipt></svg>';
+
+        $filePath = $this->testDir . '/split_script_pi.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+
+        $sanitizedContent = file_get_contents($filePath);
+        $this->assertStringNotContainsStringIgnoringCase('<script', $sanitizedContent);
+        $this->assertStringNotContainsString('alert', $sanitizedContent);
+        $this->assertStringContainsString('<svg', $sanitizedContent);
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testSanitizeDoesNotReassembleScriptTagSplitByEntityDeclaration(): void
+    {
+        $maliciousSvg =
+            '<svg xmlns="http://www.w3.org/2000/svg">'
+            . '<scr<!ENTITY x "y">ipt>alert(1)</scr<!ENTITY x "y">ipt></svg>';
+
+        $filePath = $this->testDir . '/split_script_entity.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+
+        $sanitizedContent = file_get_contents($filePath);
+        $this->assertStringNotContainsStringIgnoringCase('<script', $sanitizedContent);
+        $this->assertStringNotContainsString('alert', $sanitizedContent);
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testSanitizeDoesNotReassembleAnimateElementSplitByScriptTag(): void
+    {
+        $maliciousSvg =
+            '<svg xmlns="http://www.w3.org/2000/svg"><a><anim<script></script>ate '
+            . 'attributeName="href" values="javascript:alert(1)"/><circle r="10"/></a></svg>';
+
+        $filePath = $this->testDir . '/split_animate.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+
+        $sanitizedContent = file_get_contents($filePath);
+        $this->assertStringNotContainsStringIgnoringCase('<animate', $sanitizedContent);
+        $this->assertStringNotContainsString('javascript', $sanitizedContent);
+        $this->assertStringContainsString('circle', $sanitizedContent);
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testSanitizeDoesNotReassembleEventHandlerSplitByProcessingInstruction(): void
+    {
+        $maliciousSvg =
+            '<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10" onl<?php?>oad="alert(1)"/></svg>';
+
+        $filePath = $this->testDir . '/split_onload.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+
+        $sanitizedContent = file_get_contents($filePath);
+        $this->assertStringNotContainsStringIgnoringCase('onload', $sanitizedContent);
+        $this->assertStringNotContainsString('alert', $sanitizedContent);
+        $this->assertStringContainsString('<rect', $sanitizedContent);
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testSanitizedOutputAlwaysPassesIsSafe(): void
+    {
+        $payloads = [
+            '<svg xmlns="http://www.w3.org/2000/svg"><scr<?php?>ipt>alert(1)</scr<?php?>ipt></svg>',
+            '<svg xmlns="http://www.w3.org/2000/svg"><scr<scr<?php?>ipt>ipt>alert(1)</script></svg>',
+            '<svg xmlns="http://www.w3.org/2000/svg"><s<!ENTITY a "b">et attributeName="href" to="javascript:alert(1)"/></svg>',
+            '<svg xmlns="http://www.w3.org/2000/svg"><foreign<?x?>Object><body onload="alert(1)"/></foreign<?x?>Object></svg>',
+            '<svg xmlns="http://www.w3.org/2000/svg"><a href="java<?x?>script:alert(1)"><text>x</text></a></svg>',
+        ];
+
+        foreach ($payloads as $index => $payload) {
+            $filePath = $this->testDir . '/fixed_point_' . $index . '.svg';
+            file_put_contents($filePath, $payload);
+
+            if ($this->sanitizer->sanitize($filePath)) {
+                $this->assertTrue($this->sanitizer->isSafe($filePath), 'Payload ' . $index . ' survived sanitization');
+            }
+        }
+    }
 }
