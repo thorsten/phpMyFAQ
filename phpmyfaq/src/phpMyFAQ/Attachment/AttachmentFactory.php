@@ -124,7 +124,7 @@ class AttachmentFactory
             "SELECT id FROM %sfaqattachment WHERE record_id = %d AND record_lang = '%s'",
             Database::getTablePrefix(),
             $recordId,
-            Language::$language,
+            $configuration->getDb()->escape(Language::$language),
         );
 
         $result = $configuration->getDb()->fetchAll($configuration->getDb()->query($sql));

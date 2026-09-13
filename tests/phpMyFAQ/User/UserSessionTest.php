@@ -88,6 +88,31 @@ class UserSessionTest extends TestCase
         $this->assertSame(15, $session->getCurrentSessionId());
     }
 
+    public function testCheckSessionIdEscapesTheIpAddress(): void
+    {
+        $ipAddress = "192.0.2.10' OR '1'='1";
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->expects($this->exactly(2))->method('escape')->with($ipAddress)->willReturn('escaped-ip');
+        $db
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->with(self::callback(static function (string $query) use ($ipAddress): bool {
+                self::assertStringContainsString("ip = 'escaped-ip'", $query);
+                self::assertStringNotContainsString($ipAddress, $query);
+                return true;
+            }))
+            ->willReturnOnConsecutiveCalls('result', true);
+        $db->expects($this->once())->method('numRows')->with('result')->willReturn(1);
+
+        $configuration = $this->createConfiguration($db);
+        $request = Request::create('/', 'GET', [], [], [], ['REQUEST_TIME' => 2000]);
+
+        $session = new UserSession($configuration, $request);
+        $session->checkSessionId(15, $ipAddress);
+
+        $this->assertSame(15, $session->getCurrentSessionId());
+    }
+
     public function testUserTrackingReturnsEarlyWhenDisabled(): void
     {
         $db = $this->createMock(DatabaseDriver::class);

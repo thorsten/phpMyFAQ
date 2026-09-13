@@ -20,8 +20,6 @@ declare(strict_types=1);
 namespace phpMyFAQ\Setup;
 
 use FilesystemIterator;
-use JsonException;
-use Monolog\Level;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\DownloadHostType;
@@ -45,13 +43,28 @@ class Upgrade extends AbstractSetup
 
     private const string PHPMYFAQ_FILENAME = 'phpMyFAQ-%s.zip';
 
-    public string $upgradeDirectory = PMF_CONTENT_DIR . '/upgrades';
+    /**
+     * Package downloads, the extracted code and the full-installation backup
+     * live below content/core/, which every shipped server configuration
+     * refuses to serve, so an extracted PHP file can never be executed and
+     * the backup (it contains the database credentials) is never downloadable.
+     */
+    public string $upgradeDirectory = PMF_CONTENT_DIR . '/core/upgrades';
+
+    /**
+     * Top-level directories of the package that are never copied into the
+     * installation: the installer must not be re-deployed over a live site
+     * and the configuration of the installation must never be replaced.
+     */
+    private const array PROTECTED_PACKAGE_PATHS = ['setup', 'content/core/config'];
 
     private string $installationDirectory;
 
     private bool $isNightly;
 
     private HttpClientInterface $httpClient;
+
+    private PackageVerifier $packageVerifier;
 
     public function __construct(
         protected System $system,
@@ -66,6 +79,7 @@ class Upgrade extends AbstractSetup
             $this->configuration->get(item: 'upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value;
 
         $this->httpClient = $httpClient ?? HttpClient::create(['timeout' => 60]);
+        $this->packageVerifier = new PackageVerifier($this->configuration, $this->httpClient);
     }
 
     /**
@@ -75,7 +89,7 @@ class Upgrade extends AbstractSetup
      */
     public function checkFilesystem(): bool
     {
-        if (!is_dir($this->upgradeDirectory) && !mkdir($this->upgradeDirectory)) {
+        if (!is_dir($this->upgradeDirectory) && !mkdir($this->upgradeDirectory, permissions: 0o755, recursive: true)) {
             throw new Exception(message: 'The folder ' . $this->upgradeDirectory . ' is missing.');
         }
 
@@ -189,37 +203,29 @@ class Upgrade extends AbstractSetup
     }
 
     /**
-     * Method to verify the downloaded phpMyFAQ package
+     * Verifies a downloaded release package against the published checksums.
      *
      * @param string $path | Path to a zip file
      * @param string $version | Version to verify
-     * @throws TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|JsonException
+     * @throws TransportExceptionInterface
      */
     public function verifyPackage(string $path, string $version): bool
     {
-        $response = $this->httpClient->request(
-            method: 'GET',
-            url: DownloadHostType::PHPMYFAQ->value . 'info/' . $version,
-        );
+        return $this->packageVerifier->verifyRelease($path, $version);
+    }
 
-        try {
-            $responseContent = json_decode(
-                $response->getContent(),
-                associative: true,
-                depth: 512,
-                flags: JSON_THROW_ON_ERROR,
-            );
+    /**
+     * Verifies a nightly build against the SHA-256 digest GitHub publishes in
+     * the release asset metadata (see PackageVerifier::verifyNightly()).
+     */
+    public function verifyNightlyPackage(string $path): bool
+    {
+        return $this->packageVerifier->verifyNightly($path);
+    }
 
-            $expectedMd5 = is_array($responseContent) ? $responseContent['zip']['md5'] ?? null : null;
-
-            return is_string($expectedMd5) && md5_file($path) === $expectedMd5;
-        } catch (
-            TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e
-        ) {
-            $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
-
-            return false;
-        }
+    public function isUnverifiedNightlyAllowed(): bool
+    {
+        return $this->packageVerifier->isUnverifiedNightlyAllowed();
     }
 
     /**
@@ -477,6 +483,11 @@ class Upgrade extends AbstractSetup
                 $relativePath = substr($source, strlen($sourceDir) + 1);
                 $destination = $destinationDir . DIRECTORY_SEPARATOR . $relativePath;
 
+                if (self::isProtectedPackagePath($relativePath)) {
+                    ++$currentFile;
+                    continue;
+                }
+
                 if ($item->isDir()) {
                     if (!is_dir($destination) && !mkdir($destination, permissions: 0o755, recursive: true)) {
                         $failedPaths[] = $relativePath;
@@ -518,6 +529,23 @@ class Upgrade extends AbstractSetup
     }
 
     /**
+     * Returns true for package paths that must never be copied into a live
+     * installation (see PROTECTED_PACKAGE_PATHS).
+     */
+    public static function isProtectedPackagePath(string $relativePath): bool
+    {
+        $normalizedPath = str_replace(search: '\\', replace: '/', subject: $relativePath);
+
+        foreach (self::PROTECTED_PACKAGE_PATHS as $protectedPath) {
+            if ($normalizedPath === $protectedPath || str_starts_with($normalizedPath, $protectedPath . '/')) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Drops all cached bytecode after the files have been replaced. With
      * opcache.validate_timestamps=0 (or an exhausted cache) PHP would
      * otherwise keep executing classes of the previous version and fail with
@@ -541,14 +569,35 @@ class Upgrade extends AbstractSetup
     }
 
     /**
-     * Method to clean up the upgrade directory
+     * Removes everything the update left behind: the extracted package, the
+     * downloaded archive and the temporary full-installation backup (which
+     * contains the configuration files and must not linger on disk).
      */
     public function cleanUp(): bool
     {
-        $directoryToDelete = $this->upgradeDirectory . '/new/phpmyfaq/';
+        $success = $this->removeDirectory($this->upgradeDirectory . '/new');
+
+        $archives = glob($this->upgradeDirectory . '/*.zip');
+
+        foreach ($archives === false ? [] : $archives as $archive) {
+            if (!is_file($archive) || unlink($archive)) {
+                continue;
+            }
+
+            $success = false;
+        }
+
+        return $success;
+    }
+
+    private function removeDirectory(string $directory): bool
+    {
+        if (!is_dir($directory)) {
+            return true;
+        }
 
         $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($directoryToDelete, FilesystemIterator::SKIP_DOTS),
+            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
             RecursiveIteratorIterator::CHILD_FIRST,
         );
 
@@ -557,10 +606,7 @@ class Upgrade extends AbstractSetup
                 continue;
             }
 
-            $filePath = $file->getRealPath();
-            if ($filePath === false) {
-                continue;
-            }
+            $filePath = $file->getPathname();
 
             if ($file->isDir()) {
                 rmdir($filePath);
@@ -570,7 +616,7 @@ class Upgrade extends AbstractSetup
             unlink($filePath);
         }
 
-        return rmdir($directoryToDelete);
+        return rmdir($directory);
     }
 
     /**

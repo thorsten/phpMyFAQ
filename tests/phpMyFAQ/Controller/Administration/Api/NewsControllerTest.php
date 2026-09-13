@@ -224,6 +224,63 @@ final class NewsControllerTest extends TestCase
         return $token;
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testCreateSanitizesNewsContentBeforeStoring(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-news');
+
+        $controller = new NewsController();
+        $controller->setContainer($container);
+
+        $response = $controller->create(
+            new Request(
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                json_encode(
+                    [
+                        'csrfToken' => $token,
+                        'newsHeader' => 'Sanitized News',
+                        // Entity-encoded markup passes the strip_tags() input filter and used to be decoded verbatim
+                        'news' =>
+                            '&lt;p&gt;Safe&lt;/p&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;img src=x onerror=alert(2)&gt;'
+                                . '&lt;a href="javascript:alert(3)"&gt;x&lt;/a&gt;',
+                        'authorName' => 'Tester',
+                        'authorEmail' => 'tester@example.com',
+                        'active' => '1',
+                        'comment' => '1',
+                        'link' => '',
+                        'linkTitle' => '',
+                        'langTo' => 'en',
+                        'target' => '',
+                    ],
+                    JSON_THROW_ON_ERROR,
+                ),
+            ),
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        $result = $this->dbHandle->query(sprintf(
+            'SELECT artikel FROM faqnews WHERE id = %d',
+            $this->getLatestNewsId(),
+        ));
+        $stored = (string) $this->dbHandle->fetchObject($result)->artikel;
+
+        self::assertStringContainsString('<p>Safe</p>', $stored);
+        self::assertStringNotContainsString('<script', $stored);
+        self::assertStringNotContainsString('onerror', $stored);
+        self::assertStringNotContainsString('javascript:', $stored);
+    }
+
     private function getLatestNewsId(): int
     {
         $result = $this->dbHandle->query('SELECT MAX(id) AS latest_id FROM faqnews');

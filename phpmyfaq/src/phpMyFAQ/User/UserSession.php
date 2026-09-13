@@ -97,7 +97,7 @@ class UserSession
             "SELECT sid FROM %sfaqsessions WHERE sid = %d AND ip = '%s' AND time > %d",
             Database::getTablePrefix(),
             $sessionIdToCheck,
-            $ipAddress,
+            $this->configuration->getDb()->escape($ipAddress),
             (int) $request->server->get('REQUEST_TIME') - 86_400,
         );
         $result = $this->configuration->getDb()->query($query);
@@ -116,7 +116,7 @@ class UserSession
             (int) $request->server->get('REQUEST_TIME'),
             $this->currentUser instanceof CurrentUser ? $this->currentUser->getUserId() : 0,
             $sessionIdToCheck,
-            $ipAddress,
+            $this->configuration->getDb()->escape($ipAddress),
         );
         $this->configuration->getDb()->query($query);
     }

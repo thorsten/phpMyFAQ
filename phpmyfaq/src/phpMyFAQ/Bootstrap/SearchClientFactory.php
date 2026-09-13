@@ -34,12 +34,16 @@ class SearchClientFactory
 {
     /**
      * Polls the search engine health endpoint until it responds with a 2xx–4xx status.
+     *
+     * @param array<string, bool|string> $tlsOptions Symfony HttpClient TLS options
+     *                                               (verify_peer, verify_host, cafile, capath)
      */
     public static function waitForHealthy(
         string $baseUri,
         int $timeoutSeconds = 15,
         ?HttpClientInterface $httpClient = null,
         ?callable $httpClientFactory = null,
+        array $tlsOptions = [],
     ): void {
         try {
             $http = $httpClient;
@@ -50,7 +54,8 @@ class SearchClientFactory
                 }
             }
 
-            $http ??= HttpClient::create(['verify_peer' => false]);
+            // Peer verification stays on unless the search configuration file disables it
+            $http ??= HttpClient::create($tlsOptions + ['verify_peer' => true, 'verify_host' => true]);
             $deadline = time() + $timeoutSeconds;
             do {
                 try {
@@ -83,7 +88,12 @@ class SearchClientFactory
 
         $esBaseUri = $_ENV['ELASTICSEARCH_BASE_URI'] ?? $esConfig->getHosts()[0];
 
-        self::waitForHealthy($esBaseUri, (int) ($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15), $httpClient);
+        self::waitForHealthy(
+            $esBaseUri,
+            (int) ($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15),
+            $httpClient,
+            tlsOptions: $esConfig->getTlsClientOptions(),
+        );
 
         try {
             $esClient = null;
@@ -94,12 +104,26 @@ class SearchClientFactory
                 }
             }
 
-            $esClient ??= ClientBuilder::create()->setHosts([$esBaseUri])->build();
+            $esClient ??= self::buildElasticsearchClient($esBaseUri, $esConfig);
             $faqConfig->setElasticsearch($esClient);
             $faqConfig->setElasticsearchConfig($esConfig);
         } catch (AuthenticationException $exception) {
             unset($exception);
         }
+    }
+
+    public static function buildElasticsearchClient(string $baseUri, ElasticsearchConfiguration $esConfig): Client
+    {
+        $builder = ClientBuilder::create()
+            ->setHosts([$baseUri])
+            ->setSSLVerification($esConfig->isPeerVerificationEnabled());
+
+        $caFile = $esConfig->getCaFile();
+        if ($caFile !== null) {
+            $builder->setCABundle($caFile);
+        }
+
+        return $builder->build();
     }
 
     /**
@@ -115,12 +139,15 @@ class SearchClientFactory
 
         $baseUri = $_ENV['OPENSEARCH_BASE_URI'] ?? $openSearchConfig->getHosts()[0];
 
-        self::waitForHealthy($baseUri, (int) ($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15), $httpClient);
+        self::waitForHealthy(
+            $baseUri,
+            (int) ($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15),
+            $httpClient,
+            tlsOptions: $openSearchConfig->getTlsClientOptions(),
+        );
 
-        $client = new SymfonyClientFactory()->create([
-            'base_uri' => $baseUri,
-            'verify_peer' => false,
-        ]);
+        $client = new SymfonyClientFactory()->create(['base_uri' => $baseUri]
+        + $openSearchConfig->getTlsClientOptions());
         $faqConfig->setOpenSearch($client);
         $faqConfig->setOpenSearchConfig($openSearchConfig);
     }

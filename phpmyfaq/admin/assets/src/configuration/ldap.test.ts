@@ -169,6 +169,61 @@ describe('LDAP Configuration', () => {
       expect(mappingDiv.innerHTML).toContain('memberOf');
     });
 
+    it('should escape configuration values before rendering them', async () => {
+      document.body.innerHTML = ldapPageHtml;
+
+      (fetchLdapHealthcheck as Mock).mockResolvedValue({
+        available: false,
+        status: 'degraded',
+        servers: [{ index: 0, host: 'ldap.example.com', available: false, error: '"><img src=x onerror=alert(1)>' }],
+      });
+      (fetchLdapConfiguration as Mock).mockResolvedValue({
+        ...mockConfigResponse,
+        servers: [
+          {
+            ...mockConfigResponse.servers[0],
+            ldap_server: '<img src=x onerror=alert(1)>',
+            ldap_user: '<script>alert(2)</script>',
+            ldap_base: '<b>dc=example</b>',
+          },
+        ],
+        mapping: { name: '<svg onload=alert(3)>', username: 'uid', mail: 'mail', memberOf: '<i>memberOf</i>' },
+        groupConfig: {
+          use_group_restriction: true,
+          allowed_groups: ['<em>admins</em>'],
+          auto_assign: false,
+          group_mapping: {},
+        },
+        generalSettings: {
+          ...mockConfigResponse.generalSettings,
+          dynamicLogin: true,
+          dynamicLoginAttribute: '<img src=x onerror=alert(4)>',
+        },
+      });
+
+      await handleLdap();
+
+      expect(document.querySelector('img')).toBeNull();
+      expect(document.querySelector('script')).toBeNull();
+      expect(document.querySelector('svg')).toBeNull();
+      expect(document.querySelector('#pmf-ldap-servers b')).toBeNull();
+      expect(document.querySelector('#pmf-ldap-mapping i')).toBeNull();
+      expect(document.querySelector('#pmf-ldap-group-settings em')).toBeNull();
+
+      const serversDiv = document.getElementById('pmf-ldap-servers') as HTMLElement;
+      expect(serversDiv.textContent).toContain('<img src=x onerror=alert(1)>');
+      expect(serversDiv.textContent).toContain('<script>alert(2)</script>');
+      expect(serversDiv.querySelector('.badge.bg-danger')?.getAttribute('title')).toBe(
+        '"><img src=x onerror=alert(1)>'
+      );
+
+      const mappingDiv = document.getElementById('pmf-ldap-mapping') as HTMLElement;
+      expect(mappingDiv.textContent).toContain('<svg onload=alert(3)>');
+
+      const generalDiv = document.getElementById('pmf-ldap-general-settings') as HTMLElement;
+      expect(generalDiv.textContent).toContain('<img src=x onerror=alert(4)>');
+    });
+
     it('should render LDAP options', async () => {
       document.body.innerHTML = ldapPageHtml;
 

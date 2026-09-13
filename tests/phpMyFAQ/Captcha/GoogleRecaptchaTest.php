@@ -107,6 +107,32 @@ class GoogleRecaptchaTest extends TestCase
         self::assertTrue($recaptcha->checkCaptchaCode('valid-token'));
     }
 
+    public function testCheckCaptchaCodeUrlEncodesSecretAndResponse(): void
+    {
+        $recaptcha = new class($this->configuration) extends GoogleRecaptcha {
+            public string $requestedUrl = '';
+
+            protected function fetchUrl(string $url): string|false
+            {
+                $this->requestedUrl = $url;
+                return json_encode(['success' => true]);
+            }
+        };
+        $recaptcha->setUserIsLoggedIn(false);
+
+        $this->configuration
+            ->expects($this->once())
+            ->method('get')
+            ->with('security.googleReCaptchaV2SecretKey')
+            ->willReturn('secret&key');
+
+        self::assertTrue($recaptcha->checkCaptchaCode('token&response=forged#frag'));
+        self::assertSame(
+            'https://www.google.com/recaptcha/api/siteverify?secret=secret%26key&response=token%26response%3Dforged%23frag',
+            $recaptcha->requestedUrl,
+        );
+    }
+
     /**
      * Test fluent interface chaining
      */

@@ -2,12 +2,15 @@
 
 namespace phpMyFAQ\EventListener;
 
+use Monolog\Logger;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Environment;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -109,6 +112,33 @@ class WebExceptionListenerTest extends TestCase
         $response = $event->getResponse();
         $this->assertNotNull($response);
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testLogsForbiddenExceptionAsSecurityEventWhenConfigurationIsAvailable(): void
+    {
+        $logger = $this->createMock(Logger::class);
+        $logger
+            ->expects($this->once())
+            ->method('warning')
+            ->with($this->logicalAnd(
+                $this->stringContains('security-permission-violation'),
+                $this->stringContains('No permission'),
+                $this->stringContains('path=/admin/settings.html'),
+            ));
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects($this->once())->method('has')->with('phpmyfaq.configuration')->willReturn(true);
+        $container->expects($this->once())->method('get')->with('phpmyfaq.configuration')->willReturn($configuration);
+
+        $listener = new WebExceptionListener($container);
+        $event = $this->createEvent(Request::create('/admin/settings.html'), new ForbiddenException('No permission'));
+
+        $listener->onKernelException($event);
+
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $event->getResponse()?->getStatusCode());
     }
 
     public function testHandlesBadRequestException(): void

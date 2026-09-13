@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use Exception;
 use JsonException;
+use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -94,9 +95,9 @@ final class AdminLogController extends AbstractAdministrationApiController
                     $log->getId(),
                     date('Y-m-d H:i:s', $log->getTime()),
                     $log->getUserId(),
-                    $username,
-                    $log->getIp(),
-                    $log->getText(),
+                    Report::sanitize($username),
+                    Report::sanitize($log->getIp()),
+                    Report::sanitize($log->getText()),
                 ],
                 separator: ',',
                 enclosure: '"',

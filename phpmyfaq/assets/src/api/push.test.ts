@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { getVapidPublicKey, unsubscribePush, getPushStatus } from './push';
+import { getVapidPublicKey, subscribePush, unsubscribePush, getPushStatus } from './push';
 import createFetchMock, { FetchMock } from 'vitest-fetch-mock';
 import type { VapidPublicKeyResponse, PushSubscribeResponse, PushStatusResponse } from './push';
 
@@ -41,11 +41,55 @@ describe('Push API', (): void => {
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
-  test('unsubscribePush should send endpoint and return success', async (): Promise<void> => {
+  test('subscribePush should send subscription keys and the CSRF token', async (): Promise<void> => {
+    const mockResponse: PushSubscribeResponse = { success: true };
+    fetchMocker.mockResponseOnce(JSON.stringify(mockResponse));
+    Object.defineProperty(window, 'PushManager', {
+      value: { supportedContentEncodings: ['aes128gcm'] },
+      writable: true,
+      configurable: true,
+    });
+
+    const subscription = {
+      endpoint: 'https://fcm.googleapis.com/fcm/send/abc123',
+      getKey: (name: string): ArrayBuffer => new Uint8Array(name === 'p256dh' ? [1, 2] : [3, 4]).buffer,
+    } as unknown as PushSubscription;
+
+    const data = await subscribePush(subscription, 'csrf-123');
+
+    expect(data).toEqual(mockResponse);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith('api/push/subscribe', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        endpoint: 'https://fcm.googleapis.com/fcm/send/abc123',
+        publicKey: btoa(String.fromCharCode(1, 2)),
+        authToken: btoa(String.fromCharCode(3, 4)),
+        contentEncoding: 'aes128gcm',
+        csrfToken: 'csrf-123',
+      }),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+  });
+
+  test('subscribePush should throw when the subscription keys are missing', async (): Promise<void> => {
+    const subscription = {
+      endpoint: 'https://fcm.googleapis.com/fcm/send/abc123',
+      getKey: (): null => null,
+    } as unknown as PushSubscription;
+
+    await expect(subscribePush(subscription, 'csrf-123')).rejects.toThrow('Missing subscription keys');
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  test('unsubscribePush should send endpoint and CSRF token and return success', async (): Promise<void> => {
     const mockResponse: PushSubscribeResponse = { success: true };
     fetchMocker.mockResponseOnce(JSON.stringify(mockResponse));
 
-    const data = await unsubscribePush('https://fcm.googleapis.com/fcm/send/abc123');
+    const data = await unsubscribePush('https://fcm.googleapis.com/fcm/send/abc123', 'csrf-123');
 
     expect(data).toEqual(mockResponse);
     expect(fetch).toHaveBeenCalledTimes(1);
@@ -53,7 +97,7 @@ describe('Push API', (): void => {
       method: 'POST',
       cache: 'no-cache',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ endpoint: 'https://fcm.googleapis.com/fcm/send/abc123' }),
+      body: JSON.stringify({ endpoint: 'https://fcm.googleapis.com/fcm/send/abc123', csrfToken: 'csrf-123' }),
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
     });
@@ -62,7 +106,7 @@ describe('Push API', (): void => {
   test('unsubscribePush should handle error', async (): Promise<void> => {
     fetchMocker.mockResponseOnce(null, { status: 401 });
 
-    await expect(unsubscribePush('https://example.com/push')).rejects.toThrow('HTTP 401');
+    await expect(unsubscribePush('https://example.com/push', 'csrf-123')).rejects.toThrow('HTTP 401');
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 

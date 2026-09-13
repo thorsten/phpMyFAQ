@@ -45,7 +45,10 @@ export const getVapidPublicKey = async (): Promise<VapidPublicKeyResponse> => {
   return await response.json();
 };
 
-export const subscribePush = async (subscription: PushSubscription): Promise<PushSubscribeResponse> => {
+export const subscribePush = async (
+  subscription: PushSubscription,
+  csrfToken: string
+): Promise<PushSubscribeResponse> => {
   const key = subscription.getKey('p256dh');
   const auth = subscription.getKey('auth');
 
@@ -67,6 +70,7 @@ export const subscribePush = async (subscription: PushSubscription): Promise<Pus
       publicKey: publicKey,
       authToken: authToken,
       contentEncoding: (PushManager.supportedContentEncodings || ['aesgcm'])[0],
+      csrfToken,
     }),
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
@@ -79,14 +83,14 @@ export const subscribePush = async (subscription: PushSubscription): Promise<Pus
   return await response.json();
 };
 
-export const unsubscribePush = async (endpoint: string): Promise<PushSubscribeResponse> => {
+export const unsubscribePush = async (endpoint: string, csrfToken: string): Promise<PushSubscribeResponse> => {
   const response: Response = await fetch('api/push/unsubscribe', {
     method: 'POST',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ endpoint }),
+    body: JSON.stringify({ endpoint, csrfToken }),
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });

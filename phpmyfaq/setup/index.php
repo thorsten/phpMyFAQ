@@ -27,6 +27,7 @@ use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Controller\Frontend\SetupController;
 use phpMyFAQ\Environment;
 use phpMyFAQ\EventListener\RouterListener;
+use phpMyFAQ\EventListener\SecurityHeadersListener;
 use phpMyFAQ\EventListener\WebExceptionListener;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -110,6 +111,9 @@ $dispatcher->addListener(KernelEvents::REQUEST, [$routerListener, 'onKernelReque
 
 $webExceptionListener = new WebExceptionListener();
 $dispatcher->addListener(KernelEvents::EXCEPTION, [$webExceptionListener, 'onKernelException'], -10);
+
+$securityHeadersListener = new SecurityHeadersListener();
+$dispatcher->addListener(KernelEvents::RESPONSE, [$securityHeadersListener, 'onKernelResponse'], -100);
 
 $kernel = new HttpKernel(
     $dispatcher,

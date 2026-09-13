@@ -10,6 +10,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Http\UrlSafetyValidator;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Session\Token;
@@ -110,6 +111,16 @@ final class ConfigurationTabControllerTest extends TestCase
             $this->createStub(Language::class),
             $this->createStub(System::class),
             $this->createStub(ThemeManager::class),
+        );
+    }
+
+    private function createControllerWithUrlValidator(UrlSafetyValidator $validator): ConfigurationTabController
+    {
+        return new ConfigurationTabController(
+            $this->createStub(Language::class),
+            $this->createStub(System::class),
+            $this->createStub(ThemeManager::class),
+            $validator,
         );
     }
 
@@ -574,6 +585,102 @@ final class ConfigurationTabControllerTest extends TestCase
         self::assertTrue((bool) $this->configuration->get('security.enableLoginOnly'));
         self::assertTrue((bool) $this->configuration->get('ldap.ldapSupport'));
         self::assertTrue((bool) $this->configuration->get('security.ssoSupport'));
+        $this->removeCsrfCookie('configuration');
+    }
+
+    /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function invalidUrlConfigurationProvider(): iterable
+    {
+        yield 'libretranslate on link-local host' => ['translation.libreTranslateUrl', 'http://metadata.example.test/'];
+        yield 'libretranslate on unspecified address' => ['translation.libreTranslateUrl', 'http://0.0.0.0:5000'];
+        yield 'libretranslate with wrong scheme' => ['translation.libreTranslateUrl', 'ftp://public.example.test'];
+        yield 'keycloak on metadata endpoint' => ['keycloak.baseUrl', 'http://169.254.169.254/'];
+        yield 'keycloak redirect with javascript' => ['keycloak.redirectUri', 'javascript:alert(1)'];
+        yield 'keycloak logout redirect protocol relative' => ['keycloak.logoutRedirectUrl', '//evil.example.test'];
+        yield 'session redis with http' => ['session.redisDsn', 'http://redis:6379'];
+        yield 'storage redis without host' => ['storage.redisDsn', 'redis://'];
+        yield 'cache redis garbage' => ['storage.cacheRedisDsn', 'redis'];
+        yield 'media hosts with scheme' => ['records.allowedMediaHosts', 'https://www.youtube.com'];
+        yield 'media hosts with markup' => ['records.allowedMediaHosts', "youtube.com'><script>"];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('invalidUrlConfigurationProvider')]
+    public function testSaveRejectsInvalidUrlValues(string $key, string $value): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $validator = new UrlSafetyValidator(static fn(string $host): array => match ($host) {
+            'public.example.test' => ['93.184.216.34'],
+            'metadata.example.test' => ['169.254.169.254'],
+            default => [],
+        });
+        $controller = $this->createControllerWithUrlValidator($validator);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $originalValue = $this->configuration->get($key);
+
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'availableFields' => json_encode([$key], JSON_THROW_ON_ERROR),
+            'edit' => [$key => $value],
+        ]);
+
+        $response = $controller->save($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(sprintf(Translation::get('msgInvalidConfigurationUrl'), $key), $payload['error']);
+        self::assertSame($originalValue, $this->configuration->get($key));
+        $this->removeCsrfCookie('configuration');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveAcceptsValidUrlValues(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $validator = new UrlSafetyValidator(static fn(string $host): array => match ($host) {
+            'translate.example.test', 'sso.example.test' => ['93.184.216.34'],
+            default => [],
+        });
+        $controller = $this->createControllerWithUrlValidator($validator);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $values = [
+            'translation.libreTranslateUrl' => 'https://translate.example.test',
+            'keycloak.baseUrl' => 'https://sso.example.test/realms/faq',
+            'keycloak.redirectUri' => 'http://localhost/faq/keycloak/callback',
+            'keycloak.logoutRedirectUrl' => '',
+            'session.redisDsn' => 'tcp://redis:6379?database=0',
+            'storage.redisDsn' => 'rediss://cache.example.test:6380',
+            'storage.cacheRedisDsn' => 'unix:///var/run/redis.sock',
+            'records.allowedMediaHosts' => 'www.youtube.com, player.vimeo.com',
+        ];
+
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'availableFields' => json_encode(array_keys($values), JSON_THROW_ON_ERROR),
+            'edit' => $values,
+        ]);
+
+        $response = $controller->save($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+        self::assertSame('https://translate.example.test', $this->configuration->get('translation.libreTranslateUrl'));
+        self::assertSame('www.youtube.com, player.vimeo.com', $this->configuration->get('records.allowedMediaHosts'));
         $this->removeCsrfCookie('configuration');
     }
 

@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -111,10 +114,7 @@ final class GroupControllerTest extends TestCase
         $this->seedGroups();
         $this->forceConfigurationValue('api.enableAccess', true);
 
-        $currentUser = $this->createMock(CurrentUser::class);
-        $currentUser->method('isLoggedIn')->willReturn(true);
-        $currentUser->method('getUserId')->willReturn(1);
-        $currentUser->method('isSuperAdmin')->willReturn(false);
+        $currentUser = $this->createGroupAdministrator();
 
         $controller = new GroupController();
         $controller->setContainer($this->createControllerContainer($currentUser));
@@ -132,6 +132,63 @@ final class GroupControllerTest extends TestCase
         self::assertSame('group-id', $payload['meta']['sorting']['field']);
         self::assertSame('desc', $payload['meta']['sorting']['order']);
         self::assertSame(2, $payload['data'][0]);
+    }
+
+    /**
+     * Group IDs are administrative data; a plain authenticated user must not enumerate them.
+     *
+     * @throws \Exception
+     */
+    public function testListForbidsAuthenticatedUserWithoutGroupPermission(): void
+    {
+        $this->seedGroups();
+        $this->forceConfigurationValue('api.enableAccess', true);
+
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(false);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createControllerContainer($currentUser));
+
+        $this->expectException(ForbiddenException::class);
+        $controller->list(new Request());
+    }
+
+    /**
+     * Builds a logged-in non-SuperAdmin holding the user and group administration rights.
+     */
+    private function createGroupAdministrator(): CurrentUser
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 1
+                && in_array(
+                    $right,
+                    [
+                        PermissionType::USER_ADD->value,
+                        PermissionType::USER_EDIT->value,
+                        PermissionType::USER_DELETE->value,
+                        PermissionType::GROUP_EDIT->value,
+                    ],
+                    true,
+                ),
+            );
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('isSuperAdmin')->willReturn(false);
+
+        return $currentUser;
     }
 
     private function seedGroups(): void

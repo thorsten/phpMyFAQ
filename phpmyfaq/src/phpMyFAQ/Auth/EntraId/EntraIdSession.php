@@ -33,6 +33,8 @@ class EntraIdSession extends AbstractSession
 
     final public const string ENTRA_ID_OAUTH_VERIFIER = 'pmf-entra-id-oauth-verifier';
 
+    final public const string ENTRA_ID_OAUTH_STATE = 'pmf-entra-id-oauth-state';
+
     final public const string ENTRA_ID_JWT = 'pmf-entra-id-jwt';
 
     private string $currentSessionKey;

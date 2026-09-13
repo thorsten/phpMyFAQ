@@ -14,10 +14,13 @@ use phpMyFAQ\Configuration\SearchSettings;
 use phpMyFAQ\Configuration\SecuritySettings;
 use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver;
 use phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
 use phpMyFAQ\Configuration\Storage\HybridConfigurationStore;
 use phpMyFAQ\Configuration\UrlSettings;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Environment;
+use phpMyFAQ\Plugin\PluginDiscovery;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
@@ -28,9 +31,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
-use phpMyFAQ\Database;
-use phpMyFAQ\Plugin\PluginDiscovery;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[CoversClass(SearchClientFactory::class)]
 #[AllowMockObjectsWithoutExpectations]
@@ -199,6 +200,67 @@ class SearchClientFactoryTest extends TestCase
         $this->assertSame(1, $httpClient->getRequestsCount());
     }
 
+    public function testWaitForHealthyDefaultClientVerifiesPeers(): void
+    {
+        $captured = null;
+        $factory = static function () use (&$captured): HttpClientInterface {
+            $captured = 'called';
+
+            return new MockHttpClient([new MockResponse('{}', ['http_code' => 200])]);
+        };
+
+        SearchClientFactory::waitForHealthy('http://localhost:9200', 1, null, $factory, ['verify_peer' => false]);
+
+        $this->assertSame('called', $captured);
+    }
+
+    public function testElasticsearchClientHonoursVerifyPeerFromConfigurationFile(): void
+    {
+        $configDir = $this->createSearchConfigDirectory(
+            'elasticsearch',
+            "'verify_peer' => false, 'cafile' => '/etc/ssl/es.pem'",
+        );
+        $esConfig = new ElasticsearchConfiguration($configDir . '/elasticsearch.php');
+
+        $this->assertFalse($esConfig->isPeerVerificationEnabled());
+        $this->assertSame('/etc/ssl/es.pem', $esConfig->getCaFile());
+        $this->assertSame(
+            ['verify_peer' => false, 'verify_host' => false, 'cafile' => '/etc/ssl/es.pem'],
+            $esConfig->getTlsClientOptions(),
+        );
+
+        $client = SearchClientFactory::buildElasticsearchClient('https://localhost:9200', $esConfig);
+        $this->assertInstanceOf(\Elastic\Elasticsearch\Client::class, $client);
+    }
+
+    public function testSearchConfigurationVerifiesPeersByDefault(): void
+    {
+        $esConfigDir = $this->createSearchConfigDirectory('elasticsearch');
+        $osConfigDir = $this->createSearchConfigDirectory('opensearch');
+
+        $esConfig = new ElasticsearchConfiguration($esConfigDir . '/elasticsearch.php');
+        $osConfig = new OpenSearchConfiguration($osConfigDir . '/opensearch.php');
+
+        $this->assertTrue($esConfig->isPeerVerificationEnabled());
+        $this->assertTrue($osConfig->isPeerVerificationEnabled());
+        $this->assertNull($osConfig->getCaFile());
+        $this->assertNull($osConfig->getCaPath());
+        $this->assertSame(['verify_peer' => true, 'verify_host' => true], $osConfig->getTlsClientOptions());
+    }
+
+    public function testOpenSearchConfigurationReadsCaPath(): void
+    {
+        $configDir = $this->createSearchConfigDirectory('opensearch', "'capath' => '/etc/ssl/certs'");
+        $osConfig = new OpenSearchConfiguration($configDir . '/opensearch.php');
+
+        $this->assertTrue($osConfig->isPeerVerificationEnabled());
+        $this->assertSame('/etc/ssl/certs', $osConfig->getCaPath());
+        $this->assertSame(
+            ['verify_peer' => true, 'verify_host' => true, 'capath' => '/etc/ssl/certs'],
+            $osConfig->getTlsClientOptions(),
+        );
+    }
+
     private function createConfiguration(): Configuration
     {
         $dbHandle = new Sqlite3();
@@ -207,16 +269,17 @@ class SearchClientFactoryTest extends TestCase
         return new Configuration($dbHandle);
     }
 
-    private function createSearchConfigDirectory(string $type): string
+    private function createSearchConfigDirectory(string $type, string $extraOptions = ''): string
     {
         $configDir = sys_get_temp_dir() . '/pmf-search-config-' . $type . '-' . uniqid('', true);
         mkdir($configDir, 0777, true);
+        $extraOptions = $extraOptions === '' ? '' : ', ' . $extraOptions;
 
         if ($type === 'elasticsearch') {
             file_put_contents($configDir . '/constants_elasticsearch.php', "<?php\n");
             file_put_contents(
                 $configDir . '/elasticsearch.php',
-                "<?php\n\$PMF_ES = ['hosts' => ['http://localhost:9200'], 'index' => 'pmf'];\n",
+                "<?php\n\$PMF_ES = ['hosts' => ['http://localhost:9200'], 'index' => 'pmf'{$extraOptions}];\n",
             );
         }
 
@@ -224,7 +287,7 @@ class SearchClientFactoryTest extends TestCase
             file_put_contents($configDir . '/constants_opensearch.php', "<?php\n");
             file_put_contents(
                 $configDir . '/opensearch.php',
-                "<?php\n\$PMF_OS = ['hosts' => ['http://localhost:9201'], 'index' => 'pmf'];\n",
+                "<?php\n\$PMF_OS = ['hosts' => ['http://localhost:9201'], 'index' => 'pmf'{$extraOptions}];\n",
             );
         }
 

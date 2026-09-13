@@ -22,9 +22,11 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 use Exception;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\Vote;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,6 +83,11 @@ final class VotingController extends AbstractController
             throw new Exception('Invalid vote value');
         }
 
+        // Never accept a vote for a FAQ the requester may not see (ACL, unpublished, expired).
+        if (!$this->isFaqAccessible($faqId)) {
+            return $this->json(['error' => Translation::get(key: 'msgAccessDenied')], Response::HTTP_NOT_FOUND);
+        }
+
         if (!$this->rating->check($faqId, $userIp)) {
             $this->userSession->userTracking('error_save_voting', $faqId);
             return $this->json(['error' => Translation::get(key: 'err_VoteTooMuch')], Response::HTTP_BAD_REQUEST);
@@ -104,5 +111,18 @@ final class VotingController extends AbstractController
             'success' => Translation::get(key: 'msgVoteThanks'),
             'rating' => $this->rating->get($faqId),
         ], Response::HTTP_OK);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function isFaqAccessible(int $faqId): bool
+    {
+        [$currentUserId, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $faq = new Faq($this->configuration);
+        $faq->setUser($currentUserId)->setGroups($currentGroups);
+
+        return $faq->isFaqAccessibleForUser($faqId);
     }
 }

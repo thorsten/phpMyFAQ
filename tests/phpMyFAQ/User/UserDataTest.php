@@ -71,7 +71,71 @@ class UserDataTest extends TestCase
         $this->database->method('fetchArray')->willReturn(['user_id' => 1]);
 
         $result = $this->userData->fetchAll('key', 'value');
-        $this->assertEquals(['user_id' => 1, 'keycloak_sub' => ''], $result);
+        $this->assertEquals(['user_id' => 1, 'keycloak_sub' => '', 'entra_oid' => ''], $result);
+    }
+
+    public function testGetReturnsEmptyStringForEntraOidWhenTheColumnIsMissing(): void
+    {
+        $this->database->method('query')->willReturn(false);
+
+        $this->assertSame('', $this->userData->get('entra_oid'));
+        $this->assertSame('', $this->userData->get('keycloak_sub'));
+        $this->assertFalse($this->userData->get('display_name'));
+    }
+
+    public function testLoadDefaultsTheEntraOidToAnEmptyString(): void
+    {
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn(['display_name' => 'Admin']);
+
+        $this->assertTrue($this->userData->load(1));
+
+        $reflection = new \ReflectionProperty($this->userData, 'data');
+        $data = $reflection->getValue($this->userData);
+        $this->assertSame('', $data['entra_oid']);
+        $this->assertSame('', $data['keycloak_sub']);
+    }
+
+    public function testSavePersistsTheEntraOidAndNullsAnEmptyOne(): void
+    {
+        $queries = [];
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): bool {
+                $queries[] = $query;
+                return true;
+            });
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn(['display_name' => 'Admin']);
+        $this->database->method('escape')->willReturnArgument(0);
+
+        $this->userData->load(1);
+
+        $this->assertTrue($this->userData->set('entra_oid', 'oid-123'));
+        $this->assertStringContainsString("entra_oid = 'oid-123'", end($queries));
+        $this->assertStringContainsString('keycloak_sub = NULL', end($queries));
+
+        $this->assertTrue($this->userData->set('entra_oid', ''));
+        $this->assertStringContainsString('entra_oid = NULL', end($queries));
+    }
+
+    public function testSaveDoesNotRunFallbackUpdateWhenEntraOidIsPresent(): void
+    {
+        $queryResults = [true, false];
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function () use (&$queryResults): bool {
+                return array_shift($queryResults) ?? true;
+            });
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn(['display_name' => 'Old']);
+        $this->database->method('escape')->willReturnArgument(0);
+
+        $this->userData->load(1);
+
+        $this->assertFalse($this->userData->set(['display_name', 'entra_oid'], ['Admin', 'oid-123']));
+        $this->assertSame([], $queryResults);
     }
 
     public function testFetchAllReturnsDefaultArrayWhenNoResultExists(): void

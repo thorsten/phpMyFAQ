@@ -9,6 +9,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Http\RateLimiter;
+use phpMyFAQ\Kernel;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -415,6 +418,27 @@ class UnauthorizedUserControllerTest extends TestCase
         ]));
 
         $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    /**
+     * The controller must be resolved from the container: without a registration it is
+     * instantiated with `new`, which leaves it with an in-memory rate limiter that forgets
+     * every request as soon as the request ends.
+     */
+    public function testControllerIsRegisteredWithTheSharedRateLimiter(): void
+    {
+        $kernel = new Kernel(routingContext: 'public', debug: true);
+        $buildMethod = new \ReflectionMethod(Kernel::class, 'buildContainer');
+        $container = $buildMethod->invoke($kernel);
+
+        $this->assertInstanceOf(ContainerBuilder::class, $container);
+        $this->assertTrue($container->hasDefinition(UnauthorizedUserController::class));
+
+        $arguments = $container->getDefinition(UnauthorizedUserController::class)->getArguments();
+        $this->assertInstanceOf(Reference::class, $arguments[3]);
+        $this->assertSame('phpmyfaq.http.rate-limiter', (string) $arguments[3]);
+        $this->assertInstanceOf(Reference::class, $arguments[4]);
+        $this->assertSame('phpmyfaq.configuration', (string) $arguments[4]);
     }
 
     public function testJsonReturnsJsonResponse(): void

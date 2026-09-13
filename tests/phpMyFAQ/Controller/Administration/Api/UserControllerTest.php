@@ -1086,9 +1086,7 @@ final class UserControllerTest extends TestCase
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $response = $controller->listUserLanguageRestrictions(
-            new Request([], [], ['userId' => $managedUserId]),
-        );
+        $response = $controller->listUserLanguageRestrictions(new Request([], [], ['userId' => $managedUserId]));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -1189,9 +1187,7 @@ final class UserControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertTrue($payload['success']);
 
-        $listResponse = $controller->listUserLanguageRestrictions(
-            new Request([], [], ['userId' => $managedUserId]),
-        );
+        $listResponse = $controller->listUserLanguageRestrictions(new Request([], [], ['userId' => $managedUserId]));
         $listPayload = json_decode((string) $listResponse->getContent(), true, 512, JSON_THROW_ON_ERROR);
         self::assertSame(['1' => ['en']], $listPayload);
     }
@@ -1354,6 +1350,110 @@ final class UserControllerTest extends TestCase
     }
 
     /**
+     * A USER_EDIT holder must not be able to overwrite the e-mail address or reset the 2FA
+     * of an administrator who holds rights the acting user lacks (account takeover).
+     *
+     * @throws \Exception
+     */
+    public function testEditUserNonSuperAdminCannotEditUserHoldingRightsTheyLack(): void
+    {
+        $managedUserId = $this->seedManagedUser(login: 'privileged-admin', twoFactorEnabled: 1);
+        $this->grantUserRight($managedUserId, 1);
+
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUserWithRights(userId: 5, heldRightIds: []);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-data');
+
+        $response = $controller->editUser($this->jsonRequest([
+            'userId' => $managedUserId,
+            'csrfToken' => $csrf,
+            'display_name' => 'Taken over',
+            'email' => 'attacker@example.com',
+            'last_modified' => '',
+            'user_status' => 'active',
+            'is_superadmin' => '',
+            'overwrite_twofactor' => true,
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+
+        $row = $this->dbHandle->fetchObject($this->dbHandle->query(sprintf(
+            'SELECT email, twofactor_enabled FROM faquserdata WHERE user_id = %d',
+            $managedUserId,
+        )));
+        self::assertSame('privileged-admin@example.com', $row->email);
+        self::assertSame(1, (int) $row->twofactor_enabled);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEditUserNonSuperAdminCanEditUserWhoseRightsTheyHold(): void
+    {
+        $managedUserId = $this->seedManagedUser(login: 'peer-editor');
+        $this->grantUserRight($managedUserId, 1);
+
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUserWithRights(userId: 5, heldRightIds: [1]);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-data');
+
+        $response = $controller->editUser($this->jsonRequest([
+            'userId' => $managedUserId,
+            'csrfToken' => $csrf,
+            'display_name' => 'Peer Editor',
+            'email' => 'peer-editor@example.com',
+            'last_modified' => '',
+            'user_status' => 'active',
+            'is_superadmin' => '',
+            'overwrite_twofactor' => false,
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
+    /**
+     * Builds a non-SuperAdmin acting user that holds the USER_EDIT gate plus exactly the
+     * given right IDs.
+     *
+     * @param array<int> $heldRightIds
+     */
+    private function buildActingUserWithRights(int $userId, array $heldRightIds): CurrentUser
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $actingUserId, mixed $right): bool => (
+                    $actingUserId === $userId
+                    && ($right === PermissionType::USER_EDIT->value || in_array($right, $heldRightIds, true))
+                ),
+            );
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $permission;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn($userId);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        return $actingUser;
+    }
+
+    private function grantUserRight(int $userId, int $rightId): void
+    {
+        self::assertNotFalse($this->dbHandle->query(sprintf(
+            'INSERT INTO faquser_right (user_id, right_id) VALUES (%d, %d)',
+            $userId,
+            $rightId,
+        )));
+    }
+
+    /**
      * editUser must clear the 2FA secret and disable the flag when the TS client
      * sends a JSON boolean true (not the legacy 'on' string).
      *
@@ -1395,12 +1495,10 @@ final class UserControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         // Assert that the secret was cleared and 2FA disabled in the database.
-        $result = $this->dbHandle->query(
-            sprintf(
-                "SELECT secret, twofactor_enabled FROM faquserdata WHERE user_id = %d",
-                $managedUserId,
-            )
-        );
+        $result = $this->dbHandle->query(sprintf(
+            'SELECT secret, twofactor_enabled FROM faquserdata WHERE user_id = %d',
+            $managedUserId,
+        ));
         self::assertNotFalse($result);
         $row = $this->dbHandle->fetchObject($result);
         self::assertNotFalse($row);
@@ -1448,12 +1546,10 @@ final class UserControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         // 2FA secret and flag must be untouched.
-        $result = $this->dbHandle->query(
-            sprintf(
-                "SELECT secret, twofactor_enabled FROM faquserdata WHERE user_id = %d",
-                $managedUserId,
-            )
-        );
+        $result = $this->dbHandle->query(sprintf(
+            'SELECT secret, twofactor_enabled FROM faquserdata WHERE user_id = %d',
+            $managedUserId,
+        ));
         self::assertNotFalse($result);
         $row = $this->dbHandle->fetchObject($result);
         self::assertNotFalse($row);
@@ -1556,16 +1652,18 @@ final class UserControllerTest extends TestCase
         $actingUser = $this->buildActingUser(userId: 1, isSuperAdmin: true);
 
         $userData = $this->createMock(UserData::class);
-        $userData->method('get')->willReturn([
-            'user_id' => 7,
-            'last_modified' => '20260101000000',
-            'display_name' => 'Jane Doe',
-            'email' => 'jane@example.test',
-            'is_visible' => 1,
-            'twofactor_enabled' => 1,
-            'secret' => 'TOPSECRETTOTPSEEDVALUE',
-            'keycloak_sub' => 'kc-subject-uuid-123',
-        ]);
+        $userData
+            ->method('get')
+            ->willReturn([
+                'user_id' => 7,
+                'last_modified' => '20260101000000',
+                'display_name' => 'Jane Doe',
+                'email' => 'jane@example.test',
+                'is_visible' => 1,
+                'twofactor_enabled' => 1,
+                'secret' => 'TOPSECRETTOTPSEEDVALUE',
+                'keycloak_sub' => 'kc-subject-uuid-123',
+            ]);
 
         $userService = $this->createMock(CurrentUser::class);
         $userService->method('userData')->willReturn($userData);

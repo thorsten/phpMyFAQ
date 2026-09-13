@@ -1305,7 +1305,7 @@ $PMF_LANG['msgBackupCurrentInstallation'] = 'Backup of current installation';
 $PMF_LANG['msgInstallationNewFiles'] = 'Installation of new files';
 $PMF_LANG['msgDatabaseUpdate'] = 'Update of the database';
 $PMF_LANG['alertNightlyBuild'] = 'You are using a development version of phpMyFAQ. You can update to the latest nightly build.';
-$PMF_LANG['noteNightlyBuild'] = 'Please note that the previous day build will be downloaded (saved in /content/upgrades). Because each new build is not created until 2am (UTC) by GitHub.';
+$PMF_LANG['noteNightlyBuild'] = 'Please note that the previous day build will be downloaded (saved in /content/core/upgrades). Because each new build is not created until 2am (UTC) by GitHub.';
 $PMF_LANG['buttonCheckHealth'] = 'Check System health now';
 $PMF_LANG['buttonCheckUpdates'] = 'Check for Updates now';
 $PMF_LANG['buttonDownloadPackage'] = 'Download now';
@@ -1890,5 +1890,19 @@ $PMF_LANG['questionHistoryEventAnswered'] = 'Question answered';
 $PMF_LANG['questionHistoryEventReopened'] = 'Question reopened';
 $PMF_LANG['msgQuestionReopenError'] = 'The question could not be reopened.';
 $PMF_LANG['msgQuestionHistoryFaqReference'] = 'FAQ #%d';
+
+// added v4.2.0-beta - 2026-09-13 by Thorsten
+$PMF_LANG['msgEntraIdLoginFailed'] = 'The login with Microsoft Entra ID failed. Please try again or contact the administrator.';
+$PMF_LANG['msgTwofactorAlreadyConfigured'] = 'Two Factor Authentication is active. To enrol a new device, remove the current configuration first.';
+
+// added v4.2.0-alpha.2 - 2026-09-13 by Thorsten Rinne - security hardening
+$PMF_LANG['ad_category_restrictions_no_category'] = 'No valid category ID provided.';
+$PMF_LANG['msgPushInvalidEndpoint'] = 'The push subscription endpoint must be a public HTTPS URL.';
+$PMF_LANG['msgApiKeyUnknownScope'] = 'Unknown API key scope: %s';
+$PMF_LANG['msgApiKeyScopeNotHeld'] = 'You do not hold the permission required for the API key scope: %s';
+$PMF_LANG['msgInvalidVersionNumber'] = 'The requested version number is not valid.';
+$PMF_LANG['msgInvalidConfigurationUrl'] = 'The value of "%s" is not a valid or allowed URL.';
+$PMF_LANG['msgAttachmentTypeNotAllowed'] = 'Files of this type (%s) cannot be uploaded as attachments.';
+$LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Allow installing nightly builds whose SHA-256 digest cannot be verified against GitHub (not recommended)'];
 
 return $PMF_LANG;

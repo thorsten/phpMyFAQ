@@ -139,7 +139,7 @@ class User
      * regular expression to find invalid login strings
      * (default: /^[a-z0-9][\w\.\-@]+/is ).
      */
-    private string $validUsername = '/^[a-z0-9][\w.\-@]+/i';
+    private string $validUsername = '/^[a-z0-9][\w.\-@]+$/iD';
 
     private int $userId = -1;
 
@@ -260,7 +260,8 @@ class User
             SELECT
                 user_id,
                 login,
-                account_status
+                account_status,
+                remember_me_expires
             FROM
                 %sfaquser
             WHERE
@@ -285,6 +286,16 @@ class User
 
         // Don't ever log in via an anonymous user
         if (-1 === (int) $user['user_id']) {
+            return false;
+        }
+
+        // The cookie lifetime is only enforced by the browser; a token that was copied out
+        // of the browser must stop working server-side once its lifetime is over. Tokens
+        // issued before an expiry was recorded are treated as expired.
+        $expires = (int) ($user['remember_me_expires'] ?? 0);
+        if ($expires <= 0 || $expires < (int) Request::createFromGlobals()->server->get('REQUEST_TIME')) {
+            $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
+
             return false;
         }
 
@@ -337,10 +348,12 @@ class User
      */
     public function searchUsers(string $search): array
     {
+        // Escape LIKE metacharacters (%, _) so the filter cannot widen into a wildcard search
+        $escapedSearch = str_replace(['|', '%', '_'], ['||', '|%', '|_'], $search);
         $select = sprintf(
-            "SELECT login, user_id, account_status FROM %sfaquser WHERE login LIKE '%s'",
+            "SELECT login, user_id, account_status FROM %sfaquser WHERE login LIKE '%s' ESCAPE '|'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($search . '%'),
+            $this->configuration->getDb()->escape($escapedSearch . '%'),
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -753,24 +766,6 @@ class User
 
         $this->extractUserFromResult($result);
 
-        // get encrypted password
-        // @todo: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
-        if ('db' === $this->getAuthSource('name')) {
-            $select = sprintf(
-                "SELECT pass FROM %sfaquserlogin WHERE login = '%s'",
-                Database::getTablePrefix(),
-                $this->login,
-            );
-
-            $res = $this->configuration->getDb()->query($select);
-            if ($this->configuration->getDb()->numRows($res) !== 1) {
-                $this->errors[] =
-                    self::ERROR_USER_NO_USERLOGINDATA . 'error: ' . $this->configuration->getDb()->error();
-
-                return false;
-            }
-        }
-
         // get user-data
         $this->userData()->load($this->getUserId());
 
@@ -826,6 +821,24 @@ class User
     public function getUserIdByKeycloakSub(string $keycloakSub): int
     {
         $userData = $this->userData()->fetchAll('keycloak_sub', $keycloakSub);
+
+        if (!array_key_exists('user_id', $userData)) {
+            return 0;
+        }
+
+        return (int) $userData['user_id'];
+    }
+
+    /**
+     * Returns the user ID linked to the given Microsoft Entra ID object identifier.
+     */
+    public function getUserIdByEntraOid(string $objectId): int
+    {
+        if ($objectId === '') {
+            return 0;
+        }
+
+        $userData = $this->userData()->fetchAll('entra_oid', $objectId);
 
         if (!array_key_exists('user_id', $userData)) {
             return 0;
@@ -1001,7 +1014,28 @@ class User
             $success = true;
         }
 
+        if ($success) {
+            // A password change must invalidate every credential derived from the old
+            // password: remember-me tokens and sessions established before the change.
+            $this->revokePersistentLogins();
+        }
+
         return $success;
+    }
+
+    /**
+     * Revokes the remember-me token and the stored session of the user, so that every
+     * device that was logged in before has to authenticate again.
+     */
+    public function revokePersistentLogins(): bool
+    {
+        $update = sprintf(
+            'UPDATE %sfaquser SET remember_me = NULL, remember_me_expires = NULL, session_id = NULL WHERE user_id = %d',
+            Database::getTablePrefix(),
+            $this->userId,
+        );
+
+        return (bool) $this->configuration->getDb()->query($update);
     }
 
     /**

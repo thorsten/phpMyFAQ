@@ -216,7 +216,7 @@ describe('handlePushNotifications', () => {
 
   it('should unsubscribe when toggle clicked while subscribed', async () => {
     document.body.innerHTML = `
-      <button id="pmf-push-toggle" data-label-enable="Enable" data-label-disable="Disable" data-msg-disabled="Disabled!" disabled></button>
+      <button id="pmf-push-toggle" data-label-enable="Enable" data-label-disable="Disable" data-msg-disabled="Disabled!" data-pmf-csrf="csrf-123" disabled></button>
       <div id="pmf-push-toast-container"></div>
     `;
 
@@ -237,7 +237,7 @@ describe('handlePushNotifications', () => {
     button.click();
 
     await vi.waitFor(() => {
-      expect(unsubscribePush).toHaveBeenCalledWith('https://push.example.com/existing');
+      expect(unsubscribePush).toHaveBeenCalledWith('https://push.example.com/existing', 'csrf-123');
     });
 
     expect(mockUnsubscribe).toHaveBeenCalled();
@@ -247,10 +247,10 @@ describe('handlePushNotifications', () => {
 
   it('should subscribe when toggle clicked while not subscribed', async () => {
     document.body.innerHTML = `
-      <button id="pmf-push-toggle" data-label-enable="Enable" data-label-disable="Disable" data-msg-enabled="Enabled!" disabled></button>
+      <button id="pmf-push-toggle" data-label-enable="Enable" data-label-disable="Disable" data-msg-enabled="Enabled!" data-pmf-csrf="csrf-123" disabled></button>
       <div id="pmf-push-toast-container"></div>
     `;
-    setupServiceWorker(null);
+    const { mockSubscription } = setupServiceWorker(null);
     vi.mocked(getVapidPublicKey).mockResolvedValue({ enabled: true, vapidPublicKey: 'test-key' });
     vi.mocked(subscribePush).mockResolvedValue({ success: true });
 
@@ -260,7 +260,7 @@ describe('handlePushNotifications', () => {
     button.click();
 
     await vi.waitFor(() => {
-      expect(subscribePush).toHaveBeenCalled();
+      expect(subscribePush).toHaveBeenCalledWith(mockSubscription, 'csrf-123');
     });
 
     expect(button.textContent).toBe('Disable');

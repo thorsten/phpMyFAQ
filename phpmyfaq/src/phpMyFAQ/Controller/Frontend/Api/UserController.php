@@ -142,6 +142,11 @@ final class UserController extends AbstractController
 
                     $success = true;
                 }
+
+                // The new password invalidates every other device: remember-me tokens and
+                // stored sessions are revoked, only the session that changed it stays alive.
+                $this->currentUser->revokePersistentLogins();
+                $this->currentUser->updateSessionId();
             }
         }
 
@@ -365,7 +370,7 @@ final class UserController extends AbstractController
         // 2FA and reduce the account to password-only authentication (CWE-308). The code is
         // verified against the still-current secret, before it is rotated below.
         if ((int) $this->currentUser->getUserData('twofactor_enabled') === 1) {
-            $code = trim((string) Filter::filterVar($data->code ?? null, FILTER_SANITIZE_SPECIAL_CHARS, ''));
+            $code = trim(Filter::filterVar($data->code ?? null, FILTER_SANITIZE_SPECIAL_CHARS, ''));
             if (!$twoFactor->validateToken($code, $this->currentUser->getUserId())) {
                 return $this->json([
                     'error' => Translation::get(key: 'msgTwofactorErrorToken'),

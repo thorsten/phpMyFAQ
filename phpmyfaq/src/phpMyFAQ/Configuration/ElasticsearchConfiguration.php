@@ -26,17 +26,76 @@ readonly class ElasticsearchConfiguration
 
     private string $index;
 
+    /**
+     * TLS peer verification is on unless the configuration file explicitly
+     * sets $PMF_ES['verify_peer'] = false (e.g. for a self-signed test cluster).
+     */
+    private bool $verifyPeer;
+
+    private ?string $caFile;
+
+    private ?string $caPath;
+
     public function __construct(string $filename)
     {
         $PMF_ES = [
             'hosts' => [],
             'index' => '',
+            'verify_peer' => true,
+            'cafile' => null,
+            'capath' => null,
         ];
 
         include $filename;
 
         $this->hosts = $PMF_ES['hosts'];
         $this->index = $PMF_ES['index'];
+
+        // The configuration file may replace the whole array, so every optional key needs its default again
+        /** @var array<string, mixed> $PMF_ES */
+        $this->verifyPeer = filter_var($PMF_ES['verify_peer'] ?? true, FILTER_VALIDATE_BOOLEAN);
+        $this->caFile = self::optionalPath($PMF_ES['cafile'] ?? null);
+        $this->caPath = self::optionalPath($PMF_ES['capath'] ?? null);
+    }
+
+    public function isPeerVerificationEnabled(): bool
+    {
+        return $this->verifyPeer;
+    }
+
+    public function getCaFile(): ?string
+    {
+        return $this->caFile;
+    }
+
+    public function getCaPath(): ?string
+    {
+        return $this->caPath;
+    }
+
+    /**
+     * Options for Symfony HttpClient based clients (health check, OpenSearch).
+     *
+     * @return array<string, bool|string>
+     */
+    public function getTlsClientOptions(): array
+    {
+        $options = ['verify_peer' => $this->verifyPeer, 'verify_host' => $this->verifyPeer];
+
+        if ($this->caFile !== null) {
+            $options['cafile'] = $this->caFile;
+        }
+
+        if ($this->caPath !== null) {
+            $options['capath'] = $this->caPath;
+        }
+
+        return $options;
+    }
+
+    private static function optionalPath(mixed $value): ?string
+    {
+        return is_string($value) && trim($value) !== '' ? trim($value) : null;
     }
 
     /**

@@ -185,8 +185,8 @@ final class AuthenticationController extends AbstractAdministrationController im
         $this->currentUser->deleteFromSession(deleteCookie: true);
         $ssoLogout = (string) ($this->configuration->get(item: 'security.ssoLogoutRedirect') ?? '');
         if ((bool) $this->configuration->get(item: 'security.ssoSupport') && $ssoLogout !== '') {
-            $redirectResponse->isRedirect($ssoLogout);
-            $redirectResponse->send();
+            $redirectResponse->setTargetUrl($ssoLogout);
+            return $redirectResponse->send();
         }
 
         if (

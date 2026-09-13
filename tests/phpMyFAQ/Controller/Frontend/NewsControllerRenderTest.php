@@ -126,6 +126,45 @@ final class NewsControllerRenderTest extends TestCase
         self::assertStringContainsString('Test News Content', (string) $response->getContent());
     }
 
+    /**
+     * News::get() returns an inactive item with header, author and e-mail intact and only the
+     * body replaced; a guest must get a plain 404 instead.
+     */
+    public function testIndexReturnsNotFoundForInactiveNewsRecordWhenViewerMayNotEditNews(): void
+    {
+        $language = $this->configuration->getLanguage()->getLanguage();
+
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "INSERT INTO faqnews (id, lang, header, artikel, datum, author_name, author_email, active, comment, link, linktitel, target)
+                 VALUES (2, '%s', 'Unpublished Header', 'Unpublished Content', '20260301120000', 'Hidden Author', 'hidden@example.com', 'n', 'n', '', '', '_self')",
+                $language,
+            ));
+
+        $controller = new NewsController(
+            new UserSession($this->configuration),
+            new BuiltinCaptcha($this->configuration),
+            new Date($this->configuration),
+            new Mail($this->configuration),
+            new Gravatar(),
+        );
+        $configurationProperty = new \ReflectionProperty($controller, 'configuration');
+        $configurationProperty->setValue($controller, $this->configuration);
+
+        $request = Request::create('/news/2/en/unpublished-header.html', 'GET');
+        $request->attributes->set('newsId', '2');
+        $request->attributes->set('newsLang', $language);
+        $request->attributes->set('slug', 'unpublished-header');
+
+        $response = $controller->index($request);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertStringNotContainsString('Unpublished Header', (string) $response->getContent());
+        self::assertStringNotContainsString('Hidden Author', (string) $response->getContent());
+        self::assertStringNotContainsString('hidden@example.com', (string) $response->getContent());
+    }
+
     private function overrideConfigurationValues(array $values): void
     {
         $reflection = new \ReflectionClass(Configuration::class);

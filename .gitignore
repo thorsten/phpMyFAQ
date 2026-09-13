@@ -38,6 +38,10 @@ phpmyfaq/content/core/data/*
 phpmyfaq/content/core/logs/*
 !phpmyfaq/content/core/logs/.gitkeep
 phpmyfaq/content/core/cache/
+phpmyfaq/content/core/upgrades/*
+!phpmyfaq/content/core/upgrades/.gitkeep
+phpmyfaq/content/core/exports/*
+!phpmyfaq/content/core/exports/.gitkeep
 phpmyfaq/content/upgrades/*
 !phpmyfaq/content/upgrades/.gitkeep
 phpmyfaq/content/user/images/*
@@ -84,7 +88,8 @@ phpmyfaq/assets/svg/*.svg
 phpmyfaq/admin/assets/cache/
 
 # Route caches
-phpmyfaq/cache/
+phpmyfaq/cache/*
+!phpmyfaq/cache/.htaccess
 
 # Node.js modules for development
 node_modules/*

@@ -236,7 +236,7 @@
 
 <!-- Push notification opt-in banner -->
 {% if pushEnabled and isUserLoggedIn %}
-<div id="pmf-push-banner" class="position-fixed bottom-0 start-0 end-0 d-none" style="z-index: 1050;">
+<div id="pmf-push-banner" class="position-fixed bottom-0 start-0 end-0 d-none" style="z-index: 1050;" data-pmf-csrf="{{ csrfTokenPushSubscription }}">
   <div class="container">
     <div class="alert alert-info alert-dismissible shadow-lg mb-0 rounded-0 rounded-top d-flex align-items-center" role="alert">
       <i class="bi bi-bell fs-4 me-3 flex-shrink-0" aria-hidden="true"></i>

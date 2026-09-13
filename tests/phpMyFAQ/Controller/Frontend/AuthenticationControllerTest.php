@@ -268,7 +268,7 @@ final class AuthenticationControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testLogoutReturnsDefaultRedirectWhenSsoLogoutIsConfigured(): void
+    public function testLogoutRedirectsToSsoLogoutUrlWhenConfigured(): void
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
@@ -287,7 +287,7 @@ final class AuthenticationControllerTest extends TestCase
 
         $response = $controller->logout(new Request(['csrf' => $token]));
 
-        self::assertSame($this->configuration->getDefaultUrl(), $response->getTargetUrl());
+        self::assertSame('https://sso.example/logout', $response->getTargetUrl());
         self::assertNotEmpty($session->getFlashBag()->get('success'));
     }
 

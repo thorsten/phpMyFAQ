@@ -148,6 +148,17 @@ final class CommentController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'errSaveComment')], Response::HTTP_BAD_REQUEST);
         }
 
+        // Never accept a comment for a FAQ the requester may not see (ACL, unpublished, expired).
+        if ($type === 'faq') {
+            [$currentUserId, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+            $this->faq->setUser($currentUserId);
+            $this->faq->setGroups($currentGroups);
+
+            if (!$this->faq->isFaqAccessibleForUser($commentId, $languageCode)) {
+                return $this->json(['error' => Translation::get(key: 'msgAccessDenied')], Response::HTTP_NOT_FOUND);
+            }
+        }
+
         // Check display name and e-mail address for not logged-in users
         if (!$this->currentUser->isLoggedIn()) {
             if ($this->user->checkDisplayName($username) && $this->user->checkMailAddress($email)) {

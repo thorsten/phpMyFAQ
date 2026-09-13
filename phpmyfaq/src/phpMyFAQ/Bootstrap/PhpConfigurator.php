@@ -66,6 +66,7 @@ class PhpConfigurator
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             ini_set('session.use_only_cookies', value: '1');
+            ini_set('session.use_strict_mode', value: '1');
             ini_set('session.use_trans_sid', value: '0');
             ini_set('session.cookie_samesite', value: 'Strict');
             ini_set('session.cookie_httponly', value: '1');

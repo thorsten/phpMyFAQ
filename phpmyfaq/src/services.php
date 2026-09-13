@@ -18,14 +18,14 @@
 declare(strict_types=1);
 
 use phpMyFAQ\Administration\AdminLog;
-use phpMyFAQ\Administration\RemoteApiClient;
+use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Category;
 use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Faq as AdminFaq;
-use phpMyFAQ\Administration\AdminMenuBuilder;
-use phpMyFAQ\Administration\RecentUsers;
 use phpMyFAQ\Administration\RatingStatistics;
+use phpMyFAQ\Administration\RecentUsers;
+use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Api\MetaService;
 use phpMyFAQ\Api\OAuthDiscoveryService;
@@ -34,29 +34,33 @@ use phpMyFAQ\Auth as LegacyAuth;
 use phpMyFAQ\Auth\ApiKeyAuthenticator;
 use phpMyFAQ\Auth\AuthChain;
 use phpMyFAQ\Auth\Keycloak\KeycloakProviderConfigFactory;
-use phpMyFAQ\Auth\Oidc\OidcClient;
-use phpMyFAQ\Auth\Oidc\OidcDiscoveryService;
-use phpMyFAQ\Auth\Oidc\OidcIdTokenValidator;
-use phpMyFAQ\Auth\Oidc\OidcPkceGenerator;
-use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
-use phpMyFAQ\Auth\Oidc\OidcSession;
+use phpMyFAQ\Auth\OAuth2\AuthorizationServer as OAuth2AuthorizationServer;
 use phpMyFAQ\Auth\OAuth2\Repository\AccessTokenRepository;
 use phpMyFAQ\Auth\OAuth2\Repository\AuthCodeRepository;
 use phpMyFAQ\Auth\OAuth2\Repository\ClientRepository;
 use phpMyFAQ\Auth\OAuth2\Repository\RefreshTokenRepository;
 use phpMyFAQ\Auth\OAuth2\Repository\ScopeRepository;
 use phpMyFAQ\Auth\OAuth2\Repository\UserRepository;
-use phpMyFAQ\Auth\OAuth2\AuthorizationServer as OAuth2AuthorizationServer;
 use phpMyFAQ\Auth\OAuth2\ResourceServer as OAuth2ResourceServer;
+use phpMyFAQ\Auth\Oidc\OidcClient;
+use phpMyFAQ\Auth\Oidc\OidcDiscoveryService;
+use phpMyFAQ\Auth\Oidc\OidcIdTokenValidator;
+use phpMyFAQ\Auth\Oidc\OidcPkceGenerator;
+use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
+use phpMyFAQ\Auth\Oidc\OidcSession;
 use phpMyFAQ\Bookmark;
-use phpMyFAQ\Chat;
+use phpMyFAQ\Cache\CacheFactory;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
+use phpMyFAQ\Chat;
 use phpMyFAQ\Command\CreateHashesCommand;
 use phpMyFAQ\Command\SeedTestDataCommand;
+use phpMyFAQ\Comment\CommentsRepository;
+use phpMyFAQ\Comments;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Administration\Api\CategoryController as AdminApiCategoryController;
 use phpMyFAQ\Controller\Administration\Api\CommentController as AdminApiCommentController;
 use phpMyFAQ\Controller\Administration\Api\ConfigurationController as AdminApiConfigurationController;
@@ -103,15 +107,26 @@ use phpMyFAQ\Controller\Administration\SystemInformationController as AdminSyste
 use phpMyFAQ\Controller\Administration\TagController as AdminTagController;
 use phpMyFAQ\Controller\Administration\UserController as AdminUserController;
 use phpMyFAQ\Controller\Api\CategoryController as ApiCategoryController;
-use phpMyFAQ\Controller\Api\MetaController as ApiMetaController;
-use phpMyFAQ\Controller\Api\OAuth2Controller;
 use phpMyFAQ\Controller\Api\CommentController as ApiCommentController;
 use phpMyFAQ\Controller\Api\FaqController as ApiFaqController;
 use phpMyFAQ\Controller\Api\GlossaryController as ApiGlossaryController;
+use phpMyFAQ\Controller\Api\MetaController as ApiMetaController;
+use phpMyFAQ\Controller\Api\OAuth2Controller;
 use phpMyFAQ\Controller\Api\OpenQuestionController as ApiOpenQuestionController;
 use phpMyFAQ\Controller\Api\QuestionController as ApiQuestionController;
 use phpMyFAQ\Controller\Api\SearchController as ApiSearchController;
 use phpMyFAQ\Controller\Api\TagController as ApiTagController;
+use phpMyFAQ\Controller\Frontend\Api\AutoCompleteController as FrontendApiAutoCompleteController;
+use phpMyFAQ\Controller\Frontend\Api\CaptchaController as FrontendApiCaptchaController;
+use phpMyFAQ\Controller\Frontend\Api\CommentController as FrontendApiCommentController;
+use phpMyFAQ\Controller\Frontend\Api\ContactController as FrontendApiContactController;
+use phpMyFAQ\Controller\Frontend\Api\FaqController as FrontendApiFaqController;
+use phpMyFAQ\Controller\Frontend\Api\PopularSearchesController as FrontendApiPopularSearchesController;
+use phpMyFAQ\Controller\Frontend\Api\PushController as FrontendApiPushController;
+use phpMyFAQ\Controller\Frontend\Api\QuestionController as FrontendApiQuestionController;
+use phpMyFAQ\Controller\Frontend\Api\UnauthorizedUserController as FrontendApiUnauthorizedUserController;
+use phpMyFAQ\Controller\Frontend\Api\UserController as FrontendApiUserController;
+use phpMyFAQ\Controller\Frontend\Api\VotingController as FrontendApiVotingController;
 use phpMyFAQ\Controller\Frontend\AttachmentController;
 use phpMyFAQ\Controller\Frontend\AuthenticationController as FrontendAuthenticationController;
 use phpMyFAQ\Controller\Frontend\AzureAuthenticationController as FrontendAzureAuthenticationController;
@@ -132,20 +147,7 @@ use phpMyFAQ\Controller\Frontend\SearchController as FrontendSearchController;
 use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
 use phpMyFAQ\Controller\Frontend\StartpageController;
 use phpMyFAQ\Controller\Frontend\UserController as FrontendUserController;
-use phpMyFAQ\Controller\Frontend\Api\AutoCompleteController as FrontendApiAutoCompleteController;
-use phpMyFAQ\Controller\Frontend\Api\CaptchaController as FrontendApiCaptchaController;
-use phpMyFAQ\Controller\Frontend\Api\CommentController as FrontendApiCommentController;
-use phpMyFAQ\Controller\Frontend\Api\ContactController as FrontendApiContactController;
-use phpMyFAQ\Controller\Frontend\Api\FaqController as FrontendApiFaqController;
-use phpMyFAQ\Controller\Frontend\Api\PopularSearchesController as FrontendApiPopularSearchesController;
-use phpMyFAQ\Controller\Frontend\Api\PushController as FrontendApiPushController;
-use phpMyFAQ\Controller\Frontend\Api\QuestionController as FrontendApiQuestionController;
-use phpMyFAQ\Controller\Frontend\Api\UserController as FrontendApiUserController;
-use phpMyFAQ\Controller\Frontend\Api\VotingController as FrontendApiVotingController;
 use phpMyFAQ\Controller\SitemapController as RootSitemapController;
-use phpMyFAQ\Comment\CommentsRepository;
-use phpMyFAQ\Comments;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\CustomPage;
 use phpMyFAQ\CustomPage\CustomPageRepository;
 use phpMyFAQ\Database\DatabaseHelper;
@@ -153,25 +155,29 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Faq\Statistics;
-use phpMyFAQ\Cache\CacheFactory;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Glossary;
-use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Helper\StatisticsHelper;
 use phpMyFAQ\Helper\UserHelper;
+use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Instance\Search\OpenSearch;
-use phpMyFAQ\Ldap;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\Ldap;
 use phpMyFAQ\Mail;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
+use phpMyFAQ\Plugin\PluginManager;
+use phpMyFAQ\Push\PushSubscriptionRepository;
+use phpMyFAQ\Push\WebPushService;
+use phpMyFAQ\Question;
+use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Queue\DatabaseMessageBus;
 use phpMyFAQ\Queue\Handler\ExportHandler;
 use phpMyFAQ\Queue\Handler\IndexFaqHandler;
@@ -182,21 +188,16 @@ use phpMyFAQ\Queue\Message\SendMailMessage;
 use phpMyFAQ\Queue\MessageBusFactory;
 use phpMyFAQ\Queue\Transport\DatabaseTransport;
 use phpMyFAQ\Queue\Worker;
-use phpMyFAQ\Push\PushSubscriptionRepository;
-use phpMyFAQ\Push\WebPushService;
-use phpMyFAQ\Plugin\PluginManager;
-use phpMyFAQ\Question;
-use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Rating;
-use phpMyFAQ\Search;
 use phpMyFAQ\Scheduler\TaskScheduler;
+use phpMyFAQ\Search;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Seo\SeoRepository;
 use phpMyFAQ\Seo\SitemapXmlService;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Service\McpServer\FaqSearchTool;
-use phpMyFAQ\Service\McpServer\McpServerRuntimeInterface;
 use phpMyFAQ\Service\McpServer\McpSdkRuntime;
+use phpMyFAQ\Service\McpServer\McpServerRuntimeInterface;
 use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
 use phpMyFAQ\Session\SessionWrapper;
 use phpMyFAQ\Session\Token;
@@ -204,9 +205,9 @@ use phpMyFAQ\Setup\EnvironmentConfigurator;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\Sitemap;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Storage\StorageFactory;
 use phpMyFAQ\Storage\StorageInterface;
-use phpMyFAQ\StopWords;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Template\ThemeManager;
@@ -504,18 +505,23 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
-    $services->set('phpmyfaq.queue.worker', Worker::class)->args([
-        service('phpmyfaq.queue.transport.database'),
-    ])->call('registerHandler', [
-        SendMailMessage::class,
-        service('phpmyfaq.queue.handler.send-mail'),
-    ])->call('registerHandler', [
-        IndexFaqMessage::class,
-        service('phpmyfaq.queue.handler.index-faq'),
-    ])->call('registerHandler', [
-        ExportMessage::class,
-        service('phpmyfaq.queue.handler.export'),
-    ]);
+    $services
+        ->set('phpmyfaq.queue.worker', Worker::class)
+        ->args([
+            service('phpmyfaq.queue.transport.database'),
+        ])
+        ->call('registerHandler', [
+            SendMailMessage::class,
+            service('phpmyfaq.queue.handler.send-mail'),
+        ])
+        ->call('registerHandler', [
+            IndexFaqMessage::class,
+            service('phpmyfaq.queue.handler.index-faq'),
+        ])
+        ->call('registerHandler', [
+            ExportMessage::class,
+            service('phpmyfaq.queue.handler.export'),
+        ]);
 
     $services->set('phpmyfaq.scheduler.task-scheduler', TaskScheduler::class)->args([
         service('phpmyfaq.configuration'),
@@ -860,6 +866,13 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.question.history'),
         service('phpmyfaq.http.rate-limiter'),
     ]);
+    $services->set(FrontendApiUnauthorizedUserController::class, FrontendApiUnauthorizedUserController::class)->args([
+        null,
+        null,
+        null,
+        service('phpmyfaq.http.rate-limiter'),
+        service('phpmyfaq.configuration'),
+    ]);
     $services->set(FrontendApiUserController::class, FrontendApiUserController::class)->args([
         service('phpmyfaq.stop-words'),
         service('phpmyfaq.mail'),
@@ -966,7 +979,10 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.user.two-factor'),
     ]);
     $services->set(FrontendAzureAuthenticationController::class, FrontendAzureAuthenticationController::class);
-    $services->set(FrontendKeycloakAuthenticationController::class, FrontendKeycloakAuthenticationController::class)->args([
+    $services->set(
+        FrontendKeycloakAuthenticationController::class,
+        FrontendKeycloakAuthenticationController::class,
+    )->args([
         service('phpmyfaq.auth.keycloak.provider-config-factory'),
         service('phpmyfaq.auth.oidc.discovery-service'),
         service('phpmyfaq.auth.oidc.pkce-generator'),

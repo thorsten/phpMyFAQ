@@ -76,6 +76,42 @@ class FaqHelperTest extends TestCase
         $this->assertEquals('<a href="https://localhost:443/#Foobar">Hello, World</a>', $result);
     }
 
+    public function testRewriteUrlFragmentsEscapesTheCurrentUrl(): void
+    {
+        $content = '<a href="#Foobar">Hello, World</a>';
+        $result = $this->faqHelper->rewriteUrlFragments($content, '//evil.example/"><script>alert(1)</script>');
+
+        $this->assertStringNotContainsString('<script>', $result);
+        $this->assertSame(
+            '<a href="//evil.example/&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;#Foobar">Hello, World</a>',
+            $result,
+        );
+    }
+
+    public function testCleanUpContentDropsDataLinksAndDataImages(): void
+    {
+        $content =
+            '<p><a href="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==">x</a>'
+            . '<img src="data:image/png;base64,iVBORw0KGgo="></p>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
+        $this->assertStringNotContainsString('data:', $actualOutput);
+        $this->assertStringContainsString('<a>x</a>', $actualOutput);
+    }
+
+    public function testCleanUpContentAllowsMediaFromTheConfiguredDefaultUrlHost(): void
+    {
+        $_SERVER['HTTP_HOST'] = 'attacker.example';
+        $content = '<p><img src="https://localhost/images/a.png"><img src="https://attacker.example/b.png"></p>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+        unset($_SERVER['HTTP_HOST']);
+
+        $this->assertStringContainsString('https://localhost/images/a.png', $actualOutput);
+        $this->assertStringNotContainsString('attacker.example', $actualOutput);
+    }
+
     public function testCreateFaqUrl(): void
     {
         $faqEntity = new FaqEntity();
@@ -311,8 +347,7 @@ class FaqHelperTest extends TestCase
         $question = 'How can I create an account?';
 
         $content = 'See <a href="http://example.org/index.php?action&#61;faq&amp;cat&#61;7&amp;id&#61;42">this link</a>';
-        $expected =
-            'See <a href="https://localhost:443/content/7/42/en/how-can-i-create-an-account.html">this link</a>';
+        $expected = 'See <a href="https://localhost:443/content/7/42/en/how-can-i-create-an-account.html">this link</a>';
 
         $this->assertEquals($expected, $this->faqHelper->convertOldInternalLinks($question, $content));
     }

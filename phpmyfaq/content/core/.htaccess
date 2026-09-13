@@ -1,0 +1,11 @@
+# Deny direct web access to server-side internals: configuration with the
+# database credentials, tracking logs, application logs, caches, exports and
+# the updater's working directory. Defence in depth for the rewrite rules in
+# the root .htaccess; the application never links into this directory.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+</IfModule>

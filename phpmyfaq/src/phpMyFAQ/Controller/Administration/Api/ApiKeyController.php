@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use JsonException;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\ApiKeyScope;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Translation;
@@ -81,7 +82,12 @@ final class ApiKeyController extends AbstractAdministrationApiController
         }
 
         $scopes = is_array($data->scopes ?? null) ? array_values($data->scopes) : [];
-        $scopes = array_values(array_filter($scopes, is_string(...)));
+        $scopes = array_values(array_unique(array_filter($scopes, is_string(...))));
+        $scopeError = $this->rejectedScope($scopes);
+        if ($scopeError !== null) {
+            return $this->json(['error' => $scopeError], Response::HTTP_BAD_REQUEST);
+        }
+
         $expiresAt = Filter::filterVar($data->expiresAt ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($expiresAt !== '' && strtotime($expiresAt) === false) {
@@ -147,7 +153,12 @@ final class ApiKeyController extends AbstractAdministrationApiController
         }
 
         $scopes = is_array($data->scopes ?? null) ? array_values($data->scopes) : [];
-        $scopes = array_values(array_filter($scopes, is_string(...)));
+        $scopes = array_values(array_unique(array_filter($scopes, is_string(...))));
+        $scopeError = $this->rejectedScope($scopes);
+        if ($scopeError !== null) {
+            return $this->json(['error' => $scopeError], Response::HTTP_BAD_REQUEST);
+        }
+
         $expiresAt = Filter::filterVar($data->expiresAt ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         if ($expiresAt !== '' && strtotime($expiresAt) === false) {
@@ -229,5 +240,36 @@ final class ApiKeyController extends AbstractAdministrationApiController
         }
 
         return $this->json(['success' => true], Response::HTTP_OK);
+    }
+
+    /**
+     * A key acts on behalf of its owner, so every requested scope must be a known one whose
+     * permission the owner holds. Returns the translated rejection message, or null when all
+     * scopes are acceptable.
+     *
+     * @param array<string> $scopes
+     * @throws \Exception
+     */
+    private function rejectedScope(array $scopes): ?string
+    {
+        $userId = $this->currentUser->getUserId();
+        $isSuperAdmin = $this->currentUser->isSuperAdmin();
+
+        foreach ($scopes as $scope) {
+            $apiKeyScope = ApiKeyScope::tryFrom($scope);
+            if ($apiKeyScope === null) {
+                return sprintf(Translation::getString(key: 'msgApiKeyUnknownScope'), $scope);
+            }
+
+            if ($isSuperAdmin) {
+                continue;
+            }
+
+            if (!$this->currentUser->perm->hasPermission($userId, $apiKeyScope->requiredPermission()->value)) {
+                return sprintf(Translation::getString(key: 'msgApiKeyScopeNotHeld'), $scope);
+            }
+        }
+
+        return null;
     }
 }

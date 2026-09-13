@@ -65,8 +65,8 @@ final class NewsService
         $news['processedContent'] = $this->processContent((string) ($news['content'] ?? ''));
         $news['processedHeader'] = $this->processContent((string) ($news['header'] ?? ''));
 
-        // Add an information link if available
-        if ((string) ($news['link'] ?? '') !== '') {
+        // Add an information link if available and its scheme is safe to render
+        if ($this->isSafeInformationLink((string) ($news['link'] ?? ''))) {
             $news['processedContent'] .= $this->buildInformationLink(
                 (string) ($news['link'] ?? ''),
                 (string) ($news['target'] ?? ''),
@@ -94,10 +94,30 @@ final class NewsService
         return sprintf(
             '</p><p>%s<a href="%s" target="%s">%s</a>',
             Translation::getString('msgInfo'),
-            Strings::htmlentities($link),
-            $target,
+            Strings::htmlentities(trim($link)),
+            in_array($target, ['_blank', '_self', '_parent', '_top'], strict: true) ? $target : '_self',
             Strings::htmlentities($linkTitle),
         );
+    }
+
+    /**
+     * Only http(s), mailto and site-relative links may be rendered as the information link;
+     * javascript:, data: and friends are dropped. Control characters are rejected outright
+     * because browsers strip them before parsing the scheme.
+     */
+    private function isSafeInformationLink(string $link): bool
+    {
+        $link = trim($link);
+        if ($link === '' || preg_match('/[\x00-\x1F\x7F]/', $link) === 1) {
+            return false;
+        }
+
+        $scheme = parse_url($link, PHP_URL_SCHEME);
+        if (is_string($scheme)) {
+            return in_array(strtolower($scheme), ['http', 'https', 'mailto'], strict: true);
+        }
+
+        return preg_match('#^(?:/|\./|\#)#', $link) === 1;
     }
 
     /**

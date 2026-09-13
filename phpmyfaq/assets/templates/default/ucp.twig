@@ -197,54 +197,56 @@
               </div>
             </div>
 
-            <div class="row mb-4">
-              <div class="offset-4 col-lg-8">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#twofactor_config">
-                  {{ msgTwofactorConfig }}
-                </button>
-              </div>
-            </div>
             {% if twofactor_enabled == true %}
               <div class="row mb-4">
                 <div class="offset-4 col-lg-8">
+                  <p class="form-text">{{ msgTwofactorAlreadyConfigured }}</p>
                   <button type="button" class="btn btn-secondary" id="removeCurrentConfig" data-bs-toggle="modal"
                           data-bs-target="#twofactor_removeModal">
                     {{ msgTwofactorNewSecret }}
                   </button>
                 </div>
               </div>
-            {% endif %}
+            {% else %}
+              <div class="row mb-4">
+                <div class="offset-4 col-lg-8">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#twofactor_config">
+                    {{ msgTwofactorConfig }}
+                  </button>
+                </div>
+              </div>
 
-            <!-- QR Code Modal -->
-            <div
-              class="modal fade"
-              id="twofactor_config"
-              tabindex="-1"
-              aria-labelledby="twofactor_configLabel"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="twofactor_configLabel">{{ msgTwofactorConfigModelTitle }}</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <img
-                      class="rounded mx-auto d-block"
-                      src="{{ qr_code_secret }}"
-                      width="200"
-                      height="200"
-                      alt="{{ qr_code_secret_alt }}"
-                    />
-                    <p class="text-center">Secret-Key: {{ twofactor_secret }}</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ msgSave }}</button>
+              <!-- QR Code Modal: the seed is only shown while the second factor is not active yet -->
+              <div
+                class="modal fade"
+                id="twofactor_config"
+                tabindex="-1"
+                aria-labelledby="twofactor_configLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="twofactor_configLabel">{{ msgTwofactorConfigModelTitle }}</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <img
+                        class="rounded mx-auto d-block"
+                        src="{{ qr_code_secret }}"
+                        width="200"
+                        height="200"
+                        alt="{{ qr_code_secret_alt }}"
+                      />
+                      <p class="text-center">Secret-Key: {{ twofactor_secret }}</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ msgSave }}</button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            {% endif %}
 
             <!-- Confirm removing of 2FA-configuration Modal -->
             <div
@@ -367,6 +369,7 @@
                 class="btn btn-primary"
                 id="pmf-push-toggle"
                 disabled
+                data-pmf-csrf="{{ csrfTokenPushSubscription }}"
                 data-label-enable="{{ 'msgPushNotificationsEnable' | translate }}"
                 data-label-disable="{{ 'msgPushNotificationsDisable' | translate }}"
                 data-label-not-supported="{{ 'msgPushNotificationsNotSupported' | translate }}"

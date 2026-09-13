@@ -61,16 +61,18 @@ class AttachmentFactoryTest extends TestCase
     private function primeAttachmentRow(bool $encrypted): void
     {
         $this->mockDb->method('query')->willReturn(true);
-        $this->mockDb->method('fetchArray')->willReturn([
-            'record_id' => 1,
-            'record_lang' => 'en',
-            'real_hash' => 'realhash',
-            'virtual_hash' => 'virtualhash',
-            'filename' => 'file.txt',
-            'filesize' => 10,
-            'encrypted' => $encrypted ? 1 : 0,
-            'mime_type' => 'text/plain',
-        ]);
+        $this->mockDb
+            ->method('fetchArray')
+            ->willReturn([
+                'record_id' => 1,
+                'record_lang' => 'en',
+                'real_hash' => 'realhash',
+                'virtual_hash' => 'virtualhash',
+                'filename' => 'file.txt',
+                'filesize' => 10,
+                'encrypted' => $encrypted ? 1 : 0,
+                'mime_type' => 'text/plain',
+            ]);
     }
 
     private function getKey(File $file): ?string
@@ -230,6 +232,7 @@ class AttachmentFactoryTest extends TestCase
     {
         $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
         Language::$language = 'de';
+        $this->mockDb->method('escape')->willReturnCallback(static fn(string $value): string => $value);
 
         $expectedQueryPattern = "SELECT id FROM %sfaqattachment WHERE record_id = 456 AND record_lang = 'de'";
 
@@ -300,6 +303,7 @@ class AttachmentFactoryTest extends TestCase
 
         // Test with French language
         Language::$language = 'fr';
+        $this->mockDb->method('escape')->willReturnCallback(static fn(string $value): string => $value);
 
         $this->mockDb
             ->expects($this->once())

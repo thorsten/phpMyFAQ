@@ -194,6 +194,12 @@ final class FaqController extends AbstractFrontController
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
+        // The lookup applies the ACL but not the publication state; the redirect target
+        // carries the title as slug, so an unpublished or expired record must stay hidden.
+        if (!$this->faq->isFaqAccessibleForUser((int) $faqData['id'], (string) $faqData['lang'])) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
         $slug = TitleSlugifier::slug((string) $faqData['question']);
 
         // Redirect to the canonical FAQ URL
@@ -237,6 +243,12 @@ final class FaqController extends AbstractFrontController
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
+        // The query applies the ACL but not the publication state; the redirect target
+        // carries the title as slug, so an unpublished or expired record must stay hidden.
+        if (!$this->faq->isFaqAccessibleForUser($faqId, $faqLang)) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
         $categoryId = $this->category->getCategoryIdFromFaq($faqId);
 
         if ($categoryId === 0) {
@@ -252,11 +264,35 @@ final class FaqController extends AbstractFrontController
     }
 
     /**
+     * Resolves the language of a /content/ URL: the "language" attribute, then "faqLang", then the
+     * configured language. A missing attribute filters to an empty string, so the fall-through is
+     * explicit. Returns null when the outcome is not a supported language code.
+     */
+    private function resolveRequestedLanguage(Request $request): ?string
+    {
+        foreach (['language', 'faqLang'] as $attribute) {
+            $candidate = Filter::filterVar($request->attributes->get($attribute), FILTER_SANITIZE_SPECIAL_CHARS, '');
+            if ($candidate !== '') {
+                return Language::isASupportedLanguage($candidate) ? $candidate : null;
+            }
+        }
+
+        $configured = $this->configuration->getLanguage()->getLanguage();
+
+        return Language::isASupportedLanguage($configured) ? $configured : null;
+    }
+
+    /**
      * Displays a single FAQ article with comments, ratings, and related content
      *
      * @throws Exception|LoaderError|\Exception
      */
-    #[Route(path: '/content/{categoryId}/{faqId}/{faqLang}/{slug}.html', name: 'public.faq.show', methods: ['GET'])]
+    #[Route(
+        path: '/content/{categoryId}/{faqId}/{faqLang}/{slug}.html',
+        name: 'public.faq.show',
+        requirements: ['faqLang' => '[a-z]{2}(?:[_-][a-zA-Z]{2})?'],
+        methods: ['GET'],
+    )]
     public function show(Request $request): Response
     {
         $this->faqSession->setCurrentUser($this->currentUser);
@@ -267,15 +303,12 @@ final class FaqController extends AbstractFrontController
         // Get faqId from route attributes (new routes) or query parameters (legacy/backward compatibility)
         $faqId = Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT, 0);
 
-        // Get language from route parameter (for /content/ URLs)
-        $requestedLanguage =
-            Filter::filterVar(
-                $request->attributes->get('language'),
-                FILTER_SANITIZE_SPECIAL_CHARS,
-            ) ?? Filter::filterVar(
-                $request->attributes->get('faqLang'),
-                FILTER_SANITIZE_SPECIAL_CHARS,
-            ) ?? $this->configuration->getLanguage()->getLanguage();
+        // Get language from route parameter (for /content/ URLs). The language ends up in SQL and
+        // in the session: only a phpMyFAQ-supported code is acceptable.
+        $requestedLanguage = $this->resolveRequestedLanguage($request);
+        if ($requestedLanguage === null) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
 
         // Temporarily set the language in session for this request
         $originalLanguage = $this->session->get('lang');

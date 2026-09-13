@@ -36,6 +36,12 @@ use Symfony\Component\HttpFoundation\Request;
 class UserData
 {
     /**
+     * Columns that link an account to an external identity provider. They only exist
+     * on upgraded schemas, so reads of them degrade to an empty string instead of false.
+     */
+    private const array IDENTITY_LINK_FIELDS = ['keycloak_sub', 'entra_oid'];
+
+    /**
      * associative array containing user data.
      *
      * @var array<array-key, mixed>
@@ -78,15 +84,11 @@ class UserData
         try {
             $res = $this->configuration->getDb()->query($select);
         } catch (\Throwable) {
-            if ($singleReturn && $field === 'keycloak_sub') {
-                return '';
-            }
-
-            return false;
+            $res = false;
         }
 
         if ($res === false) {
-            if ($singleReturn && $field === 'keycloak_sub') {
+            if ($singleReturn && in_array($field, self::IDENTITY_LINK_FIELDS, strict: true)) {
                 return '';
             }
 
@@ -113,7 +115,7 @@ class UserData
 
         if ($singleReturn && $field !== '*') {
             return match ($field) {
-                'display_name', 'email', 'keycloak_sub', 'secret' => (string) ($array[$field] ?? ''),
+                'display_name', 'email', 'keycloak_sub', 'entra_oid', 'secret' => (string) ($array[$field] ?? ''),
                 default => $array[$field] ?? null,
             };
         }
@@ -156,7 +158,8 @@ class UserData
         // $key is a column name chosen by internal callers, never user input; only
         // the value is bound as a parameter.
         $select = sprintf('SELECT
-                user_id, last_modified, display_name, email, keycloak_sub, is_visible, twofactor_enabled, secret
+                user_id, last_modified, display_name, email, keycloak_sub, entra_oid, is_visible,
+                twofactor_enabled, secret
             FROM %sfaquserdata WHERE %s = ?', Database::getTablePrefix(), $key);
 
         try {
@@ -179,6 +182,7 @@ class UserData
         $row = $this->configuration->getDb()->fetchArray($res);
         $this->data = is_array($row) ? $row : [];
         $this->data['keycloak_sub'] ??= '';
+        $this->data['entra_oid'] ??= '';
 
         return $this->data;
     }
@@ -234,6 +238,7 @@ class UserData
                 display_name, 
                 email,
                 keycloak_sub,
+                entra_oid,
                 is_visible,
                 twofactor_enabled, 
                 secret
@@ -271,6 +276,7 @@ class UserData
         $row = $this->configuration->getDb()->fetchArray($res);
         $this->data = is_array($row) ? $row : [];
         $this->data['keycloak_sub'] ??= '';
+        $this->data['entra_oid'] ??= '';
 
         return true;
     }
@@ -281,10 +287,8 @@ class UserData
      */
     public function save(): bool
     {
-        $keycloakSubRaw = $this->data['keycloak_sub'] ?? null;
-        $keycloakSubValue = is_string($keycloakSubRaw) && trim($keycloakSubRaw) !== ''
-            ? "'" . $this->configuration->getDb()->escape($keycloakSubRaw) . "'"
-            : 'NULL';
+        $keycloakSubValue = $this->identityLinkValue('keycloak_sub');
+        $entraOidValue = $this->identityLinkValue('entra_oid');
 
         $update = sprintf(
             "
@@ -295,6 +299,7 @@ class UserData
                 display_name = '%s',
                 email = '%s',
                 keycloak_sub = %s,
+                entra_oid = %s,
                 is_visible = %d,
                 twofactor_enabled = %d,
                 secret = '%s'
@@ -305,6 +310,7 @@ class UserData
             $this->configuration->getDb()->escape((string) ($this->data['display_name'] ?? '')),
             $this->configuration->getDb()->escape((string) ($this->data['email'] ?? '')),
             $keycloakSubValue,
+            $entraOidValue,
             (int) ($this->data['is_visible'] ?? 0),
             (int) ($this->data['twofactor_enabled'] ?? 0),
             $this->configuration->getDb()->escape((string) ($this->data['secret'] ?? '')),
@@ -318,10 +324,10 @@ class UserData
         }
 
         if ($res === false) {
-            // Only bail out if the user actually has a Keycloak subject to
+            // Only bail out if the user actually has an identity provider link to
             // persist. An empty placeholder must not block the fallback UPDATE
-            // for schemas that lack the keycloak_sub column.
-            if (is_string($keycloakSubRaw) && trim($keycloakSubRaw) !== '') {
+            // for schemas that lack the keycloak_sub or entra_oid column.
+            if ($keycloakSubValue !== 'NULL' || $entraOidValue !== 'NULL') {
                 return false;
             }
 
@@ -352,6 +358,20 @@ class UserData
         }
 
         return (bool) $res;
+    }
+
+    /**
+     * Returns the SQL literal for an identity provider link column: the escaped,
+     * quoted identifier, or NULL when the account is not linked.
+     */
+    private function identityLinkValue(string $field): string
+    {
+        $raw = $this->data[$field] ?? null;
+        if (!is_string($raw) || trim($raw) === '') {
+            return 'NULL';
+        }
+
+        return "'" . $this->configuration->getDb()->escape($raw) . "'";
     }
 
     /**

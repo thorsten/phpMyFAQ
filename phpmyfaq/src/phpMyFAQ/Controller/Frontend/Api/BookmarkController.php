@@ -23,9 +23,11 @@ use Exception;
 use JsonException;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,6 +54,11 @@ final class BookmarkController extends AbstractController
 
         if ($bookmarkId === null || $bookmarkId < 1) {
             return $this->json(['error' => Translation::get(key: 'msgError')], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Never bookmark a FAQ the requester may not see (ACL, unpublished, expired).
+        if (!$this->isFaqAccessible($bookmarkId)) {
+            return $this->json(['error' => Translation::get(key: 'msgAccessDenied')], Response::HTTP_NOT_FOUND);
         }
 
         $bookmark = new Bookmark($this->configuration, $this->currentUser);
@@ -124,5 +131,18 @@ final class BookmarkController extends AbstractController
         }
 
         return $this->json(['error' => Translation::get(key: 'msgError')], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function isFaqAccessible(int $faqId): bool
+    {
+        [$currentUserId, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $faq = new Faq($this->configuration);
+        $faq->setUser($currentUserId)->setGroups($currentGroups);
+
+        return $faq->isFaqAccessibleForUser($faqId);
     }
 }

@@ -238,8 +238,41 @@ class ClientRepositoryTest extends TestCase
 
         $this->db->method('query')->willReturn(new \stdClass());
         $this->db->method('fetchObject')->willReturn($row);
+        $this->db
+            ->expects($this->once())
+            ->method('queryPrepared')
+            ->with(
+                $this->stringContains('UPDATE faqoauth_clients SET client_secret = ? WHERE client_id = ?'),
+                $this->callback(static function (array $params): bool {
+                    return (
+                        count($params) === 2
+                        && $params[1] === 'conf-app'
+                        && password_get_info($params[0])['algoName'] === 'bcrypt'
+                        && password_verify('my-plain-secret', $params[0])
+                    );
+                }),
+            )
+            ->willReturn(true);
 
         $this->assertTrue($this->repository->validateClient('conf-app', 'my-plain-secret', null));
+    }
+
+    public function testValidateClientDoesNotRehashAnAlreadyHashedSecret(): void
+    {
+        $row = (object) [
+            'client_id' => 'hashed-app',
+            'client_secret' => password_hash('correct-password', PASSWORD_BCRYPT),
+            'name' => 'Hashed App',
+            'redirect_uri' => 'https://example.com/cb',
+            'grants' => '',
+            'is_confidential' => 1,
+        ];
+
+        $this->db->method('query')->willReturn(new \stdClass());
+        $this->db->method('fetchObject')->willReturn($row);
+        $this->db->expects($this->never())->method('queryPrepared');
+
+        $this->assertTrue($this->repository->validateClient('hashed-app', 'correct-password', null));
     }
 
     public function testValidateClientReturnsFalseForConfidentialClientWithWrongPlainSecret(): void
@@ -255,6 +288,7 @@ class ClientRepositoryTest extends TestCase
 
         $this->db->method('query')->willReturn(new \stdClass());
         $this->db->method('fetchObject')->willReturn($row);
+        $this->db->expects($this->never())->method('queryPrepared');
 
         $this->assertFalse($this->repository->validateClient('conf-app', 'wrong-secret', null));
     }

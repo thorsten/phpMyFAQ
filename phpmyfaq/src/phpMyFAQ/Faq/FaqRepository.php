@@ -39,9 +39,131 @@ final class FaqRepository implements FaqRepositoryInterface
     ) {
     }
 
+    /**
+     * Columns callers may order by, keyed by table alias. Everything else falls back to fd.id.
+     *
+     * @var array<string, list<string>>
+     */
+    private const array SORTABLE_COLUMNS = [
+        'fd' => ['id', 'thema', 'updated', 'created', 'sticky', 'sticky_order', 'author', 'solution_id'],
+        'fv' => ['visits'],
+        'fcr' => ['category_id'],
+    ];
+
     public function setReadScope(?ReadScope $readScope): void
     {
         $this->readScope = $readScope;
+    }
+
+    /**
+     * Allow-lists the sort direction: anything but DESC sorts ascending.
+     */
+    private function normalizeSortDirection(string $sortDirection): string
+    {
+        return strtoupper(trim($sortDirection)) === 'DESC' ? 'DESC' : 'ASC';
+    }
+
+    /**
+     * Allow-lists a "table.column" sort expression; unknown expressions fall back to fd.id.
+     *
+     * @return array{string, string}
+     */
+    private function normalizeOrderColumn(string $table, string $column): array
+    {
+        $table = strtolower(trim($table));
+        $column = strtolower(trim($column));
+
+        if (in_array($column, self::SORTABLE_COLUMNS[$table] ?? [], strict: true)) {
+            return [$table, $column];
+        }
+
+        return ['fd', 'id'];
+    }
+
+    /**
+     * Allow-lists a "table.column" sort expression given as one string.
+     */
+    private function normalizeOrderExpression(string $orderExpression): string
+    {
+        $parts = explode('.', $orderExpression, limit: 2);
+        [$table, $column] = count($parts) === 2 ? $parts : ['fd', $parts[0]];
+
+        return implode('.', $this->normalizeOrderColumn($table, $column));
+    }
+
+    /**
+     * Reduces a full ORDER BY clause to allow-listed "table.column DIRECTION" pairs. Any token
+     * outside the allow-list drops the entire clause rather than reaching the database.
+     */
+    private function normalizeOrderByClause(string $orderBy): string
+    {
+        $orderBy = trim($orderBy);
+        if ($orderBy === '') {
+            return '';
+        }
+
+        $matches = [];
+        if (preg_match('/^ORDER\s+BY\s+(.+)$/is', $orderBy, $matches) !== 1) {
+            return '';
+        }
+
+        $terms = [];
+        foreach (explode(',', $matches[1]) as $term) {
+            $tokens = preg_split('/\s+/', trim($term));
+            if ($tokens === false) {
+                return '';
+            }
+
+            if (count($tokens) > 2 || $tokens === [] || $tokens[0] === '') {
+                return '';
+            }
+
+            $expression = strtolower($tokens[0]);
+            if ($this->normalizeOrderExpression($expression) !== $expression) {
+                return '';
+            }
+
+            $direction = $tokens[1] ?? 'ASC';
+            if (!in_array(strtoupper($direction), ['ASC', 'DESC'], strict: true)) {
+                return '';
+            }
+
+            $terms[] = $expression . ' ' . strtoupper($direction);
+        }
+
+        return 'ORDER BY ' . implode(', ', $terms);
+    }
+
+    /**
+     * Int-casts a comma-separated ID list; an empty list yields "0" so IN () stays valid.
+     */
+    private function normalizeIdList(string $records): string
+    {
+        $ids = [];
+        foreach (explode(',', $records) as $record) {
+            $record = trim($record);
+            if ($record === '' || preg_match('/^-?\d+$/', $record) !== 1) {
+                continue;
+            }
+
+            $ids[] = (int) $record;
+        }
+
+        return $ids === [] ? '0' : implode(', ', $ids);
+    }
+
+    /**
+     * Column identifiers of a condition map are interpolated as-is, so only plain
+     * "[alias.]column" identifiers are acceptable.
+     */
+    private function assertColumnIdentifier(string $field): void
+    {
+        if (preg_match('/^(?:(?:fd|fcr|fv|fdg|fdu)\.)?[a-z_]+$/', $field) !== 1) {
+            throw new \InvalidArgumentException(sprintf(
+                'Invalid column identifier "%s" in FAQ query condition.',
+                $field,
+            ));
+        }
     }
 
     public function getNextSolutionId(): int
@@ -583,6 +705,8 @@ final class FaqRepository implements FaqRepositoryInterface
         array $groups,
         bool $groupSupport,
     ): array {
+        [$orderTable, $orderColumn] = $this->normalizeOrderColumn($orderTable, $orderColumn);
+        $sortDirection = $this->normalizeSortDirection($sortDirection);
         $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
@@ -650,6 +774,7 @@ final class FaqRepository implements FaqRepositoryInterface
         array $groups,
         bool $groupSupport,
     ): array {
+        $records = $this->normalizeIdList($records);
         $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
@@ -784,6 +909,7 @@ final class FaqRepository implements FaqRepositoryInterface
         int $limit = 0,
         int $offset = 0,
     ): array {
+        $orderBy = $this->normalizeOrderByClause($orderBy);
         // prevents multiple display of FAQ in case it is tagged under multiple groups.
         $groupBy =
             ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.status,fd.sticky,fd.keywords,'
@@ -1017,6 +1143,7 @@ final class FaqRepository implements FaqRepositoryInterface
         int $offset = 0,
         int $rowcount = 0,
     ): mixed {
+        $order = $this->normalizeOrderByClause($order);
         $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
@@ -1114,6 +1241,9 @@ final class FaqRepository implements FaqRepositoryInterface
         array $groups,
         bool $groupSupport,
     ): mixed {
+        $records = $this->normalizeIdList($records);
+        $orderExpression = $this->normalizeOrderExpression($orderExpression);
+        $sortDirection = $this->normalizeSortDirection($sortDirection);
         $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
@@ -1185,6 +1315,7 @@ final class FaqRepository implements FaqRepositoryInterface
         $where = 'WHERE ';
         foreach ($condition as $field => $data) {
             --$num;
+            $this->assertColumnIdentifier($field);
             $where .= $field;
             if (is_array($data)) {
                 $where .= ' IN (';

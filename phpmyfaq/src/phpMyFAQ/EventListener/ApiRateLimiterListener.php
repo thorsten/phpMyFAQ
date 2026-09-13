@@ -20,7 +20,9 @@ declare(strict_types=1);
 namespace phpMyFAQ\EventListener;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Http\RateLimiter;
+use phpMyFAQ\Http\SecurityEventLogger;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -66,6 +68,12 @@ readonly class ApiRateLimiterListener
         if ($this->rateLimiter->check($clientIdentifier, $requestLimit, $interval)) {
             return;
         }
+
+        new SecurityEventLogger($this->configuration->getLogger())->log(
+            AdminLogType::SECURITY_RATE_LIMIT_EXCEEDED,
+            $request,
+            sprintf('%d requests per %d seconds exceeded', $requestLimit, $interval),
+        );
 
         $response = new JsonResponse(data: [
             'error' => 'Too many requests.',

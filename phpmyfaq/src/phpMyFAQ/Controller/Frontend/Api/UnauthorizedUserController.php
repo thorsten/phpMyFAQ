@@ -31,8 +31,10 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 use Closure;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Http\RateLimiter;
+use phpMyFAQ\Http\SecurityEventLogger;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -89,6 +91,7 @@ final class UnauthorizedUserController
             self::ISSUE_LIMIT_PER_IP,
             self::ISSUE_LIMIT_INTERVAL,
         )) {
+            $this->logSecurityEvent(AdminLogType::SECURITY_RATE_LIMIT_EXCEEDED, $request, 'password reset requests');
             return $this->tooManyRequests();
         }
 
@@ -128,7 +131,14 @@ final class UnauthorizedUserController
             return $this->genericIssuanceResponse();
         }
 
-        $token = $this->tokenService->issue($user->getUserId(), $passwordKey, self::RESET_TOKEN_LIFETIME_SECONDS);
+        $userId = $user->getUserId();
+        $token = $this->tokenService->issue($userId, $passwordKey, self::RESET_TOKEN_LIFETIME_SECONDS);
+        $this->logSecurityEvent(
+            AdminLogType::USER_PASSWORD_RESET_REQUESTED,
+            $request,
+            sprintf('login "%s"', $username),
+            $userId,
+        );
 
         try {
             $this->sendResetLinkEmail($email, $username, $token);
@@ -197,7 +207,19 @@ final class UnauthorizedUserController
             return $this->json(['error' => Translation::get('ad_passwd_fail')], Response::HTTP_BAD_REQUEST);
         }
 
+        $this->logSecurityEvent(
+            AdminLogType::USER_PASSWORD_RESET_COMPLETED,
+            $request,
+            'password reset via link',
+            $userId,
+        );
+
         return $this->json(['success' => Translation::get('resetpwd_success')], Response::HTTP_OK);
+    }
+
+    private function logSecurityEvent(AdminLogType $type, Request $request, string $detail, ?int $userId = null): void
+    {
+        new SecurityEventLogger($this->configuration->getLogger())->log($type, $request, $detail, $userId);
     }
 
     /**

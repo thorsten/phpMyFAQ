@@ -21,11 +21,14 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\EventListener;
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Controller\ContainerControllerResolver;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Environment;
+use phpMyFAQ\Http\SecurityEventLogger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -58,6 +61,10 @@ readonly class WebExceptionListener
 
         $throwable = $event->getThrowable();
 
+        if ($throwable instanceof ForbiddenException) {
+            $this->logPermissionViolation($event);
+        }
+
         $response = match (true) {
             $throwable instanceof ResourceNotFoundException,
             $throwable instanceof NotFoundHttpException,
@@ -79,6 +86,24 @@ readonly class WebExceptionListener
         };
 
         $event->setResponse($response);
+    }
+
+    private function logPermissionViolation(ExceptionEvent $event): void
+    {
+        if (!$this->container instanceof ContainerInterface || !$this->container->has('phpmyfaq.configuration')) {
+            return;
+        }
+
+        $configuration = $this->container->get('phpmyfaq.configuration');
+        if (!$configuration instanceof Configuration) {
+            return;
+        }
+
+        new SecurityEventLogger($configuration->getLogger())->log(
+            AdminLogType::SECURITY_PERMISSION_VIOLATION,
+            $event->getRequest(),
+            $event->getThrowable()->getMessage(),
+        );
     }
 
     private function handleNotFound(ExceptionEvent $event): Response

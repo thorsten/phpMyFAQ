@@ -19,15 +19,24 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Push;
 
+use GuzzleHttp\Client;
 use Minishlink\WebPush\MessageSentReport;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\VAPID;
 use Minishlink\WebPush\WebPush;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\PushSubscriptionEntity;
+use Psr\Http\Client\ClientInterface;
 
 readonly class WebPushService
 {
+    /**
+     * Seconds to wait for a push service before giving up on a single request.
+     */
+    private const int REQUEST_TIMEOUT = 10;
+
+    private const int CONNECT_TIMEOUT = 5;
+
     public function __construct(
         private Configuration $configuration,
         private PushSubscriptionRepository $repository,
@@ -148,7 +157,7 @@ readonly class WebPushService
         ];
 
         try {
-            $webPush = new WebPush($auth);
+            $webPush = new WebPush($auth, [], $this->createHttpClient());
 
             $payload = json_encode([
                 'title' => $title,
@@ -177,5 +186,20 @@ readonly class WebPushService
         } catch (\Throwable $exception) {
             $this->configuration->getLogger()->error('Web Push notification failed: ' . $exception->getMessage());
         }
+    }
+
+    /**
+     * Endpoints are user-supplied, so the client must never follow a redirect into the
+     * internal network and must not hang on an unresponsive host. Non-2xx responses are
+     * returned as-is so the library can detect expired subscriptions (404/410).
+     */
+    private function createHttpClient(): ClientInterface
+    {
+        return new Client([
+            'allow_redirects' => false,
+            'connect_timeout' => self::CONNECT_TIMEOUT,
+            'timeout' => self::REQUEST_TIMEOUT,
+            'http_errors' => false,
+        ]);
     }
 }

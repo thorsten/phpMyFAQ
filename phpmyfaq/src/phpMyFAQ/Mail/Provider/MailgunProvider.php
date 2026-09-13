@@ -28,13 +28,20 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final readonly class MailgunProvider implements MailProviderInterface
 {
+    /**
+     * The mail API is called synchronously while a user waits: a hanging
+     * endpoint must not stall the request, and redirects are never expected
+     * from the API host, so they are refused instead of followed.
+     */
+    public const array HTTP_CLIENT_OPTIONS = ['timeout' => 10, 'max_redirects' => 0];
+
     private HttpClientInterface $httpClient;
 
     public function __construct(
         private Configuration $configuration,
         ?HttpClientInterface $httpClient = null,
     ) {
-        $this->httpClient = $httpClient ?? HttpClient::create();
+        $this->httpClient = $httpClient ?? HttpClient::create(self::HTTP_CLIENT_OPTIONS);
     }
 
     /**

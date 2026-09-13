@@ -245,6 +245,89 @@ final class ApiKeyControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testCreateRejectsUnknownScope(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-create');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => 'Generated key',
+            'scopes' => ['faq.read', 'admin.everything'],
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(sprintf(Translation::get('msgApiKeyUnknownScope'), 'admin.everything'), $payload['error']);
+        self::assertSame(0, $this->countApiKeysForUser(42));
+    }
+
+    /**
+     * A key acts on behalf of its owner, so it must not carry a scope whose permission the
+     * owner does not hold.
+     *
+     * @throws \Exception
+     */
+    public function testCreateRejectsScopeWhosePermissionTheOwnerDoesNotHold(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-create');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => 'Generated key',
+            'scopes' => ['faq.read', 'news.write'],
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(sprintf(Translation::get('msgApiKeyScopeNotHeld'), 'news.write'), $payload['error']);
+        self::assertSame(0, $this->countApiKeysForUser(42));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateRejectsScopeWhosePermissionTheOwnerDoesNotHold(): void
+    {
+        $this->seedApiKeyRow();
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-update');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], ['id' => 1], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => 'Renamed key',
+            'scopes' => ['category.write'],
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(sprintf(Translation::get('msgApiKeyScopeNotHeld'), 'category.write'), $payload['error']);
+    }
+
+    private function countApiKeysForUser(int $userId): int
+    {
+        $db = $this->configuration->getDb();
+        $result = $db->query(sprintf('SELECT id FROM faqapi_keys WHERE user_id = %d', $userId));
+
+        return $result === false ? 0 : $db->numRows($result);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testUpdateReturnsNotFoundForUnknownApiKeyWhenAuthenticated(): void
     {
         $controller = $this->createController();
@@ -610,9 +693,15 @@ final class ApiKeyControllerTest extends TestCase
         $permission
             ->method('hasPermission')
             ->willReturnCallback(
-                static fn(int $userId, mixed $right): bool => (
-                    $userId === 42
-                    && $right === PermissionType::USER_EDIT->value
+                static fn(int $userId, mixed $right): bool => $userId === 42
+                && in_array(
+                    $right,
+                    [
+                        PermissionType::USER_EDIT->value,
+                        PermissionType::FAQS_VIEW->value,
+                        PermissionType::FAQ_EDIT->value,
+                    ],
+                    true,
                 ),
             );
 
@@ -620,6 +709,7 @@ final class ApiKeyControllerTest extends TestCase
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
+        $currentUser->method('isSuperAdmin')->willReturn(false);
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);

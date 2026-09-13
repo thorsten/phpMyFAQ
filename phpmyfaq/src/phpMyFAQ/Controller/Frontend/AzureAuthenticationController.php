@@ -26,6 +26,7 @@ use phpMyFAQ\Auth\EntraId\JwksProvider;
 use phpMyFAQ\Auth\EntraId\OAuth;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -91,6 +92,7 @@ final class AzureAuthenticationController extends AbstractFrontController
         [$auth, $oAuth, $entraIdSession] = $this->buildAuthContext();
 
         $code = Filter::filterVar($request->query->get('code'), FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $state = Filter::filterVar($request->query->get('state'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $errorParam = Filter::filterVar($request->query->get('error'), FILTER_SANITIZE_SPECIAL_CHARS, '');
         $error = Filter::filterVar($request->query->get('error_description'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
@@ -110,6 +112,13 @@ final class AzureAuthenticationController extends AbstractFrontController
             return $redirect;
         }
 
+        // The state ties this callback to the authorization request this browser started;
+        // without it an attacker could complete a login with a code of their own account.
+        if (!$auth->isValidState($state)) {
+            $this->configuration->getLogger()->warning('Entra ID callback rejected: invalid OAuth state.');
+            return $this->loginFailed();
+        }
+
         try {
             $token = $oAuth->getOAuthToken($code);
             $accessToken = $token->access_token ?? null;
@@ -120,15 +129,24 @@ final class AzureAuthenticationController extends AbstractFrontController
                 ->setRefreshToken($refreshToken === null ? null : (string) $refreshToken);
 
             if (!$auth->isValidLogin($oAuth->getMail())) {
-                return new Response('Login not valid.');
+                return $this->loginFailed();
             }
 
             if (!$auth->checkCredentials($oAuth->getMail(), '')) {
-                return new Response('Credentials not valid.');
+                return $this->loginFailed();
             }
 
+            // Only the account the driver resolved for this identity may be logged in, and
+            // getUserById() refuses blocked accounts and the anonymous user.
             $user = $this->getCurrentUserService();
-            $user->getUserByLogin($oAuth->getMail());
+            $userId = $auth->getAuthenticatedUserId();
+            if ($userId <= 0 || !$user->getUserById($userId) || $user->getUserId() <= 0) {
+                $this->configuration
+                    ->getLogger()
+                    ->warning(sprintf('Entra ID login rejected: local account #%d is not available.', $userId));
+                return $this->loginFailed();
+            }
+
             $user->setLoggedIn(true);
             $user->setAuthSource(AuthenticationSourceType::AUTH_AZURE->value);
             $user->updateSessionId(true);
@@ -143,13 +161,27 @@ final class AzureAuthenticationController extends AbstractFrontController
 
             return $redirect;
         } catch (TransportExceptionInterface|Exception $exception) {
-            return new Response(sprintf(
-                'Entra ID Login failed: %s at line %d at %s',
-                $exception->getMessage(),
-                $exception->getLine(),
-                $exception->getFile(),
-            ));
+            $this->configuration
+                ->getLogger()
+                ->error(sprintf(
+                    'Entra ID Login failed: %s at line %d at %s',
+                    $exception->getMessage(),
+                    $exception->getLine(),
+                    $exception->getFile(),
+                ));
+
+            return $this->loginFailed(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * Returns the generic, translated failure response; the reason is only logged.
+     */
+    private function loginFailed(int $status = Response::HTTP_FORBIDDEN): Response
+    {
+        $message = Translation::get('msgEntraIdLoginFailed');
+
+        return new Response(is_string($message) ? $message : '', $status);
     }
 
     /**

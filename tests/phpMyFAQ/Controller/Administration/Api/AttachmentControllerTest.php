@@ -324,6 +324,7 @@ final class AttachmentControllerTest extends TestCase
         $htmlFile = $this->createMock(UploadedFile::class);
         $htmlFile->method('isValid')->willReturn(true);
         $htmlFile->method('getSize')->willReturn(128);
+        $htmlFile->method('getClientOriginalName')->willReturn('page.txt');
         $htmlFile->method('getMimeType')->willReturn('text/html');
 
         $container = $this->createAuthenticatedContainer();
@@ -339,7 +340,74 @@ final class AttachmentControllerTest extends TestCase
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        self::assertSame(Translation::get('msgImageTooLarge'), $payload['error']);
+        self::assertSame(sprintf(Translation::get('msgAttachmentTypeNotAllowed'), 'text/html'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadRejectsExecutableFilesByExtensionBeforeAnythingIsStored(): void
+    {
+        $document = $this->createMock(UploadedFile::class);
+        $document->method('isValid')->willReturn(true);
+        $document->method('getSize')->willReturn(128);
+        $document->method('getClientOriginalName')->willReturn('report.pdf');
+        $document->method('getMimeType')->willReturn('application/pdf');
+
+        $script = $this->createMock(UploadedFile::class);
+        $script->method('isValid')->willReturn(true);
+        $script->method('getSize')->willReturn(128);
+        $script->method('getClientOriginalName')->willReturn('shell.PHP');
+        $script->method('getMimeType')->willReturn('text/plain');
+        $script->expects(self::never())->method('getPathname');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $request = new Request(
+            [],
+            ['pmf-csrf-token' => $token, 'record_id' => 1, 'record_lang' => 'en'],
+            [],
+            [],
+            ['filesToUpload' => [$document, $script]],
+        );
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(sprintf(Translation::get('msgAttachmentTypeNotAllowed'), '.php'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadRejectsSvgAttachmentsByDetectedMimeType(): void
+    {
+        $svg = $this->createMock(UploadedFile::class);
+        $svg->method('isValid')->willReturn(true);
+        $svg->method('getSize')->willReturn(128);
+        $svg->method('getClientOriginalName')->willReturn('diagram.image');
+        $svg->method('getMimeType')->willReturn('image/svg+xml');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $request = new Request([], ['pmf-csrf-token' => $token], [], [], ['filesToUpload' => [$svg]]);
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(sprintf(Translation::get('msgAttachmentTypeNotAllowed'), 'image/svg+xml'), $payload['error']);
     }
 
     /**
@@ -660,13 +728,15 @@ final class AttachmentControllerTest extends TestCase
         $controller->setContainer($container);
 
         $this->expectException(ForbiddenException::class);
-        $controller->upload(new Request(
-            [],
-            ['pmf-csrf-token' => $token, 'record_id' => 5, 'record_lang' => 'en'],
-            [],
-            [],
-            ['filesToUpload' => [$file]],
-        ));
+        $controller->upload(
+            new Request(
+                [],
+                ['pmf-csrf-token' => $token, 'record_id' => 5, 'record_lang' => 'en'],
+                [],
+                [],
+                ['filesToUpload' => [$file]],
+            ),
+        );
     }
 
     /**
@@ -695,13 +765,15 @@ final class AttachmentControllerTest extends TestCase
         $controller = new AttachmentController();
         $controller->setContainer($container);
 
-        $response = $controller->upload(new Request(
-            [],
-            ['pmf-csrf-token' => $token, 'record_id' => 5, 'record_lang' => 'en'],
-            [],
-            [],
-            ['filesToUpload' => [$missingFile]],
-        ));
+        $response = $controller->upload(
+            new Request(
+                [],
+                ['pmf-csrf-token' => $token, 'record_id' => 5, 'record_lang' => 'en'],
+                [],
+                [],
+                ['filesToUpload' => [$missingFile]],
+            ),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         // The scope check passes; the save itself still fails because the file is missing.
@@ -712,7 +784,7 @@ final class AttachmentControllerTest extends TestCase
     private function seedAttachment(int $attachmentId, int $recordId, string $recordLang): void
     {
         self::assertNotFalse($this->dbHandle->query(sprintf(
-            "INSERT INTO faqattachment (id, record_id, record_lang, real_hash, virtual_hash, filename, filesize,"
+            'INSERT INTO faqattachment (id, record_id, record_lang, real_hash, virtual_hash, filename, filesize,'
             . " encrypted, mime_type) VALUES (%d, %d, '%s', '%s', '%s', 'file.txt', 18, 0, 'text/plain')",
             $attachmentId,
             $recordId,
@@ -725,7 +797,7 @@ final class AttachmentControllerTest extends TestCase
     private function seedCategoryRelation(int $categoryId, int $recordId, string $recordLang): void
     {
         self::assertNotFalse($this->dbHandle->query(sprintf(
-            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)"
+            'INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)'
             . " VALUES (%d, '%s', %d, '%s')",
             $categoryId,
             $recordLang,
@@ -785,10 +857,12 @@ final class AttachmentControllerTest extends TestCase
         $permission
             ->method('hasPermissionForCategory')
             ->willReturnCallback(
-                static fn(int $userId, mixed $right, int $categoryId): bool => $userId === 42
-                && in_array($right, $attachmentRights, true)
-                && $categoryId !== 666 // sentinel forbidden category for tests
-                && ($allowedCategories === null || in_array($categoryId, $allowedCategories, true)),
+                static fn(int $userId, mixed $right, int $categoryId): bool => (
+                    $userId === 42
+                    && in_array($right, $attachmentRights, true)
+                    && $categoryId !== 666 // sentinel forbidden category for tests
+                    && ($allowedCategories === null || in_array($categoryId, $allowedCategories, true))
+                ),
             );
         $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
         $permission

@@ -285,7 +285,11 @@ class Tags
             Database::getTablePrefix(),
             $showInactive ? '' : StatusScope::publishedOnly()->toSqlFragment('d'),
             $search !== null && $search !== ''
-                ? 'AND tagging_name ' . $like . " '" . $this->configuration->getDb()->escape($search) . "%'"
+                ? 'AND tagging_name '
+                . $like
+                . " '"
+                . $this->configuration->getDb()->escape($this->escapeLikeWildcards($search))
+                . "%' ESCAPE '|'"
                 : '',
             $permissionCheck,
         );
@@ -475,7 +479,7 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             StatusScope::publishedOnly()->toSqlFragment('d'),
             $permissionCheck,
         );
@@ -578,5 +582,13 @@ class Tags
         $normalizedGroups = array_map(static fn($group): int => (int) $group, $this->groups);
 
         return $normalizedGroups === [] ? '-1' : implode(', ', $normalizedGroups);
+    }
+
+    /**
+     * Escapes LIKE metacharacters so a search term cannot widen into a wildcard match.
+     */
+    private function escapeLikeWildcards(string $term): string
+    {
+        return str_replace(['|', '%', '_'], ['||', '|%', '|_'], $term);
     }
 }

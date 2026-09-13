@@ -328,6 +328,11 @@ final class UserController extends AbstractAdministrationApiController
                 return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_BAD_REQUEST);
             }
 
+            // changePassword() revoked every stored session; keep the one that changed it alive.
+            if ($isSelf) {
+                $this->currentUser->updateSessionId();
+            }
+
             $this->adminLog->log($this->currentUser, AdminLogType::USER_CHANGE_PASSWORD->value . ':' . $userId);
 
             return $this->json(['success' => Translation::get(key: 'ad_passwdsuc')], Response::HTTP_OK);
@@ -528,6 +533,13 @@ final class UserController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
+        // A non-SuperAdmin may only edit users whose rights they hold themselves. Overwriting the
+        // e-mail address or resetting two-factor authentication of a more privileged administrator
+        // would otherwise let a USER_EDIT holder take over that account (privilege escalation).
+        if (!$actingIsSuperAdmin && !$this->actingUserHoldsAllRightsOf($user)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         $stats = $user->getStatus();
         $wasSuperAdmin = $user->isSuperAdmin();
 
@@ -577,6 +589,22 @@ final class UserController extends AbstractAdministrationApiController
             . '" '
             . Translation::getString(key: 'ad_msg_savedsuc_2');
         return $this->json(['success' => $success], Response::HTTP_OK);
+    }
+
+    /**
+     * Whether the acting user holds every right the target user holds, directly or via
+     * their groups. Mirrors the "only rights you hold" rule of updateUserRights().
+     *
+     * @throws Exception
+     */
+    private function actingUserHoldsAllRightsOf(User $user): bool
+    {
+        $actingUserId = $this->currentUser->getUserId();
+
+        return array_all(
+            $user->perm->getAllUserRights($user->getUserId()),
+            fn(mixed $rightId): bool => $this->currentUser->perm->hasPermission($actingUserId, (int) $rightId),
+        );
     }
 
     /**

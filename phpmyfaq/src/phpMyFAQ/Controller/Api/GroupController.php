@@ -30,7 +30,7 @@ final class GroupController extends AbstractApiController
     #[OA\Get(
         path: '/api/v4.0/groups',
         operationId: 'getGroups',
-        description: 'Returns paginated list of group IDs.',
+        description: 'Returns paginated list of group IDs. Requires the user and group administration permissions.',
         tags: ['Endpoints with Authentication'],
     )]
     #[OA\Header(
@@ -111,10 +111,15 @@ final class GroupController extends AbstractApiController
         ]),
     )]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
+    #[OA\Response(
+        response: 403,
+        description: 'If the user does not hold the user and group administration permissions.',
+    )]
     #[Route(path: 'v4.0/groups', name: 'api.groups.list', methods: ['GET'])]
     public function list(?Request $request = null): JsonResponse
     {
-        $this->userIsAuthenticated();
+        // Group IDs are administrative data: only user/group administrators may enumerate them.
+        $this->userHasGroupPermission();
         $request ??= Request::createFromGlobals();
 
         $mediumPermission = new MediumPermission($this->configuration);

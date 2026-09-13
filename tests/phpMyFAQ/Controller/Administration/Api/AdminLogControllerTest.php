@@ -9,6 +9,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Entity\AdminLog as AdminLogEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
@@ -229,6 +230,43 @@ final class AdminLogControllerTest extends TestCase
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertArrayHasKey('error', $payload);
         $this->removeCsrfCookie('delete-adminlog');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    /**
+     * @throws \Exception
+     */
+    public function testExportNeutralisesSpreadsheetFormulasInCells(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('export-adminlog');
+        $this->setCsrfCookie('export-adminlog', $csrfToken);
+
+        $entry = new AdminLogEntity()
+            ->setId(1)
+            ->setTime(1700000000)
+            ->setUserId(-1)
+            ->setIp('127.0.0.1')
+            ->setText('=cmd|\' /C calc\'!A0');
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog->expects($this->once())->method('getAll')->willReturn([1 => $entry]);
+        $adminLog->expects($this->once())->method('log');
+
+        $controller = new AdminLogController();
+        $controller->setContainer($this->createAuthenticatedContainer($adminLog, $session));
+
+        $response = $controller->export(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+        $csv = (string) $response->getContent();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringNotContainsString(',=cmd', $csv);
+        self::assertStringContainsString('"""=cmd|\' /C calc\'!A0"""', $csv);
+        $this->removeCsrfCookie('export-adminlog');
     }
 
     /**

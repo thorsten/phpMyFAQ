@@ -221,6 +221,58 @@ describe('phpMyFAQ Jodit Plugin', () => {
       expect(dialog.close).toHaveBeenCalled();
     });
 
+    it('should render a question containing markup as text, not as HTML', async () => {
+      injectDialogHtml();
+
+      (fetchFaqsByAutocomplete as Mock).mockResolvedValue({
+        success: [{ url: '/faq/1" onmouseover="alert(1)', question: '<img src=x onerror=alert(1)>' }],
+      });
+
+      commandFn();
+
+      const searchInput = document.getElementById('pmf-search-internal-links') as HTMLInputElement;
+      searchInput.value = 'img';
+      searchInput.dispatchEvent(new Event('keyup'));
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      const resultsContainer = document.getElementById('pmf-search-results') as HTMLDivElement;
+      expect(resultsContainer.querySelector('img')).toBeNull();
+      expect(resultsContainer.textContent).toContain('<img src=x onerror=alert(1)>');
+
+      const radio = resultsContainer.querySelector('input[name=faqURL]') as HTMLInputElement;
+      expect(radio.value).toBe('/faq/1" onmouseover="alert(1)');
+      expect(radio.hasAttribute('onmouseover')).toBe(false);
+    });
+
+    it('should insert the selected question as escaped anchor text', () => {
+      injectDialogHtml();
+
+      commandFn();
+
+      const resultsContainer = document.getElementById('pmf-search-results') as HTMLDivElement;
+      const label = document.createElement('label');
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'faqURL';
+      radio.value = '/faq/1';
+      radio.checked = true;
+      label.append(radio, ' <img src=x onerror=alert(1)>');
+      resultsContainer.append(label);
+
+      const selectButton = document.getElementById('select-faq-button') as HTMLButtonElement;
+      selectButton.click();
+
+      const insertHTMLFn = (editor.selection as Record<string, Mock>).insertHTML;
+      const inserted = insertHTMLFn.mock.calls[0][0] as string;
+      expect(inserted).toBe('<a href="/faq/1">&lt;img src=x onerror=alert(1)&gt;</a>');
+
+      const probe = document.createElement('div');
+      probe.innerHTML = inserted;
+      expect(probe.querySelector('img')).toBeNull();
+      expect(probe.querySelector('a')?.textContent).toBe('<img src=x onerror=alert(1)>');
+    });
+
     it('should show alert when no radio is selected', () => {
       injectDialogHtml();
 

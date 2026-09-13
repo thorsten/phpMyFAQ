@@ -11,6 +11,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\DownloadHostType;
 use phpMyFAQ\System;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
@@ -25,6 +26,7 @@ class UpgradeTest extends TestCase
 {
     private Upgrade $upgrade;
     private HttpClientInterface $httpClientMock;
+    private Configuration $configuration;
     private string $testDir;
     private Sqlite3 $dbHandle;
     private string $databasePath;
@@ -47,6 +49,7 @@ class UpgradeTest extends TestCase
         $this->dbHandle->connect($this->databasePath, '', '');
         $this->initializeDatabaseStatics($this->dbHandle);
         $configuration = new Configuration($this->dbHandle);
+        $this->configuration = $configuration;
 
         $this->httpClientMock = $this->createMock(HttpClientInterface::class);
         $this->upgrade = new Upgrade(new System(), $configuration, $this->httpClientMock);
@@ -367,8 +370,7 @@ class UpgradeTest extends TestCase
         $this->upgrade->setInstallationDirectory($installationDir);
 
         try {
-            $this->assertTrue($this->upgrade->installPackage(function (): void {
-            }));
+            $this->assertTrue($this->upgrade->installPackage(function (): void {}));
             $this->assertFileExists($installationDir . '/index.php');
             $this->assertFileExists($installationDir . '/src/phpMyFAQ/System.php');
         } finally {
@@ -401,8 +403,7 @@ class UpgradeTest extends TestCase
             $this->expectException(Exception::class);
             $this->expectExceptionMessage('Could not copy 1 path(s) into the installation directory: locked.php');
 
-            $this->upgrade->installPackage(function (): void {
-            });
+            $this->upgrade->installPackage(function (): void {});
         } finally {
             chmod($installationDir . '/locked.php', 0o644);
             $this->assertStringEqualsFile($installationDir . '/locked.php', "<?php // old\n");
@@ -421,8 +422,7 @@ class UpgradeTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The extracted package is missing, please run the extract step again.');
 
-        $this->upgrade->installPackage(function (): void {
-        });
+        $this->upgrade->installPackage(function (): void {});
     }
 
     /**
@@ -453,6 +453,219 @@ class UpgradeTest extends TestCase
             $this->removeDirectory($installationDir);
             unlink(PMF_CONTENT_DIR . '/core/config/constants.php');
         }
+    }
+
+    public function testDefaultUpgradeDirectoryIsBelowContentCore(): void
+    {
+        $upgrade = new Upgrade(new System(), $this->configuration, $this->httpClientMock);
+
+        $this->assertSame(PMF_CONTENT_DIR . '/core/upgrades', $upgrade->upgradeDirectory);
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    public function testVerifyPackagePrefersSha256OverMd5(): void
+    {
+        $package = $this->createPackageFile('sha256-package');
+
+        $this->mockReleaseInfo([
+            'zip' => ['md5' => md5_file($package), 'sha256' => hash_file('sha256', $package)],
+        ]);
+
+        $this->assertTrue($this->upgrade->verifyPackage($package, '4.2.0'));
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    public function testVerifyPackageFailsWhenSha256DoesNotMatchEvenIfMd5Matches(): void
+    {
+        $package = $this->createPackageFile('tampered-package');
+
+        $this->mockReleaseInfo([
+            'zip' => ['md5' => md5_file($package), 'sha256' => str_repeat('0', 64)],
+        ]);
+
+        $this->assertFalse($this->upgrade->verifyPackage($package, '4.2.0'));
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    public function testVerifyPackageFallsBackToMd5ForLegacyReleaseInformation(): void
+    {
+        $package = $this->createPackageFile('legacy-package');
+
+        $this->mockReleaseInfo(['zip' => ['md5' => md5_file($package)]]);
+
+        $this->assertTrue($this->upgrade->verifyPackage($package, '3.2.0'));
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    public function testVerifyPackageFailsWithoutAnyPublishedChecksum(): void
+    {
+        $package = $this->createPackageFile('unchecked-package');
+
+        $this->mockReleaseInfo(['zip' => []]);
+
+        $this->assertFalse($this->upgrade->verifyPackage($package, '4.2.0'));
+    }
+
+    public function testVerifyNightlyPackageAcceptsMatchingGitHubDigest(): void
+    {
+        $package = $this->createPackageFile('nightly-ok', sprintf('phpMyFAQ-nightly-%s.zip', date('Y-m-d')));
+
+        $this->mockReleaseInfo([
+            'assets' => [
+                ['name' => 'other.zip', 'digest' => 'sha256:' . str_repeat('a', 64)],
+                ['name' => basename($package), 'digest' => 'sha256:' . hash_file('sha256', $package)],
+            ],
+        ]);
+
+        $this->assertTrue($this->upgrade->verifyNightlyPackage($package));
+    }
+
+    public function testVerifyNightlyPackageRejectsMismatchingGitHubDigest(): void
+    {
+        $package = $this->createPackageFile('nightly-bad', sprintf('phpMyFAQ-nightly-%s.zip', date('Y-m-d')));
+
+        $this->mockReleaseInfo([
+            'assets' => [['name' => basename($package), 'digest' => 'sha256:' . str_repeat('b', 64)]],
+        ]);
+
+        $this->assertFalse($this->upgrade->verifyNightlyPackage($package));
+    }
+
+    public function testVerifyNightlyPackageRefusesMissingDigestByDefault(): void
+    {
+        $package = $this->createPackageFile('nightly-nodigest', sprintf('phpMyFAQ-nightly-%s.zip', date('Y-m-d')));
+
+        $this->mockReleaseInfo(['assets' => [['name' => basename($package)]]]);
+
+        $this->assertFalse($this->upgrade->isUnverifiedNightlyAllowed());
+        $this->assertFalse($this->upgrade->verifyNightlyPackage($package));
+    }
+
+    public function testVerifyNightlyPackageAcceptsMissingDigestWhenExplicitlyAllowed(): void
+    {
+        $package = $this->createPackageFile('nightly-allowed', sprintf('phpMyFAQ-nightly-%s.zip', date('Y-m-d')));
+        // The key is seeded by the installer; an existing installation gets it through a migration
+        $this->configuration->add('upgrade.allowUnverifiedNightly', 'true');
+
+        $this->mockReleaseInfo(['assets' => []]);
+
+        $this->assertTrue($this->upgrade->isUnverifiedNightlyAllowed());
+        $this->assertTrue($this->upgrade->verifyNightlyPackage($package));
+    }
+
+    public function testVerifyNightlyPackageRefusesWhenGitHubIsUnreachable(): void
+    {
+        $package = $this->createPackageFile('nightly-offline', sprintf('phpMyFAQ-nightly-%s.zip', date('Y-m-d')));
+
+        $this->httpClientMock
+            ->method('request')
+            ->willThrowException(new class('offline') extends \RuntimeException implements
+                \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface {});
+
+        $this->assertFalse($this->upgrade->verifyNightlyPackage($package));
+    }
+
+    /**
+     * @return iterable<string, array{string, bool}>
+     */
+    public static function protectedPackagePathProvider(): iterable
+    {
+        yield 'installer directory' => ['setup', true];
+        yield 'installer file' => ['setup/index.php', true];
+        yield 'configuration directory' => ['content/core/config', true];
+        yield 'configuration file' => ['content/core/config/database.php', true];
+        yield 'windows separators' => ['content\\core\\config\\database.php', true];
+        yield 'application code' => ['src/phpMyFAQ/System.php', false];
+        yield 'similar prefix' => ['setup-notes.md', false];
+        yield 'other core directory' => ['content/core/data/.gitkeep', false];
+    }
+
+    #[DataProvider('protectedPackagePathProvider')]
+    public function testIsProtectedPackagePath(string $relativePath, bool $expected): void
+    {
+        $this->assertSame($expected, Upgrade::isProtectedPackagePath($relativePath));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testInstallPackageNeverCopiesInstallerOrConfiguration(): void
+    {
+        $sourceDir = PMF_CONTENT_DIR . '/upgrades/new/phpmyfaq';
+        mkdir($sourceDir . '/setup', recursive: true);
+        mkdir($sourceDir . '/content/core/config', recursive: true);
+        file_put_contents($sourceDir . '/index.php', "<?php // new\n");
+        file_put_contents($sourceDir . '/setup/index.php', "<?php // installer\n");
+        file_put_contents($sourceDir . '/content/core/config/database.php', "<?php // attacker config\n");
+
+        $installationDir = PMF_TEST_DIR . '/install-target-protected';
+        mkdir($installationDir . '/content/core/config', recursive: true);
+        file_put_contents($installationDir . '/content/core/config/database.php', "<?php // live config\n");
+        $this->upgrade->setInstallationDirectory($installationDir);
+
+        try {
+            $this->assertTrue($this->upgrade->installPackage(function (): void {}));
+            $this->assertFileExists($installationDir . '/index.php');
+            $this->assertFileDoesNotExist($installationDir . '/setup/index.php');
+            $this->assertStringEqualsFile(
+                $installationDir . '/content/core/config/database.php',
+                "<?php // live config\n",
+            );
+        } finally {
+            $this->removeDirectory(PMF_CONTENT_DIR . '/upgrades/new');
+            $this->removeDirectory($installationDir);
+        }
+    }
+
+    public function testCleanUpRemovesExtractedPackageDownloadsAndBackups(): void
+    {
+        $upgradeDir = PMF_CONTENT_DIR . '/upgrades';
+        mkdir($upgradeDir . '/new/phpmyfaq/setup', recursive: true);
+        file_put_contents($upgradeDir . '/new/phpmyfaq/setup/index.php', '<?php');
+        file_put_contents($upgradeDir . '/phpMyFAQ-4.2.0.zip', 'package');
+        file_put_contents($upgradeDir . '/' . bin2hex(random_bytes(4)) . '.zip', 'backup with database.php');
+        file_put_contents($upgradeDir . '/.gitkeep', '');
+
+        $this->assertTrue($this->upgrade->cleanUp());
+
+        $this->assertDirectoryDoesNotExist($upgradeDir . '/new');
+        $this->assertSame([], glob($upgradeDir . '/*.zip'));
+        $this->assertFileExists($upgradeDir . '/.gitkeep');
+    }
+
+    public function testCleanUpSucceedsWhenNothingWasExtracted(): void
+    {
+        $this->removeDirectory(PMF_CONTENT_DIR . '/upgrades/new');
+
+        $this->assertTrue($this->upgrade->cleanUp());
+    }
+
+    private function createPackageFile(string $name, ?string $filename = null): string
+    {
+        $path = $this->testDir . '/' . ($filename ?? $name . '.zip');
+        file_put_contents($path, 'binary content of ' . $name);
+
+        return $path;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function mockReleaseInfo(array $payload): void
+    {
+        $response = $this->createStub(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(200);
+        $response->method('getContent')->willReturn(json_encode($payload, JSON_THROW_ON_ERROR));
+
+        $this->httpClientMock->method('request')->willReturn($response);
     }
 
     private function removeDirectory(string $directory): void

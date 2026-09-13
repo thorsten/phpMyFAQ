@@ -182,8 +182,9 @@ class PdfControllerTest extends TestCase
             ->method('getFaq')
             ->with(7)
             ->willReturnCallback(function () use ($faq): void {
-                $faq->faqRecord = ['solution_id' => 1007];
+                $faq->faqRecord = ['solution_id' => 1007, 'status' => 'published'];
             });
+        $faq->method('isFaqRecordVisible')->willReturn(true);
 
         $services = $this->createMock(Services::class);
         $services->expects($this->once())->method('setFaqId')->with(7)->willReturnSelf();
@@ -221,9 +222,46 @@ class PdfControllerTest extends TestCase
             ->willReturnCallback(function () use ($faq): void {
                 $faq->faqRecord = ['solution_id' => 42];
             });
+        $faq->method('isFaqRecordVisible')->willReturn(false);
 
         $controller = new PdfController();
         $controller->setFaqFactory(static fn() => $faq);
+
+        $response = $controller->getById($request);
+
+        $this->assertSame(404, $response->getStatusCode());
+        $this->assertSame('{}', (string) $response->getContent());
+    }
+
+    /**
+     * A draft or expired record is loaded with its metadata intact; the PDF link must
+     * not disclose that it exists.
+     *
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testGetByIdReturnsNotFoundWhenFaqIsNotVisible(): void
+    {
+        $request = new Request();
+        $request->attributes->set('categoryId', '3');
+        $request->attributes->set('faqId', '7');
+
+        $faq = $this->createMock(\phpMyFAQ\Faq::class);
+        $faq
+            ->expects($this->once())
+            ->method('getFaq')
+            ->with(7)
+            ->willReturnCallback(function () use ($faq): void {
+                $faq->faqRecord = ['solution_id' => 1007, 'status' => 'draft'];
+            });
+        $faq->expects($this->once())->method('isFaqRecordVisible')->willReturn(false);
+
+        $services = $this->createMock(Services::class);
+        $services->expects($this->never())->method('getPdfApiLink');
+
+        $controller = new PdfController();
+        $controller->setFaqFactory(static fn() => $faq);
+        $controller->setServicesFactory(static fn() => $services);
 
         $response = $controller->getById($request);
 

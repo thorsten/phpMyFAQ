@@ -26,6 +26,7 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Mail;
 use phpMyFAQ\News\NewsService;
@@ -82,7 +83,9 @@ final class NewsController extends AbstractFrontController
         $newsService = new NewsService($this->configuration, $this->currentUser);
         $news = $newsService->getProcessedNews($newsId);
 
-        if ($news === []) {
+        // An inactive item still comes back with its header, author and e-mail; only the
+        // body is replaced. Keep it hidden from everyone who may not edit news.
+        if ($news === [] || ($news['active'] ?? false) !== true && !$this->mayViewInactiveNews()) {
             $response = $this->render('404.twig', [
                 ...$this->getHeader($request),
             ]);
@@ -166,5 +169,16 @@ final class NewsController extends AbstractFrontController
             'safeEmails' => $safeEmails,
             'formattedDates' => $formattedDates,
         ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function mayViewInactiveNews(): bool
+    {
+        return $this->currentUser->perm->hasPermission(
+            $this->currentUser->getUserId(),
+            PermissionType::NEWS_EDIT->value,
+        );
     }
 }

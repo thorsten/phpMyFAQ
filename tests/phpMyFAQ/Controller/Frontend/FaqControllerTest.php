@@ -253,6 +253,62 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * The route language is interpolated into SQL by several sinks and stored in the session,
+     * so anything that is not a phpMyFAQ-supported language code must be rejected up front.
+     *
+     * @throws \Exception
+     */
+    public function testShowReturnsNotFoundForUnsupportedLanguage(): void
+    {
+        $this->seedFaqRow(faqId: 4);
+        Language::$language = 'en';
+
+        $faq = new Faq($this->configuration);
+
+        $category = $this
+            ->getMockBuilder(Category::class)
+            ->setConstructorArgs([$this->configuration, [-1]])
+            ->onlyMethods(['categoryHasLinkToFaq'])
+            ->getMock();
+        $category->expects(self::never())->method('categoryHasLinkToFaq');
+
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            $faq,
+            $category,
+        );
+
+        $response = $controller->show(
+            new \Symfony\Component\HttpFoundation\Request(
+                [],
+                [],
+                ['categoryId' => '1', 'faqId' => '4', 'faqLang' => "en' OR 1=1 --", 'slug' => 'faq-title'],
+            ),
+        );
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertSame('en', Language::$language);
+    }
+
+    public function testShowRouteRestrictsLanguageParameterToLanguageCodes(): void
+    {
+        $attributes = new \ReflectionMethod(
+            FaqController::class,
+            'show',
+        )->getAttributes(\Symfony\Component\Routing\Attribute\Route::class);
+
+        self::assertCount(1, $attributes);
+        $route = $attributes[0]->newInstance();
+        $requirement = (string) ($route->requirements['faqLang'] ?? '');
+
+        self::assertSame(1, preg_match('#^' . $requirement . '$#', 'en'));
+        self::assertSame(1, preg_match('#^' . $requirement . '$#', 'pt_br'));
+        self::assertSame(0, preg_match('#^' . $requirement . '$#', "en' OR 1=1"));
+    }
+
+    /**
      * Seeds a guest-readable FAQ. Defaults describe a visible record.
      */
     private function seedFaqRow(int $faqId, string $status = 'published'): void
@@ -353,6 +409,7 @@ final class FaqControllerTest extends TestCase
     {
         $faq = $this->createMock(Faq::class);
         $faq->expects(self::once())->method('getFaqResult')->with(42, 'en')->willReturn('faq-result');
+        $faq->expects(self::once())->method('isFaqAccessibleForUser')->with(42, 'en')->willReturn(true);
 
         $databaseDriver = $this->createMock(DatabaseDriver::class);
         $databaseDriver->expects(self::once())->method('numRows')->with('faq-result')->willReturn(1);

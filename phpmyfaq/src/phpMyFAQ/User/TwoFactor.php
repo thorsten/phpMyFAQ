@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use RobThree\Auth\Algorithm;
 use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
 use RobThree\Auth\TwoFactorAuth;
@@ -48,6 +49,11 @@ class TwoFactor
     private const int VERIFY_DISCREPANCY = 0;
 
     /**
+     * Length of a TOTP time slice in seconds.
+     */
+    private const int PERIOD = 30;
+
+    /**
      * @throws TwoFactorAuthException
      */
     public function __construct(
@@ -59,7 +65,7 @@ class TwoFactor
             $this->endroidQrCodeProvider,
             (string) $this->configuration->get(item: 'main.titleFAQ'),
             6,
-            30,
+            self::PERIOD,
             Algorithm::Sha1,
         );
     }
@@ -110,7 +116,51 @@ class TwoFactor
             return false;
         }
 
-        return $this->twoFactorAuth->verifyCode($secret, $token, self::VERIFY_DISCREPANCY);
+        if (!$this->twoFactorAuth->verifyCode($secret, $token, self::VERIFY_DISCREPANCY)) {
+            return false;
+        }
+
+        // A code is valid for a whole time slice, so a captured code could be replayed
+        // until the slice ends. Every slice therefore authenticates at most once.
+        $slice = intdiv(time(), self::PERIOD);
+        if ($slice <= $this->lastAcceptedSlice($userId)) {
+            return false;
+        }
+
+        return $this->rememberAcceptedSlice($userId, $slice);
+    }
+
+    /**
+     * Returns the last time slice a code was accepted for, or 0 if none was recorded.
+     */
+    private function lastAcceptedSlice(int $userId): int
+    {
+        $db = $this->configuration->getDb();
+        $result = $db->query(sprintf(
+            'SELECT twofactor_last_slice FROM %sfaquserdata WHERE user_id = %d',
+            Database::getTablePrefix(),
+            $userId,
+        ));
+
+        if (!$result || $db->numRows($result) !== 1) {
+            return 0;
+        }
+
+        $row = $db->fetchArray($result);
+
+        return is_array($row) ? (int) ($row['twofactor_last_slice'] ?? 0) : 0;
+    }
+
+    private function rememberAcceptedSlice(int $userId, int $slice): bool
+    {
+        return (bool) $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                'UPDATE %sfaquserdata SET twofactor_last_slice = %d WHERE user_id = %d',
+                Database::getTablePrefix(),
+                $slice,
+                $userId,
+            ));
     }
 
     /**

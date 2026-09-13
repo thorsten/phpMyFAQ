@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use DateTime;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Helper\SvgSanitizer as SvgSanitizer;
 use phpMyFAQ\Session\Token;
@@ -164,6 +165,8 @@ final class ImageController extends AbstractController
                     }
                 }
             }
+
+            $this->logSecurityEvent(AdminLogType::ATTACHMENT_ADD, sprintf('Image uploaded: %s', $fileName));
 
             // Add to the list of uploaded files
             $uploadedFiles[] = $fileName;

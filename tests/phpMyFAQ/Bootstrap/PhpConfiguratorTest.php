@@ -37,6 +37,7 @@ class PhpConfiguratorTest extends TestCase
             'session.save_handler' => ini_get('session.save_handler'),
             'session.save_path' => ini_get('session.save_path'),
             'session.use_only_cookies' => ini_get('session.use_only_cookies'),
+            'session.use_strict_mode' => ini_get('session.use_strict_mode'),
             'session.use_trans_sid' => ini_get('session.use_trans_sid'),
             'session.cookie_samesite' => ini_get('session.cookie_samesite'),
             'session.cookie_httponly' => ini_get('session.cookie_httponly'),
@@ -133,6 +134,27 @@ class PhpConfiguratorTest extends TestCase
         PhpConfigurator::configureSession($configuration);
 
         $this->assertEquals('files', ini_get('session.save_handler'));
+    }
+
+    public function testConfigureSessionEnablesStrictModeAndCookieHardening(): void
+    {
+        ini_set('session.use_strict_mode', '0');
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['session.handler',  'files'],
+                ['session.redisDsn', ''],
+                ['session.savePath', ''],
+            ]);
+
+        PhpConfigurator::configureSession($configuration);
+
+        $this->assertSame('1', ini_get('session.use_strict_mode'));
+        $this->assertSame('1', ini_get('session.use_only_cookies'));
+        $this->assertSame('1', ini_get('session.cookie_httponly'));
+        $this->assertSame('Strict', ini_get('session.cookie_samesite'));
     }
 
     public function testConfigureSessionUsesFilesForDatabaseHandlerInLiteMode(): void

@@ -65,4 +65,51 @@ class CategoryRepositoryTest extends TestCase
         $this->expectException(QuotaExceededException::class);
         $repository->create($categoryEntity);
     }
+
+    public function testFindCategoriesPaginatedAllowListsTheSortDirection(): void
+    {
+        Database::setTablePrefix('pmf_');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db
+            ->expects($this->once())
+            ->method('query')
+            ->with(self::callback(static function (string $query): bool {
+                self::assertStringContainsString('ORDER BY fc.id ASC LIMIT 25 OFFSET 0', $query);
+                self::assertStringNotContainsString('DROP', $query);
+                return true;
+            }))
+            ->willReturn(true);
+        $db->method('fetchArray')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $repository = new CategoryRepository($configuration);
+
+        self::assertSame(
+            [],
+            $repository->findCategoriesPaginated(sortField: 'id', sortOrder: 'ASC; DROP TABLE pmf_faqcategories'),
+        );
+    }
+
+    public function testFindCategoriesPaginatedAcceptsLowerCaseDescendingSortDirection(): void
+    {
+        Database::setTablePrefix('pmf_');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db
+            ->expects($this->once())
+            ->method('query')
+            ->with(self::stringContains('ORDER BY fc.name DESC'))
+            ->willReturn(true);
+        $db->method('fetchArray')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $repository = new CategoryRepository($configuration);
+
+        self::assertSame([], $repository->findCategoriesPaginated(sortField: 'name', sortOrder: 'desc'));
+    }
 }

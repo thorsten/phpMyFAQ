@@ -80,14 +80,15 @@ const showToast = (message: string, type: 'success' | 'danger'): void => {
 
 const subscribeUser = async (
   registration: ServiceWorkerRegistration,
-  vapidPublicKey: string
+  vapidPublicKey: string,
+  csrfToken: string
 ): Promise<PushSubscription> => {
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(vapidPublicKey) as unknown as BufferSource,
   });
 
-  await subscribePush(subscription);
+  await subscribePush(subscription, csrfToken);
   return subscription;
 };
 
@@ -97,7 +98,8 @@ const subscribeUser = async (
 const handlePushBanner = async (
   registration: ServiceWorkerRegistration,
   vapidPublicKey: string,
-  isSubscribed: boolean
+  isSubscribed: boolean,
+  csrfToken: string
 ): Promise<void> => {
   const banner = document.getElementById('pmf-push-banner');
   if (!banner || isSubscribed) {
@@ -126,7 +128,7 @@ const handlePushBanner = async (
 
   enableButton?.addEventListener('click', async (): Promise<void> => {
     try {
-      await subscribeUser(registration, vapidPublicKey);
+      await subscribeUser(registration, vapidPublicKey, csrfToken);
       banner.classList.add('d-none');
       localStorage.setItem(PUSH_DISMISSED_KEY, 'subscribed');
     } catch (error) {
@@ -149,7 +151,8 @@ const handleUcpToggle = async (
   button: HTMLButtonElement,
   registration: ServiceWorkerRegistration,
   vapidPublicKey: string,
-  initialSubscription: PushSubscription | null
+  initialSubscription: PushSubscription | null,
+  csrfToken: string
 ): Promise<void> => {
   let isSubscribed = initialSubscription !== null;
   let currentSubscription = initialSubscription;
@@ -163,7 +166,7 @@ const handleUcpToggle = async (
       if (isSubscribed && currentSubscription) {
         const endpoint = currentSubscription.endpoint;
         await currentSubscription.unsubscribe();
-        await unsubscribePush(endpoint);
+        await unsubscribePush(endpoint, csrfToken);
         isSubscribed = false;
         currentSubscription = null;
         updateButtonState(button, false);
@@ -176,7 +179,7 @@ const handleUcpToggle = async (
           return;
         }
 
-        currentSubscription = await subscribeUser(registration, vapidPublicKey);
+        currentSubscription = await subscribeUser(registration, vapidPublicKey, csrfToken);
         isSubscribed = true;
         updateButtonState(button, true);
         showToast(button.dataset.msgEnabled || 'Push notifications enabled', 'success');
@@ -208,6 +211,9 @@ export const handlePushNotifications = async (): Promise<void> => {
   if (!ucpButton && !banner) {
     return;
   }
+
+  // The session CSRF token is rendered on whichever element is present
+  const csrfToken = ucpButton?.dataset.pmfCsrf ?? banner?.dataset.pmfCsrf ?? '';
 
   // For the banner only (no UCP button): skip API call if user already dismissed/subscribed
   // This avoids unnecessary API calls on every page load
@@ -262,12 +268,12 @@ export const handlePushNotifications = async (): Promise<void> => {
 
     // Handle UCP toggle button (on the User Control Panel page)
     if (ucpButton) {
-      await handleUcpToggle(ucpButton, registration, vapidResponse.vapidPublicKey, existingSubscription);
+      await handleUcpToggle(ucpButton, registration, vapidResponse.vapidPublicKey, existingSubscription, csrfToken);
     }
 
     // Handle global push banner (on all pages)
     if (banner) {
-      await handlePushBanner(registration, vapidResponse.vapidPublicKey, isSubscribed);
+      await handlePushBanner(registration, vapidResponse.vapidPublicKey, isSubscribed, csrfToken);
     }
   } catch (error) {
     console.error('Push notification setup failed:', error);

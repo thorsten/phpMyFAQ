@@ -45,6 +45,8 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 final class UpdateController extends AbstractController
 {
+    private const string VERSION_NUMBER_PATTERN = '/^[0-9A-Za-z.\-]+$/';
+
     public function __construct(
         private readonly Upgrade $upgrade,
         private readonly RemoteApiClient $adminApi,
@@ -169,19 +171,27 @@ final class UpdateController extends AbstractController
             '',
         );
 
+        // The version becomes part of the download URL and the package file name
+        if (preg_match(self::VERSION_NUMBER_PATTERN, $versionNumber) !== 1) {
+            return $this->json([
+                'error' => Translation::get(key: 'msgInvalidVersionNumber'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         try {
             $pathToPackage = $this->upgrade->downloadPackage($versionNumber);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!$this->upgrade->isNightly()) {
-            $result = $this->upgrade->verifyPackage($pathToPackage, $versionNumber);
-            if ($result === false) {
-                return $this->json([
-                    'error' => Translation::get(key: 'verificationFailure'),
-                ], Response::HTTP_BAD_GATEWAY);
-            }
+        $verified = $this->upgrade->isNightly()
+            ? $this->upgrade->verifyNightlyPackage($pathToPackage)
+            : $this->upgrade->verifyPackage($pathToPackage, $versionNumber);
+
+        if (!$verified) {
+            return $this->json([
+                'error' => Translation::get(key: 'verificationFailure'),
+            ], Response::HTTP_BAD_GATEWAY);
         }
 
         $this->configuration->set('upgrade.lastDownloadedPackage', urlencode($pathToPackage));

@@ -96,6 +96,11 @@ trait CurrentUserSessionLookupTrait
         $user = new CurrentUser($configuration);
         $user->getUserById((int) $sessionWrapper->get(CurrentUser::SESSION_CURRENT_USER));
 
+        // never restore the anonymous user (or an unknown one) from the session
+        if ($user->getUserId() <= 0) {
+            return null;
+        }
+
         // user object is timed out
         if ($user->sessionIsTimedOut()) {
             $user->deleteFromSession();

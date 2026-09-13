@@ -224,8 +224,7 @@ final class GroupControllerTest extends TestCase
         // current UI ('en' in this test setup) may be returned. 'fr' sorts
         // after 'en', so without a language filter the French rows would win
         // the per-id overwrite in loadCategories().
-        $this->dbHandle->query(
-            "INSERT INTO faqcategories
+        $this->dbHandle->query("INSERT INTO faqcategories
                 (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
              VALUES
                 (1, 'en', 0, 'News', '', -1, -1, 1, '', 1),
@@ -234,19 +233,14 @@ final class GroupControllerTest extends TestCase
                 (4, 'en', 99, 'Orphan', '', -1, -1, 1, '', 1),
                 (1, 'fr', 0, 'Nouvelles', '', -1, -1, 1, '', 1),
                 (2, 'fr', 0, 'Tutoriels', '', -1, -1, 1, '', 1),
-                (3, 'fr', 2, 'Installation', '', -1, -1, 1, '', 1)",
-        );
+                (3, 'fr', 2, 'Installation', '', -1, -1, 1, '', 1)");
         // The category order (same source the category overview page uses)
         // puts 'Guides' before 'News'; positions restart per parent level.
-        $this->dbHandle->query(
-            'INSERT INTO faqcategory_order (category_id, parent_id, position)
-             VALUES (2, 0, 1), (3, 2, 1), (1, 0, 2), (4, 99, 3)',
-        );
+        $this->dbHandle->query('INSERT INTO faqcategory_order (category_id, parent_id, position)
+             VALUES (2, 0, 1), (3, 2, 1), (1, 0, 2), (4, 99, 3)');
         // group_id -1 marks a category as visible to everyone.
-        $this->dbHandle->query(
-            'INSERT INTO faqcategory_group (category_id, group_id)
-             VALUES (1, -1), (2, -1), (3, -1), (4, -1)',
-        );
+        $this->dbHandle->query('INSERT INTO faqcategory_group (category_id, group_id)
+             VALUES (1, -1), (2, -1), (3, -1), (4, -1)');
     }
 
     private function setCsrfCookie(string $page, string $token): void
@@ -492,12 +486,14 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $response = $controller->saveLanguageRestrictions(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'rightId' => 1,
-            'languages' => ['en'],
-            'csrfToken' => 'invalid-token',
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->saveLanguageRestrictions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightId' => 1,
+                'languages' => ['en'],
+                'csrfToken' => 'invalid-token',
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -519,12 +515,14 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->saveLanguageRestrictions(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'rightId' => 1,
-            'languages' => ['en', 'not-a-language'],
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->saveLanguageRestrictions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightId' => 1,
+                'languages' => ['en', 'not-a-language'],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -554,12 +552,14 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->saveLanguageRestrictions(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'rightId' => 1,
-            'languages' => ['not-a-language'],
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->saveLanguageRestrictions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightId' => 1,
+                'languages' => ['not-a-language'],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
@@ -585,12 +585,14 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createRestrictedContainer($session, ['de']));
 
-        $response = $controller->saveLanguageRestrictions(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'rightId' => 1,
-            'languages' => ['fr'],
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->saveLanguageRestrictions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightId' => 1,
+                'languages' => ['fr'],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -616,12 +618,14 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createRestrictedContainer($session, ['de']));
 
-        $response = $controller->saveLanguageRestrictions(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'rightId' => 1,
-            'languages' => [],
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->saveLanguageRestrictions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightId' => 1,
+                'languages' => [],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -630,16 +634,196 @@ final class GroupControllerTest extends TestCase
     }
 
     /**
-     * Builds a container whose acting user holds the group-permission gate but is a
-     * non-SuperAdmin restricted to $allowedLanguages for every right.
-     *
-     * @param array<string> $allowedLanguages
+     * @throws \Exception
      */
-    private function createRestrictedContainer(Session $session, array $allowedLanguages): ContainerInterface
+    public function testSaveCategoryRestrictionsRequiresGroupPermission(): void
     {
+        $controller = new GroupController();
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->saveCategoryRestrictions(new Request(content: '{}'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveCategoryRestrictionsSavesSubsetForSuperAdmin(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('save-category-restrictions');
+        $this->setCsrfCookie('save-category-restrictions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createSuperAdminContainer($session));
+
+        $response = $controller->saveCategoryRestrictions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightId' => 1,
+                'categoryIds' => [3, 3, 'abc', 0],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+
+        $listResponse = $controller->listCategoryRestrictions(new Request([], [], ['groupId' => self::TEST_GROUP_ID]));
+        $listPayload = json_decode((string) $listResponse->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        self::assertEquals(['1' => [3]], $listPayload);
+        $this->removeCsrfCookie('save-category-restrictions');
+    }
+
+    /**
+     * A list of only invalid IDs filters down to an empty set, which would otherwise be
+     * persisted as "unrestricted".
+     *
+     * @throws \Exception
+     */
+    public function testSaveCategoryRestrictionsRejectsOnlyInvalidCategoryIds(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('save-category-restrictions');
+        $this->setCsrfCookie('save-category-restrictions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createSuperAdminContainer($session));
+
+        $response = $controller->saveCategoryRestrictions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightId' => 1,
+                'categoryIds' => ['abc', 0, -5],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_category_restrictions_no_category'), $payload['error']);
+        $this->removeCsrfCookie('save-category-restrictions');
+    }
+
+    /**
+     * Group rights are inherited by every member, so a category-restricted admin must
+     * not be able to scope a group right to a category they do not hold themselves.
+     *
+     * @throws \Exception
+     */
+    public function testSaveCategoryRestrictionsRejectsCategoryNotHeldByNonSuperAdmin(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('save-category-restrictions');
+        $this->setCsrfCookie('save-category-restrictions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createRestrictedContainer($session, ['de'], [1, 2]));
+
+        $response = $controller->saveCategoryRestrictions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightId' => 1,
+                'categoryIds' => [1, 3],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+        $this->removeCsrfCookie('save-category-restrictions');
+    }
+
+    /**
+     * An empty category list clears every restriction row, which the permission model
+     * reads as "all categories" — a grant, not a narrowing.
+     *
+     * @throws \Exception
+     */
+    public function testSaveCategoryRestrictionsRejectsEmptyListFromRestrictedNonSuperAdmin(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('save-category-restrictions');
+        $this->setCsrfCookie('save-category-restrictions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createRestrictedContainer($session, ['de'], [1, 2]));
+
+        $response = $controller->saveCategoryRestrictions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightId' => 1,
+                'categoryIds' => [],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+        $this->removeCsrfCookie('save-category-restrictions');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveCategoryRestrictionsAcceptsSubsetHeldByNonSuperAdmin(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('save-category-restrictions');
+        $this->setCsrfCookie('save-category-restrictions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createRestrictedContainer($session, ['de'], [1, 2]));
+
+        $response = $controller->saveCategoryRestrictions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightId' => 1,
+                'categoryIds' => [2],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        $this->removeCsrfCookie('save-category-restrictions');
+    }
+
+    /**
+     * Builds a container whose acting user holds the group-permission gate but is a
+     * non-SuperAdmin restricted to $allowedLanguages (and, if given, $allowedCategories)
+     * for every right.
+     *
+     * @param array<string>  $allowedLanguages
+     * @param array<int>|null $allowedCategories null means unrestricted
+     */
+    private function createRestrictedContainer(
+        Session $session,
+        array $allowedLanguages,
+        ?array $allowedCategories = null,
+    ): ContainerInterface {
         $permission = $this->createStub(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
         $permission->method('getAllowedLanguagesForRight')->willReturn($allowedLanguages);
+        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -713,11 +897,13 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createSuperAdminContainer());
 
-        $response = $controller->updateGroup(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'name' => 'Editors',
-            'csrfToken' => 'invalid-token',
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->updateGroup(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'name' => 'Editors',
+                'csrfToken' => 'invalid-token',
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -736,11 +922,13 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createSuperAdminContainer($session));
 
-        $response = $controller->updateGroup(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'name' => '   ',
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->updateGroup(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'name' => '   ',
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
@@ -763,13 +951,15 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createSuperAdminContainer($session));
 
-        $response = $controller->updateGroup(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'name' => 'Editors renamed',
-            'description' => 'Updated description',
-            'autoJoin' => true,
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->updateGroup(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'name' => 'Editors renamed',
+                'description' => 'Updated description',
+                'autoJoin' => true,
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -802,11 +992,13 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createSuperAdminContainer());
 
-        $response = $controller->updateMembers(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'memberIds' => [1],
-            'csrfToken' => 'invalid-token',
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->updateMembers(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'memberIds' => [1],
+                'csrfToken' => 'invalid-token',
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -827,11 +1019,13 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->updateMembers(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'memberIds' => [1],
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->updateMembers(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'memberIds' => [1],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -882,11 +1076,13 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($container);
 
-        $response = $controller->updateMembers(new Request(content: json_encode([
-            'groupId' => 1,
-            'memberIds' => [5],
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->updateMembers(
+            new Request(content: json_encode([
+                'groupId' => 1,
+                'memberIds' => [5],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -910,11 +1106,13 @@ final class GroupControllerTest extends TestCase
         $controller->setContainer($this->createSuperAdminContainer($session));
 
         // Fixtures seed members 1 and 2; replace with just member 2.
-        $response = $controller->updateMembers(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'memberIds' => [2],
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->updateMembers(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'memberIds' => [2],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -947,11 +1145,13 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createSuperAdminContainer());
 
-        $response = $controller->updatePermissions(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'rightIds' => [1],
-            'csrfToken' => 'invalid-token',
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->updatePermissions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightIds' => [1],
+                'csrfToken' => 'invalid-token',
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -972,11 +1172,13 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->updatePermissions(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'rightIds' => [999],
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->updatePermissions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightIds' => [999],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -1000,11 +1202,13 @@ final class GroupControllerTest extends TestCase
         $controller->setContainer($this->createSuperAdminContainer($session));
 
         // Fixtures seed rights [1, 2]; replace with [3, 4].
-        $response = $controller->updatePermissions(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'rightIds' => [3, 4],
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->updatePermissions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightIds' => [3, 4],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -1035,10 +1239,12 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createSuperAdminContainer());
 
-        $response = $controller->deleteGroup(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'csrfToken' => 'invalid-token',
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->deleteGroup(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'csrfToken' => 'invalid-token',
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -1054,10 +1260,12 @@ final class GroupControllerTest extends TestCase
         $controller->setContainer($this->createAuthenticatedContainer());
 
         $this->expectException(ForbiddenException::class);
-        $controller->deleteGroup(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'csrfToken' => 'irrelevant',
-        ], JSON_THROW_ON_ERROR)));
+        $controller->deleteGroup(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'csrfToken' => 'irrelevant',
+            ], JSON_THROW_ON_ERROR)),
+        );
     }
 
     /**
@@ -1072,12 +1280,14 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->updateGroup(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'name' => 'Editors',
-            'autoJoin' => true,
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->updateGroup(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'name' => 'Editors',
+                'autoJoin' => true,
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -1100,10 +1310,12 @@ final class GroupControllerTest extends TestCase
         $controller = new GroupController();
         $controller->setContainer($this->createSuperAdminContainer($session));
 
-        $response = $controller->deleteGroup(new Request(content: json_encode([
-            'groupId' => self::TEST_GROUP_ID,
-            'csrfToken' => $csrfToken,
-        ], JSON_THROW_ON_ERROR)));
+        $response = $controller->deleteGroup(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use Symfony\Component\HttpFoundation\Request;
@@ -63,6 +64,45 @@ final class BookmarkControllerAuthenticatedTest extends ApiControllerTestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
         self::assertArrayHasKey('csrfToken', $payload);
+    }
+
+    /**
+     * A bookmark must never be stored for a FAQ the requester may not see; the response
+     * must not reveal whether the record exists.
+     */
+    public function testCreateReturnsNotFoundForFaqTheRequesterMayNotSee(): void
+    {
+        self::assertNotFalse(
+            $this->configuration
+                ->getDb()
+                ->query(
+                    "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (77, 'en', 1077, 0, 'draft', 0, '', 'Secret draft', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                ),
+        );
+        self::assertNotFalse(
+            $this->configuration->getDb()->query('INSERT INTO faqdata_user (record_id, user_id) VALUES (77, -1)'),
+        );
+
+        $controller = new BookmarkController();
+        $session = $this->createSession();
+        $csrfToken = Token::getInstance($session)->getTokenString('add-bookmark');
+        $_COOKIE[sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(md5('add-bookmark'), 0, 10))] = $csrfToken;
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $session);
+
+        $response = $controller->create(
+            new Request([], [], [], [], [], [], '{"id":77,"csrfToken":"' . $csrfToken . '"}'),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertSame(Translation::get('msgAccessDenied'), $payload['error']);
+        self::assertSame(
+            0,
+            $this->configuration
+                ->getDb()
+                ->numRows($this->configuration->getDb()->query('SELECT faqid FROM faqbookmarks WHERE faqid = 77')),
+        );
     }
 
     public function testCreateReturnsUnauthorizedForInvalidCsrfToken(): void

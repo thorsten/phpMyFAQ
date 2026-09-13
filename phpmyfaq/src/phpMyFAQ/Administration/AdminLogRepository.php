@@ -90,6 +90,7 @@ readonly class AdminLogRepository
         $time = (int) $request->server->get('REQUEST_TIME', time());
         $userId = $user->getUserId();
         $ip = $request->getClientIp() ?? '';
+        $logText = $this->stripControlCharacters($logText);
 
         // Create a temporary entity to calculate hash
         $entity = new AdminLogEntity();
@@ -116,6 +117,15 @@ readonly class AdminLogRepository
         );
 
         return (bool) $this->configuration->getDb()->query($insert);
+    }
+
+    /**
+     * Log entries are single lines: CR/LF and other control characters from user-supplied
+     * values (e.g. a submitted login name) must not be able to forge additional entries.
+     */
+    private function stripControlCharacters(string $logText): string
+    {
+        return (string) preg_replace(pattern: '/[\x00-\x1F\x7F]+/', replacement: ' ', subject: $logText);
     }
 
     public function deleteOlderThan(int $timestamp): bool

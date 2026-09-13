@@ -12,6 +12,16 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 #[CoversClass(SendGridProvider::class)]
 class SendGridProviderTest extends TestCase
 {
+    public function testDefaultHttpClientUsesTimeoutAndRefusesRedirects(): void
+    {
+        $this->assertSame(10, SendGridProvider::HTTP_CLIENT_OPTIONS['timeout']);
+        $this->assertSame(0, SendGridProvider::HTTP_CLIENT_OPTIONS['max_redirects']);
+
+        // The default client must be constructible from the options (no HTTP call is made)
+        $provider = new SendGridProvider($this->createStub(Configuration::class));
+        $this->assertInstanceOf(SendGridProvider::class, $provider);
+    }
+
     public function testSendThrowsWhenApiKeyMissing(): void
     {
         $configuration = $this->createStub(Configuration::class);

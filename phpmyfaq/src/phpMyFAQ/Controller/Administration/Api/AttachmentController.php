@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use phpMyFAQ\Attachment\ActiveContentDenyList;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Attachment\Filename;
@@ -165,9 +166,16 @@ final class AttachmentController extends AbstractAdministrationApiController
             if (
                 !$file->isValid()
                 || (int) $file->getSize() > (int) $this->configuration->get(item: 'records.maxAttachmentSize')
-                || $file->getMimeType() === 'text/html'
             ) {
                 return $this->json(['error' => Translation::get(key: 'msgImageTooLarge')], Response::HTTP_BAD_REQUEST);
+            }
+
+            // Executable and active content is refused by extension and by the detected MIME type
+            $deniedReason = ActiveContentDenyList::deniedReason($file->getClientOriginalName(), $file->getMimeType());
+            if ($deniedReason !== null) {
+                return $this->json([
+                    'error' => sprintf(Translation::getString(key: 'msgAttachmentTypeNotAllowed'), $deniedReason),
+                ], Response::HTTP_BAD_REQUEST);
             }
 
             $validatedFiles[$index] = $file;

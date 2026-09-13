@@ -216,6 +216,9 @@ class CategoryRepository implements CategoryRepositoryInterface
             $sortField = 'id';
         }
 
+        // The direction is interpolated as an SQL keyword, so it is allow-listed as well.
+        $sortOrder = strtoupper(trim($sortOrder)) === 'DESC' ? 'DESC' : 'ASC';
+
         $prefix = Database::getTablePrefix();
 
         $categoryPermissionService = new CategoryPermissionService();

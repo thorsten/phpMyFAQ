@@ -189,7 +189,7 @@ final class NewsController extends AbstractAdministrationApiController
         $newsMessage
             ->setLanguage($newsLang)
             ->setHeader($header)
-            ->setMessage(html_entity_decode($content))
+            ->setMessage(Filter::removeAttributes(html_entity_decode($content)))
             ->setAuthor($author)
             ->setEmail($email)
             ->setActive((bool) $active)

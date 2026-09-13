@@ -24,6 +24,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Setup\Installation\DefaultDataSeeder;
@@ -35,6 +36,7 @@ use phpMyFAQ\Setup\Migration\MigrationRegistry;
 use phpMyFAQ\Setup\Migration\MigrationResult;
 use phpMyFAQ\Setup\Migration\MigrationTracker;
 use phpMyFAQ\System;
+use phpMyFAQ\User\CurrentUser;
 use Random\RandomException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -173,8 +175,18 @@ class Update extends AbstractSetup
     /**
      * @throws Exception
      */
+    /**
+     * Adjusts the RewriteBase of the shipped .htaccess to the request path.
+     * The update page is reachable without authentication, so the file (and
+     * its backup copy) is only touched during installation, i.e. while no
+     * database configuration exists yet, or when an administrator is logged in.
+     */
     public function checkInitialRewriteBasePath(Request $request): bool
     {
+        if (!$this->isRewriteBaseUpdateAllowed()) {
+            return true;
+        }
+
         $basePath = $request->getBasePath();
         if (str_ends_with($basePath, 'update')) {
             $basePath = substr($basePath, offset: 0, length: -strlen('update'));
@@ -184,6 +196,26 @@ class Update extends AbstractSetup
 
         $htaccessUpdater = new HtaccessUpdater();
         return $htaccessUpdater->updateRewriteBase($htaccessPath, $basePath);
+    }
+
+    public function isRewriteBaseUpdateAllowed(): bool
+    {
+        if (!is_file((string) PMF_CONFIG_DIR . '/database.php')) {
+            return true;
+        }
+
+        try {
+            $currentUser = CurrentUser::getCurrentUser($this->configuration);
+
+            if (!$currentUser->isLoggedIn()) {
+                return false;
+            }
+
+            return $currentUser->isSuperAdmin()
+            || $currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::CONFIGURATION_EDIT->value);
+        } catch (\Throwable) {
+            return false;
+        }
     }
 
     /**

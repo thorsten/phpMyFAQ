@@ -92,7 +92,15 @@ class InstallationInputValidator
     {
         $dbSetup = [];
 
-        $dbSetup['dbPrefix'] = (string) Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $dbSetup['dbPrefix'] = $setup === null || !array_key_exists('dbPrefix', $setup)
+            ? (string) Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_SPECIAL_CHARS, '')
+            : (string) $setup['dbPrefix'];
+        if (preg_match('/^[A-Za-z0-9_]{0,32}$/', $dbSetup['dbPrefix']) !== 1) {
+            throw new Exception(
+                'Installation Error: The table prefix may only contain letters, digits and underscores (max. 32 characters).',
+            );
+        }
+
         if ('' !== $dbSetup['dbPrefix']) {
             Database::setTablePrefix($dbSetup['dbPrefix']);
         }

@@ -96,6 +96,18 @@ class AdminLogTest extends TestCase
         $this->assertEquals('127.0.0.1', $entries[0]->getIp());
     }
 
+    public function testLogStripsLineBreaksAndControlCharacters(): void
+    {
+        $_SERVER['REQUEST_TIME'] = $this->now;
+        $this->adminLog->log(new User($this->configuration), "Login failed:admin\r\nLogin succeeded:admin\x00\x1b");
+
+        $entries = array_values($this->adminLog->getAll());
+
+        $this->assertCount(1, $entries);
+        $this->assertSame('Login failed:admin Login succeeded:admin ', $entries[0]->getText());
+        $this->assertTrue($this->adminLog->verifyChainIntegrity()['valid']);
+    }
+
     public function testGetAllReturnsEmptyArrayWhenNoEntries(): void
     {
         $result = $this->adminLog->getAll();

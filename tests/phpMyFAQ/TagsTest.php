@@ -166,6 +166,24 @@ class TagsTest extends TestCase
         $this->assertIsArray($this->tags->getAllTags());
     }
 
+    public function testGetAllTagsSearchTreatsWildcardsLiterally(): void
+    {
+        // getAllTags() only lists tags of visible FAQs, so seed a published record first
+        $this->dbHandle->query(
+            "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
+             VALUES (1, 'en', 1000, 0, 'published', 0, '', 'Question', 'Answer', 'Author', 'author@example.com', 'y', '20260301010101', '00000000000000', '99991231235959', '2026-03-01 01:01:01', '', 0)",
+        );
+        $this->dbHandle->query('INSERT INTO faqdata_user (record_id, user_id) VALUES (1, -1)');
+        $this->tags->setUser(-1);
+        $this->tags->setGroups([-1]);
+        $this->tags->create(1, ['Alpha', 'Beta', 'Under_score']);
+
+        $this->assertSame([], array_values($this->tags->getAllTags('%')));
+        $this->assertSame([], array_values($this->tags->getAllTags('_lpha')));
+        $this->assertSame(['Under_score'], array_values($this->tags->getAllTags('Under_')));
+        $this->assertSame(['Alpha'], array_values($this->tags->getAllTags('Al')));
+    }
+
     public function testGetPopularTagsWithPermissions(): void
     {
         // Set up tags for a record

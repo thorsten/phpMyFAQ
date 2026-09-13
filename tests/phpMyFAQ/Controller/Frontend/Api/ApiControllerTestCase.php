@@ -9,6 +9,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -97,6 +98,7 @@ abstract class ApiControllerTestCase extends TestCase
     protected function createAuthenticatedUserMock(int $userId = 1): CurrentUser
     {
         $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $this->createStub(PermissionInterface::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn($userId);
         $currentUser->method('getUserAuthSource')->willReturn('local');

@@ -428,9 +428,9 @@ final class UpdateControllerTest extends TestCase
         self::assertInstanceOf(Session::class, $session);
         $csrf = $this->createValidUpdatePackageToken($session);
 
-        $response = $controller->updateDatabase(
-            new Request([], [], [], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
-        );
+        $response = $controller->updateDatabase(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrf,
+        ], JSON_THROW_ON_ERROR)));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
@@ -457,9 +457,9 @@ final class UpdateControllerTest extends TestCase
         self::assertInstanceOf(Session::class, $session);
         $csrf = $this->createValidUpdatePackageToken($session);
 
-        $response = $controller->cleanUp(
-            new Request([], [], [], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
-        );
+        $response = $controller->cleanUp(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrf,
+        ], JSON_THROW_ON_ERROR)));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -482,9 +482,9 @@ final class UpdateControllerTest extends TestCase
         );
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $response = $controller->updateDatabase(
-            new Request([], [], [], [], [], [], json_encode(['csrf' => 'invalid-token'], JSON_THROW_ON_ERROR)),
-        );
+        $response = $controller->updateDatabase(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => 'invalid-token',
+        ], JSON_THROW_ON_ERROR)));
 
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
@@ -505,9 +505,9 @@ final class UpdateControllerTest extends TestCase
         );
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $response = $controller->cleanUp(
-            new Request([], [], [], [], [], [], json_encode(['csrf' => 'invalid-token'], JSON_THROW_ON_ERROR)),
-        );
+        $response = $controller->cleanUp(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => 'invalid-token',
+        ], JSON_THROW_ON_ERROR)));
 
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
@@ -639,12 +639,17 @@ final class UpdateControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testDownloadPackageReturnsSuccessForNightlyPackageWithoutVerification(): void
+    public function testDownloadPackageVerifiesNightlyPackageAgainstGitHubDigest(): void
     {
         $upgrade = $this->createMock(Upgrade::class);
         $upgrade->expects(self::once())->method('downloadPackage')->willReturn('/tmp/phpmyfaq-nightly.zip');
         $upgrade->method('isNightly')->willReturn(true);
         $upgrade->expects(self::never())->method('verifyPackage');
+        $upgrade
+            ->expects(self::once())
+            ->method('verifyNightlyPackage')
+            ->with('/tmp/phpmyfaq-nightly.zip')
+            ->willReturn(true);
 
         $controller = $this->createControllerWithDependencies(
             $upgrade,
@@ -672,6 +677,73 @@ final class UpdateControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testDownloadPackageReturnsBadGatewayWhenNightlyDigestDoesNotMatch(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->method('downloadPackage')->willReturn('/tmp/phpmyfaq-nightly.zip');
+        $upgrade->method('isNightly')->willReturn(true);
+        $upgrade->method('verifyNightlyPackage')->willReturn(false);
+
+        $controller = $this->createControllerWithDependencies(
+            $upgrade,
+            $this->createStub(RemoteApiClient::class),
+            $this->createStub(Update::class),
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $container = $this->createAuthenticatedContainer();
+        $controller->setContainer($container);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $csrf = $this->createValidUpdatePackageToken($session);
+
+        $response = $controller->downloadPackage(
+            new Request([], [], ['versionNumber' => 'nightly'], [], [], [], json_encode([
+                'csrf' => $csrf,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
+        self::assertSame(Translation::get('verificationFailure'), $payload['error']);
+        self::assertSame('', $this->configuration->get('upgrade.lastDownloadedPackage'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDownloadPackageRejectsVersionNumbersWithUnexpectedCharacters(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->expects(self::never())->method('downloadPackage');
+
+        $controller = $this->createControllerWithDependencies(
+            $upgrade,
+            $this->createStub(RemoteApiClient::class),
+            $this->createStub(Update::class),
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $container = $this->createAuthenticatedContainer();
+        $controller->setContainer($container);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $csrf = $this->createValidUpdatePackageToken($session);
+
+        foreach (['../../etc/passwd', '4.2.0/..', '4.2.0 rc', '', '4.2.0?x=1'] as $invalidVersion) {
+            $response = $controller->downloadPackage(
+                new Request([], [], ['versionNumber' => $invalidVersion], [], [], [], json_encode([
+                    'csrf' => $csrf,
+                ], JSON_THROW_ON_ERROR)),
+            );
+            $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+            self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode(), $invalidVersion);
+            self::assertSame(Translation::get('msgInvalidVersionNumber'), $payload['error']);
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testUpdateDatabaseReturnsSuccessWhenUpdatesApplied(): void
     {
         $update = $this->createMock(Update::class);
@@ -689,9 +761,9 @@ final class UpdateControllerTest extends TestCase
         self::assertInstanceOf(Session::class, $session);
         $csrf = $this->createValidUpdatePackageToken($session);
 
-        $response = $controller->updateDatabase(
-            new Request([], [], [], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
-        );
+        $response = $controller->updateDatabase(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrf,
+        ], JSON_THROW_ON_ERROR)));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -718,9 +790,9 @@ final class UpdateControllerTest extends TestCase
         self::assertInstanceOf(Session::class, $session);
         $csrf = $this->createValidUpdatePackageToken($session);
 
-        $response = $controller->updateDatabase(
-            new Request([], [], [], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR)),
-        );
+        $response = $controller->updateDatabase(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrf,
+        ], JSON_THROW_ON_ERROR)));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());

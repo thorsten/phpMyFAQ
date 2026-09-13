@@ -215,10 +215,26 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => 'categoryIds must be an array.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $categoryIds = array_values(array_filter(
+        $categoryIds = array_values(array_unique(array_filter(
             array_map('intval', $rawCategoryIds),
             static fn(int $id): bool => $id > 0,
-        ));
+        )));
+
+        // An empty set means "unrestricted". Dropping every invalid ID would silently
+        // turn a narrowing request into a grant, so refuse it instead.
+        if ($rawCategoryIds !== [] && $categoryIds === []) {
+            return $this->json([
+                'error' => Translation::get(key: 'ad_category_restrictions_no_category'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        // A non-SuperAdmin may only scope a group's right to a non-empty subset of the
+        // categories they hold that right in themselves. Group rights are inherited by every
+        // member, so without this an administrator could grant the group category access they
+        // do not possess (privilege escalation), including via an empty "unrestricted" list.
+        if (!$this->mayAssignCategories($rightId, $categoryIds)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
 
         $success = $currentUser->perm->setCategoryRestrictions($groupId, $rightId, $categoryIds);
 
@@ -652,5 +668,43 @@ final class GroupController extends AbstractAdministrationApiController
         ], $orderedCategories);
 
         return $this->json($categories, Response::HTTP_OK);
+    }
+
+    /**
+     * Whether the acting user may scope the given right to exactly these categories.
+     * SuperAdmins and users holding the right without category restriction may assign
+     * anything; everyone else only a non-empty subset of their own allowed categories.
+     *
+     * @param array<int> $categoryIds
+     * @throws Exception
+     */
+    private function mayAssignCategories(int $rightId, array $categoryIds): bool
+    {
+        if ($this->currentUser->isSuperAdmin()) {
+            return true;
+        }
+
+        $allowedCategories = $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            $rightId,
+        );
+
+        if ($allowedCategories === null) {
+            return true;
+        }
+
+        // Clearing the restrictions would widen the right to every category,
+        // including ones the acting user does not hold.
+        if ($categoryIds === []) {
+            return false;
+        }
+
+        $allowedCategories = array_map(intval(...), $allowedCategories);
+
+        return array_all($categoryIds, static fn(int $categoryId): bool => in_array(
+            $categoryId,
+            $allowedCategories,
+            strict: true,
+        ));
     }
 }

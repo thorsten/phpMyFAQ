@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 #[AllowMockObjectsWithoutExpectations]
 class ErrorTest extends TestCase
@@ -16,12 +17,14 @@ class ErrorTest extends TestCase
     private int $originalErrorReporting;
     private string $originalLogErrors;
     private string $originalErrorLog;
+    private bool $originalDebugMode;
 
     protected function setUp(): void
     {
         $this->originalErrorReporting = error_reporting();
         $this->originalLogErrors = ini_get('log_errors');
         $this->originalErrorLog = ini_get('error_log');
+        $this->originalDebugMode = Environment::isDebugMode();
 
         error_reporting(E_ALL);
     }
@@ -31,6 +34,13 @@ class ErrorTest extends TestCase
         error_reporting($this->originalErrorReporting);
         ini_set('log_errors', $this->originalLogErrors);
         ini_set('error_log', $this->originalErrorLog);
+        $this->setDebugMode($this->originalDebugMode);
+    }
+
+    private function setDebugMode(bool $debugMode): void
+    {
+        $reflectionProperty = new ReflectionProperty(Environment::class, 'debugMode');
+        $reflectionProperty->setValue(null, $debugMode);
     }
 
     public function testErrorHandlerThrowsExceptionWhenErrorReportingIsEnabled(): void
@@ -148,7 +158,10 @@ class ErrorTest extends TestCase
             Error::errorHandler(E_USER_DEPRECATED, 'Deprecated feature', 'test.php', 42);
 
             $logContent = file_get_contents($logFile);
-            $this->assertStringContainsString('phpMyFAQ Deprecation: Deprecated feature in test.php on line 42', $logContent);
+            $this->assertStringContainsString(
+                'phpMyFAQ Deprecation: Deprecated feature in test.php on line 42',
+                $logContent,
+            );
         } finally {
             if (file_exists($logFile)) {
                 unlink($logFile);
@@ -164,7 +177,7 @@ class ErrorTest extends TestCase
 
         ini_set('log_errors', '0');
 
-        $this->expectOutputRegex('/<h1>phpMyFAQ Fatal error<\/h1>/');
+        $this->expectOutputRegex('/The requested page could not be found\./');
 
         Error::exceptionHandler($exception);
 
@@ -178,6 +191,7 @@ class ErrorTest extends TestCase
         $exception = new Exception('Test error', 200);
 
         ini_set('log_errors', '0');
+        $this->setDebugMode(true);
 
         $this->expectOutputRegex('/phpMyFAQ Fatal error/');
 
@@ -188,11 +202,12 @@ class ErrorTest extends TestCase
 
     #[PreserveGlobalState(false)]
     #[RunInSeparateProcess]
-    public function testExceptionHandlerOutputContainsExpectedElements(): void
+    public function testExceptionHandlerOutputContainsExpectedElementsInDebugMode(): void
     {
         $exception = new Exception("Test message with <script>alert('xss')</script>", 500);
 
         ini_set('log_errors', '0');
+        $this->setDebugMode(true);
 
         ob_start();
         Error::exceptionHandler($exception);
@@ -211,6 +226,56 @@ class ErrorTest extends TestCase
 
     #[PreserveGlobalState(false)]
     #[RunInSeparateProcess]
+    public function testExceptionHandlerHidesDetailsOutsideDebugMode(): void
+    {
+        $exception = new Exception('Secret database password in message', 500);
+
+        ini_set('log_errors', '0');
+        $this->setDebugMode(false);
+
+        ob_start();
+        Error::exceptionHandler($exception);
+        $output = ob_get_clean();
+
+        $this->assertSame(500, http_response_code());
+        $this->assertStringNotContainsString('Secret database password', $output);
+        $this->assertStringNotContainsString('Stack trace', $output);
+        $this->assertStringNotContainsString(__FILE__, $output);
+        $this->assertStringNotContainsString('Uncaught exception', $output);
+        $this->assertStringContainsString('internal error', $output);
+    }
+
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
+    public function testExceptionHandlerLogsFullDetailsOutsideDebugMode(): void
+    {
+        ini_set('log_errors', '1');
+        $this->setDebugMode(false);
+
+        $logFile = tempnam(sys_get_temp_dir(), 'phpunit_error_log');
+        ini_set('error_log', $logFile);
+
+        $exception = new Exception('Secret details for the log only', 500);
+
+        try {
+            ob_start();
+            Error::exceptionHandler($exception);
+            $output = ob_get_clean();
+
+            $logContent = file_get_contents($logFile);
+            $this->assertStringContainsString('Secret details for the log only', $logContent);
+            $this->assertStringContainsString(__FILE__, $logContent);
+            $this->assertStringContainsString('Stack trace:', $logContent);
+            $this->assertStringNotContainsString('Secret details for the log only', $output);
+        } finally {
+            if (file_exists($logFile)) {
+                unlink($logFile);
+            }
+        }
+    }
+
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testExceptionHandlerWithCustomException(): void
     {
         $customException = new class('Custom error message', 123) extends Exception {
@@ -218,6 +283,7 @@ class ErrorTest extends TestCase
         };
 
         ini_set('log_errors', '0');
+        $this->setDebugMode(true);
 
         $this->expectOutputRegex('/Custom error message/');
 
@@ -290,6 +356,7 @@ class ErrorTest extends TestCase
         $errorException = new ErrorException('Test error exception', 0, E_ERROR, 'test.php', 42);
 
         ini_set('log_errors', '0');
+        $this->setDebugMode(true);
 
         $this->expectOutputRegex('/Test error exception/');
 

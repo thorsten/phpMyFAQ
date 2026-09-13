@@ -136,6 +136,10 @@ final class AbstractFrontControllerRenderTest extends TestCase
         self::assertSame(['plugin.css'], $header['pluginStylesheets']);
         self::assertSame(['plugin.js'], $header['pluginScripts']);
         self::assertSame('show', $header['action']);
+        self::assertSame(
+            rtrim($this->configuration->getDefaultUrl(), '/') . '/index.php?action=show',
+            $header['currentPageUrl'],
+        );
         self::assertSame('./search', $header['formActionUrl']);
         self::assertTrue($header['isPrivacyLinkEnabled']);
         self::assertTrue($header['isTermsLinkEnabled']);
@@ -146,6 +150,27 @@ final class AbstractFrontControllerRenderTest extends TestCase
         self::assertSame('active', $header['topNavigation'][0]['active']);
         self::assertSame('./contact.html', $header['footerNavigation'][3]['link']);
         self::assertArrayHasKey('csrfLogout', $header);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testHeaderBuildsCurrentPageUrlFromTheDefaultUrlNotTheHostHeader(): void
+    {
+        $controller = new AbstractFrontControllerRenderTestStub();
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            [],
+            false,
+            false,
+        ));
+
+        $request = Request::create('https://attacker.example/index.php?action=show');
+        $header = $controller->fetchHeader($request);
+
+        self::assertStringNotContainsString('attacker.example', $header['currentPageUrl']);
+        self::assertStringStartsWith(rtrim($this->configuration->getDefaultUrl(), '/'), $header['currentPageUrl']);
+        self::assertStringEndsWith('/index.php?action=show', $header['currentPageUrl']);
     }
 
     /**

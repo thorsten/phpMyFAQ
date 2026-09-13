@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\EventListener;
 
+use Monolog\Logger;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Http\RateLimiter;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -107,6 +108,10 @@ final class ApiRateLimiterListenerTest extends TestCase
                 ['api.rateLimit.interval', '3600'],
             ]);
         $rateLimiter->check('127.0.0.1', 1, 3600);
+
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->once())->method('warning')->with($this->stringContains('security-rate-limit-exceeded'));
+        $configuration->method('getLogger')->willReturn($logger);
 
         $listener = new ApiRateLimiterListener($configuration, $rateLimiter);
         $event = $this->createEvent();

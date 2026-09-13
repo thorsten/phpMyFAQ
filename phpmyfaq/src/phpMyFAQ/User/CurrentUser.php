@@ -201,8 +201,14 @@ class CurrentUser extends User
                 continue; // Incorrect password, try the next auth method
             }
 
-            // Login successful, proceed with post-login actions
-            $this->getUserByLogin($login);
+            // Login successful, proceed with post-login actions. A driver may accept a
+            // login that has no local account (e.g. SSO without provisioning); without a
+            // loaded account the user-ID stays at the guest default, so refuse the login
+            // instead of establishing a session for the anonymous user.
+            if (!$this->getUserByLogin($login) || $this->getUserId() <= 0) {
+                throw new UserException(parent::ERROR_USER_INCORRECT_LOGIN);
+            }
+
             if ((int) $this->getUserData('twofactor_enabled') !== 1) {
                 $this->setLoggedIn(true);
                 $this->updateSessionId(true);
@@ -422,7 +428,7 @@ class CurrentUser extends User
             session_id(),
             $requestTime,
             $updateLastLogin ? "last_login = '" . date(format: 'YmdHis', timestamp: $requestTime) . "'," : '',
-            Request::createFromGlobals()->getClientIp(),
+            $this->configuration->getDb()->escape((string) Request::createFromGlobals()->getClientIp()),
             $this->getUserId(),
         );
 
@@ -468,7 +474,7 @@ class CurrentUser extends User
             WHERE
                 user_id = %d',
             Database::getTablePrefix(),
-            $deleteCookie ? ', remember_me = NULL' : '',
+            $deleteCookie ? ', remember_me = NULL, remember_me_expires = NULL' : '',
             $this->getUserId(),
         );
 
@@ -549,14 +555,18 @@ class CurrentUser extends User
     }
 
     /**
-     * Saves remember me token in the database.
+     * Saves the remember-me token in the database together with its server-side expiry,
+     * which matches the lifetime of the cookie handed to the browser.
      */
     public function setRememberMe(string $rememberMe): bool
     {
+        $expires = (int) Request::createFromGlobals()->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME;
+
         $update = sprintf(
-            "UPDATE %sfaquser SET remember_me = '%s' WHERE user_id = %d",
+            "UPDATE %sfaquser SET remember_me = '%s', remember_me_expires = %d WHERE user_id = %d",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($rememberMe),
+            $expires,
             $this->getUserId(),
         );
 
@@ -639,7 +649,7 @@ class CurrentUser extends User
                 user_id = %d",
             Database::getTablePrefix(),
             (int) Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            Request::createFromGlobals()->getClientIp(),
+            $this->configuration->getDb()->escape((string) Request::createFromGlobals()->getClientIp()),
             $this->getUserId(),
         );
 

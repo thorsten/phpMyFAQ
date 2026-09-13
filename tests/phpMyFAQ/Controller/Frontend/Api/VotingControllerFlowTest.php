@@ -8,6 +8,7 @@ use phpMyFAQ\Entity\Vote;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -27,6 +28,57 @@ final class VotingControllerFlowTest extends ApiControllerTestCase
         $csrfToken = Token::getInstance($session)->getTokenString('voting');
 
         return [$session, $csrfToken];
+    }
+
+    /**
+     * A vote must never be stored for a FAQ the requester may not see; the response must
+     * not reveal whether the record exists.
+     */
+    public function testCreateReturnsNotFoundForFaqTheRequesterMayNotSee(): void
+    {
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+        $this->seedUnpublishedFaq(42);
+
+        $rating = $this->createMock(Rating::class);
+        $rating->expects($this->never())->method('check');
+        $rating->expects($this->never())->method('create');
+        $rating->expects($this->never())->method('update');
+
+        $controller = new VotingController($rating, $this->createStub(UserSession::class));
+        $currentUser = $this->createAuthenticatedUserMock();
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = Request::create('/api/voting', 'POST', server: ['REMOTE_ADDR' => '127.0.0.1'], content: json_encode([
+            'id' => 42,
+            'value' => 4,
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertSame(Translation::get('msgAccessDenied'), $payload['error']);
+    }
+
+    private function seedUnpublishedFaq(int $faqId): void
+    {
+        self::assertNotFalse(
+            $this->configuration
+                ->getDb()
+                ->query(sprintf(
+                    "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (%d, 'en', %d, 0, 'draft', 0, '', 'Secret draft', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                    $faqId,
+                    1000 + $faqId,
+                )),
+        );
+        self::assertNotFalse(
+            $this->configuration
+                ->getDb()
+                ->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)', $faqId)),
+        );
     }
 
     public function testCreateReturnsUnauthorizedForInvalidCsrfToken(): void

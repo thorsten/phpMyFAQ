@@ -176,6 +176,61 @@ class AuthDatabaseTest extends TestCase
         $this->authDatabase->checkCredentials("' OR '1'='1", 'testPassword');
     }
 
+    /**
+     * An unknown login must cost about as much time as a known login with a wrong
+     * password, otherwise the response time reveals which accounts exist.
+     */
+    public function testUnknownLoginTakesAsLongAsAWrongPassword(): void
+    {
+        $this->authDatabase->create('testUser', 'correctPassword');
+
+        $wrongPassword = PHP_FLOAT_MAX;
+        $unknownLogin = PHP_FLOAT_MAX;
+        for ($i = 0; $i < 3; ++$i) {
+            $start = hrtime(true);
+            try {
+                $this->authDatabase->checkCredentials('testUser', 'wrongPassword');
+            } catch (AuthException) {
+                // expected
+            }
+            $wrongPassword = min($wrongPassword, hrtime(true) - $start);
+
+            $start = hrtime(true);
+            try {
+                $this->authDatabase->checkCredentials('nonExistingUser', 'wrongPassword');
+            } catch (AuthException) {
+                // expected
+            }
+            $unknownLogin = min($unknownLogin, hrtime(true) - $start);
+        }
+
+        $this->assertGreaterThanOrEqual(
+            $wrongPassword * 0.3,
+            $unknownLogin,
+            'Rejecting an unknown login must burn a bcrypt verification as well.',
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testIsValidLoginForUnknownLoginBurnsAPasswordVerification(): void
+    {
+        $this->authDatabase->create('testUser', 'correctPassword');
+
+        $start = hrtime(true);
+        $this->assertSame(1, $this->authDatabase->isValidLogin('testUser'));
+        $knownLogin = hrtime(true) - $start;
+
+        $start = hrtime(true);
+        $this->assertSame(0, $this->authDatabase->isValidLogin('nonExistingUser'));
+        $unknownLogin = hrtime(true) - $start;
+
+        // bcrypt at cost 12 takes well over 10 ms; a plain SELECT takes far less.
+        $this->assertGreaterThan(10_000_000, $unknownLogin);
+        $this->assertGreaterThan($knownLogin, $unknownLogin);
+    }
+
     public function testCreateStoresBcryptHash(): void
     {
         $this->authDatabase->create('testUser', 'testPassword');

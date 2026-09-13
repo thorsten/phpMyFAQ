@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Auth;
 
+use Closure;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\EntraId\EntraIdSession;
 use phpMyFAQ\Auth\EntraId\OAuth;
@@ -29,8 +30,12 @@ use phpMyFAQ\User;
 use SensitiveParameter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-/**q
+/**
  * Class AuthEntraId
+ *
+ * Local accounts are bound to the immutable Entra ID object identifier. An existing
+ * account is only ever used by the identity whose object identifier it stores; it is
+ * never claimed by a matching login or mail address.
  *
  * @package phpMyFAQ\Auth
  */
@@ -40,16 +45,23 @@ class AuthEntraId extends Auth implements AuthDriverInterface
 
     private string $oAuthChallenge;
 
+    private string $oAuthState = '';
+
+    private int $authenticatedUserId = 0;
+
     private const string ENTRAID_CHALLENGE_METHOD = 'S256';
 
     private const string ENTRAID_LOGOUT_URL = 'https://login.microsoftonline.com/common/wsfederation?wa=wsignout1.0';
 
+    private const int OAUTH_STATE_LIFETIME = 7200;
+
     /**
-     * @inheritDoc
+     * @param (Closure(): User)|null $userFactory
      */
     public function __construct(
         Configuration $configuration,
         private readonly OAuth $oAuth,
+        private readonly ?Closure $userFactory = null,
     ) {
         $this->configuration = $configuration;
 
@@ -57,30 +69,53 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     }
 
     /**
+     * Creates the local account for the signed-in identity and links it to the
+     * object identifier. Returns false when the login is already taken, so a
+     * pre-existing account is never modified.
+     *
      * @inheritDoc
      * @throws Exception
      */
-    public function create(string $login, #[SensitiveParameter] string $password, string $domain = ''): mixed
+    public function create(string $login, #[SensitiveParameter] string $password, string $domain = ''): bool
     {
-        $result = false;
-        $user = new User($this->configuration);
+        $user = $this->createUser();
 
         try {
             $result = $user->createUser($login, '', $domain);
         } catch (\Exception $exception) {
-            $this->configuration->getLogger()->info($exception->getMessage());
+            $this->configuration
+                ->getLogger()
+                ->error(sprintf(
+                    'Entra ID user creation failed for "%s": %s',
+                    $this->redactIdentifier($login),
+                    $exception->getMessage(),
+                ));
+            return false;
+        }
+
+        if (!$result) {
+            return false;
+        }
+
+        $saved = $user->setUserData([
+            'display_name' => $this->oAuth->getName(),
+            'email' => $this->oAuth->getMail(),
+            'entra_oid' => $this->oAuth->getObjectId(),
+        ]);
+
+        if (!$saved) {
+            $this->configuration
+                ->getLogger()
+                ->error(sprintf('Entra ID user data persistence failed for "%s"', $this->redactIdentifier($login)));
+            return false;
         }
 
         $user->setStatus('active');
         $user->setAuthSource(AuthenticationSourceType::AUTH_AZURE->value);
 
-        // Set user information from JWT
-        $user->setUserData([
-            'display_name' => $this->oAuth->getName(),
-            'email' => $this->oAuth->getMail(),
-        ]);
+        $this->authenticatedUserId = $user->getUserId();
 
-        return $result;
+        return true;
     }
 
     /**
@@ -100,6 +135,10 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     }
 
     /**
+     * Accepts the login when an account is linked to the object identifier of the
+     * signed-in identity, or creates one when the login is still free. A login that
+     * exists but is not linked is refused.
+     *
      * @inheritDoc
      * @throws Exception
      */
@@ -109,8 +148,51 @@ class AuthEntraId extends Auth implements AuthDriverInterface
         string $password,
         ?array $optionalData = [],
     ): bool {
-        $this->create($login, '');
-        return true;
+        $this->authenticatedUserId = 0;
+
+        if ($login === '' || $login !== $this->oAuth->getMail()) {
+            return false;
+        }
+
+        $objectId = $this->oAuth->getObjectId();
+        if ($objectId === '') {
+            $this->configuration
+                ->getLogger()
+                ->warning(sprintf(
+                    'Entra ID login rejected for "%s": the token carries no object identifier.',
+                    $this->redactIdentifier($login),
+                ));
+            return false;
+        }
+
+        $linkedUser = $this->findLinkedUser($objectId);
+        if ($linkedUser instanceof User) {
+            if ($linkedUser->getStatus() === 'blocked') {
+                $this->configuration
+                    ->getLogger()
+                    ->warning(sprintf(
+                        'Entra ID login rejected for "%s": the linked local account is blocked.',
+                        $this->redactIdentifier($login),
+                    ));
+                return false;
+            }
+
+            $this->authenticatedUserId = $linkedUser->getUserId();
+
+            return true;
+        }
+
+        if ($this->findUser($login) instanceof User) {
+            $this->configuration
+                ->getLogger()
+                ->warning(sprintf(
+                    'Entra ID login rejected for "%s": the local account is not linked to this Entra ID identity.',
+                    $this->redactIdentifier($login),
+                ));
+            return false;
+        }
+
+        return $this->create($login, '');
     }
 
     /**
@@ -118,11 +200,20 @@ class AuthEntraId extends Auth implements AuthDriverInterface
      */
     public function isValidLogin(string $login, ?array $optionalData = []): int
     {
-        if ($login === $this->oAuth->getMail()) {
+        if ($login !== '' && $login === $this->oAuth->getMail()) {
             return 1;
         }
 
         return 0;
+    }
+
+    /**
+     * Returns the ID of the local account resolved by the last successful
+     * checkCredentials() call, or 0 if none was resolved.
+     */
+    public function getAuthenticatedUserId(): int
+    {
+        return $this->authenticatedUserId;
     }
 
     /**
@@ -133,27 +224,59 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     public function authorize(): RedirectResponse
     {
         $this->createOAuthChallenge();
-        $this->oAuth->getEntraIdSession()->setCurrentSessionKey();
-        $this->oAuth->getEntraIdSession()->set(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER, $this->oAuthVerifier);
-        $this->oAuth->getEntraIdSession()->setCookie(
+        $this->createOAuthState();
+        $entraIdSession = $this->oAuth->getEntraIdSession();
+        $entraIdSession->setCurrentSessionKey();
+        $entraIdSession->set(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER, $this->oAuthVerifier);
+        $entraIdSession->set(EntraIdSession::ENTRA_ID_OAUTH_STATE, $this->oAuthState);
+        // The session cookie is SameSite=Strict and therefore absent on the cross-site
+        // redirect back from Microsoft, so both values are mirrored into lax cookies.
+        $entraIdSession->setCookie(
             EntraIdSession::ENTRA_ID_OAUTH_VERIFIER,
             $this->oAuthVerifier,
-            7200,
+            self::OAUTH_STATE_LIFETIME,
+            false,
+        );
+        $entraIdSession->setCookie(
+            EntraIdSession::ENTRA_ID_OAUTH_STATE,
+            $this->oAuthState,
+            self::OAUTH_STATE_LIFETIME,
             false,
         );
 
         $oAuthURL = sprintf(
             'https://login.microsoftonline.com/%s/oauth2/v2.0/authorize'
-            . '?response_type=code&client_id=%s&redirect_uri=%s&scope=%s&code_challenge=%s&code_challenge_method=%s',
+            . '?response_type=code&client_id=%s&redirect_uri=%s&scope=%s&code_challenge=%s&code_challenge_method=%s'
+            . '&state=%s',
             AAD_OAUTH_TENANTID,
             AAD_OAUTH_CLIENTID,
             urlencode($this->configuration->getDefaultUrl() . 'services/azure/callback.php'),
             AAD_OAUTH_SCOPE,
             $this->oAuthChallenge,
             self::ENTRAID_CHALLENGE_METHOD,
+            $this->oAuthState,
         );
 
         return new RedirectResponse($oAuthURL);
+    }
+
+    /**
+     * Returns true when the state returned by Entra ID matches the one issued by
+     * authorize() for this browser, which ties the callback to the login it started.
+     */
+    public function isValidState(string $state): bool
+    {
+        if ($state === '') {
+            return false;
+        }
+
+        $entraIdSession = $this->oAuth->getEntraIdSession();
+        $expected = (string) ($entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_STATE) ?? '');
+        if ($expected === '') {
+            $expected = $entraIdSession->getCookie(EntraIdSession::ENTRA_ID_OAUTH_STATE);
+        }
+
+        return $expected !== '' && hash_equals($expected, $state);
     }
 
     /**
@@ -192,5 +315,71 @@ class AuthEntraId extends Auth implements AuthDriverInterface
             replace: '',
             subject: strtr(string: base64_encode(pack('H*', hash('sha256', $verifier))), from: '+/', to: '-_'),
         );
+    }
+
+    /**
+     * Generates the unguessable OAuth state parameter.
+     *
+     * @throws \Exception
+     */
+    private function createOAuthState(): void
+    {
+        if ($this->oAuthState !== '') {
+            return;
+        }
+
+        $this->oAuthState = bin2hex(random_bytes(32));
+    }
+
+    /**
+     * Returns the account linked to the given object identifier, blocked or not.
+     *
+     * @throws Exception
+     */
+    private function findLinkedUser(string $objectId): ?User
+    {
+        $user = $this->createUser();
+        $userId = $user->getUserIdByEntraOid($objectId);
+        if ($userId <= 0) {
+            return null;
+        }
+
+        return $user->getUserById($userId, allowBlockedUsers: true) ? $user : null;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function findUser(string $login): ?User
+    {
+        $user = $this->createUser();
+
+        return $user->getUserByLogin($login, false) ? $user : null;
+    }
+
+    private function redactIdentifier(string $identifier): string
+    {
+        if (str_contains($identifier, '@')) {
+            [$local, $domain] = explode('@', string: $identifier, limit: 2);
+            return ($local === '' ? '' : $local[0]) . '***@' . $domain;
+        }
+
+        if (mb_strlen($identifier) <= 3) {
+            return str_repeat('*', mb_strlen($identifier));
+        }
+
+        return mb_substr($identifier, start: 0, length: 3) . '…';
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createUser(): User
+    {
+        if ($this->userFactory instanceof Closure) {
+            return ($this->userFactory)();
+        }
+
+        return new User($this->configuration);
     }
 }

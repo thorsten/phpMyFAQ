@@ -92,6 +92,22 @@ final class ClientRepository extends AbstractRepository implements ClientReposit
             return password_verify($clientSecret, $storedSecret);
         }
 
-        return hash_equals($storedSecret, $clientSecret);
+        if (!hash_equals($storedSecret, $clientSecret)) {
+            return false;
+        }
+
+        // A secret that is still stored in clear text is accepted this one time and
+        // replaced by its hash, so a database read no longer yields a usable credential.
+        $this->storeHashedSecret($clientIdentifier, $clientSecret);
+
+        return true;
+    }
+
+    private function storeHashedSecret(string $clientIdentifier, #[\SensitiveParameter] string $clientSecret): void
+    {
+        $this->db()->queryPrepared(
+            sprintf('UPDATE %s SET client_secret = ? WHERE client_id = ?', $this->table('faqoauth_clients')),
+            [password_hash($clientSecret, PASSWORD_BCRYPT), $clientIdentifier],
+        );
     }
 }

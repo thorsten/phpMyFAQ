@@ -11,6 +11,7 @@ use phpMyFAQ\EventListener\ApiRateLimiterListener;
 use phpMyFAQ\EventListener\ControllerContainerListener;
 use phpMyFAQ\EventListener\LanguageListener;
 use phpMyFAQ\EventListener\RouterListener;
+use phpMyFAQ\EventListener\SecurityHeadersListener;
 use phpMyFAQ\EventListener\WebExceptionListener;
 use phpMyFAQ\Form\FormsServiceProvider;
 use phpMyFAQ\Http\RateLimiter;
@@ -41,6 +42,7 @@ use Symfony\Component\Routing\RouteCollection;
 #[UsesClass(ControllerContainerListener::class)]
 #[UsesClass(LanguageListener::class)]
 #[UsesClass(RouterListener::class)]
+#[UsesClass(SecurityHeadersListener::class)]
 #[UsesClass(Strings::class)]
 #[UsesClass(Translation::class)]
 #[UsesClass(WebExceptionListener::class)]
@@ -435,6 +437,7 @@ class KernelTest extends TestCase
         $requestListeners = $dispatcher->getListeners('kernel.request');
         $exceptionListeners = $dispatcher->getListeners('kernel.exception');
         $controllerListeners = $dispatcher->getListeners('kernel.controller');
+        $responseListeners = $dispatcher->getListeners('kernel.response');
 
         // RouterListener and LanguageListener
         $this->assertCount(2, $requestListeners);
@@ -442,6 +445,10 @@ class KernelTest extends TestCase
         $this->assertCount(2, $exceptionListeners);
         // ControllerContainerListener
         $this->assertCount(1, $controllerListeners);
+        // SecurityHeadersListener
+        $this->assertCount(1, $responseListeners);
+        $this->assertInstanceOf(SecurityHeadersListener::class, $responseListeners[0][0]);
+        $this->assertSame(-100, $dispatcher->getListenerPriority('kernel.response', $responseListeners[0]));
     }
 
     public function testRegisterEventListenersRequestListenerPriorities(): void

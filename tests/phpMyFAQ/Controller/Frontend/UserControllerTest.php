@@ -142,6 +142,54 @@ final class UserControllerTest extends TestCase
         self::assertStringContainsString('id="pmf-submit-user-control-panel"', (string) $response->getContent());
     }
 
+    public function testUcpExposesTheSecretOnlyDuringEnrolment(): void
+    {
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'main.enableGravatarSupport' => false,
+            'security.enableWebAuthnSupport' => false,
+        ]);
+        $this->dbHandle->query(
+            "UPDATE faquserdata SET twofactor_enabled = 0, secret = 'ENROLSECRET123' WHERE user_id = 1",
+        );
+
+        $controller = $this->createController();
+        $this->setCurrentUser($controller, $this->createLoggedInCurrentUser());
+
+        $content = (string) $controller->ucp(Request::create('/user/ucp', 'GET'))->getContent();
+
+        self::assertStringContainsString('ENROLSECRET123', $content);
+        self::assertStringContainsString('id="twofactor_config"', $content);
+        self::assertStringContainsString('data:image/png;base64,', $content);
+        self::assertStringNotContainsString('id="removeCurrentConfig"', $content);
+    }
+
+    public function testUcpNeverRendersTheSecretOnceTwoFactorIsEnabled(): void
+    {
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'main.enableGravatarSupport' => false,
+            'security.enableWebAuthnSupport' => false,
+        ]);
+        $this->dbHandle->query(
+            "UPDATE faquserdata SET twofactor_enabled = 1, secret = 'ACTIVESECRET123' WHERE user_id = 1",
+        );
+
+        $controller = $this->createController();
+        $this->setCurrentUser($controller, $this->createLoggedInCurrentUser());
+
+        $content = (string) $controller->ucp(Request::create('/user/ucp', 'GET'))->getContent();
+
+        self::assertStringNotContainsString('ACTIVESECRET123', $content);
+        self::assertStringNotContainsString('id="twofactor_config"', $content);
+        self::assertStringNotContainsString('data:image/png;base64,', $content);
+        self::assertStringContainsString('id="removeCurrentConfig"', $content);
+        self::assertStringContainsString(Translation::get('msgTwofactorAlreadyConfigured'), $content);
+
+        $result = $this->dbHandle->query('SELECT secret FROM faquserdata WHERE user_id = 1');
+        self::assertSame('ACTIVESECRET123', $this->dbHandle->fetchArray($result)['secret']);
+    }
+
     private function createController(): UserController
     {
         $captcha = $this->createMock(CaptchaInterface::class);

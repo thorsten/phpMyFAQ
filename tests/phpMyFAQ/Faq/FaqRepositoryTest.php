@@ -342,19 +342,13 @@ class FaqRepositoryTest extends TestCase
         $condition = ['fd.id' => ['5048', '5049']];
 
         $this->assertSame(2, $this->faqRepository->countAllFaqs($condition, -1, [-1], false));
-        $this->assertSame(
-            1,
-            $this->faqRepository->countAllFaqs(
-                [...$condition, 'fd.status' => FaqStatus::Published->value],
-                -1,
-                [-1],
-                false,
-            ),
-        );
-        $this->assertCount(
-            2,
-            $this->faqRepository->fetchAllFaqs($condition, 'ORDER BY fd.id ASC', -1, [-1], false),
-        );
+        $this->assertSame(1, $this->faqRepository->countAllFaqs(
+            [...$condition, 'fd.status' => FaqStatus::Published->value],
+            -1,
+            [-1],
+            false,
+        ));
+        $this->assertCount(2, $this->faqRepository->fetchAllFaqs($condition, 'ORDER BY fd.id ASC', -1, [-1], false));
     }
 
     public function testInsertCreatesFaqRow(): void
@@ -423,18 +417,132 @@ class FaqRepositoryTest extends TestCase
         $this->assertSame('Render By Id', $row->question);
     }
 
+    public function testFetchAvailableFaqsByCategoryIdFallsBackToSafeOrderForUnknownColumns(): void
+    {
+        $this->seedFaqRecord(id: 5062, solutionId: 7520, question: 'Injected Order', categoryId: 96);
+
+        $rows = $this->faqRepository->fetchAvailableFaqsByCategoryId(
+            96,
+            'fd',
+            'id; DROP TABLE faqdata',
+            'ASC; DROP TABLE faqdata',
+            -1,
+            [-1],
+            false,
+        );
+
+        $this->assertCount(1, $rows);
+        $this->assertSame(5062, (int) $rows[0]->id);
+        $this->assertTrue($this->faqRepository->exists(5062));
+    }
+
+    public function testFetchFaqsByIdsIntCastsTheIdList(): void
+    {
+        $this->seedFaqRecord(id: 5063, solutionId: 7530, question: 'Casted Id');
+
+        $rows = $this->faqRepository->fetchFaqsByIds("5063, 1 OR 1=1) UNION SELECT 'x'", true, -1, [-1], false);
+
+        $this->assertCount(1, $rows);
+        $this->assertSame(5063, (int) $rows[0]->id);
+    }
+
+    public function testFetchFaqsByIdsWithEmptyIdListReturnsNothing(): void
+    {
+        $this->seedFaqRecord(id: 5064, solutionId: 7540, question: 'Not requested');
+
+        $this->assertSame([], $this->faqRepository->fetchFaqsByIds('', true, -1, [-1], false));
+        $this->assertSame([], $this->faqRepository->fetchFaqsByIds('abc', true, -1, [-1], false));
+    }
+
+    public function testFetchAllFaqsDropsOrderByClausesOutsideTheAllowList(): void
+    {
+        $this->seedFaqRecord(id: 5065, solutionId: 7550, question: 'Ordered A');
+        $this->seedFaqRecord(id: 5066, solutionId: 7560, question: 'Ordered B');
+
+        $ascending = $this->faqRepository->fetchAllFaqs(
+            ['fd.id' => ['5065', '5066']],
+            'ORDER BY fd.id ASC',
+            -1,
+            [-1],
+            false,
+        );
+        $descending = $this->faqRepository->fetchAllFaqs(
+            ['fd.id' => ['5065', '5066']],
+            'ORDER BY fd.id DESC',
+            -1,
+            [-1],
+            false,
+        );
+        $injected = $this->faqRepository->fetchAllFaqs(
+            ['fd.id' => ['5065', '5066']],
+            'ORDER BY (SELECT 1 FROM faqdata) DESC',
+            -1,
+            [-1],
+            false,
+        );
+
+        $this->assertSame([5065, 5066], array_map(static fn(object $row): int => (int) $row->id, $ascending));
+        $this->assertSame([5066, 5065], array_map(static fn(object $row): int => (int) $row->id, $descending));
+        $this->assertCount(2, $injected);
+    }
+
+    public function testFetchAllFaqsRejectsConditionKeysThatAreNotColumnIdentifiers(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid column identifier');
+
+        $this->faqRepository->fetchAllFaqs(['fd.id = 1 OR 1' => '1'], '', -1, [-1], false);
+    }
+
+    public function testQueryRenderableFaqsByCategoryIdIgnoresInjectedOrderClause(): void
+    {
+        $this->seedFaqRecord(id: 5067, solutionId: 7570, question: 'Render Injected', categoryId: 97);
+
+        $result = $this->faqRepository->queryRenderableFaqsByCategoryId(
+            97,
+            'ORDER BY fd.id ASC; DROP TABLE faqdata',
+            -1,
+            [-1],
+            false,
+        );
+
+        $this->assertSame(1, $this->configuration->getDb()->numRows($result));
+        $this->assertTrue($this->faqRepository->exists(5067));
+    }
+
+    public function testQueryRenderableFaqsByIdsNormalizesIdsOrderAndDirection(): void
+    {
+        $this->seedFaqRecord(id: 5068, solutionId: 7580, question: 'Render Low');
+        $this->seedFaqRecord(id: 5069, solutionId: 7590, question: 'Render High');
+
+        $result = $this->faqRepository->queryRenderableFaqsByIds(
+            '5068, 5069, abc',
+            'fd.id; DROP TABLE faqdata',
+            'DESC; DROP TABLE faqdata',
+            -1,
+            [-1],
+            false,
+        );
+
+        $this->assertSame(2, $this->configuration->getDb()->numRows($result));
+        $this->assertSame(5068, (int) $this->configuration->getDb()->fetchObject($result)->id);
+        $this->assertTrue($this->faqRepository->exists(5068));
+    }
+
     /**
      * @param int[] $groupIds
      */
     private function seedGroupPermissions(int $recordId, array $groupIds): void
     {
         foreach ($groupIds as $groupId) {
-            $this->configuration->getDb()->query(sprintf(
-                'INSERT INTO %sfaqdata_group (record_id, group_id) VALUES (%d, %d)',
-                Database::getTablePrefix(),
-                $recordId,
-                $groupId,
-            ));
+            $this->configuration
+                ->getDb()
+                ->query(sprintf(
+                    'INSERT INTO %sfaqdata_group (record_id, group_id) VALUES (%d, %d)',
+                    Database::getTablePrefix(),
+                    $recordId,
+                    $groupId,
+                ));
         }
     }
 

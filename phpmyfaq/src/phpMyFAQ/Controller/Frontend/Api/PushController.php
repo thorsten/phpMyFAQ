@@ -22,8 +22,10 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\PushSubscriptionEntity;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Push\PushEndpointValidator;
 use phpMyFAQ\Push\PushSubscriptionRepository;
 use phpMyFAQ\Push\WebPushService;
+use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,10 +33,19 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class PushController extends AbstractController
 {
+    /**
+     * CSRF token page shared by subscribe and unsubscribe; issued via the frontend header.
+     */
+    public const string CSRF_PAGE = 'push-subscription';
+
+    private readonly PushEndpointValidator $pushEndpointValidator;
+
     public function __construct(
         private readonly WebPushService $webPushService,
         private readonly PushSubscriptionRepository $pushSubscriptionRepository,
+        ?PushEndpointValidator $pushEndpointValidator = null,
     ) {
+        $this->pushEndpointValidator = $pushEndpointValidator ?? new PushEndpointValidator();
         parent::__construct();
     }
 
@@ -64,6 +75,10 @@ final class PushController extends AbstractController
             return $this->json(['error' => 'Invalid JSON payload'], Response::HTTP_BAD_REQUEST);
         }
 
+        if (!$this->verifySessionCsrfToken(self::CSRF_PAGE, trim((string) ($data->csrfToken ?? '')))) {
+            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
+
         $filteredEndpoint = Filter::filterVar($data->endpoint ?? '', FILTER_SANITIZE_URL);
         $endpoint = is_string($filteredEndpoint) ? $filteredEndpoint : '';
         $publicKey = Filter::filterVar($data->publicKey ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -72,6 +87,14 @@ final class PushController extends AbstractController
 
         if ($endpoint === '' || $publicKey === '' || $authToken === '') {
             return $this->json(['error' => 'Missing required subscription data'], Response::HTTP_BAD_REQUEST);
+        }
+
+        // The server later POSTs to every stored endpoint, so anything but a public HTTPS
+        // host would be a blind SSRF primitive.
+        if (!$this->pushEndpointValidator->isValid($endpoint)) {
+            return $this->json([
+                'error' => Translation::get(key: 'msgPushInvalidEndpoint'),
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $entity = new PushSubscriptionEntity();
@@ -102,6 +125,10 @@ final class PushController extends AbstractController
             $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         } catch (\JsonException) {
             return $this->json(['error' => 'Invalid JSON payload'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!$this->verifySessionCsrfToken(self::CSRF_PAGE, trim((string) ($data->csrfToken ?? '')))) {
+            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $filteredEndpoint = Filter::filterVar($data->endpoint ?? '', FILTER_SANITIZE_URL);

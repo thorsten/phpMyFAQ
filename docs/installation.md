@@ -421,6 +421,15 @@ If you choose to add this during installation, the file will be automatically wr
 If you enable Elasticsearch support in the admin configuration panel, you can create, re-import, and delete your
 index with a user-friendly interface.
 
+When the cluster is reached over HTTPS, the TLS certificate of the cluster is verified. For a cluster with a
+private CA, point phpMyFAQ to the CA certificate in `content/core/config/elasticsearch.php`; disabling the
+verification is only meant for local test clusters with self-signed certificates:
+
+    $PMF_ES['hosts'] = ['https://elasticsearch.example.com:9200'];
+    $PMF_ES['index'] = 'phpmyfaq';
+    $PMF_ES['cafile'] = '/etc/ssl/certs/elasticsearch-ca.pem'; // or $PMF_ES['capath'] = '/etc/ssl/certs';
+    // $PMF_ES['verify_peer'] = false; // self-signed test cluster only
+
 ## 2.17 OpenSearch Support
 
 To improve the search performance and quality of search results, it's possible to use OpenSearch.
@@ -430,6 +439,9 @@ OpenSearch file located in the folder config/.
 If you choose to add this during installation, the file will be automatically written and the index will be built.
 If you enable OpenSearch support in the admin configuration panel, you can create, re-import, and delete your
 index with a user-friendly interface.
+
+TLS certificates are verified in the same way as for Elasticsearch; the options `cafile`, `capath` and
+`verify_peer` are read from `$PMF_OS` in `content/core/config/opensearch.php`.
 
 ## 2.18 SSO (Single Sign-On) Support
 

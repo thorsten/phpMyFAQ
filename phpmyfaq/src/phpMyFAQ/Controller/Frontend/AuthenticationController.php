@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -139,7 +140,7 @@ final class AuthenticationController extends AbstractFrontController
         // SSO Logout
         $ssoLogout = (string) ($this->configuration->get('security.ssoLogoutRedirect') ?? '');
         if ((bool) $this->configuration->get('security.ssoSupport') && $ssoLogout !== '') {
-            $redirectResponse->isRedirect($ssoLogout);
+            $redirectResponse->setTargetUrl($ssoLogout);
             return $redirectResponse;
         }
 
@@ -223,7 +224,12 @@ final class AuthenticationController extends AbstractFrontController
             } catch (UserException $e) {
                 // Log the specific reason server-side, but never disclose whether the login
                 // name exists: always show the same generic message to prevent user enumeration.
-                $this->configuration->getLogger()->error('Login-error: ' . $e->getMessage());
+                $this->logSecurityEvent(
+                    $e->getMessage() === CurrentUser::ERROR_USER_TOO_MANY_FAILED_LOGINS
+                        ? AdminLogType::SECURITY_SUSPICIOUS_ACTIVITY
+                        : AdminLogType::AUTH_LOGIN_FAILED,
+                    sprintf('%s (login "%s")', $e->getMessage(), $username),
+                );
                 $this->session->getFlashBag()->add('error', Translation::get('ad_auth_fail'));
                 return new RedirectResponse('./login');
             }

@@ -28,6 +28,25 @@ interface FaqAutocompleteResponse {
 
 Jodit.modules.Icon.set('phpmyfaq', phpmyfaq);
 
+/**
+ * Builds one selectable search result. The question and URL come from the database and are
+ * assigned as text and property values so they can never be interpreted as markup.
+ */
+const buildResultOption = (result: FaqAutocompleteResult): HTMLLabelElement => {
+  const label = document.createElement('label');
+  label.className = 'form-check-label';
+
+  const radio = document.createElement('input');
+  radio.className = 'form-check-input';
+  radio.type = 'radio';
+  radio.name = 'faqURL';
+  radio.value = result.url;
+
+  label.append(radio, ` ${result.question}`);
+
+  return label;
+};
+
 Jodit.plugins.add('phpMyFAQ', (editor: Jodit): void => {
   // Register the button
   editor.registerButton({
@@ -69,12 +88,9 @@ Jodit.plugins.add('phpMyFAQ', (editor: Jodit): void => {
         try {
           const response = (await fetchFaqsByAutocomplete(query, csrfToken)) as FaqAutocompleteResponse;
 
-          resultsContainer.innerHTML = '';
+          resultsContainer.replaceChildren();
           response.success.forEach((result: FaqAutocompleteResult) => {
-            resultsContainer.innerHTML += `<label class="form-check-label">
-            <input class="form-check-input" type="radio" name="faqURL" value="${result.url}">
-            ${result.question}
-          </label><br>`;
+            resultsContainer.append(buildResultOption(result), document.createElement('br'));
           });
         } catch (error) {
           console.error('Error:', (error as Error).message);
@@ -87,10 +103,10 @@ Jodit.plugins.add('phpMyFAQ', (editor: Jodit): void => {
     selectLink.addEventListener('click', (): void => {
       const selected = document.querySelector('input[name=faqURL]:checked') as HTMLInputElement;
       if (selected) {
-        const url = selected.value;
-        const question = selected.parentNode?.textContent?.trim() || '';
-        const anchor = `<a href="${url}">${question}</a>`;
-        editor.selection.insertHTML(anchor);
+        const anchor = document.createElement('a');
+        anchor.href = selected.value;
+        anchor.textContent = selected.parentNode?.textContent?.trim() || '';
+        editor.selection.insertHTML(anchor.outerHTML);
         dialog.close();
       } else {
         alert('Please select an FAQ.');

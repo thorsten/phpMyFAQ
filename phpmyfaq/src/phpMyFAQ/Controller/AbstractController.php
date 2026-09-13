@@ -29,10 +29,12 @@ use phpMyFAQ\Container\ContainerRegistry;
 use phpMyFAQ\Controller\Administration\SkipsAuthenticationCheck;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Form\FormsServiceProvider;
 use phpMyFAQ\Http\RateLimiter;
+use phpMyFAQ\Http\SecurityEventLogger;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
@@ -563,7 +565,28 @@ abstract class AbstractController
             return false;
         }
 
-        return hash_equals($storedToken->getSessionToken(), $requestToken);
+        if (!hash_equals($storedToken->getSessionToken(), $requestToken)) {
+            $this->logSecurityEvent(AdminLogType::SECURITY_CSRF_VIOLATION, sprintf(
+                'Invalid CSRF token for "%s"',
+                $page,
+            ));
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Records a security event for the current request and user.
+     */
+    protected function logSecurityEvent(AdminLogType $type, string $detail): void
+    {
+        new SecurityEventLogger($this->configuration->getLogger())->log(
+            $type,
+            Request::createFromGlobals(),
+            $detail,
+            $this->currentUser->getUserId(),
+        );
     }
 
     /**

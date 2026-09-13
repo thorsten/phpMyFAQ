@@ -22,6 +22,7 @@ namespace phpMyFAQ;
 use phpMyFAQ\Bootstrap\ConfigDirectoryResolver;
 use phpMyFAQ\Bootstrap\PhpConfigurator;
 use phpMyFAQ\Bootstrap\SearchClientFactory;
+use phpMyFAQ\Bootstrap\TrustedProxyConfigurator;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Core\Exception;
@@ -88,26 +89,29 @@ class Bootstrapper
         // 8. Error handlers
         PhpConfigurator::registerErrorHandlers();
 
-        // 9. Request
+        // 9. Trusted reverse proxies (TRUSTED_PROXIES), before the first Request is built
+        TrustedProxyConfigurator::configureFromEnvironment();
+
+        // 10. Request
         $request = Request::createFromGlobals();
         $this->request = $request;
 
-        // 10. Output buffering
+        // 11. Output buffering
         ob_start();
 
-        // 11. Database connection (only if a database file exists)
+        // 12. Database connection (only if a database file exists)
         if ($databaseFile !== null) {
             $this->connectDatabase($databaseFile);
 
-            // 12. Session configuration
+            // 13. Session configuration
             PhpConfigurator::configureSession($this->config());
 
-            // 13. LDAP
+            // 14. LDAP
             $this->configureLdap();
 
             $configDir = (string) PMF_CONFIG_DIR;
 
-            // 14. Elasticsearch
+            // 15. Elasticsearch
             if (
                 (bool) $this->config()->get('search.enableElasticsearch')
                 && file_exists($configDir . '/elasticsearch.php')
@@ -115,12 +119,12 @@ class Bootstrapper
                 SearchClientFactory::configureElasticsearch($this->config(), $configDir);
             }
 
-            // 15. OpenSearch
+            // 16. OpenSearch
             if ((bool) $this->config()->get('search.enableOpenSearch') && file_exists($configDir . '/opensearch.php')) {
                 SearchClientFactory::configureOpenSearch($this->config(), $configDir);
             }
 
-            // 16. Attachments directory
+            // 17. Attachments directory
             if (strtolower((string) $this->config()->get('storage.type')) !== 's3') {
                 ConfigDirectoryResolver::resolveAttachmentsDir(
                     (string) $this->config()->get('records.attachmentsPath'),
@@ -128,7 +132,7 @@ class Bootstrapper
                 );
             }
 
-            // 17. Proxy header fix
+            // 18. Proxy header fix
             $this->fixProxyHeaders($request);
         }
 
@@ -244,9 +248,17 @@ class Bootstrapper
         }
     }
 
+    /**
+     * Falls back to X-Forwarded-Server / X-Forwarded-Host when the Host header is missing, but only
+     * behind a declared reverse proxy (TRUSTED_PROXIES): any client can send those headers.
+     */
     private function fixProxyHeaders(Request $request): void
     {
         if ($request->server->has('HTTP_HOST')) {
+            return;
+        }
+
+        if (!$this->hasTrustedProxies()) {
             return;
         }
 
@@ -256,5 +268,13 @@ class Bootstrapper
         }
 
         $request->server->set('HTTP_HOST', $request->server->get('HTTP_X_FORWARDED_HOST'));
+    }
+
+    private function hasTrustedProxies(): bool
+    {
+        $trustedProxies =
+            $_ENV[TrustedProxyConfigurator::ENVIRONMENT_VARIABLE] ?? getenv(TrustedProxyConfigurator::ENVIRONMENT_VARIABLE);
+
+        return is_string($trustedProxies) && trim($trustedProxies) !== '';
     }
 }

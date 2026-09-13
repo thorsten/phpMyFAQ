@@ -14,6 +14,7 @@ use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\StopWords;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\UserSession;
@@ -39,8 +40,13 @@ final class CommentControllerValidationTest extends ApiControllerTestCase
         $language->method('setLanguageFromConfiguration')->willReturn('en');
         $language->method('setLanguageWithDetection')->willReturn('en');
 
+        if ($faq === null) {
+            $faq = $this->createStub(Faq::class);
+            $faq->method('isFaqAccessibleForUser')->willReturn(true);
+        }
+
         return new CommentController(
-            $faq ?? $this->createStub(Faq::class),
+            $faq,
             $comments ?? $this->createStub(Comments::class),
             $stopWords ?? $this->createStub(StopWords::class),
             $userSession ?? $this->createStub(UserSession::class),
@@ -363,6 +369,50 @@ final class CommentControllerValidationTest extends ApiControllerTestCase
         self::assertSame('Please add your name, your e-mail address and a comment!', $payload['error']);
     }
 
+    /**
+     * A comment must never be stored for a FAQ the requester may not see; the response
+     * must not reveal whether the record exists.
+     */
+    public function testCreateReturnsNotFoundWhenFaqIsNotAccessibleForRequester(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'records.allowCommentsForGuests' => '1',
+            'main.enableCommentEditor' => '0',
+        ]);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('setUser')->willReturnSelf();
+        $faq->method('setGroups')->willReturnSelf();
+        $faq->expects($this->once())->method('isFaqAccessibleForUser')->with(1, 'en')->willReturn(false);
+        $faq->expects($this->never())->method('isActive');
+
+        $comments = $this->createMock(Comments::class);
+        $comments->expects($this->never())->method('create');
+
+        $controller = $this->createController(faq: $faq, comments: $comments);
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+        $currentUser = $this->createAuthenticatedUserMock();
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = Request::create('/api/comment/create', 'POST', content: json_encode([
+            'pmf-csrf-token' => $csrfToken,
+            'type' => 'faq',
+            'id' => 1,
+            'user' => 'Test User',
+            'mail' => 'test@example.com',
+            'comment_text' => 'Test comment',
+            'captcha' => 'ignored',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertSame(Translation::get('msgAccessDenied'), $payload['error']);
+    }
+
     public function testCreateReturnsBadRequestWhenFaqIsInactive(): void
     {
         $this->configuration->getAll();
@@ -372,6 +422,9 @@ final class CommentControllerValidationTest extends ApiControllerTestCase
         ]);
 
         $faq = $this->createMock(Faq::class);
+        $faq->method('setUser')->willReturnSelf();
+        $faq->method('setGroups')->willReturnSelf();
+        $faq->method('isFaqAccessibleForUser')->willReturn(true);
         $faq->expects($this->once())->method('isActive')->with(1, 'en', 'faq')->willReturn(false);
 
         $comments = $this->createMock(Comments::class);
@@ -413,6 +466,9 @@ final class CommentControllerValidationTest extends ApiControllerTestCase
         ]);
 
         $faq = $this->createMock(Faq::class);
+        $faq->method('setUser')->willReturnSelf();
+        $faq->method('setGroups')->willReturnSelf();
+        $faq->method('isFaqAccessibleForUser')->willReturn(true);
         $faq->expects($this->never())->method('isActive');
 
         $comments = $this->createMock(Comments::class);
@@ -455,6 +511,9 @@ final class CommentControllerValidationTest extends ApiControllerTestCase
         ]);
 
         $faq = $this->createMock(Faq::class);
+        $faq->method('setUser')->willReturnSelf();
+        $faq->method('setGroups')->willReturnSelf();
+        $faq->method('isFaqAccessibleForUser')->willReturn(true);
         $faq->expects($this->once())->method('isActive')->with(1, 'en', 'faq')->willReturn(true);
         $faq->expects($this->once())->method('getFaq')->with(1);
 
@@ -530,6 +589,9 @@ final class CommentControllerValidationTest extends ApiControllerTestCase
         ]);
 
         $faq = $this->createMock(Faq::class);
+        $faq->method('setUser')->willReturnSelf();
+        $faq->method('setGroups')->willReturnSelf();
+        $faq->method('isFaqAccessibleForUser')->willReturn(true);
         $faq->expects($this->once())->method('isActive')->with(1, 'en', 'faq')->willReturn(true);
         $faq->expects($this->never())->method('getFaq');
 
@@ -581,6 +643,9 @@ final class CommentControllerValidationTest extends ApiControllerTestCase
         ]);
 
         $faq = $this->createMock(Faq::class);
+        $faq->method('setUser')->willReturnSelf();
+        $faq->method('setGroups')->willReturnSelf();
+        $faq->method('isFaqAccessibleForUser')->willReturn(true);
         $faq->expects($this->once())->method('isActive')->with(1, 'en', 'faq')->willReturn(true);
         $faq->expects($this->once())->method('getFaq')->with(1);
 

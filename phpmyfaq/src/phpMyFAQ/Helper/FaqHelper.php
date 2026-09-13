@@ -34,7 +34,6 @@ use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Utils;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class FaqHelper
@@ -56,7 +55,7 @@ class FaqHelper extends AbstractHelper
      */
     public function rewriteUrlFragments(string $answer, string $currentUrl): string
     {
-        return str_replace('href="#', 'href="' . $currentUrl . '#', $answer);
+        return str_replace('href="#', 'href="' . htmlspecialchars($currentUrl, ENT_QUOTES) . '#', $answer);
     }
 
     /**
@@ -122,19 +121,24 @@ class FaqHelper extends AbstractHelper
     {
         $contentLength = strlen($content);
         $allowedHosts = array_values($this->configuration->getAllowedMediaHosts());
-        $allowedHosts[] = Request::createFromGlobals()->getHost();
+        $defaultHost = parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST);
+        if (is_string($defaultHost)) {
+            $allowedHosts[] = $defaultHost;
+        }
         $forceHttpsUrls = filter_var($this->configuration->get(item: 'security.useSslOnly'), FILTER_VALIDATE_BOOLEAN);
-        $htmlSanitizer = new HtmlSanitizer(new HtmlSanitizerConfig()
-            ->withMaxInputLength($contentLength + 1)
-            ->allowSafeElements()
-            ->allowRelativeLinks()
-            ->allowStaticElements()
-            ->allowRelativeMedias()
-            ->forceHttpsUrls($forceHttpsUrls)
-            ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
-            ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
-            ->allowMediaHosts($allowedHosts)
-            ->allowLinkSchemes(['https', 'http', 'mailto', 'data']));
+        $htmlSanitizer = new HtmlSanitizer(
+            new HtmlSanitizerConfig()
+                ->withMaxInputLength($contentLength + 1)
+                ->allowSafeElements()
+                ->allowRelativeLinks()
+                ->allowStaticElements()
+                ->allowRelativeMedias()
+                ->forceHttpsUrls($forceHttpsUrls)
+                ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
+                ->allowMediaSchemes(['https', 'http', 'mailto'])
+                ->allowMediaHosts($allowedHosts)
+                ->allowLinkSchemes(['https', 'http', 'mailto']),
+        );
 
         // Pre-encode whitespace in src/href attribute values, since Symfony HtmlSanitizer
         // rejects URLs containing unencoded spaces and strips the attribute entirely.

@@ -9,6 +9,7 @@ use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Tenant\QuotaExceededException;
 use phpMyFAQ\User\UserData;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -187,11 +188,117 @@ class UserTest extends TestCase
                 'user_id' => 42,
                 'login' => 'cookie-user',
                 'account_status' => 'active',
+                'remember_me_expires' => time() + 3600,
             ]);
         $this->userData->expects($this->once())->method('load')->with(42);
 
         $this->assertTrue($this->user->getUserByCookie('cookie-token'));
         $this->assertSame(42, $this->user->getUserId());
+    }
+
+    #[DataProvider('expiredRememberMeProvider')]
+    public function testGetUserByCookieRejectsExpiredOrUnboundedTokens(?int $expires): void
+    {
+        $previousRequestTime = $_SERVER['REQUEST_TIME'] ?? null;
+        $_SERVER['REQUEST_TIME'] = 1_800_000_000;
+
+        try {
+            $this->assertRememberMeTokenIsRejected($expires);
+        } finally {
+            $_SERVER['REQUEST_TIME'] = $previousRequestTime;
+        }
+    }
+
+    private function assertRememberMeTokenIsRejected(?int $expires): void
+    {
+        $this->database->method('escape')->willReturn('cookie-token');
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(1);
+        $this->database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => 42,
+                'login' => 'cookie-user',
+                'account_status' => 'active',
+                'remember_me_expires' => $expires,
+            ]);
+        $this->userData->expects($this->never())->method('load');
+
+        $this->assertFalse($this->user->getUserByCookie('cookie-token'));
+        $this->assertSame(-1, $this->user->getUserId());
+        $this->assertContains(User::ERROR_USER_INCORRECT_LOGIN, $this->user->errors);
+    }
+
+    /**
+     * @return array<string, array{0: ?int}>
+     */
+    public static function expiredRememberMeProvider(): array
+    {
+        return [
+            'expired one second before the request' => [1_799_999_999],
+            'issued before expiry tracking' => [null],
+            'zero expiry' => [0],
+        ];
+    }
+
+    public function testGetUserIdByEntraOidReturnsTheLinkedUser(): void
+    {
+        $this->userData
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->with('entra_oid', 'oid-123')
+            ->willReturn([
+                'user_id' => 13,
+            ]);
+
+        $this->assertSame(13, $this->user->getUserIdByEntraOid('oid-123'));
+    }
+
+    public function testGetUserIdByEntraOidIgnoresAnEmptyIdentifier(): void
+    {
+        $this->userData->expects($this->never())->method('fetchAll');
+
+        $this->assertSame(0, $this->user->getUserIdByEntraOid(''));
+    }
+
+    public function testChangePasswordRevokesRememberMeTokensAndSessions(): void
+    {
+        $this->setPrivateProperty('login', 'api-user');
+        $this->setPrivateProperty('userId', 15);
+        $this->setProtectedProperty('authContainer', []);
+
+        $writable = $this->createMock(AuthDatabase::class);
+        $writable->method('disableReadOnly')->willReturn(false);
+        $writable->expects($this->once())->method('update')->with('api-user', 'Secret123')->willReturn(true);
+        $this->user->addAuth($writable, 'writable');
+
+        $this->database
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->logicalAnd(
+                $this->stringContains('remember_me = NULL'),
+                $this->stringContains('remember_me_expires = NULL'),
+                $this->stringContains('session_id = NULL'),
+                $this->stringContains('user_id = 15'),
+            ))
+            ->willReturn(true);
+
+        $this->assertTrue($this->user->changePassword('Secret123'));
+    }
+
+    public function testChangePasswordDoesNotRevokeAnythingWhenNoDriverUpdated(): void
+    {
+        $this->setPrivateProperty('login', 'api-user');
+        $this->setProtectedProperty('authContainer', []);
+
+        $failing = $this->createMock(AuthDatabase::class);
+        $failing->method('disableReadOnly')->willReturn(false);
+        $failing->method('update')->willReturn(false);
+        $this->user->addAuth($failing, 'failing');
+
+        $this->database->expects($this->never())->method('query');
+
+        $this->assertFalse($this->user->changePassword('Secret123'));
     }
 
     public function testGetUserIdAddsErrorWhenUnset(): void
@@ -278,6 +385,26 @@ class UserTest extends TestCase
         $this->assertFalse($this->user->isValidLogin('a'));
         $this->assertContains(User::ERROR_USER_LOGIN_INVALID, $this->user->errors);
         $this->assertTrue($this->user->isValidLogin('valid_user'));
+    }
+
+    public function testIsValidLoginRejectsTrailingGarbage(): void
+    {
+        $this->assertFalse($this->user->isValidLogin("admin' OR 1=1"));
+        $this->assertFalse($this->user->isValidLogin('admin<script>'));
+        $this->assertFalse($this->user->isValidLogin("admin\n"));
+        $this->assertTrue($this->user->isValidLogin('john.doe-1@example.com'));
+    }
+
+    public function testSearchUsersEscapesLikeWildcards(): void
+    {
+        $this->database->expects($this->once())->method('escape')->with('th|_or|%%')->willReturn('th|_or|%%');
+        $this->database
+            ->expects($this->once())
+            ->method('query')
+            ->with(self::stringContains("login LIKE 'th|_or|%%' ESCAPE '|'"))
+            ->willReturn(false);
+
+        $this->assertSame([], $this->user->searchUsers('th_or%'));
     }
 
     public function testGetUserByLoginReturnsFalseWithoutErrorWhenDisabled(): void
@@ -508,31 +635,14 @@ class UserTest extends TestCase
         $this->assertSame([3, 5], $this->user->getAllUsers(false, false));
     }
 
-    public function testGetUserByIdReturnsFalseWhenNotFoundOrMissingLoginData(): void
+    public function testGetUserByIdReturnsFalseWhenNotFound(): void
     {
-        $this->setPrivateProperty('authData', [
-            'authSource' => [
-                'name' => 'db',
-                'type' => 'local',
-            ],
-            'encType' => User::DEFAULT_ENCRYPTION_TYPE,
-            'readOnly' => false,
-        ]);
-        $this->database->method('query')->willReturnOnConsecutiveCalls(true, true, true);
-        $this->database->method('numRows')->willReturnOnConsecutiveCalls(0, 1, 0);
-        $this->database
-            ->method('fetchArray')
-            ->willReturn([
-                'user_id' => 8,
-                'login' => 'db-user',
-                'account_status' => 'active',
-                'is_superadmin' => 0,
-                'auth_source' => 'local',
-            ]);
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(0);
         $this->database->method('error')->willReturn('db error');
 
         $this->assertFalse($this->user->getUserById(99));
-        $this->assertFalse($this->user->getUserById(8));
+        $this->assertContains(User::ERROR_USER_NO_USERID . 'error(): db error', $this->user->errors);
     }
 
     public function testGetUserByIdLoadsUserDataOnSuccess(): void
@@ -579,6 +689,7 @@ class UserTest extends TestCase
                 'user_id' => 42,
                 'login' => 'cookie-user',
                 'account_status' => 'active',
+                'remember_me_expires' => time() + 3600,
             ], [
                 'last_modified' => '20240101000000',
                 'display_name' => 'Cookie User',

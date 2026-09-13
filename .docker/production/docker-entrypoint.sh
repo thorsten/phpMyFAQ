@@ -7,7 +7,9 @@
 # 3. Installs phpMyFAQ headlessly when database and admin credentials are
 #    given and no installation exists yet. Without them the web installer at
 #    /setup/ is used instead.
-# 4. Hands over to the web server.
+# 4. Hands over to the web server. Apache keeps its root master process and
+#    drops the workers to www-data itself; FrankenPHP is started as www-data
+#    directly, so no root process stays around.
 
 set -eu
 
@@ -16,7 +18,7 @@ CONSOLE=/var/www/bin/console
 # "cache" holds the compiled routes, container, Twig templates and plugin
 # manifest in production mode; it is deliberately not a volume, so every new
 # image starts with a fresh cache.
-WRITABLE_DIRS="cache content/core/config content/core/data content/core/logs content/core/cache content/user/attachments content/user/images"
+WRITABLE_DIRS="cache content/core/config content/core/data content/core/logs content/core/cache content/core/exports content/core/upgrades content/user/attachments content/user/images"
 
 log() {
     printf '[phpmyfaq] %s\n' "$*"
@@ -92,4 +94,11 @@ else
 fi
 
 # --- 4. web server ------------------------------------------------------------
+if [ "$(id -u)" = "0" ] && [ "${1:-}" = "frankenphp" ]; then
+    # Caddy state (certificates, autosave config) lives in named volumes that
+    # may be root-owned on first start.
+    chown -R www-data:www-data /data /config
+    exec setpriv --reuid=www-data --regid=www-data --init-groups "$@"
+fi
+
 exec "$@"

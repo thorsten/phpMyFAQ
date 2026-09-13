@@ -7,12 +7,13 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Setup\Migration\MigrationTracker;
-use phpMyFAQ\Setup\Migration\Versions\Migration420Alpha2;
+use phpMyFAQ\Setup\Migration\Versions\Migration420Beta;
 use phpMyFAQ\System;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Random\RandomException;
 use ReflectionClass;
+use Symfony\Component\HttpFoundation\Request;
 
 #[AllowMockObjectsWithoutExpectations]
 class UpdateTest extends TestCase
@@ -139,10 +140,10 @@ class UpdateTest extends TestCase
         $update->dryRun = true;
         $update->applyUpdates();
 
-        $queries = array_filter(
-            $update->dryRunQueries,
-            static fn(string $query): bool => str_contains($query, 'faqquestion_history'),
-        );
+        $queries = array_filter($update->dryRunQueries, static fn(string $query): bool => str_contains(
+            $query,
+            'faqquestion_history',
+        ));
 
         $this->assertNotEmpty($queries, 'Amended migration must be re-run for installations that already applied it');
     }
@@ -163,10 +164,10 @@ class UpdateTest extends TestCase
         $update->dryRun = true;
         $update->applyUpdates();
 
-        $queries = array_filter(
-            $update->dryRunQueries,
-            static fn(string $query): bool => str_contains($query, 'faqquestion_history'),
-        );
+        $queries = array_filter($update->dryRunQueries, static fn(string $query): bool => str_contains(
+            $query,
+            'faqquestion_history',
+        ));
 
         $this->assertNotEmpty(
             $queries,
@@ -199,13 +200,13 @@ class UpdateTest extends TestCase
     public function testApplyUpdatesSkipsAppliedMigrationWithUnchangedChecksum(): void
     {
         $configuration = new Configuration($this->dbHandle);
-        $migration = new Migration420Alpha2($configuration);
+        $migration = new Migration420Beta($configuration);
         $tracker = new MigrationTracker($configuration);
         $tracker->ensureTableExists();
-        $tracker->recordMigration('4.2.0-alpha.2', 1, $migration->getChecksum(), $migration->getDescription());
+        $tracker->recordMigration('4.2.0-beta', 1, $migration->getChecksum(), $migration->getDescription());
 
         $update = new Update(new System(), $configuration);
-        $update->version = '4.2.0-alpha.2';
+        $update->version = '4.2.0-beta';
         $update->dryRun = true;
         $update->applyUpdates();
 
@@ -221,6 +222,68 @@ class UpdateTest extends TestCase
         $result = $this->update->dryRunQueries;
 
         $this->assertIsArray($result);
+    }
+
+    public function testRewriteBaseUpdateIsAllowedDuringInstallation(): void
+    {
+        $databaseConfig = PMF_CONFIG_DIR . '/database.php';
+        $backup = $databaseConfig . '.rewrite-test.bak';
+        $hidden = false;
+        if (is_file($databaseConfig)) {
+            rename($databaseConfig, $backup);
+            $hidden = true;
+        }
+
+        try {
+            $this->assertTrue($this->update->isRewriteBaseUpdateAllowed());
+        } finally {
+            if ($hidden) {
+                rename($backup, $databaseConfig);
+            }
+        }
+    }
+
+    public function testRewriteBaseUpdateIsRefusedForAnonymousRequestsAfterInstallation(): void
+    {
+        $databaseConfig = PMF_CONFIG_DIR . '/database.php';
+        $created = false;
+        if (!is_file($databaseConfig)) {
+            file_put_contents($databaseConfig, "<?php\n");
+            $created = true;
+        }
+
+        try {
+            $this->assertFalse($this->update->isRewriteBaseUpdateAllowed());
+        } finally {
+            if ($created) {
+                unlink($databaseConfig);
+            }
+        }
+    }
+
+    public function testCheckInitialRewriteBasePathDoesNotTouchHtaccessForAnonymousRequests(): void
+    {
+        $databaseConfig = PMF_CONFIG_DIR . '/database.php';
+        $created = false;
+        if (!is_file($databaseConfig)) {
+            file_put_contents($databaseConfig, "<?php\n");
+            $created = true;
+        }
+
+        $htaccess = PMF_ROOT_DIR . '/.htaccess';
+        $before = file_get_contents($htaccess);
+        $backupsBefore = glob($htaccess . '.backup-*') ?: [];
+
+        try {
+            $request = Request::create('/some/other/base/update');
+            $this->assertTrue($this->update->checkInitialRewriteBasePath($request));
+            $this->assertStringEqualsFile($htaccess, (string) $before);
+            $this->assertSame($backupsBefore, glob($htaccess . '.backup-*') ?: []);
+        } finally {
+            if ($created) {
+                unlink($databaseConfig);
+            }
+        }
     }
 
     public function testSetDryRun(): void

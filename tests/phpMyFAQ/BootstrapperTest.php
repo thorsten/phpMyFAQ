@@ -15,10 +15,12 @@ use phpMyFAQ\Configuration\SecuritySettings;
 use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettings;
 use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver;
 use phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
 use phpMyFAQ\Configuration\Storage\HybridConfigurationStore;
 use phpMyFAQ\Configuration\UrlSettings;
 use phpMyFAQ\Core\Exception\DatabaseConnectionException;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Plugin\PluginDiscovery;
 use phpMyFAQ\Plugin\PluginManager;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -27,8 +29,6 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
-use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
-use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(Bootstrapper::class)]
@@ -258,27 +258,62 @@ class BootstrapperTest extends TestCase
 
     public function testFixProxyHeadersWithForwardedServer(): void
     {
-        $bootstrapper = new Bootstrapper();
-        $request = Request::create('/', 'GET', [], [], [], ['HTTP_X_FORWARDED_SERVER' => 'proxy.example.com']);
-        // Remove HTTP_HOST so the proxy path is taken
-        $request->server->remove('HTTP_HOST');
-        $this->setPrivateProperty($bootstrapper, 'request', $request);
+        $_ENV['TRUSTED_PROXIES'] = '10.0.0.1';
+        try {
+            $bootstrapper = new Bootstrapper();
+            $request = Request::create('/', 'GET', [], [], [], ['HTTP_X_FORWARDED_SERVER' => 'proxy.example.com']);
+            // Remove HTTP_HOST so the proxy path is taken
+            $request->server->remove('HTTP_HOST');
+            $this->setPrivateProperty($bootstrapper, 'request', $request);
 
-        $this->invokePrivateMethod($bootstrapper, 'fixProxyHeaders', [$request]);
+            $this->invokePrivateMethod($bootstrapper, 'fixProxyHeaders', [$request]);
 
-        $this->assertEquals('proxy.example.com', $request->server->get('HTTP_HOST'));
+            $this->assertEquals('proxy.example.com', $request->server->get('HTTP_HOST'));
+        } finally {
+            unset($_ENV['TRUSTED_PROXIES']);
+        }
     }
 
     public function testFixProxyHeadersWithForwardedHost(): void
     {
+        $_ENV['TRUSTED_PROXIES'] = '10.0.0.1';
+        try {
+            $bootstrapper = new Bootstrapper();
+            $request = Request::create('/', 'GET', [], [], [], ['HTTP_X_FORWARDED_HOST' => 'forwarded.example.com']);
+            $request->server->remove('HTTP_HOST');
+            $this->setPrivateProperty($bootstrapper, 'request', $request);
+
+            $this->invokePrivateMethod($bootstrapper, 'fixProxyHeaders', [$request]);
+
+            $this->assertEquals('forwarded.example.com', $request->server->get('HTTP_HOST'));
+        } finally {
+            unset($_ENV['TRUSTED_PROXIES']);
+        }
+    }
+
+    public function testFixProxyHeadersIgnoresForwardedHeadersWithoutTrustedProxies(): void
+    {
+        unset($_ENV['TRUSTED_PROXIES']);
+        putenv('TRUSTED_PROXIES');
+
         $bootstrapper = new Bootstrapper();
-        $request = Request::create('/', 'GET', [], [], [], ['HTTP_X_FORWARDED_HOST' => 'forwarded.example.com']);
+        $request = Request::create(
+            '/',
+            'GET',
+            [],
+            [],
+            [],
+            [
+                'HTTP_X_FORWARDED_HOST' => 'forwarded.example.com',
+                'HTTP_X_FORWARDED_SERVER' => 'proxy.example.com',
+            ],
+        );
         $request->server->remove('HTTP_HOST');
         $this->setPrivateProperty($bootstrapper, 'request', $request);
 
         $this->invokePrivateMethod($bootstrapper, 'fixProxyHeaders', [$request]);
 
-        $this->assertEquals('forwarded.example.com', $request->server->get('HTTP_HOST'));
+        $this->assertFalse($request->server->has('HTTP_HOST'));
     }
 
     public function testConfigureLdapWhenActiveAndFileExists(): void

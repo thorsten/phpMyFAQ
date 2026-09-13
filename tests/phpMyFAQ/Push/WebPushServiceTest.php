@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Push;
 
+use GuzzleHttp\Client;
 use Monolog\Logger;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\PushSubscriptionEntity;
@@ -205,6 +206,22 @@ class WebPushServiceTest extends TestCase
 
         $this->service->sendToUsers([1, 2], 'Test', 'Body');
         $this->assertTrue(true);
+    }
+
+    /**
+     * Endpoints are user-supplied: the client must not follow redirects into the internal
+     * network and must not hang on an unresponsive host.
+     */
+    public function testHttpClientNeverFollowsRedirectsAndHasTimeouts(): void
+    {
+        $method = new \ReflectionMethod($this->service, 'createHttpClient');
+        $client = $method->invoke($this->service);
+
+        $this->assertInstanceOf(Client::class, $client);
+        $this->assertFalse($client->getConfig('allow_redirects'));
+        $this->assertFalse($client->getConfig('http_errors'));
+        $this->assertGreaterThan(0, $client->getConfig('timeout'));
+        $this->assertGreaterThan(0, $client->getConfig('connect_timeout'));
     }
 
     public function testSendToAllLogsErrorWhenPayloadEncodingFails(): void

@@ -24,7 +24,9 @@ namespace phpMyFAQ\EventListener;
 use phpMyFAQ\Api\ProblemDetails;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Environment;
+use phpMyFAQ\Http\SecurityEventLogger;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,8 +87,33 @@ readonly class ApiExceptionListener
             ));
         }
 
+        $this->logDeniedRequest($request, $throwable, $status);
+
         $response = $this->createProblemDetailsResponse($request, $status, $throwable, $defaultDetail);
         $event->setResponse($response);
+    }
+
+    /**
+     * Denied requests are security events: without a trace, credential stuffing
+     * and permission probing against the API are invisible.
+     */
+    private function logDeniedRequest(Request $request, Throwable $throwable, int $status): void
+    {
+        if ($this->configuration === null) {
+            return;
+        }
+
+        $type = match ($status) {
+            Response::HTTP_UNAUTHORIZED => AdminLogType::SECURITY_UNAUTHORIZED_ACCESS,
+            Response::HTTP_FORBIDDEN => AdminLogType::SECURITY_PERMISSION_VIOLATION,
+            default => null,
+        };
+
+        if ($type === null) {
+            return;
+        }
+
+        new SecurityEventLogger($this->configuration->getLogger())->log($type, $request, $throwable->getMessage());
     }
 
     private function createProblemDetailsResponse(

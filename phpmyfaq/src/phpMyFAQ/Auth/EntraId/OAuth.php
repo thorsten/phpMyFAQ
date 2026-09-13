@@ -35,6 +35,10 @@ use Throwable;
  */
 class OAuth
 {
+    private const float HTTP_TIMEOUT = 10.0;
+
+    private const int HTTP_MAX_REDIRECTS = 3;
+
     private HttpClientInterface $httpClient;
 
     /** @var stdClass|null JWT */
@@ -54,7 +58,10 @@ class OAuth
         private readonly EntraIdSession $entraIdSession,
         ?JwksProvider $jwksProvider = null,
     ) {
-        $this->httpClient = HttpClient::create();
+        $this->httpClient = HttpClient::create([
+            'timeout' => self::HTTP_TIMEOUT,
+            'max_redirects' => self::HTTP_MAX_REDIRECTS,
+        ]);
         $this->jwksProvider = $jwksProvider;
     }
 
@@ -233,5 +240,20 @@ class OAuth
     public function getMail(): string
     {
         return (string) ($this->token->preferred_username ?? '');
+    }
+
+    /**
+     * Returns the immutable identifier of the signed-in identity: the Entra ID object
+     * identifier, falling back to the token subject. Unlike the mail address it never
+     * changes for an account and cannot be reassigned to a different person.
+     */
+    public function getObjectId(): string
+    {
+        $objectId = trim((string) ($this->token->oid ?? ''));
+        if ($objectId !== '') {
+            return $objectId;
+        }
+
+        return trim((string) ($this->token->sub ?? ''));
     }
 }

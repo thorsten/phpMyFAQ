@@ -7,12 +7,13 @@ use phpMyFAQ\Auth\EntraId\EntraIdSession;
 use phpMyFAQ\Auth\EntraId\OAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AuthenticationSourceType;
+use phpMyFAQ\User;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use InvalidArgumentException;
 
 const AAD_OAUTH_TENANTID = 'test-tenant-id';
 
@@ -42,39 +43,73 @@ class AuthEntraIdTest extends TestCase
         $this->authEntraId = new AuthEntraId($this->configurationMock, $this->oAuthMock);
     }
 
+    private function createAuthWithUser(User $user): AuthEntraId
+    {
+        return new AuthEntraId($this->configurationMock, $this->oAuthMock, static fn(): User => $user);
+    }
+
     public function testConstruct(): void
     {
         $this->assertInstanceOf(AuthEntraId::class, $this->authEntraId);
         $this->assertInstanceOf(AuthDriverInterface::class, $this->authEntraId);
     }
 
-    public function testCreateSuccess(): void
+    public function testCreateLinksTheNewAccountToTheObjectIdentifier(): void
     {
-        $login = 'test@example.com';
-        $password = 'password';
-        $domain = 'example.com';
-
         $this->oAuthMock->method('getName')->willReturn('John Doe');
-        $this->oAuthMock->method('getMail')->willReturn('john.doe@example.com');
+        $this->oAuthMock->method('getMail')->willReturn('john@example.com');
+        $this->oAuthMock->method('getObjectId')->willReturn('oid-123');
 
-        // In test environment, User creation will fail due to missing database/permissions
-        // The unconfigured permission level now fails loudly with a typed exception
-        $this->expectException(InvalidArgumentException::class);
-        $this->authEntraId->create($login, $password, $domain);
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('createUser')->with('john@example.com', '', '')->willReturn(true);
+        $user
+            ->expects($this->once())
+            ->method('setUserData')
+            ->with(['display_name' => 'John Doe', 'email' => 'john@example.com', 'entra_oid' => 'oid-123'])
+            ->willReturn(true);
+        $user->expects($this->once())->method('setStatus')->with('active');
+        $user->expects($this->once())->method('setAuthSource')->with(AuthenticationSourceType::AUTH_AZURE->value);
+        $user->method('getUserId')->willReturn(42);
+
+        $auth = $this->createAuthWithUser($user);
+
+        $this->assertTrue($auth->create('john@example.com', ''));
+        $this->assertSame(42, $auth->getAuthenticatedUserId());
     }
 
-    public function testCreateWithException(): void
+    public function testCreateNeverTouchesAnExistingAccountWhenTheLoginIsTaken(): void
     {
-        $login = 'test@example.com';
-        $password = 'password';
+        $this->oAuthMock->method('getMail')->willReturn('john@example.com');
+        $this->oAuthMock->method('getObjectId')->willReturn('oid-123');
 
-        $this->oAuthMock->method('getName')->willReturn('John Doe');
-        $this->oAuthMock->method('getMail')->willReturn('john.doe@example.com');
+        $user = $this->createMock(User::class);
+        $user
+            ->expects($this->once())
+            ->method('createUser')
+            ->willThrowException(new Exception(User::ERROR_USER_LOGIN_NOT_UNIQUE));
+        $user->expects($this->never())->method('setStatus');
+        $user->expects($this->never())->method('setAuthSource');
+        $user->expects($this->never())->method('setUserData');
 
-        // In the test environment, the unconfigured permission level fails before reaching the logger
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid permission level');
-        $this->authEntraId->create($login, $password);
+        $auth = $this->createAuthWithUser($user);
+
+        $this->assertFalse($auth->create('john@example.com', ''));
+        $this->assertSame(0, $auth->getAuthenticatedUserId());
+    }
+
+    public function testCreateFailsWhenTheLinkCannotBePersisted(): void
+    {
+        $this->oAuthMock->method('getMail')->willReturn('john@example.com');
+        $this->oAuthMock->method('getObjectId')->willReturn('oid-123');
+
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willReturn(true);
+        $user->method('setUserData')->willReturn(false);
+        $user->expects($this->never())->method('setStatus');
+
+        $auth = $this->createAuthWithUser($user);
+
+        $this->assertFalse($auth->create('john@example.com', ''));
     }
 
     public function testUpdate(): void
@@ -89,20 +124,147 @@ class AuthEntraIdTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @throws Exception
-     */
-    public function testCheckCredentials(): void
+    public function testCheckCredentialsAcceptsTheAccountLinkedToTheObjectIdentifier(): void
     {
-        $login = 'test@example.com';
-        $password = 'password';
+        $this->oAuthMock->method('getMail')->willReturn('john@example.com');
+        $this->oAuthMock->method('getObjectId')->willReturn('oid-123');
 
-        $this->oAuthMock->method('getName')->willReturn('John Doe');
-        $this->oAuthMock->method('getMail')->willReturn('john.doe@example.com');
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserIdByEntraOid')->with('oid-123')->willReturn(7);
+        $user->expects($this->once())->method('getUserById')->with(7, true)->willReturn(true);
+        $user->method('getStatus')->willReturn('active');
+        $user->method('getUserId')->willReturn(7);
+        $user->expects($this->never())->method('createUser');
+        $user->expects($this->never())->method('setStatus');
 
-        // checkCredentials calls create() internally, which fails on the unconfigured permission level
-        $this->expectException(InvalidArgumentException::class);
-        $this->authEntraId->checkCredentials($login, $password);
+        $auth = $this->createAuthWithUser($user);
+
+        $this->assertTrue($auth->checkCredentials('john@example.com', ''));
+        $this->assertSame(7, $auth->getAuthenticatedUserId());
+    }
+
+    public function testCheckCredentialsRefusesABlockedLinkedAccount(): void
+    {
+        $this->oAuthMock->method('getMail')->willReturn('john@example.com');
+        $this->oAuthMock->method('getObjectId')->willReturn('oid-123');
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserIdByEntraOid')->willReturn(7);
+        $user->method('getUserById')->willReturn(true);
+        $user->method('getStatus')->willReturn('blocked');
+        $user->expects($this->never())->method('createUser');
+        $user->expects($this->never())->method('setStatus');
+
+        $auth = $this->createAuthWithUser($user);
+
+        $this->assertFalse($auth->checkCredentials('john@example.com', ''));
+        $this->assertSame(0, $auth->getAuthenticatedUserId());
+    }
+
+    public function testCheckCredentialsRefusesAnExistingAccountThatIsNotLinked(): void
+    {
+        $this->oAuthMock->method('getMail')->willReturn('admin@example.com');
+        $this->oAuthMock->method('getObjectId')->willReturn('oid-attacker');
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserIdByEntraOid')->willReturn(0);
+        $user->expects($this->once())->method('getUserByLogin')->with('admin@example.com', false)->willReturn(true);
+        $user->expects($this->never())->method('createUser');
+        $user->expects($this->never())->method('setStatus');
+        $user->expects($this->never())->method('setAuthSource');
+        $user->expects($this->never())->method('setUserData');
+
+        $auth = $this->createAuthWithUser($user);
+
+        $this->assertFalse($auth->checkCredentials('admin@example.com', ''));
+        $this->assertSame(0, $auth->getAuthenticatedUserId());
+    }
+
+    public function testCheckCredentialsProvisionsAnAccountForAnUnknownLogin(): void
+    {
+        $this->oAuthMock->method('getName')->willReturn('Jane Doe');
+        $this->oAuthMock->method('getMail')->willReturn('jane@example.com');
+        $this->oAuthMock->method('getObjectId')->willReturn('oid-jane');
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserIdByEntraOid')->willReturn(0);
+        $user->expects($this->once())->method('getUserByLogin')->with('jane@example.com', false)->willReturn(false);
+        $user->expects($this->once())->method('createUser')->with('jane@example.com', '', '')->willReturn(true);
+        $user->expects($this->once())->method('setUserData')->willReturn(true);
+        $user->expects($this->once())->method('setStatus')->with('active');
+        $user->method('getUserId')->willReturn(9);
+
+        $auth = $this->createAuthWithUser($user);
+
+        $this->assertTrue($auth->checkCredentials('jane@example.com', ''));
+        $this->assertSame(9, $auth->getAuthenticatedUserId());
+    }
+
+    #[DataProvider('rejectedLoginProvider')]
+    public function testCheckCredentialsRefusesWithoutAUsableIdentity(string $login, string $mail, string $oid): void
+    {
+        $this->oAuthMock->method('getMail')->willReturn($mail);
+        $this->oAuthMock->method('getObjectId')->willReturn($oid);
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->never())->method('createUser');
+        $user->expects($this->never())->method('getUserIdByEntraOid');
+
+        $auth = $this->createAuthWithUser($user);
+
+        $this->assertFalse($auth->checkCredentials($login, ''));
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string, 2: string}>
+     */
+    public static function rejectedLoginProvider(): array
+    {
+        return [
+            'login differs from token mail' => ['other@example.com', 'john@example.com', 'oid-123'],
+            'empty login and empty token' => ['', '', 'oid-123'],
+            'token without object identifier' => ['john@example.com', 'john@example.com', ''],
+        ];
+    }
+
+    public function testIsValidLoginRejectsAnEmptyLoginEvenWhenTheTokenIsEmpty(): void
+    {
+        $this->oAuthMock->method('getMail')->willReturn('');
+
+        $this->assertSame(0, $this->authEntraId->isValidLogin(''));
+    }
+
+    public function testIsValidStateAcceptsTheStateStoredInTheSession(): void
+    {
+        $this->sessionMock
+            ->expects($this->exactly(2))
+            ->method('get')
+            ->with(EntraIdSession::ENTRA_ID_OAUTH_STATE)
+            ->willReturn('state-123');
+
+        $this->assertTrue($this->authEntraId->isValidState('state-123'));
+        $this->assertFalse($this->authEntraId->isValidState('state-456'));
+    }
+
+    public function testIsValidStateFallsBackToTheCookieWhenTheSessionIsEmpty(): void
+    {
+        $this->sessionMock->method('get')->willReturn(null);
+        $this->sessionMock
+            ->expects($this->once())
+            ->method('getCookie')
+            ->with(EntraIdSession::ENTRA_ID_OAUTH_STATE)
+            ->willReturn('state-123');
+
+        $this->assertTrue($this->authEntraId->isValidState('state-123'));
+    }
+
+    public function testIsValidStateRejectsMissingStates(): void
+    {
+        $this->sessionMock->method('get')->willReturn(null);
+        $this->sessionMock->method('getCookie')->willReturn('');
+
+        $this->assertFalse($this->authEntraId->isValidState(''));
+        $this->assertFalse($this->authEntraId->isValidState('state-123'));
     }
 
     public function testIsValidLoginSuccess(): void
@@ -133,22 +295,44 @@ class AuthEntraIdTest extends TestCase
 
         $this->sessionMock->expects($this->once())->method('setCurrentSessionKey');
 
+        $stored = [];
         $this->sessionMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('set')
-            ->with(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER, $this->isString());
+            ->willReturnCallback(static function (string $key, mixed $value) use (&$stored): void {
+                $stored[$key] = $value;
+            });
 
+        $cookies = [];
         $this->sessionMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('setCookie')
-            ->with(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER, $this->isString(), 7200, false);
+            ->willReturnCallback(static function (string $name, mixed $value, int $timeout, bool $strict) use (
+                &$cookies,
+            ): void {
+                $cookies[$name] = [$value, $timeout, $strict];
+            });
 
         $response = $this->authEntraId->authorize();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertStringContainsString('login.microsoftonline.com', (string) $response->headers->get('Location'));
-        $this->assertStringContainsString('test-tenant-id', (string) $response->headers->get('Location'));
-        $this->assertStringContainsString('test-client-id', (string) $response->headers->get('Location'));
+        $location = (string) $response->headers->get('Location');
+        $this->assertStringContainsString('login.microsoftonline.com', $location);
+        $this->assertStringContainsString('test-tenant-id', $location);
+        $this->assertStringContainsString('test-client-id', $location);
+
+        $this->assertArrayHasKey(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER, $stored);
+        $this->assertArrayHasKey(EntraIdSession::ENTRA_ID_OAUTH_STATE, $stored);
+        $state = $stored[EntraIdSession::ENTRA_ID_OAUTH_STATE];
+        $this->assertIsString($state);
+        $this->assertMatchesRegularExpression('/^[0-9a-f]{64}$/', $state);
+        $this->assertStringContainsString('&state=' . $state, $location);
+
+        $this->assertSame(
+            [$stored[EntraIdSession::ENTRA_ID_OAUTH_VERIFIER], 7200, false],
+            $cookies[EntraIdSession::ENTRA_ID_OAUTH_VERIFIER],
+        );
+        $this->assertSame([$state, 7200, false], $cookies[EntraIdSession::ENTRA_ID_OAUTH_STATE]);
     }
 
     public function testLogout(): void

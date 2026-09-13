@@ -299,7 +299,10 @@ class Search
         // Build language condition
         $langCondition = '';
         if (!$allLanguages) {
-            $langCondition = sprintf(" AND lang = '%s'", $this->configuration->getLanguage()->getLanguage());
+            $langCondition = sprintf(
+                " AND lang = '%s'",
+                $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
+            );
         }
 
         // Build the query
@@ -408,7 +411,7 @@ class Search
             "INSERT INTO %s (id, lang, searchterm, searchdate) VALUES (%d, '%s', '%s', '%s')",
             $this->table,
             $this->configuration->getDb()->nextId($this->table, 'id'),
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             $this->configuration->getDb()->escape($sanitizedSearchTerm),
             $dateTime->format('Y-m-d H:i:s'),
         );

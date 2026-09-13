@@ -34,10 +34,20 @@ DirectoryIndex index.php
 # X-Frame-Options to prevent clickjacking
 <IfModule mod_headers.c>
     Header always append X-Frame-Options SAMEORIGIN
-    # CORS
-    Header set Access-Control-Allow-Origin "*"
-    Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE"
-    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+    # CORS: only the public REST API (/api/) is meant to be called cross-origin.
+    # The admin API (/admin/api/) and the HTML pages must not send wildcard
+    # CORS headers.
+    <If "%{REQUEST_URI} =~ m#(^|/)api/# && %{REQUEST_URI} !~ m#/admin/api/#">
+        Header set Access-Control-Allow-Origin "*"
+        Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE"
+        Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+    </If>
+    # User-uploaded SVG files may contain scripts: sandbox them when opened
+    # directly so they never run in the site origin, and forbid MIME sniffing.
+    <If "%{REQUEST_URI} =~ m#/content/user/images/.*\.svgz?$#i">
+        Header set Content-Security-Policy "sandbox"
+        Header set X-Content-Type-Options "nosniff"
+    </If>
 </IfModule>
 # Set cache control
 <filesMatch ".(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
@@ -121,6 +131,9 @@ DirectoryIndex index.php
     # The tracking logs may contain sensitive query strings such as password
     # reset signatures, so they must never be served to HTTP clients.
     RewriteRule ^content/core/ - [F,L]
+    # Block the updater's working directory (downloaded packages, extracted
+    # code, full-installation backups including the configuration)
+    RewriteRule ^content/upgrades/ - [F,L]
     # Block direct access to attachments: downloads must go through the
     # permission-checked /attachment/{id} controller
     RewriteRule ^content/user/attachments/ - [F,L]

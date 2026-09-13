@@ -38,10 +38,15 @@ The application writes only below `content/`. These directories are volumes in t
 | Path in the container                    | Content                                             |
 |------------------------------------------|-----------------------------------------------------|
 | `/var/www/html/content/core/config`      | database and service configuration                  |
-| `/var/www/html/content/core/data`        | application data (SQLite databases, exports)        |
+| `/var/www/html/content/core/data`        | application data (SQLite databases)                 |
 | `/var/www/html/content/core/logs`        | application logs                                    |
 | `/var/www/html/content/user/attachments` | uploaded attachments                                |
 | `/var/www/html/content/user/images`      | uploaded images                                     |
+
+`content/core/exports` (generated exports, sent by e-mail) and `content/core/upgrades` (the updater's
+working directory) are also writable but transient, so they are not volumes. The FrankenPHP image runs
+the server as `www-data`; the entrypoint starts as root only to prepare the volumes and then drops
+privileges. The Apache image keeps Apache's usual root master process with `www-data` workers.
 
 ## Prerequisites
 
@@ -89,6 +94,7 @@ All settings live in `.env`; `.env.production.example` documents every variable.
 | `PMF_DB_*`, `PMF_ADMIN_*`, `PMF_BASE_URL` | headless installation, read only while no installation exists               |
 | `MYSQL_*`, `POSTGRES_*`           | credentials the database container is created with; `PMF_DB_*` must match them     |
 | `SERVER_NAME`                     | FrankenPHP only: a public host name turns on automatic HTTPS                        |
+| `TRUSTED_PROXIES`                 | IPs/CIDRs of reverse proxies whose `X-Forwarded-*` headers are trusted, or `REMOTE_ADDR` |
 | `ELASTICSEARCH_BASE_URI`, `OPENSEARCH_BASE_URI` | search engine URL, e.g. `http://elasticsearch:9200`                   |
 
 Values that are already stored in the installation (database credentials, base URL) are changed in the
@@ -160,6 +166,12 @@ Set `COMPOSE_PROFILES=frankenphp,...`, `SERVER_NAME=faq.example.com` and `PMF_BA
 Certificates are stored in the `caddy_data` volume.
 
 ### Option 2: A reverse proxy in front of the Apache image
+
+Set `TRUSTED_PROXIES` to the proxy's IP or network (or `REMOTE_ADDR` when the proxy is the only thing
+that can reach the container, as in the compose network below). Without it phpMyFAQ ignores the
+`X-Forwarded-For`, `X-Forwarded-Host`, `X-Forwarded-Port` and `X-Forwarded-Proto` headers, so it would
+see the proxy as the client and would not know that the request came in over HTTPS. Never trust
+proxies that are not under your control: a client could otherwise spoof its IP address and host name.
 
 Add a `docker-compose.override.yml` with your proxy. The example uses Traefik with Let's Encrypt:
 

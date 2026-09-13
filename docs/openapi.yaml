@@ -1199,7 +1199,7 @@ paths:
     get:
       tags:
         - 'Endpoints with Authentication'
-      description: 'Returns paginated list of group IDs.'
+      description: 'Returns paginated list of group IDs. Requires the user and group administration permissions.'
       operationId: getGroups
       parameters:
         - name: page
@@ -1284,6 +1284,13 @@ paths:
                   sorting: { field: group-id, order: asc }
         '401':
           description: 'If the user is not authenticated.'
+          headers:
+            Accept-Language:
+              description: 'The language code for the login.'
+              schema:
+                type: string
+        '403':
+          description: 'If the user does not hold the user and group administration permissions.'
           headers:
             Accept-Language:
               description: 'The language code for the login.'

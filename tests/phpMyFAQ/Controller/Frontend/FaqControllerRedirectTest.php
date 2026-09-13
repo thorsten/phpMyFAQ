@@ -128,6 +128,49 @@ final class FaqControllerRedirectTest extends TestCase
         self::assertSame('/content/7/42/en/test-question.html', $response->headers->get('Location'));
     }
 
+    public function testSolutionReturnsNotFoundForUnpublishedFaq(): void
+    {
+        $this->seedFaqRecord(7, 42, 4242, 'en', 'Secret Draft', status: 'draft');
+
+        $controller = $this->createController();
+        $request = Request::create('/solution_id_4242.html', 'GET');
+        $request->attributes->set('solutionId', '4242');
+
+        $response = $controller->solution($request);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertNull($response->headers->get('Location'));
+    }
+
+    public function testContentReturnsNotFoundForUnpublishedFaq(): void
+    {
+        $this->seedFaqRecord(7, 42, 4242, 'en', 'Secret Draft', status: 'draft');
+
+        $controller = $this->createController();
+        $request = Request::create('/content/42/en', 'GET');
+        $request->attributes->set('faqId', '42');
+        $request->attributes->set('faqLang', 'en');
+
+        $response = $controller->contentRedirect($request);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertNull($response->headers->get('Location'));
+    }
+
+    public function testContentReturnsNotFoundForExpiredFaq(): void
+    {
+        $this->seedFaqRecord(7, 42, 4242, 'en', 'Expired Entry', dateEnd: '20000101000000');
+
+        $controller = $this->createController();
+        $request = Request::create('/content/42/en', 'GET');
+        $request->attributes->set('faqId', '42');
+        $request->attributes->set('faqLang', 'en');
+
+        $response = $controller->contentRedirect($request);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
     private function createController(): FaqController
     {
         $currentUser = new CurrentUser($this->configuration);
@@ -160,6 +203,8 @@ final class FaqControllerRedirectTest extends TestCase
         int $solutionId,
         string $language,
         string $question,
+        string $status = 'published',
+        string $dateEnd = '99991231235959',
     ): void {
         $this->configuration
             ->getDb()
@@ -174,11 +219,13 @@ final class FaqControllerRedirectTest extends TestCase
             ->getDb()
             ->query(sprintf(
                 "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
-                 VALUES (%d, '%s', %d, 0, 'published', 0, '', '%s', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                 VALUES (%d, '%s', %d, 0, '%s', 0, '', '%s', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '%s')",
                 $faqId,
                 $language,
                 $solutionId,
+                $status,
                 \SQLite3::escapeString($question),
+                $dateEnd,
             ));
 
         $this->configuration

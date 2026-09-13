@@ -42,6 +42,11 @@ final readonly class ExportHandler
     ) {
     }
 
+    public static function getExportDirectory(): string
+    {
+        return (string) PMF_ROOT_DIR . '/content/core/exports';
+    }
+
     public function __invoke(ExportMessage $message): void
     {
         $user = null;
@@ -101,7 +106,9 @@ final readonly class ExportHandler
             throw new RuntimeException('Export generated empty content');
         }
 
-        $exportDir = (string) PMF_ROOT_DIR . '/content/user/exports';
+        // Exports are only ever delivered by e-mail, so they are stored below
+        // content/core/, which the web server never serves.
+        $exportDir = self::getExportDirectory();
         if (
             !is_dir($exportDir)
             && !mkdir(directory: $exportDir, permissions: 0o775, recursive: true)

@@ -249,7 +249,7 @@ final class AuthenticationControllerTest extends TestCase
         ob_end_clean();
 
         self::assertInstanceOf(RedirectResponse::class, $response);
-        self::assertSame($this->configuration->getDefaultUrl() . 'admin/login', $response->getTargetUrl());
+        self::assertSame('https://idp.example.test/logout', $response->getTargetUrl());
     }
 
     /**

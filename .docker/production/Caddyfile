@@ -12,12 +12,30 @@
 	root * /var/www/html
 	encode zstd gzip
 
-	# Server-side internals and raw attachments are never served directly;
-	# attachments go through the permission-checked /attachment/{id} route.
-	@internal path /content/core/* /content/user/attachments/* /cache/*
+	# Server-side internals, the updater's working directory and raw
+	# attachments are never served directly; attachments go through the
+	# permission-checked /attachment/{id} route.
+	@internal path /content/core/* /content/upgrades/* /content/user/attachments/* /cache/*
 	respond @internal 403
 	@archives path_regexp ^/content/.*\.zip$
 	respond @archives 403
+	# Dot files (.env, .git, .htaccess) and Composer manifests; /.well-known/
+	# stays reachable for the OAuth discovery document and ACME challenges.
+	@dotfiles {
+		path_regexp (^|/)\.[^/]
+		not path /.well-known/*
+	}
+	respond @dotfiles 403
+	@manifests path /composer.json /composer.lock /package.json /pnpm-lock.yaml
+	respond @manifests 403
+
+	# User-uploaded SVG files may contain scripts: sandbox them when opened
+	# directly so they never run in the site origin.
+	@user_svg path_regexp (?i)^/content/user/images/.*\.svgz?$
+	header @user_svg {
+		Content-Security-Policy sandbox
+		X-Content-Type-Options nosniff
+	}
 
 	# Front controllers of the sub applications
 	@admin_api path /admin/api/*

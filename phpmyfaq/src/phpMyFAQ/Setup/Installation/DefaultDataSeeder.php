@@ -309,6 +309,7 @@ class DefaultDataSeeder
             'upgrade.lastDownloadedPackage' => '',
             'upgrade.onlineUpdateEnabled' => 'false',
             'upgrade.releaseEnvironment' => '__PHPMYFAQ_RELEASE__',
+            'upgrade.allowUnverifiedNightly' => 'false',
             'layout.templateSet' => 'default',
             'layout.defaultLayoutMode' => 'auto',
             'layout.allowUserLayoutMode' => 'true',

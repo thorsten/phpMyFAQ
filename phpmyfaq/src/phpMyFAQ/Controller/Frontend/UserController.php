@@ -208,24 +208,33 @@ final class UserController extends AbstractFrontController
             ));
         }
 
+        $twoFactorEnabled = (int) $this->currentUser->getUserData('twofactor_enabled') === 1;
+
+        // The seed is only exposed during enrolment. Once the second factor is active, rendering
+        // it again on every visit would let anyone with a stolen session clone the authenticator;
+        // re-enrolment goes through the removal flow, which requires a valid code.
         $qrCode = '';
         $secret = '';
-        try {
-            $twoFactor = new TwoFactor($this->configuration, $this->currentUser);
-            $secret = $twoFactor->getSecret($this->currentUser);
-            if ('' === $secret || is_null($secret)) {
-                try {
-                    $secret = $twoFactor->generateSecret();
-                } catch (TwoFactorAuthException $exception) {
-                    $this->configuration->getLogger()->error('Cannot generate 2FA secret: ' . $exception->getMessage());
+        if (!$twoFactorEnabled) {
+            try {
+                $twoFactor = new TwoFactor($this->configuration, $this->currentUser);
+                $secret = $twoFactor->getSecret($this->currentUser);
+                if ('' === $secret || is_null($secret)) {
+                    try {
+                        $secret = $twoFactor->generateSecret();
+                    } catch (TwoFactorAuthException $exception) {
+                        $this->configuration
+                            ->getLogger()
+                            ->error('Cannot generate 2FA secret: ' . $exception->getMessage());
+                    }
+
+                    $twoFactor->saveSecret($secret ?? '');
                 }
 
-                $twoFactor->saveSecret($secret ?? '');
+                $qrCode = $twoFactor->getQrCode($secret ?? '');
+            } catch (TwoFactorAuthException|\Exception $exception) {
+                $this->configuration->getLogger()->error('2FA error: ' . $exception->getMessage());
             }
-
-            $qrCode = $twoFactor->getQrCode($secret ?? '');
-        } catch (TwoFactorAuthException|\Exception $exception) {
-            $this->configuration->getLogger()->error('2FA error: ' . $exception->getMessage());
         }
 
         return $this->render('ucp.twig', [
@@ -247,8 +256,9 @@ final class UserController extends AbstractFrontController
             'msgConfirm' => Translation::get(key: 'ad_user_confirm'),
             'msgSave' => Translation::get(key: 'msgSave'),
             'msgCancel' => Translation::get(key: 'msgCancel'),
-            'twofactor_enabled' => (bool) $this->currentUser->getUserData('twofactor_enabled'),
+            'twofactor_enabled' => $twoFactorEnabled,
             'msgTwofactorEnabled' => Translation::get(key: 'msgTwofactorEnabled'),
+            'msgTwofactorAlreadyConfigured' => Translation::get(key: 'msgTwofactorAlreadyConfigured'),
             'msgTwofactorConfig' => Translation::get(key: 'msgTwofactorConfig'),
             'msgTwofactorConfigModelTitle' => Translation::get(key: 'msgTwofactorConfigModelTitle'),
             'twofactor_secret' => $secret,

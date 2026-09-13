@@ -22,6 +22,8 @@ x-phpmyfaq-environment: &phpmyfaq-environment
   PMF_MEMORY_LIMIT: ${PMF_MEMORY_LIMIT:-512M}
   PHP_UPLOAD_MAX_FILESIZE: ${PHP_UPLOAD_MAX_FILESIZE:-64M}
   PHP_POST_MAX_SIZE: ${PHP_POST_MAX_SIZE:-64M}
+  # Reverse proxies whose X-Forwarded-* headers are trusted (see .env.production.example)
+  TRUSTED_PROXIES: ${TRUSTED_PROXIES:-}
   # Headless installation on first start (optional, see .env.production.example)
   PMF_DB_TYPE: ${PMF_DB_TYPE:-mysqli}
   PMF_DB_HOST: ${PMF_DB_HOST:-}

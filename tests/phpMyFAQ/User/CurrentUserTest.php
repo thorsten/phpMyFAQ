@@ -154,9 +154,7 @@ class CurrentUserTest extends TestCase
     public function testRepeatedFailuresLockTheAccountWithoutEmailLogin(): void
     {
         $this->resetLockoutState();
-        $this->assertFalse(
-            (bool) $this->configuration->get('security.loginWithEmailAddress'),
-        );
+        $this->assertFalse((bool) $this->configuration->get('security.loginWithEmailAddress'));
 
         try {
             for ($attempt = 0; $attempt <= 5; ++$attempt) {
@@ -192,10 +190,12 @@ class CurrentUserTest extends TestCase
      */
     private function resetLockoutState(): void
     {
-        $this->configuration->getDb()->query(sprintf(
-            "UPDATE %sfaquser SET login_attempts = 0, success = 1, ip = '' WHERE user_id = 1",
-            Database::getTablePrefix(),
-        ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "UPDATE %sfaquser SET login_attempts = 0, success = 1, ip = '' WHERE user_id = 1",
+                Database::getTablePrefix(),
+            ));
     }
 
     /**
@@ -261,6 +261,30 @@ class CurrentUserTest extends TestCase
 
     /**
      * @throws Exception
+     */
+    public function testSetRememberMeStoresAnExpiryMatchingTheCookieLifetime(): void
+    {
+        $this->resetRememberMeToken();
+
+        try {
+            $this->currentUser->login('admin', 'password');
+            $this->assertTrue($this->currentUser->setRememberMe('remember-me-token'));
+
+            $database = $this->configuration->getDb();
+            $result = $database->query(sprintf(
+                'SELECT remember_me_expires FROM %sfaquser WHERE user_id = 1',
+                Database::getTablePrefix(),
+            ));
+            $expires = (int) ($database->fetchArray($result)['remember_me_expires'] ?? 0);
+
+            $this->assertSame((int) $_SERVER['REQUEST_TIME'] + 1_209_600, $expires);
+        } finally {
+            $this->resetRememberMeToken();
+        }
+    }
+
+    /**
+     * @throws Exception
      * @throws \JsonException
      */
     public function testSetTokenDataPersistsOauthFields(): void
@@ -322,7 +346,7 @@ class CurrentUserTest extends TestCase
             // so even a correct-password re-authentication is refused while locked out.
             $caught = null;
             try {
-                (new CurrentUser($this->configuration))->login('admin', 'password');
+                new CurrentUser($this->configuration)->login('admin', 'password');
             } catch (Exception $exception) {
                 $caught = $exception;
             }
@@ -467,9 +491,11 @@ class CurrentUserTest extends TestCase
      */
     private function resetRememberMeToken(): void
     {
-        $this->configuration->getDb()->query(sprintf(
-            'UPDATE %sfaquser SET remember_me = NULL WHERE user_id = 1',
-            Database::getTablePrefix(),
-        ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                'UPDATE %sfaquser SET remember_me = NULL, remember_me_expires = NULL WHERE user_id = 1',
+                Database::getTablePrefix(),
+            ));
     }
 }

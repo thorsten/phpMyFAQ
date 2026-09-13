@@ -221,6 +221,51 @@ class HandlersTest extends TestCase
         $handler(new ExportMessage('pdf', 5));
     }
 
+    public function testExportHandlerWritesExportsBelowContentCore(): void
+    {
+        $this->assertSame(PMF_ROOT_DIR . '/content/core/exports', ExportHandler::getExportDirectory());
+
+        $configuration = $this->createStub(Configuration::class);
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission->expects($this->once())->method('hasPermission')->with(5, 'export')->willReturn(true);
+
+        $user = $this->createMock(User::class);
+        $user->perm = $permission;
+        $user->expects($this->once())->method('getUserById')->with(5)->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('');
+
+        $faq = $this->createMock(Faq::class);
+        $category = $this->createMock(Category::class);
+        $exporter = new class {
+            public function generate(int $categoryId = 0, bool $downwards = true, string $language = ''): string
+            {
+                return '{"export":true}';
+            }
+        };
+
+        $handler = new ExportHandler(
+            $configuration,
+            static fn(): User => $user,
+            static fn(): Faq => $faq,
+            static fn(): Category => $category,
+            static fn(Faq $faq, Category $category, string $format): object => $exporter,
+        );
+
+        $before = glob(ExportHandler::getExportDirectory() . '/export-5-*.json') ?: [];
+        $handler(new ExportMessage('json', 5));
+        $written = array_diff(glob(ExportHandler::getExportDirectory() . '/export-5-*.json') ?: [], $before);
+
+        try {
+            $this->assertCount(1, $written);
+            $this->assertStringEqualsFile((string) reset($written), '{"export":true}');
+            $this->assertFileDoesNotExist(PMF_ROOT_DIR . '/content/user/exports');
+        } finally {
+            foreach ($written as $file) {
+                unlink($file);
+            }
+        }
+    }
+
     public function testIndexFaqHandlerReturnsWithoutIndexingWhenFaqIsMissing(): void
     {
         $configuration = new class($this->createSqliteDatabase()) extends Configuration {

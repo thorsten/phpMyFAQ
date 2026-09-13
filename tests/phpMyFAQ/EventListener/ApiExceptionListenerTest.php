@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\EventListener;
 
+use Monolog\Logger;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Environment;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -120,6 +122,48 @@ class ApiExceptionListenerTest extends TestCase
         $content = json_decode($response->getContent(), true);
         $this->assertEquals(403, $content['status']);
         $this->assertEquals('Forbidden', $content['title']);
+    }
+
+    public function testLogsForbiddenRequestAsSecurityEvent(): void
+    {
+        $logger = $this->createMock(Logger::class);
+        $logger
+            ->expects($this->once())
+            ->method('warning')
+            ->with($this->logicalAnd(
+                $this->stringContains('security-permission-violation'),
+                $this->stringContains('path=/api/v3.2/admin'),
+            ));
+        $this->configuration->method('getLogger')->willReturn($logger);
+
+        $event = $this->createEvent(Request::create('/api/v3.2/admin'), new ForbiddenException('Access denied'));
+
+        $this->listener->onKernelException($event);
+    }
+
+    public function testLogsUnauthorizedRequestAsSecurityEvent(): void
+    {
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->once())->method('warning')->with($this->stringContains('security-unauthorized-access'));
+        $this->configuration->method('getLogger')->willReturn($logger);
+
+        $event = $this->createEvent(
+            Request::create('/api/v3.2/admin'),
+            new UnauthorizedHttpException(challenge: 'User is not authenticated.'),
+        );
+
+        $this->listener->onKernelException($event);
+    }
+
+    public function testDoesNotLogNotFoundAsSecurityEvent(): void
+    {
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->never())->method('warning');
+        $this->configuration->method('getLogger')->willReturn($logger);
+
+        $event = $this->createEvent(Request::create('/api/v3.2/missing'), new NotFoundHttpException());
+
+        $this->listener->onKernelException($event);
     }
 
     public function testHandlesBadRequestException(): void

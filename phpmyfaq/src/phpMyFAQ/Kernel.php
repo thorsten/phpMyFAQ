@@ -30,6 +30,7 @@ use phpMyFAQ\EventListener\ApiRateLimiterListener;
 use phpMyFAQ\EventListener\ControllerContainerListener;
 use phpMyFAQ\EventListener\LanguageListener;
 use phpMyFAQ\EventListener\RouterListener;
+use phpMyFAQ\EventListener\SecurityHeadersListener;
 use phpMyFAQ\EventListener\WebExceptionListener;
 use phpMyFAQ\Form\FormsServiceProvider;
 use phpMyFAQ\Http\RateLimiter;
@@ -259,5 +260,12 @@ class Kernel implements HttpKernelInterface
         // Controller container listener — injects shared container into controllers
         $controllerContainerListener = new ControllerContainerListener($container);
         $dispatcher->addListener(KernelEvents::CONTROLLER, [$controllerContainerListener, 'onKernelController'], 0);
+
+        // Security headers listener — CSP and hardening headers on HTML responses (priority -100, runs last
+        // so headers set by controllers or other listeners win)
+        $securityHeadersListener = new SecurityHeadersListener(
+            $configurationService instanceof Configuration ? $configurationService : null,
+        );
+        $dispatcher->addListener(KernelEvents::RESPONSE, [$securityHeadersListener, 'onKernelResponse'], -100);
     }
 }

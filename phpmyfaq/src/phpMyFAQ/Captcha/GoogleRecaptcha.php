@@ -39,11 +39,12 @@ class GoogleRecaptcha implements CaptchaInterface
             return true;
         }
 
-        $url = sprintf(
-            'https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s',
-            (string) $this->configuration->get(item: 'security.googleReCaptchaV2SecretKey'),
-            $code,
-        );
+        $url =
+            'https://www.google.com/recaptcha/api/siteverify?'
+            . http_build_query([
+                'secret' => (string) $this->configuration->get(item: 'security.googleReCaptchaV2SecretKey'),
+                'response' => $code,
+            ], encoding_type: PHP_QUERY_RFC3986);
 
         $response = $this->fetchUrl($url);
 

@@ -3,6 +3,7 @@
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,7 @@ class TwoFactorTest extends TestCase
     private const int PERIOD = 30;
 
     private Configuration $configuration;
+    private DatabaseDriver $database;
     private CurrentUser $currentUser;
     private TwoFactor $twoFactor;
 
@@ -27,8 +29,30 @@ class TwoFactorTest extends TestCase
     protected function setUp(): void
     {
         $this->configuration = $this->createMock(Configuration::class);
+        $this->database = $this->createMock(DatabaseDriver::class);
+        $this->configuration->method('getDb')->willReturn($this->database);
         $this->currentUser = $this->createMock(CurrentUser::class);
         $this->twoFactor = new TwoFactor($this->configuration, $this->currentUser);
+    }
+
+    /**
+     * Lets the database mock report the given last accepted slice and record the UPDATE.
+     *
+     * @param list<string> $updates
+     */
+    private function storeLastAcceptedSlice(?int $lastSlice, array &$updates): void
+    {
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$updates): bool {
+                if (str_starts_with($query, 'UPDATE')) {
+                    $updates[] = $query;
+                }
+
+                return true;
+            });
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn(['twofactor_last_slice' => $lastSlice]);
     }
 
     public function testGenerateSecret(): void
@@ -66,14 +90,14 @@ class TwoFactorTest extends TestCase
 
     private function realTwoFactorAuth(): TwoFactorAuth
     {
-        return (new ReflectionClass($this->twoFactor))
+        return new ReflectionClass($this->twoFactor)
             ->getProperty('twoFactorAuth')
             ->getValue($this->twoFactor);
     }
 
     private function replaceTwoFactorAuth(TwoFactorAuth $twoFactorAuth): void
     {
-        (new ReflectionClass($this->twoFactor))
+        new ReflectionClass($this->twoFactor)
             ->getProperty('twoFactorAuth')
             ->setValue($this->twoFactor, $twoFactorAuth);
     }
@@ -90,15 +114,96 @@ class TwoFactorTest extends TestCase
         $this->currentUser->method('getUserById')->willReturn(true);
 
         $twoFactorAuth = $this->createMock(TwoFactorAuth::class);
-        $twoFactorAuth
-            ->expects($this->once())
-            ->method('verifyCode')
-            ->with('testsecret', '123456', 0)
-            ->willReturn(true);
+        $twoFactorAuth->expects($this->once())->method('verifyCode')->with('testsecret', '123456', 0)->willReturn(true);
 
         $this->replaceTwoFactorAuth($twoFactorAuth);
 
+        $updates = [];
+        $this->storeLastAcceptedSlice(null, $updates);
+
         $this->assertTrue($this->twoFactor->validateToken('123456', 1));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testValidateTokenRecordsTheAcceptedTimeSlice(): void
+    {
+        $this->currentUser->method('getUserData')->willReturn('testsecret');
+        $this->currentUser->method('getUserById')->willReturn(true);
+
+        $twoFactorAuth = $this->createMock(TwoFactorAuth::class);
+        $twoFactorAuth->method('verifyCode')->willReturn(true);
+        $this->replaceTwoFactorAuth($twoFactorAuth);
+
+        $updates = [];
+        $this->storeLastAcceptedSlice(null, $updates);
+
+        $this->assertTrue($this->twoFactor->validateToken('123456', 1));
+
+        $this->assertCount(1, $updates);
+        $this->assertStringContainsString(
+            sprintf('twofactor_last_slice = %d WHERE user_id = 1', intdiv(time(), self::PERIOD)),
+            $updates[0],
+        );
+    }
+
+    /**
+     * A code that was already accepted for the current slice must not be usable a
+     * second time, even though it is still mathematically valid.
+     *
+     * @throws Exception
+     */
+    public function testValidateTokenRejectsAReplayWithinTheSameTimeSlice(): void
+    {
+        $this->currentUser->method('getUserData')->willReturn('testsecret');
+        $this->currentUser->method('getUserById')->willReturn(true);
+
+        $twoFactorAuth = $this->createMock(TwoFactorAuth::class);
+        $twoFactorAuth->method('verifyCode')->willReturn(true);
+        $this->replaceTwoFactorAuth($twoFactorAuth);
+
+        $updates = [];
+        $this->storeLastAcceptedSlice(intdiv(time(), self::PERIOD), $updates);
+
+        $this->assertFalse($this->twoFactor->validateToken('123456', 1));
+        $this->assertSame([], $updates);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testValidateTokenRejectsASliceOlderThanTheLastAcceptedOne(): void
+    {
+        $this->currentUser->method('getUserData')->willReturn('testsecret');
+        $this->currentUser->method('getUserById')->willReturn(true);
+
+        $twoFactorAuth = $this->createMock(TwoFactorAuth::class);
+        $twoFactorAuth->method('verifyCode')->willReturn(true);
+        $this->replaceTwoFactorAuth($twoFactorAuth);
+
+        $updates = [];
+        $this->storeLastAcceptedSlice(intdiv(time(), self::PERIOD) + 1, $updates);
+
+        $this->assertFalse($this->twoFactor->validateToken('123456', 1));
+        $this->assertSame([], $updates);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testValidateTokenDoesNotRecordASliceForAWrongCode(): void
+    {
+        $this->currentUser->method('getUserData')->willReturn('testsecret');
+        $this->currentUser->method('getUserById')->willReturn(true);
+
+        $twoFactorAuth = $this->createMock(TwoFactorAuth::class);
+        $twoFactorAuth->method('verifyCode')->willReturn(false);
+        $this->replaceTwoFactorAuth($twoFactorAuth);
+
+        $this->database->expects($this->never())->method('query');
+
+        $this->assertFalse($this->twoFactor->validateToken('123456', 1));
     }
 
     /**
@@ -115,6 +220,9 @@ class TwoFactorTest extends TestCase
         $secret = $this->twoFactor->generateSecret();
         $this->currentUser->method('getUserData')->willReturn($secret);
         $this->currentUser->method('getUserById')->willReturn(true);
+
+        $updates = [];
+        $this->storeLastAcceptedSlice(null, $updates);
 
         // Without any discrepancy tolerance a code generated just before a slice
         // boundary would no longer verify just after it, so retry in that case.

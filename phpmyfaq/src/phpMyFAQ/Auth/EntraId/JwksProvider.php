@@ -36,7 +36,7 @@ class JwksProvider
 
     public function __construct(?HttpClientInterface $httpClient = null, ?string $cacheDir = null)
     {
-        $this->httpClient = $httpClient ?? HttpClient::create();
+        $this->httpClient = $httpClient ?? HttpClient::create(['timeout' => 10.0, 'max_redirects' => 3]);
         $this->cacheDir =
             $cacheDir
             ?? (

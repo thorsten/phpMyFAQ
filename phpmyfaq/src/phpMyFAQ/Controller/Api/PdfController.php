@@ -119,11 +119,11 @@ final class PdfController extends AbstractController
         $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
 
         $faq->getFaq($faqId);
-        $result = $faq->faqRecord;
 
-        if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {
-            $result = new stdClass();
-            return $this->json($result, Response::HTTP_NOT_FOUND);
+        // getFaq() also returns non-permitted, unpublished and expired records with their
+        // metadata intact; do not hand out a PDF link for anything the requester may not see.
+        if (!$faq->isFaqRecordVisible()) {
+            return $this->json(new stdClass(), Response::HTTP_NOT_FOUND);
         }
 
         $services = is_callable($this->servicesFactory)

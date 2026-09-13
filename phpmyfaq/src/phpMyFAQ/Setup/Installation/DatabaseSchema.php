@@ -704,6 +704,7 @@ class DatabaseSchema
             ->varchar('auth_source', 100)
             ->varchar('member_since', 14)
             ->varchar('remember_me', 150)
+            ->integer('remember_me_expires')
             ->smallInteger('success', true, 1)
             ->smallInteger('is_superadmin', true, 0)
             ->smallInteger('login_attempts', true, 0)
@@ -724,9 +725,11 @@ class DatabaseSchema
             ->varchar('display_name', 128)
             ->varchar('email', 128)
             ->varchar('keycloak_sub', 255)
+            ->varchar('entra_oid', 255)
             ->smallInteger('is_visible', true, 0)
             ->smallInteger('twofactor_enabled', true, 0)
-            ->varchar('secret', 128);
+            ->varchar('secret', 128)
+            ->integer('twofactor_last_slice');
     }
 
     public function faquserlogin(): TableBuilder

@@ -15,6 +15,14 @@
 
 import { fetchLdapConfiguration, fetchLdapHealthcheck, LdapServerHealth } from '../api';
 
+const escapeHtml = (value: string | number | null | undefined): string =>
+  String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 const badge = (enabled: boolean): string => {
   const cls = enabled ? 'bg-success' : 'bg-secondary';
   const text = enabled ? 'Enabled' : 'Disabled';
@@ -28,7 +36,7 @@ const healthBadge = (serverHealth: LdapServerHealth | undefined): string => {
   if (serverHealth.available) {
     return '<span class="badge bg-success">Connected</span>';
   }
-  const tooltip = serverHealth.error ? ` title="${serverHealth.error}"` : '';
+  const tooltip = serverHealth.error ? ` title="${escapeHtml(serverHealth.error)}"` : '';
   return `<span class="badge bg-danger"${tooltip}>Unreachable</span>`;
 };
 
@@ -90,10 +98,10 @@ export const handleLdap = async (): Promise<void> => {
         const serverHealth = serverHealthMap.get(index);
         html += `<h6>Server ${index + 1}</h6>`;
         html += '<dl class="row mb-0">';
-        html += `<dt class="col-sm-4">Host</dt><dd class="col-sm-8">${server.ldap_server || '<em>Not set</em>'} ${healthBadge(serverHealth)}</dd>`;
-        html += `<dt class="col-sm-4">Port</dt><dd class="col-sm-8">${server.ldap_port || 389}</dd>`;
-        html += `<dt class="col-sm-4">Bind User</dt><dd class="col-sm-8">${server.ldap_user || '<em>Not set</em>'}</dd>`;
-        html += `<dt class="col-sm-4">Base DN</dt><dd class="col-sm-8">${server.ldap_base || '<em>Not set</em>'}</dd>`;
+        html += `<dt class="col-sm-4">Host</dt><dd class="col-sm-8">${server.ldap_server ? escapeHtml(server.ldap_server) : '<em>Not set</em>'} ${healthBadge(serverHealth)}</dd>`;
+        html += `<dt class="col-sm-4">Port</dt><dd class="col-sm-8">${escapeHtml(server.ldap_port || 389)}</dd>`;
+        html += `<dt class="col-sm-4">Bind User</dt><dd class="col-sm-8">${server.ldap_user ? escapeHtml(server.ldap_user) : '<em>Not set</em>'}</dd>`;
+        html += `<dt class="col-sm-4">Base DN</dt><dd class="col-sm-8">${server.ldap_base ? escapeHtml(server.ldap_base) : '<em>Not set</em>'}</dd>`;
         html += '</dl>';
       });
       serversDiv.innerHTML = html || '<p class="text-muted">No servers configured.</p>';
@@ -103,10 +111,10 @@ export const handleLdap = async (): Promise<void> => {
     const mappingDiv = document.getElementById('pmf-ldap-mapping') as HTMLElement;
     if (mappingDiv) {
       let html = '<dl class="row mb-0">';
-      html += `<dt class="col-sm-4">Name</dt><dd class="col-sm-8"><code>${config.mapping.name || ''}</code></dd>`;
-      html += `<dt class="col-sm-4">Username</dt><dd class="col-sm-8"><code>${config.mapping.username || ''}</code></dd>`;
-      html += `<dt class="col-sm-4">Mail</dt><dd class="col-sm-8"><code>${config.mapping.mail || ''}</code></dd>`;
-      html += `<dt class="col-sm-4">Member Of</dt><dd class="col-sm-8"><code>${config.mapping.memberOf || ''}</code></dd>`;
+      html += `<dt class="col-sm-4">Name</dt><dd class="col-sm-8"><code>${escapeHtml(config.mapping.name)}</code></dd>`;
+      html += `<dt class="col-sm-4">Username</dt><dd class="col-sm-8"><code>${escapeHtml(config.mapping.username)}</code></dd>`;
+      html += `<dt class="col-sm-4">Mail</dt><dd class="col-sm-8"><code>${escapeHtml(config.mapping.mail)}</code></dd>`;
+      html += `<dt class="col-sm-4">Member Of</dt><dd class="col-sm-8"><code>${escapeHtml(config.mapping.memberOf)}</code></dd>`;
       html += '</dl>';
       mappingDiv.innerHTML = html;
     }
@@ -115,8 +123,8 @@ export const handleLdap = async (): Promise<void> => {
     const optionsDiv = document.getElementById('pmf-ldap-options') as HTMLElement;
     if (optionsDiv) {
       let html = '<dl class="row mb-0">';
-      html += `<dt class="col-sm-6">Protocol Version</dt><dd class="col-sm-6">${config.options.LDAP_OPT_PROTOCOL_VERSION ?? 3}</dd>`;
-      html += `<dt class="col-sm-6">Referrals</dt><dd class="col-sm-6">${config.options.LDAP_OPT_REFERRALS ?? 0}</dd>`;
+      html += `<dt class="col-sm-6">Protocol Version</dt><dd class="col-sm-6">${escapeHtml(config.options.LDAP_OPT_PROTOCOL_VERSION ?? 3)}</dd>`;
+      html += `<dt class="col-sm-6">Referrals</dt><dd class="col-sm-6">${escapeHtml(config.options.LDAP_OPT_REFERRALS ?? 0)}</dd>`;
       html += '</dl>';
       optionsDiv.innerHTML = html;
     }
@@ -128,7 +136,7 @@ export const handleLdap = async (): Promise<void> => {
       html += `<dt class="col-sm-6">Group Restriction</dt><dd class="col-sm-6">${badge(!!config.groupConfig.use_group_restriction)}</dd>`;
       html += `<dt class="col-sm-6">Auto-Assign</dt><dd class="col-sm-6">${badge(!!config.groupConfig.auto_assign)}</dd>`;
       const groups = config.groupConfig.allowed_groups?.length
-        ? config.groupConfig.allowed_groups.join(', ')
+        ? escapeHtml(config.groupConfig.allowed_groups.join(', '))
         : '<em>None</em>';
       html += `<dt class="col-sm-6">Allowed Groups</dt><dd class="col-sm-6">${groups}</dd>`;
       html += '</dl>';
@@ -144,7 +152,7 @@ export const handleLdap = async (): Promise<void> => {
       html += `<dt class="col-sm-6">Anonymous Login</dt><dd class="col-sm-6">${badge(config.generalSettings.anonymousLogin)}</dd>`;
       html += `<dt class="col-sm-6">Dynamic Login</dt><dd class="col-sm-6">${badge(config.generalSettings.dynamicLogin)}</dd>`;
       if (config.generalSettings.dynamicLogin && config.generalSettings.dynamicLoginAttribute) {
-        html += `<dt class="col-sm-6">Dynamic Login Attribute</dt><dd class="col-sm-6"><code>${config.generalSettings.dynamicLoginAttribute}</code></dd>`;
+        html += `<dt class="col-sm-6">Dynamic Login Attribute</dt><dd class="col-sm-6"><code>${escapeHtml(config.generalSettings.dynamicLoginAttribute)}</code></dd>`;
       }
       html += `<dt class="col-sm-6">Multiple Servers</dt><dd class="col-sm-6">${badge(config.generalSettings.multipleServers)}</dd>`;
       html += '</dl>';

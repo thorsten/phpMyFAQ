@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use LogicException;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Controller\Frontend\Api\PushController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\CustomPage;
 use phpMyFAQ\Enums\PermissionType;
@@ -112,7 +113,7 @@ abstract class AbstractFrontController extends AbstractController
             'metaRobots' => $this->seo->getMetaRobots($action),
             'phpmyfaqVersion' => $this->configuration->getVersion(),
             'stylesheet' => Translation::get(key: 'direction') === 'rtl' ? 'style.rtl' : 'style',
-            'currentPageUrl' => $request->getSchemeAndHttpHost() . $request->getRequestUri(),
+            'currentPageUrl' => $this->buildCurrentPageUrl($request),
             'action' => $action,
             'dir' => Translation::get(key: 'direction'),
             'formActionUrl' => './search',
@@ -214,6 +215,7 @@ abstract class AbstractFrontController extends AbstractController
                 'msgUserRemoval' => Translation::get(key: 'ad_menu_RequestRemove'),
                 'msgLogoutUser' => Translation::get(key: 'ad_menu_logout'),
                 'csrfLogout' => $csrfLogoutToken,
+                'csrfTokenPushSubscription' => Token::getInstance($this->session)->getTokenString(PushController::CSRF_PAGE),
             ];
         }
 
@@ -282,5 +284,20 @@ abstract class AbstractFrontController extends AbstractController
         $response = new Response();
         $response->setStatusCode(Response::HTTP_NOT_FOUND);
         return $this->render('404.twig', [], $response);
+    }
+
+    /**
+     * Builds the canonical URL of the current page from the configured default URL instead of the
+     * Host header, so a spoofed Host cannot poison canonical, share or Open Graph links.
+     */
+    private function buildCurrentPageUrl(Request $request): string
+    {
+        $queryString = $request->getQueryString();
+
+        return (
+            rtrim($this->configuration->getDefaultUrl(), characters: '/')
+            . $request->getPathInfo()
+            . ($queryString === null ? '' : '?' . $queryString)
+        );
     }
 }

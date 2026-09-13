@@ -127,9 +127,7 @@ class OAuthTest extends TestCase
     public function testGetOAuthTokenFallsBackToCookieVerifier(): void
     {
         $mockResponse = $this->createStub(ResponseInterface::class);
-        $mockResponse
-            ->method('getContent')
-            ->willReturn(json_encode(['access_token' => 'fake_access_token']));
+        $mockResponse->method('getContent')->willReturn(json_encode(['access_token' => 'fake_access_token']));
 
         // A fresh session (SameSite=Strict cookie not sent on the callback) returns null
         $this->mockSession
@@ -542,6 +540,36 @@ class OAuthTest extends TestCase
 
         $this->oAuth->setToken($token);
         $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testGetObjectIdPrefersTheOidClaim(): void
+    {
+        $token = new stdClass();
+        $token->id_token = $this->signedIdToken(['oid' => 'object-id-123', 'sub' => 'subject-id']);
+
+        $this->oAuth->setToken($token);
+
+        $this->assertSame('object-id-123', $this->oAuth->getObjectId());
+    }
+
+    public function testGetObjectIdFallsBackToTheSubjectClaim(): void
+    {
+        $token = new stdClass();
+        $token->id_token = $this->signedIdToken(['sub' => 'subject-id']);
+
+        $this->oAuth->setToken($token);
+
+        $this->assertSame('subject-id', $this->oAuth->getObjectId());
+    }
+
+    public function testGetObjectIdIsEmptyForARejectedToken(): void
+    {
+        $token = new stdClass();
+        $token->id_token = $this->signedIdToken(['aud' => 'other-client-id', 'oid' => 'object-id-123']);
+
+        $this->oAuth->setToken($token);
+
+        $this->assertSame('', $this->oAuth->getObjectId());
     }
 
     public function testSetTokenWithValidJWTButMissingFields(): void

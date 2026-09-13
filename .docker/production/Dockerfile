@@ -77,8 +77,9 @@ RUN set -eu \
               phpmyfaq/.env \
     && find phpmyfaq/content/core/config -name '*.bak.php' -delete \
     && find phpmyfaq/content/core/config -name '*.zip' -delete \
-    && find phpmyfaq/content/core/data phpmyfaq/content/core/logs phpmyfaq/content/upgrades \
-            -mindepth 1 -not -name '.gitkeep' -delete \
+    && find phpmyfaq/content/core/data phpmyfaq/content/core/logs phpmyfaq/content/core/exports \
+            phpmyfaq/content/core/upgrades phpmyfaq/content/upgrades \
+            -mindepth 1 -not -name '.gitkeep' -not -name '.htaccess' -delete \
     && find . -name '.DS_Store' -delete \
     && chmod +x bin/console
 
@@ -156,10 +157,15 @@ COPY .docker/production/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 COPY --from=payload /payload/phpmyfaq /var/www/html
 COPY --from=payload /payload/bin/console /var/www/bin/console
 
+# FrankenPHP runs as www-data (the entrypoint starts as root to prepare the
+# volumes and drops privileges before exec'ing the server). The capability
+# lets the unprivileged process bind ports 80/443; /data and /config hold
+# Caddy's certificates and state and must belong to the same user.
 RUN ln -s /var/www/html /var/www/phpmyfaq \
     && chmod +x /usr/local/bin/docker-entrypoint \
-    && mkdir -p /var/www/html/cache \
-    && chown -R www-data:www-data /var/www/html/cache /var/www/html/content
+    && mkdir -p /var/www/html/cache /data /config \
+    && chown -R www-data:www-data /var/www/html/cache /var/www/html/content /data /config \
+    && setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp
 
 # SERVER_NAME=":80" serves plain HTTP (use behind a reverse proxy). Set it to
 # a public host name to get automatic HTTPS with Let's Encrypt certificates.

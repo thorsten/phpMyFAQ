@@ -27,6 +27,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\PermissionHelper;
+use phpMyFAQ\Http\UrlSafetyValidator;
 use phpMyFAQ\Language;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -44,12 +45,32 @@ use Twig\Error\LoaderError;
 
 final class ConfigurationTabController extends AbstractAdministrationApiController
 {
+    /**
+     * URLs the server connects to: must be http(s) and must not point at
+     * loopback, private or link-local addresses.
+     */
+    private const array OUTBOUND_URL_KEYS = ['translation.libreTranslateUrl', 'keycloak.baseUrl'];
+
+    /**
+     * URLs the browser is redirected to: must be http(s), may point anywhere
+     * (usually at this installation).
+     */
+    private const array REDIRECT_URL_KEYS = ['keycloak.redirectUri', 'keycloak.logoutRedirectUrl'];
+
+    private const array REDIS_DSN_KEYS = ['session.redisDsn', 'storage.redisDsn', 'storage.cacheRedisDsn'];
+
+    private const array HOSTNAME_LIST_KEYS = ['records.allowedMediaHosts'];
+
+    private readonly UrlSafetyValidator $urlSafetyValidator;
+
     public function __construct(
         private readonly Language $language,
         private readonly System $faqSystem,
         private readonly ThemeManager $themeManager,
+        ?UrlSafetyValidator $urlSafetyValidator = null,
     ) {
         parent::__construct();
+        $this->urlSafetyValidator = $urlSafetyValidator ?? new UrlSafetyValidator();
     }
 
     /**
@@ -197,6 +218,13 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
             && is_null(Filter::filterVar($configurationData['main.referenceURL'], FILTER_VALIDATE_URL))
         ) {
             unset($configurationData['main.referenceURL']);
+        }
+
+        $invalidUrlKey = $this->findInvalidUrlValue($configurationData);
+        if ($invalidUrlKey !== null) {
+            return $this->json([
+                'error' => sprintf(Translation::getString(key: 'msgInvalidConfigurationUrl'), $invalidUrlKey),
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         foreach ($configurationData as $key => $value) {
@@ -583,6 +611,47 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         }
 
         return 'unknown';
+    }
+
+    /**
+     * Returns the first URL-typed configuration key whose submitted value is
+     * not acceptable, or null when all of them are. Empty values are allowed
+     * (they switch the respective feature off).
+     *
+     * @param array<array-key, mixed> $configurationData
+     */
+    private function findInvalidUrlValue(array $configurationData): ?string
+    {
+        $checks = [
+            ...array_fill_keys(self::OUTBOUND_URL_KEYS, fn(string $url): bool => $this->urlSafetyValidator->isSafeOutboundHttpUrl(
+                $url,
+                allowPrivateNetworks: true,
+            )),
+            ...array_fill_keys(self::REDIRECT_URL_KEYS, $this->urlSafetyValidator->isHttpUrl(...)),
+            ...array_fill_keys(self::REDIS_DSN_KEYS, $this->urlSafetyValidator->isRedisDsn(...)),
+            ...array_fill_keys(self::HOSTNAME_LIST_KEYS, $this->urlSafetyValidator->isHostnameList(...)),
+        ];
+
+        foreach ($checks as $key => $isValid) {
+            if (!array_key_exists($key, $configurationData)) {
+                continue;
+            }
+
+            if (!is_scalar($configurationData[$key])) {
+                return $key;
+            }
+
+            $value = trim((string) $configurationData[$key]);
+            if ($value === '') {
+                continue;
+            }
+
+            if (!$isValid($value)) {
+                return $key;
+            }
+        }
+
+        return null;
     }
 
     private function hasValidThemeCsrfToken(Request $request): bool

@@ -95,6 +95,48 @@ class InstallationInputValidatorTest extends TestCase
         ]);
     }
 
+    public function testValidateThrowsExceptionForInvalidTablePrefix(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Installation Error: The table prefix may only contain letters, digits and underscores',
+        );
+
+        $this->validator->validate([
+            'dbType' => 'sqlite3',
+            'dbPrefix' => 'pmf_; DROP TABLE faquser; --',
+            'dbServer' => 'localhost',
+            'dbPort' => 3306,
+            'dbUser' => 'root',
+            'dbPassword' => '',
+            'dbDatabaseName' => 'phpmyfaq',
+            'loginname' => 'admin',
+            'password' => 'secret123',
+            'password_retyped' => 'secret123',
+        ]);
+    }
+
+    public function testValidateThrowsExceptionForOverlongTablePrefix(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Installation Error: The table prefix may only contain letters, digits and underscores',
+        );
+
+        $this->validator->validate([
+            'dbType' => 'sqlite3',
+            'dbPrefix' => str_repeat('a', 33),
+            'dbServer' => 'localhost',
+            'dbPort' => 3306,
+            'dbUser' => 'root',
+            'dbPassword' => '',
+            'dbDatabaseName' => 'phpmyfaq',
+            'loginname' => 'admin',
+            'password' => 'secret123',
+            'password_retyped' => 'secret123',
+        ]);
+    }
+
     public function testValidateThrowsExceptionForMissingDatabaseServer(): void
     {
         $this->expectException(Exception::class);

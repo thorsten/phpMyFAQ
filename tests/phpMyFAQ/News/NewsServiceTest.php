@@ -103,6 +103,63 @@ class NewsServiceTest extends TestCase
         $this->assertStringContainsString('_blank', $result['processedContent']);
     }
 
+    public function testGetProcessedNewsDropsInformationLinkWithUnsafeScheme(): void
+    {
+        foreach ([
+            'javascript:alert(1)',
+            'data:text/html,<script>alert(1)</script>',
+            'vbscript:x',
+            'www.example.org',
+        ] as $link) {
+            $news = $this->createMock(News::class);
+            $news->method('get')->willReturn([
+                'content' => 'See FAQ',
+                'header' => 'FAQ Header',
+                'link' => $link,
+                'target' => '_blank',
+                'linkTitle' => 'Click me',
+            ]);
+            $glossary = $this->createMock(Glossary::class);
+            $glossary->method('insertItemsIntoContent')->willReturnArgument(0);
+            $faqHelper = $this->createMock(FaqHelper::class);
+            $faqHelper->method('cleanUpContent')->willReturnArgument(0);
+
+            $this->setProperty($this->newsService, 'news', $news);
+            $this->setProperty($this->newsService, 'glossary', $glossary);
+            $this->setProperty($this->newsService, 'faqHelper', $faqHelper);
+
+            $result = $this->newsService->getProcessedNews(55);
+
+            $this->assertSame('See FAQ', $result['processedContent'], 'Link must be dropped: ' . $link);
+        }
+    }
+
+    public function testGetProcessedNewsKeepsRelativeInformationLinkAndEscapesTarget(): void
+    {
+        $news = $this->createMock(News::class);
+        $news->method('get')->willReturn([
+            'content' => 'See FAQ',
+            'header' => 'FAQ Header',
+            'link' => '/content/1/1/en/faq.html',
+            'target' => '"><script>alert(1)</script>',
+            'linkTitle' => 'Read on',
+        ]);
+        $glossary = $this->createMock(Glossary::class);
+        $glossary->method('insertItemsIntoContent')->willReturnArgument(0);
+        $faqHelper = $this->createMock(FaqHelper::class);
+        $faqHelper->method('cleanUpContent')->willReturnArgument(0);
+
+        $this->setProperty($this->newsService, 'news', $news);
+        $this->setProperty($this->newsService, 'glossary', $glossary);
+        $this->setProperty($this->newsService, 'faqHelper', $faqHelper);
+
+        $result = $this->newsService->getProcessedNews(55);
+
+        $this->assertStringContainsString('<a href="', $result['processedContent']);
+        $this->assertStringContainsString('target="_self">Read on</a>', $result['processedContent']);
+        $this->assertStringNotContainsString('<script>', $result['processedContent']);
+    }
+
     public function testGetProcessedNewsSkipsInformationLinkWhenLinkIsEmpty(): void
     {
         $news = $this->createMock(News::class);
