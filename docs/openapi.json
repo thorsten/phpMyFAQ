@@ -1527,11 +1527,15 @@
             "headers": {
               "Accept-Language": {
                 "description": "The language code for the login.",
-                "schema": { "type": "string" }
+                "schema": {
+                  "type": "string"
+                }
               },
               "x-pmf-token": {
                 "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": { "type": "string" }
+                "schema": {
+                  "type": "string"
+                }
               }
             },
             "content": {
@@ -1793,6 +1797,23 @@
                 "schema": {
                   "type": "string"
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "tags": ["Public Endpoints"],
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "The application is running and connected to its database.",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": "{\"status\": \"ok\"}"
               }
             }
           }

@@ -1289,6 +1289,18 @@ paths:
               description: 'The language code for the login.'
               schema:
                 type: string
+  /api/health:
+    get:
+      tags:
+        - 'Public Endpoints'
+      operationId: getHealth
+      responses:
+        '200':
+          description: 'The application is running and connected to its database.'
+          content:
+            application/json:
+              schema: {}
+              example: '{"status": "ok"}'
   /api/v4.0/language:
     get:
       tags:
