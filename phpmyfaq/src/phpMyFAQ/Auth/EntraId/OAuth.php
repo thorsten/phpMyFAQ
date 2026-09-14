@@ -187,6 +187,14 @@ class OAuth
                 return $this;
             }
 
+            if (!$this->hasValidNonce($decoded)) {
+                $this->configuration
+                    ->getLogger()
+                    ->warning('Entra ID token rejected: the nonce does not match the authorization request.');
+                $this->clearToken();
+                return $this;
+            }
+
             $this->token = $decoded;
             $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, json_encode(
                 value: $this->token,
@@ -197,6 +205,30 @@ class OAuth
         }
 
         return $this;
+    }
+
+    /**
+     * Returns true when the ID token carries the nonce issued by authorize() for this
+     * browser. The session cookie is SameSite=Strict and therefore absent on the
+     * cross-site redirect back from Microsoft, so the lax nonce cookie is the fallback.
+     */
+    private function hasValidNonce(stdClass $decoded): bool
+    {
+        $expected = (string) ($this->entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_NONCE) ?? '');
+        if ($expected === '') {
+            $expected = $this->entraIdSession->getCookie(EntraIdSession::ENTRA_ID_OAUTH_NONCE);
+        }
+
+        if ($expected === '') {
+            return false;
+        }
+
+        $nonce = trim((string) ($decoded->nonce ?? ''));
+        if ($nonce === '') {
+            return false;
+        }
+
+        return hash_equals($expected, $nonce);
     }
 
     private function clearToken(): void

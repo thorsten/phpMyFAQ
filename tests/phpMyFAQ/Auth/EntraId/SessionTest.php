@@ -76,6 +76,8 @@ class SessionTest extends TestCase
     {
         $this->assertEquals('pmf-entra-id-session-key', EntraIdSession::ENTRA_ID_SESSION_KEY);
         $this->assertEquals('pmf-entra-id-oauth-verifier', EntraIdSession::ENTRA_ID_OAUTH_VERIFIER);
+        $this->assertEquals('pmf-entra-id-oauth-state', EntraIdSession::ENTRA_ID_OAUTH_STATE);
+        $this->assertEquals('pmf-entra-id-oauth-nonce', EntraIdSession::ENTRA_ID_OAUTH_NONCE);
         $this->assertEquals('pmf-entra-id-jwt', EntraIdSession::ENTRA_ID_JWT);
     }
 

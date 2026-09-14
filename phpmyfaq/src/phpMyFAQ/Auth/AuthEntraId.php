@@ -47,6 +47,8 @@ class AuthEntraId extends Auth implements AuthDriverInterface
 
     private string $oAuthState = '';
 
+    private string $oAuthNonce = '';
+
     private int $authenticatedUserId = 0;
 
     private const string ENTRAID_CHALLENGE_METHOD = 'S256';
@@ -225,10 +227,12 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     {
         $this->createOAuthChallenge();
         $this->createOAuthState();
+        $this->createOAuthNonce();
         $entraIdSession = $this->oAuth->getEntraIdSession();
         $entraIdSession->setCurrentSessionKey();
         $entraIdSession->set(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER, $this->oAuthVerifier);
         $entraIdSession->set(EntraIdSession::ENTRA_ID_OAUTH_STATE, $this->oAuthState);
+        $entraIdSession->set(EntraIdSession::ENTRA_ID_OAUTH_NONCE, $this->oAuthNonce);
         // The session cookie is SameSite=Strict and therefore absent on the cross-site
         // redirect back from Microsoft, so both values are mirrored into lax cookies.
         $entraIdSession->setCookie(
@@ -243,11 +247,17 @@ class AuthEntraId extends Auth implements AuthDriverInterface
             self::OAUTH_STATE_LIFETIME,
             false,
         );
+        $entraIdSession->setCookie(
+            EntraIdSession::ENTRA_ID_OAUTH_NONCE,
+            $this->oAuthNonce,
+            self::OAUTH_STATE_LIFETIME,
+            false,
+        );
 
         $oAuthURL = sprintf(
             'https://login.microsoftonline.com/%s/oauth2/v2.0/authorize'
             . '?response_type=code&client_id=%s&redirect_uri=%s&scope=%s&code_challenge=%s&code_challenge_method=%s'
-            . '&state=%s',
+            . '&state=%s&nonce=%s',
             AAD_OAUTH_TENANTID,
             AAD_OAUTH_CLIENTID,
             urlencode($this->configuration->getDefaultUrl() . 'services/azure/callback.php'),
@@ -255,6 +265,7 @@ class AuthEntraId extends Auth implements AuthDriverInterface
             $this->oAuthChallenge,
             self::ENTRAID_CHALLENGE_METHOD,
             $this->oAuthState,
+            $this->oAuthNonce,
         );
 
         return new RedirectResponse($oAuthURL);
@@ -329,6 +340,21 @@ class AuthEntraId extends Auth implements AuthDriverInterface
         }
 
         $this->oAuthState = bin2hex(random_bytes(32));
+    }
+
+    /**
+     * Generates the nonce that Entra ID echoes back in the ID token, which ties the
+     * token to the authorization request this browser started.
+     *
+     * @throws \Exception
+     */
+    private function createOAuthNonce(): void
+    {
+        if ($this->oAuthNonce !== '') {
+            return;
+        }
+
+        $this->oAuthNonce = bin2hex(random_bytes(32));
     }
 
     /**

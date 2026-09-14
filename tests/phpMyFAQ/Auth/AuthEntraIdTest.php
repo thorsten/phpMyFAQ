@@ -297,7 +297,7 @@ class AuthEntraIdTest extends TestCase
 
         $stored = [];
         $this->sessionMock
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('set')
             ->willReturnCallback(static function (string $key, mixed $value) use (&$stored): void {
                 $stored[$key] = $value;
@@ -305,7 +305,7 @@ class AuthEntraIdTest extends TestCase
 
         $cookies = [];
         $this->sessionMock
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('setCookie')
             ->willReturnCallback(static function (string $name, mixed $value, int $timeout, bool $strict) use (
                 &$cookies,
@@ -328,11 +328,19 @@ class AuthEntraIdTest extends TestCase
         $this->assertMatchesRegularExpression('/^[0-9a-f]{64}$/', $state);
         $this->assertStringContainsString('&state=' . $state, $location);
 
+        $this->assertArrayHasKey(EntraIdSession::ENTRA_ID_OAUTH_NONCE, $stored);
+        $nonce = $stored[EntraIdSession::ENTRA_ID_OAUTH_NONCE];
+        $this->assertIsString($nonce);
+        $this->assertMatchesRegularExpression('/^[0-9a-f]{64}$/', $nonce);
+        $this->assertNotSame($state, $nonce);
+        $this->assertStringContainsString('&nonce=' . $nonce, $location);
+
         $this->assertSame(
             [$stored[EntraIdSession::ENTRA_ID_OAUTH_VERIFIER], 7200, false],
             $cookies[EntraIdSession::ENTRA_ID_OAUTH_VERIFIER],
         );
         $this->assertSame([$state, 7200, false], $cookies[EntraIdSession::ENTRA_ID_OAUTH_STATE]);
+        $this->assertSame([$nonce, 7200, false], $cookies[EntraIdSession::ENTRA_ID_OAUTH_NONCE]);
     }
 
     public function testLogout(): void

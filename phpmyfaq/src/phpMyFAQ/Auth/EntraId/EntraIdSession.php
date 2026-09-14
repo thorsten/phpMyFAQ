@@ -35,6 +35,8 @@ class EntraIdSession extends AbstractSession
 
     final public const string ENTRA_ID_OAUTH_STATE = 'pmf-entra-id-oauth-state';
 
+    final public const string ENTRA_ID_OAUTH_NONCE = 'pmf-entra-id-oauth-nonce';
+
     final public const string ENTRA_ID_JWT = 'pmf-entra-id-jwt';
 
     private string $currentSessionKey;

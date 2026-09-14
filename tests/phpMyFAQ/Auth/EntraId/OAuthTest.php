@@ -35,6 +35,8 @@ class OAuthTest extends TestCase
 
     private const string KID = 'test-kid';
 
+    private const string NONCE = 'test-nonce-0123456789abcdef';
+
     public static function setUpBeforeClass(): void
     {
         $resource = openssl_pkey_new([
@@ -77,9 +79,22 @@ class OAuthTest extends TestCase
             'exp' => time() + 3600,
             'name' => 'John Doe',
             'preferred_username' => 'john@example.com',
+            'nonce' => self::NONCE,
         ], $overrides);
 
         return JWT::encode($payload, self::$privateKey, 'RS256', self::KID);
+    }
+
+    /**
+     * Simulates the nonce that authorize() stored in the session for this browser.
+     */
+    private function issueNonce(string $nonce = self::NONCE): void
+    {
+        $this->mockSession
+            ->method('get')
+            ->willReturnCallback(
+                static fn(string $key): ?string => $key === EntraIdSession::ENTRA_ID_OAUTH_NONCE ? $nonce : null,
+            );
     }
 
     /**
@@ -255,6 +270,8 @@ class OAuthTest extends TestCase
 
     public function testSetToken(): void
     {
+        $this->issueNonce();
+
         $token = new stdClass();
         $token->id_token = $this->signedIdToken();
 
@@ -397,6 +414,8 @@ class OAuthTest extends TestCase
 
     public function testGetTokenReturnsPreviouslySetDecodedToken(): void
     {
+        $this->issueNonce();
+
         $token = new stdClass();
         $token->id_token = $this->signedIdToken(['name' => 'Token User', 'preferred_username' => 'token@example.com']);
 
@@ -433,6 +452,8 @@ class OAuthTest extends TestCase
 
     public function testGetName(): void
     {
+        $this->issueNonce();
+
         $token = new stdClass();
         $token->id_token = $this->signedIdToken(['name' => 'Jane Doe', 'preferred_username' => 'jane@example.com']);
 
@@ -447,6 +468,8 @@ class OAuthTest extends TestCase
 
     public function testGetMail(): void
     {
+        $this->issueNonce();
+
         $token = new stdClass();
         $token->id_token = $this->signedIdToken(['name' => 'Test User', 'preferred_username' => 'test@company.com']);
 
@@ -544,6 +567,8 @@ class OAuthTest extends TestCase
 
     public function testGetObjectIdPrefersTheOidClaim(): void
     {
+        $this->issueNonce();
+
         $token = new stdClass();
         $token->id_token = $this->signedIdToken(['oid' => 'object-id-123', 'sub' => 'subject-id']);
 
@@ -554,6 +579,8 @@ class OAuthTest extends TestCase
 
     public function testGetObjectIdFallsBackToTheSubjectClaim(): void
     {
+        $this->issueNonce();
+
         $token = new stdClass();
         $token->id_token = $this->signedIdToken(['sub' => 'subject-id']);
 
@@ -574,6 +601,8 @@ class OAuthTest extends TestCase
 
     public function testSetTokenWithValidJWTButMissingFields(): void
     {
+        $this->issueNonce();
+
         $token = new stdClass();
         $token->id_token = $this->signedIdToken(['name' => null, 'preferred_username' => null]);
 
@@ -585,5 +614,72 @@ class OAuthTest extends TestCase
         $this->oAuth->setToken($token);
         $this->assertEquals('', $this->oAuth->getName());
         $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testSetTokenRejectsAMissingNonceClaim(): void
+    {
+        $this->issueNonce();
+
+        $token = new stdClass();
+        $token->id_token = $this->signedIdToken(['nonce' => null]);
+
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $this->oAuth->setToken($token);
+
+        $this->assertSame('', $this->oAuth->getMail());
+        $this->assertSame('', $this->oAuth->getObjectId());
+    }
+
+    public function testSetTokenRejectsAMismatchedNonce(): void
+    {
+        $this->issueNonce();
+
+        $token = new stdClass();
+        $token->id_token = $this->signedIdToken(['nonce' => 'nonce-from-another-browser']);
+
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $this->oAuth->setToken($token);
+
+        $this->assertSame('', $this->oAuth->getMail());
+    }
+
+    public function testSetTokenRejectsATokenWhenNoNonceWasIssued(): void
+    {
+        $this->mockSession->method('get')->willReturn(null);
+        $this->mockSession->method('getCookie')->willReturn('');
+
+        $token = new stdClass();
+        $token->id_token = $this->signedIdToken();
+
+        $this->mockSession->expects($this->once())->method('set')->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $this->oAuth->setToken($token);
+
+        $this->assertSame('', $this->oAuth->getMail());
+    }
+
+    public function testSetTokenFallsBackToTheNonceCookieWhenTheSessionIsEmpty(): void
+    {
+        // The session cookie is SameSite=Strict and not sent on the redirect back from Microsoft.
+        $this->mockSession->method('get')->willReturn(null);
+        $this->mockSession
+            ->expects($this->once())
+            ->method('getCookie')
+            ->with(EntraIdSession::ENTRA_ID_OAUTH_NONCE)
+            ->willReturn(self::NONCE);
+
+        $token = new stdClass();
+        $token->id_token = $this->signedIdToken();
+
+        $this->mockSession
+            ->expects($this->once())
+            ->method('set')
+            ->with(EntraIdSession::ENTRA_ID_JWT, $this->stringContains('John Doe'));
+
+        $this->oAuth->setToken($token);
+
+        $this->assertSame('john@example.com', $this->oAuth->getMail());
     }
 }
