@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+#
+# bin/phpunit-ci — run PHPUnit exactly as the GitHub Actions build does.
+#
+# PHPUnit is strict about coverage metadata (beStrictAboutCoverageMetadata +
+# failOnRisky): a test that executes a class it does not declare via
+# #[CoversClass] or #[UsesClass] is risky and fails the run, but only while
+# coverage is being collected. The git hooks therefore run this script rather
+# than `phpunit --no-coverage`, so such failures surface before a commit instead
+# of only in CI.
+#
+# Extra arguments are passed through to PHPUnit, e.g.
+#   bin/phpunit-ci --log-junit junit.xml
+#   bin/phpunit-ci tests/phpMyFAQ/Auth/AuthEntraIdTest.php
+#
+# Set PHP to use a different interpreter, e.g. PHP="php -d pcov.enabled=0".
+
+set -eu
+
+PHP="${PHP:-php}"
+PHPUNIT="phpmyfaq/src/libs/bin/phpunit"
+
+cd "$(dirname "$0")/.."
+
+# Mirrors the driver detection of php-code-coverage: pcov must be enabled, or
+# Xdebug must run with "coverage" in its mode.
+if $PHP -r 'exit((extension_loaded("pcov") && filter_var(ini_get("pcov.enabled"), FILTER_VALIDATE_BOOL)) || (extension_loaded("xdebug") && str_contains((string) (getenv("XDEBUG_MODE") ?: ini_get("xdebug.mode")), "coverage")) ? 0 : 1);'; then
+    exec $PHP "$PHPUNIT" --coverage-text --coverage-clover coverage/clover.xml "$@"
+fi
+
+cat >&2 <<'MSG'
+WARNING: no code coverage driver (pcov or Xdebug with xdebug.mode=coverage) is available.
+         Running PHPUnit without coverage. Risky tests caused by missing #[CoversClass] /
+         #[UsesClass] attributes are NOT detected in this mode but WILL fail the CI build.
+         Install pcov (https://github.com/krakjoe/pcov) to run the same checks as CI.
+MSG
+
+exec $PHP "$PHPUNIT" --no-coverage "$@"

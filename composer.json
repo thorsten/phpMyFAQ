@@ -141,6 +141,7 @@
     "refactor": "./phpmyfaq/src/libs/bin/rector",
     "refactor:dryrun": "./phpmyfaq/src/libs/bin/rector --dry-run",
     "test": "./phpmyfaq/src/libs/bin/phpunit --no-coverage",
+    "test:ci": "bin/phpunit-ci",
     "test:coverage": "./phpmyfaq/src/libs/bin/phpunit --coverage-text",
     "test:coverage-html": "./phpmyfaq/src/libs/bin/phpunit --coverage-html coverage",
     "test:coverage-clover": "./phpmyfaq/src/libs/bin/phpunit --coverage-clover coverage/clover.xml",

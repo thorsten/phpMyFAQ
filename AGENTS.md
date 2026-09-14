@@ -72,10 +72,13 @@ CLI tools therefore live in `phpmyfaq/src/libs/bin/` (`phpunit`, `mago`, `rector
 - SCSS lint auto-fix: pnpm stylelint:fix
 - End-to-end tests (Playwright, fully automated setup via bin/e2e): pnpm e2e:local (SQLite + built-in PHP server) or pnpm e2e:docker (MariaDB container)
 - TypeScript errors have to be fixed before committing code.
-- Local hooks run PHPUnit without coverage, CI runs it with coverage. Risky-test failures from strict
-  coverage metadata (`beStrictAboutCoverageMetadata` + `failOnRisky`) therefore only appear in CI, as
-  exit code 1 with "0 failed" in the JUnit report. Reproduce locally with:
-  `./phpmyfaq/src/libs/bin/phpunit --coverage-text --coverage-clover /tmp/clover.xml`
+- PHP code exactly as CI runs it, with coverage: composer test:ci (wraps `bin/phpunit-ci`)
+- PHPUnit is strict about coverage metadata (`beStrictAboutCoverageMetadata` + `failOnRisky`): a test
+  that executes a class it does not declare via `#[CoversClass]` or `#[UsesClass]` is risky and fails
+  the run, but only while coverage is collected. `composer test` skips coverage and cannot catch this.
+  The git hooks and the GitHub Actions build both run `bin/phpunit-ci`, which needs a coverage driver
+  (pcov, or Xdebug with `xdebug.mode=coverage`); without one it warns and falls back to no coverage.
+  In the JUnit report such a failure shows as exit code 1 with "0 failed".
 
 ### Mago baselines
 
@@ -116,8 +119,11 @@ entrypoint creates.
 - Commit messages must follow Conventional Commits (`fix:`, `feat:`, `test:`, `chore:`, `docs:`, `refactor:`, ...);
   the commit-msg hook runs commitlint and rejects non-conforming messages.
 - The pre-commit hook runs the full check pipeline (Mago format/lint/analyze, composer validate,
-  PHPUnit, oxfmt, oxlint, stylelint, tsc, vitest). It takes a few minutes — that is expected, not a hang.
+  PHPUnit with coverage, oxfmt, oxlint, stylelint, tsc, vitest). It takes a few minutes — that is
+  expected, not a hang.
 - The pre-push hook runs composer validate and both test suites again.
+- Hooks and CI run PHPUnit through the same `bin/phpunit-ci` script; change the PHPUnit invocation
+  there, never in the hooks or the workflow directly.
 
 ## Coding Standards
 

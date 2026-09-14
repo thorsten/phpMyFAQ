@@ -53,7 +53,8 @@ jobs:
 
       - name: Test with PHPUnit
         id: phpunit
-        run: phpmyfaq/src/libs/bin/phpunit --coverage-text --coverage-clover coverage/clover.xml --log-junit junit.xml
+        # Same invocation as the git hooks (composer test:ci), so local and CI runs cannot drift.
+        run: bin/phpunit-ci --log-junit junit.xml
 
       # Only publish when PHPUnit actually ran. With a plain `if: always()` an
       # earlier failure (e.g. Mago) skips PHPUnit and this step then reports a
