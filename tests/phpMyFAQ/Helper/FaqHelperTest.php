@@ -140,6 +140,34 @@ class FaqHelperTest extends TestCase
         $this->assertStringNotContainsString('frameborder', $actualOutput);
     }
 
+    public function testCleanUpContentRemovesIframesWithDataUrlSource(): void
+    {
+        $content =
+            '<p>Before</p>'
+            . '<iframe src="data:text/html,<script>alert(document.domain)</script>"></iframe>'
+            . '<iframe src="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg=="></iframe>'
+            . '<p>After</p>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
+        $this->assertStringNotContainsString('data:', $actualOutput);
+        $this->assertStringNotContainsString('<iframe', $actualOutput);
+        $this->assertStringNotContainsString('script', $actualOutput);
+        $this->assertSame('<p>Before</p><p>After</p>', $actualOutput);
+    }
+
+    public function testCleanUpContentDropsDataLinksAndDataImages(): void
+    {
+        $content =
+            '<p><a href="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==">x</a>'
+            . '<img src="data:image/png;base64,iVBORw0KGgo="></p>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
+        $this->assertStringNotContainsString('data:', $actualOutput);
+        $this->assertStringContainsString('<a>x</a>', $actualOutput);
+    }
+
     public function testCleanUpEmptyIframes(): void
     {
         $content = '<iframe></iframe>';

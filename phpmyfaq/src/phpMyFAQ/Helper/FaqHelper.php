@@ -156,17 +156,19 @@ class FaqHelper extends AbstractHelper
         $contentLength = strlen($content);
         $allowedHosts = $this->configuration->getAllowedMediaHosts();
         $allowedHosts[] = Request::createFromGlobals()->getHost();
-        $htmlSanitizer = new HtmlSanitizer((new HtmlSanitizerConfig())
-            ->withMaxInputLength($contentLength + 1)
-            ->allowSafeElements()
-            ->allowRelativeLinks()
-            ->allowStaticElements()
-            ->allowRelativeMedias()
-            ->forceHttpsUrls($this->configuration->get(item: 'security.useSslOnly'))
-            ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
-            ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
-            ->allowMediaHosts($allowedHosts)
-            ->allowLinkSchemes(['https', 'http', 'mailto', 'data']));
+        $htmlSanitizer = new HtmlSanitizer(
+            (new HtmlSanitizerConfig())
+                ->withMaxInputLength($contentLength + 1)
+                ->allowSafeElements()
+                ->allowRelativeLinks()
+                ->allowStaticElements()
+                ->allowRelativeMedias()
+                ->forceHttpsUrls($this->configuration->get(item: 'security.useSslOnly'))
+                ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
+                ->allowMediaSchemes(['https', 'http', 'mailto'])
+                ->allowMediaHosts($allowedHosts)
+                ->allowLinkSchemes(['https', 'http', 'mailto']),
+        );
 
         // Suppress parse warnings (tokenizer and tree errors) from Dom\HTMLDocument::createFromString()
         // for malformed legacy HTML — the parser recovers from these and still returns a document.
