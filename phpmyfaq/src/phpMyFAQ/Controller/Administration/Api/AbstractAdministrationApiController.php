@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use Override;
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Permission\MediumPermission;
 
 abstract class AbstractAdministrationApiController extends AbstractController
 {
@@ -82,5 +83,95 @@ abstract class AbstractAdministrationApiController extends AbstractController
         }
 
         return true;
+    }
+
+    /**
+     * Whether the acting user holds the group's right in at least the language and category
+     * scope the group holds it in. Group rights are inherited by every member, so a right the
+     * group holds unrestricted, or in a language or category the acting user lacks, would widen
+     * the acting user's own scope on joining.
+     *
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    protected function holdsGroupRightInFullScope(MediumPermission $permission, int $groupId, int $rightId): bool
+    {
+        if (!$permission->hasPermission($this->currentUser->getUserId(), $rightId)) {
+            return false;
+        }
+
+        return (
+            $this->mayAssignLanguages($rightId, $permission->getLanguageRestrictions($groupId, $rightId))
+            && $this->mayAssignCategories($rightId, $permission->getCategoryRestrictions($groupId, $rightId))
+        );
+    }
+
+    /**
+     * Restricts the group's right to the languages and categories the acting user holds it in,
+     * so a delegated grant never exceeds the granter's own scope. A null scope means the acting
+     * user is unrestricted in that dimension and the group's restrictions are left alone; an
+     * empty scope means the right is not held at all and cannot be granted.
+     *
+     * @param array<string>|null $ownLanguages
+     * @param array<int|string>|null $ownCategories
+     */
+    protected function restrictGroupRightToScope(
+        MediumPermission $permission,
+        int $groupId,
+        int $rightId,
+        ?array $ownLanguages,
+        ?array $ownCategories,
+    ): bool {
+        if ($ownLanguages !== null) {
+            if ($ownLanguages === [] || !$permission->setLanguageRestrictions($groupId, $rightId, $ownLanguages)) {
+                return false;
+            }
+        }
+
+        if ($ownCategories !== null) {
+            $ownCategories = array_map(intval(...), $ownCategories);
+            if ($ownCategories === [] || !$permission->setCategoryRestrictions($groupId, $rightId, $ownCategories)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Whether the acting user may scope the given right to exactly these categories.
+     * SuperAdmins and users holding the right without category restriction may assign
+     * anything; everyone else only a non-empty subset of their own allowed categories.
+     *
+     * @param array<int> $categoryIds
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    protected function mayAssignCategories(int $rightId, array $categoryIds): bool
+    {
+        if ($this->currentUser->isSuperAdmin()) {
+            return true;
+        }
+
+        $allowedCategories = $this->currentUser->perm->getAllowedCategoriesForRight(
+            $this->currentUser->getUserId(),
+            $rightId,
+        );
+
+        if ($allowedCategories === null) {
+            return true;
+        }
+
+        // Clearing the restrictions would widen the right to every category,
+        // including ones the acting user does not hold.
+        if ($categoryIds === []) {
+            return false;
+        }
+
+        $allowedCategories = array_map(intval(...), $allowedCategories);
+
+        return array_all($categoryIds, static fn(int $categoryId): bool => in_array(
+            $categoryId,
+            $allowedCategories,
+            strict: true,
+        ));
     }
 }

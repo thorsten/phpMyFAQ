@@ -850,6 +850,74 @@ final class GroupControllerTest extends TestCase
     }
 
     /**
+     * Acting user 1 as a non-SuperAdmin backed by the real MediumPermission, so the
+     * language and category scopes the controller consults come from the database.
+     */
+    private function createScopedContainer(Session $session, MediumPermission $permission): ContainerInterface
+    {
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('isSuperAdmin')->willReturn(false);
+
+        $adminLog = $this->createStub(AdminLog::class);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
+
+        return $container;
+    }
+
+    /**
+     * Turns user 1 into a non-SuperAdmin group administrator without any content right,
+     * and creates the empty group the tests grant rights to.
+     */
+    private function seedScopedGroupAdministrator(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->dbHandle->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->dbHandle->query('DELETE FROM faquser_right WHERE user_id = 1');
+        $this->dbHandle->query('DELETE FROM faquser_group WHERE user_id = 1');
+        foreach (
+            [PermissionType::USER_ADD, PermissionType::USER_EDIT, PermissionType::USER_DELETE, PermissionType::GROUP_EDIT]
+            as $permissionType
+        ) {
+            $this->dbHandle->query(sprintf(
+                'INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d)',
+                $this->rightId($permissionType),
+            ));
+        }
+
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (%d, 'Editors', '', 0)",
+            self::TEST_GROUP_ID,
+        ));
+    }
+
+    private function rightId(PermissionType $permissionType): int
+    {
+        $result = $this->dbHandle->query(sprintf(
+            "SELECT right_id FROM faqright WHERE name = '%s'",
+            $permissionType->value,
+        ));
+        $row = $this->dbHandle->fetchArray($result);
+        self::assertIsArray($row);
+
+        return (int) $row['right_id'];
+    }
+
+    /**
      * @throws \Exception
      */
     public function testListLanguagesRequiresGroupPermission(): void
@@ -1218,6 +1286,245 @@ final class GroupControllerTest extends TestCase
         $rightsPayload = json_decode((string) $rightsResponse->getContent(), true, 512, JSON_THROW_ON_ERROR);
         self::assertSame([3, 4], $rightsPayload);
         $this->removeCsrfCookie('update-group-permissions');
+    }
+
+    /**
+     * A non-SuperAdmin holding a right for one language only must not be able to grant that
+     * right to a group unrestricted and then inherit it for every language by joining the group.
+     *
+     * @throws \Exception
+     */
+    public function testUpdatePermissionsNarrowsGrantToLanguageScopeOfNonSuperAdmin(): void
+    {
+        $this->seedScopedGroupAdministrator();
+        $faqEdit = $this->rightId(PermissionType::FAQ_EDIT);
+        $this->dbHandle->query(sprintf('INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d)', $faqEdit));
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, %d, 'en')",
+            $faqEdit,
+        ));
+
+        $permission = new MediumPermission($this->configuration);
+        self::assertFalse($permission->hasPermissionForLanguage(1, $faqEdit, 'de'));
+
+        $session = new Session(new MockArraySessionStorage());
+        $controller = new GroupController();
+        $controller->setContainer($this->createScopedContainer($session, $permission));
+
+        $csrfToken = Token::getInstance($session)->getTokenString('update-group-permissions');
+        $this->setCsrfCookie('update-group-permissions', $csrfToken);
+        $response = $controller->updatePermissions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightIds' => [$faqEdit],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([$faqEdit], $permission->getGroupRights(self::TEST_GROUP_ID));
+        self::assertSame(['en'], $permission->getLanguageRestrictions(self::TEST_GROUP_ID, $faqEdit));
+        $this->removeCsrfCookie('update-group-permissions');
+
+        // The group now holds the right in the acting user's own scope, so joining it is allowed
+        // and widens nothing.
+        $csrfToken = Token::getInstance($session)->getTokenString('update-group-members');
+        $this->setCsrfCookie('update-group-members', $csrfToken);
+        $response = $controller->updateMembers(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'memberIds' => [1],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('update-group-members');
+
+        self::assertTrue($permission->hasPermissionForLanguage(1, $faqEdit, 'en'));
+        self::assertFalse($permission->hasPermissionForLanguage(1, $faqEdit, 'de'));
+        self::assertSame(['en'], $permission->getAllowedLanguagesForRight(1, $faqEdit));
+    }
+
+    /**
+     * Saving permissions resets the group's language scope, so a restriction set earlier is
+     * replaced by the acting user's own scope, never by "unrestricted".
+     *
+     * @throws \Exception
+     */
+    public function testUpdatePermissionsReplacesGroupRestrictionsWithNonSuperAdminScope(): void
+    {
+        $this->seedScopedGroupAdministrator();
+        $faqEdit = $this->rightId(PermissionType::FAQ_EDIT);
+        $this->dbHandle->query(sprintf('INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d)', $faqEdit));
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, %d, 'en'), (1, %d, 'de')",
+            $faqEdit,
+            $faqEdit,
+        ));
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faqgroup_right_language (group_id, right_id, language) VALUES (%d, %d, 'fr')",
+            self::TEST_GROUP_ID,
+            $faqEdit,
+        ));
+
+        $permission = new MediumPermission($this->configuration);
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('update-group-permissions');
+        $this->setCsrfCookie('update-group-permissions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createScopedContainer($session, $permission));
+
+        $response = $controller->updatePermissions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightIds' => [$faqEdit],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $restrictions = $permission->getLanguageRestrictions(self::TEST_GROUP_ID, $faqEdit);
+        sort($restrictions);
+        self::assertSame(['de', 'en'], $restrictions);
+        $this->removeCsrfCookie('update-group-permissions');
+    }
+
+    /**
+     * Category scope can only come from a group grant, so the acting user holds the right via
+     * another group restricted to one category and must not widen it via a fresh group.
+     *
+     * @throws \Exception
+     */
+    public function testUpdatePermissionsNarrowsGrantToCategoryScopeOfNonSuperAdmin(): void
+    {
+        $this->seedScopedGroupAdministrator();
+        $faqEdit = $this->rightId(PermissionType::FAQ_EDIT);
+        $this->dbHandle->query("INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (4243, 'News', '', 0)");
+        $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 4243)');
+        $this->dbHandle->query(sprintf('INSERT INTO faqgroup_right (group_id, right_id) VALUES (4243, %d)', $faqEdit));
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faqgroup_right_category (group_id, right_id, category_id) VALUES (4243, %d, 7)',
+            $faqEdit,
+        ));
+
+        $permission = new MediumPermission($this->configuration);
+        self::assertFalse($permission->hasPermissionForCategory(1, $faqEdit, 8));
+
+        $session = new Session(new MockArraySessionStorage());
+        $controller = new GroupController();
+        $controller->setContainer($this->createScopedContainer($session, $permission));
+
+        $csrfToken = Token::getInstance($session)->getTokenString('update-group-permissions');
+        $this->setCsrfCookie('update-group-permissions', $csrfToken);
+        $response = $controller->updatePermissions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightIds' => [$faqEdit],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([7], $permission->getCategoryRestrictions(self::TEST_GROUP_ID, $faqEdit));
+        $this->removeCsrfCookie('update-group-permissions');
+
+        $csrfToken = Token::getInstance($session)->getTokenString('update-group-members');
+        $this->setCsrfCookie('update-group-members', $csrfToken);
+        $response = $controller->updateMembers(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'memberIds' => [1],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('update-group-members');
+
+        self::assertTrue($permission->hasPermissionForCategory(1, $faqEdit, 7));
+        self::assertFalse($permission->hasPermissionForCategory(1, $faqEdit, 8));
+    }
+
+    /**
+     * A group holding a right unrestricted lies outside the scope of an acting user who holds
+     * that right for one language only, so they may not manage its membership.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateMembersRejectsGroupRightWiderThanNonSuperAdminScope(): void
+    {
+        $this->seedScopedGroupAdministrator();
+        $faqEdit = $this->rightId(PermissionType::FAQ_EDIT);
+        $this->dbHandle->query(sprintf('INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d)', $faqEdit));
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, %d, 'en')",
+            $faqEdit,
+        ));
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faqgroup_right (group_id, right_id) VALUES (%d, %d)',
+            self::TEST_GROUP_ID,
+            $faqEdit,
+        ));
+
+        $permission = new MediumPermission($this->configuration);
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('update-group-members');
+        $this->setCsrfCookie('update-group-members', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createScopedContainer($session, $permission));
+
+        $response = $controller->updateMembers(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'memberIds' => [1],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame('Cannot manage a group whose rights you do not hold.', $payload['error']);
+        self::assertFalse($permission->hasPermissionForLanguage(1, $faqEdit, 'de'));
+        $this->removeCsrfCookie('update-group-members');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateGroupRejectsAutoJoinOnGroupRightWiderThanNonSuperAdminScope(): void
+    {
+        $this->seedScopedGroupAdministrator();
+        $faqEdit = $this->rightId(PermissionType::FAQ_EDIT);
+        $this->dbHandle->query(sprintf('INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d)', $faqEdit));
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, %d, 'en')",
+            $faqEdit,
+        ));
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faqgroup_right (group_id, right_id) VALUES (%d, %d)',
+            self::TEST_GROUP_ID,
+            $faqEdit,
+        ));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('update-group');
+        $this->setCsrfCookie('update-group', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createScopedContainer($session, new MediumPermission($this->configuration)));
+
+        $response = $controller->updateGroup(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'name' => 'Editors',
+                'autoJoin' => true,
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame('Cannot enable auto-join on a group whose rights you do not hold.', $payload['error']);
+        $this->removeCsrfCookie('update-group');
     }
 
     /**

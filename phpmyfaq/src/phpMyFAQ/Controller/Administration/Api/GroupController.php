@@ -391,15 +391,15 @@ final class GroupController extends AbstractAdministrationApiController
         // so a non-SuperAdmin may only enable it on a group whose rights they fully hold
         // (same escalation rule as membership management, fail closed).
         if ($autoJoin && !$this->currentUser->isSuperAdmin()) {
-            if (!$this->currentUser->perm instanceof MediumPermission) {
+            $actingPermission = $this->currentUser->perm;
+            if (!$actingPermission instanceof MediumPermission) {
                 return $this->json([
                     'error' => 'Cannot enable auto-join without group permission support.',
                 ], Response::HTTP_FORBIDDEN);
             }
 
-            $actingUserId = $this->currentUser->getUserId();
-            foreach ($this->currentUser->perm->getGroupRights($groupId) as $groupRight) {
-                if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $groupRight)) {
+            foreach ($actingPermission->getGroupRights($groupId) as $groupRight) {
+                if (!$this->holdsGroupRightInFullScope($actingPermission, $groupId, (int) $groupRight)) {
                     return $this->json([
                         'error' => 'Cannot enable auto-join on a group whose rights you do not hold.',
                     ], Response::HTTP_FORBIDDEN);
@@ -470,21 +470,22 @@ final class GroupController extends AbstractAdministrationApiController
         ));
 
         // A non-SuperAdmin may only manage membership of a group whose rights they fully hold
-        // themselves. Otherwise an administrator with the delegable GROUP_EDIT right could join
-        // themselves (or anyone else) to a privileged group and inherit rights they do not possess
-        // (privilege escalation via group membership inheritance).
+        // themselves, in at least the language and category scope the group holds them in.
+        // Otherwise an administrator with the delegable GROUP_EDIT right could join themselves
+        // (or anyone else) to a privileged group and inherit rights, or a wider scope for a
+        // right, they do not possess (privilege escalation via group membership inheritance).
         if (!$this->currentUser->isSuperAdmin()) {
             // Fail closed: if the permission backend cannot enumerate group rights, we cannot prove
             // the acting user holds them, so the operation must be denied rather than allowed.
-            if (!$this->currentUser->perm instanceof MediumPermission) {
+            $actingPermission = $this->currentUser->perm;
+            if (!$actingPermission instanceof MediumPermission) {
                 return $this->json([
                     'error' => 'Cannot manage group membership without group permission support.',
                 ], Response::HTTP_FORBIDDEN);
             }
 
-            $actingUserId = $this->currentUser->getUserId();
-            foreach ($this->currentUser->perm->getGroupRights($groupId) as $groupRight) {
-                if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $groupRight)) {
+            foreach ($actingPermission->getGroupRights($groupId) as $groupRight) {
+                if (!$this->holdsGroupRightInFullScope($actingPermission, $groupId, (int) $groupRight)) {
                     return $this->json([
                         'error' => 'Cannot manage a group whose rights you do not hold.',
                     ], Response::HTTP_FORBIDDEN);
@@ -561,12 +562,23 @@ final class GroupController extends AbstractAdministrationApiController
         // A non-SuperAdmin may only assign rights they hold themselves. This prevents an
         // administrator with the delegable GROUP_EDIT right from granting privileges they do not
         // possess to a group (privilege escalation via group membership inheritance).
+        //
+        // Holding a right is not enough: a right held only for some languages or categories must
+        // not be granted to the group in a wider scope, or the acting user could widen their own
+        // scope by joining the group. The acting user's scope per right is captured here, before
+        // any write, because it may itself derive from the group being edited.
+        $ownScopes = [];
         if (!$this->currentUser->isSuperAdmin()) {
             $actingUserId = $this->currentUser->getUserId();
             foreach ($rightIds as $rightId) {
                 if (!$this->currentUser->perm->hasPermission($actingUserId, $rightId)) {
                     return $this->json(['error' => 'Cannot grant a right you do not hold.'], Response::HTTP_FORBIDDEN);
                 }
+
+                $ownScopes[$rightId] = [
+                    $this->currentUser->perm->getAllowedLanguagesForRight($actingUserId, $rightId),
+                    $this->currentUser->perm->getAllowedCategoriesForRight($actingUserId, $rightId),
+                ];
             }
         }
 
@@ -581,6 +593,22 @@ final class GroupController extends AbstractAdministrationApiController
 
         $failed = false;
         foreach ($rightIds as $rightId) {
+            // Restrict first, grant second: if restricting fails, the right stays ungranted (fail closed).
+            $ownScope = $ownScopes[$rightId] ?? null;
+            if ($ownScope !== null) {
+                [$ownLanguages, $ownCategories] = $ownScope;
+                if (!$this->restrictGroupRightToScope(
+                    $currentUser->perm,
+                    $groupId,
+                    $rightId,
+                    $ownLanguages,
+                    $ownCategories,
+                )) {
+                    $failed = true;
+                    continue;
+                }
+            }
+
             if ($currentUser->perm->grantGroupRight($groupId, $rightId)) {
                 continue;
             }
@@ -668,43 +696,5 @@ final class GroupController extends AbstractAdministrationApiController
         ], $orderedCategories);
 
         return $this->json($categories, Response::HTTP_OK);
-    }
-
-    /**
-     * Whether the acting user may scope the given right to exactly these categories.
-     * SuperAdmins and users holding the right without category restriction may assign
-     * anything; everyone else only a non-empty subset of their own allowed categories.
-     *
-     * @param array<int> $categoryIds
-     * @throws Exception
-     */
-    private function mayAssignCategories(int $rightId, array $categoryIds): bool
-    {
-        if ($this->currentUser->isSuperAdmin()) {
-            return true;
-        }
-
-        $allowedCategories = $this->currentUser->perm->getAllowedCategoriesForRight(
-            $this->currentUser->getUserId(),
-            $rightId,
-        );
-
-        if ($allowedCategories === null) {
-            return true;
-        }
-
-        // Clearing the restrictions would widen the right to every category,
-        // including ones the acting user does not hold.
-        if ($categoryIds === []) {
-            return false;
-        }
-
-        $allowedCategories = array_map(intval(...), $allowedCategories);
-
-        return array_all($categoryIds, static fn(int $categoryId): bool => in_array(
-            $categoryId,
-            $allowedCategories,
-            strict: true,
-        ));
     }
 }
