@@ -7,6 +7,7 @@ namespace phpMyFAQ\EventListener;
 use Monolog\Logger;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Http\RateLimiter;
+use phpMyFAQ\Http\SecurityEventLogger;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -20,6 +21,7 @@ use Symfony\Component\RateLimiter\Storage\InMemoryStorage;
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(ApiRateLimiterListener::class)]
 #[UsesClass(RateLimiter::class)]
+#[UsesClass(SecurityEventLogger::class)]
 final class ApiRateLimiterListenerTest extends TestCase
 {
     public function testOnKernelRequestSkipsSubRequests(): void

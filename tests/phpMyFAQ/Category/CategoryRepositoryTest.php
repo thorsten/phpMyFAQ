@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Category;
 
+use phpMyFAQ\Category\Permission\CategoryPermissionService;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(CategoryRepository::class)]
 #[UsesClass(Database::class)]
 #[UsesClass(CategoryEntity::class)]
+#[UsesClass(CategoryPermissionService::class)]
 #[UsesClass(TenantQuotaEnforcer::class)]
 #[UsesClass(TenantContext::class)]
 #[UsesClass(TenantContextResolver::class)]

@@ -4,6 +4,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Bootstrap\ConfigDirectoryResolver;
 use phpMyFAQ\Bootstrap\PhpConfigurator;
+use phpMyFAQ\Bootstrap\TrustedProxyConfigurator;
 use phpMyFAQ\Configuration\ConfigurationRepository;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Configuration\LayoutSettings;
@@ -53,6 +54,7 @@ use Symfony\Component\HttpFoundation\Request;
 #[UsesClass(System::class)]
 #[UsesClass(Translation::class)]
 #[UsesClass(PhpConfigurator::class)]
+#[UsesClass(TrustedProxyConfigurator::class)]
 #[UsesClass(ConfigDirectoryResolver::class)]
 #[UsesClass(FilesystemConfigurationCache::class)]
 #[UsesClass(PluginDiscovery::class)]
