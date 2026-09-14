@@ -74,8 +74,8 @@ devDependencies:
     specifier: 4.1.11
     version: 4.1.11(vitest@4.1.11)
   autoprefixer:
-    specifier: 10.5.4
-    version: 10.5.4(postcss@8.5.28)
+    specifier: 10.5.5
+    version: 10.5.5(postcss@8.5.28)
   husky:
     specifier: 9.1.7
     version: 9.1.7
@@ -1739,8 +1739,8 @@ packages:
     resolution: {integrity: sha512-ZKUvEIU8XpqqkMrZoy+QmAh7Ga8YE3qB8EFJzC05K69S8+dQ3xrN066vJImiIjkwYVG1Oc8eRP4YVDQOquUF9A==}
     dev: false
 
-  /autoprefixer@10.5.4(postcss@8.5.28):
-    resolution: {integrity: sha512-MaU0U/za7N3r6brxD4YB/l4NSrFzLPlANv6wEuQVaIPlD3L4W9rFcQPbL/EilY9BHhHvhfcz3gInDLrEtWT4EA==}
+  /autoprefixer@10.5.5(postcss@8.5.28):
+    resolution: {integrity: sha512-uiRYvQYe/nNSzBJ7OUnd2/TZVsAdob3blml44teEpee9Cc1f4rGZFewO+JT3Wo8mgFOSzNqes4FHZn/Qz8WOuw==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
