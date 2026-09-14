@@ -11,6 +11,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -1586,6 +1587,219 @@ final class UserControllerTest extends TestCase
         $response = $controller->updateUserRights($request);
 
         $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    /**
+     * A non-SuperAdmin holding a right for one language only must not be able to widen it to
+     * every language by re-saving the rights they already hold: the re-grant must keep the
+     * per-right language restriction rows instead of dropping them.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateRightsKeepsLanguageScopeWhenNonSuperAdminResavesOwnRights(): void
+    {
+        $this->seedCurrentUserSession();
+        $faqAdd = $this->seedScopedUserAdministrator(['en']);
+        $userEdit = $this->rightId(PermissionType::USER_EDIT);
+
+        $permission = new BasicPermission($this->configuration);
+        self::assertTrue($permission->hasPermissionForLanguage(1, $faqAdd, 'en'));
+        self::assertFalse($permission->hasPermissionForLanguage(1, $faqAdd, 'de'));
+
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->buildController($session, $this->buildScopedActingUser($permission));
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'csrfToken' => $csrf,
+            'userId' => 1,
+            'userRights' => [$userEdit, $faqAdd],
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($permission->hasPermissionForLanguage(1, $faqAdd, 'en'));
+        self::assertFalse($permission->hasPermissionForLanguage(1, $faqAdd, 'de'));
+        self::assertSame(['en'], $permission->getAllowedLanguagesForRight(1, $faqAdd));
+    }
+
+    /**
+     * Re-saving a user's rights must keep the language restriction of every right that survives
+     * the save, even for a SuperAdmin: the rights form does not carry the restrictions, which
+     * are edited separately.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateRightsKeepsTargetLanguageScopeForSuperAdmin(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser();
+        $faqAdd = $this->rightId(PermissionType::FAQ_ADD);
+        $faqEdit = $this->rightId(PermissionType::FAQ_EDIT);
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faquser_right (user_id, right_id) VALUES (%d, %d), (%d, %d)',
+            $managedUserId,
+            $faqAdd,
+            $managedUserId,
+            $faqEdit,
+        ));
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (%d, %d, 'de'), (%d, %d, 'fr')",
+            $managedUserId,
+            $faqAdd,
+            $managedUserId,
+            $faqEdit,
+        ));
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $csrf = $this->createValidCsrfToken($session, 'update-user-rights');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'csrfToken' => $csrf,
+            'userId' => $managedUserId,
+            'userRights' => [$faqAdd],
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $permission = new BasicPermission($this->configuration);
+        self::assertSame(['de'], $permission->getAllowedLanguagesForRight($managedUserId, $faqAdd));
+        self::assertFalse($permission->hasPermissionForLanguage($managedUserId, $faqAdd, 'en'));
+        // The dropped right takes its restriction rows with it.
+        self::assertSame([$faqAdd => ['de']], $permission->getAllUserLanguageRestrictions($managedUserId));
+    }
+
+    /**
+     * A non-SuperAdmin restricted to some languages re-saving the rights of a user who holds a
+     * right unrestricted must leave that right in their own scope, never unrestricted.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateRightsNarrowsUnrestrictedTargetRightToNonSuperAdminScope(): void
+    {
+        $this->seedCurrentUserSession();
+        $faqAdd = $this->seedScopedUserAdministrator(['en', 'de']);
+        $managedUserId = $this->seedManagedUser();
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faquser_right (user_id, right_id) VALUES (%d, %d)',
+            $managedUserId,
+            $faqAdd,
+        ));
+
+        $permission = new BasicPermission($this->configuration);
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->buildController($session, $this->buildScopedActingUser($permission));
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'csrfToken' => $csrf,
+            'userId' => $managedUserId,
+            'userRights' => [$faqAdd],
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $languages = $permission->getAllowedLanguagesForRight($managedUserId, $faqAdd);
+        self::assertIsArray($languages);
+        sort($languages);
+        self::assertSame(['de', 'en'], $languages);
+        self::assertFalse($permission->hasPermissionForLanguage($managedUserId, $faqAdd, 'fr'));
+    }
+
+    /**
+     * A target restriction narrower than the acting user's own scope is kept as it is.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateRightsKeepsNarrowerTargetRestrictionWithinNonSuperAdminScope(): void
+    {
+        $this->seedCurrentUserSession();
+        $faqAdd = $this->seedScopedUserAdministrator(['en', 'de']);
+        $managedUserId = $this->seedManagedUser();
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faquser_right (user_id, right_id) VALUES (%d, %d)',
+            $managedUserId,
+            $faqAdd,
+        ));
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (%d, %d, 'de'), (%d, %d, 'fr')",
+            $managedUserId,
+            $faqAdd,
+            $managedUserId,
+            $faqAdd,
+        ));
+
+        $permission = new BasicPermission($this->configuration);
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->buildController($session, $this->buildScopedActingUser($permission));
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'csrfToken' => $csrf,
+            'userId' => $managedUserId,
+            'userRights' => [$faqAdd],
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // 'fr' is outside the acting user's scope and is dropped; 'de' is kept.
+        self::assertSame(['de'], $permission->getAllowedLanguagesForRight($managedUserId, $faqAdd));
+    }
+
+    /**
+     * Turns user 1 into a non-SuperAdmin user administrator holding USER_EDIT unrestricted and
+     * FAQ_ADD restricted to the given languages. Returns the FAQ_ADD right id.
+     *
+     * @param array<string> $languages
+     */
+    private function seedScopedUserAdministrator(array $languages): int
+    {
+        $this->dbHandle->query("UPDATE faquser SET is_superadmin = 0, account_status = 'active' WHERE user_id = 1");
+        $this->dbHandle->query('DELETE FROM faquser_right WHERE user_id = 1');
+        $userEdit = $this->rightId(PermissionType::USER_EDIT);
+        $faqAdd = $this->rightId(PermissionType::FAQ_ADD);
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d), (1, %d)',
+            $userEdit,
+            $faqAdd,
+        ));
+        foreach ($languages as $language) {
+            $this->dbHandle->query(sprintf(
+                "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, %d, '%s')",
+                $faqAdd,
+                $language,
+            ));
+        }
+
+        return $faqAdd;
+    }
+
+    /**
+     * Acting user 1 as a non-SuperAdmin backed by the real permission object, so the language
+     * scopes the controller consults come from the database.
+     */
+    private function buildScopedActingUser(BasicPermission $permission): CurrentUser
+    {
+        $actingUser = $this->createStub(CurrentUser::class);
+        $actingUser->perm = $permission;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(1);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        return $actingUser;
+    }
+
+    private function rightId(PermissionType $permissionType): int
+    {
+        $result = $this->dbHandle->query(sprintf(
+            "SELECT right_id FROM faqright WHERE name = '%s'",
+            $permissionType->value,
+        ));
+        $row = $this->dbHandle->fetchArray($result);
+        self::assertIsArray($row);
+
+        return (int) $row['right_id'];
     }
 
     public function testAddUserNonSuperAdminCannotGrantSuperAdminFlag(): void

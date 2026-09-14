@@ -648,12 +648,26 @@ final class UserController extends AbstractAdministrationApiController
         // A non-SuperAdmin may only assign rights they hold themselves. This prevents an
         // administrator with the delegable USER_EDIT right from granting privileges they do not
         // possess (privilege escalation).
+        //
+        // Holding a right is not enough: a right held only for some languages must not be
+        // re-granted in a wider scope, or the acting user could widen their own scope by
+        // re-saving the rights they already hold. The acting user's scope per right is captured
+        // here, before any write, because it may itself derive from the user being edited.
+        $ownScopes = [];
         if (!$actingIsSuperAdmin) {
             $actingUserId = $this->currentUser->getUserId();
             foreach ($userRights as $userRight) {
                 if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $userRight)) {
                     return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
                 }
+
+                // Fail closed: an empty scope means the right is not held in any language.
+                $ownScope = $this->currentUser->perm->getAllowedLanguagesForRight($actingUserId, (int) $userRight);
+                if ($ownScope === []) {
+                    return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+                }
+
+                $ownScopes[(int) $userRight] = $ownScope;
             }
         }
 
@@ -666,11 +680,32 @@ final class UserController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
+        // refuseAllUserRights() drops the per-right language restriction rows along with the
+        // rights, and a missing restriction row means "all languages". Capture the target's
+        // restrictions first so a right that survives the save keeps its scope.
+        $existingScopes = $user->perm instanceof BasicPermission
+            ? $user->perm->getAllUserLanguageRestrictions($userId)
+            : [];
+
         if (!$user->perm->refuseAllUserRights($userId)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_mysqlerr')], Response::HTTP_BAD_REQUEST);
         }
 
         foreach ($userRights as $userRight) {
+            $languages = $this->languageScopeForRegrant(
+                $existingScopes[(int) $userRight] ?? [],
+                $ownScopes[(int) $userRight] ?? null,
+            );
+
+            // Restrict first, grant second: if restricting fails, the right stays ungranted (fail closed).
+            if (
+                $languages !== []
+                && $user->perm instanceof BasicPermission
+                && !$user->perm->setUserLanguageRestrictions($userId, (int) $userRight, $languages)
+            ) {
+                return $this->json(['error' => Translation::get(key: 'ad_msg_mysqlerr')], Response::HTTP_BAD_REQUEST);
+            }
+
             $user->perm->grantUserRight($userId, (int) $userRight);
         }
 
@@ -685,6 +720,28 @@ final class UserController extends AbstractAdministrationApiController
             . Translation::getString(key: 'ad_msg_savedsuc_2');
 
         return $this->json(['success' => $success], Response::HTTP_OK);
+    }
+
+    /**
+     * Returns the languages a re-granted right must be restricted to, an empty array meaning
+     * unrestricted. The target keeps its existing restriction. A non-SuperAdmin whose own grant
+     * is restricted (a non-null scope) can only leave the right within that scope: the existing
+     * restriction is narrowed to the languages they hold, and an unrestricted or disjoint
+     * restriction becomes exactly their own scope, which they could assign explicitly anyway.
+     *
+     * @param array<string> $existingLanguages
+     * @param array<string>|null $ownLanguages
+     * @return array<string>
+     */
+    private function languageScopeForRegrant(array $existingLanguages, ?array $ownLanguages): array
+    {
+        if ($ownLanguages === null) {
+            return $existingLanguages;
+        }
+
+        $languages = array_values(array_intersect($existingLanguages, $ownLanguages));
+
+        return $languages === [] ? $ownLanguages : $languages;
     }
 
     /**
