@@ -2108,4 +2108,41 @@ class SvgSanitizerTest extends TestCase
         $this->assertStringContainsString('M 0 0 L 10 10', $sanitizedContent);
         $this->assertTrue($this->sanitizer->isSafe($filePath));
     }
+
+    public function testIsSafeReturnsFalseForSlashSeparatedEventHandler(): void
+    {
+        $maliciousSvg = '<svg xmlns="http://www.w3.org/2000/svg"/onload="alert(document.cookie)">';
+
+        $filePath = $this->testDir . '/slash_separated_onload.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+        $this->assertNotEmpty($this->sanitizer->detectIssues($maliciousSvg));
+    }
+
+    public function testIsSafeReturnsFalseForSlashSeparatedUnquotedEventHandler(): void
+    {
+        $maliciousSvg = '<svg xmlns="http://www.w3.org/2000/svg"><circle r="1"/onload=alert(1)></svg>';
+
+        $filePath = $this->testDir . '/slash_separated_unquoted_onload.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testSanitizeRemovesSlashSeparatedEventHandler(): void
+    {
+        $maliciousSvg = '<svg xmlns="http://www.w3.org/2000/svg"/onload="alert(1)"><circle r="1"/></svg>';
+
+        $filePath = $this->testDir . '/slash_separated_onload_sanitize.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+
+        $sanitizedContent = file_get_contents($filePath);
+        $this->assertStringNotContainsStringIgnoringCase('onload', $sanitizedContent);
+        $this->assertStringNotContainsString('alert', $sanitizedContent);
+        $this->assertStringContainsString('circle', $sanitizedContent);
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
+    }
 }

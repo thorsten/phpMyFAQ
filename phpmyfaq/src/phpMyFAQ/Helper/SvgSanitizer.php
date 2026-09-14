@@ -41,9 +41,11 @@ class SvgSanitizer
         '/<script\b[^>]*\/>/is',
         '/<script\b[^>]*>/is',
 
-        // Event handlers (onclick, onload, onerror, etc.)
-        '/\s+on\w+\s*=\s*["\'][^"\']*["\']/i',
-        '/\s+on\w+\s*=\s*[^"\'\s>][^\s>]*/i',
+        // Event handlers (onclick, onload, onerror, etc.). HTML parsers accept
+        // "/" as an attribute separator (<svg/onload=...>), so it counts as
+        // whitespace here in case the SVG is ever inlined into HTML.
+        '/[\s\/]+on\w+\s*=\s*["\'][^"\']*["\']/i',
+        '/[\s\/]+on\w+\s*=\s*[^"\'\s>][^\s>]*/i',
 
         // ForeignObject tags
         '/<foreignObject\b[^>]*>.*?<\/foreignObject>/is',
@@ -407,7 +409,7 @@ class SvgSanitizer
         }
 
         // Additional cleanup for remaining event handlers
-        $sanitized = preg_replace('/\s+on\w+\s*=\s*[^\s>]+/i', replacement: '', subject: $sanitized) ?? '';
+        $sanitized = preg_replace('/[\s\/]+on\w+\s*=\s*[^\s>]+/i', replacement: '', subject: $sanitized) ?? '';
 
         // Clean up any remaining dangerous URIs in attributes
         $sanitized =
