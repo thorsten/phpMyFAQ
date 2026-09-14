@@ -505,7 +505,9 @@ trait ConfigurationMethodsTrait
      */
     public function add(string $name, mixed $value): bool
     {
-        if (!array_key_exists($name, $this->config) || $this->config[$name] === null) {
+        // get() loads the configuration from the store when it is not in memory yet,
+        // so a key seeded by the installer is never inserted twice by a migration.
+        if ($this->get($name) === null) {
             return $this->configurationRepository->insert($name, (string) $value);
         }
 

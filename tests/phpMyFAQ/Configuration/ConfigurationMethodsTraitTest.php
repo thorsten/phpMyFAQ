@@ -512,6 +512,20 @@ class ConfigurationMethodsTraitTest extends TestCase
         $this->assertTrue($this->subject->add('null.key', 'value'));
     }
 
+    public function testAddDoesNotInsertWhenKeyExistsInStoreButNotInMemory(): void
+    {
+        // A migration adds a key the installer already seeded: the in-memory map is
+        // empty at that point, so the store has to be consulted before inserting.
+        $this->configurationRepository
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn([(object) ['config_name' => 'seeded.key', 'config_value' => 'false']]);
+        $this->configurationRepository->expects($this->never())->method('insert');
+
+        $this->assertTrue($this->subject->add('seeded.key', 'true'));
+        $this->assertFalse($this->subject->get('seeded.key'));
+    }
+
     public function testAddReturnsTrueWhenKeyExists(): void
     {
         $this->subject->config['existing.key'] = 'existing-value';

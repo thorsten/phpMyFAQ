@@ -553,7 +553,8 @@ class UpgradeTest extends TestCase
     {
         $package = $this->createPackageFile('nightly-allowed', sprintf('phpMyFAQ-nightly-%s.zip', date('Y-m-d')));
         // The key is seeded by the installer; an existing installation gets it through a migration
-        $this->configuration->add('upgrade.allowUnverifiedNightly', 'true');
+        $this->configuration->add('upgrade.allowUnverifiedNightly', 'false');
+        $this->configuration->set('upgrade.allowUnverifiedNightly', 'true');
 
         $this->mockReleaseInfo(['assets' => []]);
 
