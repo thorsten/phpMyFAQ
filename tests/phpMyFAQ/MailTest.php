@@ -28,6 +28,12 @@ class MailTest extends TestCase
         $this->mail = new Mail($configuration);
     }
 
+    protected function tearDown(): void
+    {
+        $_SERVER['HTTP_HOST'] = 'localhost';
+        $_SERVER['SERVER_NAME'] = 'localhost';
+    }
+
     public function testCreateBoundaryReturnsString(): void
     {
         $result = Mail::createBoundary();

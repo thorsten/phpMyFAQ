@@ -37,6 +37,7 @@ class NewsTest extends TestCase
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.language', 'en');
         $this->configuration->set('main.referenceURL', 'https://example.org/');
+        $_SERVER['HTTP_HOST'] = 'example.org';
 
         Language::$language = 'en';
         $language = new Language($this->configuration, $this->createStub(Session::class));
@@ -46,6 +47,11 @@ class NewsTest extends TestCase
         $this->mockRepository = $this->createMock(NewsRepositoryInterface::class);
 
         $this->news = new News($this->configuration, $this->mockRepository);
+    }
+
+    protected function tearDown(): void
+    {
+        $_SERVER['HTTP_HOST'] = 'localhost';
     }
 
     public function testCreate(): void

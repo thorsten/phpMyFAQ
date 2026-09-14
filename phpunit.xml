@@ -2,6 +2,8 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.3/phpunit.xsd" bootstrap="tests/bootstrap.php"
          executionOrder="depends,defects"
+         controlGarbageCollector="true"
+         numberOfTestsBeforeGarbageCollection="25"
          beStrictAboutOutputDuringTests="true"
          failOnRisky="true"
          failOnWarning="true"

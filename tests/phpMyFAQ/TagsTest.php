@@ -45,6 +45,8 @@ class TagsTest extends TestCase
     {
         $this->dbHandle->query('DELETE FROM faqdata_tags');
         $this->dbHandle->query('DELETE FROM faqtags');
+        $this->configuration->set('security.permLevel', 'basic');
+        $_SERVER['HTTP_HOST'] = 'localhost';
     }
 
     public function testCreate(): void

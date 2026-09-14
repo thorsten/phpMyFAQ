@@ -64,6 +64,8 @@ class SitemapTest extends TestCase
         $this->db->query('DELETE FROM faqdata WHERE id = 1');
         $this->db->query('DELETE FROM faqdata_group WHERE record_id = 1');
         $this->db->query('DELETE FROM faqdata_user WHERE record_id = 1');
+        $this->configuration->set('security.permLevel', 'basic');
+        $_SERVER['HTTP_HOST'] = 'localhost';
     }
 
     public function testGetAllFirstLetters(): void
