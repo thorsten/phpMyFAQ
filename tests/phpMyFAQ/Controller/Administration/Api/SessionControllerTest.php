@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -229,5 +230,17 @@ final class SessionControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame('text/csv', $response->headers->get('Content-Type'));
+        self::assertInstanceOf(BinaryFileResponse::class, $response);
+
+        // The export is written to a temp file that must not outlive the download.
+        $exportFile = $response->getFile()->getPathname();
+        self::assertFileExists($exportFile);
+
+        ob_start();
+        $response->sendContent();
+        $csv = ob_get_clean();
+
+        self::assertSame("127.0.0.1,\"2026-03-01 00:00:00\"\n", $csv);
+        self::assertFileDoesNotExist($exportFile);
     }
 }

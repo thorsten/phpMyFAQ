@@ -81,6 +81,7 @@ final class SessionController extends AbstractAdministrationApiController
                 'sessions_' . $firstHour . '-' . $lastHour . '.csv',
             );
             $binaryFileResponse->headers->set('Content-Type', 'text/csv');
+            $binaryFileResponse->deleteFileAfterSend();
             return $binaryFileResponse;
         }
 
