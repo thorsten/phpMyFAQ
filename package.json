@@ -107,5 +107,21 @@
     "vitest": "4.1.11",
     "vitest-fetch-mock": "0.4.5"
   },
+  "pnpm": {
+    "supportedArchitectures": {
+      "os": [
+        "darwin",
+        "linux"
+      ],
+      "cpu": [
+        "current",
+        "arm64"
+      ],
+      "libc": [
+        "glibc",
+        "musl"
+      ]
+    }
+  },
   "packageManager": "pnpm@8.15.5"
 }
