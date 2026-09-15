@@ -39,6 +39,9 @@ final class ConfigurationTabControllerTest extends TestCase
     private Configuration $configuration;
     private Sqlite3 $dbHandle;
     private string $databasePath;
+
+    /** @var list<string> */
+    private array $temporaryFiles = [];
     private ?Configuration $previousConfiguration = null;
 
     /**
@@ -101,6 +104,14 @@ final class ConfigurationTabControllerTest extends TestCase
         $dbTypeProperty = $databaseReflection->getProperty('dbType');
         $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
+
+        foreach ($this->temporaryFiles as $temporaryFile) {
+            if (is_file($temporaryFile)) {
+                unlink($temporaryFile);
+            }
+        }
+
+        $this->temporaryFiles = [];
 
         parent::tearDown();
     }
@@ -426,6 +437,7 @@ final class ConfigurationTabControllerTest extends TestCase
 
         $archive = tempnam(sys_get_temp_dir(), 'pmf-theme-');
         self::assertNotFalse($archive);
+        $this->temporaryFiles[] = $archive;
         file_put_contents($archive, 'zip-placeholder');
         $uploadedFile = new UploadedFile($archive, 'my-theme.zip', 'application/zip', null, true);
 
@@ -465,6 +477,7 @@ final class ConfigurationTabControllerTest extends TestCase
 
         $archive = tempnam(sys_get_temp_dir(), 'pmf-theme-');
         self::assertNotFalse($archive);
+        $this->temporaryFiles[] = $archive;
         file_put_contents($archive, 'zip-placeholder');
         $uploadedFile = new UploadedFile($archive, 'broken-theme.zip', 'application/zip', null, true);
 

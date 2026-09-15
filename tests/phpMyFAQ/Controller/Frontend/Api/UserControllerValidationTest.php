@@ -546,6 +546,9 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         self::assertInstanceOf(BinaryFileResponse::class, $response);
         self::assertSame('application/zip', $response->headers->get('Content-Type'));
         self::assertStringContainsString('attachment;', (string) $response->headers->get('Content-Disposition'));
+
+        // The archive is only removed once the response has been sent, which never happens here.
+        unlink($response->getFile()->getPathname());
     }
 
     /**
@@ -595,6 +598,7 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         self::assertTrue($zipArchive->open($response->getFile()->getPathname()));
         $json = $zipArchive->getFromName('userdata.json');
         $zipArchive->close();
+        unlink($response->getFile()->getPathname());
 
         self::assertIsString($json);
         $userData = json_decode($json, true);

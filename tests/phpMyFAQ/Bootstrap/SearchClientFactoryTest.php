@@ -60,6 +60,9 @@ class SearchClientFactoryTest extends TestCase
 {
     private array $envBackup = [];
 
+    /** @var list<string> */
+    private array $configDirectories = [];
+
     protected function setUp(): void
     {
         $this->envBackup = [
@@ -79,6 +82,16 @@ class SearchClientFactoryTest extends TestCase
 
             $_ENV[$key] = $value;
         }
+
+        foreach ($this->configDirectories as $configDirectory) {
+            foreach (glob($configDirectory . '/*') ?: [] as $file) {
+                unlink($file);
+            }
+
+            rmdir($configDirectory);
+        }
+
+        $this->configDirectories = [];
     }
 
     public function testWaitForHealthyReturnsImmediatelyOnSuccess(): void
@@ -273,6 +286,7 @@ class SearchClientFactoryTest extends TestCase
     {
         $configDir = sys_get_temp_dir() . '/pmf-search-config-' . $type . '-' . uniqid('', true);
         mkdir($configDir, 0777, true);
+        $this->configDirectories[] = $configDir;
         $extraOptions = $extraOptions === '' ? '' : ', ' . $extraOptions;
 
         if ($type === 'elasticsearch') {

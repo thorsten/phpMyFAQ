@@ -253,5 +253,8 @@ class BackupControllerTest extends TestCase
         $backupFilePath = (string) realpath($backupFile->getPathname());
         self::assertStringStartsWith((string) realpath(sys_get_temp_dir()), $backupFilePath);
         self::assertStringStartsNotWith((string) realpath(PMF_ROOT_DIR), $backupFilePath);
+
+        // The archive is only removed once the response has been sent, which never happens here.
+        unlink($backupFilePath);
     }
 }

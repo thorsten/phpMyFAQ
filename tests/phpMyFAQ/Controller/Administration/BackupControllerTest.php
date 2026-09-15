@@ -41,6 +41,9 @@ final class BackupControllerTest extends TestCase
     private Configuration $configuration;
     private Sqlite3 $dbHandle;
     private string $databasePath;
+
+    /** @var list<string> */
+    private array $temporaryFiles = [];
     private ?Configuration $previousConfiguration = null;
 
     /**
@@ -100,6 +103,14 @@ final class BackupControllerTest extends TestCase
         $dbTypeProperty = $databaseReflection->getProperty('dbType');
         $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
+
+        foreach ($this->temporaryFiles as $temporaryFile) {
+            if (is_file($temporaryFile)) {
+                unlink($temporaryFile);
+            }
+        }
+
+        $this->temporaryFiles = [];
 
         parent::tearDown();
     }
@@ -378,6 +389,7 @@ final class BackupControllerTest extends TestCase
         $filePath = tempnam(sys_get_temp_dir(), 'pmf-backup-upload-');
         self::assertNotFalse($filePath);
         file_put_contents($filePath, $content);
+        $this->temporaryFiles[] = $filePath;
 
         return new UploadedFile($filePath, $originalName, 'application/sql', $error, true);
     }

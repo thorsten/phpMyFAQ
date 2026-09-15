@@ -60,6 +60,7 @@ abstract class WebTestCase extends TestCase
     protected static function createClient(string $routingContext = 'public'): HttpKernelBrowser
     {
         self::backupGlobalState();
+        self::releaseDatabase();
 
         $databasePath = tempnam(sys_get_temp_dir(), 'pmf-functional-webtest-');
         self::assertNotFalse($databasePath);
@@ -116,23 +117,37 @@ abstract class WebTestCase extends TestCase
         static::$kernel = null;
         static::$client = null;
         ContainerRegistry::reset();
+        self::releaseDatabase();
     }
 
     public static function tearDownAfterClass(): void
+    {
+        self::releaseDatabase();
+        static::$kernel = null;
+        static::$client = null;
+        self::restoreGlobalState();
+    }
+
+    /**
+     * Closes and deletes the temporary SQLite copy created by createClient().
+     *
+     * Every createClient() call copies test.db to a fresh temp file, so the copy has to
+     * be released after each test (and before the next copy is made) or one file per
+     * test is left behind in the system temp directory.
+     */
+    private static function releaseDatabase(): void
     {
         if (self::$dbHandle instanceof Sqlite3) {
             self::$dbHandle->close();
         }
 
         if (self::$databasePath !== null) {
+            // nosemgrep: php.lang.security.unlink-use.unlink-use - temp file created by tempnam() above
             @unlink(self::$databasePath);
         }
 
         self::$dbHandle = null;
         self::$databasePath = null;
-        static::$kernel = null;
-        static::$client = null;
-        self::restoreGlobalState();
     }
 
     private static function initializeDatabaseStatics(Sqlite3 $dbHandle): void

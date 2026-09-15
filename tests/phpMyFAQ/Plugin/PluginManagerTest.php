@@ -76,6 +76,10 @@ class PluginManagerTest extends TestCase
         unlink($testPluginDir . '/assets/style.css');
         rmdir($testPluginDir . '/assets');
         rmdir($testPluginDir);
+        unlink($assetsDir . '/style.css');
+        unlink($assetsDir . '/admin.css');
+        rmdir($assetsDir);
+        rmdir($pluginDir);
     }
 
     /**

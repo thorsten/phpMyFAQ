@@ -47,6 +47,9 @@ final class FaqControllerTest extends TestCase
     private Configuration $configuration;
     private Sqlite3 $dbHandle;
     private string $databasePath;
+
+    /** @var list<string> */
+    private array $temporaryFiles = [];
     private ?Configuration $previousConfiguration = null;
 
     /**
@@ -105,6 +108,14 @@ final class FaqControllerTest extends TestCase
         $dbTypeProperty = $databaseReflection->getProperty('dbType');
         $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
+
+        foreach ($this->temporaryFiles as $temporaryFile) {
+            if (is_file($temporaryFile)) {
+                unlink($temporaryFile);
+            }
+        }
+
+        $this->temporaryFiles = [];
 
         parent::tearDown();
     }
@@ -1824,6 +1835,7 @@ final class FaqControllerTest extends TestCase
     {
         $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
         self::assertNotFalse($tempFile);
+        $this->temporaryFiles[] = $tempFile;
         file_put_contents($tempFile, "question,answer\nQ,A\n");
         $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
 
@@ -1849,6 +1861,7 @@ final class FaqControllerTest extends TestCase
 
         $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
         self::assertNotFalse($tempFile);
+        $this->temporaryFiles[] = $tempFile;
         file_put_contents($tempFile, 'not a csv import');
         $uploadedFile = new UploadedFile($tempFile, 'faq.txt', null, null, true);
 
@@ -1875,6 +1888,7 @@ final class FaqControllerTest extends TestCase
 
         $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
         self::assertNotFalse($tempFile);
+        $this->temporaryFiles[] = $tempFile;
         file_put_contents($tempFile, "1,Question,Answer,keywords,en,Author,author@example.com,true\n");
         $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
 
@@ -1902,6 +1916,7 @@ final class FaqControllerTest extends TestCase
 
         $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
         self::assertNotFalse($tempFile);
+        $this->temporaryFiles[] = $tempFile;
         file_put_contents(
             $tempFile,
             "1,Imported question,Imported answer,keywords,en,Author,author@example.com,true,false\n",
@@ -1935,6 +1950,7 @@ final class FaqControllerTest extends TestCase
 
         $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
         self::assertNotFalse($tempFile);
+        $this->temporaryFiles[] = $tempFile;
         // Row 2 targets the sentinel forbidden language 'fr'.
         file_put_contents(
             $tempFile,
@@ -1970,6 +1986,7 @@ final class FaqControllerTest extends TestCase
 
         $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
         self::assertNotFalse($tempFile);
+        $this->temporaryFiles[] = $tempFile;
         file_put_contents(
             $tempFile,
             "666,Blocked question,Blocked answer,keywords,en,Author,author@example.com,true,false\n",

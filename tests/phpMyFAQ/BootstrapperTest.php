@@ -402,7 +402,8 @@ class BootstrapperTest extends TestCase
     {
         // Create a temp DB config pointing to a valid SQLite file but with no tables
         $tempDb = tempnam(sys_get_temp_dir(), 'pmf_test_');
-        $tempConfig = tempnam(sys_get_temp_dir(), 'pmf_dbcfg_') . '.php';
+        $tempConfigPlaceholder = tempnam(sys_get_temp_dir(), 'pmf_dbcfg_');
+        $tempConfig = $tempConfigPlaceholder . '.php';
 
         // Create empty SQLite DB
         new \PDO('sqlite:' . $tempDb);
@@ -420,6 +421,7 @@ class BootstrapperTest extends TestCase
             $this->invokePrivateMethod($bootstrapper, 'connectDatabase', [$tempConfig]);
         } finally {
             @unlink($tempConfig);
+            @unlink($tempConfigPlaceholder);
             @unlink($tempDb);
         }
     }
