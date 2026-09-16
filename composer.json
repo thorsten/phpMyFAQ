@@ -51,7 +51,7 @@
     "minishlink/web-push": "~11.0.0",
     "monolog/monolog": "~3.11.0",
     "myclabs/deep-copy": "~1.14.0",
-    "opensearch-project/opensearch-php": "~2.6.0",
+    "opensearch-project/opensearch-php": "~2.7.0",
     "phpseclib/phpseclib": "~4.0.1",
     "robthree/twofactorauth": "~3.0.3",
     "symfony/cache": "~8.1.0",
