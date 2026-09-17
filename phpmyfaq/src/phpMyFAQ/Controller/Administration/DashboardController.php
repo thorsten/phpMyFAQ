@@ -45,15 +45,7 @@ final class DashboardController extends AbstractAdministrationController
     {
         $this->userIsAuthenticated();
 
-        $session = $this->container->get(id: 'phpmyfaq.admin.session');
-        $faq = $this->container->get(id: 'phpmyfaq.admin.faq');
-        $backup = $this->container->get(id: 'phpmyfaq.admin.backup');
-        $latestUsers = $this->container->get(id: 'phpmyfaq.admin.latest-users');
-
-        $faqTableInfo = $this->configuration->getDb()->getTableStatus(Database::getTablePrefix());
         $userId = $this->currentUser->getUserId();
-
-        $backupInfo = $backup->getLastBackupInfo();
 
         $templateVars = [
             'isDebugMode' => Environment::isDebugMode(),
@@ -65,27 +57,18 @@ final class DashboardController extends AbstractAdministrationController
                 System::getVersion(),
                 System::getGitHubIssuesUrl(),
             ),
-            'adminDashboardInfoNumVisits' => $session->getNumberOfSessions(),
-            'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],
-            'adminDashboardInfoNumComments' => $faqTableInfo[Database::getTablePrefix() . 'faqcomments'],
-            'adminDashboardInfoNumQuestions' => $faqTableInfo[Database::getTablePrefix() . 'faqquestions'],
             'adminDashboardInfoUser' => Translation::get(key: 'msgNews'),
-            'adminDashboardInfoNumUser' => $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1,
             'adminDashboardHeaderUsersOnline' => Translation::get(key: 'msgUserOnline'),
-            'adminDashboardInfoNumUsersOnline' => $session->getNumberOfOnlineUsers(windowSeconds: 600),
             'adminDashboardHeaderVisits' => Translation::get(key: 'ad_stat_report_visits'),
             'hasUserTracking' => $this->configuration->get(item: 'main.enableUserTracking'),
             'adminDashboardHeaderInactiveFaqs' => Translation::get(key: 'ad_record_inactive'),
-            'adminDashboardInactiveFaqs' => $faq->getInactiveFaqsData(),
             'hasPermissionEditConfig' => $this->currentUser->perm->hasPermission(
                 $userId,
                 PermissionType::CONFIGURATION_EDIT->value,
             ),
             'showVersion' => $this->configuration->get(item: 'main.enableAutoUpdateHint'),
             'documentationUrl' => System::getDocumentationUrl(),
-            'lastBackupDate' => $backupInfo['lastBackupDate'],
-            'isBackupOlderThan30Days' => $backupInfo['isBackupOlderThan30Days'],
-            'adminDashboardLatestUsers' => $latestUsers->getList(limit: 5),
+            ...$this->getPermissionGatedWidgets($userId),
         ];
 
         if (version_compare($this->configuration->getVersion(), System::getVersion(), operator: '<')) {
@@ -135,5 +118,82 @@ final class DashboardController extends AbstractAdministrationController
             ...$this->getFooter(),
             ...$templateVars,
         ]);
+    }
+
+    /**
+     * Returns the dashboard widgets the current user is allowed to see.
+     *
+     * The dashboard is the landing page of every authenticated user, so it must not require a
+     * specific right itself. Each data set is therefore gated on the right its dedicated admin page
+     * already requires, and the underlying queries are only executed when that right is held:
+     *
+     * - site-wide counters and the visit/top-ten charts: STATISTICS_VIEWLOGS (see the dashboard API)
+     * - unpublished FAQs with their edit links: FAQ_EDIT (see admin.faq.edit)
+     * - newest registered users: USER_EDIT (see admin.user.edit)
+     * - last backup information: BACKUP (see admin.backup)
+     *
+     * A user holding none of these rights gets an empty dashboard instead of the data.
+     *
+     * @return array<string, mixed>
+     */
+    public function getPermissionGatedWidgets(int $userId): array
+    {
+        $permission = $this->currentUser->perm;
+
+        $widgets = [
+            'hasPermissionViewStatistics' => false,
+            'hasPermissionViewInactiveFaqs' => false,
+            'hasPermissionViewLatestUsers' => false,
+            'hasPermissionViewBackup' => false,
+            'adminDashboardInactiveFaqs' => [],
+            'adminDashboardLatestUsers' => [],
+        ];
+
+        if ($permission->hasPermission($userId, PermissionType::STATISTICS_VIEWLOGS->value)) {
+            $session = $this->container->get(id: 'phpmyfaq.admin.session');
+            $faqTableInfo = $this->configuration->getDb()->getTableStatus(Database::getTablePrefix());
+
+            $widgets = [
+                ...$widgets,
+                'hasPermissionViewStatistics' => true,
+                'adminDashboardInfoNumVisits' => $session->getNumberOfSessions(),
+                'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],
+                'adminDashboardInfoNumComments' => $faqTableInfo[Database::getTablePrefix() . 'faqcomments'],
+                'adminDashboardInfoNumQuestions' => $faqTableInfo[Database::getTablePrefix() . 'faqquestions'],
+                'adminDashboardInfoNumUser' => $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1,
+                'adminDashboardInfoNumUsersOnline' => $session->getNumberOfOnlineUsers(windowSeconds: 600),
+            ];
+        }
+
+        if ($permission->hasPermission($userId, PermissionType::FAQ_EDIT->value)) {
+            $widgets = [
+                ...$widgets,
+                'hasPermissionViewInactiveFaqs' => true,
+                'adminDashboardInactiveFaqs' => $this->container->get(id: 'phpmyfaq.admin.faq')->getInactiveFaqsData(),
+            ];
+        }
+
+        if ($permission->hasPermission($userId, PermissionType::USER_EDIT->value)) {
+            $widgets = [
+                ...$widgets,
+                'hasPermissionViewLatestUsers' => true,
+                'adminDashboardLatestUsers' => $this->container->get(id: 'phpmyfaq.admin.latest-users')->getList(
+                    limit: 5,
+                ),
+            ];
+        }
+
+        if ($permission->hasPermission($userId, PermissionType::BACKUP->value)) {
+            $backupInfo = $this->container->get(id: 'phpmyfaq.admin.backup')->getLastBackupInfo();
+
+            $widgets = [
+                ...$widgets,
+                'hasPermissionViewBackup' => true,
+                'lastBackupDate' => $backupInfo['lastBackupDate'],
+                'isBackupOlderThan30Days' => $backupInfo['isBackupOlderThan30Days'],
+            ];
+        }
+
+        return $widgets;
     }
 }
