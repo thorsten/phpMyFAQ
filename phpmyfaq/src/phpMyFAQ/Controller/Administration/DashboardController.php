@@ -61,10 +61,13 @@ final class DashboardController extends AbstractAdministrationController
     {
         $this->userIsAuthenticated();
 
-        $faqTableInfo = $this->configuration->getDb()->getTableStatus(Database::getTablePrefix());
-        $userId = $this->currentUser->getUserId();
-
-        $backupInfo = $this->backup->getLastBackupInfo();
+        // Every widget is gated on the permission its data requires on the sibling admin routes,
+        // so a logged-in user without admin rights gets an empty dashboard instead of the data.
+        $canViewStatistics = $this->userMay(PermissionType::STATISTICS_VIEWLOGS);
+        $canViewInactiveFaqs = $this->userMay(PermissionType::FAQ_EDIT);
+        $canViewRecentUsers = $this->userMay(PermissionType::USER_EDIT);
+        $canViewBackupStatus = $this->userMay(PermissionType::BACKUP);
+        $canEditConfiguration = $this->userMay(PermissionType::CONFIGURATION_EDIT);
 
         $templateVars = [
             'isDebugMode' => Environment::isDebugMode(),
@@ -76,30 +79,45 @@ final class DashboardController extends AbstractAdministrationController
                 System::getVersion(),
                 System::getGitHubIssuesUrl(),
             ),
-            'adminDashboardInfoNumVisits' => $this->adminSession->getNumberOfSessions(),
-            'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],
-            'adminDashboardInfoNumComments' => $faqTableInfo[Database::getTablePrefix() . 'faqcomments'],
-            'adminDashboardInfoNumQuestions' => $faqTableInfo[Database::getTablePrefix() . 'faqquestions'],
+            'canViewStatistics' => $canViewStatistics,
+            'canViewInactiveFaqs' => $canViewInactiveFaqs,
+            'canViewRecentUsers' => $canViewRecentUsers,
+            'canViewBackupStatus' => $canViewBackupStatus,
             'adminDashboardInfoUser' => Translation::get(key: 'msgNews'),
-            'adminDashboardInfoNumUser' => (int) $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1,
             'adminDashboardHeaderUsersOnline' => Translation::get(key: 'msgUserOnline'),
-            'adminDashboardInfoNumUsersOnline' => $this->adminSession->getNumberOfOnlineUsers(windowSeconds: 600),
             'adminDashboardHeaderVisits' => Translation::get(key: 'ad_stat_report_visits'),
             'hasUserTracking' => $this->configuration->get(item: 'main.enableUserTracking'),
             'adminDashboardHeaderInactiveFaqs' => Translation::get(key: 'ad_record_inactive'),
-            'adminDashboardInactiveFaqs' => $this->adminFaq->getInactiveFaqsData(),
-            'hasPermissionEditConfig' => $this->currentUser?->perm->hasPermission(
-                $userId,
-                PermissionType::CONFIGURATION_EDIT->value,
-            ),
+            'adminDashboardInactiveFaqs' => $canViewInactiveFaqs ? $this->adminFaq->getInactiveFaqsData() : [],
+            'hasPermissionEditConfig' => $canEditConfiguration,
             'showVersion' => $this->configuration->get(item: 'main.enableAutoUpdateHint'),
             'documentationUrl' => System::getDocumentationUrl(),
-            'lastBackupDate' => $backupInfo['lastBackupDate'],
-            'isBackupOlderThan30Days' => $backupInfo['isBackupOlderThan30Days'],
-            'adminDashboardRecentUsers' => $this->recentUsers->getList(limit: 5),
+            'adminDashboardRecentUsers' => $canViewRecentUsers ? $this->recentUsers->getList(limit: 5) : [],
             'hasRecentNews' => $this->configuration->get(item: 'main.enableRecentNews'),
             'dashboardCsrfToken' => Token::getInstance($this->session)->getTokenString(page: 'dashboard'),
         ];
+
+        if ($canViewStatistics) {
+            $faqTableInfo = $this->configuration->getDb()->getTableStatus(Database::getTablePrefix());
+            $templateVars = [
+                ...$templateVars,
+                'adminDashboardInfoNumVisits' => $this->adminSession->getNumberOfSessions(),
+                'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],
+                'adminDashboardInfoNumComments' => $faqTableInfo[Database::getTablePrefix() . 'faqcomments'],
+                'adminDashboardInfoNumQuestions' => $faqTableInfo[Database::getTablePrefix() . 'faqquestions'],
+                'adminDashboardInfoNumUser' => (int) $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1,
+                'adminDashboardInfoNumUsersOnline' => $this->adminSession->getNumberOfOnlineUsers(windowSeconds: 600),
+            ];
+        }
+
+        if ($canViewBackupStatus) {
+            $backupInfo = $this->backup->getLastBackupInfo();
+            $templateVars = [
+                ...$templateVars,
+                'lastBackupDate' => $backupInfo['lastBackupDate'],
+                'isBackupOlderThan30Days' => $backupInfo['isBackupOlderThan30Days'],
+            ];
+        }
 
         if (version_compare($this->configuration->getVersion(), System::getVersion(), operator: '<')) {
             $templateVars = [
@@ -109,7 +127,7 @@ final class DashboardController extends AbstractAdministrationController
             ];
         }
 
-        if ($this->currentUser->perm->hasPermission($userId, PermissionType::CONFIGURATION_EDIT->value)) {
+        if ($canEditConfiguration) {
             $version = Filter::filterVar($request->query->get(key: 'param'), FILTER_SANITIZE_SPECIAL_CHARS);
             if (!$this->configuration->get(item: 'main.enableAutoUpdateHint') && $version === 'version') {
                 try {

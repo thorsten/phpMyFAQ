@@ -518,6 +518,20 @@ abstract class AbstractController
     }
 
     /**
+     * Non-throwing companion to userHasPermission(), for pages that show or hide individual
+     * parts depending on the user's rights instead of rejecting the whole request.
+     */
+    protected function userMay(PermissionType $permissionType): bool
+    {
+        $currentUser = $this->currentUser;
+        if (!$currentUser->isLoggedIn()) {
+            return false;
+        }
+
+        return $currentUser->perm->hasPermission($currentUser->getUserId(), $permissionType->value);
+    }
+
+    /**
      * Grants access when the user owns at least one of the given permissions.
      *
      * @throws UnauthorizedHttpException|ForbiddenException

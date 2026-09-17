@@ -281,16 +281,197 @@ final class DashboardControllerTest extends TestCase
         self::assertStringNotContainsString('pmf-recent-news', (string) $response->getContent());
     }
 
-    private function createAuthenticatedContainer(bool $allowConfigEdit = false): ContainerInterface
+    /**
+     * Regression test: a logged-in account without any admin right (e.g. a front-end user who
+     * signed in through the public login form) must not see unpublished FAQs, recent user
+     * accounts, site counters or backup state on the dashboard (CWE-862).
+     *
+     * @throws \Exception
+     */
+    public function testIndexRendersEmptyDashboardForUserWithoutAdminRights(): void
     {
+        $adminSession = $this->createMock(AdminSession::class);
+        $adminSession->expects(self::never())->method('getNumberOfSessions');
+        $adminSession->expects(self::never())->method('getNumberOfOnlineUsers');
+
+        $adminFaq = $this->createMock(AdminFaq::class);
+        $adminFaq->expects(self::never())->method('getInactiveFaqsData');
+
+        $backup = $this->createMock(Backup::class);
+        $backup->expects(self::never())->method('getLastBackupInfo');
+
+        $controller = new DashboardController(
+            $adminSession,
+            $adminFaq,
+            $backup,
+            new RecentUsers($this->configuration),
+            $this->createStub(RemoteApiClient::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer(grantedPermissions: []));
+
+        $request = new Request();
+        $request->attributes->set('_route', 'admin.dashboard');
+        $response = $controller->index($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString('Dashboard', $content);
+        self::assertStringNotContainsString('id="pmf-dashboard-metrics"', $content);
+        self::assertStringNotContainsString('id="pmf-chart-visits"', $content);
+        self::assertStringNotContainsString('data-pmf-widget="inactive-faqs"', $content);
+        self::assertStringNotContainsString('data-pmf-widget="recent-users"', $content);
+        self::assertStringNotContainsString('./user/edit/', $content);
+        self::assertStringNotContainsString('data-pmf-widget="content-health"', $content);
+        self::assertStringNotContainsString('data-pmf-widget="popular-searches"', $content);
+        self::assertStringNotContainsString('data-pmf-widget="version-check"', $content);
+        self::assertStringNotContainsString('data-pmf-widget="backup-status"', $content);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexShowsInactiveFaqsOnlyWithFaqEditRight(): void
+    {
+        $adminFaq = $this->createStub(AdminFaq::class);
+        $adminFaq
+            ->method('getInactiveFaqsData')
+            ->willReturn([
+                [
+                    'id' => 1,
+                    'lang' => 'en',
+                    'question' => 'DRAFT-MARKER unreleased question',
+                    'url' => 'https://localhost/admin/faq/edit/1/en',
+                ],
+            ]);
+
+        $controller = new DashboardController(
+            $this->createStub(AdminSession::class),
+            $adminFaq,
+            $this->createStub(Backup::class),
+            new RecentUsers($this->configuration),
+            $this->createStub(RemoteApiClient::class),
+        );
+        $controller->setContainer(
+            $this->createAuthenticatedContainer(grantedPermissions: [PermissionType::FAQ_EDIT]),
+        );
+
+        $request = new Request();
+        $request->attributes->set('_route', 'admin.dashboard');
+        $response = $controller->index($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString('data-pmf-widget="inactive-faqs"', $content);
+        self::assertStringContainsString('DRAFT-MARKER unreleased question', $content);
+        self::assertStringNotContainsString('data-pmf-widget="recent-users"', $content);
+        self::assertStringNotContainsString('./user/edit/', $content);
+        self::assertStringNotContainsString('id="pmf-dashboard-metrics"', $content);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexShowsRecentUsersOnlyWithUserEditRight(): void
+    {
+        $adminFaq = $this->createMock(AdminFaq::class);
+        $adminFaq->expects(self::never())->method('getInactiveFaqsData');
+
+        $controller = new DashboardController(
+            $this->createStub(AdminSession::class),
+            $adminFaq,
+            $this->createStub(Backup::class),
+            new RecentUsers($this->configuration),
+            $this->createStub(RemoteApiClient::class),
+        );
+        $controller->setContainer(
+            $this->createAuthenticatedContainer(grantedPermissions: [PermissionType::USER_EDIT]),
+        );
+
+        $request = new Request();
+        $request->attributes->set('_route', 'admin.dashboard');
+        $response = $controller->index($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString('data-pmf-widget="recent-users"', $content);
+        self::assertStringContainsString('./user/edit/1', $content);
+        self::assertStringNotContainsString('data-pmf-widget="inactive-faqs"', $content);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexShowsStatisticsAndBackupWidgetsWithMatchingRights(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => true]);
+
+        $adminSession = $this->createStub(AdminSession::class);
+        $adminSession->method('getNumberOfSessions')->willReturn(3);
+        $adminSession->method('getNumberOfOnlineUsers')->willReturn(1);
+
+        $backup = $this->createStub(Backup::class);
+        $backup
+            ->method('getLastBackupInfo')
+            ->willReturn([
+                'lastBackupDate' => '2026-03-01',
+                'isBackupOlderThan30Days' => false,
+            ]);
+
+        $controller = new DashboardController(
+            $adminSession,
+            $this->createStub(AdminFaq::class),
+            $backup,
+            new RecentUsers($this->configuration),
+            $this->createStub(RemoteApiClient::class),
+        );
+        $controller->setContainer(
+            $this->createAuthenticatedContainer(
+                grantedPermissions: [PermissionType::STATISTICS_VIEWLOGS, PermissionType::BACKUP],
+            ),
+        );
+
+        $request = new Request();
+        $request->attributes->set('_route', 'admin.dashboard');
+        $response = $controller->index($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString('id="pmf-dashboard-metrics"', $content);
+        self::assertStringContainsString('id="pmf-chart-visits"', $content);
+        self::assertStringContainsString('data-pmf-widget="content-health"', $content);
+        self::assertStringContainsString('data-pmf-widget="popular-searches"', $content);
+        self::assertStringContainsString('data-pmf-widget="backup-status"', $content);
+        self::assertStringContainsString('2026-03-01', $content);
+        self::assertStringNotContainsString('data-pmf-widget="inactive-faqs"', $content);
+        self::assertStringNotContainsString('data-pmf-widget="recent-users"', $content);
+    }
+
+    /**
+     * @param list<PermissionType>|null $grantedPermissions null grants every right except CONFIGURATION_EDIT
+     */
+    private function createAuthenticatedContainer(
+        bool $allowConfigEdit = false,
+        ?array $grantedPermissions = null,
+    ): ContainerInterface {
+        $grantedRights = $grantedPermissions === null
+            ? null
+            : array_map(static fn(PermissionType $type): string => $type->value, $grantedPermissions);
+
         $permission = $this->createStub(PermissionInterface::class);
         $permission
             ->method('hasPermission')
             ->willReturnCallback(
-                static fn(int $userId, mixed $right): bool => (
-                    $userId === 42
-                    && ($right !== PermissionType::CONFIGURATION_EDIT->value || $allowConfigEdit)
-                ),
+                static function (int $userId, mixed $right) use ($allowConfigEdit, $grantedRights): bool {
+                    if ($userId !== 42) {
+                        return false;
+                    }
+
+                    if ($grantedRights !== null) {
+                        return in_array($right, $grantedRights, true);
+                    }
+
+                    return $right !== PermissionType::CONFIGURATION_EDIT->value || $allowConfigEdit;
+                },
             );
 
         $currentUser = $this->createStub(CurrentUser::class);
