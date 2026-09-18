@@ -3,6 +3,7 @@
 namespace phpMyFAQ;
 
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -253,6 +254,36 @@ class FilterTest extends TestCase
         $this->assertStringContainsString('style="color: red;"', $result);
         $this->assertStringContainsString('href="https://example.org"', $result);
         $this->assertStringContainsString('target="_blank"', $result);
+    }
+
+    /**
+     * Regression test for stored XSS via anonymous FAQ submissions with the WYSIWYG editor
+     * enabled: the answer is rendered raw inside a <textarea> in the admin editor, so a
+     * closing tag plus an event handler must never survive the sanitizer.
+     *
+     * @return array<string, array{string}>
+     */
+    public static function textareaBreakoutPayloadProvider(): array
+    {
+        return [
+            'closing textarea with onerror image' => [
+                '</textarea><img src=xyz style="display:none" onerror=confirm(/XSS/)>',
+            ],
+            'marquee with onerror image' => [
+                '<marquee behavior="alternate" style="background:yellow;font-size:2em;">PoC'
+                    . '<img src=x style="display:none" onerror=confirm(/XSS/)></marquee>',
+            ],
+        ];
+    }
+
+    #[DataProvider('textareaBreakoutPayloadProvider')]
+    public function testFilterHtmlNeutralizesTextareaBreakout(string $payload): void
+    {
+        $result = Filter::filterHtml($payload);
+
+        $this->assertStringNotContainsStringIgnoringCase('</textarea>', $result);
+        $this->assertStringNotContainsStringIgnoringCase('onerror', $result);
+        $this->assertStringNotContainsString('confirm(', $result);
     }
 
     public function testFilterHtmlWithNonStringInput(): void
