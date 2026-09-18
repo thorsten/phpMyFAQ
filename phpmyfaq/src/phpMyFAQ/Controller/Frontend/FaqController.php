@@ -69,8 +69,9 @@ final class FaqController extends AbstractController
         $questionText = trim(strip_tags((string) $questionText));
 
         if ($this->configuration->get(item: 'main.enableWysiwygEditorFrontend')) {
-            $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
-            $answer = trim(html_entity_decode((string) $answer));
+            // Anonymous submissions are rendered raw inside the admin editor, so the HTML must be
+            // sanitized here, not just decoded, to avoid stored XSS against administrators.
+            $answer = trim((string) Filter::filterHtml($data->answer));
         } else {
             $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
             $answer = strip_tags((string) $answer);
