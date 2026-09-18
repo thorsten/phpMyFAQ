@@ -67,6 +67,7 @@ class TagsTest extends TestCase
 
         $this->dbHandle->close();
         @unlink($this->databaseFile);
+        $_SERVER['HTTP_HOST'] = 'localhost';
 
         parent::tearDown();
     }

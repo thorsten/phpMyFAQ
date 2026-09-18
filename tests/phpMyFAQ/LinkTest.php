@@ -34,6 +34,11 @@ class LinkTest extends TestCase
         $this->configuration->set('security.useSslOnly', 'true');
     }
 
+    protected function tearDown(): void
+    {
+        $_SERVER['HTTP_HOST'] = 'localhost';
+    }
+
     public function testisHomeIndex(): void
     {
         $class = new ReflectionClass('phpMyFAQ\Link');

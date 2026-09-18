@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -427,23 +428,127 @@ final class NewsControllerTest extends TestCase
         self::assertSame(Translation::get('ad_news_delsuc'), $payload['success']);
     }
 
-    private function createAuthenticatedContainer(): ContainerInterface
+    /**
+     * Regression: a delegated admin holding NEWS_ADD and NEWS_DELETE but not NEWS_EDIT
+     * must not be able to rewrite an existing news entry.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateRequiresNewsEditEvenWhenUserHoldsAddAndDelete(): void
     {
+        $controller = new NewsController();
+        $controller->setContainer($this->createAuthenticatedContainer([
+            PermissionType::NEWS_ADD,
+            PermissionType::NEWS_DELETE,
+        ]));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "NEWS_EDIT" permission.');
+
+        $controller->update($this->updateRequest('irrelevant'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateRequiresNewsEditWhenUserHoldsOnlyDelete(): void
+    {
+        $controller = new NewsController();
+        $controller->setContainer($this->createAuthenticatedContainer([PermissionType::NEWS_DELETE]));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "NEWS_EDIT" permission.');
+
+        $controller->update($this->updateRequest('irrelevant'));
+    }
+
+    /**
+     * A user holding only NEWS_EDIT passes the permission guard and reaches the CSRF check.
+     *
+     * @throws \Exception
+     */
+    public function testUpdatePassesPermissionGateWithNewsEditOnly(): void
+    {
+        $controller = new NewsController();
+        $controller->setContainer($this->createAuthenticatedContainer([PermissionType::NEWS_EDIT]));
+
+        $response = $controller->update($this->updateRequest('not-the-session-token'));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteStillRequiresNewsDelete(): void
+    {
+        $controller = new NewsController();
+        $controller->setContainer($this->createAuthenticatedContainer([
+            PermissionType::NEWS_ADD,
+            PermissionType::NEWS_EDIT,
+        ]));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "NEWS_DELETE" permission.');
+
+        $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => 'irrelevant',
+            'id' => 1,
+        ], JSON_THROW_ON_ERROR)));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateStillRequiresNewsEdit(): void
+    {
+        $controller = new NewsController();
+        $controller->setContainer($this->createAuthenticatedContainer([
+            PermissionType::NEWS_ADD,
+            PermissionType::NEWS_DELETE,
+        ]));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "NEWS_EDIT" permission.');
+
+        $controller->activate(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => 'irrelevant',
+            'id' => 1,
+            'status' => 'y',
+        ], JSON_THROW_ON_ERROR)));
+    }
+
+    private function updateRequest(string $csrfToken): Request
+    {
+        return new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+            'id' => 1,
+            'newsHeader' => 'Rewritten header',
+            'news' => 'Rewritten body',
+            'authorName' => 'attacker',
+            'authorEmail' => 'attacker@example.test',
+            'active' => 'y',
+        ], JSON_THROW_ON_ERROR));
+    }
+
+    /**
+     * @param list<PermissionType>|null $grantedPermissions null grants every news right
+     */
+    private function createAuthenticatedContainer(?array $grantedPermissions = null): ContainerInterface
+    {
+        $grantedRights = array_map(
+            static fn(PermissionType $type): string => $type->value,
+            $grantedPermissions ?? [PermissionType::NEWS_ADD, PermissionType::NEWS_DELETE, PermissionType::NEWS_EDIT],
+        );
+
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
-            ->willReturnCallback(static function (int $userId, mixed $right): bool {
-                return $userId === 42
-                && in_array(
-                    $right,
-                    [
-                        PermissionType::NEWS_ADD->value,
-                        PermissionType::NEWS_DELETE->value,
-                        PermissionType::NEWS_EDIT->value,
-                    ],
-                    true,
-                );
-            });
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $userId === 42 && in_array($right, $grantedRights, true),
+            );
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
