@@ -124,8 +124,7 @@ class Database
                 . '</p>
                 </div>
             </body>
-            </html>'
-        ;
+            </html>';
     }
 
     /**
