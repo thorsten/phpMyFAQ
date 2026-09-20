@@ -2,11 +2,16 @@
 
 namespace phpMyFAQ\Helper;
 
+use Monolog\Logger;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Mail;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\UserData;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -28,6 +33,117 @@ class RegistrationHelperTest extends TestCase
         $this->mailMock = $this->createStub(Mail::class);
 
         $this->registrationHelper = new RegistrationHelper($this->configurationMock);
+    }
+
+    /**
+     * @return array<string, array{string, string, string}>
+     */
+    public static function collidingRegistrationProvider(): array
+    {
+        // [userName, email, faquserdata match value, faquser login match value]
+        return [
+            'e-mail already registered' => ['newlogin', 'taken@example.com', 'taken@example.com', ''],
+            'login is an already registered e-mail' => [
+                'taken@example.com',
+                'new@example.com',
+                'taken@example.com',
+                '',
+            ],
+            'login name already registered' => ['takenlogin', 'new@example.com', '', 'takenlogin'],
+        ];
+    }
+
+    /**
+     * A registration that collides with an existing account must return the exact same payload as a
+     * successful registration and must not create anything. This is the regression guard for the
+     * account-enumeration report.
+     */
+    #[DataProvider('collidingRegistrationProvider')]
+    public function testCreateUserWithCollidingIdentityReturnsUniformSuccess(
+        string $userName,
+        string $email,
+        string $existingEmail,
+        string $existingLogin,
+    ): void {
+        $this->setUpTranslations();
+
+        $lastQuery = '';
+        $lastParams = [];
+        $database = $this->createMock(Sqlite3::class);
+        $database->method('escape')->willReturnArgument(0);
+        $database
+            ->method('query')
+            ->willReturnCallback(function (string $sql) use (&$lastQuery, &$lastParams): bool {
+                $lastQuery = $sql;
+                $lastParams = [];
+                return true;
+            });
+        $database
+            ->method('queryPrepared')
+            ->willReturnCallback(function (string $sql, array $params) use (&$lastQuery, &$lastParams): bool {
+                $lastQuery = $sql;
+                $lastParams = $params;
+                return true;
+            });
+        $database
+            ->method('numRows')
+            ->willReturnCallback(function () use (&$lastQuery, &$lastParams, $existingEmail, $existingLogin): int {
+                $matchesEmail = str_contains($lastQuery, "email = '" . $existingEmail . "'")
+                    || (str_contains($lastQuery, 'email = ?') && in_array($existingEmail, $lastParams, true));
+                if ($existingEmail !== '' && $matchesEmail) {
+                    return 1;
+                }
+                $matchesLogin = str_contains($lastQuery, "login = '" . $existingLogin . "'")
+                    || (str_contains($lastQuery, 'login = ?') && in_array($existingLogin, $lastParams, true));
+                if ($existingLogin !== '' && $matchesLogin) {
+                    return 1;
+                }
+                return 0;
+            });
+        $database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => 42,
+                'login' => $existingLogin,
+                'account_status' => 'active',
+                'is_superadmin' => 0,
+                'auth_source' => 'local',
+            ]);
+        $database->expects($this->never())->method('nextId');
+
+        $this->configurationMock->method('getDb')->willReturn($database);
+        $this->configurationMock
+            ->method('get')
+            ->willReturnCallback(fn(string $item) => match ($item) {
+                'security.permLevel' => 'basic',
+                default => null,
+            });
+        $this->configurationMock->method('getLogger')->willReturn($this->createMock(Logger::class));
+
+        $result = $this->registrationHelper->createUser($userName, 'Full Name', $email, false);
+
+        $this->assertSame(
+            [
+                'registered' => true,
+                'success' =>
+                    trim((string) Translation::get(key: 'successMessage'))
+                        . ' '
+                        . trim((string) Translation::get(key: 'msgRegThankYou')),
+            ],
+            $result,
+        );
+        $this->assertArrayNotHasKey('error', $result);
+    }
+
+    private function setUpTranslations(): void
+    {
+        Strings::init();
+
+        Translation::create()
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('en')
+            ->setMultiByteLanguage();
     }
 
     public function testConstructor(): void

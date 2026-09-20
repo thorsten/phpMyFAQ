@@ -159,14 +159,6 @@ final class CommentController extends AbstractController
             }
         }
 
-        // Check display name and e-mail address for not logged-in users
-        if (!$this->currentUser->isLoggedIn()) {
-            if ($this->user->checkDisplayName($username) && $this->user->checkMailAddress($email)) {
-                $this->configuration->getLogger()->error(message: 'Name and email already used by registered user.');
-                return $this->json(['error' => Translation::get(key: 'errSaveComment')], Response::HTTP_CONFLICT);
-            }
-        }
-
         if (
             $username !== ''
             && $email !== ''
@@ -189,6 +181,16 @@ final class CommentController extends AbstractController
                 ) // Already sanitized with HTML support // Plain text with line breaks
                 ->setDate((string) $request->server->get(key: 'REQUEST_TIME'));
 
+            // Guests must not comment under the display name and e-mail address of a registered user.
+            // The comment is discarded, but the response is identical to a successful save so that the
+            // endpoint cannot be used as an oracle for account existence or name-to-email linkage.
+            if (!$isLoggedIn && $this->isRegisteredUserIdentity($username, $email)) {
+                $this->configuration
+                    ->getLogger()
+                    ->info(message: 'Guest comment discarded: display name and e-mail belong to a registered user.');
+                return $this->buildSuccessResponse($commentEntity);
+            }
+
             if ($this->comments->create($commentEntity)) {
                 if ('faq' === $type) {
                     $this->faq->getFaq($commentId);
@@ -200,20 +202,7 @@ final class CommentController extends AbstractController
                     $this->notification->sendNewsCommentNotification($newsData, $commentEntity);
                 }
 
-                $gravatarUrl = $this->gravatar->getImageUrl($commentEntity->getEmail(), [
-                    'size' => '50',
-                    'default' => 'mm',
-                ]);
-
-                return $this->json([
-                    'success' => Translation::get(key: 'msgCommentThanks'),
-                    'commentData' => [
-                        'username' => $commentEntity->getUsername(),
-                        'comment' => $commentEntity->getComment(),
-                        'date' => $commentEntity->getDate(),
-                        'gravatarUrl' => $gravatarUrl,
-                    ],
-                ], Response::HTTP_OK);
+                return $this->buildSuccessResponse($commentEntity);
             }
 
             $this->userSession->userTracking(action: 'error_save_comment', data: $commentId);
@@ -223,6 +212,35 @@ final class CommentController extends AbstractController
         return $this->json([
             'error' => 'Please add your name, your e-mail address and a comment!',
         ], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Returns true if both the display name and the e-mail address belong to a registered user.
+     *
+     * @throws \Exception
+     */
+    private function isRegisteredUserIdentity(string $username, string $email): bool
+    {
+        return $this->user->checkDisplayName($username) && $this->user->checkMailAddress($email);
+    }
+
+    /**
+     * Builds the success response for a submitted comment. The payload must not depend on whether
+     * the comment was actually stored.
+     */
+    private function buildSuccessResponse(Comment $commentEntity): JsonResponse
+    {
+        $gravatarUrl = $this->gravatar->getImageUrl($commentEntity->getEmail(), ['size' => '50', 'default' => 'mm']);
+
+        return $this->json([
+            'success' => Translation::get(key: 'msgCommentThanks'),
+            'commentData' => [
+                'username' => $commentEntity->getUsername(),
+                'comment' => $commentEntity->getComment(),
+                'date' => $commentEntity->getDate(),
+                'gravatarUrl' => $gravatarUrl,
+            ],
+        ], Response::HTTP_OK);
     }
 
     /**

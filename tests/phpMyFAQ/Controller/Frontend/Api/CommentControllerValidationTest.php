@@ -707,4 +707,172 @@ final class CommentControllerValidationTest extends ApiControllerTestCase
         self::assertSame('<a title="safe">Click</a><strong>OK</strong>', $payload['commentData']['comment']);
         self::assertArrayHasKey('success', $payload);
     }
+
+    /**
+     * A guest whose display name and e-mail address both belong to a registered user must receive the
+     * exact same response as any other guest, while the comment itself is not stored. This is the
+     * regression guard for the account-enumeration report.
+     */
+    public function testCreateDiscardsGuestCommentWithRegisteredIdentityButReturnsUniformResponse(): void
+    {
+        $user = $this->createStub(User::class);
+        $user->method('checkDisplayName')->willReturn(true);
+        $user->method('checkMailAddress')->willReturn(true);
+
+        $comments = $this->createMock(Comments::class);
+        $comments->method('isCommentAllowed')->willReturn(true);
+        $comments->expects($this->never())->method('create');
+
+        $notification = $this->createMock(Notification::class);
+        $notification->expects($this->never())->method('sendFaqCommentNotification');
+
+        $response = $this->createGuestComment($user, $comments, $notification, 'Registered User', 'registered@example.com');
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($this->expectedGuestSuccessPayload('Registered User'), $payload);
+    }
+
+    public function testCreateStoresGuestCommentWithUnknownIdentity(): void
+    {
+        $user = $this->createStub(User::class);
+        $user->method('checkDisplayName')->willReturn(false);
+        $user->method('checkMailAddress')->willReturn(false);
+
+        $comments = $this->createMock(Comments::class);
+        $comments->method('isCommentAllowed')->willReturn(true);
+        $comments->expects($this->once())->method('create')->willReturn(true);
+
+        $notification = $this->createMock(Notification::class);
+        $notification->expects($this->once())->method('sendFaqCommentNotification');
+
+        $response = $this->createGuestComment($user, $comments, $notification, 'Unknown Guest', 'guest@example.com');
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($this->expectedGuestSuccessPayload('Unknown Guest'), $payload);
+    }
+
+    /**
+     * Only a full match of display name AND e-mail address is treated as a registered identity.
+     */
+    public function testCreateStoresGuestCommentWithPartialIdentityMatch(): void
+    {
+        $user = $this->createStub(User::class);
+        $user->method('checkDisplayName')->willReturn(true);
+        $user->method('checkMailAddress')->willReturn(false);
+
+        $comments = $this->createMock(Comments::class);
+        $comments->method('isCommentAllowed')->willReturn(true);
+        $comments->expects($this->once())->method('create')->willReturn(true);
+
+        $response = $this->createGuestComment(
+            $user,
+            $comments,
+            $this->createStub(Notification::class),
+            'Registered User',
+            'other@example.com',
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($this->expectedGuestSuccessPayload('Registered User'), $payload);
+    }
+
+    public function testCreateNeverReturnsConflictForGuestCommentWithRegisteredIdentity(): void
+    {
+        $user = $this->createStub(User::class);
+        $user->method('checkDisplayName')->willReturn(true);
+        $user->method('checkMailAddress')->willReturn(true);
+
+        $comments = $this->createStub(Comments::class);
+        $comments->method('isCommentAllowed')->willReturn(true);
+
+        $response = $this->createGuestComment(
+            $user,
+            $comments,
+            $this->createStub(Notification::class),
+            'Registered User',
+            'registered@example.com',
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertNotSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        self::assertArrayNotHasKey('error', $payload);
+    }
+
+    private function createGuestComment(
+        User $user,
+        Comments $comments,
+        Notification $notification,
+        string $username,
+        string $email,
+    ): Response {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'records.allowCommentsForGuests' => '1',
+            'main.enableCommentEditor' => '0',
+            'spam.enableCaptchaCode' => '0',
+        ]);
+
+        $faq = $this->createStub(Faq::class);
+        $faq->method('setUser')->willReturnSelf();
+        $faq->method('setGroups')->willReturnSelf();
+        $faq->method('isFaqAccessibleForUser')->willReturn(true);
+        $faq->method('isActive')->willReturn(true);
+
+        $stopWords = $this->createStub(StopWords::class);
+        $stopWords->method('checkBannedWord')->willReturn(true);
+
+        $userSession = $this->createStub(UserSession::class);
+        $userSession->method('setCurrentUser')->willReturnSelf();
+
+        $gravatar = $this->createStub(Gravatar::class);
+        $gravatar->method('getImageUrl')->willReturn('https://secure.gravatar.com/avatar/guest');
+
+        $controller = $this->createController(
+            faq: $faq,
+            comments: $comments,
+            stopWords: $stopWords,
+            user: $user,
+            userSession: $userSession,
+            notification: $notification,
+            gravatar: $gravatar,
+        );
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(false);
+        $currentUser->method('getUserId')->willReturn(-1);
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = Request::create('/api/comment/create', 'POST', [], [], [], ['REQUEST_TIME' => 1758355200], json_encode([
+            'pmf-csrf-token' => $csrfToken,
+            'type' => 'faq',
+            'id' => 1,
+            'user' => $username,
+            'mail' => $email,
+            'comment_text' => 'probe',
+            'captcha' => '',
+        ], JSON_THROW_ON_ERROR));
+
+        return $controller->create($request);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function expectedGuestSuccessPayload(string $username): array
+    {
+        return [
+            'success' => Translation::get(key: 'msgCommentThanks'),
+            'commentData' => [
+                'username' => $username,
+                'comment' => 'probe',
+                'date' => '1758355200',
+                'gravatarUrl' => 'https://secure.gravatar.com/avatar/guest',
+            ],
+        ];
+    }
 }
