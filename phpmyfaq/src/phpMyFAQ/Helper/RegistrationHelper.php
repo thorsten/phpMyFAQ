@@ -58,17 +58,25 @@ class RegistrationHelper extends AbstractHelper
     {
         $user = new User($this->configuration);
 
-        // Check if email already exists in the userdata table (even if the username is different)
-        if (!empty($email)) {
-            if (!$user->userdata instanceof UserData) {
-                $user->userdata = new UserData($this->configuration);
-            }
-            if ($user->userdata->emailExists($email)) {
-                return [
-                    'registered' => false,
-                    'error' => User::ERROR_USER_EMAIL_NOT_UNIQUE,
-                ];
-            }
+        if (!$user->userdata instanceof UserData) {
+            $user->userdata = new UserData($this->configuration);
+        }
+
+        // A registration that collides with an existing account (e-mail address or login name) is
+        // silently discarded. The response is identical to a successful registration so that the
+        // public endpoint cannot be used as an oracle for account existence.
+        if (
+            $user->userdata->emailExists($email)
+            || $user->userdata->emailExists($userName)
+            || $user->getUserByLogin($userName, false)
+        ) {
+            $this->configuration
+                ->getLogger()
+                ->info(
+                    message: 'Registration discarded: e-mail address or login name already belongs to a registered user.',
+                );
+
+            return $this->buildSuccessResponse();
         }
 
         if (!$user->createUser($userName, '')) {
@@ -107,6 +115,16 @@ class RegistrationHelper extends AbstractHelper
         $mail->send();
         unset($mail);
 
+        return $this->buildSuccessResponse();
+    }
+
+    /**
+     * Builds the registration success payload. It must not depend on whether an account was created.
+     *
+     * @return array{registered: bool, success: string}
+     */
+    private function buildSuccessResponse(): array
+    {
         return [
             'registered' => true,
             'success' =>

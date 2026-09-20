@@ -88,15 +88,6 @@ final class CommentController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'errSaveComment')], Response::HTTP_BAD_REQUEST);
         }
 
-        // Check display name and e-mail address for not logged-in users
-        if (!$this->currentUser->isLoggedIn()) {
-            $user = $this->container->get(id: 'phpmyfaq.user');
-            if ($user->checkDisplayName($username) && $user->checkMailAddress($email)) {
-                $this->configuration->getLogger()->error(message: 'Name and email already used by registered user.');
-                return $this->json(['error' => Translation::get(key: 'errSaveComment')], Response::HTTP_CONFLICT);
-            }
-        }
-
         if (
             $username !== ''
             && $email !== ''
@@ -115,6 +106,16 @@ final class CommentController extends AbstractController
                 ->setComment(nl2br(strip_tags((string) $commentText)))
                 ->setDate((string) $request->server->get(key: 'REQUEST_TIME'));
 
+            // Guests must not comment under the display name and e-mail address of a registered user.
+            // The comment is discarded, but the response is identical to a successful save so that the
+            // endpoint cannot be used as an oracle for account existence or name-to-email linkage.
+            if (!$this->currentUser->isLoggedIn() && $this->isRegisteredUserIdentity($username, $email)) {
+                $this->configuration
+                    ->getLogger()
+                    ->info(message: 'Guest comment discarded: display name and e-mail belong to a registered user.');
+                return $this->buildSuccessResponse($commentEntity);
+            }
+
             if ($comment->create($commentEntity)) {
                 $notification = $this->container->get(id: 'phpmyfaq.notification');
                 if ('faq' === $type) {
@@ -126,19 +127,7 @@ final class CommentController extends AbstractController
                     $notification->sendNewsCommentNotification($newsData, $commentEntity);
                 }
 
-                $gravatar = $this->container->get(id: 'phpmyfaq.services.gravatar');
-                $gravatarUrl = $gravatar->getImageUrl($commentEntity->getEmail(), ['size' => 50, 'default' => 'mm']);
-
-                return $this->json([
-                    'success' => Translation::get(key: 'msgCommentThanks'),
-                    'commentData' => [
-                        'username' => $commentEntity->getUsername(),
-                        'email' => $commentEntity->getEmail(),
-                        'comment' => $commentEntity->getComment(),
-                        'date' => $commentEntity->getDate(),
-                        'gravatarUrl' => $gravatarUrl,
-                    ],
-                ], Response::HTTP_OK);
+                return $this->buildSuccessResponse($commentEntity);
             }
 
             $session->userTracking(action: 'error_save_comment', data: $commentId);
@@ -148,6 +137,39 @@ final class CommentController extends AbstractController
         return $this->json([
             'error' => 'Please add your name, your e-mail address and a comment!',
         ], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Returns true if both the display name and the e-mail address belong to a registered user.
+     *
+     * @throws \Exception
+     */
+    private function isRegisteredUserIdentity(string $username, string $email): bool
+    {
+        $user = $this->container->get(id: 'phpmyfaq.user');
+
+        return $user->checkDisplayName($username) && $user->checkMailAddress($email);
+    }
+
+    /**
+     * Builds the success response for a submitted comment. The payload must not depend on whether
+     * the comment was actually stored.
+     */
+    private function buildSuccessResponse(Comment $commentEntity): JsonResponse
+    {
+        $gravatar = $this->container->get(id: 'phpmyfaq.services.gravatar');
+        $gravatarUrl = $gravatar->getImageUrl($commentEntity->getEmail(), ['size' => 50, 'default' => 'mm']);
+
+        return $this->json([
+            'success' => Translation::get(key: 'msgCommentThanks'),
+            'commentData' => [
+                'username' => $commentEntity->getUsername(),
+                'email' => $commentEntity->getEmail(),
+                'comment' => $commentEntity->getComment(),
+                'date' => $commentEntity->getDate(),
+                'gravatarUrl' => $gravatarUrl,
+            ],
+        ], Response::HTTP_OK);
     }
 
     /**
