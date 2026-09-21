@@ -7,9 +7,9 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
-use Symfony\Component\HttpFoundation\Request;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 #[AllowMockObjectsWithoutExpectations]
 class CurrentUserTest extends TestCase
@@ -174,9 +174,7 @@ class CurrentUserTest extends TestCase
     public function testRepeatedFailuresLockTheAccountWithoutEmailLogin(): void
     {
         $this->resetLockoutState();
-        $this->assertFalse(
-            (bool) $this->configuration->get('security.loginWithEmailAddress'),
-        );
+        $this->assertFalse((bool) $this->configuration->get('security.loginWithEmailAddress'));
 
         for ($attempt = 0; $attempt <= 5; ++$attempt) {
             try {
@@ -210,10 +208,12 @@ class CurrentUserTest extends TestCase
      */
     private function resetLockoutState(): void
     {
-        $this->configuration->getDb()->query(sprintf(
-            "UPDATE %sfaquser SET login_attempts = 0, success = 1, ip = '' WHERE user_id = 1",
-            Database::getTablePrefix(),
-        ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "UPDATE %sfaquser SET login_attempts = 0, success = 1, ip = '' WHERE user_id = 1",
+                Database::getTablePrefix(),
+            ));
     }
 
     /**
@@ -223,9 +223,7 @@ class CurrentUserTest extends TestCase
      */
     private function foreignIp(): string
     {
-        return Request::createFromGlobals()->getClientIp() === '198.51.100.7'
-            ? '198.51.100.8'
-            : '198.51.100.7';
+        return Request::createFromGlobals()->getClientIp() === '198.51.100.7' ? '198.51.100.8' : '198.51.100.7';
     }
 
     /**
@@ -354,6 +352,55 @@ class CurrentUserTest extends TestCase
             $this->currentUser->twoFactorSuccess();
 
             $this->assertFalse($this->currentUser->isTwoFactorLockedOut());
+        } finally {
+            $this->resetLockoutState();
+        }
+    }
+
+    /**
+     * Step-up verification (re-entering the password before disabling 2FA or changing
+     * the password) shares the account's failure budget, so a hijacked session cannot
+     * guess the password without limit.
+     *
+     * @throws Exception
+     */
+    public function testStepUpFailuresLockTheAccount(): void
+    {
+        $this->resetLockoutState();
+
+        try {
+            $this->currentUser->getUserById(1);
+            $this->assertFalse($this->currentUser->isStepUpLockedOut());
+
+            for ($attempt = 0; $attempt <= 5; ++$attempt) {
+                $this->currentUser->stepUpFailure();
+            }
+
+            $this->assertTrue($this->currentUser->isStepUpLockedOut());
+            $this->assertTrue($this->currentUser->isTwoFactorLockedOut());
+        } finally {
+            $this->resetLockoutState();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testStepUpSuccessClearsTheLockout(): void
+    {
+        $this->resetLockoutState();
+
+        try {
+            $this->currentUser->getUserById(1);
+            for ($attempt = 0; $attempt <= 5; ++$attempt) {
+                $this->currentUser->stepUpFailure();
+            }
+
+            $this->assertTrue($this->currentUser->isStepUpLockedOut());
+
+            $this->currentUser->stepUpSuccess();
+
+            $this->assertFalse($this->currentUser->isStepUpLockedOut());
         } finally {
             $this->resetLockoutState();
         }
@@ -530,9 +577,8 @@ class CurrentUserTest extends TestCase
      */
     private function resetRememberMeToken(): void
     {
-        $this->configuration->getDb()->query(sprintf(
-            'UPDATE %sfaquser SET remember_me = NULL WHERE user_id = 1',
-            Database::getTablePrefix(),
-        ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf('UPDATE %sfaquser SET remember_me = NULL WHERE user_id = 1', Database::getTablePrefix()));
     }
 }

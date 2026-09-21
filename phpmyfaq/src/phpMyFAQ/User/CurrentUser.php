@@ -313,6 +313,38 @@ class CurrentUser extends User
     }
 
     /**
+     * Returns true while the account is locked out of step-up verification.
+     *
+     * Step-up checks (re-entering the current password before a security-sensitive
+     * change such as disabling the second factor) share the per-account failure
+     * budget of the login. The client IP is ignored on purpose: the caller already
+     * holds a session, so a new IP must not grant a fresh set of guesses.
+     */
+    public function isStepUpLockedOut(): bool
+    {
+        return $this->hasExceededLoginAttempts(null);
+    }
+
+    /**
+     * Records a failed step-up verification against the account.
+     *
+     * The counter lives in the database, so it survives re-authentication and new
+     * sessions, and it locks the login as well once the budget is exhausted.
+     */
+    public function stepUpFailure(): bool
+    {
+        return (bool) $this->setLoginAttempt();
+    }
+
+    /**
+     * Clears the failure budget after a successful step-up verification.
+     */
+    public function stepUpSuccess(): bool
+    {
+        return $this->setSuccess(true);
+    }
+
+    /**
      * Sets loggedIn to true if the 2FA-auth was successful and saves the login to session.
      *
      * setSuccess() clears the failed-attempt counter, so a completed second factor

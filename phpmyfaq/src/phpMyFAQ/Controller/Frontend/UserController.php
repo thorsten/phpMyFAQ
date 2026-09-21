@@ -150,10 +150,9 @@ final class UserController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_CONFLICT);
         }
 
-        if (!$this->currentUser->verifyPassword($currentPassword)) {
-            return $this->json([
-                'error' => Translation::get(key: 'ad_user_error_currentPasswordInvalid'),
-            ], Response::HTTP_FORBIDDEN);
+        $stepUp = $this->verifyCurrentPassword($currentPassword);
+        if ($stepUp instanceof JsonResponse) {
+            return $stepUp;
         }
 
         $changed = false;
@@ -201,17 +200,31 @@ final class UserController extends AbstractController
      * Verifies the current user's password as a step-up check.
      *
      * Used before security-sensitive changes that a session cookie plus CSRF token
-     * must not be enough to make on their own. Returns a 403 JsonResponse to
-     * short-circuit the request when the password is missing or wrong (an empty
-     * password never verifies), or null when it verifies and the caller may proceed.
+     * must not be enough to make on their own. Failed attempts consume the account's
+     * login failure budget and lock the step-up (and the login) once it is exhausted,
+     * so a hijacked session cannot guess the password without limit (CWE-307).
+     *
+     * Returns a 429 JsonResponse while the account is locked out, a 403 JsonResponse
+     * when the password is missing or wrong (an empty password never verifies), or
+     * null when it verifies and the caller may proceed.
      */
     private function verifyCurrentPassword(#[\SensitiveParameter] string $currentPassword): ?JsonResponse
     {
+        if ($this->currentUser->isStepUpLockedOut()) {
+            return $this->json([
+                'error' => Translation::get(key: 'msgStepUpLockedOut'),
+            ], Response::HTTP_TOO_MANY_REQUESTS);
+        }
+
         if (!$this->currentUser->verifyPassword($currentPassword)) {
+            $this->currentUser->stepUpFailure();
+
             return $this->json([
                 'error' => Translation::get(key: 'ad_user_error_currentPasswordInvalid'),
             ], Response::HTTP_FORBIDDEN);
         }
+
+        $this->currentUser->stepUpSuccess();
 
         return null;
     }
