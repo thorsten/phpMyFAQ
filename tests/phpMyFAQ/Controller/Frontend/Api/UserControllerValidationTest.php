@@ -13,6 +13,9 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
+use RobThree\Auth\Algorithm;
+use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
+use RobThree\Auth\TwoFactorAuth;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -1005,6 +1008,137 @@ final class UserControllerValidationTest extends ApiControllerTestCase
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertSame(Translation::get('msgTwofactorErrorToken'), $payload['error']);
+    }
+
+    public function testRemoveTwofactorConfigRejectsGuessWhileLockedOut(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'remove-twofactor');
+
+        // The account has exhausted its second-factor budget. The code must not even be
+        // looked at: no further failure is recorded, nothing is written, and the caller
+        // gets a 429 instead of an oracle for the next guess.
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserData')->willReturnMap([
+            ['twofactor_enabled', 1],
+            ['secret', ''],
+        ]);
+        $currentUser->method('isTwoFactorLockedOut')->willReturn(true);
+        $currentUser->expects($this->never())->method('twoFactorFailure');
+        $currentUser->expects($this->never())->method('setSuccess');
+        $currentUser->expects($this->never())->method('setUserData');
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->removeTwofactorConfig(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+            'code' => '123456',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
+        self::assertSame(Translation::get('msgTwofactorLockedOut'), $payload['error']);
+    }
+
+    public function testRemoveTwofactorConfigRecordsFailedGuessAgainstAccount(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'remove-twofactor');
+
+        // A wrong code consumes the same per-account budget as a wrong login-flow token, so
+        // an authenticated session cannot brute-force the six digits on this route either.
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserData')->willReturnMap([
+            ['twofactor_enabled', 1],
+            ['secret', ''],
+        ]);
+        $currentUser->method('isTwoFactorLockedOut')->willReturn(false);
+        $currentUser->expects($this->once())->method('twoFactorFailure')->willReturn(true);
+        $currentUser->expects($this->never())->method('setSuccess');
+        $currentUser->expects($this->never())->method('setUserData');
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->removeTwofactorConfig(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+            'code' => '000000',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgTwofactorErrorToken'), $payload['error']);
+    }
+
+    public function testRemoveTwofactorConfigClearsFailureBudgetAfterProvenFactor(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'remove-twofactor');
+
+        $twoFactorAuth = new TwoFactorAuth(new EndroidQrCodeProvider(), 'test', 6, 30, Algorithm::Sha1);
+        $secret = $twoFactorAuth->createSecret();
+
+        // A legitimate owner who mistyped a few codes must not stay locked out of the login
+        // once the factor is proven, so a correct code resets the budget like the login flow.
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserData')->willReturnMap([
+            ['twofactor_enabled', 1],
+            ['secret', $secret],
+        ]);
+        $currentUser->method('isTwoFactorLockedOut')->willReturn(false);
+        $currentUser->expects($this->never())->method('twoFactorFailure');
+        $currentUser->expects($this->once())->method('setSuccess')->with(true)->willReturn(true);
+        $currentUser->expects($this->once())->method('setUserData')->willReturn(true);
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        // Only the current 30-second slice is accepted, so do not generate the code right
+        // before a slice boundary that the request could then cross.
+        while (time() % 30 >= 27) {
+            usleep(200_000);
+        }
+
+        $response = $controller->removeTwofactorConfig(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+            'code' => $twoFactorAuth->getCode($secret),
+        ], JSON_THROW_ON_ERROR)));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testRemoveTwofactorConfigDoesNotTouchFailureBudgetWhenTwoFactorIsOff(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'remove-twofactor');
+
+        // With the factor off there is nothing to prove, so the lockout must not be consulted
+        // and no attempt is recorded; the secret is simply rotated.
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserData')->willReturnMap([
+            ['twofactor_enabled', 0],
+        ]);
+        $currentUser->expects($this->never())->method('isTwoFactorLockedOut');
+        $currentUser->expects($this->never())->method('twoFactorFailure');
+        $currentUser->expects($this->never())->method('setSuccess');
+        $currentUser->expects($this->once())->method('setUserData')->willReturn(true);
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->removeTwofactorConfig(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     public function testUpdateDataCannotDisableEnabledTwoFactor(): void

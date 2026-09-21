@@ -1904,5 +1904,6 @@ $PMF_LANG['msgInvalidVersionNumber'] = 'The requested version number is not vali
 $PMF_LANG['msgInvalidConfigurationUrl'] = 'The value of "%s" is not a valid or allowed URL.';
 $PMF_LANG['msgAttachmentTypeNotAllowed'] = 'Files of this type (%s) cannot be uploaded as attachments.';
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Allow installing nightly builds whose SHA-256 digest cannot be verified against GitHub (not recommended)'];
+$PMF_LANG['msgTwofactorLockedOut'] = 'Too many wrong codes. Please try again later.';
 
 return $PMF_LANG;

@@ -1829,5 +1829,6 @@ $PMF_LANG['msgStatusReview'] = 'In Prüfung';
 $PMF_LANG['msgStatusPublished'] = 'Veröffentlicht';
 $PMF_LANG['msgStatusFilterAll'] = 'Alle Status';
 $PMF_LANG['msgInvalidFaqStatus'] = 'Ungültiger oder fehlender Statuswert.';
+$PMF_LANG['msgTwofactorLockedOut'] = 'Zu viele falsche Codes. Bitte versuchen Sie es später erneut.';
 
 return $PMF_LANG;

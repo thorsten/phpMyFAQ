@@ -369,13 +369,30 @@ final class UserController extends AbstractController
         // very factor. Without this a stolen session plus a CSRF token would silently strip
         // 2FA and reduce the account to password-only authentication (CWE-308). The code is
         // verified against the still-current secret, before it is rotated below.
+        //
+        // The guess shares the account-level failure budget of the login-flow token step:
+        // this route is exempt from the generic API rate limiter (api.private.*), so without
+        // the lockout an authenticated session could brute-force the six-digit code without
+        // limit and turn a transient session compromise into a permanent 2FA downgrade
+        // (CWE-307).
         if ((int) $this->currentUser->getUserData('twofactor_enabled') === 1) {
+            if ($this->currentUser->isTwoFactorLockedOut()) {
+                return $this->json([
+                    'error' => Translation::get(key: 'msgTwofactorLockedOut'),
+                ], Response::HTTP_TOO_MANY_REQUESTS);
+            }
+
             $code = trim(Filter::filterVar($data->code ?? null, FILTER_SANITIZE_SPECIAL_CHARS, ''));
             if (!$twoFactor->validateToken($code, $this->currentUser->getUserId())) {
+                $this->currentUser->twoFactorFailure();
+
                 return $this->json([
                     'error' => Translation::get(key: 'msgTwofactorErrorToken'),
                 ], Response::HTTP_FORBIDDEN);
             }
+
+            // A proven factor releases the budget, exactly as a completed login-flow token does.
+            $this->currentUser->setSuccess(true);
         }
 
         $newSecret = $twoFactor->generateSecret();
