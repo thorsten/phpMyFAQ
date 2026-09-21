@@ -71,7 +71,7 @@
     "symfony/uid": "~8.1.0",
     "tecnickcom/tcpdf": "^7.0.4",
     "tivie/htaccess-parser": "~0.4.0",
-    "twig/intl-extra": "~3.26.0",
+    "twig/intl-extra": "~3.29.0",
     "twig/twig": "~3.28.0"
   },
   "require-dev": {
