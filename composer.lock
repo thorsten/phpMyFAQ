@@ -2680,16 +2680,16 @@
         },
         {
             "name": "opensearch-project/opensearch-php",
-            "version": "2.7.0",
+            "version": "2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opensearch-project/opensearch-php.git",
-                "reference": "4917f9fbab469c322dcc9ce9cebe95ef982e378d"
+                "reference": "ba3219959531501abfb4fbdcea06fff05cc0082f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opensearch-project/opensearch-php/zipball/4917f9fbab469c322dcc9ce9cebe95ef982e378d",
-                "reference": "4917f9fbab469c322dcc9ce9cebe95ef982e378d",
+                "url": "https://api.github.com/repos/opensearch-project/opensearch-php/zipball/ba3219959531501abfb4fbdcea06fff05cc0082f",
+                "reference": "ba3219959531501abfb4fbdcea06fff05cc0082f",
                 "shasum": ""
             },
             "require": {
@@ -2715,10 +2715,10 @@
                 "guzzlehttp/psr7": "^2.8.0 || ^3.0.0",
                 "mockery/mockery": "^1.6.12",
                 "phpstan/extension-installer": "^1.4.3",
-                "phpstan/phpstan": "^1.12.32",
-                "phpstan/phpstan-deprecation-rules": "^1.2.1",
-                "phpstan/phpstan-mockery": "^1.1.3",
-                "phpstan/phpstan-phpunit": "^1.4.2",
+                "phpstan/phpstan": "^2.2",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-mockery": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
                 "phpunit/phpunit": "^11.5",
                 "react/promise": "^v3.3",
                 "symfony/console": "v6.4.31|^7.4.3|^8.0.3",
@@ -2761,9 +2761,9 @@
             ],
             "support": {
                 "issues": "https://github.com/opensearch-project/opensearch-php/issues",
-                "source": "https://github.com/opensearch-project/opensearch-php/tree/2.7.0"
+                "source": "https://github.com/opensearch-project/opensearch-php/tree/2.7.1"
             },
-            "time": "2026-09-08T07:23:54+00:00"
+            "time": "2026-09-14T04:51:09+00:00"
         },
         {
             "name": "opis/json-schema",
