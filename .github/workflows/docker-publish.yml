@@ -114,7 +114,7 @@ jobs:
             org.opencontainers.image.licenses=MPL-2.0
 
       - name: Build the amd64 image for the smoke test
-        uses: docker/build-push-action@v7.3.0
+        uses: docker/build-push-action@v7.4.0
         with:
           context: .
           file: .docker/production/Dockerfile
@@ -130,7 +130,7 @@ jobs:
 
       - name: Build and publish the multi-platform image
         if: env.PUBLISH == 'true'
-        uses: docker/build-push-action@v7.3.0
+        uses: docker/build-push-action@v7.4.0
         with:
           context: .
           file: .docker/production/Dockerfile
