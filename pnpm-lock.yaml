@@ -74,8 +74,8 @@ devDependencies:
     specifier: 4.1.11
     version: 4.1.11(vitest@4.1.11)
   autoprefixer:
-    specifier: 10.6.0
-    version: 10.6.0(postcss@8.5.28)
+    specifier: 10.6.1
+    version: 10.6.1(postcss@8.5.28)
   husky:
     specifier: 9.1.7
     version: 9.1.7
@@ -1739,8 +1739,8 @@ packages:
     resolution: {integrity: sha512-ZKUvEIU8XpqqkMrZoy+QmAh7Ga8YE3qB8EFJzC05K69S8+dQ3xrN066vJImiIjkwYVG1Oc8eRP4YVDQOquUF9A==}
     dev: false
 
-  /autoprefixer@10.6.0(postcss@8.5.28):
-    resolution: {integrity: sha512-A26d6qs9kqGgkmImIXMYvXTzqb4Qv7AVgpY1NXzr9Y659J8qHHnLOO/zE8ewIGFMprOolAoRAQYDgNryXIJKBw==}
+  /autoprefixer@10.6.1(postcss@8.5.28):
+    resolution: {integrity: sha512-cL1Qz6ADZhcEbny/8HPfe99J6HhNoYtpX2LFLIbhgGE7Q1hlQVkYFdetDN7Id3KiQxhDrHwzlHr/YQCnZ8+xSA==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
@@ -1816,8 +1816,8 @@ packages:
     dependencies:
       baseline-browser-mapping: 2.11.25
       caniuse-lite: 1.0.30001810
-      electron-to-chromium: 1.5.433
-      node-releases: 2.0.56
+      electron-to-chromium: 1.5.438
+      node-releases: 2.0.57
       update-browserslist-db: 1.3.3(browserslist@4.29.0)
     dev: true
 
@@ -2194,8 +2194,8 @@ packages:
       jake: 10.9.4
     dev: true
 
-  /electron-to-chromium@1.5.433:
-    resolution: {integrity: sha512-5lCAbyZBjtmUt/RAGHRqrL2q0oEFRThDAsZHHDn9XHa89Qw7gMYOeSicBTy+AHfvo0r6vwsZvqNJTQIQy1BLzA==}
+  /electron-to-chromium@1.5.438:
+    resolution: {integrity: sha512-AN9xMU1hJiT65LkCUPL1DZm5TCbOPb2Qsm5pYwFLEXp6/qj9SdT4yMiqs7Qqstwvkn1zF7l36SRGt+s6XcJ0FA==}
     dev: true
 
   /emoji-regex@10.6.0:
@@ -2985,8 +2985,8 @@ packages:
       he: 1.2.0
     dev: true
 
-  /node-releases@2.0.56:
-    resolution: {integrity: sha512-x0InOIyzgdk+eyaWaRJFH5snEtiImgBgblZ2CyPrLmqqcuMQkEvcDPHbzqbD8eDsSeJbVOjn+crzyzHaM4D+/A==}
+  /node-releases@2.0.57:
+    resolution: {integrity: sha512-kQK9LGGFiHtrWiNhZtA7Qbw17AQz+dmsEKODRIVTXA9+e5MS/2gZEBhYJt13GrAz5/IOZKddH/0Z3TP/Zgo+yw==}
     engines: {node: '>=18'}
     dev: true
 
