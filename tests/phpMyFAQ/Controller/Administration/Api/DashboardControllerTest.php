@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
@@ -14,6 +15,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Strings;
+use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -23,10 +25,13 @@ use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpClient\Exception\TransportException;
+use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(DashboardController::class)]
@@ -98,16 +103,37 @@ final class DashboardControllerTest extends TestCase
 
     private CacheItemPoolInterface $cache;
 
-    private function createController(): DashboardController
+    private function createController(?HttpClientInterface $httpClient = null): DashboardController
     {
-        $this->cache = new ArrayAdapter();
-        return new DashboardController($this->createStub(AdminSession::class), $this->cache);
+        return $this->createControllerWithSession($this->createStub(AdminSession::class), $httpClient);
     }
 
-    private function createControllerWithSession(AdminSession $adminSession): DashboardController
-    {
+    private function createControllerWithSession(
+        AdminSession $adminSession,
+        ?HttpClientInterface $httpClient = null,
+    ): DashboardController {
         $this->cache = new ArrayAdapter();
-        return new DashboardController($adminSession, $this->cache);
+
+        return new DashboardController($adminSession, $this->cache, $this->createRemoteApiClient($httpClient));
+    }
+
+    /**
+     * Builds a remote API client that never reaches the network. By default every request fails
+     * like an unreachable API, so tests do not depend on api.phpmyfaq.de.
+     */
+    private function createRemoteApiClient(?HttpClientInterface $httpClient): RemoteApiClient
+    {
+        $remoteApiClient = new RemoteApiClient($this->configuration, new System());
+        $remoteApiClient->setHttpClient($httpClient ?? new MockHttpClient(
+            static fn(): never => throw new TransportException('phpMyFAQ API is unreachable.'),
+        ));
+
+        return $remoteApiClient;
+    }
+
+    private function createHttpClientThatMustNotBeCalled(): HttpClientInterface
+    {
+        return new MockHttpClient(static fn(): never => self::fail('A remote lookup must not happen.'));
     }
 
     private function createAuthenticatedContainer(): ContainerInterface
@@ -474,7 +500,7 @@ final class DashboardControllerTest extends TestCase
     public function testVersionsReturnsFreshCachedPayloadWithoutRemoteLookup(): void
     {
         $this->configuration->set('upgrade.releaseEnvironment', 'stable');
-        $controller = $this->createController();
+        $controller = $this->createController($this->createHttpClientThatMustNotBeCalled());
         $controller->setContainer($this->createAuthenticatedContainer());
 
         $cachedPayload = ['success' => 'phpMyFAQ 4.2.0'];

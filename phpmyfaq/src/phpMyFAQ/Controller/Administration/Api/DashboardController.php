@@ -30,7 +30,6 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Search;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
@@ -72,6 +71,7 @@ final class DashboardController extends AbstractController
     public function __construct(
         private readonly AdminSession $adminSession,
         private readonly CacheItemPoolInterface $cache,
+        private readonly RemoteApiClient $remoteApiClient,
     ) {
         parent::__construct();
     }
@@ -146,9 +146,8 @@ final class DashboardController extends AbstractController
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $data = $request->getContent();
-        $api = new RemoteApiClient($this->configuration, new System());
 
-        return $this->json($api->setRemoteHashes($data)->getVerificationIssues());
+        return $this->json($this->remoteApiClient->setRemoteHashes($data)->getVerificationIssues());
     }
 
     /**
@@ -167,10 +166,8 @@ final class DashboardController extends AbstractController
             return $this->json($fresh);
         }
 
-        $api = new RemoteApiClient($this->configuration, new System());
-
         try {
-            $versions = $api->getVersions();
+            $versions = $this->remoteApiClient->getVersions();
             if (!array_key_exists('installed', $versions) || !array_key_exists($releaseEnvironment, $versions)) {
                 throw new Exception('Version lookup failed for release environment "' . $releaseEnvironment . '".');
             }

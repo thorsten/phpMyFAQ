@@ -907,6 +907,7 @@ return static function (ContainerConfigurator $container): void {
     $services->set(AdminApiDashboardController::class, AdminApiDashboardController::class)->args([
         service('phpmyfaq.admin.session'),
         service('phpmyfaq.cache'),
+        service('phpmyfaq.admin.api'),
     ]);
     $services->set(AdminApiExportController::class, AdminApiExportController::class)->args([
         service('phpmyfaq.faq'),
