@@ -164,6 +164,35 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * The FAQ overview only lists FAQs: its menu entry, its data endpoint (admin.api.faqs) and the
+     * dashboard shortcut are gated on FAQ_EDIT, while adding, publishing and deleting are enforced
+     * per action by the API. Requiring more rights just to open the list made the menu entry lead
+     * to a 403 for users holding FAQ_EDIT only (GitHub issue #4691).
+     *
+     * @throws \Exception
+     */
+    public function testIndexRendersWithFaqEditRightOnly(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer(grantedRights: [PermissionType::FAQ_EDIT]));
+
+        $response = $controller->index(new Request());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testIndexRequiresFaqEditRight(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer(
+            grantedRights: [PermissionType::FAQ_ADD, PermissionType::FAQ_PUBLISH, PermissionType::FAQ_DELETE],
+        ));
+
+        $this->expectException(ForbiddenException::class);
+        $controller->index(new Request());
+    }
+
+    /**
      * @throws \Exception
      */
     public function testAddRendersInCurrentAnonymousAdminContext(): void
@@ -470,14 +499,28 @@ final class FaqControllerTest extends TestCase
         );
     }
 
-    private function createAuthenticatedContainer(?PermissionType $deniedRight = null): ContainerInterface
-    {
+    /**
+     * @param list<PermissionType>|null $grantedRights null grants every right except $deniedRight
+     */
+    private function createAuthenticatedContainer(
+        ?PermissionType $deniedRight = null,
+        ?array $grantedRights = null,
+    ): ContainerInterface {
+        $grantedValues = $grantedRights === null
+            ? null
+            : array_map(static fn(PermissionType $type): string => $type->value, $grantedRights);
+
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
             ->willReturnCallback(
-                static fn(int $userId, mixed $right): bool => $deniedRight === null
-                    || ($right !== $deniedRight && $right !== $deniedRight->value),
+                static function (int $userId, mixed $right) use ($deniedRight, $grantedValues): bool {
+                    if ($grantedValues !== null) {
+                        return in_array($right, $grantedValues, true);
+                    }
+
+                    return $deniedRight === null || ($right !== $deniedRight && $right !== $deniedRight->value);
+                },
             );
         $permission
             ->method('hasPermissionForCategory')

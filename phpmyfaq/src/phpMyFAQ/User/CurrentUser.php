@@ -47,6 +47,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-28
  */
+/* @mago-expect lint:too-many-methods - session, lockout and remember-me handling still live together; account-state split is in progress */
 class CurrentUser extends User
 {
     use CurrentUserAccountStateTrait;
@@ -292,6 +293,38 @@ class CurrentUser extends User
     public function isTwoFactorLockedOut(): bool
     {
         return $this->hasExceededLoginAttempts();
+    }
+
+    /**
+     * Returns true while the account is locked out of step-up verification.
+     *
+     * Step-up checks (re-entering the current password before a security-sensitive
+     * change such as changing the password) share the per-account failure budget
+     * of the login. The client IP is ignored on purpose: the caller already holds
+     * a session, so a new IP must not grant a fresh set of guesses.
+     */
+    public function isStepUpLockedOut(): bool
+    {
+        return $this->hasExceededLoginAttempts();
+    }
+
+    /**
+     * Records a failed step-up verification against the account.
+     *
+     * The counter lives in the database, so it survives re-authentication and new
+     * sessions, and it locks the login as well once the budget is exhausted.
+     */
+    public function stepUpFailure(): bool
+    {
+        return $this->setLoginAttempt() !== false;
+    }
+
+    /**
+     * Clears the failure budget after a successful step-up verification.
+     */
+    public function stepUpSuccess(): bool
+    {
+        return $this->setSuccess(true);
     }
 
     /**

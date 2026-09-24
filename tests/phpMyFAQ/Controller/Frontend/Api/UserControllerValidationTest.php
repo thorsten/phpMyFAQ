@@ -262,6 +262,154 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         self::assertSame(Translation::get('ad_passwd_fail'), $payload['error']);
     }
 
+    /**
+     * Regression guard for the unthrottled step-up: a hijacked session must not be able to
+     * guess the current password without limit, so a locked-out account is rejected before
+     * the password is even checked.
+     */
+    public function testUpdateDataRejectsPasswordChangeWhileStepUpIsLockedOut(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'ucp');
+
+        $authDriver = $this
+            ->getMockBuilder(AuthDatabase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['checkCredentials', 'update'])
+            ->getMock();
+        $authDriver->expects($this->never())->method('checkCredentials');
+        $authDriver->expects($this->never())->method('update');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserAuthSource')->willReturn('local');
+        $currentUser->method('getLogin')->willReturn('testuser');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser->method('isStepUpLockedOut')->willReturn(true);
+        $currentUser->expects($this->never())->method('stepUpFailure');
+        $currentUser->expects($this->never())->method('setUserData');
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userid' => 1,
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'is_visible' => 'on',
+            'faqpassword' => 'password123',
+            'faqpassword_confirm' => 'password123',
+            'faqpassword_current' => 'oldpass123',
+            'twofactor_enabled' => 'off',
+            'secret' => '',
+            'pmf-csrf-token' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->updateData($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
+        self::assertSame(Translation::get('msgStepUpLockedOut'), $payload['error']);
+    }
+
+    public function testUpdateDataWrongCurrentPasswordConsumesTheFailureBudget(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'ucp');
+
+        $authDriver = $this
+            ->getMockBuilder(AuthDatabase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['checkCredentials', 'update'])
+            ->getMock();
+        $authDriver
+            ->method('checkCredentials')
+            ->willThrowException(new \phpMyFAQ\Auth\AuthException('incorrect password'));
+        $authDriver->expects($this->never())->method('update');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserAuthSource')->willReturn('local');
+        $currentUser->method('getLogin')->willReturn('testuser');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser->method('isStepUpLockedOut')->willReturn(false);
+        $currentUser->expects($this->once())->method('stepUpFailure');
+        $currentUser->expects($this->never())->method('stepUpSuccess');
+        $currentUser->expects($this->never())->method('setUserData');
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userid' => 1,
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'is_visible' => 'on',
+            'faqpassword' => 'password123',
+            'faqpassword_confirm' => 'password123',
+            'faqpassword_current' => 'wrong-old-password',
+            'twofactor_enabled' => 'off',
+            'secret' => '',
+            'pmf-csrf-token' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->updateData($request);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testUpdateDataCorrectCurrentPasswordClearsTheFailureBudget(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'ucp');
+
+        $authDriver = $this
+            ->getMockBuilder(AuthDatabase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([
+                'disableReadOnly',
+                'update',
+                'checkCredentials',
+            ])
+            ->getMock();
+        $authDriver->method('disableReadOnly')->willReturn(false);
+        $authDriver->method('update')->willReturn(true);
+        $authDriver->expects($this->once())->method('checkCredentials')->with('testuser', 'oldpass123')->willReturn(true);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserAuthSource')->willReturn('local');
+        $currentUser->method('getLogin')->willReturn('testuser');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser->method('setUserData')->willReturn(true);
+        $currentUser->method('isStepUpLockedOut')->willReturn(false);
+        $currentUser->expects($this->never())->method('stepUpFailure');
+        $currentUser->expects($this->once())->method('stepUpSuccess');
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userid' => 1,
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'is_visible' => 'on',
+            'faqpassword' => 'password123',
+            'faqpassword_confirm' => 'password123',
+            'faqpassword_current' => 'oldpass123',
+            'twofactor_enabled' => 'off',
+            'secret' => '',
+            'pmf-csrf-token' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->updateData($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
     public function testUpdateDataReturnsSuccessForLocalUserWhenProfileAndAuthUpdateSucceed(): void
     {
         $controller = $this->createController();

@@ -23,6 +23,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
+use phpMyFAQ\Translation;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -57,6 +58,12 @@ class UserNameTwigExtensionTest extends TestCase
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
+
+        Translation::create()
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('en')
+            ->setMultiByteLanguage();
     }
 
     public function testExtendsAbstractExtension(): void
@@ -64,27 +71,33 @@ class UserNameTwigExtensionTest extends TestCase
         $this->assertInstanceOf(AbstractExtension::class, new UserNameTwigExtension());
     }
 
-    public function testGetUserNameReturnsStringForExistingUser(): void
+    public function testGetUserNameReturnsLoginForExistingUser(): void
     {
-        $result = UserNameTwigExtension::getUserName(1);
-        $this->assertIsString($result);
+        $this->assertSame('admin', UserNameTwigExtension::getUserName(1));
     }
 
-    public function testGetUserNameReturnsStringForNonExistentUser(): void
+    /**
+     * A changelog entry may reference a user that was deleted since. The filter must degrade to a
+     * placeholder instead of failing with a TypeError on an unhydrated user (GitHub issue #4690).
+     */
+    public function testGetUserNameReturnsPlaceholderForUnresolvableUser(): void
     {
-        $result = UserNameTwigExtension::getUserName(99999);
-        $this->assertIsString($result);
+        $this->assertSame('Unknown user (#99999)', UserNameTwigExtension::getUserName(99999));
     }
 
-    public function testGetRealNameReturnsStringForExistingUser(): void
+    public function testGetRealNameReturnsDisplayNameForExistingUser(): void
     {
-        $result = UserNameTwigExtension::getRealName(1);
-        $this->assertIsString($result);
+        $this->assertSame('Anonymous User', UserNameTwigExtension::getRealName(-1));
     }
 
-    public function testGetRealNameReturnsStringForNonExistentUser(): void
+    public function testGetRealNameFallsBackToLoginWithoutDisplayName(): void
     {
-        $result = UserNameTwigExtension::getRealName(99999);
-        $this->assertIsString($result);
+        // The admin account in the test database has no display name stored.
+        $this->assertSame('admin', UserNameTwigExtension::getRealName(1));
+    }
+
+    public function testGetRealNameReturnsPlaceholderForUnresolvableUser(): void
+    {
+        $this->assertSame('Unknown user (#99999)', UserNameTwigExtension::getRealName(99999));
     }
 }

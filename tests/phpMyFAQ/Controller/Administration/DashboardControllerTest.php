@@ -369,6 +369,56 @@ final class DashboardControllerTest extends TestCase
     }
 
     /**
+     * The FAQ counter links to the FAQ overview, which admin.faqs gates on FAQ_EDIT. The link must
+     * be gated on the same right, otherwise a user sees a working link that ends in a 403
+     * (GitHub issue #4691).
+     *
+     * @throws \Exception
+     */
+    public function testIndexLinksToFaqOverviewOnlyWithFaqEditRight(): void
+    {
+        $adminSession = $this->createStub(AdminSession::class);
+        $adminSession->method('getNumberOfSessions')->willReturn(3);
+        $adminSession->method('getNumberOfOnlineUsers')->willReturn(1);
+
+        $withoutEdit = new DashboardController(
+            $adminSession,
+            $this->createStub(AdminFaq::class),
+            $this->createStub(Backup::class),
+            new RecentUsers($this->configuration),
+            $this->createStub(RemoteApiClient::class),
+        );
+        $withoutEdit->setContainer(
+            $this->createAuthenticatedContainer(grantedPermissions: [PermissionType::STATISTICS_VIEWLOGS]),
+        );
+
+        $request = new Request();
+        $request->attributes->set('_route', 'admin.dashboard');
+        $content = (string) $withoutEdit->index($request)->getContent();
+
+        self::assertStringContainsString('id="pmf-dashboard-metrics"', $content);
+        self::assertStringNotContainsString('href="./faqs"', $content);
+
+        $withEdit = new DashboardController(
+            $adminSession,
+            $this->createStub(AdminFaq::class),
+            $this->createStub(Backup::class),
+            new RecentUsers($this->configuration),
+            $this->createStub(RemoteApiClient::class),
+        );
+        $withEdit->setContainer(
+            $this->createAuthenticatedContainer(
+                grantedPermissions: [PermissionType::STATISTICS_VIEWLOGS, PermissionType::FAQ_EDIT],
+            ),
+        );
+
+        $content = (string) $withEdit->index($request)->getContent();
+
+        self::assertStringContainsString('id="pmf-dashboard-metrics"', $content);
+        self::assertStringContainsString('href="./faqs"', $content);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testIndexShowsRecentUsersOnlyWithUserEditRight(): void

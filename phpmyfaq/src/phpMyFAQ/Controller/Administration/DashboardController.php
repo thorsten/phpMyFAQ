@@ -65,6 +65,9 @@ final class DashboardController extends AbstractAdministrationController
         // so a logged-in user without admin rights gets an empty dashboard instead of the data.
         $canViewStatistics = $this->userMay(PermissionType::STATISTICS_VIEWLOGS);
         $canViewInactiveFaqs = $this->userMay(PermissionType::FAQ_EDIT);
+        // The shortcut to the FAQ overview is gated on the same right as admin.faqs itself,
+        // otherwise a user sees a working link that ends in a 403.
+        $canViewFaqOverview = $canViewInactiveFaqs;
         $canViewRecentUsers = $this->userMay(PermissionType::USER_EDIT);
         $canViewBackupStatus = $this->userMay(PermissionType::BACKUP);
         $canEditConfiguration = $this->userMay(PermissionType::CONFIGURATION_EDIT);
@@ -81,6 +84,7 @@ final class DashboardController extends AbstractAdministrationController
             ),
             'canViewStatistics' => $canViewStatistics,
             'canViewInactiveFaqs' => $canViewInactiveFaqs,
+            'canViewFaqOverview' => $canViewFaqOverview,
             'canViewRecentUsers' => $canViewRecentUsers,
             'canViewBackupStatus' => $canViewBackupStatus,
             'adminDashboardInfoUser' => Translation::get(key: 'msgNews'),

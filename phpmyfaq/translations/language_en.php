@@ -613,6 +613,7 @@ $PMF_LANG['ad_entry_not_visibility'] = "not published";
 // added v2.0.0 - 2006-01-02 by Lars
 $PMF_LANG['ad_user_error_password'] = "Please enter a password. ";
 $PMF_LANG['ad_user_error_passwordsDontMatch'] = "Passwords do not match. ";
+$PMF_LANG['msgStepUpLockedOut'] = "Too many failed attempts. Please try again later.";
 $PMF_LANG['ad_user_error_loginInvalid'] = "The specified username is invalid.";
 $PMF_LANG['ad_user_error_noEmail'] = "Please enter a valid email address. ";
 $PMF_LANG['ad_user_error_noRealName'] = "Please enter your real name. ";
@@ -1550,6 +1551,7 @@ $PMF_LANG['msgError403Description'] = 'You are authenticated, but you do not hav
 $PMF_LANG['msgError403Hint'] = 'If you believe this is an error, please contact an administrator.';
 $PMF_LANG['msgCreateDate'] = 'Created on';
 $PMF_LANG['msgUpdateDate'] = 'Last updated on';
+$PMF_LANG['msgUnknownUser'] = 'Unknown user (#%d)';
 
 // added v4.2.0-alpha - 2026-01-03 by Thorsten
 $PMF_LANG['msgError500'] = 'Internal Server Error';

@@ -320,6 +320,54 @@ class CurrentUserTest extends TestCase
     }
 
     /**
+     * Step-up verification (re-entering the password before changing it) shares the
+     * account's failure budget, so a hijacked session cannot guess the password without limit.
+     *
+     * @throws Exception
+     */
+    public function testStepUpFailuresLockTheAccount(): void
+    {
+        $this->resetLockoutState();
+
+        try {
+            $this->currentUser->getUserById(1);
+            $this->assertFalse($this->currentUser->isStepUpLockedOut());
+
+            for ($attempt = 0; $attempt <= 5; ++$attempt) {
+                $this->currentUser->stepUpFailure();
+            }
+
+            $this->assertTrue($this->currentUser->isStepUpLockedOut());
+            $this->assertTrue($this->currentUser->isTwoFactorLockedOut());
+        } finally {
+            $this->resetLockoutState();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testStepUpSuccessClearsTheLockout(): void
+    {
+        $this->resetLockoutState();
+
+        try {
+            $this->currentUser->getUserById(1);
+            for ($attempt = 0; $attempt <= 5; ++$attempt) {
+                $this->currentUser->stepUpFailure();
+            }
+
+            $this->assertTrue($this->currentUser->isStepUpLockedOut());
+
+            $this->currentUser->stepUpSuccess();
+
+            $this->assertFalse($this->currentUser->isStepUpLockedOut());
+        } finally {
+            $this->resetLockoutState();
+        }
+    }
+
+    /**
      * The core of the bypass: the token step is reached only with a valid password,
      * so an attacker who holds it could re-authenticate to get a fresh session. The
      * failure count lives on the account and the lockout ignores the client IP, so
