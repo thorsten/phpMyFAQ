@@ -161,9 +161,9 @@ final class GroupControllerTest extends TestCase
         return $container;
     }
 
-    private function createContainerForUser(CurrentUser $currentUser): ContainerInterface
+    private function createContainerForUser(CurrentUser $currentUser, ?Session $session = null): ContainerInterface
     {
-        $session = new Session(new MockArraySessionStorage());
+        $session ??= new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
 
         $container = $this->createStub(ContainerInterface::class);
@@ -1600,6 +1600,172 @@ final class GroupControllerTest extends TestCase
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertSame('Cannot enable auto-join without group permission support.', $payload['error']);
         $this->removeCsrfCookie('update-group');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteGroupFailsClosedForNonSuperAdminWithoutMediumPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('delete-group');
+        $this->setCsrfCookie('delete-group', $csrfToken);
+
+        // The acting user holds GROUP_DELETE, but perm is a PermissionInterface stub, NOT
+        // MediumPermission, so the group's rights cannot be enumerated and it must fail closed.
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+
+        $actingUser = $this->createStub(CurrentUser::class);
+        $actingUser->perm = $permission;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(1);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createContainerForUser($actingUser, $session));
+
+        $response = $controller->deleteGroup(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame('Cannot delete a group without group permission support.', $payload['error']);
+        $this->removeCsrfCookie('delete-group');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[AllowMockObjectsWithoutExpectations]
+    public function testDeleteGroupRejectsNonSuperAdminLackingGroupRight(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('delete-group');
+        $this->setCsrfCookie('delete-group', $csrfToken);
+
+        // The target group holds right id 42, which the acting user does NOT hold. Deleting the
+        // group would destroy a privilege the acting user neither holds nor could grant, so it
+        // must be refused. hasPermission() returns true for the string-keyed permission gate but
+        // false for the integer right id 42 the target group holds.
+        $perm = $this->getMockBuilder(MediumPermission::class)->disableOriginalConstructor()->getMock();
+        $perm->method('getGroupRights')->willReturn([42]);
+        $perm->method('hasPermission')->willReturnCallback(
+            static fn(int $userId, mixed $right): bool => is_string($right),
+        );
+        $perm->expects(self::never())->method('deleteGroup');
+
+        $actingUser = $this->createStub(CurrentUser::class);
+        $actingUser->perm = $perm;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createContainerForUser($actingUser, $session));
+
+        $response = $controller->deleteGroup(
+            new Request(content: json_encode([
+                'groupId' => 1,
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame('Cannot delete a group whose rights you do not hold.', $payload['error']);
+        $this->removeCsrfCookie('delete-group');
+    }
+
+    /**
+     * A group holding a right unrestricted lies outside the scope of an acting user who holds
+     * that right for one language only, so they may not delete it either.
+     *
+     * @throws \Exception
+     */
+    public function testDeleteGroupRejectsGroupRightWiderThanNonSuperAdminScope(): void
+    {
+        $this->seedScopedGroupAdministrator();
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d)',
+            $this->rightId(PermissionType::GROUP_DELETE),
+        ));
+        $faqEdit = $this->rightId(PermissionType::FAQ_EDIT);
+        $this->dbHandle->query(sprintf('INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d)', $faqEdit));
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, %d, 'en')",
+            $faqEdit,
+        ));
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faqgroup_right (group_id, right_id) VALUES (%d, %d)',
+            self::TEST_GROUP_ID,
+            $faqEdit,
+        ));
+
+        $permission = new MediumPermission($this->configuration);
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('delete-group');
+        $this->setCsrfCookie('delete-group', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createScopedContainer($session, $permission));
+
+        $response = $controller->deleteGroup(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame('Cannot delete a group whose rights you do not hold.', $payload['error']);
+        self::assertSame([$faqEdit], array_map(intval(...), $permission->getGroupRights(self::TEST_GROUP_ID)));
+        $this->removeCsrfCookie('delete-group');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteGroupAllowsNonSuperAdminHoldingEveryGroupRight(): void
+    {
+        $this->seedScopedGroupAdministrator();
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d)',
+            $this->rightId(PermissionType::GROUP_DELETE),
+        ));
+        $faqEdit = $this->rightId(PermissionType::FAQ_EDIT);
+        $this->dbHandle->query(sprintf('INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d)', $faqEdit));
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faqgroup_right (group_id, right_id) VALUES (%d, %d)',
+            self::TEST_GROUP_ID,
+            $faqEdit,
+        ));
+
+        $permission = new MediumPermission($this->configuration);
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('delete-group');
+        $this->setCsrfCookie('delete-group', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createScopedContainer($session, $permission));
+
+        $response = $controller->deleteGroup(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_group_deleted'), $payload['success']);
+        self::assertSame([], $permission->getGroupRights(self::TEST_GROUP_ID));
+        $this->removeCsrfCookie('delete-group');
     }
 
     /**

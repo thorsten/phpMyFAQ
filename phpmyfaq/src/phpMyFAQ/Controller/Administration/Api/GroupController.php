@@ -390,20 +390,14 @@ final class GroupController extends AbstractAdministrationApiController
         // Enabling auto-join makes every newly registered user inherit this group's rights,
         // so a non-SuperAdmin may only enable it on a group whose rights they fully hold
         // (same escalation rule as membership management, fail closed).
-        if ($autoJoin && !$this->currentUser->isSuperAdmin()) {
-            $actingPermission = $this->currentUser->perm;
-            if (!$actingPermission instanceof MediumPermission) {
-                return $this->json([
-                    'error' => 'Cannot enable auto-join without group permission support.',
-                ], Response::HTTP_FORBIDDEN);
-            }
-
-            foreach ($actingPermission->getGroupRights($groupId) as $groupRight) {
-                if (!$this->holdsGroupRightInFullScope($actingPermission, $groupId, (int) $groupRight)) {
-                    return $this->json([
-                        'error' => 'Cannot enable auto-join on a group whose rights you do not hold.',
-                    ], Response::HTTP_FORBIDDEN);
-                }
+        if ($autoJoin) {
+            $denied = $this->denyUnlessGroupRightsHeld(
+                $groupId,
+                'Cannot enable auto-join without group permission support.',
+                'Cannot enable auto-join on a group whose rights you do not hold.',
+            );
+            if ($denied instanceof JsonResponse) {
+                return $denied;
             }
         }
 
@@ -474,23 +468,13 @@ final class GroupController extends AbstractAdministrationApiController
         // Otherwise an administrator with the delegable GROUP_EDIT right could join themselves
         // (or anyone else) to a privileged group and inherit rights, or a wider scope for a
         // right, they do not possess (privilege escalation via group membership inheritance).
-        if (!$this->currentUser->isSuperAdmin()) {
-            // Fail closed: if the permission backend cannot enumerate group rights, we cannot prove
-            // the acting user holds them, so the operation must be denied rather than allowed.
-            $actingPermission = $this->currentUser->perm;
-            if (!$actingPermission instanceof MediumPermission) {
-                return $this->json([
-                    'error' => 'Cannot manage group membership without group permission support.',
-                ], Response::HTTP_FORBIDDEN);
-            }
-
-            foreach ($actingPermission->getGroupRights($groupId) as $groupRight) {
-                if (!$this->holdsGroupRightInFullScope($actingPermission, $groupId, (int) $groupRight)) {
-                    return $this->json([
-                        'error' => 'Cannot manage a group whose rights you do not hold.',
-                    ], Response::HTTP_FORBIDDEN);
-                }
-            }
+        $denied = $this->denyUnlessGroupRightsHeld(
+            $groupId,
+            'Cannot manage group membership without group permission support.',
+            'Cannot manage a group whose rights you do not hold.',
+        );
+        if ($denied instanceof JsonResponse) {
+            return $denied;
         }
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
@@ -652,6 +636,20 @@ final class GroupController extends AbstractAdministrationApiController
         $groupId = (int) ($data['groupId'] ?? 0);
         if ($groupId <= 0) {
             return $this->json(['error' => 'Invalid group ID.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        // A non-SuperAdmin may only delete a group whose rights they fully hold themselves, in at
+        // least the language and category scope the group holds them in. Deleting a group destroys
+        // the rights, memberships and restrictions it carries, so without this an administrator
+        // holding the delegable GROUP_DELETE right could tear down privileges they do not possess
+        // and could not grant, join or manage through any of the other, privilege-gated endpoints.
+        $denied = $this->denyUnlessGroupRightsHeld(
+            $groupId,
+            'Cannot delete a group without group permission support.',
+            'Cannot delete a group whose rights you do not hold.',
+        );
+        if ($denied instanceof JsonResponse) {
+            return $denied;
         }
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);

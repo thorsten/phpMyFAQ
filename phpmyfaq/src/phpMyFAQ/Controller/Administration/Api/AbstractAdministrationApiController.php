@@ -23,6 +23,8 @@ use Override;
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Permission\MediumPermission;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractAdministrationApiController extends AbstractController
 {
@@ -103,6 +105,43 @@ abstract class AbstractAdministrationApiController extends AbstractController
             $this->mayAssignLanguages($rightId, $permission->getLanguageRestrictions($groupId, $rightId))
             && $this->mayAssignCategories($rightId, $permission->getCategoryRestrictions($groupId, $rightId))
         );
+    }
+
+    /**
+     * Denies a group-write operation unless the acting user may act on every right the group
+     * carries, and returns null when it may proceed.
+     *
+     * A non-SuperAdmin may only operate on a group whose rights they hold themselves, in at least
+     * the language and category scope the group holds them in. Group rights are inherited by every
+     * member, so without this an administrator holding a delegable group-management right could
+     * reach privileges they do not already possess (privilege escalation via group membership
+     * inheritance), or destroy privileges they could never grant.
+     *
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    protected function denyUnlessGroupRightsHeld(
+        int $groupId,
+        string $unsupportedError,
+        string $forbiddenError,
+    ): ?JsonResponse {
+        if ($this->currentUser->isSuperAdmin()) {
+            return null;
+        }
+
+        // Fail closed: if the permission backend cannot enumerate group rights, we cannot prove
+        // the acting user holds them, so the operation must be denied rather than allowed.
+        $actingPermission = $this->currentUser->perm;
+        if (!$actingPermission instanceof MediumPermission) {
+            return $this->json(['error' => $unsupportedError], Response::HTTP_FORBIDDEN);
+        }
+
+        foreach ($actingPermission->getGroupRights($groupId) as $groupRight) {
+            if (!$this->holdsGroupRightInFullScope($actingPermission, $groupId, (int) $groupRight)) {
+                return $this->json(['error' => $forbiddenError], Response::HTTP_FORBIDDEN);
+            }
+        }
+
+        return null;
     }
 
     /**
