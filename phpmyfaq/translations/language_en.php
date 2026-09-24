@@ -1541,5 +1541,6 @@ $PMF_LANG['msgError403Description'] = 'You are authenticated, but you do not hav
 $PMF_LANG['msgError403Hint'] = 'If you believe this is an error, please contact an administrator.';
 $PMF_LANG['msgCreateDate'] = 'Created on';
 $PMF_LANG['msgUpdateDate'] = 'Last updated on';
+$PMF_LANG['msgUnknownUser'] = 'Unknown user (#%d)';
 
 return $PMF_LANG;

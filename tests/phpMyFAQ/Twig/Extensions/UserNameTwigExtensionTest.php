@@ -2,9 +2,13 @@
 
 namespace phpMyFAQ\Twig\Extensions;
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionProperty;
 use Twig\Extension\AbstractExtension;
 
 /**
@@ -15,10 +19,107 @@ class UserNameTwigExtensionTest extends TestCase
 {
     private UserNameTwigExtension $extension;
 
+    private ?Configuration $previousConfiguration = null;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->extension = new UserNameTwigExtension();
+        $this->previousConfiguration = $this->getConfigurationProperty()->getValue();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->getConfigurationProperty()->setValue(null, $this->previousConfiguration);
+        parent::tearDown();
+    }
+
+    private function getConfigurationProperty(): ReflectionProperty
+    {
+        return new ReflectionProperty(Configuration::class, 'configuration');
+    }
+
+    /**
+     * Installs a configuration whose database stub reports the given number of rows for every query and
+     * returns the given row for every fetch, so the user lookup can be simulated without a real database.
+     *
+     * @param array<string, mixed> $row
+     */
+    private function installConfigurationWithDatabaseStub(int $numRows, array $row = []): void
+    {
+        Translation::create()
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('en')
+            ->setMultiByteLanguage();
+
+        $database = $this->createStub(Sqlite3::class);
+        $database->method('query')->willReturn(true);
+        $database->method('numRows')->willReturn($numRows);
+        $database->method('fetchArray')->willReturn($row);
+        $database->method('error')->willReturn('');
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+        $configuration->method('get')->willReturnMap([['security.permLevel', 'basic']]);
+
+        $this->getConfigurationProperty()->setValue(null, $configuration);
+    }
+
+    public function testGetUserNameReturnsPlaceholderForUnresolvableUser(): void
+    {
+        $this->installConfigurationWithDatabaseStub(0);
+
+        $this->assertSame('Unknown user (#123)', UserNameTwigExtension::getUserName(123));
+    }
+
+    public function testGetRealNameReturnsPlaceholderForUnresolvableUser(): void
+    {
+        $this->installConfigurationWithDatabaseStub(0);
+
+        $this->assertSame('Unknown user (#123)', UserNameTwigExtension::getRealName(123));
+    }
+
+    public function testGetUserNameReturnsLoginForResolvableUser(): void
+    {
+        $this->installConfigurationWithDatabaseStub(1, [
+            'user_id' => 42,
+            'login' => 'jane.doe',
+            'account_status' => 'active',
+            'is_superadmin' => 0,
+            'auth_source' => 'db',
+            'display_name' => 'Jane Doe',
+        ]);
+
+        $this->assertSame('jane.doe', UserNameTwigExtension::getUserName(42));
+    }
+
+    public function testGetRealNameReturnsDisplayNameForResolvableUser(): void
+    {
+        $this->installConfigurationWithDatabaseStub(1, [
+            'user_id' => 42,
+            'login' => 'jane.doe',
+            'account_status' => 'active',
+            'is_superadmin' => 0,
+            'auth_source' => 'db',
+            'display_name' => 'Jane Doe',
+        ]);
+
+        $this->assertSame('Jane Doe', UserNameTwigExtension::getRealName(42));
+    }
+
+    public function testGetRealNameFallsBackToLoginWithoutDisplayName(): void
+    {
+        $this->installConfigurationWithDatabaseStub(1, [
+            'user_id' => 42,
+            'login' => 'jane.doe',
+            'account_status' => 'active',
+            'is_superadmin' => 0,
+            'auth_source' => 'db',
+            'display_name' => '',
+        ]);
+
+        $this->assertSame('jane.doe', UserNameTwigExtension::getRealName(42));
     }
 
     public function testExtendsAbstractExtension(): void
@@ -199,6 +300,7 @@ class UserNameTwigExtensionTest extends TestCase
         $expectedImports = [
             'use phpMyFAQ\Configuration;',
             'use phpMyFAQ\Core\Exception;',
+            'use phpMyFAQ\Translation;',
             'use phpMyFAQ\User;',
             'use Twig\Attribute\AsTwigFilter;',
             'use Twig\Extension\AbstractExtension;',
@@ -223,9 +325,10 @@ class UserNameTwigExtensionTest extends TestCase
         $filename = (new ReflectionClass(UserNameTwigExtension::class))->getFileName();
         $source = file_get_contents($filename);
 
-        // Should create a User instance and call getUserById
-        $this->assertStringContainsString('$user->getUserById($userId)', $source);
+        // Should create a User instance, call getUserById and handle an unresolvable user
+        $this->assertStringContainsString('$user->getUserById($userId, allowBlockedUsers: true)', $source);
         $this->assertStringContainsString('$user->getLogin()', $source);
+        $this->assertStringContainsString('self::getUnknownUserPlaceholder($userId)', $source);
     }
 
     public function testGetRealNameImplementation(): void
@@ -233,9 +336,10 @@ class UserNameTwigExtensionTest extends TestCase
         $filename = (new ReflectionClass(UserNameTwigExtension::class))->getFileName();
         $source = file_get_contents($filename);
 
-        // Should create User instance and call getUserById
-        $this->assertStringContainsString('$user->getUserById($userId)', $source);
+        // Should create User instance, call getUserById and handle an unresolvable user
+        $this->assertStringContainsString('$user->getUserById($userId, allowBlockedUsers: true)', $source);
         $this->assertStringContainsString("getUserData(field: 'display_name')", $source);
+        $this->assertStringContainsString('self::getUnknownUserPlaceholder($userId)', $source);
     }
 
     public function testMethodsAreStaticForTwigCompatibility(): void
@@ -355,7 +459,7 @@ class UserNameTwigExtensionTest extends TestCase
         // 3. Return user data
 
         $getUserNameCount = substr_count($source, '$user = new User(Configuration::getConfigurationInstance())');
-        $getUserByIdCount = substr_count($source, '$user->getUserById($userId)');
+        $getUserByIdCount = substr_count($source, '$user->getUserById($userId, allowBlockedUsers: true)');
 
         $this->assertEquals(2, $getUserNameCount, 'Should create User instance twice (once per method)');
         $this->assertEquals(2, $getUserByIdCount, 'Should call getUserById twice (once per method)');
@@ -369,8 +473,9 @@ class UserNameTwigExtensionTest extends TestCase
         // getUserName should call getLogin()
         $this->assertStringContainsString('return $user->getLogin();', $source);
 
-        // getRealName should call getUserData('display_name')
-        $this->assertStringContainsString('return $user->getUserData(field: \'display_name\');', $source);
+        // getRealName should read getUserData('display_name') and fall back to the login name
+        $this->assertStringContainsString('$displayName = $user->getUserData(field: \'display_name\');', $source);
+        $this->assertStringContainsString('return $displayName;', $source);
     }
 
     public function testDocumentationExists(): void

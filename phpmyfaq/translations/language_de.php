@@ -1542,5 +1542,6 @@ $PMF_LANG['msgError403Description'] = 'Sie haben keine Berechtigung, auf diese S
 $PMF_LANG['msgError403Hint'] = 'Wenn Sie denken, dass dies ein Fehler ist, kontaktieren Sie bitte den Administrator.';
 $PMF_LANG['msgCreateDate'] = 'Erstellt am';
 $PMF_LANG['msgUpdateDate'] = 'Aktualisiert am';
+$PMF_LANG['msgUnknownUser'] = 'Unbekannter Benutzer (#%d)';
 
 return $PMF_LANG;
