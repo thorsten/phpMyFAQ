@@ -128,7 +128,8 @@ final class DashboardController extends AbstractAdministrationController
      * already requires, and the underlying queries are only executed when that right is held:
      *
      * - site-wide counters and the visit/top-ten charts: STATISTICS_VIEWLOGS (see the dashboard API)
-     * - unpublished FAQs with their edit links: FAQ_EDIT (see admin.faq.edit)
+     * - unpublished FAQs with their edit links and the link to the FAQ overview: FAQ_EDIT
+     *   (see admin.faq.edit and admin.faqs)
      * - newest registered users: USER_EDIT (see admin.user.edit)
      * - last backup information: BACKUP (see admin.backup)
      *
@@ -143,6 +144,7 @@ final class DashboardController extends AbstractAdministrationController
         $widgets = [
             'hasPermissionViewStatistics' => false,
             'hasPermissionViewInactiveFaqs' => false,
+            'hasPermissionViewFaqOverview' => false,
             'hasPermissionViewLatestUsers' => false,
             'hasPermissionViewBackup' => false,
             'adminDashboardInactiveFaqs' => [],
@@ -169,6 +171,7 @@ final class DashboardController extends AbstractAdministrationController
             $widgets = [
                 ...$widgets,
                 'hasPermissionViewInactiveFaqs' => true,
+                'hasPermissionViewFaqOverview' => true,
                 'adminDashboardInactiveFaqs' => $this->container->get(id: 'phpmyfaq.admin.faq')->getInactiveFaqsData(),
             ];
         }

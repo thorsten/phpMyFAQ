@@ -106,6 +106,7 @@ class DashboardControllerTest extends TestCase
 
         $this->assertFalse($widgets['hasPermissionViewStatistics']);
         $this->assertFalse($widgets['hasPermissionViewInactiveFaqs']);
+        $this->assertFalse($widgets['hasPermissionViewFaqOverview']);
         $this->assertFalse($widgets['hasPermissionViewLatestUsers']);
         $this->assertFalse($widgets['hasPermissionViewBackup']);
         $this->assertSame([], $widgets['adminDashboardInactiveFaqs']);
@@ -136,6 +137,7 @@ class DashboardControllerTest extends TestCase
         $widgets = $controller->getPermissionGatedWidgets(7);
 
         $this->assertTrue($widgets['hasPermissionViewInactiveFaqs']);
+        $this->assertTrue($widgets['hasPermissionViewFaqOverview']);
         $this->assertSame($inactive, $widgets['adminDashboardInactiveFaqs']);
         $this->assertFalse($widgets['hasPermissionViewStatistics']);
         $this->assertFalse($widgets['hasPermissionViewLatestUsers']);
@@ -247,6 +249,27 @@ class DashboardControllerTest extends TestCase
             'latest users' => [PermissionType::USER_EDIT, 'hasPermissionViewLatestUsers'],
             'backup' => [PermissionType::BACKUP, 'hasPermissionViewBackup'],
         ];
+    }
+
+    /**
+     * The dashboard's link to the FAQ overview must be gated on the same right as the overview
+     * itself (admin.faqs requires FAQ_EDIT), otherwise a user sees a working link that ends in a 403.
+     */
+    public function testFaqOverviewLinkRequiresFaqEdit(): void
+    {
+        $withEdit = $this->buildController(
+            $this->userHolding([PermissionType::FAQ_EDIT]),
+            $this->createMock(Configuration::class),
+            ['phpmyfaq.admin.faq' => $this->createMock(Faq::class)],
+        );
+        $this->assertTrue($withEdit->getPermissionGatedWidgets(7)['hasPermissionViewFaqOverview']);
+
+        $withoutEdit = $this->buildController(
+            $this->userHolding([PermissionType::FAQ_ADD, PermissionType::FAQ_APPROVE, PermissionType::FAQ_DELETE]),
+            $this->createMock(Configuration::class),
+            ['phpmyfaq.admin.faq' => $this->createMock(Faq::class)],
+        );
+        $this->assertFalse($withoutEdit->getPermissionGatedWidgets(7)['hasPermissionViewFaqOverview']);
     }
 
     #[DataProvider('withheldRightProvider')]

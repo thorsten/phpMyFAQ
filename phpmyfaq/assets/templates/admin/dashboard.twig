@@ -91,9 +91,13 @@
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
               <div class="text-xs font-weight-bold mb-1">
+                {% if hasPermissionViewFaqOverview %}
                 <a class="text-white" href="./faqs">
                   {{ 'ad_start_articles' | translate }}
                 </a>
+                {% else %}
+                {{ 'ad_start_articles' | translate }}
+                {% endif %}
               </div>
               <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumFaqs }}</div>
             </div>

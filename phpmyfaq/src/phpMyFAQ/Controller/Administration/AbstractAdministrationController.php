@@ -122,7 +122,7 @@ abstract class AbstractAdministrationController extends AbstractController
             'faq/add',
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
-            'edit_faq+delete_faq',
+            PermissionType::FAQ_EDIT->value,
             'msgHeaderFAQOverview',
             'faqs',
         );

@@ -55,10 +55,9 @@ final class FaqController extends AbstractAdministrationController
     #[Route(path: '/faqs', name: 'admin.faqs', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $this->userHasPermission(PermissionType::FAQ_ADD);
-        $this->userHasPermission(PermissionType::FAQ_APPROVE);
+        // The overview only lists FAQs; its data endpoint (admin.api.faqs) and the menu entry are gated on
+        // FAQ_EDIT, and every row action enforces its own right (approve, delete, ...) in the API.
         $this->userHasPermission(PermissionType::FAQ_EDIT);
-        $this->userHasPermission(PermissionType::FAQ_DELETE);
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
