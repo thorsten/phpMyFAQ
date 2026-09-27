@@ -95,6 +95,11 @@ final class UserController extends AbstractController
                 return $twoFactorStepUp;
             }
 
+            $emailStepUp = $this->requireEmailChangeStepUp((string) $email, $currentPassword);
+            if ($emailStepUp instanceof JsonResponse) {
+                return $emailStepUp;
+            }
+
             $success = $this->currentUser->setUserData([
                 'display_name' => $userName,
                 'email' => $email,
@@ -190,6 +195,35 @@ final class UserController extends AbstractController
         string $currentPassword,
     ): ?JsonResponse {
         if (!$isCurrentlyEnabled || $willBeEnabled) {
+            return null;
+        }
+
+        return $this->verifyCurrentPassword($currentPassword);
+    }
+
+    /**
+     * Requires a verified step-up before the account e-mail address is changed.
+     *
+     * The e-mail address is the trust anchor of the anonymous password-reset
+     * flow: whoever controls it can have a signed reset link delivered and use
+     * it to set a new password. A valid session plus CSRF token must therefore
+     * not be enough to repoint it (CWE-620), otherwise a hijacked session could
+     * swap the address and then reset the password through the public flow,
+     * sidestepping the current-password step-up that guards password changes
+     * directly. The current password is required and verified first, the same
+     * step-up applied to password changes and to disabling 2FA. The guard fires
+     * only when the address actually changes; unrelated profile saves, and an
+     * empty or unchanged address, need no step-up.
+     *
+     * Returns a JsonResponse to short-circuit the request when the step-up
+     * fails, or null when the change may proceed.
+     */
+    private function requireEmailChangeStepUp(
+        string $newEmail,
+        #[\SensitiveParameter]
+        string $currentPassword,
+    ): ?JsonResponse {
+        if ($newEmail === '' || $newEmail === (string) $this->currentUser->getUserData('email')) {
             return null;
         }
 

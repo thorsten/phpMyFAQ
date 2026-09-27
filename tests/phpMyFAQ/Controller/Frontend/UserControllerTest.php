@@ -164,6 +164,72 @@ class UserControllerTest extends TestCase
         $this->assertNull($this->requireTwoFactorStepUp(true, false, 'correct'));
     }
 
+    private function requireEmailChangeStepUp(string $newEmail, string $currentPassword): ?JsonResponse
+    {
+        $method = new ReflectionMethod(UserController::class, 'requireEmailChangeStepUp');
+
+        return $method->invoke($this->controller, $newEmail, $currentPassword);
+    }
+
+    public function testUnchangedEmailNeedsNoStepUp(): void
+    {
+        $this->currentUserMock->method('getUserData')->with('email')->willReturn('jane@example.com');
+        $this->currentUserMock->expects($this->never())->method('verifyPassword');
+
+        $this->assertNull($this->requireEmailChangeStepUp('jane@example.com', ''));
+    }
+
+    public function testEmptyEmailNeedsNoStepUp(): void
+    {
+        // An invalid submitted address filters to '' upstream; it must not trip the step-up.
+        $this->currentUserMock->expects($this->never())->method('verifyPassword');
+
+        $this->assertNull($this->requireEmailChangeStepUp('', ''));
+    }
+
+    /**
+     * Regression guard for the e-mail-swap account-takeover report: a hijacked session
+     * must not be able to repoint the account e-mail (the password-reset trust anchor)
+     * without proving the current password (CWE-620).
+     */
+    public function testChangingEmailWithWrongPasswordIsForbiddenAndEmailIsNeverWritten(): void
+    {
+        $this->currentUserMock->method('getUserData')->with('email')->willReturn('jane@example.com');
+        $this->currentUserMock->method('isStepUpLockedOut')->willReturn(false);
+        $this->currentUserMock->method('verifyPassword')->with('wrong')->willReturn(false);
+        // The new address must never be written when the step-up fails.
+        $this->currentUserMock->expects($this->never())->method('setUserData');
+        $this->currentUserMock->expects($this->once())->method('stepUpFailure');
+
+        $result = $this->requireEmailChangeStepUp('attacker@evil.example', 'wrong');
+
+        $this->assertInstanceOf(JsonResponse::class, $result);
+        $this->assertSame(Response::HTTP_FORBIDDEN, $result->getStatusCode());
+    }
+
+    public function testChangingEmailWithValidPasswordIsAllowed(): void
+    {
+        $this->currentUserMock->method('getUserData')->with('email')->willReturn('jane@example.com');
+        $this->currentUserMock->method('isStepUpLockedOut')->willReturn(false);
+        $this->currentUserMock->method('verifyPassword')->with('correct')->willReturn(true);
+        $this->currentUserMock->expects($this->once())->method('stepUpSuccess');
+
+        $this->assertNull($this->requireEmailChangeStepUp('attacker@evil.example', 'correct'));
+    }
+
+    public function testLockedOutAccountCannotChangeTheEmail(): void
+    {
+        $this->currentUserMock->method('getUserData')->with('email')->willReturn('jane@example.com');
+        $this->currentUserMock->method('isStepUpLockedOut')->willReturn(true);
+        $this->currentUserMock->expects($this->never())->method('verifyPassword');
+        $this->currentUserMock->expects($this->never())->method('setUserData');
+
+        $result = $this->requireEmailChangeStepUp('attacker@evil.example', 'correct');
+
+        $this->assertInstanceOf(JsonResponse::class, $result);
+        $this->assertSame(Response::HTTP_TOO_MANY_REQUESTS, $result->getStatusCode());
+    }
+
     /**
      * @return array<string, int|string>
      */
