@@ -410,6 +410,240 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
+    /**
+     * The e-mail address is the trust anchor of the anonymous password-reset flow, so
+     * repointing it needs the same current-password step-up as a password change. These
+     * guard the e-mail-swap account-takeover path (CWE-620): a hijacked session must not
+     * be able to move the address and then reset the password through the public flow.
+     */
+    public function testUpdateDataUnchangedEmailNeedsNoStepUp(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'ucp');
+
+        $authDriver = $this
+            ->getMockBuilder(AuthDatabase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['checkCredentials', 'update'])
+            ->getMock();
+        $authDriver->expects($this->never())->method('checkCredentials');
+        $authDriver->expects($this->never())->method('update');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserAuthSource')->willReturn('local');
+        $currentUser->method('getLogin')->willReturn('testuser');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([['email', 'jane@example.com'], ['twofactor_enabled', 0]]);
+        $currentUser->expects($this->never())->method('stepUpFailure');
+        $currentUser
+            ->expects($this->once())
+            ->method('setUserData')
+            ->with([
+                'display_name' => 'Jane Doe',
+                'is_visible' => 1,
+                'email' => 'jane@example.com',
+                'twofactor_enabled' => 0,
+            ])
+            ->willReturn(true);
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->updateData($this->createProfileUpdateRequest($csrfToken, 'jane@example.com'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testUpdateDataEmptyEmailNeedsNoStepUp(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'ucp');
+
+        $authDriver = $this
+            ->getMockBuilder(AuthDatabase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['checkCredentials', 'update'])
+            ->getMock();
+        $authDriver->expects($this->never())->method('checkCredentials');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserAuthSource')->willReturn('local');
+        $currentUser->method('getLogin')->willReturn('testuser');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser->method('getUserData')->willReturnMap([['email', 'jane@example.com']]);
+        $currentUser->expects($this->never())->method('stepUpFailure');
+        $currentUser
+            ->expects($this->once())
+            ->method('setUserData')
+            ->with([
+                'display_name' => 'Jane Doe',
+                'is_visible' => 1,
+                'email' => '',
+                'twofactor_enabled' => 0,
+            ])
+            ->willReturn(true);
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        // An invalid submitted address filters to '' upstream; it must not trip the step-up.
+        $response = $controller->updateData($this->createProfileUpdateRequest($csrfToken, 'not-an-email'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testUpdateDataRejectsEmailChangeWithWrongCurrentPassword(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'ucp');
+
+        $authDriver = $this
+            ->getMockBuilder(AuthDatabase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['checkCredentials', 'update'])
+            ->getMock();
+        $authDriver
+            ->method('checkCredentials')
+            ->willThrowException(new \phpMyFAQ\Auth\AuthException('incorrect password'));
+        $authDriver->expects($this->never())->method('update');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserAuthSource')->willReturn('local');
+        $currentUser->method('getLogin')->willReturn('testuser');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser->method('getUserData')->willReturnMap([['email', 'jane@example.com']]);
+        $currentUser->method('isStepUpLockedOut')->willReturn(false);
+        $currentUser->expects($this->once())->method('stepUpFailure');
+        // The new address must never be written when the step-up fails.
+        $currentUser->expects($this->never())->method('setUserData');
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->updateData(
+            $this->createProfileUpdateRequest($csrfToken, 'attacker@evil.example', 'wrong-password'),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_passwd_fail'), $payload['error']);
+    }
+
+    public function testUpdateDataAllowsEmailChangeWithCorrectCurrentPassword(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'ucp');
+
+        $authDriver = $this
+            ->getMockBuilder(AuthDatabase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['checkCredentials', 'update'])
+            ->getMock();
+        $authDriver
+            ->expects($this->once())
+            ->method('checkCredentials')
+            ->with('testuser', 'correct-password')
+            ->willReturn(true);
+        // No password change was requested, so the driver must not rotate the password.
+        $authDriver->expects($this->never())->method('update');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserAuthSource')->willReturn('local');
+        $currentUser->method('getLogin')->willReturn('testuser');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([['email', 'jane@example.com'], ['twofactor_enabled', 0]]);
+        $currentUser->method('isStepUpLockedOut')->willReturn(false);
+        $currentUser->expects($this->once())->method('stepUpSuccess');
+        $currentUser
+            ->expects($this->once())
+            ->method('setUserData')
+            ->with([
+                'display_name' => 'Jane Doe',
+                'is_visible' => 1,
+                'email' => 'jane@new.example',
+                'twofactor_enabled' => 0,
+            ])
+            ->willReturn(true);
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->updateData(
+            $this->createProfileUpdateRequest($csrfToken, 'jane@new.example', 'correct-password'),
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testUpdateDataRejectsEmailChangeWhileStepUpIsLockedOut(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'ucp');
+
+        $authDriver = $this
+            ->getMockBuilder(AuthDatabase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['checkCredentials', 'update'])
+            ->getMock();
+        $authDriver->expects($this->never())->method('checkCredentials');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getUserAuthSource')->willReturn('local');
+        $currentUser->method('getLogin')->willReturn('testuser');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser->method('getUserData')->willReturnMap([['email', 'jane@example.com']]);
+        $currentUser->method('isStepUpLockedOut')->willReturn(true);
+        $currentUser->expects($this->never())->method('stepUpFailure');
+        $currentUser->expects($this->never())->method('setUserData');
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->updateData(
+            $this->createProfileUpdateRequest($csrfToken, 'attacker@evil.example', 'correct-password'),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
+        self::assertSame(Translation::get('msgStepUpLockedOut'), $payload['error']);
+    }
+
+    /**
+     * A profile save that changes no password, so only the e-mail step-up can fire.
+     */
+    private function createProfileUpdateRequest(
+        string $csrfToken,
+        string $email,
+        string $currentPassword = '',
+    ): Request {
+        return new Request([], [], [], [], [], [], json_encode([
+            'userid' => 1,
+            'name' => 'Jane Doe',
+            'email' => $email,
+            'is_visible' => 'on',
+            'faqpassword' => '',
+            'faqpassword_confirm' => '',
+            'faqpassword_current' => $currentPassword,
+            'twofactor_enabled' => 'off',
+            'secret' => '',
+            'pmf-csrf-token' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+    }
+
     public function testUpdateDataReturnsSuccessForLocalUserWhenProfileAndAuthUpdateSucceed(): void
     {
         $controller = $this->createController();
@@ -1302,8 +1536,11 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(1);
         $currentUser->method('getUserAuthSource')->willReturn('local');
+        // The submitted address equals the stored one, so the e-mail step-up stays out of the
+        // way and this test keeps asserting only the 2FA flag behaviour.
         $currentUser->method('getUserData')->willReturnMap([
             ['twofactor_enabled', 1],
+            ['email', 'test@example.com'],
         ]);
         $currentUser
             ->expects($this->once())

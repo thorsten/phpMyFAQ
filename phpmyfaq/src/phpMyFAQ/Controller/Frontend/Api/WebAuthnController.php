@@ -41,6 +41,10 @@ final class WebAuthnController extends AbstractController
 
     private readonly User $user;
 
+    /**
+     * Optional CurrentUser used by login(); when null a fresh instance is created per request.
+     * Injectable so the two-factor deferral in login() can be verified without a database.
+     */
     private readonly ?CurrentUser $loginCurrentUser;
 
     public function __construct(

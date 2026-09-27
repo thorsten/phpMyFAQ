@@ -461,8 +461,9 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         $loginUser->expects($this->once())->method('updateSessionId')->with(true)->willReturn(true);
         $loginUser->expects($this->once())->method('saveToSession');
 
+        $session = $this->createSession();
         $controller = new WebAuthnController($authWebAuthn, $user, $loginUser);
-        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $session);
 
         $request = Request::create('/api/webauthn/login', 'POST', content: json_encode([
             'username' => 'alice',
@@ -475,6 +476,105 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame('ok', $payload['success']);
         self::assertSame('https://localhost/', $payload['redirect']);
+        // An account without a second factor is logged in outright, no token step is armed.
+        self::assertNull($session->get('2fa_pending_user_id'));
+    }
+
+    /**
+     * A passkey is only the first factor on a TOTP-protected account: the request must be
+     * parked in the same 2fa-pending state the password login uses, never fully granted.
+     */
+    public function testLoginDefersToTokenStepWhenTwoFactorIsEnabled(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'security.enableWebAuthnSupport' => '1',
+            'main.referenceURL' => 'https://localhost/',
+        ]);
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $user->expects($this->once())->method('getWebAuthnKeys')->willReturn('stored-keys');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn
+            ->expects($this->once())
+            ->method('authenticate')
+            ->with((object) ['assertion' => 'payload'], 'stored-keys')
+            ->willReturn(true);
+
+        $loginUser = $this->createMock(CurrentUser::class);
+        $loginUser->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $loginUser->expects($this->once())->method('isBlocked')->willReturn(false);
+        $loginUser->method('getUserId')->willReturn(1);
+        $loginUser->expects($this->once())->method('getUserData')->with('twofactor_enabled')->willReturn(1);
+        $loginUser->expects($this->once())->method('isTwoFactorLockedOut')->willReturn(false);
+        $loginUser->expects($this->never())->method('setLoggedIn');
+        $loginUser->expects($this->never())->method('updateSessionId');
+        $loginUser->expects($this->never())->method('saveToSession');
+        // setSuccess() clears the failure budget, so it must not run before the token step.
+        $loginUser->expects($this->never())->method('setSuccess');
+
+        $session = $this->createSession();
+        $controller = new WebAuthnController($authWebAuthn, $user, $loginUser);
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $session);
+
+        $request = Request::create('/api/webauthn/login', 'POST', content: json_encode([
+            'username' => 'alice',
+            'login' => ['assertion' => 'payload'],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->login($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('ok', $payload['success']);
+        self::assertSame('https://localhost/token?user-id=1', $payload['redirect']);
+        // The token step is bound to the account the passkey resolved to.
+        self::assertSame(1, $session->get('2fa_pending_user_id'));
+        // The passkey login form has no remember-me option.
+        self::assertFalse($session->get('2fa_pending_remember_me'));
+    }
+
+    public function testLoginRejectsTwoFactorLockedOutAccount(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['security.enableWebAuthnSupport' => '1']);
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $user->expects($this->once())->method('getWebAuthnKeys')->willReturn('stored-keys');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn
+            ->expects($this->once())
+            ->method('authenticate')
+            ->with((object) ['assertion' => 'payload'], 'stored-keys')
+            ->willReturn(true);
+
+        $loginUser = $this->createMock(CurrentUser::class);
+        $loginUser->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $loginUser->expects($this->once())->method('isBlocked')->willReturn(false);
+        $loginUser->expects($this->once())->method('getUserData')->with('twofactor_enabled')->willReturn(1);
+        $loginUser->expects($this->once())->method('isTwoFactorLockedOut')->willReturn(true);
+        $loginUser->expects($this->never())->method('setLoggedIn');
+        $loginUser->expects($this->never())->method('saveToSession');
+
+        $session = $this->createSession();
+        $controller = new WebAuthnController($authWebAuthn, $user, $loginUser);
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $session);
+
+        $request = Request::create('/api/webauthn/login', 'POST', content: json_encode([
+            'username' => 'alice',
+            'login' => ['assertion' => 'payload'],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->login($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_auth_fail'), $payload['error']);
+        self::assertNull($session->get('2fa_pending_user_id'));
     }
 
     /**

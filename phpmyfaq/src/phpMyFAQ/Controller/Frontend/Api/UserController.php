@@ -122,12 +122,30 @@ final class UserController extends AbstractController
                 }
             }
 
+            // The e-mail address is the trust anchor of the anonymous password-reset flow:
+            // whoever controls it can have a signed reset link delivered and use it to set a new
+            // password. A valid session plus CSRF token must therefore not be enough to repoint it
+            // (CWE-620), otherwise a hijacked session could swap the address and then reset the
+            // password through the public flow, sidestepping the step-up that guards a password
+            // change directly. An empty or unchanged address needs no step-up, and a password
+            // change in the same request has already proved the current password above. Passkey
+            // accounts never reach this: their e-mail address is not written here at all.
+            $newEmail = is_string($email) ? $email : '';
+            $changeEmail = $newEmail !== '' && $newEmail !== (string) $this->currentUser->getUserData('email');
+
+            if (!$isWebAuthnUser && !$changePassword && $changeEmail) {
+                $stepUp = $this->verifyCurrentPassword($currentPassword);
+                if ($stepUp instanceof JsonResponse) {
+                    return $stepUp;
+                }
+            }
+
             $userData = [
                 'display_name' => $userName,
                 'is_visible' => $isVisible === 'on' ? 1 : 0,
             ];
             if (!$isWebAuthnUser) {
-                $userData['email'] = is_string($email) ? $email : '';
+                $userData['email'] = $newEmail;
                 $userData['twofactor_enabled'] = $twoFactorFlag;
             }
 
