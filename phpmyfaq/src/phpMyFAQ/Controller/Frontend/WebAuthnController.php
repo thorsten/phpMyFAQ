@@ -42,12 +42,22 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
 
     private readonly User $user;
 
-    public function __construct()
-    {
+    /**
+     * Optional CurrentUser used by login(); when null a fresh instance is created per request.
+     * Injectable so the two-factor deferral in login() can be verified without a database.
+     */
+    private readonly ?CurrentUser $loginCurrentUser;
+
+    public function __construct(
+        ?AuthWebAuthn $authWebAuthn = null,
+        ?User $user = null,
+        ?CurrentUser $loginCurrentUser = null,
+    ) {
         parent::__construct();
 
-        $this->authWebAuthn = new AuthWebAuthn($this->configuration);
-        $this->user = new User($this->configuration);
+        $this->authWebAuthn = $authWebAuthn ?? new AuthWebAuthn($this->configuration);
+        $this->user = $user ?? new User($this->configuration);
+        $this->loginCurrentUser = $loginCurrentUser;
     }
 
     /**
@@ -239,7 +249,7 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
         $this->user->setWebAuthnKeys($webAuthnKeys);
 
         if ($isAuthenticated) {
-            $currentUser = new CurrentUser($this->configuration);
+            $currentUser = $this->loginCurrentUser ?? new CurrentUser($this->configuration);
             $currentUser->getUserByLogin($login);
 
             if ($currentUser->isBlocked()) {

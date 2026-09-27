@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Auth\AuthWebAuthn;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -216,7 +217,7 @@ class WebAuthnControllerTest extends TestCase
         $userMock = $this->createMock(User::class);
         $userMock->method('getUserByLogin')->with('admin', false)->willReturn(true);
         $userMock->method('getUserId')->willReturn(1);
-        $this->injectUser($userMock);
+        $this->injectControllerProperty('user', $userMock);
 
         $currentUserMock = $this->createMock(CurrentUser::class);
         $currentUserMock->method('isLoggedIn')->willReturn(false);
@@ -241,7 +242,7 @@ class WebAuthnControllerTest extends TestCase
         $userMock = $this->createMock(User::class);
         $userMock->method('getUserByLogin')->with('admin', false)->willReturn(true);
         $userMock->method('getUserId')->willReturn(1);
-        $this->injectUser($userMock);
+        $this->injectControllerProperty('user', $userMock);
 
         $currentUserMock = $this->createMock(CurrentUser::class);
         $currentUserMock->method('isLoggedIn')->willReturn(true);
@@ -256,6 +257,109 @@ class WebAuthnControllerTest extends TestCase
         $response = $this->controller->prepare($request);
 
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    public function testLoginDefersToTokenStepWhenTwoFactorIsEnabled(): void
+    {
+        // A passkey is only the first factor on a TOTP-protected account: the session must be
+        // parked in the same 2fa-pending state the password login uses, never fully granted.
+        $session = $this->prepareAuthenticatedPasskeyLogin();
+
+        $currentUserMock = $this->createMock(CurrentUser::class);
+        $currentUserMock->method('getUserByLogin')->willReturn(true);
+        $currentUserMock->method('isBlocked')->willReturn(false);
+        $currentUserMock->method('getUserId')->willReturn(1);
+        $currentUserMock->method('getUserData')->with('twofactor_enabled')->willReturn(1);
+        $currentUserMock->method('isTwoFactorLockedOut')->willReturn(false);
+        $currentUserMock->expects($this->never())->method('setLoggedIn');
+        $currentUserMock->expects($this->never())->method('saveToSession');
+        $currentUserMock->expects($this->never())->method('updateSessionId');
+        $this->injectControllerProperty('loginCurrentUser', $currentUserMock);
+
+        $response = $this->controller->login($this->passkeyLoginRequest());
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $payload = json_decode($response->getContent(), associative: true);
+        $this->assertSame('ok', $payload['success']);
+        $this->assertSame('http://localhost/admin/token?user-id=1', $payload['redirect']);
+        $this->assertSame(1, $session->get('2fa_pending_user_id'));
+        $this->assertFalse($session->get('2fa_pending_remember_me'));
+    }
+
+    public function testLoginRejectsTwoFactorLockedOutAccount(): void
+    {
+        $session = $this->prepareAuthenticatedPasskeyLogin();
+
+        $currentUserMock = $this->createMock(CurrentUser::class);
+        $currentUserMock->method('getUserByLogin')->willReturn(true);
+        $currentUserMock->method('isBlocked')->willReturn(false);
+        $currentUserMock->method('getUserId')->willReturn(1);
+        $currentUserMock->method('getUserData')->with('twofactor_enabled')->willReturn(1);
+        $currentUserMock->method('isTwoFactorLockedOut')->willReturn(true);
+        $currentUserMock->expects($this->never())->method('setLoggedIn');
+        $this->injectControllerProperty('loginCurrentUser', $currentUserMock);
+
+        $response = $this->controller->login($this->passkeyLoginRequest());
+
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        $this->assertNull($session->get('2fa_pending_user_id'));
+    }
+
+    public function testLoginGrantsSessionWhenTwoFactorIsDisabled(): void
+    {
+        $session = $this->prepareAuthenticatedPasskeyLogin();
+
+        $currentUserMock = $this->createMock(CurrentUser::class);
+        $currentUserMock->method('getUserByLogin')->willReturn(true);
+        $currentUserMock->method('isBlocked')->willReturn(false);
+        $currentUserMock->method('getUserData')->with('twofactor_enabled')->willReturn(0);
+        $currentUserMock->expects($this->once())->method('setLoggedIn')->with(true);
+        $currentUserMock->expects($this->once())->method('saveToSession');
+        $this->injectControllerProperty('loginCurrentUser', $currentUserMock);
+
+        $response = $this->controller->login($this->passkeyLoginRequest());
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $payload = json_decode($response->getContent(), associative: true);
+        $this->assertSame('http://localhost/', $payload['redirect']);
+        $this->assertNull($session->get('2fa_pending_user_id'));
+    }
+
+    /**
+     * Wires a WebAuthn-enabled configuration, a user with stored keys, an AuthWebAuthn that
+     * accepts the assertion, and a real session on the container. Returns that session.
+     */
+    private function prepareAuthenticatedPasskeyLogin(): Session
+    {
+        $this->configurationMock
+            ->method('get')
+            ->willReturnCallback(fn(string $item) => match ($item) {
+                'security.enableWebAuthnSupport' => true,
+                default => null,
+            });
+        $this->configurationMock->method('getDefaultUrl')->willReturn('http://localhost/');
+
+        $session = new Session(new MockArraySessionStorage());
+        $this->containerMock->method('get')->with('session')->willReturn($session);
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUserByLogin')->willReturn(true);
+        $userMock->method('getWebAuthnKeys')->willReturn('[]');
+        $this->injectControllerProperty('user', $userMock);
+
+        $authWebAuthnMock = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthnMock->method('authenticate')->willReturn(true);
+        $this->injectControllerProperty('authWebAuthn', $authWebAuthnMock);
+
+        return $session;
+    }
+
+    private function passkeyLoginRequest(): Request
+    {
+        return Request::create('/api/webauthn/login', 'POST', [], [], [], [], json_encode([
+            'username' => 'admin',
+            'login' => ['id' => 'credential-id'],
+        ]));
     }
 
     private function enableWebAuthnAndRegistration(): void
@@ -281,7 +385,8 @@ class WebAuthnControllerTest extends TestCase
 
         $tokenReflection = new ReflectionClass(Token::class);
         $token = $tokenReflection->newInstanceWithoutConstructor();
-        $token->setPage($page)
+        $token
+            ->setPage($page)
             ->setExpiry(time() + 3600)
             ->setSessionToken($tokenValue)
             ->setCookieToken($tokenValue);
@@ -293,11 +398,13 @@ class WebAuthnControllerTest extends TestCase
         $_COOKIE[sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(md5($page), 0, 10))] = $tokenValue;
     }
 
-    private function injectUser(User $user): void
+    /**
+     * Sets one of the controller's own (constructor-initialised) dependencies via reflection.
+     */
+    private function injectControllerProperty(string $property, object $value): void
     {
         $reflection = new ReflectionClass(WebAuthnController::class);
-        $userProp = $reflection->getProperty('user');
-        $userProp->setValue($this->controller, $user);
+        $reflection->getProperty($property)->setValue($this->controller, $value);
     }
 
     private function injectCurrentUser(CurrentUser $currentUser): void
