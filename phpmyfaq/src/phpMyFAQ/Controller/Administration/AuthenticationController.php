@@ -175,7 +175,10 @@ final class AuthenticationController extends AbstractAdministrationController im
             return new RedirectResponse(url: './');
         }
 
-        $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
+        // The token page is reached by a GET redirect ("./token?user-id=N"), so the pending
+        // user-id arrives in the query string; reading it from the request body left the
+        // form's hidden field at 0 and check() then rejected every token.
+        $userId = (int) Filter::filterVar($request->query->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
         return $this->render(file: '@admin/user/twofactor.twig', context: [
             ...$this->getHeader($request),
