@@ -147,16 +147,45 @@ final class AzureAuthenticationController extends AbstractFrontController
                 return $this->loginFailed();
             }
 
-            $user->setLoggedIn(true);
             $user->setAuthSource(AuthenticationSourceType::AUTH_AZURE->value);
-            $user->updateSessionId(true);
-            $user->saveToSession();
             $user->setTokenData([
                 'refresh_token' => $oAuth->getRefreshToken() ?? '',
                 'access_token' => $oAuth->getAccessToken() ?? '',
                 'code_verifier' => (string) $entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER),
                 'jwt' => $oAuth->getToken(),
             ]);
+
+            // A validated Entra ID identity counts as the first factor only. If the account has
+            // TOTP two-factor enabled, defer to the token step instead of granting the session,
+            // mirroring the password and passkey login flows, so single sign-on cannot bypass
+            // two-factor authentication.
+            if ((int) $user->getUserData('twofactor_enabled') === 1) {
+                // The failure count is deliberately not reset here: a valid SSO identity must
+                // not buy a fresh budget of token guesses, so setSuccess() stays in the token step.
+                if ($user->isTwoFactorLockedOut()) {
+                    $this->configuration
+                        ->getLogger()
+                        ->warning(sprintf(
+                            'Entra ID login rejected: second factor locked out for account #%d.',
+                            $user->getUserId(),
+                        ));
+
+                    return $this->loginFailed();
+                }
+
+                $this->session->set('2fa_pending_user_id', $user->getUserId());
+                // Single sign-on has no remember-me option; the token step decides cookie
+                // issuance, so carry an explicit "false" through it.
+                $this->session->set('2fa_pending_remember_me', false);
+
+                return new RedirectResponse(
+                    $this->configuration->getDefaultUrl() . 'token?user-id=' . $user->getUserId(),
+                );
+            }
+
+            $user->setLoggedIn(true);
+            $user->updateSessionId(true);
+            $user->saveToSession();
             $user->setSuccess(true);
 
             return $redirect;

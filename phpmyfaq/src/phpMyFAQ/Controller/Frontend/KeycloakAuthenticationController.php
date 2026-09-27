@@ -230,10 +230,7 @@ final class KeycloakAuthenticationController extends AbstractFrontController
                 return $redirect;
             }
 
-            $user->setLoggedIn(true);
             $user->setAuthSource(AuthenticationSourceType::AUTH_KEYCLOAK->value);
-            $user->updateSessionId(true);
-            $user->saveToSession();
             $user->setTokenData([
                 'refresh_token' => (string) ($token['refresh_token'] ?? ''),
                 'access_token' => (string) $token['access_token'],
@@ -243,9 +240,41 @@ final class KeycloakAuthenticationController extends AbstractFrontController
                     'userinfo' => $claims,
                 ],
             ]);
-            $user->setSuccess(true);
             $this->oidcSession->clearAuthorizationState();
             $this->oidcSession->setIdToken((string) ($token['id_token'] ?? ''));
+
+            // A validated Keycloak identity counts as the first factor only. If the account has
+            // TOTP two-factor enabled, defer to the token step instead of granting the session,
+            // mirroring the password and passkey login flows, so single sign-on cannot bypass
+            // two-factor authentication.
+            if ((int) $user->getUserData('twofactor_enabled') === 1) {
+                // The failure count is deliberately not reset here: a valid SSO identity must
+                // not buy a fresh budget of token guesses, so setSuccess() stays in the token step.
+                if ($user->isTwoFactorLockedOut()) {
+                    $this->configuration
+                        ->getLogger()
+                        ->warning(sprintf(
+                            'Keycloak login rejected: second factor locked out for user: %s',
+                            $this->maskLogin($login),
+                        ));
+
+                    return $redirect;
+                }
+
+                $this->session->set('2fa_pending_user_id', $user->getUserId());
+                // Single sign-on has no remember-me option; the token step decides cookie
+                // issuance, so carry an explicit "false" through it.
+                $this->session->set('2fa_pending_remember_me', false);
+
+                return new RedirectResponse(
+                    $this->configuration->getDefaultUrl() . 'token?user-id=' . $user->getUserId(),
+                );
+            }
+
+            $user->setLoggedIn(true);
+            $user->updateSessionId(true);
+            $user->saveToSession();
+            $user->setSuccess(true);
 
             return $redirect;
         } catch (Exception $exception) {

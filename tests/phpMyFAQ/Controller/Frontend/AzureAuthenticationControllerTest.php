@@ -11,7 +11,9 @@ use phpMyFAQ\Auth\EntraId\OAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception as CoreException;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Strings;
+use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -22,9 +24,12 @@ use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(AzureAuthenticationController::class)]
@@ -214,6 +219,139 @@ class AzureAuthenticationControllerTest extends TestCase
         $response = $controller->callback(new Request(['code' => 'test-code', 'state' => 'state-1']));
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
+    }
+
+    /**
+     * An Entra ID identity is the first factor only: an account with TOTP two-factor
+     * authentication enabled must be sent through the token step instead of receiving
+     * a fully authenticated session from the callback.
+     *
+     * @throws Exception
+     */
+    public function testCallbackDefersToTokenStepWhenTwoFactorIsEnabled(): void
+    {
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->once())->method('getUserById')->with(7)->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(7);
+        $currentUser->expects($this->once())->method('getUserData')->with('twofactor_enabled')->willReturn(1);
+        $currentUser->expects($this->once())->method('isTwoFactorLockedOut')->willReturn(false);
+        $currentUser->expects($this->once())->method('setAuthSource')->with('azure');
+        $currentUser->expects($this->once())->method('setTokenData');
+        // No session is granted before the second factor has been verified.
+        $currentUser->expects($this->never())->method('setLoggedIn');
+        $currentUser->expects($this->never())->method('updateSessionId');
+        $currentUser->expects($this->never())->method('saveToSession');
+        // setSuccess() clears the failure budget, so it must not run before the token step.
+        $currentUser->expects($this->never())->method('setSuccess');
+
+        $session = $this->createStartedSession();
+        $controller = $this->createCallbackController($currentUser, $session);
+
+        $response = $controller->callback(new Request(['code' => 'test-code', 'state' => 'state-1']));
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame(
+            $this->configuration->getDefaultUrl() . 'token?user-id=7',
+            $response->headers->get('Location'),
+        );
+        // The 2FA step is bound to the account the Entra ID identity resolved to.
+        $this->assertSame(7, $session->get('2fa_pending_user_id'));
+        // Single sign-on has no remember-me option.
+        $this->assertFalse($session->get('2fa_pending_remember_me'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testCallbackRefusesLoginWhenSecondFactorIsLockedOut(): void
+    {
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->once())->method('getUserById')->with(7)->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(7);
+        $currentUser->expects($this->once())->method('getUserData')->with('twofactor_enabled')->willReturn(1);
+        $currentUser->expects($this->once())->method('isTwoFactorLockedOut')->willReturn(true);
+        $currentUser->expects($this->never())->method('setLoggedIn');
+        $currentUser->expects($this->never())->method('saveToSession');
+        $currentUser->expects($this->never())->method('setSuccess');
+
+        $session = $this->createStartedSession();
+        $controller = $this->createCallbackController($currentUser, $session);
+
+        $response = $controller->callback(new Request(['code' => 'test-code', 'state' => 'state-1']));
+
+        $this->assertLoginFailedResponse($response);
+        $this->assertNull($session->get('2fa_pending_user_id'));
+    }
+
+    /**
+     * Builds a controller whose provider stubs complete the OAuth dance for user #7.
+     */
+    private function createCallbackController(
+        CurrentUser $currentUser,
+        Session $session,
+    ): AzureAuthenticationController {
+        $token = new stdClass();
+        $token->access_token = 'access';
+        $token->refresh_token = 'refresh';
+        $token->id_token = 'a.b.c';
+
+        $oauth = $this->createMock(OAuth::class);
+        $oauth->expects($this->once())->method('getOAuthToken')->with('test-code')->willReturn($token);
+        $oauth->expects($this->once())->method('setToken')->with($token)->willReturnSelf();
+        $oauth->expects($this->once())->method('setAccessToken')->with('access')->willReturnSelf();
+        $oauth->expects($this->once())->method('setRefreshToken')->with('refresh')->willReturnSelf();
+        $oauth->method('getMail')->willReturn('john@example.com');
+        $oauth->method('getRefreshToken')->willReturn('refresh');
+        $oauth->method('getAccessToken')->willReturn('access');
+        $oauth->method('getToken')->willReturn(new stdClass());
+
+        $auth = $this->createMock(AuthEntraId::class);
+        $auth->expects($this->once())->method('isValidState')->with('state-1')->willReturn(true);
+        $auth->expects($this->once())->method('isValidLogin')->with('john@example.com')->willReturn(1);
+        $auth->expects($this->once())->method('checkCredentials')->with('john@example.com', '')->willReturn(true);
+        $auth->expects($this->once())->method('getAuthenticatedUserId')->willReturn(7);
+
+        $entraIdSession = $this->createMock(EntraIdSession::class);
+        $entraIdSession->expects($this->once())->method('getCurrentSessionKey')->willReturn('session-key');
+        $entraIdSession
+            ->expects($this->once())
+            ->method('get')
+            ->with(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER)
+            ->willReturn('verifier');
+
+        $controller = new AzureAuthenticationController(
+            authContextFactory: static fn(): array => [$auth, $oauth, $entraIdSession],
+            currentUserFactory: static fn(): CurrentUser => $currentUser,
+            azureConfigLoader: static fn(): null => null,
+        );
+        $controller->setContainer($this->createControllerContainer($session, $currentUser));
+
+        return $controller;
+    }
+
+    private function createStartedSession(): Session
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+
+        return $session;
+    }
+
+    private function createControllerContainer(Session $session, CurrentUser $currentUser): ContainerInterface
+    {
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(fn(string $id): mixed => match ($id) {
+                'phpmyfaq.configuration' => $this->configuration,
+                'phpmyfaq.user.current_user' => $currentUser,
+                'session' => $session,
+                'phpmyfaq.system' => new System(),
+                'phpmyfaq.seo' => new Seo($this->configuration),
+                default => null,
+            });
+
+        return $container;
     }
 
     /**

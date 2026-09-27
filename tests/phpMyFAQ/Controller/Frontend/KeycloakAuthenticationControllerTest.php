@@ -14,7 +14,9 @@ use phpMyFAQ\Auth\Oidc\OidcSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception as CoreException;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Strings;
+use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
@@ -24,6 +26,7 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -255,7 +258,10 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->expects($this->once())->method('getUserByLogin')->with('john')->willReturn(true);
-        $currentUser->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('123');
+        $currentUser
+            ->expects($this->exactly(2))
+            ->method('getUserData')
+            ->willReturnMap([['keycloak_sub', '123'], ['twofactor_enabled', 0]]);
         $currentUser->expects($this->never())->method('setUserData');
         $currentUser->expects($this->once())->method('setLoggedIn')->with(true);
         $currentUser->expects($this->once())->method('setAuthSource')->with('keycloak');
@@ -344,7 +350,10 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->expects($this->once())->method('getUserByLogin')->with('linked-user')->willReturn(true);
-        $currentUser->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('subject-123');
+        $currentUser
+            ->expects($this->exactly(2))
+            ->method('getUserData')
+            ->willReturnMap([['keycloak_sub', 'subject-123'], ['twofactor_enabled', 0]]);
         $currentUser->expects($this->once())->method('setLoggedIn')->with(true);
         $currentUser->expects($this->once())->method('setAuthSource')->with('keycloak');
         $currentUser->expects($this->once())->method('updateSessionId')->with(true);
@@ -376,6 +385,122 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+    }
+
+    /**
+     * A Keycloak identity is the first factor only: an account with TOTP two-factor
+     * authentication enabled must be sent through the token step instead of receiving
+     * a fully authenticated session from the callback.
+     */
+    public function testCallbackDefersToTokenStepWhenTwoFactorIsEnabled(): void
+    {
+        $idToken = $this->signToken([
+            'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => 'subject-123',
+            'aud' => ['phpmyfaq'],
+            'azp' => 'phpmyfaq',
+            'nonce' => 'nonce-456',
+            'iat' => time(),
+            'exp' => time() + 300,
+        ]);
+
+        $oidcSession = new OidcSession($this->createStartedSession());
+        $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('getUserId')->willReturn(55);
+        $currentUser->expects($this->once())->method('getUserByLogin')->with('linked-user')->willReturn(true);
+        $currentUser
+            ->expects($this->exactly(2))
+            ->method('getUserData')
+            ->willReturnMap([['keycloak_sub', 'subject-123'], ['twofactor_enabled', 1]]);
+        $currentUser->expects($this->once())->method('isTwoFactorLockedOut')->willReturn(false);
+        $currentUser->expects($this->once())->method('setAuthSource')->with('keycloak');
+        $currentUser->expects($this->once())->method('setTokenData');
+        // No session is granted before the second factor has been verified.
+        $currentUser->expects($this->never())->method('setLoggedIn');
+        $currentUser->expects($this->never())->method('updateSessionId');
+        $currentUser->expects($this->never())->method('saveToSession');
+        // setSuccess() clears the failure budget, so it must not run before the token step.
+        $currentUser->expects($this->never())->method('setSuccess');
+
+        $resolverUser = $this->createLinkedResolverUser();
+        $controllerSession = $this->createStartedSession();
+        $controller = $this->createController(
+            $this->createSuccessfulProviderResponses(
+                $idToken,
+                '{"sub":"subject-123","preferred_username":"john","email":"john@example.com","name":"John Doe"}',
+            ),
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+            static fn(): User => $resolverUser,
+        );
+        $controller->setContainer($this->createControllerContainer($controllerSession, $currentUser));
+
+        $response = $controller->callback(new Request([
+            'code' => 'test-code',
+            'state' => 'state-123',
+        ]));
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame(
+            $this->configuration->getDefaultUrl() . 'token?user-id=55',
+            $response->headers->get('Location'),
+        );
+        // The 2FA step is bound to the account the Keycloak subject resolved to.
+        $this->assertSame(55, $controllerSession->get('2fa_pending_user_id'));
+        // Single sign-on has no remember-me option.
+        $this->assertFalse($controllerSession->get('2fa_pending_remember_me'));
+    }
+
+    public function testCallbackRefusesLoginWhenSecondFactorIsLockedOut(): void
+    {
+        $idToken = $this->signToken([
+            'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => 'subject-123',
+            'aud' => ['phpmyfaq'],
+            'azp' => 'phpmyfaq',
+            'nonce' => 'nonce-456',
+            'iat' => time(),
+            'exp' => time() + 300,
+        ]);
+
+        $oidcSession = new OidcSession($this->createStartedSession());
+        $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('getUserId')->willReturn(55);
+        $currentUser->expects($this->once())->method('getUserByLogin')->with('linked-user')->willReturn(true);
+        $currentUser
+            ->expects($this->exactly(2))
+            ->method('getUserData')
+            ->willReturnMap([['keycloak_sub', 'subject-123'], ['twofactor_enabled', 1]]);
+        $currentUser->expects($this->once())->method('isTwoFactorLockedOut')->willReturn(true);
+        $currentUser->expects($this->never())->method('setLoggedIn');
+        $currentUser->expects($this->never())->method('saveToSession');
+        $currentUser->expects($this->never())->method('setSuccess');
+
+        $resolverUser = $this->createLinkedResolverUser();
+        $controllerSession = $this->createStartedSession();
+        $controller = $this->createController(
+            $this->createSuccessfulProviderResponses(
+                $idToken,
+                '{"sub":"subject-123","preferred_username":"john","email":"john@example.com","name":"John Doe"}',
+            ),
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+            static fn(): User => $resolverUser,
+        );
+        $controller->setContainer($this->createControllerContainer($controllerSession, $currentUser));
+
+        $response = $controller->callback(new Request([
+            'code' => 'test-code',
+            'state' => 'state-123',
+        ]));
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $this->assertNull($controllerSession->get('2fa_pending_user_id'));
     }
 
     public function testCallbackReturnsFailureWhenStoredKeycloakSubjectDoesNotMatch(): void
@@ -788,6 +913,51 @@ final class KeycloakAuthenticationControllerTest extends TestCase
             new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
             new MockResponse($userInfo),
         ];
+    }
+
+    private function createStartedSession(): Session
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+
+        return $session;
+    }
+
+    /**
+     * Resolves login "linked-user" from the stored Keycloak subject "subject-123".
+     */
+    private function createLinkedResolverUser(): User&MockObject
+    {
+        $resolverUser = $this->createMock(User::class);
+        $resolverUser->expects($this->once())->method('getUserIdByKeycloakSub')->with('subject-123')->willReturn(55);
+        $resolverUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
+        $resolverUser->expects($this->once())->method('getLogin')->willReturn('linked-user');
+        // AuthKeycloak::isValidLogin()/checkCredentials() re-resolve the account and its subject.
+        $resolverUser
+            ->expects($this->once())
+            ->method('getUserByLogin')
+            ->with('linked-user', false)
+            ->willReturn(true);
+        $resolverUser->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('subject-123');
+
+        return $resolverUser;
+    }
+
+    private function createControllerContainer(Session $session, CurrentUser $currentUser): ContainerInterface
+    {
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(fn(string $id): mixed => match ($id) {
+                'phpmyfaq.configuration' => $this->configuration,
+                'phpmyfaq.user.current_user' => $currentUser,
+                'session' => $session,
+                'phpmyfaq.system' => new System(),
+                'phpmyfaq.seo' => new Seo($this->configuration),
+                default => null,
+            });
+
+        return $container;
     }
 
     private function createController(
