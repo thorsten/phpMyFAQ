@@ -94,8 +94,20 @@ class PdoMysql implements DatabaseDriver
      */
     public function escape(string $string): string
     {
-        // For MySQL, escape single quotes by doubling them and escape backslashes
-        return str_replace(["\\", "'"], ["\\\\", "\\'"], $string);
+        // Use the driver's SQL-mode-aware quoting so escaping stays correct even under
+        // NO_BACKSLASH_ESCAPES, where backslash escaping (\') would let a single quote
+        // break out of the string literal. PDO::quote() adds surrounding quotes, which
+        // callers add themselves, so strip them off again.
+        if ($this->pdo instanceof PDO) {
+            $quoted = $this->pdo->quote($string);
+            if (false !== $quoted) {
+                return substr($quoted, 1, -1);
+            }
+        }
+
+        // Fallback before a connection exists: double single quotes (SQL standard) and
+        // backslashes so the value is safe regardless of the server's SQL mode.
+        return str_replace(["\\", "'"], ["\\\\", "''"], $string);
     }
 
     /**
