@@ -120,9 +120,14 @@ final class ConfigurationTabController extends AbstractController
             'main.titleFAQ',
         ];
 
+        // Checkbox items are always persisted as the strings 'true' or 'false'. The list of
+        // checkbox keys comes from the configuration schema so that unchecked boxes can be
+        // reset without relying on the client-side "availableFields" list.
+        $checkboxKeys = $this->getCheckboxKeys();
+
         // Special checks
-        if (isset($configurationData['main.enableMarkdownEditor'])) {
-            $configurationData['main.enableWysiwygEditor'] = false; // Disable WYSIWYG editor if Markdown is enabled
+        if ($this->isTruthy($configurationData['main.enableMarkdownEditor'] ?? null)) {
+            $configurationData['main.enableWysiwygEditor'] = 'false'; // Disable WYSIWYG editor if Markdown is enabled
         }
 
         if (isset($configurationData['main.currentVersion'])) {
@@ -153,6 +158,13 @@ final class ConfigurationTabController extends AbstractController
         }
 
         foreach ($configurationData as $key => $value) {
+            if (in_array($key, $checkboxKeys, strict: true)) {
+                // Normalise submitted checkbox values: the form sends a hidden 'false' plus 'true'
+                // when checked; legacy clients may send '1' or 'on'.
+                $newConfigValues[$key] = $this->isTruthy($value) ? 'true' : 'false';
+                continue;
+            }
+
             $newConfigValues[$key] = (string) $value;
             // Escape some values
             if (isset($escapeValues[$key])) {
@@ -160,18 +172,20 @@ final class ConfigurationTabController extends AbstractController
             }
         }
 
-        // Only process fields that were available in the current form
-        // For checkboxes: if field is available but not in configurationData, set to false
-        // For other fields: keep original value if not in configurationData
-        if (!empty($availableFields)) {
-            foreach ($availableFields as $fieldKey) {
-                if (array_key_exists($fieldKey, $newConfigValues)) {
-                    continue;
-                }
+        // Fallback for clients that do not send the hidden 'false' value of a checkbox:
+        // a checkbox rendered on the current form but missing from the payload was unchecked.
+        // Non-checkbox fields keep their stored value.
+        foreach ($availableFields as $fieldKey) {
+            if (!is_string($fieldKey) || array_key_exists($fieldKey, $newConfigValues)) {
+                continue;
+            }
 
-                if (isset($oldConfigurationData[$fieldKey]) && $oldConfigurationData[$fieldKey] === 'true') {
-                    $newConfigValues[$fieldKey] = 'false';
-                }
+            $isCheckbox = $checkboxKeys === []
+                ? $this->isTruthy($oldConfigurationData[$fieldKey] ?? null)
+                : in_array($fieldKey, $checkboxKeys, strict: true);
+
+            if ($isCheckbox) {
+                $newConfigValues[$fieldKey] = 'false';
             }
         }
 
@@ -199,6 +213,46 @@ final class ConfigurationTabController extends AbstractController
         AttachmentFactory::initFromConfiguration($this->configuration);
 
         return $this->json(['success' => Translation::get(key: 'ad_config_saved')], Response::HTTP_OK);
+    }
+
+    /**
+     * Returns all configuration keys rendered as a checkbox in the admin configuration.
+     *
+     * @return string[]
+     */
+    private function getCheckboxKeys(): array
+    {
+        try {
+            $items = Translation::getConfigurationItems();
+        } catch (\Throwable) {
+            return [];
+        }
+
+        return array_keys(array_filter(
+            $items,
+            static fn(array $item): bool => ($item['element'] ?? '') === 'checkbox',
+        ));
+    }
+
+    /**
+     * Normalises a submitted or stored boolean-like configuration value.
+     * Accepts 'true', '1', 'on', 'yes' (case-insensitive) as well as real booleans and integers.
+     */
+    private function isTruthy(mixed $value): bool
+    {
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        if (is_int($value)) {
+            return $value !== 0;
+        }
+
+        if (!is_string($value)) {
+            return false;
+        }
+
+        return in_array(strtolower(trim($value)), ['true', '1', 'on', 'yes'], strict: true);
     }
 
     /**

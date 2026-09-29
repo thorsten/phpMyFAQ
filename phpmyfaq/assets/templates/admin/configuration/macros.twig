@@ -15,6 +15,8 @@
   {% endif %}
   <div class="offset-3 col-6">
     <div class="form-check">
+      {# The hidden "false" is overridden by the checkbox value when it is checked, so an unchecked box always submits "false" #}
+      <input type="hidden" name="edit[{{ key }}]" value="false">
       <input class="form-check-input" type="checkbox" name="edit[{{ key }}]" id="edit[{{ key }}]" value="true"{{ checked }}{{ disabled }}>
       <label class="form-check-label" for="edit[{{ key }}]">{{ label | raw }}</label>
       {% if description != '' %}
