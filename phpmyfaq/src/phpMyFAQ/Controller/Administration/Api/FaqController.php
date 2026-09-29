@@ -279,6 +279,7 @@ final class FaqController extends AbstractController
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $tagging = $this->container->get(id: 'phpmyfaq.tags');
         $tagging->setBypassPermissionCheck();
+        $notification = $this->container->get(id: 'phpmyfaq.notification');
         $logging = $this->container->get(id: 'phpmyfaq.admin.admin-log');
         $changelog = $this->container->get(id: 'phpmyfaq.admin.changelog');
         $visits = $this->container->get(id: 'phpmyfaq.visits');
@@ -438,6 +439,16 @@ final class FaqController extends AbstractController
         if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             $faqPermission->delete(FaqPermission::GROUP, $faqData->getId());
             $faqPermission->add(FaqPermission::GROUP, $faqData->getId(), $permissions['restricted_groups']);
+        }
+
+        // Let the admin and the category owners be informed by email of this updated entry
+        try {
+            $categoryHelper = new CategoryHelper();
+            $categoryHelper->setCategory($category)->setConfiguration($this->configuration);
+            $moderators = $categoryHelper->getModerators($categories);
+            $notification->sendFaqUpdated($moderators, $faqData);
+        } catch (Exception|TransportExceptionInterface $e) {
+            $this->configuration->getLogger()->error('Send moderator notification failed: ' . $e->getMessage());
         }
 
         // If Elasticsearch is enabled, update an active or delete inactive FAQ document

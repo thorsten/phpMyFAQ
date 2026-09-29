@@ -1544,4 +1544,9 @@ $PMF_LANG['msgCreateDate'] = 'Erstellt am';
 $PMF_LANG['msgUpdateDate'] = 'Aktualisiert am';
 $PMF_LANG['msgUnknownUser'] = 'Unbekannter Benutzer (#%d)';
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgMailNewFaqSubject'] = 'Neuer FAQ-Beitrag hinzugefügt';
+$PMF_LANG['msgMailFaqUpdatedSubject'] = 'FAQ-Beitrag aktualisiert';
+$PMF_LANG['msgMailCheckUpdated'] = 'Ein FAQ-Beitrag wurde aktualisiert. Sie können diesen hier oder im Adminbereich überprüfen.';
+
 return $PMF_LANG;

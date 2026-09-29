@@ -10,6 +10,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - fixed unchecked configuration checkboxes not being saved as disabled (#4710) (Thorsten)
 - fixed comment and question notifications ignoring the "Enable notifications" switch (#4711) (Thorsten)
+- added e-mail notification to admins and category owners when a FAQ is updated (#4712) (Thorsten)
 - updated third party dependencies (Thorsten)
 - fixed security vulnerabilities (Thorsten)
 - fixed bugs (Thorsten)

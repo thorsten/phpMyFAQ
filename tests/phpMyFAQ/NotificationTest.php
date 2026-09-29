@@ -170,6 +170,31 @@ class NotificationTest extends TestCase
         ]]);
     }
 
+    /**
+     * Regression for https://github.com/thorsten/phpMyFAQ/issues/4712
+     */
+    public function testFaqUpdatedHonoursDisabledSwitch(): void
+    {
+        $faqEntity = (new FaqEntity())
+            ->setId(1)
+            ->setLanguage('en');
+
+        $this->notificationWithDisabledNotifications()->sendFaqUpdated(['someone@example.com'], $faqEntity);
+    }
+
+    public function testFaqNotificationTranslationsExist(): void
+    {
+        foreach (['en', 'de'] as $language) {
+            $PMF_LANG = [];
+            include PMF_TRANSLATION_DIR . '/language_' . $language . '.php';
+
+            $this->assertNotEmpty($PMF_LANG['msgMailNewFaqSubject'], $language);
+            $this->assertNotEmpty($PMF_LANG['msgMailFaqUpdatedSubject'], $language);
+            $this->assertNotEmpty($PMF_LANG['msgMailCheckUpdated'], $language);
+            $this->assertNotSame($PMF_LANG['msgMailNewFaqSubject'], $PMF_LANG['msgMailFaqUpdatedSubject'], $language);
+        }
+    }
+
     public function testNewFaqAddedHonoursDisabledSwitch(): void
     {
         $faqEntity = (new FaqEntity())

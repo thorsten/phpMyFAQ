@@ -91,53 +91,92 @@ readonly class Notification
      */
     public function sendNewFaqAdded(array $emails, FaqEntity $faqEntity): void
     {
-        if ($this->isEnabled()) {
-            $this->mail->addTo($this->configuration->getAdminEmail());
-            foreach ($emails as $email) {
-                if ($email === $this->configuration->getAdminEmail()) {
-                    continue;
-                }
+        if (!$this->isEnabled()) {
+            return;
+        }
 
-                $this->mail->addCc($email);
+        $this->sendFaqNotification(
+            $emails,
+            $faqEntity,
+            (string) (Translation::get(key: 'msgMailNewFaqSubject') ?? 'New FAQ was added.'),
+            (string) Translation::get(key: 'msgMailCheck'),
+        );
+    }
+
+    /**
+     * Sends mails to FAQ admin and other given users about an updated FAQ.
+     *
+     * @param array<string> $emails
+     * @throws Core\Exception|TransportExceptionInterface
+     */
+    public function sendFaqUpdated(array $emails, FaqEntity $faqEntity): void
+    {
+        if (!$this->isEnabled()) {
+            return;
+        }
+
+        $this->sendFaqNotification(
+            $emails,
+            $faqEntity,
+            (string) (Translation::get(key: 'msgMailFaqUpdatedSubject') ?? 'FAQ was updated.'),
+            (string) Translation::get(key: 'msgMailCheckUpdated'),
+        );
+    }
+
+    /**
+     * Sends the FAQ content together with a link to the admin editor to the admin (To) and the
+     * given moderators (Cc).
+     *
+     * @param array<string> $emails
+     * @throws Core\Exception|TransportExceptionInterface
+     */
+    private function sendFaqNotification(array $emails, FaqEntity $faqEntity, string $subject, string $intro): void
+    {
+        $this->mail->addTo($this->configuration->getAdminEmail());
+        foreach ($emails as $email) {
+            if ($email === $this->configuration->getAdminEmail()) {
+                continue;
             }
 
-            $this->mail->subject = $this->configuration->getTitle() . ': New FAQ was added.';
-            $this->faq->getFaq(faqId: $faqEntity->getId(), faqRevisionId: null, isAdmin: true);
-
-            $linkToAdmin = '%sadmin/faq/edit/%d/%s';
-            $url = sprintf(
-                $linkToAdmin,
-                $this->configuration->getDefaultUrl(),
-                $faqEntity->getId(),
-                $faqEntity->getLanguage(),
-            );
-            $link = new Link($url, $this->configuration);
-            $link->setTitle($this->faq->getQuestion($faqEntity->getId()));
-
-            $this->mail->message =
-                html_entity_decode((string) Translation::get(key: 'msgMailCheck'))
-                . '<p><strong>'
-                . Translation::get(key: 'msgAskYourQuestion')
-                . ':</strong> '
-                . $this->faq->getQuestion($faqEntity->getId())
-                . '</p>'
-                . '<p><strong>'
-                . Translation::get(key: 'msgNewContentArticle')
-                . ':</strong> '
-                . $this->faq->faqRecord['content']
-                . '</p>'
-                . '<hr>'
-                . $this->configuration->getTitle()
-                . ': <a target="_blank" href="'
-                . $link->toString()
-                . '">'
-                . $link->toString()
-                . '</a>';
-
-            $this->mail->contentType = 'text/html';
-
-            $this->mail->send();
+            $this->mail->addCc($email);
         }
+
+        $this->mail->subject = $this->configuration->getTitle() . ': ' . $subject;
+        $this->faq->getFaq(faqId: $faqEntity->getId(), faqRevisionId: null, isAdmin: true);
+
+        $linkToAdmin = '%sadmin/faq/edit/%d/%s';
+        $url = sprintf(
+            $linkToAdmin,
+            $this->configuration->getDefaultUrl(),
+            $faqEntity->getId(),
+            $faqEntity->getLanguage(),
+        );
+        $link = new Link($url, $this->configuration);
+        $link->setTitle($this->faq->getQuestion($faqEntity->getId()));
+
+        $this->mail->message =
+            html_entity_decode($intro)
+            . '<p><strong>'
+            . Translation::get(key: 'msgAskYourQuestion')
+            . ':</strong> '
+            . $this->faq->getQuestion($faqEntity->getId())
+            . '</p>'
+            . '<p><strong>'
+            . Translation::get(key: 'msgNewContentArticle')
+            . ':</strong> '
+            . $this->faq->faqRecord['content']
+            . '</p>'
+            . '<hr>'
+            . $this->configuration->getTitle()
+            . ': <a target="_blank" href="'
+            . $link->toString()
+            . '">'
+            . $link->toString()
+            . '</a>';
+
+        $this->mail->contentType = 'text/html';
+
+        $this->mail->send();
     }
 
     /**
