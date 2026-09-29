@@ -52,6 +52,15 @@ readonly class Notification
     }
 
     /**
+     * Whether notification e-mails are enabled via the global "main.enableNotifications" switch.
+     * Every notification sent by this class must honour this flag.
+     */
+    public function isEnabled(): bool
+    {
+        return (bool) $this->configuration->get(item: 'main.enableNotifications');
+    }
+
+    /**
      * Sends mail to user who added a question.
      *
      * @param string $email Email address of the user
@@ -61,7 +70,7 @@ readonly class Notification
      */
     public function sendOpenQuestionAnswered(string $email, string $userName, string $url): void
     {
-        if ($this->configuration->get(item: 'main.enableNotifications')) {
+        if ($this->isEnabled()) {
             $this->mail->addTo($email, $userName);
             $this->mail->subject =
                 $this->configuration->getTitle() . ' - ' . Translation::get(key: 'msgQuestionAnswered');
@@ -82,7 +91,7 @@ readonly class Notification
      */
     public function sendNewFaqAdded(array $emails, FaqEntity $faqEntity): void
     {
-        if ($this->configuration->get(item: 'main.enableNotifications')) {
+        if ($this->isEnabled()) {
             $this->mail->addTo($this->configuration->getAdminEmail());
             foreach ($emails as $email) {
                 if ($email === $this->configuration->getAdminEmail()) {
@@ -139,6 +148,10 @@ readonly class Notification
      */
     public function sendFaqCommentNotification(Faq $faq, Comment $comment): void
     {
+        if (!$this->isEnabled()) {
+            return;
+        }
+
         $category = new Category($this->configuration);
         $emailTo = $this->configuration->getAdminEmail();
 
@@ -211,6 +224,10 @@ readonly class Notification
      */
     public function sendNewsCommentNotification(array $newsData, Comment $comment): void
     {
+        if (!$this->isEnabled()) {
+            return;
+        }
+
         if ($newsData['authorEmail'] !== '') {
             $this->mail->addTo($newsData['authorEmail']);
         }
@@ -251,6 +268,10 @@ readonly class Notification
 
     public function sendQuestionSuccessMail(QuestionEntity $questionEntity, array $categories): void
     {
+        if (!$this->isEnabled()) {
+            return;
+        }
+
         $mailText = '%s<br><br>User: %s, %s<br>%s: %s<br><br>%s: %s<br><br>%s';
         $questionMail = sprintf(
             $mailText,

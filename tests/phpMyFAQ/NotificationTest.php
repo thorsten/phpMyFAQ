@@ -18,8 +18,11 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Entity\Comment;
+use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Entity\QuestionEntity;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -73,5 +76,115 @@ class NotificationTest extends TestCase
         $notification = new Notification($this->configuration);
 
         $this->assertInstanceOf(Notification::class, $notification);
+    }
+
+    /**
+     * Builds a Notification whose configuration has notifications disabled. Every method that
+     * composes a mail needs the FAQ title, the default URL or the admin address first, so the
+     * expectations registered after construction prove that the method returned before
+     * composing the message. The constructor itself legitimately calls some of these.
+     *
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    private function notificationWithDisabledNotifications(): Notification
+    {
+        /** @var Configuration&MockObject $configuration */
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getNoReplyEmail')->willReturn('noreply@example.com');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ Test');
+        $configuration->method('getAdminEmail')->willReturn('admin@example.com');
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['main.enableNotifications', false],
+                ['main.administrationMail',  'admin@example.com'],
+                ['main.languageDetection',   true],
+                ['mail.remoteSMTP',          false],
+            ]);
+
+        $notification = new Notification($configuration);
+
+        $configuration->expects($this->never())->method('getTitle');
+        $configuration->expects($this->never())->method('getDefaultUrl');
+        $configuration->expects($this->never())->method('getAdminEmail');
+
+        return $notification;
+    }
+
+    public function testIsEnabledReflectsConfiguration(): void
+    {
+        $this->assertFalse($this->notificationWithDisabledNotifications()->isEnabled());
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getNoReplyEmail')->willReturn('noreply@example.com');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ Test');
+        $configuration->method('get')->willReturnMap([['main.enableNotifications', true]]);
+
+        $this->assertTrue((new Notification($configuration))->isEnabled());
+    }
+
+    /**
+     * Regression for https://github.com/thorsten/phpMyFAQ/issues/4711
+     */
+    public function testFaqCommentNotificationHonoursDisabledSwitch(): void
+    {
+        $faq = $this->createStub(Faq::class);
+        $faq->faqRecord = ['id' => 1, 'lang' => 'en', 'title' => 'Question', 'email' => 'author@example.com'];
+
+        $comment = new Comment();
+        $comment->setUsername('Commenter')->setEmail('commenter@example.com')->setComment('Hello');
+
+        $this->notificationWithDisabledNotifications()->sendFaqCommentNotification($faq, $comment);
+    }
+
+    /**
+     * Regression for https://github.com/thorsten/phpMyFAQ/issues/4711
+     */
+    public function testNewsCommentNotificationHonoursDisabledSwitch(): void
+    {
+        $comment = new Comment();
+        $comment->setUsername('Commenter')->setEmail('commenter@example.com')->setComment('Hello');
+
+        $this->notificationWithDisabledNotifications()->sendNewsCommentNotification([
+            'id' => 1,
+            'lang' => 'en',
+            'header' => 'News',
+            'authorEmail' => 'author@example.com',
+        ], $comment);
+    }
+
+    /**
+     * Regression for https://github.com/thorsten/phpMyFAQ/issues/4711
+     */
+    public function testQuestionSuccessMailHonoursDisabledSwitch(): void
+    {
+        $questionEntity = (new QuestionEntity())
+            ->setUsername('Asker')
+            ->setEmail('asker@example.com')
+            ->setCategoryId(1)
+            ->setQuestion('Why?');
+
+        $this->notificationWithDisabledNotifications()->sendQuestionSuccessMail($questionEntity, [1 => [
+            'name' => 'Category',
+        ]]);
+    }
+
+    public function testNewFaqAddedHonoursDisabledSwitch(): void
+    {
+        $faqEntity = (new FaqEntity())
+            ->setId(1)
+            ->setLanguage('en');
+
+        $this->notificationWithDisabledNotifications()->sendNewFaqAdded(['someone@example.com'], $faqEntity);
+    }
+
+    public function testOpenQuestionAnsweredHonoursDisabledSwitch(): void
+    {
+        $this->notificationWithDisabledNotifications()->sendOpenQuestionAnswered(
+            'user@example.com',
+            'User',
+            'https://example.test',
+        );
     }
 }
