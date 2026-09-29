@@ -291,7 +291,7 @@ export const handleSaveConfiguration = async (): Promise<void> => {
         if (name && name.startsWith('edit[')) {
           // Extract the config key from a name like "edit[main.language]"
           const match = name.match(/edit\[([^\]]+)\]/);
-          if (match) {
+          if (match && !availableFields.includes(match[1])) {
             availableFields.push(match[1]);
           }
         }

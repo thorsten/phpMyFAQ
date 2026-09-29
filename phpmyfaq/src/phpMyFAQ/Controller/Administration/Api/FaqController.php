@@ -574,6 +574,16 @@ final class FaqController extends AbstractAdministrationApiController
             $faqPermission->add(FaqPermission::GROUP, $faqId, $permissions['restricted_groups']);
         }
 
+        // Let the admin and the category owners be informed by email of this updated entry
+        try {
+            $categoryHelper = new CategoryHelper();
+            $categoryHelper->setCategory($category)->setConfiguration($this->configuration);
+            $moderators = $categoryHelper->getModerators($categories);
+            $this->notification->sendFaqUpdated($moderators, $faqData);
+        } catch (Exception|TransportExceptionInterface $e) {
+            $this->configuration->getLogger()->error('Send moderator notification failed: ' . $e->getMessage());
+        }
+
         // If Elasticsearch is enabled, update a published or delete a non-published FAQ document
         if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             $elasticsearch = new Elasticsearch($this->configuration);

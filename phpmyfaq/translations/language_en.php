@@ -1908,4 +1908,9 @@ $PMF_LANG['msgAttachmentTypeNotAllowed'] = 'Files of this type (%s) cannot be up
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Allow installing nightly builds whose SHA-256 digest cannot be verified against GitHub (not recommended)'];
 $PMF_LANG['msgTwofactorLockedOut'] = 'Too many wrong codes. Please try again later.';
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgMailNewFaqSubject'] = 'New FAQ was added';
+$PMF_LANG['msgMailFaqUpdatedSubject'] = 'FAQ was updated';
+$PMF_LANG['msgMailCheckUpdated'] = 'An entry in the FAQ was updated! Please check it here or in the admin section.';
+
 return $PMF_LANG;

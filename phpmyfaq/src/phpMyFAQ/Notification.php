@@ -58,6 +58,15 @@ readonly class Notification
     }
 
     /**
+     * Whether notification e-mails are enabled via the global "main.enableNotifications" switch.
+     * Every notification sent by this class must honour this flag.
+     */
+    public function isEnabled(): bool
+    {
+        return filter_var($this->configuration->get(item: 'main.enableNotifications'), FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
      * Sends mail to user who added a question.
      *
      * @param string $email Email address of the user
@@ -67,7 +76,7 @@ readonly class Notification
      */
     public function sendOpenQuestionAnswered(string $email, string $userName, string $url): void
     {
-        if ($this->configuration->get(item: 'main.enableNotifications')) {
+        if ($this->isEnabled()) {
             $this->mail->addTo($email, $userName);
             $this->mail->subject =
                 $this->configuration->getTitle() . ' - ' . Translation::getString(key: 'msgQuestionAnswered');
@@ -88,56 +97,95 @@ readonly class Notification
      */
     public function sendNewFaqAdded(array $emails, FaqEntity $faqEntity): void
     {
-        if ($this->configuration->get(item: 'main.enableNotifications')) {
-            $faqId = $faqEntity->getId();
-            if ($faqId === null) {
-                return;
-            }
-
-            $this->mail->addTo($this->configuration->getAdminEmail());
-            foreach ($emails as $email) {
-                if ($email === $this->configuration->getAdminEmail()) {
-                    continue;
-                }
-
-                $this->mail->addCc($email);
-            }
-
-            $this->mail->subject = $this->configuration->getTitle() . ': New FAQ was added.';
-            $this->faq->getFaq(faqId: $faqId, faqRevisionId: null, isAdmin: true);
-
-            $linkToAdmin = '%sadmin/faq/edit/%d/%s';
-            $url = sprintf($linkToAdmin, $this->configuration->getDefaultUrl(), $faqId, $faqEntity->getLanguage());
-            $link = new Link($url, $this->configuration);
-            $link->setTitle($this->faq->getQuestion($faqId));
-
-            $this->mail->message =
-                html_entity_decode(Translation::getString(key: 'msgMailCheck'))
-                . '<p><strong>'
-                . Translation::getString(key: 'msgAskYourQuestion')
-                . ':</strong> '
-                . $this->faq->getQuestion($faqId)
-                . '</p>'
-                . '<p><strong>'
-                . Translation::getString(key: 'msgNewContentArticle')
-                . ':</strong> '
-                . (string) ($this->faq->faqRecord['content'] ?? '')
-                . '</p>'
-                . '<hr>'
-                . $this->configuration->getTitle()
-                . ': <a target="_blank" href="'
-                . $link->toString()
-                . '">'
-                . $link->toString()
-                . '</a>';
-
-            $this->mail->contentType = 'text/html';
-
-            $this->mail->send();
+        if (!$this->isEnabled()) {
+            return;
         }
+
+        $this->sendFaqNotification(
+            $emails,
+            $faqEntity,
+            Translation::getString(key: 'msgMailNewFaqSubject'),
+            Translation::getString(key: 'msgMailCheck'),
+        );
 
         // Note: Web push notification for new FAQs is sent from FaqController::create()
         // with the public FAQ URL, which is more useful for end-users.
+    }
+
+    /**
+     * Sends mails to FAQ admin and other given users about an updated FAQ.
+     *
+     * @param array<string> $emails
+     * @throws Core\Exception|TransportExceptionInterface
+     */
+    public function sendFaqUpdated(array $emails, FaqEntity $faqEntity): void
+    {
+        if (!$this->isEnabled()) {
+            return;
+        }
+
+        $this->sendFaqNotification(
+            $emails,
+            $faqEntity,
+            Translation::getString(key: 'msgMailFaqUpdatedSubject'),
+            Translation::getString(key: 'msgMailCheckUpdated'),
+        );
+    }
+
+    /**
+     * Sends the FAQ content together with a link to the admin editor to the admin (To) and the
+     * given moderators (Cc).
+     *
+     * @param array<string> $emails
+     * @throws Core\Exception|TransportExceptionInterface
+     */
+    private function sendFaqNotification(array $emails, FaqEntity $faqEntity, string $subject, string $intro): void
+    {
+        $faqId = $faqEntity->getId();
+        if ($faqId === null) {
+            return;
+        }
+
+        $this->mail->addTo($this->configuration->getAdminEmail());
+        foreach ($emails as $email) {
+            if ($email === $this->configuration->getAdminEmail()) {
+                continue;
+            }
+
+            $this->mail->addCc($email);
+        }
+
+        $this->mail->subject = $this->configuration->getTitle() . ': ' . $subject;
+        $this->faq->getFaq(faqId: $faqId, faqRevisionId: null, isAdmin: true);
+
+        $linkToAdmin = '%sadmin/faq/edit/%d/%s';
+        $url = sprintf($linkToAdmin, $this->configuration->getDefaultUrl(), $faqId, $faqEntity->getLanguage());
+        $link = new Link($url, $this->configuration);
+        $link->setTitle($this->faq->getQuestion($faqId));
+
+        $this->mail->message =
+            html_entity_decode($intro)
+            . '<p><strong>'
+            . Translation::getString(key: 'msgAskYourQuestion')
+            . ':</strong> '
+            . $this->faq->getQuestion($faqId)
+            . '</p>'
+            . '<p><strong>'
+            . Translation::getString(key: 'msgNewContentArticle')
+            . ':</strong> '
+            . (string) ($this->faq->faqRecord['content'] ?? '')
+            . '</p>'
+            . '<hr>'
+            . $this->configuration->getTitle()
+            . ': <a target="_blank" href="'
+            . $link->toString()
+            . '">'
+            . $link->toString()
+            . '</a>';
+
+        $this->mail->contentType = 'text/html';
+
+        $this->mail->send();
     }
 
     /**
@@ -148,6 +196,10 @@ readonly class Notification
      */
     public function sendFaqCommentNotification(Faq $faq, Comment $comment): void
     {
+        if (!$this->isEnabled()) {
+            return;
+        }
+
         $category = $this->createCategory();
         $emailTo = $this->configuration->getAdminEmail();
 
@@ -225,6 +277,10 @@ readonly class Notification
      */
     public function sendNewsCommentNotification(array $newsData, Comment $comment): void
     {
+        if (!$this->isEnabled()) {
+            return;
+        }
+
         $authorEmail = (string) ($newsData['authorEmail'] ?? '');
         if ($authorEmail !== '') {
             $this->mail->addTo($authorEmail);
@@ -271,6 +327,36 @@ readonly class Notification
 
     public function sendQuestionSuccessMail(QuestionEntity $questionEntity, array $categories): void
     {
+        $userId = $this->category->getOwner($questionEntity->getCategoryId());
+
+        if ($this->isEnabled()) {
+            $this->sendQuestionMail($questionEntity, $categories, $userId);
+        }
+
+        // Send push notification only to admin and category owner (not all subscribers)
+        // since the URL points to the admin area
+        $adminUserIds = [];
+        if ($userId > 0) {
+            $adminUserIds[] = $userId;
+        }
+        // Add all superadmins
+        $superAdminIds = User::getSuperAdminIds($this->configuration);
+        $adminUserIds = array_unique(array_merge($adminUserIds, $superAdminIds));
+
+        $this->sendWebPushToUsers(
+            $adminUserIds,
+            Translation::getString(key: 'msgPushNewQuestion'),
+            mb_substr($questionEntity->getQuestion(), start: 0, length: 200),
+            $this->configuration->getDefaultUrl() . 'admin/',
+            'new-question',
+        );
+    }
+
+    /**
+     * Sends the new-question mail to the main admin (To) and the category owner (Cc).
+     */
+    private function sendQuestionMail(QuestionEntity $questionEntity, array $categories, int $userId): void
+    {
         $mailText = '%s<br><br>User: %s, %s<br>%s: %s<br><br>%s: %s<br><br>%s';
         $questionMail = sprintf(
             $mailText,
@@ -284,7 +370,6 @@ readonly class Notification
             $this->configuration->getDefaultUrl() . 'admin/',
         );
 
-        $userId = $this->category->getOwner($questionEntity->getCategoryId());
         try {
             $oUser = $this->createUser();
             $oUser->getUserById($userId);
@@ -314,24 +399,6 @@ readonly class Notification
         } catch (Exception|TransportExceptionInterface $exception) {
             $this->configuration->getLogger()->error('Error sending mail: ' . $exception->getMessage());
         }
-
-        // Send push notification only to admin and category owner (not all subscribers)
-        // since the URL points to the admin area
-        $adminUserIds = [];
-        if ($userId > 0) {
-            $adminUserIds[] = $userId;
-        }
-        // Add all superadmins
-        $superAdminIds = User::getSuperAdminIds($this->configuration);
-        $adminUserIds = array_unique(array_merge($adminUserIds, $superAdminIds));
-
-        $this->sendWebPushToUsers(
-            $adminUserIds,
-            Translation::getString(key: 'msgPushNewQuestion'),
-            mb_substr($questionEntity->getQuestion(), start: 0, length: 200),
-            $this->configuration->getDefaultUrl() . 'admin/',
-            'new-question',
-        );
     }
 
     /**

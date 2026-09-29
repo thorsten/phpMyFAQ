@@ -201,6 +201,27 @@ class NotificationTest extends TestCase
         $this->assertEquals('text/html', $this->mail->contentType);
     }
 
+    public function testSendFaqUpdated(): void
+    {
+        $faqEntity = new FaqEntity();
+        $faqEntity->setId(42);
+        $faqEntity->setLanguage('en');
+
+        $this->faq->expects($this->exactly(2))->method('getQuestion')->with(42)->willReturn('How to test?');
+        $this->faq->expects($this->once())->method('getFaq')->with(42, null, true);
+        $this->faq->faqRecord = ['content' => 'Updated content'];
+
+        $this->mail->expects($this->once())->method('addTo')->with('admin@example.com');
+        $this->mail->expects($this->once())->method('addCc')->with('owner@example.com');
+        $this->mail->expects($this->once())->method('send');
+
+        $this->notification->sendFaqUpdated(['owner@example.com'], $faqEntity);
+
+        $this->assertStringContainsString('FAQ was updated', $this->mail->subject);
+        $this->assertStringContainsString('An entry in the FAQ was updated', $this->mail->message);
+        $this->assertStringContainsString('admin/faq/edit/42/en', $this->mail->message);
+    }
+
     public function testSendNewFaqAddedSkipsDuplicateAdminEmail(): void
     {
         $faqEntity = new FaqEntity();
@@ -621,5 +642,164 @@ class NotificationTest extends TestCase
         $configuration->method('getDb')->willReturn($dbDriver);
 
         return $configuration;
+    }
+
+    /**
+     * Builds a Notification whose configuration has notifications disabled. Every method that
+     * composes a mail needs the FAQ title, the default URL or the admin address first, so the
+     * expectations registered after construction prove that the method returned before
+     * composing the message. The constructor itself legitimately calls some of these.
+     *
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    private function notificationWithDisabledNotifications(): Notification
+    {
+        /** @var Configuration&MockObject $configuration */
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getNoReplyEmail')->willReturn('noreply@example.com');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ Test');
+        $configuration->method('getAdminEmail')->willReturn('admin@example.com');
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['main.enableNotifications', false],
+                ['main.administrationMail',  'admin@example.com'],
+                ['main.languageDetection',   true],
+                ['mail.remoteSMTP',          false],
+            ]);
+
+        $mail = $this->createMock(Mail::class);
+        $mail->method('setReplyTo')->willReturn(true);
+        $mail->expects($this->never())->method('send');
+
+        $notification = new Notification($configuration, null, $mail, $this->faq, $this->category);
+
+        $configuration->expects($this->never())->method('getTitle');
+        $configuration->expects($this->never())->method('getDefaultUrl');
+        $configuration->expects($this->never())->method('getAdminEmail');
+
+        return $notification;
+    }
+
+    public function testIsEnabledReflectsConfiguration(): void
+    {
+        $this->assertFalse($this->notificationWithDisabledNotifications()->isEnabled());
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getNoReplyEmail')->willReturn('noreply@example.com');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ Test');
+        $configuration->method('get')->willReturnMap([['main.enableNotifications', true]]);
+
+        $this->assertTrue((new Notification($configuration, null, $this->mail, $this->faq, $this->category))->isEnabled());
+    }
+
+    /**
+     * Regression for https://github.com/thorsten/phpMyFAQ/issues/4711
+     */
+    public function testFaqCommentNotificationHonoursDisabledSwitch(): void
+    {
+        $faq = $this->createStub(Faq::class);
+        $faq->faqRecord = ['id' => 1, 'lang' => 'en', 'title' => 'Question', 'email' => 'author@example.com'];
+
+        $comment = new Comment();
+        $comment->setUsername('Commenter')->setEmail('commenter@example.com')->setComment('Hello');
+
+        $this->notificationWithDisabledNotifications()->sendFaqCommentNotification($faq, $comment);
+    }
+
+    /**
+     * Regression for https://github.com/thorsten/phpMyFAQ/issues/4711
+     */
+    public function testNewsCommentNotificationHonoursDisabledSwitch(): void
+    {
+        $comment = new Comment();
+        $comment->setUsername('Commenter')->setEmail('commenter@example.com')->setComment('Hello');
+
+        $this->notificationWithDisabledNotifications()->sendNewsCommentNotification([
+            'id' => 1,
+            'lang' => 'en',
+            'header' => 'News',
+            'authorEmail' => 'author@example.com',
+        ], $comment);
+    }
+
+    /**
+     * Regression for https://github.com/thorsten/phpMyFAQ/issues/4711
+     */
+    public function testQuestionSuccessMailHonoursDisabledSwitch(): void
+    {
+        $questionEntity = (new QuestionEntity())
+            ->setUsername('Asker')
+            ->setEmail('asker@example.com')
+            ->setCategoryId(1)
+            ->setQuestion('Why?');
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getNoReplyEmail')->willReturn('noreply@example.com');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ Test');
+        $configuration->method('getDefaultUrl')->willReturn('https://example.com/');
+        $configuration->method('get')->willReturnMap([['main.enableNotifications', false]]);
+        $dbDriver = $this->createStub(DatabaseDriver::class);
+        $dbDriver->method('query')->willReturn(false);
+        $configuration->method('getDb')->willReturn($dbDriver);
+
+        $mail = $this->createMock(Mail::class);
+        $mail->method('setReplyTo')->willReturn(true);
+        $mail->expects($this->never())->method('addTo');
+        $mail->expects($this->never())->method('send');
+
+        // The admin web push has its own switch and is not affected by "Enable notifications"
+        $webPushService = $this->createMock(WebPushService::class);
+        $webPushService->method('isEnabled')->willReturn(true);
+        $webPushService->expects($this->once())->method('sendToUsers');
+
+        $this->category->method('getOwner')->willReturn(7);
+
+        $notification = new Notification($configuration, $webPushService, $mail, $this->faq, $this->category);
+        $notification->sendQuestionSuccessMail($questionEntity, [1 => ['name' => 'Category']]);
+    }
+
+    /**
+     * Regression for https://github.com/thorsten/phpMyFAQ/issues/4712
+     */
+    public function testFaqUpdatedHonoursDisabledSwitch(): void
+    {
+        $faqEntity = (new FaqEntity())
+            ->setId(1)
+            ->setLanguage('en');
+
+        $this->notificationWithDisabledNotifications()->sendFaqUpdated(['someone@example.com'], $faqEntity);
+    }
+
+    public function testFaqNotificationTranslationsExist(): void
+    {
+        foreach (['en', 'de'] as $language) {
+            $PMF_LANG = [];
+            include PMF_TRANSLATION_DIR . '/language_' . $language . '.php';
+
+            $this->assertNotEmpty($PMF_LANG['msgMailNewFaqSubject'], $language);
+            $this->assertNotEmpty($PMF_LANG['msgMailFaqUpdatedSubject'], $language);
+            $this->assertNotEmpty($PMF_LANG['msgMailCheckUpdated'], $language);
+            $this->assertNotSame($PMF_LANG['msgMailNewFaqSubject'], $PMF_LANG['msgMailFaqUpdatedSubject'], $language);
+        }
+    }
+
+    public function testNewFaqAddedHonoursDisabledSwitch(): void
+    {
+        $faqEntity = (new FaqEntity())
+            ->setId(1)
+            ->setLanguage('en');
+
+        $this->notificationWithDisabledNotifications()->sendNewFaqAdded(['someone@example.com'], $faqEntity);
+    }
+
+    public function testOpenQuestionAnsweredHonoursDisabledSwitch(): void
+    {
+        $this->notificationWithDisabledNotifications()->sendOpenQuestionAnswered(
+            'user@example.com',
+            'User',
+            'https://example.test',
+        );
     }
 }

@@ -54,18 +54,21 @@ class PdoMysqlTest extends TestCase
 
     public function testEscape(): void
     {
+        // Without an active connection the driver falls back to SQL-standard quote
+        // doubling, which is safe regardless of the server SQL mode (including
+        // NO_BACKSLASH_ESCAPES). It must never produce a backslash-escaped quote.
         $testString = "test'string";
         $result = $this->pdoMysql->escape($testString);
-        // Single quotes should be escaped with backslash for MySQL
-        $this->assertEquals("test\\'string", $result);
+        $this->assertEquals("test''string", $result);
+        $this->assertStringNotContainsString("\\'", $result);
     }
 
     public function testEscapeWithSpecialCharacters(): void
     {
         $testString = 'test"string\'with\\special;chars';
         $result = $this->pdoMysql->escape($testString);
-        // Single quotes and backslashes should be escaped for MySQL
-        $this->assertEquals('test"string\\\'with\\\\special;chars', $result);
+        // Single quotes are doubled and backslashes are doubled in the fallback path.
+        $this->assertEquals('test"string\'\'with\\\\special;chars', $result);
     }
 
     public function testEscapeWithNoSpecialCharacters(): void
@@ -73,6 +76,15 @@ class PdoMysqlTest extends TestCase
         $testString = 'simple string without quotes';
         $result = $this->pdoMysql->escape($testString);
         $this->assertEquals($testString, $result);
+    }
+
+    public function testEscapeDoesNotUseBackslashEscapedQuotes(): void
+    {
+        // Regression guard: a backslash-escaped single quote (\') is unsafe under
+        // MySQL/MariaDB NO_BACKSLASH_ESCAPES mode because the backslash is literal
+        // and the quote terminates the string literal, allowing SQL injection.
+        $result = $this->pdoMysql->escape("a'b");
+        $this->assertEquals("a''b", $result);
     }
 
     public function testFetchArrayWithMockResult(): void

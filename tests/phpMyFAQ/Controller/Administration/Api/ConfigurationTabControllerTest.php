@@ -590,8 +590,9 @@ final class ConfigurationTabControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
-        self::assertSame('1', $this->configuration->get('main.enableMarkdownEditor'));
-        self::assertSame('', $this->configuration->get('main.enableWysiwygEditor'));
+        // Checkbox values are normalised to 'true'/'false', and enabling Markdown disables WYSIWYG
+        self::assertTrue($this->configuration->get('main.enableMarkdownEditor'));
+        self::assertFalse($this->configuration->get('main.enableWysiwygEditor'));
         self::assertSame($originalReferenceUrl, $this->configuration->get('main.referenceURL'));
         self::assertFalse((bool) $this->configuration->get('security.enableRegistration'));
         self::assertTrue((bool) $this->configuration->get('main.maintenanceMode'));
@@ -721,6 +722,149 @@ final class ConfigurationTabControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
         $this->removeCsrfCookie('configuration');
+    }
+
+    /**
+     * @param array<string, string> $edit
+     * @param list<string>|null $availableFields
+     * @return array<string, mixed>
+     * @throws \Exception
+     */
+    private function saveConfiguration(array $edit, ?array $availableFields = null): array
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $post = ['pmf-csrf-token' => $csrfToken, 'edit' => $edit];
+        if ($availableFields !== null) {
+            $post['availableFields'] = json_encode($availableFields, JSON_THROW_ON_ERROR);
+        }
+
+        $response = $controller->save(new Request([], $post));
+        $this->removeCsrfCookie('configuration');
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        return $this->configuration->getAll();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUncheckedCheckboxIsPersistedAsFalseWithoutAvailableFields(): void
+    {
+        $this->configuration->update(['main.enableNotifications' => 'true', 'security.enableRegistration' => 'true']);
+
+        // The form sends the hidden "false" value of an unchecked checkbox itself,
+        // so persistence must not depend on the JavaScript-generated availableFields list.
+        $stored = $this->saveConfiguration(['main.enableNotifications' => 'false']);
+
+        self::assertSame('false', $stored['main.enableNotifications']);
+        self::assertSame('true', $stored['security.enableRegistration'], 'Fields from other tabs are untouched');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCheckedCheckboxIsPersistedAsTrue(): void
+    {
+        $stored = $this->saveConfiguration([
+            'main.enableMarkdownEditor' => 'true',
+            'main.enableNotifications' => 'true',
+        ]);
+
+        self::assertSame('true', $stored['main.enableNotifications']);
+        self::assertSame('true', $stored['main.enableMarkdownEditor']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLegacyTruthyCheckboxValueIsNormalisedToTrue(): void
+    {
+        $stored = $this->saveConfiguration(['main.enableNotifications' => '1']);
+
+        self::assertSame('true', $stored['main.enableNotifications']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testMissingCheckboxListedInAvailableFieldsIsPersistedAsFalse(): void
+    {
+        $this->configuration->update(['main.enableNotifications' => 'true']);
+
+        $stored = $this->saveConfiguration(['main.titleFAQ' => 'New title'], [
+            'main.titleFAQ',
+            'main.enableNotifications',
+        ]);
+
+        self::assertSame('false', $stored['main.enableNotifications']);
+        self::assertSame('New title', $stored['main.titleFAQ']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testMissingCheckboxWithLegacyStoredValueIsPersistedAsFalse(): void
+    {
+        $this->configuration->update(['main.enableNotifications' => '1']);
+
+        $stored = $this->saveConfiguration(['main.titleFAQ' => 'New title'], [
+            'main.titleFAQ',
+            'main.enableNotifications',
+        ]);
+
+        self::assertSame('false', $stored['main.enableNotifications']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testMissingNonCheckboxFieldInAvailableFieldsKeepsStoredValue(): void
+    {
+        // A non-checkbox field with a "truthy looking" stored value must never be reset.
+        $this->configuration->update(['records.numberOfRecordsPerPage' => '1']);
+
+        $stored = $this->saveConfiguration(['main.titleFAQ' => 'New title'], [
+            'main.titleFAQ',
+            'records.numberOfRecordsPerPage',
+        ]);
+
+        self::assertSame('1', $stored['records.numberOfRecordsPerPage']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEnablingMarkdownEditorDisablesWysiwygEditor(): void
+    {
+        $stored = $this->saveConfiguration([
+            'main.enableMarkdownEditor' => 'true',
+            'main.enableWysiwygEditor' => 'true',
+        ]);
+
+        self::assertSame('true', $stored['main.enableMarkdownEditor']);
+        self::assertSame('false', $stored['main.enableWysiwygEditor']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSubmittedFalseMarkdownEditorDoesNotDisableWysiwygEditor(): void
+    {
+        // Regression: the hidden "false" value must not be mistaken for "Markdown enabled".
+        $stored = $this->saveConfiguration([
+            'main.enableMarkdownEditor' => 'false',
+            'main.enableWysiwygEditor' => 'true',
+        ]);
+
+        self::assertSame('false', $stored['main.enableMarkdownEditor']);
+        self::assertSame('true', $stored['main.enableWysiwygEditor']);
     }
 
     private function setCsrfCookie(string $page, string $token): void

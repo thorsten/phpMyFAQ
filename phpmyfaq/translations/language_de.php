@@ -1833,4 +1833,9 @@ $PMF_LANG['msgStatusFilterAll'] = 'Alle Status';
 $PMF_LANG['msgInvalidFaqStatus'] = 'Ungültiger oder fehlender Statuswert.';
 $PMF_LANG['msgTwofactorLockedOut'] = 'Zu viele falsche Codes. Bitte versuchen Sie es später erneut.';
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgMailNewFaqSubject'] = 'Neuer FAQ-Beitrag hinzugefügt';
+$PMF_LANG['msgMailFaqUpdatedSubject'] = 'FAQ-Beitrag aktualisiert';
+$PMF_LANG['msgMailCheckUpdated'] = 'Ein FAQ-Beitrag wurde aktualisiert. Sie können diesen hier oder im Adminbereich überprüfen.';
+
 return $PMF_LANG;
