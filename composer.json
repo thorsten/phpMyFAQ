@@ -94,8 +94,8 @@
   "minimum-stability": "stable",
   "scripts": {
     "analyze": "./phpmyfaq/src/libs/bin/mago analyze",
-    "format": "./phpmyfaq/src/libs/bin/mago format",
-    "format:fix": "./phpmyfaq/src/libs/bin/mago format --fix",
+    "format": "./phpmyfaq/src/libs/bin/mago format --check",
+    "format:fix": "./phpmyfaq/src/libs/bin/mago format",
     "lint": "./phpmyfaq/src/libs/bin/mago lint",
     "lint:fix": "./phpmyfaq/src/libs/bin/mago lint --fix",
     "openapi:json": "./phpmyfaq/src/libs/bin/openapi -b ./phpmyfaq/src/libs/autoload.php -f json ./phpmyfaq/src/phpMyFAQ -o docs/openapi.json",
