@@ -462,7 +462,7 @@ readonly class OpenSearch
 
         // Send the last batch if it exists
         $responses = null;
-        if (($params['body'] ?? []) !== []) {
+        if ($params['body'] !== []) {
             $responses = $this->client->bulk($params);
         }
 

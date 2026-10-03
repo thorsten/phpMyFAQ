@@ -624,7 +624,7 @@ abstract class AbstractController
 
     public function isApiEnabled(): bool
     {
-        return (bool) $this->configuration->get(item: 'api.enableAccess');
+        return filter_var($this->configuration->get(item: 'api.enableAccess'), FILTER_VALIDATE_BOOLEAN);
     }
 
     public function addExtension(ExtensionInterface $extension): void

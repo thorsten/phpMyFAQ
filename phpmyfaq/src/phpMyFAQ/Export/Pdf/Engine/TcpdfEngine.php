@@ -240,7 +240,7 @@ final readonly class TcpdfEngine implements PdfEngineInterface
         // Note: this file lives one directory deeper (Engine/) than the original
         // Wrapper, so the fallback paths carry one extra "../" to resolve identically.
         $pmfRootDir = defined('PMF_ROOT_DIR') ? (string) PMF_ROOT_DIR : __DIR__ . '/../../../../';
-        $pmfSrcDir = defined('PMF_SRC_DIR') ? (string) PMF_SRC_DIR : __DIR__ . '/../../../';
+        $pmfSrcDir = defined('PMF_SRC_DIR') ? PMF_SRC_DIR : __DIR__ . '/../../../';
 
         self::defineIfMissing('K_TCPDF_EXTERNAL_CONFIG', true);
         self::defineIfMissing('K_PATH_URL', '');

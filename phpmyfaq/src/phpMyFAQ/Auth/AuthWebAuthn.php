@@ -181,13 +181,10 @@ class AuthWebAuthn extends Auth
         // (fmt=none/packed without a verified cert), so the only proof this was a genuine
         // registration and not a forged HTTP request is the one-time challenge minted by
         // prepareChallengeForRegistration() and matched here.
-        if (
-            !property_exists($info->response, 'clientDataJSON') || !$info->response->clientDataJSON instanceof stdClass
-        ) {
+        $clientDataObject = $info->response->clientDataJSON ?? null;
+        if (!$clientDataObject instanceof stdClass) {
             throw new Exception('no clientDataJSON in info');
         }
-
-        $clientDataObject = $info->response->clientDataJSON;
 
         $presentedChallenge = $clientDataObject->challenge ?? null;
         if (
@@ -463,6 +460,7 @@ class AuthWebAuthn extends Auth
 
         $signedData = $hashId . chr($flags) . $counter . hash(algo: 'sha256', data: $clientDataJson, binary: true);
 
+        /** @var mixed $signatureBytes */
         $signatureBytes = $response->signature ?? null;
         if (!is_array($signatureBytes) || count($signatureBytes) < 70) {
             throw new Exception('Cannot decode key response (3)');
@@ -499,6 +497,7 @@ class AuthWebAuthn extends Auth
      */
     private function decodeSignedClientData(string $clientDataJson): stdClass
     {
+        /** @var mixed $clientData */
         $clientData = json_decode($clientDataJson);
         if (!$clientData instanceof stdClass) {
             throw new Exception('No client data in info');

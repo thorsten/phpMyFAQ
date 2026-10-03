@@ -594,7 +594,7 @@ class Elasticsearch
 
         // Send the last batch if it exists
         $responses = null;
-        if (($params['body'] ?? []) !== []) {
+        if ($params['body'] !== []) {
             try {
                 $responses = $this->unwrapResponse($this->client->bulk($params));
             } catch (ClientResponseException|ServerResponseException $e) {

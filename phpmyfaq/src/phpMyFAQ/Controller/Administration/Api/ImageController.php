@@ -79,9 +79,9 @@ final class ImageController extends AbstractController
                 continue;
             }
 
-            $httpOrigin = $request->server->get('HTTP_ORIGIN');
-            if ($httpOrigin !== null && (string) $httpOrigin . '/' === $this->configuration->getDefaultUrl()) {
-                $headers = ['Access-Control-Allow-Origin' => (string) $httpOrigin];
+            $httpOrigin = $request->server->getString('HTTP_ORIGIN');
+            if ($httpOrigin !== '' && $httpOrigin . '/' === $this->configuration->getDefaultUrl()) {
+                $headers = ['Access-Control-Allow-Origin' => $httpOrigin];
             }
 
             // Sanitize input

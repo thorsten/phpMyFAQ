@@ -59,6 +59,7 @@ final class CategoryTreeRestrictionFilter
         }
 
         $filtered = [];
+        /** @var mixed $children */
         foreach ($categoryTree as $categoryId => $children) {
             if (!in_array(needle: (int) $categoryId, haystack: $allowedCategoryIds, strict: true)) {
                 continue;

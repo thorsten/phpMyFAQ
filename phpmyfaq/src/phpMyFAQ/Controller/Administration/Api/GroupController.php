@@ -536,6 +536,7 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => 'Invalid group ID.'], Response::HTTP_BAD_REQUEST);
         }
 
+        /** @var mixed $rawRightIds */
         $rawRightIds = $data['rightIds'] ?? [];
         if (!is_array($rawRightIds)) {
             return $this->json(['error' => 'rightIds must be an array.'], Response::HTTP_BAD_REQUEST);
@@ -624,6 +625,7 @@ final class GroupController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::GROUP_DELETE);
 
+        /** @var mixed $data */
         $data = json_decode($request->getContent(), associative: true);
         if (!is_array($data)) {
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);

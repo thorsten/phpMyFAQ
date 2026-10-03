@@ -143,7 +143,7 @@ final class FaqController extends AbstractAdministrationApiController
         // malformed request and must fail loudly instead of silently creating a draft.
         $status = FaqStatus::Draft;
         if (property_exists($data, 'status')) {
-            $status = FaqStatus::tryFrom((string) Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS, ''));
+            $status = FaqStatus::tryFrom(Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS, ''));
             if (!$status instanceof FaqStatus) {
                 return $this->json([
                     'error' => Translation::get(key: 'msgInvalidFaqStatus'),
@@ -246,7 +246,7 @@ final class FaqController extends AbstractAdministrationApiController
                         questionLanguage: $faqData->getLanguage(),
                         eventType: QuestionHistoryEventType::Answered,
                         userId: $this->currentUser->getUserId(),
-                        username: (string) $this->currentUser->getLogin(),
+                        username: $this->currentUser->getLogin(),
                         faqId: $faqId,
                     ));
                 } catch (InvalidArgumentException $exception) {
@@ -302,7 +302,7 @@ final class FaqController extends AbstractAdministrationApiController
             // first publish.
             if (
                 FaqStatus::Published === $faqData->getStatus()
-                && (bool) $this->configuration->get(item: 'search.enableElasticsearch')
+                && filter_var($this->configuration->get(item: 'search.enableElasticsearch'), FILTER_VALIDATE_BOOLEAN)
             ) {
                 $elasticsearch = new Elasticsearch($this->configuration);
                 $elasticsearch->index([
@@ -321,7 +321,7 @@ final class FaqController extends AbstractAdministrationApiController
             // publish.
             if (
                 FaqStatus::Published === $faqData->getStatus()
-                && (bool) $this->configuration->get(item: 'search.enableOpenSearch')
+                && filter_var($this->configuration->get(item: 'search.enableOpenSearch'), FILTER_VALIDATE_BOOLEAN)
             ) {
                 $openSearch = new OpenSearch($this->configuration);
                 $openSearch->index([
@@ -422,11 +422,7 @@ final class FaqController extends AbstractAdministrationApiController
         // is a malformed request and must fail loudly instead of being silently ignored.
         $requestedStatus = null;
         if (property_exists($data, 'status')) {
-            $requestedStatus = FaqStatus::tryFrom((string) Filter::filterVar(
-                $data->status,
-                FILTER_SANITIZE_SPECIAL_CHARS,
-                '',
-            ));
+            $requestedStatus = FaqStatus::tryFrom(Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS, ''));
             if (!$requestedStatus instanceof FaqStatus) {
                 return $this->json([
                     'error' => Translation::get(key: 'msgInvalidFaqStatus'),
@@ -584,40 +580,30 @@ final class FaqController extends AbstractAdministrationApiController
             $this->configuration->getLogger()->error('Send moderator notification failed: ' . $e->getMessage());
         }
 
-        // If Elasticsearch is enabled, update a published or delete a non-published FAQ document
-        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
-            $elasticsearch = new Elasticsearch($this->configuration);
-            if (FaqStatus::Published === $status) {
-                $elasticsearch->update([
-                    'id' => $faqId,
-                    'lang' => $faqLang,
-                    'solution_id' => $faqData->getSolutionId(),
-                    'question' => $faqData->getQuestion(),
-                    'answer' => $faqData->getAnswer(),
-                    'keywords' => $faqData->getKeywords(),
-                    'category_id' => $categories[0] ?? 0,
-                ]);
-            } else {
-                $elasticsearch->delete((int) $faqData->getSolutionId());
-            }
+        // Only a published FAQ is public content: upsert its search document, otherwise
+        // remove whatever an earlier publish left in the enabled search engines.
+        $document = FaqStatus::Published === $status
+            ? [
+                'id' => $faqId,
+                'lang' => $faqLang,
+                'solution_id' => $faqData->getSolutionId(),
+                'question' => $faqData->getQuestion(),
+                'answer' => $faqData->getAnswer(),
+                'keywords' => $faqData->getKeywords(),
+                'category_id' => $categories[0] ?? 0,
+            ]
+            : null;
+
+        if (filter_var($this->configuration->get(item: 'search.enableElasticsearch'), FILTER_VALIDATE_BOOLEAN)) {
+            $this->syncSearchDocument(
+                new Elasticsearch($this->configuration),
+                $document,
+                (int) $faqData->getSolutionId(),
+            );
         }
 
-        // If OpenSearch is enabled, update a published or delete a non-published FAQ document
-        if ($this->configuration->get(item: 'search.enableOpenSearch')) {
-            $openSearch = new OpenSearch($this->configuration);
-            if (FaqStatus::Published === $status) {
-                $openSearch->update([
-                    'id' => $faqId,
-                    'lang' => $faqLang,
-                    'solution_id' => $faqData->getSolutionId(),
-                    'question' => $faqData->getQuestion(),
-                    'answer' => $faqData->getAnswer(),
-                    'keywords' => $faqData->getKeywords(),
-                    'category_id' => $categories[0] ?? 0,
-                ]);
-            } else {
-                $openSearch->delete((int) $faqData->getSolutionId());
-            }
+        if (filter_var($this->configuration->get(item: 'search.enableOpenSearch'), FILTER_VALIDATE_BOOLEAN)) {
+            $this->syncSearchDocument(new OpenSearch($this->configuration), $document, (int) $faqData->getSolutionId());
         }
 
         return $this->json([
@@ -695,11 +681,7 @@ final class FaqController extends AbstractAdministrationApiController
         $rawFaqIds = $data->faqIds ?? null;
         $faqIds = is_array($rawFaqIds) ? array_map(static fn(mixed $faqId): int => (int) $faqId, $rawFaqIds) : [];
         $faqLanguage = Filter::filterVar($data->faqLanguage ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $targetStatus = FaqStatus::tryFrom((string) Filter::filterVar(
-            $data->status ?? '',
-            FILTER_SANITIZE_SPECIAL_CHARS,
-            '',
-        ));
+        $targetStatus = FaqStatus::tryFrom(Filter::filterVar($data->status ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''));
 
         if (!Token::getInstance($this->session)->verifyToken(
             page: 'pmf-csrf-token',
@@ -785,8 +767,14 @@ final class FaqController extends AbstractAdministrationApiController
         FaqStatus $status,
         array $categoryIds,
     ): void {
-        $elasticsearchEnabled = (bool) $this->configuration->get(item: 'search.enableElasticsearch');
-        $openSearchEnabled = (bool) $this->configuration->get(item: 'search.enableOpenSearch');
+        $elasticsearchEnabled = filter_var(
+            $this->configuration->get(item: 'search.enableElasticsearch'),
+            FILTER_VALIDATE_BOOLEAN,
+        );
+        $openSearchEnabled = filter_var(
+            $this->configuration->get(item: 'search.enableOpenSearch'),
+            FILTER_VALIDATE_BOOLEAN,
+        );
 
         if (!$elasticsearchEnabled && !$openSearchEnabled) {
             return;
@@ -819,22 +807,28 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         if ($elasticsearchEnabled) {
-            $elasticsearch = new Elasticsearch($this->configuration);
-            if ($document !== null) {
-                $elasticsearch->update($document);
-            } else {
-                $elasticsearch->delete($solutionId);
-            }
+            $this->syncSearchDocument(new Elasticsearch($this->configuration), $document, $solutionId);
         }
 
         if ($openSearchEnabled) {
-            $openSearch = new OpenSearch($this->configuration);
-            if ($document !== null) {
-                $openSearch->update($document);
-            } else {
-                $openSearch->delete($solutionId);
-            }
+            $this->syncSearchDocument(new OpenSearch($this->configuration), $document, $solutionId);
         }
+    }
+
+    /**
+     * Upserts the FAQ document in one search engine, or removes the FAQ from it when there is
+     * no public document (unpublished FAQ).
+     *
+     * @param array<string, int|string|null>|null $document
+     */
+    private function syncSearchDocument(Elasticsearch|OpenSearch $searchEngine, ?array $document, int $solutionId): void
+    {
+        if ($document === null) {
+            $searchEngine->delete($solutionId);
+            return;
+        }
+
+        $searchEngine->update($document);
     }
 
     /**
@@ -994,6 +988,7 @@ final class FaqController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
+        /** @var mixed $faqIds */
         $faqIds = $data->faqIds ?? null;
         if (!is_array($faqIds)) {
             return $this->json(['error' => 'No FAQ IDs provided.'], Response::HTTP_BAD_REQUEST);
