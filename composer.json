@@ -54,7 +54,7 @@
     "twig/twig": "^3.10"
   },
   "require-dev": {
-    "carthage-software/mago": "^1.0.1",
+    "carthage-software/mago": "^1.51.1",
     "doctrine/instantiator": "2.*",
     "mikey179/vfsstream": "^1.6",
     "phpdocumentor/reflection-docblock": "5.*",
