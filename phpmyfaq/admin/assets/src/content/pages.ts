@@ -91,7 +91,8 @@ const updateCharCounter = (inputId: string, counterId: string, maxLength: number
  */
 const validateSlug = async (slug: string, lang: string, csrfToken: string, excludeId?: string): Promise<boolean> => {
   const response = await checkSlug(slug, lang, csrfToken, excludeId);
-  return response.available;
+  // A failed or empty API answer must not throw out of the debounced input handler.
+  return response?.available === true;
 };
 
 /**
