@@ -311,6 +311,152 @@ final class FaqControllerTest extends TestCase
     /**
      * Seeds a guest-readable FAQ. Defaults describe a visible record.
      */
+    /**
+     * Links the FAQ to a category every visitor may see.
+     */
+    private function seedCategoryFor(int $faqId, int $categoryId = 1): void
+    {
+        $this->dbHandle->query(sprintf('DELETE FROM faqcategories WHERE id = %d', $categoryId));
+        $this->dbHandle->query(sprintf('DELETE FROM faqcategoryrelations WHERE category_id = %d', $categoryId));
+        $this->dbHandle->query(sprintf('DELETE FROM faqcategory_user WHERE category_id = %d', $categoryId));
+        $this->dbHandle->query(sprintf('DELETE FROM faqcategory_group WHERE category_id = %d', $categoryId));
+
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, show_home, image)
+             VALUES (%d, 'en', 0, 'Rendered category', '', 1, -1, 1, 1, '')",
+            $categoryId,
+        ));
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (%d, 'en', %d, 'en')",
+            $categoryId,
+            $faqId,
+        ));
+        $this->dbHandle->query(sprintf('INSERT INTO faqcategory_user (category_id, user_id) VALUES (%d, -1)', $categoryId));
+        $this->dbHandle->query(sprintf('INSERT INTO faqcategory_group (category_id, group_id) VALUES (%d, -1)', $categoryId));
+    }
+
+    private function showRequest(int $categoryId, int $faqId): \Symfony\Component\HttpFoundation\Request
+    {
+        $request = new \Symfony\Component\HttpFoundation\Request(
+            [],
+            [],
+            ['categoryId' => (string) $categoryId, 'faqId' => (string) $faqId, 'faqLang' => 'en', 'slug' => 'faq-title'],
+        );
+        $request->setSession(new Session(new MockArraySessionStorage()));
+
+        return $request;
+    }
+
+    public function testShowRendersAPublishedFaqForGuests(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+        $this->seedCategoryFor(faqId: 1);
+        $this->configuration->getAll();
+
+        $controller = $this->createController(
+            new Date($this->configuration),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $this->createCurrentUserStub(-1, false),
+        );
+
+        $response = $controller->show($this->showRequest(1, 1));
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString('Unreleased product name', $content);
+        self::assertStringContainsString('Answer body', $content);
+        self::assertStringContainsString('solution_id_1001.html', $content);
+        // Comments are disabled on the record, so the invitation to comment is replaced.
+        self::assertStringContainsString((string) Translation::get(key: 'msgWriteNoComment'), $content);
+        self::assertStringNotContainsString('internal notes', $content);
+    }
+
+    public function testShowRevealsNotesAndBookmarkStateToEditors(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+        $this->seedCategoryFor(faqId: 1);
+        $this->configuration->getAll();
+
+        $controller = $this->createController(
+            new Date($this->configuration),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $this->createCurrentUserStub(1, true),
+        );
+
+        $response = $controller->show($this->showRequest(1, 1));
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString('internal notes', $content);
+        self::assertStringContainsString('bi bi-bookmark', $content);
+    }
+
+    public function testSolutionRedirectsToTheFaqPage(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+        $this->seedCategoryFor(faqId: 1);
+
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $this->createCurrentUserStub(-1, false),
+        );
+
+        $response = $controller->solution(
+            new \Symfony\Component\HttpFoundation\Request([], [], ['solutionId' => '1001']),
+        );
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_MOVED_PERMANENTLY, $response->getStatusCode());
+        self::assertSame('/content/1/1/en/unreleased-product-name.html', $response->headers->get('Location'));
+    }
+
+    public function testContentRedirectResolvesTheCategoryAndSlug(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+        $this->seedCategoryFor(faqId: 1);
+
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $this->createCurrentUserStub(-1, false),
+        );
+
+        $response = $controller->contentRedirect(
+            new \Symfony\Component\HttpFoundation\Request([], [], ['faqId' => '1', 'faqLang' => 'en']),
+        );
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_MOVED_PERMANENTLY, $response->getStatusCode());
+        self::assertSame('/content/1/1/en/unreleased-product-name.html', $response->headers->get('Location'));
+    }
+
+    public function testAddRendersTheFormForUsersAllowedToAddFaqs(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+        $this->seedCategoryFor(faqId: 1);
+        $this->configuration->getAll();
+
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $this->createCurrentUserStub(1, true),
+        );
+
+        $request = new \Symfony\Component\HttpFoundation\Request(['cat' => '1']);
+        $request->setSession(new Session(new MockArraySessionStorage()));
+
+        $response = $controller->add($request);
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString((string) Translation::get(key: 'msgNewContentHeader'), $content);
+        self::assertStringContainsString('Rendered category', $content);
+    }
+
     private function seedFaqRow(int $faqId, string $status = 'published'): void
     {
         $this->dbHandle->query(sprintf('DELETE FROM faqdata WHERE id = %d', $faqId));

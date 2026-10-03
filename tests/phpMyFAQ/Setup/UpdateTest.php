@@ -289,6 +289,85 @@ class UpdateTest extends TestCase
         }
     }
 
+    /**
+     * @return array<int, string>
+     */
+    private function queuedQueries(): array
+    {
+        /** @var array<int, string> $queries */
+        $queries = new \ReflectionProperty(Update::class, 'queries')->getValue($this->update);
+
+        return $queries;
+    }
+
+    public function testOptimizeTablesQueuesTheDialectSpecificStatements(): void
+    {
+        $dbTypeProperty = new \ReflectionProperty(Database::class, 'dbType');
+
+        try {
+            $dbTypeProperty->setValue(null, 'pgsql');
+            $this->update->optimizeTables();
+            $this->assertSame(['VACUUM ANALYZE;'], $this->queuedQueries());
+
+            $dbTypeProperty->setValue(null, 'mysqli');
+            $this->update->optimizeTables();
+            $queries = $this->queuedQueries();
+            $this->assertContains('OPTIMIZE TABLE faqconfig', $queries);
+            $this->assertContains('OPTIMIZE TABLE faqdata', $queries);
+            $this->assertGreaterThan(20, count($queries));
+
+            $before = count($queries);
+            $dbTypeProperty->setValue(null, 'sqlite3');
+            $this->update->optimizeTables();
+            $this->assertCount($before, $this->queuedQueries(), 'SQLite needs no table optimisation.');
+        } finally {
+            $dbTypeProperty->setValue(null, 'sqlite3');
+        }
+    }
+
+    public function testInsertFormInputsReplacesTheDefaultFormDefinitions(): void
+    {
+        new \ReflectionMethod(Update::class, 'insertFormInputs')->invoke($this->update);
+
+        $queries = $this->queuedQueries();
+        $this->assertSame('DELETE FROM faqforms', $queries[0]);
+        $inserts = array_filter($queries, static fn(string $query): bool => str_starts_with($query, 'INSERT INTO faqforms'));
+        $this->assertCount(count(new \phpMyFAQ\Setup\Installation\DefaultDataSeeder()->getFormInputs()), $inserts);
+    }
+
+    public function testMigrateAdminLogHashesChainsEntriesThatHaveNoHashYet(): void
+    {
+        $this->dbHandle->query('DELETE FROM faqadminlog');
+        $this->dbHandle->query("INSERT INTO faqadminlog (id, time, usr, ip, text) VALUES (1, 1700000000, 1, '127.0.0.1', 'first')");
+        $this->dbHandle->query("INSERT INTO faqadminlog (id, time, usr, ip, text) VALUES (2, 1700000001, 1, '127.0.0.1', 'second')");
+        $this->dbHandle->query("INSERT INTO faqadminlog (id, time, usr, ip, text) VALUES (3, 1700000002, 1, '127.0.0.1', 'third')");
+
+        $this->update->version = '4.1.9';
+        new \ReflectionMethod(Update::class, 'migrateAdminLogHashes')->invoke($this->update);
+
+        $entries = array_values(new \phpMyFAQ\Administration\AdminLogRepository(new Configuration($this->dbHandle))->getAll());
+        $this->assertCount(3, $entries);
+        $this->assertNull($entries[0]->getPreviousHash());
+        $this->assertNotNull($entries[0]->getHash());
+        $this->assertSame($entries[0]->getHash(), $entries[1]->getPreviousHash());
+        $this->assertSame($entries[1]->getHash(), $entries[2]->getPreviousHash());
+        foreach ($entries as $entry) {
+            $this->assertTrue($entry->verifyIntegrity());
+        }
+    }
+
+    public function testMigrateAdminLogHashesLeavesInstallationsFrom420Alone(): void
+    {
+        $this->dbHandle->query('DELETE FROM faqadminlog');
+        $this->dbHandle->query("INSERT INTO faqadminlog (id, time, usr, ip, text) VALUES (1, 1700000000, 1, '127.0.0.1', 'first')");
+
+        $this->update->version = '4.2.0-alpha';
+        new \ReflectionMethod(Update::class, 'migrateAdminLogHashes')->invoke($this->update);
+
+        $entries = array_values(new \phpMyFAQ\Administration\AdminLogRepository(new Configuration($this->dbHandle))->getAll());
+        $this->assertNull($entries[0]->getHash());
+    }
+
     public function testSetDryRun(): void
     {
         $this->update->dryRun = true;
