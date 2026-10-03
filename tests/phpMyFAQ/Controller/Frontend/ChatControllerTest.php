@@ -6,9 +6,9 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\UserSession;
@@ -24,6 +24,8 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 #[UsesNamespace('phpMyFAQ')]
 final class ChatControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     /**
@@ -40,13 +42,7 @@ final class ChatControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        try {
-            $this->configuration = Configuration::getConfigurationInstance();
-        } catch (\TypeError) {
-            $dbHandle = new Sqlite3();
-            $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-            $this->configuration = new Configuration($dbHandle);
-        }
+        $this->configuration = $this->createTestConfiguration();
 
         $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
         $language->setLanguageFromConfiguration('en');

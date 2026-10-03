@@ -23,6 +23,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -30,6 +31,8 @@ use Twig\Extension\AbstractExtension;
 
 class CategoryNameTwigExtensionTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -49,8 +52,7 @@ class CategoryNameTwigExtensionTest extends TestCase
 
         Database::setTablePrefix('');
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $configuration = new Configuration($dbHandle);
         $configuration->set('main.currentVersion', System::getVersion());
 

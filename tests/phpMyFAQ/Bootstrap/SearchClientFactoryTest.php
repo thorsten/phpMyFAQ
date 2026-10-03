@@ -23,6 +23,7 @@ use phpMyFAQ\Environment;
 use phpMyFAQ\Plugin\PluginDiscovery;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\System;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -58,6 +59,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[UsesClass(PluginDiscovery::class)]
 class SearchClientFactoryTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private array $envBackup = [];
 
     /** @var list<string> */
@@ -276,8 +279,7 @@ class SearchClientFactoryTest extends TestCase
 
     private function createConfiguration(): Configuration
     {
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
 
         return new Configuration($dbHandle);
     }

@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class NewsTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private News $news;
     private Configuration $configuration;
     private NewsRepositoryInterface $mockRepository;
@@ -33,8 +35,7 @@ class NewsTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
         $this->primeConfiguration([
             'main.language' => 'en',

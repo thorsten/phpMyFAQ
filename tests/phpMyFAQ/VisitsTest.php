@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class VisitsTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     /** @var Configuration */
     private Configuration $configuration;
 
@@ -30,8 +32,7 @@ class VisitsTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.currentVersion', System::getVersion());
 

@@ -2,6 +2,8 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use phpMyFAQ\TestDatabaseTrait;
+
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -13,6 +15,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 #[UsesNamespace('phpMyFAQ')]
 class HealthControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->createTestConfiguration();
+    }
+
     public function testIndexReportsOk(): void
     {
         $response = new HealthController()->index();

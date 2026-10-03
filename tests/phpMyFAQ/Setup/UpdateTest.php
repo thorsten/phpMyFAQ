@@ -40,10 +40,13 @@ class UpdateTest extends TestCase
         $this->dbHandle->connect($this->databasePath, '', '');
         $this->initializeDatabaseStatics($this->dbHandle);
         $configuration = new Configuration($this->dbHandle);
+        // The constructor only registers the very first instance of the process as the
+        // singleton; install this one explicitly so the migrations run against this copy.
+        $configurationProperty->setValue(null, $configuration);
         $configuration->set('main.currentVersion', '4.0.0');
         $configuration->getAll();
 
-        $this->update = new Update(new System(), Configuration::getConfigurationInstance());
+        $this->update = new Update(new System(), $configuration);
     }
 
     protected function tearDown(): void

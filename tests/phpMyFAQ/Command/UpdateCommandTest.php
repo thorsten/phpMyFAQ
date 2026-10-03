@@ -6,6 +6,7 @@ use DateTime;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\System;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -21,6 +22,8 @@ use Symfony\Component\Console\Tester\CommandTester;
 #[AllowMockObjectsWithoutExpectations]
 class UpdateCommandTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private UpdateCommand $command;
     private CommandTester $commandTester;
 
@@ -28,8 +31,7 @@ class UpdateCommandTest extends TestCase
     {
         parent::setUp();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         new Configuration($dbHandle);
 
         $this->command = new UpdateCommand();

@@ -7,12 +7,15 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class CurrentUserTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private CurrentUser $currentUser;
 
     private Configuration $configuration;
@@ -31,8 +34,7 @@ class CurrentUserTest extends TestCase
 
         Strings::init();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
 
         $this->currentUser = new CurrentUser($this->configuration);

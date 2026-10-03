@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class CustomPageTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private CustomPage $customPage;
     private Configuration $configuration;
     private CustomPageRepositoryInterface $mockRepository;
@@ -34,8 +36,7 @@ class CustomPageTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.language', 'en');
         $this->configuration->set('main.referenceURL', 'https://example.org/');

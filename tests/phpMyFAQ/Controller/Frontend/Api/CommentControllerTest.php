@@ -14,6 +14,7 @@ use phpMyFAQ\Notification;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\UserSession;
@@ -28,6 +29,8 @@ use Symfony\Component\HttpFoundation\Request;
 #[UsesNamespace('phpMyFAQ')]
 class CommentControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private Faq $faq;
     private Comments $comments;
@@ -54,7 +57,7 @@ class CommentControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
+        $this->configuration = $this->createTestConfiguration();
 
         $this->faq = $this->createStub(Faq::class);
         $this->comments = $this->createStub(Comments::class);

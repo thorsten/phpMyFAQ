@@ -98,6 +98,8 @@ use phpMyFAQ\User\UserSession;
 #[UsesClass(UserSession::class)]
 class SitemapTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private const int FAQ_ID = 9990;
     private const int FAQ_ID_2 = 9991;
     private const int CAT_ID = 9990;
@@ -122,14 +124,7 @@ class SitemapTest extends TestCase
 
         $dbConfig = new DatabaseConfiguration(PMF_TEST_DIR . '/content/core/config/database.php');
         Database::setTablePrefix($dbConfig->getPrefix());
-        $this->db = Database::factory($dbConfig->getType());
-        $this->db->connect(
-            $dbConfig->getServer(),
-            $dbConfig->getUser(),
-            $dbConfig->getPassword(),
-            $dbConfig->getDatabase(),
-            $dbConfig->getPort(),
-        );
+        $this->db = $this->connectToTestDatabaseCopy(Database::factory($dbConfig->getType()));
         $this->configuration = new Configuration($this->db);
         $this->configuration->set('main.referenceURL', 'https://example.com/');
 

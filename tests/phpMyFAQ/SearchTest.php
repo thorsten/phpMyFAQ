@@ -25,6 +25,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[UsesClass(OpenSearchConfiguration::class)]
 class SearchTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private Search $search;
     private Sqlite3 $dbHandle;
@@ -43,8 +45,7 @@ class SearchTest extends TestCase
             ->setMultiByteLanguage();
         Language::$language = 'en';
 
-        $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->setDatabaseType('sqlite3');
         $this->configuration = new Configuration($this->dbHandle);
         $this->configuration->setLanguage(

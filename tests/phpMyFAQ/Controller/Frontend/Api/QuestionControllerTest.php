@@ -6,7 +6,6 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Notification;
@@ -15,6 +14,7 @@ use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Search;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -32,6 +32,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[UsesNamespace('phpMyFAQ')]
 class QuestionControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private StopWords $stopWords;
     private QuestionHelper $questionHelper;
@@ -76,14 +78,7 @@ class QuestionControllerTest extends TestCase
 
     private function createConfiguration(): Configuration
     {
-        try {
-            return Configuration::getConfigurationInstance();
-        } catch (\TypeError) {
-            $db = new Sqlite3();
-            $db->connect(PMF_TEST_DIR . '/test.db', '', '');
-
-            return new Configuration($db);
-        }
+        return $this->createTestConfiguration();
     }
 
     private function overrideConfigurationValue(string $name, string $value): void

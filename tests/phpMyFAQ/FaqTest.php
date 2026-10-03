@@ -21,6 +21,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[UsesClass(Faq::class)]
 class FaqTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     /** @var Configuration */
     private Configuration $configuration;
 
@@ -29,8 +31,6 @@ class FaqTest extends TestCase
 
     /** @var array<int, array{id: int, lang: string}> */
     private array $createdFaqs = [];
-
-    private string $databaseFile;
 
     /**
      * @throws Exception
@@ -47,11 +47,7 @@ class FaqTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->resetConfigurationSingleton();
-        $this->databaseFile = PMF_TEST_DIR . '/faq-' . uniqid('', true) . '.db';
-        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
-
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect($this->databaseFile, '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.currentVersion', System::getVersion());
         $this->configuration->set('main.language', 'language_en.php');
@@ -86,7 +82,6 @@ class FaqTest extends TestCase
         $this->createdFaqs = [];
         putenv('PMF_TENANT_QUOTA_MAX_FAQS');
         Language::$language = '';
-        @unlink($this->databaseFile);
     }
 
     public function testSetGroups(): void

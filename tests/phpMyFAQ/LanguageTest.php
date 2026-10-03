@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[AllowMockObjectsWithoutExpectations]
 class LanguageTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Language $language;
 
     private Sqlite3 $dbHandle;
@@ -30,8 +32,7 @@ class LanguageTest extends TestCase
 
         $this->session = $this->createStub(Session::class);
 
-        $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $configuration = new Configuration($this->dbHandle);
         $this->language = new Language($configuration, $this->session);
 

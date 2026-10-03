@@ -6,6 +6,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -13,21 +14,17 @@ use PHPUnit\Framework\TestCase;
 #[AllowMockObjectsWithoutExpectations]
 class BasicPermissionTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Sqlite3 $dbHandle;
 
     private Configuration $configuration;
     private BasicPermission $basicPermission;
-    private string $databaseFile;
-
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->databaseFile = PMF_TEST_DIR . '/basic-permission-' . uniqid('', true) . '.db';
-        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
-
-        $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect($this->databaseFile, '', '');
+        $this->dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($this->dbHandle);
 
         $this->basicPermission = new BasicPermission($this->configuration);
@@ -36,7 +33,6 @@ class BasicPermissionTest extends TestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        @unlink($this->databaseFile);
     }
 
     public function testGrantUserRight(): void

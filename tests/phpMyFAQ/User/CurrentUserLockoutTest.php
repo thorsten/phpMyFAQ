@@ -7,6 +7,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\User;
 use PHPUnit\Framework\TestCase;
 
@@ -16,11 +17,11 @@ use PHPUnit\Framework\TestCase;
  */
 class CurrentUserLockoutTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     private CurrentUser $currentUser;
-
-    private string $databaseFile;
 
     protected function setUp(): void
     {
@@ -32,11 +33,7 @@ class CurrentUserLockoutTest extends TestCase
 
         Strings::init();
 
-        $this->databaseFile = PMF_TEST_DIR . '/lockout-' . uniqid('', true) . '.db';
-        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
-
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect($this->databaseFile, '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         Database::setTablePrefix('');
 
         $this->configuration = new Configuration($dbHandle);
@@ -48,7 +45,6 @@ class CurrentUserLockoutTest extends TestCase
     protected function tearDown(): void
     {
         session_destroy();
-        @unlink($this->databaseFile);
 
         parent::tearDown();
     }

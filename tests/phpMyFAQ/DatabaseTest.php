@@ -12,6 +12,8 @@ use PHPUnit\Framework\TestCase;
 #[AllowMockObjectsWithoutExpectations]
 class DatabaseTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private string $sqliteTestFile;
     private mixed $originalDatabaseDriver;
     private string $originalDbType;
@@ -112,14 +114,7 @@ class DatabaseTest extends TestCase
     {
         $dbConfig = new DatabaseConfiguration(PMF_TEST_DIR . '/content/core/config/database.php');
         Database::setTablePrefix($dbConfig->getPrefix());
-        $db = Database::factory($dbConfig->getType());
-        $db->connect(
-            $dbConfig->getServer(),
-            $dbConfig->getUser(),
-            $dbConfig->getPassword(),
-            $dbConfig->getDatabase(),
-            $dbConfig->getPort(),
-        );
+        $this->connectToTestDatabaseCopy(Database::factory($dbConfig->getType()));
 
         $actual = Database::checkOnEmptyTable('faqconfig');
         $this->assertEquals(0, $actual);

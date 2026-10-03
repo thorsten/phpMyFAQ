@@ -10,6 +10,7 @@ use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Language;
 use phpMyFAQ\System;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -19,11 +20,11 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class FaqRepositoryTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     private FaqRepository $faqRepository;
-
-    private string $databaseFile;
 
     protected function setUp(): void
     {
@@ -38,11 +39,7 @@ class FaqRepositoryTest extends TestCase
         $reflectionProperty = new ReflectionProperty(Configuration::class, 'configuration');
         $reflectionProperty->setValue(null, null);
 
-        $this->databaseFile = PMF_TEST_DIR . '/faq-repository-' . uniqid('', true) . '.db';
-        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
-
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect($this->databaseFile, '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.currentVersion', System::getVersion());
         $this->configuration->set('main.language', 'language_en.php');
@@ -63,7 +60,6 @@ class FaqRepositoryTest extends TestCase
         parent::tearDown();
 
         Language::$language = '';
-        @unlink($this->databaseFile);
     }
 
     private function seedFaqRecord(

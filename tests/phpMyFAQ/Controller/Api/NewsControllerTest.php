@@ -6,6 +6,7 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Language;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -21,6 +22,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[UsesNamespace('phpMyFAQ')]
 class NewsControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     /**
@@ -28,7 +31,7 @@ class NewsControllerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configuration = Configuration::getConfigurationInstance();
+        $this->configuration = $this->createTestConfiguration();
         $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageWithDetection('language_en.php');
         $this->configuration->setLanguage($language);

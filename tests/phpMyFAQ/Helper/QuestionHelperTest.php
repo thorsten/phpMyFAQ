@@ -12,6 +12,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Search\SearchResultSet;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -20,6 +21,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class QuestionHelperTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private QuestionHelper $questionHelper;
     private Category $category;
@@ -38,8 +41,7 @@ class QuestionHelperTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
 
         $language = new Language($this->configuration, $this->createStub(Session::class));

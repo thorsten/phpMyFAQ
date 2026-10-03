@@ -9,6 +9,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -22,6 +23,8 @@ use Symfony\Component\HttpFoundation\Request;
 #[UsesNamespace('phpMyFAQ')]
 class QuestionControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     /**
@@ -39,7 +42,7 @@ class QuestionControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
+        $this->configuration = $this->createTestConfiguration();
     }
 
     public function testCreateReturnsJsonResponse(): void

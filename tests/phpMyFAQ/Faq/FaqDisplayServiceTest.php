@@ -10,6 +10,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -21,6 +22,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class FaqDisplayServiceTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private CurrentUser|MockObject $currentUser;
     private array $currentGroups;
@@ -45,8 +48,7 @@ class FaqDisplayServiceTest extends TestCase
             ->setMultiByteLanguage();
 
         // Create configuration with real database
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
 
         $language = new Language($this->configuration, $this->createStub(Session::class));

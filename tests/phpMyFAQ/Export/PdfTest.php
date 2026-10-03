@@ -40,6 +40,7 @@ use phpMyFAQ\Strings\AbstractString;
 use phpMyFAQ\Strings\Mbstring;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
@@ -105,6 +106,8 @@ use phpMyFAQ\Plugin\PluginDiscovery;
 #[AllowMockObjectsWithoutExpectations]
 final class PdfTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private Faq $faq;
     private Category $category;
@@ -420,8 +423,7 @@ final class PdfTest extends TestCase
 
     private function createRealConfiguration(): Configuration
     {
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         Database::setTablePrefix('');
 
         $config = new Configuration($dbHandle);

@@ -3,9 +3,9 @@
 namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Language;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -21,6 +21,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[UsesNamespace('phpMyFAQ')]
 class GlossaryControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     /**
@@ -36,19 +38,7 @@ class GlossaryControllerTest extends TestCase
 
     private function createConfiguration(): Configuration
     {
-        try {
-            return Configuration::getConfigurationInstance();
-        } catch (\TypeError) {
-            $db = new Sqlite3();
-            $db->connect(PMF_TEST_DIR . '/test.db', '', '');
-            $configuration = new Configuration($db);
-
-            $configurationReflection = new \ReflectionClass(Configuration::class);
-            $configurationProperty = $configurationReflection->getProperty('configuration');
-            $configurationProperty->setValue(null, $configuration);
-
-            return $configuration;
-        }
+        return $this->createTestConfiguration();
     }
 
     public function testListReturnsGlossaryItems(): void

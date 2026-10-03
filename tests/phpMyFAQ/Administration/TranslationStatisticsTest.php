@@ -6,20 +6,22 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class TranslationStatisticsTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private TranslationStatistics $translation;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $configuration = new Configuration($dbHandle);
 
         $this->translation = new TranslationStatistics($configuration);

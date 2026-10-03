@@ -6,10 +6,10 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -24,6 +24,8 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 #[UsesNamespace('phpMyFAQ')]
 class RegistrationControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     /**
@@ -55,19 +57,7 @@ class RegistrationControllerTest extends TestCase
 
     private function createConfiguration(): Configuration
     {
-        try {
-            return Configuration::getConfigurationInstance();
-        } catch (\TypeError) {
-            $db = new Sqlite3();
-            $db->connect(PMF_TEST_DIR . '/test.db', '', '');
-            $configuration = new Configuration($db);
-
-            $configurationReflection = new \ReflectionClass(Configuration::class);
-            $configurationProperty = $configurationReflection->getProperty('configuration');
-            $configurationProperty->setValue(null, $configuration);
-
-            return $configuration;
-        }
+        return $this->createTestConfiguration();
     }
 
     /**

@@ -19,6 +19,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\System;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -46,14 +47,15 @@ use ReflectionClass;
 #[UsesClass(Translation::class)]
 final class OAuthDiscoveryServiceTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Sqlite3 $dbHandle;
     private Configuration $configuration;
     private array $originalConfig = [];
 
     protected function setUp(): void
     {
-        $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($this->dbHandle);
 
         $reflection = new ReflectionClass(Configuration::class);

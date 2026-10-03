@@ -4,6 +4,7 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Controller\Frontend\Api\TranslationController;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -19,6 +20,8 @@ use Symfony\Component\HttpFoundation\Response;
 #[UsesNamespace('phpMyFAQ')]
 class TranslationControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     /**
      * @throws \phpMyFAQ\Core\Exception
      */
@@ -26,6 +29,7 @@ class TranslationControllerTest extends TestCase
     {
         parent::setUp();
 
+        $this->createTestConfiguration();
         Strings::init();
 
         Translation::create()

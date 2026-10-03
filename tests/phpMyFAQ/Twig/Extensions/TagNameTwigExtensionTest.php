@@ -18,17 +18,18 @@
 namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Twig\Extension\AbstractExtension;
 
 class TagNameTwigExtensionTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -38,15 +39,9 @@ class TagNameTwigExtensionTest extends TestCase
 
     private function ensureConfiguration(): void
     {
-        $reflection = new ReflectionClass(Configuration::class);
-        $prop = $reflection->getProperty('configuration');
-        if ($prop->getValue() !== null) {
-            return;
-        }
-
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $configuration = new Configuration($dbHandle);
+        // Always install a fresh configuration singleton so the static Twig filter never
+        // resolves one that an earlier test left behind.
+        $configuration = $this->createTestConfiguration();
         $configuration->set('main.currentVersion', System::getVersion());
 
         $language = new Language($configuration, $this->createStub(Session::class));

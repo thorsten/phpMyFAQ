@@ -13,10 +13,10 @@ use phpMyFAQ\Auth\Oidc\OidcPkceGenerator;
 use phpMyFAQ\Auth\Oidc\OidcSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception as CoreException;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
@@ -40,6 +40,8 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 #[UsesNamespace('phpMyFAQ')]
 final class KeycloakAuthenticationControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private OpenSSLAsymmetricKey $privateKey;
 
@@ -60,13 +62,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        try {
-            $this->configuration = Configuration::getConfigurationInstance();
-        } catch (\TypeError) {
-            $dbHandle = new Sqlite3();
-            $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-            $this->configuration = new Configuration($dbHandle);
-        }
+        $this->configuration = $this->createTestConfiguration();
 
         $reflection = new \ReflectionClass(Configuration::class);
         $property = $reflection->getProperty('config');

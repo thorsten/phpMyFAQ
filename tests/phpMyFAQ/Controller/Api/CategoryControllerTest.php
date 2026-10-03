@@ -10,11 +10,11 @@ use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -35,6 +35,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[UsesClass(PaginatedResponseOptions::class)]
 class CategoryControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     /**
@@ -52,17 +54,7 @@ class CategoryControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        try {
-            $this->configuration = Configuration::getConfigurationInstance();
-        } catch (\TypeError) {
-            $db = new Sqlite3();
-            $db->connect(PMF_TEST_DIR . '/test.db', '', '');
-            $this->configuration = new Configuration($db);
-
-            $configurationReflection = new \ReflectionClass(Configuration::class);
-            $configurationProperty = $configurationReflection->getProperty('configuration');
-            $configurationProperty->setValue(null, $this->configuration);
-        }
+        $this->configuration = $this->createTestConfiguration();
 
         $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');

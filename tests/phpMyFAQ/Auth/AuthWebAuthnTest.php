@@ -9,6 +9,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Plugin\PluginException;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -17,6 +18,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class AuthWebAuthnTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private AuthWebAuthn $authWebAuthn;
     private Configuration $configuration;
 
@@ -25,8 +28,7 @@ class AuthWebAuthnTest extends TestCase
      */
     protected function setUp(): void
     {
-        $dbHandle = new PdoSqlite();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new PdoSqlite());
         $this->configuration = new Configuration($dbHandle);
 
         $this->authWebAuthn = new AuthWebAuthn($this->configuration);

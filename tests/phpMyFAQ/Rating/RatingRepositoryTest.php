@@ -23,6 +23,7 @@ use phpMyFAQ\Entity\Vote;
 use phpMyFAQ\Language;
 use phpMyFAQ\Search\Rating\RatingRepository;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception as MockException;
@@ -32,6 +33,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class RatingRepositoryTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private RatingRepository $repository;
 
@@ -51,8 +54,7 @@ class RatingRepositoryTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.referenceURL', 'https://example.com');
 

@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -14,9 +15,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 #[UsesNamespace('phpMyFAQ')]
 class TitleControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
+    private Configuration $configuration;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->configuration = $this->createTestConfiguration();
+    }
+
     public function testIndex(): void
     {
-        $title = Configuration::getConfigurationInstance()->getTitle();
+        $title = $this->configuration->getTitle();
 
         $titleController = new TitleController();
 

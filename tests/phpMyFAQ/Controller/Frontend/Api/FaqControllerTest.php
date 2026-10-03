@@ -15,6 +15,7 @@ use phpMyFAQ\Question;
 use phpMyFAQ\Question\QuestionHistoryRepository;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -29,6 +30,8 @@ use Throwable;
 #[UsesNamespace('phpMyFAQ')]
 class FaqControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private Faq $faq;
     private FaqHelper $faqHelper;
@@ -55,7 +58,7 @@ class FaqControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
+        $this->configuration = $this->createTestConfiguration();
 
         $this->faq = $this->createStub(Faq::class);
         $this->faqHelper = $this->createStub(FaqHelper::class);

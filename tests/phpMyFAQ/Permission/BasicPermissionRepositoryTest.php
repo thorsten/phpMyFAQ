@@ -4,26 +4,23 @@ namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class BasicPermissionRepositoryTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Sqlite3 $dbHandle;
     private Configuration $configuration;
     private BasicPermissionRepository $repository;
-    private string $databaseFile;
-
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->databaseFile = PMF_TEST_DIR . '/basic-permission-repository-' . uniqid('', true) . '.db';
-        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
-
-        $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect($this->databaseFile, '', '');
+        $this->dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($this->dbHandle);
 
         $this->repository = new BasicPermissionRepository($this->configuration);
@@ -32,7 +29,6 @@ class BasicPermissionRepositoryTest extends TestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        @unlink($this->databaseFile);
     }
 
     public function testGrantUserRight(): void

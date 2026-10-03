@@ -6,12 +6,15 @@ use phpMyFAQ\Captcha\BuiltinCaptcha;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class CaptchaHelperTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     protected Configuration $configuration;
 
     protected function setUp(): void
@@ -20,8 +23,7 @@ class CaptchaHelperTest extends TestCase
 
         Strings::init();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
     }
 

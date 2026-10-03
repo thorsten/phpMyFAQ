@@ -4,6 +4,7 @@ namespace phpMyFAQ\Database;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\System;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
@@ -15,6 +16,8 @@ use PHPUnit\Framework\TestCase;
 #[AllowMockObjectsWithoutExpectations]
 class DatabaseHelperTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     /** @var DatabaseHelper */
     private DatabaseHelper $databaseHelper;
 
@@ -22,8 +25,7 @@ class DatabaseHelperTest extends TestCase
     {
         parent::setUp();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $dbHandle->query(
             'CREATE TABLE faqtest (name VARCHAR(255) NOT NULL, testvalue VARCHAR(255) DEFAULT NULL, PRIMARY KEY (name))',
         );
@@ -40,8 +42,7 @@ class DatabaseHelperTest extends TestCase
     {
         parent::tearDown();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $dbHandle->query('DROP TABLE faqtest');
     }
 

@@ -9,6 +9,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -21,6 +22,8 @@ use Symfony\Component\HttpFoundation\Request;
 #[UsesNamespace('phpMyFAQ')]
 class ContactControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private StopWords $stopWords;
     private Mail $mailer;
@@ -40,7 +43,7 @@ class ContactControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
+        $this->configuration = $this->createTestConfiguration();
 
         $this->stopWords = $this->createStub(StopWords::class);
         $this->mailer = $this->createStub(Mail::class);

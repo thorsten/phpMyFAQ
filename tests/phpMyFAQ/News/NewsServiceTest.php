@@ -11,6 +11,7 @@ use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\News;
 use phpMyFAQ\News\NewsService;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -20,6 +21,8 @@ use ReflectionProperty;
 #[AllowMockObjectsWithoutExpectations]
 class NewsServiceTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private CurrentUser $currentUser;
     private NewsService $newsService;
@@ -34,8 +37,7 @@ class NewsServiceTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
 
         $this->configuration = new Configuration($dbHandle);
         $this->primeConfiguration([

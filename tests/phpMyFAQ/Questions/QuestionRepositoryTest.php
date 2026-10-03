@@ -7,6 +7,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Language;
 use phpMyFAQ\Question\QuestionRepository;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class QuestionRepositoryTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Sqlite3 $dbHandle;
     private QuestionRepository $repository;
 
@@ -25,8 +28,7 @@ class QuestionRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $configuration = new Configuration($this->dbHandle);
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');

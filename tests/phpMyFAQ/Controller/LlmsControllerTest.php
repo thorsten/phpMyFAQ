@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -17,6 +18,8 @@ use Twig\Environment;
 #[UsesNamespace('phpMyFAQ')]
 class LlmsControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Environment $twig;
     private LlmsController $controller;
 
@@ -28,6 +31,7 @@ class LlmsControllerTest extends TestCase
     {
         parent::setUp();
 
+        $this->createTestConfiguration();
         Strings::init();
 
         Translation::create()

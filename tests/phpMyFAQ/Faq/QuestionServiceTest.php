@@ -8,6 +8,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -19,12 +20,12 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class QuestionServiceTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private CurrentUser|MockObject $currentUser;
     private array $currentGroups;
     private QuestionService $questionService;
-    private string $databaseFile;
-
     /**
      * @throws Exception
      * @throws \phpMyFAQ\Core\Exception
@@ -41,12 +42,8 @@ class QuestionServiceTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->databaseFile = PMF_TEST_DIR . '/question-service-' . uniqid('', true) . '.db';
-        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
-
         // Create configuration with real database
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect($this->databaseFile, '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
 
         $language = new Language($this->configuration, $this->createStub(Session::class));
@@ -67,7 +64,6 @@ class QuestionServiceTest extends TestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        @unlink($this->databaseFile);
     }
 
     /**

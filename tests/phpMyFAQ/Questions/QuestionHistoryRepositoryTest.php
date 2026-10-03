@@ -8,6 +8,7 @@ use phpMyFAQ\Entity\QuestionHistoryEntity;
 use phpMyFAQ\Enums\QuestionHistoryEventType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Question\QuestionHistoryRepository;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class QuestionHistoryRepositoryTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Sqlite3 $dbHandle;
     private QuestionHistoryRepository $repository;
 
@@ -22,8 +25,7 @@ class QuestionHistoryRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $configuration = new Configuration($this->dbHandle);
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');

@@ -7,6 +7,7 @@ namespace phpMyFAQ\Visits\Test;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\PdoSqlite;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Visits\VisitsRepository;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -14,13 +15,14 @@ use PHPUnit\Framework\TestCase;
 #[AllowMockObjectsWithoutExpectations]
 class VisitsRepositoryTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
     private VisitsRepository $repository;
 
     protected function setUp(): void
     {
-        $db = new PdoSqlite();
-        $db->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $db = $this->connectToTestDatabaseCopy(new PdoSqlite());
         $this->configuration = new Configuration($db);
         $this->repository = new VisitsRepository($this->configuration);
 

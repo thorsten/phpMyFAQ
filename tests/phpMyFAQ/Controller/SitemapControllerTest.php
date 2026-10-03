@@ -3,9 +3,9 @@
 namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Seo\SitemapXmlService;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -19,6 +19,8 @@ use Symfony\Component\HttpFoundation\Response;
 #[UsesNamespace('phpMyFAQ')]
 class SitemapControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private SitemapXmlService $sitemapXmlService;
     private SitemapController $controller;
 
@@ -38,9 +40,7 @@ class SitemapControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        new Configuration($dbHandle);
+        $this->createTestConfiguration();
 
         $this->sitemapXmlService = $this->createStub(SitemapXmlService::class);
         $this->controller = new SitemapController($this->sitemapXmlService);

@@ -9,6 +9,7 @@ use phpMyFAQ\Controller\Frontend\Api\SetupController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Setup\UpdateToken;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -28,6 +29,8 @@ use Symfony\Component\HttpFoundation\Response;
 #[UsesNamespace('phpMyFAQ')]
 class SetupControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     private UpdateToken $updateToken;
@@ -47,7 +50,7 @@ class SetupControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = Configuration::getConfigurationInstance();
+        $this->configuration = $this->createTestConfiguration();
 
         $this->updateToken = new UpdateToken(PMF_CONFIG_DIR);
         $this->updateToken->delete();

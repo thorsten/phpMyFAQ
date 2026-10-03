@@ -8,6 +8,7 @@ use Exception;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Faq;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -23,6 +24,15 @@ use Symfony\Component\HttpFoundation\Response;
 #[UsesNamespace('phpMyFAQ')]
 class CommentControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->createTestConfiguration();
+    }
+
     /**
      * @throws Exception
      */

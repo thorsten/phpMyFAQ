@@ -5,6 +5,7 @@ namespace phpMyFAQ\User;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Http\RateLimiter;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
@@ -13,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 #[AllowMockObjectsWithoutExpectations]
 class UserAuthenticationTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private CurrentUser $currentUser;
     private UserAuthentication $userAuth;
     private Configuration $configuration;
@@ -31,8 +34,7 @@ class UserAuthenticationTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
 
         $this->currentUser = $this->createStub(CurrentUser::class);
@@ -142,8 +144,7 @@ class UserAuthenticationTest extends TestCase
      */
     public function testAuthenticateDoesNotInitializeLdapWhenSupportIsStringFalse(): void
     {
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $configuration = $this->createMock(Configuration::class);
         $configuration
             ->method('get')

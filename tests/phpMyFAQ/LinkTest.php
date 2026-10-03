@@ -15,6 +15,8 @@ use ReflectionClass;
 #[AllowMockObjectsWithoutExpectations]
 class LinkTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Link $link;
 
     private Configuration $configuration;
@@ -27,8 +29,7 @@ class LinkTest extends TestCase
 
         $_SERVER['HTTP_HOST'] = 'example.com';
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
 
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('security.useSslOnly', 'true');

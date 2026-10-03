@@ -10,6 +10,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -21,6 +22,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class SearchServiceTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration|MockObject $configuration;
     private CurrentUser|MockObject $currentUser;
     private array $currentGroups;
@@ -42,8 +45,7 @@ class SearchServiceTest extends TestCase
             ->setMultiByteLanguage();
 
         // Create configuration with real database
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $baseConfiguration = new Configuration($dbHandle);
 
         $language = new Language($baseConfiguration, $this->createStub(Session::class));

@@ -2,8 +2,8 @@
 
 namespace phpMyFAQ\Controller\Api;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Language;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -17,12 +17,14 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[UsesNamespace('phpMyFAQ')]
 class LanguageControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     /**
      * @throws Exception
      */
     public function testIndex(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
+        $configuration = $this->createTestConfiguration();
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageWithDetection('language_en.php');
 
@@ -42,7 +44,7 @@ class LanguageControllerTest extends TestCase
      */
     public function testIndexReturnsJsonResponse(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
+        $configuration = $this->createTestConfiguration();
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageWithDetection('language_en.php');
         $configuration->setLanguage($language);
@@ -59,7 +61,7 @@ class LanguageControllerTest extends TestCase
      */
     public function testIndexReturnsValidLanguageCode(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
+        $configuration = $this->createTestConfiguration();
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageWithDetection('language_en.php');
         $configuration->setLanguage($language);
@@ -79,7 +81,7 @@ class LanguageControllerTest extends TestCase
      */
     public function testIndexResponseContentIsNotNull(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
+        $configuration = $this->createTestConfiguration();
         $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageWithDetection('language_en.php');
         $configuration->setLanguage($language);

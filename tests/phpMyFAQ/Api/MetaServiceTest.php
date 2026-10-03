@@ -8,6 +8,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -20,14 +21,15 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[UsesClass(LanguageHelper::class)]
 final class MetaServiceTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Sqlite3 $dbHandle;
     private Configuration $configuration;
     private array $originalConfig = [];
 
     protected function setUp(): void
     {
-        $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($this->dbHandle);
 
         $reflection = new ReflectionClass(Configuration::class);

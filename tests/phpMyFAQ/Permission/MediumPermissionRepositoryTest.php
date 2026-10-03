@@ -4,12 +4,15 @@ namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class MediumPermissionRepositoryTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Sqlite3 $dbHandle;
     private Configuration $configuration;
     private MediumPermissionRepository $repository;
@@ -18,8 +21,7 @@ class MediumPermissionRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->dbHandle = new Sqlite3();
-        $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($this->dbHandle);
 
         $this->repository = new MediumPermissionRepository($this->configuration);

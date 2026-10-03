@@ -7,7 +7,6 @@ namespace phpMyFAQ\Controller\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
@@ -17,6 +16,7 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -32,6 +32,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[UsesNamespace('phpMyFAQ')]
 class FaqControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     /**
@@ -70,19 +72,7 @@ class FaqControllerTest extends TestCase
 
     private function createConfiguration(): Configuration
     {
-        try {
-            return Configuration::getConfigurationInstance();
-        } catch (\TypeError) {
-            $db = new Sqlite3();
-            $db->connect(PMF_TEST_DIR . '/test.db', '', '');
-            $configuration = new Configuration($db);
-
-            $configurationReflection = new \ReflectionClass(Configuration::class);
-            $configurationProperty = $configurationReflection->getProperty('configuration');
-            $configurationProperty->setValue(null, $configuration);
-
-            return $configuration;
-        }
+        return $this->createTestConfiguration();
     }
 
     private function forceConfigurationValue(string $key, mixed $value): void

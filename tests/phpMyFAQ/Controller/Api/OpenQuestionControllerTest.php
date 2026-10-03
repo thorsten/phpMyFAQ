@@ -7,8 +7,8 @@ namespace phpMyFAQ\Controller\Api;
 use Exception;
 use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Question;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -22,6 +22,8 @@ use Symfony\Component\HttpFoundation\Response;
 #[UsesNamespace('phpMyFAQ')]
 class OpenQuestionControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     protected function setUp(): void
@@ -32,19 +34,7 @@ class OpenQuestionControllerTest extends TestCase
 
     private function createConfiguration(): Configuration
     {
-        try {
-            return Configuration::getConfigurationInstance();
-        } catch (\TypeError) {
-            $db = new Sqlite3();
-            $db->connect(PMF_TEST_DIR . '/test.db', '', '');
-            $configuration = new Configuration($db);
-
-            $configurationReflection = new \ReflectionClass(Configuration::class);
-            $configurationProperty = $configurationReflection->getProperty('configuration');
-            $configurationProperty->setValue(null, $configuration);
-
-            return $configuration;
-        }
+        return $this->createTestConfiguration();
     }
 
     /**

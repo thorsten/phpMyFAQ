@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 #[AllowMockObjectsWithoutExpectations]
 class AuthTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     /** @var Auth */
     protected Auth $auth;
 
@@ -25,8 +27,7 @@ class AuthTest extends TestCase
     {
         parent::setUp();
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
         $this->auth = new Auth($this->configuration);
     }

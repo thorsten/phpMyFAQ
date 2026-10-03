@@ -8,6 +8,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
@@ -17,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 #[AllowMockObjectsWithoutExpectations]
 class SearchFactoryTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     /** @var Configuration */
     private $configuration;
 
@@ -33,14 +36,7 @@ class SearchFactoryTest extends TestCase
 
         $dbConfig = new DatabaseConfiguration(PMF_TEST_DIR . '/content/core/config/database.php');
         Database::setTablePrefix($dbConfig->getPrefix());
-        $db = Database::factory($dbConfig->getType());
-        $db->connect(
-            $dbConfig->getServer(),
-            $dbConfig->getUser(),
-            $dbConfig->getPassword(),
-            $dbConfig->getDatabase(),
-            $dbConfig->getPort(),
-        );
+        $db = $this->connectToTestDatabaseCopy(Database::factory($dbConfig->getType()));
         $this->configuration = new Configuration($db);
     }
 

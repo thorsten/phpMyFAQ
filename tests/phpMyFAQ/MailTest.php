@@ -21,6 +21,8 @@ use Symfony\Component\HttpFoundation\Request;
 #[AllowMockObjectsWithoutExpectations]
 class MailTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Mail $mail;
     private Configuration $configuration;
 
@@ -33,8 +35,7 @@ class MailTest extends TestCase
 
         Request::setTrustedHosts(['^.*$']); // Trust all hosts for testing
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $configuration = new Configuration($dbHandle);
         $this->configuration = $configuration;
 

@@ -14,6 +14,7 @@ use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Queue\Message\ExportMessage;
 use phpMyFAQ\Queue\Message\IndexFaqMessage;
 use phpMyFAQ\Queue\Message\SendMailMessage;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\User;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +24,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class HandlersTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     public function testSendMailHandlerAcceptsConfiguration(): void
     {
         $configuration = $this->createStub(Configuration::class);
@@ -286,8 +289,7 @@ class HandlersTest extends TestCase
 
     private function createSqliteDatabase(): Sqlite3
     {
-        $database = new Sqlite3();
-        $database->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $database = $this->connectToTestDatabaseCopy(new Sqlite3());
 
         return $database;
     }

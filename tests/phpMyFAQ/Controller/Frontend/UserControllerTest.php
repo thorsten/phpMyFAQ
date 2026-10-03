@@ -61,6 +61,9 @@ final class UserControllerTest extends TestCase
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect($this->databasePath, '', '');
         $this->configuration = new Configuration($this->dbHandle);
+        // The constructor only registers the very first instance of the process as the
+        // singleton; install this one explicitly so the controller under test uses it.
+        $configurationProperty->setValue(null, $this->configuration);
         $this->initializeDatabaseStatics($this->dbHandle);
 
         $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));

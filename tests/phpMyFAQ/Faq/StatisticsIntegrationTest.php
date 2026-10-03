@@ -8,6 +8,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -21,9 +22,9 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class StatisticsIntegrationTest extends TestCase
 {
-    private Configuration $configuration;
+    use TestDatabaseTrait;
 
-    private string $databaseFile;
+    private Configuration $configuration;
 
     private ?Configuration $previousConfiguration = null;
 
@@ -38,11 +39,7 @@ class StatisticsIntegrationTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->databaseFile = PMF_TEST_DIR . '/statistics-' . uniqid('', true) . '.db';
-        copy(PMF_TEST_DIR . '/test.db', $this->databaseFile);
-
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect($this->databaseFile, '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         Database::setTablePrefix('');
 
         $this->configuration = new Configuration($dbHandle);
@@ -65,7 +62,6 @@ class StatisticsIntegrationTest extends TestCase
         $reflectionProperty->setValue(null, $this->previousConfiguration);
 
         Language::$language = '';
-        @unlink($this->databaseFile);
 
         parent::tearDown();
     }

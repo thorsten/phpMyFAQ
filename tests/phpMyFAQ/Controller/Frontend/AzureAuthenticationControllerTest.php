@@ -10,10 +10,10 @@ use phpMyFAQ\Auth\EntraId\EntraIdSession;
 use phpMyFAQ\Auth\EntraId\OAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception as CoreException;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -36,6 +36,8 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 #[UsesNamespace('phpMyFAQ')]
 class AzureAuthenticationControllerTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     /**
@@ -52,13 +54,7 @@ class AzureAuthenticationControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        try {
-            $this->configuration = Configuration::getConfigurationInstance();
-        } catch (\TypeError) {
-            $dbHandle = new Sqlite3();
-            $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-            $this->configuration = new Configuration($dbHandle);
-        }
+        $this->configuration = $this->createTestConfiguration();
     }
 
     public function testAuthorizeReturnsRedirectResponse(): void

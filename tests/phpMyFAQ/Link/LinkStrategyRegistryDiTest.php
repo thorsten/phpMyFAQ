@@ -10,19 +10,21 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Link\Strategy\StrategyInterface;
 use phpMyFAQ\Link\Strategy\StrategyRegistry;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class LinkStrategyRegistryDiTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configuration;
 
     protected function setUp(): void
     {
         Strings::init();
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle = $this->connectToTestDatabaseCopy(new Sqlite3());
         $this->configuration = new Configuration($dbHandle);
     }
 
