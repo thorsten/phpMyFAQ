@@ -104,8 +104,8 @@ readonly class OpenSearch
             'index' => $this->openSearchConfiguration->getIndex(),
             'body' => [
                 'settings' => [
-                    'number_of_shards' => PMF_OPENSEARCH_NUMBER_SHARDS,
-                    'number_of_replicas' => PMF_OPENSEARCH_NUMBER_REPLICAS,
+                    'number_of_shards' => $this->getNumberOfShards(),
+                    'number_of_replicas' => $this->getNumberOfReplicas(),
                     'analysis' => [
                         'filter' => [
                             'autocomplete_filter' => [
@@ -115,13 +115,13 @@ readonly class OpenSearch
                             ],
                             'Language_stemmer' => [
                                 'type' => 'stemmer',
-                                'name' => PMF_OPENSEARCH_STEMMING_LANGUAGE[$this->configuration->getDefaultLanguage()],
+                                'name' => $this->getStemmingLanguage(),
                             ],
                         ],
                         'analyzer' => [
                             'autocomplete' => [
                                 'type' => 'custom',
-                                'tokenizer' => PMF_OPENSEARCH_TOKENIZER,
+                                'tokenizer' => $this->getTokenizer(),
                                 'filter' => [
                                     'lowercase',
                                     'autocomplete_filter',
@@ -133,6 +133,56 @@ readonly class OpenSearch
                 ],
             ],
         ];
+    }
+
+    /**
+     * The constants below come from content/core/config/constants_opensearch.php, which is
+     * only loaded when OpenSearch is enabled at bootstrap. Fall back to the shipped defaults
+     * so an index can be created even when that file was not included.
+     */
+    private function getNumberOfShards(): int
+    {
+        if (defined('PMF_OPENSEARCH_NUMBER_SHARDS')) {
+            return (int) constant('PMF_OPENSEARCH_NUMBER_SHARDS');
+        }
+
+        return 2;
+    }
+
+    private function getNumberOfReplicas(): int
+    {
+        if (defined('PMF_OPENSEARCH_NUMBER_REPLICAS')) {
+            return (int) constant('PMF_OPENSEARCH_NUMBER_REPLICAS');
+        }
+
+        return 0;
+    }
+
+    private function getTokenizer(): string
+    {
+        if (defined('PMF_OPENSEARCH_TOKENIZER')) {
+            return (string) constant('PMF_OPENSEARCH_TOKENIZER');
+        }
+
+        return 'standard';
+    }
+
+    private function getStemmingLanguage(): string
+    {
+        if (!defined('PMF_OPENSEARCH_STEMMING_LANGUAGE')) {
+            return 'english';
+        }
+
+        /** @var mixed $stemmingLanguages */
+        $stemmingLanguages = constant('PMF_OPENSEARCH_STEMMING_LANGUAGE');
+        if (!is_array($stemmingLanguages)) {
+            return 'english';
+        }
+
+        /** @var mixed $stemmer */
+        $stemmer = $stemmingLanguages[$this->configuration->getDefaultLanguage()] ?? 'english';
+
+        return is_string($stemmer) && $stemmer !== '' ? $stemmer : 'english';
     }
 
     /**
