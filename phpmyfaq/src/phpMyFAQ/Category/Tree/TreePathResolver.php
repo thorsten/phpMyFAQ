@@ -42,6 +42,11 @@ final class TreePathResolver
                 break;
             }
 
+            // Corrupt parent data (A -> B -> A) must not hang the request.
+            if (in_array($parentId, $nodes, strict: true)) {
+                break;
+            }
+
             array_unshift($nodes, $parentId);
             $currentCategoryId = $parentId;
         }
