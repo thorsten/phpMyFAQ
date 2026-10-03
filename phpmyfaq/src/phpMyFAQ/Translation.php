@@ -187,6 +187,13 @@ class Translation
      */
     public function setTranslationsDir(string $translationsDir): Translation
     {
+        if ($translationsDir !== $this->translationsDir) {
+            // Language files already loaded from another directory must not be served for
+            // this one, and the default language has to be checked against the new location.
+            $this->loadedLanguages = [];
+            $this->isReady = false;
+        }
+
         $this->translationsDir = $translationsDir;
         $this->checkTranslationsDirectory();
 

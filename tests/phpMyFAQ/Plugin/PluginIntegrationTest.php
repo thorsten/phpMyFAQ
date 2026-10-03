@@ -149,6 +149,10 @@ class PluginIntegrationTest extends TestCase
     {
         // Cleanup test plugin directory
         $this->recursiveDelete($this->testPluginDir);
+
+        // The singleton was pointed at the temporary translations directory above;
+        // do not leak that to later tests.
+        Translation::resetInstance();
         parent::tearDown();
     }
 

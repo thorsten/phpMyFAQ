@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Setup;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use PHPUnit\Framework\TestCase;
 
 class InstallationInputValidatorTest extends TestCase
@@ -12,6 +13,14 @@ class InstallationInputValidatorTest extends TestCase
     protected function setUp(): void
     {
         $this->validator = new InstallationInputValidator();
+    }
+
+    protected function tearDown(): void
+    {
+        // validate() installs the submitted table prefix process-wide.
+        Database::setTablePrefix('');
+
+        parent::tearDown();
     }
 
     public function testValidateThrowsExceptionForMissingDatabaseType(): void

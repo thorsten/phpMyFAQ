@@ -14,6 +14,15 @@ use ReflectionClass;
 #[AllowMockObjectsWithoutExpectations]
 class AdditionalMigrationVersionsTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        // setDatabaseState() changes process-wide statics; do not leak a driver type or a
+        // table prefix into later tests.
+        $this->setDatabaseState('sqlite3');
+
+        parent::tearDown();
+    }
+
     #[DataProvider('metadataProvider')]
     public function testMigrationMetadata(
         string $className,

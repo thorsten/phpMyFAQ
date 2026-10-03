@@ -388,6 +388,46 @@ class TranslationTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testChangingTheTranslationsDirectoryReloadsTheLanguages(): void
+    {
+        $firstDir = sys_get_temp_dir() . '/pmf-translations-first-' . uniqid('', true);
+        $secondDir = sys_get_temp_dir() . '/pmf-translations-second-' . uniqid('', true);
+        mkdir($firstDir);
+        mkdir($secondDir);
+        file_put_contents($firstDir . '/language_en.php', "<?php\n\nreturn ['first.key' => 'first'];\n");
+        file_put_contents($secondDir . '/language_en.php', "<?php\n\nreturn ['second.key' => 'second'];\n");
+
+        try {
+            Translation::resetInstance();
+            $translation = Translation::create()
+                ->setTranslationsDir($firstDir)
+                ->setDefaultLanguage('en')
+                ->setCurrentLanguage('en');
+            $this->assertSame('first', Translation::get('first.key'));
+
+            // The same instance is reconfigured, as every consumer of the singleton does.
+            $translation->setTranslationsDir($secondDir)->setDefaultLanguage('en')->setCurrentLanguage('en');
+
+            $this->assertNull(Translation::get('first.key'));
+            $this->assertSame('second', Translation::get('second.key'));
+        } finally {
+            Translation::resetInstance();
+            unlink($firstDir . '/language_en.php');
+            unlink($secondDir . '/language_en.php');
+            rmdir($firstDir);
+            rmdir($secondDir);
+        }
+    }
+
+    public function testSettingTheSameTranslationsDirectoryKeepsLoadedLanguages(): void
+    {
+        $this->assertSame('Default Label', Translation::get('test.key'));
+
+        Translation::create()->setTranslationsDir(__DIR__ . '/_translations');
+
+        $this->assertSame('Default Label', Translation::get('test.key'));
+    }
+
     public function testSetTranslationsDirWithInvalidDirectoryThrowsException(): void
     {
         $this->expectException(Exception::class);

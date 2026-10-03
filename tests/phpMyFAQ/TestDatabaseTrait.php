@@ -30,10 +30,13 @@ trait TestDatabaseTrait
 
     private ?Configuration $previousConfigurationInstance = null;
 
+    private string $previousTablePrefix = '';
+
     /**
      * Configuration::__construct() registers the first instance of the process as the
      * singleton, so a test that creates one leaks it to every later test. Remember what was
-     * there before the test and put it back afterwards, so this test is invisible to others.
+     * there before the test (and the table prefix, another process-wide static) and put it
+     * back afterwards, so this test is invisible to others.
      */
     #[Before]
     protected function rememberConfigurationInstance(): void
@@ -41,6 +44,7 @@ trait TestDatabaseTrait
         /** @var Configuration|null $previous */
         $previous = new ReflectionProperty(Configuration::class, 'configuration')->getValue();
         $this->previousConfigurationInstance = $previous;
+        $this->previousTablePrefix = Database::getTablePrefix();
     }
 
     /**
@@ -56,6 +60,9 @@ trait TestDatabaseTrait
         }
 
         $driver->connect($copy, '', '');
+
+        // The prepared database has no table prefix, whatever an earlier test left behind.
+        Database::setTablePrefix('');
 
         $this->testDatabaseHandles[] = $driver;
         $this->testDatabaseCopies[] = $copy;
@@ -90,6 +97,7 @@ trait TestDatabaseTrait
             $this->previousConfigurationInstance,
         );
         $this->previousConfigurationInstance = null;
+        Database::setTablePrefix($this->previousTablePrefix);
 
         foreach ($this->testDatabaseHandles as $handle) {
             $handle->close();
