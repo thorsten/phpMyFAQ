@@ -42,6 +42,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved and hardened multi tenancy support (Thorsten)
 - improved and redesigned searchable admin configuration frontend (Thorsten)
 - improved package size by removing unused dependencies (Thorsten)
+- fixed the upgrade reporting a PHP error instead of a clear message when the downloaded package cannot be opened (Thorsten)
 - updated to PHPUnit v13 (Thorsten)
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)

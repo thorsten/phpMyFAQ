@@ -257,7 +257,11 @@ class Upgrade extends AbstractSetup
             throw new Exception(message: 'Given path to download package is outside the upgrade directory.');
         }
 
-        $zipFile = $zipArchive->open($realPath);
+        // open() returns true or an error code; the archive must not be touched when it failed,
+        // registering the progress callback on it would throw a ValueError instead.
+        if ($zipArchive->open($realPath) !== true) {
+            throw new Exception(message: 'Cannot open zipped download package.');
+        }
 
         $zipArchive->registerProgressCallback(rate: 0.05, callback: static function (float $rate) use (
             $progressCallback,
@@ -266,14 +270,11 @@ class Upgrade extends AbstractSetup
             $progressCallback($progress);
         });
 
-        if ($zipFile) {
-            // Secure extraction to prevent Zip Slip vulnerability
-            $extractPath = $this->upgradeDirectory . '/new/';
-            $this->secureExtractZip($zipArchive, $extractPath);
-            return $zipArchive->close();
-        }
+        // Secure extraction to prevent Zip Slip vulnerability
+        $extractPath = $this->upgradeDirectory . '/new/';
+        $this->secureExtractZip($zipArchive, $extractPath);
 
-        throw new Exception(message: 'Cannot open zipped download package.');
+        return $zipArchive->close();
     }
 
     /**

@@ -649,6 +649,80 @@ class UpgradeTest extends TestCase
         $this->assertTrue($this->upgrade->cleanUp());
     }
 
+    public function testExtractPackageUnpacksIntoTheNewDirectoryOfTheUpgradeDirectory(): void
+    {
+        $this->upgrade->setUpgradeDirectory($this->testDir);
+
+        $zipPath = $this->testDir . '/phpMyFAQ-4.2.0.zip';
+        $zip = new ZipArchive();
+        $zip->open($zipPath, ZipArchive::CREATE);
+        $zip->addFromString('phpmyfaq/index.php', '<?php echo "new";');
+        $zip->addFromString('phpmyfaq/assets/app.js', 'console.log(1);');
+        $zip->close();
+
+        $progress = [];
+        $result = $this->upgrade->extractPackage($zipPath, static function (string $value) use (&$progress): void {
+            $progress[] = $value;
+        });
+
+        $this->assertTrue($result);
+        $this->assertFileExists($this->testDir . '/new/phpmyfaq/index.php');
+        $this->assertSame('<?php echo "new";', file_get_contents($this->testDir . '/new/phpmyfaq/index.php'));
+        $this->assertFileExists($this->testDir . '/new/phpmyfaq/assets/app.js');
+        foreach ($progress as $value) {
+            $this->assertMatchesRegularExpression('/^\d+%$/', $value);
+        }
+    }
+
+    public function testExtractPackageRejectsAMissingFile(): void
+    {
+        $this->upgrade->setUpgradeDirectory($this->testDir);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Given path to download package is not valid.');
+
+        $this->upgrade->extractPackage($this->testDir . '/does-not-exist.zip', static fn(string $value): null => null);
+    }
+
+    public function testExtractPackageRefusesPackagesOutsideTheUpgradeDirectory(): void
+    {
+        $this->upgrade->setUpgradeDirectory($this->testDir . '/extract');
+
+        $outside = $this->testDir . '/outside.zip';
+        $zip = new ZipArchive();
+        $zip->open($outside, ZipArchive::CREATE);
+        $zip->addFromString('phpmyfaq/index.php', '<?php');
+        $zip->close();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('outside the upgrade directory');
+
+        $this->upgrade->extractPackage($outside, static fn(string $value): null => null);
+    }
+
+    public function testExtractPackageRejectsACorruptArchive(): void
+    {
+        $this->upgrade->setUpgradeDirectory($this->testDir);
+        $corrupt = $this->testDir . '/corrupt.zip';
+        file_put_contents($corrupt, 'this is not a zip file');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot open zipped download package.');
+
+        $this->upgrade->extractPackage($corrupt, static fn(string $value): null => null);
+    }
+
+    public function testCreateTemporaryBackupRefusesToOverwriteAnExistingBackup(): void
+    {
+        $this->upgrade->setUpgradeDirectory($this->testDir);
+        file_put_contents($this->testDir . '/existing.zip', 'older backup');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Backup file already exists.');
+
+        $this->upgrade->createTemporaryBackup('existing.zip', static fn(string $value): null => null);
+    }
+
     private function createPackageFile(string $name, ?string $filename = null): string
     {
         $path = $this->testDir . '/' . ($filename ?? $name . '.zip');
