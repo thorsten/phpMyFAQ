@@ -15,8 +15,10 @@ final class WritablePathScannerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->root = sys_get_temp_dir() . '/pmf-writable-scan-' . bin2hex(random_bytes(6));
-        mkdir($this->root . '/content/user', 0777, true);
+        $root = sys_get_temp_dir() . '/pmf-writable-scan-' . bin2hex(random_bytes(6));
+        mkdir($root . '/content/user', 0777, true);
+        // The scanner reports resolved paths (macOS: /var/folders -> /private/var/folders).
+        $this->root = (string) realpath($root);
         mkdir($this->root . '/excluded/deep', 0777, true);
         file_put_contents($this->root . '/content/user/file.txt', 'x');
         file_put_contents($this->root . '/excluded/deep/file.txt', 'x');
@@ -61,6 +63,28 @@ final class WritablePathScannerTest extends TestCase
             [$this->root . '/excluded'],
             WritablePathScanner::getNonWritablePaths($this->root, $this->root . '/does-not-exist'),
         );
+    }
+
+    public function testExclusionWorksWhenScanningThroughASymlinkedDirectory(): void
+    {
+        $link = $this->root . '-link';
+        if (!@symlink($this->root, $link)) {
+            $this->markTestSkipped('Symlinks are not supported here.');
+        }
+
+        try {
+            chmod($this->root . '/excluded/deep/file.txt', 0444);
+            if (is_writable($this->root . '/excluded/deep/file.txt')) {
+                $this->markTestSkipped('The current user ignores file permissions (probably root).');
+            }
+
+            // Scanned via the link, excluded via the link: the read-only file inside the
+            // excluded directory must still be skipped.
+            $this->assertSame([], WritablePathScanner::getNonWritablePaths($link, $link . '/excluded'));
+            $this->assertSame([], WritablePathScanner::getNonWritablePaths($link, $this->root . '/excluded'));
+        } finally {
+            unlink($link);
+        }
     }
 
     public function testFormatPathListJoinsUpToFivePaths(): void

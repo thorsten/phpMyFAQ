@@ -35,10 +35,20 @@ final class WritablePathScanner
     public static function getNonWritablePaths(string $directory, string $excludedDirectory): array
     {
         $nonWritablePaths = [];
+
+        // Both sides of the prefix check below must be resolved the same way: the
+        // scanned directory may itself sit behind a symlink (macOS /var -> /private/var,
+        // hosting setups linking the document root), in which case comparing a resolved
+        // exclusion against unresolved item paths would never match.
+        $realDirectory = realpath($directory);
+        if ($realDirectory === false) {
+            $realDirectory = $directory;
+        }
+
         $realExcludedDirectory = realpath($excludedDirectory);
 
         $items = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
+            new RecursiveDirectoryIterator($realDirectory, FilesystemIterator::SKIP_DOTS),
             RecursiveIteratorIterator::SELF_FIRST,
             RecursiveIteratorIterator::CATCH_GET_CHILD,
         );
