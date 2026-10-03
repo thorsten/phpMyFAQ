@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.2.0-beta - unreleased
+### phpMyFAQ v4.2.0-beta - 2026-10-03
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
 - added official Docker images (Apache and FrankenPHP) published to the GitHub Container Registry, including nightly images, with headless installation via environment variables (Thorsten)
