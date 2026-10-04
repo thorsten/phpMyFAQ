@@ -907,4 +907,84 @@ final class PageControllerTest extends TestCase
 
         return $container;
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => 'invalid-token',
+            'pageTitle' => 'Page',
+            'slug' => 'page',
+            'authorName' => 'Author',
+            'authorEmail' => 'author@example.com',
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateRejectsAnAuthorEmailThatIsNotAnEmailAddress(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'pageTitle' => 'Page',
+            'slug' => 'page-' . bin2hex(random_bytes(3)),
+            'authorName' => 'Author',
+            'authorEmail' => 'not an address',
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Missing required field: authorEmail', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateStoresATranslationOfAnExistingPage(): void
+    {
+        $pageId = $this->createPageViaController('translated-page-' . bin2hex(random_bytes(4)));
+        self::assertGreaterThan(0, $pageId);
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'pageId' => $pageId,
+            'pageTitle' => 'Übersetzte Seite',
+            'slug' => 'uebersetzte-seite-' . bin2hex(random_bytes(3)),
+            'content' => 'Übersetzter Inhalt',
+            'authorName' => 'Autor',
+            'authorEmail' => 'autor@example.com',
+            'active' => true,
+            'lang' => 'de',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+        self::assertSame($pageId, (int) $payload['id']);
+    }
 }

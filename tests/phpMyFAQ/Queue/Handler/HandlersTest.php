@@ -293,4 +293,95 @@ class HandlersTest extends TestCase
 
         return $database;
     }
+
+    /**
+     * @return array{0: ExportHandler, 1: Mail&\PHPUnit\Framework\MockObject\MockObject}
+     */
+    private function createExportHandlerForMailDelivery(string $email): array
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+
+        $user = $this->createStub(User::class);
+        $user->perm = $permission;
+        $user->method('getUserById')->willReturn(true);
+        $user->method('getUserData')->willReturn($email);
+
+        $exporter = new class {
+            public function generate(int $categoryId = 0, bool $downwards = true, string $language = ''): string
+            {
+                return '%PDF-1.7 fake';
+            }
+        };
+
+        $mail = $this->createMock(Mail::class);
+        $faq = $this->createStub(Faq::class);
+        $category = $this->createStub(Category::class);
+
+        $handler = new ExportHandler(
+            $configuration,
+            static fn(): User => $user,
+            static fn(): Faq => $faq,
+            static fn(): Category => $category,
+            static fn(Faq $faq, Category $category, string $format): object => $exporter,
+            static fn(): Mail => $mail,
+        );
+
+        return [$handler, $mail];
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function runExportAndCollectFiles(ExportHandler $handler, string $format): array
+    {
+        $pattern = ExportHandler::getExportDirectory() . '/export-7-*.' . $format;
+        $before = glob($pattern) ?: [];
+        $handler(new ExportMessage($format, 7));
+
+        return array_values(array_diff(glob($pattern) ?: [], $before));
+    }
+
+    public function testExportHandlerMailsTheFileNameToTheRequestingUser(): void
+    {
+        [$handler, $mail] = $this->createExportHandlerForMailDelivery('export@example.org');
+        $mail->expects($this->once())->method('addTo')->with('export@example.org');
+        $mail->expects($this->once())->method('send')->willReturn(1);
+
+        $written = $this->runExportAndCollectFiles($handler, 'pdf');
+
+        try {
+            $this->assertCount(1, $written);
+            $this->assertSame('Your phpMyFAQ export is ready', $mail->subject);
+            $this->assertStringContainsString('Your PDF export has been generated', $mail->message);
+            $this->assertStringContainsString(basename($written[0]), $mail->message);
+        } finally {
+            foreach ($written as $file) {
+                unlink($file);
+            }
+        }
+    }
+
+    public function testExportHandlerKeepsTheFileWhenTheNotificationCannotBeSent(): void
+    {
+        [$handler, $mail] = $this->createExportHandlerForMailDelivery('export@example.org');
+        $mail->method('send')->willThrowException(new \RuntimeException('SMTP down'));
+
+        $previousLog = ini_set('error_log', '/dev/null');
+        try {
+            $written = $this->runExportAndCollectFiles($handler, 'pdf');
+        } finally {
+            ini_set('error_log', (string) $previousLog);
+        }
+
+        try {
+            $this->assertCount(1, $written);
+            $this->assertStringEqualsFile($written[0], '%PDF-1.7 fake');
+        } finally {
+            foreach ($written as $file) {
+                unlink($file);
+            }
+        }
+    }
 }

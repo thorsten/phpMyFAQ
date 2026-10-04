@@ -1315,4 +1315,29 @@ class WrapperTest extends TestCase
             . '<p>end</p>',
         );
     }
+
+    public function testDocumentSettersDelegateToTheEngine(): void
+    {
+        $engine = $this->createMock(\phpMyFAQ\Export\Pdf\Engine\PdfEngineInterface::class);
+        $engine->expects($this->once())->method('setMargins')->with(10.0, 20.0, 15.0);
+        $engine->expects($this->once())->method('setHeaderMargin')->with(5.0);
+        $engine->expects($this->once())->method('setFooterMargin')->with(7.5);
+        $engine->expects($this->once())->method('setCreator')->with('phpMyFAQ');
+        $engine->expects($this->once())->method('setTitle')->with('FAQ export');
+        $engine->expects($this->once())->method('setAuthor')->with('Admin');
+        $engine->expects($this->once())->method('setFont')->with('dejavusans', 'B', 12.0);
+        $engine->expects($this->once())->method('ln')->with(4.0);
+        $engine->expects($this->once())->method('write')->with(5.0, 'Hello');
+
+        $wrapper = new Wrapper($engine);
+        $wrapper->SetMargins(10.0, 20.0, 15.0);
+        $wrapper->SetHeaderMargin(5.0);
+        $wrapper->SetFooterMargin(7.5);
+        $wrapper->SetCreator('phpMyFAQ');
+        $wrapper->SetTitle('FAQ export');
+        $wrapper->SetAuthor('Admin');
+        $wrapper->SetFont('dejavusans', 'B', 12.0);
+        $wrapper->Ln(4.0);
+        $wrapper->Write(5.0, 'Hello');
+    }
 }
