@@ -3325,4 +3325,152 @@ final class FaqControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
         $this->removeCsrfCookie('pmf-csrf-token');
     }
+
+    /**
+     * Registers an Elasticsearch client whose transport talks to a mocked PSR-18 HTTP client
+     * (the client class is final) and enables the engine.
+     */
+    private function enableElasticsearch(): \Psr\Http\Client\ClientInterface&\PHPUnit\Framework\MockObject\MockObject
+    {
+        $httpClient = $this->createMock(\Psr\Http\Client\ClientInterface::class);
+        $nodePool = $this->createStub(\Elastic\Transport\NodePool\NodePoolInterface::class);
+        $nodePool->method('nextNode')->willReturn(new \Elastic\Transport\NodePool\Node('http://localhost:9200'));
+
+        $clientClass = new \ReflectionClass(\Elastic\Elasticsearch\Client::class);
+        $client = $clientClass->newInstanceWithoutConstructor();
+        $clientClass->getProperty('namespace')->setValue($client, []);
+        $clientClass->getProperty('transport')->setValue(
+            $client,
+            new \Elastic\Transport\Transport($httpClient, $nodePool, new \Psr\Log\NullLogger()),
+        );
+        $clientClass->getProperty('logger')->setValue($client, new \Psr\Log\NullLogger());
+        $clientClass->getProperty('responseException')->setValue($client, true);
+        $clientClass->getProperty('elasticMetaHeader')->setValue($client, false);
+        $clientClass->getProperty('async')->setValue($client, false);
+
+        $elasticsearchConfiguration = $this->createStub(\phpMyFAQ\Configuration\ElasticsearchConfiguration::class);
+        $elasticsearchConfiguration->method('getIndex')->willReturn('phpmyfaq-test');
+
+        $this->configuration->setElasticsearch($client);
+        $this->configuration->setElasticsearchConfig($elasticsearchConfiguration);
+        self::assertTrue($this->configuration->set('search.enableElasticsearch', true));
+
+        return $httpClient;
+    }
+
+    private function elasticsearchResponse(int $statusCode, array $body): \GuzzleHttp\Psr7\Response
+    {
+        return new \GuzzleHttp\Psr7\Response(
+            $statusCode,
+            ['Content-Type' => 'application/json', 'X-Elastic-Product' => 'Elasticsearch'],
+            json_encode($body, JSON_THROW_ON_ERROR),
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateIndexesAPublishedFaqIntoElasticsearch(): void
+    {
+        $httpClient = $this->enableElasticsearch();
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->with($this->callback(static function (\Psr\Http\Message\RequestInterface $request): bool {
+                $body = json_decode((string) $request->getBody(), true);
+
+                return $request->getMethod() === 'PUT'
+                    && $request->getUri()->getPath() === '/phpmyfaq-test/_doc/1'
+                    && $body['question'] === 'New question'
+                    && $body['content_type'] === 'faq';
+            }))
+            ->willReturn($this->elasticsearchResponse(201, ['result' => 'created']));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity
+                ->setId(1)
+                ->setSolutionId(1));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($this->createRequestForNewFaq($csrfToken, status: 'published'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateUpsertsAPublishedFaqInElasticsearch(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        $httpClient = $this->enableElasticsearch();
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->with($this->callback(static function (\Psr\Http\Message\RequestInterface $request): bool {
+                $body = json_decode((string) $request->getBody(), true);
+
+                return $request->getUri()->getPath() === '/phpmyfaq-test/_update/1001'
+                    && $body['doc']['question'] === 'Updated FAQ';
+            }))
+            ->willReturn($this->elasticsearchResponse(200, ['result' => 'updated']));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('update')->willReturnArgument(0);
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->update($this->createRequestForFaqUpdate($csrfToken, status: 'published'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateRemovesAnUnpublishedFaqFromElasticsearch(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        $httpClient = $this->enableElasticsearch();
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->with($this->callback(static fn(\Psr\Http\Message\RequestInterface $request): bool => $request->getMethod() === 'DELETE'
+                && $request->getUri()->getPath() === '/phpmyfaq-test/_doc/1001'))
+            ->willReturn($this->elasticsearchResponse(200, ['result' => 'deleted']));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('update')->willReturnArgument(0);
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->update($this->createRequestForFaqUpdate($csrfToken, status: 'draft'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
 }
