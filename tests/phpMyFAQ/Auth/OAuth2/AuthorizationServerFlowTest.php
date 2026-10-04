@@ -134,7 +134,8 @@ final class AuthorizationServerFlowTest extends TestCase
         $this->assertSame(Response::HTTP_OK, $result['status'], json_encode($result['body']));
         $this->assertSame('Bearer', $result['body']['token_type']);
         $this->assertArrayHasKey('access_token', $result['body']);
-        $this->assertSame(3600, $result['body']['expires_in']);
+        // The lifetime is computed from the expiry timestamp, so a second may tick away in between.
+        $this->assertEqualsWithDelta(3600, $result['body']['expires_in'], 1);
         $this->assertSame('no-store', $result['headers']['cache-control'] ?? $result['headers']['Cache-Control'] ?? null);
         $this->assertSame(1, $this->countRows('faqoauth_access_tokens'));
     }
