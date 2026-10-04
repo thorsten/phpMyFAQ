@@ -360,6 +360,7 @@ final class ConfigurationTabControllerTest extends TestCase
             'translation provider' => ['translationProvider', 'google', 'value="google"'],
             'mail provider' => ['mailProvider', 'smtp', 'value="smtp" selected'],
             'layout mode' => ['layoutMode', 'dark', 'value="dark" selected'],
+            'cache adapter' => ['cacheAdapter', 'redis', 'value="redis" selected'],
         ];
     }
 
@@ -875,5 +876,29 @@ final class ConfigurationTabControllerTest extends TestCase
     private function removeCsrfCookie(string $page): void
     {
         unset($_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)]);
+    }
+
+    /**
+     * @return iterable<string, array{mixed, string}>
+     */
+    public static function convertedValueProvider(): iterable
+    {
+        yield 'null' => [null, 'null'];
+        yield 'boolean' => [true, '1'];
+        yield 'integer' => [42, '42'];
+        yield 'string' => ['value', 'value'];
+        yield 'object' => [new \stdClass(), 'stdClass'];
+        yield 'array' => [['a'], 'array'];
+    }
+
+    #[DataProvider('convertedValueProvider')]
+    public function testConvertToStringRendersEveryValueTypeForTheLog(mixed $value, string $expected): void
+    {
+        $controller = $this->createController();
+
+        self::assertSame(
+            $expected,
+            new \ReflectionMethod(ConfigurationTabController::class, 'convertToString')->invoke($controller, $value),
+        );
     }
 }

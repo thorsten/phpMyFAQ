@@ -308,6 +308,29 @@ class UpdateTest extends TestCase
         $this->assertSame('4.0.0', $reloaded->get('main.currentVersion'));
     }
 
+    public function testExecuteQueriesReportsTheFailingStatement(): void
+    {
+        new \ReflectionProperty(Update::class, 'queries')->setValue($this->update, [
+            'UPDATE faqconfig SET config_value = config_value WHERE config_name = \'main.language\'',
+            'UPDATE no_such_table SET x = 1',
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('(Query: UPDATE no_such_table SET x = 1)');
+
+        new \ReflectionMethod(Update::class, 'executeQueries')->invoke($this->update);
+    }
+
+    public function testExecuteQueriesOnlyCollectsTheStatementsInDryRunMode(): void
+    {
+        $this->update->dryRun = true;
+        new \ReflectionProperty(Update::class, 'queries')->setValue($this->update, ['UPDATE no_such_table SET x = 1']);
+
+        new \ReflectionMethod(Update::class, 'executeQueries')->invoke($this->update);
+
+        $this->assertSame(['UPDATE no_such_table SET x = 1'], $this->update->dryRunQueries);
+    }
+
     /**
      * @return array<int, string>
      */

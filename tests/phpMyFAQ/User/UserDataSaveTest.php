@@ -84,4 +84,25 @@ final class UserDataSaveTest extends TestCase
         $this->assertFalse($userData->set(['display_name', 'entra_oid'], ['Linked Admin', 'entra-object-1']));
         $this->assertNotSame('Linked Admin', $this->storedDisplayName(1));
     }
+
+    public function testLoadAndGetFallBackOnALegacySchemaWithoutIdentityLinkColumns(): void
+    {
+        $this->dropIdentityLinkColumns();
+
+        $userData = new UserData($this->configuration);
+        $this->assertTrue($userData->load(1));
+        $this->assertSame('', $userData->get('keycloak_sub'));
+        $this->assertSame('', $userData->get('entra_oid'));
+        $this->assertIsArray($userData->get(['display_name', 'email']));
+        $this->assertFalse($userData->get('no_such_column'));
+    }
+
+    public function testLoadRejectsInvalidUserIds(): void
+    {
+        $userData = new UserData($this->configuration);
+
+        $this->assertFalse($userData->load(0));
+        $this->assertFalse($userData->load(-7));
+        $this->assertFalse($userData->load(987654));
+    }
 }

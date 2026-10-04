@@ -655,4 +655,63 @@ class ClientTest extends TestCase
         $this->assertContains('Failed to create tenant database tables.', $logMessages);
         $this->assertContains('Failed to reconnect to source database.', $logMessages);
     }
+
+    /**
+     * @return iterable<string, array{string, string, string}>
+     */
+    public static function quotedIdentifierProvider(): iterable
+    {
+        yield 'sql server' => ['sqlsrv', 'faq]data', '[faq]]data]'];
+        yield 'postgresql' => ['pgsql', 'faq"data', '"faq""data"'];
+        yield 'sqlite' => ['sqlite3', 'faqdata', '"faqdata"'];
+        yield 'mysql' => ['mysqli', 'faq`data', '`faq``data`'];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('quotedIdentifierProvider')]
+    public function testQuoteIdentifierFollowsTheDriver(string $dbType, string $name, string $expected): void
+    {
+        $previous = new \ReflectionProperty(Database::class, 'dbType')->getValue();
+        new \ReflectionProperty(Database::class, 'dbType')->setValue(null, $dbType);
+
+        try {
+            $this->assertSame($expected, new ReflectionMethod($this->client, 'quoteIdentifier')->invoke($this->client, $name));
+        } finally {
+            new \ReflectionProperty(Database::class, 'dbType')->setValue(null, $previous);
+        }
+    }
+
+    public function testCreateClientTablesWithSchemaRejectsAnInvalidIdentifier(): void
+    {
+        $logger = $this->createMock(Logger::class);
+        $logger->expects($this->once())->method('error');
+        $this->configuration->method('getLogger')->willReturn($logger);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid tenant schema identifier.');
+
+        new ReflectionMethod($this->client, 'createClientTablesWithSchema')->invoke($this->client, 'tenant;drop');
+    }
+
+    public function testCreateClientTablesWithDatabaseRejectsAnInvalidIdentifier(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid tenant database identifier.');
+
+        new ReflectionMethod($this->client, 'createClientTablesWithDatabase')->invoke($this->client, 'tenant-db');
+    }
+
+    public function testCreateClientTablesWithDatabaseRequiresPostgreSqlOrSqlServer(): void
+    {
+        $previous = new \ReflectionProperty(Database::class, 'dbType')->getValue();
+        new \ReflectionProperty(Database::class, 'dbType')->setValue(null, 'sqlite3');
+
+        try {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage('Database-per-tenant isolation is not supported for driver "sqlite3"');
+
+            new ReflectionMethod($this->client, 'createClientTablesWithDatabase')->invoke($this->client, 'tenant_db');
+        } finally {
+            new \ReflectionProperty(Database::class, 'dbType')->setValue(null, $previous);
+        }
+    }
 }
