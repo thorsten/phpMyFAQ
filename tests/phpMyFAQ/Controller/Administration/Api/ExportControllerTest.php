@@ -432,4 +432,80 @@ final class ExportControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('"FAQ ID","Last author"', $content);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportReportRendersEveryColumnForAFaqInASubcategory(): void
+    {
+        $this->dbHandle->query(
+            "INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active)"
+            . " VALUES (500, 'en', 0, 'Hardware', '', 1, -1, 1)",
+        );
+        $this->dbHandle->query(
+            "INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active)"
+            . " VALUES (501, 'en', 500, 'Printers', '', 1, -1, 1)",
+        );
+        $this->dbHandle->query(
+            'INSERT INTO faqdata '
+            . '(id, lang, solution_id, revision_id, status, sticky, thema, content, author, email, updated) '
+            . "VALUES (4243, 'en', 9998, 0, 'published', 1, 'Why does the printer jam?', "
+            . "'body', 'Report Author', 'author@example.org', '20240102030405')",
+        );
+        $this->dbHandle->query(
+            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)"
+            . " VALUES (501, 'en', 4243, 'en')",
+        );
+        $this->dbHandle->query("INSERT INTO faqvisits (id, lang, visits, last_visit) VALUES (4243, 'en', 77, 1704164645)");
+        $this->dbHandle->query(
+            "INSERT INTO faqchanges (id, beitrag, lang, revision_id, usr, datum, what)"
+            . " VALUES (4243, 4243, 'en', 0, 1, 1704164645, 'created')",
+        );
+
+        $session = new Session(new MockArraySessionStorage());
+        $token = Token::getInstance($session)->getTokenString('create-report');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('create-report'), 0, 10)] = $token;
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $token,
+                'category' => true,
+                'sub_category' => true,
+                'translations' => true,
+                'language' => true,
+                'id' => true,
+                'sticky' => true,
+                'title' => true,
+                'creation_date' => true,
+                'owner' => true,
+                'last_modified_person' => true,
+                'url' => true,
+                'visits' => true,
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->exportReport($request);
+        $content = (string) $response->getContent();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $lines = array_values(array_filter(explode("\n", $content)));
+        self::assertCount(2, $lines, $content);
+        $row = str_getcsv($lines[1], ',', '"', '\\');
+
+        // Category name, its parent id, the "n/a" sub-category marker and the sub-category name.
+        self::assertSame(['Printers', '500', 'n/a', 'Printers'], array_slice($row, 0, 4));
+        self::assertContains('4243', $row);
+        self::assertContains('1', $row, 'sticky flag');
+        self::assertContains('Why does the printer jam?', $row);
+        self::assertContains('Report Author', $row);
+        self::assertContains('77', $row, 'visits');
+        self::assertContains('2024-01-02 03:04', $row);
+        $url = array_values(array_filter($row, static fn(string $value): bool => str_contains($value, '/content/')));
+        self::assertCount(1, $url);
+        self::assertStringContainsString('/content/501/4243/en/', $url[0]);
+        self::assertStringEndsWith('.html', $url[0]);
+    }
 }

@@ -22,6 +22,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -894,5 +895,67 @@ final class AttachmentControllerTest extends TestCase
             });
 
         return $container;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadStoresTheFilesAndReportsThem(): void
+    {
+        $storageRoot = sys_get_temp_dir() . '/pmf-upload-' . bin2hex(random_bytes(6));
+        $this->configuration->set('storage.type', 'filesystem');
+        $this->configuration->set('storage.filesystem.root', $storageRoot);
+        $this->configuration->set('records.maxAttachmentSize', '1048576');
+
+        $sourceFile = tempnam(sys_get_temp_dir(), 'pmf-upload-src-');
+        self::assertNotFalse($sourceFile);
+        file_put_contents($sourceFile, 'attachment payload');
+        $uploadedFile = new UploadedFile($sourceFile, 'manual.txt', 'text/plain', null, true);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        try {
+            $response = $controller->upload(new Request(
+                [],
+                [
+                    'pmf-csrf-token' => $token,
+                    'record_id' => 1,
+                    'record_lang' => 'en',
+                    'customFileNames' => ['user-manual'],
+                ],
+                [],
+                [],
+                ['filesToUpload' => [$uploadedFile]],
+            ));
+            $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+            self::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+            self::assertCount(1, $payload);
+            self::assertGreaterThan(0, $payload[0]['attachmentId']);
+            self::assertSame('user-manual.txt', $payload[0]['fileName']);
+            self::assertSame(1, $payload[0]['faqId']);
+            self::assertSame('en', $payload[0]['faqLanguage']);
+
+            $storedFiles = iterator_to_array(new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($storageRoot, \FilesystemIterator::SKIP_DOTS),
+            ), false);
+            $storedFiles = array_filter($storedFiles, static fn(\SplFileInfo $file): bool => $file->isFile());
+            self::assertCount(1, $storedFiles);
+            self::assertSame('attachment payload', file_get_contents(reset($storedFiles)->getPathname()));
+
+            $row = $this->dbHandle->fetchArray($this->dbHandle->query(sprintf(
+                'SELECT filename, record_id, record_lang FROM faqattachment WHERE id = %d',
+                (int) $payload[0]['attachmentId'],
+            )));
+            self::assertSame(['filename' => 'user-manual.txt', 'record_id' => 1, 'record_lang' => 'en'], $row);
+        } finally {
+            new Filesystem()->remove([$storageRoot, $sourceFile]);
+        }
     }
 }
