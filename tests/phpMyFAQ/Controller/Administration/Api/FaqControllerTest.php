@@ -3169,4 +3169,160 @@ final class FaqControllerTest extends TestCase
         self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
         $this->removeCsrfCookie('pmf-csrf-token');
     }
+
+    /**
+     * Registers a mocked OpenSearch client on the configuration and enables the engine.
+     */
+    private function enableOpenSearch(): \OpenSearch\Client&\PHPUnit\Framework\MockObject\MockObject
+    {
+        $client = $this->createMock(\OpenSearch\Client::class);
+        $openSearchConfiguration = $this->createStub(\phpMyFAQ\Configuration\OpenSearchConfiguration::class);
+        $openSearchConfiguration->method('getIndex')->willReturn('phpmyfaq-test');
+
+        $this->configuration->setOpenSearch($client);
+        $this->configuration->setOpenSearchConfig($openSearchConfiguration);
+        self::assertTrue($this->configuration->set('search.enableOpenSearch', true));
+
+        return $client;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateIndexesAPublishedFaqIntoOpenSearch(): void
+    {
+        $client = $this->enableOpenSearch();
+        $client
+            ->expects($this->once())
+            ->method('index')
+            ->with($this->callback(static fn(array $params): bool => $params['index'] === 'phpmyfaq-test'
+                && $params['body']['id'] === 1
+                && $params['body']['question'] === 'New question'
+                && $params['body']['content_type'] === 'faq'))
+            ->willReturn(['result' => 'created']);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1));
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($this->createRequestForNewFaq($csrfToken, status: 'published'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateUpsertsAPublishedFaqInOpenSearch(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        $client = $this->enableOpenSearch();
+        $client->expects($this->never())->method('delete');
+        $client
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->callback(static fn(array $params): bool => $params['id'] === '1001'
+                && $params['body']['doc']['question'] === 'Updated FAQ'))
+            ->willReturn(['result' => 'updated']);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('update')->willReturnArgument(0);
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->update($this->createRequestForFaqUpdate($csrfToken, status: 'published'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateRemovesAnUnpublishedFaqFromOpenSearch(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        $client = $this->enableOpenSearch();
+        $client->expects($this->never())->method('update');
+        $client
+            ->expects($this->once())
+            ->method('delete')
+            ->with(['index' => 'phpmyfaq-test', 'id' => '1001'])
+            ->willReturn(['result' => 'deleted']);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('update')->willReturnArgument(0);
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->update($this->createRequestForFaqUpdate($csrfToken, status: 'draft'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatusPublishUpsertsTheLanguageScopedDocumentInOpenSearch(): void
+    {
+        $this->seedFaqRecord(question: 'Publishable FAQ');
+        $client = $this->enableOpenSearch();
+        $client
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->callback(static fn(array $params): bool => $params['id'] === '1001'
+                && $params['body']['doc']['question'] === 'Publishable FAQ'
+                && $params['body']['doc']['lang'] === 'en'))
+            ->willReturn(['result' => 'updated']);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Review);
+        $faq->method('getSolutionIdFromId')->willReturn(1001);
+        $englishRow = $this->configuration
+            ->getDb()
+            ->query("SELECT 'Publishable FAQ' AS thema, 'Answer' AS content, '' AS keywords");
+        self::assertNotFalse($englishRow);
+        $faq->method('getFaqResult')->willReturn($englishRow);
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->status(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'published',
+        ], JSON_THROW_ON_ERROR)));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
 }
