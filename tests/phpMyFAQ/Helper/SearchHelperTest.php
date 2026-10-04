@@ -319,6 +319,58 @@ class SearchHelperTest extends TestCase
         $this->assertStringContainsString('<span title=', $firstResult->renderedScore);
     }
 
+    public function testGetSearchResultRendersCustomPagesWithoutACategoryPath(): void
+    {
+        $this->searchHelper->setSearchTerm('privacy policy');
+
+        $this->configurationMock
+            ->method('get')
+            ->willReturnMap([
+                ['records.numberOfRecordsPerPage', 10],
+                ['search.enableHighlighting', true],
+                ['main.enableMarkdownEditor', false],
+            ]);
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $page = new stdClass();
+        $page->content_type = 'page';
+        $page->slug = 'privacy';
+        $page->question = 'Our privacy policy';
+        $page->answer = 'The privacy policy explains which data we store and why.';
+        $page->score = 2.5;
+
+        $faq = new stdClass();
+        $faq->id = 7;
+        $faq->lang = 'en';
+        $faq->category_id = 1;
+        $faq->question = 'Where is the privacy page?';
+        $faq->answer = 'See the privacy page.';
+        $faq->score = 'not numeric';
+
+        $this->searchResultSetMock->method('getNumberOfResults')->willReturn(2);
+        $this->searchResultSetMock->method('getResultSet')->willReturn([$page, $faq]);
+        $this->categoryMock->method('getCategoriesFromFaq')->willReturn([]);
+        $this->categoryMock->expects($this->never())->method('getPath');
+
+        $results = $this->searchHelper->getSearchResult($this->searchResultSetMock, 1);
+
+        $this->assertCount(2, $results);
+
+        $pageResult = $results[0];
+        $this->assertTrue($pageResult->isCustomPage);
+        $this->assertSame('', $pageResult->path);
+        $this->assertStringContainsString('page/privacy.html', $pageResult->url);
+        $this->assertStringContainsString('<mark class="pmf-highlighted-string">privacy</mark>', $pageResult->question);
+        $this->assertStringContainsString('<mark class="pmf-highlighted-string">policy</mark>', $pageResult->answerPreview);
+        $this->assertStringContainsString('<span title=', $pageResult->renderedScore);
+
+        // A FAQ without any category keeps an empty path; a non-numeric score renders as zero.
+        $faqResult = $results[1];
+        $this->assertObjectNotHasProperty('isCustomPage', $faqResult);
+        $this->assertSame('', $faqResult->path);
+        $this->assertStringContainsString('content/1/7/en/', $faqResult->url);
+    }
+
     public function testGetSearchResultWithPagination(): void
     {
         $this->configurationMock
