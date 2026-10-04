@@ -104,7 +104,7 @@ final class FilesystemConfigurationCache
     {
         $payload = [];
         foreach ($rows as $row) {
-            if (!property_exists($row, 'config_name') || $row->config_name === null) {
+            if (($row->config_name ?? null) === null) {
                 continue;
             }
 

@@ -58,23 +58,23 @@ class EncryptedFile extends AbstractFile
     /**
      * @throws FileException
      */
-    public function copyTo(object|string $target): bool
+    public function copyTo(object|string $entry): bool
     {
         $return = false;
 
-        if (is_string($target)) {
-            $target = new VanillaFile($target, AbstractFile::MODE_WRITE);
+        if (is_string($entry)) {
+            $entry = new VanillaFile($entry, AbstractFile::MODE_WRITE);
         }
 
-        if (!$target instanceof AbstractFile) {
+        if (!$entry instanceof AbstractFile) {
             throw new FileException('copyTo() expects a file path or an AbstractFile instance.');
         }
 
-        $target->setMode(AbstractFile::MODE_WRITE);
+        $entry->setMode(AbstractFile::MODE_WRITE);
 
-        if ($target->isOk()) {
+        if ($entry->isOk()) {
             while (!$this->eof()) {
-                $target->putChunk($this->getChunk());
+                $entry->putChunk($this->getChunk());
             }
 
             $return = true;

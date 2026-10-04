@@ -324,7 +324,7 @@ class Pgsql implements DatabaseDriver
         /* @mago-expect analysis:possibly-invalid-argument - the pg_* functions are shadowed in tests; the stubbed result must pass through */
         $row = pg_fetch_row($this->query($query));
 
-        return is_array($row) ? (string) ($row[0] ?? '') : '';
+        return is_array($row) ? $row[0] ?? '' : '';
     }
 
     /**

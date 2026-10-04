@@ -261,10 +261,8 @@ class Link
             ]);
         }
 
-        if ($strategyRegistry instanceof StrategyRegistry) {
-            // Merge missing default strategies when a custom registry is injected (non-destructive)
-            $this->ensureDefaultStrategies($strategyRegistry);
-        }
+        // Merge missing default strategies when a custom registry is injected (non-destructive)
+        $this->ensureDefaultStrategies($strategyRegistry);
 
         $this->strategyRegistry = $strategyRegistry;
     }
@@ -456,11 +454,7 @@ class Link
     {
         $parsed = parse_url($this->url);
 
-        return (
-            is_array($parsed)
-            && array_key_exists('scheme', $parsed)
-            && ($parsed['scheme'] !== '' && $parsed['scheme'] !== '0')
-        );
+        return is_array($parsed) && array_key_exists('scheme', $parsed) && $parsed['scheme'] !== '0';
     }
 
     /**

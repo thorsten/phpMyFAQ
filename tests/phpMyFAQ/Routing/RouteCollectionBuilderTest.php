@@ -2,27 +2,20 @@
 
 namespace phpMyFAQ\Routing;
 
-use phpMyFAQ\Configuration;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouteCollection;
 
-#[AllowMockObjectsWithoutExpectations]
 class RouteCollectionBuilderTest extends TestCase
 {
-    private Configuration $configuration;
     private RouteCollectionBuilder $builder;
 
     protected function setUp(): void
     {
-        $this->configuration = $this->createMock(Configuration::class);
-        $this->builder = new RouteCollectionBuilder($this->configuration);
+        $this->builder = new RouteCollectionBuilder();
     }
 
     public function testBuildReturnsRouteCollection(): void
     {
-        $this->configuration->method('get')->willReturn(false);
-
         $routes = $this->builder->build('public', false);
 
         $this->assertInstanceOf(RouteCollection::class, $routes);
@@ -30,8 +23,6 @@ class RouteCollectionBuilderTest extends TestCase
 
     public function testBuildIncludesFileRoutesWhenNotAttributesOnly(): void
     {
-        $this->configuration->method('get')->willReturn(false);
-
         $routes = $this->builder->build('public', false);
 
         // Public routes file exists and should be loaded
@@ -41,8 +32,6 @@ class RouteCollectionBuilderTest extends TestCase
 
     public function testBuildSkipsFileRoutesWhenAttributesOnly(): void
     {
-        $this->configuration->method('get')->willReturn(true);
-
         $routes = $this->builder->build('public', true);
 
         // With attributesOnly=true, we should only get routes from attributes
@@ -51,8 +40,6 @@ class RouteCollectionBuilderTest extends TestCase
 
     public function testBuildHandlesPublicContext(): void
     {
-        $this->configuration->method('get')->willReturn(false);
-
         $routes = $this->builder->build('public', false);
 
         $this->assertInstanceOf(RouteCollection::class, $routes);
@@ -60,8 +47,6 @@ class RouteCollectionBuilderTest extends TestCase
 
     public function testBuildHandlesAdminContext(): void
     {
-        $this->configuration->method('get')->willReturn(false);
-
         $routes = $this->builder->build('admin', false);
 
         $this->assertInstanceOf(RouteCollection::class, $routes);
@@ -69,8 +54,6 @@ class RouteCollectionBuilderTest extends TestCase
 
     public function testBuildHandlesApiContext(): void
     {
-        $this->configuration->method('get')->willReturn(false);
-
         $routes = $this->builder->build('api', false);
 
         $this->assertInstanceOf(RouteCollection::class, $routes);
@@ -78,8 +61,6 @@ class RouteCollectionBuilderTest extends TestCase
 
     public function testBuildHandlesAdminApiContext(): void
     {
-        $this->configuration->method('get')->willReturn(false);
-
         $routes = $this->builder->build('admin-api', false);
 
         $this->assertInstanceOf(RouteCollection::class, $routes);
@@ -87,8 +68,6 @@ class RouteCollectionBuilderTest extends TestCase
 
     public function testBuildHandlesNonExistentRouteFile(): void
     {
-        $this->configuration->method('get')->willReturn(false);
-
         // Should not throw exception for contexts without route files
         $routes = $this->builder->build('unknown', false);
 

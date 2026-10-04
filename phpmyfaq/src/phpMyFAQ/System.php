@@ -499,23 +499,23 @@ class System
                     continue;
                 }
 
-                if ('php' !== pathinfo((string) $file->getFilename(), PATHINFO_EXTENSION)) {
+                if ('php' !== pathinfo($file->getFilename(), PATHINFO_EXTENSION)) {
                     continue;
                 }
 
-                if (str_contains((string) $file->getPath(), needle: '/tests/')) {
+                if (str_contains($file->getPath(), needle: '/tests/')) {
                     continue;
                 }
 
-                if (str_contains((string) $file->getPath(), needle: '/multisite/')) {
+                if (str_contains($file->getPath(), needle: '/multisite/')) {
                     continue;
                 }
 
-                if (str_contains((string) $file->getPath(), needle: '/upgrade/')) {
+                if (str_contains($file->getPath(), needle: '/upgrade/')) {
                     continue;
                 }
 
-                $current = str_replace((string) PMF_ROOT_DIR, replace: '', subject: (string) $file->getPathname());
+                $current = str_replace((string) PMF_ROOT_DIR, replace: '', subject: $file->getPathname());
 
                 if (array_key_exists($current, $ignoredFiles)) {
                     continue;

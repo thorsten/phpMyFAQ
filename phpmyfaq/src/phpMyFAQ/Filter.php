@@ -33,10 +33,14 @@ class Filter
     /**
      * Static wrapper method for filter_input().
      *
-     * @param int        $type Filter type
-     * @param string     $variableName Variable name
-     * @param int        $filter Filter
-     * @param mixed|null $default Default value
+     * @template TDefault
+     *
+     * @param int      $type Filter type
+     * @param string   $variableName Variable name
+     * @param int      $filter Filter
+     * @param TDefault $default Default value
+     *
+     * @return ($filter is 515|517|518|273|274|275 ? string|TDefault : ($filter is 257 ? int|TDefault : ($filter is 258 ? bool|TDefault : ($filter is 259 ? float|TDefault : mixed))))
      */
     public static function filterInput(int $type, string $variableName, int $filter, mixed $default = null): mixed
     {
@@ -82,7 +86,7 @@ class Filter
      * @param int      $filter Filter
      * @param TDefault $default Default value
      *
-     * @return ($filter is 515 ? string|TDefault : ($filter is 257 ? int|TDefault : ($filter is 258 ? bool|TDefault : mixed)))
+     * @return ($filter is 515|517|518|273|274|275 ? string|TDefault : ($filter is 257 ? int|TDefault : ($filter is 258 ? bool|TDefault : ($filter is 259 ? float|TDefault : mixed))))
      */
     public static function filterVar(mixed $variable, int $filter, mixed $default = null): mixed
     {
@@ -95,12 +99,18 @@ class Filter
 
     /**
      * Validates an email address and sanitizes it for safe output.
+     *
+     * @template TDefault
+     *
+     * @param TDefault $default Default value
+     *
+     * @return string|TDefault
      */
     public static function filterEmail(mixed $variable, mixed $default = null): mixed
     {
         $validated = self::filterVar($variable, FILTER_VALIDATE_EMAIL, $default);
         if ($validated !== null && $validated !== false && $validated !== $default) {
-            return self::filterVar($validated, FILTER_SANITIZE_SPECIAL_CHARS);
+            return self::filterVar($validated, FILTER_SANITIZE_SPECIAL_CHARS, $default);
         }
 
         return $validated;
@@ -166,8 +176,12 @@ class Filter
      * Symfony's HtmlSanitizer, so safe HTML markup is kept intact. Unlike
      * removeAttributes(), inline style attributes are preserved.
      *
-     * @param mixed      $variable Variable
-     * @param mixed|null $default Default value
+     * @template TDefault
+     *
+     * @param mixed         $variable Variable
+     * @param TDefault|null $default Default value
+     *
+     * @return string|TDefault
      */
     public static function filterHtml(mixed $variable, mixed $default = null): mixed
     {

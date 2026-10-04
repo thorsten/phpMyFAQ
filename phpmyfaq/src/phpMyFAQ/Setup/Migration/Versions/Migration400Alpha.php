@@ -44,7 +44,7 @@ readonly class Migration400Alpha extends AbstractMigration
     {
         // Copy database configuration
         if (defined('PMF_LEGACY_CONFIG_DIR') && defined('PMF_CONFIG_DIR')) {
-            $legacyConfigDir = (string) PMF_LEGACY_CONFIG_DIR;
+            $legacyConfigDir = PMF_LEGACY_CONFIG_DIR;
             $configDir = (string) PMF_CONFIG_DIR;
             $recorder->copyFile($legacyConfigDir . '/database.php', $configDir . '/database.php');
 

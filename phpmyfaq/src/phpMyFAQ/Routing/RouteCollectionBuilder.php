@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Routing;
 
-use phpMyFAQ\Configuration;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
@@ -32,9 +31,8 @@ class RouteCollectionBuilder
 {
     private AttributeRouteLoader $attributeLoader;
 
-    public function __construct(
-        private readonly ?Configuration $configuration = null,
-    ) {
+    public function __construct()
+    {
         $this->attributeLoader = new AttributeRouteLoader();
     }
 

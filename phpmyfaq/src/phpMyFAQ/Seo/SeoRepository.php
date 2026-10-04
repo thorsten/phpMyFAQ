@@ -79,7 +79,7 @@ class SeoRepository implements SeoRepositoryInterface
         if ($db->numRows($result) > 0) {
             while (true) {
                 $row = $db->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if ($row === false || $row === null) {
                     break;
                 }
 

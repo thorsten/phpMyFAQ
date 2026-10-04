@@ -303,7 +303,7 @@ class MigrationExecutor
         $output .= "Migrations: {$report['summary']['migrationCount']}\n";
         $output .= "Total Operations: {$report['summary']['totalOperations']}\n";
 
-        if (($report['summary']['operationsByType'] ?? []) !== []) {
+        if ($report['summary']['operationsByType'] !== []) {
             $output .= "By Type:\n";
             foreach ($report['summary']['operationsByType'] as $type => $count) {
                 $output .= "  - {$type}: {$count}\n";

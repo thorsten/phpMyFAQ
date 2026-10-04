@@ -108,6 +108,7 @@ class Auth
             throw new Exception(message: self::PMF_ERROR_USER_NO_AUTH_TYPE);
         }
 
+        /* @mago-expect analysis:unsafe-instantiation - every auth driver accepts a Configuration as first argument */
         $auth = new $authClass($this->configuration);
         if (!$auth instanceof AuthDriverInterface) {
             $this->errors[] = self::PMF_ERROR_USER_NO_AUTH_TYPE;

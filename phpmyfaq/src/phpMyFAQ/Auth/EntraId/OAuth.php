@@ -177,12 +177,12 @@ class OAuth
                 'https://sts.windows.net/' . AAD_OAUTH_TENANTID . '/',
             ];
 
-            if (!property_exists($decoded, 'aud') || $decoded->aud !== AAD_OAUTH_CLIENTID) {
+            if (($decoded->aud ?? null) !== AAD_OAUTH_CLIENTID) {
                 $this->clearToken();
                 return $this;
             }
 
-            if (!property_exists($decoded, 'iss') || !in_array($decoded->iss, $expectedIssuers, strict: true)) {
+            if (!in_array($decoded->iss ?? null, $expectedIssuers, strict: true)) {
                 $this->clearToken();
                 return $this;
             }

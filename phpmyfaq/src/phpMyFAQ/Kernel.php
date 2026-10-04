@@ -79,7 +79,7 @@ class Kernel implements HttpKernelInterface
         $this->container = $container;
         ContainerRegistry::set($container);
 
-        $routes = $this->loadRoutes($container);
+        $routes = $this->loadRoutes();
         $this->routes = $routes;
 
         $this->httpKernel = $this->createHttpKernel($container, $routes);
@@ -180,23 +180,20 @@ class Kernel implements HttpKernelInterface
         return $containerBuilder;
     }
 
-    private function loadRoutes(ContainerInterface $container): RouteCollection
+    private function loadRoutes(): RouteCollection
     {
-        $configurationService = $container->get(id: 'phpmyfaq.configuration');
-        $configuration = $configurationService instanceof Configuration ? $configurationService : null;
-
         $cacheEnabled = filter_var(Environment::get('ROUTING_CACHE_ENABLED', 'true'), FILTER_VALIDATE_BOOLEAN);
         $cacheDir = (string) Environment::get('ROUTING_CACHE_DIR', (string) PMF_ROOT_DIR . '/cache/routes');
 
         if ($cacheEnabled && !$this->debug && !Environment::isDebugMode()) {
             $cacheManager = new RouteCacheManager($cacheDir, Environment::isDebugMode());
-            return $cacheManager->getRoutes($this->routingContext, function () use ($configuration) {
-                $builder = new RouteCollectionBuilder($configuration);
+            return $cacheManager->getRoutes($this->routingContext, function () {
+                $builder = new RouteCollectionBuilder();
                 return $builder->build($this->routingContext);
             });
         }
 
-        $builder = new RouteCollectionBuilder($configuration);
+        $builder = new RouteCollectionBuilder();
         return $builder->build($this->routingContext);
     }
 

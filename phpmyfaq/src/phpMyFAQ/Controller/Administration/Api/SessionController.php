@@ -56,8 +56,8 @@ final class SessionController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $firstHour = (string) Filter::filterVar($requestData->firstHour ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $lastHour = (string) Filter::filterVar($requestData->lastHour ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $firstHour = Filter::filterVar($requestData->firstHour ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $lastHour = Filter::filterVar($requestData->lastHour ?? null, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $data = $this->adminSession->getSessionsByDate((int) strtotime($firstHour), (int) strtotime($lastHour));
         $filePath = tempnam(sys_get_temp_dir(), prefix: 'csv_');

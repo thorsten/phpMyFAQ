@@ -47,7 +47,8 @@ readonly class ConfigurationStorageSettingsResolver
             $redisPrefix = self::DEFAULT_REDIS_PREFIX;
         }
 
-        $connectTimeout = (float) ($this->databaseConfigurationStore->fetchValue('storage.redisConnectTimeout') ?? '');
+        $connectTimeoutValue = $this->databaseConfigurationStore->fetchValue('storage.redisConnectTimeout');
+        $connectTimeout = is_numeric($connectTimeoutValue) ? (float) $connectTimeoutValue : 0.0;
         if ($connectTimeout <= 0) {
             $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
         }

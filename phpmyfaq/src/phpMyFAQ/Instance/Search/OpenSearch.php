@@ -297,18 +297,12 @@ readonly class OpenSearch
 
         // Nothing left to send — every FAQ was filtered out (e.g. none published) or the
         // last full batch drained the buffer; an empty bulk request would be rejected.
-        if (($params['body'] ?? []) === []) {
+        if ($params['body'] === []) {
             return ['success' => []];
         }
 
         // Send the last batch if it exists
-        $responses = $this->client->bulk($params);
-
-        if ($responses !== null) {
-            return ['success' => $responses];
-        }
-
-        return ['error' => 'Unknown error.'];
+        return ['success' => $this->client->bulk($params)];
     }
 
     /**

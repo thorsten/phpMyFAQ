@@ -59,13 +59,14 @@ class SearchFactory
             throw new \RuntimeException('Unknown search backend: ' . $searchClass);
         }
 
+        /* @mago-expect analysis:unsafe-instantiation - every search backend keeps the (Configuration) constructor */
         return new $searchClass($configuration);
     }
 
     private static function resolveDatabaseType(DatabaseDriver $databaseDriver): string
     {
         $classNameParts = explode('\\', $databaseDriver::class);
-        $driverClass = strtolower((string) end($classNameParts));
+        $driverClass = strtolower(end($classNameParts));
 
         return match ($driverClass) {
             'pdomysql' => 'pdo_mysql',

@@ -61,8 +61,6 @@ final class AccessTokenRepository extends AbstractRepository implements AccessTo
 
         $tokenUserIdentifier = $accessTokenEntity->getUserIdentifier();
 
-        $tokenUserIdentifier = $tokenUserIdentifier === null ? null : (string) $tokenUserIdentifier;
-
         $insert = sprintf(
             "INSERT INTO %s (identifier, client_id, user_id, scopes, revoked, expires_at, created)
              VALUES ('%s', '%s', %s, '%s', 0, '%s', %s)",

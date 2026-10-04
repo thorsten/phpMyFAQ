@@ -108,7 +108,7 @@ class Faq
         if ($num > 0) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if ($row === false || $row === null) {
                     break;
                 }
 
@@ -221,7 +221,7 @@ class Faq
         $oldId = 0;
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if ($row === false || $row === null) {
                 break;
             }
 
@@ -282,7 +282,7 @@ class Faq
         $seen = [];
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if ($row === false || $row === null) {
                 break;
             }
 

@@ -285,7 +285,7 @@ class Wrapper
                 h: 0,
                 x: 0,
                 y: 0,
-                html: html_entity_decode((string) $title, ENT_QUOTES, encoding: 'utf-8'),
+                html: html_entity_decode($title, ENT_QUOTES, encoding: 'utf-8'),
                 border: 0,
                 ln: 0,
                 fill: false,
@@ -298,7 +298,7 @@ class Wrapper
         $this->engine->multiCell(
             w: 0,
             h: 10,
-            txt: html_entity_decode((string) $title, ENT_QUOTES, encoding: 'utf-8'),
+            txt: html_entity_decode($title, ENT_QUOTES, encoding: 'utf-8'),
             border: 0,
             align: 'C',
         );
@@ -475,7 +475,7 @@ class Wrapper
         }
 
         $path = parse_url($file, PHP_URL_PATH);
-        if ($path === false || $path === null || $path === '') {
+        if ($path === false || $path === null) {
             return null;
         }
 

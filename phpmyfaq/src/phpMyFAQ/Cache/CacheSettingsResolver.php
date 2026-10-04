@@ -60,7 +60,8 @@ readonly class CacheSettingsResolver
         }
         $redisPrefix = $this->normalizeRedisPrefix($redisPrefix);
 
-        $connectTimeout = (float) ($values['storage.cacheRedisConnectTimeout'] ?? '');
+        $connectTimeoutValue = $values['storage.cacheRedisConnectTimeout'] ?? null;
+        $connectTimeout = is_numeric($connectTimeoutValue) ? (float) $connectTimeoutValue : 0.0;
         if ($connectTimeout <= 0) {
             $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
         }

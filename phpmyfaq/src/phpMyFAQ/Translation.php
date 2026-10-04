@@ -240,8 +240,7 @@ class Translation
     public static function getInstance(): Translation
     {
         if (!self::$translation instanceof Translation) {
-            $className = self::class;
-            self::$translation = new $className();
+            self::$translation = new self();
         }
 
         return self::$translation;

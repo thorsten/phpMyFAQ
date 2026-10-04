@@ -415,7 +415,7 @@ final class UserController extends AbstractAdministrationApiController
 
         $userName = Filter::filterVar($data->userName ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $userRealName = trim(strip_tags((string) ($data->realName ?? '')));
-        $userEmail = (string) Filter::filterEmail($data->email ?? '', default: '');
+        $userEmail = Filter::filterEmail($data->email ?? '', default: '');
         $automaticPassword = (bool) Filter::filterVar($data->automaticPassword ?? false, FILTER_VALIDATE_BOOLEAN);
         $userPassword = Filter::filterVar($data->password ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $userPasswordConfirm = Filter::filterVar($data->passwordConfirm ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -503,7 +503,7 @@ final class UserController extends AbstractAdministrationApiController
 
         $userData = [];
         $userData['display_name'] = trim(strip_tags((string) ($data->display_name ?? '')));
-        $userData['email'] = (string) Filter::filterEmail($data->email ?? '', default: '');
+        $userData['email'] = Filter::filterEmail($data->email ?? '', default: '');
         $userData['last_modified'] = Filter::filterVar($data->last_modified ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $userStatus = Filter::filterVar(
             $data->user_status ?? 'active',

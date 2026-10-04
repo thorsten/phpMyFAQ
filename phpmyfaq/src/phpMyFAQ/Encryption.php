@@ -44,7 +44,7 @@ class Encryption
     /**
      * Constructor.
      */
-    private function __construct(
+    final private function __construct(
         protected Configuration $configuration,
     ) {
     }

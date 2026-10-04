@@ -45,6 +45,7 @@ readonly class DatabaseConfiguration
             throw new RuntimeException(sprintf('Database configuration file "%s" is not readable.', $filename));
         }
 
+        /** @var array<string, string> $DB */
         $DB = [
             'server' => '',
             'port' => '',

@@ -95,7 +95,7 @@ final class FaqController extends AbstractController
             throw new Exception('Missing name');
         }
 
-        if (!property_exists($data, 'question') || trim((string) $data->question) === '') {
+        if (trim((string) ($data->question ?? '')) === '') {
             throw new Exception('Missing or empty question');
         }
 
@@ -120,11 +120,11 @@ final class FaqController extends AbstractController
             // markup, so the decoded result must be passed through the HTML sanitizer
             // before it is stored. Otherwise it is rendered unescaped in the admin
             // FAQ editor (faq.editor.twig uses the |raw filter), enabling stored XSS.
-            $answer = $this->faqHelper->cleanUpContent(trim(html_entity_decode((string) $answer)));
+            $answer = $this->faqHelper->cleanUpContent(trim(html_entity_decode($answer)));
         }
 
         if (!$this->configuration->get(item: 'main.enableWysiwygEditorFrontend')) {
-            $answer = trim(nl2br(strip_tags((string) $answer)));
+            $answer = trim(nl2br(strip_tags($answer)));
         }
 
         $category = new Category($this->configuration);
@@ -160,7 +160,6 @@ final class FaqController extends AbstractController
         if (
             $author !== ''
             && $author !== '0'
-            && $email !== ''
             && $email !== '0'
             && $questionText !== ''
             && $questionText !== '0'

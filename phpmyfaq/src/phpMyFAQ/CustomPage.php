@@ -23,8 +23,6 @@ use DateTime;
 use phpMyFAQ\CustomPage\CustomPageRepository;
 use phpMyFAQ\CustomPage\CustomPageRepositoryInterface;
 use phpMyFAQ\Entity\CustomPageEntity;
-use phpMyFAQ\Seo\SeoRepository;
-use phpMyFAQ\Seo\SeoRepositoryInterface;
 use stdClass;
 
 /**
@@ -36,18 +34,14 @@ readonly class CustomPage
 {
     private CustomPageRepositoryInterface $repository;
 
-    private SeoRepositoryInterface $seoRepository;
-
     /**
      * Constructor.
      */
     public function __construct(
         private Configuration $configuration,
         ?CustomPageRepositoryInterface $repository = null,
-        ?SeoRepositoryInterface $seoRepository = null,
     ) {
         $this->repository = $repository ?? new CustomPageRepository($this->configuration);
-        $this->seoRepository = $seoRepository ?? new SeoRepository($this->configuration);
     }
 
     /**

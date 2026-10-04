@@ -88,7 +88,7 @@ final class ClientRepository extends AbstractRepository implements ClientReposit
         }
 
         $passwordInfo = password_get_info($storedSecret);
-        if (($passwordInfo['algoName'] ?? 'unknown') !== 'unknown') {
+        if ($passwordInfo['algoName'] !== 'unknown') {
             return password_verify($clientSecret, $storedSecret);
         }
 

@@ -52,7 +52,7 @@ class LdapConfiguration
         $this->mainBase = $PMF_LDAP['ldap_base'];
 
         foreach ($PMF_LDAP as $key => $server) {
-            /* @mago-expect analysis:impossible-type-comparison - multi-server config files append array entries to $PMF_LDAP */
+            /* @mago-expect analysis:impossible-type-comparison,redundant-condition - multi-server config files append array entries to $PMF_LDAP */
             if (!is_array($server)) {
                 continue;
             }

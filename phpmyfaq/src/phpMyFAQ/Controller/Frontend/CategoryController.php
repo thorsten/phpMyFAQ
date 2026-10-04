@@ -237,7 +237,7 @@ class CategoryController extends AbstractFrontController
     private function getSubCategoryContent(Category $category, int $selectedCategoryId, string &$records): ?string
     {
         $childNodes = $category->getChildNodes($selectedCategoryId);
-        $hasChildren = is_countable($childNodes) && $childNodes !== [];
+        $hasChildren = $childNodes !== [];
 
         if ($records !== '' && !$hasChildren) {
             return null;

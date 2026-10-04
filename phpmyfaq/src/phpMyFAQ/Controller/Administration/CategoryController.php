@@ -636,7 +636,7 @@ final class CategoryController extends AbstractAdministrationController
         // Strip any path components: the category image is always a bare file
         // name inside the upload directory. This prevents traversal sequences
         // (e.g. "../") from being stored and later passed to Image::delete().
-        $existingImage = is_null($existingImage) ? '' : basename((string) $existingImage);
+        $existingImage = is_null($existingImage) ? '' : basename($existingImage);
         $hasUploadedImage = $uploadedFile instanceof UploadedFile;
         $image = $hasUploadedImage ? $this->categoryImage->getFileName($categoryId, $categoryLang) : $existingImage;
 
@@ -651,7 +651,7 @@ final class CategoryController extends AbstractAdministrationController
                 FILTER_SANITIZE_SPECIAL_CHARS,
             ))
             ->setUserId((int) Filter::filterVar($request->request->get(key: 'user_id'), FILTER_VALIDATE_INT))
-            ->setGroupId((int) Filter::filterVar($request->request->get(key: 'group_id'), FILTER_VALIDATE_INT) ?? -1)
+            ->setGroupId(Filter::filterVar($request->request->get(key: 'group_id'), FILTER_VALIDATE_INT) ?? -1)
             ->setActive((bool) Filter::filterVar($request->request->get(key: 'active'), FILTER_VALIDATE_INT))
             ->setImage($image)
             ->setShowHome((bool) Filter::filterVar($request->request->get(key: 'show_home'), FILTER_VALIDATE_INT));

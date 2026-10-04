@@ -63,7 +63,7 @@ final class MediaBrowserController extends AbstractController
                 return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
-            $file = basename((string) Filter::filterVar($data->name ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''));
+            $file = basename(Filter::filterVar($data->name ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''));
             $allowedDir = realpath(PMF_CONTENT_DIR . '/user/images');
             $targetPath = realpath(PMF_CONTENT_DIR . '/user/images/' . $file);
 

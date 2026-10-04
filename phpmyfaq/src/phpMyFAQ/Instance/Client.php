@@ -441,7 +441,7 @@ class Client extends Instance
                 continue;
             }
 
-            $rowData = (array) $row;
+            $rowData = is_array($row) ? $row : get_object_vars($row);
             $quotedColumns = array_map(fn(int|string $column): string => $this->quoteIdentifier(
                 (string) $column,
             ), array_keys($rowData));

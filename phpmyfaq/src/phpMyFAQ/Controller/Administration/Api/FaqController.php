@@ -160,7 +160,7 @@ final class FaqController extends AbstractAdministrationApiController
         $content = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $email = (string) Filter::filterEmail($data->email ?? '', default: '');
+        $email = Filter::filterEmail($data->email ?? '', default: '');
         $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS, 'n');
         $changed = Filter::filterVar($data->changed ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $notes = Filter::filterVar($data->notes ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -277,7 +277,7 @@ final class FaqController extends AbstractAdministrationApiController
 
                 // notify the user who added the question
                 try {
-                    $notifyEmail = (string) Filter::filterVar($data->notifyEmail ?? '', FILTER_SANITIZE_EMAIL, '');
+                    $notifyEmail = Filter::filterVar($data->notifyEmail ?? '', FILTER_SANITIZE_EMAIL, '');
                     $notifyUser = Filter::filterVar($data->notifyUser ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
                     $this->notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
                 } catch (Exception|TransportExceptionInterface $e) {
@@ -441,7 +441,7 @@ final class FaqController extends AbstractAdministrationApiController
         $content = Filter::filterVar($data->answer ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $email = (string) Filter::filterEmail($data->email ?? '', default: '');
+        $email = Filter::filterEmail($data->email ?? '', default: '');
         $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS, 'n');
         $changed = Filter::filterVar($data->changed ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $date = Filter::filterVar($data->date ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');

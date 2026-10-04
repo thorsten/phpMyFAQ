@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class ResourceServer
 {
-    /** @var callable(Request): ?int|null */
+    /** @var (callable(Request): ?int)|null */
     private $tokenValidator = null;
 
     public function __construct(

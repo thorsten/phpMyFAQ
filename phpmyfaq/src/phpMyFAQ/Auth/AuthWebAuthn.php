@@ -173,7 +173,7 @@ class AuthWebAuthn extends Auth
             throw new Exception('no attestationObject in info');
         }
 
-        if (!property_exists($info, 'rawId') || $info->rawId === null || $info->rawId === []) {
+        if (($info->rawId ?? null) === null || $info->rawId === []) {
             throw new Exception('no rawId in info');
         }
 
@@ -210,15 +210,11 @@ class AuthWebAuthn extends Auth
         $attestationString = $this->byteString($info->response->attestationObject);
         $attestationObject = (object) CBOREncoder::decode($attestationString);
 
-        if (
-            !property_exists($attestationObject, 'fmt')
-            || $attestationObject->fmt === null
-            || $attestationObject->fmt === ''
-        ) {
+        if (($attestationObject->fmt ?? '') === '') {
             throw new Exception('Cannot decode key for format');
         }
 
-        if (!property_exists($attestationObject, 'authData') || $attestationObject->authData === null) {
+        if (($attestationObject->authData ?? null) === null) {
             throw new Exception('Cannot decode key for authentication data');
         }
 

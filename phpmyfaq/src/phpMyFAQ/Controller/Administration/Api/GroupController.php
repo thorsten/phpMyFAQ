@@ -408,7 +408,7 @@ final class GroupController extends AbstractAdministrationApiController
 
         $groupData = [
             'name' => $name,
-            'description' => (string) Filter::filterVar($data['description'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''),
+            'description' => Filter::filterVar($data['description'] ?? '', FILTER_SANITIZE_SPECIAL_CHARS, ''),
             'auto_join' => $autoJoin,
         ];
 

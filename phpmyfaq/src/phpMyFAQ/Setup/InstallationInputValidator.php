@@ -72,10 +72,10 @@ class InstallationInputValidator
             osSetup: $osSetup,
             loginName: $loginName,
             password: $password,
-            language: (string) $language,
-            realname: (string) $realname,
-            email: (string) $email,
-            permLevel: (string) $permLevel,
+            language: $language,
+            realname: $realname,
+            email: $email,
+            permLevel: $permLevel,
             rootDir: (string) $rootDir,
             ldapEnabled: $ldapEnabled,
             esEnabled: $esEnabled,
@@ -93,7 +93,7 @@ class InstallationInputValidator
         $dbSetup = [];
 
         $dbSetup['dbPrefix'] = $setup === null || !array_key_exists('dbPrefix', $setup)
-            ? (string) Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_SPECIAL_CHARS, '')
+            ? Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_SPECIAL_CHARS, '')
             : (string) $setup['dbPrefix'];
         if (preg_match('/^[A-Za-z0-9_]{0,32}$/', $dbSetup['dbPrefix']) !== 1) {
             throw new Exception(
@@ -228,7 +228,7 @@ class InstallationInputValidator
         ];
 
         $esHosts = Filter::filterInputArray(INPUT_POST, $esHostFilter);
-        if (is_null($esHosts)) {
+        if (!is_array($esHosts)) {
             throw new Exception('Elasticsearch Installation Error: Please add at least one Elasticsearch host.');
         }
 
@@ -262,7 +262,7 @@ class InstallationInputValidator
         ];
 
         $osHosts = Filter::filterInputArray(INPUT_POST, $osHostFilter);
-        if (is_null($osHosts)) {
+        if (!is_array($osHosts)) {
             throw new Exception('OpenSearch Installation Error: Please add at least one OpenSearch host.');
         }
 

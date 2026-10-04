@@ -190,11 +190,7 @@ final class AttachmentController extends AbstractAdministrationApiController
         }
 
         $recordId = (int) $recordId;
-        $recordLang = (string) Filter::filterVar(
-            $request->request->get('record_lang'),
-            FILTER_SANITIZE_SPECIAL_CHARS,
-            '',
-        );
+        $recordLang = Filter::filterVar($request->request->get('record_lang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $this->userHasPermissionForFaq(PermissionType::ATTACHMENT_ADD, $recordId, $recordLang);
 

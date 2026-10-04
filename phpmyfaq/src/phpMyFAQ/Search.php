@@ -185,9 +185,7 @@ class Search
         if ($categoryId !== null && 0 < $categoryId) {
             $category = $this->getCategory();
             $selectedCategory = [
-                $fcrTable . '.category_id' => $category instanceof Category
-                    ? array_merge([$categoryId], $category->getChildNodes($categoryId))
-                    : [$categoryId],
+                $fcrTable . '.category_id' => array_merge([$categoryId], $category->getChildNodes($categoryId)),
             ];
 
             $condition = [...$selectedCategory, ...$condition];

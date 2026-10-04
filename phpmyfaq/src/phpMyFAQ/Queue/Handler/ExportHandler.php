@@ -96,7 +96,7 @@ final readonly class ExportHandler
         }
 
         $exporter ??= Export::create($faq, $category, $this->configuration, $message->format);
-        $content = (string) $exporter->generate(
+        $content = $exporter->generate(
             categoryId: (int) ($message->options['categoryId'] ?? 0),
             downwards: (bool) ($message->options['downwards'] ?? true),
             language: (string) ($message->options['language'] ?? ''),

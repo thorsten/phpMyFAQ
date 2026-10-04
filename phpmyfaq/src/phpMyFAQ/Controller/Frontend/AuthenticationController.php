@@ -308,7 +308,7 @@ final class AuthenticationController extends AbstractFrontController
             return new RedirectResponse('./login');
         }
 
-        if (strlen((string) $token) === 6) {
+        if (strlen($token) === 6) {
             $result = $this->twoFactor->validateToken($token, $userId);
 
             if ($result) {

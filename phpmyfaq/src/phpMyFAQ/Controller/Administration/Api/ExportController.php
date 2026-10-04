@@ -274,6 +274,6 @@ final class ExportController extends AbstractController
      */
     private function hasDataField(\stdClass $payload, string $field): bool
     {
-        return property_exists($payload, $field) && $payload->{$field} !== null;
+        return (get_object_vars($payload)[$field] ?? null) !== null;
     }
 }

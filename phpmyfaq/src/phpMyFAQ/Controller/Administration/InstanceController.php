@@ -131,7 +131,7 @@ final class InstanceController extends AbstractAdministrationController
             '',
         ));
 
-        if (is_null($instanceEntity->getUrl()) || !$updatedClient->isValidClientUrl($instanceEntity->getUrl())) {
+        if (!$updatedClient->isValidClientUrl($instanceEntity->getUrl())) {
             $result = ['updateError' => 'Invalid instance URL.'];
 
             return $this->render('@admin/configuration/instances.twig', [

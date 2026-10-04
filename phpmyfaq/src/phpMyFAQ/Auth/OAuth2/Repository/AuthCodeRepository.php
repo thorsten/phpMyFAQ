@@ -41,8 +41,6 @@ final class AuthCodeRepository extends AbstractRepository implements AuthCodeRep
 
         $userIdentifier = $authCodeEntity->getUserIdentifier();
 
-        $userIdentifier = $userIdentifier === null ? null : (string) $userIdentifier;
-
         $redirectUri = $authCodeEntity->getRedirectUri();
 
         $insert = sprintf(

@@ -139,7 +139,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
         $sessionId = (int) Filter::filterVar($request->attributes->get(key: 'sessionId'), FILTER_VALIDATE_INT);
 
         $time = $this->adminSession->getTimeFromSessionId($sessionId);
-        $trackingFile = (string) PMF_CONTENT_DIR . '/core/data/tracking' . date(format: 'dmY', timestamp: $time);
+        $trackingFile = PMF_CONTENT_DIR . '/core/data/tracking' . date(format: 'dmY', timestamp: $time);
         $trackingFileContent = file_get_contents($trackingFile);
         $trackingData = explode(separator: "\n", string: $trackingFileContent === false ? '' : $trackingFileContent);
 

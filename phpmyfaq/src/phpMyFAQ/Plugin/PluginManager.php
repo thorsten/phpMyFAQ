@@ -70,6 +70,7 @@ class PluginManager
             return;
         }
 
+        /* @mago-expect analysis:unsafe-instantiation - is_subclass_of() excludes the interface itself */
         $plugin = new $pluginClass();
         if (!$this->isCompatible($plugin)) {
             $this->incompatiblePlugins[$plugin->getName()] = [

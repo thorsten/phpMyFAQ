@@ -67,7 +67,7 @@ final readonly class McpSdkRuntime implements McpServerRuntimeInterface
             'all_languages' => $all_languages,
         ]);
 
-        $content = (string) ($result['content'] ?? '');
+        $content = $result['content'];
         $decoded = json_decode($content, associative: true);
         if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
             $normalized = [];

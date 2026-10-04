@@ -78,7 +78,7 @@ final class WebAuthnController extends AbstractController
 
         $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        $userExists = (bool) $this->user->getUserByLogin($username, raiseError: false);
+        $userExists = $this->user->getUserByLogin($username, raiseError: false);
 
         if (!$userExists && !$this->configuration->get('security.enableRegistration')) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);

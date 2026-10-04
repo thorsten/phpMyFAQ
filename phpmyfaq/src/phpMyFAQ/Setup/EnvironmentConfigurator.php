@@ -41,7 +41,7 @@ readonly class EnvironmentConfigurator
     {
         $path = parse_url($this->configuration->getDefaultUrl(), PHP_URL_PATH);
 
-        return $path === null || $path === false || $path === '' ? '/' : $path;
+        return $path === null || $path === false ? '/' : $path;
     }
 
     /**

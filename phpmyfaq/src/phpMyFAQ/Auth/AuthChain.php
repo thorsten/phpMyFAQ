@@ -36,7 +36,7 @@ final class AuthChain
         get => $this->authSourceStorage;
     }
 
-    /** @var callable(Request): ?int|null */
+    /** @var (callable(Request): ?int)|null */
     private $oauth2Authenticator = null;
 
     public function __construct(

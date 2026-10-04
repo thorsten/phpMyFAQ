@@ -231,7 +231,7 @@ class File extends AbstractAttachment implements AttachmentInterface
         // Won't delete the file if there are still some records hanging on it
         $hasLinkedRecords = $this->linkedRecords();
         if (!$hasLinkedRecords && $this->encrypted) {
-            $success = $success && $this->getFile()->delete();
+            $success = $this->getFile()->delete();
         }
 
         if (!$hasLinkedRecords && !$this->encrypted) {

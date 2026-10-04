@@ -199,7 +199,7 @@ class Upgrade extends AbstractSetup
         }
 
         // Should not be reached, but for safety
-        throw new Exception('Download failed: ' . ($lastExceptionMessage ?? 'unknown error'));
+        throw new Exception('Download failed: ' . $lastExceptionMessage);
     }
 
     /**

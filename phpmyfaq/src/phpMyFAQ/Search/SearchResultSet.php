@@ -138,7 +138,7 @@ class SearchResultSet
 
             $duplicateResults[$resultId] = true;
 
-            if (!property_exists($result, 'score') || $result->score === null) {
+            if (($result->score ?? null) === null) {
                 $result->score = $this->getScore($result);
             }
 

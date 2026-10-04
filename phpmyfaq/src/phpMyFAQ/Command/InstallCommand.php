@@ -131,11 +131,9 @@ class InstallCommand extends Command
             $io->note('Removed any existing installation config files (--force).');
         }
 
-        /** @var string $dbType */
         $dbType = (string) $input->getOption('db-type');
         $isSqlite = System::isSqlite($dbType);
 
-        /** @var string $adminPassword */
         $adminPassword = (string) $input->getOption('admin-password');
         if (strlen($adminPassword) < 8) {
             $io->error(

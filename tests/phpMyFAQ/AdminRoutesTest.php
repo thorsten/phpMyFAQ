@@ -5,21 +5,16 @@ declare(strict_types=1);
 namespace phpMyFAQ;
 
 use phpMyFAQ\Routing\RouteCollectionBuilder;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouteCollection;
 
-#[AllowMockObjectsWithoutExpectations]
 class AdminRoutesTest extends TestCase
 {
     private RouteCollection $routes;
 
     protected function setUp(): void
     {
-        $configuration = $this->createMock(Configuration::class);
-        $configuration->method('get')->willReturn(false);
-
-        $this->routes = new RouteCollectionBuilder($configuration)->build('admin', true);
+        $this->routes = new RouteCollectionBuilder()->build('admin', true);
     }
 
     /**

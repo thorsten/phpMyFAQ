@@ -1100,7 +1100,7 @@ class User
         $superAdminIds = [];
         while (true) {
             $row = $configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if ($row === false || $row === null) {
                 break;
             }
 
@@ -1126,19 +1126,24 @@ class User
 
     public function extractUserFromResult(mixed $result): void
     {
-        $user = array_merge([
-            'user_id' => 0,
-            'login' => '',
-            'account_status' => '',
-            'is_superadmin' => false,
-            'auth_source' => '',
-        ], $this->fetchRowArray($result));
+        // The database row carries every column as a string, so cast each value explicitly.
+        $user = $this->fetchRowArray($result);
 
-        $this->userId = (int) $user['user_id'];
-        $this->login = (string) $user['login'];
-        $this->status = (string) $user['account_status'];
-        $this->isSuperAdmin = (bool) $user['is_superadmin'];
-        $this->authSource = (string) $user['auth_source'];
+        $this->userId = (int) self::column($user, 'user_id', 0);
+        $this->login = (string) self::column($user, 'login', '');
+        $this->status = (string) self::column($user, 'account_status', '');
+        $this->isSuperAdmin = (int) self::column($user, 'is_superadmin', 0) !== 0;
+        $this->authSource = (string) self::column($user, 'auth_source', '');
+    }
+
+    /**
+     * Returns a raw column value of a fetched row, or the default when the column is missing.
+     *
+     * @param array<array-key, mixed> $row
+     */
+    private static function column(array $row, string $name, mixed $default): mixed
+    {
+        return array_key_exists($name, $row) ? $row[$name] : $default;
     }
 
     /**
@@ -1175,8 +1180,7 @@ class User
 
         $result = $this->configuration->getDb()->query($select);
         if ($this->configuration->getDb()->numRows($result) === 1) {
-            $user = array_merge(['webauthnkeys' => ''], $this->fetchRowArray($result));
-            $webAuthnKeys = $user['webauthnkeys'];
+            $webAuthnKeys = $this->fetchRowArray($result)['webauthnkeys'] ?? '';
 
             return is_string($webAuthnKeys) ? $webAuthnKeys : '';
         }

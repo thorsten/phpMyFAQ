@@ -174,11 +174,7 @@ final class CommentController extends AbstractController
                 ->setType($type)
                 ->setUsername($username)
                 ->setEmail($email)
-                ->setComment(
-                    $enableCommentEditor && $isLoggedIn
-                        ? (string) $commentText
-                        : nl2br(strip_tags((string) $commentText)),
-                ) // Already sanitized with HTML support // Plain text with line breaks
+                ->setComment($enableCommentEditor && $isLoggedIn ? $commentText : nl2br(strip_tags($commentText))) // Already sanitized with HTML support // Plain text with line breaks
                 ->setDate((string) $request->server->get(key: 'REQUEST_TIME'));
 
             // Guests must not comment under the display name and e-mail address of a registered user.

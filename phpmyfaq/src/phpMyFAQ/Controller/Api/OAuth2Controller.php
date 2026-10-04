@@ -131,11 +131,7 @@ final class OAuth2Controller extends AbstractApiController
         }
 
         $locationHeader = null;
-        if (
-            array_key_exists('headers', $result)
-            && is_array($result['headers'])
-            && array_key_exists('Location', $result['headers'])
-        ) {
+        if (array_key_exists('headers', $result) && array_key_exists('Location', $result['headers'])) {
             $locationHeader = $result['headers']['Location'];
         }
 
@@ -145,14 +141,14 @@ final class OAuth2Controller extends AbstractApiController
 
         $contentType = $result['headers']['Content-Type'] ?? '';
         if (str_contains($contentType, 'application/json')) {
-            $data = json_decode(is_string($result['body'] ?? null) ? $result['body'] : '', associative: true);
+            $data = json_decode(is_string($result['body']) ? $result['body'] : '', associative: true);
             if (is_array($data)) {
                 return $this->json($data, $result['status'], $result['headers'] ?? []);
             }
         }
 
         return new Response(
-            is_string($result['body'] ?? null) ? $result['body'] : '',
+            is_string($result['body']) ? $result['body'] : '',
             $result['status'],
             $result['headers'] ?? [],
         );

@@ -156,11 +156,12 @@ readonly class DatabaseConfigurationStore implements ConfigurationStoreInterface
         }
 
         foreach ($rows as $row) {
-            if (!property_exists($row, 'config_name') || !property_exists($row, 'config_value')) {
+            $columns = get_object_vars($row);
+            if (!array_key_exists('config_name', $columns) || !array_key_exists('config_value', $columns)) {
                 continue;
             }
 
-            $values[(string) $row->config_name] = (string) $row->config_value;
+            $values[(string) $columns['config_name']] = (string) $columns['config_value'];
         }
 
         return $values;

@@ -146,7 +146,7 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
             $redis = $this->getRedisClient();
             $keyValueMap = [];
             foreach ($rows as $row) {
-                if (!property_exists($row, 'config_name') || $row->config_name === null) {
+                if (($row->config_name ?? null) === null) {
                     continue;
                 }
 
@@ -254,7 +254,11 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
                 ));
             }
 
-            $readTimeout = $timeout > 0 ? $timeout : (float) ini_get('default_socket_timeout');
+            $readTimeout = $timeout;
+            if ($readTimeout <= 0) {
+                $defaultSocketTimeout = ini_get('default_socket_timeout');
+                $readTimeout = is_numeric($defaultSocketTimeout) ? (float) $defaultSocketTimeout : 60.0;
+            }
             $redis->setOption(Redis::OPT_READ_TIMEOUT, $readTimeout);
 
             return $redis;

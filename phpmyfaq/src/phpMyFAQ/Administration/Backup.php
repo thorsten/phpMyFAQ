@@ -163,11 +163,11 @@ readonly class Backup
         switch ($backupType) {
             case BackupType::BACKUP_TYPE_DATA:
                 foreach ($tables as $table) {
-                    if (Database::getTablePrefix() . 'faqadminlog' === trim((string) $table)) {
+                    if (Database::getTablePrefix() . 'faqadminlog' === trim($table)) {
                         continue;
                     }
 
-                    if (Database::getTablePrefix() . 'faqsessions' === trim((string) $table)) {
+                    if (Database::getTablePrefix() . 'faqsessions' === trim($table)) {
                         continue;
                     }
 
@@ -178,8 +178,8 @@ readonly class Backup
             case BackupType::BACKUP_TYPE_LOGS:
                 foreach ($tables as $table) {
                     if (
-                        Database::getTablePrefix() . 'faqadminlog' !== trim((string) $table)
-                        && Database::getTablePrefix() . 'faqsessions' !== trim((string) $table)
+                        Database::getTablePrefix() . 'faqadminlog' !== trim($table)
+                        && Database::getTablePrefix() . 'faqsessions' !== trim($table)
                     ) {
                         continue;
                     }
@@ -248,7 +248,7 @@ readonly class Backup
                 continue;
             }
 
-            $relativePath = substr($filePath, strlen((string) PMF_CONTENT_DIR) + 1);
+            $relativePath = substr($filePath, strlen(PMF_CONTENT_DIR) + 1);
             $zipArchive->addFile($filePath, $relativePath);
         }
 

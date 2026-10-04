@@ -524,7 +524,7 @@ final class PageController extends AbstractAdministrationApiController
         $offset = Filter::filterVar($request->query->get('offset'), FILTER_VALIDATE_INT, 0);
         $sortField = Filter::filterVar($request->query->get('sortField'), FILTER_SANITIZE_SPECIAL_CHARS, 'created');
         $sortOrder = Filter::filterVar($request->query->get('sortOrder'), FILTER_SANITIZE_SPECIAL_CHARS, 'DESC');
-        $activeOnly = (bool) Filter::filterVar($request->query->get('activeOnly'), FILTER_VALIDATE_BOOLEAN, false);
+        $activeOnly = Filter::filterVar($request->query->get('activeOnly'), FILTER_VALIDATE_BOOLEAN, false);
 
         $pages = $customPage->getPagesPaginated(
             activeOnly: $activeOnly,

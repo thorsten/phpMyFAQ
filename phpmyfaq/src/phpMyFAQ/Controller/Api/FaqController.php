@@ -723,7 +723,7 @@ final class FaqController extends AbstractApiController
         $answer = Filter::filterHtml($data->answer ?? '', '');
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $email = (string) Filter::filterVar($data->email ?? '', FILTER_SANITIZE_EMAIL, '');
+        $email = Filter::filterVar($data->email ?? '', FILTER_SANITIZE_EMAIL, '');
         $isActive = Filter::filterVar($data->{'is-active'} ?? null, FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($data->{'is-sticky'} ?? null, FILTER_VALIDATE_BOOLEAN);
 
@@ -892,7 +892,7 @@ final class FaqController extends AbstractApiController
         $answer = Filter::filterHtml($data->answer ?? '', '');
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $email = (string) Filter::filterVar($data->email ?? '', FILTER_SANITIZE_EMAIL, '');
+        $email = Filter::filterVar($data->email ?? '', FILTER_SANITIZE_EMAIL, '');
         $isActive = Filter::filterVar($data->{'is-active'} ?? null, FILTER_VALIDATE_BOOLEAN);
         $isSticky = Filter::filterVar($data->{'is-sticky'} ?? null, FILTER_VALIDATE_BOOLEAN);
 

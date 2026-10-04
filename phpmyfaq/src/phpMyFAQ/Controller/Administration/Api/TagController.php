@@ -89,15 +89,12 @@ final class TagController extends AbstractController
 
         $tags = [];
         if (!is_null($autoCompleteValue)) {
-            if (strpos((string) $autoCompleteValue, needle: ',')) {
-                $arrayOfValues = explode(separator: ',', string: (string) $autoCompleteValue);
+            if (strpos($autoCompleteValue, needle: ',')) {
+                $arrayOfValues = explode(separator: ',', string: $autoCompleteValue);
                 $autoCompleteValue = end($arrayOfValues);
             }
 
-            $tags = $this->tags->getAllTags(
-                strtolower(trim((string) $autoCompleteValue)),
-                PMF_TAGS_CLOUD_RESULT_SET_SIZE,
-            );
+            $tags = $this->tags->getAllTags(strtolower(trim($autoCompleteValue)), PMF_TAGS_CLOUD_RESULT_SET_SIZE);
         }
 
         if (is_null($autoCompleteValue)) {

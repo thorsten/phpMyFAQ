@@ -95,7 +95,7 @@ readonly class RatingRepository implements RatingRepositoryInterface
         }
 
         $row = $this->configuration->getDb()->fetchObject($result);
-        if ($row !== false && $row !== null && $row !== []) {
+        if ($row !== false && $row !== null) {
             return (int) $row->usr;
         }
 

@@ -89,7 +89,7 @@ readonly class Plurals
                     return 3;
                 }
 
-                if ($n100 >= 11 && $n100 <= 99) {
+                if ($n100 >= 11) {
                     return 4;
                 }
 
@@ -276,7 +276,7 @@ readonly class Plurals
             return is_string($templates) ? $templates : '';
         }
 
-        return (string) ($templates[$plural] ?? $templates[1] ?? '');
+        return $templates[$plural] ?? $templates[1] ?? '';
     }
 
     /**

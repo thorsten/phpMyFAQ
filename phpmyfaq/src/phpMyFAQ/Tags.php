@@ -366,7 +366,7 @@ class Tags
     public function getFaqsByIntersectionTags(array $arrayOfTags): array
     {
         $db = $this->configuration->getDb();
-        $escapedTags = array_map(static fn($tag): string => $db->escape((string) $tag), $arrayOfTags);
+        $escapedTags = array_map($db->escape(...), $arrayOfTags);
 
         $query = sprintf(
             "

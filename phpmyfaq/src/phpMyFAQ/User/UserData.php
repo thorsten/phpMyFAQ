@@ -145,7 +145,7 @@ class UserData
         $row = $this->configuration->getDb()->fetchObject($res);
 
         /* @mago-expect analysis:mixed-return-statement - user data fields are heterogeneous by design */
-        return $row instanceof \stdClass ? $row->$key : null;
+        return $row instanceof \stdClass ? get_object_vars($row)[$key] ?? null : null;
     }
 
     /**

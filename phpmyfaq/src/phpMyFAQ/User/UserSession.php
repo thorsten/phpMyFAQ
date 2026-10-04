@@ -284,11 +284,11 @@ class UserSession
         ];
 
         if ($this->cookieSetter instanceof Closure) {
-            ($this->cookieSetter)($name, (string) $sessionId ?? '', $options);
+            ($this->cookieSetter)($name, (string) $sessionId, $options);
             return;
         }
 
-        setcookie($name, (string) $sessionId ?? '', $options);
+        setcookie($name, (string) $sessionId, $options);
     }
 
     private function getRequest(): Request

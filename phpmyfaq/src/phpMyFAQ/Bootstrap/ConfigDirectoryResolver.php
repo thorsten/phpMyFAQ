@@ -65,7 +65,7 @@ class ConfigDirectoryResolver
             || str_contains($requestUri, '/update')
             || str_contains($requestUri, '/update/');
 
-        $legacyConfigDir = defined('PMF_LEGACY_CONFIG_DIR') ? (string) PMF_LEGACY_CONFIG_DIR : null;
+        $legacyConfigDir = defined('PMF_LEGACY_CONFIG_DIR') ? PMF_LEGACY_CONFIG_DIR : null;
 
         $configExists = file_exists((string) PMF_CONFIG_DIR . '/database.php');
         $legacyExists = $legacyConfigDir !== null && file_exists($legacyConfigDir . '/database.php');
@@ -102,7 +102,7 @@ class ConfigDirectoryResolver
             return;
         }
 
-        $legacyConstantsFile = (string) PMF_LEGACY_CONFIG_DIR . '/constants.php';
+        $legacyConstantsFile = PMF_LEGACY_CONFIG_DIR . '/constants.php';
         if (file_exists($legacyConstantsFile)) {
             require_once $legacyConstantsFile;
         }

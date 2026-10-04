@@ -77,7 +77,6 @@ final class InstanceController extends AbstractController
             || $comment === null
             || $email === ''
             || $email === null
-            || $email === false
             || $admin === ''
             || $admin === null
             || $password === ''
@@ -85,13 +84,6 @@ final class InstanceController extends AbstractController
         ) {
             return $this->json(['error' => 'Cannot create instance.'], Response::HTTP_BAD_REQUEST);
         }
-
-        $url = (string) $url;
-        $instance = (string) $instance;
-        $comment = (string) $comment;
-        $email = (string) $email;
-        $admin = (string) $admin;
-        $password = (string) $password;
 
         $url = 'https://' . $url . '.' . $request->getHost();
         if (!Filter::filterVar($url, FILTER_VALIDATE_URL)) {
@@ -190,7 +182,7 @@ final class InstanceController extends AbstractController
 
         $instanceId = Filter::filterVar($data->instanceId ?? null, FILTER_VALIDATE_INT);
 
-        if ($instanceId !== false && null !== $instanceId) {
+        if (null !== $instanceId) {
             $client = new Client($this->configuration);
             $client->setFileSystem(new Filesystem());
             $clientData = $client->getById($instanceId);

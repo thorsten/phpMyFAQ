@@ -232,7 +232,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
             $conditions .= match (true) {
                 is_array($value) => $this->buildInClause($column, $value),
                 is_int($value) => ' AND ' . $column . ' = ' . $value,
-                default => ' AND ' . $column . " = '" . $db->escape((string) $value) . "'",
+                default => ' AND ' . $column . " = '" . $db->escape($value) . "'",
             };
         }
 

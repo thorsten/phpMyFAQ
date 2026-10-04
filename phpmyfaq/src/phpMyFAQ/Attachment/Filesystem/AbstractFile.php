@@ -99,7 +99,7 @@ abstract class AbstractFile extends AbstractEntry
      */
     public function delete(): bool
     {
-        if ($this->handle) {
+        if (is_resource($this->handle)) {
             fclose($this->handle);
         }
 

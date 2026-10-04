@@ -160,7 +160,7 @@ class Tracking
             );
             $this->userSession->setCurrentSessionId($this->currentSessionId);
 
-            if (!is_null($cookieId) && !$cookieId !== $this->userSession->getCurrentSessionId()) {
+            if ($cookieId !== null && $cookieId !== $this->userSession->getCurrentSessionId()) {
                 $this->userSession->setCookie(
                     UserSession::COOKIE_NAME_SESSION_ID,
                     $this->userSession->getCurrentSessionId(),

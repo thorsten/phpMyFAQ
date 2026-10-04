@@ -238,7 +238,7 @@ final class UnauthorizedUserController
      */
     private function sendResetLinkEmail(string $email, string $username, #[\SensitiveParameter] array $token): void
     {
-        $baseUrl = rtrim((string) $this->configuration->getDefaultUrl(), characters: '/');
+        $baseUrl = rtrim($this->configuration->getDefaultUrl(), characters: '/');
         $link = sprintf(
             '%s/user/reset-password?u=%d&exp=%d&sig=%s',
             $baseUrl,

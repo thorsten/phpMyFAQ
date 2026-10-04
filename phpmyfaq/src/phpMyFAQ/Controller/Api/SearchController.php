@@ -163,8 +163,8 @@ final class SearchController extends AbstractApiController
         $sortField = $sort->getField();
         if ($sortField !== null && $sortField !== '') {
             usort($allResults, static function (object $a, object $b) use ($sort, $sortField): int {
-                $aVal = $a->{$sortField} ?? '';
-                $bVal = $b->{$sortField} ?? '';
+                $aVal = get_object_vars($a)[$sortField] ?? '';
+                $bVal = get_object_vars($b)[$sortField] ?? '';
                 $result = is_numeric($aVal) && is_numeric($bVal)
                     ? (float) $aVal <=> (float) $bVal
                     : (string) $aVal <=> (string) $bVal;

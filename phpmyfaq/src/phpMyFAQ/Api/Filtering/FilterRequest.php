@@ -38,18 +38,14 @@ class FilterRequest
         }
     }
 
-    private array $allowedFilters;
-
     /**
      * Constructor
      *
      * @param array $filters Parsed and validated filters
-     * @param array $allowedFilters Configuration of allowed filters
      */
-    private function __construct(array $filters, array $allowedFilters)
+    private function __construct(array $filters)
     {
         $this->filters = $filters;
-        $this->allowedFilters = $allowedFilters;
     }
 
     /**
@@ -95,7 +91,7 @@ class FilterRequest
             }
         }
 
-        return new self($filters, $allowedFilters);
+        return new self($filters);
     }
 
     /**

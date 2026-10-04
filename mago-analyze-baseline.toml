@@ -19,12 +19,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 5
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/DashboardLayout.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -43,82 +37,10 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
-code = "less-specific-nested-argument-type"
-message = "Argument type mismatch for argument #1 of `array_diff`: expected `array<array-key, ('V.array_diff() extends Stringable|null|resource|scalar)>`, but provided type `array<array-key, mixed>` is less specific."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
-code = "less-specific-nested-argument-type"
-message = "Argument type mismatch for argument #2 of `array_diff`: expected `array<array-key, ('V.array_diff() extends Stringable|null|resource|scalar)>`, but provided type `array<array-key, mixed>` is less specific."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
-code = "template-constraint-violation"
-message = "Argument type mismatch for template `V`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/ReportRepository.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/ReportRepository.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/ReportRepository.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Revision.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Revision.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Administration/Revision.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
-count = 1
+count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Api/Filtering/FilterRequest.php"
@@ -133,27 +55,9 @@ message = "Assigning `nonnull` type to a variable may lead to unexpected behavio
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Api/Filtering/FilterRequest.php"
-code = "write-only-property"
-message = "Property `$allowedFilters` is written to but never read."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Api/MetaService.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Api/OAuthDiscoveryService.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Api/Sorting/SortRequest.php"
-code = "write-only-property"
-message = "Property `$allowedFields` is written to but never read."
 count = 1
 
 [[issues]]
@@ -169,88 +73,10 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
-code = "redundant-condition"
-message = "Redundant condition: variable `$success` (type `true`) will always evaluate to true."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/File.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/AbstractFile.php"
-code = "redundant-condition"
-message = "This condition (type `resource`) will always evaluate to true."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Attachment/Filesystem/File/EncryptedFile.php"
-code = "incompatible-parameter-name"
-message = 'Parameter #1 of `phpMyFAQ\Attachment\Filesystem\File\EncryptedFile::copyto()` is named `$target` but parent `phpMyFAQ\Attachment\Filesystem\AbstractEntry::copyto()` names it `$entry`'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth.php"
-code = "unsafe-instantiation"
-message = 'Unsafe `new $class_name`: constructor of `phpMyFAQ\Auth` is not final and its signature might change in child classes, potentially leading to runtime errors.'
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/ApiKeyAuthenticator.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthChain.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthChain.php"
-code = "redundant-condition"
-message = "This condition (type `true`) will always evaluate to true."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #2 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #3 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
-code = "mixed-argument"
-message = "Invalid argument type for argument #5 of `sprintf`: expected `Stringable|null|scalar`, but found `mixed`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\AAD_OAUTH_CLIENTID`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\AAD_OAUTH_SCOPE`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthEntraId.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\AAD_OAUTH_TENANTID`.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/AuthKeycloak.php"
@@ -301,24 +127,6 @@ message = "Assigning `nonnull` type to a variable may lead to unexpected behavio
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$attestationObject` (type `stdClass&has-property<'fmt'>`) is already known to be `has-property<'authData'>`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$attestationObject` (type `stdClass`) is already known to be `has-property<'fmt'>`."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$info` (type `has-property<'response'>`) is already known to be `has-property<'rawId'>`."
-count = 2
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/EntraIdSession.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -332,51 +140,9 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Auth\EntraId\JwksProvider::getKeys`: expected `string`, but found `mixed`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\EntraId\AAD_OAUTH_CLIENTID`.'
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\EntraId\AAD_OAUTH_SCOPE`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\EntraId\AAD_OAUTH_SECRET`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "non-existent-constant"
-message = 'Undefined constant: `phpMyFAQ\Auth\EntraId\AAD_OAUTH_TENANTID`.'
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$decoded` (type `stdClass&has-property<'aud'>`) is already known to be `has-property<'iss'>`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$decoded` (type `stdClass`) is already known to be `has-property<'aud'>`."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/AuthorizationServer.php"
@@ -385,40 +151,10 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 4
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/AccessTokenRepository.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/AuthCodeRepository.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/Repository/ClientRepository.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/ResourceServer.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/ResourceServer.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/ResourceServer.php"
-code = "redundant-condition"
-message = "This condition (type `true`) will always evaluate to true."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Auth/Oidc/OidcClient.php"
@@ -451,12 +187,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 6
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Bootstrap/ConfigDirectoryResolver.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 2
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Bootstrap/SearchClientFactory.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -467,12 +197,6 @@ file = "phpmyfaq/src/phpMyFAQ/Bootstrapper.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Cache/CacheSettingsResolver.php"
-code = "invalid-type-cast"
-message = "Non numeric string of type `string` implicitly cast to `float`."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Captcha/GoogleRecaptcha.php"
@@ -493,12 +217,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/BreadcrumbsHtmlRenderer.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -509,18 +227,6 @@ file = "phpmyfaq/src/phpMyFAQ/Command/CreateHashesCommand.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Command/InstallCommand.php"
-code = "redundant-docblock-type"
-message = "Redundant docblock type for variable `$adminPassword`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Command/InstallCommand.php"
-code = "redundant-docblock-type"
-message = "Redundant docblock type for variable `$dbType`."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Command/McpServerCommand.php"
@@ -541,36 +247,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 10
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Comment/CommentsRepository.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/DatabaseConfiguration.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is always identical to right-hand side."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/DatabaseConfiguration.php"
-code = "redundant-condition"
-message = "Redundant ternary operator: condition is always truthy."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/LdapConfiguration.php"
-code = "redundant-condition"
-message = "This condition (type `true`) will always evaluate to true."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Configuration/LdapSettings.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -580,12 +256,6 @@ count = 4
 file = "phpmyfaq/src/phpMyFAQ/Configuration/MailSettings.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/MultisiteConfigurationLocator.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
@@ -601,30 +271,6 @@ message = "Casting `mixed` to `bool`."
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/ConfigurationStorageSettingsResolver.php"
-code = "invalid-type-cast"
-message = "Non numeric string of type `string` implicitly cast to `float`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/DatabaseConfigurationStore.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `has-property<'config_name'>`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/FilesystemConfigurationCache.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `has-property<'config_name'>`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
-code = "invalid-type-cast"
-message = "Non numeric string of type `string` implicitly cast to `float`."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -641,12 +287,6 @@ file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
 code = "redundant-logical-operation"
 message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `has-property<'config_name'>`."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/ConfigurationMethodsTrait.php"
@@ -685,12 +325,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 3
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -716,20 +350,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationController.php"
-code = "invalid-type-cast"
-message = "Casting `mixed` to `float`."
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationTabController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationTabController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
 count = 4
 
 [[issues]]
@@ -754,12 +382,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ExportController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ExportController.php"
-code = "string-member-selector"
-message = "This member selector uses a non-literal string type (`string`); its specific value cannot be statically determined."
 count = 1
 
 [[issues]]
@@ -787,46 +409,10 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/InstanceController.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/LdapController.php"
@@ -841,22 +427,10 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/MediaBrowserController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 8
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(bool)`: the expression already has this type."
-count = 1
+count = 6
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PushController.php"
@@ -868,18 +442,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/QuestionController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/SessionController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TagController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
 count = 3
 
 [[issues]]
@@ -919,12 +481,6 @@ message = "Casting `mixed` to `bool`."
 count = 4
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AuthenticationController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/BackupController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -935,18 +491,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
 code = "mixed-assignment"
 message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/DashboardController.php"
@@ -964,30 +508,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/InstanceController.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is always false and right operand is evaluated."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/PasswordChangeController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/StatisticsSessionsController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
@@ -1009,12 +529,6 @@ message = "Casting `mixed` to `bool`."
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SystemInformationController.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 2
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -1025,30 +539,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Api/CategoryController.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\FaqEntity::setAnswer`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Entity\FaqEntity::setQuestion`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "mixed-argument"
-message = 'Invalid argument type for argument #1 of `phpMyFAQ\Faq::hasTitleAHash`: expected `string`, but found `mixed`.'
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/FaqController.php"
@@ -1067,18 +557,6 @@ file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OAuth2Controller.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/OpenQuestionController.php"
@@ -1102,12 +580,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Controller/Api/SearchController.php"
 code = "mixed-assignment"
 message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Api/SearchController.php"
-code = "string-member-selector"
-message = "This member selector uses a non-literal string type (`non-empty-string`); its specific value cannot be statically determined."
 count = 2
 
 [[issues]]
@@ -1138,7 +610,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/CommentController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/CommentController.php"
@@ -1147,52 +619,22 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/CommentController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 2
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/ContactController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/FaqController.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$data` (type `stdClass&has-property<'name'>`) is already known to be `has-property<'question'>`."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/PushController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 4
+count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/QuestionController.php"
@@ -1207,52 +649,28 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/RegistrationController.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/RegistrationController.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$data` (type `has-property<'realname'>&has-property<'name'>`) is already known to be `has-property<'email'>`."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UnauthorizedUserController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UnauthorizedUserController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/UserController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/VotingController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/WebAuthnController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/WebAuthnController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(bool)`: the expression already has this type."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AuthenticationController.php"
@@ -1267,22 +685,10 @@ message = "Casting `mixed` to `bool`."
 count = 4
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AuthenticationController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AzureAuthenticationController.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/CategoryController.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$childNodes` (type `array<array-key, int>`) is already known to be `countable`."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
@@ -1315,28 +721,10 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/SearchController.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
-code = "write-only-property"
-message = "Property `$seoRepository` is written to but never read."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database.php"
-code = "unsafe-instantiation"
-message = 'Potentially unsafe instantiation: `class-string<phpMyFAQ\Database\DatabaseDriver>` may contain the interface `phpMyFAQ\Database\DatabaseDriver` itself, which cannot be instantiated.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/DatabaseHelper.php"
@@ -1369,12 +757,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 5
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Pgsql.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
@@ -1385,18 +767,6 @@ file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Encryption.php"
-code = "unsafe-instantiation"
-message = 'Unsafe `new $class_name`: constructor of `phpMyFAQ\Encryption` is not final and its signature might change in child classes, potentially leading to runtime errors.'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/EventListener/LanguageListener.php"
@@ -1441,30 +811,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 3
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Engine/TcpdfEngine.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Export/Pdf/Wrapper.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/FaqCreationService.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
@@ -1486,7 +832,7 @@ count = 2
 file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
+count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Faq/Permission.php"
@@ -1510,24 +856,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Filter.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Forms.php"
-code = "redundant-condition"
-message = "Redundant condition: variable `$ok` (type `true`) will always evaluate to true."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Forms.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Helper/FaqHelper.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
 count = 2
 
 [[issues]]
@@ -1541,12 +869,6 @@ file = "phpmyfaq/src/phpMyFAQ/Helper/StatisticsHelper.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 7
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
-code = "invalid-type-cast"
-message = "Object of type `object` cast to `array`. Property visibility (public, protected, private) affects the resulting array."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
@@ -1567,34 +889,10 @@ message = "Assigning `nonnull` type to a variable may lead to unexpected behavio
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Search/Elasticsearch.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
-code = "redundant-condition"
-message = "This condition (type `true`) will always evaluate to true."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
@@ -1618,24 +916,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Language/LanguageDetector.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Language/Plurals.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Language/Plurals.php"
-code = "redundant-comparison"
-message = "Redundant `<=` comparison: left-hand side is always less than or equal to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Language/Plurals.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
 count = 1
 
 [[issues]]
@@ -1643,36 +923,6 @@ file = "phpmyfaq/src/phpMyFAQ/Ldap.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Link.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Link.php"
-code = "redundant-condition"
-message = "This condition (type `true`) will always evaluate to true."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Link.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is always truthy and right operand is evaluated."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Link/Strategy/SearchStrategy.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Link/Util/LinkQueryParser.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Mail.php"
@@ -1687,52 +937,10 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Mail/Builtin.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/News.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 6
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/News/NewsRepository.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
-count = 3
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
@@ -1759,12 +967,6 @@ message = "Casting `mixed` to `bool`."
 count = 3
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Plugin/PluginManager.php"
-code = "unsafe-instantiation"
-message = 'Potentially unsafe instantiation: `class-string<phpMyFAQ\Plugin\PluginInterface>` may contain the interface `phpMyFAQ\Plugin\PluginInterface` itself, which cannot be instantiated.'
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -1787,12 +989,6 @@ file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/ExportHandler.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
 count = 2
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/ExportHandler.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/IndexFaqHandler.php"
@@ -1831,18 +1027,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Queue/Worker.php"
-code = "possibly-static-access-on-interface"
-message = 'Potential static method call on interface `phpMyFAQ\Queue\Message\QueueMessageInterface` via `class-string`.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Queue/Worker.php"
-code = "redundant-docblock-type"
-message = "Redundant docblock type for variable `$messageClass`."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Relation.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -1861,21 +1045,9 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Routing/RouteCollectionBuilder.php"
-code = "unused-property"
-message = "Property `$configuration` is never used."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search.php"
-code = "redundant-condition"
-message = "Redundant ternary operator: condition is always truthy."
 count = 1
 
 [[issues]]
@@ -1939,18 +1111,6 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/Rating/RatingRepository.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/Search/Elasticsearch.php"
 code = "ambiguous-object-method-access"
 message = "Cannot statically verify method call on a generic `object` type."
@@ -1969,30 +1129,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 3
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchDatabase.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchFactory.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchFactory.php"
-code = "unsafe-instantiation"
-message = 'Unsafe `new $class_name`: constructor of `phpMyFAQ\Search\SearchDatabase` is not final and its signature might change in child classes, potentially leading to runtime errors.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Search/SearchResultSet.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$result` (type `stdClass`) is already known to be `has-property<'score'>`."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
@@ -2008,24 +1144,6 @@ count = 1
 file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Seo/SeoRepository.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
 count = 1
 
 [[issues]]
@@ -2059,18 +1177,6 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 2
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/McpSdkRuntime.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/McpSdkRuntime.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/PhpMyFaqMcpServer.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
@@ -2089,34 +1195,10 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/EnvironmentConfigurator.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/EnvironmentConfigurator.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Installation/SchemaInstaller.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationInputValidator.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 9
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationInputValidator.php"
-code = "possibly-invalid-array-access"
-message = "Cannot perform array access on value of type `bool`."
-count = 2
+count = 4
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationRunner.php"
@@ -2149,39 +1231,9 @@ message = "Assigning `nonnull` type to a variable may lead to unexpected behavio
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationExecutor.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationTracker.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Operations/ConfigUpdateOperation.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Versions/Migration400Alpha.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
@@ -2209,18 +1261,6 @@ message = "Assigning `nonnull` type to a variable may lead to unexpected behavio
 count = 4
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Setup/Upgrade.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/StopWords.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Storage/S3Storage.php"
 code = "ambiguous-object-method-access"
 message = "Cannot statically verify method call on a generic `object` type."
@@ -2246,20 +1286,8 @@ count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/System.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 5
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/System.php"
 code = "redundant-comparison"
 message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Tags.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
 count = 1
 
 [[issues]]
@@ -2273,30 +1301,6 @@ file = "phpmyfaq/src/phpMyFAQ/Translation.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation.php"
-code = "unsafe-instantiation"
-message = 'Unsafe `new $class_name`: constructor of `phpMyFAQ\Translation` is not final and its signature might change in child classes, potentially leading to runtime errors.'
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation/ContentTranslationService.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 12
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation/ContentTranslationService.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 12
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/AmazonTranslationProvider.php"
-code = "incompatible-parameter-name"
-message = 'Parameter #1 of `phpMyFAQ\Translation\Provider\AmazonTranslationProvider::maplanguagecode()` is named `$languageCode` but parent `phpMyFAQ\Translation\AbstractTranslationProvider::maplanguagecode()` names it `$pmfLangCode`'
-count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/AmazonTranslationProvider.php"
@@ -2348,50 +1352,14 @@ count = 1
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User.php"
 code = "mixed-operand"
 message = "Casting `mixed` to `bool`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "redundant-cast"
-message = "Redundant cast to `(bool)`: the expression already has this type."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 3
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "redundant-comparison"
-message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "redundant-condition"
-message = "Redundant ternary operator: condition is always truthy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "redundant-logical-operation"
-message = "Redundant `||` operation: left operand is evaluated and right operand is always falsy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "redundant-type-comparison"
-message = "Redundant condition: variable `$row` (type `stdClass`) is already known to be `empty-countable`."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User.php"
-code = "redundant-type-comparison"
-message = "Redundant type assertion: `$webAuthnKeys` is already `string('')`."
 count = 1
 
 [[issues]]
@@ -2419,33 +1387,9 @@ message = "Casting `mixed` to `bool`."
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/CurrentUserSessionLookupTrait.php"
-code = "redundant-cast"
-message = "Redundant cast to `(string)`: the expression already has this type."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/Tracking.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/Tracking.php"
-code = "redundant-comparison"
-message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/Tracking.php"
-code = "redundant-logical-operation"
-message = "Redundant `&&` operation: left operand is evaluated and right operand is always truthy."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserAuthentication.php"
-code = "unevaluated-code"
-message = "Unreachable code detected."
 count = 1
 
 [[issues]]
@@ -2455,22 +1399,10 @@ message = "Assigning `mixed` type to a variable may lead to unexpected behavior.
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
-code = "string-member-selector"
-message = "This member selector uses a non-literal string type (`string`); its specific value cannot be statically determined."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/User/UserSession.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
 count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/User/UserSession.php"
-code = "redundant-null-coalesce"
-message = "Redundant null coalesce: left-hand side can never be `null` or undefined."
-count = 2
 
 [[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Visits.php"

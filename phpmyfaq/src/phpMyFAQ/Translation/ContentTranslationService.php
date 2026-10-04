@@ -61,7 +61,7 @@ class ContentTranslationService
         $result = [];
 
         // Translate question (plain text)
-        if (array_key_exists('question', $fields) && $fields['question'] !== null && $fields['question'] !== '') {
+        if (array_key_exists('question', $fields) && $fields['question'] !== '') {
             $result['question'] = $this->provider->translate(
                 $fields['question'],
                 $request->getSourceLang(),
@@ -71,7 +71,7 @@ class ContentTranslationService
         }
 
         // Translate answer (HTML content)
-        if (array_key_exists('answer', $fields) && $fields['answer'] !== null && $fields['answer'] !== '') {
+        if (array_key_exists('answer', $fields) && $fields['answer'] !== '') {
             $result['answer'] = $this->provider->translate(
                 $fields['answer'],
                 $request->getSourceLang(),
@@ -81,7 +81,7 @@ class ContentTranslationService
         }
 
         // Translate keywords (plain text)
-        if (array_key_exists('keywords', $fields) && $fields['keywords'] !== null && $fields['keywords'] !== '') {
+        if (array_key_exists('keywords', $fields) && $fields['keywords'] !== '') {
             $result['keywords'] = $this->provider->translate(
                 $fields['keywords'],
                 $request->getSourceLang(),
@@ -110,7 +110,7 @@ class ContentTranslationService
         $result = [];
 
         // Translate page title
-        if (array_key_exists('pageTitle', $fields) && $fields['pageTitle'] !== null && $fields['pageTitle'] !== '') {
+        if (array_key_exists('pageTitle', $fields) && $fields['pageTitle'] !== '') {
             $result['pageTitle'] = $this->provider->translate(
                 $fields['pageTitle'],
                 $request->getSourceLang(),
@@ -120,7 +120,7 @@ class ContentTranslationService
         }
 
         // Translate content (HTML)
-        if (array_key_exists('content', $fields) && $fields['content'] !== null && $fields['content'] !== '') {
+        if (array_key_exists('content', $fields) && $fields['content'] !== '') {
             $result['content'] = $this->provider->translate(
                 $fields['content'],
                 $request->getSourceLang(),
@@ -130,7 +130,7 @@ class ContentTranslationService
         }
 
         // Translate SEO title
-        if (array_key_exists('seoTitle', $fields) && $fields['seoTitle'] !== null && $fields['seoTitle'] !== '') {
+        if (array_key_exists('seoTitle', $fields) && $fields['seoTitle'] !== '') {
             $result['seoTitle'] = $this->provider->translate(
                 $fields['seoTitle'],
                 $request->getSourceLang(),
@@ -140,11 +140,7 @@ class ContentTranslationService
         }
 
         // Translate SEO description
-        if (
-            array_key_exists('seoDescription', $fields)
-            && $fields['seoDescription'] !== null
-            && $fields['seoDescription'] !== ''
-        ) {
+        if (array_key_exists('seoDescription', $fields) && $fields['seoDescription'] !== '') {
             $result['seoDescription'] = $this->provider->translate(
                 $fields['seoDescription'],
                 $request->getSourceLang(),
@@ -173,7 +169,7 @@ class ContentTranslationService
         $result = [];
 
         // Translate name
-        if (array_key_exists('name', $fields) && $fields['name'] !== null && $fields['name'] !== '') {
+        if (array_key_exists('name', $fields) && $fields['name'] !== '') {
             $result['name'] = $this->provider->translate(
                 $fields['name'],
                 $request->getSourceLang(),
@@ -183,11 +179,7 @@ class ContentTranslationService
         }
 
         // Translate description
-        if (
-            array_key_exists('description', $fields)
-            && $fields['description'] !== null
-            && $fields['description'] !== ''
-        ) {
+        if (array_key_exists('description', $fields) && $fields['description'] !== '') {
             $result['description'] = $this->provider->translate(
                 $fields['description'],
                 $request->getSourceLang(),
@@ -216,7 +208,7 @@ class ContentTranslationService
         $result = [];
 
         // Translate header
-        if (array_key_exists('header', $fields) && $fields['header'] !== null && $fields['header'] !== '') {
+        if (array_key_exists('header', $fields) && $fields['header'] !== '') {
             $result['header'] = $this->provider->translate(
                 $fields['header'],
                 $request->getSourceLang(),
@@ -226,7 +218,7 @@ class ContentTranslationService
         }
 
         // Translate message
-        if (array_key_exists('message', $fields) && $fields['message'] !== null && $fields['message'] !== '') {
+        if (array_key_exists('message', $fields) && $fields['message'] !== '') {
             $result['message'] = $this->provider->translate(
                 $fields['message'],
                 $request->getSourceLang(),
@@ -236,7 +228,7 @@ class ContentTranslationService
         }
 
         // Translate link title
-        if (array_key_exists('linkTitle', $fields) && $fields['linkTitle'] !== null && $fields['linkTitle'] !== '') {
+        if (array_key_exists('linkTitle', $fields) && $fields['linkTitle'] !== '') {
             $result['linkTitle'] = $this->provider->translate(
                 $fields['linkTitle'],
                 $request->getSourceLang(),

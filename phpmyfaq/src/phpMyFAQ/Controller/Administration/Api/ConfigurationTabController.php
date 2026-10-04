@@ -236,7 +236,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
             if (in_array($key, $checkboxKeys, strict: true)) {
                 // Normalise submitted checkbox values: the form sends a hidden 'false' plus 'true'
                 // when checked; legacy clients may send '1' or 'on'.
-                $newConfigValues[(string) $key] = $this->isTruthy($value) ? 'true' : 'false';
+                $newConfigValues[$key] = $this->isTruthy($value) ? 'true' : 'false';
                 continue;
             }
 
@@ -244,7 +244,7 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
             $newConfigValues[(string) $key] = $stringValue;
             // Escape some values
             if (in_array($key, $escapeValues, strict: true)) {
-                $newConfigValues[(string) $key] = Strings::htmlspecialchars($stringValue, ENT_QUOTES);
+                $newConfigValues[$key] = Strings::htmlspecialchars($stringValue, ENT_QUOTES);
             }
         }
 
@@ -273,13 +273,13 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
             }
 
             if (is_scalar($value) || $value === null) {
-                $newConfigValues[(string) $key] = $value === null ? null : (string) $value;
+                $newConfigValues[$key] = $value === null ? null : (string) $value;
             }
         }
 
         // Replace "main.referenceUrl" in FAQs
         $oldReferenceUrl = (string) ($oldConfigurationData['main.referenceURL'] ?? '');
-        $newReferenceUrl = (string) ($newConfigValues['main.referenceURL'] ?? '');
+        $newReferenceUrl = $newConfigValues['main.referenceURL'] ?? '';
         if ($oldReferenceUrl !== $newReferenceUrl) {
             $this->configuration->replaceMainReferenceUrl($oldReferenceUrl, $newReferenceUrl);
         }

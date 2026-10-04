@@ -89,9 +89,9 @@ final class PasswordChangeController extends AbstractAdministrationController
         );
 
         $newPasswordIsValid =
-            strlen((string) $newPassword) > 7
+            strlen($newPassword) > 7
             && strlen((string) $retypedPassword) > 7
-            && hash_equals((string) $newPassword, (string) $retypedPassword);
+            && hash_equals($newPassword, (string) $retypedPassword);
 
         // checkCredentials() throws on an incorrect password instead of returning
         // false, so treat any failure as "the current password is wrong". It must

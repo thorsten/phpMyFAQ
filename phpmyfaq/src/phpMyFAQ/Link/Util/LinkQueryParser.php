@@ -39,7 +39,7 @@ final class LinkQueryParser
             return $parameters;
         }
 
-        if (array_key_exists('query', $parsed) && is_string($parsed['query'])) {
+        if (array_key_exists('query', $parsed)) {
             $rawQuery = str_replace(search: ['&amp;', '#38;', 'amp;'], replace: '&', subject: $parsed['query']);
             $tmp = [];
             parse_str($rawQuery, $tmp);
@@ -52,7 +52,7 @@ final class LinkQueryParser
             }
         }
 
-        if (array_key_exists('fragment', $parsed) && is_string($parsed['fragment'])) {
+        if (array_key_exists('fragment', $parsed)) {
             $fragment = $parsed['fragment'];
             $parameters['#'] = $fragment; // historisch
             $parameters['fragment'] = $fragment;

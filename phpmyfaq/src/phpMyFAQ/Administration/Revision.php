@@ -101,7 +101,7 @@ readonly class Revision
         if ($this->configuration->getDb()->numRows($result) > 0) {
             while (true) {
                 $row = $this->configuration->getDb()->fetchObject($result);
-                if ($row === false || $row === null || $row === []) {
+                if ($row === false || $row === null) {
                     break;
                 }
 

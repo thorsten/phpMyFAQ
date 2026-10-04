@@ -133,7 +133,7 @@ class Worker
             );
         }
 
-        /** @var class-string<QueueMessageInterface> $messageClass */
+        /* @mago-expect analysis:possibly-static-access-on-interface - is_subclass_of() excludes the interface itself */
         return $messageClass::fromArray($payload);
     }
 }

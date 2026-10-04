@@ -142,10 +142,10 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
      * Map language codes to Amazon Translate format.
      * Amazon uses standard ISO 639-1 codes with some exceptions.
      *
-     * @param string $languageCode Language code
+     * @param string $pmfLangCode Language code
      * @return string Mapped language code
      */
-    protected function mapLanguageCode(string $languageCode): string
+    protected function mapLanguageCode(string $pmfLangCode): string
     {
         // Amazon Translate uses mostly standard ISO 639-1 codes
         // Special cases:
@@ -157,7 +157,7 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
             'pt-BR' => 'pt', // Brazilian Portuguese -> Portuguese
         ];
 
-        return $mapping[$languageCode] ?? $languageCode;
+        return $mapping[$pmfLangCode] ?? $pmfLangCode;
     }
 
     /**

@@ -6,7 +6,6 @@ use DateTime;
 use phpMyFAQ\CustomPage\CustomPageRepositoryInterface;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\CustomPageEntity;
-use phpMyFAQ\Seo\SeoRepositoryInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +20,6 @@ class CustomPageTest extends TestCase
     private CustomPage $customPage;
     private Configuration $configuration;
     private CustomPageRepositoryInterface $mockRepository;
-    private SeoRepositoryInterface $mockSeoRepository;
 
     /**
      * @throws Exception|Core\Exception
@@ -47,9 +45,8 @@ class CustomPageTest extends TestCase
 
         // Create mock repositories
         $this->mockRepository = $this->createMock(CustomPageRepositoryInterface::class);
-        $this->mockSeoRepository = $this->createMock(SeoRepositoryInterface::class);
 
-        $this->customPage = new CustomPage($this->configuration, $this->mockRepository, $this->mockSeoRepository);
+        $this->customPage = new CustomPage($this->configuration, $this->mockRepository);
     }
 
     public function testCreate(): void

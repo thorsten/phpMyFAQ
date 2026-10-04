@@ -88,7 +88,7 @@ final class SearchController extends AbstractFrontController
         $inputTag = Filter::filterVar($request->query->get('tagging_id'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!is_null($inputTag)) {
-            $inputTag = str_replace(search: ' ', replace: '', subject: (string) $inputTag);
+            $inputTag = str_replace(search: ' ', replace: '', subject: $inputTag);
             $inputTag = str_replace(search: ',,', replace: ',', subject: $inputTag);
         }
 

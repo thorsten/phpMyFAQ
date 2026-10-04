@@ -152,7 +152,7 @@ class Sqlsrv implements DatabaseDriver
         $errors = sqlsrv_errors();
 
         if (null !== $errors) {
-            $firstError = $errors[0] ?? [];
+            $firstError = $errors[0];
             return (string) ($firstError['SQLSTATE'] ?? '') . ': ' . (string) ($firstError['message'] ?? '');
         }
 

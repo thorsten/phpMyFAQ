@@ -56,7 +56,7 @@ final readonly class NewsRepository implements NewsRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if ($row === false || $row === null) {
                 break;
             }
 
@@ -108,7 +108,7 @@ final readonly class NewsRepository implements NewsRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if ($row === false || $row === null) {
                 break;
             }
 
@@ -154,7 +154,7 @@ final readonly class NewsRepository implements NewsRepositoryInterface
         $result = $this->configuration->getDb()->query($query);
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            if ($row === false || $row === null || $row === []) {
+            if ($row === false || $row === null) {
                 break;
             }
 
@@ -172,7 +172,7 @@ final readonly class NewsRepository implements NewsRepositoryInterface
         );
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);
-        return $row !== false && $row !== null && $row !== [] ? $row : null;
+        return $row !== false && $row !== null ? $row : null;
     }
 
     public function insert(NewsMessage $newsMessage): bool
@@ -190,9 +190,9 @@ final readonly class NewsRepository implements NewsRepositoryInterface
             $this->configuration->getDb()->escape($newsMessage->getEmail()),
             $newsMessage->isActive() ? 'y' : 'n',
             $newsMessage->isComment() ? 'y' : 'n',
-            $this->configuration->getDb()->escape($newsMessage->getLink() ?? ''),
-            $this->configuration->getDb()->escape($newsMessage->getLinkTitle() ?? ''),
-            $this->configuration->getDb()->escape($newsMessage->getLinkTarget() ?? ''),
+            $this->configuration->getDb()->escape($newsMessage->getLink()),
+            $this->configuration->getDb()->escape($newsMessage->getLinkTitle()),
+            $this->configuration->getDb()->escape($newsMessage->getLinkTarget()),
         );
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -210,9 +210,9 @@ final readonly class NewsRepository implements NewsRepositoryInterface
             $this->configuration->getDb()->escape($newsMessage->getEmail()),
             $newsMessage->isActive() ? 'y' : 'n',
             $newsMessage->isComment() ? 'y' : 'n',
-            $this->configuration->getDb()->escape($newsMessage->getLink() ?? ''),
-            $this->configuration->getDb()->escape($newsMessage->getLinkTitle() ?? ''),
-            $this->configuration->getDb()->escape($newsMessage->getLinkTarget() ?? ''),
+            $this->configuration->getDb()->escape($newsMessage->getLink()),
+            $this->configuration->getDb()->escape($newsMessage->getLinkTitle()),
+            $this->configuration->getDb()->escape($newsMessage->getLinkTarget()),
             $newsMessage->getId(),
         );
         return (bool) $this->configuration->getDb()->query($query);

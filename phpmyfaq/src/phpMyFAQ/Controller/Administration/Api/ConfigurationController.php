@@ -113,7 +113,8 @@ final class ConfigurationController extends AbstractAdministrationApiController
         }
 
         $redisDsn = trim((string) ($data->redisDsn ?? $this->configuration->get('storage.redisDsn') ?? ''));
-        $timeout = (float) ($data->timeout ?? $this->configuration->get('storage.redisConnectTimeout') ?? 1.0);
+        $timeoutValue = $data->timeout ?? $this->configuration->get('storage.redisConnectTimeout');
+        $timeout = is_numeric($timeoutValue) ? (float) $timeoutValue : 1.0;
         if ($timeout <= 0) {
             $timeout = 1.0;
         }

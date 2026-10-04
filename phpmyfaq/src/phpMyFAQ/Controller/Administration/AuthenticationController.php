@@ -261,7 +261,7 @@ final class AuthenticationController extends AbstractAdministrationController im
             return new RedirectResponse(url: './login');
         }
 
-        if (strlen((string) $token) === 6) {
+        if (strlen($token) === 6) {
             $tfa = $this->twoFactor;
             $result = $tfa->validateToken($token, $userId);
 

@@ -149,14 +149,30 @@ class RemoteApiClient
             flags: JSON_THROW_ON_ERROR,
         );
 
-        $issues = array_diff(is_array($localHashes) ? $localHashes : [], is_array($remoteHashes) ? $remoteHashes : []);
+        return array_diff($this->toHashMap($localHashes), $this->toHashMap($remoteHashes));
+    }
 
-        $verificationIssues = [];
-        foreach ($issues as $issueKey => $issueValue) {
-            $verificationIssues[$issueKey] = (string) $issueValue;
+    /**
+     * Keeps only the string entries of a decoded hash list.
+     *
+     * @return array<array-key, string>
+     */
+    private function toHashMap(mixed $decoded): array
+    {
+        if (!is_array($decoded)) {
+            return [];
         }
 
-        return $verificationIssues;
+        $hashes = [];
+        foreach ($decoded as $file => $hash) {
+            if (!is_string($hash)) {
+                continue;
+            }
+
+            $hashes[$file] = $hash;
+        }
+
+        return $hashes;
     }
 
     public function setHttpClient(HttpClientInterface $httpClient): void

@@ -135,8 +135,6 @@ class UserAuthentication
             $this->recordFailedLogin();
             throw $userException;
         }
-
-        return $this->currentUser;
     }
 
     /**

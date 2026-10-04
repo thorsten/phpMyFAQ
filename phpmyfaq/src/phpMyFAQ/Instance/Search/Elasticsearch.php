@@ -363,7 +363,7 @@ class Elasticsearch
 
         // Nothing left to send — every FAQ was filtered out (e.g. none published) or the
         // last full batch drained the buffer; an empty bulk request would be rejected.
-        if (($params['body'] ?? []) === []) {
+        if ($params['body'] === []) {
             return ['success' => []];
         }
 

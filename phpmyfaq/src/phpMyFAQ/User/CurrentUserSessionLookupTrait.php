@@ -157,7 +157,7 @@ trait CurrentUserSessionLookupTrait
 
         // create a new CurrentUser object
         $user = new CurrentUser($configuration);
-        $user->getUserByCookie((string) $request->cookies->get(UserSession::COOKIE_NAME_REMEMBER_ME, ''));
+        $user->getUserByCookie($request->cookies->get(UserSession::COOKIE_NAME_REMEMBER_ME, ''));
 
         if (-1 === $user->getUserId()) {
             return null;

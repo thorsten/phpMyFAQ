@@ -76,7 +76,7 @@ readonly class Forms
     {
         $ok = true;
         if ($activated !== null) {
-            $ok = $ok && $this->formsRepository->updateInputActive($formId, $inputId, $activated);
+            $ok = $this->formsRepository->updateInputActive($formId, $inputId, $activated);
         }
 
         if ($required !== null) {

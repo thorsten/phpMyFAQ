@@ -34,20 +34,16 @@ class SortRequest
 
     private string $order;
 
-    private array $allowedFields;
-
     /**
      * Constructor
      *
      * @param string|null $field Sort field name
      * @param string $order Sort order (asc or desc)
-     * @param array $allowedFields Allowed field names for sorting
      */
-    private function __construct(?string $field, string $order, array $allowedFields)
+    private function __construct(?string $field, string $order)
     {
         $this->field = $field;
         $this->order = $order;
-        $this->allowedFields = $allowedFields;
     }
 
     /**
@@ -82,7 +78,7 @@ class SortRequest
         $orderParam = Filter::filterVar($request->query->get('order'), FILTER_SANITIZE_SPECIAL_CHARS);
         $order = self::validateOrder($orderParam, $defaultOrder);
 
-        return new self($field, $order, $allowedFields);
+        return new self($field, $order);
     }
 
     /**

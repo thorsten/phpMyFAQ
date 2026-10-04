@@ -122,7 +122,7 @@ final readonly class MetaService
         $variableMatches = [];
         preg_match_all(
             '/(?P<name>--[A-Za-z0-9\-]+)\s*:\s*(?P<value>[^;]+);/',
-            (string) $matches['body'],
+            $matches['body'],
             $variableMatches,
             PREG_SET_ORDER,
         );

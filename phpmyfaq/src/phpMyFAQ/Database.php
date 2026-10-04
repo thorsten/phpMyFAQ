@@ -53,6 +53,7 @@ class Database
         }
 
         if (class_exists($class) && is_subclass_of($class, DatabaseDriver::class)) {
+            /* @mago-expect analysis:unsafe-instantiation - is_subclass_of() excludes the interface itself */
             $databaseDriver = new $class();
             self::$databaseDriver = $databaseDriver;
             return $databaseDriver;

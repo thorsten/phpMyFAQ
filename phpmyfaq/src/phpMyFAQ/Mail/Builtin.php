@@ -54,7 +54,7 @@ class Builtin implements MailUserAgentInterface
         // Prepare the headers for the email
         $mailHeaders = '';
         foreach ($headers as $key => $value) {
-            $mailHeaders .= self::stripNewlines((string) $key) . ': ' . self::stripNewlines((string) $value) . PHP_EOL;
+            $mailHeaders .= self::stripNewlines($key) . ': ' . self::stripNewlines((string) $value) . PHP_EOL;
         }
 
         // Send the email

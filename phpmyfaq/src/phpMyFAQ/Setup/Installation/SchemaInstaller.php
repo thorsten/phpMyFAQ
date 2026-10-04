@@ -104,7 +104,7 @@ class SchemaInstaller implements DriverInterface
             return true;
         } finally {
             if ($prefix !== '') {
-                Database::setTablePrefix($previousPrefix ?? '');
+                Database::setTablePrefix($previousPrefix);
             }
         }
     }

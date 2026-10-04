@@ -185,8 +185,8 @@ class FaqHelper extends AbstractHelper
                 // Remove the style attribute if empty
                 return $newStyle !== '' && $newStyle !== '0' ? 'style="' . $newStyle . '"' : '';
             },
-            (string) $sanitizedContent,
-        ) ?? (string) $sanitizedContent;
+            $sanitizedContent,
+        ) ?? $sanitizedContent;
     }
 
     /**
