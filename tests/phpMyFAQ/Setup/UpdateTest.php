@@ -289,6 +289,25 @@ class UpdateTest extends TestCase
         }
     }
 
+    public function testDryRunResultsListThePendingMigrationsWithoutApplyingThem(): void
+    {
+        $this->update->version = '4.0.0';
+        $this->update->dryRun = true;
+
+        $report = $this->update->getDryRunResults();
+
+        $this->assertArrayHasKey('migrations', $report);
+        $this->assertArrayHasKey('summary', $report);
+        $this->assertNotEmpty($report['migrations']);
+        $this->assertGreaterThan(0, $report['summary']['migrationCount']);
+
+        $formatted = $this->update->getFormattedDryRunReport();
+        $this->assertStringContainsString((string) array_key_first($report['migrations']), $formatted);
+
+        $reloaded = new Configuration($this->dbHandle);
+        $this->assertSame('4.0.0', $reloaded->get('main.currentVersion'));
+    }
+
     /**
      * @return array<int, string>
      */
