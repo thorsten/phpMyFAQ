@@ -128,4 +128,52 @@ class SchemaInstallerTest extends TestCase
             'PostgreSQL should not emit duplicate CREATE INDEX statements',
         );
     }
+
+    /**
+     * @return array<string, array{DialectInterface, list<string>}>
+     */
+    public static function schemaStatementProvider(): array
+    {
+        return [
+            'mysql' => [new MysqlDialect(), ['CREATE DATABASE IF NOT EXISTS `tenant_a`', 'USE `tenant_a`']],
+            'postgres' => [new PostgresDialect(), ['CREATE SCHEMA IF NOT EXISTS "tenant_a"', 'SET search_path TO "tenant_a"']],
+            'sqlserver' => [
+                new SqlServerDialect(),
+                ["IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'tenant_a') EXEC('CREATE SCHEMA [tenant_a]')"],
+            ],
+            'sqlite' => [new SqliteDialect(), []],
+        ];
+    }
+
+    /**
+     * @param list<string> $expectedStatements
+     */
+    #[DataProvider('schemaStatementProvider')]
+    public function testASchemaNameSwitchesToThatSchemaBeforeCreatingTables(
+        DialectInterface $dialect,
+        array $expectedStatements,
+    ): void {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($this->createStub(DatabaseDriver::class));
+
+        $installer = new SchemaInstaller($configuration, $dialect);
+        $installer->dryRun = true;
+
+        $this->assertTrue($installer->createTables('', 'tenant_a'));
+        $this->assertSame($expectedStatements, array_slice($installer->collectedSql, 0, count($expectedStatements)));
+        $this->assertStringContainsString('CREATE TABLE', $installer->collectedSql[count($expectedStatements)]);
+    }
+
+    public function testASchemaThatCannotBeCreatedAbortsBeforeAnyTable(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->expects($this->once())->method('query')->willReturn(false);
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $installer = new SchemaInstaller($configuration, new MysqlDialect());
+
+        $this->assertFalse($installer->createTables('', 'tenant_a'));
+        $this->assertSame(['CREATE DATABASE IF NOT EXISTS `tenant_a`'], $installer->collectedSql);
+    }
 }

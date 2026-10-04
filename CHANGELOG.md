@@ -44,6 +44,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved package size by removing unused dependencies (Thorsten)
 - fixed the upgrade reporting a PHP error instead of a clear message when the downloaded package cannot be opened (Thorsten)
 - fixed the update backup reporting a PHP warning instead of a clear error when the upgrade directory is missing (Thorsten)
+- fixed schema-based multi-tenant instances not creating their schema on PostgreSQL and SQL Server (Thorsten)
 - updated to PHPUnit v13 (Thorsten)
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)

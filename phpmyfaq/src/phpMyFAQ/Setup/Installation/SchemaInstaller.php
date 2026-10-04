@@ -27,6 +27,9 @@ namespace phpMyFAQ\Setup\Installation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Instance\Database\DriverInterface;
+use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\MysqlDialect;
+use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\PostgresDialect;
+use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\SqlServerDialect;
 use phpMyFAQ\Setup\Migration\QueryBuilder\DialectFactory;
 use phpMyFAQ\Setup\Migration\QueryBuilder\DialectInterface;
 
@@ -114,23 +117,21 @@ class SchemaInstaller implements DriverInterface
      */
     private function createAndUseSchema(string $schema): bool
     {
-        $dialectClass = $this->dialect::class;
-
-        if (str_contains($dialectClass, 'Mysql')) {
+        if ($this->dialect instanceof MysqlDialect) {
             return (
                 $this->executeSql(sprintf('CREATE DATABASE IF NOT EXISTS `%s`', $schema))
                 && $this->executeSql(sprintf('USE `%s`', $schema))
             );
         }
 
-        if (str_contains($dialectClass, 'Pgsql')) {
+        if ($this->dialect instanceof PostgresDialect) {
             return (
                 $this->executeSql(sprintf('CREATE SCHEMA IF NOT EXISTS "%s"', $schema))
                 && $this->executeSql(sprintf('SET search_path TO "%s"', $schema))
             );
         }
 
-        if (str_contains($dialectClass, 'Sqlsrv')) {
+        if ($this->dialect instanceof SqlServerDialect) {
             return $this->executeSql(sprintf(
                 "IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '%s') EXEC('CREATE SCHEMA [%s]')",
                 $schema,
