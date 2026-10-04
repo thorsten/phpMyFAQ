@@ -22,7 +22,6 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Faq as AdminFaq;
 use phpMyFAQ\Administration\RecentUsers;
-use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -35,8 +34,6 @@ use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
 
 final class DashboardController extends AbstractAdministrationController
@@ -46,7 +43,6 @@ final class DashboardController extends AbstractAdministrationController
         private readonly AdminFaq $adminFaq,
         private readonly Backup $backup,
         private readonly RecentUsers $recentUsers,
-        private readonly RemoteApiClient $adminApi,
     ) {
         parent::__construct();
     }
@@ -132,33 +128,9 @@ final class DashboardController extends AbstractAdministrationController
         }
 
         if ($canEditConfiguration) {
+            // The live version check runs in the browser against the dashboard API; requesting
+            // it here only switches the widget to the loader that triggers that check.
             $version = Filter::filterVar($request->query->get(key: 'param'), FILTER_SANITIZE_SPECIAL_CHARS);
-            if (!$this->configuration->get(item: 'main.enableAutoUpdateHint') && $version === 'version') {
-                try {
-                    $versions = $this->adminApi->getVersions();
-                    $templateVars = [
-                        ...$templateVars,
-                        'adminDashboardShouldUpdateMessage' => false,
-                        'adminDashboardLatestVersionMessage' => Translation::get(key: 'ad_xmlrpc_latest'),
-                        'adminDashboardVersions' => $versions,
-                    ];
-
-                    if (-1 === version_compare($versions['installed'], $versions['stable'])) {
-                        $templateVars = [
-                            ...$templateVars,
-                            'adminDashboardShouldUpdateMessage' => true,
-                            'adminDashboardLatestVersionMessage' => Translation::get(key: 'ad_you_should_update'),
-                            'adminDashboardVersions' => $versions,
-                        ];
-                    }
-                } catch (DecodingExceptionInterface|TransportExceptionInterface|Exception $e) {
-                    $templateVars = [
-                        ...$templateVars,
-                        'adminDashboardErrorMessage' => $e->getMessage(),
-                    ];
-                }
-            }
-
             $templateVars = [
                 ...$templateVars,
                 'showVersion' =>

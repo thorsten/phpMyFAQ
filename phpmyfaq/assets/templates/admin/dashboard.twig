@@ -361,20 +361,6 @@
                   {{ 'msgButtonFetchLatestVersion' | translate }}
                 </button>
               </form>
-              {% if adminDashboardShouldUpdateMessage %}
-                <div class="alert alert-danger">
-                  {{ adminDashboardLatestVersionMessage }}:
-                  <strong>phpMyFAQ {{ adminDashboardVersions.stable }}</strong>
-                  <hr>
-                  {{ adminDashboardShouldUpdateMessage }}
-                </div>
-              {% endif %}
-
-              {% if adminDashboardErrorMessage %}
-                <div class="alert alert-danger">
-                  {{ adminDashboardErrorMessage }}
-                </div>
-              {% endif %}
             {% endif %}
           </div>
         </div>

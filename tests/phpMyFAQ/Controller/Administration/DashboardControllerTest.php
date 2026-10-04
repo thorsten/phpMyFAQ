@@ -9,7 +9,6 @@ use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Faq as AdminFaq;
 use phpMyFAQ\Administration\RecentUsers;
-use phpMyFAQ\Administration\RemoteApiClient;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
@@ -107,7 +106,6 @@ final class DashboardControllerTest extends TestCase
             $this->createStub(AdminFaq::class),
             $this->createStub(Backup::class),
             new RecentUsers($this->configuration),
-            $this->createStub(RemoteApiClient::class),
         );
     }
 
@@ -148,7 +146,6 @@ final class DashboardControllerTest extends TestCase
             $adminFaq,
             $backup,
             new RecentUsers($this->configuration),
-            $this->createStub(RemoteApiClient::class),
         );
         $controller->setContainer($this->createAuthenticatedContainer());
 
@@ -158,49 +155,6 @@ final class DashboardControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('Dashboard', (string) $response->getContent());
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testIndexRendersVersionCheckErrorWhenApiThrows(): void
-    {
-        self::assertTrue($this->configuration->set('main.enableAutoUpdateHint', 'false'));
-
-        $adminSession = $this->createStub(AdminSession::class);
-        $adminSession->method('getNumberOfSessions')->willReturn(3);
-        $adminSession->method('getNumberOfOnlineUsers')->willReturn(1);
-
-        $adminFaq = $this->createStub(AdminFaq::class);
-        $adminFaq->method('getInactiveFaqsData')->willReturn([]);
-
-        $backup = $this->createStub(Backup::class);
-        $backup
-            ->method('getLastBackupInfo')
-            ->willReturn([
-                'lastBackupDate' => '2026-03-01',
-                'isBackupOlderThan30Days' => false,
-            ]);
-
-        $adminApi = $this->createMock(RemoteApiClient::class);
-        $adminApi->expects($this->once())->method('getVersions')->willThrowException(new Exception('Version check failed'));
-
-        $controller = new DashboardController(
-            $adminSession,
-            $adminFaq,
-            $backup,
-            new RecentUsers($this->configuration),
-            $adminApi,
-        );
-        $controller->setContainer($this->createAuthenticatedContainer(allowConfigEdit: true));
-
-        // The controller reads the parameter from the query string, not from the route attributes.
-        $request = new Request(['param' => 'version']);
-        $request->attributes->set('_route', 'admin.dashboard');
-        $response = $controller->index($request);
-
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString('id="phpmyfaq-latest-version"', (string) $response->getContent());
     }
 
     /**
@@ -230,7 +184,6 @@ final class DashboardControllerTest extends TestCase
             $adminFaq,
             $backup,
             new RecentUsers($this->configuration),
-            $this->createStub(RemoteApiClient::class),
         );
         $controller->setContainer($this->createAuthenticatedContainer());
 
@@ -269,7 +222,6 @@ final class DashboardControllerTest extends TestCase
             $adminFaq,
             $backup,
             new RecentUsers($this->configuration),
-            $this->createStub(RemoteApiClient::class),
         );
         $controller->setContainer($this->createAuthenticatedContainer());
 
@@ -305,7 +257,6 @@ final class DashboardControllerTest extends TestCase
             $adminFaq,
             $backup,
             new RecentUsers($this->configuration),
-            $this->createStub(RemoteApiClient::class),
         );
         $controller->setContainer($this->createAuthenticatedContainer(grantedPermissions: []));
 
@@ -349,7 +300,6 @@ final class DashboardControllerTest extends TestCase
             $adminFaq,
             $this->createStub(Backup::class),
             new RecentUsers($this->configuration),
-            $this->createStub(RemoteApiClient::class),
         );
         $controller->setContainer(
             $this->createAuthenticatedContainer(grantedPermissions: [PermissionType::FAQ_EDIT]),
@@ -386,7 +336,6 @@ final class DashboardControllerTest extends TestCase
             $this->createStub(AdminFaq::class),
             $this->createStub(Backup::class),
             new RecentUsers($this->configuration),
-            $this->createStub(RemoteApiClient::class),
         );
         $withoutEdit->setContainer(
             $this->createAuthenticatedContainer(grantedPermissions: [PermissionType::STATISTICS_VIEWLOGS]),
@@ -404,7 +353,6 @@ final class DashboardControllerTest extends TestCase
             $this->createStub(AdminFaq::class),
             $this->createStub(Backup::class),
             new RecentUsers($this->configuration),
-            $this->createStub(RemoteApiClient::class),
         );
         $withEdit->setContainer(
             $this->createAuthenticatedContainer(
@@ -431,7 +379,6 @@ final class DashboardControllerTest extends TestCase
             $adminFaq,
             $this->createStub(Backup::class),
             new RecentUsers($this->configuration),
-            $this->createStub(RemoteApiClient::class),
         );
         $controller->setContainer(
             $this->createAuthenticatedContainer(grantedPermissions: [PermissionType::USER_EDIT]),
@@ -472,7 +419,6 @@ final class DashboardControllerTest extends TestCase
             $this->createStub(AdminFaq::class),
             $backup,
             new RecentUsers($this->configuration),
-            $this->createStub(RemoteApiClient::class),
         );
         $controller->setContainer(
             $this->createAuthenticatedContainer(
@@ -588,66 +534,6 @@ final class DashboardControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testIndexAnnouncesAnAvailableUpdateWhenTheVersionCheckIsRequested(): void
-    {
-        // Persisted on purpose: Configuration::get() reloads the array from the database as soon
-        // as any key is missing, which would discard an in-memory override of this flag.
-        self::assertTrue($this->configuration->set('main.enableAutoUpdateHint', 'false'));
-        [$adminSession, $adminFaq, $backup] = $this->createQuietWidgets();
-
-        $adminApi = $this->createMock(RemoteApiClient::class);
-        $adminApi->expects($this->once())->method('getVersions')->willReturn([
-            'installed' => '4.0.0',
-            'stable' => '9.9.9',
-            'development' => '9.9.9',
-            'nightly' => '9.9.9',
-        ]);
-
-        $controller = new DashboardController($adminSession, $adminFaq, $backup, new RecentUsers($this->configuration), $adminApi);
-        $controller->setContainer($this->createAuthenticatedContainer(allowConfigEdit: true));
-
-        $request = new Request(['param' => 'version']);
-        $request->attributes->set('_route', 'admin.dashboard');
-        $response = $controller->index($request);
-
-        // The requested check switches the widget to the live loader; the comparison result is
-        // computed server-side (and verified through the API mock) but rendered by the client.
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString('id="phpmyfaq-latest-version"', (string) $response->getContent());
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function testIndexConfirmsTheLatestVersionWhenNothingNewerExists(): void
-    {
-        // Persisted on purpose: Configuration::get() reloads the array from the database as soon
-        // as any key is missing, which would discard an in-memory override of this flag.
-        self::assertTrue($this->configuration->set('main.enableAutoUpdateHint', 'false'));
-        [$adminSession, $adminFaq, $backup] = $this->createQuietWidgets();
-
-        $adminApi = $this->createMock(RemoteApiClient::class);
-        $adminApi->expects($this->once())->method('getVersions')->willReturn([
-            'installed' => '9.9.9',
-            'stable' => '9.9.9',
-            'development' => '9.9.9',
-            'nightly' => '9.9.9',
-        ]);
-
-        $controller = new DashboardController($adminSession, $adminFaq, $backup, new RecentUsers($this->configuration), $adminApi);
-        $controller->setContainer($this->createAuthenticatedContainer(allowConfigEdit: true));
-
-        $request = new Request(['param' => 'version']);
-        $request->attributes->set('_route', 'admin.dashboard');
-        $response = $controller->index($request);
-
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString('id="phpmyfaq-latest-version"', (string) $response->getContent());
-    }
-
-    /**
-     * @throws \Exception
-     */
     public function testIndexWarnsWhenTheDatabaseIsOlderThanTheCode(): void
     {
         self::assertTrue($this->configuration->set('main.currentVersion', '4.0.0'));
@@ -658,7 +544,6 @@ final class DashboardControllerTest extends TestCase
             $adminFaq,
             $backup,
             new RecentUsers($this->configuration),
-            $this->createStub(RemoteApiClient::class),
         );
         $controller->setContainer($this->createAuthenticatedContainer());
 

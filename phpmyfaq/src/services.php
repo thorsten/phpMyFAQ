@@ -1094,7 +1094,6 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.admin.faq'),
         service('phpmyfaq.admin.backup'),
         service('phpmyfaq.admin.recent-users'),
-        service('phpmyfaq.admin.api'),
     ]);
     $services->set(AdminExportController::class, AdminExportController::class)->args([
         service('phpmyfaq.helper.category-helper'),
