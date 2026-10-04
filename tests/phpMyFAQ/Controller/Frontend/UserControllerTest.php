@@ -15,6 +15,7 @@ use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\PasswordResetTokenService;
 use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -191,6 +192,61 @@ final class UserControllerTest extends TestCase
 
         $result = $this->dbHandle->query('SELECT secret FROM faquserdata WHERE user_id = 1');
         self::assertSame('ACTIVESECRET123', $this->dbHandle->fetchArray($result)['secret']);
+    }
+
+    public function testResetPasswordRendersTheFormForAValidToken(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+        $user = new CurrentUser($this->configuration);
+        self::assertTrue($user->getUserById(1, true));
+        $token = new PasswordResetTokenService()->issue(1, $user->getEncryptedPassword());
+
+        $controller = $this->createController();
+        $response = $controller->resetPassword(Request::create('/user/password/reset', 'GET', [
+            'u' => '1',
+            'exp' => (string) $token['expires'],
+            'sig' => $token['signature'],
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString('id="pmf-resetpw-form"', $content);
+        self::assertStringContainsString('name="u" value="1"', $content);
+        self::assertStringContainsString('name="exp" value="' . $token['expires'] . '"', $content);
+        self::assertStringContainsString('name="sig" value="' . $token['signature'] . '"', $content);
+    }
+
+    public function testResetPasswordRejectsAForgedSignature(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+
+        $controller = $this->createController();
+        $response = $controller->resetPassword(Request::create('/user/password/reset', 'GET', [
+            'u' => '1',
+            'exp' => (string) (time() + 3600),
+            'sig' => str_repeat('0', 64),
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringNotContainsString('id="pmf-resetpw-form"', $content);
+        self::assertStringContainsString(Translation::get('resetpwd_err_invalid'), $content);
+    }
+
+    public function testResetPasswordRejectsAnUnknownUserAndMissingParameters(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+        $controller = $this->createController();
+
+        $unknownUser = $controller->resetPassword(Request::create('/user/password/reset', 'GET', [
+            'u' => '424242',
+            'exp' => (string) (time() + 3600),
+            'sig' => str_repeat('0', 64),
+        ]));
+        $missing = $controller->resetPassword(Request::create('/user/password/reset', 'GET'));
+
+        self::assertStringNotContainsString('id="pmf-resetpw-form"', (string) $unknownUser->getContent());
+        self::assertStringNotContainsString('id="pmf-resetpw-form"', (string) $missing->getContent());
     }
 
     private function createController(): UserController
