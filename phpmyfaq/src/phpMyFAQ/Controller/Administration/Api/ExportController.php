@@ -234,14 +234,16 @@ final class ExportController extends AbstractController
             }
 
             if ($this->hasDataField(payload: $data, field: 'url')) {
-                $text[$i][] = Report::sanitize($report->convertEncoding(sprintf(
+                // The URL starts with its scheme, so it cannot be read as a spreadsheet formula;
+                // the formula guard would strip the hyphens of the slug and break the link.
+                $text[$i][] = sprintf(
                     '%scontent/%d/%d/%s/%s.html',
                     $this->configuration->getDefaultUrl(),
                     (int) ($reportData['category_id'] ?? 0),
                     (int) $reportData['faq_id'],
                     $faqLanguage,
                     TitleSlugifier::slug((string) ($reportData['faq_question'] ?? '')),
-                )));
+                );
             }
 
             if ($this->hasDataField(payload: $data, field: 'visits')) {

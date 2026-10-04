@@ -505,7 +505,6 @@ final class ExportControllerTest extends TestCase
         self::assertContains('2024-01-02 03:04', $row);
         $url = array_values(array_filter($row, static fn(string $value): bool => str_contains($value, '/content/')));
         self::assertCount(1, $url);
-        self::assertStringContainsString('/content/501/4243/en/', $url[0]);
-        self::assertStringEndsWith('.html', $url[0]);
+        self::assertStringEndsWith('/content/501/4243/en/why-does-the-printer-jam.html', $url[0]);
     }
 }
