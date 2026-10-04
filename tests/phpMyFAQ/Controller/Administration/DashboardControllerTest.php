@@ -165,7 +165,7 @@ final class DashboardControllerTest extends TestCase
      */
     public function testIndexRendersVersionCheckErrorWhenApiThrows(): void
     {
-        $this->overrideConfigurationValues(['main.enableAutoUpdateHint' => false]);
+        self::assertTrue($this->configuration->set('main.enableAutoUpdateHint', 'false'));
 
         $adminSession = $this->createStub(AdminSession::class);
         $adminSession->method('getNumberOfSessions')->willReturn(3);
@@ -182,8 +182,8 @@ final class DashboardControllerTest extends TestCase
                 'isBackupOlderThan30Days' => false,
             ]);
 
-        $adminApi = $this->createStub(RemoteApiClient::class);
-        $adminApi->method('getVersions')->willThrowException(new Exception('Version check failed'));
+        $adminApi = $this->createMock(RemoteApiClient::class);
+        $adminApi->expects($this->once())->method('getVersions')->willThrowException(new Exception('Version check failed'));
 
         $controller = new DashboardController(
             $adminSession,
@@ -194,9 +194,9 @@ final class DashboardControllerTest extends TestCase
         );
         $controller->setContainer($this->createAuthenticatedContainer(allowConfigEdit: true));
 
-        $request = new Request();
+        // The controller reads the parameter from the query string, not from the route attributes.
+        $request = new Request(['param' => 'version']);
         $request->attributes->set('_route', 'admin.dashboard');
-        $request->attributes->set('param', 'version');
         $response = $controller->index($request);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
