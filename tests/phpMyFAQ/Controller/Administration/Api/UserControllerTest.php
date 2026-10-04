@@ -2157,4 +2157,154 @@ final class UserControllerTest extends TestCase
             'SELECT account_status FROM faquser WHERE user_id = ' . $superAdminId,
         ))['account_status']);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEditUserRejectsAnUnknownUser(): void
+    {
+        $this->seedCurrentUserSession();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-data');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->editUser($this->jsonRequest([
+            'csrfToken' => $token,
+            'userId' => 987654,
+            'display_name' => 'Nobody',
+            'email' => 'nobody@example.com',
+            'user_status' => 'active',
+            'is_superadmin' => false,
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_user_error_noId'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEditUserForbidsANonSuperAdminToTouchAProtectedAccount(): void
+    {
+        $this->seedCurrentUserSession();
+        $protectedId = $this->seedManagedUser(login: 'protected-account', status: 'protected');
+
+        $session = new Session(new MockArraySessionStorage());
+        $token = $this->primeCsrf($session, 'update-user-data');
+        $controller = $this->buildController($session, $this->buildActingUser(42, false));
+
+        $response = $controller->editUser($this->jsonRequest([
+            'csrfToken' => $token,
+            'userId' => $protectedId,
+            'display_name' => 'Renamed',
+            'email' => 'renamed@example.com',
+            'user_status' => 'active',
+            'is_superadmin' => false,
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEditUserRevokesTheSuperAdminFlagAndLogsIt(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser(login: 'former-superadmin', status: 'active', isSuperAdmin: 1);
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog
+            ->expects($this->exactly(2))
+            ->method('log')
+            ->with($this->anything(), $this->callback(static function (string $message): bool {
+                static $expectedFragments = ['user-superadmin-revoked:', 'user-edit:'];
+
+                $expectedFragment = array_shift($expectedFragments);
+                return $expectedFragment !== null && str_contains($message, $expectedFragment);
+            }));
+
+        $container = $this->createAuthenticatedContainerWithAdminLog($adminLog);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-data');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->editUser($this->jsonRequest([
+            'csrfToken' => $token,
+            'userId' => $managedUserId,
+            'display_name' => 'Former Super Admin',
+            'email' => 'former-superadmin@example.com',
+            'last_modified' => '20260101010101',
+            'user_status' => 'active',
+            'is_superadmin' => false,
+            'overwrite_twofactor' => 'off',
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('0', (string) $this->dbHandle->fetchArray($this->dbHandle->query(
+            'SELECT is_superadmin FROM faquser WHERE user_id = ' . $managedUserId,
+        ))['is_superadmin']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testOverwritePasswordRejectsAnUnknownUser(): void
+    {
+        $this->seedCurrentUserSession();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'overwrite-password');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->overwritePassword($this->jsonRequest([
+            'csrf' => $token,
+            'userId' => 987654,
+            'newPassword' => 'new-password-1234',
+            'passwordRepeat' => 'new-password-1234',
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_user_error_noId'), $payload['error']);
+    }
+
+    /**
+     * A protected account cannot change its own password through the administration either.
+     *
+     * @throws \Exception
+     */
+    public function testOverwritePasswordForbidsAProtectedNonSuperAdminToChangeItsOwnPassword(): void
+    {
+        $this->seedCurrentUserSession();
+        $protectedId = $this->seedManagedUser(login: 'protected-self', status: 'protected');
+
+        $session = new Session(new MockArraySessionStorage());
+        $token = $this->primeCsrf($session, 'overwrite-password');
+        $controller = $this->buildController($session, $this->buildActingUser($protectedId, false));
+
+        $response = $controller->overwritePassword($this->jsonRequest([
+            'csrf' => $token,
+            'userId' => $protectedId,
+            'newPassword' => 'new-password-1234',
+            'passwordRepeat' => 'new-password-1234',
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
 }

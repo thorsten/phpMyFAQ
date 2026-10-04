@@ -901,4 +901,102 @@ final class ConfigurationTabControllerTest extends TestCase
             new \ReflectionMethod(ConfigurationTabController::class, 'convertToString')->invoke($controller, $value),
         );
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveDropsAnAttachmentsPathThatDoesNotExist(): void
+    {
+        $before = (string) $this->configuration->get('records.attachmentsPath');
+
+        $stored = $this->saveConfiguration(['records.attachmentsPath' => '/no/such/directory/anywhere']);
+
+        self::assertSame($before, $stored['records.attachmentsPath']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveStoresAnExistingAttachmentsPathRelativeToTheDocumentRoot(): void
+    {
+        $documentRoot = (string) realpath(sys_get_temp_dir()) . '/pmf-docroot-' . bin2hex(random_bytes(4));
+        mkdir($documentRoot . '/content/attachments', 0o755, true);
+        $previousDocumentRoot = $_SERVER['DOCUMENT_ROOT'] ?? null;
+        $_SERVER['DOCUMENT_ROOT'] = $documentRoot;
+
+        try {
+            // A path with a redundant segment, so realpath() has something to normalise.
+            $stored = $this->saveConfiguration([
+                'records.attachmentsPath' => $documentRoot . '/content/./attachments',
+            ]);
+        } finally {
+            if ($previousDocumentRoot === null) {
+                unset($_SERVER['DOCUMENT_ROOT']);
+            } else {
+                $_SERVER['DOCUMENT_ROOT'] = $previousDocumentRoot;
+            }
+
+            rmdir($documentRoot . '/content/attachments');
+            rmdir($documentRoot . '/content');
+            rmdir($documentRoot);
+        }
+
+        self::assertSame('content/attachments', $stored['records.attachmentsPath']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveDropsAReferenceUrlThatIsNotAUrl(): void
+    {
+        $before = (string) $this->configuration->get('main.referenceURL');
+
+        $stored = $this->saveConfiguration(['main.referenceURL' => 'not a url']);
+
+        self::assertSame($before, $stored['main.referenceURL']);
+    }
+
+    /**
+     * @return iterable<string, array{string, string, string}>
+     */
+    public static function maintenanceModeProvider(): iterable
+    {
+        yield 'enabled' => ['false', 'true', 'system-maintenance-mode-enabled'];
+        yield 'disabled' => ['true', 'false', 'system-maintenance-mode-disabled'];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('maintenanceModeProvider')]
+    public function testSaveLogsMaintenanceModeChanges(string $before, string $after, string $expectedLogEntry): void
+    {
+        $this->configuration->update(['main.maintenanceMode' => $before]);
+
+        $logged = [];
+        $adminLog = $this->createStub(AdminLog::class);
+        $adminLog->method('log')->willReturnCallback(static function ($user, string $message) use (&$logged): bool {
+            $logged[] = $message;
+
+            return true;
+        });
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerWithAdminLog($adminLog, $session));
+
+        $response = $controller->save(new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'edit' => ['main.maintenanceMode' => $after],
+        ]));
+        $this->removeCsrfCookie('configuration');
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($after, $this->configuration->getAll()['main.maintenanceMode']);
+        self::assertContains($expectedLogEntry, $logged);
+        self::assertContains('config-change:main.maintenanceMode', $logged);
+    }
 }
