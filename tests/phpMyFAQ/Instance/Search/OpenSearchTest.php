@@ -688,4 +688,20 @@ class OpenSearchTest extends TestCase
 
         $this->assertSame(['result' => 'updated'], $result);
     }
+
+    public function testConstructorWiresClientConfigurationAndMappings(): void
+    {
+        $openSearch = new OpenSearch($this->configMock);
+
+        $ref = new ReflectionClass(OpenSearch::class);
+        $this->assertSame($this->clientMock, $ref->getProperty('client')->getValue($openSearch));
+        $this->assertSame($this->osConfigMock, $ref->getProperty('openSearchConfiguration')->getValue($openSearch));
+
+        $mappings = $ref->getProperty('mappings')->getValue($openSearch);
+        $this->assertSame(
+            ['id', 'lang', 'solution_id', 'question', 'answer', 'keywords', 'category_id', 'content_type', 'slug'],
+            array_keys($mappings['properties']),
+        );
+        $this->assertSame('autocomplete', $mappings['properties']['question']['analyzer']);
+    }
 }

@@ -249,6 +249,38 @@ final class UserControllerTest extends TestCase
         self::assertStringNotContainsString('id="pmf-resetpw-form"', (string) $missing->getContent());
     }
 
+    public function testUcpRendersTheGravatarWhenEnabled(): void
+    {
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'security.enableWebAuthnSupport' => false,
+        ]);
+        // Configuration::get() reloads the whole array from the database as soon as a key is
+        // missing, which would discard an in-memory override of this flag.
+        self::assertTrue($this->configuration->set('main.enableGravatarSupport', 'true'));
+
+        $gravatar = $this->createMock(Gravatar::class);
+        $gravatar
+            ->expects($this->once())
+            ->method('getImage')
+            ->with($this->isString(), ['class' => 'img-responsive rounded-circle', 'size' => '125'])
+            ->willReturn('<img src="https://www.gravatar.com/avatar/abc" alt="">');
+
+        $controller = new UserController(
+            new UserSession($this->configuration),
+            $this->createMock(CaptchaInterface::class),
+            $this->createMock(CaptchaHelperInterface::class),
+            $gravatar,
+        );
+        $this->setCurrentUser($controller, $this->createLoggedInCurrentUser());
+
+        $response = $controller->ucp(Request::create('/user/ucp', 'GET'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('href="https://www.gravatar.com"', (string) $response->getContent());
+        self::assertStringContainsString('gravatar.com/avatar/abc', (string) $response->getContent());
+    }
+
     private function createController(): UserController
     {
         $captcha = $this->createMock(CaptchaInterface::class);

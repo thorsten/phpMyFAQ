@@ -840,4 +840,22 @@ class ElasticsearchTest extends TestCase
 
         $this->assertArrayHasKey('error', $result);
     }
+
+    public function testConstructorWiresClientConfigurationAndMappings(): void
+    {
+        $client = new ReflectionClass(Client::class)->newInstanceWithoutConstructor();
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getElasticsearch')->willReturn($client);
+        $configuration->method('getElasticsearchConfig')->willReturn($this->esConfigMock);
+        $configuration->method('getDefaultLanguage')->willReturn('en');
+
+        $elasticsearch = new Elasticsearch($configuration);
+
+        $ref = new ReflectionClass(Elasticsearch::class);
+        $this->assertSame($client, $ref->getProperty('client')->getValue($elasticsearch));
+        $this->assertSame($this->esConfigMock, $ref->getProperty('elasticsearchConfiguration')->getValue($elasticsearch));
+        $mappings = $ref->getProperty('mappings')->getValue($elasticsearch);
+        $this->assertArrayHasKey('question', $mappings['properties']);
+        $this->assertArrayHasKey('categories', $mappings['properties']);
+    }
 }
