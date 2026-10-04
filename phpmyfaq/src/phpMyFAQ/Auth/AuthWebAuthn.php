@@ -469,7 +469,16 @@ class AuthWebAuthn extends Auth
         $signature = $this->arrayToString($signatureBytes);
 
         $publicKeyPem = (string) $key->key;
-        $verificationResult = openssl_verify($signedData, $signature, $publicKeyPem, OPENSSL_ALGO_SHA256);
+
+        // A corrupt stored key makes openssl_verify() emit a warning on top of returning -1;
+        // the failure is reported through the exception below instead.
+        set_error_handler(static fn(): bool => true);
+        try {
+            $verificationResult = openssl_verify($signedData, $signature, $publicKeyPem, OPENSSL_ALGO_SHA256);
+        } finally {
+            restore_error_handler();
+        }
+
         if ($verificationResult === 1) {
             return true;
         }

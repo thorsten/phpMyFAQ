@@ -48,6 +48,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - fixed the admin category form creating a duplicate category after reporting that it already exists (Thorsten)
 - fixed the report export stripping hyphens from the FAQ URLs (Thorsten)
 - fixed the statistics clean-up deleting tracking files from a different directory than it lists (Thorsten)
+- fixed a corrupt stored WebAuthn key raising a PHP warning instead of a clear login error (Thorsten)
 - updated to PHPUnit v13 (Thorsten)
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)

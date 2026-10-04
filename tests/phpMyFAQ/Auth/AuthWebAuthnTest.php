@@ -465,12 +465,14 @@ class AuthWebAuthnTest extends TestCase
         $key = openssl_pkey_new(['curve_name' => 'prime256v1', 'private_key_type' => OPENSSL_KEYTYPE_EC]);
         $details = openssl_pkey_get_details($key);
 
+        // Authenticators encode the coordinates as fixed 32-byte values; OpenSSL may return a
+        // shorter big-endian value when the coordinate has leading zero bytes.
         $cosePublicKey = [
             1 => 2,
             3 => -7,
             -1 => 1,
-            -2 => new CBORByteString($details['ec']['x']),
-            -3 => new CBORByteString($details['ec']['y']),
+            -2 => new CBORByteString(str_pad($details['ec']['x'], 32, "\0", STR_PAD_LEFT)),
+            -3 => new CBORByteString(str_pad($details['ec']['y'], 32, "\0", STR_PAD_LEFT)),
         ];
         $cborPublicKey = (string) CBOREncoder::encode($cosePublicKey);
 
@@ -859,8 +861,8 @@ class AuthWebAuthnTest extends TestCase
             1 => 2,
             3 => -7,
             -1 => 1,
-            -2 => new CBORByteString($details['ec']['x']),
-            -3 => new CBORByteString($details['ec']['y']),
+            -2 => new CBORByteString(str_pad($details['ec']['x'], 32, "\0", STR_PAD_LEFT)),
+            -3 => new CBORByteString(str_pad($details['ec']['y'], 32, "\0", STR_PAD_LEFT)),
         ]);
 
         $credId = random_bytes(32);
@@ -1088,5 +1090,20 @@ class AuthWebAuthnTest extends TestCase
             $this->createSignedAssertionFor($otherKey, $challenge),
             $userWebAuthn,
         ));
+    }
+
+    public function testAuthenticateReportsACorruptStoredKeyWithoutAWarning(): void
+    {
+        $privateKey = openssl_pkey_new(['private_key_bits' => 2048, 'private_key_type' => OPENSSL_KEYTYPE_RSA]);
+        self::assertInstanceOf(\OpenSSLAsymmetricKey::class, $privateKey);
+
+        $userWebAuthn = (string) json_encode([(object) ['id' => [1, 2, 3], 'key' => '-----BEGIN PUBLIC KEY-----garbage']]);
+        $this->authWebAuthn->prepareForLogin($userWebAuthn);
+        $challenge = json_decode($userWebAuthn)[0]->challenge;
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot decode key response because of');
+
+        $this->authWebAuthn->authenticate($this->createSignedAssertionFor($privateKey, $challenge), $userWebAuthn);
     }
 }
