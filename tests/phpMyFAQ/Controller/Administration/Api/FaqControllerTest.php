@@ -3056,4 +3056,117 @@ final class FaqControllerTest extends TestCase
     {
         unset($_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)]);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateRejectsABodyWithoutADataObject(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->createControllerWithDependencies();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create(new Request([], [], [], [], [], [], '{"data":"not an object"}'));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('The request body must contain a data object.', $payload['error']);
+    }
+
+    /**
+     * Failing history recording and failing notifications are logged, never surfaced: the FAQ
+     * has already been created at that point.
+     *
+     * @throws \Exception
+     */
+    public function testCreateLogsFailedHistoryRecordingAndNotificationsInsteadOfFailing(): void
+    {
+        self::assertTrue($this->configuration->set('security.permLevel', 'basic'));
+        self::assertTrue($this->configuration->set('records.enableDeleteQuestion', false));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faqEntity = new \phpMyFAQ\Entity\FaqEntity()
+            ->setId(654)
+            ->setLanguage('en')
+            ->setSolutionId(1654)
+            ->setStatus(FaqStatus::Published)
+            ->setSticky(false)
+            ->setQuestion('Answered FAQ')
+            ->setAnswer('Answered answer')
+            ->setKeywords('answered')
+            ->setAuthor('Author')
+            ->setEmail('author@example.com')
+            ->setComment(true)
+            ->setCreatedDate(new \DateTime())
+            ->setNotes('');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('create')->willReturn($faqEntity);
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('updateQuestionAnswer')->with(56, 654, 1);
+
+        $questionHistory = $this->createMock(QuestionHistoryRepository::class);
+        $questionHistory
+            ->expects($this->once())
+            ->method('add')
+            ->willThrowException(new \InvalidArgumentException('history table missing'));
+
+        $notification = $this->createMock(Notification::class);
+        $notification
+            ->expects($this->once())
+            ->method('sendOpenQuestionAnswered')
+            ->with('asker@example.com', 'Asker', $this->stringContains('/content/1/654/en/'))
+            ->willThrowException(new \phpMyFAQ\Core\Exception('mail server down'));
+        $notification
+            ->expects($this->once())
+            ->method('sendNewFaqAdded')
+            ->willThrowException(new \phpMyFAQ\Core\Exception('mail server still down'));
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'question' => 'Answered FAQ',
+                'categories[]' => 1,
+                'lang' => 'en',
+                'tags' => '',
+                'status' => 'published',
+                'sticky' => 'no',
+                'answer' => 'Answered answer',
+                'keywords' => 'answered',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'comment' => 'y',
+                'userpermission' => 'restricted',
+                'restricted_users' => [],
+                'grouppermission' => 'restricted',
+                'restricted_groups' => [],
+                'changed' => 'Initial import',
+                'notes' => '',
+                'serpTitle' => '',
+                'serpDescription' => '',
+                'openQuestionId' => 56,
+                'notifyEmail' => 'asker@example.com',
+                'notifyUser' => 'Asker',
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithDependencies(
+            faq: $faq,
+            notification: $notification,
+            question: $question,
+            questionHistory: $questionHistory,
+        );
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
 }

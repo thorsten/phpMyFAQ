@@ -16,6 +16,7 @@ use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\UserData;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -2049,5 +2050,67 @@ final class UserControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteUserRemovesAManagedUserAndItsGroupMemberships(): void
+    {
+        $this->seedCurrentUserSession();
+        self::assertTrue($this->configuration->set('security.permLevel', 'medium'));
+
+        $victim = new User($this->configuration);
+        self::assertTrue($victim->createUser('to-be-deleted', 'password-1234'));
+        $victimId = $victim->getUserId();
+        self::assertGreaterThan(1, $victimId);
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog->expects($this->once())->method('log')->with(
+            $this->anything(),
+            $this->stringEndsWith(':' . $victimId),
+        );
+        $container = $this->createAuthenticatedContainerWithAdminLog($adminLog);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-user');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->deleteUser(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'userId' => $victimId,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_user_deleted'), $payload['success']);
+        self::assertFalse(new User($this->configuration)->getUserById($victimId, true));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteUserRejectsAMissingUserId(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-user');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->deleteUser(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'userId' => 'not-a-number',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_user_error_noId'), $payload['error']);
     }
 }
