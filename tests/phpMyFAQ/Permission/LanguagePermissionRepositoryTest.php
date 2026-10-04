@@ -348,4 +348,24 @@ class LanguagePermissionRepositoryTest extends TestCase
         $dbTypeProperty->setValue(null, 'sqlite3');
         Database::setTablePrefix('');
     }
+
+    public function testGetAllUserLanguageRestrictionsGroupsTheLanguagesByRight(): void
+    {
+        $this->assertTrue($this->repository->setUserLanguageRestrictions(1, 3, ['en', 'de']));
+        $this->assertTrue($this->repository->setUserLanguageRestrictions(1, 7, ['fr']));
+        $this->assertTrue($this->repository->setUserLanguageRestrictions(2, 3, ['es']));
+
+        $restrictions = $this->repository->getAllUserLanguageRestrictions(1);
+
+        $this->assertSame([3, 7], array_keys($restrictions));
+        $this->assertEqualsCanonicalizing(['en', 'de'], $restrictions[3]);
+        $this->assertSame(['fr'], $restrictions[7]);
+    }
+
+    public function testGetAllUserLanguageRestrictionsIsEmptyForInvalidOrUnrestrictedUsers(): void
+    {
+        $this->assertSame([], $this->repository->getAllUserLanguageRestrictions(0));
+        $this->assertSame([], $this->repository->getAllUserLanguageRestrictions(-1));
+        $this->assertSame([], $this->repository->getAllUserLanguageRestrictions(1));
+    }
 }

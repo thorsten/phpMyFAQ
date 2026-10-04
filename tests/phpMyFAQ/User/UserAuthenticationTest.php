@@ -2,6 +2,8 @@
 
 namespace phpMyFAQ\User;
 
+use phpMyFAQ\Auth\AuthException;
+use phpMyFAQ\Auth\AuthSso;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Http\RateLimiter;
@@ -167,5 +169,62 @@ class UserAuthenticationTest extends TestCase
 
         $this->expectException(UserException::class);
         $userAuth->authenticate('username', 'password');
+    }
+
+    public function testAuthenticateDefersToTheSecondFactorWhenItIsEnabled(): void
+    {
+        $user = $this->createMock(CurrentUser::class);
+        $user->method('login')->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('twofactor_enabled')->willReturn(1);
+        $user->expects($this->once())->method('setLoggedIn')->with(false);
+        $userAuth = new UserAuthentication($this->configuration, $user);
+
+        $this->assertSame($user, $userAuth->authenticate('admin', 'password'));
+        $this->assertTrue($userAuth->hasTwoFactorAuthentication());
+    }
+
+    public function testAuthenticateRejectsABlockedAccountAfterAValidPassword(): void
+    {
+        $user = $this->createMock(CurrentUser::class);
+        $user->method('login')->willReturn(true);
+        $user->method('getUserData')->willReturn(0);
+        $user->method('getStatus')->willReturn('blocked');
+        $user->expects($this->once())->method('setLoggedIn')->with(false);
+        $userAuth = new UserAuthentication($this->configuration, $user);
+
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage('(blocked-user)');
+
+        $userAuth->authenticate('blocked-user', 'password');
+    }
+
+    public function testAuthenticateWrapsAuthenticationDriverFailures(): void
+    {
+        $user = $this->createMock(CurrentUser::class);
+        $user->method('login')->willThrowException(new AuthException('Directory server unavailable'));
+        $userAuth = new UserAuthentication($this->configuration, $user);
+
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage('Directory server unavailable');
+
+        $userAuth->authenticate('admin', 'password');
+    }
+
+    public function testAuthenticateEnablesRememberMeAndRegistersSsoWhenConfigured(): void
+    {
+        $this->assertTrue($this->configuration->set('security.ssoSupport', 'true'));
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->once())->method('enableRememberMe');
+        $user->expects($this->once())->method('addAuth')->with($this->isInstanceOf(AuthSso::class), 'sso');
+        $user->method('login')->willReturn(true);
+        $user->method('getUserData')->willReturn(0);
+        $user->method('getStatus')->willReturn('active');
+        $user->expects($this->once())->method('setLoggedIn')->with(true);
+
+        $userAuth = new UserAuthentication($this->configuration, $user);
+        $userAuth->setRememberMe(true);
+
+        $this->assertSame($user, $userAuth->authenticate('admin', 'password'));
     }
 }

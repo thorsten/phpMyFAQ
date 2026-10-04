@@ -37,4 +37,27 @@ class LanguageHelperTest extends TestCase
         $this->assertStringContainsString('Deutsch', $result);
         $this->assertStringNotContainsString('value="en"', $result);
     }
+
+    public function testRenderSelectLanguageMarksTheDefaultAndCanSubmitOnChange(): void
+    {
+        $plain = LanguageHelper::renderSelectLanguage('de');
+        $this->assertStringStartsWith('<select class="form-select" name="language" aria-label="Language" id="language" >', $plain);
+        $this->assertStringContainsString('<option value="de" selected>Deutsch</option>', $plain);
+        $this->assertStringContainsString('<option value="en" >English</option>', $plain);
+        $this->assertStringEndsWith('</select>', $plain);
+
+        $submitting = LanguageHelper::renderSelectLanguage('en', true, [], 'content-language');
+        $this->assertStringContainsString('name="content-language"', $submitting);
+        $this->assertStringContainsString('aria-label="Content-language"', $submitting);
+        $this->assertStringContainsString('onchange="this.form.submit();"', $submitting);
+    }
+
+    public function testRenderSelectLanguageLeavesOutExcludedLanguages(): void
+    {
+        $result = LanguageHelper::renderSelectLanguage('en', false, ['de', 'fr']);
+
+        $this->assertStringContainsString('value="en"', $result);
+        $this->assertStringNotContainsString('value="de"', $result);
+        $this->assertStringNotContainsString('value="fr"', $result);
+    }
 }
