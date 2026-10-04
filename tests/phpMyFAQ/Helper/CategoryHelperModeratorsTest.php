@@ -15,8 +15,9 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Resolves the notification recipients of categories against the SQLite test database,
- * whose permission level is "medium", so moderator groups are consulted.
+ * Resolves the notification recipients of categories against the SQLite test database. The
+ * permission level is raised to "medium" explicitly, because moderator groups are only
+ * consulted above the basic level and a freshly built test database starts at basic.
  */
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(CategoryHelper::class)]
@@ -30,6 +31,7 @@ final class CategoryHelperModeratorsTest extends TestCase
     protected function setUp(): void
     {
         $this->configuration = $this->createTestConfiguration();
+        $this->assertTrue($this->configuration->set('security.permLevel', 'medium'));
     }
 
     private function createUserWithEmail(string $login, string $email): int
