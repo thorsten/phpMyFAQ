@@ -236,4 +236,62 @@ class HtaccessUpdaterTest extends TestCase
         $this->assertStringContainsString('RewriteBase /foo/bar', $final);
         $this->assertStringNotContainsString('RewriteBase /foo/bar/', $final);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateRewriteBaseInsertsEngineAndBaseIntoARewriteBlockWithoutEngine(): void
+    {
+        $originalContent = <<<HTACCESS
+            # custom header
+            <IfModule mod_rewrite.c>
+                RewriteRule ^api/(.*)$ api/index.php [L,QSA]
+            </IfModule>
+            HTACCESS;
+        file_put_contents($this->testHtaccessPath, $originalContent);
+
+        $this->assertTrue($this->htaccessUpdater->updateRewriteBase($this->testHtaccessPath, 'faq'));
+
+        $updatedContent = (string) file_get_contents($this->testHtaccessPath);
+        $this->assertSame(1, substr_count($updatedContent, 'RewriteEngine On'));
+        $this->assertSame(1, substr_count($updatedContent, 'RewriteBase /faq/'));
+        $this->assertStringContainsString('# custom header', $updatedContent);
+        $this->assertStringContainsString('RewriteRule ^api/(.*)$ api/index.php [L,QSA]', $updatedContent);
+        $this->assertLessThan(
+            strpos($updatedContent, 'RewriteRule ^api/'),
+            strpos($updatedContent, 'RewriteBase /faq/'),
+        );
+        $this->assertTrue($this->htaccessUpdater->validateHtaccessStructure($this->testHtaccessPath));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateRewriteBaseAppendsARewriteBlockWhenNoneExists(): void
+    {
+        $originalContent = "Options -Indexes\nErrorDocument 404 /index.php\n";
+        file_put_contents($this->testHtaccessPath, $originalContent);
+
+        $this->assertTrue($this->htaccessUpdater->updateRewriteBase($this->testHtaccessPath, '/sub/dir'));
+
+        $updatedContent = (string) file_get_contents($this->testHtaccessPath);
+        $this->assertStringStartsWith("Options -Indexes\nErrorDocument 404 /index.php\n\n<IfModule mod_rewrite.c>", $updatedContent);
+        $this->assertStringContainsString("RewriteEngine On\n", $updatedContent);
+        $this->assertStringContainsString("RewriteBase /sub/dir/\n</IfModule>\n", $updatedContent);
+        $this->assertTrue($this->htaccessUpdater->validateHtaccessStructure($this->testHtaccessPath));
+        $this->assertCount(1, glob($this->testHtaccessPath . '.backup-*'));
+    }
+
+    public function testUpdateRewriteBaseFailsForNonExistentFile(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The .htaccess file does not exist at: ' . $this->testHtaccessPath);
+
+        $this->htaccessUpdater->updateRewriteBase($this->testHtaccessPath, '/');
+    }
+
+    public function testValidateHtaccessStructureFailsForNonExistentFile(): void
+    {
+        $this->assertFalse($this->htaccessUpdater->validateHtaccessStructure($this->testHtaccessPath));
+    }
 }
