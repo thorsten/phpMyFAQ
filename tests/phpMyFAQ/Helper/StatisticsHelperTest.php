@@ -24,6 +24,7 @@ class StatisticsHelperTest extends TestCase
     private Visits $visitsMock;
     private Date $dateMock;
     private array $createdTrackingFiles = [];
+    private string $trackingDirectory;
     private ?string $databaseFile = null;
     private mixed $previousConfigurationInstance = null;
 
@@ -53,7 +54,17 @@ class StatisticsHelperTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->statisticsHelper = new StatisticsHelper($this->sessionMock, $this->visitsMock, $this->dateMock);
+        // An isolated tracking directory: clearAllVisits() and deleteTrackingFiles() remove files,
+        // and the default directory is the one of the checked-out installation.
+        $this->trackingDirectory = sys_get_temp_dir() . '/pmf-statistics-helper-' . uniqid('', true);
+        mkdir($this->trackingDirectory, 0o755, true);
+
+        $this->statisticsHelper = new StatisticsHelper(
+            $this->sessionMock,
+            $this->visitsMock,
+            $this->dateMock,
+            $this->trackingDirectory,
+        );
 
         $_SERVER = [];
     }
@@ -67,6 +78,16 @@ class StatisticsHelperTest extends TestCase
         }
 
         $this->createdTrackingFiles = [];
+
+        foreach (glob($this->trackingDirectory . '/*') ?: [] as $leftover) {
+            if (is_file($leftover)) {
+                unlink($leftover);
+            }
+        }
+
+        if (is_dir($this->trackingDirectory)) {
+            rmdir($this->trackingDirectory);
+        }
 
         if ($this->databaseFile !== null && is_file($this->databaseFile)) {
             unlink($this->databaseFile);
@@ -104,6 +125,10 @@ class StatisticsHelperTest extends TestCase
 
     public function testGetTrackingFilesStatisticsWithMockedValidDates(): void
     {
+        foreach ([mktime(0, 0, 0, 1, 2, 2024), mktime(0, 0, 0, 1, 3, 2024), mktime(0, 0, 0, 1, 4, 2024)] as $day) {
+            $this->createTrackingFile((int) $day, ['a;b;c;d;e;f;g;' . $day]);
+        }
+
         $callCount = 0;
         $this->dateMock
             ->method('getTrackingFileDateStart')
@@ -433,7 +458,7 @@ class StatisticsHelperTest extends TestCase
 
     private function createTrackingFile(int $timestamp, array $rows): string
     {
-        $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $timestamp);
+        $file = $this->trackingDirectory . '/tracking' . date('dmY', $timestamp);
         file_put_contents($file, implode(PHP_EOL, $rows));
         $this->createdTrackingFiles[] = $file;
 
