@@ -14,6 +14,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
@@ -27,6 +28,7 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -82,6 +84,9 @@ final class DashboardControllerTest extends TestCase
         $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
         $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
+
+        $this->session = new Session(new MockArraySessionStorage());
+        Token::resetInstanceForTests();
     }
 
     protected function tearDown(): void
@@ -98,10 +103,15 @@ final class DashboardControllerTest extends TestCase
         $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
 
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('dashboard'), 0, 10)]);
+        Token::resetInstanceForTests();
+
         parent::tearDown();
     }
 
     private CacheItemPoolInterface $cache;
+
+    private Session $session;
 
     private function createController(?HttpClientInterface $httpClient = null): DashboardController
     {
@@ -111,10 +121,53 @@ final class DashboardControllerTest extends TestCase
     private function createControllerWithSession(
         AdminSession $adminSession,
         ?HttpClientInterface $httpClient = null,
+        ?HttpClientInterface $newsHttpClient = null,
     ): DashboardController {
         $this->cache = new ArrayAdapter();
 
-        return new DashboardController($adminSession, $this->cache, $this->createRemoteApiClient($httpClient));
+        return new DashboardController(
+            $adminSession,
+            $this->cache,
+            $this->createRemoteApiClient($httpClient),
+            $newsHttpClient ?? $this->createHttpClientThatMustNotBeCalled(),
+        );
+    }
+
+    private function createNewsController(HttpClientInterface $newsHttpClient): DashboardController
+    {
+        $controller = $this->createControllerWithSession(
+            $this->createStub(AdminSession::class),
+            null,
+            $newsHttpClient,
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+        $this->configuration->set('main.enableRecentNews', 'true');
+
+        return $controller;
+    }
+
+    private function createVersionsApi(string $installed, string $stable): HttpClientInterface
+    {
+        $this->configuration->set('main.currentVersion', $installed);
+        $this->configuration->set('upgrade.releaseEnvironment', 'stable');
+
+        return new MockHttpClient(new MockResponse(
+            json_encode(['stable' => $stable, 'development' => $stable, 'nightly' => $stable], JSON_THROW_ON_ERROR),
+            ['response_headers' => ['content-type' => 'application/json']],
+        ));
+    }
+
+    /**
+     * Issues a CSRF token for the dashboard page in the container's session and
+     * stores its cookie counterpart, the way the browser would send it back.
+     */
+    private function createValidCsrfToken(): string
+    {
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($this->session)->getTokenString('dashboard');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('dashboard'), 0, 10)] = $token;
+
+        return $token;
     }
 
     /**
@@ -160,7 +213,7 @@ final class DashboardControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
 
-        $session = new Session(new MockArraySessionStorage());
+        $session = $this->session;
 
         $container = $this->createStub(ContainerInterface::class);
         $container
@@ -242,7 +295,7 @@ final class DashboardControllerTest extends TestCase
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
 
-        $session = new Session(new MockArraySessionStorage());
+        $session = $this->session;
 
         $container = $this->createStub(ContainerInterface::class);
         $container
@@ -646,5 +699,257 @@ final class DashboardControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertSame('Recent news is disabled.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testVersionsWarnsAboutAnAvailableUpdateAndCachesIt(): void
+    {
+        $controller = $this->createController($this->createVersionsApi('4.0.0', '9.9.9'));
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->versions();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('warning', $payload);
+        self::assertArrayNotHasKey('success', $payload);
+
+        $cached = $this->cache->getItem('dashboard.versions.stable')->get();
+        self::assertIsArray($cached);
+        self::assertSame($payload, $cached['payload']);
+        self::assertEqualsWithDelta(time(), $cached['fetchedAt'], 5);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testVersionsConfirmsAnUpToDateInstallation(): void
+    {
+        $controller = $this->createController($this->createVersionsApi('9.9.9', '9.9.9'));
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->versions();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+        self::assertStringEndsWith('phpMyFAQ 9.9.9', $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLayoutStoresTheSanitizedWidgetList(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+        $csrfToken = $this->createValidCsrfToken();
+
+        $body = json_encode([
+            'csrfToken' => $csrfToken,
+            'config' => [
+                ['key' => 'sponsor', 'visible' => false],
+                ['key' => 'content-health'],
+                ['key' => 'sponsor', 'visible' => true],
+                ['key' => 'not-a-widget'],
+                ['visible' => true],
+                'not an object',
+                ['key' => 'support', 'visible' => 1],
+            ],
+        ], JSON_THROW_ON_ERROR);
+
+        $response = $controller->saveLayout(new Request([], [], [], [], [], [], $body));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        self::assertSame([
+            ['key' => 'sponsor', 'position' => 0, 'visible' => false],
+            ['key' => 'content-health', 'position' => 1, 'visible' => true],
+            ['key' => 'support', 'position' => 2, 'visible' => true],
+        ], $payload['config']);
+
+        $stored = json_decode((string) $controller->getLayout()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        self::assertSame($payload['config'], $stored['config']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLayoutStoresAnEmptyListWhenTheConfigIsNotAList(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+        $csrfToken = $this->createValidCsrfToken();
+
+        $body = json_encode(['csrfToken' => $csrfToken, 'config' => 'broken'], JSON_THROW_ON_ERROR);
+        $response = $controller->saveLayout(new Request([], [], [], [], [], [], $body));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([], $payload['config']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testResetLayoutRemovesTheStoredLayout(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+        $csrfToken = $this->createValidCsrfToken();
+
+        $saveBody = json_encode([
+            'csrfToken' => $csrfToken,
+            'config' => [['key' => 'sponsor', 'visible' => false]],
+        ], JSON_THROW_ON_ERROR);
+        $controller->saveLayout(new Request([], [], [], [], [], [], $saveBody));
+
+        $resetBody = json_encode(['csrfToken' => $csrfToken], JSON_THROW_ON_ERROR);
+        $response = $controller->resetLayout(new Request([], [], [], [], [], [], $resetBody));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+
+        $layout = json_decode((string) $controller->getLayout()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        self::assertNotSame([['key' => 'sponsor', 'position' => 0, 'visible' => false]], $layout['config']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testResetLayoutRejectsInvalidBody(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->resetLayout(new Request([], [], [], [], [], [], 'not-json'));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testNewsReturnsAtMostFiveEntriesAndCachesThem(): void
+    {
+        $news = [];
+        for ($i = 1; $i <= 7; $i++) {
+            $news[] = ['title' => 'News ' . $i];
+        }
+
+        $controller = $this->createNewsController(new MockHttpClient(new MockResponse(
+            json_encode(['news' => $news, 'source' => 'phpmyfaq.de'], JSON_THROW_ON_ERROR),
+            ['response_headers' => ['content-type' => 'application/json']],
+        )));
+
+        $response = $controller->news();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertCount(5, $payload['news']);
+        self::assertSame('News 5', $payload['news'][4]['title']);
+        self::assertSame('phpmyfaq.de', $payload['source']);
+
+        $cached = $this->cache->getItem('dashboard.news')->get();
+        self::assertIsArray($cached);
+        self::assertSame($payload, $cached['payload']);
+    }
+
+    /**
+     * @throws \Exception
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testNewsReturnsFreshCachedPayloadWithoutRemoteLookup(): void
+    {
+        $controller = $this->createNewsController($this->createHttpClientThatMustNotBeCalled());
+
+        $cachedPayload = ['news' => [['title' => 'Cached']]];
+        $item = $this->cache->getItem('dashboard.news');
+        $item->set(['fetchedAt' => time(), 'payload' => $cachedPayload]);
+        $this->cache->save($item);
+
+        $response = $controller->news();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($cachedPayload, $payload);
+    }
+
+    /**
+     * @throws \Exception
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testNewsServesStaleCacheWhenTheServerFails(): void
+    {
+        $controller = $this->createNewsController(new MockHttpClient(new MockResponse('', ['http_code' => 503])));
+
+        $stalePayload = ['news' => [['title' => 'Stale']]];
+        $item = $this->cache->getItem('dashboard.news');
+        $item->set(['fetchedAt' => time() - 100_000, 'payload' => $stalePayload]);
+        $this->cache->save($item);
+
+        $response = $controller->news();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($stalePayload, $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testNewsReportsAFailingServerWithoutCache(): void
+    {
+        $controller = $this->createNewsController(new MockHttpClient(new MockResponse('', ['http_code' => 503])));
+
+        $response = $controller->news();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
+        self::assertSame('Failed to fetch news.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testNewsServesStaleCacheWhenTheServerIsUnreachable(): void
+    {
+        $controller = $this->createNewsController(new MockHttpClient(
+            static fn(): never => throw new TransportException('www.phpmyfaq.de is unreachable.'),
+        ));
+
+        $stalePayload = ['news' => [['title' => 'Stale']]];
+        $item = $this->cache->getItem('dashboard.news');
+        $item->set(['fetchedAt' => time() - 100_000, 'payload' => $stalePayload]);
+        $this->cache->save($item);
+
+        $response = $controller->news();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($stalePayload, $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testNewsReportsAnUnreachableServerWithoutCache(): void
+    {
+        $controller = $this->createNewsController(new MockHttpClient(
+            static fn(): never => throw new TransportException('www.phpmyfaq.de is unreachable.'),
+        ));
+
+        $response = $controller->news();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
+        self::assertSame('www.phpmyfaq.de is unreachable.', $payload['error']);
     }
 }

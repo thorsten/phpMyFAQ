@@ -40,6 +40,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class DashboardController extends AbstractController
 {
@@ -68,10 +69,15 @@ final class DashboardController extends AbstractController
         'support',
     ];
 
+    /**
+     * The HTTP client fetches the recent news; passing one in keeps the
+     * dashboard offline in tests.
+     */
     public function __construct(
         private readonly AdminSession $adminSession,
         private readonly CacheItemPoolInterface $cache,
         private readonly RemoteApiClient $remoteApiClient,
+        private readonly ?HttpClientInterface $httpClient = null,
     ) {
         parent::__construct();
     }
@@ -252,7 +258,7 @@ final class DashboardController extends AbstractController
         }
 
         try {
-            $httpClient = HttpClient::create(['max_redirects' => 2, 'timeout' => 10]);
+            $httpClient = $this->httpClient ?? HttpClient::create(['max_redirects' => 2, 'timeout' => 10]);
             $response = $httpClient->request('GET', 'https://www.phpmyfaq.de/api/news/recent');
 
             if ($response->getStatusCode() === Response::HTTP_OK) {
