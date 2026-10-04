@@ -53,7 +53,6 @@ phpMyFAQ\Captcha\BuiltinCaptcha
 phpMyFAQ\Captcha\Helper\BuiltinCaptchaAbstractHelper
 phpMyFAQ\Category\CategoryRepository
 phpMyFAQ\Category\CategoryTreeRestrictionFilter
-phpMyFAQ\Category\Navigation\CategoryTreeNavigator
 phpMyFAQ\Category\Order
 phpMyFAQ\Category\Presentation\AdminCategoryTreePresenter
 phpMyFAQ\Category\Relation

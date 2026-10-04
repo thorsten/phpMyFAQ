@@ -499,18 +499,6 @@ message = "Redundant null coalesce: left-hand side can never be `null` or undefi
 count = 1
 
 [[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
-code = "mixed-assignment"
-message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
-file = "phpmyfaq/src/phpMyFAQ/Category/Navigation/CategoryTreeNavigator.php"
-code = "mixed-assignment"
-message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
-count = 1
-
-[[issues]]
 file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
 code = "mixed-assignment"
 message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
