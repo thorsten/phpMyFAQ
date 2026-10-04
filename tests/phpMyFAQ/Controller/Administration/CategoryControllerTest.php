@@ -885,5 +885,10 @@ final class CategoryControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString(Translation::get('ad_categ_existing'), (string) $response->getContent());
+        self::assertStringNotContainsString('alert alert-success', (string) $response->getContent());
+
+        $db = $this->configuration->getDb();
+        $row = $db->fetchArray($db->query("SELECT COUNT(*) AS n FROM faqcategories WHERE name = 'Parent Category'"));
+        self::assertSame(1, (int) $row['n'], 'The existing category must not be duplicated.');
     }
 }

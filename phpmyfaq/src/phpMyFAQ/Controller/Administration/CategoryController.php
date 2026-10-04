@@ -295,12 +295,16 @@ final class CategoryController extends AbstractAdministrationController
             'msgHeaderCategoryMain' => Translation::get(key: 'msgHeaderCategoryOverview'),
         ];
 
+        // A category with the same name, language and parent must not be created twice.
         if ($category->checkIfCategoryExists($categoryEntity) > 0) {
-            $templateVars = [
+            return $this->render(file: '@admin/content/category.main.twig', context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                ...$this->getBaseTemplateVars(),
                 ...$templateVars,
                 'isError' => true,
                 'errorMessage' => Translation::get(key: 'ad_categ_existing'),
-            ];
+            ]);
         }
 
         $categoryId = $category->create($categoryEntity);
