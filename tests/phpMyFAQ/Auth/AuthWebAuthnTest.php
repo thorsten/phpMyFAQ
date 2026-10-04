@@ -842,4 +842,251 @@ class AuthWebAuthnTest extends TestCase
 
         return array_map(ord(...), str_split($clientDataJson));
     }
+
+    /**
+     * Builds a registration payload like createSignedRegistrationInfo(), but lets a test bend
+     * single fields of the attestation to reach the guard clauses behind the happy path.
+     *
+     * @param array{fmt?: string|null, rpId?: string, flags?: int, rawId?: list<int>, authData?: mixed} $options
+     * @return array{0: string, 1: string}
+     */
+    private function createAttestationInfo(array $options = []): array
+    {
+        $key = openssl_pkey_new(['curve_name' => 'prime256v1', 'private_key_type' => OPENSSL_KEYTYPE_EC]);
+        $details = openssl_pkey_get_details($key);
+
+        $cborPublicKey = (string) CBOREncoder::encode([
+            1 => 2,
+            3 => -7,
+            -1 => 1,
+            -2 => new CBORByteString($details['ec']['x']),
+            -3 => new CBORByteString($details['ec']['y']),
+        ]);
+
+        $credId = random_bytes(32);
+        $authData = hash('sha256', $options['rpId'] ?? 'example.com', true)
+            . chr($options['flags'] ?? 0x45)
+            . "\x00\x00\x00\x00"
+            . str_repeat("\x00", 16)
+            . pack('n', strlen($credId))
+            . $credId
+            . $cborPublicKey;
+
+        $attestation = ['attStmt' => []];
+        if (!array_key_exists('fmt', $options) || $options['fmt'] !== null) {
+            $attestation['fmt'] = $options['fmt'] ?? 'none';
+        }
+
+        if (!array_key_exists('authData', $options)) {
+            $attestation['authData'] = new CBORByteString($authData);
+        } elseif ($options['authData'] !== null) {
+            $attestation['authData'] = $options['authData'];
+        }
+
+        $attestationObject = (string) CBOREncoder::encode($attestation);
+
+        $info = (string) json_encode([
+            'rawId' => $options['rawId'] ?? array_values(unpack('C*', $credId)),
+            'response' => [
+                'attestationObject' => array_values(unpack('C*', $attestationObject)),
+                'clientDataJSON' => (object) [
+                    'challenge' => 'issued-challenge',
+                    'origin' => 'https://example.com',
+                    'type' => 'webauthn.create',
+                ],
+            ],
+        ]);
+
+        return [$info, $credId];
+    }
+
+    public function testRegisterAcceptsPackedAttestations(): void
+    {
+        [$info, $credId] = $this->createAttestationInfo(['fmt' => 'packed']);
+
+        $keys = json_decode($this->authWebAuthn->register($info, '', 'issued-challenge'));
+
+        self::assertCount(1, $keys);
+        self::assertSame(array_values(unpack('C*', $credId)), $keys[0]->id);
+    }
+
+    /**
+     * @return iterable<string, array{array<string, mixed>, string}>
+     */
+    public static function malformedAttestationProvider(): iterable
+    {
+        yield 'fido-u2f' => [['fmt' => 'fido-u2f'], 'Cannot decode FIDO format responses'];
+        yield 'unsupported format' => [['fmt' => 'tpm'], 'Cannot decode key for format if not none or packed'];
+        yield 'no format' => [['fmt' => null], 'Cannot decode key for format'];
+        yield 'no authenticator data' => [['authData' => null], 'Cannot decode key for authentication data'];
+        yield 'authenticator data not a byte string' => [
+            ['authData' => 'plain text'],
+            'Cannot decode key for authentication data',
+        ];
+        yield 'foreign relying party' => [['rpId' => 'evil.example.org'], 'Cannot decode key as RP ID hash does not match'];
+        yield 'user not present' => [['flags' => 0x00], 'Cannot decode key as flags are not correct'];
+        yield 'credential id differs from rawId' => [['rawId' => [9, 9, 9]], 'Cannot decode key for credId'];
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('malformedAttestationProvider')]
+    public function testRegisterRejectsMalformedAttestations(array $options, string $expectedMessage): void
+    {
+        [$info] = $this->createAttestationInfo($options);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage($expectedMessage);
+
+        $this->authWebAuthn->register($info, '', 'issued-challenge');
+    }
+
+    public function testRegisterReplacesTheKeyOfAnAlreadyKnownCredential(): void
+    {
+        [$info, $credId] = $this->createAttestationInfo();
+        $id = array_values(unpack('C*', $credId));
+        $existing = (string) json_encode([
+            (object) ['id' => [7, 7, 7], 'key' => 'other key'],
+            (object) ['id' => $id, 'key' => 'stale key'],
+            'not an object',
+        ]);
+
+        $keys = json_decode($this->authWebAuthn->register($info, $existing, 'issued-challenge'));
+
+        self::assertCount(3, $keys);
+        self::assertSame('other key', $keys[0]->key);
+        self::assertSame($id, $keys[1]->id);
+        self::assertStringContainsString('BEGIN PUBLIC KEY', $keys[1]->key);
+    }
+
+    public function testRegisterPrependsANewCredentialToTheExistingKeys(): void
+    {
+        [$info, $credId] = $this->createAttestationInfo();
+        $existing = (string) json_encode([(object) ['id' => [7, 7, 7], 'key' => 'other key']]);
+
+        $keys = json_decode($this->authWebAuthn->register($info, $existing, 'issued-challenge'));
+
+        self::assertCount(2, $keys);
+        self::assertSame(array_values(unpack('C*', $credId)), $keys[0]->id);
+        self::assertSame([7, 7, 7], $keys[1]->id);
+    }
+
+    public function testRegisterTreatsUnparsableExistingKeysAsEmpty(): void
+    {
+        [$info] = $this->createAttestationInfo();
+
+        $keys = json_decode($this->authWebAuthn->register($info, 'not json', 'issued-challenge'));
+
+        self::assertCount(1, $keys);
+    }
+
+    /**
+     * Signs an assertion like createSignedAssertion(), with a configurable relying party and flags.
+     */
+    private function createSignedAssertionFor(
+        \OpenSSLAsymmetricKey $privateKey,
+        string $challenge,
+        string $rpId = 'example.com',
+        int $flags = 0x01,
+    ): \stdClass {
+        $clientDataJson = (string) json_encode([
+            'challenge' => $challenge,
+            'origin' => 'https://example.com',
+            'type' => 'webauthn.get',
+        ]);
+        $authenticatorData = hash('sha256', $rpId, true) . chr($flags) . "\0\0\0\1";
+
+        $signature = '';
+        openssl_sign($authenticatorData . hash('sha256', $clientDataJson, true), $signature, $privateKey, OPENSSL_ALGO_SHA256);
+
+        $info = new \stdClass();
+        $info->rawId = [1, 2, 3];
+        $info->response = new \stdClass();
+        $info->response->authenticatorData = array_map(ord(...), str_split($authenticatorData));
+        $info->response->clientDataJSONarray = array_map(ord(...), str_split($clientDataJson));
+        $info->response->signature = array_map(ord(...), str_split($signature));
+
+        return $info;
+    }
+
+    /**
+     * @return array{0: \OpenSSLAsymmetricKey, 1: string, 2: string} the key, the stored keys and the challenge
+     */
+    private function prepareStoredRsaKey(): array
+    {
+        $privateKey = openssl_pkey_new(['private_key_bits' => 2048, 'private_key_type' => OPENSSL_KEYTYPE_RSA]);
+        self::assertInstanceOf(\OpenSSLAsymmetricKey::class, $privateKey);
+        $details = openssl_pkey_get_details($privateKey);
+
+        $userWebAuthn = (string) json_encode([
+            'not an object',
+            (object) ['id' => [1, 2, 3], 'key' => $details['key']],
+        ]);
+        $this->authWebAuthn->prepareForLogin($userWebAuthn);
+        $challenge = json_decode($userWebAuthn)[1]->challenge;
+        self::assertNotEmpty($challenge);
+
+        return [$privateKey, $userWebAuthn, $challenge];
+    }
+
+    public function testAuthenticateThrowsWhenTheResponseIsMissing(): void
+    {
+        $userWebAuthn = 'not json';
+        $info = new \stdClass();
+        $info->rawId = [1, 2, 3];
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No response in info');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testAuthenticateSkipsStoredEntriesThatAreNotObjects(): void
+    {
+        [$privateKey, $userWebAuthn, $challenge] = $this->prepareStoredRsaKey();
+
+        self::assertTrue($this->authWebAuthn->authenticate(
+            $this->createSignedAssertionFor($privateKey, $challenge),
+            $userWebAuthn,
+        ));
+    }
+
+    public function testAuthenticateRejectsAnAssertionForAnotherRelyingParty(): void
+    {
+        [$privateKey, $userWebAuthn, $challenge] = $this->prepareStoredRsaKey();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot decode key response for RP ID hash');
+
+        $this->authWebAuthn->authenticate(
+            $this->createSignedAssertionFor($privateKey, $challenge, rpId: 'evil.example.org'),
+            $userWebAuthn,
+        );
+    }
+
+    public function testAuthenticateRejectsAnAssertionWithoutUserPresence(): void
+    {
+        [$privateKey, $userWebAuthn, $challenge] = $this->prepareStoredRsaKey();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot decode key response (2c)');
+
+        $this->authWebAuthn->authenticate(
+            $this->createSignedAssertionFor($privateKey, $challenge, flags: 0x00),
+            $userWebAuthn,
+        );
+    }
+
+    public function testAuthenticateReturnsFalseForASignatureOfAnotherKey(): void
+    {
+        [, $userWebAuthn, $challenge] = $this->prepareStoredRsaKey();
+        $otherKey = openssl_pkey_new(['private_key_bits' => 2048, 'private_key_type' => OPENSSL_KEYTYPE_RSA]);
+        self::assertInstanceOf(\OpenSSLAsymmetricKey::class, $otherKey);
+
+        self::assertFalse($this->authWebAuthn->authenticate(
+            $this->createSignedAssertionFor($otherKey, $challenge),
+            $userWebAuthn,
+        ));
+    }
 }
