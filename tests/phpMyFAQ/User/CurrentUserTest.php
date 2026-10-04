@@ -548,4 +548,51 @@ class CurrentUserTest extends TestCase
                 Database::getTablePrefix(),
             ));
     }
+
+    public function testLocalAuthenticationIsConsultedLast(): void
+    {
+        $sorted = new \ReflectionMethod(CurrentUser::class, 'sortAuthContainer')->invoke(
+            $this->currentUser,
+            ['local' => 'database', 'ldap' => 'directory', 'sso' => 'single sign-on'],
+        );
+
+        $this->assertSame(['ldap', 'sso', 'local'], array_keys($sorted));
+    }
+
+    public function testLoginAcceptsTheEmailAddressWhenEnabled(): void
+    {
+        $this->assertTrue($this->configuration->set('security.loginWithEmailAddress', 'true'));
+        $db = $this->configuration->getDb();
+        $db->query("UPDATE faquserdata SET email = 'admin@example.org' WHERE user_id = 1");
+
+        $this->assertTrue($this->currentUser->login('admin@example.org', 'password'));
+        $this->assertSame('admin', $this->currentUser->getLogin());
+        $this->assertTrue($this->currentUser->isLoggedIn());
+    }
+
+    public function testLoginRequiresAnEmailAddressWhenEmailLoginIsEnabled(): void
+    {
+        $this->assertTrue($this->configuration->set('security.loginWithEmailAddress', 'true'));
+
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage(\phpMyFAQ\User::ERROR_USER_INCORRECT_LOGIN);
+
+        $this->currentUser->login('not-an-email', 'password');
+    }
+
+    public function testSsoLoginStripsTheRealmAndStillNeedsAMatchingDriver(): void
+    {
+        $this->assertTrue($this->configuration->set('security.ssoSupport', 'true'));
+        $_SERVER['REMOTE_USER'] = 'admin@EXAMPLE.ORG';
+
+        try {
+            $this->expectException(UserException::class);
+            // The local driver refuses the empty SSO password, so the attempt fails as a wrong password.
+            $this->expectExceptionMessage(\phpMyFAQ\User::ERROR_USER_INCORRECT_PASSWORD);
+
+            $this->currentUser->login('admin@EXAMPLE.ORG', '');
+        } finally {
+            unset($_SERVER['REMOTE_USER']);
+        }
+    }
 }

@@ -1189,4 +1189,39 @@ class FaqTest extends TestCase
         $faq->setGroups([7]);
         $this->assertTrue($faq->isFaqEditableForUser($faqEntity->getId(), 'en'));
     }
+
+    /**
+     * @return iterable<string, array{string, array{string, string}, string}>
+     */
+    public static function orderNormalisationProvider(): iterable
+    {
+        yield 'visits' => ['visits', ['fv', 'visits'], 'fv.visits'];
+        yield 'updated' => ['updated', ['fd', 'updated'], 'fd.updated'];
+        yield 'created' => ['created', ['fd', 'created'], 'fd.created'];
+        yield 'thema' => ['thema', ['fd', 'thema'], 'fd.thema'];
+        yield 'question' => ['question', ['fd', 'thema'], 'fd.thema'];
+        yield 'sticky' => ['sticky', ['fd', 'sticky'], 'fd.id'];
+        yield 'sticky order' => ['sticky_order', ['fd', 'sticky_order'], 'fd.id'];
+        yield 'qualified column' => ['fd.updated', ['fd', 'id'], 'fd.updated'];
+        yield 'injection attempt' => ['id; DROP TABLE faqdata', ['fd', 'id'], 'fd.id'];
+    }
+
+    /**
+     * @param array{string, string} $categoryOrder
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('orderNormalisationProvider')]
+    public function testOrderColumnsAreNormalisedToKnownColumns(
+        string $requested,
+        array $categoryOrder,
+        string $faqOrderBy,
+    ): void {
+        $this->assertSame(
+            $categoryOrder,
+            new \ReflectionMethod(Faq::class, 'normalizeCategoryOrder')->invoke($this->faq, $requested),
+        );
+        $this->assertSame(
+            $faqOrderBy,
+            new \ReflectionMethod(Faq::class, 'normalizeFaqOrderBy')->invoke($this->faq, $requested),
+        );
+    }
 }
