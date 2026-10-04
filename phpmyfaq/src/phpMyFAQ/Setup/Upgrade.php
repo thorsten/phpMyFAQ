@@ -379,6 +379,15 @@ class Upgrade extends AbstractSetup
             throw new Exception(message: 'Backup file already exists.');
         }
 
+        // ZipArchive only reports a missing or read-only directory when the
+        // archive is closed, as a PHP warning after the whole installation
+        // has been read; check up front and name the directory instead.
+        if (!is_dir($this->upgradeDirectory) || !is_writable($this->upgradeDirectory)) {
+            throw new Exception(
+                message: 'Cannot create backup file: the directory ' . $this->upgradeDirectory . ' is not writable.',
+            );
+        }
+
         $zipArchive = new ZipArchive();
         if ($zipArchive->open($outputZipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
             throw new Exception(message: 'Cannot create backup file.');
