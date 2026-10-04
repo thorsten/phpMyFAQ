@@ -25,10 +25,12 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(UpdateController::class)]
@@ -797,5 +799,326 @@ final class UpdateControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
         self::assertStringContainsString('broken update', $payload['error']);
+    }
+
+    /**
+     * Streams the response the way the web server would, capturing the progress lines the
+     * callbacks flush as well as the final JSON document.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function streamedDocuments(Response $response): array
+    {
+        self::assertInstanceOf(StreamedResponse::class, $response);
+
+        // The progress callbacks call ob_flush(), which moves the inner buffer to the outer one.
+        ob_start();
+        ob_start();
+        $response->sendContent();
+        $inner = (string) ob_get_clean();
+        $outer = (string) ob_get_clean();
+
+        $documents = [];
+        foreach (array_filter(explode("\n", $outer . $inner)) as $line) {
+            $documents[] = json_decode($line, true, 512, JSON_THROW_ON_ERROR);
+        }
+
+        return $documents;
+    }
+
+    private function createTokenRequest(string $csrf): Request
+    {
+        return new Request([], [], [], [], [], [], json_encode(['csrf' => $csrf], JSON_THROW_ON_ERROR));
+    }
+
+    /**
+     * @return array{0: UpdateController, 1: string}
+     */
+    private function createAuthorizedController(
+        Upgrade $upgrade,
+        ?EnvironmentConfigurator $configurator = null,
+    ): array {
+        $controller = $this->createControllerWithDependencies(
+            $upgrade,
+            $this->createStub(RemoteApiClient::class),
+            $this->createStub(Update::class),
+            $configurator ?? $this->createStub(EnvironmentConfigurator::class),
+        );
+        $container = $this->createAuthenticatedContainer();
+        $controller->setContainer($container);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+
+        return [$controller, $this->createValidUpdatePackageToken($session)];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testHealthCheckReturnsBadRequestWhenFilesystemCheckFails(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->method('isMaintenanceEnabled')->willReturn(true);
+        $upgrade->method('checkFilesystem')->willThrowException(new Exception('The folder /content/core/data is missing.'));
+
+        $controller = $this->createControllerWithDependencies(
+            $upgrade,
+            $this->createStub(RemoteApiClient::class),
+            $this->createStub(Update::class),
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->healthCheck();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('The folder /content/core/data is missing.', $payload['error']);
+        self::assertArrayHasKey('dateLastChecked', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateCheckReturnsBadRequestWhenTheApiIsUnreachable(): void
+    {
+        $adminApi = $this->createMock(RemoteApiClient::class);
+        $adminApi->method('getVersions')->willThrowException(new TransportException('api.phpmyfaq.de is unreachable.'));
+
+        $controller = $this->createControllerWithDependencies(
+            $this->createStub(Upgrade::class),
+            $adminApi,
+            $this->createStub(Update::class),
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->updateCheck();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('api.phpmyfaq.de is unreachable.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDownloadPackageRejectsInvalidCsrfToken(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->expects($this->never())->method('downloadPackage');
+
+        $controller = $this->createControllerWithDependencies(
+            $upgrade,
+            $this->createStub(RemoteApiClient::class),
+            $this->createStub(Update::class),
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = $this->createTokenRequest('wrong-token');
+        $request->attributes->set('versionNumber', '4.0.1');
+        $response = $controller->downloadPackage($request);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExtractPackageStreamsProgressAndSuccess(): void
+    {
+        $this->configuration->set('upgrade.lastDownloadedPackage', urlencode('/tmp/phpMyFAQ-4.0.1.zip'));
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade
+            ->expects($this->once())
+            ->method('extractPackage')
+            ->with('/tmp/phpMyFAQ-4.0.1.zip', $this->isCallable())
+            ->willReturnCallback(static function (string $path, callable $progressCallback): bool {
+                $progressCallback('50%');
+                return true;
+            });
+        [$controller, $csrf] = $this->createAuthorizedController($upgrade);
+
+        $documents = $this->streamedDocuments($controller->extractPackage($this->createTokenRequest($csrf)));
+
+        self::assertSame([
+            ['progress' => '50%'],
+            ['message' => Translation::get('extractSuccessful')],
+        ], $documents);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExtractPackageStreamsAFailure(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->method('extractPackage')->willReturn(false);
+        [$controller, $csrf] = $this->createAuthorizedController($upgrade);
+
+        $documents = $this->streamedDocuments($controller->extractPackage($this->createTokenRequest($csrf)));
+
+        self::assertSame([['error' => Translation::get('extractFailure')]], $documents);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExtractPackageStreamsTheExceptionMessage(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->method('extractPackage')->willThrowException(new Exception('Cannot open zipped download package.'));
+        [$controller, $csrf] = $this->createAuthorizedController($upgrade);
+
+        $documents = $this->streamedDocuments($controller->extractPackage($this->createTokenRequest($csrf)));
+
+        self::assertCount(1, $documents);
+        self::assertStringEndsWith('Cannot open zipped download package.', $documents[0]['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExtractPackageRejectsInvalidCsrfToken(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->expects($this->never())->method('extractPackage');
+        [$controller] = $this->createAuthorizedController($upgrade);
+
+        $response = $controller->extractPackage($this->createTokenRequest('wrong-token'));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateTemporaryBackupStreamsProgressAndSuccess(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade
+            ->expects($this->once())
+            ->method('createTemporaryBackup')
+            ->with($this->matchesRegularExpression('/^[0-9a-f]{32}\.zip$/'), $this->isCallable())
+            ->willReturnCallback(static function (string $name, callable $progressCallback): bool {
+                $progressCallback('25%');
+                return true;
+            });
+        [$controller, $csrf] = $this->createAuthorizedController($upgrade);
+
+        $documents = $this->streamedDocuments($controller->createTemporaryBackup($this->createTokenRequest($csrf)));
+
+        self::assertSame([['progress' => '25%'], ['success' => 'Backup successful']], $documents);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateTemporaryBackupStreamsAFailure(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->method('createTemporaryBackup')->willReturn(false);
+        [$controller, $csrf] = $this->createAuthorizedController($upgrade);
+
+        $documents = $this->streamedDocuments($controller->createTemporaryBackup($this->createTokenRequest($csrf)));
+
+        self::assertSame([['error' => 'Backup failed']], $documents);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateTemporaryBackupStreamsTheExceptionMessage(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->method('createTemporaryBackup')->willThrowException(new Exception('Backup file already exists.'));
+        [$controller, $csrf] = $this->createAuthorizedController($upgrade);
+
+        $documents = $this->streamedDocuments($controller->createTemporaryBackup($this->createTokenRequest($csrf)));
+
+        self::assertSame([['error' => 'Backup failed: Backup file already exists.']], $documents);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateTemporaryBackupRejectsInvalidCsrfToken(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->expects($this->never())->method('createTemporaryBackup');
+        [$controller] = $this->createAuthorizedController($upgrade);
+
+        $response = $controller->createTemporaryBackup($this->createTokenRequest('wrong-token'));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testInstallPackageStreamsProgressAndSuccess(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade
+            ->expects($this->once())
+            ->method('installPackage')
+            ->willReturnCallback(static function (callable $progressCallback): bool {
+                $progressCallback('10%');
+                return true;
+            });
+        $configurator = $this->createMock(EnvironmentConfigurator::class);
+        $configurator->expects($this->once())->method('adjustRewriteBaseHtaccess')->willReturn(true);
+        [$controller, $csrf] = $this->createAuthorizedController($upgrade, $configurator);
+
+        $documents = $this->streamedDocuments($controller->installPackage($this->createTokenRequest($csrf)));
+
+        self::assertSame([['progress' => '10%'], ['success' => 'Package successfully installed.']], $documents);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testInstallPackageStreamsAFailureWhenTheHtaccessCannotBeAdjusted(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->method('installPackage')->willReturn(true);
+        $configurator = $this->createMock(EnvironmentConfigurator::class);
+        $configurator->method('adjustRewriteBaseHtaccess')->willReturn(false);
+        [$controller, $csrf] = $this->createAuthorizedController($upgrade, $configurator);
+
+        $documents = $this->streamedDocuments($controller->installPackage($this->createTokenRequest($csrf)));
+
+        self::assertSame([['error' => 'Install package failed']], $documents);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testInstallPackageStreamsTheExceptionMessage(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->method('installPackage')->willThrowException(new Exception('The extracted package is missing.'));
+        $configurator = $this->createMock(EnvironmentConfigurator::class);
+        $configurator->expects($this->never())->method('adjustRewriteBaseHtaccess');
+        [$controller, $csrf] = $this->createAuthorizedController($upgrade, $configurator);
+
+        $documents = $this->streamedDocuments($controller->installPackage($this->createTokenRequest($csrf)));
+
+        self::assertSame([['error' => 'Install package failed: The extracted package is missing.']], $documents);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testInstallPackageRejectsInvalidCsrfToken(): void
+    {
+        $upgrade = $this->createMock(Upgrade::class);
+        $upgrade->expects($this->never())->method('installPackage');
+        [$controller] = $this->createAuthorizedController($upgrade);
+
+        $response = $controller->installPackage($this->createTokenRequest('wrong-token'));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 }
