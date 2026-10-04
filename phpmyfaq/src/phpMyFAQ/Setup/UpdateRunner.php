@@ -34,14 +34,20 @@ use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 
 /* @mago-expect lint:kan-defect - the dry-run report renders every operation type inline; split planned with the update rework */
 final class UpdateRunner
 {
+    /**
+     * The HTTP client is shared with the update check and the package
+     * download; passing one in keeps the update offline in tests.
+     */
     public function __construct(
         private readonly Configuration $configuration,
         private readonly System $system,
+        private readonly ?HttpClientInterface $httpClient = null,
     ) {
     }
 
@@ -299,7 +305,7 @@ final class UpdateRunner
 
     private function taskHealthCheck(SymfonyStyle $symfonyStyle): int
     {
-        $upgrade = new Upgrade($this->system, $this->configuration);
+        $upgrade = $this->createUpgrade();
         if (!$upgrade->isMaintenanceEnabled()) {
             $symfonyStyle->warning(Translation::getString(key: 'msgNotInMaintenanceMode'));
         }
@@ -322,6 +328,10 @@ final class UpdateRunner
 
         try {
             $api = new RemoteApiClient($this->configuration, $this->system);
+            if ($this->httpClient instanceof HttpClientInterface) {
+                $api->setHttpClient($this->httpClient);
+            }
+
             $versions = $api->getVersions();
             $this->configuration->set(key: 'upgrade.dateLastChecked', value: $dateLastChecked);
 
@@ -358,7 +368,7 @@ final class UpdateRunner
      */
     private function taskDownloadPackage(SymfonyStyle $symfonyStyle): int
     {
-        $upgrade = new Upgrade($this->system, $this->configuration);
+        $upgrade = $this->createUpgrade();
         $pathToPackage = $upgrade->downloadPackage($this->version);
 
         if (!$upgrade->isNightly()) {
@@ -377,7 +387,7 @@ final class UpdateRunner
 
     private function taskExtractPackage(SymfonyStyle $symfonyStyle): int
     {
-        $upgrade = new Upgrade($this->system, $this->configuration);
+        $upgrade = $this->createUpgrade();
         $pathToPackage = urldecode((string) $this->configuration->get(item: 'upgrade.lastDownloadedPackage'));
 
         $result = $this->withProgress($symfonyStyle, static function (callable $setProgress) use (
@@ -402,7 +412,7 @@ final class UpdateRunner
 
     private function taskCreateTemporaryBackup(SymfonyStyle $symfonyStyle): int
     {
-        $upgrade = new Upgrade($this->system, $this->configuration);
+        $upgrade = $this->createUpgrade();
         $backupHash = bin2hex(random_bytes(16));
         $backupFile = $backupHash . '.zip';
 
@@ -428,7 +438,7 @@ final class UpdateRunner
 
     private function taskInstallPackage(SymfonyStyle $symfonyStyle): int
     {
-        $upgrade = new Upgrade($this->system, $this->configuration);
+        $upgrade = $this->createUpgrade();
         $environmentConfigurator = new EnvironmentConfigurator($this->configuration);
 
         $result = $this->withProgress($symfonyStyle, static function (callable $setProgress) use (
@@ -515,11 +525,16 @@ final class UpdateRunner
 
     private function taskCleanup(SymfonyStyle $symfonyStyle): int
     {
-        $upgrade = new Upgrade($this->system, $this->configuration);
+        $upgrade = $this->createUpgrade();
         $upgrade->cleanUp();
 
         $symfonyStyle->success(message: 'Cleanup successful.');
         return Command::SUCCESS;
+    }
+
+    private function createUpgrade(): Upgrade
+    {
+        return new Upgrade($this->system, $this->configuration, $this->httpClient);
     }
 
     private function withProgress(SymfonyStyle $symfonyStyle, callable $fn): bool
