@@ -3,10 +3,12 @@
 #
 # - Pull requests and pushes to main that touch the image build only build
 #   the amd64 image and run the smoke test; nothing is pushed.
-# - A published GitHub release builds amd64 + arm64 and pushes them, tagged
-#   with the release version (4.2.1, 4.2, 4, latest; pre-releases only get
-#   their exact version). The FrankenPHP variant carries the "-frankenphp"
-#   suffix.
+# - A pushed release tag (4.2.1, 4.2.0-beta, ...) or a published GitHub
+#   release builds amd64 + arm64 and pushes them, tagged with the version
+#   (4.2.1, 4.2, 4, latest; pre-releases only get their exact version). The
+#   FrankenPHP variant carries the "-frankenphp" suffix. Releases are cut by
+#   pushing the tag, so the tag push is what publishes the image; the release
+#   event is kept for releases created afterwards on GitHub.
 # - workflow_dispatch builds on demand; "push" additionally publishes
 #   ("edge" tag when run from a branch).
 # - After the "phpMyFAQ Nightly Development Build" workflow has published its
@@ -33,6 +35,8 @@ on:
       - 'bin/console'
   push:
     branches: [ main ]
+    # Path filters only apply to branch pushes; a tag push always builds.
+    tags: [ '[0-9]+.[0-9]+.[0-9]+*' ]
     paths:
       - '.docker/production/**'
       - '.dockerignore'
@@ -68,7 +72,7 @@ jobs:
           - variant: frankenphp
             suffix: '-frankenphp'
     env:
-      PUBLISH: ${{ github.event_name == 'release' || github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && inputs.push) }}
+      PUBLISH: ${{ github.event_name == 'release' || github.event_name == 'workflow_run' || (github.event_name == 'push' && github.ref_type == 'tag') || (github.event_name == 'workflow_dispatch' && inputs.push) }}
       SMOKE_IMAGE: phpmyfaq-smoke:${{ matrix.variant }}
 
     steps:
