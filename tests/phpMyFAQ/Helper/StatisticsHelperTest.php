@@ -285,7 +285,8 @@ class StatisticsHelperTest extends TestCase
 
         $constructor = $reflection->getConstructor();
         $this->assertNotNull($constructor);
-        $this->assertEquals(3, $constructor->getNumberOfParameters());
+        $this->assertEquals(4, $constructor->getNumberOfParameters());
+        $this->assertEquals(3, $constructor->getNumberOfRequiredParameters(), 'The tracking directory is optional');
     }
 
     /**
@@ -303,7 +304,7 @@ class StatisticsHelperTest extends TestCase
         $reflection = new ReflectionClass($helper);
         $properties = $reflection->getProperties();
 
-        $this->assertCount(3, $properties, 'Should have 3 private properties for dependencies');
+        $this->assertCount(4, $properties, 'Three dependencies plus the optional tracking directory');
     }
 
     public function testGetFirstTrackingDateReturnsFormattedDate(): void

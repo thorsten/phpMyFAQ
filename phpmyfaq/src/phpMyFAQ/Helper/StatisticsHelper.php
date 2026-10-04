@@ -28,11 +28,21 @@ use Symfony\Component\HttpFoundation\Request;
 
 readonly class StatisticsHelper
 {
+    /**
+     * @param string|null $trackingDirectory where the tracking files live; defaults to the directory
+     *                                       the tracking writers use (see Tracking and UserSession)
+     */
     public function __construct(
         private Session $session,
         private Visits $visits,
         private Date $date,
+        private ?string $trackingDirectory = null,
     ) {
+    }
+
+    private function trackingDirectory(): string
+    {
+        return $this->trackingDirectory ?? (string) PMF_ROOT_DIR . '/content/core/data';
     }
 
     public function getTrackingFilesStatistics(): stdClass
@@ -40,7 +50,7 @@ readonly class StatisticsHelper
         $numberOfDays = 0;
         $first = PHP_INT_MAX;
         $last = 0;
-        $dir = opendir((string) PMF_ROOT_DIR . '/content/core/data');
+        $dir = opendir($this->trackingDirectory());
         if ($dir === false) {
             $result = new stdClass();
             $result->numberOfDays = 0;
@@ -87,8 +97,7 @@ readonly class StatisticsHelper
         $requestTime = $request->server->get('REQUEST_TIME');
         $date = 0;
 
-        $trackingFile =
-            (string) PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $firstDate);
+        $trackingFile = $this->trackingDirectory() . '/tracking' . date(format: 'dmY', timestamp: $firstDate);
         if (is_file($trackingFile)) {
             $fp = fopen(filename: $trackingFile, mode: 'r');
             if ($fp === false) {
@@ -112,8 +121,7 @@ readonly class StatisticsHelper
         $request = Request::createFromGlobals();
         $requestTime = $request->server->get('REQUEST_TIME');
 
-        $trackingFile =
-            (string) PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate);
+        $trackingFile = $this->trackingDirectory() . '/tracking' . date(format: 'dmY', timestamp: $lastDate);
         if (is_file($trackingFile)) {
             $fp = fopen(filename: $trackingFile, mode: 'r');
             if ($fp === false) {
@@ -145,7 +153,7 @@ readonly class StatisticsHelper
      */
     public function getAllTrackingDates(): array
     {
-        $dir = opendir((string) PMF_ROOT_DIR . '/content/core/data');
+        $dir = opendir($this->trackingDirectory());
         $trackingDates = [];
         if ($dir === false) {
             return $trackingDates;
@@ -167,7 +175,7 @@ readonly class StatisticsHelper
 
     public function deleteTrackingFiles(string $month): bool
     {
-        $dir = opendir((string) PMF_ROOT_DIR . '/content/core/data');
+        $dir = opendir($this->trackingDirectory());
         $first = PHP_INT_MAX;
         $last = 0;
         if ($dir === false) {
@@ -196,7 +204,7 @@ readonly class StatisticsHelper
                 $first = $candidateFirst;
             }
 
-            unlink(PMF_CONTENT_DIR . '/core/data/' . $trackingFile);
+            unlink($this->trackingDirectory() . '/' . $trackingFile);
         }
 
         closedir($dir);
@@ -208,7 +216,7 @@ readonly class StatisticsHelper
     {
         $this->visits->resetAll();
 
-        $files = glob(PMF_CONTENT_DIR . '/core/data/*');
+        $files = glob($this->trackingDirectory() . '/*');
         if ($files === false) {
             $files = [];
         }
