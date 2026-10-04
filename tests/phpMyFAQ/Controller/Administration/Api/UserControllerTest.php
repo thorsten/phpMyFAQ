@@ -2113,4 +2113,48 @@ final class UserControllerTest extends TestCase
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame(Translation::get('ad_user_error_noId'), $payload['error']);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateRejectsAnUnknownUser(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'activate-user');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->activate($this->jsonRequest(['csrfToken' => $token, 'userId' => 987654]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_user_error_noId'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateForbidsANonSuperAdminToTouchASuperAdminAccount(): void
+    {
+        $this->seedCurrentUserSession();
+        $superAdminId = $this->seedManagedUser(login: 'blocked-superadmin', status: 'blocked', isSuperAdmin: 1);
+
+        $session = new Session(new MockArraySessionStorage());
+        $token = $this->primeCsrf($session, 'activate-user');
+        $controller = $this->buildController($session, $this->buildActingUser(42, false));
+
+        $response = $controller->activate($this->jsonRequest(['csrfToken' => $token, 'userId' => $superAdminId]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+        self::assertSame('blocked', $this->dbHandle->fetchArray($this->dbHandle->query(
+            'SELECT account_status FROM faquser WHERE user_id = ' . $superAdminId,
+        ))['account_status']);
+    }
 }

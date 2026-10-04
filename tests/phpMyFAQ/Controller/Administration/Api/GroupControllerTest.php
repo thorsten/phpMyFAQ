@@ -20,6 +20,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -1863,5 +1864,105 @@ final class GroupControllerTest extends TestCase
 
         $this->expectException(ForbiddenException::class);
         $controller->listGroups();
+    }
+
+    /**
+     * @return iterable<string, array{string, string, array<string, mixed>|string, string}>
+     */
+    public static function invalidPayloadProvider(): iterable
+    {
+        yield 'updateGroup: invalid json' => ['updateGroup', 'update-group', 'not json', 'Invalid JSON payload.'];
+        yield 'updateGroup: no group' => ['updateGroup', 'update-group', ['groupId' => 0, 'name' => 'x'], 'Invalid group ID.'];
+
+        yield 'updateMembers: invalid json' => ['updateMembers', 'update-group-members', '[', 'Invalid JSON payload.'];
+        yield 'updateMembers: no group' => ['updateMembers', 'update-group-members', ['groupId' => 0], 'Invalid group ID.'];
+        yield 'updateMembers: members not a list' => [
+            'updateMembers',
+            'update-group-members',
+            ['groupId' => self::TEST_GROUP_ID, 'memberIds' => '1,2'],
+            'memberIds must be an array.',
+        ];
+
+        yield 'updatePermissions: invalid json' => ['updatePermissions', 'update-group-permissions', '', 'Invalid JSON payload.'];
+        yield 'updatePermissions: no group' => ['updatePermissions', 'update-group-permissions', ['groupId' => -5], 'Invalid group ID.'];
+        yield 'updatePermissions: rights not a list' => [
+            'updatePermissions',
+            'update-group-permissions',
+            ['groupId' => self::TEST_GROUP_ID, 'rightIds' => 7],
+            'rightIds must be an array.',
+        ];
+
+        yield 'deleteGroup: invalid json' => ['deleteGroup', 'delete-group', 'null', 'Invalid JSON payload.'];
+        yield 'deleteGroup: no group' => ['deleteGroup', 'delete-group', ['groupId' => 0], 'Invalid group ID.'];
+
+        yield 'saveCategoryRestrictions: invalid json' => [
+            'saveCategoryRestrictions',
+            'save-category-restrictions',
+            'not json',
+            'Invalid JSON payload.',
+        ];
+        yield 'saveCategoryRestrictions: no ids' => [
+            'saveCategoryRestrictions',
+            'save-category-restrictions',
+            ['groupId' => self::TEST_GROUP_ID, 'rightId' => 0],
+            'Invalid group or right ID.',
+        ];
+        yield 'saveCategoryRestrictions: categories not a list' => [
+            'saveCategoryRestrictions',
+            'save-category-restrictions',
+            ['groupId' => self::TEST_GROUP_ID, 'rightId' => 1, 'categoryIds' => 'all'],
+            'categoryIds must be an array.',
+        ];
+
+        yield 'saveLanguageRestrictions: invalid json' => [
+            'saveLanguageRestrictions',
+            'save-language-restrictions',
+            'not json',
+            'Invalid JSON payload.',
+        ];
+        yield 'saveLanguageRestrictions: no ids' => [
+            'saveLanguageRestrictions',
+            'save-language-restrictions',
+            ['groupId' => 0, 'rightId' => 1],
+            'Invalid group or right ID.',
+        ];
+        yield 'saveLanguageRestrictions: languages not a list' => [
+            'saveLanguageRestrictions',
+            'save-language-restrictions',
+            ['groupId' => self::TEST_GROUP_ID, 'rightId' => 1, 'languages' => 'en'],
+            'languages must be an array.',
+        ];
+    }
+
+    /**
+     * @param array<string, mixed>|string $payload
+     * @throws \Exception
+     */
+    #[DataProvider('invalidPayloadProvider')]
+    public function testWriteEndpointsRejectMalformedPayloads(
+        string $method,
+        string $page,
+        array|string $payload,
+        string $expectedError,
+    ): void {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString($page);
+        $this->setCsrfCookie($page, $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createSuperAdminContainer($session));
+
+        $content = is_array($payload)
+            ? json_encode($payload + ['csrfToken' => $csrfToken], JSON_THROW_ON_ERROR)
+            : $payload;
+        $response = $controller->{$method}(new Request(content: $content));
+        $decoded = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame($expectedError, $decoded['error']);
+        $this->removeCsrfCookie($page);
     }
 }

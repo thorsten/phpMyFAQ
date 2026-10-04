@@ -1006,4 +1006,66 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         return rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
     }
+
+    /**
+     * The configuration instance is private to this test, so the override needs no restore.
+     */
+    private function disableProvider(): void
+    {
+        $property = new \ReflectionProperty(Configuration::class, 'config');
+        /** @var array<string, mixed> $config */
+        $config = $property->getValue($this->configuration);
+        $config['keycloak.enable'] = 'false';
+        $property->setValue($this->configuration, $config);
+    }
+
+    public function testAuthorizeRedirectsHomeWhenTheProviderIsDisabled(): void
+    {
+        $this->disableProvider();
+        $controller = $this->createController([
+            new MockResponse('', ['http_code' => 500]),
+        ]);
+
+        $response = $controller->authorize();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+    }
+
+    public function testAuthorizeRedirectsHomeWhenDiscoveryFails(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session);
+        $controller = $this->createController([new MockResponse('unavailable', ['http_code' => 503])], $oidcSession);
+
+        $response = $controller->authorize();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $this->assertNull($session->get(OidcSession::OIDC_STATE), 'No authorization state is stored when discovery fails.');
+    }
+
+    public function testLogoutClearsTheLocalSessionWhenDiscoveryFails(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session);
+        $oidcSession->setIdToken('session-id-token');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->atLeastOnce())->method('deleteFromSession');
+
+        $controller = $this->createController(
+            [new MockResponse('unavailable', ['http_code' => 503])],
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+        );
+
+        $response = $controller->logout();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $this->assertSame('', $oidcSession->getIdToken());
+    }
 }
