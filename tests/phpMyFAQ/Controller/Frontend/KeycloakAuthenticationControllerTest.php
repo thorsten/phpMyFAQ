@@ -1068,4 +1068,89 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
         $this->assertSame('', $oidcSession->getIdToken());
     }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function unusableJwtProvider(): iterable
+    {
+        yield 'empty' => [''];
+        yield 'not json' => ['not json'];
+        yield 'scalar json' => ['"just-a-string"'];
+        yield 'no id token' => ['{"userinfo":{"sub":"123"}}'];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('unusableJwtProvider')]
+    public function testLogoutWithoutAUsableIdTokenStillEndsTheProviderSession(string $jwt): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->once())->method('getUserData')->with('jwt')->willReturn($jwt);
+        $currentUser->expects($this->once())->method('deleteFromSession');
+
+        $controller = $this->createController(
+            [
+                new MockResponse(
+                    '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
+                ),
+            ],
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+        );
+
+        $response = $controller->logout();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $location = (string) $response->headers->get('Location');
+        $this->assertStringStartsWith('https://sso.example.test/logout?client_id=phpmyfaq', $location);
+        $this->assertStringNotContainsString('id_token_hint', $location);
+    }
+
+    public function testCallbackRefusesToProvisionAnIdentityWithoutUsernameAndEmail(): void
+    {
+        $idToken = $this->signToken([
+            'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => '123',
+            'aud' => ['phpmyfaq'],
+            'azp' => 'phpmyfaq',
+            'nonce' => 'nonce-456',
+            'iat' => time(),
+            'exp' => time() + 300,
+        ]);
+
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session);
+        $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $this->expectNoLogin($currentUser);
+
+        $authUser = $this->createMock(User::class);
+        $authUser->expects($this->once())->method('getUserIdByKeycloakSub')->with('123')->willReturn(0);
+        $authUser->expects($this->never())->method('createUser');
+
+        $controller = $this->createController(
+            [
+                new MockResponse(
+                    '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}',
+                ),
+                new MockResponse('{"access_token":"access","refresh_token":"refresh","id_token":"' . $idToken . '"}'),
+                new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
+                new MockResponse('{"sub":"123","name":"Nameless Subject"}'),
+            ],
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+            static fn(): User => $authUser,
+        );
+
+        $response = $controller->callback(new Request(['code' => 'test-code', 'state' => 'state-123']));
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $this->assertSame('', $oidcSession->getAuthorizationState()['state']);
+    }
 }

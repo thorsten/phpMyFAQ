@@ -29,6 +29,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -746,5 +747,143 @@ final class CategoryControllerTest extends TestCase
     private function getCsrfCookieName(string $page): string
     {
         return sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(md5($page), 0, 10));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateAssignsRestrictedUsersAndGroups(): void
+    {
+        $context = $this->createAuthenticatedContext();
+
+        // The controller resolves the permission service itself, so the stored rows are checked.
+        $controller = new CategoryController(
+            new AdminCategory($this->configuration),
+            $this->createStub(Order::class),
+            $this->createStub(CategoryPermission::class),
+            $this->createStub(Image::class),
+            $this->createStub(Seo::class),
+            $this->createStub(UserHelper::class),
+        );
+        $controller->setContainer($context['container']);
+
+        $csrfToken = $this->createCsrfToken($context['session'], 'save-category');
+        $response = $controller->create(new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'parent_id' => '0',
+            'lang' => 'en',
+            'name' => 'Restricted Category',
+            'description' => '',
+            'user_id' => '42',
+            'group_id' => '-1',
+            'active' => '1',
+            'show_home' => '0',
+            'userpermission' => 'restricted',
+            'restricted_users' => '42',
+            'grouppermission' => 'restricted',
+            'restricted_groups' => ['3', 'not-a-number', '5'],
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('alert alert-success', (string) $response->getContent());
+
+        $db = $this->configuration->getDb();
+        $category = $db->fetchObject($db->query("SELECT id FROM faqcategories WHERE name = 'Restricted Category'"));
+        self::assertIsObject($category);
+        $categoryId = (int) $category->id;
+
+        $users = $db->fetchAll($db->query('SELECT user_id FROM faqcategory_user WHERE category_id = ' . $categoryId));
+        self::assertSame([42], array_map(static fn(object $row): int => (int) $row->user_id, $users ?? []));
+
+        $groups = $db->fetchAll($db->query(
+            'SELECT group_id FROM faqcategory_group WHERE category_id = ' . $categoryId . ' ORDER BY group_id',
+        ));
+        self::assertSame([3, 5], array_map(static fn(object $row): int => (int) $row->group_id, $groups ?? []));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateWarnsWhenTheImageUploadFails(): void
+    {
+        $context = $this->createAuthenticatedContext();
+
+        $sourceFile = tempnam(sys_get_temp_dir(), 'pmf-category-image-');
+        self::assertNotFalse($sourceFile);
+        file_put_contents($sourceFile, 'not really an image');
+        $uploadedFile = new UploadedFile($sourceFile, 'category.png', 'image/png', null, true);
+
+        $image = $this->createMock(Image::class);
+        $image->expects($this->once())->method('setUploadedFile')->with($uploadedFile);
+        $image->expects($this->once())->method('upload')->willThrowException(new \RuntimeException('The image is too large.'));
+
+        $controller = new CategoryController(
+            new AdminCategory($this->configuration),
+            $this->createStub(Order::class),
+            $this->createStub(CategoryPermission::class),
+            $image,
+            $this->createStub(Seo::class),
+            $this->createStub(UserHelper::class),
+        );
+        $controller->setContainer($context['container']);
+
+        $csrfToken = $this->createCsrfToken($context['session'], 'save-category');
+        try {
+            $response = $controller->create(new Request([], [
+                'pmf-csrf-token' => $csrfToken,
+                'parent_id' => '0',
+                'lang' => 'en',
+                'name' => 'Illustrated Category',
+                'description' => '',
+                'user_id' => '42',
+                'group_id' => '-1',
+                'active' => '1',
+                'show_home' => '0',
+                'userpermission' => 'all',
+                'grouppermission' => 'all',
+            ], [], [], ['image' => $uploadedFile]));
+        } finally {
+            @unlink($sourceFile);
+        }
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('The image is too large.', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReportsAnAlreadyExistingCategory(): void
+    {
+        $this->insertTestCategory();
+        $context = $this->createAuthenticatedContext();
+
+        $controller = new CategoryController(
+            new AdminCategory($this->configuration),
+            $this->createStub(Order::class),
+            $this->createStub(CategoryPermission::class),
+            $this->createStub(Image::class),
+            $this->createStub(Seo::class),
+            $this->createStub(UserHelper::class),
+        );
+        $controller->setContainer($context['container']);
+
+        $csrfToken = $this->createCsrfToken($context['session'], 'save-category');
+        $response = $controller->create(new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'parent_id' => '0',
+            'lang' => 'en',
+            'name' => 'Parent Category',
+            'description' => 'Duplicate of the seeded category',
+            'user_id' => '42',
+            'group_id' => '-1',
+            'active' => '1',
+            'show_home' => '1',
+            'userpermission' => 'all',
+            'grouppermission' => 'all',
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString(Translation::get('ad_categ_existing'), (string) $response->getContent());
     }
 }

@@ -714,4 +714,34 @@ class ClientTest extends TestCase
             new \ReflectionProperty(Database::class, 'dbType')->setValue(null, $previous);
         }
     }
+
+    public function testCreateClientTablesLogsAndRethrowsAQueryFailure(): void
+    {
+        Database::factory('pdo_pgsql');
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query): bool {
+                if (str_starts_with($query, 'INSERT INTO')) {
+                    throw new Exception('insert failed');
+                }
+
+                return true;
+            });
+        $dbMock->method('escape')->willReturnArgument(0);
+        $this->configuration->method('getDb')->willReturn($dbMock);
+
+        $logger = $this->createMock(Logger::class);
+        $logger
+            ->expects($this->once())
+            ->method('error')
+            ->with('Failed to create tenant prefix tables.', $this->callback(static fn(array $context): bool => $context['prefix'] === 'broken_'
+                && $context['message'] === 'insert failed'));
+        $this->configuration->method('getLogger')->willReturn($logger);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('insert failed');
+
+        $this->client->createClientTables('broken_');
+    }
 }
