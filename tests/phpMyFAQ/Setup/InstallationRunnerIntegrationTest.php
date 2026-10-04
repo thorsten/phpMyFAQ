@@ -62,6 +62,8 @@ final class InstallationRunnerIntegrationTest extends TestCase
      * settings default like the validator defaults them.
      *
      * @param array<string, mixed> $dbOverrides
+     * @param array<string, mixed> $esSetup
+     * @param array<string, mixed> $osSetup
      */
     private function createInput(
         array $dbOverrides = [],
@@ -69,6 +71,10 @@ final class InstallationRunnerIntegrationTest extends TestCase
         string $realname = 'Admin User',
         string $email = 'admin@example.org',
         string $permLevel = 'basic',
+        array $esSetup = [],
+        array $osSetup = [],
+        bool $esEnabled = false,
+        bool $osEnabled = false,
     ): InstallationInput {
         return new InstallationInput(
             dbSetup: array_merge([
@@ -81,8 +87,8 @@ final class InstallationRunnerIntegrationTest extends TestCase
                 'dbPrefix' => '',
             ], $dbOverrides),
             ldapSetup: [],
-            esSetup: [],
-            osSetup: [],
+            esSetup: $esSetup,
+            osSetup: $osSetup,
             loginName: 'admin',
             password: 'password',
             language: $language,
@@ -90,6 +96,8 @@ final class InstallationRunnerIntegrationTest extends TestCase
             email: $email,
             permLevel: $permLevel,
             rootDir: $this->rootDir,
+            esEnabled: $esEnabled,
+            osEnabled: $osEnabled,
         );
     }
 
@@ -194,5 +202,55 @@ final class InstallationRunnerIntegrationTest extends TestCase
 
         $this->assertFileDoesNotExist($this->rootDir . '/content/core/config/database.php');
         $this->assertFileDoesNotExist($this->rootDir . '/install.db');
+    }
+
+    public function testRunReportsADatabaseThatCannotBeOpenedBeforeTouchingTheFilesystem(): void
+    {
+        $input = $this->createInput(['dbServer' => $this->rootDir . '/missing-directory/install.db']);
+
+        try {
+            new InstallationRunner(new System())->run($input);
+            $this->fail('A database that cannot be opened must be rejected.');
+        } catch (Exception $exception) {
+            $this->assertStringStartsWith('Database Connection Error:', $exception->getMessage());
+        }
+
+        $this->assertFileDoesNotExist($this->rootDir . '/content/core/config/database.php');
+    }
+
+    public function testRunReportsAnUnreachableElasticsearchServerBeforeTouchingTheFilesystem(): void
+    {
+        $input = $this->createInput(esSetup: ['hosts' => ['http://127.0.0.1:9']], esEnabled: true);
+
+        try {
+            new InstallationRunner(new System())->run($input);
+            $this->fail('An unreachable Elasticsearch server must be rejected.');
+        } catch (Exception $exception) {
+            $this->assertStringStartsWith(
+                'Elasticsearch Installation Error: Could not connect to Elasticsearch:',
+                $exception->getMessage(),
+            );
+        }
+
+        $this->assertFileDoesNotExist($this->rootDir . '/content/core/config/database.php');
+        $this->assertFileDoesNotExist($this->rootDir . '/content/core/config/elasticsearch.php');
+    }
+
+    public function testRunReportsAnUnreachableOpenSearchServerBeforeTouchingTheFilesystem(): void
+    {
+        $input = $this->createInput(osSetup: ['hosts' => ['http://127.0.0.1:9']], osEnabled: true);
+
+        try {
+            new InstallationRunner(new System())->run($input);
+            $this->fail('An unreachable OpenSearch server must be rejected.');
+        } catch (Exception $exception) {
+            $this->assertStringStartsWith(
+                'OpenSearch Installation Error: Could not connect to OpenSearch:',
+                $exception->getMessage(),
+            );
+        }
+
+        $this->assertFileDoesNotExist($this->rootDir . '/content/core/config/database.php');
+        $this->assertFileDoesNotExist($this->rootDir . '/content/core/config/opensearch.php');
     }
 }
