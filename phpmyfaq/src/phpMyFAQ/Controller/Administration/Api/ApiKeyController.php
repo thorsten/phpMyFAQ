@@ -70,7 +70,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::USER_EDIT);
 
-        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR) ?? new \stdClass();
         $csrf = Filter::filterVar($data->csrf ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if (!$this->verifySessionCsrfToken('api-key-create', $csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
@@ -136,7 +136,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::USER_EDIT);
 
-        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR) ?? new \stdClass();
         $csrf = Filter::filterVar($data->csrf ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if (!$this->verifySessionCsrfToken('api-key-update', $csrf)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
@@ -213,8 +213,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
         $csrf = $request->headers->get('X-CSRF-Token') ?? $request->query->get('csrf');
 
         if ($csrf === null) {
-            $body = json_decode(json: $request->getContent(), associative: false);
-            $csrf = $body->csrf ?? null;
+            $csrf = $this->decodeJsonObject($request)->csrf ?? null;
         }
 
         $csrf = Filter::filterVar((string) ($csrf ?? ''), FILTER_SANITIZE_SPECIAL_CHARS, '');

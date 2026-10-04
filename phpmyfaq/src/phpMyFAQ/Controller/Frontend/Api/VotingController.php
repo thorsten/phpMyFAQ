@@ -50,9 +50,9 @@ final class VotingController extends AbstractController
     {
         $this->userSession->setCurrentUser($this->currentUser);
 
-        $data = json_decode($request->getContent());
+        $data = $this->decodeJsonObject($request);
 
-        if (!$data instanceof \stdClass) {
+        if ($data === null) {
             throw new Exception('Invalid JSON data');
         }
 

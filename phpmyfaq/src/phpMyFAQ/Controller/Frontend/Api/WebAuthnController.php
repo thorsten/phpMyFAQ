@@ -70,9 +70,9 @@ final class WebAuthnController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR);
 
-        if (!is_object($data) || !property_exists($data, 'username')) {
+        if ($data === null || !property_exists($data, 'username')) {
             throw new Exception('Missing username');
         }
 
@@ -150,9 +150,9 @@ final class WebAuthnController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR);
 
-        if (!is_object($data) || !property_exists($data, 'register')) {
+        if ($data === null || !property_exists($data, 'register')) {
             throw new Exception('Missing register data');
         }
 
@@ -206,9 +206,9 @@ final class WebAuthnController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR);
 
-        if (!is_object($data) || !property_exists($data, 'username')) {
+        if ($data === null || !property_exists($data, 'username')) {
             throw new Exception('Missing username');
         }
 
@@ -242,9 +242,9 @@ final class WebAuthnController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR);
 
-        if (!is_object($data) || !property_exists($data, 'username')) {
+        if ($data === null || !property_exists($data, 'username')) {
             throw new Exception('Missing username');
         }
 

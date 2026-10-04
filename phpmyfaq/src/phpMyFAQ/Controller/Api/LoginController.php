@@ -81,8 +81,8 @@ final class LoginController extends AbstractController
     #[Route(path: 'v4.0/login', name: 'api.login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
     {
-        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        if (!$data instanceof \stdClass) {
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR);
+        if ($data === null) {
             return $this->json([
                 'loggedin' => false,
                 'error' => 'The request body must be a JSON object.',

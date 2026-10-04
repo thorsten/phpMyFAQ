@@ -92,8 +92,8 @@ final class QuestionController extends AbstractController
 
         $categories = $category->getAllCategories();
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        if (!$data instanceof \stdClass) {
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR);
+        if ($data === null) {
             throw new Exception('The request body must be a JSON object');
         }
 

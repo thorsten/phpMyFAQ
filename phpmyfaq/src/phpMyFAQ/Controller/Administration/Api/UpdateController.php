@@ -343,8 +343,7 @@ final class UpdateController extends AbstractController
      */
     private function isValidUpdatePackageToken(Request $request): bool
     {
-        $data = json_decode($request->getContent());
-        $csrfToken = is_object($data) ? (string) ($data->csrf ?? '') : '';
+        $csrfToken = (string) ($this->decodeJsonObject($request)->csrf ?? '');
 
         return Token::getInstance($this->session)->verifyToken('update-package', $csrfToken);
     }

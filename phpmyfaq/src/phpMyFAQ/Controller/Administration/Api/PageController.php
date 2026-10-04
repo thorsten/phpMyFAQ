@@ -30,7 +30,6 @@ use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
-use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -149,9 +148,9 @@ final class PageController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::PAGE_ADD);
 
-        $data = json_decode($request->getContent());
+        $data = $this->decodeJsonObject($request);
 
-        if (json_last_error() !== JSON_ERROR_NONE || !$data instanceof stdClass) {
+        if ($data === null) {
             return $this->json(['error' => 'Invalid JSON: ' . json_last_error_msg()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -275,9 +274,9 @@ final class PageController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::PAGE_DELETE);
 
-        $data = json_decode($request->getContent());
+        $data = $this->decodeJsonObject($request);
 
-        if (json_last_error() !== JSON_ERROR_NONE || !$data instanceof stdClass) {
+        if ($data === null) {
             return $this->json(['error' => 'Invalid JSON: ' . json_last_error_msg()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -318,9 +317,9 @@ final class PageController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::PAGE_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->decodeJsonObject($request);
 
-        if (json_last_error() !== JSON_ERROR_NONE || !$data instanceof stdClass) {
+        if ($data === null) {
             return $this->json(['error' => 'Invalid JSON: ' . json_last_error_msg()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -414,9 +413,9 @@ final class PageController extends AbstractAdministrationApiController
     public function activate(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::PAGE_EDIT);
-        $data = json_decode($request->getContent());
+        $data = $this->decodeJsonObject($request);
 
-        if (json_last_error() !== JSON_ERROR_NONE || !$data instanceof stdClass) {
+        if ($data === null) {
             return $this->json(['error' => 'Invalid JSON: ' . json_last_error_msg()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -474,9 +473,9 @@ final class PageController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::PAGE_ADD);
 
-        $data = json_decode($request->getContent());
+        $data = $this->decodeJsonObject($request);
 
-        if (json_last_error() !== JSON_ERROR_NONE || !$data instanceof stdClass) {
+        if ($data === null) {
             return $this->json(['error' => 'Invalid JSON: ' . json_last_error_msg()], Response::HTTP_BAD_REQUEST);
         }
 

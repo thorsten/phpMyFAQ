@@ -283,8 +283,8 @@ final class CategoryController extends AbstractApiController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        if (!$data instanceof \stdClass) {
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR);
+        if ($data === null) {
             return $this->json([
                 'stored' => false,
                 'error' => 'The request body must be a JSON object.',

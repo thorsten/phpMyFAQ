@@ -130,8 +130,8 @@ final class RegistrationController extends AbstractController
             ? ($this->registrationHelperFactory)($this->configuration)
             : new RegistrationHelper($this->configuration);
 
-        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        if (!$data instanceof \stdClass) {
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR);
+        if ($data === null) {
             return $this->json([
                 'registered' => false,
                 'error' => 'The request body must be a JSON object.',

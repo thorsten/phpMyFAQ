@@ -396,9 +396,9 @@ final class UserController extends AbstractController
     #[Route(path: 'user/remove-twofactor', name: 'api.private.user.remove-twofactor', methods: ['POST'])]
     public function removeTwofactorConfig(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent());
+        $data = $this->decodeJsonObject($request);
 
-        if (!$data) {
+        if ($data === null) {
             throw new Exception('Invalid JSON data');
         }
 

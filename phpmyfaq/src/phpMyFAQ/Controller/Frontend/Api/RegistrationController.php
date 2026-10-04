@@ -45,8 +45,8 @@ final class RegistrationController extends AbstractController
 
         $registrationHelper = new RegistrationHelper($this->configuration);
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
-        if (!is_object($data)) {
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR);
+        if ($data === null) {
             throw new Exception('Invalid request payload');
         }
 

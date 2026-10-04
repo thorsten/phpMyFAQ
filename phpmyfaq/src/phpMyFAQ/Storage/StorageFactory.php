@@ -126,11 +126,11 @@ final readonly class StorageFactory
     private function readStringConfig(string $key): ?string
     {
         $value = $this->configuration->get($key);
-        if ($value === null) {
+        if (!is_string($value)) {
             return null;
         }
 
-        return trim((string) $value);
+        return trim($value);
     }
 
     private function tenantPrefix(): string

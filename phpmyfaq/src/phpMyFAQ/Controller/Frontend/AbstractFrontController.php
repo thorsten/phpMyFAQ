@@ -260,11 +260,12 @@ abstract class AbstractFrontController extends AbstractController
      */
     protected function handleStaticPageRedirect(string $configKey): Response
     {
-        $url = $this->configuration->get($configKey);
+        $configuredUrl = $this->configuration->get($configKey);
+        $url = is_string($configuredUrl) ? $configuredUrl : '';
 
         // Check if this is a reference to a custom page (format: "page:slug")
-        if (str_starts_with((string) $url, 'page:')) {
-            $slug = substr(string: (string) $url, offset: 5);
+        if (str_starts_with($url, 'page:')) {
+            $slug = substr(string: $url, offset: 5);
             $customPage = new CustomPage($this->configuration);
             $page = $customPage->getBySlug($slug);
 
@@ -276,8 +277,8 @@ abstract class AbstractFrontController extends AbstractController
         }
 
         // Default behavior: redirect to external URL
-        if ((string) $url !== '') {
-            return new RedirectResponse((string) $url);
+        if ($url !== '') {
+            return new RedirectResponse($url);
         }
 
         // If no URL configured and no fallback, return 404

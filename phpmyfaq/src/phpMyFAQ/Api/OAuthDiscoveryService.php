@@ -69,6 +69,6 @@ final readonly class OAuthDiscoveryService
     {
         $value = $this->configuration->get('oauth2.enable');
 
-        return $value === true || $value === 1 || $value === '1' || $value === 'true';
+        return in_array($value, [true, 1, '1', 'true'], strict: true);
     }
 }

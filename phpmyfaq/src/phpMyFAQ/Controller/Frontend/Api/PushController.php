@@ -70,7 +70,7 @@ final class PushController extends AbstractController
         $this->userIsAuthenticated();
 
         try {
-            $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+            $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR) ?? new \stdClass();
         } catch (\JsonException) {
             return $this->json(['error' => 'Invalid JSON payload'], Response::HTTP_BAD_REQUEST);
         }
@@ -122,7 +122,7 @@ final class PushController extends AbstractController
         $this->userIsAuthenticated();
 
         try {
-            $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+            $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR) ?? new \stdClass();
         } catch (\JsonException) {
             return $this->json(['error' => 'Invalid JSON payload'], Response::HTTP_BAD_REQUEST);
         }

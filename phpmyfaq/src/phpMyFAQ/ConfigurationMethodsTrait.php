@@ -50,7 +50,7 @@ trait ConfigurationMethodsTrait
      * Configuration store: string values from the faqconfig table plus the
      * runtime objects registered under `core.*` keys.
      *
-     * @var array<string, mixed>
+     * @var array<string, object|string|null>
      */
     private array $config = [];
 
@@ -89,7 +89,6 @@ trait ConfigurationMethodsTrait
      */
     private function runtimeObject(string $key, string $expectedClass): object
     {
-        /* @mago-expect analysis:mixed-assignment - the config store is mixed by design; validated below */
         $object = $this->config[$key] ?? null;
         if (!$object instanceof $expectedClass) {
             throw new \LogicException(sprintf('No %s registered under "%s".', $expectedClass, $key));
@@ -178,7 +177,7 @@ trait ConfigurationMethodsTrait
      */
     public function setContainer(mixed $container): void
     {
-        $this->config['core.container'] = $container;
+        $this->config['core.container'] = $container instanceof \Psr\Container\ContainerInterface ? $container : null;
     }
 
     /**
@@ -196,11 +195,22 @@ trait ConfigurationMethodsTrait
      */
     public function getDefaultLanguage(): string
     {
-        if (!array_key_exists('main.language', $this->config) || $this->config['main.language'] === null) {
+        $language = $this->storedString('main.language');
+        if ($language === '') {
             return 'en';
         }
 
-        return str_replace(['language_', '.php'], replace: '', subject: (string) $this->config['main.language']);
+        return str_replace(['language_', '.php'], replace: '', subject: $language);
+    }
+
+    /**
+     * Returns the stored string value of a configuration key, or an empty string.
+     */
+    private function storedString(string $key): string
+    {
+        $value = $this->config[$key] ?? null;
+
+        return is_string($value) ? $value : '';
     }
 
     /**
@@ -208,7 +218,7 @@ trait ConfigurationMethodsTrait
      */
     public function getVersion(): string
     {
-        return (string) $this->config['main.currentVersion'];
+        return $this->storedString('main.currentVersion');
     }
 
     /**
@@ -216,7 +226,7 @@ trait ConfigurationMethodsTrait
      */
     public function getTitle(): string
     {
-        return (string) $this->config['main.titleFAQ'];
+        return $this->storedString('main.titleFAQ');
     }
 
     /**
@@ -224,7 +234,7 @@ trait ConfigurationMethodsTrait
      */
     public function getAdminEmail(): string
     {
-        return (string) $this->config['main.administrationMail'];
+        return $this->storedString('main.administrationMail');
     }
 
     public function getTemplateSet(): string
@@ -259,9 +269,12 @@ trait ConfigurationMethodsTrait
     }
 
     /**
-     * Returns a configuration item.
+     * Returns a configuration item: `'true'`/`'false'` are returned as booleans,
+     * other stored values as strings, runtime objects under `core.*` as-is.
      *
      * @param string $item Configuration item
+     *
+     * @return ($item is 'core.database'|'core.instance'|'core.language'|'core.container'|'core.elasticsearch'|'core.opensearch'|'core.elasticsearchConfig'|'core.openSearchConfig'|'core.translationProvider'|'core.pluginManager' ? object|null : string|bool|null)
      */
     public function get(string $item): mixed
     {
@@ -469,7 +482,6 @@ trait ConfigurationMethodsTrait
             $this->initializeTranslationProvider();
         }
 
-        /* @mago-expect analysis:mixed-assignment - the config store is mixed by design; validated below */
         $provider = $this->config['core.translationProvider'] ?? null;
 
         return $provider instanceof TranslationProviderInterface ? $provider : null;
@@ -482,7 +494,6 @@ trait ConfigurationMethodsTrait
     {
         try {
             // Get HTTP client from service container if available
-            /* @mago-expect analysis:mixed-assignment - the config store is mixed by design; validated below */
             $container = $this->config['core.container'] ?? null;
             if ($container instanceof ContainerInterface && $container->has('phpmyfaq.http-client')) {
                 $httpClient = $container->get('phpmyfaq.http-client');

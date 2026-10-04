@@ -101,7 +101,7 @@ final class ChatController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR) ?? new \stdClass();
         $recipientId = Filter::filterVar($data->recipientId ?? 0, FILTER_VALIDATE_INT);
         $message = trim((string) Filter::filterVar($data->message ?? '', FILTER_SANITIZE_SPECIAL_CHARS));
         $csrfToken = trim((string) ($data->csrfToken ?? ''));
@@ -141,7 +141,7 @@ final class ChatController extends AbstractController
 
         $messageId = Filter::filterVar($request->attributes->get('messageId'), FILTER_VALIDATE_INT);
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR) ?? new \stdClass();
         $csrfToken = trim((string) ($data->csrfToken ?? ''));
 
         if (!$this->verifySessionCsrfToken('mark-chat-read', $csrfToken)) {

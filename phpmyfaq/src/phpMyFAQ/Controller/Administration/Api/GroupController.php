@@ -187,12 +187,13 @@ final class GroupController extends AbstractAdministrationApiController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        if (!$currentUser->perm instanceof MediumPermission) {
+        $permission = $currentUser->perm;
+        if (!$permission instanceof MediumPermission) {
             return $this->json(['error' => 'Group permissions are not enabled.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $data = json_decode($request->getContent(), associative: true);
-        if (!is_array($data)) {
+        $data = $this->decodeJsonArray($request);
+        if ($data === null) {
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -236,7 +237,7 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
-        $success = $currentUser->perm->setCategoryRestrictions($groupId, $rightId, $categoryIds);
+        $success = $permission->setCategoryRestrictions($groupId, $rightId, $categoryIds);
 
         if (!$success) {
             return $this->json([
@@ -282,12 +283,13 @@ final class GroupController extends AbstractAdministrationApiController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        if (!$currentUser->perm instanceof MediumPermission) {
+        $permission = $currentUser->perm;
+        if (!$permission instanceof MediumPermission) {
             return $this->json(['error' => 'Group permissions are not enabled.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $data = json_decode($request->getContent(), associative: true);
-        if (!is_array($data)) {
+        $data = $this->decodeJsonArray($request);
+        if ($data === null) {
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -331,7 +333,7 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
-        $success = $currentUser->perm->setLanguageRestrictions($groupId, $rightId, $languages);
+        $success = $permission->setLanguageRestrictions($groupId, $rightId, $languages);
 
         if (!$success) {
             return $this->json([
@@ -366,8 +368,8 @@ final class GroupController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::GROUP_EDIT);
 
-        $data = json_decode($request->getContent(), associative: true);
-        if (!is_array($data)) {
+        $data = $this->decodeJsonArray($request);
+        if ($data === null) {
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -436,8 +438,8 @@ final class GroupController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::GROUP_EDIT);
 
-        $data = json_decode($request->getContent(), associative: true);
-        if (!is_array($data)) {
+        $data = $this->decodeJsonArray($request);
+        if ($data === null) {
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -519,8 +521,8 @@ final class GroupController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::GROUP_EDIT);
 
-        $data = json_decode($request->getContent(), associative: true);
-        if (!is_array($data)) {
+        $data = $this->decodeJsonArray($request);
+        if ($data === null) {
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -626,8 +628,8 @@ final class GroupController extends AbstractAdministrationApiController
         $this->userHasPermission(PermissionType::GROUP_DELETE);
 
         /** @var mixed $data */
-        $data = json_decode($request->getContent(), associative: true);
-        if (!is_array($data)) {
+        $data = $this->decodeJsonArray($request);
+        if ($data === null) {
             return $this->json(['error' => 'Invalid JSON payload.'], Response::HTTP_BAD_REQUEST);
         }
 

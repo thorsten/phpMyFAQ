@@ -49,8 +49,8 @@ final class TranslationController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::FAQ_TRANSLATE);
 
-        $data = json_decode($request->getContent(), associative: true);
-        if (!is_array($data)) {
+        $data = $this->decodeJsonArray($request);
+        if ($data === null) {
             return $this->json([
                 'success' => false,
                 'error' => 'The request body must be a JSON object.',

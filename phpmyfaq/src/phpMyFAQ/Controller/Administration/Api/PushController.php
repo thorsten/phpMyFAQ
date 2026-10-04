@@ -38,10 +38,7 @@ final class PushController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $data = json_decode($request->getContent());
-        if (!$data instanceof \stdClass) {
-            $data = new \stdClass();
-        }
+        $data = $this->decodeJsonObject($request) ?? new \stdClass();
 
         if (!Token::getInstance($this->session)->verifyToken('pmf-csrf-token', (string) ($data->csrf ?? ''))) {
             return $this->json([

@@ -43,9 +43,9 @@ final class MarkdownController extends AbstractAdministrationApiController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $data = json_decode($request->getContent());
+        $data = $this->decodeJsonObject($request);
 
-        if (!is_object($data) || !property_exists($data, 'text')) {
+        if ($data === null || !property_exists($data, 'text')) {
             throw new Exception('Invalid JSON data');
         }
 

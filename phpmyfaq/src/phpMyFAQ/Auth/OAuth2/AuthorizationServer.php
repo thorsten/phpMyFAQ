@@ -167,7 +167,7 @@ final class AuthorizationServer
     public function isEnabled(): bool
     {
         $value = $this->configuration->get('oauth2.enable');
-        return $value === true || $value === 'true' || $value === 1 || $value === '1';
+        return in_array($value, [true, 1, '1', 'true'], strict: true);
     }
 
     /**

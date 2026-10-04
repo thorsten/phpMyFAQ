@@ -348,8 +348,8 @@ final class DashboardController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $data = json_decode($request->getContent());
-        if (!is_object($data)) {
+        $data = $this->decodeJsonObject($request);
+        if ($data === null) {
             return $this->json(['error' => 'Invalid request body.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -379,8 +379,8 @@ final class DashboardController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $data = json_decode($request->getContent());
-        if (!is_object($data)) {
+        $data = $this->decodeJsonObject($request);
+        if ($data === null) {
             return $this->json(['error' => 'Invalid request body.'], Response::HTTP_BAD_REQUEST);
         }
 

@@ -44,7 +44,7 @@ final class BookmarkController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR) ?? new \stdClass();
         $bookmarkId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT);
         $csrfToken = Filter::filterVar($data->csrfToken ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -83,7 +83,7 @@ final class BookmarkController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR) ?? new \stdClass();
         $bookmarkId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT);
         $csrfToken = Filter::filterVar($data->csrfToken ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -117,7 +117,7 @@ final class BookmarkController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR) ?? new \stdClass();
         $csrfToken = Filter::filterVar($data->csrfToken ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->session)->verifyToken('delete-all-bookmarks', $csrfToken)) {

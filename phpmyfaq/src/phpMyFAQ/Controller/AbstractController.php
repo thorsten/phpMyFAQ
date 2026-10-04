@@ -192,14 +192,41 @@ abstract class AbstractController
      */
     protected function getJsonObject(Request $request): \stdClass
     {
+        return (
+            $this->decodeJsonObject($request, JSON_THROW_ON_ERROR) ?? throw new JsonException(
+                'The request body must be a JSON object.',
+            )
+        );
+    }
+
+    /**
+     * Decodes the JSON request body into an object, or null when the body is
+     * not a JSON object. Malformed JSON throws only with JSON_THROW_ON_ERROR;
+     * otherwise it yields null and json_last_error() reports the failure.
+     *
+     * @throws JsonException
+     */
+    protected function decodeJsonObject(Request $request, int $flags = 0): ?\stdClass
+    {
         /* @mago-expect analysis:mixed-assignment - json_decode() is mixed by nature; validated to stdClass below */
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: $flags);
 
-        if (!$data instanceof \stdClass) {
-            throw new JsonException('The request body must be a JSON object.');
-        }
+        return $data instanceof \stdClass ? $data : null;
+    }
 
-        return $data;
+    /**
+     * Decodes the JSON request body into an associative array, or null when
+     * the body is not a JSON object or array.
+     *
+     * @return array<array-key, mixed>|null
+     * @throws JsonException
+     */
+    protected function decodeJsonArray(Request $request, int $flags = 0): ?array
+    {
+        /* @mago-expect analysis:mixed-assignment - json_decode() is mixed by nature; validated to array below */
+        $data = json_decode($request->getContent(), associative: true, depth: 512, flags: $flags);
+
+        return is_array($data) ? $data : null;
     }
 
     /**
@@ -612,7 +639,7 @@ abstract class AbstractController
         $captcha = Captcha::getInstance($this->configuration);
         $captcha->setUserIsLoggedIn($this->currentUser->isLoggedIn());
 
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR) ?? new \stdClass();
 
         $code = Filter::filterVar($data->captcha ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         if ($this->configuration->get(item: 'security.enableGoogleReCaptchaV2')) {
