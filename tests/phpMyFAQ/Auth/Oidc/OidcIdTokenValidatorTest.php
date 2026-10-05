@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Auth\Oidc;
 
 use OpenSSLAsymmetricKey;
+use phpMyFAQ\Core\Json;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 #[CoversClass(OidcIdTokenValidator::class)]
+#[UsesClass(Json::class)]
 #[UsesClass(OidcDiscoveryDocument::class)]
 final class OidcIdTokenValidatorTest extends TestCase
 {

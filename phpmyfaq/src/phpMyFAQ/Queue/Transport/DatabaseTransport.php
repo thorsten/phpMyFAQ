@@ -21,6 +21,7 @@ namespace phpMyFAQ\Queue\Transport;
 
 use DateTimeImmutable;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Database;
 use RuntimeException;
 
@@ -169,8 +170,8 @@ readonly class DatabaseTransport
             return [];
         }
 
-        $decoded = json_decode($rawHeaders, associative: true);
-        if (!is_array($decoded)) {
+        $decoded = Json::decodeAssoc($rawHeaders);
+        if ($decoded === null) {
             return [];
         }
 

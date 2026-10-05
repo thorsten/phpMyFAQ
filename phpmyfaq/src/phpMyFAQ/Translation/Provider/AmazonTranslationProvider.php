@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Translation\Provider;
 
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Translation\AbstractTranslationProvider;
 use phpMyFAQ\Translation\Exception\ApiException;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -86,9 +87,9 @@ class AmazonTranslationProvider extends AbstractTranslationProvider
                 throw new ApiException('Amazon Translate API error: HTTP ' . $statusCode);
             }
 
-            $data = json_decode(json: $response->getContent(), associative: true);
+            $data = Json::decodeAssoc($response->getContent());
 
-            if (!is_array($data) || !array_key_exists('TranslatedText', $data)) {
+            if ($data === null || !array_key_exists('TranslatedText', $data)) {
                 throw new ApiException('Invalid response from Amazon Translate API');
             }
 

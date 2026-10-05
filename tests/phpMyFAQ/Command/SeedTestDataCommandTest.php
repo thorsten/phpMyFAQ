@@ -22,6 +22,7 @@ use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[CoversClass(SeedTestDataCommand::class)]
+#[UsesClass(\phpMyFAQ\Core\Json::class)]
 #[UsesClass(\phpMyFAQ\Category::class)]
 #[UsesClass(\phpMyFAQ\Category\CategoryCache::class)]
 #[UsesClass(\phpMyFAQ\Category\CategoryPermissionContext::class)]

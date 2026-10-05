@@ -31,6 +31,7 @@ namespace phpMyFAQ\Controller\Frontend\Api;
 use Closure;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Http\RateLimiter;
@@ -95,8 +96,8 @@ final class UnauthorizedUserController
             return $this->tooManyRequests();
         }
 
-        $data = json_decode($request->getContent());
-        if (!is_object($data)) {
+        $data = Json::decodeObject($request->getContent());
+        if ($data === null) {
             return $this->genericIssuanceResponse();
         }
 
@@ -166,8 +167,8 @@ final class UnauthorizedUserController
             return $this->tooManyRequests();
         }
 
-        $data = json_decode($request->getContent());
-        if (!is_object($data)) {
+        $data = Json::decodeObject($request->getContent());
+        if ($data === null) {
             return $this->json(['error' => Translation::get('resetpwd_err_invalid')], Response::HTTP_BAD_REQUEST);
         }
 

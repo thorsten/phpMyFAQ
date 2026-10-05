@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Auth\Oidc;
 
 use JsonException;
+use phpMyFAQ\Core\Json;
 use RuntimeException;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -48,16 +49,13 @@ final readonly class OidcDiscoveryService
         }
 
         try {
-            $payload = json_decode($content, associative: true, depth: 512, flags: JSON_THROW_ON_ERROR);
+            $payload = Json::decodeAssoc($content, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
             throw new RuntimeException('OIDC discovery response is not valid JSON', previous: $exception);
         }
 
-        if (!is_array($payload)) {
-            throw new RuntimeException(sprintf(
-                'OIDC discovery response is not a JSON object/array, got %s',
-                gettype($payload),
-            ));
+        if ($payload === null) {
+            throw new RuntimeException('OIDC discovery response is not a JSON object/array');
         }
 
         $normalizedPayload = [];

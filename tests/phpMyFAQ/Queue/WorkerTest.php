@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Queue;
 
 use DateTimeImmutable;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Queue\Message\SendMailMessage;
 use phpMyFAQ\Queue\Transport\DatabaseTransport;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -11,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 #[CoversClass(Worker::class)]
+#[UsesClass(Json::class)]
 #[UsesClass(SendMailMessage::class)]
 class WorkerTest extends TestCase
 {

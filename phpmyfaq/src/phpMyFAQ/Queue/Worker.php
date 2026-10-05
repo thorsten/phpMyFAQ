@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Queue;
 
 use DateTimeImmutable;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Queue\Message\QueueMessageInterface;
 use phpMyFAQ\Queue\Transport\DatabaseTransport;
 use RuntimeException;
@@ -111,8 +112,8 @@ class Worker
 
     private function decodeMessage(string $body): QueueMessageInterface
     {
-        $decoded = json_decode($body, associative: true);
-        if (!is_array($decoded) || !array_key_exists('class', $decoded)) {
+        $decoded = Json::decodeAssoc($body);
+        if ($decoded === null || !array_key_exists('class', $decoded)) {
             throw new RuntimeException('Queue job body has an invalid format.');
         }
 

@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -169,8 +170,8 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         // Parse the list of available fields from the form
         $availableFields = [];
         if ($availableFieldsJson !== '') {
-            $decodedFields = json_decode($availableFieldsJson, associative: true);
-            if (is_array($decodedFields)) {
+            $decodedFields = Json::decodeAssoc($availableFieldsJson);
+            if ($decodedFields !== null) {
                 $availableFields = array_map(
                     static fn(mixed $fieldName): string => (string) $fieldName,
                     $decodedFields,

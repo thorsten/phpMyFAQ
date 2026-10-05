@@ -34,6 +34,7 @@ use phpMyFAQ\Auth\OAuth2\Repository\ClientRepository;
 use phpMyFAQ\Auth\OAuth2\Repository\RefreshTokenRepository;
 use phpMyFAQ\Auth\OAuth2\Repository\ScopeRepository;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Json;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -99,8 +100,8 @@ final class AuthorizationServer
                 $psrResponse,
             );
 
-            $body = json_decode((string) $leagueResponse->getBody(), associative: true);
-            if (!is_array($body)) {
+            $body = Json::decodeAssoc((string) $leagueResponse->getBody());
+            if ($body === null) {
                 $body = ['error' => 'server_error', 'error_description' => 'Invalid OAuth2 token response body'];
             }
 
@@ -204,8 +205,8 @@ final class AuthorizationServer
                 $headers[(string) $headerName] = implode(', ', $values);
             }
 
-            $body = json_decode((string) $response->getBody(), associative: true);
-            if (!is_array($body)) {
+            $body = Json::decodeAssoc((string) $response->getBody());
+            if ($body === null) {
                 $body = [
                     'error' => 'server_error',
                     'error_description' => 'Invalid OAuth2 authorization response body',

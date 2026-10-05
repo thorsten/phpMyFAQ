@@ -24,6 +24,7 @@ namespace phpMyFAQ\Administration;
 
 use JsonException;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Database;
 
 readonly class DashboardLayout
@@ -57,12 +58,12 @@ readonly class DashboardLayout
         }
 
         try {
-            $config = json_decode($row->config, associative: true, depth: 16, flags: JSON_THROW_ON_ERROR);
+            $config = Json::decodeAssoc($row->config, JSON_THROW_ON_ERROR, 16);
         } catch (JsonException) {
             return [];
         }
 
-        if (!is_array($config)) {
+        if ($config === null) {
             return [];
         }
 

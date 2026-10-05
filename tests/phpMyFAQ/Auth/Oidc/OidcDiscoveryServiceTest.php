@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Auth\Oidc;
 
+use phpMyFAQ\Core\Json;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
@@ -11,6 +12,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 #[CoversClass(OidcDiscoveryService::class)]
+#[UsesClass(Json::class)]
 #[UsesClass(OidcProviderConfig::class)]
 #[UsesClass(OidcDiscoveryDocument::class)]
 #[UsesClass(OidcClientConfig::class)]

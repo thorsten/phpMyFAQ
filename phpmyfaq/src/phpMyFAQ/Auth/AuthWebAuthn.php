@@ -25,6 +25,7 @@ use phpMyFAQ\Auth\WebAuthn\PublicKeyConverter;
 use phpMyFAQ\Auth\WebAuthn\WebAuthnUser;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Utils;
 use Random\RandomException;
 use stdClass;
@@ -158,18 +159,14 @@ class AuthWebAuthn extends Auth
     public function register(string $info, string $userWebAuthn, string $expectedChallenge): string
     {
         $info = html_entity_decode($info);
-        $info = json_decode(json: $info, associative: false);
+        $info = Json::decodeObject($info);
 
-        if (!is_object($info)) {
+        if ($info === null) {
             throw new Exception('info is not properly JSON encoded');
         }
 
-        if (
-            !property_exists($info, 'response')
-            || !is_object($info->response)
-            || !property_exists($info->response, 'attestationObject')
-            || $info->response->attestationObject === null
-        ) {
+        $response = $info->response ?? null;
+        if (!$response instanceof stdClass || ($response->attestationObject ?? null) === null) {
             throw new Exception('no attestationObject in info');
         }
 
@@ -181,7 +178,7 @@ class AuthWebAuthn extends Auth
         // (fmt=none/packed without a verified cert), so the only proof this was a genuine
         // registration and not a forged HTTP request is the one-time challenge minted by
         // prepareChallengeForRegistration() and matched here.
-        $clientDataObject = $info->response->clientDataJSON ?? null;
+        $clientDataObject = $response->clientDataJSON ?? null;
         if (!$clientDataObject instanceof stdClass) {
             throw new Exception('no clientDataJSON in info');
         }
@@ -207,7 +204,7 @@ class AuthWebAuthn extends Auth
             throw new Exception(sprintf("Origin mismatch for '%s'", $clientOrigin));
         }
 
-        $attestationString = $this->byteString($info->response->attestationObject);
+        $attestationString = $this->byteString($response->attestationObject);
         $attestationObject = (object) CBOREncoder::decode($attestationString);
 
         if (($attestationObject->fmt ?? '') === '') {
@@ -275,10 +272,7 @@ class AuthWebAuthn extends Auth
             return (string) json_encode([$publicKey]);
         }
 
-        $existingKeys = json_decode($userWebAuthn);
-        if (!is_array($existingKeys)) {
-            $existingKeys = [];
-        }
+        $existingKeys = Json::decodeList($userWebAuthn) ?? [];
 
         $found = false;
         foreach ($existingKeys as $key) {
@@ -326,8 +320,8 @@ class AuthWebAuthn extends Auth
         );
 
         if ($userWebAuthn !== '' && $userWebAuthn !== '0') {
-            $storedKeys = json_decode($userWebAuthn);
-            if (is_array($storedKeys)) {
+            $storedKeys = Json::decodeList($userWebAuthn);
+            if ($storedKeys !== null) {
                 foreach ($storedKeys as $key) {
                     if (!$key instanceof stdClass) {
                         continue;
@@ -368,10 +362,7 @@ class AuthWebAuthn extends Auth
      */
     public function authenticate(stdClass $info, string &$userWebAuthn): bool
     {
-        $storedKeys = $userWebAuthn === '' || $userWebAuthn === '0' ? [] : json_decode($userWebAuthn);
-        if (!is_array($storedKeys)) {
-            $storedKeys = [];
-        }
+        $storedKeys = $userWebAuthn === '' || $userWebAuthn === '0' ? [] : Json::decodeList($userWebAuthn) ?? [];
 
         $response = $info->response ?? null;
         if (!$response instanceof stdClass) {

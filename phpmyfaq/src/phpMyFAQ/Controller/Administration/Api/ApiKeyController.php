@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use JsonException;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\ApiKeyScope;
 use phpMyFAQ\Enums\PermissionType;
@@ -52,8 +53,7 @@ final class ApiKeyController extends AbstractAdministrationApiController
         foreach ($rows as &$row) {
             $row = (array) $row;
 
-            $decoded = is_string($row['scopes'] ?? null) ? json_decode(json: $row['scopes'], associative: true) : null;
-            $row['scopes'] = is_array($decoded) ? $decoded : [];
+            $row['scopes'] = is_string($row['scopes'] ?? null) ? Json::decodeAssoc($row['scopes']) ?? [] : [];
         }
 
         unset($row);

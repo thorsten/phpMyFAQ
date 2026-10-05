@@ -22,6 +22,7 @@ namespace phpMyFAQ\Auth\EntraId;
 
 use Firebase\JWT\JWK;
 use Firebase\JWT\Key;
+use phpMyFAQ\Core\Json;
 use RuntimeException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -64,8 +65,8 @@ class JwksProvider
         if (is_file($cacheFile) && (time() - (int) filemtime($cacheFile)) < self::CACHE_TTL_SECONDS) {
             $cached = file_get_contents($cacheFile);
             if ($cached !== false) {
-                $decoded = json_decode($cached, associative: true);
-                if (is_array($decoded) && array_key_exists('keys', $decoded) && is_array($decoded['keys'])) {
+                $decoded = Json::decodeAssoc($cached);
+                if ($decoded !== null && array_key_exists('keys', $decoded) && is_array($decoded['keys'])) {
                     return ['keys' => $decoded['keys']];
                 }
             }
@@ -82,8 +83,8 @@ class JwksProvider
         }
 
         $body = $response->getContent();
-        $decoded = json_decode($body, associative: true);
-        if (!is_array($decoded) || !array_key_exists('keys', $decoded) || !is_array($decoded['keys'])) {
+        $decoded = Json::decodeAssoc($body);
+        if ($decoded === null || !array_key_exists('keys', $decoded) || !is_array($decoded['keys'])) {
             throw new RuntimeException('Malformed JWKS response from identity provider.');
         }
 

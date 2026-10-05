@@ -29,6 +29,7 @@ use phpMyFAQ\Auth\Oidc\OidcDiscoveryService;
 use phpMyFAQ\Auth\Oidc\OidcIdTokenValidator;
 use phpMyFAQ\Auth\Oidc\OidcPkceGenerator;
 use phpMyFAQ\Auth\Oidc\OidcSession;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\User;
@@ -401,12 +402,12 @@ final class KeycloakAuthenticationController extends AbstractFrontController
         }
 
         try {
-            $jwt = json_decode($jwtPayload, associative: true, depth: 512, flags: JSON_THROW_ON_ERROR);
+            $jwt = Json::decodeAssoc($jwtPayload, JSON_THROW_ON_ERROR);
         } catch (JsonException) {
             return '';
         }
 
-        if (!is_array($jwt)) {
+        if ($jwt === null) {
             return '';
         }
 

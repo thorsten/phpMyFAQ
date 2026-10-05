@@ -21,6 +21,7 @@ namespace phpMyFAQ\Service\McpServer;
 
 use Mcp\Server;
 use Mcp\Server\Transport\StdioTransport;
+use phpMyFAQ\Core\Json;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -68,8 +69,8 @@ final readonly class McpSdkRuntime implements McpServerRuntimeInterface
         ]);
 
         $content = $result['content'];
-        $decoded = json_decode($content, associative: true);
-        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+        $decoded = Json::decodeAssoc($content);
+        if ($decoded !== null) {
             $normalized = [];
             foreach ($decoded as $decodedKey => $decodedValue) {
                 $normalized[(string) $decodedKey] = $decodedValue;

@@ -22,6 +22,7 @@ namespace phpMyFAQ\Auth\EntraId;
 use Firebase\JWT\JWT;
 use JsonException;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Json;
 use stdClass;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -122,8 +123,8 @@ class OAuth
             }
         }
 
-        $token = json_decode(json: $content, associative: null, depth: 512, flags: JSON_THROW_ON_ERROR);
-        if (!$token instanceof stdClass) {
+        $token = Json::decodeObject($content, JSON_THROW_ON_ERROR);
+        if ($token === null) {
             throw new \RuntimeException('OAuth token exchange returned an unexpected payload.');
         }
 

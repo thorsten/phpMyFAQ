@@ -4,6 +4,7 @@ namespace phpMyFAQ\Queue\Transport;
 
 use DateTimeImmutable;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -13,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(DatabaseTransport::class)]
+#[UsesClass(Json::class)]
 #[UsesClass(Database::class)]
 class DatabaseTransportTest extends TestCase
 {

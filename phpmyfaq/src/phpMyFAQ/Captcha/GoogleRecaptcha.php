@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Captcha;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Json;
 
 class GoogleRecaptcha implements CaptchaInterface
 {
@@ -53,12 +54,12 @@ class GoogleRecaptcha implements CaptchaInterface
         }
 
         try {
-            $decoded = json_decode($response, associative: true, depth: 512, flags: JSON_THROW_ON_ERROR);
+            $decoded = Json::decodeAssoc($response, JSON_THROW_ON_ERROR);
         } catch (\JsonException) {
             return false;
         }
 
-        return is_array($decoded) && ($decoded['success'] ?? false) === true;
+        return $decoded !== null && ($decoded['success'] ?? false) === true;
     }
 
     /**

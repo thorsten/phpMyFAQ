@@ -29,6 +29,7 @@ use phpMyFAQ\Container\ContainerRegistry;
 use phpMyFAQ\Controller\Administration\SkipsAuthenticationCheck;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -208,10 +209,7 @@ abstract class AbstractController
      */
     protected function decodeJsonObject(Request $request, int $flags = 0): ?\stdClass
     {
-        /* @mago-expect analysis:mixed-assignment - json_decode() is mixed by nature; validated to stdClass below */
-        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: $flags);
-
-        return $data instanceof \stdClass ? $data : null;
+        return Json::decodeObject($request->getContent(), $flags);
     }
 
     /**
@@ -223,10 +221,7 @@ abstract class AbstractController
      */
     protected function decodeJsonArray(Request $request, int $flags = 0): ?array
     {
-        /* @mago-expect analysis:mixed-assignment - json_decode() is mixed by nature; validated to array below */
-        $data = json_decode($request->getContent(), associative: true, depth: 512, flags: $flags);
-
-        return is_array($data) ? $data : null;
+        return Json::decodeAssoc($request->getContent(), $flags);
     }
 
     /**

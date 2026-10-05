@@ -19,8 +19,10 @@ declare(strict_types=1);
 namespace phpMyFAQ\Faq;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
+use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -163,10 +165,9 @@ class Permission
     {
         $permissions = [];
 
-        $payload = json_decode(Request::createFromGlobals()->getContent());
-        $data = is_object($payload) && property_exists($payload, 'data') && is_object($payload->data)
-            ? $payload->data
-            : (object) [];
+        $payload = Json::decodeObject(Request::createFromGlobals()->getContent());
+        $candidate = $payload === null ? null : $payload->data ?? null;
+        $data = $candidate instanceof stdClass ? $candidate : (object) [];
 
         $restrictedUsers = [];
         if ('all' === Filter::filterVar($data->userpermission ?? null, FILTER_SANITIZE_SPECIAL_CHARS)) {

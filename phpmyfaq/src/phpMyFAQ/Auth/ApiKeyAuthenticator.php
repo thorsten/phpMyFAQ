@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Database;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -140,8 +141,8 @@ final class ApiKeyAuthenticator
             return [];
         }
 
-        $decoded = json_decode(json: $scopes, associative: true);
-        if (!is_array($decoded)) {
+        $decoded = Json::decodeAssoc($scopes);
+        if ($decoded === null) {
             return [];
         }
 

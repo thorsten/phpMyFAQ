@@ -21,6 +21,7 @@ namespace phpMyFAQ\Auth\Oidc;
 
 use Closure;
 use JsonException;
+use phpMyFAQ\Core\Json;
 use RuntimeException;
 use SensitiveParameter;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
@@ -85,12 +86,12 @@ final readonly class OidcIdTokenValidator
         $decoded = $this->base64UrlDecode($segment);
 
         try {
-            $payload = json_decode($decoded, associative: true, depth: 512, flags: JSON_THROW_ON_ERROR);
+            $payload = Json::decodeAssoc($decoded, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
             throw new RuntimeException(sprintf('OIDC id_token %s is not valid JSON', $context), previous: $exception);
         }
 
-        if (!is_array($payload)) {
+        if ($payload === null) {
             throw new RuntimeException(sprintf('OIDC id_token %s is not valid', $context));
         }
 
@@ -245,12 +246,12 @@ final readonly class OidcIdTokenValidator
         }
 
         try {
-            $payload = json_decode($content, associative: true, depth: 512, flags: JSON_THROW_ON_ERROR);
+            $payload = Json::decodeAssoc($content, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
             throw new RuntimeException('OIDC JWKS response is not valid JSON', previous: $exception);
         }
 
-        if (!is_array($payload)) {
+        if ($payload === null) {
             throw new RuntimeException('OIDC JWKS response is not valid');
         }
 

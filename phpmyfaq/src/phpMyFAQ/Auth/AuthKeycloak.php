@@ -24,6 +24,7 @@ use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User;
@@ -315,8 +316,8 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
             return [];
         }
 
-        $decoded = json_decode($groupMapping, associative: true);
-        if (!is_array($decoded)) {
+        $decoded = Json::decodeAssoc($groupMapping);
+        if ($decoded === null) {
             return [];
         }
 

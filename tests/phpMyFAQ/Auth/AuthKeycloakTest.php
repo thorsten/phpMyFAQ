@@ -7,6 +7,7 @@ namespace phpMyFAQ\Auth;
 use Monolog\Logger;
 use phpMyFAQ\Auth\Oidc\OidcClientConfig;
 use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Permission\MediumPermission;
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(AuthKeycloak::class)]
+#[UsesClass(Json::class)]
 #[UsesClass(OidcClientConfig::class)]
 #[UsesClass(OidcProviderConfig::class)]
 final class AuthKeycloakTest extends TestCase

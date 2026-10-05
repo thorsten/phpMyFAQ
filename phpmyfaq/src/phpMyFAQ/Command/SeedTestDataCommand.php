@@ -27,6 +27,7 @@ use DateTime;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Json;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Entity\FaqEntity;
@@ -164,8 +165,8 @@ class SeedTestDataCommand extends Command
             throw new \RuntimeException(sprintf('Unable to read fixture file: %s', $path));
         }
 
-        $data = json_decode($raw, associative: true, depth: 16, flags: JSON_THROW_ON_ERROR);
-        if (!is_array($data)) {
+        $data = Json::decodeAssoc($raw, JSON_THROW_ON_ERROR, 16);
+        if ($data === null) {
             throw new \RuntimeException(sprintf('Fixture file "%s" does not contain a JSON array.', $filename));
         }
 

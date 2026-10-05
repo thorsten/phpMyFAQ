@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Auth\OAuth2\AuthorizationServer as OAuth2AuthorizationServer;
+use phpMyFAQ\Core\Json;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -141,8 +142,8 @@ final class OAuth2Controller extends AbstractApiController
 
         $contentType = $result['headers']['Content-Type'] ?? '';
         if (str_contains($contentType, 'application/json')) {
-            $data = json_decode(is_string($result['body']) ? $result['body'] : '', associative: true);
-            if (is_array($data)) {
+            $data = Json::decodeAssoc(is_string($result['body']) ? $result['body'] : '');
+            if ($data !== null) {
                 return $this->json($data, $result['status'], $result['headers'] ?? []);
             }
         }
