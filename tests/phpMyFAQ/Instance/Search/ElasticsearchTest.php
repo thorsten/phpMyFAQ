@@ -18,6 +18,8 @@ use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface as HttpClientInterface;
+use Psr\Http\Client\NetworkExceptionInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Log\NullLogger;
 use ReflectionClass;
 
@@ -457,6 +459,65 @@ class ElasticsearchTest extends TestCase
     }
 
     // --- Bulk index tests ---
+
+    /**
+     * An unreachable engine surfaces as the transport's NoNodeAvailableException, which is not a
+     * response exception. The document methods must report it instead of throwing, because the
+     * FAQ is already saved when the search document is synced.
+     */
+    public function testIndexFaqReturnsNullWhenNoNodeIsAvailable(): void
+    {
+        $this->configMock->method('getLogger')->willReturn($this->createStub(Logger::class));
+        $this->httpClientMock->method('sendRequest')->willThrowException($this->networkException());
+
+        $this->assertNull($this->elasticsearch->index($this->faqDocument()));
+    }
+
+    public function testUpdateFaqReturnsErrorWhenNoNodeIsAvailable(): void
+    {
+        $this->httpClientMock->method('sendRequest')->willThrowException($this->networkException());
+
+        $result = $this->elasticsearch->update($this->faqDocument());
+
+        $this->assertArrayHasKey('error', $result);
+        $this->assertStringContainsString('Exceeded maximum number of retries', $result['error']);
+    }
+
+    public function testDeleteFaqReturnsErrorWhenNoNodeIsAvailable(): void
+    {
+        $this->httpClientMock->method('sendRequest')->willThrowException($this->networkException());
+
+        $result = $this->elasticsearch->delete(42);
+
+        $this->assertArrayHasKey('error', $result);
+        $this->assertStringContainsString('Exceeded maximum number of retries', $result['error']);
+    }
+
+    /**
+     * @return array<string, int|string|null>
+     */
+    private function faqDocument(): array
+    {
+        return [
+            'solution_id' => '42',
+            'id' => '1',
+            'lang' => 'en',
+            'question' => 'Q',
+            'answer' => 'A',
+            'keywords' => '',
+            'category_id' => '1',
+        ];
+    }
+
+    private function networkException(): NetworkExceptionInterface
+    {
+        return new class ('Connection refused') extends \RuntimeException implements NetworkExceptionInterface {
+            public function getRequest(): RequestInterface
+            {
+                return new \GuzzleHttp\Psr7\Request('PUT', '/phpmyfaq_test/_doc/42');
+            }
+        };
+    }
 
     public function testBulkIndexSkipsInactiveFaqs(): void
     {

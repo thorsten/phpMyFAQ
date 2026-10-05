@@ -25,6 +25,7 @@ use OpenSearch\Exception\HttpException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Enums\FaqStatus;
+use Psr\Http\Client\ClientExceptionInterface;
 
 /**
  * Class OpenSearch
@@ -249,7 +250,12 @@ readonly class OpenSearch
             ],
         ];
 
-        return $this->client->index($params);
+        try {
+            return $this->client->index($params);
+        } catch (HttpException|ClientExceptionInterface $e) {
+            $this->configuration->getLogger()->error('OpenSearch index error.', [$e->getMessage()]);
+            return ['error' => $e->getMessage()];
+        }
     }
 
     /**
@@ -329,7 +335,12 @@ readonly class OpenSearch
             ],
         ];
 
-        return $this->client->update($params);
+        try {
+            return $this->client->update($params);
+        } catch (HttpException|ClientExceptionInterface $e) {
+            $this->configuration->getLogger()->error('OpenSearch update error.', [$e->getMessage()]);
+            return ['error' => $e->getMessage()];
+        }
     }
 
     /**
@@ -346,7 +357,8 @@ readonly class OpenSearch
 
         try {
             return $this->client->delete($params);
-        } catch (HttpException $e) {
+        } catch (HttpException|ClientExceptionInterface $e) {
+            $this->configuration->getLogger()->error('OpenSearch delete error.', [$e->getMessage()]);
             return ['error' => $e->getMessage()];
         }
     }

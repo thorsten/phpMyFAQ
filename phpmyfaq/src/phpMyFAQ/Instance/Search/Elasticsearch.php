@@ -24,6 +24,7 @@ use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\MissingParameterException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Elastic\Elasticsearch\Response\Elasticsearch as ElasticsearchResponse;
+use Elastic\Transport\Exception\NoNodeAvailableException;
 use Http\Promise\Promise;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
@@ -307,7 +308,9 @@ class Elasticsearch
 
         try {
             return $this->unwrapResponse($this->client->index($params))->asObject();
-        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
+        } catch (
+            ClientResponseException|MissingParameterException|NoNodeAvailableException|ServerResponseException $e
+        ) {
             $this->configuration->getLogger()->error('Index error.', [$e->getMessage()]);
             return null;
         }
@@ -407,7 +410,9 @@ class Elasticsearch
 
         try {
             return $this->unwrapResponse($this->client->update($params))->asArray();
-        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
+        } catch (
+            ClientResponseException|MissingParameterException|NoNodeAvailableException|ServerResponseException $e
+        ) {
             return ['error' => $e->getMessage()];
         }
     }
@@ -426,7 +431,9 @@ class Elasticsearch
 
         try {
             return $this->unwrapResponse($this->client->delete($params))->asArray();
-        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
+        } catch (
+            ClientResponseException|MissingParameterException|NoNodeAvailableException|ServerResponseException $e
+        ) {
             return ['error' => $e->getMessage()];
         }
     }

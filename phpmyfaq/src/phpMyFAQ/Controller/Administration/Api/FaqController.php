@@ -819,6 +819,12 @@ final class FaqController extends AbstractAdministrationApiController
      * Upserts the FAQ document in one search engine, or removes the FAQ from it when there is
      * no public document (unpublished FAQ).
      *
+     * Indexing replaces the whole document, so a FAQ that was never indexed (created as a
+     * draft, or removed from the index on an earlier unpublish) gets indexed on publish; a
+     * partial update would fail with "document missing" for exactly those FAQs. The search
+     * document is derived data: the engines report failures instead of throwing, so an
+     * unreachable engine never turns a saved FAQ into an error response.
+     *
      * @param array<string, int|string|null>|null $document
      */
     private function syncSearchDocument(Elasticsearch|OpenSearch $searchEngine, ?array $document, int $solutionId): void
@@ -828,7 +834,7 @@ final class FaqController extends AbstractAdministrationApiController
             return;
         }
 
-        $searchEngine->update($document);
+        $searchEngine->index($document);
     }
 
     /**

@@ -12,6 +12,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\NetworkExceptionInterface;
+use Psr\Http\Message\RequestInterface;
 use ReflectionClass;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -355,6 +357,96 @@ class OpenSearchTest extends TestCase
 
         $this->assertArrayHasKey('error', $result);
         $this->assertSame('document missing', $result['error']);
+    }
+
+    /**
+     * The controller publishes through index() (a full-document upsert), so a FAQ that was never
+     * indexed or was removed on an earlier unpublish is created instead of failing with
+     * "document missing". When the engine still rejects the document, the error must be
+     * reported, not thrown: the FAQ is already saved at this point.
+     */
+    public function testIndexFaqReturnsErrorWhenOpenSearchRejectsTheDocument(): void
+    {
+        $this->configMock->method('getLogger')->willReturn($this->createStub(Logger::class));
+        $this->clientMock
+            ->method('index')
+            ->willThrowException(new NotFoundHttpException('no such index [phpmyfaq_os_test]'));
+
+        $result = $this->openSearch->index($this->faqDocument());
+
+        $this->assertSame(['error' => 'no such index [phpmyfaq_os_test]'], $result);
+    }
+
+    public function testIndexFaqReturnsErrorWhenOpenSearchIsUnreachable(): void
+    {
+        $this->configMock->method('getLogger')->willReturn($this->createStub(Logger::class));
+        $this->clientMock->method('index')->willThrowException($this->networkException());
+
+        $result = $this->openSearch->index($this->faqDocument());
+
+        $this->assertSame(['error' => 'Connection refused'], $result);
+    }
+
+    public function testUpdateFaqReturnsErrorWhenDocumentIsMissing(): void
+    {
+        $this->configMock->method('getLogger')->willReturn($this->createStub(Logger::class));
+        $this->clientMock
+            ->method('update')
+            ->willThrowException(new NotFoundHttpException('document_missing_exception: [42]: document missing'));
+
+        $result = $this->openSearch->update($this->faqDocument());
+
+        $this->assertSame(['error' => 'document_missing_exception: [42]: document missing'], $result);
+    }
+
+    public function testUpdateFaqReturnsErrorWhenOpenSearchIsUnreachable(): void
+    {
+        $this->configMock->method('getLogger')->willReturn($this->createStub(Logger::class));
+        $this->clientMock->method('update')->willThrowException($this->networkException());
+
+        $result = $this->openSearch->update($this->faqDocument());
+
+        $this->assertSame(['error' => 'Connection refused'], $result);
+    }
+
+    public function testDeleteFaqReturnsErrorWhenOpenSearchIsUnreachable(): void
+    {
+        $this->configMock->method('getLogger')->willReturn($this->createStub(Logger::class));
+        $this->clientMock->method('delete')->willThrowException($this->networkException());
+
+        $result = $this->openSearch->delete(42);
+
+        $this->assertSame(['error' => 'Connection refused'], $result);
+    }
+
+    /**
+     * @return array<string, int|string|null>
+     */
+    private function faqDocument(): array
+    {
+        return [
+            'solution_id' => '42',
+            'id' => '1',
+            'lang' => 'en',
+            'question' => 'Q',
+            'answer' => 'A',
+            'keywords' => '',
+            'category_id' => '1',
+        ];
+    }
+
+    /**
+     * What the PSR-18 client throws when the engine cannot be reached; the OpenSearch client
+     * passes it through unwrapped.
+     */
+    private function networkException(): NetworkExceptionInterface
+    {
+        return new class ('Connection refused') extends \RuntimeException implements NetworkExceptionInterface {
+            public function getRequest(): RequestInterface
+            {
+                return new \GuzzleHttp\Psr7\Request('PUT', '/phpmyfaq_os_test/_doc/42');
+            }
+        };
     }
 
     public function testIsAvailableReturnsTrueOnPing(): void

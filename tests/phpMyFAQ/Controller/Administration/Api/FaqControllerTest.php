@@ -3227,12 +3227,13 @@ final class FaqControllerTest extends TestCase
         $this->seedFaqRecord(question: 'Original FAQ');
         $client = $this->enableOpenSearch();
         $client->expects($this->never())->method('delete');
+        $client->expects($this->never())->method('update');
         $client
             ->expects($this->once())
-            ->method('update')
+            ->method('index')
             ->with($this->callback(static fn(array $params): bool => $params['id'] === '1001'
-                && $params['body']['doc']['question'] === 'Updated FAQ'))
-            ->willReturn(['result' => 'updated']);
+                && $params['body']['question'] === 'Updated FAQ'))
+            ->willReturn(['result' => 'created']);
 
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
@@ -3259,7 +3260,7 @@ final class FaqControllerTest extends TestCase
     {
         $this->seedFaqRecord(question: 'Original FAQ');
         $client = $this->enableOpenSearch();
-        $client->expects($this->never())->method('update');
+        $client->expects($this->never())->method('index');
         $client
             ->expects($this->once())
             ->method('delete')
@@ -3291,13 +3292,14 @@ final class FaqControllerTest extends TestCase
     {
         $this->seedFaqRecord(question: 'Publishable FAQ');
         $client = $this->enableOpenSearch();
+        $client->expects($this->never())->method('update');
         $client
             ->expects($this->once())
-            ->method('update')
+            ->method('index')
             ->with($this->callback(static fn(array $params): bool => $params['id'] === '1001'
-                && $params['body']['doc']['question'] === 'Publishable FAQ'
-                && $params['body']['doc']['lang'] === 'en'))
-            ->willReturn(['result' => 'updated']);
+                && $params['body']['question'] === 'Publishable FAQ'
+                && $params['body']['lang'] === 'en'))
+            ->willReturn(['result' => 'created']);
 
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
@@ -3419,10 +3421,11 @@ final class FaqControllerTest extends TestCase
             ->with($this->callback(static function (\Psr\Http\Message\RequestInterface $request): bool {
                 $body = json_decode((string) $request->getBody(), true);
 
-                return $request->getUri()->getPath() === '/phpmyfaq-test/_update/1001'
-                    && $body['doc']['question'] === 'Updated FAQ';
+                return $request->getMethod() === 'PUT'
+                    && $request->getUri()->getPath() === '/phpmyfaq-test/_doc/1001'
+                    && $body['question'] === 'Updated FAQ';
             }))
-            ->willReturn($this->elasticsearchResponse(200, ['result' => 'updated']));
+            ->willReturn($this->elasticsearchResponse(200, ['result' => 'created']));
 
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
@@ -3472,5 +3475,129 @@ final class FaqControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * Regression guard for the editor save returning 500 with OpenSearch enabled: the FAQ is
+     * written before the search document is synced, so whatever the engine answers (a
+     * rejected document, an engine that is not running) must not turn the save into an error.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateStillSucceedsWhenOpenSearchRejectsTheDocument(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        $client = $this->enableOpenSearch();
+        $client
+            ->expects($this->once())
+            ->method('index')
+            ->willThrowException(new \OpenSearch\Exception\NotFoundHttpException('no such index [phpmyfaq-test]'));
+
+        $response = $this->updatePublishedFaqWithSearchEngineEnabled();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateStillSucceedsWhenOpenSearchIsUnreachable(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        $client = $this->enableOpenSearch();
+        $client->expects($this->once())->method('index')->willThrowException($this->searchNetworkException());
+
+        $response = $this->updatePublishedFaqWithSearchEngineEnabled();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateStillSucceedsWhenElasticsearchIsUnreachable(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        $httpClient = $this->enableElasticsearch();
+        $httpClient->expects($this->once())->method('sendRequest')->willThrowException($this->searchNetworkException());
+
+        $response = $this->updatePublishedFaqWithSearchEngineEnabled();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatusPublishStillSucceedsWhenOpenSearchIsUnreachable(): void
+    {
+        $this->seedFaqRecord(question: 'Publishable FAQ');
+        $client = $this->enableOpenSearch();
+        $client->expects($this->once())->method('index')->willThrowException($this->searchNetworkException());
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
+        $faq->method('getSolutionIdFromId')->willReturn(1001);
+        $englishRow = $this->configuration
+            ->getDb()
+            ->query("SELECT 'Publishable FAQ' AS thema, 'Answer' AS content, '' AS keywords");
+        self::assertNotFalse($englishRow);
+        $faq->method('getFaqResult')->willReturn($englishRow);
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->status(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'status' => 'published',
+        ], JSON_THROW_ON_ERROR)));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * Saves the seeded FAQ as published through the update endpoint with a search engine
+     * already registered on the configuration.
+     */
+    private function updatePublishedFaqWithSearchEngineEnabled(): Response
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('update')->willReturnArgument(0);
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->update($this->createRequestForFaqUpdate($csrfToken, status: 'published'));
+        $this->removeCsrfCookie('pmf-csrf-token');
+
+        return $response;
+    }
+
+    /**
+     * What a PSR-18 HTTP client throws when the search engine cannot be reached.
+     */
+    private function searchNetworkException(): \Psr\Http\Client\NetworkExceptionInterface
+    {
+        return new class ('Connection refused') extends \RuntimeException implements \Psr\Http\Client\NetworkExceptionInterface {
+            public function getRequest(): \Psr\Http\Message\RequestInterface
+            {
+                return new \GuzzleHttp\Psr7\Request('PUT', '/phpmyfaq-test/_doc/1001');
+            }
+        };
     }
 }
