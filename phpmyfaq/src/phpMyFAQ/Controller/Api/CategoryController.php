@@ -36,13 +36,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryController extends AbstractApiController
 {
-    /** @var null|callable */
+    /** @var (callable(array<array-key, mixed>): Category)|null */
     private $categoryFactory = null;
 
-    /** @var null|callable */
+    /** @var (callable(): CategoryPermission)|null */
     private $categoryPermissionFactory = null;
 
-    /** @var null|callable */
+    /** @var (callable(): Order)|null */
     private $orderFactory = null;
 
     public function __construct(
@@ -51,16 +51,25 @@ final class CategoryController extends AbstractApiController
         parent::__construct();
     }
 
+    /**
+     * @param callable(array<array-key, mixed>): Category $categoryFactory
+     */
     public function setCategoryFactory(callable $categoryFactory): void
     {
         $this->categoryFactory = $categoryFactory;
     }
 
+    /**
+     * @param callable(): CategoryPermission $categoryPermissionFactory
+     */
     public function setCategoryPermissionFactory(callable $categoryPermissionFactory): void
     {
         $this->categoryPermissionFactory = $categoryPermissionFactory;
     }
 
+    /**
+     * @param callable(): Order $orderFactory
+     */
     public function setOrderFactory(callable $orderFactory): void
     {
         $this->orderFactory = $orderFactory;
@@ -388,11 +397,8 @@ final class CategoryController extends AbstractApiController
 
     private function createCategory(array $currentGroups): Category
     {
-        if (is_callable($this->categoryFactory)) {
-            $category = ($this->categoryFactory)($currentGroups);
-            if ($category instanceof Category) {
-                return $category;
-            }
+        if ($this->categoryFactory !== null) {
+            return ($this->categoryFactory)($currentGroups);
         }
 
         return new Category($this->configuration, $currentGroups, withPermission: true);
@@ -400,11 +406,8 @@ final class CategoryController extends AbstractApiController
 
     private function createCategoryPermission(): CategoryPermission
     {
-        if (is_callable($this->categoryPermissionFactory)) {
-            $categoryPermission = ($this->categoryPermissionFactory)();
-            if ($categoryPermission instanceof CategoryPermission) {
-                return $categoryPermission;
-            }
+        if ($this->categoryPermissionFactory !== null) {
+            return ($this->categoryPermissionFactory)();
         }
 
         return new CategoryPermission($this->configuration);
@@ -412,11 +415,8 @@ final class CategoryController extends AbstractApiController
 
     private function createOrder(): Order
     {
-        if (is_callable($this->orderFactory)) {
-            $categoryOrder = ($this->orderFactory)();
-            if ($categoryOrder instanceof Order) {
-                return $categoryOrder;
-            }
+        if ($this->orderFactory !== null) {
+            return ($this->orderFactory)();
         }
 
         return new Order($this->configuration);

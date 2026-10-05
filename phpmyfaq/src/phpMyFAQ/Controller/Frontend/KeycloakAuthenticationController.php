@@ -41,7 +41,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class KeycloakAuthenticationController extends AbstractFrontController
 {
+    /** @var (Closure(): CurrentUser)|null */
     private ?Closure $currentUserFactory = null;
+
+    /** @var (Closure(): User)|null */
     private ?Closure $userFactory = null;
 
     public function __construct(
@@ -55,12 +58,18 @@ final class KeycloakAuthenticationController extends AbstractFrontController
         parent::__construct();
     }
 
+    /**
+     * @param (Closure(): CurrentUser)|null $currentUserFactory
+     */
     public function setCurrentUserFactory(?Closure $currentUserFactory): self
     {
         $this->currentUserFactory = $currentUserFactory;
         return $this;
     }
 
+    /**
+     * @param (Closure(): User)|null $userFactory
+     */
     public function setUserFactory(?Closure $userFactory): self
     {
         $this->userFactory = $userFactory;
@@ -417,10 +426,7 @@ final class KeycloakAuthenticationController extends AbstractFrontController
     private function getCurrentUserService(): CurrentUser
     {
         if ($this->currentUserFactory instanceof Closure) {
-            $currentUser = ($this->currentUserFactory)();
-            if ($currentUser instanceof CurrentUser) {
-                return $currentUser;
-            }
+            return ($this->currentUserFactory)();
         }
 
         return $this->currentUser;
@@ -429,10 +435,7 @@ final class KeycloakAuthenticationController extends AbstractFrontController
     private function createUser(): User
     {
         if ($this->userFactory instanceof Closure) {
-            $user = ($this->userFactory)();
-            if ($user instanceof User) {
-                return $user;
-            }
+            return ($this->userFactory)();
         }
 
         return new User($this->configuration);

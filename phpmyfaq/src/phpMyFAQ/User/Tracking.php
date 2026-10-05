@@ -46,11 +46,15 @@ class Tracking
         private readonly Configuration $configuration,
         private readonly Request $request,
         private readonly UserSession $userSession,
+        /** @var (Closure(): Network)|null */
         private readonly ?Closure $networkFactory = null,
         private readonly ?string $trackingDirectory = null,
     ) {
     }
 
+    /**
+     * @param (Closure(): Network)|null $networkFactory
+     */
     public static function getInstance(
         Configuration $configuration,
         Request $request,
@@ -246,10 +250,7 @@ class Tracking
     private function createNetwork(): Network
     {
         if ($this->networkFactory instanceof Closure) {
-            $network = ($this->networkFactory)();
-            if ($network instanceof Network) {
-                return $network;
-            }
+            return ($this->networkFactory)();
         }
 
         return new Network($this->configuration);

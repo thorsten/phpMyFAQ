@@ -32,6 +32,12 @@ use RuntimeException;
 
 final readonly class ExportHandler
 {
+    /**
+     * @param (Closure(): User)|null $userFactory
+     * @param (Closure(): Faq)|null $faqFactory
+     * @param (Closure(): Category)|null $categoryFactory
+     * @param (Closure(): Mail)|null $mailFactory
+     */
     public function __construct(
         private Configuration $configuration,
         private ?Closure $userFactory = null,
@@ -49,15 +55,7 @@ final readonly class ExportHandler
 
     public function __invoke(ExportMessage $message): void
     {
-        $user = null;
-        if ($this->userFactory instanceof Closure) {
-            $createdUser = ($this->userFactory)();
-            if ($createdUser instanceof User) {
-                $user = $createdUser;
-            }
-        }
-
-        $user ??= new User($this->configuration);
+        $user = $this->userFactory instanceof Closure ? ($this->userFactory)() : new User($this->configuration);
         if (!$user->getUserById($message->userId)) {
             throw new RuntimeException(sprintf('Export requested by unknown user ID %d', $message->userId));
         }
@@ -66,25 +64,10 @@ final readonly class ExportHandler
             throw new RuntimeException(sprintf('User ID %d does not have export permission', $message->userId));
         }
 
-        $faq = null;
-        if ($this->faqFactory instanceof Closure) {
-            $createdFaq = ($this->faqFactory)();
-            if ($createdFaq instanceof Faq) {
-                $faq = $createdFaq;
-            }
-        }
-
-        $faq ??= new Faq($this->configuration);
-
-        $category = null;
-        if ($this->categoryFactory instanceof Closure) {
-            $createdCategory = ($this->categoryFactory)();
-            if ($createdCategory instanceof Category) {
-                $category = $createdCategory;
-            }
-        }
-
-        $category ??= new Category($this->configuration);
+        $faq = $this->faqFactory instanceof Closure ? ($this->faqFactory)() : new Faq($this->configuration);
+        $category = $this->categoryFactory instanceof Closure
+            ? ($this->categoryFactory)()
+            : new Category($this->configuration);
 
         $exporter = null;
         if ($this->exportFactory instanceof Closure) {
@@ -128,15 +111,7 @@ final readonly class ExportHandler
         $email = $user->getUserData('email');
         if (is_string($email) && $email !== '') {
             try {
-                $mail = null;
-                if ($this->mailFactory instanceof Closure) {
-                    $createdMail = ($this->mailFactory)();
-                    if ($createdMail instanceof Mail) {
-                        $mail = $createdMail;
-                    }
-                }
-
-                $mail ??= new Mail($this->configuration);
+                $mail = $this->mailFactory instanceof Closure ? ($this->mailFactory)() : new Mail($this->configuration);
                 $mail->addTo($email);
                 $mail->subject = 'Your phpMyFAQ export is ready';
                 $mail->message = sprintf(

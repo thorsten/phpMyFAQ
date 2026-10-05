@@ -52,6 +52,7 @@ class UserSession
     public function __construct(
         private readonly Configuration $configuration,
         private readonly ?Request $request = null,
+        /** @var (Closure(Configuration): Network)|null */
         private readonly ?Closure $networkFactory = null,
         private readonly ?Closure $cookieSetter = null,
         private readonly ?string $trackingDirectory = null,
@@ -299,10 +300,7 @@ class UserSession
     private function createNetwork(): Network
     {
         if ($this->networkFactory instanceof Closure) {
-            $network = ($this->networkFactory)($this->configuration);
-            if ($network instanceof Network) {
-                return $network;
-            }
+            return ($this->networkFactory)($this->configuration);
         }
 
         return new Network($this->configuration);

@@ -26,6 +26,9 @@ use phpMyFAQ\Queue\Message\SendMailMessage;
 
 final readonly class SendMailHandler
 {
+    /**
+     * @param (Closure(): Mail)|null $mailFactory
+     */
     public function __construct(
         private Configuration $configuration,
         private ?Closure $mailFactory = null,
@@ -34,15 +37,7 @@ final readonly class SendMailHandler
 
     public function __invoke(SendMailMessage $message): void
     {
-        $mail = null;
-        if ($this->mailFactory instanceof Closure) {
-            $createdMail = ($this->mailFactory)();
-            if ($createdMail instanceof Mail) {
-                $mail = $createdMail;
-            }
-        }
-
-        $mail ??= new Mail($this->configuration);
+        $mail = $this->mailFactory instanceof Closure ? ($this->mailFactory)() : new Mail($this->configuration);
 
         $envelope = $message->metadata['envelope'] ?? null;
         if (

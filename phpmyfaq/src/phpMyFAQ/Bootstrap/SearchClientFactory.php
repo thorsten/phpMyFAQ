@@ -35,6 +35,7 @@ class SearchClientFactory
     /**
      * Polls the search engine health endpoint until it responds with a 2xx–4xx status.
      *
+     * @param (callable(): HttpClientInterface)|null $httpClientFactory
      * @param array<string, bool|string> $tlsOptions Symfony HttpClient TLS options
      *                                               (verify_peer, verify_host, cafile, capath)
      */
@@ -48,10 +49,7 @@ class SearchClientFactory
         try {
             $http = $httpClient;
             if ($http === null && $httpClientFactory !== null) {
-                $createdHttpClient = $httpClientFactory();
-                if ($createdHttpClient instanceof HttpClientInterface) {
-                    $http = $createdHttpClient;
-                }
+                $http = $httpClientFactory();
             }
 
             // Peer verification stays on unless the search configuration file disables it
@@ -76,6 +74,8 @@ class SearchClientFactory
 
     /**
      * Configures the Elasticsearch client and attaches it to the Configuration.
+     *
+     * @param (callable(string): Client)|null $clientFactory
      */
     public static function configureElasticsearch(
         Configuration $faqConfig,
@@ -96,15 +96,9 @@ class SearchClientFactory
         );
 
         try {
-            $esClient = null;
-            if ($clientFactory !== null) {
-                $createdClient = $clientFactory($esBaseUri);
-                if ($createdClient instanceof Client) {
-                    $esClient = $createdClient;
-                }
-            }
-
-            $esClient ??= self::buildElasticsearchClient($esBaseUri, $esConfig);
+            $esClient = $clientFactory !== null
+                ? $clientFactory($esBaseUri)
+                : self::buildElasticsearchClient($esBaseUri, $esConfig);
             $faqConfig->setElasticsearch($esClient);
             $faqConfig->setElasticsearchConfig($esConfig);
         } catch (AuthenticationException $exception) {

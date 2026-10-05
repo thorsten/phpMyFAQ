@@ -30,6 +30,11 @@ use RuntimeException;
 
 final readonly class IndexFaqHandler
 {
+    /**
+     * @param (Closure(): Faq)|null $faqFactory
+     * @param (Closure(): Category)|null $categoryFactory
+     * @param (Closure(): Elasticsearch)|null $elasticsearchFactory
+     */
     public function __construct(
         private Configuration $configuration,
         private ?Closure $faqFactory = null,
@@ -50,15 +55,7 @@ final readonly class IndexFaqHandler
             throw new RuntimeException('Elasticsearch is not configured');
         }
 
-        $faq = null;
-        if ($this->faqFactory instanceof Closure) {
-            $createdFaq = ($this->faqFactory)();
-            if ($createdFaq instanceof Faq) {
-                $faq = $createdFaq;
-            }
-        }
-
-        $faq ??= new Faq($this->configuration);
+        $faq = $this->faqFactory instanceof Closure ? ($this->faqFactory)() : new Faq($this->configuration);
         $faq->getFaq($message->faqId);
 
         // A FAQ that left the published state must also leave the index, mirroring the
@@ -80,15 +77,9 @@ final readonly class IndexFaqHandler
             && $faq->faqRecord['status'] === FaqStatus::Published->value
             && $faq->faqRecord['content'] !== ''
         ) {
-            $category = null;
-            if ($this->categoryFactory instanceof Closure) {
-                $createdCategory = ($this->categoryFactory)();
-                if ($createdCategory instanceof Category) {
-                    $category = $createdCategory;
-                }
-            }
-
-            $category ??= new Category($this->configuration);
+            $category = $this->categoryFactory instanceof Closure
+                ? ($this->categoryFactory)()
+                : new Category($this->configuration);
             $categoryId = $category->getCategoryIdFromFaq($message->faqId);
 
             $this->createElasticsearch()->index([
@@ -106,10 +97,7 @@ final readonly class IndexFaqHandler
     private function createElasticsearch(): Elasticsearch
     {
         if ($this->elasticsearchFactory instanceof Closure) {
-            $createdElasticsearch = ($this->elasticsearchFactory)();
-            if ($createdElasticsearch instanceof Elasticsearch) {
-                return $createdElasticsearch;
-            }
+            return ($this->elasticsearchFactory)();
         }
 
         return new Elasticsearch($this->configuration);

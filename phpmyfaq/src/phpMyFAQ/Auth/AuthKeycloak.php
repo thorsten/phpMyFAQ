@@ -38,7 +38,9 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
         private readonly OidcProviderConfig $providerConfig,
         private readonly array $claims,
         private readonly string $resolvedLogin,
+        /** @var (Closure(): User)|null */
         private readonly ?Closure $userFactory = null,
+        /** @var (Closure(): MediumPermission)|null */
         private readonly ?Closure $mediumPermissionFactory = null,
     ) {
         parent::__construct($configuration);
@@ -366,10 +368,7 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
     private function createUser(): User
     {
         if ($this->userFactory instanceof Closure) {
-            $user = ($this->userFactory)();
-            if ($user instanceof User) {
-                return $user;
-            }
+            return ($this->userFactory)();
         }
 
         return new User($this->configuration);
@@ -378,10 +377,7 @@ class AuthKeycloak extends Auth implements AuthDriverInterface
     private function createMediumPermission(): MediumPermission
     {
         if ($this->mediumPermissionFactory instanceof Closure) {
-            $mediumPermission = ($this->mediumPermissionFactory)();
-            if ($mediumPermission instanceof MediumPermission) {
-                return $mediumPermission;
-            }
+            return ($this->mediumPermissionFactory)();
         }
 
         return new MediumPermission($this->configuration);

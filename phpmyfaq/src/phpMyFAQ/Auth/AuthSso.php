@@ -36,11 +36,15 @@ use Symfony\Component\HttpFoundation\Request;
 class AuthSso extends Auth implements AuthDriverInterface
 {
     private readonly Request $request;
+    /** @var (Closure(): AuthLdap)|null */
     private readonly ?Closure $ldapFactory;
+
+    /** @var (Closure(): User)|null */
     private readonly ?Closure $userFactory;
 
     /**
-     * @inheritDoc
+     * @param (Closure(): AuthLdap)|null $ldapFactory
+     * @param (Closure(): User)|null $userFactory
      */
     public function __construct(
         Configuration $configuration,
@@ -134,10 +138,7 @@ class AuthSso extends Auth implements AuthDriverInterface
     private function createLdapAuth(): AuthLdap
     {
         if ($this->ldapFactory instanceof Closure) {
-            $authLdap = ($this->ldapFactory)();
-            if ($authLdap instanceof AuthLdap) {
-                return $authLdap;
-            }
+            return ($this->ldapFactory)();
         }
 
         return new AuthLdap($this->configuration);
@@ -146,10 +147,7 @@ class AuthSso extends Auth implements AuthDriverInterface
     private function createUser(): User
     {
         if ($this->userFactory instanceof Closure) {
-            $user = ($this->userFactory)();
-            if ($user instanceof User) {
-                return $user;
-            }
+            return ($this->userFactory)();
         }
 
         return new User($this->configuration);

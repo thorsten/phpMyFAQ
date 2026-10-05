@@ -39,7 +39,10 @@ use SensitiveParameter;
 class AuthLdap extends Auth implements AuthDriverInterface
 {
     private LdapCore $ldapCore;
+    /** @var (Closure(): User)|null */
     private readonly ?Closure $userFactory;
+
+    /** @var (Closure(): MediumPermission)|null */
     private readonly ?Closure $mediumPermissionFactory;
 
     /** @var array<int, array<string, mixed>> Array of LDAP servers */
@@ -52,6 +55,9 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
+     *
+     * @param (Closure(): User)|null $userFactory
+     * @param (Closure(): MediumPermission)|null $mediumPermissionFactory
      * @throws Exception
      */
     public function __construct(
@@ -327,10 +333,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     private function createUser(): User
     {
         if ($this->userFactory instanceof Closure) {
-            $user = ($this->userFactory)();
-            if ($user instanceof User) {
-                return $user;
-            }
+            return ($this->userFactory)();
         }
 
         return new User($this->configuration);
@@ -339,10 +342,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     private function createMediumPermission(): MediumPermission
     {
         if ($this->mediumPermissionFactory instanceof Closure) {
-            $mediumPermission = ($this->mediumPermissionFactory)();
-            if ($mediumPermission instanceof MediumPermission) {
-                return $mediumPermission;
-            }
+            return ($this->mediumPermissionFactory)();
         }
 
         return new MediumPermission($this->configuration);

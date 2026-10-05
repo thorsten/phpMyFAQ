@@ -38,6 +38,10 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 final class AzureAuthenticationController extends AbstractFrontController
 {
+    /**
+     * @param (\Closure(): array{0: AuthEntraId, 1: OAuth, 2: EntraIdSession})|null $authContextFactory
+     * @param (\Closure(): CurrentUser)|null $currentUserFactory
+     */
     public function __construct(
         private readonly ?\Closure $authContextFactory = null,
         private readonly ?\Closure $currentUserFactory = null,
@@ -219,17 +223,7 @@ final class AzureAuthenticationController extends AbstractFrontController
     protected function buildAuthContext(): array
     {
         if ($this->authContextFactory instanceof \Closure) {
-            $authContext = ($this->authContextFactory)();
-            $entraAuth = is_array($authContext) ? $authContext[0] ?? null : null;
-            $entraOAuth = is_array($authContext) ? $authContext[1] ?? null : null;
-            $entraSession = is_array($authContext) ? $authContext[2] ?? null : null;
-            if (
-                $entraAuth instanceof AuthEntraId
-                && $entraOAuth instanceof OAuth
-                && $entraSession instanceof EntraIdSession
-            ) {
-                return [$entraAuth, $entraOAuth, $entraSession];
-            }
+            return ($this->authContextFactory)();
         }
 
         // Use a bridge session per request to preserve legacy Azure flow behavior.
@@ -248,10 +242,7 @@ final class AzureAuthenticationController extends AbstractFrontController
     protected function getCurrentUserService(): CurrentUser
     {
         if ($this->currentUserFactory instanceof \Closure) {
-            $currentUser = ($this->currentUserFactory)();
-            if ($currentUser instanceof CurrentUser) {
-                return $currentUser;
-            }
+            return ($this->currentUserFactory)();
         }
 
         return $this->currentUser;
