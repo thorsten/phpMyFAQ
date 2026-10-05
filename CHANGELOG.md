@@ -50,6 +50,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - fixed the statistics clean-up deleting tracking files from a different directory than it lists (Thorsten)
 - fixed a corrupt stored WebAuthn key raising a PHP warning instead of a clear login error (Thorsten)
 - fixed saving or publishing a FAQ failing with an internal server error when OpenSearch or Elasticsearch is enabled and the FAQ is not in the index yet or the search engine is unreachable (Thorsten)
+- fixed every request failing with a PHP error when the stored session data cannot be decoded, e.g. after an upgrade; the broken session is discarded instead (Thorsten)
 - updated to PHPUnit v13 (Thorsten)
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)
@@ -62,6 +63,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated third party dependencies (Thorsten)
 - fixed security vulnerabilities (Thorsten)
 - fixed bugs (Thorsten)
+
+### phpMyFAQ v4.1.10 - unreleased
+
+- updated third party dependencies (Thorsten)
+- fixed corrupted sessions after creating CSRF tokens (Thorsten)
 
 ### phpMyFAQ v4.1.9 - 2026-10-03
 

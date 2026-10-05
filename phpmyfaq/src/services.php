@@ -199,6 +199,7 @@ use phpMyFAQ\Service\McpServer\FaqSearchTool;
 use phpMyFAQ\Service\McpServer\McpSdkRuntime;
 use phpMyFAQ\Service\McpServer\McpServerRuntimeInterface;
 use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
+use phpMyFAQ\Session\RecoveringSessionStorage;
 use phpMyFAQ\Session\SessionWrapper;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Setup\EnvironmentConfigurator;
@@ -248,7 +249,8 @@ return static function (ContainerConfigurator $container): void {
     $services->set('filesystem', Filesystem::class);
     $services->set('phpmyfaq.event_dispatcher', EventDispatcher::class);
     $services->alias(EventDispatcherInterface::class, 'phpmyfaq.event_dispatcher');
-    $services->set('session', Session::class);
+    $services->set('phpmyfaq.session.storage', RecoveringSessionStorage::class);
+    $services->set('session', Session::class)->args([service('phpmyfaq.session.storage')]);
     $services->alias(SessionInterface::class, 'session');
 
     // ========== phpMyFAQ services ==========
