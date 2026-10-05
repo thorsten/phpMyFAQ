@@ -96,12 +96,14 @@ class SessionStarterTest extends TestCase
 
     private function assertSessionIsWritable(): void
     {
-        $this->assertSame(self::SESSION_ID, session_id());
+        // PHP may keep the cookie's id or hand out a new one (session.use_strict_mode), both are fine
+        $sessionId = session_id();
+        $this->assertNotSame('', $sessionId);
 
         $_SESSION['after'] = 1;
         session_write_close();
 
-        $this->assertSame('after|i:1;', file_get_contents($this->sessionFile()));
+        $this->assertSame('after|i:1;', file_get_contents($this->savePath . '/sess_' . $sessionId));
     }
 
     /**
