@@ -29,6 +29,7 @@ use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Environment;
+use phpMyFAQ\Session\SessionStarter;
 use phpMyFAQ\System;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\RedirectResponse;

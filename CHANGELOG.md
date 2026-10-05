@@ -6,6 +6,10 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+### phpMyFAQ v4.1.10 - unreleased
+
+- fixed corrupted sessions after creating CSRF tokens, which broke the auto-update's database step with "Unexpected end of serialized data" (Thorsten)
+
 ### phpMyFAQ v4.1.9 - 2026-10-03
 
 - updated third party dependencies (Thorsten)

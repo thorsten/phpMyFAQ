@@ -5,7 +5,9 @@ namespace phpMyFAQ\Session;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[AllowMockObjectsWithoutExpectations]
 class TokenTest extends TestCase
@@ -22,6 +24,37 @@ class TokenTest extends TestCase
         // Mock the SessionInterface
         $this->sessionMock = $this->createStub(SessionInterface::class);
         $this->token = Token::getInstance($this->sessionMock);
+    }
+
+    protected function tearDown(): void
+    {
+        Token::resetInstanceForTests();
+    }
+
+    public function testStoredTokenSerializesWithoutSessionReference(): void
+    {
+        Token::resetInstanceForTests();
+        $session = new Session(new MockArraySessionStorage());
+        $token = Token::getInstance($session)
+            ->setPage('update-package')
+            ->setExpiry(1_900_000_000)
+            ->setSessionToken('session-token')
+            ->setCookieToken('cookie-token');
+
+        $serialized = serialize($token);
+
+        // Dragging the Symfony session into $_SESSION corrupts the stored session data,
+        // because Symfony's session handlers refuse to be serialised.
+        $this->assertStringNotContainsString('Symfony', $serialized);
+        $this->assertStringNotContainsString('MockArraySessionStorage', $serialized);
+
+        $restored = unserialize($serialized);
+
+        $this->assertInstanceOf(Token::class, $restored);
+        $this->assertSame('update-package', $restored->getPage());
+        $this->assertSame(1_900_000_000, $restored->getExpiry());
+        $this->assertSame('session-token', $restored->getSessionToken());
+        $this->assertSame('cookie-token', $restored->getCookieToken());
     }
 
     public function testGetInstanceReturnsTokenInstance(): void

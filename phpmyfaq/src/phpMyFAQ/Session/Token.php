@@ -48,6 +48,40 @@ class Token
     ) {
     }
 
+    /**
+     * Only the token data is persisted in the session. The SessionInterface
+     * reference is deliberately excluded: serialising it would drag the whole
+     * Symfony session object (storage, bags and save handler) into $_SESSION.
+     * Symfony's session handlers refuse to be serialised, which truncates the
+     * written session data and makes the next session_start() fail with
+     * "Unexpected end of serialized data". A persisted token never needs its
+     * own session back-reference.
+     *
+     * @return array<string, mixed>
+     */
+    public function __serialize(): array
+    {
+        return [
+            'page' => $this->page ?? '',
+            'expiry' => $this->expiry,
+            'sessionToken' => $this->sessionToken,
+            'cookieToken' => $this->cookieToken,
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->page = (string) ($data['page'] ?? '');
+        $this->expiry = (int) ($data['expiry'] ?? 0);
+        $sessionToken = $data['sessionToken'] ?? null;
+        $this->sessionToken = is_string($sessionToken) ? $sessionToken : null;
+        $cookieToken = $data['cookieToken'] ?? null;
+        $this->cookieToken = is_string($cookieToken) ? $cookieToken : null;
+    }
+
     public function getPage(): string
     {
         return $this->page;
