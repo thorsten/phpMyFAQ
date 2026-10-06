@@ -60,7 +60,7 @@ final class SesProvider implements MailProviderInterface
                 ],
                 'Message' => [
                     'Subject' => [
-                        'Data' => $headers['Subject'] ?? '',
+                        'Data' => (string) ($headers['Subject'] ?? ''),
                         'Charset' => 'UTF-8',
                     ],
                     'Body' => [
@@ -83,7 +83,7 @@ final class SesProvider implements MailProviderInterface
     }
 
     /**
-     * @return array<int, string>
+     * @return list<string>
      */
     private function parseRecipients(string $recipients): array
     {
