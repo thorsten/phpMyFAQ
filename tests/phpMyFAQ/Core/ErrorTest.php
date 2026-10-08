@@ -274,6 +274,28 @@ class ErrorTest extends TestCase
         }
     }
 
+    /**
+     * Regression test for an exception raised after the response was sent, e.g. during
+     * session_write_close() at shutdown: http_response_code() must not be called once
+     * the headers are out, otherwise its warning becomes a second uncaught ErrorException.
+     * headers_sent() can only become true in a separate CLI process without output buffering.
+     */
+    public function testExceptionHandlerDoesNotCascadeWhenHeadersAreAlreadySent(): void
+    {
+        $fixture = PMF_TEST_DIR . '/fixtures/exception-handler-headers-sent.php';
+
+        exec(sprintf('%s %s 2>&1', escapeshellarg(PHP_BINARY), escapeshellarg($fixture)), $outputLines, $exitCode);
+        $output = implode("\n", $outputLines);
+
+        $this->assertSame(0, $exitCode, $output);
+        $this->assertStringContainsString('page output', $output);
+        $this->assertStringContainsString('An internal error occurred.', $output);
+        $this->assertStringContainsString('HANDLER RETURNED', $output);
+        $this->assertStringNotContainsString('headers already sent', $output);
+        $this->assertStringNotContainsString('Uncaught ErrorException', $output);
+        $this->assertStringNotContainsString('late failure', $output);
+    }
+
     #[PreserveGlobalState(false)]
     #[RunInSeparateProcess]
     public function testExceptionHandlerWithCustomException(): void

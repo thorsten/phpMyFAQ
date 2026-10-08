@@ -68,6 +68,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - updated third party dependencies (Thorsten)
 - fixed corrupted sessions after creating CSRF tokens (Thorsten)
+- fixed uncaught exceptions after the response was sent and stopped exposing stack traces outside debug mode (Thorsten)
 
 ### phpMyFAQ v4.1.9 - 2026-10-03
 

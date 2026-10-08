@@ -68,7 +68,12 @@ class Error
             $code = 500;
         }
 
-        http_response_code($code);
+        // An exception thrown after the response went out (e.g. from session_write_close() at shutdown)
+        // must not touch the status code: http_response_code() would raise a warning, which errorHandler()
+        // turns into a second, uncaught ErrorException rendered as a PHP fatal error in the page body.
+        if (!headers_sent()) {
+            http_response_code($code);
+        }
 
         if (ini_get('log_errors')) {
             error_log(sprintf(
