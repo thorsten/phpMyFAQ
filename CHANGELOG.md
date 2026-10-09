@@ -11,6 +11,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated third party dependencies (Thorsten)
 - fixed corrupted sessions after creating CSRF tokens (Thorsten)
 - fixed uncaught exceptions after the response was sent and stopped exposing stack traces outside debug mode (Thorsten)
+- fixed the "Allow comments" checkbox being always checked when editing, copying or translating a FAQ (Thorsten)
 
 ### phpMyFAQ v4.1.9 - 2026-10-03
 

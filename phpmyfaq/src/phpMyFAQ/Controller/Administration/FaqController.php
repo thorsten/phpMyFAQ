@@ -273,6 +273,8 @@ final class FaqController extends AbstractAdministrationController
             $faqData['revision_id'] = $selectedRevisionId;
         }
 
+        $faqData = $this->normalizeCommentFlag($faqData);
+
         // Tags
         $faqData['tags'] = implode(', ', $this->container->get(id: 'phpmyfaq.tags')->getAllTagsById($faqId));
 
@@ -402,7 +404,7 @@ final class FaqController extends AbstractAdministrationController
         $categories = [];
 
         $faq->getFaq($faqId, null, true);
-        $faqData = $faq->faqRecord;
+        $faqData = $this->normalizeCommentFlag($faq->faqRecord);
         $faqData['title'] = 'Copy of ' . $faqData['title'];
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
@@ -476,7 +478,7 @@ final class FaqController extends AbstractAdministrationController
         $categories = [];
 
         $faq->getFaq($faqId, null, true);
-        $faqData = $faq->faqRecord;
+        $faqData = $this->normalizeCommentFlag($faq->faqRecord);
         $faqData['title'] = 'Translation of ' . $faqData['title'];
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
@@ -670,5 +672,23 @@ final class FaqController extends AbstractAdministrationController
             'ad_changerev' => Translation::get(key: 'ad_changerev'),
             'ad_view_faq' => Translation::get(key: 'ad_view_faq'),
         ];
+    }
+
+    /**
+     * Maps the stored "allow comments" flag onto the contract of the FAQ editor template.
+     *
+     * The template renders the checkbox from the truthiness of faqData['comment'], which is
+     * what add() and answer() provide ('checked' or null). The database stores the flag as
+     * 'y' or 'n', and the string 'n' is truthy in Twig, so passing the raw record through
+     * showed the checkbox as checked for every FAQ regardless of its stored value.
+     *
+     * @param array<string, mixed> $faqData
+     * @return array<string, mixed>
+     */
+    private function normalizeCommentFlag(array $faqData): array
+    {
+        $faqData['comment'] = ($faqData['comment'] ?? null) === 'y' ? 'checked' : null;
+
+        return $faqData;
     }
 }

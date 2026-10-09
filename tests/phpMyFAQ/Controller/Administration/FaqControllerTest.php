@@ -7,8 +7,10 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionMethod;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -129,5 +131,50 @@ class FaqControllerTest extends TestCase
 
         $this->expectException(ForbiddenException::class);
         $controller->index(new Request());
+    }
+
+    /**
+     * The editor template renders the "allow comments" checkbox from the truthiness of
+     * faqData['comment']. The database stores the flag as 'y'/'n' and the string 'n' is truthy
+     * in Twig, so the raw record showed the checkbox as checked for every FAQ when editing,
+     * copying or translating it (see GitHub issue #4751). The stored value must be mapped onto
+     * the 'checked'/null contract that add() and answer() already use.
+     */
+    #[DataProvider('commentFlagProvider')]
+    public function testNormalizeCommentFlagMapsStoredFlagOntoTemplateContract(mixed $stored, ?string $expected): void
+    {
+        $controller = (new ReflectionClass(FaqController::class))->newInstanceWithoutConstructor();
+        $method = new ReflectionMethod(FaqController::class, 'normalizeCommentFlag');
+
+        $faqData = ['id' => 1, 'title' => 'Question', 'comment' => $stored];
+        $normalized = $method->invoke($controller, $faqData);
+
+        static::assertSame($expected, $normalized['comment']);
+        static::assertSame(1, $normalized['id']);
+        static::assertSame('Question', $normalized['title']);
+    }
+
+    /**
+     * @return array<string, array{mixed, ?string}>
+     */
+    public static function commentFlagProvider(): array
+    {
+        return [
+            'comments allowed' => ['y', 'checked'],
+            'comments disabled' => ['n', null],
+            'empty placeholder record' => ['', null],
+            'missing flag' => [null, null],
+        ];
+    }
+
+    public function testNormalizeCommentFlagToleratesRecordWithoutCommentKey(): void
+    {
+        $controller = (new ReflectionClass(FaqController::class))->newInstanceWithoutConstructor();
+        $method = new ReflectionMethod(FaqController::class, 'normalizeCommentFlag');
+
+        $normalized = $method->invoke($controller, ['id' => 1]);
+
+        static::assertArrayHasKey('comment', $normalized);
+        static::assertNull($normalized['comment']);
     }
 }
