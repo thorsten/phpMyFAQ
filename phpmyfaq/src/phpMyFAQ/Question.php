@@ -124,7 +124,12 @@ readonly class Question
      */
     public function updateQuestionAnswer(int $openQuestionId, int $faqId, int $categoryId): bool
     {
-        return $this->questionRepository->updateQuestionAnswer($openQuestionId, $faqId, $categoryId);
+        return $this->questionRepository->updateQuestionAnswer(
+            $openQuestionId,
+            $faqId,
+            $categoryId,
+            $this->configuration->getLanguage()->getLanguage(),
+        );
     }
 
     /**

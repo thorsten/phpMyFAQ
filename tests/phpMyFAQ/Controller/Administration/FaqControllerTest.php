@@ -184,9 +184,11 @@ final class FaqControllerTest extends TestCase
     public function testIndexRequiresFaqEditRight(): void
     {
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer(
-            grantedRights: [PermissionType::FAQ_ADD, PermissionType::FAQ_PUBLISH, PermissionType::FAQ_DELETE],
-        ));
+        $controller->setContainer($this->createAuthenticatedContainer(grantedRights: [
+            PermissionType::FAQ_ADD,
+            PermissionType::FAQ_PUBLISH,
+            PermissionType::FAQ_DELETE,
+        ]));
 
         $this->expectException(ForbiddenException::class);
         $controller->index(new Request());
@@ -500,6 +502,138 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * The editor renders the "allow comments" checkbox from the truthiness of faqData['comment'].
+     * The database stores the flag as 'y'/'n' and the string 'n' is truthy in Twig, so the raw
+     * record used to render the checkbox as checked for every FAQ (GitHub issue #4751). A stored
+     * 'y' must still render as checked.
+     *
+     * @throws \Exception
+     */
+    public function testEditChecksAllowCommentsWhenStoredFlagIsYes(): void
+    {
+        $controller = $this->createControllerForEdit($this->editableFaqRecord(['comment' => 'y']));
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->edit(new Request([], [], ['faqId' => '1', 'faqLanguage' => 'en']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertMatchesRegularExpression(
+            '/name="comment" id="comment" value="y"[^>]*\bchecked\b/s',
+            (string) $response->getContent(),
+        );
+    }
+
+    /**
+     * Regression guard for #4751: a stored 'n' must render the "allow comments" checkbox unchecked.
+     *
+     * @throws \Exception
+     */
+    public function testEditDoesNotCheckAllowCommentsWhenStoredFlagIsNo(): void
+    {
+        $controller = $this->createControllerForEdit($this->editableFaqRecord(['comment' => 'n']));
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->edit(new Request([], [], ['faqId' => '1', 'faqLanguage' => 'en']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertDoesNotMatchRegularExpression(
+            '/name="comment" id="comment" value="y"[^>]*\bchecked\b/s',
+            (string) $response->getContent(),
+        );
+    }
+
+    /**
+     * The "Create new revision?" option is the only way to create a FAQ revision, and the update
+     * endpoint only honours it while 'records.enableAutoRevisions' is enabled. The editor used to
+     * show it in exactly the opposite case (GitHub issue in the 4.1 changelog), so with versioning
+     * enabled the option was hidden. It must be shown when editing an existing FAQ and versioning
+     * is enabled.
+     *
+     * @throws \Exception
+     */
+    public function testEditShowsNewRevisionOptionWhenVersioningEnabled(): void
+    {
+        $this->configuration->set('records.enableAutoRevisions', true);
+
+        $controller = $this->createControllerForEdit($this->editableFaqRecord());
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->edit(new Request([], [], ['faqId' => '1', 'faqLanguage' => 'en']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('name="revision" id="revision" value="yes"', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEditHidesNewRevisionOptionWhenVersioningDisabled(): void
+    {
+        $this->configuration->set('records.enableAutoRevisions', false);
+
+        $controller = $this->createControllerForEdit($this->editableFaqRecord());
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->edit(new Request([], [], ['faqId' => '1', 'faqLanguage' => 'en']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringNotContainsString(
+            'name="revision" id="revision" value="yes"',
+            (string) $response->getContent(),
+        );
+    }
+
+    /**
+     * Returns a stored FAQ record for the editor, with optional overrides merged in.
+     *
+     * @param array<string, mixed> $overrides
+     * @return array<string, mixed>
+     */
+    private function editableFaqRecord(array $overrides = []): array
+    {
+        return [
+            'id' => 1,
+            'lang' => 'en',
+            'title' => 'Prepared FAQ',
+            'revision_id' => 0,
+            'status' => 'published',
+            'author' => 'Test Author',
+            'email' => 'test@example.com',
+            ...$overrides,
+        ];
+    }
+
+    /**
+     * Builds a controller that can render edit() for the given stored FAQ record.
+     *
+     * @param array<string, mixed> $faqRecord
+     */
+    private function createControllerForEdit(array $faqRecord): FaqController
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = $faqRecord;
+        $faq->method('getNextSolutionId')->willReturn(1001);
+
+        $tags = $this->createMock(Tags::class);
+        $tags->method('getAllTagsById')->willReturn([]);
+
+        $seo = $this->createMock(Seo::class);
+        $seo->method('get')->willReturn(new SeoEntity());
+
+        return new FaqController(
+            $this->createStub(Comments::class),
+            $faq,
+            $tags,
+            $seo,
+            $this->createStub(CategoryHelper::class),
+            $this->createStub(UserHelper::class),
+            new FaqPermission($this->configuration),
+            $this->createStub(Changelog::class),
+            $this->createStub(Question::class),
+        );
+    }
+
+    /**
      * @param list<PermissionType>|null $grantedRights null grants every right except $deniedRight
      */
     private function createAuthenticatedContainer(
@@ -513,15 +647,13 @@ final class FaqControllerTest extends TestCase
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
-            ->willReturnCallback(
-                static function (int $userId, mixed $right) use ($deniedRight, $grantedValues): bool {
-                    if ($grantedValues !== null) {
-                        return in_array($right, $grantedValues, true);
-                    }
+            ->willReturnCallback(static function (int $userId, mixed $right) use ($deniedRight, $grantedValues): bool {
+                if ($grantedValues !== null) {
+                    return in_array($right, $grantedValues, true);
+                }
 
-                    return $deniedRight === null || ($right !== $deniedRight && $right !== $deniedRight->value);
-                },
-            );
+                return $deniedRight === null || $right !== $deniedRight && $right !== $deniedRight->value;
+            });
         $permission
             ->method('hasPermissionForCategory')
             ->willReturnCallback(

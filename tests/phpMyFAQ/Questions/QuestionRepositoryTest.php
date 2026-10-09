@@ -249,13 +249,34 @@ class QuestionRepositoryTest extends TestCase
         $this->repository->add($questionEntity);
 
         // Update the answer_id
-        $result = $this->repository->updateQuestionAnswer(1, 42, 2);
+        $result = $this->repository->updateQuestionAnswer(1, 42, 2, 'en');
 
         $this->assertTrue($result);
 
         // Verify the update
         $question = $this->repository->getById(1, 'en');
         $this->assertEquals(2, $question['category_id']);
+    }
+
+    public function testUpdateQuestionAnswerDoesNotCrossLanguageBoundaries(): void
+    {
+        // Add a question in English
+        $questionEntity = new QuestionEntity();
+        $questionEntity
+            ->setUsername('testuser')
+            ->setEmail('test@example.org')
+            ->setCategoryId(1)
+            ->setQuestion('Test question')
+            ->setLanguage('en')
+            ->setIsVisible(true);
+
+        $this->repository->add($questionEntity);
+
+        // An update targeting the same id but a different language must not touch the row
+        $this->repository->updateQuestionAnswer(1, 42, 2, 'de');
+
+        $question = $this->repository->getById(1, 'en');
+        $this->assertEquals(1, $question['category_id']);
     }
 
     public function testGetAllReturnsEmptyArrayForNonExistentLanguage(): void
@@ -311,7 +332,7 @@ class QuestionRepositoryTest extends TestCase
             ->setIsVisible(true);
 
         $questionId = $this->repository->add($questionEntity);
-        $this->assertTrue($this->repository->updateQuestionAnswer($questionId, 7, 1));
+        $this->assertTrue($this->repository->updateQuestionAnswer($questionId, 7, 1, 'en'));
 
         $questions = $this->repository->getAll('en');
         $this->assertSame(7, $questions[0]['answer_id']);

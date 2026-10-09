@@ -143,7 +143,7 @@ final class QuestionRepositoryTest extends TestCase
     {
         $questionId = $this->repository->add($this->createQuestion());
 
-        $this->assertTrue($this->repository->updateQuestionAnswer($questionId, 42, 7));
+        $this->assertTrue($this->repository->updateQuestionAnswer($questionId, 42, 7, 'en'));
 
         $row = $this->repository->getAll('en')[0];
         $this->assertSame(42, $row['answer_id']);
@@ -153,7 +153,7 @@ final class QuestionRepositoryTest extends TestCase
     public function testReopenClearsAnswerOnlyOnce(): void
     {
         $questionId = $this->repository->add($this->createQuestion());
-        $this->repository->updateQuestionAnswer($questionId, 42, 1);
+        $this->repository->updateQuestionAnswer($questionId, 42, 1, 'en');
 
         $this->assertTrue($this->repository->reopen($questionId));
         $this->assertSame(0, $this->repository->getAll('en')[0]['answer_id']);

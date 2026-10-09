@@ -225,18 +225,21 @@ readonly class QuestionRepository
      * @param int $openQuestionId Question ID
      * @param int $faqId FAQ ID
      * @param int $categoryId Category ID
+     * @param string $language Language code
      */
-    public function updateQuestionAnswer(int $openQuestionId, int $faqId, int $categoryId): bool
+    public function updateQuestionAnswer(int $openQuestionId, int $faqId, int $categoryId, string $language): bool
     {
+        $db = $this->configuration->getDb();
         $query = sprintf(
-            'UPDATE %sfaqquestions SET answer_id = %d, category_id= %d WHERE id= %d',
+            "UPDATE %sfaqquestions SET answer_id = %d, category_id = %d WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
             $categoryId,
             $openQuestionId,
+            $db->escape($language),
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $db->query($query);
     }
 
     /**
