@@ -874,8 +874,10 @@ class Wrapper extends TCPDF
      * (disallowed host, no allowlist, failed fetch, non-raster data) is removed
      * from the HTML instead of being handed to TCPDF: its own loaders would
      * otherwise fetch the URL and follow redirects without any host check.
-     * Local references without a host are left untouched and resolved against
-     * the content directory by the Image()/ImageSVG()/ImageEps() overrides.
+     * Local references without a host, and absolute URLs pointing at this
+     * installation's own host, are left untouched and resolved against the
+     * content directory by the Image()/ImageSVG()/ImageEps() overrides, so the
+     * server never opens a connection to itself.
      *
      * @param string $html The HTML content to process
      * @return string The processed HTML content with external images converted to base64
@@ -883,12 +885,13 @@ class Wrapper extends TCPDF
     public function convertExternalImagesToBase64(string $html): string
     {
         $allowedHosts = $this->config instanceof Configuration ? $this->config->getAllowedMediaHosts() : [];
+        $ownHost = $this->getOwnHost();
 
         // Pattern to match img tags with src attributes
         $pattern = '/<img\s+[^>]*src\s*=\s*["\']([^"\']+)["\'][^>]*>/i';
         return preg_replace_callback(
             $pattern,
-            function (array $matches) use ($allowedHosts): string {
+            function (array $matches) use ($allowedHosts, $ownHost): string {
                 $fullMatch = $matches[0];
                 // Decode entities so the URL we check is the URL that would be fetched
                 $imageUrl = html_entity_decode(trim($matches[1]), ENT_QUOTES | ENT_HTML5, encoding: 'UTF-8');
@@ -899,8 +902,14 @@ class Wrapper extends TCPDF
                     return $fullMatch; // Local reference, resolved by the image loaders
                 }
 
-                // Check if the host is in the allowed list
-                if (!$this->isHostAllowed($parsedUrl['host'], $allowedHosts)) {
+                // Images on our own host (e.g. uploaded via the editor) are read
+                // from the content directory, never requested over the network.
+                if ($ownHost !== null && $this->normalizeHost($parsedUrl['host']) === $ownHost) {
+                    return $fullMatch;
+                }
+
+                // Check if the origin (scheme, host and port) is in the allowed list
+                if (!$this->isOriginAllowed($parsedUrl, $allowedHosts)) {
                     return ''; // Neutralize images from hosts outside the policy
                 }
 
@@ -945,7 +954,8 @@ class Wrapper extends TCPDF
      * Checks whether a host is covered by the configured media host allowlist.
      *
      * Matches an exact hostname or any subdomain of an allowed host. Empty
-     * entries and the disabled sentinel "0" are ignored.
+     * entries and the disabled sentinel "0" are ignored, and so is an optional
+     * ":port" suffix on an entry (see isOriginAllowed() for the port policy).
      *
      * @param string   $host         The hostname to check
      * @param string[] $allowedHosts The configured allowlist
@@ -953,24 +963,226 @@ class Wrapper extends TCPDF
      */
     private function isHostAllowed(string $host, array $allowedHosts): bool
     {
-        $host = strtolower(trim($host));
-        if ($host === '') {
+        return $this->findAllowedEntry($host, $allowedHosts) !== null;
+    }
+
+    /**
+     * Checks whether a parsed URL may be fetched under the media host policy:
+     * HTTP(S) only, the host must be allowlisted, and the port must be the
+     * scheme default unless the matching allowlist entry names that port
+     * ("host:port"). Without the port rule an allowlisted host would expose
+     * every service listening on that machine to server-side requests.
+     *
+     * @param array<string, mixed> $parsedUrl    Result of parse_url()
+     * @param string[]             $allowedHosts The configured allowlist
+     */
+    private function isOriginAllowed(array $parsedUrl, array $allowedHosts): bool
+    {
+        if (!isset($parsedUrl['host'])) {
             return false;
         }
 
+        $scheme = strtolower((string) ($parsedUrl['scheme'] ?? 'http'));
+        if ($scheme !== 'http' && $scheme !== 'https') {
+            return false;
+        }
+
+        $entry = $this->findAllowedEntry((string) $parsedUrl['host'], $allowedHosts);
+        if ($entry === null) {
+            return false;
+        }
+
+        $defaultPort = $scheme === 'https' ? 443 : 80;
+        $port = isset($parsedUrl['port']) ? (int) $parsedUrl['port'] : $defaultPort;
+
+        return $port === ($entry['port'] ?? $defaultPort);
+    }
+
+    /**
+     * Finds the allowlist entry covering the given host.
+     *
+     * @param string[] $allowedHosts The configured allowlist
+     * @return array{host: string, port: int|null}|null The matching entry, or null
+     */
+    private function findAllowedEntry(string $host, array $allowedHosts): ?array
+    {
+        $host = $this->normalizeHost($host);
+        if ($host === '') {
+            return null;
+        }
+
         foreach ($allowedHosts as $allowedHost) {
-            $allowedHost = strtolower(trim($allowedHost));
-            if ($allowedHost === '' || $allowedHost === '0') {
+            $entry = $this->parseAllowedEntry((string) $allowedHost);
+            if ($entry === null) {
                 continue;
             }
 
             // Allow exact match or subdomain match
-            if ($host === $allowedHost || str_ends_with($host, '.' . $allowedHost)) {
-                return true;
+            if ($host === $entry['host'] || str_ends_with($host, '.' . $entry['host'])) {
+                return $entry;
             }
         }
 
-        return false;
+        return null;
+    }
+
+    /**
+     * Parses one allowlist entry ("host", "host:port" or "[v6]:port") into its
+     * host and optional port. Empty entries and the disabled sentinel "0" yield null.
+     *
+     * @return array{host: string, port: int|null}|null
+     */
+    private function parseAllowedEntry(string $entry): ?array
+    {
+        $entry = strtolower(trim($entry));
+        if ($entry === '' || $entry === '0') {
+            return null;
+        }
+
+        $port = null;
+        if (preg_match('/^(\[[0-9a-f:.]+\]|[^:\[\]]+):(\d{1,5})$/', $entry, $matches)) {
+            $entry = $matches[1];
+            $port = (int) $matches[2];
+            if ($port < 1 || $port > 65535) {
+                return null;
+            }
+        }
+
+        $host = $this->normalizeHost($entry);
+
+        return $host === '' ? null : ['host' => $host, 'port' => $port];
+    }
+
+    /**
+     * Lower-cases a host and strips the brackets of an IPv6 literal, so that
+     * "[::1]" from parse_url() and "::1" from configuration compare equal.
+     */
+    private function normalizeHost(string $host): string
+    {
+        $host = strtolower(trim($host));
+        if (str_starts_with($host, '[') && str_ends_with($host, ']')) {
+            $host = substr($host, 1, -1);
+        }
+
+        return rtrim($host, '.');
+    }
+
+    /**
+     * Returns the host of this installation's reference URL, or null if unknown.
+     */
+    private function getOwnHost(): ?string
+    {
+        if (!$this->config instanceof Configuration) {
+            return null;
+        }
+
+        $host = parse_url($this->config->getDefaultUrl(), PHP_URL_HOST);
+        if (!is_string($host) || $host === '') {
+            return null;
+        }
+
+        $host = $this->normalizeHost($host);
+
+        return $host === '' ? null : $host;
+    }
+
+    /**
+     * Resolves a host name to the IP address the fetcher may connect to.
+     *
+     * Every address the name resolves to must be a routable unicast address:
+     * loopback, link-local (cloud metadata endpoints), unspecified, multicast
+     * and other reserved ranges are refused, even for an allowlisted host.
+     * RFC 1918 / ULA private ranges stay allowed because intranet image hosts
+     * are a legitimate configuration; the port policy limits their exposure.
+     *
+     * @return string|null The vetted IP address, or null if the host must not be contacted
+     */
+    private function resolveSafeAddress(string $host): ?string
+    {
+        $host = $this->normalizeHost($host);
+        if ($host === '') {
+            return null;
+        }
+
+        if (filter_var($host, FILTER_VALIDATE_IP) !== false) {
+            return $this->isRoutableAddress($host) ? $host : null;
+        }
+
+        $addresses = [];
+        $ipv4 = gethostbynamel($host);
+        if (is_array($ipv4)) {
+            $addresses = $ipv4;
+        }
+
+        // dns_get_record() warns on resolver failures; phpMyFAQ turns warnings
+        // into exceptions globally, and an unresolvable host is simply skipped.
+        set_error_handler(static fn(): bool => true, E_WARNING);
+        try {
+            $records = dns_get_record($host, DNS_AAAA);
+        } finally {
+            restore_error_handler();
+        }
+
+        if (is_array($records)) {
+            foreach ($records as $record) {
+                $ipv6 = $record['ipv6'] ?? null;
+                if (is_string($ipv6)) {
+                    $addresses[] = $ipv6;
+                }
+            }
+        }
+
+        $addresses = array_values(array_unique($addresses));
+        if ($addresses === []) {
+            return null;
+        }
+
+        foreach ($addresses as $address) {
+            if (!$this->isRoutableAddress($address)) {
+                return null;
+            }
+        }
+
+        return $addresses[0];
+    }
+
+    /**
+     * Tells whether an IP address is a routable unicast address outside the
+     * loopback, link-local, unspecified, multicast and reserved ranges.
+     */
+    private function isRoutableAddress(string $address): bool
+    {
+        if (filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE) === false) {
+            return false;
+        }
+
+        if (filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
+            $firstOctet = (int) explode('.', $address)[0];
+
+            // 224.0.0.0/4 multicast, 255.255.255.255 broadcast
+            return $firstOctet < 224;
+        }
+
+        $packed = inet_pton($address);
+        if ($packed === false || strlen($packed) !== 16) {
+            return false;
+        }
+
+        // ff00::/8 multicast
+        if (ord($packed[0]) === 0xff) {
+            return false;
+        }
+
+        // IPv4-mapped (::ffff:a.b.c.d) and IPv4-compatible (::a.b.c.d) addresses
+        // must satisfy the IPv4 policy for the embedded address.
+        $prefix = substr($packed, 0, 12);
+        if ($prefix === "\0\0\0\0\0\0\0\0\0\0\xff\xff" || $prefix === "\0\0\0\0\0\0\0\0\0\0\0\0") {
+            $embedded = inet_ntop(substr($packed, 12, 4));
+
+            return $embedded !== false && $this->isRoutableAddress($embedded);
+        }
+
+        return true;
     }
 
     /**
@@ -978,6 +1190,11 @@ class Wrapper extends TCPDF
      * host allowlist is re-applied to every redirect destination. Delegating
      * redirects to the PHP stream wrapper would let an allowed origin redirect
      * the server-side request to a disallowed host (SSRF, CWE-918).
+     *
+     * Each hop is resolved first and the connection is opened to the vetted IP
+     * address (with the original host in the Host header and TLS SNI), so a DNS
+     * answer that changes between the check and the connect cannot redirect
+     * the request to an internal destination.
      *
      * @param string   $url          The image URL to fetch
      * @param string[] $allowedHosts The configured allowlist
@@ -987,6 +1204,7 @@ class Wrapper extends TCPDF
     {
         $maxRedirects = 3;
         $currentUrl = $url;
+        $ownHost = $this->getOwnHost();
 
         for ($hop = 0; $hop <= $maxRedirects; ++$hop) {
             $parsedUrl = parse_url($currentUrl);
@@ -1000,16 +1218,40 @@ class Wrapper extends TCPDF
                 return false;
             }
 
-            // Re-apply the allowlist to the current hop, not just the first URL.
-            if (!$this->isHostAllowed($parsedUrl['host'], $allowedHosts)) {
+            $host = $this->normalizeHost($parsedUrl['host']);
+
+            // Our own host is only ever read from disk, never contacted.
+            if ($ownHost !== null && $host === $ownHost) {
                 return false;
             }
+
+            // Re-apply the allowlist to the current hop, not just the first URL.
+            if (!$this->isOriginAllowed($parsedUrl, $allowedHosts)) {
+                return false;
+            }
+
+            $address = $this->resolveSafeAddress($host);
+            if ($address === null) {
+                return false;
+            }
+
+            $port = isset($parsedUrl['port']) ? (int) $parsedUrl['port'] : null;
+            $hostHeader = $parsedUrl['host'] . ($port !== null ? ':' . $port : '');
+            $connectHost = str_contains($address, ':') ? '[' . $address . ']' : $address;
+            $connectUrl =
+                $scheme
+                . '://'
+                . $connectHost
+                . ($port !== null ? ':' . $port : '')
+                . ($parsedUrl['path'] ?? '/')
+                . (isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '');
 
             $context = stream_context_create([
                 'http' => [
                     'method' => 'GET',
                     'timeout' => 10, // 10-second timeout
                     'user_agent' => 'phpMyFAQ PDF Generator/1.0',
+                    'header' => 'Host: ' . $hostHeader,
                     'follow_location' => 0, // do not let the wrapper follow redirects
                     'max_redirects' => 1,
                     'ignore_errors' => true, // read the body of 3xx/4xx responses
@@ -1017,6 +1259,7 @@ class Wrapper extends TCPDF
                 'ssl' => [
                     'verify_peer' => true,
                     'verify_peer_name' => true,
+                    'peer_name' => $host,
                 ],
             ]);
 
@@ -1033,7 +1276,7 @@ class Wrapper extends TCPDF
             }
 
             $responseHeaders = [];
-            $body = @file_get_contents($currentUrl, use_include_path: false, context: $context);
+            $body = @file_get_contents($connectUrl, use_include_path: false, context: $context);
 
             if (function_exists('http_get_last_response_headers')) {
                 // PHP 8.5+: replaces the deprecated predefined variable.

@@ -81,6 +81,21 @@ class FaqHelperTest extends TestCase
         $this->assertEquals($expectedOutput, $actualOutput);
     }
 
+    public function testCleanUpContentAcceptsAllowedHostEntriesWithPortSuffix(): void
+    {
+        $this->configuration->set('records.allowedMediaHosts', 'cdn.example:8080,[2001:db8::1]:8443');
+        $content =
+            '<p><img src="https://cdn.example:8080/a.png" />'
+            . '<img src="https://[2001:db8::1]:8443/b.png" />'
+            . '<img src="https://other.example/c.png" /></p>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
+        $this->assertStringContainsString('src="https://cdn.example:8080/a.png"', $actualOutput);
+        $this->assertStringContainsString('src="https://[2001:db8::1]:8443/b.png"', $actualOutput);
+        $this->assertStringNotContainsString('other.example', $actualOutput);
+    }
+
     public function testCleanUpContentWithUmlauts(): void
     {
         $content = '<p>Hellö, wörld!</p>';
@@ -306,8 +321,7 @@ class FaqHelperTest extends TestCase
         $question = 'How can I create an account?';
 
         $content = 'See <a href="http://example.org/index.php?action&#61;faq&amp;cat&#61;7&amp;id&#61;42">this link</a>';
-        $expected =
-            'See <a href="https://localhost:443/content/7/42/en/how-can-i-create-an-account.html">this link</a>';
+        $expected = 'See <a href="https://localhost:443/content/7/42/en/how-can-i-create-an-account.html">this link</a>';
 
         $this->assertEquals($expected, $this->faqHelper->convertOldInternalLinks($question, $content));
     }

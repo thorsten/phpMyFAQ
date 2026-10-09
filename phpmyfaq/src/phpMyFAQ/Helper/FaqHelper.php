@@ -154,7 +154,14 @@ class FaqHelper extends AbstractHelper
     public function cleanUpContent(string $content): string
     {
         $contentLength = strlen($content);
-        $allowedHosts = $this->configuration->getAllowedMediaHosts();
+        // An allowlist entry may carry a ":port" suffix for the server-side PDF
+        // image fetcher; the browser-side sanitizer matches host names only.
+        $allowedHosts = array_map(
+            static fn(string $host): string => (
+                preg_replace('/^(\[[0-9a-f:.]+\]|[^:\[\]]+):\d{1,5}$/i', replacement: '$1', subject: trim($host)) ?? ''
+            ),
+            $this->configuration->getAllowedMediaHosts(),
+        );
         $allowedHosts[] = Request::createFromGlobals()->getHost();
         $htmlSanitizer = new HtmlSanitizer(
             (new HtmlSanitizerConfig())

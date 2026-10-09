@@ -628,6 +628,7 @@ class WrapperTest extends TestCase
     private function spyOnHttpRequests(callable $callback): array
     {
         HttpSpyStreamWrapper::$requests = [];
+        HttpSpyStreamWrapper::$contexts = [];
         stream_wrapper_unregister('http');
         stream_wrapper_register('http', HttpSpyStreamWrapper::class);
 
@@ -680,13 +681,13 @@ class WrapperTest extends TestCase
     public function testConvertExternalImagesStripsAllowedImageThatCannotBeFetched(): void
     {
         $config = $this->createStub(Configuration::class);
-        $config->method('getAllowedMediaHosts')->willReturn(['127.0.0.1']);
+        $config->method('getAllowedMediaHosts')->willReturn(['203.0.113.10']);
         $this->wrapper->setConfig($config);
 
         $result = null;
         $requests = $this->spyOnHttpRequests(function () use (&$result): void {
             $result = $this->wrapper->convertExternalImagesToBase64(
-                '<img src="http://127.0.0.1/redirect.svg"><img src="http://127.0.0.1/redirect.png">',
+                '<img src="http://203.0.113.10/redirect.svg"><img src="http://203.0.113.10/redirect.png">',
             );
         });
 
@@ -695,8 +696,206 @@ class WrapperTest extends TestCase
         $this->assertEquals('', $result);
         $this->assertNotEmpty($requests);
         foreach ($requests as $url) {
-            $this->assertStringStartsWith('http://127.0.0.1/', $url);
+            $this->assertStringStartsWith('http://203.0.113.10/', $url);
         }
+    }
+
+    public function testFetchPinsConnectionToVettedAddressAndSendsHostHeader(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['203.0.113.10:8080']);
+        $this->wrapper->setConfig($config);
+
+        $requests = $this->spyOnHttpRequests(function (): void {
+            $this->wrapper->convertExternalImagesToBase64('<img src="http://203.0.113.10:8080/a/b.png?x=1">');
+        });
+
+        $this->assertSame(['http://203.0.113.10:8080/a/b.png?x=1'], $requests);
+        $this->assertCount(1, HttpSpyStreamWrapper::$contexts);
+        $http = HttpSpyStreamWrapper::$contexts[0]['http'] ?? [];
+        $this->assertSame('Host: 203.0.113.10:8080', $http['header'] ?? null);
+        $this->assertSame(0, $http['follow_location'] ?? null);
+        $this->assertSame('203.0.113.10', HttpSpyStreamWrapper::$contexts[0]['ssl']['peer_name'] ?? null);
+    }
+
+    public function testConvertExternalImagesNeverContactsLoopbackEvenWhenAllowlisted(): void
+    {
+        // The reported scenario: "localhost" is on the allowlist and an editor
+        // points an image at a loopback-only service on another port.
+        $config = $this->createStub(Configuration::class);
+        $config
+            ->method('getAllowedMediaHosts')
+            ->willReturn([
+                'localhost',
+                '127.0.0.1',
+                '::1',
+                '[::1]:9321',
+                '0.0.0.0',
+                'localhost:9321',
+                '127.0.0.1:9321',
+            ]);
+        $this->wrapper->setConfig($config);
+
+        $html =
+            '<p>a</p>'
+            . '<img src="http://localhost:9321/internal-secret.png">'
+            . '<img src="http://localhost/internal-secret.png">'
+            . '<img src="http://127.0.0.1:9321/internal-secret.png">'
+            . '<img src="http://127.0.0.1/internal-secret.png">'
+            . '<img src="http://127.1.2.3/internal-secret.png">'
+            . '<img src="http://[::1]:9321/internal-secret.png">'
+            . '<img src="http://[::ffff:127.0.0.1]/internal-secret.png">'
+            . '<img src="http://0.0.0.0:9321/internal-secret.png">'
+            . '<p>b</p>';
+
+        $result = null;
+        $requests = $this->spyOnHttpRequests(function () use (&$result, $html): void {
+            $result = $this->wrapper->convertExternalImagesToBase64($html);
+        });
+
+        $this->assertSame('<p>a</p><p>b</p>', $result);
+        $this->assertSame([], $requests);
+    }
+
+    public function testConvertExternalImagesNeverContactsLinkLocalOrReservedRanges(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['169.254.169.254', '224.0.0.1', 'fe80::1', '240.0.0.1']);
+        $this->wrapper->setConfig($config);
+
+        $html =
+            '<img src="http://169.254.169.254/latest/meta-data/x.png">'
+            . '<img src="http://224.0.0.1/x.png">'
+            . '<img src="http://[fe80::1]/x.png">'
+            . '<img src="http://240.0.0.1/x.png">';
+
+        $result = null;
+        $requests = $this->spyOnHttpRequests(function () use (&$result, $html): void {
+            $result = $this->wrapper->convertExternalImagesToBase64($html);
+        });
+
+        $this->assertSame('', $result);
+        $this->assertSame([], $requests);
+    }
+
+    public function testConvertExternalImagesOnlyAllowsDefaultPortUnlessEntryNamesOne(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['203.0.113.10', '203.0.113.20:8080']);
+        $this->wrapper->setConfig($config);
+
+        $html =
+            '<img src="http://203.0.113.10:9321/x.png">' // bare entry: non-default port refused
+            . '<img src="https://203.0.113.10:80/x.png">' // https on port 80 is not the default
+            . '<img src="http://203.0.113.20/x.png">' // entry names 8080: default port refused
+            . '<img src="http://203.0.113.20:8081/x.png">'
+            . '<img src="http://203.0.113.10:80/x.png">' // explicit default port is fine
+            . '<img src="http://203.0.113.20:8080/x.png">';
+
+        $requests = $this->spyOnHttpRequests(function () use ($html): void {
+            $this->wrapper->convertExternalImagesToBase64($html);
+        });
+
+        $this->assertSame(['http://203.0.113.10:80/x.png', 'http://203.0.113.20:8080/x.png'], $requests);
+    }
+
+    public function testConvertExternalImagesKeepsOwnHostAsLocalReference(): void
+    {
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['faq.example.org']);
+        $config->method('getDefaultUrl')->willReturn('https://FAQ.example.org/');
+        $this->wrapper->setConfig($config);
+
+        // Uploaded images carry the absolute reference URL; they are served from
+        // the content directory and never requested over the network, not even
+        // when the own host is allowlisted or another port is given.
+        $html =
+            '<img src="https://faq.example.org/content/user/images/a.png">'
+            . '<img src="http://faq.example.org:9321/internal-secret.png">';
+
+        $result = null;
+        $requests = $this->spyOnHttpRequests(function () use (&$result, $html): void {
+            $result = $this->wrapper->convertExternalImagesToBase64($html);
+        });
+
+        $this->assertSame($html, $result);
+        $this->assertSame([], $requests);
+    }
+
+    public function testWriteHtmlNeverFetchesOwnHostImages(): void
+    {
+        $this->preparePage(['localhost']);
+
+        $requests = $this->spyOnHttpRequests(function (): void {
+            $this->wrapper->WriteHTML(
+                '<img src="https://localhost/content/user/images/missing.png" width="10" height="10">'
+                . '<img src="http://localhost:9321/internal-secret.png" width="10" height="10">',
+            );
+        });
+
+        $this->assertSame([], $requests);
+        $this->assertGreaterThanOrEqual(1, $this->wrapper->getNumPages());
+    }
+
+    public function testIsOriginAllowedAppliesPortPolicy(): void
+    {
+        $allowed = ['cdn.test', 'img.test:8080', '[2001:db8::1]:8443', ' 0 ', ''];
+
+        $this->assertTrue($this->invokePrivate('isOriginAllowed', parse_url('http://cdn.test/x'), $allowed));
+        $this->assertTrue($this->invokePrivate('isOriginAllowed', parse_url('https://cdn.test:443/x'), $allowed));
+        $this->assertTrue($this->invokePrivate('isOriginAllowed', parse_url('http://sub.cdn.test:80/x'), $allowed));
+        $this->assertFalse($this->invokePrivate('isOriginAllowed', parse_url('http://cdn.test:8080/x'), $allowed));
+        $this->assertFalse($this->invokePrivate('isOriginAllowed', parse_url('https://cdn.test:80/x'), $allowed));
+        $this->assertFalse($this->invokePrivate('isOriginAllowed', parse_url('ftp://cdn.test/x'), $allowed));
+
+        $this->assertTrue($this->invokePrivate('isOriginAllowed', parse_url('http://img.test:8080/x'), $allowed));
+        $this->assertFalse($this->invokePrivate('isOriginAllowed', parse_url('http://img.test/x'), $allowed));
+
+        $this->assertTrue($this->invokePrivate('isOriginAllowed', parse_url('https://[2001:db8::1]:8443/x'), $allowed));
+        $this->assertFalse($this->invokePrivate('isOriginAllowed', parse_url('https://[2001:db8::1]/x'), $allowed));
+    }
+
+    public function testIsHostAllowedIgnoresPortSuffixOfEntries(): void
+    {
+        $this->assertTrue($this->invokePrivate('isHostAllowed', 'img.test', ['img.test:8080']));
+        $this->assertTrue($this->invokePrivate('isHostAllowed', '[::1]', ['::1']));
+        $this->assertTrue($this->invokePrivate('isHostAllowed', '::1', ['[::1]:9321']));
+        $this->assertFalse($this->invokePrivate('isHostAllowed', 'img.test', ['img.test:99999']));
+    }
+
+    public function testResolveSafeAddressRefusesNonRoutableDestinations(): void
+    {
+        foreach ([
+            'localhost',
+            '127.0.0.1',
+            '127.255.255.254',
+            '0.0.0.0',
+            '169.254.169.254',
+            '224.0.0.1',
+            '255.255.255.255',
+            '240.0.0.1',
+            '::1',
+            '[::1]',
+            '::',
+            '::ffff:127.0.0.1',
+            '::ffff:169.254.169.254',
+            '::127.0.0.1',
+            'fe80::1',
+            'ff02::1',
+            '',
+        ] as $host) {
+            $this->assertNull($this->invokePrivate('resolveSafeAddress', $host), $host . ' must not be contacted');
+        }
+    }
+
+    public function testResolveSafeAddressKeepsRoutableAndPrivateDestinations(): void
+    {
+        // Intranet image hosts are a legitimate configuration, so RFC 1918 / ULA stay allowed.
+        foreach (['203.0.113.10', '10.0.0.5', '172.16.0.5', '192.168.1.5', '2001:db8::1', 'fd00::1'] as $host) {
+            $this->assertSame($host, $this->invokePrivate('resolveSafeAddress', $host));
+        }
+
+        $this->assertSame('203.0.113.10', $this->invokePrivate('resolveSafeAddress', '[203.0.113.10]'));
     }
 
     public function testConvertExternalImagesDecodesEntitiesBeforeApplyingPolicy(): void
@@ -775,7 +974,7 @@ class WrapperTest extends TestCase
 
     public function testWriteHtmlNeverFetchesVectorImageUrls(): void
     {
-        $this->preparePage(['127.0.0.1']);
+        $this->preparePage(['203.0.113.10']);
 
         $nestedSvg =
             '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" '
@@ -790,9 +989,10 @@ class WrapperTest extends TestCase
             . '<img src="http://localhost/direct.svg" width="10" height="10">'
             . '<img src="http://localhost/direct.eps" width="10" height="10">'
             . '<img src="http://localhost/direct.ai" width="10" height="10">'
-            . '<img src="http://127.0.0.1/redirect.svg" width="10" height="10">'
-            . '<img src="http://127.0.0.1/redirect.eps" width="10" height="10">'
-            . '<img src="http://127.0.0.1/redirect.ai" width="10" height="10">'
+            . '<img src="http://203.0.113.10/redirect.svg" width="10" height="10">'
+            . '<img src="http://203.0.113.10/redirect.eps" width="10" height="10">'
+            . '<img src="http://203.0.113.10/redirect.ai" width="10" height="10">'
+            . '<img src="http://127.0.0.1/loopback.png" width="10" height="10">'
             . '<img src="'
             . $this->inlineSvg($nestedSvg)
             . '" width="10" height="10">'
@@ -807,7 +1007,7 @@ class WrapperTest extends TestCase
         // disallowed host must never be contacted, directly, via redirect or
         // via a nested SVG resource.
         foreach ($requests as $url) {
-            $this->assertStringStartsWith('http://127.0.0.1/', $url, 'Unexpected request to ' . $url);
+            $this->assertStringStartsWith('http://203.0.113.10/', $url, 'Unexpected request to ' . $url);
         }
 
         $this->assertGreaterThanOrEqual(1, $this->wrapper->getNumPages(), 'WriteHTML must still render the page');
@@ -836,12 +1036,16 @@ final class HttpSpyStreamWrapper
     /** @var string[] */
     public static array $requests = [];
 
+    /** @var array<int, array<string, array<string, mixed>>> */
+    public static array $contexts = [];
+
     /** @var resource|null */
     public $context;
 
     public function stream_open(string $path, string $mode, int $options, ?string &$openedPath): bool
     {
         self::$requests[] = $path;
+        self::$contexts[] = is_resource($this->context) ? stream_context_get_options($this->context) : [];
 
         return false;
     }
