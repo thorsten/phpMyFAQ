@@ -25,6 +25,25 @@ use Symfony\Component\HttpFoundation\Response;
 #[UsesNamespace('phpMyFAQ')]
 final class FaqControllerValidationTest extends ApiControllerTestCase
 {
+    /**
+     * Builds the array a visible open question is represented by, as returned by Question::get().
+     *
+     * @return array<string, int|string>
+     */
+    private function openQuestion(int $questionId, string $isVisible = 'Y'): array
+    {
+        return [
+            'id' => $questionId,
+            'lang' => 'en',
+            'username' => 'Asking User',
+            'email' => 'asker@example.com',
+            'category_id' => 1,
+            'question' => 'An open question?',
+            'created' => '20260101000000',
+            'is_visible' => $isVisible,
+        ];
+    }
+
     private function seedCategory(int $categoryId = 1): void
     {
         $query = sprintf(
@@ -482,6 +501,7 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
             });
 
         $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('get')->with(55)->willReturn($this->openQuestion(55));
         $question->expects($this->once())->method('delete')->with(55);
         $question->expects($this->never())->method('updateQuestionAnswer');
 
@@ -567,6 +587,7 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
             });
 
         $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('get')->with(77)->willReturn($this->openQuestion(77));
         $question->expects($this->never())->method('delete');
         $question->expects($this->once())->method('updateQuestionAnswer')->with(77, 126, 1);
 
@@ -653,6 +674,7 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
             });
 
         $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('get')->with(99)->willReturn($this->openQuestion(99));
         $question->expects($this->never())->method('delete');
         $question->expects($this->once())->method('updateQuestionAnswer')->with(99, 128, 1);
 
@@ -719,5 +741,170 @@ final class FaqControllerValidationTest extends ApiControllerTestCase
         self::assertSame(128, $events[0]['faq_id']);
         self::assertSame(-1, $events[0]['user_id']);
         self::assertSame('Guest Author', $events[0]['username']);
+    }
+
+    public function testCreateDoesNotActOnHiddenOpenQuestion(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'records.allowNewFaqsForGuests' => '1',
+            'records.defaultActivation' => false,
+            // Even with the destructive delete sink enabled, a hidden question must be untouched.
+            'records.enableDeleteQuestion' => true,
+            'security.permLevel' => 'basic',
+            'spam.enableCaptchaCode' => false,
+        ]);
+        $this->seedCategory();
+
+        $faq = $this->createMock(Faq::class);
+        $faq
+            ->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static function ($entity) {
+                $entity->setId(130);
+                return $entity;
+            });
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('get')->with(66)->willReturn($this->openQuestion(66, 'N'));
+        $question->expects($this->never())->method('delete');
+        $question->expects($this->never())->method('updateQuestionAnswer');
+
+        $stopWords = $this->createStub(StopWords::class);
+        $stopWords->method('checkBannedWord')->willReturn(true);
+
+        $userSession = $this->createMock(UserSession::class);
+        $userSession->expects($this->once())->method('setCurrentUser')->willReturnSelf();
+        $userSession->expects($this->once())->method('userTracking')->with('save_new_entry', 0);
+
+        $categoryHelper = $this->createMock(CategoryHelper::class);
+        $categoryHelper->expects($this->once())->method('setCategory')->willReturnSelf();
+        $categoryHelper->expects($this->once())->method('setConfiguration')->willReturnSelf();
+        $categoryHelper->expects($this->once())->method('getModerators')->with([1])->willReturn([]);
+
+        $notification = $this->createMock(Notification::class);
+        $notification->expects($this->once())->method('sendNewFaqAdded')->with([], $this->anything());
+
+        $language = $this->createStub(Language::class);
+        $language->method('setLanguageFromConfiguration')->willReturn('en');
+        $language->method('setLanguageWithDetection')->willReturn('en');
+
+        $questionHistory = new QuestionHistoryRepository($this->configuration);
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(FaqHelper::class),
+            $question,
+            $stopWords,
+            $userSession,
+            $language,
+            $categoryHelper,
+            $notification,
+            $questionHistory,
+        );
+        $currentUser = $this->createAuthenticatedUserMock();
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
+        $this->injectControllerState($controller, $currentUser, $this->createSession());
+
+        $request = Request::create('/api/faq/create', 'POST', content: json_encode([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'question' => 'Question referencing a hidden item?',
+            'answer' => 'Answer',
+            'keywords' => 'test',
+            'rubrik' => [1],
+            'openQuestionID' => 66,
+            'captcha' => 'ignored-for-logged-in-user',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        // The FAQ itself is still created, but the hidden question is left untouched
+        // and no answered history entry is forged against it.
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+        self::assertCount(0, $questionHistory->getByQuestion(66, 'en'));
+    }
+
+    public function testCreateDoesNotActOnNonExistentOpenQuestion(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'records.allowNewFaqsForGuests' => '1',
+            'records.defaultActivation' => false,
+            'records.enableDeleteQuestion' => true,
+            'security.permLevel' => 'basic',
+            'spam.enableCaptchaCode' => false,
+        ]);
+        $this->seedCategory();
+
+        $faq = $this->createMock(Faq::class);
+        $faq
+            ->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static function ($entity) {
+                $entity->setId(131);
+                return $entity;
+            });
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('get')->with(4711)->willReturn([]);
+        $question->expects($this->never())->method('delete');
+        $question->expects($this->never())->method('updateQuestionAnswer');
+
+        $stopWords = $this->createStub(StopWords::class);
+        $stopWords->method('checkBannedWord')->willReturn(true);
+
+        $userSession = $this->createMock(UserSession::class);
+        $userSession->expects($this->once())->method('setCurrentUser')->willReturnSelf();
+        $userSession->expects($this->once())->method('userTracking')->with('save_new_entry', 0);
+
+        $categoryHelper = $this->createMock(CategoryHelper::class);
+        $categoryHelper->expects($this->once())->method('setCategory')->willReturnSelf();
+        $categoryHelper->expects($this->once())->method('setConfiguration')->willReturnSelf();
+        $categoryHelper->expects($this->once())->method('getModerators')->with([1])->willReturn([]);
+
+        $notification = $this->createMock(Notification::class);
+        $notification->expects($this->once())->method('sendNewFaqAdded')->with([], $this->anything());
+
+        $language = $this->createStub(Language::class);
+        $language->method('setLanguageFromConfiguration')->willReturn('en');
+        $language->method('setLanguageWithDetection')->willReturn('en');
+
+        $questionHistory = new QuestionHistoryRepository($this->configuration);
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(FaqHelper::class),
+            $question,
+            $stopWords,
+            $userSession,
+            $language,
+            $categoryHelper,
+            $notification,
+            $questionHistory,
+        );
+        $currentUser = $this->createAuthenticatedUserMock();
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
+        $this->injectControllerState($controller, $currentUser, $this->createSession());
+
+        $request = Request::create('/api/faq/create', 'POST', content: json_encode([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'question' => 'Question referencing an unknown item?',
+            'answer' => 'Answer',
+            'keywords' => 'test',
+            'rubrik' => [1],
+            'openQuestionID' => 4711,
+            'captcha' => 'ignored-for-logged-in-user',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+        self::assertCount(0, $questionHistory->getByQuestion(4711, 'en'));
     }
 }

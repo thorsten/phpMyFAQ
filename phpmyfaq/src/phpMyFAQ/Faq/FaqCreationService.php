@@ -63,18 +63,27 @@ final class FaqCreationService
         $question = '';
         $readonly = '';
         $displayFullForm = false;
+        $answerableQuestion = null;
 
-        // Load question data if a question ID is provided
+        // Load question data if a question ID is provided. The id comes from the query
+        // string of a publicly reachable page, so only the text of a question that is
+        // part of the public open-questions list (is_visible = 'Y') may be exposed.
+        // Otherwise a visitor could read the text of a hidden or unrelated question by
+        // guessing its numeric id (CWE-639, insecure direct object reference). An
+        // unanswerable id is treated as if no question had been selected.
         if ($selectedQuestion !== null) {
             $questionData = $this->question->get($selectedQuestion);
-            $question = (string) ($questionData['question'] ?? '');
-            if (Strings::strlen($question) !== 0) {
-                $readonly = ' readonly';
-            }
+            if ($questionData !== [] && ($questionData['is_visible'] ?? '') === 'Y') {
+                $answerableQuestion = $selectedQuestion;
+                $question = (string) ($questionData['question'] ?? '');
+                if (Strings::strlen($question) !== 0) {
+                    $readonly = ' readonly';
+                }
 
-            // Display full form even if the user switched off single fields because of use together with answering
-            // open questions
-            $displayFullForm = true;
+                // Display full form even if the user switched off single fields because of use together with
+                // answering open questions
+                $displayFullForm = true;
+            }
         }
 
         // Build category tree
@@ -91,7 +100,7 @@ final class FaqCreationService
             'question' => $question,
             'readonly' => $readonly,
             'displayFullForm' => $displayFullForm,
-            'selectedQuestion' => $selectedQuestion,
+            'selectedQuestion' => $answerableQuestion,
             'selectedCategory' => $selectedCategory,
             'categories' => $this->category->getCategoryTree(),
             'formData' => $formData,

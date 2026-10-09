@@ -95,6 +95,54 @@ class FaqCreationServiceTest extends TestCase
         static::assertSame(-1, $result['selectedCategory']);
     }
 
+    private function seedQuestion(int $questionId, string $isVisible, string $text = 'A pending open question?'): void
+    {
+        $query = sprintf(
+            "INSERT INTO faqquestions (id, lang, username, email, category_id, question, created, is_visible, answer_id)
+             VALUES (%d, 'en', 'Asking User', 'asker@example.com', 1, '%s', '20260101000000', '%s', 0)",
+            $questionId,
+            $this->configuration->getDb()->escape($text),
+            $isVisible,
+        );
+
+        $this->configuration->getDb()->query($query);
+    }
+
+    public function testPrepareAddFaqDataLoadsVisibleOpenQuestion(): void
+    {
+        $this->seedQuestion(4201, 'Y', 'How do I reset my password?');
+
+        $result = $this->faqService->prepareAddFaqData(4201, -1);
+
+        static::assertSame('How do I reset my password?', $result['question']);
+        static::assertSame(' readonly', $result['readonly']);
+        static::assertTrue($result['displayFullForm']);
+        static::assertSame(4201, $result['selectedQuestion']);
+    }
+
+    public function testPrepareAddFaqDataIgnoresHiddenOpenQuestion(): void
+    {
+        $this->seedQuestion(4202, 'N', 'Confidential: pending salary review');
+
+        $result = $this->faqService->prepareAddFaqData(4202, -1);
+
+        // The hidden question's text must not leak and the form must not treat it as selected.
+        static::assertSame('', $result['question']);
+        static::assertSame('', $result['readonly']);
+        static::assertFalse($result['displayFullForm']);
+        static::assertNull($result['selectedQuestion']);
+    }
+
+    public function testPrepareAddFaqDataIgnoresNonExistentOpenQuestion(): void
+    {
+        $result = $this->faqService->prepareAddFaqData(4299, -1);
+
+        static::assertSame('', $result['question']);
+        static::assertSame('', $result['readonly']);
+        static::assertFalse($result['displayFullForm']);
+        static::assertNull($result['selectedQuestion']);
+    }
+
     /**
      * @throws Exception
      */

@@ -200,7 +200,15 @@ final class FaqController extends AbstractController
             $openQuestionId = property_exists($data, 'openQuestionID')
                 ? Filter::filterVar($data->openQuestionID, FILTER_VALIDATE_INT)
                 : false;
-            if ($openQuestionId) {
+            // This endpoint is reachable by anonymous visitors when guests may add
+            // FAQs. The open question id is client supplied, so it must be validated
+            // against the public open-questions queue before it is used as the key of
+            // a write (history entry, answer link, deletion). Without this guard any
+            // visitor could rewrite or delete arbitrary questions by their numeric id,
+            // including ones deliberately hidden from the public list (CWE-639,
+            // insecure direct object reference). Only questions that exist and are
+            // visible in the public list are answerable here.
+            if ($openQuestionId && $this->isAnswerableOpenQuestion((int) $openQuestionId)) {
                 try {
                     $this->questionHistory->add(new QuestionHistoryEntity(
                         questionId: (int) $openQuestionId,
@@ -281,5 +289,20 @@ final class FaqController extends AbstractController
             !$this->configuration->get(item: 'records.allowNewFaqsForGuests')
             && !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::FAQ_ADD->value)
         );
+    }
+
+    /**
+     * Determines whether the given open question may be answered through this public endpoint.
+     *
+     * Only questions that exist in the current language and are visible in the public
+     * open-questions list (is_visible = 'Y') are answerable. This keeps the write path in
+     * line with what the public open-questions list exposes and prevents a client supplied
+     * id from targeting hidden or non-existent questions.
+     */
+    private function isAnswerableOpenQuestion(int $questionId): bool
+    {
+        $question = $this->question->get($questionId);
+
+        return $question !== [] && ($question['is_visible'] ?? '') === 'Y';
     }
 }
