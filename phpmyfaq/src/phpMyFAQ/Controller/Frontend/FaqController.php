@@ -138,10 +138,23 @@ final class FaqController extends AbstractController
             try {
                 $openQuestionId = Filter::filterVar($data->openQuestionID, FILTER_VALIDATE_INT);
                 if ($openQuestionId) {
-                    if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
-                        $question->delete($openQuestionId);
-                    } else { // adds this faq record id to the related open question
-                        $question->updateQuestionAnswer((int) $openQuestionId, (int) $recordId, (int) $categories[0]);
+                    // The open-question id is attacker-controlled, so it must be bound to a
+                    // question the caller may legitimately answer: one that exists and is
+                    // publicly visible in the current language. That is exactly the set a
+                    // visitor can reach from the public open-questions list. Without this
+                    // check a crafted id could relink or delete hidden questions (the
+                    // moderation queue, is_visible = 'N') or questions in another language.
+                    $openQuestion = $question->get((int) $openQuestionId);
+                    if ($openQuestion !== [] && ($openQuestion['is_visible'] ?? 'N') === 'Y') {
+                        if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
+                            $question->delete((int) $openQuestionId);
+                        } else { // adds this faq record id to the related open question
+                            $question->updateQuestionAnswer(
+                                (int) $openQuestionId,
+                                (int) $recordId,
+                                (int) $categories[0],
+                            );
+                        }
                     }
                 }
 
