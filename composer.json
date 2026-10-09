@@ -79,7 +79,7 @@
     "doctrine/instantiator": "~2.1.0",
     "mikey179/vfsstream": "~1.6.12",
     "phpdocumentor/reflection-docblock": "~6.0.3",
-    "phpunit/phpunit": "~13.3.0",
+    "phpunit/phpunit": "~13.4.0",
     "rector/rector": "~2.6.1",
     "symfony/browser-kit": "~8.1.0",
     "symfony/css-selector": "~8.1.0",
