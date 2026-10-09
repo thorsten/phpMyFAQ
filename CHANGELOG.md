@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.2.0-beta.2 - unreleased
+### phpMyFAQ v4.2.0-beta.2 - 2026-10-09
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
 - added official Docker images (Apache and FrankenPHP) published to the GitHub Container Registry, including nightly images, with headless installation via environment variables (Thorsten)
@@ -42,15 +42,6 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved and hardened multi tenancy support (Thorsten)
 - improved and redesigned searchable admin configuration frontend (Thorsten)
 - improved package size by removing unused dependencies (Thorsten)
-- fixed the upgrade reporting a PHP error instead of a clear message when the downloaded package cannot be opened (Thorsten)
-- fixed the update backup reporting a PHP warning instead of a clear error when the upgrade directory is missing (Thorsten)
-- fixed schema-based multi-tenant instances not creating their schema on PostgreSQL and SQL Server (Thorsten)
-- fixed the admin category form creating a duplicate category after reporting that it already exists (Thorsten)
-- fixed the report export stripping hyphens from the FAQ URLs (Thorsten)
-- fixed the statistics clean-up deleting tracking files from a different directory than it lists (Thorsten)
-- fixed a corrupt stored WebAuthn key raising a PHP warning instead of a clear login error (Thorsten)
-- fixed saving or publishing a FAQ failing with an internal server error when OpenSearch or Elasticsearch is enabled and the FAQ is not in the index yet or the search engine is unreachable (Thorsten)
-- fixed every request failing with a PHP error when the stored session data cannot be decoded, e.g. after an upgrade; the broken session is discarded instead (Thorsten)
 - updated to PHPUnit v13 (Thorsten)
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)
