@@ -38,11 +38,11 @@
     "autocompleter": "^9.3.2",
     "bootstrap": "^5.3.8",
     "bootstrap-datepicker": "^1.10.1",
-    "bootstrap-icons": "^1.13.1",
+    "bootstrap-icons": "^1.13.2",
     "chart.js": "^4.5.1",
     "choices.js": "^11.2.4",
     "highlight.js": "^11.12.0",
-    "jodit": "^4.17.1",
+    "jodit": "^4.17.3",
     "masonry-layout": "^4.2.2",
     "sortablejs": "^1.15.7",
     "vanilla-cookieconsent": "^3.1.0"
