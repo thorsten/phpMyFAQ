@@ -642,7 +642,7 @@ final class FaqController extends AbstractAdministrationController
             'isMarkdownEditorEnabled' => $this->configuration->get(item: 'main.enableMarkdownEditor'),
             'isBasicPermission' => $this->configuration->get(item: 'security.permLevel') === 'basic',
             'defaultUrl' => $this->configuration->getDefaultUrl(),
-            'canBeNewRevision' => !$this->configuration->get(item: 'records.enableAutoRevisions'),
+            'canBeNewRevision' => (bool) $this->configuration->get(item: 'records.enableAutoRevisions'),
             'maxAttachmentSize' => $this->configuration->get(item: 'records.maxAttachmentSize'),
             'hasPermissionForAddAttachments' => $canAddAttachments,
             'hasPermissionForDeleteAttachments' => $canDeleteAttachments,

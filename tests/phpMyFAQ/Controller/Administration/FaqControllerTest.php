@@ -2,15 +2,19 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Session\Token;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionProperty;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -19,8 +23,29 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 #[AllowMockObjectsWithoutExpectations]
 class FaqControllerTest extends TestCase
 {
-    private function buildController(Session $session, CurrentUser $actingUser): FaqController
+    protected function setUp(): void
     {
+        (new ReflectionProperty(Token::class, 'instance'))->setValue(null, null);
+        $_COOKIE = [];
+
+        Translation::create()
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('en')
+            ->setMultiByteLanguage();
+    }
+
+    protected function tearDown(): void
+    {
+        (new ReflectionProperty(Token::class, 'instance'))->setValue(null, null);
+        $_COOKIE = [];
+    }
+
+    private function buildController(
+        Session $session,
+        CurrentUser $actingUser,
+        ?Configuration $configuration = null,
+    ): FaqController {
         $controller = (new ReflectionClass(FaqController::class))->newInstanceWithoutConstructor();
 
         $container = $this->createMock(ContainerBuilder::class);
@@ -38,6 +63,9 @@ class FaqControllerTest extends TestCase
 
         $parent->getProperty('container')->setValue($controller, $container);
         $parent->getProperty('currentUser')->setValue($controller, $actingUser);
+        if ($configuration !== null) {
+            $parent->getProperty('configuration')->setValue($controller, $configuration);
+        }
 
         return $controller;
     }
@@ -176,5 +204,44 @@ class FaqControllerTest extends TestCase
 
         static::assertArrayHasKey('comment', $normalized);
         static::assertNull($normalized['comment']);
+    }
+
+    /**
+     * The "Create new revision?" radio buttons are the only way to create a FAQ revision, and the
+     * update endpoint only honours them while 'records.enableAutoRevisions' is enabled. The editor
+     * showed them in exactly the opposite case, so with versioning enabled the option was hidden and
+     * no revision could ever be created, while with versioning disabled choosing "yes" did nothing.
+     */
+    #[DataProvider('autoRevisionsProvider')]
+    public function testCanBeNewRevisionFollowsTheVersioningSetting(bool $enabled): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'records.enableAutoRevisions' => $enabled,
+                default => null,
+            });
+
+        $controller = $this->buildController(
+            new Session(new MockArraySessionStorage()),
+            $this->userHolding([PermissionType::FAQ_EDIT]),
+            $configuration,
+        );
+
+        $templateVars = (new ReflectionMethod(FaqController::class, 'getBaseTemplateVars'))->invoke($controller);
+
+        static::assertSame($enabled, $templateVars['canBeNewRevision']);
+    }
+
+    /**
+     * @return array<string, array{bool}>
+     */
+    public static function autoRevisionsProvider(): array
+    {
+        return [
+            'versioning enabled' => [true],
+            'versioning disabled' => [false],
+        ];
     }
 }

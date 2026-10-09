@@ -144,8 +144,9 @@ time with all the relevant data of the specific entry. The meaning of the fields
   If you don't want to allow public comments for this FAQ you can disable the feature here.
 
 - **Revision**
-  Like a wiki, phpMyFAQ supports revisions of every entry. New revisions won't be created automatically, but you can
-  create a new one if you click on "yes". The old revision will be stored in the database, and the new current revision
+  Like a wiki, phpMyFAQ supports revisions of every entry. Enable "Allow versioning of FAQ changes" in the FAQ
+  configuration first. New revisions won't be created automatically, but you can create a new one if you click on
+  "yes" when saving an existing entry. The old revision will be stored in the database, and the new current revision
   will be displayed in the public frontend. You can also bring back old revisions into the frontend if you select an
   old revision and save them as a new one.
 
