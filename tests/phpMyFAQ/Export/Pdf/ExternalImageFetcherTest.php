@@ -39,8 +39,12 @@ final class ExternalImageFetcherTest extends TestCase
 {
     public function testFetchReturnsBodyForDirectlyAllowedHost(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
-            ->withResponse('https://allowed.test/image.png', 200, ['HTTP/1.1 200 OK'], 'imagebytes');
+        $requester = new ExternalImageFetcherFakeRequester()->withResponse(
+            'https://allowed.test/image.png',
+            200,
+            ['HTTP/1.1 200 OK'],
+            'imagebytes',
+        );
 
         $result = new ExternalImageFetcher($requester)->fetch('https://allowed.test/image.png', ['allowed.test']);
 
@@ -70,7 +74,7 @@ final class ExternalImageFetcherTest extends TestCase
 
     public function testFetchFollowsRedirectToAllowedHost(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
+        $requester = new ExternalImageFetcherFakeRequester()
             ->withResponse(
                 'https://allowed.test/redirect',
                 302,
@@ -94,7 +98,7 @@ final class ExternalImageFetcherTest extends TestCase
      */
     public function testFetchRejectsRedirectToDisallowedHost(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
+        $requester = new ExternalImageFetcherFakeRequester()
             ->withResponse(
                 'https://allowed.test/redirect',
                 302,
@@ -111,13 +115,12 @@ final class ExternalImageFetcherTest extends TestCase
 
     public function testFetchRejectsRedirectToDisallowedHostViaProtocolRelativeLocation(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
-            ->withResponse(
-                'https://allowed.test/redirect',
-                302,
-                ['HTTP/1.1 302 Found', 'Location: //blocked.test/image.png'],
-                '',
-            );
+        $requester = new ExternalImageFetcherFakeRequester()->withResponse(
+            'https://allowed.test/redirect',
+            302,
+            ['HTTP/1.1 302 Found', 'Location: //blocked.test/image.png'],
+            '',
+        );
 
         $result = new ExternalImageFetcher($requester)->fetch('https://allowed.test/redirect', ['allowed.test']);
 
@@ -129,9 +132,24 @@ final class ExternalImageFetcherTest extends TestCase
     {
         $requester = new ExternalImageFetcherFakeRequester();
         $requester
-            ->withResponse('https://allowed.test/1', 302, ['HTTP/1.1 302 Found', 'Location: https://allowed.test/2'], '')
-            ->withResponse('https://allowed.test/2', 302, ['HTTP/1.1 302 Found', 'Location: https://allowed.test/3'], '')
-            ->withResponse('https://allowed.test/3', 302, ['HTTP/1.1 302 Found', 'Location: https://allowed.test/4'], '')
+            ->withResponse(
+                'https://allowed.test/1',
+                302,
+                ['HTTP/1.1 302 Found', 'Location: https://allowed.test/2'],
+                '',
+            )
+            ->withResponse(
+                'https://allowed.test/2',
+                302,
+                ['HTTP/1.1 302 Found', 'Location: https://allowed.test/3'],
+                '',
+            )
+            ->withResponse(
+                'https://allowed.test/3',
+                302,
+                ['HTTP/1.1 302 Found', 'Location: https://allowed.test/4'],
+                '',
+            )
             ->withResponse('https://allowed.test/4', 200, ['HTTP/1.1 200 OK'], 'imagebytes');
 
         $result = new ExternalImageFetcher($requester)->fetch('https://allowed.test/1', ['allowed.test']);
@@ -143,10 +161,30 @@ final class ExternalImageFetcherTest extends TestCase
     {
         $requester = new ExternalImageFetcherFakeRequester();
         $requester
-            ->withResponse('https://allowed.test/1', 302, ['HTTP/1.1 302 Found', 'Location: https://allowed.test/2'], '')
-            ->withResponse('https://allowed.test/2', 302, ['HTTP/1.1 302 Found', 'Location: https://allowed.test/3'], '')
-            ->withResponse('https://allowed.test/3', 302, ['HTTP/1.1 302 Found', 'Location: https://allowed.test/4'], '')
-            ->withResponse('https://allowed.test/4', 302, ['HTTP/1.1 302 Found', 'Location: https://allowed.test/5'], '');
+            ->withResponse(
+                'https://allowed.test/1',
+                302,
+                ['HTTP/1.1 302 Found', 'Location: https://allowed.test/2'],
+                '',
+            )
+            ->withResponse(
+                'https://allowed.test/2',
+                302,
+                ['HTTP/1.1 302 Found', 'Location: https://allowed.test/3'],
+                '',
+            )
+            ->withResponse(
+                'https://allowed.test/3',
+                302,
+                ['HTTP/1.1 302 Found', 'Location: https://allowed.test/4'],
+                '',
+            )
+            ->withResponse(
+                'https://allowed.test/4',
+                302,
+                ['HTTP/1.1 302 Found', 'Location: https://allowed.test/5'],
+                '',
+            );
 
         $result = new ExternalImageFetcher($requester)->fetch('https://allowed.test/1', ['allowed.test']);
 
@@ -164,16 +202,27 @@ final class ExternalImageFetcherTest extends TestCase
 
     public function testFetchFailsOnRedirectWithoutLocationHeader(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
-            ->withResponse('https://allowed.test/redirect', 302, ['HTTP/1.1 302 Found'], '');
+        $requester = new ExternalImageFetcherFakeRequester()->withResponse(
+            'https://allowed.test/redirect',
+            302,
+            ['HTTP/1.1 302 Found'],
+            '',
+        );
 
-        self::assertFalse(new ExternalImageFetcher($requester)->fetch('https://allowed.test/redirect', ['allowed.test']));
+        self::assertFalse(new ExternalImageFetcher($requester)->fetch('https://allowed.test/redirect', [
+            'allowed.test',
+        ]));
     }
 
     public function testFetchResolvesRootRelativeRedirect(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
-            ->withResponse('https://allowed.test/path/redirect', 302, ['HTTP/1.1 302 Found', 'Location: /image.png'], '')
+        $requester = new ExternalImageFetcherFakeRequester()
+            ->withResponse(
+                'https://allowed.test/path/redirect',
+                302,
+                ['HTTP/1.1 302 Found', 'Location: /image.png'],
+                '',
+            )
             ->withResponse('https://allowed.test/image.png', 200, ['HTTP/1.1 200 OK'], 'imagebytes');
 
         $result = new ExternalImageFetcher($requester)->fetch('https://allowed.test/path/redirect', ['allowed.test']);
@@ -183,7 +232,7 @@ final class ExternalImageFetcherTest extends TestCase
 
     public function testFetchResolvesProtocolRelativeRedirect(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
+        $requester = new ExternalImageFetcherFakeRequester()
             ->withResponse(
                 'https://allowed.test/redirect',
                 302,
@@ -199,7 +248,7 @@ final class ExternalImageFetcherTest extends TestCase
 
     public function testFetchResolvesPathRelativeRedirect(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
+        $requester = new ExternalImageFetcherFakeRequester()
             ->withResponse('https://allowed.test/dir/redirect', 302, ['HTTP/1.1 302 Found', 'Location: image.png'], '')
             ->withResponse('https://allowed.test/dir/image.png', 200, ['HTTP/1.1 200 OK'], 'imagebytes');
 
@@ -210,42 +259,72 @@ final class ExternalImageFetcherTest extends TestCase
 
     public function testFetchFailsWhenRedirectLocationIsEmpty(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
-            ->withResponse('https://allowed.test/redirect', 302, ['HTTP/1.1 302 Found', 'Location: '], '');
+        $requester = new ExternalImageFetcherFakeRequester()->withResponse(
+            'https://allowed.test/redirect',
+            302,
+            ['HTTP/1.1 302 Found', 'Location: '],
+            '',
+        );
 
-        self::assertFalse(new ExternalImageFetcher($requester)->fetch('https://allowed.test/redirect', ['allowed.test']));
+        self::assertFalse(new ExternalImageFetcher($requester)->fetch('https://allowed.test/redirect', [
+            'allowed.test',
+        ]));
     }
 
     public function testFetchFailsOnNonSuccessStatusCode(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
-            ->withResponse('https://allowed.test/missing.png', 404, ['HTTP/1.1 404 Not Found'], 'not found');
+        $requester = new ExternalImageFetcherFakeRequester()->withResponse(
+            'https://allowed.test/missing.png',
+            404,
+            ['HTTP/1.1 404 Not Found'],
+            'not found',
+        );
 
-        self::assertFalse(new ExternalImageFetcher($requester)->fetch('https://allowed.test/missing.png', ['allowed.test']));
+        self::assertFalse(new ExternalImageFetcher($requester)->fetch('https://allowed.test/missing.png', [
+            'allowed.test',
+        ]));
     }
 
     public function testFetchFailsOnEmptyBody(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
-            ->withResponse('https://allowed.test/empty.png', 200, ['HTTP/1.1 200 OK'], '');
+        $requester = new ExternalImageFetcherFakeRequester()->withResponse(
+            'https://allowed.test/empty.png',
+            200,
+            ['HTTP/1.1 200 OK'],
+            '',
+        );
 
-        self::assertFalse(new ExternalImageFetcher($requester)->fetch('https://allowed.test/empty.png', ['allowed.test']));
+        self::assertFalse(new ExternalImageFetcher($requester)->fetch('https://allowed.test/empty.png', [
+            'allowed.test',
+        ]));
     }
 
     public function testFetchFailsWhenRequestReturnsFalseBody(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
-            ->withResponse('https://allowed.test/broken.png', 200, ['HTTP/1.1 200 OK'], false);
+        $requester = new ExternalImageFetcherFakeRequester()->withResponse(
+            'https://allowed.test/broken.png',
+            200,
+            ['HTTP/1.1 200 OK'],
+            false,
+        );
 
-        self::assertFalse(new ExternalImageFetcher($requester)->fetch('https://allowed.test/broken.png', ['allowed.test']));
+        self::assertFalse(new ExternalImageFetcher($requester)->fetch('https://allowed.test/broken.png', [
+            'allowed.test',
+        ]));
     }
 
     public function testFetchMatchesSubdomainOfAllowedHost(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
-            ->withResponse('https://images.allowed.test/photo.jpg', 200, ['HTTP/1.1 200 OK'], 'imagebytes');
+        $requester = new ExternalImageFetcherFakeRequester()->withResponse(
+            'https://images.allowed.test/photo.jpg',
+            200,
+            ['HTTP/1.1 200 OK'],
+            'imagebytes',
+        );
 
-        $result = new ExternalImageFetcher($requester)->fetch('https://images.allowed.test/photo.jpg', ['allowed.test']);
+        $result = new ExternalImageFetcher($requester)->fetch('https://images.allowed.test/photo.jpg', [
+            'allowed.test',
+        ]);
 
         self::assertSame('imagebytes', $result);
     }
@@ -264,13 +343,18 @@ final class ExternalImageFetcherTest extends TestCase
 
     public function testFetchIgnoresEmptyAndZeroAllowlistEntries(): void
     {
-        $requester = (new ExternalImageFetcherFakeRequester())
-            ->withResponse('https://allowed.test/photo.jpg', 200, ['HTTP/1.1 200 OK'], 'imagebytes');
-
-        $result = new ExternalImageFetcher($requester)->fetch(
+        $requester = new ExternalImageFetcherFakeRequester()->withResponse(
             'https://allowed.test/photo.jpg',
-            ['', '0', 'allowed.test'],
+            200,
+            ['HTTP/1.1 200 OK'],
+            'imagebytes',
         );
+
+        $result = new ExternalImageFetcher($requester)->fetch('https://allowed.test/photo.jpg', [
+            '',
+            '0',
+            'allowed.test',
+        ]);
 
         self::assertSame('imagebytes', $result);
     }
@@ -291,5 +375,44 @@ final class ExternalImageFetcherTest extends TestCase
         $method = new ReflectionMethod($fetcher, 'resolveRedirectLocation');
 
         self::assertNull($method->invoke($fetcher, 'not-a-url', '/image.png'));
+    }
+
+    public function testFetchNeverContactsThisInstallationsOwnHost(): void
+    {
+        $requester = new ExternalImageFetcherFakeRequester()->withResponse(
+            'https://faq.example/a.png',
+            200,
+            [],
+            'body',
+        );
+
+        $result = new ExternalImageFetcher($requester)->fetch(
+            'https://faq.example/a.png',
+            ['faq.example'],
+            ownHost: 'faq.example',
+        );
+
+        self::assertFalse($result);
+        self::assertSame([], $requester->requestedUrls);
+    }
+
+    public function testFetchRejectsNonDefaultPortUnlessTheAllowlistEntryNamesIt(): void
+    {
+        $requester = new ExternalImageFetcherFakeRequester()->withResponse(
+            'https://cdn.test:8443/a.png',
+            200,
+            [],
+            'image-bytes',
+        );
+
+        // The host is allowlisted, but on its default port only, so the :8443 request is refused
+        // before any network call.
+        self::assertFalse(new ExternalImageFetcher($requester)->fetch('https://cdn.test:8443/a.png', ['cdn.test']));
+        self::assertSame([], $requester->requestedUrls);
+
+        // When the entry names the port the request goes through.
+        $result = new ExternalImageFetcher($requester)->fetch('https://cdn.test:8443/a.png', ['cdn.test:8443']);
+        self::assertSame('image-bytes', $result);
+        self::assertSame(['https://cdn.test:8443/a.png'], $requester->requestedUrls);
     }
 }

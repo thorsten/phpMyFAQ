@@ -18,6 +18,7 @@ use phpMyFAQ\Configuration\SecuritySettings;
 use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettings;
 use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver;
 use phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
 use phpMyFAQ\Configuration\Storage\HybridConfigurationStore;
 use phpMyFAQ\Configuration\UrlSettings;
 use phpMyFAQ\Database;
@@ -31,8 +32,11 @@ use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Permission;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\BasicPermissionRepository;
+use phpMyFAQ\Permission\GroupCategoryPermissionRepository;
+use phpMyFAQ\Permission\LanguagePermissionRepository;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\MediumPermissionRepository;
+use phpMyFAQ\Plugin\PluginDiscovery;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\Session\SessionWrapper;
 use phpMyFAQ\Strings;
@@ -50,13 +54,10 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
-use phpMyFAQ\Permission\GroupCategoryPermissionRepository;
-use phpMyFAQ\Permission\LanguagePermissionRepository;
-use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[CoversClass(Pdf::class)]
 #[UsesClass(Pdf\ExternalImageFetcher::class)]
+#[UsesClass(Pdf\MediaHostPolicy::class)]
 #[UsesClass(Pdf\Wrapper::class)]
 #[UsesClass(Pdf\Engine\TcpdfEngine::class)]
 #[UsesClass(Pdf\Engine\TcpdfDocument::class)]

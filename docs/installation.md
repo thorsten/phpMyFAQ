@@ -348,6 +348,16 @@ Main features of the PDF export:
 - supports automatic line break and text justification;
 - supports JPEG and PNG images natively, all images supported by GD (GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM)
 
+Images in FAQ answers are embedded into the PDF on the server:
+
+- Images stored on your own phpMyFAQ host (for example uploads from the editor) are read from the `content/` directory
+  and never requested over the network.
+- Images on other hosts are only fetched when the host is listed in the configuration option
+  _Allowed external hosts for media content_. Only the default port of the scheme (80 for HTTP, 443 for HTTPS) is used,
+  unless the entry names a port explicitly, e.g. `images.example.org:8080`.
+- Hosts that resolve to loopback, link-local or other non-routable addresses are never contacted, even when listed.
+  Images that cannot be fetched under these rules are left out of the PDF.
+
 ## 2.12 Static solution ID
 
 phpMyFAQ features a static solution ID which never changes. This ID is visible next to the question on a FAQ record

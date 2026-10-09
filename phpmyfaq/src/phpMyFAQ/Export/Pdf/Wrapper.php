@@ -632,8 +632,9 @@ class Wrapper
      * Any external image that cannot be converted under the media host policy
      * (disallowed host, no allowlist, failed fetch, non-raster data) is removed
      * from the HTML instead of being handed to the engine. Local references
-     * without a host are left untouched and resolved against the content
-     * directory by inlineLocalImages().
+     * without a host, and absolute URLs pointing at this installation's own
+     * host, are left untouched and resolved against the content directory by
+     * inlineLocalImages(), so the server never opens a connection to itself.
      *
      * @param string $html The HTML content to process
      * @return string The processed HTML content with external images converted to base64
@@ -641,12 +642,13 @@ class Wrapper
     public function convertExternalImagesToBase64(string $html): string
     {
         $allowedHosts = $this->config instanceof Configuration ? $this->config->getAllowedMediaHosts() : [];
+        $ownHost = $this->getOwnHost();
 
         // Pattern to match img tags with src attributes
         $pattern = '/<img\s+[^>]*src\s*=\s*["\']([^"\']+)["\'][^>]*>/i';
         return preg_replace_callback(
             $pattern,
-            function (array $matches) use ($allowedHosts): string {
+            function (array $matches) use ($allowedHosts, $ownHost): string {
                 $fullMatch = $matches[0];
                 // Decode entities so the URL we check is the URL that would be fetched
                 $imageUrl = html_entity_decode(trim($matches[1]), ENT_QUOTES | ENT_HTML5, encoding: 'UTF-8');
@@ -657,17 +659,23 @@ class Wrapper
                     return $fullMatch; // Local reference, resolved by inlineLocalImages()
                 }
 
-                // Neutralize images from hosts outside the policy instead of handing
-                // them to the engine.
-                if (!$this->isHostAllowed($parsedUrl['host'], $allowedHosts)) {
+                // Images on our own host (e.g. uploaded via the editor) are read
+                // from the content directory, never requested over the network.
+                if ($ownHost !== null && MediaHostPolicy::normalizeHost($parsedUrl['host']) === $ownHost) {
+                    return $fullMatch;
+                }
+
+                // Neutralize images whose origin (scheme, host and port) is outside
+                // the policy instead of handing them to the engine.
+                if (!MediaHostPolicy::isOriginAllowed($parsedUrl, $allowedHosts)) {
                     return '';
                 }
 
                 // Try to fetch the image and convert to base64. The fetcher itself
-                // re-checks the host allowlist on every redirect hop, so a
-                // disallowed or unfetchable URL simply returns false here.
+                // re-checks the policy and resolves a safe address on every redirect
+                // hop, so a disallowed or unfetchable URL simply returns false here.
                 try {
-                    $imageData = $this->externalImageFetcher->fetch($imageUrl, $allowedHosts);
+                    $imageData = $this->externalImageFetcher->fetch($imageUrl, $allowedHosts, $ownHost);
                 } catch (Exception) {
                     return '';
                 }
@@ -704,33 +712,23 @@ class Wrapper
     }
 
     /**
-     * Checks whether a host is covered by the configured media host allowlist.
-     *
-     * Matches an exact hostname or any subdomain of an allowed host. Empty
-     * entries and the disabled sentinel "0" are ignored.
-     *
-     * @param string   $host         The hostname to check
-     * @param string[] $allowedHosts The configured allowlist
+     * Returns the host of this installation's reference URL, or null if unknown. Images on this
+     * host are read from disk, never requested over the network.
      */
-    private function isHostAllowed(string $host, array $allowedHosts): bool
+    private function getOwnHost(): ?string
     {
-        $host = strtolower(trim($host));
-        if ($host === '') {
-            return false;
+        if (!$this->config instanceof Configuration) {
+            return null;
         }
 
-        foreach ($allowedHosts as $allowedHost) {
-            $allowedHost = strtolower(trim($allowedHost));
-            if ($allowedHost === '' || $allowedHost === '0') {
-                continue;
-            }
-
-            if ($host === $allowedHost || str_ends_with($host, '.' . $allowedHost)) {
-                return true;
-            }
+        $host = parse_url($this->config->getDefaultUrl(), PHP_URL_HOST);
+        if (!is_string($host) || $host === '') {
+            return null;
         }
 
-        return false;
+        $host = MediaHostPolicy::normalizeHost($host);
+
+        return $host === '' ? null : $host;
     }
 
     /**

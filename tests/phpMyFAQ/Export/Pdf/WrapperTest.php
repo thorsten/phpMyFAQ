@@ -1340,4 +1340,33 @@ class WrapperTest extends TestCase
         $wrapper->Ln(4.0);
         $wrapper->Write(5.0, 'Hello');
     }
+
+    public function testConvertExternalImagesKeepsOwnHostImagesAsLocalReferences(): void
+    {
+        // Images on this installation's own host are read from disk, so they are left untouched
+        // and the fetcher is never asked to request them over the network.
+        $httpRequester = $this->createMock(HttpRequesterInterface::class);
+        $httpRequester->expects($this->never())->method('request');
+
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn([]);
+        $config->method('getDefaultUrl')->willReturn('https://faq.example/');
+
+        $wrapper = new Wrapper(null, new ExternalImageFetcher($httpRequester));
+        $wrapper->setConfig($config);
+
+        $html = '<img src="https://faq.example/content/user/images/upload.png">';
+        self::assertSame($html, $wrapper->convertExternalImagesToBase64($html));
+    }
+
+    public function testConvertExternalImagesNeutralizesANonDefaultPortOutsideThePolicy(): void
+    {
+        // cdn.test is allowlisted on its default port only, so an image on :8443 is neutralized
+        // before the fetcher is reached (no network call is attempted).
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['cdn.test']);
+        $this->wrapper->setConfig($config);
+
+        self::assertSame('', $this->wrapper->convertExternalImagesToBase64('<img src="https://cdn.test:8443/a.png">'));
+    }
 }

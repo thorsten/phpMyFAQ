@@ -150,6 +150,21 @@ class FaqHelperTest extends TestCase
         $this->assertStringNotContainsString('alert(', $actualOutput);
     }
 
+    public function testCleanUpContentAcceptsAllowedHostEntriesWithPortSuffix(): void
+    {
+        $this->configuration->set('records.allowedMediaHosts', 'cdn.example:8080,[2001:db8::1]:8443');
+        $content =
+            '<p><img src="https://cdn.example:8080/a.png" />'
+            . '<img src="https://[2001:db8::1]:8443/b.png" />'
+            . '<img src="https://other.example/c.png" /></p>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
+        $this->assertStringContainsString('src="https://cdn.example:8080/a.png"', $actualOutput);
+        $this->assertStringContainsString('src="https://[2001:db8::1]:8443/b.png"', $actualOutput);
+        $this->assertStringNotContainsString('other.example', $actualOutput);
+    }
+
     public function testCleanUpContentWithUmlauts(): void
     {
         $content = '<p>Hellö, wörld!</p>';

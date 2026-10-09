@@ -23,8 +23,14 @@ namespace phpMyFAQ\Export\Pdf;
  * Class ExternalImageFetcher
  *
  * Manually follows redirects (instead of delegating to the stream wrapper) so the
- * host allowlist is re-checked on every hop. Without this, an allowed origin could
+ * media host policy is re-checked on every hop. Without this, an allowed origin could
  * redirect the request to a disallowed destination and bypass the allowlist entirely.
+ *
+ * The policy is: HTTP(S) only, the host must be allowlisted, the port must be the
+ * scheme default unless the matching allowlist entry names it, and this installation's
+ * own host is never contacted. The connecting HttpRequester additionally refuses any
+ * host that resolves to a non-routable address and pins the connection to the vetted
+ * IP (SSRF / DNS-rebinding defence).
  *
  * @package phpMyFAQ\Export\Pdf
  */
@@ -40,19 +46,20 @@ class ExternalImageFetcher
     }
 
     /**
-     * Fetches a URL, following up to three redirects and revalidating the host
-     * allowlist on every hop.
+     * Fetches a URL, following up to three redirects and revalidating the media host policy on
+     * every hop.
      *
-     * @param string[] $allowedHosts
-     * @return string|false The response body, or false if the URL, its scheme, or
-     *                       any redirect destination is not allowed, or the request fails.
+     * @param string[]    $allowedHosts
+     * @param string|null $ownHost This installation's own host, which is never contacted.
+     * @return string|false The response body, or false if the URL, its scheme, port, owning host
+     *                       or any redirect destination is not allowed, or the request fails.
      */
-    public function fetch(string $url, array $allowedHosts): false|string
+    public function fetch(string $url, array $allowedHosts, ?string $ownHost = null): false|string
     {
         $remainingRedirects = self::MAX_REDIRECTS;
 
         while (true) {
-            if (!$this->isFetchableUrl($url, $allowedHosts)) {
+            if (!$this->isFetchableUrl($url, $allowedHosts, $ownHost)) {
                 return false;
             }
 
@@ -83,42 +90,29 @@ class ExternalImageFetcher
     }
 
     /**
-     * Returns true if the given host matches an allowed host exactly or as a subdomain.
+     * Returns true if the URL uses an HTTP(S) scheme, is not this installation's own host, and its
+     * origin (host and port) is covered by the allowlist.
      *
      * @param string[] $allowedHosts
      */
-    private function isHostAllowed(string $host, array $allowedHosts): bool
-    {
-        foreach ($allowedHosts as $allowedHost) {
-            $allowedHost = trim($allowedHost);
-            if ($allowedHost === '' || $allowedHost === '0') {
-                continue;
-            }
-
-            if ($host === $allowedHost || str_ends_with($host, '.' . $allowedHost)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns true if the URL uses an HTTP(S) scheme and its host is allowed.
-     *
-     * @param string[] $allowedHosts
-     */
-    private function isFetchableUrl(string $url, array $allowedHosts): bool
+    private function isFetchableUrl(string $url, array $allowedHosts, ?string $ownHost): bool
     {
         $parsedUrl = parse_url($url);
+        if ($parsedUrl === false || !array_key_exists('scheme', $parsedUrl) || !array_key_exists('host', $parsedUrl)) {
+            return false;
+        }
 
-        return (
-            $parsedUrl !== false
-            && array_key_exists('scheme', $parsedUrl)
-            && in_array($parsedUrl['scheme'], ['http', 'https'], strict: true)
-            && array_key_exists('host', $parsedUrl)
-            && $this->isHostAllowed($parsedUrl['host'], $allowedHosts)
-        );
+        $scheme = strtolower((string) $parsedUrl['scheme']);
+        if ($scheme !== 'http' && $scheme !== 'https') {
+            return false;
+        }
+
+        // Our own host is only ever read from disk, never contacted.
+        if ($ownHost !== null && MediaHostPolicy::normalizeHost((string) $parsedUrl['host']) === $ownHost) {
+            return false;
+        }
+
+        return MediaHostPolicy::isOriginAllowed($parsedUrl, $allowedHosts);
     }
 
     /**

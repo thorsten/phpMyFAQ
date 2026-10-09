@@ -1418,7 +1418,7 @@ $LANG_CONF['seo.title'] = ['input', 'SERP title'];
 $LANG_CONF['seo.description'] = ['area', 'SERP description'];
 
 // added v4.0.0-alpha.3 - 2024-06-19 by Jan
-$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Allowed external hosts for media content (separate with commas)'];
+$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Allowed external hosts for media content (separate with commas, optionally with :port)', 'The PDF export fetches images from these hosts server-side on the default port unless a port is given. Loopback and link-local addresses are never contacted.'];
 $PMF_LANG['msgConfirmTwofactorConfig'] = 'Are you sure that you want to remove your current Two Factor Authentication-configuration?';
 $PMF_LANG['msgGravatarNotConnected'] = 'Gravatar is currently not enabled.';
 $PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'The deletion of the current 2-factor configuration was successful.';
