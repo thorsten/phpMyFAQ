@@ -456,7 +456,11 @@ class System
      */
     public function checkInstallation(): bool
     {
-        return !is_file((string) PMF_ROOT_DIR . '/content/core/config/database.php');
+        $configDir = defined('PMF_CONFIG_DIR')
+            ? (string) PMF_CONFIG_DIR
+            : (string) PMF_ROOT_DIR . '/content/core/config';
+
+        return !is_file($configDir . '/database.php');
     }
 
     /**

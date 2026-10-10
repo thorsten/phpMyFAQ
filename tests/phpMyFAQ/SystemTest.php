@@ -131,10 +131,19 @@ class SystemTest extends TestCase
 
     public function testGetHttpsStatus(): void
     {
-        $system = new System();
-        $result = $system->getHttpsStatus();
+        $previousHttps = $_SERVER['HTTPS'] ?? null;
+        unset($_SERVER['HTTPS']);
 
-        $this->assertFalse($result); // because we're on the CLI
+        try {
+            $system = new System();
+            $result = $system->getHttpsStatus();
+
+            $this->assertFalse($result); // because we're on the CLI
+        } finally {
+            if ($previousHttps !== null) {
+                $_SERVER['HTTPS'] = $previousHttps;
+            }
+        }
     }
 
     public function testCheckRequiredExtensions(): void

@@ -214,8 +214,14 @@ class Installer extends Setup
      */
     public function startInstall(?array $setup = null): void
     {
-        $rootDir = $setup['rootDir'] ?? PMF_ROOT_DIR;
-        if ($this->isAlreadyInstalled((string) $rootDir)) {
+        // An explicit root directory (programmatic or test installs) is checked for its own
+        // marker file; the web installer defers to System::checkInstallation(), which honours
+        // PMF_CONFIG_DIR exactly like the setup controller that called us.
+        $rootDir = $setup['rootDir'] ?? null;
+        $alreadyInstalled = $rootDir !== null
+            ? $this->isAlreadyInstalled((string) $rootDir)
+            : !$this->system->checkInstallation();
+        if ($alreadyInstalled) {
             throw new Exception(
                 'Looks like phpMyFAQ is already installed! Please use the <a href="../update">update</a>.',
             );

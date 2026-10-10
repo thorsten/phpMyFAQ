@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace phpMyFAQ\Functional;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Language;
 use phpMyFAQ\Session\SessionWrapper;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Response;
@@ -163,6 +165,7 @@ abstract class ControllerWebTestCase extends WebTestCase
         $client = $this->ensureClientForContext($context);
         $client->followRedirects(false);
         $this->prepareAuthenticationSession($context, $uri, $authenticateAdmin);
+        $this->resetRequestLanguage();
         $serverParameters = array_merge([
             'HTTP_HOST' => 'localhost',
             'SERVER_NAME' => 'localhost',
@@ -204,6 +207,18 @@ abstract class ControllerWebTestCase extends WebTestCase
         $currentUser->setLoggedIn(true);
         $currentUser->updateSessionId();
         $currentUser->saveToSession();
+    }
+
+    /**
+     * Language detection is enabled in test.db, so a browser language, a session language
+     * or the static language an earlier test left behind would render the page in that
+     * language instead of English.
+     */
+    private function resetRequestLanguage(): void
+    {
+        unset($_SERVER['HTTP_ACCEPT_LANGUAGE'], $_SESSION['lang']);
+        Language::$language = '';
+        Translation::resetInstance();
     }
 
     private function ensureNativeSession(): void

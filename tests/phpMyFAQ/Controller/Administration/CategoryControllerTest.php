@@ -92,6 +92,7 @@ final class CategoryControllerTest extends TestCase
         unset(
             $_COOKIE[$this->getCsrfCookieName('save-category')],
             $_COOKIE[$this->getCsrfCookieName('update-category')],
+            $_SERVER['HTTPS'],
         );
 
         $configurationReflection = new \ReflectionClass(Configuration::class);

@@ -10,6 +10,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
@@ -22,6 +23,17 @@ use PHPUnit\Framework\TestCase;
 #[UsesTrait(ConfigurationMethodsTrait::class)]
 class ReadScopeTest extends TestCase
 {
+    use TestDatabaseTrait;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // ReadScope escapes values through the global Configuration singleton; give the
+        // test its own instead of relying on whatever an earlier test left behind.
+        $this->createTestConfiguration();
+    }
+
     public function testUnrestrictedScopeAddsNothingToTheQuery(): void
     {
         $scope = ReadScope::unrestricted();

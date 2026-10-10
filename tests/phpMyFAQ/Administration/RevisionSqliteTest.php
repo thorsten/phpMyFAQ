@@ -6,6 +6,7 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,6 +17,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RevisionSqliteTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private const int FAQ_ID = 987_654;
 
     private Sqlite3 $db;
@@ -26,8 +29,7 @@ class RevisionSqliteTest extends TestCase
     {
         parent::setUp();
 
-        $this->db = new Sqlite3();
-        $this->db->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $this->db = $this->connectToTestDatabaseCopy(new Sqlite3());
 
         $this->revision = new Revision(new Configuration($this->db));
 

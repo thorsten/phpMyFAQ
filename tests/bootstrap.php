@@ -39,8 +39,22 @@ error_reporting(E_ALL & ~E_DEPRECATED);
 // The root directory
 //
 define('PMF_ROOT_DIR', dirname(__DIR__) . '/phpmyfaq');
-define('PMF_CONFIG_DIR', dirname(__DIR__) . '/tests/content/core/config');
-define('PMF_CONTENT_DIR', dirname(__DIR__) . '/tests/content');
+
+//
+// ParaTest exports TEST_TOKEN (1..n) to every worker process. Each worker gets its own
+// copy of tests/content so that tests which create, rename or delete config files,
+// attachments or upgrade packages never race against a test in another worker. The copy
+// is made below, after the shared test database has been prepared. Without a token
+// (plain PHPUnit) the checked-in directory is used directly, as before.
+//
+const PMF_SHARED_CONTENT_DIR = __DIR__ . '/content';
+$testWorkerToken = getenv('TEST_TOKEN');
+if ($testWorkerToken !== false && $testWorkerToken !== '') {
+    define('PMF_CONTENT_DIR', sys_get_temp_dir() . '/phpmyfaq-tests/worker-' . (int) $testWorkerToken . '/content');
+} else {
+    define('PMF_CONTENT_DIR', PMF_SHARED_CONTENT_DIR);
+}
+define('PMF_CONFIG_DIR', PMF_CONTENT_DIR . '/core/config');
 
 const PMF_LOG_DIR = __DIR__ . '/logs/phpmyfaq.log';
 
@@ -62,6 +76,17 @@ if (!file_exists(PMF_LOG_DIR)) {
 }
 
 //
+// Everything below that mutates files shared by all test processes (the filesystem
+// cache, tests/test.db and the generated database.php) runs under this lock, so
+// concurrent ParaTest workers and PHPUnit separate-process children cannot rebuild
+// the database underneath each other.
+//
+$bootstrapLockHandle = fopen(__DIR__ . '/.bootstrap.lock', 'c');
+if ($bootstrapLockHandle === false || !flock($bootstrapLockHandle, LOCK_EX)) {
+    throw new RuntimeException('PHPUnit bootstrap failed: cannot acquire tests/.bootstrap.lock.');
+}
+
+//
 // Clear the filesystem cache so state persisted by a previous run (e.g. the
 // rate limiter's fixed-window counters) cannot make tests flaky.
 //
@@ -72,7 +97,7 @@ if (is_dir($cacheDirectory)) {
         RecursiveIteratorIterator::CHILD_FIRST,
     );
     foreach ($cacheFiles as $cacheFile) {
-        $cacheFile->isDir() ? rmdir($cacheFile->getPathname()) : unlink($cacheFile->getPathname());
+        $cacheFile->isDir() ? @rmdir($cacheFile->getPathname()) : @unlink($cacheFile->getPathname());
     }
 }
 
@@ -151,7 +176,7 @@ function canReusePreparedTestDatabase(string $databasePath, string $databaseConf
 // Use tests/test.db as stable SQLite test database expected by tests.
 //
 $testDbAlias = PMF_TEST_DIR . '/test.db';
-$databaseConfigFile = PMF_TEST_DIR . '/content/core/config/database.php';
+$databaseConfigFile = PMF_SHARED_CONTENT_DIR . '/core/config/database.php';
 
 //
 // Create database credentials for SQLite
@@ -232,6 +257,37 @@ if (!canReusePreparedTestDatabase($testDbAlias, $databaseConfigFile)) {
 if (!file_exists($databaseConfigFile)) {
     throw new RuntimeException('PHPUnit bootstrap failed: tests/content/core/config/database.php was not generated.');
 }
+
+//
+// Give a ParaTest worker its private content directory: a copy of the shared one,
+// refreshed from it on every bootstrap so a generated config file is never stale.
+// Files a previous run left behind in the copy are not removed here; tests clean up
+// after themselves exactly as they do in the shared directory.
+//
+if (PMF_CONTENT_DIR !== PMF_SHARED_CONTENT_DIR) {
+    $sharedContentFiles = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator(PMF_SHARED_CONTENT_DIR, FilesystemIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::SELF_FIRST,
+    );
+    foreach ($sharedContentFiles as $sharedContentFile) {
+        $target = PMF_CONTENT_DIR . substr($sharedContentFile->getPathname(), strlen(PMF_SHARED_CONTENT_DIR));
+        if ($sharedContentFile->isDir()) {
+            if (!is_dir($target) && !mkdir($target, 0777, true) && !is_dir($target)) {
+                throw new RuntimeException('PHPUnit bootstrap failed: cannot create ' . $target);
+            }
+            continue;
+        }
+        if (!is_dir(dirname($target)) && !mkdir(dirname($target), 0777, true) && !is_dir(dirname($target))) {
+            throw new RuntimeException('PHPUnit bootstrap failed: cannot create ' . dirname($target));
+        }
+        if (!copy($sharedContentFile->getPathname(), $target)) {
+            throw new RuntimeException('PHPUnit bootstrap failed: cannot copy ' . $sharedContentFile->getPathname());
+        }
+    }
+}
+
+flock($bootstrapLockHandle, LOCK_UN);
+fclose($bootstrapLockHandle);
 
 require $databaseConfigFile;
 

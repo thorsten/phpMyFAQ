@@ -66,9 +66,11 @@ abstract class AbstractSetup
             throw new Exception(sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP));
         }
 
+        $configDir = defined('PMF_CONFIG_DIR')
+            ? (string) PMF_CONFIG_DIR
+            : (string) PMF_ROOT_DIR . '/content/core/config';
         if (
-            !is_readable((string) PMF_ROOT_DIR . '/content/core/config/database.php')
-            && !is_readable((string) PMF_ROOT_DIR . '/config/database.php')
+            !is_readable($configDir . '/database.php') && !is_readable((string) PMF_ROOT_DIR . '/config/database.php')
         ) {
             throw new Exception(
                 'Sorry, but the database configuration file is not readable. Please check the permissions.',

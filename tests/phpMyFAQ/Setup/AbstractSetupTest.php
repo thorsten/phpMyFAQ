@@ -42,7 +42,7 @@ class AbstractSetupTest extends TestCase
         $configuration->set('main.maintenanceMode', 'true');
         $configuration->getAll();
 
-        $this->configFilePath = PMF_ROOT_DIR . '/content/core/config/database.php';
+        $this->configFilePath = PMF_CONFIG_DIR . '/database.php';
         if (!is_file($this->configFilePath)) {
             file_put_contents($this->configFilePath, "<?php\nreturn [];\n");
             $this->createdConfigFile = true;

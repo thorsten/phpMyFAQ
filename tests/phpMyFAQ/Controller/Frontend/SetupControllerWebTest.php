@@ -20,7 +20,7 @@ final class SetupControllerWebTest extends ControllerWebTestCase
     {
         parent::setUp();
 
-        $this->databaseConfigFile = PMF_ROOT_DIR . '/content/core/config/database.php';
+        $this->databaseConfigFile = PMF_CONFIG_DIR . '/database.php';
         $this->databaseConfigBackup = $this->databaseConfigFile . '.bak';
     }
 

@@ -105,6 +105,7 @@ html-coverage/
 tests/logs
 tests/test.db
 tests/test.db-journal
+tests/.bootstrap.lock
 tests/content/core/config/database.php
 tests/content/core/config/ldap.php
 tests/content/core/config/update-token.php
