@@ -75,6 +75,7 @@
     "twig/twig": "~3.30.0"
   },
   "require-dev": {
+    "brianium/paratest": "~7.26.0",
     "carthage-software/mago": "~1.51.0",
     "doctrine/instantiator": "~2.1.0",
     "mikey179/vfsstream": "~1.6.12",
@@ -140,7 +141,8 @@
     "openapi:yaml": "./phpmyfaq/src/libs/bin/openapi -b ./phpmyfaq/src/libs/autoload.php ./phpmyfaq/src/phpMyFAQ -o docs/openapi.yaml",
     "refactor": "./phpmyfaq/src/libs/bin/rector",
     "refactor:dryrun": "./phpmyfaq/src/libs/bin/rector --dry-run",
-    "test": "./phpmyfaq/src/libs/bin/phpunit --no-coverage",
+    "test": "./phpmyfaq/src/libs/bin/paratest --no-coverage",
+    "test:sequential": "./phpmyfaq/src/libs/bin/phpunit --no-coverage",
     "test:ci": "bin/phpunit-ci",
     "test:coverage": "./phpmyfaq/src/libs/bin/phpunit --coverage-text",
     "test:coverage-html": "./phpmyfaq/src/libs/bin/phpunit --coverage-html coverage",

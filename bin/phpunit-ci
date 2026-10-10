@@ -9,16 +9,22 @@
 # than `phpunit --no-coverage`, so such failures surface before a commit instead
 # of only in CI.
 #
-# Extra arguments are passed through to PHPUnit, e.g.
+# The suite runs through ParaTest, which spreads the test files over several
+# worker processes (one per CPU core by default) and merges their coverage.
+# tests/bootstrap.php gives every worker its own copy of tests/content and
+# serialises the preparation of tests/test.db, so the workers do not race.
+#
+# Extra arguments are passed through to ParaTest/PHPUnit, e.g.
 #   bin/phpunit-ci --log-junit junit.xml
 #   bin/phpunit-ci tests/phpMyFAQ/Auth/AuthEntraIdTest.php
+#   bin/phpunit-ci -p 4            # limit the number of worker processes
 #
 # Set PHP to use a different interpreter, e.g. PHP="php -d pcov.enabled=0".
 
 set -eu
 
 PHP="${PHP:-php}"
-PHPUNIT="phpmyfaq/src/libs/bin/phpunit"
+PHPUNIT="phpmyfaq/src/libs/bin/paratest"
 
 cd "$(dirname "$0")/.."
 

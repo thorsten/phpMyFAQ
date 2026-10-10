@@ -52,8 +52,13 @@ CLI tools therefore live in `phpmyfaq/src/libs/bin/` (`phpunit`, `mago`, `rector
 - Always write tests for new features and bug fixes.
 - Always run tests before committing code. All tests must pass. CI must stay green: do not introduce new warnings or errors.
 - Linting and code formatting issues must be fixed before committing code.
-- PHP code: composer test
+- PHP code: composer test (ParaTest, one worker per CPU core)
+- PHP code sequentially in one process (to tell a parallel-only failure from a real one): composer test:sequential
 - PHP single test file (much faster than the full suite): composer test -- tests/phpMyFAQ/Path/SomeTest.php
+- Tests run in parallel, so a test must never write to the shared `tests/test.db` or rely on the
+  Configuration singleton an earlier test left behind: use `TestDatabaseTrait` (`connectToTestDatabaseCopy()`,
+  `createTestConfiguration()`) for a private database copy. `tests/bootstrap.php` gives each ParaTest
+  worker (identified by `TEST_TOKEN`) its own copy of `tests/content`, so config-file tests stay isolated.
 - PHP code with coverage: composer test:coverage
 - PHP linting: composer lint
 - PHP lint auto-fix: composer lint:fix
