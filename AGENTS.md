@@ -118,12 +118,14 @@ entrypoint creates.
 
 - Commit messages must follow Conventional Commits (`fix:`, `feat:`, `test:`, `chore:`, `docs:`, `refactor:`, ...);
   the commit-msg hook runs commitlint and rejects non-conforming messages.
-- The pre-commit hook runs the full check pipeline (Mago format/lint/analyze, composer validate,
-  PHPUnit with coverage, oxfmt, oxlint, stylelint, tsc, vitest). It takes a few minutes — that is
-  expected, not a hang.
-- The pre-push hook runs composer validate and both test suites again.
+- Both hooks run `bin/run-checks`, which runs the PHP pipeline (Mago format/lint/analyze,
+  composer validate, PHPUnit with coverage) and the JS pipeline (oxfmt, oxlint, stylelint, tsc,
+  vitest) concurrently, each buffered to its own log that is printed when it finishes. It can take
+  a few minutes — that is expected, not a hang.
+- The pre-commit hook runs `bin/run-checks --staged`: a pipeline is skipped when no staged file
+  can affect it (see the scope lists at the top of the script). The pre-push hook always runs both.
 - Hooks and CI run PHPUnit through the same `bin/phpunit-ci` script; change the PHPUnit invocation
-  there, never in the hooks or the workflow directly.
+  there, never in the hooks or the workflow directly. Change the check pipelines in `bin/run-checks`.
 
 ## Coding Standards
 

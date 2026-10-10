@@ -1,0 +1,106 @@
+#!/usr/bin/env sh
+#
+# bin/run-checks — run the PHP and the JavaScript check pipelines.
+#
+# Both pipelines are independent, so they run concurrently and the wall time is
+# the slower of the two instead of their sum. Each pipeline writes to its own log
+# file; the log is printed when the pipeline finishes so the output of the two
+# does not interleave.
+#
+# Usage:
+#   bin/run-checks            run everything (pre-push, CI parity)
+#   bin/run-checks --staged   only run the pipelines that the staged files can
+#                             affect (pre-commit)
+#
+# With --staged, a pipeline is skipped when no staged path matches its scope:
+#   PHP pipeline: *.php, composer.json, composer.lock, phpunit.xml.dist,
+#                 mago.toml, mago-*-baseline.toml, phpmyfaq/translations/,
+#                 tests/ (except tests/e2e), scripts/, bin/
+#   JS pipeline:  *.ts, *.js, *.cjs, *.mjs, *.scss, *.json, *.yml, *.yaml,
+#                 *.html, *.twig, package.json, pnpm-lock.yaml, vite.config.ts,
+#                 tsconfig*.json, .oxlintrc.json, .oxfmtrc.json, .stylelintrc*
+# Everything else (Markdown, images, workflows, ...) runs no pipeline.
+
+set -u
+
+cd "$(dirname "$0")/.."
+
+mode="${1:-all}"
+
+run_php=1
+run_js=1
+
+if [ "$mode" = "--staged" ]; then
+    staged=$(git diff --cached --name-only --diff-filter=ACMR)
+
+    if ! printf '%s\n' "$staged" | grep -vE '^tests/e2e/' \
+        | grep -qE '(\.php$|^composer\.(json|lock)$|^phpunit\.xml\.dist$|^mago.*\.toml$|^phpmyfaq/translations/|^tests/|^scripts/|^bin/)'; then
+        run_php=0
+    fi
+
+    if ! printf '%s\n' "$staged" | grep -qE '(\.(ts|js|cjs|mjs|scss|json|ya?ml|html|twig)$|^package\.json$|^pnpm-lock\.yaml$|^vite\.config\.ts$|^tsconfig.*\.json$|^\.oxlintrc|^\.oxfmtrc|^\.stylelintrc)'; then
+        run_js=0
+    fi
+fi
+
+php_checks() {
+    ./phpmyfaq/src/libs/bin/mago format --dry-run \
+        && ./phpmyfaq/src/libs/bin/mago lint --baseline=mago-lint-baseline.toml \
+        && ./phpmyfaq/src/libs/bin/mago analyze --baseline=mago-analyze-baseline.toml \
+        && composer validate \
+        && composer test:ci
+}
+
+js_checks() {
+    pnpm run oxfmt \
+        && pnpm run oxlint \
+        && pnpm run stylelint \
+        && pnpm run tsc \
+        && pnpm test
+}
+
+log_dir=$(mktemp -d)
+trap 'rm -rf "$log_dir"' EXIT INT TERM
+
+php_pid=
+js_pid=
+
+if [ "$run_php" = 1 ]; then
+    echo "run-checks: PHP pipeline started (mago, composer validate, phpunit)"
+    php_checks >"$log_dir/php.log" 2>&1 &
+    php_pid=$!
+else
+    echo "run-checks: no staged PHP changes, PHP pipeline skipped"
+fi
+
+if [ "$run_js" = 1 ]; then
+    echo "run-checks: JS pipeline started (oxfmt, oxlint, stylelint, tsc, vitest)"
+    js_checks >"$log_dir/js.log" 2>&1 &
+    js_pid=$!
+else
+    echo "run-checks: no staged TypeScript/SCSS changes, JS pipeline skipped"
+fi
+
+status=0
+
+if [ -n "$php_pid" ]; then
+    if wait "$php_pid"; then
+        echo "run-checks: PHP pipeline passed"
+    else
+        status=1
+        echo "run-checks: PHP pipeline FAILED"
+        cat "$log_dir/php.log"
+    fi
+fi
+
+if [ -n "$js_pid" ]; then
+    if wait "$js_pid"; then
+        echo "run-checks: JS pipeline passed"
+    else
+        status=1
+        echo "run-checks: JS pipeline FAILED"
+        cat "$log_dir/js.log"
+    fi
+fi
+
+exit $status
