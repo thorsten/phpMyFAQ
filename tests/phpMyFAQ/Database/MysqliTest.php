@@ -5,6 +5,7 @@ namespace phpMyFAQ\Database;
 use mysqli_result;
 use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use stdClass;
@@ -13,6 +14,7 @@ use stdClass;
  * Class MysqliTest
  */
 #[AllowMockObjectsWithoutExpectations]
+#[RequiresPhpExtension('mysqli')]
 class MysqliTest extends TestCase
 {
     private Mysqli $mysqli;

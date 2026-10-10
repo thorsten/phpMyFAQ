@@ -441,6 +441,12 @@ class UpgradeTest extends TestCase
         file_put_contents($installationDir . '/locked.php', "<?php\n");
         chmod($installationDir . '/locked.php', 0o444);
 
+        if (is_writable($installationDir . '/locked.php')) {
+            $this->removeDirectory($installationDir);
+            unlink(PMF_CONTENT_DIR . '/core/config/constants.php');
+            $this->markTestSkipped('The filesystem does not enforce file permissions.');
+        }
+
         $this->upgrade->setInstallationDirectory($installationDir);
 
         try {
