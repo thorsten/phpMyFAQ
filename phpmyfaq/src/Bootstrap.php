@@ -205,7 +205,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
         $sessionOptions['save_path'] = PMF_SESSION_SAVE_PATH;
     }
 
-    session_start($sessionOptions);
+    SessionStarter::start($sessionOptions);
     $session = new Session(new PhpBridgeSessionStorage());
     $session->start();
 }

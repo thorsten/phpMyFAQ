@@ -6,6 +6,10 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+### phpMyFAQ v4.1.11 - 2026-MM-DD
+
+- fixed "Cannot unserialize StrictSessionHandler" error after updating from phpMyFAQ 4.1.8 (#4752) (Thorsten)
+
 ### phpMyFAQ v4.1.10 - 2026-10-09
 
 - updated third party dependencies (Thorsten)
