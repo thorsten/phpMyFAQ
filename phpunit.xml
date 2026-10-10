@@ -51,5 +51,7 @@
         <server name="PHP_AUTH_USER" value="testUser"/>
         <server name="PHP_AUTH_PW" value="testPassword"/>
         <ini name="memory_limit" value="1024M" />
+        <!-- bcrypt at the minimum cost: the suite hashes thousands of passwords per run -->
+        <env name="PASSWORD_HASH_COST" value="4" />
     </php>
 </phpunit>

@@ -76,6 +76,58 @@ class PasswordHasherTest extends TestCase
         }
     }
 
+    public function testHashUsesTheCostFromTheEnvironment(): void
+    {
+        $previous = $_ENV[PasswordHasher::COST_ENVIRONMENT_VARIABLE] ?? null;
+        $_ENV[PasswordHasher::COST_ENVIRONMENT_VARIABLE] = '5';
+
+        try {
+            $hash = new PasswordHasher($this->configuration)->hash('secret');
+        } finally {
+            if ($previous === null) {
+                unset($_ENV[PasswordHasher::COST_ENVIRONMENT_VARIABLE]);
+            } else {
+                $_ENV[PasswordHasher::COST_ENVIRONMENT_VARIABLE] = $previous;
+            }
+        }
+
+        static::assertSame(5, password_get_info($hash)['options']['cost']);
+    }
+
+    public function testExplicitCostWinsOverTheEnvironmentAndIsClampedToTheBcryptRange(): void
+    {
+        $explicit = new PasswordHasher($this->configuration, 6)->hash('secret');
+        $belowMinimum = new PasswordHasher($this->configuration, 1)->hash('secret');
+
+        static::assertSame(6, password_get_info($explicit)['options']['cost']);
+        static::assertSame(4, password_get_info($belowMinimum)['options']['cost']);
+    }
+
+    public function testNeedsRehashIsTrueWhenTheStoredCostDiffersFromTheConfiguredCost(): void
+    {
+        $storedAtCostFive = new PasswordHasher($this->configuration, 5)->hash('secret');
+
+        static::assertTrue(new PasswordHasher($this->configuration, 6)->needsRehash($storedAtCostFive));
+        static::assertFalse(new PasswordHasher($this->configuration, 5)->needsRehash($storedAtCostFive));
+    }
+
+    public function testBurnVerificationTimeNeverVerifiesButTakesAsLongAsARealVerification(): void
+    {
+        $hasher = new PasswordHasher($this->configuration, 8);
+        $hasher->burnVerificationTime('warm-up');
+        $storedHash = $hasher->hash('secret');
+
+        $start = hrtime(true);
+        static::assertFalse($hasher->verify('login', 'wrong', $storedHash));
+        $realVerification = hrtime(true) - $start;
+
+        $start = hrtime(true);
+        static::assertFalse($hasher->burnVerificationTime('wrong'));
+        $burnedVerification = hrtime(true) - $start;
+
+        static::assertGreaterThanOrEqual($realVerification * 0.3, $burnedVerification);
+    }
+
     public function testHashProducesBcryptHash(): void
     {
         $hash = $this->passwordHasher->hash('secret');

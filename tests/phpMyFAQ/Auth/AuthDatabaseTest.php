@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Auth;
 
+use phpMyFAQ\Auth\PasswordHasher;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
@@ -12,6 +13,8 @@ use PHPUnit\Framework\TestCase;
 class AuthDatabaseTest extends TestCase
 {
     private AuthDatabase $authDatabase;
+
+    private Configuration $configuration;
     private string $databaseFile;
 
     protected function setUp(): void
@@ -21,9 +24,9 @@ class AuthDatabaseTest extends TestCase
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect($this->databaseFile, '', '');
-        $configuration = new Configuration($dbHandle);
+        $this->configuration = new Configuration($dbHandle);
 
-        $this->authDatabase = new AuthDatabase($configuration);
+        $this->authDatabase = new AuthDatabase($this->configuration);
         $this->authDatabase->getEncryptionContainer('sha1');
 
         // Clean up leftover users from previous runs
@@ -182,14 +185,15 @@ class AuthDatabaseTest extends TestCase
      */
     public function testUnknownLoginTakesAsLongAsAWrongPassword(): void
     {
-        $this->authDatabase->create('testUser', 'correctPassword');
+        $authDatabase = $this->createAuthDatabaseWithMeasurableHashingCost();
+        $authDatabase->create('testUser', 'correctPassword');
 
         $wrongPassword = PHP_FLOAT_MAX;
         $unknownLogin = PHP_FLOAT_MAX;
         for ($i = 0; $i < 3; ++$i) {
             $start = hrtime(true);
             try {
-                $this->authDatabase->checkCredentials('testUser', 'wrongPassword');
+                $authDatabase->checkCredentials('testUser', 'wrongPassword');
             } catch (AuthException) {
                 // expected
             }
@@ -197,7 +201,7 @@ class AuthDatabaseTest extends TestCase
 
             $start = hrtime(true);
             try {
-                $this->authDatabase->checkCredentials('nonExistingUser', 'wrongPassword');
+                $authDatabase->checkCredentials('nonExistingUser', 'wrongPassword');
             } catch (AuthException) {
                 // expected
             }
@@ -216,19 +220,44 @@ class AuthDatabaseTest extends TestCase
      */
     public function testIsValidLoginForUnknownLoginBurnsAPasswordVerification(): void
     {
-        $this->authDatabase->create('testUser', 'correctPassword');
+        $authDatabase = $this->createAuthDatabaseWithMeasurableHashingCost();
+        $authDatabase->create('testUser', 'correctPassword');
 
         $start = hrtime(true);
-        $this->assertSame(1, $this->authDatabase->isValidLogin('testUser'));
+        $this->assertSame(1, $authDatabase->isValidLogin('testUser'));
         $knownLogin = hrtime(true) - $start;
 
         $start = hrtime(true);
-        $this->assertSame(0, $this->authDatabase->isValidLogin('nonExistingUser'));
+        $this->assertSame(0, $authDatabase->isValidLogin('nonExistingUser'));
         $unknownLogin = hrtime(true) - $start;
 
-        // bcrypt at cost 12 takes well over 10 ms; a plain SELECT takes far less.
+        // bcrypt at cost 10 takes well over 10 ms; a plain SELECT takes far less.
         $this->assertGreaterThan(10_000_000, $unknownLogin);
         $this->assertGreaterThan($knownLogin, $unknownLogin);
+    }
+
+    /**
+     * The suite hashes at the bcrypt minimum (see phpunit.xml), where a verification is
+     * too fast to time. Timing tests need a cost that is clearly measurable.
+     */
+    private function createAuthDatabaseWithMeasurableHashingCost(): AuthDatabase
+    {
+        $previousCost = $_ENV[PasswordHasher::COST_ENVIRONMENT_VARIABLE] ?? null;
+        $_ENV[PasswordHasher::COST_ENVIRONMENT_VARIABLE] = '10';
+
+        try {
+            $authDatabase = new AuthDatabase($this->configuration);
+        } finally {
+            if ($previousCost === null) {
+                unset($_ENV[PasswordHasher::COST_ENVIRONMENT_VARIABLE]);
+            } else {
+                $_ENV[PasswordHasher::COST_ENVIRONMENT_VARIABLE] = $previousCost;
+            }
+        }
+
+        $authDatabase->getEncryptionContainer('sha1');
+
+        return $authDatabase;
     }
 
     public function testCreateStoresBcryptHash(): void

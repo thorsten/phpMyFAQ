@@ -34,11 +34,6 @@ use phpMyFAQ\User;
  */
 class AuthDatabase extends Auth implements AuthDriverInterface
 {
-    /**
-     * bcrypt hash of a random value; only used to equalise the timing of failed lookups.
-     */
-    private const string DUMMY_PASSWORD_HASH = '$2y$12$EGITAUZxbLyU7bB4wmlCJ.cJjeYZzAHfwavMg0WAJWPSSVNLwsxMe';
-
     private readonly DatabaseDriver $databaseDriver;
 
     private readonly PasswordHasher $passwordHasher;
@@ -173,7 +168,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         $numRows = $this->databaseDriver->numRows($check);
         if ($numRows < 1) {
-            $this->burnPasswordVerificationTime($password);
+            $this->passwordHasher->burnVerificationTime($password);
             throw new AuthException(User::ERROR_USER_NOT_FOUND);
         }
 
@@ -238,21 +233,9 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         $numRows = $this->databaseDriver->numRows($check);
         if ($numRows < 1) {
-            $this->burnPasswordVerificationTime('');
+            $this->passwordHasher->burnVerificationTime('');
         }
 
         return $numRows;
-    }
-
-    /**
-     * Verifies against a fixed bcrypt hash so an unknown login costs the same time as a
-     * known login with a wrong password. Without this, the missing hash computation
-     * makes existing accounts distinguishable by response time (CWE-208). The hash
-     * belongs to a discarded random value, so the result is always false; only the
-     * elapsed time matters.
-     */
-    private function burnPasswordVerificationTime(#[\SensitiveParameter] string $password): bool
-    {
-        return password_verify($password, self::DUMMY_PASSWORD_HASH);
     }
 }
