@@ -272,8 +272,9 @@ class Bootstrapper
 
     private function hasTrustedProxies(): bool
     {
-        $trustedProxies =
-            $_ENV[TrustedProxyConfigurator::ENVIRONMENT_VARIABLE] ?? getenv(TrustedProxyConfigurator::ENVIRONMENT_VARIABLE);
+        $trustedProxies = $_ENV[TrustedProxyConfigurator::ENVIRONMENT_VARIABLE] ?? getenv(
+            TrustedProxyConfigurator::ENVIRONMENT_VARIABLE,
+        );
 
         return is_string($trustedProxies) && trim($trustedProxies) !== '';
     }

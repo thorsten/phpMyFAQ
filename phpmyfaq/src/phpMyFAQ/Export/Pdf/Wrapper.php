@@ -722,7 +722,7 @@ class Wrapper
         }
 
         $host = parse_url($this->config->getDefaultUrl(), PHP_URL_HOST);
-        if (!is_string($host) || $host === '') {
+        if (!is_string($host)) {
             return null;
         }
 

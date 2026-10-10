@@ -89,19 +89,19 @@ final class StreamHttpRequester implements HttpRequesterInterface
             return null;
         }
 
-        $scheme = strtolower((string) $parsedUrl['scheme']);
+        $scheme = strtolower($parsedUrl['scheme']);
         if ($scheme !== 'http' && $scheme !== 'https') {
             return null;
         }
 
-        $host = MediaHostPolicy::normalizeHost((string) $parsedUrl['host']);
+        $host = MediaHostPolicy::normalizeHost($parsedUrl['host']);
         $address = $this->resolveSafeAddress($host);
         if ($address === null) {
             return null;
         }
 
         $port = array_key_exists('port', $parsedUrl) ? (int) $parsedUrl['port'] : null;
-        $hostHeader = (string) $parsedUrl['host'] . ($port !== null ? ':' . $port : '');
+        $hostHeader = $parsedUrl['host'] . ($port !== null ? ':' . $port : '');
         $connectHost = str_contains($address, ':') ? '[' . $address . ']' : $address;
         $connectUrl =
             $scheme
@@ -151,11 +151,13 @@ final class StreamHttpRequester implements HttpRequesterInterface
         }
 
         if (is_array($records)) {
+            /** @var array<array-key, mixed> $record */
             foreach ($records as $record) {
-                $ipv6 = is_array($record) ? $record['ipv6'] ?? null : null;
-                if (is_string($ipv6)) {
-                    $addresses[] = $ipv6;
+                if (!is_string($record['ipv6'] ?? null)) {
+                    continue;
                 }
+
+                $addresses[] = $record['ipv6'];
             }
         }
 

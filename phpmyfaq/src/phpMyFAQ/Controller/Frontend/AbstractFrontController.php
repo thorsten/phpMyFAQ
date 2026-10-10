@@ -215,7 +215,9 @@ abstract class AbstractFrontController extends AbstractController
                 'msgUserRemoval' => Translation::get(key: 'ad_menu_RequestRemove'),
                 'msgLogoutUser' => Translation::get(key: 'ad_menu_logout'),
                 'csrfLogout' => $csrfLogoutToken,
-                'csrfTokenPushSubscription' => Token::getInstance($this->session)->getTokenString(PushController::CSRF_PAGE),
+                'csrfTokenPushSubscription' => Token::getInstance($this->session)->getTokenString(
+                    PushController::CSRF_PAGE,
+                ),
             ];
         }
 

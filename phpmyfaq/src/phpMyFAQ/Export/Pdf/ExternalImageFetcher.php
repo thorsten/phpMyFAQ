@@ -102,13 +102,13 @@ class ExternalImageFetcher
             return false;
         }
 
-        $scheme = strtolower((string) $parsedUrl['scheme']);
+        $scheme = strtolower($parsedUrl['scheme']);
         if ($scheme !== 'http' && $scheme !== 'https') {
             return false;
         }
 
         // Our own host is only ever read from disk, never contacted.
-        if ($ownHost !== null && MediaHostPolicy::normalizeHost((string) $parsedUrl['host']) === $ownHost) {
+        if ($ownHost !== null && MediaHostPolicy::normalizeHost($parsedUrl['host']) === $ownHost) {
             return false;
         }
 

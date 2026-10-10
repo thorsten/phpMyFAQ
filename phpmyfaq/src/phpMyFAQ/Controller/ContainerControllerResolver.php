@@ -49,7 +49,6 @@ class ContainerControllerResolver extends ControllerResolver
                 $instance = $this->container->get($class);
                 $controllerCallable = [$instance, $method];
                 if (is_callable($controllerCallable)) {
-                    /* @mago-expect analysis:less-specific-nested-return-statement - is_callable proves the array is a valid callable */
                     return $controllerCallable;
                 }
             }

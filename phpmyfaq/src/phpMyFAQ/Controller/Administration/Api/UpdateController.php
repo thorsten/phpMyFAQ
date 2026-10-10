@@ -227,8 +227,7 @@ final class UpdateController extends AbstractController
                 echo
                     json_encode([
                         'error' => Translation::getString(key: 'extractFailure') . ' ' . $exception->getMessage(),
-                    ])
-                ;
+                    ]);
             }
         });
     }
