@@ -14,6 +14,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Encryption;
+use phpMyFAQ\Environment;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(AuthDatabase::class)]
 #[UsesClass(PasswordHasher::class)]
 #[UsesClass(Encryption::class)]
+#[UsesClass(Environment::class)]
 class UserRepositoryTest extends TestCase
 {
     private DatabaseDriver&MockObject $db;

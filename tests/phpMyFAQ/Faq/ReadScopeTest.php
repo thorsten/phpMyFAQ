@@ -10,11 +10,11 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\PermissionInterface;
-use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 #[CoversClass(ReadScope::class)]
 #[UsesClass(Configuration::class)]
@@ -23,15 +23,56 @@ use PHPUnit\Framework\TestCase;
 #[UsesTrait(ConfigurationMethodsTrait::class)]
 class ReadScopeTest extends TestCase
 {
-    use TestDatabaseTrait;
+    private static ?Configuration $configuration = null;
+
+    private static ?string $databaseFile = null;
+
+    private ?Configuration $previousConfiguration = null;
+
+    /**
+     * ReadScope escapes values through the global Configuration singleton. The test needs
+     * one of its own instead of whatever an earlier test left behind. It is built here,
+     * outside the per-test coverage window, because constructing a Configuration touches
+     * far more classes than this test is about.
+     */
+    public static function setUpBeforeClass(): void
+    {
+        $databaseFile = tempnam(sys_get_temp_dir(), 'pmf-read-scope-test-');
+        if ($databaseFile === false || !copy(PMF_TEST_DIR . '/test.db', $databaseFile)) {
+            throw new \RuntimeException('Unable to copy the prepared SQLite test database.');
+        }
+
+        $driver = new Sqlite3();
+        $driver->connect($databaseFile, '', '');
+
+        self::$databaseFile = $databaseFile;
+        self::$configuration = new Configuration($driver);
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        self::$configuration = null;
+
+        if (self::$databaseFile !== null) {
+            @unlink(self::$databaseFile);
+            self::$databaseFile = null;
+        }
+    }
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        // ReadScope escapes values through the global Configuration singleton; give the
-        // test its own instead of relying on whatever an earlier test left behind.
-        $this->createTestConfiguration();
+        $singleton = new ReflectionProperty(Configuration::class, 'configuration');
+        $this->previousConfiguration = $singleton->getValue();
+        $singleton->setValue(null, self::$configuration);
+    }
+
+    protected function tearDown(): void
+    {
+        new ReflectionProperty(Configuration::class, 'configuration')->setValue(null, $this->previousConfiguration);
+
+        parent::tearDown();
     }
 
     public function testUnrestrictedScopeAddsNothingToTheQuery(): void

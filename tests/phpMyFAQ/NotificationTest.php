@@ -15,6 +15,7 @@ use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\QuestionEntity;
+use phpMyFAQ\Environment;
 use phpMyFAQ\Link\Strategy\GenericPathStrategy;
 use phpMyFAQ\Link\Strategy\StrategyRegistry;
 use phpMyFAQ\Link\Util\TitleSlugifier;
@@ -35,6 +36,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(Notification::class)]
+#[UsesClass(Environment::class)]
 #[UsesClass(Strings::class)]
 #[UsesClass(Translation::class)]
 #[UsesClass(FaqEntity::class)]

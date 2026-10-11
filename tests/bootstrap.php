@@ -122,6 +122,10 @@ $loader->add('phpMyFAQ', PMF_SRC_DIR);
 $loader->add('phpMyFAQ', PMF_TEST_DIR);
 $loader->register();
 
+// Namespace-level function overrides must exist before the code they shadow runs
+// for the first time in this process; see the file for details.
+require PMF_TEST_DIR . '/phpMyFAQ/Configuration/Storage/RedisExtensionShim.php';
+
 /**
  * Reuses the prepared SQLite test database across bootstrap invocations when possible.
  * This avoids reinstall races in PHPUnit separate-process tests and coverage subprocesses.

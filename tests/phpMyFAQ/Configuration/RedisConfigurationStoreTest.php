@@ -85,24 +85,6 @@ namespace {
     }
 }
 
-namespace phpMyFAQ\Configuration\Storage {
-    function extension_loaded(string $extension): bool
-    {
-        return $extension === 'redis'
-            ? \phpMyFAQ\Configuration\RedisConfigurationStoreTestShim::$redisExtensionLoaded
-            : \extension_loaded($extension);
-    }
-
-    function phpversion(?string $extension = null): string|false
-    {
-        if ($extension === 'redis') {
-            return \phpMyFAQ\Configuration\RedisConfigurationStoreTestShim::$redisExtensionVersion;
-        }
-
-        return \phpversion($extension);
-    }
-}
-
 namespace phpMyFAQ\Configuration {
     use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettings;
     use phpMyFAQ\Configuration\Storage\RedisConfigurationStore;
@@ -131,6 +113,15 @@ namespace phpMyFAQ\Configuration {
             $this->settings = new ConfigurationStorageSettings(true, 'tcp://redis:6379?database=1', 'pmf:config:', 1.0);
             RedisConfigurationStoreTestShim::$redisExtensionLoaded = true;
             RedisConfigurationStoreTestShim::$redisExtensionVersion = '6.1.0';
+        }
+
+        protected function tearDown(): void
+        {
+            // Back to the real extension state for every other test in this process.
+            RedisConfigurationStoreTestShim::$redisExtensionLoaded = null;
+            RedisConfigurationStoreTestShim::$redisExtensionVersion = null;
+
+            parent::tearDown();
         }
 
         public function testUpdateConfigValueReturnsTrueWhenRedisHashSetSucceeds(): void
@@ -341,12 +332,5 @@ namespace phpMyFAQ\Configuration {
 
             return $store;
         }
-    }
-
-    final class RedisConfigurationStoreTestShim
-    {
-        public static bool $redisExtensionLoaded = true;
-
-        public static string|false $redisExtensionVersion = '6.1.0';
     }
 }
