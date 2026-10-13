@@ -1,0 +1,446 @@
+<?php
+
+/**
+ * Authentication Controller for generic OpenID Connect providers.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2026 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since 2026-10-13
+ */
+
+declare(strict_types=1);
+
+namespace phpMyFAQ\Controller\Frontend;
+
+use Closure;
+use Exception;
+use JsonException;
+use phpMyFAQ\Auth\AuthOidc;
+use phpMyFAQ\Auth\Oidc\GenericOidcProviderConfigFactory;
+use phpMyFAQ\Auth\Oidc\OidcClient;
+use phpMyFAQ\Auth\Oidc\OidcDiscoveryService;
+use phpMyFAQ\Auth\Oidc\OidcIdTokenValidator;
+use phpMyFAQ\Auth\Oidc\OidcPkceGenerator;
+use phpMyFAQ\Auth\Oidc\OidcSession;
+use phpMyFAQ\Core\Json;
+use phpMyFAQ\Enums\AuthenticationSourceType;
+use phpMyFAQ\Filter;
+use phpMyFAQ\User;
+use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+final class OidcAuthenticationController extends AbstractFrontController
+{
+    /** @var (Closure(): CurrentUser)|null */
+    private ?Closure $currentUserFactory = null;
+
+    /** @var (Closure(): User)|null */
+    private ?Closure $userFactory = null;
+
+    public function __construct(
+        private readonly GenericOidcProviderConfigFactory $providerConfigFactory,
+        private readonly OidcDiscoveryService $discoveryService,
+        private readonly OidcPkceGenerator $pkceGenerator,
+        private readonly OidcSession $oidcSession,
+        private readonly OidcClient $oidcClient,
+        private readonly OidcIdTokenValidator $idTokenValidator,
+    ) {
+        parent::__construct();
+    }
+
+    /**
+     * @param (Closure(): CurrentUser)|null $currentUserFactory
+     */
+    public function setCurrentUserFactory(?Closure $currentUserFactory): self
+    {
+        $this->currentUserFactory = $currentUserFactory;
+        return $this;
+    }
+
+    /**
+     * @param (Closure(): User)|null $userFactory
+     */
+    public function setUserFactory(?Closure $userFactory): self
+    {
+        $this->userFactory = $userFactory;
+        return $this;
+    }
+
+    #[Route(path: '/auth/oidc/authorize', name: 'public.oidc.authorize', methods: ['GET'])]
+    public function authorize(): RedirectResponse
+    {
+        try {
+            $providerConfig = $this->providerConfigFactory->create();
+            if (!$providerConfig->enabled || $providerConfig->discoveryUrl === '') {
+                return new RedirectResponse($this->configuration->getDefaultUrl());
+            }
+
+            $discoveryDocument = $this->discoveryService->discover($providerConfig);
+            $state = bin2hex(random_bytes(16));
+            $nonce = bin2hex(random_bytes(16));
+            $verifier = $this->pkceGenerator->generateVerifier();
+            $challenge = $this->pkceGenerator->generateChallenge($verifier);
+
+            $this->oidcSession->setAuthorizationState($state, $nonce, $verifier);
+
+            return new RedirectResponse($this->oidcClient->buildAuthorizationUrl(
+                $providerConfig,
+                $discoveryDocument,
+                $state,
+                $nonce,
+                $challenge,
+            ));
+        } catch (Exception $exception) {
+            $this->configuration
+                ->getLogger()
+                ->info(sprintf(
+                    'OpenID Connect login failed: %s at line %d at %s',
+                    $exception->getMessage(),
+                    $exception->getLine(),
+                    $exception->getFile(),
+                ));
+
+            return new RedirectResponse($this->configuration->getDefaultUrl());
+        }
+    }
+
+    #[Route(path: '/auth/oidc/logout', name: 'public.oidc.logout', methods: ['GET'])]
+    public function logout(): RedirectResponse
+    {
+        $user = $this->getCurrentUserService();
+
+        try {
+            $providerConfig = $this->providerConfigFactory->create();
+            $idToken = $this->resolveLogoutIdToken($user);
+
+            $user->deleteFromSession();
+            $this->oidcSession->clearIdToken();
+
+            if (!$providerConfig->enabled || $providerConfig->discoveryUrl === '') {
+                return new RedirectResponse($this->configuration->getDefaultUrl());
+            }
+
+            $discoveryDocument = $this->discoveryService->discover($providerConfig);
+            $logoutUrl = $this->oidcClient->buildLogoutUrl($providerConfig, $discoveryDocument, $idToken);
+
+            return new RedirectResponse($logoutUrl ?? $this->configuration->getDefaultUrl());
+        } catch (Exception) {
+            $user->deleteFromSession();
+            $this->oidcSession->clearIdToken();
+            return new RedirectResponse($this->configuration->getDefaultUrl());
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route(path: '/auth/oidc/callback', name: 'public.oidc.callback', methods: ['GET'])]
+    public function callback(Request $request): Response
+    {
+        $providerConfig = $this->providerConfigFactory->create();
+        if (!$providerConfig->enabled || $providerConfig->discoveryUrl === '') {
+            return new RedirectResponse($this->configuration->getDefaultUrl());
+        }
+
+        $code = Filter::filterVar($request->query->get('code'), FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $state = Filter::filterVar($request->query->get('state'), FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $error = Filter::filterVar($request->query->get('error_description'), FILTER_SANITIZE_SPECIAL_CHARS, '');
+
+        if ($error !== '') {
+            $this->configuration->getLogger()->warning(sprintf('OpenID Connect callback error: %s', $error));
+            return new RedirectResponse($this->configuration->getDefaultUrl());
+        }
+
+        $redirect = new RedirectResponse($this->configuration->getDefaultUrl());
+        $authorizationState = $this->oidcSession->getAuthorizationState();
+
+        if (
+            $code === ''
+            || $state === ''
+            || $authorizationState['state'] === ''
+            || !hash_equals($authorizationState['state'], $state)
+        ) {
+            $this->oidcSession->clearAuthorizationState();
+            return $redirect;
+        }
+
+        try {
+            $discoveryDocument = $this->discoveryService->discover($providerConfig);
+            $token = $this->oidcClient->exchangeAuthorizationCode(
+                $providerConfig,
+                $discoveryDocument,
+                $code,
+                $authorizationState['verifier'],
+            );
+            $idTokenClaims = $this->idTokenValidator->validate(
+                (string) ($token['id_token'] ?? ''),
+                $discoveryDocument,
+                $providerConfig->client->clientId,
+                $authorizationState['nonce'],
+            );
+            $claims = $this->oidcClient->fetchUserInfo($discoveryDocument, (string) $token['access_token']);
+
+            $idTokenSub = (string) ($idTokenClaims['sub'] ?? '');
+            $userInfoSub = (string) ($claims['sub'] ?? '');
+            if ($idTokenSub === '' || $userInfoSub === '' || !hash_equals($idTokenSub, $userInfoSub)) {
+                $this->configuration
+                    ->getLogger()
+                    ->warning('OpenID Connect subject mismatch between ID token and UserInfo; aborting login.');
+                $this->oidcSession->clearAuthorizationState();
+                return $redirect;
+            }
+
+            $login = $this->resolveLocalLogin($claims);
+            if ($login === '') {
+                $this->oidcSession->clearAuthorizationState();
+                return $redirect;
+            }
+            $auth = new AuthOidc($this->configuration, $providerConfig, $claims, $login, $this->userFactory);
+
+            if (!$auth->isValidLogin($login)) {
+                $this->configuration
+                    ->getLogger()
+                    ->warning(sprintf('OpenID Connect login not valid for user: %s', $this->maskLogin($login)));
+                $this->oidcSession->clearAuthorizationState();
+                return $redirect;
+            }
+
+            if (!$auth->checkCredentials($login, '')) {
+                $this->configuration
+                    ->getLogger()
+                    ->warning(sprintf('OpenID Connect credentials not valid for user: %s', $this->maskLogin($login)));
+                $this->oidcSession->clearAuthorizationState();
+                return $redirect;
+            }
+
+            $user = $this->getCurrentUserService();
+            if (!$user->getUserByLogin($login)) {
+                $this->configuration
+                    ->getLogger()
+                    ->warning(sprintf('OpenID Connect user lookup failed for login: %s', $this->maskLogin($login)));
+                $this->oidcSession->clearAuthorizationState();
+                return $redirect;
+            }
+
+            if (!$this->isLinkedToSubject($user, $claims)) {
+                $this->configuration
+                    ->getLogger()
+                    ->warning(sprintf('OpenID Connect subject mismatch for user: %s', $this->maskLogin($login)));
+                $this->oidcSession->clearAuthorizationState();
+                return $redirect;
+            }
+
+            $user->setAuthSource(AuthenticationSourceType::AUTH_OIDC->value);
+            $user->setTokenData([
+                'refresh_token' => (string) ($token['refresh_token'] ?? ''),
+                'access_token' => (string) $token['access_token'],
+                'code_verifier' => $authorizationState['verifier'],
+                'jwt' => [
+                    'id_token' => (string) ($token['id_token'] ?? ''),
+                    'userinfo' => $claims,
+                ],
+            ]);
+            $this->oidcSession->clearAuthorizationState();
+            $this->oidcSession->setIdToken((string) ($token['id_token'] ?? ''));
+
+            // A validated OpenID Connect identity counts as the first factor only. If the account has
+            // TOTP two-factor enabled, defer to the token step instead of granting the session,
+            // mirroring the password and passkey login flows, so single sign-on cannot bypass
+            // two-factor authentication.
+            if ((int) $user->getUserData('twofactor_enabled') === 1) {
+                // The failure count is deliberately not reset here: a valid SSO identity must
+                // not buy a fresh budget of token guesses, so setSuccess() stays in the token step.
+                if ($user->isTwoFactorLockedOut()) {
+                    $this->configuration
+                        ->getLogger()
+                        ->warning(sprintf(
+                            'OpenID Connect login rejected: second factor locked out for user: %s',
+                            $this->maskLogin($login),
+                        ));
+
+                    return $redirect;
+                }
+
+                $this->session->set('2fa_pending_user_id', $user->getUserId());
+                // Single sign-on has no remember-me option; the token step decides cookie
+                // issuance, so carry an explicit "false" through it.
+                $this->session->set('2fa_pending_remember_me', false);
+
+                return new RedirectResponse(
+                    $this->configuration->getDefaultUrl() . 'token?user-id=' . $user->getUserId(),
+                );
+            }
+
+            $user->setLoggedIn(true);
+            $user->updateSessionId(true);
+            $user->saveToSession();
+            $user->setSuccess(true);
+
+            return $redirect;
+        } catch (Exception $exception) {
+            $this->configuration->getLogger()->error(
+                sprintf('OpenID Connect login failed: %s', $exception->getMessage()),
+                [
+                    'exception' => $exception,
+                ],
+            );
+            $this->oidcSession->clearAuthorizationState();
+
+            return new RedirectResponse($this->configuration->getDefaultUrl());
+        }
+    }
+
+    /**
+     * Resolves the local login for the authenticated OpenID Connect identity.
+     *
+     * An existing local account is only ever resolved through its stored OpenID Connect
+     * subject. Matching by preferred username or email would let any OpenID Connect user
+     * who controls a colliding claim take over a local account they never proved
+     * ownership of, so an unlinked identity may only provision a new account.
+     *
+     * @param array<string, mixed> $claims
+     */
+    private function resolveLocalLogin(array $claims): string
+    {
+        $subject = trim((string) ($claims['sub'] ?? ''));
+        if ($subject === '') {
+            $this->configuration->getLogger()->warning('OpenID Connect login rejected: claims are missing the sub.');
+            return '';
+        }
+
+        $linkedUser = $this->createUser();
+        $linkedUserId = $linkedUser->getUserIdByOidcSub($subject);
+        if ($linkedUserId > 0 && $linkedUser->getUserById($linkedUserId)) {
+            return $linkedUser->getLogin();
+        }
+
+        return $this->resolveProvisioningLogin($claims);
+    }
+
+    /**
+     * Returns the login for a OpenID Connect identity that is not linked to any local account.
+     * The login is rejected when it would collide with an existing local account.
+     *
+     * @param array<string, mixed> $claims
+     */
+    private function resolveProvisioningLogin(array $claims): string
+    {
+        $preferredUsername = trim((string) ($claims['preferred_username'] ?? ''));
+        $email = trim((string) ($claims['email'] ?? ''));
+        $login = $preferredUsername !== '' ? $preferredUsername : $email;
+
+        if ($login === '') {
+            $this->configuration
+                ->getLogger()
+                ->warning(
+                    'OpenID Connect login rejected: claims are missing both preferred_username and email; refusing to auto-provision the sub.',
+                );
+
+            return '';
+        }
+
+        if ($this->createUser()->getUserByLogin($login, false)) {
+            $this->configuration
+                ->getLogger()
+                ->warning(sprintf(
+                    'OpenID Connect login rejected: local account %s exists but is not linked to the OpenID Connect subject.',
+                    $this->maskLogin($login),
+                ));
+
+            return '';
+        }
+
+        if ($email !== '' && $this->createUser()->getUserIdByEmail($email) > 0) {
+            $this->configuration
+                ->getLogger()
+                ->warning(sprintf(
+                    'OpenID Connect login rejected: email of %s belongs to a local account that is not linked to the OpenID Connect subject.',
+                    $this->maskLogin($login),
+                ));
+
+            return '';
+        }
+
+        return $login;
+    }
+
+    private function maskLogin(string $login): string
+    {
+        $login = trim($login);
+        if ($login === '') {
+            return '<empty>';
+        }
+
+        $secret = (string) $this->configuration->get('security.salt');
+
+        return 'hmac:' . substr(hash_hmac('sha256', $login, $secret), offset: 0, length: 12);
+    }
+
+    /**
+     * The loaded account must already carry the subject of the authenticated identity.
+     * A missing binding is never filled in at login time: doing so would silently hand
+     * the account to whichever OpenID Connect identity reaches this point first.
+     *
+     * @param array<string, mixed> $claims
+     */
+    private function isLinkedToSubject(CurrentUser $user, array $claims): bool
+    {
+        $subject = trim((string) ($claims['sub'] ?? ''));
+        $linkedSubject = trim((string) $user->getUserData('oidc_sub'));
+
+        return $subject !== '' && $linkedSubject !== '' && hash_equals($linkedSubject, $subject);
+    }
+
+    private function resolveLogoutIdToken(CurrentUser $user): string
+    {
+        $idToken = trim($this->oidcSession->getIdToken());
+        if ($idToken !== '') {
+            return $idToken;
+        }
+
+        $jwtPayload = trim((string) $user->getUserData('jwt'));
+        if ($jwtPayload === '') {
+            return '';
+        }
+
+        try {
+            $jwt = Json::decodeAssoc($jwtPayload, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            return '';
+        }
+
+        if ($jwt === null) {
+            return '';
+        }
+
+        return trim((string) ($jwt['id_token'] ?? ''));
+    }
+
+    private function getCurrentUserService(): CurrentUser
+    {
+        if ($this->currentUserFactory instanceof Closure) {
+            return ($this->currentUserFactory)();
+        }
+
+        return $this->currentUser;
+    }
+
+    private function createUser(): User
+    {
+        if ($this->userFactory instanceof Closure) {
+            return ($this->userFactory)();
+        }
+
+        return new User($this->configuration);
+    }
+}
