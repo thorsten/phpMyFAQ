@@ -49,6 +49,7 @@ const TAB_TARGETS = [
   '#api',
   '#oauth2',
   '#keycloak',
+  '#oidc',
   '#upgrade',
   '#translation',
   '#storage',

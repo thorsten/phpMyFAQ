@@ -272,6 +272,28 @@ final class ConfigurationTabControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testListReturnsRenderedOidcConfigurationTabForAuthenticatedUser(): void
+    {
+        $language = $this->createStub(Language::class);
+        $language->method('setLanguageByAcceptLanguage')->willReturn('en');
+
+        $controller = $this->createControllerWithLanguage($language);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [], ['mode' => 'oidc']);
+        $response = $controller->list($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('OpenID Connect', (string) $response->getContent());
+        self::assertStringContainsString('data-config-key="oidc.enable"', (string) $response->getContent());
+        self::assertStringContainsString('data-config-key="oidc.discoveryUrl"', (string) $response->getContent());
+        self::assertStringContainsString('data-config-key="oidc.groupsClaim"', (string) $response->getContent());
+        self::assertStringNotContainsString('data-config-key="oauth2.', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testSaveReturnsUnauthorizedForInvalidCsrfWhenAuthenticated(): void
     {
         $controller = $this->createController();
@@ -614,6 +636,12 @@ final class ConfigurationTabControllerTest extends TestCase
         yield 'keycloak on metadata endpoint' => ['keycloak.baseUrl', 'http://169.254.169.254/'];
         yield 'keycloak redirect with javascript' => ['keycloak.redirectUri', 'javascript:alert(1)'];
         yield 'keycloak logout redirect protocol relative' => ['keycloak.logoutRedirectUrl', '//evil.example.test'];
+        yield 'oidc discovery on metadata endpoint' => [
+            'oidc.discoveryUrl',
+            'http://169.254.169.254/.well-known/openid-configuration',
+        ];
+        yield 'oidc redirect with javascript' => ['oidc.redirectUri', 'javascript:alert(1)'];
+        yield 'oidc logout redirect protocol relative' => ['oidc.logoutRedirectUrl', '//evil.example.test'];
         yield 'session redis with http' => ['session.redisDsn', 'http://redis:6379'];
         yield 'storage redis without host' => ['storage.redisDsn', 'redis://'];
         yield 'cache redis garbage' => ['storage.cacheRedisDsn', 'redis'];
