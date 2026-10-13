@@ -342,6 +342,7 @@ class PdoSqlsrv extends Database implements DriverInterface
             display_name NVARCHAR(128) NULL,
             email NVARCHAR(128) NULL,
             keycloak_sub NVARCHAR(255) NULL,
+            oidc_sub NVARCHAR(255) NULL,
             is_visible INTEGER NULL DEFAULT 0,
             twofactor_enabled INTEGER NULL DEFAULT 0,
             secret NVARCHAR(128) NULL DEFAULT NULL)',
