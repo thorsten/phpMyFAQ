@@ -731,7 +731,8 @@ class DatabaseSchema
             ->smallInteger('is_visible', true, 0)
             ->smallInteger('twofactor_enabled', true, 0)
             ->varchar('secret', 128)
-            ->integer('twofactor_last_slice');
+            ->integer('twofactor_last_slice')
+            ->uniqueIndex('idx_faquserdata_oidc_identity', ['oidc_iss', 'oidc_sub']);
     }
 
     public function faquserlogin(): TableBuilder

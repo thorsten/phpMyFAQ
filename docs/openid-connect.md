@@ -49,6 +49,7 @@ The login pages then show a *Sign in with Authentik* button.
 ## 4. User resolution and account linking
 
 1. An account whose stored OIDC issuer and subject equal the ID token's `iss` and `sub` claims is used.
+   Each issuer and subject pair links to at most one account; distinct issuers may share a subject.
 2. Otherwise, when automatic provisioning is enabled, a new account is created with the
    `preferred_username` claim as login (or the `email` claim when there is no username).
 3. If that login or email already belongs to an account that is not linked, the login is refused

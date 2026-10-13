@@ -157,24 +157,56 @@ class UserData
      */
     public function fetchAll(string $key, string $value): array
     {
-        // $key is a column name chosen by internal callers, never user input; only
-        // the value is bound as a parameter.
+        return $this->fetchWhere([$key => $value]);
+    }
+
+    /**
+     * Returns the data of the account linked to the given OpenID Connect identity.
+     * A subject is only unique per issuer, so both columns take part in the lookup.
+     *
+     * @return array<array-key, mixed>
+     */
+    public function fetchByOidcIdentity(string $issuer, string $subject): array
+    {
+        return $this->fetchWhere(['oidc_iss' => $issuer, 'oidc_sub' => $subject]);
+    }
+
+    /**
+     * @param array<string, string> $criteria column => value, all of them must match
+     * @return array<array-key, mixed>
+     */
+    private function fetchWhere(array $criteria): array
+    {
+        // The keys are column names chosen by internal callers, never user input; only
+        // the values are bound as parameters.
+        $where = implode(' AND ', array_map(
+            static fn(string $column): string => $column . ' = ?',
+            array_keys($criteria),
+        ));
+        $values = array_values($criteria);
+
         $select = sprintf('SELECT
                 user_id, last_modified, display_name, email, keycloak_sub, entra_oid, oidc_sub, oidc_iss, is_visible,
                 twofactor_enabled, secret
-            FROM %sfaquserdata WHERE %s = ?', Database::getTablePrefix(), $key);
+            FROM %sfaquserdata WHERE %s', Database::getTablePrefix(), $where);
 
         try {
-            $res = $this->configuration->getDb()->queryPrepared($select, [$value]);
+            $res = $this->configuration->getDb()->queryPrepared($select, $values);
         } catch (\Throwable) {
             $res = false;
         }
 
         if ($res === false) {
+            // A legacy schema without the identity link columns cannot hold a link, so a
+            // lookup by one of them has nothing to find; other keys fall back to the old columns.
+            if (array_intersect(array_keys($criteria), self::IDENTITY_LINK_FIELDS) !== []) {
+                return ['user_id' => -1];
+            }
+
             $select = sprintf('SELECT
                     user_id, last_modified, display_name, email, is_visible, twofactor_enabled, secret
-                FROM %sfaquserdata WHERE %s = ?', Database::getTablePrefix(), $key);
-            $res = $this->configuration->getDb()->queryPrepared($select, [$value]);
+                FROM %sfaquserdata WHERE %s', Database::getTablePrefix(), $where);
+            $res = $this->configuration->getDb()->queryPrepared($select, $values);
         }
 
         if ($this->configuration->getDb()->numRows($res) !== 1) {

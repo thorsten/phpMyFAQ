@@ -72,8 +72,8 @@ class Migration420Beta3Test extends TestCase
         $this->assertSame(
             [
                 'ALTER TABLE faquserdata ADD COLUMN oidc_sub VARCHAR(255) NULL',
-                'CREATE UNIQUE INDEX IF NOT EXISTS idx_faquserdata_oidc_sub ON faquserdata (oidc_sub)',
                 'ALTER TABLE faquserdata ADD COLUMN oidc_iss VARCHAR(255) NULL',
+                'CREATE UNIQUE INDEX IF NOT EXISTS idx_faquserdata_oidc_identity ON faquserdata (oidc_iss, oidc_sub)',
             ],
             $recorder->getSqlQueries(),
         );
@@ -117,7 +117,7 @@ class Migration420Beta3Test extends TestCase
         $this->assertCount(13, $recorder->getOperationsByType('config_add'));
     }
 
-    public function testUpOnlyAddsTheIssuerColumnWhenTheSubjectColumnExists(): void
+    public function testUpAddsTheIssuerColumnAndTheIdentityIndexWhenOnlyTheSubjectColumnExists(): void
     {
         $this->configuration->getDb()->query('CREATE TABLE faquserdata (user_id INTEGER, oidc_sub VARCHAR(255))');
 
@@ -125,7 +125,10 @@ class Migration420Beta3Test extends TestCase
         $this->migration->up($recorder);
 
         $this->assertSame(
-            ['ALTER TABLE faquserdata ADD COLUMN oidc_iss VARCHAR(255) NULL'],
+            [
+                'ALTER TABLE faquserdata ADD COLUMN oidc_iss VARCHAR(255) NULL',
+                'CREATE UNIQUE INDEX IF NOT EXISTS idx_faquserdata_oidc_identity ON faquserdata (oidc_iss, oidc_sub)',
+            ],
             $recorder->getSqlQueries(),
         );
     }
@@ -143,5 +146,14 @@ class Migration420Beta3Test extends TestCase
         }
 
         $this->assertNotFalse($db->query('SELECT oidc_sub, oidc_iss FROM faquserdata'));
+
+        // Distinct issuers may share a subject, a duplicate (issuer, subject) pair is rejected.
+        $db->query("INSERT INTO faquserdata (user_id, oidc_sub, oidc_iss) VALUES (1, 'sub-1', 'https://a.example')");
+        $this->assertNotFalse(
+            $db->query("INSERT INTO faquserdata (user_id, oidc_sub, oidc_iss) VALUES (2, 'sub-1', 'https://b.example')"),
+        );
+        $this->assertFalse(
+            @$db->query("INSERT INTO faquserdata (user_id, oidc_sub, oidc_iss) VALUES (3, 'sub-1', 'https://a.example')"),
+        );
     }
 }
