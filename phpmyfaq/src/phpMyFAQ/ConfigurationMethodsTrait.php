@@ -390,6 +390,11 @@ trait ConfigurationMethodsTrait
         return $this->securitySettings->isSignInWithKeycloakActive();
     }
 
+    public function isSignInWithOidcActive(): bool
+    {
+        return $this->securitySettings->isSignInWithOidcActive();
+    }
+
     /**
      * Sets the Elasticsearch client instance.
      */

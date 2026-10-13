@@ -1856,11 +1856,11 @@ final class UserControllerTest extends TestCase
 
     /**
      * The admin read endpoint must never serialise secret material: the live TOTP seed
-     * (secret) and the OIDC subject (keycloak_sub) have to be stripped from the response.
+     * (secret) and the identity-provider subjects (keycloak_sub, oidc_sub) have to be stripped from the response.
      *
      * @throws \Exception
      */
-    public function testUserDataStripsSecretAndKeycloakSubFromResponse(): void
+    public function testUserDataStripsSecretAndIdentitySubjectsFromResponse(): void
     {
         $session = new Session(new MockArraySessionStorage());
         // A SuperAdmin acting user passes the target guard, isolating the field-stripping.
@@ -1878,6 +1878,7 @@ final class UserControllerTest extends TestCase
                 'twofactor_enabled' => 1,
                 'secret' => 'TOPSECRETTOTPSEEDVALUE',
                 'keycloak_sub' => 'kc-subject-uuid-123',
+                'oidc_sub' => 'oidc-subject-uuid-456',
             ]);
 
         $userService = $this->createMock(CurrentUser::class);
@@ -1900,6 +1901,8 @@ final class UserControllerTest extends TestCase
         self::assertStringNotContainsString('kc-subject-uuid-123', $body);
         self::assertStringNotContainsString('secret', $body);
         self::assertStringNotContainsString('keycloak_sub', $body);
+        self::assertStringNotContainsString('oidc-subject-uuid-456', $body);
+        self::assertStringNotContainsString('oidc_sub', $body);
         // Non-sensitive fields must still be present.
         self::assertStringContainsString('jane@example.test', $body);
     }

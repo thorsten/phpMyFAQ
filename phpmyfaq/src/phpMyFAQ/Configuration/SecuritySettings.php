@@ -37,4 +37,9 @@ readonly class SecuritySettings
     {
         return (bool) $this->coreConfiguration->get(item: 'keycloak.enable');
     }
+
+    public function isSignInWithOidcActive(): bool
+    {
+        return (bool) $this->coreConfiguration->get(item: 'oidc.enable');
+    }
 }

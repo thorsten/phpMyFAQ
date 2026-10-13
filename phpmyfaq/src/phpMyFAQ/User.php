@@ -830,6 +830,24 @@ class User
     }
 
     /**
+     * Returns the user ID linked to the given OpenID Connect subject.
+     */
+    public function getUserIdByOidcSub(string $subject): int
+    {
+        if ($subject === '') {
+            return 0;
+        }
+
+        $userData = $this->userData()->fetchAll('oidc_sub', $subject);
+
+        if (!array_key_exists('user_id', $userData)) {
+            return 0;
+        }
+
+        return (int) $userData['user_id'];
+    }
+
+    /**
      * Returns the user ID linked to the given Microsoft Entra ID object identifier.
      */
     public function getUserIdByEntraOid(string $objectId): int

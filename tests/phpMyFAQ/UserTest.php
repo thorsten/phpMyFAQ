@@ -710,12 +710,13 @@ class UserTest extends TestCase
         $this->userData->expects($this->once())->method('load')->with(11);
         $this->userData->expects($this->once())->method('set')->with(['display_name'], ['Thorsten'])->willReturn(true);
         $this->userData
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(4))
             ->method('fetchAll')
             ->willReturnOnConsecutiveCalls(
                 ['user_id' => 11, 'is_visible' => true],
                 ['user_id' => 12],
                 ['user_id' => 13],
+                ['user_id' => 14],
             );
 
         $this->assertSame('Thorsten', $this->user->getUserData('display_name'));
@@ -723,6 +724,14 @@ class UserTest extends TestCase
         $this->assertSame(11, $this->user->getUserIdByEmail('thorsten@example.com'));
         $this->assertTrue($this->user->getUserVisibilityByEmail('anonymous@example.com'));
         $this->assertSame(13, $this->user->getUserIdByKeycloakSub('keycloak-sub-123'));
+        $this->assertSame(14, $this->user->getUserIdByOidcSub('oidc-sub-123'));
+    }
+
+    public function testGetUserIdByOidcSubReturnsZeroForEmptySubject(): void
+    {
+        $this->userData->expects($this->never())->method('fetchAll');
+
+        $this->assertSame(0, $this->user->getUserIdByOidcSub(''));
     }
 
     public function testGetUserDataCreatesUserDataWhenUnset(): void
