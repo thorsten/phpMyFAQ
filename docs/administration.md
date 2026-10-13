@@ -957,7 +957,7 @@ phpMyFAQ can integrate with external identity providers for administrator and fr
 ### 5.7.1 Using Keycloak
 
 Keycloak support uses OpenID Connect Authorization Code flow with PKCE.
-You can enable it in the administration under `Configuration` -> `Security` -> `Keycloak`.
+You can enable it in the administration under `Configuration` -> `Keycloak`.
 For a worked configuration example, see the dedicated [Keycloak Integration guide](keycloak.md).
 
 Recommended Keycloak client settings:
@@ -1023,7 +1023,16 @@ Troubleshooting:
 - If users are created but not added to groups, make sure permission level `medium` is enabled and the Keycloak roles actually match your JSON mapping keys
 - If an existing user cannot log in, check whether the stored Keycloak subject (`sub`) is already linked to a different account
 
-### 5.7.2 Using Microsoft Entra ID
+### 5.7.2 Using a generic OpenID Connect provider
+
+phpMyFAQ can also sign users in through any OpenID Connect provider, such as Authentik, Okta or
+Zitadel, using the Authorization Code flow with PKCE. Enable it under
+`Configuration` -> `OpenID Connect`, enter the provider's discovery URL, client ID and client secret,
+and optionally a provider name for the login button. See the dedicated
+[OpenID Connect Integration guide](openid-connect.md) for an Authentik walkthrough, account
+linking rules and group mapping.
+
+### 5.7.3 Using Microsoft Entra ID
 
 You can use our experimental Microsoft Entra ID support for user authentication as well.
 App Registrations in Azure are used to integrate applications with Microsoft Azure services,

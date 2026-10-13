@@ -6,6 +6,10 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+### phpMyFAQ v4.2.0-beta.3 - unreleased
+
+- added support for generic OpenID Connect providers such as Authentik, issue #4759 (Thorsten)
+
 ### phpMyFAQ v4.2.0-beta.2 - 2026-10-09
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)

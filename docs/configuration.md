@@ -136,6 +136,19 @@ each setting controls. These values are set during installation and can be chang
 | `keycloak.groupSyncOnLogin`                 | Synchronize mapped phpMyFAQ groups on login | `false` | When enabled, phpMyFAQ also removes stale memberships for groups managed by the Keycloak role mapping during login. |
 | `keycloak.groupMapping`                     | Role to group mapping | *(empty)* | JSON object mapping Keycloak role names to phpMyFAQ group names, for example `{"admin":"Administrators","faq-editors":"Editors"}`. Only mapped roles are managed for assignment and synchronization. |
 | `keycloak.logoutRedirectUrl`                | Logout redirect URL | *(empty)* | URL users should be redirected to after logging out from Keycloak, for example `https://faq.example.com/`. |
+| `oidc.enable`                               | Enable OpenID Connect sign-in | `false` | Enables login through a generic OpenID Connect provider on the frontend and admin login forms. |
+| `oidc.providerName`                         | Provider name | `OpenID Connect` | Name shown on the login button, for example `Authentik`. |
+| `oidc.discoveryUrl`                         | Discovery URL | *(empty)* | Full URL of the provider's `.well-known/openid-configuration` document. |
+| `oidc.clientId`                             | Client ID | *(empty)* | OIDC client identifier configured at the provider. |
+| `oidc.clientSecret`                         | Client secret | *(empty)* | Client secret configured for the OIDC client. |
+| `oidc.redirectUri`                          | Redirect URI | *(empty)* | Callback URL registered at the provider; empty means `https://faq.example.com/auth/oidc/callback`. |
+| `oidc.scopes`                               | Scopes | `openid profile email` | Space-separated scopes requested during login. |
+| `oidc.autoProvision`                        | Automatically create phpMyFAQ users on first OpenID Connect login | `true` | When enabled, phpMyFAQ creates a local user automatically if no linked account exists yet. |
+| `oidc.groupsClaim`                          | Groups claim | `groups` | Name of the claim that carries the user's groups as a list of strings. |
+| `oidc.groupAutoAssign`                      | Automatically assign phpMyFAQ groups from the groups claim | `false` | When enabled and permission level `medium` is active, phpMyFAQ assigns mapped groups on login. |
+| `oidc.groupSyncOnLogin`                     | Synchronize mapped phpMyFAQ groups on login | `false` | When enabled, phpMyFAQ also removes stale memberships for mapped groups during login. |
+| `oidc.groupMapping`                         | Group mapping | *(empty)* | JSON object mapping provider group names to phpMyFAQ group names, for example `{"faq-admins":"Administrators"}`. |
+| `oidc.logoutRedirectUrl`                    | Logout redirect URL | *(empty)* | URL users return to after provider logout, for example `https://faq.example.com/`. |
 | `security.enableGoogleReCaptchaV2`          | Enable Invisible Google ReCAPTCHA v2 | `false` | Enables Google reCAPTCHA v2 to protect forms from spam and abuse. |
 | `security.googleReCaptchaV2SiteKey`         | Google ReCAPTCHA v2 site key | *(empty)* | The site key from your Google reCAPTCHA v2 registration. |
 | `security.googleReCaptchaV2SecretKey`       | Google ReCAPTCHA v2 secret key | *(empty)* | The secret key from your Google reCAPTCHA v2 registration. |
