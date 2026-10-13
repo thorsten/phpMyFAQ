@@ -769,7 +769,6 @@ final class UserControllerValidationTest extends ApiControllerTestCase
             ->with([
                 'is_visible' => 1,
                 'twofactor_enabled' => 1,
-                'secret' => 'azure-secret',
             ])
             ->willReturn(true);
 

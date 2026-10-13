@@ -74,7 +74,6 @@ final class UserController extends AbstractController
             FILTER_SANITIZE_SPECIAL_CHARS,
         ));
         $twoFactorEnabled = Filter::filterVar($data->twofactor_enabled ?? 'off', FILTER_SANITIZE_SPECIAL_CHARS);
-        $secret = Filter::filterVar($data->secret ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $isExternalIdentityUser = in_array($this->currentUser->getUserAuthSource(), ['azure', 'oidc'], strict: true);
         $isWebAuthnUser = $this->currentUser->getUserAuthSource() === 'webauthn';
@@ -175,7 +174,6 @@ final class UserController extends AbstractController
             $userData = [
                 'is_visible' => $isVisible === 'on' ? 1 : 0,
                 'twofactor_enabled' => $twoFactorFlag,
-                'secret' => $secret,
             ];
 
             $success = $this->currentUser->setUserData($userData);

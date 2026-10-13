@@ -16,6 +16,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -188,7 +189,6 @@ class UserControllerTest extends TestCase
         $currentUser->expects(self::once())->method('setUserData')->with([
             'is_visible' => 1,
             'twofactor_enabled' => 0,
-            'secret' => '',
         ])->willReturn(true);
         $currentUser->expects(self::never())->method('getAuthContainer');
         $currentUser->expects(self::never())->method('revokePersistentLogins');
@@ -197,6 +197,40 @@ class UserControllerTest extends TestCase
             'faqpassword' => 'new-secret-password',
             'faqpassword_confirm' => 'new-secret-password',
             'faqpassword_current' => 'whatever',
+        ]);
+
+        self::assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function externalIdentityAuthSourceProvider(): array
+    {
+        return [
+            'azure' => ['azure'],
+            'oidc' => ['oidc'],
+        ];
+    }
+
+    /**
+     * The two-factor secret is only ever enrolled server-side; a profile update must not
+     * overwrite (or wipe) it with a value taken from the request.
+     *
+     * @throws \Exception
+     */
+    #[DataProvider('externalIdentityAuthSourceProvider')]
+    public function testUpdateDataNeverWritesSecretForExternalIdentityUser(string $authSource): void
+    {
+        $currentUser = $this->createCurrentUserWithAuthSource($authSource);
+        $currentUser
+            ->expects(self::once())
+            ->method('setUserData')
+            ->with(self::callback(static fn(array $data): bool => !array_key_exists('secret', $data)))
+            ->willReturn(true);
+
+        $response = $this->runProfileUpdate($currentUser, [
+            'secret' => 'attacker-secret',
         ]);
 
         self::assertSame(200, $response->getStatusCode());
