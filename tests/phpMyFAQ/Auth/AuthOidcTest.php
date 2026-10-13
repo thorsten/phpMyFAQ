@@ -229,7 +229,7 @@ final class AuthOidcTest extends TestCase
 
         $user = $this->createMock(User::class);
         $user->method('getUserByLogin')->willReturn(true);
-        $user->method('getUserData')->with('oidc_sub')->willReturn('subject-123');
+        $user->expects($this->atLeastOnce())->method('getUserData')->with('oidc_sub')->willReturn('subject-123');
         $user->method('getUserId')->willReturn(42);
 
         $permission = $this->createMock(MediumPermission::class);
@@ -268,7 +268,7 @@ final class AuthOidcTest extends TestCase
 
         $user = $this->createMock(User::class);
         $user->method('getUserByLogin')->willReturn(true);
-        $user->method('getUserData')->with('oidc_sub')->willReturn('subject-123');
+        $user->expects($this->atLeastOnce())->method('getUserData')->with('oidc_sub')->willReturn('subject-123');
         $user->method('getUserId')->willReturn(42);
 
         $permission = $this->createMock(MediumPermission::class);
