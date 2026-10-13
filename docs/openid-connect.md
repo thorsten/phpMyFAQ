@@ -54,6 +54,12 @@ The login pages then show a *Sign in with Authentik* button.
 3. If that login or email already belongs to an account that is not linked, the login is refused
    and logged. phpMyFAQ never links an existing account to a subject at login time.
 
+> **Warning:** The `sub` claim is only unique per issuer, and accounts are linked by `sub` alone.
+> Changing the discovery URL to a different identity provider does not clear existing links, so a
+> user at the new provider with the same `sub` would sign into the old account. Before switching
+> providers, clear the `oidc_sub` column in the `faquserdata` table for all users (or delete the
+> provisioned accounts).
+
 ## 5. Group mapping
 
 Requires permission level `medium`.
@@ -68,7 +74,9 @@ Requires permission level `medium`.
 ## 6. Logout
 
 Logout clears the phpMyFAQ session and redirects to the provider's `end_session_endpoint` with
-`id_token_hint` and the configured logout redirect URL. Providers without an end-session endpoint
+`id_token_hint` and, when configured, the logout redirect URL as `post_logout_redirect_uri`. When the
+logout redirect URL is empty, no `post_logout_redirect_uri` is sent and the provider shows its own
+post-logout page. Providers without an end-session endpoint
 only get a local logout.
 
 ## 7. Troubleshooting
@@ -78,6 +86,6 @@ only get a local logout.
   discovery URL, an unsupported signing algorithm, a redirect URI mismatch, or a `sub` mismatch
   between ID token and UserInfo.
 - *User exists but cannot log in*: the account is not linked to this subject. Delete and let it be
-  re-provisioned, or set `oidc_sub` for the account in the database.
+  re-provisioned, or set `oidc_sub` for the account in the `faquserdata` table.
 - *No groups assigned*: permission level must be `medium`, the claim must be a list of strings,
   and the group names must match the mapping keys exactly.

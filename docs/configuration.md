@@ -148,7 +148,7 @@ each setting controls. These values are set during installation and can be chang
 | `oidc.groupAutoAssign`                      | Automatically assign phpMyFAQ groups from the groups claim | `false` | When enabled and permission level `medium` is active, phpMyFAQ assigns mapped groups on login. |
 | `oidc.groupSyncOnLogin`                     | Synchronize mapped phpMyFAQ groups on login | `false` | When enabled, phpMyFAQ also removes stale memberships for mapped groups during login. |
 | `oidc.groupMapping`                         | Group mapping | *(empty)* | JSON object mapping provider group names to phpMyFAQ group names, for example `{"faq-admins":"Administrators"}`. |
-| `oidc.logoutRedirectUrl`                    | Logout redirect URL | *(empty)* | URL users return to after provider logout, for example `https://faq.example.com/`. |
+| `oidc.logoutRedirectUrl`                    | Logout redirect URL | *(empty)* | URL users return to after provider logout, for example `https://faq.example.com/`. When empty, no `post_logout_redirect_uri` is sent and the provider shows its own post-logout page. |
 | `security.enableGoogleReCaptchaV2`          | Enable Invisible Google ReCAPTCHA v2 | `false` | Enables Google reCAPTCHA v2 to protect forms from spam and abuse. |
 | `security.googleReCaptchaV2SiteKey`         | Google ReCAPTCHA v2 site key | *(empty)* | The site key from your Google reCAPTCHA v2 registration. |
 | `security.googleReCaptchaV2SecretKey`       | Google ReCAPTCHA v2 secret key | *(empty)* | The secret key from your Google reCAPTCHA v2 registration. |
