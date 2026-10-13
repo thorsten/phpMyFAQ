@@ -12,7 +12,7 @@
  * @copyright 2026 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since 2026-10-13
+ * @since     2026-10-13
  */
 
 declare(strict_types=1);
@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use Closure;
 use Exception;
+use InvalidArgumentException;
 use JsonException;
 use phpMyFAQ\Auth\AuthOidc;
 use phpMyFAQ\Auth\Oidc\GenericOidcProviderConfigFactory;
@@ -147,7 +148,15 @@ final class OidcAuthenticationController extends AbstractFrontController
     #[Route(path: '/auth/oidc/callback', name: 'public.oidc.callback', methods: ['GET'])]
     public function callback(Request $request): Response
     {
-        $providerConfig = $this->providerConfigFactory->create();
+        try {
+            $providerConfig = $this->providerConfigFactory->create();
+        } catch (InvalidArgumentException $exception) {
+            $this->configuration
+                ->getLogger()
+                ->error(sprintf('OpenID Connect provider is misconfigured: %s', $exception->getMessage()));
+            return new RedirectResponse($this->configuration->getDefaultUrl());
+        }
+
         if (!$providerConfig->enabled || $providerConfig->discoveryUrl === '') {
             return new RedirectResponse($this->configuration->getDefaultUrl());
         }

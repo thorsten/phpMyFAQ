@@ -138,9 +138,9 @@ use phpMyFAQ\Controller\Frontend\CustomPageController as FrontendCustomPageContr
 use phpMyFAQ\Controller\Frontend\FaqController as FrontendFaqController;
 use phpMyFAQ\Controller\Frontend\GlossaryController as FrontendGlossaryController;
 use phpMyFAQ\Controller\Frontend\KeycloakAuthenticationController as FrontendKeycloakAuthenticationController;
-use phpMyFAQ\Controller\Frontend\OidcAuthenticationController as FrontendOidcAuthenticationController;
 use phpMyFAQ\Controller\Frontend\NewsController as FrontendNewsController;
 use phpMyFAQ\Controller\Frontend\OAuthDiscoveryController as FrontendOAuthDiscoveryController;
+use phpMyFAQ\Controller\Frontend\OidcAuthenticationController as FrontendOidcAuthenticationController;
 use phpMyFAQ\Controller\Frontend\OverviewController as FrontendOverviewController;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Controller\Frontend\PdfController;
