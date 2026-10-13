@@ -138,6 +138,7 @@ use phpMyFAQ\Controller\Frontend\CustomPageController as FrontendCustomPageContr
 use phpMyFAQ\Controller\Frontend\FaqController as FrontendFaqController;
 use phpMyFAQ\Controller\Frontend\GlossaryController as FrontendGlossaryController;
 use phpMyFAQ\Controller\Frontend\KeycloakAuthenticationController as FrontendKeycloakAuthenticationController;
+use phpMyFAQ\Controller\Frontend\OidcAuthenticationController as FrontendOidcAuthenticationController;
 use phpMyFAQ\Controller\Frontend\NewsController as FrontendNewsController;
 use phpMyFAQ\Controller\Frontend\OAuthDiscoveryController as FrontendOAuthDiscoveryController;
 use phpMyFAQ\Controller\Frontend\OverviewController as FrontendOverviewController;
@@ -1002,6 +1003,17 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.auth.oidc.discovery-service'),
         service('phpmyfaq.auth.oidc.pkce-generator'),
         service('phpmyfaq.auth.oidc.session.keycloak'),
+        service('phpmyfaq.auth.oidc.client'),
+        service('phpmyfaq.auth.oidc.id-token-validator'),
+    ]);
+    $services->set(
+        FrontendOidcAuthenticationController::class,
+        FrontendOidcAuthenticationController::class,
+    )->args([
+        service('phpmyfaq.auth.oidc.generic.provider-config-factory'),
+        service('phpmyfaq.auth.oidc.discovery-service'),
+        service('phpmyfaq.auth.oidc.pkce-generator'),
+        service('phpmyfaq.auth.oidc.session.generic'),
         service('phpmyfaq.auth.oidc.client'),
         service('phpmyfaq.auth.oidc.id-token-validator'),
     ]);
