@@ -48,17 +48,17 @@ The login pages then show a *Sign in with Authentik* button.
 
 ## 4. User resolution and account linking
 
-1. An account whose stored OIDC subject equals the `sub` claim is used.
+1. An account whose stored OIDC issuer and subject equal the ID token's `iss` and `sub` claims is used.
 2. Otherwise, when automatic provisioning is enabled, a new account is created with the
    `preferred_username` claim as login (or the `email` claim when there is no username).
 3. If that login or email already belongs to an account that is not linked, the login is refused
    and logged. phpMyFAQ never links an existing account to a subject at login time.
 
-> **Warning:** The `sub` claim is only unique per issuer, and accounts are linked by `sub` alone.
-> Changing the discovery URL to a different identity provider does not clear existing links, so a
-> user at the new provider with the same `sub` would sign into the old account. Before switching
-> providers, clear the `oidc_sub` column in the `faquserdata` table for all users (or delete the
-> provisioned accounts).
+> **Note:** The `sub` claim is only unique per issuer, so account links are bound to the issuer
+> (`oidc_iss`) as well as the subject (`oidc_sub`). Switching `oidc.discoveryUrl` to another
+> provider therefore never maps its users onto existing accounts. Users provisioned by the old
+> provider are refused (logged as an issuer mismatch or as an account not linked to this issuer
+> and subject) and must be re-linked or deleted.
 
 ## 5. Group mapping
 
@@ -85,7 +85,8 @@ only get a local logout.
 - *Redirect loops back to the start page*: check the phpMyFAQ log; usual causes are a wrong
   discovery URL, an unsupported signing algorithm, a redirect URI mismatch, or a `sub` mismatch
   between ID token and UserInfo.
-- *User exists but cannot log in*: the account is not linked to this subject. Delete and let it be
-  re-provisioned, or set `oidc_sub` for the account in the `faquserdata` table.
+- *User exists but cannot log in*: the account is not linked to this issuer and subject. Delete
+  and let it be re-provisioned, or set both `oidc_sub` and `oidc_iss` for the account in the
+  `faquserdata` table.
 - *No groups assigned*: permission level must be `medium`, the claim must be a list of strings,
   and the group names must match the mapping keys exactly.

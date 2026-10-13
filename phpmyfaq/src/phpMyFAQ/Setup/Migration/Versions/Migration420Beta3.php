@@ -36,11 +36,11 @@ readonly class Migration420Beta3 extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Add the generic OpenID Connect provider: oidc.* configuration and the oidc_sub identity link';
+        return 'Add the generic OpenID Connect provider: oidc.* configuration and the issuer-bound oidc_sub/oidc_iss identity link';
     }
 
     /**
-     * The column step is guarded so the migration stays safe to re-run.
+     * The column steps are guarded so the migration stays safe to re-run.
      */
     public function up(OperationRecorder $recorder): void
     {
@@ -53,6 +53,13 @@ readonly class Migration420Beta3 extends AbstractMigration
             $recorder->addSql(
                 $this->createUniqueIndex('faquserdata', 'idx_faquserdata_oidc_sub', 'oidc_sub'),
                 'Create unique oidc_sub index on faquserdata',
+            );
+        }
+
+        if (!$this->columnExists('faquserdata', 'oidc_iss')) {
+            $recorder->addSql(
+                $this->addColumn('faquserdata', 'oidc_iss', $this->varcharType(255) . ' NULL'),
+                'Add oidc_iss column to faquserdata',
             );
         }
 

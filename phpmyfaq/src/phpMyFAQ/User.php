@@ -830,17 +830,18 @@ class User
     }
 
     /**
-     * Returns the user ID linked to the given OpenID Connect subject.
+     * Returns the user ID linked to the given OpenID Connect identity. A subject is only
+     * unique per issuer, so the stored issuer must match as well; 0 means "not linked".
      */
-    public function getUserIdByOidcSub(string $subject): int
+    public function getUserIdByOidcIdentity(string $issuer, string $subject): int
     {
-        if ($subject === '') {
+        if (in_array('', [$issuer, $subject], strict: true)) {
             return 0;
         }
 
-        $userData = $this->userData()->fetchAll('oidc_sub', $subject);
-
-        if (!array_key_exists('user_id', $userData)) {
+        // An unknown subject or a link without a stored issuer never matches the non-empty issuer.
+        $userData = $this->userData()->fetchAll('oidc_sub', $subject) + ['user_id' => 0, 'oidc_iss' => ''];
+        if (!hash_equals($userData['oidc_iss'], $issuer)) {
             return 0;
         }
 

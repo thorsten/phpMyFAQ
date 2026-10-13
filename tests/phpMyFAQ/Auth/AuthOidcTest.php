@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Auth;
 
+use InvalidArgumentException;
 use Monolog\Logger;
 use phpMyFAQ\Auth\Oidc\OidcClientConfig;
 use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
@@ -12,6 +13,7 @@ use phpMyFAQ\Core\Json;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -24,16 +26,19 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(OidcProviderConfig::class)]
 final class AuthOidcTest extends TestCase
 {
+    private const string ISSUER = 'https://auth.example.test';
+
     public function testCheckCredentialsReturnsTrueForExistingLinkedUser(): void
     {
         $user = $this->createMock(User::class);
         $user->expects($this->once())->method('getUserByLogin')->with('jane', false)->willReturn(true);
-        $user->expects($this->once())->method('getUserData')->with('oidc_sub')->willReturn('subject-123');
+        $this->expectStoredIdentity($user, 'subject-123', self::ISSUER);
 
         $auth = new AuthOidc(
             $this->createStub(Configuration::class),
             $this->createProviderConfig(autoProvision: false),
             ['sub' => 'subject-123', 'preferred_username' => 'jane'],
+            self::ISSUER,
             'jane',
             static fn(): User => $user,
         );
@@ -48,13 +53,14 @@ final class AuthOidcTest extends TestCase
 
         $user = $this->createMock(User::class);
         $user->expects($this->once())->method('getUserByLogin')->with('jane', false)->willReturn(true);
-        $user->expects($this->once())->method('getUserData')->with('oidc_sub')->willReturn('');
+        $this->expectStoredIdentity($user, '', self::ISSUER);
         $user->expects($this->never())->method('createUser');
 
         $auth = new AuthOidc(
             $configuration,
             $this->createProviderConfig(autoProvision: true),
             ['sub' => 'subject-123', 'preferred_username' => 'jane'],
+            self::ISSUER,
             'jane',
             static fn(): User => $user,
         );
@@ -69,17 +75,92 @@ final class AuthOidcTest extends TestCase
 
         $user = $this->createMock(User::class);
         $user->expects($this->once())->method('getUserByLogin')->with('jane', false)->willReturn(true);
-        $user->expects($this->once())->method('getUserData')->with('oidc_sub')->willReturn('other-subject');
+        $this->expectStoredIdentity($user, 'other-subject', self::ISSUER);
 
         $auth = new AuthOidc(
             $configuration,
             $this->createProviderConfig(autoProvision: true),
             ['sub' => 'subject-123', 'preferred_username' => 'jane'],
+            self::ISSUER,
             'jane',
             static fn(): User => $user,
         );
 
         $this->assertFalse($auth->checkCredentials('jane', ''));
+    }
+
+    public function testCheckCredentialsRejectsExistingUserLinkedToAnotherIssuer(): void
+    {
+        $warnings = [];
+        $logger = $this->createMock(Logger::class);
+        $logger
+            ->expects($this->exactly(2))
+            ->method('warning')
+            ->willReturnCallback(static function (string $message) use (&$warnings): void {
+                $warnings[] = $message;
+            });
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('jane', false)->willReturn(true);
+        $this->expectStoredIdentity($user, 'subject-123', 'https://other-issuer.example.test');
+        $user->expects($this->never())->method('createUser');
+
+        $auth = new AuthOidc(
+            $configuration,
+            $this->createProviderConfig(autoProvision: true),
+            ['sub' => 'subject-123', 'preferred_username' => 'jane'],
+            self::ISSUER,
+            'jane',
+            static fn(): User => $user,
+        );
+
+        $this->assertFalse($auth->checkCredentials('jane', ''));
+        $this->assertStringContainsString('issuer mismatch', $warnings[0]);
+    }
+
+    public function testCheckCredentialsRejectsExistingUserWithoutStoredIssuer(): void
+    {
+        $warnings = [];
+        $logger = $this->createMock(Logger::class);
+        $logger
+            ->expects($this->exactly(2))
+            ->method('warning')
+            ->willReturnCallback(static function (string $message) use (&$warnings): void {
+                $warnings[] = $message;
+            });
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('jane', false)->willReturn(true);
+        $this->expectStoredIdentity($user, 'subject-123', '');
+
+        $auth = new AuthOidc(
+            $configuration,
+            $this->createProviderConfig(autoProvision: true),
+            ['sub' => 'subject-123', 'preferred_username' => 'jane'],
+            self::ISSUER,
+            'jane',
+            static fn(): User => $user,
+        );
+
+        $this->assertFalse($auth->checkCredentials('jane', ''));
+        $this->assertStringContainsString('predates issuer binding', $warnings[0]);
+    }
+
+    public function testConstructorRejectsEmptyIssuer(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        new AuthOidc(
+            $this->createStub(Configuration::class),
+            $this->createProviderConfig(autoProvision: false),
+            ['sub' => 'subject-123'],
+            '',
+            'jane',
+        );
     }
 
     public function testCheckCredentialsRejectsUnknownUserWhenAutoProvisionIsOff(): void
@@ -92,6 +173,7 @@ final class AuthOidcTest extends TestCase
             $this->createStub(Configuration::class),
             $this->createProviderConfig(autoProvision: false),
             ['sub' => 'subject-123', 'preferred_username' => 'jane'],
+            self::ISSUER,
             'jane',
             static fn(): User => $user,
         );
@@ -114,6 +196,7 @@ final class AuthOidcTest extends TestCase
                 'display_name' => 'Jane Doe',
                 'email' => 'jane@example.com',
                 'oidc_sub' => 'subject-123',
+                'oidc_iss' => self::ISSUER,
             ])
             ->willReturn(true);
         $user->expects($this->once())->method('setStatus')->with('active');
@@ -123,6 +206,7 @@ final class AuthOidcTest extends TestCase
             $configuration,
             $this->createProviderConfig(autoProvision: true),
             ['sub' => 'subject-123', 'name' => 'Jane Doe', 'email' => 'jane@example.com'],
+            self::ISSUER,
             'jane',
             static fn(): User => $user,
         );
@@ -159,6 +243,7 @@ final class AuthOidcTest extends TestCase
             $configuration,
             $this->createProviderConfig(autoProvision: true),
             ['sub' => 'subject-123', 'roles' => ['faq-admins', 'unmapped']],
+            self::ISSUER,
             'jane',
             static fn(): User => $user,
             static fn(): MediumPermission => $permission,
@@ -183,7 +268,7 @@ final class AuthOidcTest extends TestCase
 
         $user = $this->createMock(User::class);
         $user->expects($this->once())->method('getUserByLogin')->with('jane', false)->willReturn(true);
-        $user->expects($this->once())->method('getUserData')->with('oidc_sub')->willReturn('subject-123');
+        $this->expectStoredIdentity($user, 'subject-123', self::ISSUER);
         $user->expects($this->once())->method('getUserId')->willReturn(42);
 
         $permission = $this->createMock(MediumPermission::class);
@@ -205,6 +290,7 @@ final class AuthOidcTest extends TestCase
             $configuration,
             $this->createProviderConfig(autoProvision: false),
             ['sub' => 'subject-123', 'groups' => ['faq-admins']],
+            self::ISSUER,
             'jane',
             static fn(): User => $user,
             static fn(): MediumPermission => $permission,
@@ -229,7 +315,7 @@ final class AuthOidcTest extends TestCase
 
         $user = $this->createMock(User::class);
         $user->method('getUserByLogin')->willReturn(true);
-        $user->expects($this->atLeastOnce())->method('getUserData')->with('oidc_sub')->willReturn('subject-123');
+        $this->expectStoredIdentity($user, 'subject-123', self::ISSUER);
         $user->method('getUserId')->willReturn(42);
 
         $permission = $this->createMock(MediumPermission::class);
@@ -242,6 +328,7 @@ final class AuthOidcTest extends TestCase
             $configuration,
             $this->createProviderConfig(autoProvision: false),
             ['sub' => 'subject-123', 'groups' => 'faq-admins'],
+            self::ISSUER,
             'jane',
             static fn(): User => $user,
             static fn(): MediumPermission => $permission,
@@ -268,7 +355,7 @@ final class AuthOidcTest extends TestCase
 
         $user = $this->createMock(User::class);
         $user->method('getUserByLogin')->willReturn(true);
-        $user->expects($this->atLeastOnce())->method('getUserData')->with('oidc_sub')->willReturn('subject-123');
+        $this->expectStoredIdentity($user, 'subject-123', self::ISSUER);
         $user->method('getUserId')->willReturn(42);
 
         $permission = $this->createMock(MediumPermission::class);
@@ -278,6 +365,7 @@ final class AuthOidcTest extends TestCase
             $configuration,
             $this->createProviderConfig(autoProvision: false),
             ['sub' => 'subject-123', 'groups' => ['faq-admins']],
+            self::ISSUER,
             'jane',
             static fn(): User => $user,
             static fn(): MediumPermission => $permission,
@@ -292,11 +380,20 @@ final class AuthOidcTest extends TestCase
             $this->createStub(Configuration::class),
             $this->createProviderConfig(autoProvision: false),
             ['sub' => 'subject-123'],
+            self::ISSUER,
             'jane',
         );
 
         $this->assertSame(1, $auth->isValidLogin('jane'));
         $this->assertSame(0, $auth->isValidLogin('john'));
+    }
+
+    private function expectStoredIdentity(User&MockObject $user, string $subject, string $issuer): void
+    {
+        $user
+            ->expects($this->atLeastOnce())
+            ->method('getUserData')
+            ->willReturnMap([['oidc_sub', $subject], ['oidc_iss', $issuer]]);
     }
 
     private function createProviderConfig(bool $autoProvision): OidcProviderConfig

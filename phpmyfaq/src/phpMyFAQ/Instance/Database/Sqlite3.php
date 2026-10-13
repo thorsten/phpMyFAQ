@@ -344,6 +344,7 @@ class Sqlite3 extends Database implements DriverInterface
             email VARCHAR(128) NULL,
             keycloak_sub VARCHAR(255) NULL,
             oidc_sub VARCHAR(255) NULL,
+            oidc_iss VARCHAR(255) NULL,
             is_visible INT(1) NULL DEFAULT 0,
             twofactor_enabled INT(1) NULL DEFAULT 0,
             secret VARCHAR(128) NULL DEFAULT NULL)',

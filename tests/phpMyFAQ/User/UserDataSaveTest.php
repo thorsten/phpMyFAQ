@@ -65,16 +65,24 @@ final class UserDataSaveTest extends TestCase
         $this->assertSame('kc-subject-1', $reloaded->get('keycloak_sub'));
     }
 
-    public function testSaveStoresTheOidcSubjectOnACurrentSchema(): void
+    public function testSaveStoresTheOidcIdentityOnACurrentSchema(): void
     {
         $userData = new UserData($this->configuration);
         $this->assertTrue($userData->load(1));
 
-        $this->assertTrue($userData->set('oidc_sub', 'oidc-subject-1'));
+        $this->assertTrue($userData->set(
+            ['oidc_sub', 'oidc_iss'],
+            ['oidc-subject-1', 'https://auth.example.test'],
+        ));
 
         $reloaded = new UserData($this->configuration);
         $this->assertTrue($reloaded->load(1));
         $this->assertSame('oidc-subject-1', $reloaded->get('oidc_sub'));
+        $this->assertSame('https://auth.example.test', $reloaded->get('oidc_iss'));
+
+        $linked = new UserData($this->configuration)->fetchAll('oidc_sub', 'oidc-subject-1');
+        $this->assertSame(1, (int) $linked['user_id']);
+        $this->assertSame('https://auth.example.test', $linked['oidc_iss']);
     }
 
     public function testSaveFallsBackToTheLegacyColumnsWithoutAnIdentityLink(): void
