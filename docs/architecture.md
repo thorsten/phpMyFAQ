@@ -292,6 +292,7 @@ classDiagram
     class AuthLdap
     class AuthSso
     class AuthKeycloak
+    class AuthOidc
     class AuthEntraId
     class AuthHttp
 
@@ -358,12 +359,14 @@ classDiagram
     AuthDriverInterface <|.. AuthLdap
     AuthDriverInterface <|.. AuthSso
     AuthDriverInterface <|.. AuthKeycloak
+    AuthDriverInterface <|.. AuthOidc
     AuthDriverInterface <|.. AuthEntraId
     AuthDriverInterface <|.. AuthHttp
     Auth <|-- AuthDatabase
     Auth <|-- AuthLdap
     Auth <|-- AuthSso
     Auth <|-- AuthKeycloak
+    Auth <|-- AuthOidc
 
     User <|-- CurrentUser
     User --> PermissionInterface : composes
