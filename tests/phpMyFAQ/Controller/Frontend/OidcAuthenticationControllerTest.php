@@ -22,6 +22,7 @@ use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -107,17 +108,37 @@ final class OidcAuthenticationControllerTest extends TestCase
 
     public function testAuthorizeReturnsRedirectResponse(): void
     {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session, 'oidc');
+
         $controller = $this->createController([
             new MockResponse(
                 '{"issuer":"https://auth.example.test","authorization_endpoint":"https://auth.example.test/auth","token_endpoint":"https://auth.example.test/token","userinfo_endpoint":"https://auth.example.test/userinfo","jwks_uri":"https://auth.example.test/jwks","end_session_endpoint":"https://auth.example.test/logout"}',
             ),
-        ]);
+        ], $oidcSession);
 
         $response = $controller->authorize();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertStringStartsWith('https://auth.example.test/auth?', (string) $response->headers->get('Location'));
-        $this->assertStringContainsString('client_id=phpmyfaq', (string) $response->headers->get('Location'));
+        $location = (string) $response->headers->get('Location');
+        $this->assertStringStartsWith('https://auth.example.test/auth?', $location);
+        $this->assertStringContainsString('client_id=phpmyfaq', $location);
+        $this->assertStringContainsString(
+            'redirect_uri=' . urlencode('https://faq.example.test/auth/oidc/callback'),
+            $location,
+        );
+        $this->assertStringContainsString('code_challenge_method=S256', $location);
+        $this->assertStringContainsString('scope=' . urlencode('openid profile email'), $location);
+
+        parse_str((string) parse_url($location, PHP_URL_QUERY), $query);
+        $this->assertNotEmpty($query['state'] ?? '');
+        $this->assertNotEmpty($query['nonce'] ?? '');
+
+        $authorizationState = $oidcSession->getAuthorizationState();
+        $this->assertNotSame('', $authorizationState['state']);
+        $this->assertNotSame('', $authorizationState['nonce']);
+        $this->assertNotSame('', $authorizationState['verifier']);
     }
 
     public function testLogoutReturnsProviderLogoutResponse(): void
@@ -220,6 +241,26 @@ final class OidcAuthenticationControllerTest extends TestCase
             'https://auth.example.test/logout?client_id=phpmyfaq&post_logout_redirect_uri=https%3A%2F%2Ffaq.example.test%2F&id_token_hint=persisted-id-token',
             $response->headers->get('Location'),
         );
+    }
+
+    public function testCallbackRedirectsHomeWhenEnabledProviderHasNoDiscoveryUrl(): void
+    {
+        $property = new \ReflectionProperty(Configuration::class, 'config');
+        /** @var array<string, mixed> $original */
+        $original = $property->getValue($this->configuration);
+        $config = $original;
+        $config['oidc.enable'] = 'true';
+        $config['oidc.discoveryUrl'] = '';
+        $property->setValue($this->configuration, $config);
+
+        try {
+            $response = $this->createController()->callback(new Request(['code' => 'x', 'state' => 'y']));
+        } finally {
+            $property->setValue($this->configuration, $original);
+        }
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
     }
 
     /**
@@ -882,9 +923,6 @@ final class OidcAuthenticationControllerTest extends TestCase
         $this->assertSame('', $oidcSession->getAuthorizationState()['state']);
     }
 
-    /**
-     * @param list<MockResponse> $responses
-     */
     private function expectNoLogin(CurrentUser&MockObject $currentUser): void
     {
         $currentUser->expects($this->never())->method('setUserData');
@@ -956,6 +994,9 @@ final class OidcAuthenticationControllerTest extends TestCase
         return $container;
     }
 
+    /**
+     * @param list<MockResponse> $responses
+     */
     private function createController(
         array $responses = [],
         ?OidcSession $oidcSession = null,
@@ -1080,7 +1121,7 @@ final class OidcAuthenticationControllerTest extends TestCase
         yield 'no id token' => ['{"userinfo":{"sub":"123"}}'];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('unusableJwtProvider')]
+    #[DataProvider('unusableJwtProvider')]
     public function testLogoutWithoutAUsableIdTokenStillEndsTheProviderSession(string $jwt): void
     {
         $session = new Session(new MockArraySessionStorage());
