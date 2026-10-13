@@ -839,9 +839,10 @@ class User
             return 0;
         }
 
-        // An unknown subject or a link without a stored issuer never matches the non-empty issuer.
-        $userData = $this->userData()->fetchAll('oidc_sub', $subject) + ['user_id' => 0, 'oidc_iss' => ''];
-        if (!hash_equals($userData['oidc_iss'], $issuer)) {
+        // The lookup already matches both columns; the comparison guards against a
+        // case-insensitive collation treating two different issuers as equal.
+        $userData = $this->userData()->fetchByOidcIdentity($issuer, $subject) + ['user_id' => 0, 'oidc_iss' => ''];
+        if (!hash_equals((string) $userData['oidc_iss'], $issuer)) {
             return 0;
         }
 

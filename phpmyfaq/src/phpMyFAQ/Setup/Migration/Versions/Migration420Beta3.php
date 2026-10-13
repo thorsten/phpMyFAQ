@@ -44,22 +44,30 @@ readonly class Migration420Beta3 extends AbstractMigration
      */
     public function up(OperationRecorder $recorder): void
     {
+        $identityLinkAdded = false;
+
         if (!$this->columnExists('faquserdata', 'oidc_sub')) {
             $recorder->addSql(
                 $this->addColumn('faquserdata', 'oidc_sub', $this->varcharType(255) . ' NULL'),
                 'Add oidc_sub column to faquserdata',
             );
-
-            $recorder->addSql(
-                $this->createUniqueIndex('faquserdata', 'idx_faquserdata_oidc_sub', 'oidc_sub'),
-                'Create unique oidc_sub index on faquserdata',
-            );
+            $identityLinkAdded = true;
         }
 
         if (!$this->columnExists('faquserdata', 'oidc_iss')) {
             $recorder->addSql(
                 $this->addColumn('faquserdata', 'oidc_iss', $this->varcharType(255) . ' NULL'),
                 'Add oidc_iss column to faquserdata',
+            );
+            $identityLinkAdded = true;
+        }
+
+        // A subject is only unique per issuer, so the link is unique on the (issuer, subject)
+        // pair: distinct issuers may share a subject, duplicate pairs are rejected.
+        if ($identityLinkAdded) {
+            $recorder->addSql(
+                $this->createUniqueIndex('faquserdata', 'idx_faquserdata_oidc_identity', ['oidc_iss', 'oidc_sub']),
+                'Create unique (oidc_iss, oidc_sub) index on faquserdata',
             );
         }
 

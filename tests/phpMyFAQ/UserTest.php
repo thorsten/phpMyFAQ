@@ -727,8 +727,8 @@ class UserTest extends TestCase
     {
         $this->userData
             ->expects($this->once())
-            ->method('fetchAll')
-            ->with('oidc_sub', 'oidc-sub-123')
+            ->method('fetchByOidcIdentity')
+            ->with('https://auth.example.test', 'oidc-sub-123')
             ->willReturn(['user_id' => 14, 'oidc_sub' => 'oidc-sub-123', 'oidc_iss' => 'https://auth.example.test']);
 
         $this->assertSame(14, $this->user->getUserIdByOidcIdentity('https://auth.example.test', 'oidc-sub-123'));
@@ -738,8 +738,8 @@ class UserTest extends TestCase
     {
         $this->userData
             ->expects($this->once())
-            ->method('fetchAll')
-            ->with('oidc_sub', 'oidc-sub-123')
+            ->method('fetchByOidcIdentity')
+            ->with('https://auth.example.test', 'oidc-sub-123')
             ->willReturn(['user_id' => 14, 'oidc_sub' => 'oidc-sub-123', 'oidc_iss' => 'https://old.example.test']);
 
         $this->assertSame(0, $this->user->getUserIdByOidcIdentity('https://auth.example.test', 'oidc-sub-123'));
@@ -749,8 +749,8 @@ class UserTest extends TestCase
     {
         $this->userData
             ->expects($this->once())
-            ->method('fetchAll')
-            ->with('oidc_sub', 'oidc-sub-123')
+            ->method('fetchByOidcIdentity')
+            ->with('https://auth.example.test', 'oidc-sub-123')
             ->willReturn(['user_id' => 14, 'oidc_sub' => 'oidc-sub-123', 'oidc_iss' => '']);
 
         $this->assertSame(0, $this->user->getUserIdByOidcIdentity('https://auth.example.test', 'oidc-sub-123'));
@@ -758,14 +758,14 @@ class UserTest extends TestCase
 
     public function testGetUserIdByOidcIdentityReturnsZeroForEmptySubject(): void
     {
-        $this->userData->expects($this->never())->method('fetchAll');
+        $this->userData->expects($this->never())->method('fetchByOidcIdentity');
 
         $this->assertSame(0, $this->user->getUserIdByOidcIdentity('https://auth.example.test', ''));
     }
 
     public function testGetUserIdByOidcIdentityReturnsZeroForEmptyIssuer(): void
     {
-        $this->userData->expects($this->never())->method('fetchAll');
+        $this->userData->expects($this->never())->method('fetchByOidcIdentity');
 
         $this->assertSame(0, $this->user->getUserIdByOidcIdentity('', 'oidc-sub-123'));
     }
