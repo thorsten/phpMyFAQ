@@ -71,7 +71,13 @@ class UserDataTest extends TestCase
         $this->database->method('fetchArray')->willReturn(['user_id' => 1]);
 
         $result = $this->userData->fetchAll('key', 'value');
-        $this->assertEquals(['user_id' => 1, 'keycloak_sub' => '', 'entra_oid' => '', 'oidc_sub' => ''], $result);
+        $this->assertEquals([
+            'user_id' => 1,
+            'keycloak_sub' => '',
+            'entra_oid' => '',
+            'oidc_sub' => '',
+            'oidc_iss' => '',
+        ], $result);
     }
 
     public function testGetReturnsEmptyStringForEntraOidWhenTheColumnIsMissing(): void

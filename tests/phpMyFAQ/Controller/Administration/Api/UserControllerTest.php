@@ -1856,7 +1856,7 @@ final class UserControllerTest extends TestCase
 
     /**
      * The admin read endpoint must never serialise secret material: the live TOTP seed
-     * (secret) and the identity-provider subjects (keycloak_sub, oidc_sub) have to be stripped from the response.
+     * (secret) and the identity-provider links (keycloak_sub, oidc_sub, oidc_iss) have to be stripped from the response.
      *
      * @throws \Exception
      */
@@ -1879,6 +1879,7 @@ final class UserControllerTest extends TestCase
                 'secret' => 'TOPSECRETTOTPSEEDVALUE',
                 'keycloak_sub' => 'kc-subject-uuid-123',
                 'oidc_sub' => 'oidc-subject-uuid-456',
+                'oidc_iss' => 'https://oidc-issuer.example.test',
             ]);
 
         $userService = $this->createMock(CurrentUser::class);
@@ -1903,6 +1904,8 @@ final class UserControllerTest extends TestCase
         self::assertStringNotContainsString('keycloak_sub', $body);
         self::assertStringNotContainsString('oidc-subject-uuid-456', $body);
         self::assertStringNotContainsString('oidc_sub', $body);
+        self::assertStringNotContainsString('oidc-issuer.example.test', $body);
+        self::assertStringNotContainsString('oidc_iss', $body);
         // Non-sensitive fields must still be present.
         self::assertStringContainsString('jane@example.test', $body);
     }

@@ -43,6 +43,8 @@ final class OidcAuthenticationControllerTest extends TestCase
 {
     use TestDatabaseTrait;
 
+    private const string ISSUER = 'https://auth.example.test';
+
     private Configuration $configuration;
     private OpenSSLAsymmetricKey $privateKey;
 
@@ -296,9 +298,9 @@ final class OidcAuthenticationControllerTest extends TestCase
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->expects($this->once())->method('getUserByLogin')->with('john')->willReturn(true);
         $currentUser
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('getUserData')
-            ->willReturnMap([['oidc_sub', '123'], ['twofactor_enabled', 0]]);
+            ->willReturnMap([['oidc_sub', '123'], ['oidc_iss', self::ISSUER], ['twofactor_enabled', 0]]);
         $currentUser->expects($this->never())->method('setUserData');
         $currentUser->expects($this->once())->method('setLoggedIn')->with(true);
         $currentUser->expects($this->once())->method('setAuthSource')->with('oidc');
@@ -324,14 +326,19 @@ final class OidcAuthenticationControllerTest extends TestCase
         $currentUser->expects($this->once())->method('setSuccess')->with(true);
 
         $authUser = $this->createMock(User::class);
-        $authUser->expects($this->once())->method('getUserIdByOidcSub')->with('123')->willReturn(0);
+        $authUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, '123')->willReturn(0);
         $authUser->expects($this->exactly(2))->method('getUserByLogin')->with('john', false)->willReturn(false);
         $authUser->expects($this->once())->method('getUserIdByEmail')->with('john@example.com')->willReturn(0);
         $authUser->expects($this->once())->method('createUser')->with('john', '', '')->willReturn(true);
         $authUser
             ->expects($this->once())
             ->method('setUserData')
-            ->with(['display_name' => 'John Doe', 'email' => 'john@example.com', 'oidc_sub' => '123'])
+            ->with([
+                'display_name' => 'John Doe',
+                'email' => 'john@example.com',
+                'oidc_sub' => '123',
+                'oidc_iss' => self::ISSUER,
+            ])
             ->willReturn(true);
 
         $controller = $this->createController(
@@ -379,18 +386,21 @@ final class OidcAuthenticationControllerTest extends TestCase
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $resolverUser = $this->createMock(User::class);
-        $resolverUser->expects($this->once())->method('getUserIdByOidcSub')->with('subject-123')->willReturn(55);
+        $resolverUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'subject-123')->willReturn(55);
         $resolverUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
         $resolverUser->expects($this->once())->method('getLogin')->willReturn('linked-user');
         $resolverUser->expects($this->once())->method('getUserByLogin')->with('linked-user', false)->willReturn(true);
-        $resolverUser->expects($this->once())->method('getUserData')->with('oidc_sub')->willReturn('subject-123');
+        $resolverUser
+            ->expects($this->exactly(2))
+            ->method('getUserData')
+            ->willReturnMap([['oidc_sub', 'subject-123'], ['oidc_iss', self::ISSUER]]);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->expects($this->once())->method('getUserByLogin')->with('linked-user')->willReturn(true);
         $currentUser
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('getUserData')
-            ->willReturnMap([['oidc_sub', 'subject-123'], ['twofactor_enabled', 0]]);
+            ->willReturnMap([['oidc_sub', 'subject-123'], ['oidc_iss', self::ISSUER], ['twofactor_enabled', 0]]);
         $currentUser->expects($this->once())->method('setLoggedIn')->with(true);
         $currentUser->expects($this->once())->method('setAuthSource')->with('oidc');
         $currentUser->expects($this->once())->method('updateSessionId')->with(true);
@@ -448,9 +458,9 @@ final class OidcAuthenticationControllerTest extends TestCase
         $currentUser->method('getUserId')->willReturn(55);
         $currentUser->expects($this->once())->method('getUserByLogin')->with('linked-user')->willReturn(true);
         $currentUser
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('getUserData')
-            ->willReturnMap([['oidc_sub', 'subject-123'], ['twofactor_enabled', 1]]);
+            ->willReturnMap([['oidc_sub', 'subject-123'], ['oidc_iss', self::ISSUER], ['twofactor_enabled', 1]]);
         $currentUser->expects($this->once())->method('isTwoFactorLockedOut')->willReturn(false);
         $currentUser->expects($this->once())->method('setAuthSource')->with('oidc');
         $currentUser->expects($this->once())->method('setTokenData');
@@ -509,9 +519,9 @@ final class OidcAuthenticationControllerTest extends TestCase
         $currentUser->method('getUserId')->willReturn(55);
         $currentUser->expects($this->once())->method('getUserByLogin')->with('linked-user')->willReturn(true);
         $currentUser
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('getUserData')
-            ->willReturnMap([['oidc_sub', 'subject-123'], ['twofactor_enabled', 1]]);
+            ->willReturnMap([['oidc_sub', 'subject-123'], ['oidc_iss', self::ISSUER], ['twofactor_enabled', 1]]);
         $currentUser->expects($this->once())->method('isTwoFactorLockedOut')->willReturn(true);
         $currentUser->expects($this->never())->method('setLoggedIn');
         $currentUser->expects($this->never())->method('saveToSession');
@@ -560,18 +570,77 @@ final class OidcAuthenticationControllerTest extends TestCase
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->expects($this->once())->method('getUserByLogin')->with('john')->willReturn(true);
         $currentUser
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getUserData')
-            ->with('oidc_sub')
-            ->willReturn('different-subject');
+            ->willReturnMap([['oidc_sub', 'different-subject'], ['oidc_iss', self::ISSUER]]);
         $this->expectNoLogin($currentUser);
 
         $authUser = $this->createMock(User::class);
-        $authUser->expects($this->once())->method('getUserIdByOidcSub')->with('subject-123')->willReturn(55);
+        $authUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'subject-123')->willReturn(55);
         $authUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
         $authUser->expects($this->once())->method('getLogin')->willReturn('john');
         $authUser->expects($this->once())->method('getUserByLogin')->with('john', false)->willReturn(true);
-        $authUser->expects($this->once())->method('getUserData')->with('oidc_sub')->willReturn('subject-123');
+        $authUser
+            ->expects($this->exactly(2))
+            ->method('getUserData')
+            ->willReturnMap([['oidc_sub', 'subject-123'], ['oidc_iss', self::ISSUER]]);
+
+        $controller = $this->createController(
+            $this->createSuccessfulProviderResponses(
+                $idToken,
+                '{"sub":"subject-123","preferred_username":"john","email":"john@example.com","name":"John Doe"}',
+            ),
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+            static fn(): User => $authUser,
+        );
+
+        $response = $controller->callback(new Request([
+            'code' => 'test-code',
+            'state' => 'state-123',
+        ]));
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $this->assertSame('', $oidcSession->getAuthorizationState()['state']);
+        $this->assertSame('', $oidcSession->getIdToken());
+    }
+
+    /**
+     * A subject is only unique per issuer: an account linked through another provider's
+     * issuer must never be handed to an identity that merely shares its subject.
+     */
+    public function testCallbackRefusesLoginWhenStoredIssuerDiffers(): void
+    {
+        $idToken = $this->signToken([
+            'iss' => 'https://auth.example.test',
+            'sub' => 'subject-123',
+            'aud' => ['phpmyfaq'],
+            'azp' => 'phpmyfaq',
+            'nonce' => 'nonce-456',
+            'iat' => time(),
+            'exp' => time() + 300,
+        ]);
+
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session, 'oidc');
+        $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->never())->method('getUserByLogin');
+        $this->expectNoLogin($currentUser);
+
+        $authUser = $this->createMock(User::class);
+        $authUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'subject-123')->willReturn(55);
+        $authUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
+        $authUser->expects($this->once())->method('getLogin')->willReturn('john');
+        $authUser->expects($this->once())->method('getUserByLogin')->with('john', false)->willReturn(true);
+        $authUser
+            ->expects($this->exactly(2))
+            ->method('getUserData')
+            ->willReturnMap([['oidc_sub', 'subject-123'], ['oidc_iss', 'https://old-provider.example.test']]);
+        $authUser->expects($this->never())->method('createUser');
 
         $controller = $this->createController(
             $this->createSuccessfulProviderResponses(
@@ -616,7 +685,7 @@ final class OidcAuthenticationControllerTest extends TestCase
         $this->expectNoLogin($currentUser);
 
         $authUser = $this->createMock(User::class);
-        $authUser->expects($this->once())->method('getUserIdByOidcSub')->with('attacker-subject')->willReturn(0);
+        $authUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'attacker-subject')->willReturn(0);
         $authUser->expects($this->never())->method('getUserIdByEmail');
         $authUser->expects($this->once())->method('getUserByLogin')->with('admin', false)->willReturn(true);
         $authUser->expects($this->never())->method('createUser');
@@ -665,7 +734,7 @@ final class OidcAuthenticationControllerTest extends TestCase
         $this->expectNoLogin($currentUser);
 
         $authUser = $this->createMock(User::class);
-        $authUser->expects($this->once())->method('getUserIdByOidcSub')->with('attacker-subject')->willReturn(0);
+        $authUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'attacker-subject')->willReturn(0);
         $authUser->expects($this->once())->method('getUserByLogin')->with('attacker', false)->willReturn(false);
         $authUser->expects($this->once())->method('getUserIdByEmail')->with('admin@example.com')->willReturn(1);
         $authUser->expects($this->never())->method('getUserById');
@@ -963,7 +1032,7 @@ final class OidcAuthenticationControllerTest extends TestCase
     private function createLinkedResolverUser(): User&MockObject
     {
         $resolverUser = $this->createMock(User::class);
-        $resolverUser->expects($this->once())->method('getUserIdByOidcSub')->with('subject-123')->willReturn(55);
+        $resolverUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'subject-123')->willReturn(55);
         $resolverUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
         $resolverUser->expects($this->once())->method('getLogin')->willReturn('linked-user');
         // AuthOidc::isValidLogin()/checkCredentials() re-resolve the account and its subject.
@@ -972,7 +1041,10 @@ final class OidcAuthenticationControllerTest extends TestCase
             ->method('getUserByLogin')
             ->with('linked-user', false)
             ->willReturn(true);
-        $resolverUser->expects($this->once())->method('getUserData')->with('oidc_sub')->willReturn('subject-123');
+        $resolverUser
+            ->expects($this->exactly(2))
+            ->method('getUserData')
+            ->willReturnMap([['oidc_sub', 'subject-123'], ['oidc_iss', self::ISSUER]]);
 
         return $resolverUser;
     }
@@ -1171,7 +1243,7 @@ final class OidcAuthenticationControllerTest extends TestCase
         $this->expectNoLogin($currentUser);
 
         $authUser = $this->createMock(User::class);
-        $authUser->expects($this->once())->method('getUserIdByOidcSub')->with('123')->willReturn(0);
+        $authUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, '123')->willReturn(0);
         $authUser->expects($this->never())->method('createUser');
 
         $controller = $this->createController(

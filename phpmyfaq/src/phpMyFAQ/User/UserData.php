@@ -39,7 +39,7 @@ class UserData
      * Columns that link an account to an external identity provider. They only exist
      * on upgraded schemas, so reads of them degrade to an empty string instead of false.
      */
-    private const array IDENTITY_LINK_FIELDS = ['keycloak_sub', 'entra_oid', 'oidc_sub'];
+    private const array IDENTITY_LINK_FIELDS = ['keycloak_sub', 'entra_oid', 'oidc_sub', 'oidc_iss'];
 
     /**
      * associative array containing user data.
@@ -115,7 +115,7 @@ class UserData
 
         if ($singleReturn && $field !== '*') {
             return match ($field) {
-                'display_name', 'email', 'keycloak_sub', 'entra_oid', 'oidc_sub', 'secret' => (string) (
+                'display_name', 'email', 'keycloak_sub', 'entra_oid', 'oidc_sub', 'oidc_iss', 'secret' => (string) (
                     $array[$field] ?? ''
                 ),
                 default => $array[$field] ?? null,
@@ -160,7 +160,7 @@ class UserData
         // $key is a column name chosen by internal callers, never user input; only
         // the value is bound as a parameter.
         $select = sprintf('SELECT
-                user_id, last_modified, display_name, email, keycloak_sub, entra_oid, oidc_sub, is_visible,
+                user_id, last_modified, display_name, email, keycloak_sub, entra_oid, oidc_sub, oidc_iss, is_visible,
                 twofactor_enabled, secret
             FROM %sfaquserdata WHERE %s = ?', Database::getTablePrefix(), $key);
 
@@ -186,6 +186,7 @@ class UserData
         $this->data['keycloak_sub'] ??= '';
         $this->data['entra_oid'] ??= '';
         $this->data['oidc_sub'] ??= '';
+        $this->data['oidc_iss'] ??= '';
 
         return $this->data;
     }
@@ -243,6 +244,7 @@ class UserData
                 keycloak_sub,
                 entra_oid,
                 oidc_sub,
+                oidc_iss,
                 is_visible,
                 twofactor_enabled, 
                 secret
@@ -282,6 +284,7 @@ class UserData
         $this->data['keycloak_sub'] ??= '';
         $this->data['entra_oid'] ??= '';
         $this->data['oidc_sub'] ??= '';
+        $this->data['oidc_iss'] ??= '';
 
         return true;
     }
@@ -295,6 +298,7 @@ class UserData
         $keycloakSubValue = $this->identityLinkValue('keycloak_sub');
         $entraOidValue = $this->identityLinkValue('entra_oid');
         $oidcSubValue = $this->identityLinkValue('oidc_sub');
+        $oidcIssValue = $this->identityLinkValue('oidc_iss');
 
         $update = sprintf(
             "
@@ -307,6 +311,7 @@ class UserData
                 keycloak_sub = %s,
                 entra_oid = %s,
                 oidc_sub = %s,
+                oidc_iss = %s,
                 is_visible = %d,
                 twofactor_enabled = %d,
                 secret = '%s'
@@ -319,6 +324,7 @@ class UserData
             $keycloakSubValue,
             $entraOidValue,
             $oidcSubValue,
+            $oidcIssValue,
             (int) ($this->data['is_visible'] ?? 0),
             (int) ($this->data['twofactor_enabled'] ?? 0),
             $this->configuration->getDb()->escape((string) ($this->data['secret'] ?? '')),
@@ -334,8 +340,13 @@ class UserData
         if ($res === false) {
             // Only bail out if the user actually has an identity provider link to
             // persist. An empty placeholder must not block the fallback UPDATE
-            // for schemas that lack the keycloak_sub, entra_oid or oidc_sub column.
-            if ($keycloakSubValue !== 'NULL' || $entraOidValue !== 'NULL' || $oidcSubValue !== 'NULL') {
+            // for schemas that lack the keycloak_sub, entra_oid, oidc_sub or oidc_iss column.
+            if (
+                $keycloakSubValue !== 'NULL'
+                || $entraOidValue !== 'NULL'
+                || $oidcSubValue !== 'NULL'
+                || $oidcIssValue !== 'NULL'
+            ) {
                 return false;
             }
 

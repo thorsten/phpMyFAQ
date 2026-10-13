@@ -346,6 +346,7 @@ class Pgsql extends Database implements DriverInterface
             email VARCHAR(128) NULL,
             keycloak_sub VARCHAR(255) NULL,
             oidc_sub VARCHAR(255) NULL,
+            oidc_iss VARCHAR(255) NULL,
             is_visible SMALLINT NULL DEFAULT 0,
             twofactor_enabled SMALLINT NULL DEFAULT 0,
             secret VARCHAR(128) NULL DEFAULT NULL)',

@@ -727,6 +727,7 @@ class DatabaseSchema
             ->varchar('keycloak_sub', 255)
             ->varchar('entra_oid', 255)
             ->varchar('oidc_sub', 255)
+            ->varchar('oidc_iss', 255)
             ->smallInteger('is_visible', true, 0)
             ->smallInteger('twofactor_enabled', true, 0)
             ->varchar('secret', 128)

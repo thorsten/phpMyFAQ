@@ -73,6 +73,7 @@ class Migration420Beta3Test extends TestCase
             [
                 'ALTER TABLE faquserdata ADD COLUMN oidc_sub VARCHAR(255) NULL',
                 'CREATE UNIQUE INDEX IF NOT EXISTS idx_faquserdata_oidc_sub ON faquserdata (oidc_sub)',
+                'ALTER TABLE faquserdata ADD COLUMN oidc_iss VARCHAR(255) NULL',
             ],
             $recorder->getSqlQueries(),
         );
@@ -103,15 +104,30 @@ class Migration420Beta3Test extends TestCase
         );
     }
 
-    public function testUpSkipsTheColumnWhenItAlreadyExists(): void
+    public function testUpSkipsTheColumnsWhenTheyAlreadyExist(): void
     {
-        $this->configuration->getDb()->query('CREATE TABLE faquserdata (user_id INTEGER, oidc_sub VARCHAR(255))');
+        $this->configuration
+            ->getDb()
+            ->query('CREATE TABLE faquserdata (user_id INTEGER, oidc_sub VARCHAR(255), oidc_iss VARCHAR(255))');
 
         $recorder = new OperationRecorder($this->configuration);
         $this->migration->up($recorder);
 
         $this->assertSame([], $recorder->getSqlQueries());
         $this->assertCount(13, $recorder->getOperationsByType('config_add'));
+    }
+
+    public function testUpOnlyAddsTheIssuerColumnWhenTheSubjectColumnExists(): void
+    {
+        $this->configuration->getDb()->query('CREATE TABLE faquserdata (user_id INTEGER, oidc_sub VARCHAR(255))');
+
+        $recorder = new OperationRecorder($this->configuration);
+        $this->migration->up($recorder);
+
+        $this->assertSame(
+            ['ALTER TABLE faquserdata ADD COLUMN oidc_iss VARCHAR(255) NULL'],
+            $recorder->getSqlQueries(),
+        );
     }
 
     public function testRecordedQueriesApplyToSqlite(): void
@@ -126,6 +142,6 @@ class Migration420Beta3Test extends TestCase
             $this->assertNotFalse($db->query($query), $query);
         }
 
-        $this->assertNotFalse($db->query('SELECT oidc_sub FROM faquserdata'));
+        $this->assertNotFalse($db->query('SELECT oidc_sub, oidc_iss FROM faquserdata'));
     }
 }

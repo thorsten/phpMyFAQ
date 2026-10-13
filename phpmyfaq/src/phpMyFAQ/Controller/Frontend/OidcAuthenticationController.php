@@ -209,12 +209,14 @@ final class OidcAuthenticationController extends AbstractFrontController
                 return $redirect;
             }
 
-            $login = $this->resolveLocalLogin($claims);
+            // The validator has already matched the ID token's iss against this issuer.
+            $issuer = $discoveryDocument->issuer;
+            $login = $this->resolveLocalLogin($issuer, $claims);
             if ($login === '') {
                 $this->oidcSession->clearAuthorizationState();
                 return $redirect;
             }
-            $auth = new AuthOidc($this->configuration, $providerConfig, $claims, $login, $this->userFactory);
+            $auth = new AuthOidc($this->configuration, $providerConfig, $claims, $issuer, $login, $this->userFactory);
 
             if (!$auth->isValidLogin($login)) {
                 $this->configuration
@@ -241,7 +243,7 @@ final class OidcAuthenticationController extends AbstractFrontController
                 return $redirect;
             }
 
-            if (!$this->isLinkedToSubject($user, $claims)) {
+            if (!$this->isLinkedToSubject($user, $issuer, $claims)) {
                 $this->configuration
                     ->getLogger()
                     ->warning(sprintf('OpenID Connect subject mismatch for user: %s', $this->maskLogin($login)));
@@ -313,13 +315,13 @@ final class OidcAuthenticationController extends AbstractFrontController
      * Resolves the local login for the authenticated OpenID Connect identity.
      *
      * An existing local account is only ever resolved through its stored OpenID Connect
-     * subject. Matching by preferred username or email would let any OpenID Connect user
+     * issuer and subject. Matching by preferred username or email would let any OpenID Connect user
      * who controls a colliding claim take over a local account they never proved
      * ownership of, so an unlinked identity may only provision a new account.
      *
      * @param array<string, mixed> $claims
      */
-    private function resolveLocalLogin(array $claims): string
+    private function resolveLocalLogin(string $issuer, array $claims): string
     {
         $subject = trim((string) ($claims['sub'] ?? ''));
         if ($subject === '') {
@@ -328,7 +330,7 @@ final class OidcAuthenticationController extends AbstractFrontController
         }
 
         $linkedUser = $this->createUser();
-        $linkedUserId = $linkedUser->getUserIdByOidcSub($subject);
+        $linkedUserId = $linkedUser->getUserIdByOidcIdentity($issuer, $subject);
         if ($linkedUserId > 0 && $linkedUser->getUserById($linkedUserId)) {
             return $linkedUser->getLogin();
         }
@@ -362,7 +364,7 @@ final class OidcAuthenticationController extends AbstractFrontController
             $this->configuration
                 ->getLogger()
                 ->warning(sprintf(
-                    'OpenID Connect login rejected: local account %s exists but is not linked to the OpenID Connect subject.',
+                    'OpenID Connect login rejected: local account %s exists but is not linked to this OpenID Connect issuer and subject.',
                     $this->maskLogin($login),
                 ));
 
@@ -396,18 +398,25 @@ final class OidcAuthenticationController extends AbstractFrontController
     }
 
     /**
-     * The loaded account must already carry the subject of the authenticated identity.
-     * A missing binding is never filled in at login time: doing so would silently hand
-     * the account to whichever OpenID Connect identity reaches this point first.
+     * The loaded account must already carry the issuer and subject of the authenticated
+     * identity. A missing binding is never filled in at login time: doing so would silently
+     * hand the account to whichever OpenID Connect identity reaches this point first.
      *
      * @param array<string, mixed> $claims
      */
-    private function isLinkedToSubject(CurrentUser $user, array $claims): bool
+    private function isLinkedToSubject(CurrentUser $user, string $issuer, array $claims): bool
     {
         $subject = trim((string) ($claims['sub'] ?? ''));
         $linkedSubject = trim((string) $user->getUserData('oidc_sub'));
+        $linkedIssuer = trim((string) $user->getUserData('oidc_iss'));
 
-        return $subject !== '' && $linkedSubject !== '' && hash_equals($linkedSubject, $subject);
+        return (
+            $subject !== ''
+            && $linkedSubject !== ''
+            && $linkedIssuer !== ''
+            && hash_equals($linkedSubject, $subject)
+            && hash_equals($linkedIssuer, $issuer)
+        );
     }
 
     private function resolveLogoutIdToken(CurrentUser $user): string

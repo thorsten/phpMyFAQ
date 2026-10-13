@@ -183,8 +183,8 @@ final class UserController extends AbstractAdministrationApiController
         $data = $this->currentUserService->userData()->get(field: '*');
         if (is_array($data)) {
             // Never expose secret material in the admin read API: the live TOTP seed
-            // (secret) and the identity-provider subjects (keycloak_sub, oidc_sub) must not leave the server.
-            unset($data['secret'], $data['keycloak_sub'], $data['oidc_sub']);
+            // (secret) and the identity-provider links (keycloak_sub, oidc_sub, oidc_iss) must not leave the server.
+            unset($data['secret'], $data['keycloak_sub'], $data['oidc_sub'], $data['oidc_iss']);
 
             $userData = $data;
             $userData['userId'] = $this->currentUserService->getUserId();

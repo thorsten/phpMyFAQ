@@ -710,28 +710,64 @@ class UserTest extends TestCase
         $this->userData->expects($this->once())->method('load')->with(11);
         $this->userData->expects($this->once())->method('set')->with(['display_name'], ['Thorsten'])->willReturn(true);
         $this->userData
-            ->expects($this->exactly(4))
+            ->expects($this->exactly(3))
             ->method('fetchAll')
-            ->willReturnOnConsecutiveCalls(
-                ['user_id' => 11, 'is_visible' => true],
-                ['user_id' => 12],
-                ['user_id' => 13],
-                ['user_id' => 14],
-            );
+            ->willReturnOnConsecutiveCalls(['user_id' => 11, 'is_visible' => true], ['user_id' => 12], [
+                'user_id' => 13,
+            ]);
 
         $this->assertSame('Thorsten', $this->user->getUserData('display_name'));
         $this->assertTrue($this->user->setUserData(['display_name' => 'Thorsten']));
         $this->assertSame(11, $this->user->getUserIdByEmail('thorsten@example.com'));
         $this->assertTrue($this->user->getUserVisibilityByEmail('anonymous@example.com'));
         $this->assertSame(13, $this->user->getUserIdByKeycloakSub('keycloak-sub-123'));
-        $this->assertSame(14, $this->user->getUserIdByOidcSub('oidc-sub-123'));
     }
 
-    public function testGetUserIdByOidcSubReturnsZeroForEmptySubject(): void
+    public function testGetUserIdByOidcIdentityReturnsTheLinkedUserForAMatchingIssuer(): void
+    {
+        $this->userData
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->with('oidc_sub', 'oidc-sub-123')
+            ->willReturn(['user_id' => 14, 'oidc_sub' => 'oidc-sub-123', 'oidc_iss' => 'https://auth.example.test']);
+
+        $this->assertSame(14, $this->user->getUserIdByOidcIdentity('https://auth.example.test', 'oidc-sub-123'));
+    }
+
+    public function testGetUserIdByOidcIdentityReturnsZeroForAnIssuerMismatch(): void
+    {
+        $this->userData
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->with('oidc_sub', 'oidc-sub-123')
+            ->willReturn(['user_id' => 14, 'oidc_sub' => 'oidc-sub-123', 'oidc_iss' => 'https://old.example.test']);
+
+        $this->assertSame(0, $this->user->getUserIdByOidcIdentity('https://auth.example.test', 'oidc-sub-123'));
+    }
+
+    public function testGetUserIdByOidcIdentityReturnsZeroWithoutAStoredIssuer(): void
+    {
+        $this->userData
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->with('oidc_sub', 'oidc-sub-123')
+            ->willReturn(['user_id' => 14, 'oidc_sub' => 'oidc-sub-123', 'oidc_iss' => '']);
+
+        $this->assertSame(0, $this->user->getUserIdByOidcIdentity('https://auth.example.test', 'oidc-sub-123'));
+    }
+
+    public function testGetUserIdByOidcIdentityReturnsZeroForEmptySubject(): void
     {
         $this->userData->expects($this->never())->method('fetchAll');
 
-        $this->assertSame(0, $this->user->getUserIdByOidcSub(''));
+        $this->assertSame(0, $this->user->getUserIdByOidcIdentity('https://auth.example.test', ''));
+    }
+
+    public function testGetUserIdByOidcIdentityReturnsZeroForEmptyIssuer(): void
+    {
+        $this->userData->expects($this->never())->method('fetchAll');
+
+        $this->assertSame(0, $this->user->getUserIdByOidcIdentity('', 'oidc-sub-123'));
     }
 
     public function testGetUserDataCreatesUserDataWhenUnset(): void

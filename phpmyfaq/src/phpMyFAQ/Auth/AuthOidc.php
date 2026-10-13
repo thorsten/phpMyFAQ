@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Auth;
 
 use Closure;
+use InvalidArgumentException;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
 use phpMyFAQ\Configuration;
@@ -34,17 +35,28 @@ final class AuthOidc extends Auth implements AuthDriverInterface
 {
     public const string DEFAULT_GROUPS_CLAIM = 'groups';
 
-    /** @param array<string, mixed> $claims */
+    /**
+     * @param array<string, mixed> $claims
+     * @param string $issuer The validated issuer of the ID token; account links are bound to it.
+     * @throws InvalidArgumentException when the issuer is empty
+     */
     public function __construct(
         Configuration $configuration,
         private readonly OidcProviderConfig $providerConfig,
         private readonly array $claims,
+        private readonly string $issuer,
         private readonly string $resolvedLogin,
         /** @var (Closure(): User)|null */
         private readonly ?Closure $userFactory = null,
         /** @var (Closure(): MediumPermission)|null */
         private readonly ?Closure $mediumPermissionFactory = null,
     ) {
+        if (trim($issuer) === '') {
+            throw new InvalidArgumentException(
+                'AuthOidc requires the validated OpenID Connect issuer; pass the discovery document issuer.',
+            );
+        }
+
         parent::__construct($configuration);
     }
 
@@ -77,6 +89,7 @@ final class AuthOidc extends Auth implements AuthDriverInterface
                 'display_name' => $this->getDisplayName(),
                 'email' => $this->getEmail(),
                 'oidc_sub' => $this->getSubject(),
+                'oidc_iss' => $this->issuer,
             ]);
         } catch (\Exception $exception) {
             $this->configuration
@@ -189,15 +202,41 @@ final class AuthOidc extends Auth implements AuthDriverInterface
     }
 
     /**
-     * An existing local account may only be used by the identity whose subject it stores.
-     * Accounts without a stored subject are never claimed by username or email.
+     * An existing local account may only be used by the identity whose issuer and subject it
+     * stores: a subject is only unique per issuer. Accounts without a stored subject are never
+     * claimed by username or email, and accounts without a stored issuer are refused.
      */
     private function isLinkedToSubject(User $user): bool
     {
         $subject = $this->getSubject();
         $linkedSubject = trim((string) $user->getUserData('oidc_sub'));
+        if ($subject === '' || $linkedSubject === '' || !hash_equals($linkedSubject, $subject)) {
+            return false;
+        }
 
-        return $subject !== '' && $linkedSubject !== '' && hash_equals($linkedSubject, $subject);
+        $linkedIssuer = trim((string) $user->getUserData('oidc_iss'));
+        if ($linkedIssuer === '') {
+            $this->configuration
+                ->getLogger()
+                ->warning(sprintf(
+                    'OpenID Connect login rejected for user #%d: the account link predates issuer binding '
+                    . 'and must be re-established.',
+                    $user->getUserId(),
+                ));
+            return false;
+        }
+
+        if (!hash_equals($linkedIssuer, $this->issuer)) {
+            $this->configuration
+                ->getLogger()
+                ->warning(sprintf(
+                    'OpenID Connect login rejected for user #%d: issuer mismatch, the account is linked to another issuer.',
+                    $user->getUserId(),
+                ));
+            return false;
+        }
+
+        return true;
     }
 
     private function findUser(string $login): ?User
