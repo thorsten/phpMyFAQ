@@ -55,6 +55,14 @@ class UserControllerTest extends TestCase
         $this->mailer = $this->createStub(Mail::class);
     }
 
+    protected function tearDown(): void
+    {
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('ucp'), 0, 10)]);
+        Token::resetInstanceForTests();
+
+        parent::tearDown();
+    }
+
     private function createController(): UserController
     {
         return new UserController($this->stopWords, $this->mailer);
