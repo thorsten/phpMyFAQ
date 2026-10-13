@@ -284,7 +284,11 @@ final class ConfigurationTabControllerTest extends TestCase
         $response = $controller->list($request);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString('OpenID Connect', (string) $response->getContent());
+        self::assertStringContainsString(
+            '<h4 class="h4 pt-2 pb-1 mb-4 border-bottom">OpenID Connect</h4>',
+            (string) $response->getContent(),
+        );
+        self::assertStringNotContainsString('>oidc</h4>', (string) $response->getContent());
         self::assertStringContainsString('data-config-key="oidc.enable"', (string) $response->getContent());
         self::assertStringContainsString('data-config-key="oidc.discoveryUrl"', (string) $response->getContent());
         self::assertStringContainsString('data-config-key="oidc.groupsClaim"', (string) $response->getContent());

@@ -519,12 +519,22 @@ describe('Configuration Functions', () => {
     it('should show OpenID Connect tab and items when filtering by "discovery"', async () => {
       vi.useFakeTimers();
       buildFilterDOM();
+      (document.querySelector('#oidc') as HTMLElement).innerHTML = '';
 
-      (fetchConfiguration as Mock).mockResolvedValue('');
+      // The tabs are loaded once per module instance, so use a fresh one to exercise TAB_TARGETS.
+      vi.resetModules();
+      const freshConfiguration = await import('./configuration');
+      const freshApi = await import('../api');
+      const freshFetch = freshApi.fetchConfiguration as Mock;
+      freshFetch.mockImplementation(async (target: string) =>
+        target === '#oidc' ? '<div class="pmf-config-item" data-config-key="oidc.discoveryUrl">Discovery URL</div>' : ''
+      );
 
-      handleConfigurationTabFiltering();
+      freshConfiguration.handleConfigurationTabFiltering();
 
       await triggerFilterAndFlush('discovery');
+
+      expect(freshFetch).toHaveBeenCalledWith('#oidc', 'en');
 
       const oidcTab = document.querySelector('li.nav-item[data-config-label="OpenID Connect"]');
       expect(oidcTab?.classList.contains('d-none')).toBe(false);
