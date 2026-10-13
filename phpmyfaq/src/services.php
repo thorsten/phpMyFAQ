@@ -42,6 +42,7 @@ use phpMyFAQ\Auth\OAuth2\Repository\RefreshTokenRepository;
 use phpMyFAQ\Auth\OAuth2\Repository\ScopeRepository;
 use phpMyFAQ\Auth\OAuth2\Repository\UserRepository;
 use phpMyFAQ\Auth\OAuth2\ResourceServer as OAuth2ResourceServer;
+use phpMyFAQ\Auth\Oidc\GenericOidcProviderConfigFactory;
 use phpMyFAQ\Auth\Oidc\OidcClient;
 use phpMyFAQ\Auth\Oidc\OidcDiscoveryService;
 use phpMyFAQ\Auth\Oidc\OidcIdTokenValidator;
@@ -337,6 +338,12 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.auth.keycloak.provider-config', OidcProviderConfig::class)->factory([
         service('phpmyfaq.auth.keycloak.provider-config-factory'),
         'create',
+    ]);
+    $services->set(
+        'phpmyfaq.auth.oidc.generic.provider-config-factory',
+        GenericOidcProviderConfigFactory::class,
+    )->args([
+        service('phpmyfaq.configuration'),
     ]);
     $services->set('phpmyfaq.auth.chain', AuthChain::class)->args([
         service('phpmyfaq.user.current_user'),
