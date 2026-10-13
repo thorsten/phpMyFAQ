@@ -76,7 +76,11 @@ final class UserController extends AbstractController
         $twoFactorEnabled = Filter::filterVar($data->twofactor_enabled ?? 'off', FILTER_SANITIZE_SPECIAL_CHARS);
         $secret = Filter::filterVar($data->secret ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        $isAzureAdUser = $this->currentUser->getUserAuthSource() === 'azure';
+        $isExternalIdentityUser = in_array(
+            $this->currentUser->getUserAuthSource(),
+            ['azure', 'keycloak', 'oidc'],
+            strict: true,
+        );
         $isWebAuthnUser = $this->currentUser->getUserAuthSource() === 'webauthn';
 
         if ($userId !== $this->currentUser->getUserId()) {
@@ -92,7 +96,7 @@ final class UserController extends AbstractController
         $twoFactorFlag = $twoFactorCurrentlyEnabled || $twoFactorEnabled === 'on' ? 1 : 0;
 
         $success = false;
-        if (!$isAzureAdUser) {
+        if (!$isExternalIdentityUser) {
             // The password is only changed when the user actually entered one;
             // leaving both fields blank keeps the current password.
             $changePassword = $password !== '' || $confirm !== '';
@@ -171,7 +175,7 @@ final class UserController extends AbstractController
             }
         }
 
-        if ($isAzureAdUser) {
+        if ($isExternalIdentityUser) {
             $userData = [
                 'is_visible' => $isVisible === 'on' ? 1 : 0,
                 'twofactor_enabled' => $twoFactorFlag,

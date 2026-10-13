@@ -143,6 +143,60 @@ final class AuthenticationControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testLoginRendersOidcSignInButtonWhenEnabled(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            $this->createLoggedOutCurrentUser(),
+            ['oidc.enable' => true, 'oidc.providerName' => 'Authentik'],
+        ));
+
+        $response = $controller->login(new Request());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('./auth/oidc/authorize', (string) $response->getContent());
+        self::assertStringContainsString('Sign in with Authentik', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLoginEscapesOidcProviderName(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            $this->createLoggedOutCurrentUser(),
+            ['oidc.enable' => true, 'oidc.providerName' => '<b>Evil</b>'],
+        ));
+
+        $response = $controller->login(new Request());
+
+        self::assertStringNotContainsString('<b>Evil</b>', (string) $response->getContent());
+        self::assertStringContainsString('Sign in with &lt;b&gt;Evil&lt;/b&gt;', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLoginUsesDefaultOidcProviderNameWhenEmpty(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            $this->createLoggedOutCurrentUser(),
+            ['oidc.enable' => true, 'oidc.providerName' => ''],
+        ));
+
+        $response = $controller->login(new Request());
+
+        self::assertStringContainsString('Sign in with OpenID Connect', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testAuthenticateRedirectsHomeWhenUserIsAlreadyLoggedIn(): void
     {
         $controller = $this->createController();
@@ -239,6 +293,31 @@ final class AuthenticationControllerTest extends TestCase
         $response = $controller->logout(new Request(['csrf' => $token]));
 
         self::assertSame($this->configuration->getDefaultUrl() . 'auth/keycloak/logout', $response->getTargetUrl());
+        self::assertNotEmpty($session->getFlashBag()->get('success'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLogoutRedirectsToOidcLogoutWhenOidcUserLogsOut(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString('logout');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('logout'), 0, 10)] = $token;
+
+        $currentUser = $this->createLoggedInCurrentUser('oidc');
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer($session, $currentUser, [
+            'oidc.enable' => true,
+        ]));
+
+        $response = $controller->logout(new Request(['csrf' => $token]));
+
+        self::assertSame($this->configuration->getDefaultUrl() . 'auth/oidc/logout', $response->getTargetUrl());
         self::assertNotEmpty($session->getFlashBag()->get('success'));
     }
 
