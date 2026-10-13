@@ -7,7 +7,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Setup\Migration\MigrationTracker;
-use phpMyFAQ\Setup\Migration\Versions\Migration420Beta;
+use phpMyFAQ\Setup\Migration\Versions\Migration420Beta3;
 use phpMyFAQ\System;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -203,13 +203,13 @@ class UpdateTest extends TestCase
     public function testApplyUpdatesSkipsAppliedMigrationWithUnchangedChecksum(): void
     {
         $configuration = new Configuration($this->dbHandle);
-        $migration = new Migration420Beta($configuration);
+        $migration = new Migration420Beta3($configuration);
         $tracker = new MigrationTracker($configuration);
         $tracker->ensureTableExists();
-        $tracker->recordMigration('4.2.0-beta', 1, $migration->getChecksum(), $migration->getDescription());
+        $tracker->recordMigration('4.2.0-beta.3', 1, $migration->getChecksum(), $migration->getDescription());
 
         $update = new Update(new System(), $configuration);
-        $update->version = '4.2.0-beta';
+        $update->version = '4.2.0-beta.3';
         $update->dryRun = true;
         $update->applyUpdates();
 
