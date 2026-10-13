@@ -52,11 +52,20 @@ final class SecuritySettingsTest extends TestCase
         $this->assertSame($expected, $settings->isSignInWithKeycloakActive());
     }
 
+    #[DataProvider('flagProvider')]
+    public function testIsSignInWithOidcActive(mixed $configured, bool $expected): void
+    {
+        $settings = $this->createSettings(['oidc.enable' => $configured]);
+
+        $this->assertSame($expected, $settings->isSignInWithOidcActive());
+    }
+
     public function testFlagsAreIndependentOfEachOther(): void
     {
-        $settings = $this->createSettings(['security.enableSignInWithMicrosoft' => true, 'keycloak.enable' => false]);
+        $settings = $this->createSettings(['security.enableSignInWithMicrosoft' => true, 'keycloak.enable' => false, 'oidc.enable' => true]);
 
         $this->assertTrue($settings->isSignInWithMicrosoftActive());
         $this->assertFalse($settings->isSignInWithKeycloakActive());
+        $this->assertTrue($settings->isSignInWithOidcActive());
     }
 }

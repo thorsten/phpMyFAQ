@@ -13,6 +13,7 @@ class AuthenticationSourceTypeTest extends TestCase
         $this->assertSame('local', AuthenticationSourceType::AUTH_LOCAL->value);
         $this->assertSame('azure', AuthenticationSourceType::AUTH_AZURE->value);
         $this->assertSame('keycloak', AuthenticationSourceType::AUTH_KEYCLOAK->value);
+        $this->assertSame('oidc', AuthenticationSourceType::AUTH_OIDC->value);
         $this->assertSame('ldap', AuthenticationSourceType::AUTH_LDAP->value);
         $this->assertSame('http', AuthenticationSourceType::AUTH_HTTP->value);
         $this->assertSame('sso', AuthenticationSourceType::AUTH_SSO->value);
@@ -23,10 +24,11 @@ class AuthenticationSourceTypeTest extends TestCase
     {
         $cases = AuthenticationSourceType::cases();
 
-        $this->assertCount(7, $cases);
+        $this->assertCount(8, $cases);
         $this->assertContains(AuthenticationSourceType::AUTH_LOCAL, $cases);
         $this->assertContains(AuthenticationSourceType::AUTH_AZURE, $cases);
         $this->assertContains(AuthenticationSourceType::AUTH_KEYCLOAK, $cases);
+        $this->assertContains(AuthenticationSourceType::AUTH_OIDC, $cases);
         $this->assertContains(AuthenticationSourceType::AUTH_LDAP, $cases);
         $this->assertContains(AuthenticationSourceType::AUTH_HTTP, $cases);
         $this->assertContains(AuthenticationSourceType::AUTH_SSO, $cases);
