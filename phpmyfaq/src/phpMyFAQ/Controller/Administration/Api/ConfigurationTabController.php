@@ -50,13 +50,18 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
      * URLs the server connects to: must be http(s) and must not point at
      * loopback, private or link-local addresses.
      */
-    private const array OUTBOUND_URL_KEYS = ['translation.libreTranslateUrl', 'keycloak.baseUrl'];
+    private const array OUTBOUND_URL_KEYS = ['translation.libreTranslateUrl', 'keycloak.baseUrl', 'oidc.discoveryUrl'];
 
     /**
      * URLs the browser is redirected to: must be http(s), may point anywhere
      * (usually at this installation).
      */
-    private const array REDIRECT_URL_KEYS = ['keycloak.redirectUri', 'keycloak.logoutRedirectUrl'];
+    private const array REDIRECT_URL_KEYS = [
+        'keycloak.redirectUri',
+        'keycloak.logoutRedirectUrl',
+        'oidc.redirectUri',
+        'oidc.logoutRedirectUrl',
+    ];
 
     private const array REDIS_DSN_KEYS = ['session.redisDsn', 'storage.redisDsn', 'storage.cacheRedisDsn'];
 
@@ -391,6 +396,19 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
             'keycloak.groupSyncOnLogin',
             'keycloak.groupMapping',
             'keycloak.logoutRedirectUrl',
+            'oidc.enable',
+            'oidc.providerName',
+            'oidc.discoveryUrl',
+            'oidc.clientId',
+            'oidc.clientSecret',
+            'oidc.redirectUri',
+            'oidc.scopes',
+            'oidc.autoProvision',
+            'oidc.groupsClaim',
+            'oidc.groupAutoAssign',
+            'oidc.groupSyncOnLogin',
+            'oidc.groupMapping',
+            'oidc.logoutRedirectUrl',
         ];
 
         $ssoChanges = array_intersect($changedKeys, $ssoKeys);

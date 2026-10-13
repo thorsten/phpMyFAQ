@@ -131,6 +131,12 @@
                 {{ 'keycloakControlCenter' | translate }}
               </a>
             </li>
+            <li role="presentation" class="nav-item" data-config-group="integrations" data-config-label="{{ 'oidcControlCenter' | translate }}">
+              <a href="#oidc" aria-controls="oidc" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-box-arrow-in-right"></i>
+                {{ 'oidcControlCenter' | translate }}
+              </a>
+            </li>
             <li role="presentation" class="nav-item" data-config-group="integrations" data-config-label="LDAP">
               <a href="#ldap" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
                 <i aria-hidden="true" class="bi bi-database"></i>
@@ -168,6 +174,7 @@
             <div role="tabpanel" class="tab-pane fade" id="api"></div>
             <div role="tabpanel" class="tab-pane fade" id="oauth2"></div>
             <div role="tabpanel" class="tab-pane fade" id="keycloak"></div>
+            <div role="tabpanel" class="tab-pane fade" id="oidc"></div>
             <div role="tabpanel" class="tab-pane fade" id="upgrade"></div>
             <div role="tabpanel" class="tab-pane fade" id="translation"></div>
             <div role="tabpanel" class="tab-pane fade" id="storage"></div>

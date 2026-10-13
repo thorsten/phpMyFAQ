@@ -327,6 +327,9 @@ describe('Configuration Functions', () => {
           <li class="nav-item" data-config-group="integrations" data-config-label="Keycloak">
             <a href="#keycloak" data-bs-toggle="tab"></a>
           </li>
+          <li class="nav-item" data-config-group="integrations" data-config-label="OpenID Connect">
+            <a href="#oidc" data-bs-toggle="tab"></a>
+          </li>
         </ul>
         </form>
         <div id="pmf-configuration-result"></div>
@@ -334,6 +337,7 @@ describe('Configuration Functions', () => {
         <div id="main"></div>
         <div id="oauth2"></div>
         <div id="keycloak"></div>
+        <div id="oidc"></div>
       `;
 
       (fetchConfiguration as Mock).mockResolvedValue('Configuration content');
@@ -364,6 +368,9 @@ describe('Configuration Functions', () => {
           <li class="nav-item" data-config-group="integrations" data-config-label="Keycloak">
             <a class="nav-link" href="#keycloak"></a>
           </li>
+          <li class="nav-item" data-config-group="integrations" data-config-label="OpenID Connect">
+            <a class="nav-link" href="#oidc"></a>
+          </li>
           <li class="pmf-configuration-group" data-config-group="maintenance"><span>Maintenance</span></li>
           <li class="nav-item" data-config-group="maintenance" data-config-label="Upgrade">
             <a class="nav-link active" href="#upgrade"></a>
@@ -393,6 +400,10 @@ describe('Configuration Functions', () => {
           <div class="pmf-config-item" data-config-key="keycloak.clientId">Client ID</div>
           <div class="pmf-config-item" data-config-key="keycloak.groupSyncOnLogin">Synchronize groups on login</div>
           <div class="pmf-config-item" data-config-key="keycloak.groupMapping">Role to group mapping</div>
+        </div>
+        <div id="oidc">
+          <div class="pmf-config-item" data-config-key="oidc.enable">Enable OpenID Connect sign-in</div>
+          <div class="pmf-config-item" data-config-key="oidc.discoveryUrl">Discovery URL</div>
         </div>
         <div id="upgrade">
           <div class="pmf-config-item" data-config-key="upgrade.releaseEnvironment">Release environment</div>
@@ -501,6 +512,27 @@ describe('Configuration Functions', () => {
       expect(keycloakEnable?.classList.contains('d-none')).toBe(false);
       expect(keycloakClientId?.classList.contains('d-none')).toBe(false);
       expect(languageItem?.classList.contains('d-none')).toBe(true);
+
+      vi.useRealTimers();
+    });
+
+    it('should show OpenID Connect tab and items when filtering by "discovery"', async () => {
+      vi.useFakeTimers();
+      buildFilterDOM();
+
+      (fetchConfiguration as Mock).mockResolvedValue('');
+
+      handleConfigurationTabFiltering();
+
+      await triggerFilterAndFlush('discovery');
+
+      const oidcTab = document.querySelector('li.nav-item[data-config-label="OpenID Connect"]');
+      expect(oidcTab?.classList.contains('d-none')).toBe(false);
+
+      const discoveryItem = document.querySelector('.pmf-config-item[data-config-key="oidc.discoveryUrl"]');
+      const keycloakClientId = document.querySelector('.pmf-config-item[data-config-key="keycloak.clientId"]');
+      expect(discoveryItem?.classList.contains('d-none')).toBe(false);
+      expect(keycloakClientId?.classList.contains('d-none')).toBe(true);
 
       vi.useRealTimers();
     });
