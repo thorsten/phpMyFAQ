@@ -74,6 +74,7 @@ class MigrationRegistry
             '4.2.0-alpha' => Versions\Migration420Alpha::class,
             '4.2.0-alpha.2' => Versions\Migration420Alpha2::class,
             '4.2.0-beta' => Versions\Migration420Beta::class,
+            '4.2.0-beta.3' => Versions\Migration420Beta3::class,
         ];
     }
 
