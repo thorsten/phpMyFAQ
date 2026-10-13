@@ -188,6 +188,25 @@ final class AuthenticationControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testLoginRendersOidcSignInButtonWhenEnabled(): void
+    {
+        $request = new Request();
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(currentUser: $this->createLoggedOutCurrentUser(), configurationValues: [
+            'oidc.enable' => true,
+            'oidc.providerName' => 'Authentik',
+        ]));
+
+        $response = $controller->login($request);
+
+        self::assertInstanceOf(Response::class, $response);
+        self::assertStringContainsString('../auth/oidc/authorize', (string) $response->getContent());
+        self::assertStringContainsString('Sign in with Authentik', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testLogoutRequiresAuthentication(): void
     {
         $request = new Request(['csrf' => 'test-token']);
@@ -281,6 +300,32 @@ final class AuthenticationControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testLogoutRedirectsToOidcLogoutWhenOidcUserLogsOut(): void
+    {
+        $currentUser = $this->createLoggedInCurrentUser('oidc');
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = $this->seedAdminLogoutToken($session);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $currentUser,
+            configurationValues: ['oidc.enable' => true],
+            session: $session,
+        ));
+
+        ob_start();
+        $response = $controller->logout(new Request(['csrf' => $csrfToken]));
+        ob_end_clean();
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame($this->configuration->getDefaultUrl() . 'auth/oidc/logout', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testLogoutStaysLocalWhenKeycloakIsEnabledButUserUsesDifferentAuthSource(): void
     {
         $currentUser = $this->createLoggedInCurrentUser('local');
@@ -319,6 +364,32 @@ final class AuthenticationControllerTest extends TestCase
         $controller->setContainer($this->createControllerContainer(
             currentUser: $currentUser,
             configurationValues: ['keycloak.enable' => false],
+            session: $session,
+        ));
+
+        ob_start();
+        $response = $controller->logout(new Request(['csrf' => $csrfToken]));
+        ob_end_clean();
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame($this->configuration->getDefaultUrl() . 'admin/login', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLogoutStaysLocalWhenOidcUserLogsOutButOidcIsDisabled(): void
+    {
+        $currentUser = $this->createLoggedInCurrentUser('oidc');
+        $currentUser->expects(self::once())->method('deleteFromSession')->with(true);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = $this->seedAdminLogoutToken($session);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $currentUser,
+            configurationValues: ['oidc.enable' => false],
             session: $session,
         ));
 

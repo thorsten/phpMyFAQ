@@ -90,6 +90,8 @@ final class AuthenticationController extends AbstractFrontController
             'registerUser' => Translation::get(key: 'msgRegistration'),
             'useSignInWithMicrosoft' => $this->configuration->isSignInWithMicrosoftActive(),
             'useSignInWithKeycloak' => $this->configuration->isSignInWithKeycloakActive(),
+            'useSignInWithOidc' => $this->configuration->isSignInWithOidcActive(),
+            'msgSignInWithOidc' => $this->buildOidcSignInLabel(),
             'isWebAuthnEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
         ]);
     }
@@ -157,6 +159,10 @@ final class AuthenticationController extends AbstractFrontController
             && $this->currentUser->getUserAuthSource() === 'keycloak'
         ) {
             return new RedirectResponse($this->configuration->getDefaultUrl() . 'auth/keycloak/logout');
+        }
+
+        if ($this->configuration->isSignInWithOidcActive() && $this->currentUser->getUserAuthSource() === 'oidc') {
+            return new RedirectResponse($this->configuration->getDefaultUrl() . 'auth/oidc/logout');
         }
 
         return $redirectResponse;
@@ -331,5 +337,15 @@ final class AuthenticationController extends AbstractFrontController
 
         $this->session->getFlashBag()->add('error', Translation::get('msgTwofactorErrorToken'));
         return new RedirectResponse('./token?user-id=' . $userId);
+    }
+
+    private function buildOidcSignInLabel(): string
+    {
+        $providerName = trim((string) $this->configuration->get('oidc.providerName'));
+        if ($providerName === '') {
+            $providerName = 'OpenID Connect';
+        }
+
+        return sprintf(Translation::getString(key: 'msgSignInWithOidc'), $providerName);
     }
 }

@@ -82,7 +82,7 @@
                   </form>
                 </div>
 
-                {% if enableRegistration or useSignInWithMicrosoft or useSignInWithKeycloak or isWebAuthnEnabled %}
+                {% if enableRegistration or useSignInWithMicrosoft or useSignInWithKeycloak or useSignInWithOidc or isWebAuthnEnabled %}
                 <div class="card-footer bg-transparent border-0 text-center px-4 pb-4">
                   <div class="d-flex align-items-center text-muted my-3">
                     <hr class="flex-grow-1">
@@ -105,6 +105,12 @@
                   <a class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" href="./auth/keycloak/authorize">
                     <i class="bi bi-shield-lock" aria-hidden="true"></i>
                     {{ 'msgSignInWithKeycloak' | translate }}
+                  </a>
+                  {% endif %}
+                  {% if useSignInWithOidc %}
+                  <a class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" href="./auth/oidc/authorize">
+                    <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                    {{ msgSignInWithOidc }}
                   </a>
                   {% endif %}
                   {% if isWebAuthnEnabled %}

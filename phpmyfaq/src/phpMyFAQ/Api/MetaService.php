@@ -70,6 +70,7 @@ final readonly class MetaService
             'opensearch' => $this->toBool($this->configuration->get('search.enableOpenSearch')),
             'sso' => $this->toBool($this->configuration->get('security.ssoSupport')),
             'signInWithMicrosoft' => $this->configuration->isSignInWithMicrosoftActive(),
+            'signInWithOidc' => $this->configuration->isSignInWithOidcActive(),
         ];
     }
 

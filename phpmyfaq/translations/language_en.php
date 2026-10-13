@@ -1897,6 +1897,23 @@ $PMF_LANG['msgQuestionHistoryFaqReference'] = 'FAQ #%d';
 $PMF_LANG['msgEntraIdLoginFailed'] = 'The login with Microsoft Entra ID failed. Please try again or contact the administrator.';
 $PMF_LANG['msgTwofactorAlreadyConfigured'] = 'Two Factor Authentication is active. To enrol a new device, remove the current configuration first.';
 
+// added v4.2.0-beta.3 - 2026-10-13 by Thorsten
+$PMF_LANG['msgSignInWithOidc'] = 'Sign in with %s';
+$PMF_LANG['oidcControlCenter'] = 'OpenID Connect';
+$LANG_CONF['oidc.enable'] = ['checkbox', 'Enable OpenID Connect sign-in'];
+$LANG_CONF['oidc.providerName'] = ['input', 'Provider name', 'Shown on the login button, e.g. Authentik'];
+$LANG_CONF['oidc.discoveryUrl'] = ['input', 'Discovery URL', 'Full URL of the .well-known/openid-configuration document'];
+$LANG_CONF['oidc.clientId'] = ['input', 'Client ID', 'OIDC client identifier configured at the provider'];
+$LANG_CONF['oidc.clientSecret'] = ['password', 'Client secret'];
+$LANG_CONF['oidc.redirectUri'] = ['input', 'Redirect URI', 'Callback URL registered at the provider, defaults to <phpMyFAQ URL>/auth/oidc/callback'];
+$LANG_CONF['oidc.scopes'] = ['input', 'Scopes', 'Space-separated scopes, e.g. openid profile email'];
+$LANG_CONF['oidc.autoProvision'] = ['checkbox', 'Automatically create phpMyFAQ users on first OpenID Connect login'];
+$LANG_CONF['oidc.groupsClaim'] = ['input', 'Groups claim', 'Name of the claim that carries the user\'s groups, e.g. groups'];
+$LANG_CONF['oidc.groupAutoAssign'] = ['checkbox', 'Automatically assign phpMyFAQ groups from the groups claim'];
+$LANG_CONF['oidc.groupSyncOnLogin'] = ['checkbox', 'Synchronize mapped phpMyFAQ groups on login', 'If enabled, phpMyFAQ removes stale memberships for groups managed by the group mapping during login'];
+$LANG_CONF['oidc.groupMapping'] = ['input', 'Group mapping', 'JSON object mapping provider group names to phpMyFAQ group names, e.g. {"admins":"Administrators"}'];
+$LANG_CONF['oidc.logoutRedirectUrl'] = ['input', 'Logout redirect URL', 'URL to redirect to after provider logout'];
+
 // added v4.2.0-alpha.2 - 2026-09-13 by Thorsten Rinne - security hardening
 $PMF_LANG['ad_category_restrictions_no_category'] = 'No valid category ID provided.';
 $PMF_LANG['msgPushInvalidEndpoint'] = 'The push subscription endpoint must be a public HTTPS URL.';
