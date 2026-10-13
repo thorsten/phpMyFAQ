@@ -79,7 +79,7 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
 
         $container = self::$kernel?->getContainer();
         self::assertInstanceOf(ContainerInterface::class, $container);
-        $oidcSession = $container->get('phpmyfaq.auth.oidc.session');
+        $oidcSession = $container->get('phpmyfaq.auth.oidc.session.keycloak');
         self::assertInstanceOf(\phpMyFAQ\Auth\Oidc\OidcSession::class, $oidcSession);
 
         $idToken = $this->signToken([
@@ -184,7 +184,7 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
 
         $container = self::$kernel?->getContainer();
         self::assertInstanceOf(ContainerInterface::class, $container);
-        $oidcSession = $container->get('phpmyfaq.auth.oidc.session');
+        $oidcSession = $container->get('phpmyfaq.auth.oidc.session.keycloak');
         self::assertInstanceOf(\phpMyFAQ\Auth\Oidc\OidcSession::class, $oidcSession);
         $oidcSession->clearIdToken();
         $expectedNonce = '';
@@ -271,7 +271,7 @@ final class KeycloakAuthenticationControllerWebTest extends ControllerWebTestCas
 
         $container = self::$kernel?->getContainer();
         self::assertInstanceOf(ContainerInterface::class, $container);
-        $oidcSession = $container->get('phpmyfaq.auth.oidc.session');
+        $oidcSession = $container->get('phpmyfaq.auth.oidc.session.keycloak');
         self::assertInstanceOf(\phpMyFAQ\Auth\Oidc\OidcSession::class, $oidcSession);
         $expectedNonce = '';
         $expectedVerifier = '';

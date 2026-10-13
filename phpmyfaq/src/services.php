@@ -323,8 +323,13 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.http-client'),
     ]);
     $services->set('phpmyfaq.auth.oidc.pkce-generator', OidcPkceGenerator::class);
-    $services->set('phpmyfaq.auth.oidc.session', OidcSession::class)->args([
+    $services->set('phpmyfaq.auth.oidc.session.keycloak', OidcSession::class)->args([
         service('session'),
+        'keycloak',
+    ]);
+    $services->set('phpmyfaq.auth.oidc.session.generic', OidcSession::class)->args([
+        service('session'),
+        'oidc',
     ]);
     $services->set('phpmyfaq.auth.keycloak.provider-config-factory', KeycloakProviderConfigFactory::class)->args([
         service('phpmyfaq.configuration'),
@@ -989,7 +994,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.auth.keycloak.provider-config-factory'),
         service('phpmyfaq.auth.oidc.discovery-service'),
         service('phpmyfaq.auth.oidc.pkce-generator'),
-        service('phpmyfaq.auth.oidc.session'),
+        service('phpmyfaq.auth.oidc.session.keycloak'),
         service('phpmyfaq.auth.oidc.client'),
         service('phpmyfaq.auth.oidc.id-token-validator'),
     ]);

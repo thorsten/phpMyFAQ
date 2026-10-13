@@ -14,7 +14,7 @@ final class OidcSessionTest extends TestCase
 {
     public function testSetAndClearAuthorizationState(): void
     {
-        $session = new OidcSession(new Session(new MockArraySessionStorage()));
+        $session = new OidcSession(new Session(new MockArraySessionStorage()), 'keycloak');
         $session->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $this->assertSame(
@@ -40,12 +40,41 @@ final class OidcSessionTest extends TestCase
 
     public function testSetAndClearIdToken(): void
     {
-        $session = new OidcSession(new Session(new MockArraySessionStorage()));
+        $session = new OidcSession(new Session(new MockArraySessionStorage()), 'keycloak');
 
         $session->setIdToken('id-token-123');
         $this->assertSame('id-token-123', $session->getIdToken());
 
         $session->clearIdToken();
         $this->assertSame('', $session->getIdToken());
+    }
+
+    public function testProvidersDoNotShareState(): void
+    {
+        $symfonySession = new Session(new MockArraySessionStorage());
+        $keycloak = new OidcSession($symfonySession, 'keycloak');
+        $generic = new OidcSession($symfonySession, 'oidc');
+
+        $keycloak->setAuthorizationState('kc-state', 'kc-nonce', 'kc-verifier');
+        $keycloak->setIdToken('kc-token');
+
+        $this->assertSame(['state' => '', 'nonce' => '', 'verifier' => ''], $generic->getAuthorizationState());
+        $this->assertSame('', $generic->getIdToken());
+
+        $generic->setAuthorizationState('g-state', 'g-nonce', 'g-verifier');
+        $generic->clearIdToken();
+
+        $this->assertSame(
+            ['state' => 'kc-state', 'nonce' => 'kc-nonce', 'verifier' => 'kc-verifier'],
+            $keycloak->getAuthorizationState(),
+        );
+        $this->assertSame('kc-token', $keycloak->getIdToken());
+    }
+
+    public function testRejectsEmptyProvider(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        new OidcSession(new Session(new MockArraySessionStorage()), '');
     }
 }
