@@ -14,6 +14,10 @@ on:
       - "Semgrep"
       - "Lint GitHub Actions workflows"
     types: [completed]
+    # Only Dependabot branches: without this filter every CI run on main or on
+    # a regular pull request spawns a skipped, empty run of this workflow.
+    branches:
+      - "dependabot/**"
 
 permissions:
   contents: write
@@ -41,6 +45,14 @@ jobs:
           SELF_CHECK_NAME: Merge Dependabot minor and patch updates
         run: |
           set -euo pipefail
+
+          # Late workflow_run events for a pull request that was merged or
+          # closed in the meantime must not fail the job.
+          pr_state="$(gh pr view "$PR_NUMBER" --json state --jq '.state')"
+          if [ "$pr_state" != "OPEN" ]; then
+            echo "Not merging PR #$PR_NUMBER: pull request is $pr_state."
+            exit 0
+          fi
 
           # Dependabot records the semver update type in its commit message
           # ("update-type: version-update:semver-patch"). Grouped updates yield
