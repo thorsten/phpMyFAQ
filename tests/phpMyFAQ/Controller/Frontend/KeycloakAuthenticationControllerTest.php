@@ -124,7 +124,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setIdToken('session-id-token');
 
         $currentUser = $this->createMock(CurrentUser::class);
@@ -164,7 +164,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         try {
             $session = new Session(new MockArraySessionStorage());
             $session->start();
-            $oidcSession = new OidcSession($session);
+            $oidcSession = new OidcSession($session, 'keycloak');
             $oidcSession->setIdToken('session-id-token');
 
             $currentUser = $this->createMock(CurrentUser::class);
@@ -193,7 +193,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser
@@ -249,7 +249,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $currentUser = $this->createMock(CurrentUser::class);
@@ -334,7 +334,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $resolverUser = $this->createMock(User::class);
@@ -400,7 +400,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
             'exp' => time() + 300,
         ]);
 
-        $oidcSession = new OidcSession($this->createStartedSession());
+        $oidcSession = new OidcSession($this->createStartedSession(), 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $currentUser = $this->createMock(CurrentUser::class);
@@ -461,7 +461,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
             'exp' => time() + 300,
         ]);
 
-        $oidcSession = new OidcSession($this->createStartedSession());
+        $oidcSession = new OidcSession($this->createStartedSession(), 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $currentUser = $this->createMock(CurrentUser::class);
@@ -513,7 +513,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $currentUser = $this->createMock(CurrentUser::class);
@@ -567,7 +567,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $currentUser = $this->createMock(CurrentUser::class);
@@ -616,7 +616,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $currentUser = $this->createMock(CurrentUser::class);
@@ -666,7 +666,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $controller = $this->createController([
@@ -694,7 +694,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $controller = $this->createController([
@@ -729,7 +729,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $controller = $this->createController([
@@ -764,7 +764,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $controller = $this->createController([
@@ -799,7 +799,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $controller = $this->createController([
@@ -834,7 +834,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $controller = $this->createController([
@@ -868,7 +868,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('expected-state', 'nonce-456', 'verifier-789');
 
         $controller = $this->createController([], $oidcSession);
@@ -970,7 +970,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
             new KeycloakProviderConfigFactory($this->configuration),
             new OidcDiscoveryService($httpClient),
             new OidcPkceGenerator(),
-            $oidcSession ?? new OidcSession($session),
+            $oidcSession ?? new OidcSession($session, 'keycloak'),
             new OidcClient($httpClient),
             new OidcIdTokenValidator($httpClient),
         );
@@ -1036,21 +1036,21 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $controller = $this->createController([new MockResponse('unavailable', ['http_code' => 503])], $oidcSession);
 
         $response = $controller->authorize();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
-        $this->assertNull($session->get(OidcSession::OIDC_STATE), 'No authorization state is stored when discovery fails.');
+        $this->assertNull($session->get('pmf-oidc-keycloak-state'), 'No authorization state is stored when discovery fails.');
     }
 
     public function testLogoutClearsTheLocalSessionWhenDiscoveryFails(): void
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setIdToken('session-id-token');
 
         $currentUser = $this->createMock(CurrentUser::class);
@@ -1085,7 +1085,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->expects($this->once())->method('getUserData')->with('jwt')->willReturn($jwt);
@@ -1123,7 +1123,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $session->start();
-        $oidcSession = new OidcSession($session);
+        $oidcSession = new OidcSession($session, 'keycloak');
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $currentUser = $this->createMock(CurrentUser::class);
