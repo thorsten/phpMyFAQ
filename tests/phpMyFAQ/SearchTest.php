@@ -163,6 +163,52 @@ class SearchTest extends TestCase
         $this->assertEquals([], $this->search->search('test'));
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testSearchForAdminSearchesAllLanguagesAndInactiveFaqsAsSubstring(): void
+    {
+        $dbHandle = $this->getMockBuilder(Sqlite3::class)
+            ->onlyMethods(['query', 'escape', 'numRows', 'fetchAll'])
+            ->getMock();
+        $dbHandle->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $dbHandle
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->callback(static function (string $query): bool {
+                return str_contains($query, "fd.thema LIKE '%reinigung%' ESCAPE '='")
+                    && str_contains($query, "fd.keywords LIKE '%reinigung%' ESCAPE '='")
+                    && !str_contains($query, "fd.lang = '")
+                    && !str_contains($query, 'fd.active')
+                    && !str_contains($query, 'MATCH');
+            }))
+            ->willReturn(true);
+        $dbHandle->method('numRows')->willReturn(1);
+        $dbHandle->method('fetchAll')->willReturn([(object) ['id' => 1]]);
+
+        $search = new Search(new Configuration($dbHandle));
+
+        $this->assertEquals([(object) ['id' => 1]], $search->searchForAdmin('reinigung'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchForAdminReturnsEmptyArrayWithoutHits(): void
+    {
+        $dbHandle = $this->getMockBuilder(Sqlite3::class)
+            ->onlyMethods(['query', 'escape', 'numRows', 'fetchAll'])
+            ->getMock();
+        $dbHandle->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $dbHandle->method('query')->willReturn(true);
+        $dbHandle->method('numRows')->willReturn(0);
+        $dbHandle->expects($this->never())->method('fetchAll');
+
+        $search = new Search(new Configuration($dbHandle));
+
+        $this->assertSame([], $search->searchForAdmin('nothing'));
+    }
+
     public function testDeleteSearchTermById(): void
     {
         $this->dbHandle->query("INSERT INTO faqsearches VALUES (1, 'en', 'foo', ''), (2, 'en', 'bar', '')");

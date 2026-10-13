@@ -145,6 +145,31 @@ class SearchDatabaseTest extends TestCase
         $this->assertEquals('', $this->searchDatabase->getConditions());
     }
 
+    public function testSearchSubstringUsesLikeMatchClauseWithConditions(): void
+    {
+        $dbHandle = $this->getMockBuilder(Sqlite3::class)->onlyMethods(['query', 'escape'])->getMock();
+        $dbHandle->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $dbHandle
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->callback(static function (string $query): bool {
+                return str_contains($query, "fd.thema LIKE '%rein%' ESCAPE '='")
+                    && str_contains($query, "fd.content LIKE '%rein%' ESCAPE '='")
+                    && str_contains($query, "AND fd.active = 'yes'")
+                    && !str_contains($query, 'MATCH');
+            }))
+            ->willReturn(true);
+
+        $searchDatabase = new SearchDatabase(new Configuration($dbHandle));
+        $searchDatabase
+            ->setTable('faqdata AS fd')
+            ->setResultColumns(['fd.id AS id'])
+            ->setMatchingColumns(['fd.thema', 'fd.content'])
+            ->setConditions(['fd.active' => 'yes']);
+
+        $this->assertTrue($searchDatabase->searchSubstring('rein'));
+    }
+
     public function testGetMatchClause()
     {
         $this->searchDatabase->setMatchingColumns(['faqdata.author']);

@@ -8,11 +8,12 @@
     </h1>
     <div class="pmf-faq-overview-search col-4">
       <form name="pmf-faq-search-autocomplete" id="pmf-faq-search-autocomplete" action="./faqs"
-            method="post" role="form">
+            method="get" role="search">
         {{ csrfTokenSearch | raw }}
         <div class="input-group">
           <input type="text" class="form-control" placeholder="{{ 'msgAdminSearchFaqs' | translate }}"
-                 id="pmf-faq-overview-search-input" autocomplete="off">
+                 id="pmf-faq-overview-search-input" autocomplete="off"
+                 data-pmf-empty-msg="{{ 'msgNoResultsText' | translate }}">
           <button class="btn btn-primary" type="button" id="pmf-faq-overview-search-button">
             <i class="bi bi-search" aria-hidden="true"></i>
           </button>

@@ -353,8 +353,8 @@ const initializeCheckboxState = (): void => {
   const filterForInactive = document.getElementById('pmf-checkbox-filter-inactive') as HTMLInputElement | null;
   const filterForNew = document.getElementById('pmf-checkbox-filter-new') as HTMLInputElement | null;
 
-  const storedInactiveState: string | null = localStorage.getItem('pmfCheckboxFilterInactive');
-  const storedNewState: string | null = localStorage.getItem('pmfCheckboxFilterNew');
+  const storedInactiveState: string | null = sessionStorage.getItem('pmfCheckboxFilterInactive');
+  const storedNewState: string | null = sessionStorage.getItem('pmfCheckboxFilterNew');
 
   if (filterForInactive && storedInactiveState !== null) {
     filterForInactive.checked = JSON.parse(storedInactiveState);
@@ -366,25 +366,25 @@ const initializeCheckboxState = (): void => {
 
   if (filterForInactive) {
     filterForInactive.addEventListener('change', (): void => {
-      localStorage.setItem('pmfCheckboxFilterInactive', JSON.stringify(filterForInactive.checked));
+      sessionStorage.setItem('pmfCheckboxFilterInactive', JSON.stringify(filterForInactive.checked));
     });
   }
 
   if (filterForNew) {
     filterForNew.addEventListener('change', (): void => {
-      localStorage.setItem('pmfCheckboxFilterNew', JSON.stringify(filterForNew.checked));
+      sessionStorage.setItem('pmfCheckboxFilterNew', JSON.stringify(filterForNew.checked));
     });
   }
 };
 
 // Getter for the inactive checkbox state
 const getInactiveCheckboxState = (): boolean => {
-  const storedInactiveState = localStorage.getItem('pmfCheckboxFilterInactive');
+  const storedInactiveState = sessionStorage.getItem('pmfCheckboxFilterInactive');
   return storedInactiveState !== null ? JSON.parse(storedInactiveState) : false;
 };
 
 // Getter for the new checkbox state
 const getNewCheckboxState = (): boolean => {
-  const storedNewState = localStorage.getItem('pmfCheckboxFilterNew');
+  const storedNewState = sessionStorage.getItem('pmfCheckboxFilterNew');
   return storedNewState !== null ? JSON.parse(storedNewState) : false;
 };

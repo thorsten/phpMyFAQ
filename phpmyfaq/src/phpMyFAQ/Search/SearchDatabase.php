@@ -100,6 +100,37 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     }
 
     /**
+     * Executes a database independent substring search (LIKE '%term%') over
+     * the matching columns, honoring the configured conditions. Used by the
+     * admin search where partial words have to match on every database.
+     *
+     * @param string $searchTerm Search term
+     */
+    public function searchSubstring(string $searchTerm): mixed
+    {
+        $query = sprintf(
+            '
+            SELECT
+                %s
+            FROM 
+                %s %s %s
+            WHERE
+                %s
+                %s',
+            $this->getResultColumns(),
+            $this->getTable(),
+            $this->getJoinedTable(),
+            $this->getJoinedColumns(),
+            $this->getMatchClause($searchTerm),
+            $this->getConditions(),
+        );
+
+        $this->resultSet = $this->configuration->getDb()->query($query);
+
+        return $this->resultSet;
+    }
+
+    /**
      * Returns the part of the SQL query with the columns for the result set.
      */
     public function getResultColumns(): string

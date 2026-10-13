@@ -9,6 +9,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v4.1.11 - 2026-MM-DD
 
 - fixed "Cannot unserialize StrictSessionHandler" error after updating from phpMyFAQ 4.1.8 (#4752) (Thorsten)
+- fixed admin FAQ search: "Method Not Allowed" on Enter, missing hits for partial words and other languages, inactive filter sticking across sessions (Thorsten)
 
 ### phpMyFAQ v4.1.10 - 2026-10-09
 

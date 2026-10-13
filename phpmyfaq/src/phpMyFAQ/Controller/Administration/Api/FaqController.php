@@ -681,10 +681,10 @@ final class FaqController extends AbstractController
         $faqSearch->setCategory(new Category($this->configuration));
 
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
-        $searchString = Filter::filterVar($data->search, FILTER_SANITIZE_SPECIAL_CHARS);
+        $searchString = Filter::filterVar($data->search ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!is_null($searchString)) {
-            $searchResult = $faqSearch->search($searchString, allLanguages: false);
+        if (!is_null($searchString) && '' !== trim((string) $searchString)) {
+            $searchResult = $faqSearch->searchForAdmin(trim((string) $searchString));
 
             $searchResultSet->reviewResultSet($searchResult);
 

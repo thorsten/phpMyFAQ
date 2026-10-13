@@ -128,6 +128,47 @@ class Search
     }
 
     /**
+     * The search function for the FAQ administration. It always uses the
+     * database with a substring match over all languages and includes
+     * inactive FAQs, so partially typed words find every FAQ an admin can edit.
+     *
+     * @param string $searchTerm Text to search for
+     * @return stdClass[]
+     * @throws Exception
+     */
+    public function searchForAdmin(string $searchTerm): array
+    {
+        $fdTable = Database::getTablePrefix() . 'faqdata AS fd';
+        $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
+        $searchDatabase = SearchFactory::create($this->configuration, ['database' => Database::getType()]);
+
+        $searchDatabase
+            ->setTable($fdTable)
+            ->setResultColumns([
+                'fd.id AS id',
+                'fd.lang AS lang',
+                'fd.solution_id AS solution_id',
+                $fcrTable . '.category_id AS category_id',
+                'fd.thema AS question',
+                'fd.content AS answer',
+            ])
+            ->setJoinedTable($fcrTable)
+            ->setJoinedColumns([
+                'fd.id = ' . $fcrTable . '.record_id',
+                'fd.lang = ' . $fcrTable . '.record_lang',
+            ])
+            ->setMatchingColumns(['fd.thema', 'fd.content', 'fd.keywords']);
+
+        $result = $searchDatabase->searchSubstring($searchTerm);
+
+        if ($this->configuration->getDb()->numRows($result) === 0) {
+            return [];
+        }
+
+        return $this->configuration->getDb()->fetchAll($result);
+    }
+
+    /**
      * The search function for the database powered full-text search.
      *
      * @param string $searchTerm Text/Number (solution id)
