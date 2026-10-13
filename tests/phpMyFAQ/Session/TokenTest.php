@@ -106,6 +106,56 @@ class TokenTest extends TestCase
         $this->assertIsString($tokenString);
     }
 
+    public function testIsExpired(): void
+    {
+        $this->assertTrue($this->token->setExpiry(time() - 1)->isExpired());
+        $this->assertFalse($this->token->setExpiry(time() + 60)->isExpired());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGetTokenStringReissuesAnExpiredToken(): void
+    {
+        Token::resetInstanceForTests();
+        $session = new Session(new MockArraySessionStorage());
+        $expired = Token::getInstance($session)
+            ->setPage('update-user-data')
+            ->setExpiry(time() - 1)
+            ->setSessionToken('expired-token')
+            ->setCookieToken('expired-token');
+        $session->set('pmf-csrf-token.update-user-data', $expired);
+
+        $tokenString = Token::getInstance($session)->getTokenString('update-user-data');
+
+        $this->assertNotSame('expired-token', $tokenString);
+
+        $stored = $session->get('pmf-csrf-token.update-user-data');
+        $this->assertInstanceOf(Token::class, $stored);
+        $this->assertSame($tokenString, $stored->getSessionToken());
+        $this->assertFalse($stored->isExpired());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGetTokenInputReusesAValidToken(): void
+    {
+        Token::resetInstanceForTests();
+        $session = new Session(new MockArraySessionStorage());
+        $valid = Token::getInstance($session)
+            ->setPage('pmf-csrf-token')
+            ->setExpiry(time() + 60)
+            ->setSessionToken('valid-token')
+            ->setCookieToken('valid-token');
+        $session->set('pmf-csrf-token.pmf-csrf-token', $valid);
+
+        $this->assertStringContainsString(
+            'value="valid-token"',
+            Token::getInstance($session)->getTokenInput('pmf-csrf-token'),
+        );
+    }
+
     public function testVerifyTokenReturnsFalseForInvalidToken(): void
     {
         $this->token->setSessionToken('testSessionToken');

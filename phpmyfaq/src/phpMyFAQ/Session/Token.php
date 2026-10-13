@@ -143,7 +143,7 @@ class Token
      */
     public function getTokenInput(string $page, int $expiry = self::PMF_SESSION_EXPIRY): string
     {
-        $token = $this->getSession($page) ?? $this->setSession($page, $expiry);
+        $token = $this->getValidToken($page, $expiry);
 
         return sprintf(
             '<input type="hidden" id="%s" name="%s" value="%s">',
@@ -158,9 +158,35 @@ class Token
      */
     public function getTokenString(string $page, int $expiry = self::PMF_SESSION_EXPIRY): string
     {
-        $token = $this->getSession($page) ?? $this->setSession($page, $expiry);
+        return $this->getValidToken($page, $expiry)->sessionToken;
+    }
 
-        return $token->sessionToken;
+    /**
+     * True once the form submission window of this token has passed.
+     */
+    public function isExpired(): bool
+    {
+        return time() > $this->expiry;
+    }
+
+    /**
+     * Returns the stored token for the page, or a fresh one when none exists or
+     * the stored one has expired. A token lives for a fixed window from its
+     * creation, while the session is kept alive by activity. Without this check
+     * a page rendered after the window would carry a token that can never be
+     * verified, and the user would see a "no permission" error on the next save.
+     *
+     * @throws Exception
+     */
+    private function getValidToken(string $page, int $expiry): Token
+    {
+        $token = $this->getSession($page);
+
+        if (!$token instanceof Token || $token->isExpired()) {
+            return $this->setSession($page, $expiry);
+        }
+
+        return $token;
     }
 
     public function verifyToken(
@@ -229,14 +255,16 @@ class Token
             ->setSessionToken($randomToken)
             ->setCookieToken($randomToken);
 
-        setcookie($token->getCookieName($page), (string) $token->getCookieToken(), [
-            'expires' => $token->getExpiry(),
-            'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
-            'domain' => parse_url(Configuration::getConfigurationInstance()->getDefaultUrl(), PHP_URL_HOST),
-            'samesite' => 'strict',
-            'secure' => $request->isSecure(),
-            'httponly' => true,
-        ]);
+        if (!headers_sent()) {
+            setcookie($token->getCookieName($page), (string) $token->getCookieToken(), [
+                'expires' => $token->getExpiry(),
+                'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
+                'domain' => parse_url(Configuration::getConfigurationInstance()->getDefaultUrl(), PHP_URL_HOST),
+                'samesite' => 'strict',
+                'secure' => $request->isSecure(),
+                'httponly' => true,
+            ]);
+        }
 
         $this->session->set(sprintf('%s.%s', self::PMF_SESSION_NAME, $page), $token);
 
