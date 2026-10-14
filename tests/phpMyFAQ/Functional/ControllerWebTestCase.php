@@ -217,6 +217,9 @@ abstract class ControllerWebTestCase extends WebTestCase
     private function resetRequestLanguage(): void
     {
         unset($_SERVER['HTTP_ACCEPT_LANGUAGE'], $_SESSION['lang']);
+        // The kernel's Symfony session keeps its attributes under its own key in
+        // $_SESSION, so the language it stored has to be removed through the wrapper.
+        new SessionWrapper()->remove('lang');
         Language::$language = '';
         Translation::resetInstance();
     }
