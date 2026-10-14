@@ -249,13 +249,15 @@ class Token
             ->setSessionToken($randomToken)
             ->setCookieToken($randomToken);
 
-        setcookie($token->getCookieName($page), (string) $token->getCookieToken(), [
-            'expires' => $token->getExpiry(),
-            'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
-            'samesite' => 'strict',
-            'secure' => $request->isSecure(),
-            'httponly' => true,
-        ]);
+        if (!headers_sent()) {
+            setcookie($token->getCookieName($page), (string) $token->getCookieToken(), [
+                'expires' => $token->getExpiry(),
+                'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
+                'samesite' => 'strict',
+                'secure' => $request->isSecure(),
+                'httponly' => true,
+            ]);
+        }
 
         $this->session->set(sprintf('%s.%s', self::PMF_SESSION_NAME, $page), $token);
 

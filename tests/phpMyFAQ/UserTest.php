@@ -64,6 +64,28 @@ class UserTest extends TestCase
         $this->assertFalse($result);
     }
 
+    /**
+     * Instances upgraded from pre-3.x still carry a legacy UNIQUE index on
+     * faquser.session_id. Writing '' as the "no session" sentinel collides with the
+     * anonymous user there, so NULL must be used instead (see #4764).
+     */
+    public function testTerminateSessionIdResetsSessionIdToNull(): void
+    {
+        $executed = [];
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$executed): bool {
+                $executed[] = $query;
+                return true;
+            });
+
+        $this->assertTrue($this->user->terminateSessionId());
+
+        $this->assertCount(1, $executed);
+        $this->assertStringContainsString('SET session_id = NULL', $executed[0]);
+        $this->assertStringNotContainsString("session_id = ''", $executed[0]);
+    }
+
     public function testCreateUserThrowsExceptionWhenEmailAlreadyExistsAsLogin(): void
     {
         $this->expectException(Exception::class);

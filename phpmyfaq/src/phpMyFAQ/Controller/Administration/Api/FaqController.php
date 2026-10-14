@@ -959,8 +959,8 @@ final class FaqController extends AbstractAdministrationApiController
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
         $searchString = Filter::filterVar($data->search ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (is_string($searchString)) {
-            $searchResult = $faqSearch->search($searchString, allLanguages: false);
+        if (is_string($searchString) && trim($searchString) !== '') {
+            $searchResult = $faqSearch->searchForAdmin(trim($searchString));
 
             $searchResultSet->reviewResultSet($searchResult);
 

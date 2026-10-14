@@ -5,6 +5,20 @@
 <head>
   <meta charset="utf-8">
 
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('pmf-theme');
+        var theme = stored
+          ? stored
+          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-bs-theme', theme);
+      } catch (e) {
+        // localStorage may be unavailable (e.g. blocked storage); keep the server-rendered theme
+      }
+    })();
+  </script>
+
   <title>{{ pageTitle }}</title>
   <base href="{{ baseHref }}">
 

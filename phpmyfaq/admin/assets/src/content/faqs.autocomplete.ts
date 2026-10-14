@@ -13,7 +13,7 @@
  * @since     2023-12-27
  */
 
-import autocomplete, { AutocompleteItem } from 'autocompleter';
+import autocomplete, { type AutocompleteItem, type PreventSubmit } from 'autocompleter';
 import { fetchFaqsByAutocomplete } from '../api';
 import { addElement } from '../../../../assets/src/utils';
 
@@ -24,51 +24,94 @@ interface Faq {
 
 type FaqItem = Faq & AutocompleteItem;
 
-document.addEventListener('DOMContentLoaded', () => {
-  const autoComplete = document.getElementById('pmf-faq-overview-search-input') as HTMLInputElement | null;
+interface SearchResponse {
+  success?: FaqItem[];
+}
 
-  if (autoComplete) {
-    const csrfToken = (document.getElementById('pmf-csrf-token') as HTMLInputElement).value;
-    const debounceDelay = 300;
-    let debounceTimer: ReturnType<typeof setTimeout> | undefined;
-    let fetchRequestId = 0;
+export const escapeRegExp = (value: string): string => {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
 
-    autocomplete<FaqItem>({
-      input: autoComplete,
-      minLength: 2,
-      onSelect: (item: FaqItem) => {
-        window.location.href = item.adminUrl;
-      },
-      fetch: (text: string, update: (items: FaqItem[]) => void) => {
-        if (debounceTimer) {
-          clearTimeout(debounceTimer);
-        }
+export const escapeHtml = (value: string): string => {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+};
 
-        const match = text.toLowerCase();
-        const currentRequestId = ++fetchRequestId;
+export const highlightMatch = (question: string, searchTerm: string): string => {
+  const escapedQuestion = escapeHtml(question);
+  const term = searchTerm.trim();
 
-        debounceTimer = setTimeout(async () => {
-          const faqs = (await fetchFaqsByAutocomplete(match, csrfToken)) as { success: FaqItem[] };
+  if (term === '') {
+    return escapedQuestion;
+  }
 
-          if (currentRequestId !== fetchRequestId) {
-            return;
-          }
+  const regex = new RegExp(escapeRegExp(escapeHtml(term)), 'gi');
 
-          update(
-            faqs.success.filter((n: FaqItem) => {
-              return n.question.toLowerCase().indexOf(match) !== -1;
-            })
-          );
-        }, debounceDelay);
-      },
-      render: (item: FaqItem, currentValue: string): HTMLDivElement => {
-        const regex = new RegExp(currentValue, 'gi');
-        return addElement('div', {
-          classList: 'pmf-faq-list-result border',
-          innerHTML: item.question.replace(regex, (match) => `<strong>${match}</strong>`),
-        }) as HTMLDivElement;
-      },
-      emptyMsg: 'No users found',
+  return escapedQuestion.replace(regex, (match: string): string => `<strong>${match}</strong>`);
+};
+
+export const initFaqSearchAutocomplete = (): void => {
+  const searchInput = document.getElementById('pmf-faq-overview-search-input') as HTMLInputElement | null;
+
+  if (!searchInput) {
+    return;
+  }
+
+  const csrfToken = (document.getElementById('pmf-csrf-token') as HTMLInputElement | null)?.value ?? '';
+  const searchForm = document.getElementById('pmf-faq-search-autocomplete') as HTMLFormElement | null;
+  const searchButton = document.getElementById('pmf-faq-overview-search-button') as HTMLButtonElement | null;
+
+  const autocompleteResult = autocomplete<FaqItem>({
+    input: searchInput,
+    minLength: 1,
+    debounceWaitMs: 150,
+    // PreventSubmit.Always; the library declares a const enum without a runtime export
+    preventSubmit: 1 as PreventSubmit,
+    onSelect: (item: FaqItem): void => {
+      window.location.href = item.adminUrl;
+    },
+    fetch: async (text: string, update: (items: FaqItem[]) => void): Promise<void> => {
+      const searchTerm = text.trim();
+
+      if (searchTerm === '') {
+        update([]);
+        return;
+      }
+
+      try {
+        const response = (await fetchFaqsByAutocomplete(searchTerm, csrfToken)) as SearchResponse | undefined;
+        update(response?.success ?? []);
+      } catch {
+        update([]);
+      }
+    },
+    render: (item: FaqItem, currentValue: string): HTMLDivElement => {
+      return addElement('div', {
+        classList: 'pmf-faq-list-result border',
+        innerHTML: highlightMatch(item.question, currentValue),
+      }) as HTMLDivElement;
+    },
+    emptyMsg: searchInput.dataset.pmfEmptyMsg ?? 'No results found',
+  });
+
+  // The overview route only accepts GET; a native form submit must never happen.
+  if (searchForm) {
+    searchForm.addEventListener('submit', (event: Event): void => {
+      event.preventDefault();
+      autocompleteResult.fetch();
     });
   }
-});
+
+  if (searchButton) {
+    searchButton.addEventListener('click', (): void => {
+      searchInput.focus();
+      autocompleteResult.fetch();
+    });
+  }
+};
+
+document.addEventListener('DOMContentLoaded', initFaqSearchAutocomplete);

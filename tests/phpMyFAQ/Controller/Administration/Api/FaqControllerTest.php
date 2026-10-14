@@ -1707,7 +1707,7 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testSearchReturnsSuccessWhenSearchStringIsNullWithValidCsrf(): void
+    public function testSearchReturnsBadRequestWhenSearchStringIsBlankWithValidCsrf(): void
     {
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
@@ -1715,7 +1715,7 @@ final class FaqControllerTest extends TestCase
 
         $request = new Request([], [], [], [], [], [], json_encode([
             'csrf' => $csrfToken,
-            'search' => null,
+            'search' => '   ',
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
@@ -1724,8 +1724,8 @@ final class FaqControllerTest extends TestCase
         $response = $controller->search($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertArrayHasKey('success', $payload);
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 

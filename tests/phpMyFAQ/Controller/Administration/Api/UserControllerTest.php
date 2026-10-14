@@ -1066,6 +1066,74 @@ final class UserControllerTest extends TestCase
     }
 
     /**
+     * Rights are re-read from the database on every request, so there is no need to
+     * terminate the session of the acting admin - doing so logs them out right after
+     * saving their own rights (see #4764).
+     *
+     * @throws \Exception
+     */
+    public function testUpdateUserRightsKeepsOwnSessionAliveOnSelfEdit(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-rights');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'csrfToken' => $token,
+            'userId' => 1,
+            'userRights' => [1, 2],
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($this->sessionId, $this->sessionIdOfUser(1));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateUserRightsTerminatesSessionOfOtherUser(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser();
+        $this->dbHandle->query(sprintf(
+            "UPDATE faquser SET session_id = 'managed-session' WHERE user_id = %d",
+            $managedUserId,
+        ));
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-rights');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'csrfToken' => $token,
+            'userId' => $managedUserId,
+            'userRights' => [1],
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertNull($this->sessionIdOfUser($managedUserId));
+    }
+
+    private function sessionIdOfUser(int $userId): ?string
+    {
+        $result = $this->dbHandle->query(sprintf('SELECT session_id FROM faquser WHERE user_id = %d', $userId));
+        $row = $this->dbHandle->fetchArray($result);
+        self::assertIsArray($row);
+
+        return $row['session_id'] === null ? null : (string) $row['session_id'];
+    }
+
+    /**
      * @throws \Exception
      */
     public function testListUserLanguageRestrictionsRequiresUserPermission(): void

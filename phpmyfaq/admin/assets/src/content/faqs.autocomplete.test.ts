@@ -1,180 +1,144 @@
-import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi, type Mock } from 'vitest';
+import autocomplete from 'autocompleter';
+import { escapeRegExp, highlightMatch, initFaqSearchAutocomplete } from './faqs.autocomplete';
+import { fetchFaqsByAutocomplete } from '../api';
 
-const mockAutocomplete = vi.fn();
-
-vi.mock('autocompleter', () => ({ default: mockAutocomplete }));
-vi.mock('../api', () => ({ fetchFaqsByAutocomplete: vi.fn() }));
-vi.mock('../../../../assets/src/utils', () => ({
-  addElement: (tag: string, properties: Record<string, unknown> = {}, children: Node[] = []) => {
-    const element = Object.assign(document.createElement(tag), properties);
-    Object.keys(properties).forEach((key: string): void => {
-      if (key.startsWith('data-')) {
-        const dataKey: string = key.replace('data-', '');
-        element.dataset[dataKey] = properties[key] as string;
-      }
-    });
-    children.forEach((child: Node): Node => element.appendChild(child));
-    return element;
-  },
+vi.mock('autocompleter', () => ({
+  default: vi.fn(),
 }));
 
-describe('faqs.autocomplete', () => {
-  let domContentLoadedCallback: (() => void) | null = null;
+vi.mock('../api', () => ({
+  fetchFaqsByAutocomplete: vi.fn(),
+}));
 
-  beforeEach(() => {
-    vi.resetModules();
-    mockAutocomplete.mockClear();
-    document.body.innerHTML = '';
-    domContentLoadedCallback = null;
+const mockAutocomplete = autocomplete as unknown as Mock;
+const mockFetchFaqs = fetchFaqsByAutocomplete as unknown as Mock;
 
-    // Spy on addEventListener to capture the DOMContentLoaded callback
-    const originalAddEventListener = document.addEventListener.bind(document);
-    vi.spyOn(document, 'addEventListener').mockImplementation(
-      (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => {
-        if (type === 'DOMContentLoaded' && typeof listener === 'function') {
-          domContentLoadedCallback = listener as () => void;
-        } else {
-          originalAddEventListener(type, listener, options);
-        }
-      }
+describe('escapeRegExp', () => {
+  it('escapes regular expression metacharacters', () => {
+    expect(escapeRegExp('a.b*c(d)[e]')).toBe('a\\.b\\*c\\(d\\)\\[e\\]');
+  });
+});
+
+describe('highlightMatch', () => {
+  it('wraps the matched term case-insensitively', () => {
+    expect(highlightMatch('Reinigung Saalio und Saalux', 'reinigung')).toBe(
+      '<strong>Reinigung</strong> Saalio und Saalux'
     );
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
+  it('does not throw for terms with regular expression metacharacters', () => {
+    expect(() => highlightMatch('What is (foo)?', '(foo')).not.toThrow();
+    expect(highlightMatch('What is (foo)?', '(foo')).toBe('What is <strong>(foo</strong>)?');
   });
 
-  const importAndTrigger = async (): Promise<void> => {
-    await import('./faqs.autocomplete');
-    if (domContentLoadedCallback) {
-      domContentLoadedCallback();
-    }
-  };
+  it('escapes HTML in the question', () => {
+    expect(highlightMatch('<b>bold</b> text', 'text')).toBe('&lt;b&gt;bold&lt;/b&gt; <strong>text</strong>');
+  });
 
-  it('should not initialize autocomplete when search input is missing', async () => {
-    document.body.innerHTML = '<div></div>';
+  it('returns the escaped question for an empty term', () => {
+    expect(highlightMatch('a & b', '   ')).toBe('a &amp; b');
+  });
+});
 
-    await importAndTrigger();
+describe('initFaqSearchAutocomplete', () => {
+  let fetchSpy: Mock;
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+    fetchSpy = vi.fn();
+    mockAutocomplete.mockReturnValue({ fetch: fetchSpy, destroy: vi.fn() });
+
+    document.body.innerHTML = `
+      <form id="pmf-faq-search-autocomplete" action="./faqs" method="get">
+        <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="token" />
+        <input type="text" id="pmf-faq-overview-search-input" data-pmf-empty-msg="No results found" />
+        <button type="button" id="pmf-faq-overview-search-button">Search</button>
+      </form>
+    `;
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    document.body.innerHTML = '';
+  });
+
+  it('does nothing when the search input is missing', () => {
+    document.body.innerHTML = '';
+    initFaqSearchAutocomplete();
     expect(mockAutocomplete).not.toHaveBeenCalled();
   });
 
-  it('should initialize autocomplete when search input exists', async () => {
-    document.body.innerHTML = `
-      <input id="pmf-faq-overview-search-input" type="text" />
-      <input id="pmf-csrf-token" value="test-csrf-token" />
-    `;
+  it('configures the autocompleter to always prevent form submission', () => {
+    initFaqSearchAutocomplete();
 
-    await importAndTrigger();
-
-    expect(mockAutocomplete).toHaveBeenCalledTimes(1);
+    const options = mockAutocomplete.mock.calls[0][0];
+    expect(options.preventSubmit).toBe(1);
+    expect(options.emptyMsg).toBe('No results found');
+    expect(options.minLength).toBe(1);
   });
 
-  it('should pass correct configuration to autocomplete', async () => {
-    document.body.innerHTML = `
-      <input id="pmf-faq-overview-search-input" type="text" />
-      <input id="pmf-csrf-token" value="my-csrf" />
-    `;
+  it('prevents the native form submit and triggers a fetch instead', () => {
+    initFaqSearchAutocomplete();
 
-    await importAndTrigger();
+    const form = document.getElementById('pmf-faq-search-autocomplete') as HTMLFormElement;
+    const event = new Event('submit', { cancelable: true });
+    form.dispatchEvent(event);
 
-    expect(mockAutocomplete).toHaveBeenCalledTimes(1);
-
-    const config = mockAutocomplete.mock.calls[0][0] as Record<string, unknown>;
-    const inputElement = document.getElementById('pmf-faq-overview-search-input');
-
-    expect(config.input).toBe(inputElement);
-    expect(config.minLength).toBe(2);
-    expect(config.emptyMsg).toBe('No users found');
-    expect(typeof config.onSelect).toBe('function');
-    expect(typeof config.fetch).toBe('function');
-    expect(typeof config.render).toBe('function');
+    expect(event.defaultPrevented).toBe(true);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('should pass onSelect that navigates to adminUrl', async () => {
-    document.body.innerHTML = `
-      <input id="pmf-faq-overview-search-input" type="text" />
-      <input id="pmf-csrf-token" value="csrf-123" />
-    `;
+  it('triggers a fetch when the search button is clicked', () => {
+    initFaqSearchAutocomplete();
 
-    const hrefSetter = vi.fn();
-    Object.defineProperty(window, 'location', {
-      value: { href: '' },
-      writable: true,
-      configurable: true,
-    });
-    Object.defineProperty(window.location, 'href', {
-      set: hrefSetter,
-      get: () => '',
-      configurable: true,
-    });
+    const button = document.getElementById('pmf-faq-overview-search-button') as HTMLButtonElement;
+    button.click();
 
-    await importAndTrigger();
-
-    const config = mockAutocomplete.mock.calls[0][0] as Record<string, unknown>;
-    const onSelect = config.onSelect as (item: { adminUrl: string }) => void;
-
-    onSelect({ adminUrl: '/admin/faq/edit/1' });
-
-    expect(hrefSetter).toHaveBeenCalledWith('/admin/faq/edit/1');
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(document.activeElement?.id).toBe('pmf-faq-overview-search-input');
   });
 
-  it('should pass render that creates a div with highlighted match', async () => {
-    document.body.innerHTML = `
-      <input id="pmf-faq-overview-search-input" type="text" />
-      <input id="pmf-csrf-token" value="csrf-456" />
-    `;
+  it('passes every server result to the autocompleter without filtering by question', async () => {
+    const results = [
+      { question: 'Reinigung Saalio und Saalux', adminUrl: './faq/edit/1/de' },
+      { question: 'Wartung', adminUrl: './faq/edit/2/de' },
+    ];
+    mockFetchFaqs.mockResolvedValue({ success: results });
+    initFaqSearchAutocomplete();
 
-    await importAndTrigger();
-
-    const config = mockAutocomplete.mock.calls[0][0] as Record<string, unknown>;
-    const render = config.render as (item: { question: string }, currentValue: string) => HTMLDivElement;
-
-    const div = render({ question: 'How to install phpMyFAQ?' }, 'install');
-
-    expect(div.tagName).toBe('DIV');
-    expect(div.classList.contains('pmf-faq-list-result')).toBe(true);
-    expect(div.classList.contains('border')).toBe(true);
-    expect(div.innerHTML).toContain('<strong>install</strong>');
-    expect(div.innerHTML).toContain('How to');
-    expect(div.innerHTML).toContain('phpMyFAQ?');
-  });
-
-  it('should pass fetch that calls fetchFaqsByAutocomplete and filters results', async () => {
-    vi.useFakeTimers();
-
-    document.body.innerHTML = `
-      <input id="pmf-faq-overview-search-input" type="text" />
-      <input id="pmf-csrf-token" value="csrf-789" />
-    `;
-
-    const { fetchFaqsByAutocomplete } = await import('../api');
-    (fetchFaqsByAutocomplete as Mock).mockResolvedValue({
-      success: [
-        { question: 'How to install?', adminUrl: '/admin/1' },
-        { question: 'How to configure?', adminUrl: '/admin/2' },
-        { question: 'Release notes', adminUrl: '/admin/3' },
-      ],
-    });
-
-    await importAndTrigger();
-
-    const config = mockAutocomplete.mock.calls[0][0] as Record<string, unknown>;
-    const fetchFn = config.fetch as (
-      text: string,
-      update: (items: Array<{ question: string; adminUrl: string }>) => void
-    ) => void;
-
+    const options = mockAutocomplete.mock.calls[0][0];
     const update = vi.fn();
-    fetchFn('how', update);
-    await vi.advanceTimersByTimeAsync(300);
+    await options.fetch('reinigung', update);
 
-    expect(fetchFaqsByAutocomplete).toHaveBeenCalledWith('how', 'csrf-789');
-    expect(update).toHaveBeenCalledTimes(1);
+    expect(mockFetchFaqs).toHaveBeenCalledWith('reinigung', 'token');
+    expect(update).toHaveBeenCalledWith(results);
+  });
 
-    const filteredItems = update.mock.calls[0][0] as Array<{ question: string }>;
-    expect(filteredItems).toHaveLength(2);
-    expect(filteredItems[0].question).toBe('How to install?');
-    expect(filteredItems[1].question).toBe('How to configure?');
+  it('sends the trimmed search term and skips blank input', async () => {
+    mockFetchFaqs.mockResolvedValue({ success: [] });
+    initFaqSearchAutocomplete();
+
+    const options = mockAutocomplete.mock.calls[0][0];
+    const update = vi.fn();
+
+    await options.fetch('  rein ', update);
+    expect(mockFetchFaqs).toHaveBeenCalledWith('rein', 'token');
+
+    mockFetchFaqs.mockClear();
+    await options.fetch('   ', update);
+    expect(mockFetchFaqs).not.toHaveBeenCalled();
+    expect(update).toHaveBeenLastCalledWith([]);
+  });
+
+  it('shows an empty list when the request fails', async () => {
+    mockFetchFaqs.mockRejectedValue(new Error('Network response was not ok.'));
+    initFaqSearchAutocomplete();
+
+    const options = mockAutocomplete.mock.calls[0][0];
+    const update = vi.fn();
+    await options.fetch('rein', update);
+
+    expect(update).toHaveBeenCalledWith([]);
   });
 });

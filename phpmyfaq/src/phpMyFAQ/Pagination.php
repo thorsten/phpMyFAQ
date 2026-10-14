@@ -78,7 +78,7 @@ class Pagination
             }
         }
 
-        return (int) $page;
+        return max(1, (int) $page);
     }
 
     public function render(): string

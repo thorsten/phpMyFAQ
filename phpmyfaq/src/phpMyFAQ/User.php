@@ -1132,11 +1132,14 @@ class User
 
     /**
      * Terminates the session ID of user
+     *
+     * NULL is used instead of '' because installations upgraded from pre-3.x
+     * still carry a legacy UNIQUE index on session_id (see #4764).
      */
     public function terminateSessionId(): bool
     {
         $update = sprintf(
-            "UPDATE %sfaquser SET session_id = '' WHERE user_id = %d",
+            'UPDATE %sfaquser SET session_id = NULL WHERE user_id = %d',
             Database::getTablePrefix(),
             $this->userId,
         );

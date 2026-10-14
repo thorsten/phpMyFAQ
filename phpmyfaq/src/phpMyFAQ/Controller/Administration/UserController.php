@@ -99,7 +99,7 @@ final class UserController extends AbstractAdministrationController
         $allUsers = $this->user->getAllUsers(false);
         $numUsers = is_countable($allUsers) ? count($allUsers) : 0;
 
-        $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 0);
+        $page = max(1, (int) Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1));
         $perPage = 10;
         $lastPage = $page * $perPage;
         $firstPage = $lastPage - $perPage;

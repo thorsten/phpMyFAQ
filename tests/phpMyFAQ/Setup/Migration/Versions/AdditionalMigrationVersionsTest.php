@@ -62,6 +62,7 @@ class AdditionalMigrationVersionsTest extends TestCase
             '413' => [Migration413::class, '4.1.3', ['4.1.0-alpha.3'], 'API client token'],
             '418' => [Migration418::class, '4.1.8', ['4.1.3'], 'add_faq'],
             '419' => [Migration419::class, '4.1.9', ['4.1.8'], 'faqvisits.visits'],
+            '4111' => [Migration4111::class, '4.1.11', ['4.1.9'], 'session'],
         ];
     }
 

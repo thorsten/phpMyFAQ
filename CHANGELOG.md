@@ -61,7 +61,10 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v4.1.11 - 2026-MM-DD
 
+- updated third party dependencies (Thorsten)
+- fixed saving user rights: no more self-logout, legacy MySQL `session` index is dropped on update (Thorsten)
 - fixed "Cannot unserialize StrictSessionHandler" error after updating from phpMyFAQ 4.1.8 (#4752) (Thorsten)
+- fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.10 - 2026-10-09
 
