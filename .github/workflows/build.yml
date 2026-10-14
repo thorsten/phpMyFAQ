@@ -76,7 +76,7 @@ jobs:
         run: php scripts/check-coverage.php coverage/clover.xml "$MINIMUM_LINE_COVERAGE"
 
       - name: Setup Node.js with pnpm
-        uses: actions/setup-node@v7.0.0
+        uses: actions/setup-node@v7.1.0
         with:
           package-manager-cache: false
           node-version: 24
