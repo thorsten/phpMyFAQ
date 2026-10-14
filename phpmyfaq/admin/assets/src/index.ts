@@ -97,10 +97,13 @@ import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
 import { handleLoginForm, handlePasswordStrength, handlePasswordToggle } from '../../../assets/src/utils';
 import { handleSessionTimeout, initializeTooltips, sidebarToggle } from './utils';
-import '../../../assets/src/utils/theme-switcher';
+import { initThemeSwitcher } from '../../../assets/src/utils/theme-switcher';
 
 document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   'use strict';
+
+  // Theme switcher
+  initThemeSwitcher();
 
   // Session timeout
   handleSessionTimeout();

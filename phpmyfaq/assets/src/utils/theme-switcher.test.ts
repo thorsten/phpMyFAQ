@@ -1,5 +1,5 @@
 import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest';
-import { ThemeSwitcher } from './theme-switcher';
+import { initThemeSwitcher, ThemeSwitcher } from './theme-switcher';
 
 // Mock DOM elements
 const mockLightButton = {
@@ -53,6 +53,7 @@ interface MockDocument {
   documentElement: {
     setAttribute: ((attr: string, value: string) => void) & ReturnType<typeof vi.fn>;
     getAttribute: ((attr: string) => string | null) & ReturnType<typeof vi.fn>;
+    hasAttribute: ((attr: string) => boolean) & ReturnType<typeof vi.fn>;
   };
   addEventListener: ReturnType<typeof vi.fn>;
 }
@@ -94,6 +95,7 @@ describe('ThemeSwitcher', (): void => {
           attributes[attr] = value;
         }),
         getAttribute: vi.fn((attr: string) => attributes[attr] ?? null),
+        hasAttribute: vi.fn((attr: string) => (attributes[attr] ?? null) !== null),
       },
       addEventListener: vi.fn(),
     };
@@ -331,6 +333,26 @@ describe('ThemeSwitcher', (): void => {
 
     expect(mockDocument.documentElement.setAttribute).not.toHaveBeenCalled();
     expect(mockLocalStorage.setItem).not.toHaveBeenCalled();
+  });
+
+  test('initThemeSwitcher should start the switcher and watch the system theme', (): void => {
+    const started = initThemeSwitcher();
+
+    expect(started).toBeInstanceOf(ThemeSwitcher);
+    expect(mockMatchMedia.addEventListener).toHaveBeenCalledWith('change', expect.any(Function));
+  });
+
+  test('initThemeSwitcher should do nothing when a layout mode is forced', (): void => {
+    vi.mocked(mockLocalStorage.getItem).mockReturnValue('dark');
+    mockDocument.documentElement.setAttribute('data-pmf-forced-theme', 'light');
+    mockDocument.documentElement.setAttribute('data-bs-theme', 'light');
+    vi.clearAllMocks();
+
+    expect(initThemeSwitcher()).toBeNull();
+    expect(ThemeSwitcher.isForced()).toBe(true);
+    expect(mockDocument.documentElement.setAttribute).not.toHaveBeenCalled();
+    expect(mockLightButton.addEventListener).not.toHaveBeenCalled();
+    expect(mockMatchMedia.addEventListener).not.toHaveBeenCalled();
   });
 
   test('should handle missing DOM elements gracefully', (): void => {

@@ -29,6 +29,7 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\System;
+use phpMyFAQ\Template\LayoutMode;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,10 +91,7 @@ abstract class AbstractAdministrationController extends AbstractController
         return [
             'metaLanguage' => Translation::get(key: 'metaLanguage'),
             'layoutMode' => 'light',
-            'defaultLayoutMode' => (string) ($this->configuration->get('layout.defaultLayoutMode') ?? 'auto'),
-            'allowUserLayoutMode' =>
-                $this->configuration->get('layout.allowUserLayoutMode') === true
-                    || $this->configuration->get('layout.allowUserLayoutMode') === 'true',
+            ...LayoutMode::fromConfiguration($this->configuration)->toTemplateData(),
             'pageTitle' => $this->configuration->getTitle() . ' - ' . System::getPoweredByPlainString(),
             'baseHref' => $this->configuration->getDefaultUrl() . 'admin/',
             'version' => System::getVersion(),

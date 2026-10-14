@@ -6,6 +6,7 @@ import {
   handleSMTPPasswordToggle,
   handleTranslation,
   handleTemplates,
+  handleForceLayoutMode,
   handleLayoutMode,
   handleFaqsSortingKeys,
   handleFaqsSortingOrder,
@@ -29,6 +30,7 @@ import {
   fetchSearchRelevance,
   fetchSeoMetaTags,
   fetchMailProvider,
+  fetchForceLayoutMode,
   fetchLayoutMode,
   fetchTemplates,
   fetchTranslations,
@@ -133,6 +135,34 @@ describe('Configuration Functions', () => {
       await handleLayoutMode();
 
       expect(fetchLayoutMode).toHaveBeenCalledWith('auto');
+    });
+  });
+
+  describe('handleForceLayoutMode', () => {
+    it('should fetch and insert force layout mode options', async () => {
+      document.body.innerHTML = `
+        <select name="edit[layout.forceLayoutMode]" data-pmf-configuration-current-value="light"></select>
+      `;
+
+      (fetchForceLayoutMode as Mock).mockResolvedValue('<option value="light" selected>Light</option>');
+
+      await handleForceLayoutMode();
+
+      expect(fetchForceLayoutMode).toHaveBeenCalledWith('light');
+      const selectBox = document.querySelector('select[name="edit[layout.forceLayoutMode]"]');
+      expect(selectBox?.innerHTML).toContain('<option value="light" selected="">Light</option>');
+    });
+
+    it('should default to "auto" when no current value is set', async () => {
+      document.body.innerHTML = `
+        <select name="edit[layout.forceLayoutMode]"></select>
+      `;
+
+      (fetchForceLayoutMode as Mock).mockResolvedValue('<option value="auto" selected>Do not force</option>');
+
+      await handleForceLayoutMode();
+
+      expect(fetchForceLayoutMode).toHaveBeenCalledWith('auto');
     });
   });
 

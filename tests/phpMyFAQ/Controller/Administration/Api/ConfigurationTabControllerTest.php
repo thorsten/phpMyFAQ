@@ -386,6 +386,7 @@ final class ConfigurationTabControllerTest extends TestCase
             'translation provider' => ['translationProvider', 'google', 'value="google"'],
             'mail provider' => ['mailProvider', 'smtp', 'value="smtp" selected'],
             'layout mode' => ['layoutMode', 'dark', 'value="dark" selected'],
+            'force layout mode' => ['forceLayoutMode', 'light', 'value="light" selected'],
             'cache adapter' => ['cacheAdapter', 'redis', 'value="redis" selected'],
         ];
     }

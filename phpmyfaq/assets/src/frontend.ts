@@ -55,6 +55,11 @@ import { handleChat } from './chat';
 import { handlePushNotifications } from './push';
 
 document.addEventListener('DOMContentLoaded', (): void => {
+  // Theme switcher: only fetched when the administrator does not force a single layout mode
+  if (!document.documentElement.hasAttribute('data-pmf-forced-theme')) {
+    void import('./utils/theme-switcher').then(({ initThemeSwitcher }) => initThemeSwitcher());
+  }
+
   // Reload Captchas
   const reloadButton: HTMLButtonElement | null = document.querySelector('#captcha-button');
   if (reloadButton !== null) {

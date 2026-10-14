@@ -8,6 +8,7 @@ import {
   fetchSearchRelevance,
   fetchSeoMetaTags,
   fetchMailProvider,
+  fetchForceLayoutMode,
   fetchLayoutMode,
   fetchTemplates,
   fetchTranslations,
@@ -195,6 +196,31 @@ describe('fetchReleaseEnvironment', () => {
     const result = await fetchReleaseEnvironment(currentValue);
 
     expect(result).toBe('');
+  });
+});
+
+describe('fetchForceLayoutMode', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should fetch force layout mode options and return as text', async () => {
+    const mockResponse = '<option value="light" selected>Light</option>';
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(mockResponse),
+    } as Response);
+
+    const result = await fetchForceLayoutMode('light');
+
+    expect(result).toBe(mockResponse);
+    expect(fetchWrapperModule.fetchWrapper).toHaveBeenCalledWith('./api/configuration/force-layout-mode/light');
+  });
+
+  it('should return an empty string if the network response is not ok', async () => {
+    vi.spyOn(fetchWrapperModule, 'fetchWrapper').mockResolvedValue({ ok: false } as Response);
+
+    expect(await fetchForceLayoutMode('auto')).toBe('');
   });
 });
 

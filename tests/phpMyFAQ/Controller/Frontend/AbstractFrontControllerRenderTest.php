@@ -155,6 +155,54 @@ final class AbstractFrontControllerRenderTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testHeaderForcesTheConfiguredLayoutMode(): void
+    {
+        $controller = new AbstractFrontControllerRenderTestStub();
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            [
+                'layout.defaultLayoutMode' => 'dark',
+                'layout.allowUserLayoutMode' => 'true',
+                'layout.forceLayoutMode' => 'light',
+            ],
+            false,
+            false,
+        ));
+
+        $header = $controller->fetchHeader(Request::create('https://localhost/index.php?action=index'));
+
+        self::assertSame('dark', $header['defaultLayoutMode']);
+        self::assertTrue($header['allowUserLayoutMode']);
+        self::assertSame('light', $header['forcedLayoutMode']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testHeaderDoesNotForceTheLayoutModeByDefault(): void
+    {
+        $controller = new AbstractFrontControllerRenderTestStub();
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            [
+                'layout.defaultLayoutMode' => 'dark',
+                'layout.allowUserLayoutMode' => 'true',
+                'layout.forceLayoutMode' => 'auto',
+            ],
+            false,
+            false,
+        ));
+
+        $header = $controller->fetchHeader(Request::create('https://localhost/index.php?action=index'));
+
+        self::assertSame('dark', $header['defaultLayoutMode']);
+        self::assertTrue($header['allowUserLayoutMode']);
+        self::assertNull($header['forcedLayoutMode']);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testHeaderBuildsCurrentPageUrlFromTheDefaultUrlNotTheHostHeader(): void
     {
         $controller = new AbstractFrontControllerRenderTestStub();

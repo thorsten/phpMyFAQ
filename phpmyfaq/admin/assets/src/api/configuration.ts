@@ -140,6 +140,16 @@ export const fetchLayoutMode = async (currentValue: string): Promise<string> => 
   return await response.text();
 };
 
+export const fetchForceLayoutMode = async (currentValue: string): Promise<string> => {
+  const response = await fetchWrapper(`./api/configuration/force-layout-mode/${currentValue}`);
+
+  if (!response.ok) {
+    return '';
+  }
+
+  return await response.text();
+};
+
 export const fetchTemplates = async (): Promise<string> => {
   const response = await fetchWrapper(`./api/configuration/templates`);
 

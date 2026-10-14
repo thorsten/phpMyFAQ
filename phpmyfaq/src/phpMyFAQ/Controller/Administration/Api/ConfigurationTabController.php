@@ -659,6 +659,20 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         )));
     }
 
+    #[Route(
+        path: 'configuration/force-layout-mode/{current}',
+        name: 'admin.api.configuration.force-layout-mode',
+        methods: ['GET'],
+    )]
+    public function forceLayoutMode(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        return new Response(AdminMenuBuilder::renderForceLayoutModeOptions((string) $request->attributes->get(
+            key: 'current',
+        )));
+    }
+
     /**
      * Converts a value to string safely, handling objects and null values
      */

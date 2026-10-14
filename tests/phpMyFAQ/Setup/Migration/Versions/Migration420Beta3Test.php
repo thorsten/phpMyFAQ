@@ -99,6 +99,7 @@ class Migration420Beta3Test extends TestCase
                 'oidc.groupSyncOnLogin' => 'false',
                 'oidc.groupMapping' => '',
                 'oidc.logoutRedirectUrl' => '',
+                'layout.forceLayoutMode' => 'auto',
             ],
             $recorded,
         );
@@ -114,7 +115,7 @@ class Migration420Beta3Test extends TestCase
         $this->migration->up($recorder);
 
         $this->assertSame([], $recorder->getSqlQueries());
-        $this->assertCount(13, $recorder->getOperationsByType('config_add'));
+        $this->assertCount(14, $recorder->getOperationsByType('config_add'));
     }
 
     public function testUpAddsTheIssuerColumnAndTheIdentityIndexWhenOnlyTheSubjectColumnExists(): void

@@ -7,5 +7,4 @@ export * from './platform';
 export * from './reading-time';
 export * from './tooltip';
 export * from './TranslationService';
-export { ThemeSwitcher } from './theme-switcher';
 export * from './version-compare';

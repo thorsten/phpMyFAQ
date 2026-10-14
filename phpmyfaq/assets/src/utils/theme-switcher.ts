@@ -18,6 +18,7 @@ export class ThemeSwitcher {
   private static readonly THEME_ATTRIBUTE = 'data-bs-theme';
   private static readonly DEFAULT_THEME_ATTRIBUTE = 'data-pmf-default-theme';
   private static readonly ALLOW_USER_ATTRIBUTE = 'data-pmf-allow-user-theme';
+  private static readonly FORCED_THEME_ATTRIBUTE = 'data-pmf-forced-theme';
   private static readonly LIGHT_THEME = 'light';
   private static readonly DARK_THEME = 'dark';
   private static readonly HIGH_CONTRAST_THEME = 'high-contrast';
@@ -32,6 +33,14 @@ export class ThemeSwitcher {
 
   constructor() {
     this.init();
+  }
+
+  /**
+   * Whether the administrator mandates a single layout mode. The server already renders
+   * that mode into data-bs-theme, so there is nothing left for the switcher to do.
+   */
+  public static isForced(): boolean {
+    return document.documentElement.hasAttribute(ThemeSwitcher.FORCED_THEME_ATTRIBUTE);
   }
 
   /**
@@ -204,8 +213,16 @@ export class ThemeSwitcher {
   }
 }
 
-// Initialize the theme switcher when DOM is loaded
-document.addEventListener('DOMContentLoaded', (): void => {
+/**
+ * Start the theme switcher once the DOM is ready. Returns null when a layout mode is forced.
+ */
+export const initThemeSwitcher = (): ThemeSwitcher | null => {
+  if (ThemeSwitcher.isForced()) {
+    return null;
+  }
+
   const themeSwitcher = new ThemeSwitcher();
   themeSwitcher.watchSystemTheme();
-});
+
+  return themeSwitcher;
+};

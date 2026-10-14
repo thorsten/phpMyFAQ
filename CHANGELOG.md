@@ -9,6 +9,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v4.2.0-beta.3 - unreleased
 
 - added support for generic OpenID Connect providers such as Authentik, issue #4759 (Thorsten)
+- added the "Force layout mode" configuration, which renders one mode for all visitors and skips the inline theme script and the theme switcher, issue #4762 (Thorsten)
 
 ### phpMyFAQ v4.2.0-beta.2 - 2026-10-09
 

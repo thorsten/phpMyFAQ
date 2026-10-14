@@ -204,4 +204,15 @@ final class AdminMenuBuilderPermissionTest extends TestCase
         $this->assertStringContainsString('<option value="high-contrast">', $options);
         $this->assertStringNotContainsString('<option value="auto" selected', $options);
     }
+
+    public function testForceLayoutModeOptionsOfferNotForcingAsAuto(): void
+    {
+        $options = AdminMenuBuilder::renderForceLayoutModeOptions('auto');
+
+        $this->assertSame(4, substr_count($options, '<option'));
+        $this->assertStringContainsString('<option value="auto" selected>' . Translation::get('ad_layout_force_mode_none') . '</option>', $options);
+        $this->assertStringContainsString('<option value="light">', $options);
+        $this->assertStringContainsString('<option value="dark">', $options);
+        $this->assertStringContainsString('<option value="high-contrast">', $options);
+    }
 }

@@ -146,6 +146,43 @@ final class AbstractAdministrationControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testHeaderForcesTheConfiguredLayoutMode(): void
+    {
+        $controller = new AbstractAdministrationControllerTestStub();
+        $controller->setContainer($this->createControllerContainer(configurationValues: [
+            'layout.defaultLayoutMode' => 'auto',
+            'layout.allowUserLayoutMode' => 'true',
+            'layout.forceLayoutMode' => 'dark',
+        ]));
+
+        $header = $controller->fetchHeader(new Request(attributes: ['_route' => 'admin.dashboard']));
+
+        self::assertSame('auto', $header['defaultLayoutMode']);
+        self::assertTrue($header['allowUserLayoutMode']);
+        self::assertSame('dark', $header['forcedLayoutMode']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testHeaderDoesNotForceTheLayoutModeByDefault(): void
+    {
+        $controller = new AbstractAdministrationControllerTestStub();
+        $controller->setContainer($this->createControllerContainer(configurationValues: [
+            'layout.defaultLayoutMode' => 'auto',
+            'layout.allowUserLayoutMode' => 'false',
+            'layout.forceLayoutMode' => 'auto',
+        ]));
+
+        $header = $controller->fetchHeader(new Request(attributes: ['_route' => 'admin.dashboard']));
+
+        self::assertSame('auto', $header['defaultLayoutMode']);
+        self::assertNull($header['forcedLayoutMode']);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testHeaderOmitsOptionalEntriesWhenFeaturesAreDisabled(): void
     {
         $controller = new AbstractAdministrationControllerTestStub();

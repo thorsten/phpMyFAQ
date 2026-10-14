@@ -315,15 +315,26 @@ class AdminMenuBuilder
 
     public static function renderLayoutModeOptions(string $current): string
     {
+        return self::renderModeOptions($current, 'ad_layout_mode_auto');
+    }
+
+    public static function renderForceLayoutModeOptions(string $current): string
+    {
+        return self::renderModeOptions($current, 'ad_layout_force_mode_none');
+    }
+
+    private static function renderModeOptions(string $current, string $autoLabelKey): string
+    {
         $modes = [
-            'auto' => Translation::get('ad_layout_mode_auto'),
-            'light' => Translation::get('ad_layout_mode_light'),
-            'dark' => Translation::get('ad_layout_mode_dark'),
-            'high-contrast' => Translation::get('ad_layout_mode_highContrast'),
+            'auto' => $autoLabelKey,
+            'light' => 'ad_layout_mode_light',
+            'dark' => 'ad_layout_mode_dark',
+            'high-contrast' => 'ad_layout_mode_highContrast',
         ];
         $output = '';
 
-        foreach ($modes as $value => $label) {
+        foreach ($modes as $value => $labelKey) {
+            $label = Translation::get($labelKey);
             $output .= sprintf(
                 '<option value="%s"%s>%s</option>',
                 $value,

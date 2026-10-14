@@ -326,6 +326,7 @@ class DefaultDataSeeder
             'layout.templateSet' => 'default',
             'layout.defaultLayoutMode' => 'auto',
             'layout.allowUserLayoutMode' => 'true',
+            'layout.forceLayoutMode' => 'auto',
             'layout.enablePrivacyLink' => 'true',
             'layout.enableCookieConsent' => 'true',
             'layout.contactInformationHTML' => 'false',

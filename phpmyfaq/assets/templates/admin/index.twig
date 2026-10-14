@@ -1,23 +1,32 @@
 <!DOCTYPE html>
-<html lang="{{ metaLanguage }}" data-bs-theme="{{ defaultLayoutMode == 'auto' ? layoutMode : defaultLayoutMode }}"
+<html lang="{{ metaLanguage }}" data-bs-theme="{{ forcedLayoutMode ?? (defaultLayoutMode == 'auto' ? layoutMode : defaultLayoutMode) }}"
       data-pmf-default-theme="{{ defaultLayoutMode|default('auto') }}"
-      data-pmf-allow-user-theme="{{ allowUserLayoutMode is not defined or allowUserLayoutMode ? 'true' : 'false' }}">
+      data-pmf-allow-user-theme="{{ allowUserLayoutMode is not defined or allowUserLayoutMode ? 'true' : 'false' }}"
+      {%- if forcedLayoutMode is defined and forcedLayoutMode is not null %} data-pmf-forced-theme="{{ forcedLayoutMode }}"{% endif %}>
 <head>
   <meta charset="utf-8">
 
+  {% if forcedLayoutMode is not defined or forcedLayoutMode is null %}
   <script>
     (function () {
       try {
-        var stored = localStorage.getItem('pmf-theme');
+        var root = document.documentElement;
+        var defaultMode = root.getAttribute('data-pmf-default-theme') || 'auto';
+        var stored = root.getAttribute('data-pmf-allow-user-theme') !== 'false'
+          ? localStorage.getItem('pmf-theme')
+          : null;
         var theme = stored
           ? stored
-          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-bs-theme', theme);
+          : (defaultMode === 'auto'
+            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : defaultMode);
+        root.setAttribute('data-bs-theme', theme);
       } catch (e) {
         // localStorage may be unavailable (e.g. blocked storage); keep the server-rendered theme
       }
     })();
   </script>
+  {% endif %}
 
   <title>{{ pageTitle }}</title>
   <base href="{{ baseHref }}">

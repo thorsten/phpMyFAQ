@@ -43,4 +43,25 @@ class PublicTemplateTest extends TestCase
         static::assertStringContainsString('prefers-color-scheme: dark', $html);
         static::assertStringContainsString("setAttribute('data-bs-theme'", $html);
     }
+
+    /**
+     * A forced layout mode is rendered server-side; the inline script must then be
+     * omitted so neither localStorage nor the OS preference can override it, and the
+     * ThemeSwitcher must be told to stay out of the way (see GitHub issue #4762).
+     */
+    public function testPublicLayoutSkipsTheInlineThemeScriptWhenALayoutModeIsForced(): void
+    {
+        $html = (string) file_get_contents(PMF_ROOT_DIR . '/assets/templates/default/index.twig');
+
+        $guardPosition = strpos($html, '{% if forcedLayoutMode is not defined or forcedLayoutMode is null %}');
+        $scriptPosition = strpos($html, "localStorage.getItem('pmf-theme')");
+
+        static::assertNotFalse($guardPosition, 'Inline theme script is not guarded by the forced layout mode.');
+        static::assertNotFalse($scriptPosition);
+        static::assertLessThan($scriptPosition, $guardPosition, 'Forced layout mode guard must wrap the inline script.');
+        static::assertStringContainsString('data-pmf-forced-theme="{{ forcedLayoutMode }}"', $html);
+        static::assertStringContainsString('data-bs-theme="{{ forcedLayoutMode ?? (', $html);
+        static::assertStringContainsString("root.getAttribute('data-pmf-allow-user-theme') !== 'false'", $html);
+        static::assertStringContainsString("root.getAttribute('data-pmf-default-theme')", $html);
+    }
 }

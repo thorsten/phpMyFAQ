@@ -1787,11 +1787,13 @@ $PMF_LANG['msgAdminLdapSettings'] = 'LDAP General Settings';
 
 $LANG_CONF['layout.defaultLayoutMode'] = ['select', 'Default layout mode'];
 $LANG_CONF['layout.allowUserLayoutMode'] = ['checkbox', 'Allow visitors to change the layout mode'];
+$LANG_CONF['layout.forceLayoutMode'] = ['select', 'Force layout mode', 'Forces this mode for everyone; the default mode, the visitor choice and the theme switcher are then ignored.'];
 
 $PMF_LANG['ad_layout_mode_auto'] = 'Automatic (follow visitor system preference)';
 $PMF_LANG['ad_layout_mode_light'] = 'Light';
 $PMF_LANG['ad_layout_mode_dark'] = 'Dark';
 $PMF_LANG['ad_layout_mode_highContrast'] = 'High contrast';
+$PMF_LANG['ad_layout_force_mode_none'] = 'Do not force a layout mode';
 
 $PMF_LANG['msgThemeUploadNoZip'] = 'Please select a ZIP file to upload.';
 

@@ -123,8 +123,10 @@ vi.mock('./utils', () => ({
   sidebarToggle: vi.fn(() => trackCall('sidebarToggle')),
 }));
 
-// Mock theme switcher (side-effect import)
-vi.mock('../../../assets/src/utils/theme-switcher', () => ({}));
+// Mock theme switcher
+vi.mock('../../../assets/src/utils/theme-switcher', () => ({
+  initThemeSwitcher: vi.fn(() => trackCall('initThemeSwitcher')),
+}));
 
 describe('admin index.ts', () => {
   beforeEach(() => {
@@ -140,6 +142,9 @@ describe('admin index.ts', () => {
       // Verify the last handler in the chain was called
       expect(calls).toContain('initializeTooltips');
     });
+
+    // Theme switcher
+    expect(calls).toContain('initThemeSwitcher');
 
     // Session & login
     expect(calls).toContain('handleSessionTimeout');

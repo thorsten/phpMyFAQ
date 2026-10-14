@@ -25,6 +25,7 @@ import {
   fetchSearchRelevance,
   fetchSeoMetaTags,
   fetchCacheAdapter,
+  fetchForceLayoutMode,
   fetchLayoutMode,
   fetchMailProvider,
   fetchTemplates,
@@ -124,6 +125,7 @@ export const handleConfiguration = async (): Promise<void> => {
           case '#layout':
             await handleTemplates();
             await handleLayoutMode();
+            await handleForceLayoutMode();
             await handleThemes();
             break;
           case '#records':
@@ -361,6 +363,15 @@ export const handleLayoutMode = async (): Promise<void> => {
     const currentValue = (layoutModeSelectBox[0].dataset.pmfConfigurationCurrentValue as string) || 'auto';
     const options = await fetchLayoutMode(currentValue);
     layoutModeSelectBox[0].insertAdjacentHTML('beforeend', options);
+  }
+};
+
+export const handleForceLayoutMode = async (): Promise<void> => {
+  const selectBox = document.getElementsByName('edit[layout.forceLayoutMode]') as NodeListOf<HTMLSelectElement>;
+  if (selectBox !== null && selectBox[0]) {
+    const currentValue = (selectBox[0].dataset.pmfConfigurationCurrentValue as string) || 'auto';
+    const options = await fetchForceLayoutMode(currentValue);
+    selectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 

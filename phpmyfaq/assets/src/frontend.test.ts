@@ -94,6 +94,11 @@ vi.mock('masonry-layout', () => ({
   default: mockMasonry,
 }));
 
+const mockInitThemeSwitcher = vi.fn();
+vi.mock('./utils/theme-switcher', () => ({
+  initThemeSwitcher: () => mockInitThemeSwitcher(),
+}));
+
 describe('frontend.ts', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -131,6 +136,23 @@ describe('frontend.ts', () => {
     expect(mockHandleCategorySelection).toHaveBeenCalled();
     expect(mockHandleChat).toHaveBeenCalled();
     expect(mockHandlePushNotifications).toHaveBeenCalled();
+  });
+
+  it('should load the theme switcher when no layout mode is forced', async () => {
+    document.documentElement.removeAttribute('data-pmf-forced-theme');
+
+    await loadAndFireDOMContentLoaded();
+    await vi.waitFor(() => expect(mockInitThemeSwitcher).toHaveBeenCalled());
+  });
+
+  it('should not load the theme switcher when a layout mode is forced', async () => {
+    document.documentElement.setAttribute('data-pmf-forced-theme', 'light');
+
+    await loadAndFireDOMContentLoaded();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(mockInitThemeSwitcher).not.toHaveBeenCalled();
+    document.documentElement.removeAttribute('data-pmf-forced-theme');
   });
 
   it('should call handleReloadCaptcha when captcha button exists', async () => {

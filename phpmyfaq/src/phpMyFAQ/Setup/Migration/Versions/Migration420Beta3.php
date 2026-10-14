@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Migration for phpMyFAQ 4.2.0-beta.3: generic OpenID Connect provider.
+ * Migration for phpMyFAQ 4.2.0-beta.3: generic OpenID Connect provider and forced layout mode.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -36,7 +36,10 @@ readonly class Migration420Beta3 extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Add the generic OpenID Connect provider: oidc.* configuration and the issuer-bound oidc_sub/oidc_iss identity link';
+        return (
+            'Add the generic OpenID Connect provider: oidc.* configuration and the issuer-bound oidc_sub/oidc_iss'
+            . ' identity link; add the layout.forceLayoutMode configuration'
+        );
     }
 
     /**
@@ -84,6 +87,7 @@ readonly class Migration420Beta3 extends AbstractMigration
         $recorder->addConfig('oidc.groupSyncOnLogin', 'false');
         $recorder->addConfig('oidc.groupMapping', '');
         $recorder->addConfig('oidc.logoutRedirectUrl', '');
+        $recorder->addConfig('layout.forceLayoutMode', 'auto');
     }
 
     private function columnExists(string $table, string $column): bool
