@@ -32,4 +32,25 @@ class PaginationTest extends TestCase
 
         $this->assertEquals($expectedOutput, $pagination->render());
     }
+
+    public function testRenderTreatsPageZeroAsFirstPage(): void
+    {
+        $pagination = new Pagination([
+            'total' => 30,
+            'perPage' => 10,
+            'baseUrl' => 'http://example.com/admin/user/list?page=0',
+        ]);
+
+        $output = $pagination->render();
+
+        $this->assertStringContainsString(
+            '<li class="page-item active"><a class="page-link" href="http://example.com/admin/user/list?page=1">1</a></li>',
+            $output,
+        );
+        $this->assertStringContainsString(
+            '<a class="page-link" href="http://example.com/admin/user/list?page=2">&rarr;</a>',
+            $output,
+        );
+        $this->assertStringNotContainsString('page=1">&rarr;</a>', $output);
+    }
 }
