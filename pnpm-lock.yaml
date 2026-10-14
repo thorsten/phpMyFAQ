@@ -27,8 +27,8 @@ dependencies:
     specifier: 11.12.0
     version: 11.12.0
   jodit:
-    specifier: 4.17.1
-    version: 4.17.1
+    specifier: 4.17.2
+    version: 4.17.2
   masonry-layout:
     specifier: 4.2.2
     version: 4.2.2
@@ -42,7 +42,7 @@ dependencies:
 devDependencies:
   '@axe-core/playwright':
     specifier: 4.13.0
-    version: 4.13.0(playwright-core@1.64.0)
+    version: 4.13.0(playwright-core@1.64.1)
   '@commitlint/cli':
     specifier: 21.2.3
     version: 21.2.3(@types/node@26.6.4)(typescript@7.0.2)
@@ -148,13 +148,13 @@ packages:
       lru-cache: 11.5.3
     dev: true
 
-  /@axe-core/playwright@4.13.0(playwright-core@1.64.0):
+  /@axe-core/playwright@4.13.0(playwright-core@1.64.1):
     resolution: {integrity: sha512-6YLx+kxXu5GJceG4ozFg+33a2EMTdjYwWGloJ3sb9Kta5pp+ZNS53uxGVog5JetIY8s++P5UrtX+cri+u0VAVg==}
     peerDependencies:
       playwright-core: '>= 1.0.0'
     dependencies:
       axe-core: 4.13.0
-      playwright-core: 1.64.0
+      playwright-core: 1.64.1
     dev: true
 
   /@babel/code-frame@7.29.7:
@@ -2654,8 +2654,8 @@ packages:
     hasBin: true
     dev: true
 
-  /jodit@4.17.1:
-    resolution: {integrity: sha512-iWtFB//szGRdPKybBwW5rIAlhKSX8jgMWB0rV78gAunZ3y2OJR2ZnRvOUCgYnOsomTyBD/GdQ0YO7DEw4e3fBw==}
+  /jodit@4.17.2:
+    resolution: {integrity: sha512-+Ka5PMK2p5ycB0j09QjAmO92mVTyCcddYUYAvjoR76RTSUITTKNRzyhZqDoM7WL5RsujKwyjtXbanF7xxZFkvA==}
     dev: false
 
   /js-tokens@4.0.0:
@@ -3153,8 +3153,8 @@ packages:
     hasBin: true
     dev: true
 
-  /playwright-core@1.64.0:
-    resolution: {integrity: sha512-T9r+MZkTECl2+oUcZ26YgZzTrYidTsIhYYkJix+6iDOymOb1FB2RLLSOxRGnZGv5DStt+aduIVbt+E8WygXYpg==}
+  /playwright-core@1.64.1:
+    resolution: {integrity: sha512-BC4s8y6SEVA6Q1rSxZTto8hI1KUI3xXlHGZgvGqP4IqPdI/a6FX9H29IDNz7vKo9l21b6LfYosScPL6M3xxyDQ==}
     engines: {node: '>=20'}
     hasBin: true
     dev: true
