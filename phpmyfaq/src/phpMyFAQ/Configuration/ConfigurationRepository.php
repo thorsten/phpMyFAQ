@@ -50,7 +50,7 @@ class ConfigurationRepository
             FilesystemConfigurationCache::createIfEnabled(
                 debug: Environment::isDebugMode() || System::isDevelopmentVersion(),
                 enabled: Environment::get('CONFIG_CACHE_ENABLED'),
-                cacheDir: (string) PMF_ROOT_DIR . '/content/core/cache',
+                cacheDir: (string) PMF_CONTENT_DIR . '/core/cache',
                 identity: sprintf(
                     '%s|%s|%s',
                     defined('PMF_CONFIG_DIR') ? (string) PMF_CONFIG_DIR : '',

@@ -485,7 +485,7 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.cache.factory', CacheFactory::class)->args([
         service('phpmyfaq.configuration'),
-        PMF_ROOT_DIR . '/content/core/cache',
+        PMF_CONTENT_DIR . '/core/cache',
     ]);
     $services->set('phpmyfaq.cache', CacheItemPoolInterface::class)->factory([
         service('phpmyfaq.cache.factory'),

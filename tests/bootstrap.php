@@ -88,9 +88,11 @@ if ($bootstrapLockHandle === false || !flock($bootstrapLockHandle, LOCK_EX)) {
 
 //
 // Clear the filesystem cache so state persisted by a previous run (e.g. the
-// rate limiter's fixed-window counters) cannot make tests flaky.
+// rate limiter's fixed-window counters) cannot make tests flaky. The cache lives
+// under the per-worker content directory, so a separate-process child booting
+// in one worker cannot wipe the counters a test in another worker is counting.
 //
-$cacheDirectory = PMF_ROOT_DIR . '/content/core/cache/pmf';
+$cacheDirectory = PMF_CONTENT_DIR . '/core/cache/pmf';
 if (is_dir($cacheDirectory)) {
     $cacheFiles = new RecursiveIteratorIterator(
         new RecursiveDirectoryIterator($cacheDirectory, FilesystemIterator::SKIP_DOTS),
