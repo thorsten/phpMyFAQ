@@ -95,13 +95,11 @@ class GroupControllerTest extends TestCase
         $controller = $this->buildController($session, $actingUser);
         $csrf = $this->primeCsrf($session, 'update-group-permissions');
 
-        $request = new Request(
-            request: [
-                'pmf-csrf-token' => $csrf,
-                'group_id' => '2',
-                'group_rights' => ['42'], // an int right the acting user does not hold
-            ],
-        );
+        $request = new Request(request: [
+            'pmf-csrf-token' => $csrf,
+            'group_id' => '2',
+            'group_rights' => ['42'], // an int right the acting user does not hold
+        ]);
 
         $this->expectException(UnauthorizedHttpException::class);
         $controller->updatePermissions($request);
@@ -131,15 +129,57 @@ class GroupControllerTest extends TestCase
         $controller = $this->buildController($session, $actingUser);
         $csrf = $this->primeCsrf($session, 'update-group-members');
 
-        $request = new Request(
-            request: [
-                'pmf-csrf-token' => $csrf,
-                'group_id' => '1',
-                'group_members' => ['5'], // the acting user self-joining the privileged group
-            ],
-        );
+        $request = new Request(request: [
+            'pmf-csrf-token' => $csrf,
+            'group_id' => '1',
+            'group_members' => ['5'], // the acting user self-joining the privileged group
+        ]);
 
         $this->expectException(UnauthorizedHttpException::class);
         $controller->updateMembers($request);
+    }
+
+    private function buildNonSuperAdminLackingGroupRight(): CurrentUser
+    {
+        // The target group holds right id 42, which the acting user does NOT hold.
+        // hasPermission() returns true for the string-keyed permission gate ('delgroup') but false
+        // for the integer right id 42 the target group holds.
+        $perm = $this->createMock(MediumPermission::class);
+        $perm->method('getGroupRights')->willReturn([42]);
+        $perm->method('hasPermission')->willReturnCallback(
+            static fn(int $userId, mixed $right): bool => is_string($right),
+        );
+        $perm->expects($this->never())->method('deleteGroup');
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $perm;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        return $actingUser;
+    }
+
+    public function testConfirmNonSuperAdminCannotConfirmDeletionOfGroupWithRightTheyDoNotHold(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->buildController($session, $this->buildNonSuperAdminLackingGroupRight());
+
+        $request = new Request(request: ['group_list_select' => '1']);
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->confirm($request);
+    }
+
+    public function testDeleteNonSuperAdminCannotDeleteGroupWithRightTheyDoNotHold(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->buildController($session, $this->buildNonSuperAdminLackingGroupRight());
+        $csrf = $this->primeCsrf($session, 'delete-group');
+
+        $request = new Request(request: ['pmf-csrf-token' => $csrf, 'group_id' => '1']);
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->delete($request);
     }
 }

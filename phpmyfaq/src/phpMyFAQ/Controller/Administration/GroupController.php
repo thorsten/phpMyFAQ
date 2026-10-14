@@ -138,6 +138,8 @@ final class GroupController extends AbstractAdministrationController
         $session = $this->container->get(id: 'session');
 
         $groupId = (int) Filter::filterVar($request->request->get('group_list_select'), FILTER_VALIDATE_INT);
+        $this->assertActorHoldsAllGroupRights($groupId);
+
         $groupData = $this->currentUser->perm->getGroupData($groupId);
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
@@ -165,6 +167,10 @@ final class GroupController extends AbstractAdministrationController
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('delete-group', $csrfToken)) {
             throw new UnauthorizedHttpException('Invalid CSRF token');
         }
+
+        // Enforced here again, independently of confirm(): the delete endpoint must never trust that
+        // the confirmation step was the one that issued the token.
+        $this->assertActorHoldsAllGroupRights($groupId);
 
         if (!$this->currentUser->perm->deleteGroup($groupId)) {
             $message = sprintf(
@@ -265,14 +271,7 @@ final class GroupController extends AbstractAdministrationController
         // themselves. Otherwise an administrator with the delegable GROUP_EDIT right could join
         // themselves (or anyone else) to a privileged group and inherit rights they do not possess
         // (privilege escalation via group membership inheritance).
-        if (!$this->currentUser->isSuperAdmin()) {
-            $actingUserId = $this->currentUser->getUserId();
-            foreach ($this->currentUser->perm->getGroupRights($groupId) as $groupRight) {
-                if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $groupRight)) {
-                    throw new UnauthorizedHttpException('Cannot manage a group whose rights you do not hold');
-                }
-            }
-        }
+        $this->assertActorHoldsAllGroupRights($groupId);
 
         $user = $this->container->get(id: 'phpmyfaq.user');
         if (!$user->perm->removeAllUsersFromGroup($groupId)) {
@@ -358,6 +357,27 @@ final class GroupController extends AbstractAdministrationController
             ...$this->getBaseTemplateVars(),
             'message' => $message,
         ]);
+    }
+
+    /**
+     * A non-SuperAdmin may only manage (edit members of, delete) a group whose rights they fully
+     * hold themselves. Otherwise an administrator holding only a delegable group right could
+     * remove or take over a higher-privileged group.
+     *
+     * @throws UnauthorizedHttpException
+     */
+    private function assertActorHoldsAllGroupRights(int $groupId): void
+    {
+        if ($this->currentUser->isSuperAdmin()) {
+            return;
+        }
+
+        $actingUserId = $this->currentUser->getUserId();
+        foreach ($this->currentUser->perm->getGroupRights($groupId) as $groupRight) {
+            if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $groupRight)) {
+                throw new UnauthorizedHttpException('Cannot manage a group whose rights you do not hold');
+            }
+        }
     }
 
     /**
