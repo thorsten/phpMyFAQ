@@ -23,8 +23,12 @@ import { Response, UserData } from '../interfaces';
  * @param userId
  */
 export const updateUser = async (userId: string): Promise<void> => {
-  await setUserData(userId);
-  await setUserRights(userId);
+  try {
+    await setUserData(userId);
+    await setUserRights(userId);
+  } catch (error) {
+    pushErrorNotification(error instanceof Error ? error.message : String(error));
+  }
 };
 
 /**

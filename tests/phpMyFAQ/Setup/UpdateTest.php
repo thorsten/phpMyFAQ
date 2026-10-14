@@ -369,6 +369,70 @@ class UpdateTest extends TestCase
         $this->assertSame([], $queries);
     }
 
+    /**
+     * Installations created before v3.x carry a legacy UNIQUE index "session" on
+     * faquser.session_id that was never dropped by a migration (see #4764).
+     */
+    public function testApplyUpdates4111DropsLegacySessionIndexOnMysql(): void
+    {
+        foreach (['mysqli', 'pdo_mysql'] as $databaseType) {
+            $database = $this->createStub(Sqlite3::class);
+            $database->method('query')->willReturn(true);
+            $database->method('numRows')->willReturn(1);
+
+            $configuration = $this->createStub(Configuration::class);
+            $configuration->method('getDb')->willReturn($database);
+
+            $update = new Update(new System(), $configuration);
+            $queries = $this->collectQueriesFor($databaseType, 'applyUpdates4111', '4.1.10', 'faq_', $update);
+
+            $this->assertSame(
+                ['ALTER TABLE faq_faquser DROP INDEX session'],
+                $queries,
+                sprintf('Unexpected queries for %s', $databaseType),
+            );
+        }
+    }
+
+    public function testApplyUpdates4111SkipsMysqlWithoutLegacySessionIndex(): void
+    {
+        $database = $this->createStub(Sqlite3::class);
+        $database->method('query')->willReturn(true);
+        $database->method('numRows')->willReturn(0);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+
+        $update = new Update(new System(), $configuration);
+        $queries = $this->collectQueriesFor('mysqli', 'applyUpdates4111', '4.1.10', '', $update);
+
+        $this->assertSame([], $queries);
+    }
+
+    public function testApplyUpdates4111SkipsNonMysqlDatabases(): void
+    {
+        foreach (['pgsql', 'pdo_pgsql', 'sqlite3', 'pdo_sqlite', 'sqlsrv', 'pdo_sqlsrv'] as $databaseType) {
+            $configuration = $this->createMock(Configuration::class);
+            $configuration->expects($this->never())->method('getDb');
+
+            $update = new Update(new System(), $configuration);
+            $queries = $this->collectQueriesFor($databaseType, 'applyUpdates4111', '4.1.10', '', $update);
+
+            $this->assertSame([], $queries, sprintf('%s never had the legacy index', $databaseType));
+        }
+    }
+
+    public function testApplyUpdates4111IsSkippedForAlreadyMigratedInstallations(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->expects($this->never())->method('getDb');
+
+        $update = new Update(new System(), $configuration);
+        $queries = $this->collectQueriesFor('mysqli', 'applyUpdates4111', '4.1.11', '', $update);
+
+        $this->assertSame([], $queries);
+    }
+
     public function testSetDryRun()
     {
         $this->update->setDryRun(true);

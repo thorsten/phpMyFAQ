@@ -257,6 +257,170 @@ class UserControllerTest extends TestCase
         $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
+    /**
+     * Builds a controller whose target user is loaded from a recording database stub,
+     * so that the SQL issued by updateUserRights() can be inspected.
+     *
+     * @param string[] $executed
+     */
+    private function buildControllerWithRecordingDatabase(
+        Session $session,
+        CurrentUser $actingUser,
+        int $targetUserId,
+        array &$executed,
+    ): UserController {
+        $controller = $this->buildController($session, $actingUser);
+
+        $database = $this->createStub(Sqlite3::class);
+        $database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$executed): bool {
+                $executed[] = $query;
+                return true;
+            });
+        $database->method('numRows')->willReturn(1);
+        $database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => $targetUserId,
+                'login' => 'target_user',
+                'account_status' => 'active',
+                'is_superadmin' => 0,
+                'auth_source' => 'ldap',
+                // the same stub row is also returned for faqright lookups
+                'for_users' => 1,
+                'for_groups' => 1,
+                'for_sections' => 1,
+            ]);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['security.permLevel', 'basic'],
+            ]);
+
+        $parent = (new ReflectionClass(UserController::class))->getParentClass();
+        $parent->getProperty('configuration')->setValue($controller, $configuration);
+
+        return $controller;
+    }
+
+    /**
+     * Rights are re-read from the database on every request, so there is no need to
+     * terminate the session of the acting admin - doing so logs them out right after
+     * saving their own rights (see #4764).
+     */
+    public function testUpdateRightsDoesNotTerminateOwnSessionOnSelfEdit(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: true);
+        $executed = [];
+        $controller = $this->buildControllerWithRecordingDatabase($session, $actingUser, 5, $executed);
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $request = $this->jsonRequest([
+            'userId' => 5,
+            'csrfToken' => $csrf,
+            'userRights' => [1, 2],
+        ]);
+
+        $response = $controller->updateUserRights($request);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        foreach ($executed as $query) {
+            $this->assertStringNotContainsString('session_id', $query, 'Self-edit must keep the admin session alive.');
+        }
+    }
+
+    public function testUpdateRightsTerminatesSessionOfOtherUser(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: true);
+        $executed = [];
+        $controller = $this->buildControllerWithRecordingDatabase($session, $actingUser, 7, $executed);
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $request = $this->jsonRequest([
+            'userId' => 7,
+            'csrfToken' => $csrf,
+            'userRights' => [1],
+        ]);
+
+        $response = $controller->updateUserRights($request);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $sessionQueries = array_filter($executed, static fn(string $query): bool => str_contains(
+            $query,
+            'session_id = NULL',
+        ));
+        $this->assertCount(1, $sessionQueries, 'Editing another user must invalidate that user\'s session.');
+    }
+
+    /**
+     * A failing session invalidation must not turn an otherwise successful rights
+     * update into a raw exception page - the response has to stay valid JSON.
+     */
+    public function testUpdateRightsReturnsJsonWhenSessionTerminationFails(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: true);
+        $executed = [];
+        $controller = $this->buildControllerWithRecordingDatabase($session, $actingUser, 7, $executed);
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $logger = $this->createMock(\Monolog\Logger::class);
+        $logger->expects($this->once())->method('error');
+
+        $database = $this->createStub(Sqlite3::class);
+        $database
+            ->method('query')
+            ->willReturnCallback(static function (string $query): bool {
+                if (str_contains($query, 'session_id')) {
+                    throw new \phpMyFAQ\Core\Exception("Duplicate entry '' for key 'session'");
+                }
+                return true;
+            });
+        $database->method('numRows')->willReturn(1);
+        $database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => 7,
+                'login' => 'target_user',
+                'account_status' => 'active',
+                'is_superadmin' => 0,
+                'auth_source' => 'ldap',
+                // the same stub row is also returned for faqright lookups
+                'for_users' => 1,
+                'for_groups' => 1,
+                'for_sections' => 1,
+            ]);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+        $configuration->method('getLogger')->willReturn($logger);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['security.permLevel', 'basic'],
+            ]);
+        $parent = (new ReflectionClass(UserController::class))->getParentClass();
+        $parent->getProperty('configuration')->setValue($controller, $configuration);
+
+        $request = $this->jsonRequest([
+            'userId' => 7,
+            'csrfToken' => $csrf,
+            'userRights' => [1],
+        ]);
+
+        $response = $controller->updateUserRights($request);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertJson((string) $response->getContent());
+        $this->assertStringContainsString('success', (string) $response->getContent());
+    }
+
     public function testAddUserNonSuperAdminCannotGrantSuperAdminFlag(): void
     {
         $session = new Session(new MockArraySessionStorage());

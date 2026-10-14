@@ -192,6 +192,7 @@ class Update extends AbstractSetup
         $this->applyUpdates413();
         $this->applyUpdates418();
         $this->applyUpdates419();
+        $this->applyUpdates4111();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -1365,6 +1366,25 @@ class Update extends AbstractSetup
                     // SQLite: SMALLINT only sets INTEGER affinity without a range limit,
                     // so there is nothing to migrate
                     break;
+            }
+        }
+    }
+
+    private function applyUpdates4111(): void
+    {
+        if (version_compare($this->version, '4.1.11', '<')) {
+            // Installations created before v3.x carry a legacy UNIQUE index "session" on
+            // faquser.session_id (only the MySQL schema ever had it). It was never dropped
+            // by a migration and makes every session reset collide with the anonymous
+            // user (see #4764).
+            if (in_array(Database::getType(), ['mysqli', 'pdo_mysql'], true)) {
+                $tablePrefix = Database::getTablePrefix();
+                $result = $this->configuration
+                    ->getDb()
+                    ->query(sprintf("SHOW INDEX FROM %sfaquser WHERE Key_name = 'session'", $tablePrefix));
+                if ($result !== false && $this->configuration->getDb()->numRows($result) > 0) {
+                    $this->queries[] = sprintf('ALTER TABLE %sfaquser DROP INDEX session', $tablePrefix);
+                }
             }
         }
     }

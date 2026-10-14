@@ -596,7 +596,20 @@ final class UserController extends AbstractController
             $user->perm->grantUserRight($userId, (int) $userRight);
         }
 
-        $user->terminateSessionId();
+        // Rights are re-read from the database on every request, so the acting admin's
+        // own session must stay alive - terminating it would log them out immediately.
+        if ($user->getUserId() !== $this->currentUser->getUserId()) {
+            try {
+                $user->terminateSessionId();
+            } catch (\Throwable $throwable) {
+                // The rights are already saved; a failed session invalidation must not
+                // turn the response into a raw exception page.
+                $this->configuration
+                    ->getLogger()
+                    ->error(sprintf('Terminating session of user %d failed: %s', $userId, $throwable->getMessage()));
+            }
+        }
+
         $success =
             Translation::get(key: 'ad_msg_savedsuc_1')
             . ' "'

@@ -40,6 +40,19 @@ export const fetchUserData = async (userId: string): Promise<UserData> => {
     referrerPolicy: 'no-referrer',
   });
 
+  if (!response.ok) {
+    let message = `Failed to fetch user data (HTTP ${response.status})`;
+    try {
+      const errorData = (await response.json()) as { error?: string };
+      if (errorData?.error) {
+        message = errorData.error;
+      }
+    } catch {
+      // body was not JSON, keep the generic message
+    }
+    throw new Error(message);
+  }
+
   return await response.json();
 };
 

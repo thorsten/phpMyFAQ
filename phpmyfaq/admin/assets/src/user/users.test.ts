@@ -59,6 +59,8 @@ vi.mock('../api', () => ({
 vi.mock('../../../../assets/src/utils', () => ({
   addElement: vi.fn(),
   capitalize: vi.fn(),
+  pushErrorNotification: vi.fn(),
+  pushNotification: vi.fn(),
 }));
 
 vi.mock('../utils', () => ({
@@ -91,6 +93,19 @@ describe('User Management Functions', () => {
     // Verify the function is available and can be called
     expect(overwritePassword).toBeDefined();
     expect(typeof overwritePassword).toBe('function');
+  });
+
+  test('updateUser shows an error notification instead of crashing when fetching user data fails', async () => {
+    const { fetchUserData, fetchUserRights } = await import('../api');
+    const { pushErrorNotification } = await import('../../../../assets/src/utils');
+    const { updateUser } = await import('./users');
+
+    vi.mocked(fetchUserData).mockRejectedValue(new Error('Unauthorized access'));
+
+    await expect(updateUser('5')).resolves.toBeUndefined();
+
+    expect(pushErrorNotification).toHaveBeenCalledWith('Unauthorized access');
+    expect(fetchUserRights).not.toHaveBeenCalled();
   });
 
   test('users module should be able to import overwritePassword without errors', async () => {

@@ -82,6 +82,30 @@ describe('User API', () => {
 
       await expect(fetchUserData(userId)).rejects.toThrow(mockError);
     });
+
+    it('should throw the server error message on a non-OK response', async () => {
+      global.fetch = vi.fn(() =>
+        Promise.resolve({
+          ok: false,
+          status: 401,
+          json: () => Promise.resolve({ error: 'Unauthorized access' }),
+        } as Response)
+      );
+
+      await expect(fetchUserData('1')).rejects.toThrow('Unauthorized access');
+    });
+
+    it('should throw a generic error on a non-OK response without JSON body', async () => {
+      global.fetch = vi.fn(() =>
+        Promise.resolve({
+          ok: false,
+          status: 500,
+          json: () => Promise.reject(new SyntaxError('Unexpected token')),
+        } as Response)
+      );
+
+      await expect(fetchUserData('1')).rejects.toThrow('HTTP 500');
+    });
   });
 
   describe('fetchUserRights', () => {
