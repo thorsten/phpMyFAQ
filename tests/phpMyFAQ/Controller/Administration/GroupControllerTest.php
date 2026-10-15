@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Session\Token;
@@ -14,7 +15,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[AllowMockObjectsWithoutExpectations]
 class GroupControllerTest extends TestCase
@@ -101,7 +101,7 @@ class GroupControllerTest extends TestCase
             'group_rights' => ['42'], // an int right the acting user does not hold
         ]);
 
-        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectException(ForbiddenException::class);
         $controller->updatePermissions($request);
     }
 
@@ -135,7 +135,7 @@ class GroupControllerTest extends TestCase
             'group_members' => ['5'], // the acting user self-joining the privileged group
         ]);
 
-        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectException(ForbiddenException::class);
         $controller->updateMembers($request);
     }
 
@@ -167,7 +167,7 @@ class GroupControllerTest extends TestCase
 
         $request = new Request(request: ['group_list_select' => '1']);
 
-        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectException(ForbiddenException::class);
         $controller->confirm($request);
     }
 
@@ -179,7 +179,7 @@ class GroupControllerTest extends TestCase
 
         $request = new Request(request: ['pmf-csrf-token' => $csrf, 'group_id' => '1']);
 
-        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectException(ForbiddenException::class);
         $controller->delete($request);
     }
 }

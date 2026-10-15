@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -329,7 +330,7 @@ final class GroupController extends AbstractAdministrationController
             $actingUserId = $this->currentUser->getUserId();
             foreach ($groupPermissions as $groupPermission) {
                 if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $groupPermission)) {
-                    throw new UnauthorizedHttpException('Cannot grant a right you do not hold');
+                    throw new ForbiddenException('Cannot grant a right you do not hold');
                 }
             }
         }
@@ -364,7 +365,7 @@ final class GroupController extends AbstractAdministrationController
      * hold themselves. Otherwise an administrator holding only a delegable group right could
      * remove or take over a higher-privileged group.
      *
-     * @throws UnauthorizedHttpException
+     * @throws ForbiddenException
      */
     private function assertActorHoldsAllGroupRights(int $groupId): void
     {
@@ -375,7 +376,7 @@ final class GroupController extends AbstractAdministrationController
         $actingUserId = $this->currentUser->getUserId();
         foreach ($this->currentUser->perm->getGroupRights($groupId) as $groupRight) {
             if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $groupRight)) {
-                throw new UnauthorizedHttpException('Cannot manage a group whose rights you do not hold');
+                throw new ForbiddenException('Cannot manage a group whose rights you do not hold');
             }
         }
     }
