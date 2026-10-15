@@ -61,7 +61,7 @@ jobs:
       # green "PHPUnit Test Results" check with zero tests, which makes a red
       # pull request look partly green.
       - name: Publish PHPUnit test results
-        uses: mikepenz/action-junit-report@v6.5.0
+        uses: mikepenz/action-junit-report@v6.6.1
         if: ${{ !cancelled() && steps.phpunit.outcome != 'skipped' }}
         with:
           report_paths: junit.xml
