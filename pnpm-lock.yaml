@@ -50,8 +50,8 @@ devDependencies:
     specifier: 21.2.3
     version: 21.2.3
   '@playwright/test':
-    specifier: 1.63.0
-    version: 1.63.0
+    specifier: 1.64.0
+    version: 1.64.0
   '@types/bootstrap':
     specifier: 5.2.11
     version: 5.2.11
@@ -1017,6 +1017,15 @@ packages:
     dev: true
     optional: true
 
+  /@oxlint/binding-win32-ia32-msvc@1.87.0:
+    resolution: {integrity: sha512-daptNsEOuru4/nJTxV4DBHNJ5GepzmaBVQf+jjgKQGi9NRlZKik+RFq4hUL7ewsF1pwjKM+SkYaMbF82UwFGnw==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [ia32]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /@oxlint/binding-win32-x64-msvc@1.87.0:
     resolution: {integrity: sha512-k+m/EShyXE29J/r1fjk0HlAzhN5JhIvj044oSJkXTEkCLrWZQgXb/3r4q5LTw/eaKW/4GuMXG2xmiJs3s5rPNw==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -1159,12 +1168,12 @@ packages:
     dev: true
     optional: true
 
-  /@playwright/test@1.63.0:
-    resolution: {integrity: sha512-oxMK4vllB9RK5NQ2l1pq1IfOf2AvnEuj/vYGDj0H2nMtmtZpKtCwt/l00GEO6xjGfpBNAvjovvYdCm50dRQkpQ==}
+  /@playwright/test@1.64.0:
+    resolution: {integrity: sha512-oTN9FNYuN6bqQMwiho6jJKLCG2/QOYCixGXuCjRmzOq23eODeukuY2XiAVoVpAECbuezMt1MHQjAiQxK8F+Y+g==}
     engines: {node: '>=20'}
     hasBin: true
     dependencies:
-      playwright: 1.63.0
+      playwright: 1.64.0
     dev: true
 
   /@popperjs/core@2.11.8:
@@ -3070,6 +3079,7 @@ packages:
       '@oxlint/binding-linux-x64-musl': 1.87.0
       '@oxlint/binding-openharmony-arm64': 1.87.0
       '@oxlint/binding-win32-arm64-msvc': 1.87.0
+      '@oxlint/binding-win32-ia32-msvc': 1.87.0
       '@oxlint/binding-win32-x64-msvc': 1.87.0
     dev: true
 
@@ -3137,8 +3147,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /playwright-core@1.63.0:
-    resolution: {integrity: sha512-rYCsBF/M5HjUch52bbtVONEFjv6Xu8sm8h72dNlR5bzIE1fvC/bxgspzkjSfU+MweEMmPM8KJebG6nnyxo5mCg==}
+  /playwright-core@1.64.0:
+    resolution: {integrity: sha512-T9r+MZkTECl2+oUcZ26YgZzTrYidTsIhYYkJix+6iDOymOb1FB2RLLSOxRGnZGv5DStt+aduIVbt+E8WygXYpg==}
     engines: {node: '>=20'}
     hasBin: true
     dev: true
@@ -3149,12 +3159,12 @@ packages:
     hasBin: true
     dev: true
 
-  /playwright@1.63.0:
-    resolution: {integrity: sha512-+7ziBLidS4NaNCdt57SUDT+wYmmd5fmiQejUic/kb+YsYSCPyOOE9sebzMjNmQrsnNpDJqd4WHvV/8lfKfUDUg==}
+  /playwright@1.64.0:
+    resolution: {integrity: sha512-kVzTnYFYEyQ9RGzBjNCd2+yEqWmVbxl3AHPynv3qQ6JTjv4a+kwRcnqQwIpuP3NnrnIrE/Q6wWAIAvMfIE2/Yg==}
     engines: {node: '>=20'}
     hasBin: true
     dependencies:
-      playwright-core: 1.63.0
+      playwright-core: 1.64.0
     dev: true
 
   /postcss-media-query-parser@0.2.3:
