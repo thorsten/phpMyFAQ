@@ -8,11 +8,6 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v4.2.0-beta.3 - unreleased
 
-- added support for generic OpenID Connect providers such as Authentik, issue #4759 (Thorsten)
-- added the "Force layout mode" configuration, which renders one mode for all visitors and skips the inline theme script and the theme switcher, issue #4762 (Thorsten)
-
-### phpMyFAQ v4.2.0-beta.2 - 2026-10-09
-
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
 - added official Docker images (Apache and FrankenPHP) published to the GitHub Container Registry, including nightly images, with headless installation via environment variables (Thorsten)
 - added `GET /api/health` endpoint for container health checks (Thorsten)
@@ -38,7 +33,9 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added SBOM (Software Bill of Materials) generation (Thorsten)
 - added separate read, write and publish permissions for FAQs (Thorsten)
 - added an editorial workflow with per-language draft, review, and published states for FAQs (Thorsten)
-- added question metadata tracking, an audit log of the open question lifecycle (submitted, answered, reopened), issue #4415 (Thorsten)
+- added question metadata tracking, an audit log of the open question lifecycle (submitted, answered, reopened) (Thorsten)
+- added support for generic OpenID Connect providers such as Authentik (Thorsten)
+- added the "Force layout mode" configuration, which renders one mode for all visitors and skips the inline theme script and the theme switcher (Thorsten)
 - improved audit and activity log with comprehensive security event tracking (Thorsten)
 - improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
 - improved support for PDO (Thorsten)
