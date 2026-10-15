@@ -406,12 +406,6 @@ class PdoSqlsrvTest extends TestCase
         $this->assertEquals('void', $reflection->getReturnType()->getName());
     }
 
-    public function testDestructor(): void
-    {
-        // Can't directly test destructor, but we verify it exists
-        $this->assertTrue(method_exists(PdoSqlsrv::class, '__destruct'));
-    }
-
     public function testNowMethod(): void
     {
         $result = $this->pdoSqlsrv->now();

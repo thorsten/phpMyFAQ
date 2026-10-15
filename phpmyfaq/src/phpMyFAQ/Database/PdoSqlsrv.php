@@ -437,11 +437,6 @@ class PdoSqlsrv implements DatabaseDriver
         $this->pdo = null;
     }
 
-    public function __destruct()
-    {
-        $this->close();
-    }
-
     /**
      * Returns the ID of the last inserted row.
      */

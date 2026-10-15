@@ -30,7 +30,6 @@ use SensitiveParameter;
  *
  * @package phpMyFAQ\Database
  */
-/* @mago-expect lint:too-many-methods - implements the full DatabaseDriver contract like the other PDO drivers */
 class PdoSqlite implements DatabaseDriver
 {
     /**
@@ -467,11 +466,6 @@ class PdoSqlite implements DatabaseDriver
     public function close(): void
     {
         $this->pdo = null;
-    }
-
-    public function __destruct()
-    {
-        $this->close();
     }
 
     /**
