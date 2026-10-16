@@ -88,8 +88,13 @@ final class UserController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::USER_DELETE);
         $this->userHasPermission(PermissionType::USER_EDIT);
 
+        // A non-SuperAdmin must not see SuperAdmin or protected accounts in the list:
+        // their edit links would only lead to a 403 from the user data API (see #4782).
+        // Filtering before pagination keeps the user count and page math accurate.
+        $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
+
         $user = $this->container->get(id: 'phpmyfaq.user');
-        $allUsers = $user->getAllUsers(false);
+        $allUsers = $user->getAllUsers(false, true, !$actingIsSuperAdmin);
         $numUsers = is_countable($allUsers) ? count($allUsers) : 0;
 
         $page = max(1, (int) Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1));

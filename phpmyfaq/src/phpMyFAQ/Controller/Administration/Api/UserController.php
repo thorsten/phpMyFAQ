@@ -50,12 +50,17 @@ final class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
+        // Capture the acting user's privilege level before any user object is rebound
+        // to a target below. A non-SuperAdmin must not enumerate SuperAdmin or protected
+        // accounts, mirroring the 403 guard in userData() (see #4782).
+        $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
+
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
         $filtered = Filter::filterVar($request->query->get(key: 'filter'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ('' === $filtered) {
-            $allUsers = $currentUser->getAllUsers(withoutAnonymous: false);
+            $allUsers = $currentUser->getAllUsers(withoutAnonymous: false, excludePrivileged: !$actingIsSuperAdmin);
             $userData = [];
             foreach ($allUsers as $allUser) {
                 $currentUser->getUserById($allUser, allowBlockedUsers: true);
@@ -75,7 +80,7 @@ final class UserController extends AbstractController
         }
 
         $allUsers = [];
-        foreach ($currentUser->searchUsers($filtered) as $singleUser) {
+        foreach ($currentUser->searchUsers($filtered, excludePrivileged: !$actingIsSuperAdmin) as $singleUser) {
             $users = new stdClass();
             $users->label = $singleUser['login'];
             $users->value = (int) $singleUser['user_id'];
@@ -93,8 +98,11 @@ final class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
+        // A non-SuperAdmin must not export SuperAdmin or protected accounts (see #4782).
+        $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
+
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
-        $allUsers = $currentUser->getAllUsers(withoutAnonymous: false);
+        $allUsers = $currentUser->getAllUsers(withoutAnonymous: false, excludePrivileged: !$actingIsSuperAdmin);
 
         $handle = fopen(filename: 'php://temp', mode: 'r+');
         fputcsv(

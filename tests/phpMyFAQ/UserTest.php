@@ -133,4 +133,81 @@ class UserTest extends TestCase
 
         $this->user->createUser('existinguser');
     }
+
+    /**
+     * Non-SuperAdmin callers must never enumerate SuperAdmin or protected accounts (see #4782).
+     */
+    public function testGetAllUsersCanExcludeSuperAdminAndProtectedAccounts(): void
+    {
+        $executed = [];
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$executed): bool {
+                $executed[] = $query;
+                return true;
+            });
+        $this->database->method('numRows')->willReturn(0);
+
+        $this->user->getAllUsers(withoutAnonymous: false, allowBlockedUsers: true, excludePrivileged: true);
+
+        $this->assertCount(1, $executed);
+        $this->assertStringContainsString('COALESCE(is_superadmin, 0) = 0', $executed[0]);
+        $this->assertStringContainsString("COALESCE(account_status, '') <> 'protected'", $executed[0]);
+    }
+
+    public function testGetAllUsersIncludesPrivilegedAccountsByDefault(): void
+    {
+        $executed = [];
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$executed): bool {
+                $executed[] = $query;
+                return true;
+            });
+        $this->database->method('numRows')->willReturn(0);
+
+        $this->user->getAllUsers(withoutAnonymous: false);
+
+        $this->assertCount(1, $executed);
+        $this->assertStringNotContainsString('is_superadmin', $executed[0]);
+        $this->assertStringNotContainsString('protected', $executed[0]);
+    }
+
+    public function testSearchUsersCanExcludeSuperAdminAndProtectedAccounts(): void
+    {
+        $executed = [];
+        $this->database->method('escape')->willReturnArgument(0);
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$executed): bool {
+                $executed[] = $query;
+                return true;
+            });
+        $this->database->method('fetchArray')->willReturn(null);
+
+        $this->user->searchUsers('adm', excludePrivileged: true);
+
+        $this->assertCount(1, $executed);
+        $this->assertStringContainsString('COALESCE(is_superadmin, 0) = 0', $executed[0]);
+        $this->assertStringContainsString("COALESCE(account_status, '') <> 'protected'", $executed[0]);
+    }
+
+    public function testSearchUsersIncludesPrivilegedAccountsByDefault(): void
+    {
+        $executed = [];
+        $this->database->method('escape')->willReturnArgument(0);
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$executed): bool {
+                $executed[] = $query;
+                return true;
+            });
+        $this->database->method('fetchArray')->willReturn(null);
+
+        $this->user->searchUsers('adm');
+
+        $this->assertCount(1, $executed);
+        $this->assertStringNotContainsString('is_superadmin', $executed[0]);
+        $this->assertStringNotContainsString('protected', $executed[0]);
+    }
 }
