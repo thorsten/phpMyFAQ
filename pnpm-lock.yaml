@@ -27,8 +27,8 @@ dependencies:
     specifier: 11.12.0
     version: 11.12.0
   jodit:
-    specifier: 4.17.2
-    version: 4.17.2
+    specifier: 4.17.3
+    version: 4.17.3
   masonry-layout:
     specifier: 4.2.2
     version: 4.2.2
@@ -2654,8 +2654,8 @@ packages:
     hasBin: true
     dev: true
 
-  /jodit@4.17.2:
-    resolution: {integrity: sha512-+Ka5PMK2p5ycB0j09QjAmO92mVTyCcddYUYAvjoR76RTSUITTKNRzyhZqDoM7WL5RsujKwyjtXbanF7xxZFkvA==}
+  /jodit@4.17.3:
+    resolution: {integrity: sha512-soYfsSSj7+QCw+rEjqgYhPA+7zGg5TQq893i4Eh0Up2E2mLBxP0Ft3MeT8I1XmBTAViUCkglTLEs3lT7VU9gdw==}
     dev: false
 
   /js-tokens@4.0.0:
