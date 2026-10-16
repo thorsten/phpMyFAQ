@@ -164,9 +164,44 @@ final class UserControllerTest extends TestCase
     }
 
     /**
-     * @param list<int> $userIds
+     * The server-rendered list must mirror the 403 guard on the user data API: a
+     * non-SuperAdmin must not get SuperAdmin or protected rows with edit links (see #4782).
+     *
+     * @throws \Exception
      */
-    private function createUserMock(array $userIds = [1, 2]): User
+    public function testListNonSuperAdminDoesNotEnumeratePrivilegedAccounts(): void
+    {
+        $user = $this->createUserMock(expectExcludePrivileged: true);
+
+        $controller = new UserController($user);
+        $controller->setContainer($this->createControllerContainer(isSuperAdmin: false));
+
+        $response = $controller->list(new Request());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testListSuperAdminEnumeratesAllAccounts(): void
+    {
+        $user = $this->createUserMock(expectExcludePrivileged: false);
+
+        $controller = new UserController($user);
+        $controller->setContainer($this->createControllerContainer(isSuperAdmin: true));
+
+        $response = $controller->list(new Request());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @param list<int> $userIds
+     * @param bool|null $expectExcludePrivileged When set, getAllUsers() must be asked (once) to
+     *                                           exclude or include privileged accounts
+     */
+    private function createUserMock(array $userIds = [1, 2], ?bool $expectExcludePrivileged = null): User
     {
         $permission = $this->createMock(BasicPermission::class);
         $permission
@@ -178,7 +213,15 @@ final class UserControllerTest extends TestCase
         $currentUserId = 0;
         $user = $this->createMock(User::class);
         $user->perm = $permission;
-        $user->method('getAllUsers')->willReturn($userIds);
+        if ($expectExcludePrivileged === null) {
+            $user->method('getAllUsers')->willReturn($userIds);
+        } else {
+            $user
+                ->expects(self::once())
+                ->method('getAllUsers')
+                ->with(false, true, $expectExcludePrivileged)
+                ->willReturn($userIds);
+        }
         $user->method('getUserById')->willReturnCallback(function (int $userId) use (&$currentUserId): bool {
             $currentUserId = $userId;
 
@@ -200,7 +243,7 @@ final class UserControllerTest extends TestCase
         return $user;
     }
 
-    private function createControllerContainer(): ContainerInterface
+    private function createControllerContainer(bool $isSuperAdmin = true): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
@@ -208,7 +251,7 @@ final class UserControllerTest extends TestCase
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
-        $currentUser->method('isSuperAdmin')->willReturn(true);
+        $currentUser->method('isSuperAdmin')->willReturn($isSuperAdmin);
         $currentUser->method('getUserId')->willReturn(99);
         $currentUser
             ->method('getUserData')

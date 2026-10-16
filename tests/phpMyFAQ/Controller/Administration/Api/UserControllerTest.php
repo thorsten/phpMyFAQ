@@ -2381,4 +2381,151 @@ final class UserControllerTest extends TestCase
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
     }
+
+    /**
+     * Builds a controller whose database stub records every executed query, so the
+     * enumeration SQL issued by list() / csvExport() can be inspected (see #4782).
+     *
+     * @param string[] $executed
+     */
+    private function buildControllerWithQueryRecorder(
+        Session $session,
+        CurrentUser $actingUser,
+        array &$executed,
+    ): UserController {
+        $controller = $this->buildController($session, $actingUser);
+
+        $database = $this->createStub(Sqlite3::class);
+        $database->method('escape')->willReturnArgument(0);
+        $database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$executed): bool {
+                $executed[] = $query;
+                return true;
+            });
+        $database->method('numRows')->willReturn(0);
+        $database->method('fetchArray')->willReturn(null);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['security.permLevel', 'basic'],
+            ]);
+
+        $parent = (new \ReflectionClass(UserController::class))->getParentClass();
+        $parent->getProperty('configuration')->setValue($controller, $configuration);
+
+        return $controller;
+    }
+
+    /**
+     * @param string[] $executed
+     */
+    private function findUserEnumerationQuery(array $executed): string
+    {
+        foreach ($executed as $query) {
+            if (str_contains($query, 'faquser') && str_contains($query, 'user_id')) {
+                return $query;
+            }
+        }
+
+        $this->fail('No user enumeration query was executed.');
+    }
+
+    /**
+     * Enumeration must mirror the 403 guard on userData(): a non-SuperAdmin must not
+     * receive SuperAdmin or protected accounts in the user list (see #4782).
+     */
+    public function testListNonSuperAdminDoesNotEnumeratePrivilegedAccounts(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $executed = [];
+        $controller = $this->buildControllerWithQueryRecorder($session, $actingUser, $executed);
+
+        $response = $controller->list(new Request());
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $query = $this->findUserEnumerationQuery($executed);
+        $this->assertStringContainsString('COALESCE(is_superadmin, 0) = 0', $query);
+        $this->assertStringContainsString("<> 'protected'", $query);
+    }
+
+    public function testListSuperAdminEnumeratesAllAccounts(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 1, isSuperAdmin: true);
+        $executed = [];
+        $controller = $this->buildControllerWithQueryRecorder($session, $actingUser, $executed);
+
+        $response = $controller->list(new Request());
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $query = $this->findUserEnumerationQuery($executed);
+        $this->assertStringNotContainsString('is_superadmin', $query);
+        $this->assertStringNotContainsString('protected', $query);
+    }
+
+    public function testListSearchNonSuperAdminDoesNotEnumeratePrivilegedAccounts(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $executed = [];
+        $controller = $this->buildControllerWithQueryRecorder($session, $actingUser, $executed);
+
+        $response = $controller->list(new Request(['filter' => 'adm']));
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $query = $this->findUserEnumerationQuery($executed);
+        $this->assertStringContainsString('LIKE', $query);
+        $this->assertStringContainsString('COALESCE(is_superadmin, 0) = 0', $query);
+        $this->assertStringContainsString("<> 'protected'", $query);
+    }
+
+    public function testListSearchSuperAdminEnumeratesAllAccounts(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 1, isSuperAdmin: true);
+        $executed = [];
+        $controller = $this->buildControllerWithQueryRecorder($session, $actingUser, $executed);
+
+        $response = $controller->list(new Request(['filter' => 'adm']));
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $query = $this->findUserEnumerationQuery($executed);
+        $this->assertStringContainsString('LIKE', $query);
+        $this->assertStringNotContainsString('is_superadmin', $query);
+    }
+
+    public function testCsvExportNonSuperAdminDoesNotExportPrivilegedAccounts(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $executed = [];
+        $controller = $this->buildControllerWithQueryRecorder($session, $actingUser, $executed);
+
+        $response = $controller->csvExport();
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $query = $this->findUserEnumerationQuery($executed);
+        $this->assertStringContainsString('COALESCE(is_superadmin, 0) = 0', $query);
+        $this->assertStringContainsString("<> 'protected'", $query);
+    }
+
+    public function testCsvExportSuperAdminExportsAllAccounts(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 1, isSuperAdmin: true);
+        $executed = [];
+        $controller = $this->buildControllerWithQueryRecorder($session, $actingUser, $executed);
+
+        $response = $controller->csvExport();
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $query = $this->findUserEnumerationQuery($executed);
+        $this->assertStringNotContainsString('is_superadmin', $query);
+        $this->assertStringNotContainsString('protected', $query);
+    }
 }

@@ -346,14 +346,15 @@ class User
      * @param string $search Login name
      * @return array<string[]>
      */
-    public function searchUsers(string $search): array
+    public function searchUsers(string $search, bool $excludePrivileged = false): array
     {
         // Escape LIKE metacharacters (%, _) so the filter cannot widen into a wildcard search
         $escapedSearch = str_replace(['|', '%', '_'], ['||', '|%', '|_'], $search);
         $select = sprintf(
-            "SELECT login, user_id, account_status FROM %sfaquser WHERE login LIKE '%s' ESCAPE '|'",
+            "SELECT login, user_id, account_status FROM %sfaquser WHERE login LIKE '%s' ESCAPE '|' %s",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($escapedSearch . '%'),
+            $excludePrivileged ? 'AND ' . self::getNonPrivilegedCondition() : '',
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -362,12 +363,7 @@ class User
         }
 
         $result = [];
-        while (true) {
-            $row = $this->configuration->getDb()->fetchArray($res);
-            if (!is_array($row) || $row === []) {
-                break;
-            }
-
+        while (($row = $this->fetchRowArray($res)) !== []) {
             $result[] = array_map(static fn(mixed $value): string => (string) $value, $row);
         }
 
@@ -697,20 +693,35 @@ class User
     }
 
     /**
+     * SQL condition matching only accounts a non-SuperAdmin admin may see: neither
+     * SuperAdmin nor protected. Mirrors the 403 guard on the single-user admin endpoints,
+     * so enumeration paths cannot leak accounts the detail endpoints refuse (see #4782).
+     */
+    public static function getNonPrivilegedCondition(): string
+    {
+        return "COALESCE(is_superadmin, 0) = 0 AND COALESCE(account_status, '') <> 'protected'";
+    }
+
+    /**
      * Returns an array with the user-IDs of all users found in
      * the database. By default, the Anonymous User will not be returned.
      *
      * @param bool $withoutAnonymous Without anonymous?
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
+     * @param bool $excludePrivileged Skip SuperAdmin and protected accounts (for non-SuperAdmin callers)
      * @return array<int>
      */
-    public function getAllUsers(bool $withoutAnonymous = true, bool $allowBlockedUsers = true): array
-    {
+    public function getAllUsers(
+        bool $withoutAnonymous = true,
+        bool $allowBlockedUsers = true,
+        bool $excludePrivileged = false,
+    ): array {
         $query = sprintf(
-            'SELECT user_id FROM %sfaquser WHERE 1 = 1 %s %s ORDER BY user_id ASC',
+            'SELECT user_id FROM %sfaquser WHERE 1 = 1 %s %s %s ORDER BY user_id ASC',
             Database::getTablePrefix(),
             $withoutAnonymous ? 'AND user_id <> -1' : '',
             $allowBlockedUsers ? '' : "AND account_status != 'blocked'",
+            $excludePrivileged ? 'AND ' . self::getNonPrivilegedCondition() : '',
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -723,12 +734,7 @@ class User
             return [];
         }
 
-        while (true) {
-            $row = $this->configuration->getDb()->fetchArray($result);
-            if ($row === false || $row === null || $row === []) {
-                break;
-            }
-
+        while (($row = $this->fetchRowArray($result)) !== []) {
             $users[] = (int) $row['user_id'];
         }
 
