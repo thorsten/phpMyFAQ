@@ -285,6 +285,27 @@ class AuthWebAuthnTest extends TestCase
         $this->assertIsArray($result->allowCredentials);
     }
 
+    /**
+     * Regression test for account enumeration: the decoy credential returned for a login without
+     * stored keys used to be md5(time()), so it changed every second while a real credential ID
+     * stayed the same. It must be stable per login and differ between logins.
+     */
+    public function testPrepareForLoginReturnsStableDecoyCredentialPerLogin(): void
+    {
+        $noKeys = '';
+
+        $first = $this->authWebAuthn->prepareForLogin($noKeys, 'alice');
+        $second = $this->authWebAuthn->prepareForLogin($noKeys, 'alice');
+        $other = $this->authWebAuthn->prepareForLogin($noKeys, 'bob');
+
+        $this->assertCount(1, $first->allowCredentials);
+        $this->assertCount(32, $first->allowCredentials[0]->id);
+        $this->assertSame($first->allowCredentials[0]->id, $second->allowCredentials[0]->id);
+        $this->assertNotSame($first->allowCredentials[0]->id, $other->allowCredentials[0]->id);
+        $this->assertNotSame($first->challenge, $second->challenge);
+        $this->assertSame('', $noKeys, 'A login without stored keys must not produce keys to persist.');
+    }
+
     public function testAuthenticateWithInvalidJson(): void
     {
         // Create a more realistic but invalid authentication info structure
@@ -458,10 +479,8 @@ class AuthWebAuthnTest extends TestCase
      *
      * @return array{0: string, 1: string} the JSON-encoded info payload and the raw credential ID
      */
-    private function createSignedRegistrationInfo(
-        string $challenge,
-        string $origin = 'https://example.com',
-    ): array {
+    private function createSignedRegistrationInfo(string $challenge, string $origin = 'https://example.com'): array
+    {
         $key = openssl_pkey_new(['curve_name' => 'prime256v1', 'private_key_type' => OPENSSL_KEYTYPE_EC]);
         $details = openssl_pkey_get_details($key);
 
@@ -824,9 +843,10 @@ class AuthWebAuthnTest extends TestCase
             'origin' => $origin,
             'type' => $type,
         ];
-        $info->originalChallenge = array_map(ord(...), str_split(
-            (string) base64_decode(strtr($challenge, '-_', '+/'), true),
-        ));
+        $info->originalChallenge = array_map(
+            ord(...),
+            str_split((string) base64_decode(strtr($challenge, '-_', '+/'), true)),
+        );
     }
 
     /**
@@ -866,7 +886,8 @@ class AuthWebAuthnTest extends TestCase
         ]);
 
         $credId = random_bytes(32);
-        $authData = hash('sha256', $options['rpId'] ?? 'example.com', true)
+        $authData =
+            hash('sha256', $options['rpId'] ?? 'example.com', true)
             . chr($options['flags'] ?? 0x45)
             . "\x00\x00\x00\x00"
             . str_repeat("\x00", 16)
@@ -925,7 +946,10 @@ class AuthWebAuthnTest extends TestCase
             ['authData' => 'plain text'],
             'Cannot decode key for authentication data',
         ];
-        yield 'foreign relying party' => [['rpId' => 'evil.example.org'], 'Cannot decode key as RP ID hash does not match'];
+        yield 'foreign relying party' => [
+            ['rpId' => 'evil.example.org'],
+            'Cannot decode key as RP ID hash does not match',
+        ];
         yield 'user not present' => [['flags' => 0x00], 'Cannot decode key as flags are not correct'];
         yield 'credential id differs from rawId' => [['rawId' => [9, 9, 9]], 'Cannot decode key for credId'];
     }
@@ -1000,7 +1024,12 @@ class AuthWebAuthnTest extends TestCase
         $authenticatorData = hash('sha256', $rpId, true) . chr($flags) . "\0\0\0\1";
 
         $signature = '';
-        openssl_sign($authenticatorData . hash('sha256', $clientDataJson, true), $signature, $privateKey, OPENSSL_ALGO_SHA256);
+        openssl_sign(
+            $authenticatorData . hash('sha256', $clientDataJson, true),
+            $signature,
+            $privateKey,
+            OPENSSL_ALGO_SHA256,
+        );
 
         $info = new \stdClass();
         $info->rawId = [1, 2, 3];
@@ -1097,7 +1126,10 @@ class AuthWebAuthnTest extends TestCase
         $privateKey = openssl_pkey_new(['private_key_bits' => 2048, 'private_key_type' => OPENSSL_KEYTYPE_RSA]);
         self::assertInstanceOf(\OpenSSLAsymmetricKey::class, $privateKey);
 
-        $userWebAuthn = (string) json_encode([(object) ['id' => [1, 2, 3], 'key' => '-----BEGIN PUBLIC KEY-----garbage']]);
+        $userWebAuthn = (string) json_encode([(object) [
+            'id' => [1, 2, 3],
+            'key' => '-----BEGIN PUBLIC KEY-----garbage',
+        ]]);
         $this->authWebAuthn->prepareForLogin($userWebAuthn);
         $challenge = json_decode($userWebAuthn)[0]->challenge;
 

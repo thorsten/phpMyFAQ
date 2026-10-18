@@ -302,9 +302,11 @@ class AuthWebAuthn extends Auth
      * (to avoid replay attacks)
      *
      * @param string $userWebAuthn the existing webauthn field for the user from your database
+     * @param string $login the login the request asked for; seeds the decoy credential returned
+     *   when there are no stored keys, so the decoy is stable per login
      * @throws RandomException
      */
-    public function prepareForLogin(string &$userWebAuthn): stdClass
+    public function prepareForLogin(string &$userWebAuthn, string $login = ''): stdClass
     {
         $allow = new stdClass();
         $allow->type = 'public-key';
@@ -337,9 +339,11 @@ class AuthWebAuthn extends Auth
         }
 
         if ($userWebAuthn === '' || $userWebAuthn === '0') {
-            $allow->id = [];
-            $rb = md5((string) time());
-            $allow->id = $this->stringToArray($rb);
+            // Decoy credential for accounts without a passkey and for unknown logins. It has to be
+            // stable across requests like a real credential ID, otherwise comparing two responses
+            // tells an unauthenticated caller whether the login exists. It is keyed with the
+            // server salt so it cannot be precomputed and told apart from a real ID.
+            $allow->id = $this->stringToArray($this->decoyCredentialId($login));
             $allows[] = clone $allow;
         }
 
@@ -483,6 +487,16 @@ class AuthWebAuthn extends Auth
     public function setAppId(string $appId): void
     {
         $this->appId = $appId;
+    }
+
+    /**
+     * Deterministic per-login decoy credential ID (32 bytes) for logins without stored keys.
+     */
+    private function decoyCredentialId(string $login): string
+    {
+        $salt = (string) $this->configuration->get('security.salt');
+
+        return hash_hmac(algo: 'sha256', data: $login, key: $salt . $this->appId, binary: true);
     }
 
     /**

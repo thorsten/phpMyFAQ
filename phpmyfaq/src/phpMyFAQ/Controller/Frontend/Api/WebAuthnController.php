@@ -23,8 +23,10 @@ use phpMyFAQ\Auth\AuthWebAuthn;
 use phpMyFAQ\Auth\WebAuthn\WebAuthnUser;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
@@ -37,9 +39,17 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class WebAuthnController extends AbstractController
 {
+    private const int PREPARE_LOGIN_LIMIT_PER_IP = 20;
+
+    private const int PREPARE_LOGIN_LIMIT_PER_LOGIN = 10;
+
+    private const int PREPARE_LOGIN_LIMIT_INTERVAL = 900;
+
     private readonly AuthWebAuthn $authWebAuthn;
 
     private readonly User $user;
+
+    private readonly RateLimiter $rateLimiter;
 
     /**
      * Optional CurrentUser used by login(); when null a fresh instance is created per request.
@@ -51,12 +61,14 @@ final class WebAuthnController extends AbstractController
         ?AuthWebAuthn $authWebAuthn = null,
         ?User $user = null,
         ?CurrentUser $loginCurrentUser = null,
+        ?RateLimiter $rateLimiter = null,
     ) {
         parent::__construct();
 
         $this->authWebAuthn = $authWebAuthn ?? new AuthWebAuthn($this->configuration);
         $this->user = $user ?? new User($this->configuration);
         $this->loginCurrentUser = $loginCurrentUser;
+        $this->rateLimiter = $rateLimiter ?? $this->getRateLimiter() ?? new RateLimiter();
     }
 
     /**
@@ -214,14 +226,35 @@ final class WebAuthnController extends AbstractController
 
         $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        try {
-            $this->user->getUserByLogin($login);
-        } catch (Exception) {
-            return $this->json(['error' => Translation::get(key: 'ad_auth_fail')], Response::HTTP_BAD_REQUEST);
+        // This endpoint is unauthenticated and exempt from the global API limiter (api.private.*),
+        // so it throttles itself: per IP against account enumeration, per login so a flood of
+        // requests cannot keep overwriting the pending challenge of a targeted account.
+        if (!$this->rateLimiter->check(
+            'webauthn:prepare-login:ip:' . ($request->getClientIp() ?? 'anonymous'),
+            self::PREPARE_LOGIN_LIMIT_PER_IP,
+            self::PREPARE_LOGIN_LIMIT_INTERVAL,
+        )) {
+            $this->logSecurityEvent(AdminLogType::SECURITY_RATE_LIMIT_EXCEEDED, 'webauthn prepare-login requests');
+            return $this->json(['error' => 'Too many requests. Please retry later.'], Response::HTTP_TOO_MANY_REQUESTS);
+        }
+
+        $userExists = $this->user->getUserByLogin($login, raiseError: false);
+        $loginAllowed = $this->rateLimiter->check(
+            'webauthn:prepare-login:user:' . hash('sha256', $login),
+            self::PREPARE_LOGIN_LIMIT_PER_LOGIN,
+            self::PREPARE_LOGIN_LIMIT_INTERVAL,
+        );
+
+        // Unknown or throttled logins get the same decoy an account without a passkey gets, and
+        // nothing is written, so the response does not reveal whether the account exists.
+        if (!$userExists || !$loginAllowed) {
+            $noKeys = '';
+
+            return $this->json($this->authWebAuthn->prepareForLogin($noKeys, $login), Response::HTTP_OK);
         }
 
         $webAuthnKeys = $this->user->getWebAuthnKeys();
-        $publicKey = $this->authWebAuthn->prepareForLogin($webAuthnKeys);
+        $publicKey = $this->authWebAuthn->prepareForLogin($webAuthnKeys, $login);
 
         // prepareForLogin() stamps the pending challenge onto the keys; it has to be stored so the
         // login can check the assertion against it and reject replays.

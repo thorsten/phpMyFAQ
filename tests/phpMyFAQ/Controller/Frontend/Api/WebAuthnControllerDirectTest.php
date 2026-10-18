@@ -8,6 +8,7 @@ use phpMyFAQ\Auth\AuthWebAuthn;
 use phpMyFAQ\Auth\WebAuthn\WebAuthnUser;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
+use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
@@ -221,31 +222,107 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
-    public function testPrepareLoginReturnsBadRequestForUnknownUser(): void
+    /**
+     * Regression test for account enumeration: an unknown login must get the same kind of answer
+     * as an account without a passkey, must not be told apart by status code, and must not
+     * trigger any write to a user record.
+     */
+    public function testPrepareLoginAnswersUnknownUserWithStableDecoyAndWritesNothing(): void
     {
         $this->configuration->getAll();
         $this->overrideConfigurationValues(['security.enableWebAuthnSupport' => '1']);
 
         $user = $this->createMock(User::class);
-        $user
-            ->expects($this->once())
-            ->method('getUserByLogin')
-            ->with('alice')
-            ->willThrowException(new Exception('not found'));
+        $user->expects($this->exactly(2))->method('getUserByLogin')->with('nobody', false)->willReturn(false);
         $user->expects($this->never())->method('getWebAuthnKeys');
+        $user->expects($this->never())->method('setWebAuthnKeys');
 
-        $controller = new WebAuthnController($this->createStub(AuthWebAuthn::class), $user);
+        $controller = new WebAuthnController(new AuthWebAuthn($this->configuration), $user);
         $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
 
         $request = Request::create('/api/webauthn/prepare-login', 'POST', content: json_encode([
-            'username' => 'alice',
+            'username' => 'nobody',
         ], JSON_THROW_ON_ERROR));
 
-        $response = $controller->prepareLogin($request);
-        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $first = $controller->prepareLogin($request);
+        $second = $controller->prepareLogin($request);
 
-        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        self::assertSame(Translation::get('ad_auth_fail'), $payload['error']);
+        self::assertSame(Response::HTTP_OK, $first->getStatusCode());
+        self::assertSame(Response::HTTP_OK, $second->getStatusCode());
+
+        $firstPayload = json_decode((string) $first->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $secondPayload = json_decode((string) $second->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertCount(1, $firstPayload['allowCredentials']);
+        self::assertSame(
+            $firstPayload['allowCredentials'][0]['id'],
+            $secondPayload['allowCredentials'][0]['id'],
+            'The decoy credential ID must not change between requests.',
+        );
+        self::assertNotSame($firstPayload['challenge'], $secondPayload['challenge']);
+    }
+
+    public function testPrepareLoginIsRateLimitedPerClientIp(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['security.enableWebAuthnSupport' => '1']);
+
+        $user = $this->createStub(User::class);
+        $user->method('getUserByLogin')->willReturn(false);
+
+        $controller = new WebAuthnController(new AuthWebAuthn($this->configuration), $user, null, new RateLimiter());
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+
+        $request = Request::create(
+            '/api/webauthn/prepare-login',
+            'POST',
+            server: ['REMOTE_ADDR' => '203.0.113.7'],
+            content: json_encode(['username' => 'nobody'], JSON_THROW_ON_ERROR),
+        );
+
+        $lastStatus = null;
+        for ($i = 0; $i < 21; ++$i) {
+            $lastStatus = $controller->prepareLogin($request)->getStatusCode();
+        }
+
+        self::assertSame(Response::HTTP_TOO_MANY_REQUESTS, $lastStatus);
+    }
+
+    /**
+     * Regression test: a flood of requests for one login must stop overwriting the pending
+     * challenge of that account, otherwise an attacker keeps the owner's passkey login failing.
+     */
+    public function testPrepareLoginStopsWritingTheChallengeWhenTheLoginIsThrottled(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['security.enableWebAuthnSupport' => '1']);
+
+        $storedKeys = (string) json_encode([['id' => [1, 2, 3], 'key' => 'public-key-pem']]);
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserByLogin')->willReturn(true);
+        $user->expects($this->exactly(10))->method('getWebAuthnKeys')->willReturn($storedKeys);
+        $user->expects($this->exactly(10))->method('setWebAuthnKeys')->willReturn(true);
+
+        $controller = new WebAuthnController(new AuthWebAuthn($this->configuration), $user, null, new RateLimiter());
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+
+        $lastResponse = null;
+        for ($i = 0; $i < 11; ++$i) {
+            // Each request comes from its own IP so only the per-login limit applies.
+            $request = Request::create(
+                '/api/webauthn/prepare-login',
+                'POST',
+                server: ['REMOTE_ADDR' => '203.0.113.' . ($i + 1)],
+                content: json_encode(['username' => 'alice'], JSON_THROW_ON_ERROR),
+            );
+            $lastResponse = $controller->prepareLogin($request);
+        }
+
+        self::assertSame(Response::HTTP_OK, $lastResponse->getStatusCode());
+        $payload = json_decode((string) $lastResponse->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        self::assertCount(1, $payload['allowCredentials']);
+        self::assertNotSame([1, 2, 3], $payload['allowCredentials'][0]['id']);
     }
 
     public function testRegisterReturnsSuccessWhenKeysAreStored(): void
