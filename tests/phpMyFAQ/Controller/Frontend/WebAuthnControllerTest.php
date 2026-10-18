@@ -187,6 +187,70 @@ class WebAuthnControllerTest extends TestCase
         $this->assertStringContainsString('WebAuthn support is disabled', $response->getContent());
     }
 
+    public function testPrepareLoginDoesNotPersistKeysForUnknownAccount(): void
+    {
+        // A request for a non-existing login must still answer with a decoy, but it must not
+        // touch the database: the User object is at its default id and has nothing to write.
+        $this->configurationMock
+            ->method('get')
+            ->willReturnCallback(fn(string $item) => match ($item) {
+                'security.enableWebAuthnSupport' => true,
+                'security.salt' => 'test-salt',
+                default => null,
+            });
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUserByLogin')->with('ghost', false)->willReturn(false);
+        $userMock->expects($this->never())->method('getWebAuthnKeys');
+        $userMock->expects($this->never())->method('setWebAuthnKeys');
+        $this->injectControllerProperty('user', $userMock);
+
+        $this->configurationMock->method('getDefaultUrl')->willReturn('http://localhost/');
+        $authWebAuthn = new AuthWebAuthn($this->configurationMock);
+        $this->injectControllerProperty('authWebAuthn', $authWebAuthn);
+
+        $request = Request::create('/api/webauthn/prepare-login', 'POST', [], [], [], [], json_encode([
+            'username' => 'ghost',
+        ]));
+
+        $response = $this->controller->prepareLogin($request);
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $payload = json_decode($response->getContent());
+        $this->assertCount(1, $payload->allowCredentials);
+    }
+
+    public function testPrepareLoginDoesNotPersistKeysForAccountWithoutPasskey(): void
+    {
+        $this->configurationMock
+            ->method('get')
+            ->willReturnCallback(fn(string $item) => match ($item) {
+                'security.enableWebAuthnSupport' => true,
+                'security.salt' => 'test-salt',
+                default => null,
+            });
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUserByLogin')->with('alice', false)->willReturn(true);
+        $userMock->method('getWebAuthnKeys')->willReturn('');
+        $userMock->expects($this->never())->method('setWebAuthnKeys');
+        $this->injectControllerProperty('user', $userMock);
+
+        $this->configurationMock->method('getDefaultUrl')->willReturn('http://localhost/');
+        $authWebAuthn = new AuthWebAuthn($this->configurationMock);
+        $this->injectControllerProperty('authWebAuthn', $authWebAuthn);
+
+        $request = Request::create('/api/webauthn/prepare-login', 'POST', [], [], [], [], json_encode([
+            'username' => 'alice',
+        ]));
+
+        $response = $this->controller->prepareLogin($request);
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $payload = json_decode($response->getContent());
+        $this->assertCount(1, $payload->allowCredentials);
+    }
+
     public function testLoginReturns403WhenWebAuthnDisabled(): void
     {
         $this->configurationMock

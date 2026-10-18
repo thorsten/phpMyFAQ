@@ -280,6 +280,42 @@ class AuthWebAuthnTest extends TestCase
         $this->assertIsArray($result->allowCredentials);
     }
 
+    public function testPrepareForLoginDecoyCredentialIsStableAcrossRequests(): void
+    {
+        // Accounts without a passkey (or non-existing accounts) get a decoy credential. It must
+        // not change between requests, otherwise an attacker can tell decoys apart from real,
+        // stable credential IDs and enumerate passkey-registered accounts.
+        $first = '';
+        $second = '';
+
+        $resultOne = $this->authWebAuthn->prepareForLogin($first, 'nobody');
+        sleep(1);
+        $resultTwo = $this->authWebAuthn->prepareForLogin($second, 'nobody');
+
+        $this->assertCount(1, $resultOne->allowCredentials);
+        $this->assertSame($resultOne->allowCredentials[0]->id, $resultTwo->allowCredentials[0]->id);
+        $this->assertNotSame($resultOne->challenge, $resultTwo->challenge);
+    }
+
+    public function testPrepareForLoginDecoyCredentialDiffersPerLogin(): void
+    {
+        $empty = '';
+
+        $resultOne = $this->authWebAuthn->prepareForLogin($empty, 'alice');
+        $resultTwo = $this->authWebAuthn->prepareForLogin($empty, 'bob');
+
+        $this->assertNotSame($resultOne->allowCredentials[0]->id, $resultTwo->allowCredentials[0]->id);
+    }
+
+    public function testPrepareForLoginDecoyLeavesStoredKeysUntouched(): void
+    {
+        $empty = '';
+
+        $this->authWebAuthn->prepareForLogin($empty, 'nobody');
+
+        $this->assertSame('', $empty);
+    }
+
     public function testAuthenticateWithInvalidJson(): void
     {
         // Create a more realistic but invalid authentication info structure

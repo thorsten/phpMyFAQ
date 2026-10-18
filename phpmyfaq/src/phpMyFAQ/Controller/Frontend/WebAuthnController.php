@@ -205,19 +205,22 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
         $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        try {
-            $this->user->getUserByLogin($login);
-        } catch (Exception) {
-            return $this->json(['error' => Translation::get(key: 'ad_auth_fail')], Response::HTTP_BAD_REQUEST);
-        }
+        // An unknown login gets the same decoy response as an account without a passkey. The
+        // lookup result only decides whether there is anything to read from or write to the
+        // database; it must not change the response, or the endpoint turns into a user oracle.
+        $userExists = $this->user->getUserByLogin($login, false);
+        $webAuthnKeys = $userExists ? $this->user->getWebAuthnKeys() : '';
+        $hasStoredKeys = $webAuthnKeys !== '' && $webAuthnKeys !== '0';
 
-        $webAuthnKeys = $this->user->getWebAuthnKeys();
-        $publicKey = $this->authWebAuthn->prepareForLogin($webAuthnKeys);
+        $publicKey = $this->authWebAuthn->prepareForLogin($webAuthnKeys, $login);
 
         // prepareForLogin() stamps a fresh single-use challenge onto the stored keys. It has to be
         // persisted, otherwise login() re-reads keys without a challenge and the replay check in
-        // authenticate() has nothing to compare against.
-        $this->user->setWebAuthnKeys($webAuthnKeys);
+        // authenticate() has nothing to compare against. Without stored keys there is nothing to
+        // persist, and an unauthenticated request must not write to the account at all.
+        if ($hasStoredKeys) {
+            $this->user->setWebAuthnKeys($webAuthnKeys);
+        }
 
         return $this->json($publicKey, Response::HTTP_OK);
     }

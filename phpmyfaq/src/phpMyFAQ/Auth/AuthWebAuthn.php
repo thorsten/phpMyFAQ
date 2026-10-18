@@ -273,9 +273,10 @@ class AuthWebAuthn extends Auth
      * (to avoid replay attacks)
      *
      * @param string $userWebAuthn the existing webauthn field for the user from your database
+     * @param string $login the login the request asked for; seeds the decoy credential when no key is stored
      * @throws RandomException
      */
-    public function prepareForLogin(string &$userWebAuthn): stdClass
+    public function prepareForLogin(string &$userWebAuthn, string $login = ''): stdClass
     {
         $allow = new stdClass();
         $allow->type = 'public-key';
@@ -297,9 +298,16 @@ class AuthWebAuthn extends Auth
 
             $userWebAuthn = json_encode($webauthn);
         } else {
-            $allow->id = [];
-            $rb = md5((string) time());
-            $allow->id = $this->stringToArray($rb);
+            // No stored key: answer with a decoy so the response shape does not reveal whether the
+            // account exists. The decoy must be stable across requests, like a real credential ID,
+            // otherwise comparing two responses tells real accounts apart from decoys. Keying it on
+            // the login plus the installation secret makes it stable per login and unguessable.
+            $allow->id = $this->stringToArray(hash_hmac(
+                'sha256',
+                $login,
+                (string) $this->configuration->get('security.salt'),
+                binary: true,
+            ));
             $allows[] = clone $allow;
         }
 

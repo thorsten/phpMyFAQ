@@ -10,6 +10,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - updated third party dependencies (Thorsten)
 - fixed security vulnerabilities (Thorsten)
+- fixed WebAuthn prepare-login account enumeration via time-based decoy credential ID (Thorsten)
 - fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.10 - 2026-10-09
