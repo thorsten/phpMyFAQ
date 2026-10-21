@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "94cec0f55bb789b8cb9593350dc6753b",
+    "content-hash": "df09968b1c3c7b0ed853bf13f64f3f13",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -9191,16 +9191,16 @@
     "packages-dev": [
         {
             "name": "brianium/paratest",
-            "version": "v7.26.1",
+            "version": "v7.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paratestphp/paratest.git",
-                "reference": "4660303009de20706b71d2df487bb89fb4d8a4c2"
+                "reference": "9ac7ab32637db3cd4b6451183214ac330aa16d85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paratestphp/paratest/zipball/4660303009de20706b71d2df487bb89fb4d8a4c2",
-                "reference": "4660303009de20706b71d2df487bb89fb4d8a4c2",
+                "url": "https://api.github.com/repos/paratestphp/paratest/zipball/9ac7ab32637db3cd4b6451183214ac330aa16d85",
+                "reference": "9ac7ab32637db3cd4b6451183214ac330aa16d85",
                 "shasum": ""
             },
             "require": {
@@ -9268,7 +9268,7 @@
             ],
             "support": {
                 "issues": "https://github.com/paratestphp/paratest/issues",
-                "source": "https://github.com/paratestphp/paratest/tree/v7.26.1"
+                "source": "https://github.com/paratestphp/paratest/tree/v7.27.0"
             },
             "funding": [
                 {
@@ -9280,7 +9280,7 @@
                     "type": "paypal"
                 }
             ],
-            "time": "2026-10-10T20:10:31+00:00"
+            "time": "2026-10-13T19:05:35+00:00"
         },
         {
             "name": "carthage-software/mago",
