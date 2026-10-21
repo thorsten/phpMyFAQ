@@ -5487,16 +5487,16 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v8.1.8",
+            "version": "v8.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "e20aca4ceaa888197de5c792ffc551d99e43d98a"
+                "reference": "f892301df77ac25613b19fc2450139c950d1368a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/e20aca4ceaa888197de5c792ffc551d99e43d98a",
-                "reference": "e20aca4ceaa888197de5c792ffc551d99e43d98a",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/f892301df77ac25613b19fc2450139c950d1368a",
+                "reference": "f892301df77ac25613b19fc2450139c950d1368a",
                 "shasum": ""
             },
             "require": {
@@ -5560,7 +5560,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v8.1.8"
+                "source": "https://github.com/symfony/http-client/tree/v8.1.9"
             },
             "funding": [
                 {
@@ -5580,7 +5580,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-09-24T11:09:32+00:00"
+            "time": "2026-10-13T15:31:40+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
