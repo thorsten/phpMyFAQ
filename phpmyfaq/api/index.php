@@ -19,6 +19,8 @@ use phpMyFAQ\Application;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 require dirname(__DIR__) . '/src/Bootstrap.php';
 
@@ -29,8 +31,15 @@ $container = new ContainerBuilder();
 $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
 try {
     $loader->load('../src/services.php');
-} catch (Exception $e) {
-    echo $e->getMessage();
+} catch (Throwable $e) {
+    error_log(sprintf(
+        'phpMyFAQ API error: %s at line %d at %s',
+        $e->getMessage(),
+        $e->getLine(),
+        $e->getFile(),
+    ));
+    (new JsonResponse(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR))->send();
+    exit;
 }
 
 $routes = include PMF_SRC_DIR . '/api-routes.php';
@@ -38,6 +47,13 @@ $routes = include PMF_SRC_DIR . '/api-routes.php';
 $app = new Application($container);
 try {
     $app->run($routes);
-} catch (Exception $exception) {
-    echo $exception->getMessage();
+} catch (Throwable $exception) {
+    error_log(sprintf(
+        'phpMyFAQ API error: %s at line %d at %s',
+        $exception->getMessage(),
+        $exception->getLine(),
+        $exception->getFile(),
+    ));
+    (new JsonResponse(['error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR))->send();
+    exit;
 }

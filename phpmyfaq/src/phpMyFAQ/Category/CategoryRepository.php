@@ -188,7 +188,7 @@ class CategoryRepository implements CategoryRepositoryInterface
                 ->setGroupId((int) $row->group_id)
                 ->setActive((bool) $row->active)
                 ->setShowHome((bool) $row->show_home)
-                ->setImage($row->image);
+                ->setImage((string) $row->image);
         }
 
         return $categoryEntity;

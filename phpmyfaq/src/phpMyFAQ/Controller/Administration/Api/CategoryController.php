@@ -47,6 +47,10 @@ final class CategoryController extends AbstractController
 
         $data = json_decode($request->getContent());
 
+        if (!$this->hasValidPayload($data) || !is_string($data->language ?? null)) {
+            return $this->json(['error' => Translation::get(key: 'msgError')], Response::HTTP_BAD_REQUEST);
+        }
+
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('category', $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
@@ -60,7 +64,7 @@ final class CategoryController extends AbstractController
         $categoryRelation = new Relation($this->configuration, $category);
 
         $categoryImage = $this->container->get(id: 'phpmyfaq.category.image');
-        $categoryImage->setFileName($category->getCategoryData((int) $data->categoryId)->getImage());
+        $categoryImage->setFileName($category->getCategoryData((int) $data->categoryId)->getImage() ?? '');
 
         $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
         $categoryOrder->remove((int) $data->categoryId);
@@ -140,16 +144,24 @@ final class CategoryController extends AbstractController
 
         $data = json_decode($request->getContent());
 
+        if (!$this->hasValidPayload($data) || !is_array($data->categoryTree ?? null)) {
+            return $this->json(['error' => Translation::get(key: 'msgError')], Response::HTTP_BAD_REQUEST);
+        }
+
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('category', $data->csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
-
         $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
-        $categoryOrder->setCategoryTree($data->categoryTree);
 
         $parentId = $categoryOrder->getParentId($data->categoryTree, (int) $data->categoryId);
+        if ($parentId === null) {
+            return $this->json(['error' => Translation::get(key: 'msgError')], Response::HTTP_BAD_REQUEST);
+        }
+
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $categoryOrder->setCategoryTree($data->categoryTree);
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);
@@ -157,5 +169,17 @@ final class CategoryController extends AbstractController
         $category->updateParentCategory((int) $data->categoryId, $parentId);
 
         return $this->json(['success' => Translation::get(key: 'ad_categ_save_order')], Response::HTTP_OK);
+    }
+
+    /**
+     * Checks that the decoded JSON payload contains a CSRF token and a numeric category ID.
+     */
+    private function hasValidPayload(mixed $data): bool
+    {
+        return (
+            $data instanceof \stdClass
+            && is_string($data->csrfToken ?? null)
+            && is_numeric($data->categoryId ?? null)
+        );
     }
 }

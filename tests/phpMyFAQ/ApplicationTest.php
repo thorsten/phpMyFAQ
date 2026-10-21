@@ -414,4 +414,67 @@ class ApplicationTest extends TestCase
         $this->assertNotNull($decoded, 'API 400 response should be valid JSON');
         $this->assertArrayHasKey('error', $decoded);
     }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testHandleRequestThrowableForApiReturnsJson(): void
+    {
+        $routeCollection = new RouteCollection();
+        $routeCollection->add('api_error', new Route('/api/error', [
+            '_controller' => function () {
+                throw new \TypeError('Argument #1 must be of type string, null given');
+            },
+        ]));
+
+        $request = Request::create('/api/error');
+        $requestContext = new RequestContext();
+        $requestContext->fromRequest($request);
+        $requestContext->setBaseUrl('/api');
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('handleRequest');
+
+        $originalErrorLog = ini_get('error_log');
+        $logFile = tempnam(sys_get_temp_dir(), 'phpunit_error_log');
+        ini_set('error_log', $logFile);
+
+        try {
+            ob_start();
+            $method->invoke($this->application, $routeCollection, $request, $requestContext);
+            $output = ob_get_clean();
+
+            $decoded = json_decode($output, true);
+            $this->assertNotNull($decoded, 'API 500 response should be valid JSON');
+            $this->assertSame('Internal Server Error', $decoded['error']);
+            $this->assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, http_response_code());
+            $this->assertStringContainsString('phpMyFAQ API error', file_get_contents($logFile));
+        } finally {
+            ini_set('error_log', $originalErrorLog);
+            unlink($logFile);
+        }
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testHandleRequestThrowableForNonApiIsRethrown(): void
+    {
+        $routeCollection = new RouteCollection();
+        $routeCollection->add('page_error', new Route('/error', [
+            '_controller' => function () {
+                throw new \TypeError('Boom');
+            },
+        ]));
+
+        $request = Request::create('/error');
+        $requestContext = new RequestContext();
+        $requestContext->fromRequest($request);
+
+        $reflection = new ReflectionClass(Application::class);
+        $method = $reflection->getMethod('handleRequest');
+
+        $this->expectException(\TypeError::class);
+        $method->invoke($this->application, $routeCollection, $request, $requestContext);
+    }
 }

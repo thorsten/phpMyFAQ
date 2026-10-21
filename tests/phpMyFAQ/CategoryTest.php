@@ -206,6 +206,21 @@ class CategoryTest extends TestCase
         $this->category->delete(1, 'en');
     }
 
+    public function testGetCategoryDataReturnsEmptyImageWhenImageColumnIsNull(): void
+    {
+        $category = $this->createCategory();
+        $this->category->create($category);
+
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
+        $dbHandle->query('UPDATE faqcategories SET image = NULL WHERE id = 1');
+
+        $this->assertSame('', $this->category->getCategoryData(1)->getImage());
+
+        // Cleanup
+        $this->category->delete(1, 'en');
+    }
+
     public function testGetCategoryIdFromName(): void
     {
         $category = $this->createCategory();

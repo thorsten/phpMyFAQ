@@ -55,11 +55,15 @@ export const handleCategories = (): void => {
         const categoryId = event.item.getAttribute('data-pmf-catid') as string;
         const csrf: string = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
         const data: SerializedTree[] = serializedTree(root);
-        const response = (await setCategoryTree(data, categoryId, csrf)) as unknown as Response;
-        if (response.success) {
-          pushNotification(response.success);
-        } else {
-          pushErrorNotification(response.error as string);
+        try {
+          const response = (await setCategoryTree(data, categoryId, csrf)) as unknown as Response;
+          if (response.success) {
+            pushNotification(response.success);
+          } else {
+            pushErrorNotification(response.error as string);
+          }
+        } catch (error) {
+          pushErrorNotification((error as Error).message);
         }
       },
     });
@@ -106,12 +110,18 @@ export const handleCategoryDelete = async (): Promise<void> => {
     }
 
     const csrfToken: string = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
-    const response = (await deleteCategory(currentCategoryId, currentLanguage, csrfToken)) as unknown as Response;
-    if (response.success) {
-      pushNotification(response.success);
+    try {
+      const response = (await deleteCategory(currentCategoryId, currentLanguage, csrfToken)) as unknown as Response;
+      if (response.success) {
+        pushNotification(response.success);
+        document.getElementById(`pmf-category-${currentCategoryId}`)?.remove();
+      } else {
+        pushErrorNotification(response.error as string);
+      }
+    } catch (error) {
+      pushErrorNotification((error as Error).message);
     }
 
-    document.getElementById(`pmf-category-${currentCategoryId}`)?.remove();
     deleteModal.hide();
 
     currentCategoryId = '';

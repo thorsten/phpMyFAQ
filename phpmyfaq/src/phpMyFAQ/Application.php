@@ -202,6 +202,23 @@ class Application
                     : 'Bad Request';
                 $response = new Response(content: $message, status: Response::HTTP_BAD_REQUEST);
             }
+        } catch (Throwable $throwable) {
+            if (!$this->isApiRequest($urlMatcher)) {
+                throw $throwable;
+            }
+
+            error_log($this->formatExceptionMessage(
+                template: 'phpMyFAQ API error: :message at line :line at :file',
+                exception: $throwable,
+            ));
+
+            $response = new Response(
+                content: json_encode(value: [
+                    'error' => Environment::isDebugMode() ? $throwable->getMessage() : 'Internal Server Error',
+                ]),
+                status: Response::HTTP_INTERNAL_SERVER_ERROR,
+                headers: ['Content-Type' => 'application/json'],
+            );
         }
 
         $response->send();

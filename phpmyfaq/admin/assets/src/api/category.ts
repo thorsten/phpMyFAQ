@@ -14,6 +14,21 @@
  */
 import { CategoryTranslations, Response } from '../interfaces';
 
+const parseJsonResponse = async (response: globalThis.Response): Promise<Response> => {
+  const contentType: string = response.headers.get('Content-Type') ?? '';
+  if (!contentType.includes('application/json')) {
+    throw new Error(`Unexpected server response (HTTP ${response.status})`);
+  }
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error((data && (data.error as string)) || `Request failed (HTTP ${response.status})`);
+  }
+
+  return data;
+};
+
 export const fetchCategoryTranslations = async (categoryId: string): Promise<CategoryTranslations> => {
   const response = await fetch(`./api/category/translations/${categoryId}`, {
     method: 'GET',
@@ -48,7 +63,7 @@ export const deleteCategory = async (
     referrerPolicy: 'no-referrer',
   });
 
-  return await response.json();
+  return await parseJsonResponse(response);
 };
 
 export const setCategoryTree = async (
@@ -71,5 +86,5 @@ export const setCategoryTree = async (
     referrerPolicy: 'no-referrer',
   });
 
-  return await response.json();
+  return await parseJsonResponse(response);
 };

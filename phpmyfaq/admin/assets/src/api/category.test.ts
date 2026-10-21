@@ -7,6 +7,7 @@ describe('fetchCategoryTranslations', () => {
     global.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
+        headers: new Headers({ 'Content-Type': 'application/json' }),
         json: () => Promise.resolve(mockResponse),
       } as Response)
     );
@@ -42,6 +43,7 @@ describe('deleteCategory', () => {
     global.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
+        headers: new Headers({ 'Content-Type': 'application/json' }),
         json: () => Promise.resolve(mockResponse),
       } as Response)
     );
@@ -78,6 +80,34 @@ describe('deleteCategory', () => {
 
     await expect(deleteCategory(categoryId, language, csrfToken)).rejects.toThrow(mockError);
   });
+
+  it('should throw the server error message if the response is not ok', async () => {
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: false,
+        status: 400,
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+        json: () => Promise.resolve({ error: 'An error occurred.' }),
+      } as Response)
+    );
+
+    await expect(deleteCategory('123', 'en', 'csrfToken')).rejects.toThrow('An error occurred.');
+  });
+
+  it('should throw without parsing JSON if the server returns HTML', async () => {
+    const json = vi.fn();
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: false,
+        status: 500,
+        headers: new Headers({ 'Content-Type': 'text/html; charset=UTF-8' }),
+        json,
+      } as unknown as Response)
+    );
+
+    await expect(deleteCategory('123', 'en', 'csrfToken')).rejects.toThrow('HTTP 500');
+    expect(json).not.toHaveBeenCalled();
+  });
 });
 
 describe('setCategoryTree', () => {
@@ -86,6 +116,7 @@ describe('setCategoryTree', () => {
     global.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
+        headers: new Headers({ 'Content-Type': 'application/json' }),
         json: () => Promise.resolve(mockResponse),
       } as Response)
     );
@@ -121,5 +152,18 @@ describe('setCategoryTree', () => {
     const csrfToken = 'csrfToken';
 
     await expect(setCategoryTree(categoryTree, categoryId, csrfToken)).rejects.toThrow(mockError);
+  });
+
+  it('should throw the server error message if the response is not ok', async () => {
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: false,
+        status: 400,
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+        json: () => Promise.resolve({ error: 'An error occurred.' }),
+      } as Response)
+    );
+
+    await expect(setCategoryTree([], '123', 'csrfToken')).rejects.toThrow('An error occurred.');
   });
 });
