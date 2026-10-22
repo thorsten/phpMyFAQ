@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d60c7431cdd3d9ab9473056ecce2d15",
+    "content-hash": "3c08b2f0b7e067d8f1c92b15f2c2b1a3",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -12129,16 +12129,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "6.13.0",
+            "version": "6.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "6cbca4b611f03ae9ee58a5f2d341a0bc685c4903"
+                "reference": "c5361c2a43391fa3a4ca887cd0209d60ce32e7fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/6cbca4b611f03ae9ee58a5f2d341a0bc685c4903",
-                "reference": "6cbca4b611f03ae9ee58a5f2d341a0bc685c4903",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/c5361c2a43391fa3a4ca887cd0209d60ce32e7fa",
+                "reference": "c5361c2a43391fa3a4ca887cd0209d60ce32e7fa",
                 "shasum": ""
             },
             "require": {
@@ -12157,10 +12157,10 @@
             },
             "require-dev": {
                 "doctrine/annotations": "^2.0",
-                "friendsofphp/php-cs-fixer": "3.95.23",
-                "phpstan/phpstan": "2.2.12",
+                "friendsofphp/php-cs-fixer": "3.95.27",
+                "phpstan/phpstan": "2.3.1",
                 "phpunit/phpunit": "^11.5 || >=12.5.22",
-                "rector/rector": "2.6.5"
+                "rector/rector": "2.7.0"
             },
             "bin": [
                 "bin/openapi"
@@ -12207,7 +12207,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/6.13.0"
+                "source": "https://github.com/zircote/swagger-php/tree/6.14.0"
             },
             "funding": [
                 {
@@ -12215,7 +12215,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-11T02:19:20+00:00"
+            "time": "2026-10-14T05:49:26+00:00"
         }
     ],
     "aliases": [],
