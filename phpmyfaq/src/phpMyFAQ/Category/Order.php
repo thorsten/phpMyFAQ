@@ -43,6 +43,8 @@ readonly class Order
      */
     public function add(int $categoryId, int $parentId): bool
     {
+        $this->syncMissingCategories($categoryId);
+
         $query = sprintf(
             'INSERT INTO %sfaqcategory_order (category_id, parent_id, position) VALUES (%d, %d, %d)',
             Database::getTablePrefix(),
@@ -253,6 +255,8 @@ readonly class Order
      */
     public function getAllCategories(): array
     {
+        $this->syncMissingCategories();
+
         $query = sprintf(
             'SELECT category_id, parent_id, position FROM %sfaqcategory_order ORDER BY position',
             Database::getTablePrefix(),
@@ -275,5 +279,48 @@ readonly class Order
         }
 
         return $categories;
+    }
+
+    /**
+     * Adds all categories that are missing in the category order table, e.g. after an update from an older
+     * version where the table was never populated. Returns the number of added categories.
+     */
+    public function syncMissingCategories(?int $excludeCategoryId = null): int
+    {
+        $query = sprintf(
+            'SELECT c.id AS id, c.parent_id AS parent_id FROM %sfaqcategories c
+                LEFT JOIN %sfaqcategory_order o ON o.category_id = c.id
+                WHERE o.category_id IS NULL%s
+                ORDER BY c.id',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $excludeCategoryId !== null ? sprintf(' AND c.id <> %d', $excludeCategoryId) : '',
+        );
+        $result = $this->configuration->getDb()->query($query);
+
+        $missingCategories = [];
+        while ($row = $this->configuration->getDb()->fetchArray($result)) {
+            $categoryId = (int) $row['id'];
+            // faqcategories contains one row per language, use the first one
+            if (!array_key_exists($categoryId, $missingCategories)) {
+                $missingCategories[$categoryId] = (int) $row['parent_id'];
+            }
+        }
+
+        $added = 0;
+        foreach ($missingCategories as $categoryId => $parentId) {
+            $insert = sprintf(
+                'INSERT INTO %sfaqcategory_order (category_id, parent_id, position) VALUES (%d, %d, %d)',
+                Database::getTablePrefix(),
+                $categoryId,
+                $parentId,
+                $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategory_order', 'position'),
+            );
+            if ($this->configuration->getDb()->query($insert)) {
+                ++$added;
+            }
+        }
+
+        return $added;
     }
 }
