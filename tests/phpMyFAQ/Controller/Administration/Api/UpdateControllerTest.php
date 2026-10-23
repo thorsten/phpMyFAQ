@@ -12,6 +12,7 @@ use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionProperty;
@@ -195,6 +196,143 @@ class UpdateControllerTest extends TestCase
         $controller = $this->buildController($this->userWithConfigurationEdit(), $session, $update, $configuration);
 
         $response = $controller->updateDatabase($this->jsonRequest(['csrf' => 'wrong-token']));
+
+        $this->assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * Builds a request as sent by the updater JavaScript of phpMyFAQ <= 4.1.8, which posts
+     * to update-database without a body after install-package already replaced the PHP files.
+     */
+    private function legacyUpdateDatabaseRequest(array $headers = []): Request
+    {
+        $server = [
+            'HTTP_HOST' => 'faq.example.org',
+            'HTTPS' => 'on',
+            'REQUEST_METHOD' => 'POST',
+            'CONTENT_TYPE' => 'application/json',
+            'HTTP_SEC_FETCH_SITE' => 'same-origin',
+        ];
+
+        foreach ($headers as $name => $value) {
+            if ($value === null) {
+                unset($server[$name]);
+                continue;
+            }
+            $server[$name] = $value;
+        }
+
+        return new Request([], [], [], [], [], $server, '');
+    }
+
+    private function configurationInMaintenanceMode(bool $maintenanceMode): Configuration
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $item) => match ($item) {
+                'main.maintenanceMode' => $maintenanceMode ? 'true' : 'false',
+                'main.currentVersion' => '4.1.8',
+                default => null,
+            });
+
+        return $configuration;
+    }
+
+    public function testUpdateDatabaseAcceptsLegacyRequestWithoutBodyDuringMaintenance(): void
+    {
+        $update = $this->createMock(Update::class);
+        $update->expects($this->once())->method('setVersion')->with('4.1.8');
+        $update->expects($this->once())->method('applyUpdates')->willReturn(true);
+
+        $configuration = $this->configurationInMaintenanceMode(true);
+        $configuration->expects($this->once())->method('set')->with('main.maintenanceMode', 'false');
+
+        $controller = $this->buildController(
+            $this->userWithConfigurationEdit(),
+            new Session(new MockArraySessionStorage()),
+            $update,
+            $configuration,
+        );
+
+        $response = $controller->updateDatabase($this->legacyUpdateDatabaseRequest());
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testUpdateDatabaseAcceptsLegacyRequestWithMatchingOriginWithoutFetchMetadata(): void
+    {
+        $update = $this->createMock(Update::class);
+        $update->expects($this->once())->method('applyUpdates')->willReturn(true);
+
+        $controller = $this->buildController(
+            $this->userWithConfigurationEdit(),
+            new Session(new MockArraySessionStorage()),
+            $update,
+            $this->configurationInMaintenanceMode(true),
+        );
+
+        $response = $controller->updateDatabase($this->legacyUpdateDatabaseRequest([
+            'HTTP_SEC_FETCH_SITE' => null,
+            'HTTP_ORIGIN' => 'https://faq.example.org',
+        ]));
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public static function rejectedLegacyRequestProvider(): array
+    {
+        return [
+            'cross-site fetch metadata' => [['HTTP_SEC_FETCH_SITE' => 'cross-site'], true],
+            'same-site fetch metadata' => [['HTTP_SEC_FETCH_SITE' => 'same-site'], true],
+            'foreign origin without fetch metadata' => [
+                ['HTTP_SEC_FETCH_SITE' => null, 'HTTP_ORIGIN' => 'https://evil.example.com'],
+                true,
+            ],
+            'no fetch metadata and no origin' => [['HTTP_SEC_FETCH_SITE' => null], true],
+            'form content type' => [['CONTENT_TYPE' => 'application/x-www-form-urlencoded'], true],
+            'text/plain content type' => [['CONTENT_TYPE' => 'text/plain'], true],
+            'maintenance mode disabled' => [[], false],
+        ];
+    }
+
+    #[DataProvider('rejectedLegacyRequestProvider')]
+    public function testUpdateDatabaseRejectsUnsafeLegacyRequest(array $headers, bool $maintenanceMode): void
+    {
+        $update = $this->createMock(Update::class);
+        $update->expects($this->never())->method('applyUpdates');
+
+        $configuration = $this->configurationInMaintenanceMode($maintenanceMode);
+        $configuration->expects($this->never())->method('set');
+
+        $controller = $this->buildController(
+            $this->userWithConfigurationEdit(),
+            new Session(new MockArraySessionStorage()),
+            $update,
+            $configuration,
+        );
+
+        $response = $controller->updateDatabase($this->legacyUpdateDatabaseRequest($headers));
+
+        $this->assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    public function testUpdateDatabaseRejectsSameOriginRequestWithBodyButWithoutCsrfToken(): void
+    {
+        $update = $this->createMock(Update::class);
+        $update->expects($this->never())->method('applyUpdates');
+
+        $controller = $this->buildController(
+            $this->userWithConfigurationEdit(),
+            new Session(new MockArraySessionStorage()),
+            $update,
+            $this->configurationInMaintenanceMode(true),
+        );
+
+        $request = $this->legacyUpdateDatabaseRequest();
+        $request->initialize([], [], [], [], [], $request->server->all(), json_encode(['csrf' => '']));
+
+        $response = $controller->updateDatabase($request);
 
         $this->assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
