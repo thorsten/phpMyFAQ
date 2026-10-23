@@ -46,10 +46,19 @@ class OrderTest extends TestCase
             ->willReturn($nextId);
 
         $this->databaseMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('query')
-            ->with($this->stringContains('INSERT INTO faqcategory_order'))
-            ->willReturn(true);
+            ->willReturnCallback(function (string $query): mixed {
+                if (str_contains($query, 'LEFT JOIN faqcategory_order')) {
+                    $this->assertStringContainsString('c.id <> 123', $query);
+                    return 'sync_result';
+                }
+                $this->assertStringContainsString('INSERT INTO faqcategory_order', $query);
+                $this->assertStringContainsString('VALUES (123, 456, 10)', $query);
+                return true;
+            });
+
+        $this->databaseMock->expects($this->once())->method('fetchArray')->with('sync_result')->willReturn(false);
 
         $result = $this->order->add($categoryId, $parentId);
         $this->assertTrue($result);
@@ -67,7 +76,8 @@ class OrderTest extends TestCase
             ->with('faqcategory_order', 'position')
             ->willReturn($nextId);
 
-        $this->databaseMock->expects($this->once())->method('query')->willReturn(false);
+        $this->databaseMock->expects($this->exactly(2))->method('query')->willReturn(false);
+        $this->databaseMock->expects($this->once())->method('fetchArray')->willReturn(false);
 
         $result = $this->order->add($categoryId, $parentId);
         $this->assertFalse($result);
@@ -321,14 +331,13 @@ class OrderTest extends TestCase
     public function testGetAllCategoriesEmpty(): void
     {
         $this->databaseMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('query')
-            ->with($this->stringContains(
-                'SELECT category_id, parent_id, position FROM faqcategory_order ORDER BY position',
-            ))
-            ->willReturn('mock_result');
+            ->willReturnCallback(fn(string $query): string => str_contains($query, 'LEFT JOIN')
+                ? 'sync_result'
+                : 'mock_result');
 
-        $this->databaseMock->expects($this->exactly(1))->method('fetchArray')->with('mock_result')->willReturn(false);
+        $this->databaseMock->expects($this->exactly(2))->method('fetchArray')->willReturn(false);
 
         $result = $this->order->getAllCategories();
         $this->assertEquals([], $result);
@@ -341,15 +350,62 @@ class OrderTest extends TestCase
             ['category_id' => '2', 'parent_id' => '1', 'position' => '2'],
         ];
 
-        $this->databaseMock->expects($this->once())->method('query')->willReturn('mock_result');
+        $this->databaseMock
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->willReturnCallback(fn(string $query): string => str_contains($query, 'LEFT JOIN')
+                ? 'sync_result'
+                : 'mock_result');
 
         $this->databaseMock
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(4))
             ->method('fetchArray')
-            ->with('mock_result')
-            ->willReturnOnConsecutiveCalls($mockData[0], $mockData[1], false);
+            ->willReturnOnConsecutiveCalls(false, $mockData[0], $mockData[1], false);
 
         $result = $this->order->getAllCategories();
         $this->assertEquals($mockData, $result);
+    }
+
+    public function testSyncMissingCategoriesInsertsMissingCategoriesOnce(): void
+    {
+        $executedQueries = [];
+
+        $this->databaseMock
+            ->method('query')
+            ->willReturnCallback(function (string $query) use (&$executedQueries): mixed {
+                $executedQueries[] = $query;
+                return str_contains($query, 'LEFT JOIN') ? 'sync_result' : true;
+            });
+
+        // Category 2 exists in two languages, it must only be added once
+        $this->databaseMock
+            ->expects($this->exactly(4))
+            ->method('fetchArray')
+            ->with('sync_result')
+            ->willReturnOnConsecutiveCalls(
+                ['id' => '1', 'parent_id' => '0'],
+                ['id' => '2', 'parent_id' => '1'],
+                ['id' => '2', 'parent_id' => '1'],
+                false,
+            );
+
+        $this->databaseMock->expects($this->exactly(2))->method('nextId')->willReturnOnConsecutiveCalls(5, 6);
+
+        $this->assertSame(2, $this->order->syncMissingCategories());
+
+        $this->assertStringContainsString('WHERE o.category_id IS NULL', $executedQueries[0]);
+        $this->assertStringNotContainsString('c.id <>', $executedQueries[0]);
+        $this->assertStringContainsString('VALUES (1, 0, 5)', $executedQueries[1]);
+        $this->assertStringContainsString('VALUES (2, 1, 6)', $executedQueries[2]);
+        $this->assertCount(3, $executedQueries);
+    }
+
+    public function testSyncMissingCategoriesWithNothingMissing(): void
+    {
+        $this->databaseMock->expects($this->once())->method('query')->willReturn('sync_result');
+        $this->databaseMock->expects($this->once())->method('fetchArray')->willReturn(false);
+        $this->databaseMock->expects($this->never())->method('nextId');
+
+        $this->assertSame(0, $this->order->syncMissingCategories());
     }
 }
