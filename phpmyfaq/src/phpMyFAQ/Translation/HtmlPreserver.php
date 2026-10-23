@@ -38,6 +38,7 @@ class HtmlPreserver
      */
     public function replaceTags(string $html): array
     {
+        /** @var array<string, string> $tagMap */
         $tagMap = [];
         $counter = 0;
 

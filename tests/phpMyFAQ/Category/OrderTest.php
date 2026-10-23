@@ -330,12 +330,17 @@ class OrderTest extends TestCase
     public function testGetOrderedFlatListReturnsDepthFirstOrderWithLevels(): void
     {
         // Stored order: Guides (pos 1), Setup (child of Guides, pos 1), News (pos 2)
-        $this->databaseMock->expects($this->once())->method('query')->willReturn('mock_result');
         $this->databaseMock
-            ->expects($this->exactly(4))
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->willReturnCallback(fn(string $query): string => str_contains($query, 'LEFT JOIN')
+                ? 'sync_result'
+                : 'mock_result');
+        $this->databaseMock
+            ->expects($this->exactly(5))
             ->method('fetchArray')
-            ->with('mock_result')
             ->willReturnOnConsecutiveCalls(
+                false,
                 ['category_id' => '2', 'parent_id' => '0', 'position' => '1'],
                 ['category_id' => '3', 'parent_id' => '2', 'position' => '1'],
                 ['category_id' => '1', 'parent_id' => '0', 'position' => '2'],
@@ -359,8 +364,13 @@ class OrderTest extends TestCase
 
     public function testGetOrderedFlatListWithoutStoredOrderKeepsGivenSiblingOrder(): void
     {
-        $this->databaseMock->expects($this->once())->method('query')->willReturn('mock_result');
-        $this->databaseMock->expects($this->once())->method('fetchArray')->with('mock_result')->willReturn(false);
+        $this->databaseMock
+            ->expects($this->exactly(2))
+            ->method('query')
+            ->willReturnCallback(fn(string $query): string => str_contains($query, 'LEFT JOIN')
+                ? 'sync_result'
+                : 'mock_result');
+        $this->databaseMock->expects($this->exactly(2))->method('fetchArray')->willReturn(false);
 
         $categories = [
             ['id' => 1, 'parent_id' => 0, 'name' => 'News'],

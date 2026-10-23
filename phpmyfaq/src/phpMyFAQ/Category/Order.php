@@ -299,7 +299,12 @@ readonly class Order
         $result = $this->configuration->getDb()->query($query);
 
         $missingCategories = [];
-        while ($row = $this->configuration->getDb()->fetchArray($result)) {
+        while (true) {
+            $row = $this->configuration->getDb()->fetchArray($result);
+            if ($row === false || $row === null || $row === []) {
+                break;
+            }
+
             $categoryId = (int) $row['id'];
             // faqcategories contains one row per language, use the first one
             if (!array_key_exists($categoryId, $missingCategories)) {
