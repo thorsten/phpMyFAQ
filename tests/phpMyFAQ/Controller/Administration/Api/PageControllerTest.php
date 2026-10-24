@@ -1008,7 +1008,8 @@ final class PageControllerTest extends TestCase
             'csrfToken' => $token,
             'pageTitle' => 'HTML Page',
             'slug' => $slug,
-            'content' => '<h2 id="toc-intro">Intro</h2><p><img src="https://localhost/content/user/images/1_a.png" width="300"></p>',
+            'content' => '<h2 id="toc-intro">Intro</h2><p><img src="https://localhost/content/user/images/1_a.png" width="300"></p>'
+                . '<p><iframe width="400" height="345" src="https://www.youtube.com/embed/abc" frameborder="0" allowfullscreen></iframe></p><iframe src="https://evil.example.com/x"></iframe>',
             'authorName' => 'Test Author',
             'authorEmail' => 'test@example.com',
             'active' => true,
@@ -1017,7 +1018,8 @@ final class PageControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(
-            '<h2 id="toc-intro">Intro</h2><p><img src="https://localhost/content/user/images/1_a.png" width="300" /></p>',
+            '<h2 id="toc-intro">Intro</h2><p><img src="https://localhost/content/user/images/1_a.png" width="300" /></p>'
+                . '<p><iframe width="400" height="345" src="https://www.youtube.com/embed/abc" allowfullscreen></iframe></p><iframe></iframe>',
             $this->getStoredPageContent($slug),
         );
     }

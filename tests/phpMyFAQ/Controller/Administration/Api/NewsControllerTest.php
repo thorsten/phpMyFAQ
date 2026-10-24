@@ -256,7 +256,8 @@ final class NewsControllerTest extends TestCase
                             '<p>Safe</p><script>alert(1)</script><img src=x onerror=alert(2)>'
                                 . '<a href="javascript:alert(3)">x</a>'
                                 . '<p><img src="https://localhost/content/user/images/1_a.png" width="300"></p>'
-                                . '&lt;script&gt;alert(4)&lt;/script&gt;',
+                                . '&lt;script&gt;alert(4)&lt;/script&gt;'
+                                . '<p><iframe width="400" height="345" src="https://www.youtube.com/embed/abc" frameborder="0" allowfullscreen></iframe></p><iframe src="https://evil.example.com/x"></iframe>',
                         'authorName' => 'Tester',
                         'authorEmail' => 'tester@example.com',
                         'active' => '1',
@@ -285,6 +286,8 @@ final class NewsControllerTest extends TestCase
             $stored,
         );
         self::assertStringContainsString('&lt;script&gt;alert(4)&lt;/script&gt;', $stored);
+        self::assertStringContainsString('<iframe width="400" height="345" src="https://www.youtube.com/embed/abc" allowfullscreen></iframe>', $stored);
+        self::assertStringNotContainsString('evil.example.com', $stored);
         self::assertStringNotContainsString('<script', $stored);
         self::assertStringNotContainsString('onerror', $stored);
         self::assertStringNotContainsString('javascript:', $stored);

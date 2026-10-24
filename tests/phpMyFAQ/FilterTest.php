@@ -438,6 +438,33 @@ class FilterTest extends TestCase
         $this->assertStringContainsString('After', $result);
     }
 
+    public function testRemoveAttributesKeepsIframesOfAllowedHosts(): void
+    {
+        $html = '<p><iframe width="400" height="345" src="https://www.youtube.com/embed/abc" frameborder="0" '
+            . 'allowfullscreen onload="alert(1)"></iframe></p>';
+
+        $result = Filter::removeAttributes($html, ['www.youtube.com']);
+
+        $this->assertSame(
+            '<p><iframe width="400" height="345" src="https://www.youtube.com/embed/abc" allowfullscreen></iframe></p>',
+            $result,
+        );
+    }
+
+    public function testRemoveAttributesDropsTheSourceOfIframesFromOtherHosts(): void
+    {
+        $result = Filter::removeAttributes('<iframe src="https://evil.example.com/x"></iframe>', ['www.youtube.com']);
+
+        $this->assertSame('<iframe></iframe>', $result);
+    }
+
+    public function testRemoveAttributesWithAllowedIframeHostsKeepsImagesOfOtherHosts(): void
+    {
+        $result = Filter::removeAttributes('<img src="https://images.example.com/a.png" />', ['www.youtube.com']);
+
+        $this->assertSame('<img src="https://images.example.com/a.png" />', $result);
+    }
+
     public function testRemoveAttributesStripsObjectEmbedTags(): void
     {
         $html = '<object data="evil.swf"><embed src="evil.swf"></object>';

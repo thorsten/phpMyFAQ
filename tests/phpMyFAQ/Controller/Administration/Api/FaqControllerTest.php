@@ -44,9 +44,9 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 #[UsesNamespace('phpMyFAQ')]
 final class FaqControllerTest extends TestCase
 {
-    private const string HTML_ANSWER = '<p>Logitech Harmony Fehlercode:</p><p><img src="https://localhost/content/user/images/1792833065_IMG_1350.png" width="300"></p><pre><code>&lt;?php echo 1; ?&gt;</code></pre>';
+    private const string HTML_ANSWER = '<p>Logitech Harmony Fehlercode:</p><p><img src="https://localhost/content/user/images/1792833065_IMG_1350.png" width="300"></p><pre><code>&lt;?php echo 1; ?&gt;</code></pre><p><iframe width="400" height="345" src="https://www.youtube.com/embed/abc" frameborder="0" allowfullscreen></iframe></p><iframe src="https://evil.example.com/x"></iframe>';
 
-    private const string HTML_ANSWER_SAVED = '<p>Logitech Harmony Fehlercode:</p><p><img src="https://localhost/content/user/images/1792833065_IMG_1350.png" width="300" /></p><pre><code>&lt;?php echo 1; ?&gt;</code></pre>';
+    private const string HTML_ANSWER_SAVED = '<p>Logitech Harmony Fehlercode:</p><p><img src="https://localhost/content/user/images/1792833065_IMG_1350.png" width="300" /></p><pre><code>&lt;?php echo 1; ?&gt;</code></pre><p><iframe width="400" height="345" src="https://www.youtube.com/embed/abc" allowfullscreen></iframe></p><iframe></iframe>';
 
     private Configuration $configuration;
     private Sqlite3 $dbHandle;

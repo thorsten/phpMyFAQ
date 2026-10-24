@@ -177,7 +177,10 @@ final class PageController extends AbstractAdministrationApiController
         $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS, '');
         // The content is HTML from the editor: only the HtmlSanitizer may filter it, since
         // FILTER_SANITIZE_SPECIAL_CHARS strips every tag
-        $content = Filter::removeAttributes(is_string($data->content ?? null) ? $data->content : '');
+        $content = Filter::removeAttributes(
+            is_string($data->content ?? null) ? $data->content : '',
+            $this->configuration->getAllowedMediaHosts(),
+        );
         $authorName = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $authorEmail = Filter::filterEmail($data->authorEmail);
         if (!is_string($authorEmail) || $authorEmail === '') {
@@ -350,7 +353,10 @@ final class PageController extends AbstractAdministrationApiController
         $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS, '');
         // The content is HTML from the editor: only the HtmlSanitizer may filter it, since
         // FILTER_SANITIZE_SPECIAL_CHARS strips every tag
-        $content = Filter::removeAttributes(is_string($data->content ?? null) ? $data->content : '');
+        $content = Filter::removeAttributes(
+            is_string($data->content ?? null) ? $data->content : '',
+            $this->configuration->getAllowedMediaHosts(),
+        );
         $authorName = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $authorEmail = Filter::filterEmail($data->authorEmail);
         if (!is_string($authorEmail) || $authorEmail === '') {

@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Helper\IframeSourceSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 use Symfony\Component\HttpFoundation\Request;
@@ -196,13 +197,24 @@ class Filter
 
     /**
      * Sanitizes HTML by allowing safe elements and attributes via Symfony's HtmlSanitizer.
+     * Embedded iframes are kept only for rich text, i.e. when the allowed media hosts are
+     * given, and only with an https source of one of these hosts.
+     *
+     * @param string[] $allowedIframeHosts Allowed media hosts (records.allowedMediaHosts)
      */
-    public static function removeAttributes(string $html = ''): string
+    public static function removeAttributes(string $html = '', array $allowedIframeHosts = []): string
     {
         // remove broken stuff
         $html = str_replace(search: '&#13;', replace: '', subject: $html);
 
-        $sanitizer = new HtmlSanitizer(self::sanitizerConfig());
+        $config = self::sanitizerConfig();
+        if ($allowedIframeHosts !== []) {
+            $config = $config
+                ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
+                ->withAttributeSanitizer(new IframeSourceSanitizer($allowedIframeHosts));
+        }
+
+        $sanitizer = new HtmlSanitizer($config);
 
         return $sanitizer->sanitize($html);
     }

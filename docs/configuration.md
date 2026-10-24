@@ -75,7 +75,7 @@ each setting controls. These values are set during installation and can be chang
 | `records.numberMaxStoredRevisions`   | Maximum stored revisions | `10` | The maximum number of revisions to keep per FAQ entry. Older revisions are discarded. |
 | `records.enableAutoRevisions`        | Allow versioning of FAQ changes | `false` | When enabled, a new revision is automatically created every time a FAQ entry is saved. |
 | `records.orderStickyFaqsCustom`      | Custom ordering of sticky records | `false` | When enabled, sticky (pinned) FAQ entries can be manually reordered in the admin panel. |
-| `records.allowedMediaHosts`          | Allowed external hosts for media content | `www.youtube.com` | A comma-separated list of external hostnames allowed for embedded media content (e.g. videos). |
+| `records.allowedMediaHosts`          | Allowed external hosts for media content | `www.youtube.com` | A comma-separated list of external hostnames allowed for embedded media content (e.g. videos). Embedded videos (`<iframe>`) in FAQs, news and custom pages are only kept when saving if their source is an `https` URL of one of these hosts (subdomains included). For Vimeo embeds add `player.vimeo.com`. |
 
 ### 8.1.3 Search settings
 

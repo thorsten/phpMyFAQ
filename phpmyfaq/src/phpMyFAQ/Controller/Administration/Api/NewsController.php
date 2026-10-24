@@ -177,7 +177,10 @@ final class NewsController extends AbstractAdministrationApiController
         $header = Filter::filterVar($data->newsHeader ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         // The news text is HTML from the editor: only the HtmlSanitizer may filter it, since
         // FILTER_SANITIZE_SPECIAL_CHARS strips every tag
-        $content = Filter::removeAttributes(is_string($data->news ?? null) ? $data->news : '');
+        $content = Filter::removeAttributes(
+            is_string($data->news ?? null) ? $data->news : '',
+            $this->configuration->getAllowedMediaHosts(),
+        );
         $author = Filter::filterVar($data->authorName ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterEmail($data->authorEmail ?? '', default: '');
         $active = Filter::filterVar($data->active ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');

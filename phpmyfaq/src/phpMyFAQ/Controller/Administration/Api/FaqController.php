@@ -159,7 +159,10 @@ final class FaqController extends AbstractAdministrationApiController
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
         // The answer is HTML from the editor: only the HtmlSanitizer may filter it, since
         // FILTER_SANITIZE_SPECIAL_CHARS strips every tag
-        $content = Filter::removeAttributes(is_string($data->answer ?? null) ? $data->answer : '');
+        $content = Filter::removeAttributes(
+            is_string($data->answer ?? null) ? $data->answer : '',
+            $this->configuration->getAllowedMediaHosts(),
+        );
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterEmail($data->email ?? '', default: '');
@@ -438,7 +441,10 @@ final class FaqController extends AbstractAdministrationApiController
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS, 'no');
         // The answer is HTML from the editor: only the HtmlSanitizer may filter it, since
         // FILTER_SANITIZE_SPECIAL_CHARS strips every tag
-        $content = Filter::removeAttributes(is_string($data->answer ?? null) ? $data->answer : '');
+        $content = Filter::removeAttributes(
+            is_string($data->answer ?? null) ? $data->answer : '',
+            $this->configuration->getAllowedMediaHosts(),
+        );
         $keywords = Filter::filterVar($data->keywords ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $author = Filter::filterVar($data->author ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterEmail($data->email ?? '', default: '');
