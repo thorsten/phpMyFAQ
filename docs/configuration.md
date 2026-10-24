@@ -327,7 +327,7 @@ container. An unset or empty variable means no limit, so a regular installation 
 | `PMF_TENANT_QUOTA_MAX_CATEGORIES`      | Maximum number of categories; every language version counts as one category. |
 | `PMF_TENANT_QUOTA_MAX_USERS`           | Maximum number of users. |
 | `PMF_TENANT_QUOTA_MAX_ATTACHMENT_SIZE` | Maximum total size of all attachments in MB. |
-| `PMF_TENANT_QUOTA_MAX_API_REQUESTS`    | Reserved, not enforced yet. Use `api.rateLimit.requests` and `api.rateLimit.interval` to limit API requests. |
+| `PMF_TENANT_QUOTA_MAX_API_REQUESTS`    | Maximum number of API requests of all clients together within `api.rateLimit.interval`. It counts the same requests as `api.rateLimit.requests`: state-changing requests to the public API, but not `GET`/`HEAD`/`OPTIONS` requests or the private API used by logged-in users. Exceeded requests get HTTP 429. |
 
 Note:
 Tenant quotas are experimental. The variable names and the behavior might change in future releases.

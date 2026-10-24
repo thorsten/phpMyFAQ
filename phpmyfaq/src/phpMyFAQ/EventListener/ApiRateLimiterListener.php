@@ -23,7 +23,9 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Http\SecurityEventLogger;
+use phpMyFAQ\Tenant\TenantContext;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -32,6 +34,7 @@ readonly class ApiRateLimiterListener
     public function __construct(
         private Configuration $configuration,
         private RateLimiter $rateLimiter,
+        private TenantContext $tenantContext,
     ) {
     }
 
@@ -59,20 +62,42 @@ readonly class ApiRateLimiterListener
         $requestLimit = (int) $this->configuration->get('api.rateLimit.requests');
         $interval = (int) $this->configuration->get('api.rateLimit.interval');
 
-        if ($requestLimit < 1 || $interval < 1) {
+        if ($interval < 1) {
             return;
         }
 
         $clientIdentifier = $request->getClientIp() ?? 'anonymous';
 
-        if ($this->rateLimiter->check($clientIdentifier, $requestLimit, $interval)) {
+        if ($requestLimit >= 1 && !$this->rateLimiter->check($clientIdentifier, $requestLimit, $interval)) {
+            $this->reject($event, $request, sprintf('%d requests per %d seconds exceeded', $requestLimit, $interval));
             return;
         }
 
+        // The tenant quota is a budget shared by all clients, checked after the per-client
+        // limit so that a rejected client does not use up the budget of the whole tenant.
+        $tenantQuota = $this->tenantContext->getQuotas()->getMaxApiRequests();
+        if ($tenantQuota === null) {
+            return;
+        }
+
+        $tenantKey = sprintf('tenant-%d', $this->tenantContext->getTenantId());
+        if ($this->rateLimiter->check($tenantKey, $tenantQuota, $interval)) {
+            return;
+        }
+
+        $this->reject(
+            $event,
+            $request,
+            sprintf('Tenant quota of %d API requests per %d seconds exceeded', $tenantQuota, $interval),
+        );
+    }
+
+    private function reject(RequestEvent $event, Request $request, string $reason): void
+    {
         new SecurityEventLogger($this->configuration->getLogger())->log(
             AdminLogType::SECURITY_RATE_LIMIT_EXCEEDED,
             $request,
-            sprintf('%d requests per %d seconds exceeded', $requestLimit, $interval),
+            $reason,
         );
 
         $response = new JsonResponse(data: [

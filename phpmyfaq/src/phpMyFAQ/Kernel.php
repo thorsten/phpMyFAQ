@@ -36,6 +36,7 @@ use phpMyFAQ\Form\FormsServiceProvider;
 use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Routing\RouteCacheManager;
 use phpMyFAQ\Routing\RouteCollectionBuilder;
+use phpMyFAQ\Tenant\TenantContext;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -232,11 +233,21 @@ class Kernel implements HttpKernelInterface
             $this->routingContext === 'api'
             && $container->has('phpmyfaq.configuration')
             && $container->has('phpmyfaq.http.rate-limiter')
+            && $container->has('phpmyfaq.tenant.context')
         ) {
             $rateLimiterConfiguration = $container->get('phpmyfaq.configuration');
             $rateLimiter = $container->get('phpmyfaq.http.rate-limiter');
-            if ($rateLimiterConfiguration instanceof Configuration && $rateLimiter instanceof RateLimiter) {
-                $apiRateLimiterListener = new ApiRateLimiterListener($rateLimiterConfiguration, $rateLimiter);
+            $tenantContext = $container->get('phpmyfaq.tenant.context');
+            if (
+                $rateLimiterConfiguration instanceof Configuration
+                && $rateLimiter instanceof RateLimiter
+                && $tenantContext instanceof TenantContext
+            ) {
+                $apiRateLimiterListener = new ApiRateLimiterListener(
+                    $rateLimiterConfiguration,
+                    $rateLimiter,
+                    $tenantContext,
+                );
                 $dispatcher->addListener(KernelEvents::REQUEST, [$apiRateLimiterListener, 'onKernelRequest'], 150);
             }
         }

@@ -19,6 +19,8 @@ use phpMyFAQ\Routing\AttributeRouteLoader;
 use phpMyFAQ\Routing\RouteCacheManager;
 use phpMyFAQ\Routing\RouteCollectionBuilder;
 use phpMyFAQ\System;
+use phpMyFAQ\Tenant\TenantContext;
+use phpMyFAQ\Tenant\TenantQuotas;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -53,6 +55,8 @@ use Symfony\Component\Routing\RouteCollection;
 #[UsesClass(RouteCollectionBuilder::class)]
 #[UsesClass(PdoSqlite::class)]
 #[UsesClass(RateLimiter::class)]
+#[UsesClass(TenantContext::class)]
+#[UsesClass(TenantQuotas::class)]
 #[UsesClass(System::class)]
 #[UsesClass(ContainerRegistry::class)]
 #[AllowMockObjectsWithoutExpectations]
@@ -483,12 +487,13 @@ class KernelTest extends TestCase
     {
         $configMock = $this->createMock(Configuration::class);
         $rateLimiter = new RateLimiter(storage: new InMemoryStorage());
+        $tenantContext = new TenantContext(0, 'localhost', '', '', 'free', new TenantQuotas());
         $container = $this->createMock(ContainerBuilder::class);
         $container
             ->method('has')
             ->willReturnCallback(static fn(string $id) => in_array(
                 $id,
-                ['phpmyfaq.configuration', 'phpmyfaq.http.rate-limiter'],
+                ['phpmyfaq.configuration', 'phpmyfaq.http.rate-limiter', 'phpmyfaq.tenant.context'],
                 true,
             ));
         $container
@@ -496,6 +501,7 @@ class KernelTest extends TestCase
             ->willReturnCallback(static fn(string $id) => match ($id) {
                 'phpmyfaq.configuration' => $configMock,
                 'phpmyfaq.http.rate-limiter' => $rateLimiter,
+                'phpmyfaq.tenant.context' => $tenantContext,
                 default => null,
             });
 
@@ -522,12 +528,13 @@ class KernelTest extends TestCase
     {
         $configMock = $this->createMock(Configuration::class);
         $rateLimiter = new RateLimiter(storage: new InMemoryStorage());
+        $tenantContext = new TenantContext(0, 'localhost', '', '', 'free', new TenantQuotas());
         $container = $this->createMock(ContainerBuilder::class);
         $container
             ->method('has')
             ->willReturnCallback(static fn(string $id) => in_array(
                 $id,
-                ['phpmyfaq.configuration', 'phpmyfaq.http.rate-limiter'],
+                ['phpmyfaq.configuration', 'phpmyfaq.http.rate-limiter', 'phpmyfaq.tenant.context'],
                 true,
             ));
         $container
@@ -535,6 +542,7 @@ class KernelTest extends TestCase
             ->willReturnCallback(static fn(string $id) => match ($id) {
                 'phpmyfaq.configuration' => $configMock,
                 'phpmyfaq.http.rate-limiter' => $rateLimiter,
+                'phpmyfaq.tenant.context' => $tenantContext,
                 default => null,
             });
 
