@@ -22,6 +22,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -1118,6 +1119,123 @@ final class UpdateControllerTest extends TestCase
         [$controller] = $this->createAuthorizedController($upgrade);
 
         $response = $controller->installPackage($this->createTokenRequest('wrong-token'));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * Builds a request as sent by the updater JavaScript of phpMyFAQ <= 4.1.8, which posts
+     * to update-database without a body after install-package already replaced the PHP files.
+     *
+     * @param array<string, string|null> $headers
+     */
+    private function createLegacyUpdateDatabaseRequest(array $headers = []): Request
+    {
+        $server = [
+            'HTTP_HOST' => 'faq.example.org',
+            'HTTPS' => 'on',
+            'REQUEST_METHOD' => 'POST',
+            'CONTENT_TYPE' => 'application/json',
+            'HTTP_SEC_FETCH_SITE' => 'same-origin',
+        ];
+
+        foreach ($headers as $name => $value) {
+            if ($value === null) {
+                unset($server[$name]);
+                continue;
+            }
+
+            $server[$name] = $value;
+        }
+
+        return new Request([], [], [], [], [], $server, '');
+    }
+
+    private function createLegacyUpdateController(Update $update, bool $maintenanceMode): UpdateController
+    {
+        $this->configuration->set('main.maintenanceMode', $maintenanceMode ? 'true' : 'false');
+
+        $controller = $this->createControllerWithDependencies(
+            $this->createStub(Upgrade::class),
+            $this->createStub(RemoteApiClient::class),
+            $update,
+            $this->createStub(EnvironmentConfigurator::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        return $controller;
+    }
+
+    public function testUpdateDatabaseAcceptsLegacyRequestWithoutBodyDuringMaintenance(): void
+    {
+        $update = $this->createMock(Update::class);
+        $update->expects($this->once())->method('applyUpdates')->willReturn(true);
+        $controller = $this->createLegacyUpdateController($update, true);
+
+        $response = $controller->updateDatabase($this->createLegacyUpdateDatabaseRequest());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertFalse(filter_var($this->configuration->get('main.maintenanceMode'), FILTER_VALIDATE_BOOLEAN));
+    }
+
+    public function testUpdateDatabaseAcceptsLegacyRequestWithMatchingOriginWithoutFetchMetadata(): void
+    {
+        $update = $this->createMock(Update::class);
+        $update->expects($this->once())->method('applyUpdates')->willReturn(true);
+        $controller = $this->createLegacyUpdateController($update, true);
+
+        $response = $controller->updateDatabase($this->createLegacyUpdateDatabaseRequest([
+            'HTTP_SEC_FETCH_SITE' => null,
+            'HTTP_ORIGIN' => 'https://faq.example.org',
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @return array<string, array{0: array<string, string|null>, 1: bool}>
+     */
+    public static function rejectedLegacyRequestProvider(): array
+    {
+        return [
+            'cross-site fetch metadata' => [['HTTP_SEC_FETCH_SITE' => 'cross-site'], true],
+            'same-site fetch metadata' => [['HTTP_SEC_FETCH_SITE' => 'same-site'], true],
+            'foreign origin without fetch metadata' => [
+                ['HTTP_SEC_FETCH_SITE' => null, 'HTTP_ORIGIN' => 'https://evil.example.com'],
+                true,
+            ],
+            'no fetch metadata and no origin' => [['HTTP_SEC_FETCH_SITE' => null], true],
+            'form content type' => [['CONTENT_TYPE' => 'application/x-www-form-urlencoded'], true],
+            'text/plain content type' => [['CONTENT_TYPE' => 'text/plain'], true],
+            'maintenance mode disabled' => [[], false],
+        ];
+    }
+
+    /**
+     * @param array<string, string|null> $headers
+     */
+    #[DataProvider('rejectedLegacyRequestProvider')]
+    public function testUpdateDatabaseRejectsUnsafeLegacyRequest(array $headers, bool $maintenanceMode): void
+    {
+        $update = $this->createMock(Update::class);
+        $update->expects($this->never())->method('applyUpdates');
+        $controller = $this->createLegacyUpdateController($update, $maintenanceMode);
+
+        $response = $controller->updateDatabase($this->createLegacyUpdateDatabaseRequest($headers));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    public function testUpdateDatabaseRejectsSameOriginRequestWithBodyButWithoutCsrfToken(): void
+    {
+        $update = $this->createMock(Update::class);
+        $update->expects($this->never())->method('applyUpdates');
+        $controller = $this->createLegacyUpdateController($update, true);
+
+        $request = $this->createLegacyUpdateDatabaseRequest();
+        $request->initialize([], [], [], [], [], $request->server->all(), json_encode(['csrf' => '']));
+
+        $response = $controller->updateDatabase($request);
 
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }

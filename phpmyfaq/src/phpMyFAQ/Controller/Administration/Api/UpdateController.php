@@ -297,7 +297,7 @@ final class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        if (!$this->isValidUpdatePackageToken($request)) {
+        if (!$this->isValidUpdatePackageToken($request) && !$this->isLegacyUpdateDatabaseRequest($request)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -344,5 +344,30 @@ final class UpdateController extends AbstractController
         $csrfToken = (string) ($this->decodeJsonObject($request)->csrf ?? '');
 
         return Token::getInstance($this->session)->verifyToken('update-package', $csrfToken);
+    }
+
+    /**
+     * The updater JavaScript of phpMyFAQ 4.1.8 and earlier calls update-database without a CSRF token.
+     * As install-package already replaced the PHP files at that point, this request hits the current
+     * controller while the old JavaScript is still running in the browser. Accept it only without a body,
+     * during maintenance mode and when the browser proves a same-origin request. A JSON content type
+     * forces a CORS preflight for cross-origin requests, so the request cannot be forged by another site.
+     */
+    private function isLegacyUpdateDatabaseRequest(Request $request): bool
+    {
+        if ($request->getContent() !== '' || $request->getContentTypeFormat() !== 'json') {
+            return false;
+        }
+
+        if (!filter_var($this->configuration->get('main.maintenanceMode'), FILTER_VALIDATE_BOOLEAN)) {
+            return false;
+        }
+
+        $fetchSite = $request->headers->get('Sec-Fetch-Site');
+        if ($fetchSite !== null) {
+            return $fetchSite === 'same-origin';
+        }
+
+        return $request->headers->get('Origin') === $request->getSchemeAndHttpHost();
     }
 }
