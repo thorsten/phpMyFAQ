@@ -44,6 +44,7 @@ import '../plugins/phpmyfaq/phpmyfaq.js';
 import '../plugins/code-snippet/code-snippet.js';
 import '../plugins/show-blocks/show-blocks.js';
 import '../plugins/table-of-contents/table-of-contents.js';
+import '../plugins/video-resize/video-resize.js';
 import hljs from 'highlight.js/lib/common';
 
 interface UploaderResponse {
@@ -189,7 +190,10 @@ export const renderEditor = () => {
     imageProcessor: { replaceDataURIToBlobIdInView: false },
     removeButtons: [],
     disablePlugins: [],
-    extraPlugins: ['phpMyFAQ', 'codeSnippet', 'showBlocks', 'tableOfContents'],
+    extraPlugins: ['phpMyFAQ', 'codeSnippet', 'showBlocks', 'tableOfContents', 'videoResize'],
+    // jodit-media wraps uploaded videos, see the videoResize plugin
+    allowResizeTags: new Set(['img', 'iframe', 'table', 'jodit', 'jodit-media']),
+    resizer: { useAspectRatio: new Set(['img', 'jodit-media']) },
     extraButtons: [],
     buttons: [
       'source',
@@ -484,7 +488,10 @@ export const renderPageEditor = () => {
     imageProcessor: { replaceDataURIToBlobIdInView: false },
     removeButtons: [],
     disablePlugins: [],
-    extraPlugins: ['phpMyFAQ', 'codeSnippet', 'tableOfContents'],
+    extraPlugins: ['phpMyFAQ', 'codeSnippet', 'tableOfContents', 'videoResize'],
+    // jodit-media wraps uploaded videos, see the videoResize plugin
+    allowResizeTags: new Set(['img', 'iframe', 'table', 'jodit', 'jodit-media']),
+    resizer: { useAspectRatio: new Set(['img', 'jodit-media']) },
     extraButtons: [],
     buttons: [
       'source',
