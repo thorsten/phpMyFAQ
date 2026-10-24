@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.2.0-beta.3 - 2026-10-21
+### phpMyFAQ v4.2.0-RC.1 - unreleased
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
 - added official Docker images (Apache and FrankenPHP) published to the GitHub Container Registry, including nightly images, with headless installation via environment variables (Thorsten)
@@ -36,6 +36,9 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added question metadata tracking, an audit log of the open question lifecycle (submitted, answered, reopened) (Thorsten)
 - added support for generic OpenID Connect providers such as Authentik (Thorsten)
 - added the "Force layout mode" configuration, which renders one mode for all visitors and skips the inline theme script and the theme switcher (Thorsten)
+- added table of contents plugin in WYSIWYG editor (Thorsten)
+- added resizing of uploaded videos in WYSIWYG editor (Thorsten)
+- added embedded videos from allowed media hosts like YouTube and Vimeo in FAQs, news, and custom pages (Thorsten)
 - improved audit and activity log with comprehensive security event tracking (Thorsten)
 - improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
 - improved support for PDO (Thorsten)
@@ -44,6 +47,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved and hardened multi tenancy support (Thorsten)
 - improved and redesigned searchable admin configuration frontend (Thorsten)
 - improved package size by removing unused dependencies (Thorsten)
+- updated all translations (Thorsten)
 - updated to PHPUnit v13 (Thorsten)
 - migrated codebase using PHP 8.4 language features (Thorsten)
 - migrated routes using PHP 8+ #[Route] attributes (Thorsten)

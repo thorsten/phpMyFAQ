@@ -14,6 +14,7 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
+use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -116,7 +117,7 @@ final class SystemInformationControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('pmf-system-information', (string) $response->getContent());
-        self::assertStringContainsString('4.2.0-beta', (string) $response->getContent());
+        self::assertStringContainsString(System::getVersion(), (string) $response->getContent());
         self::assertStringContainsString('PHPUnit Web Server', (string) $response->getContent());
         self::assertStringContainsString('Redis Version', (string) $response->getContent());
         self::assertStringContainsString('n/a', (string) $response->getContent());
