@@ -27,8 +27,10 @@ import { fetchFaqsByAutocomplete } from '../../api';
 // Import the plugin to trigger its top-level side effects (Icon.set, plugins.add)
 await import('./phpmyfaq.ts');
 
-// Capture the plugin callback registered during top-level import
-const pluginAddCall = mockPluginsAdd.mock.calls[0];
+// Capture the registrations of the top-level import: Vitest clears the mock history before each test
+const iconSetCalls = [...mockIconSet.mock.calls];
+const pluginAddCalls = [...mockPluginsAdd.mock.calls];
+const pluginAddCall = pluginAddCalls[0];
 const capturedPluginCallback = pluginAddCall[1] as (editor: Record<string, unknown>) => void;
 
 describe('phpmyfaq.svg', () => {
@@ -80,11 +82,11 @@ describe('phpMyFAQ Jodit Plugin', () => {
   });
 
   it('should register the icon via Jodit.modules.Icon.set', () => {
-    expect(mockIconSet).toHaveBeenCalledWith('phpmyfaq', expect.any(String));
+    expect(iconSetCalls).toContainEqual(['phpmyfaq', expect.any(String)]);
   });
 
   it('should register the plugin via Jodit.plugins.add with name phpMyFAQ', () => {
-    expect(mockPluginsAdd).toHaveBeenCalledWith('phpMyFAQ', expect.any(Function));
+    expect(pluginAddCalls).toContainEqual(['phpMyFAQ', expect.any(Function)]);
   });
 
   it('should register a button with correct config when plugin callback is invoked', () => {
