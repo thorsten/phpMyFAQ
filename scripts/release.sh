@@ -334,7 +334,7 @@ stage_update_www() {
 
 stage_github_release() {
     release_notes=$("${PHP_BIN}" "${REPO_ROOT}/scripts/release-changelog.php" "${VERSION}")
-    release_notes=$(printf '%s\n\n## Verification\n\nSee the [verification instructions](https://github.com/thorsten/phpMyFAQ/blob/main/docs/release.md#139-verification). The release public key is published at [docs/keys/phpmyfaq-release-public-key.asc](https://github.com/thorsten/phpMyFAQ/blob/main/docs/keys/phpmyfaq-release-public-key.asc).\n' "${release_notes}")
+    release_notes=$(printf '%s\n\n## Verification\n\nSee the [verification instructions](https://github.com/thorsten/phpMyFAQ/blob/main/docs/release.md#169-verification). The release public key is published at [docs/keys/phpmyfaq-release-public-key.asc](https://github.com/thorsten/phpMyFAQ/blob/main/docs/keys/phpmyfaq-release-public-key.asc).\n' "${release_notes}")
 
     if [ "${RELEASE_TYPE}" = 'development' ]; then
         set -- --prerelease

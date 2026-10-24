@@ -7,29 +7,37 @@ The phpMyFAQ administration area is fully browser-based. You can access it at:
 You can also log in through the public frontend. After a successful login, a link to the administration backend will be 
 available there as well.
 
-If you have lost your password, you can reset it. phpMyFAQ will generate a new random password and send it to you by 
-email. After logging in with the generated password, you should change it immediately.
+If you have lost your password, use the "Forgot your password?" link on the login page and enter your username and email
+address. If both match an account, phpMyFAQ sends you an email with a reset link that is valid for one hour. Open the
+link and choose a new password with at least eight characters.
 
-Once you enter your username and password, you can log in to the system. The dashboard provides several useful cards, 
-including:
+Once you enter your username and password, you can log in to the system. If you have enabled two-factor authentication
+for your account, phpMyFAQ asks for the TOTP code afterward. The dashboard provides several useful cards, depending on
+your permissions, including:
 
-* statistics about visits, entries, news, and comments
-* the latest current version number fetched from phpmyfaq.de
-* a chart showing the number of visitors over the last 30 days
+* counters for visits, FAQs, comments, open questions, and registered users
+* a chart of the visitors over the last 7, 30, or 90 days and a chart of the most popular FAQs (if user tracking
+  is enabled)
 * a list of unpublished FAQs (drafts and FAQs in review)
 * a list of the latest user registrations
-* information about the date of the most recently verified backup
+* content health counters (orphaned and stale FAQs) and the most popular searches
+* an online version check against phpmyfaq.de
 * a button to verify the integrity of the phpMyFAQ installation
+* the date of the most recent backup, with a warning if it is older than 30 days
 
-When you click the integrity check button, phpMyFAQ calculates a SHA-1 hash for all files and compares it with a web 
-service provided by phpmyfaq.de. This makes it possible to detect whether any files have been modified.
+You can rearrange the cards with the "Customize" button and restore the default layout with "Reset layout". The
+dashboard also shows whether the FAQ is in maintenance mode or online, and warns if debug mode is enabled.
+
+When you click the integrity check button, phpMyFAQ calculates a SHA-1 hash for every PHP file of the installation
+(except local configuration files such as `database.php`) and compares the hashes with the official ones provided by
+phpmyfaq.de. This makes it possible to detect whether any files have been modified.
 
 You can also switch the current language in the administration backend. In addition, an information box can display the 
 session timeout if this feature is enabled.
 
-## 5.1 Users and Groups
+## 7.1 Users and Groups
 
-### 5.1.1 User Administration
+### 7.1.1 User Administration
 
 phpMyFAQ offers flexible management of privileges (or rights) for different users in the admin area. To search for a
 certain user, start typing the username in the input form, and you'll get a list of hits for usernames. It is
@@ -38,28 +46,29 @@ detailed and specific, so that you could allow a certain user to edit but not to
 to contemplate which user shall get which privileges. You could edit an entry by completely deleting all content, which
 would be equivalent to deleting the whole entry. The number of possible users is not limited by phpMyFAQ.
 
-Keep in mind that new users have no privileges at all; you will have to assign them by editing the user's profile.
+Keep in mind that new users have no administrative privileges; apart from the `View FAQs` right (see 7.1.5), you will
+have to assign them by editing the user's rights.
 
 A super admin can set users as super admins as well, then the given permissions aren't evaluated, so please be careful
 with setting this option.
 
 A user without any permission in the admin section can still get read access to categories and records. Reading FAQs
 requires the `View FAQs` right, which new accounts receive automatically and which the update grants to every existing
-user and group — see 5.1.5. Beyond that, you can set the permissions on categories and records in the category and
+user and group — see 7.1.5. Beyond that, you can set the permissions on categories and records in the category and
 record administration frontend.
 
 If you enable LDAP or Microsoft Entra ID authentication, you can't edit the user's profile in the admin area.
 The users will be created automatically when they log in the first time.
 
-### 5.1.2 Group Administration
+### 7.1.2 Group Administration
 
 phpMyFAQ also offers flexible management of privileges (or rights) for different groups in the admin area. You can set
 permissions for groups in the same way as for users described in the topic above.
 
-Please note that the permissions for a group are higher rated than the permissions on a user. To enable the group
-permissions, please set the permission level from _basic_ to _medium_ in the main configuration.
+A user has a right if it is granted directly or through any of the user's groups. To enable the group permissions,
+set the permission level (`security.permLevel`) from _basic_ to _medium_ in the security configuration.
 
-### 5.1.3 Category restrictions (Medium permission mode)
+### 7.1.3 Category restrictions (Medium permission mode)
 
 Groups can be restricted per right to a set of categories (Admin → Groups → Category restrictions). The rules are:
 
@@ -77,7 +86,7 @@ Groups can be restricted per right to a set of categories (Admin → Groups → 
 - A blocked action returns HTTP 403 with a message naming the missing right and the category.
 - FAQs without any category assignment can only be modified by users whose rights are not category-restricted.
 
-### 5.1.4 Language restrictions
+### 7.1.4 Language restrictions
 
 Both individual users and groups can be restricted per right to a set of languages (Admin → Users/Groups → Language
 restrictions). The rules are deliberately different from category restrictions:
@@ -98,7 +107,7 @@ restrictions). The rules are deliberately different from category restrictions:
 - Category and language restrictions combine with **AND** semantics: an action must be permitted by both the category
   and the language rules to succeed.
 
-### 5.1.5 Read, write and publish rights
+### 7.1.5 Read, write and publish rights
 
 Reading FAQs, changing them, and deciding that a change goes public are three independently assignable rights:
 
@@ -108,7 +117,7 @@ Reading FAQs, changing them, and deciding that a change goes public are three in
 | Write | `Add`/`Edit`/`Delete FAQs` | Creating and changing FAQ content |
 | Publish | `Publish FAQs` (`faq_publish`) | Setting an FAQ live, on its own or in the FAQ overview |
 
-- The publish right maps onto the editorial workflow described in 5.2.3: every FAQ is a **Draft**, in **Review**, or
+- The publish right maps onto the editorial workflow described in 7.2.3: every FAQ is a **Draft**, in **Review**, or
   **Published**, per language. Moving between draft and review only needs the edit rights, while every transition into
   or out of the published state needs `Publish FAQs`.
 - **A user with write but not publish can edit a published FAQ without changing whether it is public.** For a published
@@ -122,7 +131,7 @@ Reading FAQs, changing them, and deciding that a change goes public are three in
   Revoking `view_faqs` from a user therefore hides FAQs from that account, not from the public site.
 - New accounts receive `view_faqs` automatically, and the upgrade grants it to every existing user and group, so
   enabling the gate changes nothing until you deliberately revoke it.
-- Both rights honour the category and language restrictions described in 5.1.3 and 5.1.4, with the same **AND**
+- Both rights honour the category and language restrictions described in 7.1.3 and 7.1.4, with the same **AND**
   semantics. A user whose `view_faqs` is restricted to one category sees only that category's FAQs — in FAQ pages,
   category listings, search results, tag listings, the sitemap and the "latest"/"most popular" lists alike.
 - Super admins bypass all of this, as they do every other right.
@@ -130,9 +139,9 @@ Reading FAQs, changing them, and deciding that a change goes public are three in
   option. That is a site-wide setting about anonymous submissions rather than a right exercised by the submitter, so it
   is deliberately not gated on `faq_publish`.
 
-## 5.2 Content
+## 7.2 Content
 
-### 5.2.1 Category Administration
+### 7.2.1 Category Administration
 
 phpMyFAQ lets you create different categories and nested subcategories for your FAQs.
 You can re-arrange your categories in a different order and create nested ones with drag'n'drop.
@@ -156,13 +165,13 @@ For SEO reasons (reduced file size),
 you may want to **display the exact same file** as a background image **multiple times**.
 To do this, enter the same file name for each entry in your **database, "faqcategories" table, image field**.
 
-### 5.2.2 Add a new FAQ
+### 7.2.2 Add a new FAQ
 
 You can create a completely new FAQ by using the 'Add new FAQ' option. When doing so, it is essential to select the 
 desired category within the 'FAQ metadata' tab to ensure the entry is correctly indexed and visible to users. For a 
-detailed explanation of all available settings and metadata options, please refer to section 5.2.3.
+detailed explanation of all available settings and metadata options, please refer to section 7.2.3.
 
-### 5.2.3 FAQ Administration
+### 7.2.3 FAQ Administration
 
 You can create entries directly in the admin area. Created entries aren't published by default. All available FAQs are
 listed on the page "Edit FAQs". By clicking on them, the same interface that lets you create records will open up, this
@@ -219,14 +228,14 @@ time with all the relevant data of the specific entry. The meaning of the fields
   visible in the public area and included in searches; drafts and FAQs in review are invisible to visitors. New
   entries start as drafts, and suggested FAQs are stored as drafts by default to prevent any abuse. Moving a FAQ
   between draft and review only requires the edit right, while any transition that makes content go live or takes
-  it down requires the `Publish FAQs` right (see 5.1.5). Users without that right see the status of a published
+  it down requires the `Publish FAQs` right (see 7.1.5). Users without that right see the status of a published
   FAQ read-only, and saving leaves it unchanged. The "Edit FAQs" overview offers a status filter and lets you
   change the status of an entry directly in the list.
 
 - **Sticky?**
-  If a FAQ is "sticky," it is a crucial FAQ record and will always be shown on all pages on the right column.
-  You should mark records as sticky if they're crucial for your whole FAQ. Sticky records also appear at the
-  top positions of the lists of FAQ entries.
+  If a FAQ is "sticky," it is a crucial FAQ record and is shown in the sticky FAQs section on the start page.
+  You should mark records as sticky if they're crucial for your whole FAQ. Sticky records also appear highlighted at
+  the top positions of the lists of FAQ entries.
 
 - **Comments?**
   If you don't want to allow public comments for this FAQ you can disable the feature here.
@@ -264,14 +273,14 @@ phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor 
 the public area and may give an answer. If you wish to get rid of open questions, you can do so using this section.
 Alternatively, you can take over a question and answer it yourself and hereby add it to the FAQ.
 
-### 5.2.4 Sticky FAQs
+### 7.2.4 Sticky FAQs
 
 You can arrange the order of the sticky FAQs by drag'n'drop.
 The order of the sticky FAQs will be the same in the public frontend.
 To remove the "Important / Sticky" status from an FAQ and remove it from the overview, simply use the pin icon on the right.
 Only the status will be changed - the FAQ will not be deleted from the database.
 
-### 5.2.5 Orphaned FAQs
+### 7.2.5 Orphaned FAQs
 
 Orphaned FAQs are records that are no longer assigned to any category. This typically happens when categories are 
 deleted without moving the associated FAQs, or through incomplete data imports. As they lack a category assignment, 
@@ -296,7 +305,7 @@ for that language.
 
 Once saved, the entry will be visible in its new category and will automatically be removed from the Orphaned FAQ list.
 
-### 5.2.6 Open Questions
+### 7.2.6 Open Questions
 
 On the "Open Questions" page, you can see all open questions that visitors have posted in the currently selected 
 administration language. 
@@ -311,38 +320,38 @@ and the respective counts.
 To process these other questions, you must change your current administration language using the language selector in 
 the top menu.
 
-### 5.2.7 Comment Administration
+### 7.2.7 Comment Administration
 
 In this frontend, you can see all comments that have been posted in the FAQs and the news. You can't edit comments,
 but you can delete them with one easy click.
 
-### 5.2.8 Attachment Administration
+### 7.2.8 Attachment Administration
 
 In the attachment administration, you can see an overview of all attachments with their filename, file size,
 language, and MIME type.
 You can delete them, too.
 
-### 5.2.9 Tags Administration
+### 7.2.9 Tags Administration
 
 You can edit existing tags, and if you need to, you can delete the tag.
 
-### 5.2.10 Glossary
+### 7.2.10 Glossary
 
 A glossary is a list of terms in a particular domain of knowledge with the definitions for those terms. You can add,
 edit, and delete glossary items here. The items will be automatically displayed in <abbr> tags in the frontend.
 
-### 5.2.11 News Administration
+### 7.2.11 News Administration
 
 phpMyFAQ offers the ability to post news on the starting page of your FAQ.
 In the administration area, you can create new news, edit existing news, or delete them.
 
-### 5.2.12 Custom Pages Administration
+### 7.2.12 Custom Pages Administration
 
 Custom Pages allow you to create database-backed, SEO-friendly pages for legal information, about pages, and other 
 static content using a WYSIWYG editor. Custom pages support multi-language content, are automatically included in 
 sitemaps, and are searchable alongside FAQs.
 
-#### 5.2.12.1 Creating a Custom Page
+#### 7.2.12.1 Creating a Custom Page
 
 To create a new custom page:
 
@@ -357,7 +366,7 @@ To create a new custom page:
   - Must be unique per language
   - Real-time validation shows availability
   - Results in URL: `https://example.com/page/privacy-policy.html`
-- **Content**: Rich text editor (TinyMCE) for page content
+- **Content**: Rich text editor (Jodit) for page content
   - Full WYSIWYG editing with formatting, images, links
   - No HTML knowledge required
   - Images can be uploaded and managed
@@ -384,7 +393,7 @@ To create a new custom page:
 
 4. Click **Save** to create the page
 
-#### 5.2.12.2 Managing Custom Pages
+#### 7.2.12.2 Managing Custom Pages
 
 The Custom Pages list view provides:
 
@@ -396,7 +405,7 @@ The Custom Pages list view provides:
   - **Delete**: Remove pages (with confirmation)
   - **Active Toggle**: Quickly publish/unpublish pages
 
-#### 5.2.12.3 Multi-Language Support
+#### 7.2.12.3 Multi-Language Support
 
 Custom pages support multiple languages:
 
@@ -408,7 +417,7 @@ Custom pages support multiple languages:
   - German: `datenschutz`
   - French: `politique-de-confidentialite`
 
-#### 5.2.12.4 Legal Pages Integration
+#### 7.2.12.4 Legal Pages Integration
 
 Custom pages can be used for legal pages with automatic footer link integration:
 
@@ -450,7 +459,7 @@ main.imprintURL = page:imprint
 main.cookiePolicyURL = page:cookie-policy
 ```
 
-#### 5.2.12.5 Search Integration
+#### 7.2.12.5 Search Integration
 
 Custom pages are automatically integrated with all search engines:
 
@@ -471,11 +480,11 @@ Custom pages are automatically integrated with all search engines:
 - Bulk import via **OpenSearch → Import Data**
 
 **Search Results:**
-- Custom pages appear with a file-text icon (📄)
-- FAQs appear with a question-circle icon (❓)
+- Custom pages appear with a file-text icon
+- FAQs appear with a question-circle icon
 - Results link directly to `/page/{slug}.html`
 
-#### 5.2.12.6 Sitemap Integration
+#### 7.2.12.6 Sitemap Integration
 
 Active custom pages are automatically included in XML sitemaps:
 
@@ -489,7 +498,7 @@ Access sitemap at:
 - `https://example.com/sitemap.xml`
 - `https://example.com/sitemap.xml.gz` (gzipped)
 
-#### 5.2.12.7 SEO Best Practices
+#### 7.2.12.7 SEO Best Practices
 
 **Slug Guidelines:**
 - Use lowercase letters, numbers, and hyphens only
@@ -511,19 +520,19 @@ Access sitemap at:
 - Set pages as active when ready to publish
 - Use descriptive page titles
 
-#### 5.2.12.8 Permissions
+#### 7.2.12.8 Permissions
 
 Custom pages require the following permissions:
 
-- **PAGE_ADD**: Create new custom pages
-- **PAGE_EDIT**: Modify existing pages
-- **PAGE_DELETE**: Delete pages
+- **Add custom pages** (`addpage`): Create new custom pages
+- **Edit custom pages** (`editpage`): Modify existing pages
+- **Delete custom pages** (`delpage`): Delete pages
 
-Permissions are granted via **User Administration** → **Edit User** → **Permissions**.
+Permissions are granted in the user or group administration (see 7.1).
 
 Super admins have all permissions by default.
 
-#### 5.2.12.9 Troubleshooting
+#### 7.2.12.9 Troubleshooting
 
 **Slug validation fails:**
 - Ensure slug is unique per language
@@ -546,140 +555,18 @@ Super admins have all permissions by default.
 - Check page exists and is active
 - Clear cache if using caching
 
-### 5.2.13 AI-Assisted Translation
+### 7.2.13 AI-Assisted Translation
 
-phpMyFAQ includes an AI-assisted translation feature that helps you translate FAQ content, custom pages, categories, and
-news articles into multiple languages using professional translation APIs. The feature preserves HTML formatting and
-provides high-quality automated translations.
+phpMyFAQ can translate FAQs, custom pages, and categories with a machine translation service: Google Cloud
+Translation, DeepL, Azure Translator, Amazon Translate, or LibreTranslate. Select the provider and enter its
+credentials under **Configuration → Translation**; the feature requires the `Translate FAQs` right. When you translate
+an item, the **"Translate with AI"** button fills in the target language fields while preserving HTML formatting, and
+you review the result before saving. See the [AI-Assisted Translation guide](ai-translation.md) for the provider setup,
+the workflows, and troubleshooting.
 
-#### 5.2.13.1 Overview
+## 7.3 Statistics
 
-The AI translation feature integrates with leading translation services:
-
-- **Google Cloud Translation** - Neural machine translation with 100+ languages
-- **DeepL** - Premium quality translations, especially for European languages
-- **Azure Translator** - Microsoft's translation service with generous free tier
-- **Amazon Translate** - AWS translation service with 75+ languages
-- **LibreTranslate** - Open-source, self-hosted option for privacy
-
-#### 5.2.13.2 Configuration
-
-Navigate to the **Configuration → Translation** tab to configure your translation provider:
-
-1. Select your preferred **Translation Provider** from the dropdown
-2. Enter the required API credentials for your chosen provider
-3. Click **Save Configuration** to activate
-
-**Provider-Specific Credentials:**
-
-- **Google**: API key from Google Cloud Console
-- **DeepL**: API key from DeepL dashboard (Free or Pro)
-- **Azure**: API key and region from Azure Portal
-- **Amazon**: AWS Access Key ID, Secret Access Key, and region
-- **LibreTranslate**: Server URL and optional API key
-
-For detailed setup instructions for each provider, see the [AI Translation Guide](ai-translation.md).
-
-#### 5.2.13.3 Translating Content
-
-**Translating FAQs:**
-
-1. Navigate to **FAQs** and select an FAQ to translate
-2. Click on the **Translation** tab or **Translate FAQ**
-3. Select the target language from the dropdown
-4. Click the **"Translate with AI"** button
-5. Review the translated question, answer, and keywords
-6. Make any necessary edits
-7. Click **Save** to store the translation
-
-The AI will translate:
-- Question text
-- Answer (HTML formatting preserved)
-- Keywords/tags
-
-**Translating Custom Pages:**
-
-1. Navigate to **Content → Custom Pages**
-2. Select a page and click **Translate**
-3. Select the target language
-4. Click **"Translate with AI"**
-5. Review translated content (title, content, SEO fields)
-6. Adjust settings in the **Settings** tab
-7. Click **Save**
-
-The AI will translate:
-- Page title
-- Page content (HTML formatting preserved)
-- SEO title
-- SEO description
-
-**Translating Categories:**
-
-1. Navigate to **Categories**
-2. Select a category and click **Translate Category**
-3. Select the target language
-4. Click **"Translate with AI"**
-5. Review the translated name and description
-6. Click **Save**
-
-**Translating News:**
-
-1. Create or edit a news article
-2. Use the translation interface to create language versions
-3. The AI assists with translating headline and content
-
-#### 5.2.13.4 Best Practices
-
-**Review All Translations:**
-- AI translation is very accurate but not perfect
-- Always review technical terms, brand names, and legal content
-- Edit translations before publishing to ensure quality
-
-**Maintain Consistency:**
-- Use the same translation provider across your site
-- Keep a glossary of key terms and their preferred translations
-- Use consistent terminology in source content
-
-**HTML Formatting:**
-- Simple HTML (bold, italic, links, lists) translates best
-- Complex nested structures may need manual adjustment
-- Always preview translated content before publishing
-
-**Cost Management:**
-- Start with free tiers (DeepL Free: 500k chars/month, Azure: 2M chars/month)
-- Monitor usage in your provider's dashboard
-- Don't re-translate unnecessarily - review and edit instead
-
-#### 5.2.13.5 Troubleshooting
-
-**Translation button is disabled:**
-- Verify translation provider is configured in settings
-- Ensure source and target languages are different
-- Check that both languages are supported by your provider
-
-**Translation fails with error:**
-- Verify API credentials are correct
-- Check you haven't exceeded free tier limits
-- For Azure: ensure region format is correct (e.g., "eastus" not "East US")
-
-**Poor translation quality:**
-- Try DeepL for better quality (European languages)
-- Simplify source text (shorter sentences, clear language)
-- Review and edit translations manually
-- Verify language is well-supported by your provider
-
-**HTML formatting issues:**
-- Ensure source content has valid, clean HTML
-- Simplify complex HTML structures
-- Preview before saving
-- Re-translate if formatting is broken
-
-For comprehensive documentation, see:
-- [Complete AI Translation Guide](ai-translation.md) - Full documentation
-
-## 5.3 Statistics
-
-### 5.3.1 Ratings
+### 7.3.1 Ratings
 
 Below every FAQ, a visitor has the chance to rate the overall quality of a FAQ by giving ratings from one to five
 (whereas 1 is the worst, 5 the best rating).
@@ -687,30 +574,30 @@ In the statistics, the average rating and number of votes become visible for eve
 To give you a quick overview, FAQs with an average rating of two or worse are displayed in red; an average
 above 4 results in a green number.
 
-### 5.3.2 View sessions
+### 7.3.2 View sessions
 
 This function lets you keep track of your visitors. Every visitor is assigned an ID when coming to your starting page,
 that identifies a user during his whole visit. Using the information gathered here, you could reconstruct the way
 visitors use your FAQ and make the necessary adjustments to your categories, content, or keywords.
 
-### 5.3.3 View Admin log
+### 7.3.3 View Admin log
 
 The admin log allows you to track any actions taken by users in the admin area of phpMyFAQ. If you feel you have an
 intruder in the system, you can find out for sure by checking the admin log.
 
-### 5.3.4 Search statistics
+### 7.3.4 Search statistics
 
 On the search statistics page, you'll get a report about which keywords and how often your users are searching. This
 information is split into keywords, the number of searches for this term, the language, and the overall percentage.
 
-### 5.3.5 Reports
+### 7.3.5 Reports
 
 On the report page, you can select various data columns to generate a report about content and usage of your FAQ
 installation. You can export the report then as a CSV file.
 
-## 5.4 Imports & Exports
+## 7.4 Imports & Exports
 
-### 5.4.1 Imports
+### 7.4.1 Imports
 
 You can import faqs from a csv file. Further, you find an example of such a csv file:
 
@@ -725,14 +612,14 @@ You can import faqs from a csv file. Further, you find an example of such a csv 
 > [!NOTE]
 > All cells are required except for the keywords. Additionally, you are able to use several keywords that are seperated with commas.
 
-### 5.4.2 Exports
+### 7.4.2 Exports
 
 You can export your contents of your whole FAQ or just some selected categories into two formats:
 
 - a JSON file
 - a PDF file with a table of contents
 
-### 5.4.3 Batch upload via phpMyAdmin
+### 7.4.3 Batch upload via phpMyAdmin
 
 > [!NOTE]
 > You should have a table ready with the data you want to import. The titles of your new FAQ's in one column, the HTML-formatted content in the next, and the keywords in a third column.
@@ -743,7 +630,7 @@ You can export your contents of your whole FAQ or just some selected categories 
 >
 > This guide is intentionally extensive, but the individual steps can be completed quite quickly once you understand them. It is important that you don't make any mistakes when uploading to your DB, so take your time the first time you try it.
 
-#### 5.4.3.1 Export the necessary tables
+#### 7.4.3.1 Export the necessary tables
 
 Open phpMyAdmin, first check whether the correct database is displayed.
 You can switch to a different database at the top left.
@@ -771,7 +658,7 @@ Then click **Export** at the bottom.
 
 Save all 5 CSV-Files in a separate folder on your computer. Then you can close phpMyAdmin for the moment.
 
-#### 5.4.3.2 Edit the tables
+#### 7.4.3.2 Edit the tables
 
 Open the first CSV file _faqdata.csv_ with the spreadsheet program of your choice.
 (You can use LibreOffice, OpenOffice, or Excel, for example.)
@@ -825,7 +712,7 @@ Save and close.
 Same for the fifth file _faqdata_groups_.
 Add the unique id and -1.
 
-#### 5.4.3.3 Upload the finished tables
+#### 7.4.3.3 Upload the finished tables
 
 Now we have all the data ready to import.
 So we open phpMyAdmin again.
@@ -845,11 +732,10 @@ We'll do that four more times with our other files.
 
 Now go to your phpMyFAQ and check your new entries.
 
-## 5.5 Backup
+## 7.5 Backup
 
-Using the backup function, it is possible to create a copy of the database to a single file. This makes it possible to
-restore the FAQ after a possible "crash" or to move the FAQ from one server to another. It is recommended to create
-regular backups of your FAQ.
+Using the backup function, it is possible to create a copy of the database as a single SQL file. This makes it possible
+to restore the FAQ after a possible "crash". It is recommended to create regular backups of your FAQ.
 
 - **backup data**
   A backup of all **data** will include all entries, users, comments, etc.
@@ -857,22 +743,28 @@ regular backups of your FAQ.
   The sessions of visits and the admin log will be saved (i.e., all **log** files). This information is not necessary
   for running phpMyFAQ, they serve only statistical purposes.
 
-During the backup process, phpMyFAQ generates a hash on the whole backup file and stores this information. The hashes
-of backups will be verified during the process of restoring. If a backup can't be verified, the admin can't use the
-backup file for restore.
+During the backup process, phpMyFAQ signs the whole backup file with a secret key and stores the file name, key, and
+signature in the database. When you restore a backup, phpMyFAQ looks up this information by the file name and verifies
+the signature. If a backup can't be verified, for example because the file was renamed or modified, or because it was
+created by another installation, the admin can't use the backup file for restore. The backup must also have been
+created with the same major and minor version of phpMyFAQ (e.g., 4.2). Restoring replaces the content of all tables
+contained in the backup. Creating backups requires the `backup` right, restoring requires the `restore` right.
 
-To back up the whole data located on your web server, you can run our simple backup script located in the folder /scripts.
+To move an installation to another server, use the native tools of your database (e.g., `mysqldump` or `pg_dump`)
+instead. To back up all files on your web server, you can run the backup script `scripts/backup.sh` from the phpMyFAQ
+source repository.
 
-## 5.6 Configuration
+## 7.6 Configuration
 
-### 5.6.1 Main configuration
+### 7.6.1 Main configuration
 
-Here you can edit the general, FAQ specific, search, spam protection, spam control center, SEO related, layout
-settings, Mail setup for SMTP, API settings, online update settings, and if enabled, LDAP configuration of phpMyFAQ.
+Here you can edit all settings of phpMyFAQ. The settings are grouped into tabs: Main, FAQs, Search, Translation,
+Security, Spam control center, Layout, SEO, Mail setup, Push, API, OAuth 2.0, Keycloak, OpenID Connect, LDAP, Storage,
+and Online Update. Use the filter box above the tabs to find a tab quickly.
 
 You can find a detailed description of all settings in the [Configuration key reference](configuration.md).
 
-### 5.6.2 FAQ Multi-sites
+### 7.6.2 FAQ Multi-sites
 
 You can see a list of all multisite installations, and you're able to add new ones.
 
@@ -882,6 +774,8 @@ different database credentials), but only want to update once, you need to follo
 - Make sure you have the _multisite/_ directory in your document root and _multisite.php_ in it
 - For every installation, there needs to be a subdirectory of _multisite/_ named exactly like the hostname of the
   separate installation.
+- Alternatively, set the environment variable `PMF_MULTISITE_BASE_DOMAIN`, e.g., to `faq.example.com`. A request for
+  `acme.faq.example.com` then uses the subdirectory _multisite/acme/_ if no directory with the full hostname exists.
 
 For example, if you want to use _faq.example.org_ and _beta.faq.example.org_, it needs to look like this:
 
@@ -898,15 +792,16 @@ For example, if you want to use _faq.example.org_ and _beta.faq.example.org_, it
             |-- constants.php
             `-- database.php
 
-### 5.6.3 Stop Words configuration
+### 7.6.3 Stop Words configuration
 
 We need stop words for the smart answering feature and the related answers. If a user is adding a new question to your
 FAQ, the words will be checked against all FAQs in your database but without the stop words. Stop words are words with a
 very low relevance like the English word _the_.
 
-### 5.6.4 phpMyFAQ Update (Experimental feature)
+### 7.6.4 phpMyFAQ Update (Experimental feature)
 
-If you're running phpMyFAQ 4.0.0 or later, you can use the built-in automatic upgrade feature.
+If you're running phpMyFAQ 4.0.0 or later, you can use the built-in automatic upgrade feature. The menu entry
+"phpMyFAQ Upgrade" is only shown if the online update is enabled in the "Online Update" configuration tab.
 You can click through the update wizard:
 
 1. Check for System Health: this checks if your system is ready for the upgrade
@@ -916,114 +811,63 @@ You can click through the update wizard:
 5. Install downloaded package: first, it creates a backup of your current installation, then it copies the downloaded
    files into your installation, and in the end, the database is updated
 
-### 5.6.5 Redis-backed configuration storage
+### 7.6.5 Redis-backed configuration storage
 
-The **Storage** tab allows enabling Redis as a configuration cache.
+The **Storage** tab of the configuration allows you to use Redis as a fast read cache for the configuration values.
+The database table `faqconfig` remains the source of truth, and phpMyFAQ falls back to the database if Redis is
+unavailable. Use **Test Redis connection** before enabling it. In the same tab, you can switch the application cache
+adapter from the filesystem (default) to Redis. See
+[Redis-Backed Configuration Storage](installation.md#219-redis-backed-configuration-storage) for DSN examples and
+troubleshooting.
 
-- The database table `faqconfig` remains the source of truth.
-- Redis is used as fast read storage.
-- If Redis is unavailable, phpMyFAQ falls back to database reads/writes.
-
-Before enabling it in production:
-
-1. Configure DSN, prefix, and timeout in **Configuration → Storage**
-2. Use **Test Redis connection**
-3. Save configuration and verify application behavior
-
-### 5.6.6 Elasticsearch configuration
+### 7.6.6 Elasticsearch configuration
 
 Here you can create and drop the Elasticsearch index, and you can run a full import of all data from your database
 into the Elasticsearch index. 
 You can also see some Elasticsearch-relevant usage data. 
-This page is only available if Elasticsearch is enabled.
+This page is only available if Elasticsearch is enabled. For the setup, see
+[Elasticsearch Support](installation.md#215-elasticsearch-support).
 
-### 5.6.7 OpenSearch configuration
+### 7.6.7 OpenSearch configuration
 
 Here you can create and drop the OpenSearch index, and you can run a full import of all data from your database
 into the OpenSearch index.
 You can also see some OpenSearch-relevant usage data.
-This page is only available if OpenSearch is enabled.
+This page is only available if OpenSearch is enabled. For the setup, see
+[OpenSearch Support](installation.md#216-opensearch-support).
 
-### 5.6.8 System information
+### 7.6.8 System information
 
 On this page, phpMyFAQ displays some relevant system information like PHP version, database version, or session path.
 Please use this information when reporting bugs. Additionally, you can check the status of all translation files and see 
 if there are any missing translations.
 
-## 5.7 Using external identity providers
+### 7.6.9 Edit forms
+
+On the "Edit forms" page, you can customize the frontend forms for adding new FAQs and asking questions. For every
+input field, you can define whether it is active and whether it is required, and you can translate the field labels.
+
+### 7.6.10 Plugins
+
+The "Plugins" page lists the installed plugins with their name, version, author, and description. Plugins that are
+incompatible with your phpMyFAQ version are listed separately, together with the reason. See [Plugins](plugins.md) for
+details on writing and installing plugins.
+
+## 7.7 Using external identity providers
 
 phpMyFAQ can integrate with external identity providers for administrator and frontend logins.
 
-### 5.7.1 Using Keycloak
+### 7.7.1 Using Keycloak
 
-Keycloak support uses OpenID Connect Authorization Code flow with PKCE.
-You can enable it in the administration under `Configuration` -> `Keycloak`.
-For a worked configuration example, see the dedicated [Keycloak Integration guide](keycloak.md).
+phpMyFAQ can sign users in through Keycloak using the OpenID Connect Authorization Code flow with PKCE. Enable it
+under `Configuration` -> `Keycloak`, enter the Keycloak base URL, realm, client ID, and client secret, and register
+`https://faq.example.com/auth/keycloak/callback` as a valid redirect URI in your Keycloak client. Existing accounts are
+only matched by the stored Keycloak subject (`sub`), never by username or email address; optionally, phpMyFAQ creates
+new users on their first login and maps Keycloak roles to phpMyFAQ groups. See the dedicated
+[Keycloak Integration guide](keycloak.md) for the client settings, account linking rules, group mapping, and
+troubleshooting.
 
-Recommended Keycloak client settings:
-
-- Client type: confidential
-- Standard flow enabled
-- Direct access grants disabled unless you need them for other tools
-- PKCE code challenge method: `S256`
-- Root URL: `https://faq.example.com/`
-- Home URL: `https://faq.example.com/`
-- Valid redirect URI: `https://faq.example.com/auth/keycloak/callback`
-- Valid post logout redirect URI: `https://faq.example.com/`
-- Web origin: `https://faq.example.com`
-
-Minimum phpMyFAQ configuration:
-
-1. Enable `Keycloak sign-in`
-2. Set the `Keycloak base URL`, for example `https://sso.example.com`
-3. Set the `Realm`
-4. Set the `Client ID`
-5. Set the `Client secret`
-6. Set the `Redirect URI` to your phpMyFAQ callback URL
-7. Keep `Scopes` at least on `openid profile email`
-8. Optionally set `Logout redirect URL` to the page users should see after provider logout
-
-Example phpMyFAQ values for a production setup:
-
-- `keycloak.baseUrl`: `https://sso.example.com`
-- `keycloak.realm`: `faq`
-- `keycloak.clientId`: `phpmyfaq`
-- `keycloak.redirectUri`: `https://faq.example.com/auth/keycloak/callback`
-- `keycloak.scopes`: `openid profile email`
-- `keycloak.logoutRedirectUrl`: `https://faq.example.com/`
-
-Optional settings:
-
-- Enable automatic provisioning if phpMyFAQ should create local users on first successful Keycloak login
-- Enable automatic group assignment if phpMyFAQ should assign local groups from Keycloak roles
-- Enable group synchronization on login if phpMyFAQ should remove stale memberships for mapped Keycloak groups
-- Add a JSON role-to-group mapping if Keycloak role names should map to different phpMyFAQ group names
-- Set a logout redirect URL if users should return to a specific page after provider logout
-- Use a JSON mapping such as `{"admin":"Administrators","faq-editors":"Editors"}` if Keycloak role names and phpMyFAQ group names differ
-
-phpMyFAQ resolves users in this order:
-
-1. existing user linked by stored Keycloak subject (`sub`)
-2. preferred username from Keycloak
-3. existing user by email address
-4. automatic provisioning if enabled
-
-If automatic provisioning is disabled, users must already exist in phpMyFAQ before they can sign in with Keycloak.
-
-Group assignment behavior:
-
-- only roles listed in the JSON mapping are managed by phpMyFAQ
-- matched groups are added to the user on login
-- if group synchronization on login is enabled, stale memberships for mapped groups are removed during login
-- phpMyFAQ groups outside the configured Keycloak mapping are left untouched
-
-Troubleshooting:
-
-- If login works but logout does not return to phpMyFAQ, verify `Valid post logout redirect URI` in Keycloak and `keycloak.logoutRedirectUrl` in phpMyFAQ
-- If users are created but not added to groups, make sure permission level `medium` is enabled and the Keycloak roles actually match your JSON mapping keys
-- If an existing user cannot log in, check whether the stored Keycloak subject (`sub`) is already linked to a different account
-
-### 5.7.2 Using a generic OpenID Connect provider
+### 7.7.2 Using a generic OpenID Connect provider
 
 phpMyFAQ can also sign users in through any OpenID Connect provider, such as Authentik, Okta or
 Zitadel, using the Authorization Code flow with PKCE. Enable it under
@@ -1032,7 +876,7 @@ and optionally a provider name for the login button. See the dedicated
 [OpenID Connect Integration guide](openid-connect.md) for an Authentik walkthrough, account
 linking rules and group mapping.
 
-### 5.7.3 Using Microsoft Entra ID
+### 7.7.3 Using Microsoft Entra ID
 
 You can use our experimental Microsoft Entra ID support for user authentication as well.
 App Registrations in Azure are used to integrate applications with Microsoft Azure services,
@@ -1061,7 +905,9 @@ Follow these steps to create an App Registration in Microsoft Azure:
 
 1. In the "Name" field, provide a name for your App Registration, e.g. "phpMyFAQ".
 2. Choose the supported account types that your application will authenticate: "Accounts in this organizational directory only"
-3. In the "Redirect URI" section, specify the redirect URI where Entra ID will send authentication responses: `http://www.example.com/faq/services/azure/callback.php`
+3. In the "Redirect URI" section, select the platform "Web" and specify the redirect URI where Entra ID will send
+   authentication responses: `https://www.example.com/faq/services/azure/callback.php` (replace
+   `https://www.example.com/faq/` with the URL of your phpMyFAQ installation)
 4. Click the "Register" button to create the App Registration.
 
 **Step 5: Configure Authentication**
@@ -1073,43 +919,81 @@ Follow these steps to create an App Registration in Microsoft Azure:
 
 **Step 6: Note Application Details**
 
-1. Make note of the "Application (client) ID." This is your application's unique identifier.
-2. If your application requires client secrets, go to the "Certificates & secrets" tab to create and manage client secrets.
+1. Make note of the "Application (client) ID" and the "Directory (tenant) ID" on the "Overview" page.
+2. Go to the "Certificates & secrets" tab and create a new client secret. Copy its value; it is only shown once.
 
 **Step 7: Create Azure config file**
 
-1. Copy the file `./config/azure.php.original` and name it `./config/azure.php`
-2. Add the Tenant ID, the client ID, and the secret from Step 7 and save the file
-3. Then, activate Microsoft Entra ID support in the administration under "Security"
+1. Copy the file `content/core/config/azure.php.original` and name it `content/core/config/azure.php`
+2. Add the tenant ID (`AAD_OAUTH_TENANTID`), the client ID (`AAD_OAUTH_CLIENTID`), and the secret
+   (`AAD_OAUTH_SECRET`) from Step 6 and save the file
+3. Then, activate "Enable Sign in with Microsoft Entra ID" (`security.enableSignInWithMicrosoft`) in the
+   administration under `Configuration` -> `Security`
 
-## 5.8 Command Line Interface (CLI)
+## 7.8 Command Line Interface (CLI)
 
 phpMyFAQ offers a command line interface (CLI) for administrators.
 
-### 5.8.1 Usage
+### 7.8.1 Usage
 
-The CLI is located in the `bin/console` file. You can run it with the PHP CLI binary.
+The CLI is located in the `bin/console` file. Run it with the PHP CLI binary from the phpMyFAQ root directory.
 
-### 5.8.2 Available commands
+### 7.8.2 Available commands
 
 ```bash
 # Show available commands
 php bin/console list
 ```
 
+| Command | Description |
+|---|---|
+| `phpmyfaq:install` | Installs phpMyFAQ non-interactively (headless setup for Docker, CI, and e2e tests) |
+| `phpmyfaq:update [version]` | Runs the phpMyFAQ update process, like the online update in the admin |
+| `phpmyfaq:hashes:create` | Generates the file hashes used by the integrity check |
+| `phpmyfaq:mcp:server` | Runs the MCP server for LLM integration, see [MCP Server](mcp-server.md) |
+| `phpmyfaq:seed-testdata` | Seeds phpMyFAQ with bilingual (German and English) test data, for development only |
 
-## 5.9 Troubleshooting
+Before phpMyFAQ is installed, only `phpmyfaq:install` and `phpmyfaq:hashes:create` are available.
 
-### 5.9.1 Hard password reset
+### 7.8.3 Background worker and scheduler
+
+phpMyFAQ queues some tasks, such as sending emails, if "Use background worker queue for email delivery"
+(`mail.useQueue`) is enabled, which is the default. Run the worker regularly, e.g., via cron, to process the queue:
+
+```bash
+# Process all queued jobs
+php bin/worker.php
+
+# Process at most 10 jobs
+php bin/worker.php 10
+```
+
+The task scheduler runs maintenance tasks such as the cleanup of old sessions, the search index optimization, and the
+aggregation of statistics:
+
+```bash
+php bin/scheduler.php run
+```
+
+## 7.9 Troubleshooting
+
+### 7.9.1 Hard password reset
 
 If you can't log into your phpMyFAQ installation,
-and your password reset doesn't work, you can reset your password on this page:
-[Password Hash Generator Tool for phpMyFAQ]{https://password.phpmyfaq.de)
-You need your phpMyFAQ salt (from the table `faqconfig` in the database) and the username you used to log in,
-usually `admin`.
-You can choose a new password, and the tool will generate a new password hash for you.
-Copy the hash and paste it into the `pass` field in the `faquserlogin` table in the database for the user "admin".
-Then you can log in with the new password.
+and your password reset doesn't work, you can set a new password hash directly in the database.
+phpMyFAQ accepts bcrypt hashes, so you can generate one with the PHP CLI:
+
+```bash
+php -r 'echo password_hash("your-new-password", PASSWORD_BCRYPT), PHP_EOL;'
+```
+
+Alternatively, you can use the [Password Hash Generator Tool for phpMyFAQ](https://password.phpmyfaq.de).
+It needs your phpMyFAQ salt (`security.salt` in the table `faqconfig` in the database) and the username you used to
+log in, usually `admin`.
+
+Copy the hash and paste it into the `pass` field in the `faquserlogin` table in the database for your user, e.g.,
+"admin". If you use a table prefix, the table is named accordingly. Then you can log in with the new password.
+phpMyFAQ automatically upgrades the stored hash to the current format on the next successful login.
 
 For transparency reasons, the whole code base is available on GitHub.
 You can find the code here: https://github.com/phpMyFAQ/password.phpmyfaq.de

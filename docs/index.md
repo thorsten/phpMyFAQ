@@ -1,9 +1,9 @@
 # phpMyFAQ Manual
 
 phpMyFAQ is a comprehensive, multilingual FAQ system that is entirely database-driven.
-It is compatible with a variety of databases for data storage and requires PHP 8.4+ for data access.
+It is compatible with a variety of databases for data storage and requires PHP 8.4 or later.
 The system features a multi-language Content Management System equipped with a WYSIWYG editor and an Image Manager.
-It also provides real-time search capabilities with Elasticsearch or OpenSearch.
+It also provides optional real-time search capabilities with Elasticsearch or OpenSearch.
 
 phpMyFAQ supports flexible multi-user functionality, offering user and group-based permissions on categories and FAQs.
 It includes a wiki-like revision feature, a news system, and configurable user-tracking.
@@ -14,17 +14,19 @@ responsive templates.
 These Twig-based templates allow for the inclusion of your own text and HTML snippets. There's also a built-in plugin
 system for further customization.
 
-Additional features include PDF support, a backup system, a dynamic sitemap, related FAQs, tagging, a plugin system,
-and built-in spam protection systems.
-phpMyFAQ also supports two-factor authentication (2FA) for enhanced security.
+Additional features include PDF support, a backup system, a dynamic sitemap, related FAQs, tagging, a glossary,
+bookmarks, Web Push notifications, and built-in spam protection systems.
+phpMyFAQ also supports two-factor authentication (2FA) and passkeys (WebAuthn) for enhanced security.
 An AI-assisted translation feature helps translate content into multiple languages using Google Cloud Translation, DeepL,
 Azure Translator, Amazon Translate, or LibreTranslate.
 A REST API is available for integration with other systems.
-It also supports OpenLDAP, Microsoft Active Directory, Microsoft Entra ID, Keycloak, and an MCP Server for AI agents.
+For authentication, phpMyFAQ supports LDAP (e.g. OpenLDAP and Microsoft Active Directory), Microsoft Entra ID,
+Keycloak, and generic OpenID Connect providers such as Authentik.
+An MCP Server for AI agents is available as well.
 The system is easy to install, thanks to its user-friendly installation script.
 
 phpMyFAQ is versatile
-and can be run on almost any web hosting provider or deployed in the cloud using a Docker container.
+and can be run on almost any web hosting provider or deployed in the cloud using the official Docker images.
 
 This documentation serves as a guide to help you install, update, use, and administer phpMyFAQ effectively.
 

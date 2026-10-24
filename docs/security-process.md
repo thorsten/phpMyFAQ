@@ -1,13 +1,13 @@
-# 16. Security Process
+# 17. Security Process
 
 Internal runbook for handling vulnerability reports in phpMyFAQ. The public-facing policy is
-[SECURITY.md](../SECURITY.md); this document describes what happens on our side after a report
-arrives.
+[SECURITY.md](https://github.com/thorsten/phpMyFAQ/blob/main/SECURITY.md);
+this document describes what happens on our side after a report arrives.
 
 Audience: maintainers with security triage rights. It also serves as the audit trail description for
 organisations evaluating phpMyFAQ.
 
-## 16.1 Roles
+## 17.1 Roles
 
 | Role                | Responsibility                                                        |
 |---------------------|-----------------------------------------------------------------------|
@@ -19,21 +19,22 @@ organisations evaluating phpMyFAQ.
 One person may hold several roles. If a role is unstaffed for a report, the security contact
 escalates rather than letting the clock run.
 
-## 16.2 Prerequisites
+## 17.2 Prerequisites
 
 - Admin access to the GitHub repository (Security tab, private advisory forks)
 - Access to the security@phpmyfaq.de mailbox
 - Ability to publish releases and update the website
 - PGP key for encrypted correspondence
 
-## 16.3 Intake
+## 17.3 Intake
 
 Reports arrive through GitHub private reporting or security@phpmyfaq.de. Both channels are checked at
 least daily.
 
 1. Acknowledge within 2 business days. Use the template below.
-2. Create a **draft GitHub Security Advisory** immediately, even before triage. This is the single
-   record for the report — do not track security work in public issues.
+2. Make sure a **draft GitHub Security Advisory** exists immediately, even before triage. GitHub private
+   reports already create one; for email reports, create it yourself. This is the single record for the
+   report — do not track security work in public issues.
 3. Assign an internal identifier (`PMF-SEC-YYYY-NNN`) and record the intake date.
 4. If the report arrived by email, transfer the details into the draft advisory and continue the
    conversation from there where the reporter has a GitHub account.
@@ -41,18 +42,22 @@ least daily.
 Never forward report details to third parties, screenshots into chat channels, or paste PoCs into
 external tools.
 
-## 16.4 Triage
+## 17.4 Triage
 
 Complete within 7 calendar days of intake.
 
 1. **Reproduce** against the latest supported release in a clean environment. Record the exact
    version, PHP version, database, and configuration used.
-2. **Decide scope** using the scope guidance in SECURITY.md. If out of scope, reply with a short
-   explanation and close the advisory — politely, and with reasoning the reporter can check.
+2. **Decide scope** using the
+   [scope guidance in SECURITY.md](https://github.com/thorsten/phpMyFAQ/blob/main/SECURITY.md#scope-guidance).
+   If out of scope, reply with a short explanation and close the advisory — politely, and with reasoning the reporter can check. Reports
+   that only affect end-of-life versions are closed with an upgrade recommendation.
 3. **Score severity** with CVSS v3.1 (add v4.0 where useful). Record the vector string in the
    advisory. Do not adjust the score to fit a preferred release timeline.
 4. **Determine affected versions**: which branches contain the vulnerable code, and which of them are
-   still supported. Record the introducing commit where it can be identified.
+   still supported (see the
+   [supported versions table](https://github.com/thorsten/phpMyFAQ/blob/main/SECURITY.md#supported-versions)).
+   Record the introducing commit where it can be identified.
 5. **Assign a CWE** identifier.
 6. Inform the reporter of the outcome, the severity, and the target fix date.
 
@@ -65,7 +70,7 @@ Severity guides the timeline, not whether the issue gets fixed:
 | Medium   | 4.0+   | 60 days    | Active branch, backport if cheap |
 | Low      | < 4.0  | 90 days    | Active branch only              |
 
-## 16.5 Fix
+## 17.5 Fix
 
 1. Create a **private fork** from the draft advisory (GitHub provides this) and develop the patch
    there. Never push a security fix to a public branch before the release.
@@ -80,7 +85,7 @@ Severity guides the timeline, not whether the issue gets fixed:
    `.htaccess` rule, a disabled feature — and communicate it to the reporter and, if the risk
    warrants it, publicly.
 
-## 16.6 CVE assignment
+## 17.6 CVE assignment
 
 1. In the draft advisory, use **Request CVE** — GitHub is a CNA and issues the identifier.
 2. Fill in affected package (`thorsten/phpmyfaq` on Packagist), affected version ranges, patched
@@ -89,7 +94,7 @@ Severity guides the timeline, not whether the issue gets fixed:
 3. Credit the reporter as they requested. Check spelling and affiliation with them first.
 4. Do not publish the advisory yet — publication is coordinated with the release.
 
-## 16.7 Release and disclosure
+## 17.7 Release and disclosure
 
 1. Merge the private fork, cut the release, publish artifacts including the SBOM.
 2. Publish the GitHub Security Advisory. This propagates to the GitHub Advisory Database, Packagist,
@@ -98,27 +103,33 @@ Severity guides the timeline, not whether the issue gets fixed:
 4. Announce on the website, the release notes, and the project's usual channels. State clearly which
    versions are affected and what the upgrade path is.
 5. Notify the reporter that disclosure has happened and thank them.
-6. Where the vulnerability affects packaged distributions (Docker image, Kubernetes manifests),
-   rebuild and republish those too — a patched tarball with a stale image helps nobody.
+6. Check that the patched Docker images (`ghcr.io/thorsten/phpmyfaq`) were published. The
+   `docker-publish.yml` workflow builds them for every release tag; if it failed, rerun it — a patched
+   tarball with a stale image helps nobody.
 
-Order matters: release first, advisory second, an announcement third. Publishing an advisory before the
-release exposes users with no upgrade path.
+Order matters: release first, advisory second, announcement third. Publishing an advisory before the
+release exposes users with no upgrade path. The only exception is a vulnerability that is already being
+exploited in the wild: then the advisory with mitigations may go out before the fix, as stated in
+SECURITY.md.
 
-## 16.8 After the fact
+The disclosure date is agreed with the reporter. The default window is up to 90 days from the report,
+adjusted by severity and complexity.
+
+## 17.8 After the fact
 
 Within two weeks of disclosure:
 
 - Record in the security log: identifier, CVE, severity, dates for each stage, whether targets were
   met, and the root cause class.
 - Ask whether tooling could have caught it. If a Semgrep rule, a static analysis check, or a test
-  pattern has found it, add the rule — that is the real return on the incident.
+  pattern would have found it, add the rule — that is the real return on the incident.
 - For High and Critical issues, write a short internal note on why the code was written that way.
   Not blame; pattern recognition.
 
 Review the security log annually: which classes of vulnerability recur and whether response targets
 are being met in practice. This log is what an enterprise evaluator will ask to see.
 
-## 16.9 Records to keep
+## 17.9 Records to keep
 
 For each report, retain: intake date and channel, acknowledgement date, triage outcome and CVSS
 vector, fix commit, release version, CVE identifier, disclosure date, reporter credit preference.
@@ -126,7 +137,7 @@ vector, fix commit, release version, CVE identifier, disclosure date, reporter c
 The draft advisory holds most of this automatically — the point is that the record exists per report
 and is retrievable, rather than reconstructed from memory later.
 
-## 16.10 Templates
+## 17.10 Templates
 
 **Acknowledgement**
 

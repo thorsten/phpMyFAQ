@@ -1,51 +1,79 @@
 # 4. Docker Compose Cheat Sheet
 
-Quick reference for common Docker Compose operations with phpMyFAQ production deployment.
+Quick reference for common Docker Compose operations with the phpMyFAQ production deployment described in
+[Production Deployment](deployment.md).
+
+The commands assume:
+
+- the files `docker-compose.prod.yml` and `.env` are in a directory called `phpmyfaq`, so the Compose project name is
+  `phpmyfaq`
+- the profiles `apache` and `mariadb` are enabled in `COMPOSE_PROFILES`
+
+The services and containers of `docker-compose.prod.yml` are:
+
+| Profile         | Service         | Container                |
+|-----------------|-----------------|--------------------------|
+| `apache`        | `apache`        | `phpmyfaq-apache`        |
+| `frankenphp`    | `frankenphp`    | `phpmyfaq-frankenphp`    |
+| `mariadb`       | `mariadb`       | `phpmyfaq-mariadb`       |
+| `postgres`      | `postgres`      | `phpmyfaq-postgres`      |
+| `elasticsearch` | `elasticsearch` | `phpmyfaq-elasticsearch` |
+| `opensearch`    | `opensearch`    | `phpmyfaq-opensearch`    |
+
+If you use FrankenPHP or PostgreSQL, replace the names accordingly. Compose prefixes volume and network names with the
+project name: the volume `phpmyfaq_data` is called `phpmyfaq_phpmyfaq_data`, the network `phpmyfaq` is called
+`phpmyfaq_phpmyfaq`. `docker volume ls` shows the exact names.
+
+To omit `-f docker-compose.prod.yml` in all commands, set it once in your shell:
+
+```bash
+export COMPOSE_FILE=docker-compose.prod.yml
+```
 
 ## Basic Operations
 
 ### Start Services
 ```bash
-# Start all services
-docker-compose -f docker-compose.prod.yml up -d
+# Start all services of the profiles in COMPOSE_PROFILES
+docker compose -f docker-compose.prod.yml up -d
 
 # Start specific service
-docker-compose -f docker-compose.prod.yml up -d apache
+docker compose -f docker-compose.prod.yml up -d apache
 
-# Start with build
-docker-compose -f docker-compose.prod.yml up -d --build
+# Start with other profiles than in .env
+docker compose -f docker-compose.prod.yml --profile frankenphp --profile postgres up -d
 ```
 
 ### Stop Services
 ```bash
 # Stop all services
-docker-compose -f docker-compose.prod.yml stop
+docker compose -f docker-compose.prod.yml stop
 
 # Stop specific service
-docker-compose -f docker-compose.prod.yml stop apache
+docker compose -f docker-compose.prod.yml stop apache
 
 # Stop and remove containers
-docker-compose -f docker-compose.prod.yml down
+docker compose -f docker-compose.prod.yml down
 
-# Stop and remove containers + volumes (DANGEROUS!)
-docker-compose -f docker-compose.prod.yml down -v
+# Stop and remove containers + volumes (DANGEROUS - deletes the FAQ data and the database!)
+docker compose -f docker-compose.prod.yml down -v
 ```
 
 ### Restart Services
 ```bash
 # Restart all services
-docker-compose -f docker-compose.prod.yml restart
+docker compose -f docker-compose.prod.yml restart
 
 # Restart specific service
-docker-compose -f docker-compose.prod.yml restart apache
+docker compose -f docker-compose.prod.yml restart apache
 ```
 
 ## Monitoring
 
 ### View Status
 ```bash
-# List all containers
-docker-compose -f docker-compose.prod.yml ps
+# List all containers with their health status
+docker compose -f docker-compose.prod.yml ps
 
 # Show resource usage
 docker stats
@@ -57,94 +85,105 @@ docker inspect phpmyfaq-apache
 ### View Logs
 ```bash
 # All services (follow mode)
-docker-compose -f docker-compose.prod.yml logs -f
+docker compose -f docker-compose.prod.yml logs -f
 
 # Specific service
-docker-compose -f docker-compose.prod.yml logs -f apache
+docker compose -f docker-compose.prod.yml logs -f apache
 
 # Last 100 lines
-docker-compose -f docker-compose.prod.yml logs --tail=100 apache
+docker compose -f docker-compose.prod.yml logs --tail=100 apache
 
-# Logs since specific time
-docker-compose -f docker-compose.prod.yml logs --since 2024-01-01T00:00:00
+# Logs of the last hour
+docker compose -f docker-compose.prod.yml logs --since 1h
 
 # Save logs to file
-docker-compose -f docker-compose.prod.yml logs > phpmyfaq-logs.txt
+docker compose -f docker-compose.prod.yml logs > phpmyfaq-logs.txt
 ```
+
+The web server writes its access and error logs to the container output. The application logs of phpMyFAQ are
+stored in the `content/core/logs` directory (volume `phpmyfaq_logs`).
 
 ## Updates and Maintenance
 
 ### Update Images
+
+Enable the maintenance mode and make a backup first, then open `/update/` after the containers were recreated. See
+[Updates](deployment.md) in the deployment guide for the complete procedure.
+
 ```bash
-# Pull latest images
-docker-compose -f docker-compose.prod.yml pull
+# Pull the images of the version set in PMF_VERSION
+docker compose -f docker-compose.prod.yml pull
 
 # Update and restart
-docker-compose -f docker-compose.prod.yml pull && \
-docker-compose -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.prod.yml pull && \
+docker compose -f docker-compose.prod.yml up -d
 
 # Force recreate containers
-docker-compose -f docker-compose.prod.yml up -d --force-recreate
+docker compose -f docker-compose.prod.yml up -d --force-recreate
 ```
 
-### Rebuild Services
-```bash
-# Rebuild all
-docker-compose -f docker-compose.prod.yml build
-
-# Rebuild specific service
-docker-compose -f docker-compose.prod.yml build apache
-
-# Rebuild without cache
-docker-compose -f docker-compose.prod.yml build --no-cache
-```
+`docker-compose.prod.yml` only uses published images, it does not build them. To build your own image, see
+*Building the image yourself* in the deployment guide.
 
 ## Database Operations
 
 ### Database Backup
 ```bash
 # MariaDB backup
-docker exec phpmyfaq-mariadb mysqldump \
-  -u phpmyfaq -p[PASSWORD] phpmyfaq > backup.sql
+docker exec phpmyfaq-mariadb sh -c 'mariadb-dump -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DATABASE"' \
+  > backup.sql
 
 # PostgreSQL backup
-docker exec phpmyfaq-postgres pg_dump \
-  -U phpmyfaq phpmyfaq > backup.sql
+docker exec phpmyfaq-postgres pg_dump -U phpmyfaq phpmyfaq > backup.sql
 
 # Compressed backup
-docker exec phpmyfaq-mariadb mysqldump \
-  -u phpmyfaq -p[PASSWORD] phpmyfaq | gzip > backup.sql.gz
+docker exec phpmyfaq-mariadb sh -c 'mariadb-dump -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DATABASE"' \
+  | gzip > backup.sql.gz
 ```
 
 ### Database Restore
 ```bash
 # MariaDB restore
-cat backup.sql | docker exec -i phpmyfaq-mariadb \
-  mysql -u phpmyfaq -p[PASSWORD] phpmyfaq
+docker exec -i phpmyfaq-mariadb sh -c 'mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DATABASE"' \
+  < backup.sql
 
 # PostgreSQL restore
-cat backup.sql | docker exec -i phpmyfaq-postgres \
-  psql -U phpmyfaq -d phpmyfaq
+docker exec -i phpmyfaq-postgres psql -U phpmyfaq -d phpmyfaq < backup.sql
 
 # From compressed backup
 gunzip < backup.sql.gz | docker exec -i phpmyfaq-mariadb \
-  mysql -u phpmyfaq -p[PASSWORD] phpmyfaq
+  sh -c 'mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DATABASE"'
 ```
 
 ### Database Access
 ```bash
 # MariaDB shell
-docker exec -it phpmyfaq-mariadb mysql -u phpmyfaq -p
+docker exec -it phpmyfaq-mariadb mariadb -u phpmyfaq -p phpmyfaq
 
 # PostgreSQL shell
 docker exec -it phpmyfaq-postgres psql -U phpmyfaq -d phpmyfaq
 
 # Execute SQL query
-docker exec phpmyfaq-mariadb mysql -u phpmyfaq -p[PASSWORD] \
-  -e "SHOW TABLES;" phpmyfaq
+docker exec phpmyfaq-mariadb \
+  sh -c 'mariadb -u"$MARIADB_USER" -p"$MARIADB_PASSWORD" "$MARIADB_DATABASE" -e "SHOW TABLES;"'
 ```
 
+The examples use the default user and database name `phpmyfaq`; adjust them if you changed `MYSQL_USER`,
+`MYSQL_DATABASE`, `POSTGRES_USER`, or `POSTGRES_DB` in `.env`.
+
 ## Volume Management
+
+| Volume                 | Path in the container                    |
+|------------------------|------------------------------------------|
+| `phpmyfaq_config`      | `/var/www/html/content/core/config`      |
+| `phpmyfaq_data`        | `/var/www/html/content/core/data`        |
+| `phpmyfaq_logs`        | `/var/www/html/content/core/logs`        |
+| `phpmyfaq_attachments` | `/var/www/html/content/user/attachments` |
+| `phpmyfaq_images`      | `/var/www/html/content/user/images`      |
+
+The volumes `caddy_data` and `caddy_config` hold the certificates and the Caddy state of the FrankenPHP container,
+`mariadb_data`, `postgres_data`, `elasticsearch_data`, and `opensearch_data` the files of the database and the search
+engine. Back up the database with a dump instead of copying its volume.
 
 ### List Volumes
 ```bash
@@ -158,44 +197,53 @@ docker volume ls | grep phpmyfaq
 ### Inspect Volume
 ```bash
 # View volume details
-docker volume inspect phpmyfaq_data
+docker volume inspect phpmyfaq_phpmyfaq_data
 
 # Find volume location
-docker volume inspect phpmyfaq_data | grep Mountpoint
+docker volume inspect --format '{{ .Mountpoint }}' phpmyfaq_phpmyfaq_data
 ```
 
 ### Backup Volumes
 ```bash
 # Backup data volume
 docker run --rm \
-  -v phpmyfaq_data:/source \
-  -v $(pwd):/backup \
+  -v phpmyfaq_phpmyfaq_data:/source:ro \
+  -v "$(pwd)":/backup \
   alpine tar czf /backup/data-backup.tar.gz -C /source .
 
-# Backup all important volumes
-for vol in data images attachments config; do
+# Backup all phpMyFAQ volumes
+mkdir -p backups
+for vol in config data logs attachments images; do
   docker run --rm \
-    -v phpmyfaq_$vol:/source \
-    -v $(pwd)/backups:/backup \
-    alpine tar czf /backup/$vol-$(date +%Y%m%d).tar.gz -C /source .
+    -v "phpmyfaq_phpmyfaq_${vol}:/source:ro" \
+    -v "$(pwd)/backups":/backup \
+    alpine tar czf "/backup/${vol}-$(date +%Y%m%d).tar.gz" -C /source .
 done
 ```
 
+The complete backup script for the database and the volumes is part of the deployment guide, see
+*Backup and Restore*.
+
 ### Restore Volumes
 ```bash
+# Stop the web container first
+docker compose -f docker-compose.prod.yml stop apache
+
 # Restore data volume
 docker run --rm \
-  -v phpmyfaq_data:/target \
-  -v $(pwd):/backup \
+  -v phpmyfaq_phpmyfaq_data:/target \
+  -v "$(pwd)":/backup \
   alpine tar xzf /backup/data-backup.tar.gz -C /target
+
+docker compose -f docker-compose.prod.yml start apache
 ```
 
 ### Remove Volumes
 ```bash
 # Remove specific volume (DANGEROUS!)
-docker volume rm phpmyfaq_data
+docker volume rm phpmyfaq_phpmyfaq_data
 
-# Remove all unused volumes
+# Remove unused anonymous volumes
 docker volume prune
 ```
 
@@ -211,31 +259,32 @@ docker exec phpmyfaq-apache ls -la /var/www/html
 
 # Run as different user
 docker exec -u www-data phpmyfaq-apache whoami
+
+# Run the phpMyFAQ console
+docker exec -u www-data phpmyfaq-apache php /var/www/bin/console list
 ```
 
 ### File Operations
 ```bash
 # Copy file from container
-docker cp phpmyfaq-apache:/var/www/html/config.php ./config.php
+docker cp phpmyfaq-apache:/var/www/html/content/core/config/database.php ./database.php
 
 # Copy file to container
-docker cp local-file.txt phpmyfaq-apache:/var/www/html/
+docker cp local-file.txt phpmyfaq-apache:/var/www/html/content/user/images/
 
-# View file content
-docker exec phpmyfaq-apache cat /var/www/html/data/logs/error.log
-
-# Edit file (if nano/vi installed)
-docker exec -it phpmyfaq-apache nano /var/www/html/config.php
+# List the application logs
+docker exec phpmyfaq-apache ls -la /var/www/html/content/core/logs
 ```
+
+Only files below `content/` are kept in volumes. Changes to all other files are lost when the container is recreated.
 
 ### Check File Permissions
 ```bash
 # List permissions
-docker exec phpmyfaq-apache ls -la /var/www/html/data
+docker exec phpmyfaq-apache ls -la /var/www/html/content/core
 
-# Fix permissions
-docker exec phpmyfaq-apache chown -R www-data:www-data /var/www/html/data
-docker exec phpmyfaq-apache chmod -R 755 /var/www/html/data
+# Fix permissions (the entrypoint also does this on every start)
+docker exec phpmyfaq-apache chown -R www-data:www-data /var/www/html/content
 ```
 
 ## Network Operations
@@ -246,19 +295,19 @@ docker exec phpmyfaq-apache chmod -R 755 /var/www/html/data
 docker network ls
 
 # Inspect network
-docker network inspect phpmyfaq_phpmyfaq-network
+docker network inspect phpmyfaq_phpmyfaq
 ```
 
 ### Network Diagnostics
 ```bash
-# Test connectivity between containers
-docker exec phpmyfaq-apache ping mariadb
-
-# Check DNS resolution
-docker exec phpmyfaq-apache nslookup mariadb
+# Check DNS resolution between containers
+docker exec phpmyfaq-apache getent hosts mariadb
 
 # Test database connection
-docker exec phpmyfaq-apache nc -zv mariadb 3306
+docker exec phpmyfaq-apache php -r 'var_dump((bool) @fsockopen("mariadb", 3306));'
+
+# Test search engine connection
+docker exec phpmyfaq-apache curl -fsS http://elasticsearch:9200/_cluster/health
 ```
 
 ## Health Checks
@@ -266,25 +315,25 @@ docker exec phpmyfaq-apache nc -zv mariadb 3306
 ### Check Container Health
 ```bash
 # View health status
-docker inspect phpmyfaq-apache | grep -A 10 Health
+docker inspect --format '{{json .State.Health}}' phpmyfaq-apache
 
 # Watch health status
-watch -n 5 'docker inspect phpmyfaq-apache | grep -A 10 Health'
+watch -n 5 "docker inspect --format '{{.State.Health.Status}}' phpmyfaq-apache"
 
 # All health statuses
-docker-compose -f docker-compose.prod.yml ps | grep "health"
+docker compose -f docker-compose.prod.yml ps
 ```
 
 ### Manual Health Check
 ```bash
-# Check web server
+# Check web server and application (port PMF_HTTP_PORT, default 80)
 curl -f http://localhost/api/health
 
 # Check database
-docker exec phpmyfaq-mariadb mysqladmin ping -u phpmyfaq -p[PASSWORD]
+docker exec phpmyfaq-mariadb healthcheck.sh --connect --innodb_initialized
 
-# Check Elasticsearch
-curl http://localhost:9200/_cluster/health
+# Check Elasticsearch (not published to the host, so check from inside the container)
+docker exec phpmyfaq-elasticsearch curl -fs http://localhost:9200/_cluster/health
 ```
 
 ## Cleanup
@@ -300,27 +349,27 @@ docker rm phpmyfaq-apache
 
 ### Clean Everything
 ```bash
+# Check disk usage before cleanup
+docker system df
+
 # Remove unused data
 docker system prune
 
-# Remove everything (including volumes - DANGEROUS!)
+# Remove all unused images and anonymous volumes as well (DANGEROUS!)
 docker system prune -a --volumes
-
-# Check disk usage before cleanup
-docker system df
 ```
 
 ### Remove phpMyFAQ Stack Completely
 ```bash
 # Stop and remove containers
-docker-compose -f docker-compose.prod.yml down
+docker compose -f docker-compose.prod.yml down
 
 # Remove volumes (DANGEROUS - you'll lose all data!)
-docker-compose -f docker-compose.prod.yml down -v
+docker compose -f docker-compose.prod.yml down -v
 
 # Remove images
 docker rmi ghcr.io/thorsten/phpmyfaq:latest
-docker rmi mariadb:11.6
+docker rmi mariadb:11.8
 docker rmi elasticsearch:8.16.5
 ```
 
@@ -329,28 +378,25 @@ docker rmi elasticsearch:8.16.5
 ### Container Issues
 ```bash
 # Restart unhealthy container
-docker-compose -f docker-compose.prod.yml restart apache
+docker compose -f docker-compose.prod.yml restart apache
 
 # View container processes
 docker top phpmyfaq-apache
 
 # View container resource limits
-docker inspect phpmyfaq-apache | grep -A 20 HostConfig
+docker inspect --format '{{json .HostConfig.Resources}}' phpmyfaq-apache
 
 # Check exit code
-docker inspect phpmyfaq-apache | grep ExitCode
+docker inspect --format '{{.State.ExitCode}}' phpmyfaq-apache
 ```
 
-### Debug Mode
+### Check the Configuration
 ```bash
-# Run with debug output
-docker-compose -f docker-compose.prod.yml --verbose up
-
-# Check compose config
-docker-compose -f docker-compose.prod.yml config
+# Show the resolved compose configuration (with the values from .env)
+docker compose -f docker-compose.prod.yml config
 
 # Validate compose file
-docker-compose -f docker-compose.prod.yml config --quiet
+docker compose -f docker-compose.prod.yml config --quiet
 ```
 
 ### Performance Analysis
@@ -374,10 +420,9 @@ docker exec phpmyfaq-apache env
 
 # Search for specific variable
 docker exec phpmyfaq-apache env | grep PMF_DB
-
-# Export to file
-docker exec phpmyfaq-apache env > container-env.txt
 ```
+
+The output contains passwords, so don't save it to files or share it.
 
 ### Update Environment
 ```bash
@@ -385,37 +430,13 @@ docker exec phpmyfaq-apache env > container-env.txt
 nano .env
 
 # Recreate containers with new env
-docker-compose -f docker-compose.prod.yml up -d --force-recreate
+docker compose -f docker-compose.prod.yml up -d --force-recreate
 ```
+
+The `PMF_DB_*`, `PMF_ADMIN_*`, and `PMF_BASE_URL` variables are only read for the headless installation. Changing them
+later has no effect on an existing installation.
 
 ## Advanced Operations
-
-### Docker Swarm (Production Cluster)
-```bash
-# Initialize swarm
-docker swarm init
-
-# Deploy stack
-docker stack deploy -c docker-compose.prod.yml phpmyfaq
-
-# List services
-docker stack services phpmyfaq
-
-# Scale service
-docker service scale phpmyfaq_apache=3
-
-# Remove stack
-docker stack rm phpmyfaq
-```
-
-### Create Custom Network
-```bash
-# Create network
-docker network create --driver bridge phpmyfaq-custom
-
-# Connect container to network
-docker network connect phpmyfaq-custom phpmyfaq-apache
-```
 
 ### Export/Import Images
 ```bash
@@ -435,32 +456,23 @@ Add to `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 # phpMyFAQ Docker aliases
-alias pmf-up='docker-compose -f docker-compose.prod.yml up -d'
-alias pmf-down='docker-compose -f docker-compose.prod.yml down'
-alias pmf-restart='docker-compose -f docker-compose.prod.yml restart'
-alias pmf-logs='docker-compose -f docker-compose.prod.yml logs -f'
-alias pmf-ps='docker-compose -f docker-compose.prod.yml ps'
-alias pmf-update='docker-compose -f docker-compose.prod.yml pull && docker-compose -f docker-compose.prod.yml up -d'
+alias pmf-up='docker compose -f docker-compose.prod.yml up -d'
+alias pmf-down='docker compose -f docker-compose.prod.yml down'
+alias pmf-restart='docker compose -f docker-compose.prod.yml restart'
+alias pmf-logs='docker compose -f docker-compose.prod.yml logs -f'
+alias pmf-ps='docker compose -f docker-compose.prod.yml ps'
+alias pmf-update='docker compose -f docker-compose.prod.yml pull && docker compose -f docker-compose.prod.yml up -d'
 alias pmf-shell='docker exec -it phpmyfaq-apache bash'
-alias pmf-db='docker exec -it phpmyfaq-mariadb mysql -u phpmyfaq -p'
-alias pmf-backup='./backup.sh'
+alias pmf-db='docker exec -it phpmyfaq-mariadb mariadb -u phpmyfaq -p phpmyfaq'
+alias pmf-backup='./backup.sh'   # the backup script from the deployment guide
 ```
 
 ## Environment-Specific Tips
 
 ### Portainer
-```bash
-# Deploy via Portainer CLI
-portainer stack deploy phpmyfaq \
-  --compose-file docker-compose.prod.yml \
-  --env-file .env
 
-# List stacks
-portainer stack ls
-
-# Remove stack
-portainer stack rm phpmyfaq
-```
+Portainer deploys the stack from its web interface, see *Deployment with Portainer* in the deployment guide. Set
+`COMPOSE_PROFILES` as a stack environment variable there.
 
 ### Docker Desktop
 - Use the GUI to view containers, logs, and stats
@@ -469,10 +481,7 @@ portainer stack rm phpmyfaq
 
 ### Production Server
 ```bash
-# Run in background with restart policy
-docker-compose -f docker-compose.prod.yml up -d --no-deps apache
-
-# Monitor with systemd service
+# Start Docker on boot; the containers come back thanks to "restart: unless-stopped"
 sudo systemctl enable docker
 sudo systemctl start docker
 ```
@@ -483,17 +492,17 @@ When something goes wrong:
 
 1. **Check if containers are running**
    ```bash
-   docker-compose -f docker-compose.prod.yml ps
+   docker compose -f docker-compose.prod.yml ps
    ```
 
 2. **Check logs for errors**
    ```bash
-   docker-compose -f docker-compose.prod.yml logs --tail=50
+   docker compose -f docker-compose.prod.yml logs --tail=50
    ```
 
 3. **Verify network connectivity**
    ```bash
-   docker exec phpmyfaq-apache ping mariadb
+   docker exec phpmyfaq-apache getent hosts mariadb
    ```
 
 4. **Check disk space**
@@ -508,12 +517,12 @@ When something goes wrong:
 
 6. **Test database connection**
    ```bash
-   docker exec phpmyfaq-mariadb mysqladmin ping
+   docker exec phpmyfaq-mariadb healthcheck.sh --connect
    ```
 
 7. **Check file permissions**
    ```bash
-   docker exec phpmyfaq-apache ls -la /var/www/html/data
+   docker exec phpmyfaq-apache ls -la /var/www/html/content/core
    ```
 
 8. **Review resource usage**
@@ -521,6 +530,4 @@ When something goes wrong:
    docker stats --no-stream
    ```
 
----
-
-**Pro Tip**: Replace `docker-compose.prod.yml` with `-f docker-compose.prod.yml` shorthand or create an alias!
+See *Monitoring and Troubleshooting* in the deployment guide for the common problems and their solutions.

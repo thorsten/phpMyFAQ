@@ -1,18 +1,18 @@
-# OpenID Connect Integration
+# 10. OpenID Connect Integration
 
 phpMyFAQ supports any OpenID Connect (OIDC) provider for frontend and administration logins,
 for example Authentik, Okta, Auth0 or Zitadel. The integration uses the Authorization Code flow
 with PKCE, validates the ID token signature against the provider's JWKS, and links accounts by
 the `sub` claim. For Keycloak, prefer the dedicated [Keycloak Integration](keycloak.md).
 
-## 1. Prerequisites
+## 10.1 Prerequisites
 
 - a reachable OIDC provider that publishes a discovery document at
   `.../.well-known/openid-configuration`
 - a confidential client (client ID and client secret) for phpMyFAQ
 - the public URL of your phpMyFAQ installation, for example `https://faq.example.com/`
 
-## 2. Provider client settings
+## 10.2 Provider client settings
 
 - Client type: confidential
 - Grant: Authorization Code with PKCE (`S256`)
@@ -29,7 +29,7 @@ the `sub` claim. For Keycloak, prefer the dedicated [Keycloak Integration](keycl
 3. The discovery URL is `https://auth.example.com/application/o/faq/.well-known/openid-configuration`.
 4. Authentik's default `profile` scope already adds a `groups` claim with the user's group names.
 
-## 3. phpMyFAQ configuration
+## 10.3 phpMyFAQ configuration
 
 In the administration, open `Configuration` -> `OpenID Connect` and set:
 
@@ -43,10 +43,11 @@ In the administration, open `Configuration` -> `OpenID Connect` and set:
 | Redirect URI | `https://faq.example.com/auth/oidc/callback` (optional, this is the default) |
 | Scopes | `openid profile email` |
 | Logout redirect URL | `https://faq.example.com/` |
+| Automatically create phpMyFAQ users on first OpenID Connect login | checked (the default) |
 
 The login pages then show a *Sign in with Authentik* button.
 
-## 4. User resolution and account linking
+## 10.4 User resolution and account linking
 
 1. An account whose stored OIDC issuer and subject equal the ID token's `iss` and `sub` claims is used.
    Each issuer and subject pair links to at most one account; distinct issuers may share a subject.
@@ -55,13 +56,16 @@ The login pages then show a *Sign in with Authentik* button.
 3. If that login or email already belongs to an account that is not linked, the login is refused
    and logged. phpMyFAQ never links an existing account to a subject at login time.
 
+An OpenID Connect login only counts as the first factor: if the account has two-factor authentication
+enabled, phpMyFAQ asks for the TOTP code before the session is granted.
+
 > **Note:** The `sub` claim is only unique per issuer, so account links are bound to the issuer
 > (`oidc_iss`) as well as the subject (`oidc_sub`). Switching `oidc.discoveryUrl` to another
 > provider therefore never maps its users onto existing accounts. Users provisioned by the old
 > provider are refused (logged as an issuer mismatch or as an account not linked to this issuer
 > and subject) and must be re-linked or deleted.
 
-## 5. Group mapping
+## 10.5 Group mapping
 
 Requires permission level `medium`.
 
@@ -69,10 +73,14 @@ Requires permission level `medium`.
   (default `groups`).
 - *Group mapping*: JSON object from provider group name to phpMyFAQ group name, for example
   `{"faq-admins":"Administrators","faq-editors":"Editors"}`. Only mapped groups are managed.
-- *Automatically assign groups*: add mapped groups on first login.
-- *Synchronize groups on login*: also remove mapped groups the user no longer holds.
+- *Automatically assign phpMyFAQ groups from the groups claim*: add mapped groups when a user is
+  provisioned on first login.
+- *Synchronize mapped phpMyFAQ groups on login*: on every login, add mapped groups and remove mapped
+  groups the user no longer holds.
 
-## 6. Logout
+A mapped phpMyFAQ group that does not exist yet is created automatically.
+
+## 10.6 Logout
 
 Logout clears the phpMyFAQ session and redirects to the provider's `end_session_endpoint` with
 `id_token_hint` and, when configured, the logout redirect URL as `post_logout_redirect_uri`. When the
@@ -80,7 +88,7 @@ logout redirect URL is empty, no `post_logout_redirect_uri` is sent and the prov
 post-logout page. Providers without an end-session endpoint
 only get a local logout.
 
-## 7. Troubleshooting
+## 10.7 Troubleshooting
 
 - *Button missing*: `Enable OpenID Connect sign-in` is off.
 - *Redirect loops back to the start page*: check the phpMyFAQ log; usual causes are a wrong

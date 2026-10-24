@@ -1,47 +1,54 @@
-# 12. phpMyFAQ MCP Server
+# 15. phpMyFAQ MCP Server
 
 This document describes the Model Context Protocol (MCP) server implementation for phpMyFAQ.
 
-## 12.1 Overview
+## 15.1 Overview
 
 The phpMyFAQ MCP Server allows Large Language Models (LLMs) to query the phpMyFAQ installation through the Model
 Context Protocol. This enables AI assistants to provide contextually relevant answers based on your FAQ.
 
-The current implementation uses the official PHP package `mcp/sdk` and exposes the server over STDIO.
+The implementation uses the official PHP package `mcp/sdk` and exposes the server over STDIO only. There is no HTTP
+transport.
 
 Note:
 The MCP server is experimental. Its tools and command-line options might change in future releases.
 
-## 12.2 Usage
+## 15.2 Usage
 
-### 12.2.1 Starting the Server
+### 15.2.1 Starting the Server
 
 ```bash
-# Show server information
+# Show server information (name, version, capabilities, available tools)
 php bin/console phpmyfaq:mcp:server --info
 
 # Start the MCP server
 php bin/console phpmyfaq:mcp:server
 ```
 
-The command starts a STDIO MCP server. It is intended to be launched by an MCP-capable client or by the MCP Inspector.
+`-i` is the short form of `--info`.
 
-### 12.2.2 Available Tools
+The command is only registered once phpMyFAQ is installed, because the server needs the database configuration. On an
+installation without a database configuration, `bin/console` reports the command as not defined.
+
+The command starts a STDIO MCP server. It is not meant to be run interactively: an MCP-capable client or the MCP
+Inspector launches it as a subprocess and talks to it via standard input and output.
+
+### 15.2.2 Available Tools
 
 #### faq_search
 
-Search through the phpMyFAQ knowledge base to find relevant FAQ entries.
+Search through the phpMyFAQ knowledge base to find relevant FAQ entries. Both questions and answers are searched.
 
 **Parameters:**
-- `query` (required): The search query or question
-- `category_id` (optional): Limit search to a specific category
-- `limit` (optional): Maximum results to return (default: 10, max: 50)
-- `all_languages` (optional): Search in all languages (default: false)
+- `query` (string, required): The search query or question
+- `category_id` (integer, optional, minimum 1): Limit the search to a specific category
+- `limit` (integer, optional): Maximum number of results to return (default: 10, minimum: 1, maximum: 50)
+- `all_languages` (boolean, optional): Search in all languages instead of the current language only (default: false)
 
-**Example Usage:**
+**Example `tools/call` parameters:**
 ```json
 {
-  "tool": "faq_search",
+  "name": "faq_search",
   "arguments": {
     "query": "How to reset password?",
     "limit": 5,
@@ -51,11 +58,11 @@ Search through the phpMyFAQ knowledge base to find relevant FAQ entries.
 ```
 
 **Response Format:**
-The tool returns JSON with:
-- Question and answer content
-- FAQ ID and language
-- Relevance score
-- Direct URL to the FAQ entry
+The tool returns a JSON object with these fields:
+
+- `results`: list of FAQ entries, each with ID, language, question, answer, category ID, relevance score, and the
+  direct URL to the FAQ entry
+- `total_found`: number of entries in `results`, i.e., after `limit` has been applied
 
 Example result shape:
 
@@ -76,15 +83,18 @@ Example result shape:
 }
 ```
 
-## 12.3 Integration with LLM Clients
+If nothing matches, the tool returns `{"results": [], "total_found": 0}`.
 
-Once the MCP server is running, LLM clients can connect to it and use the `faq_search` tool to query your phpMyFAQ
-database. The server follows the MCP specification and provides:
+## 15.3 Integration with LLM Clients
+
+Configure your MCP client to launch `php bin/console phpmyfaq:mcp:server` from the phpMyFAQ root directory. The
+client can then use the `faq_search` tool to query your phpMyFAQ database. The server follows the MCP specification and
+provides:
 
 - Tool discovery via `tools/list`
 - Tool execution via `tools/call`
 
-### 12.3.1 Example with MCP Inspector
+### 15.3.1 Example with MCP Inspector
 
 To test the server, you can use the MCP Inspector tool:
 
@@ -92,70 +102,58 @@ To test the server, you can use the MCP Inspector tool:
 npx @modelcontextprotocol/inspector php bin/console phpmyfaq:mcp:server
 ```
 
-You should see something like the following output:
+The Inspector starts a local proxy, prints a session token, and opens a browser window with a URL like
+`http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=<token>`. Use it to list the tools and call `faq_search`.
 
-```bash
-Starting MCP inspector...
-⚙️ Proxy server listening on localhost:6277
-🔑 Session token: 428d7f0d505ea087fda1ef9005fbec76ade6cbdfd6f98a93c315b6207d4ac82a
-   Use this token to authenticate requests or set DANGEROUSLY_OMIT_AUTH=true to disable auth
-
-🚀 MCP Inspector is up and running at:
-   http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=428d7f0d505ea087fda1ef9005fbec76ade6cbdfd6f98a93c315b6207d4ac82a
-
-🌐 Opening browser...
-```
-
-You can then access the MCP Inspector at the provided URL to interact with the server and test the `faq_search` tool.
-
-## 12.4 Configuration
+## 15.4 Configuration
 
 No additional MCP-specific configuration is required beyond having a working phpMyFAQ installation.
 
 The MCP server uses the same phpMyFAQ runtime configuration as the rest of the application, including:
 
 - database configuration
-- language configuration
+- language configuration (`main.language`, and `main.languageDetection` if enabled)
 - URL configuration used for generated FAQ links
-- the standard logger
 
-## 12.4.1 Dependency Notes
+### 15.4.1 Dependency Notes
 
 The server runtime depends on:
 
-- `mcp/sdk`
+- `mcp/sdk` (Composer constraint `~0.9.0`)
 - `symfony/console`
 
-If you update dependencies, make sure `mcp/sdk` remains installable with the project Composer constraints.
+`mcp/sdk` is still a 0.x release, so a new minor version can contain breaking changes. All calls into the SDK are
+isolated in `phpMyFAQ\Service\McpServer\McpSdkRuntime`; check that class first when updating the SDK.
 
-## 12.5 Error Handling
+## 15.5 Error Handling
 
-The server includes comprehensive error handling:
-- Invalid search queries return descriptive error messages
-- Database connection issues are logged and reported
-- Malformed requests are handled gracefully
+Errors during a tool call are returned as text content of the tool result, not as protocol errors:
 
-## 12.6 Security Considerations
+- An empty `query` returns `Error: Search query cannot be empty.`
+- Exceptions during the search, e.g., database errors, return `Error searching FAQ database: <message>`
 
-- The MCP server only provides read access to publicly available FAQ content
+If the server cannot start, the command prints `Failed to start MCP server: <message>` and exits with a non-zero exit
+code.
+
+## 15.6 Security Considerations
+
+- The MCP server only provides read access to FAQ content
+- Searches run as an anonymous user, so only FAQs and categories visible to anonymous visitors are returned
 - No authentication bypass or privileged access is provided
-- Search results respect phpMyFAQ's existing visibility rules
 
-## 12.7 Troubleshooting
+## 15.7 Troubleshooting
 
-### 12.7.1 Debugging
+### 15.7.1 Debugging
 
-Enable debug logging by checking the Monolog output when running the server.
+The MCP server does not write its own log output. Use the MCP Inspector to inspect the requests and responses, and
+check the tool result text for the error messages listed in section 15.5.
 
-### 12.7.2 Runtime Issues
+### 15.7.2 Runtime Issues
 
 If the server does not start:
 
+- verify phpMyFAQ is installed, otherwise the command is not available
 - verify Composer dependencies are installed
 - verify `mcp/sdk` is present in the installed packages
 - run `php bin/console phpmyfaq:mcp:server --info` to confirm the command is wired correctly
 - test the server with MCP Inspector before connecting a custom client
-
-### 12.7.3 Transport Notes
-
-The phpMyFAQ MCP server currently uses STDIO only. It is not exposed as HTTP transport by default.

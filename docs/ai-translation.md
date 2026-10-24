@@ -1,15 +1,15 @@
-# 9. AI-Assisted Translation Feature
+# 11. AI-Assisted Translation Feature
 
-phpMyFAQ includes an AI-assisted translation feature that helps you translate your FAQ content, custom pages, 
-categories, and news articles into multiple languages using professional translation services.
+phpMyFAQ includes an AI-assisted translation feature that helps you translate your FAQs, custom pages, and
+categories into other languages using machine translation services.
 
-## 9.1 Overview
+## 11.1 Overview
 
 The translation feature integrates with leading translation APIs to provide high-quality, automated translations while 
 preserving HTML formatting in your content. This saves time when creating multilingual content and ensures consistency 
 across different language versions of your FAQ.
 
-## 9.2 Supported Translation Providers
+## 11.2 Supported Translation Providers
 
 phpMyFAQ supports five translation providers:
 
@@ -20,21 +20,36 @@ phpMyFAQ supports five translation providers:
 5. **LibreTranslate** - Open-source, self-hosted option
 
 Each provider has different pricing models, language support, and quality characteristics. Choose the one that best 
-fits your needs and budget.
+fits your needs and budget. The prices, free tiers, and language counts in this guide are indicative only; check the
+provider's current pricing page before you decide.
 
-## 9.3 Configuration
+## 11.3 Configuration
 
-### 9.3.1 Accessing Translation Settings
+### 11.3.1 Accessing Translation Settings
 
 1. Log in to the phpMyFAQ admin panel
 2. Navigate to **Configuration** → **Translation** tab
-3. Select your preferred translation provider from the dropdown
+3. Select your preferred provider in **Translation service provider** (`translation.provider`, default: `None`,
+   which disables the feature)
 4. Enter the required API credentials
-5. Click **Save Configuration**
+5. Save the configuration
 
-### 9.3.2 Provider-Specific Setup
+The provider settings use these configuration keys:
 
-#### 9.3.2.1 Google Cloud Translation
+| Provider | Configuration keys |
+| --- | --- |
+| Google Cloud Translation | `translation.googleApiKey` |
+| DeepL | `translation.deeplApiKey`, `translation.deeplUseFreeApi` (default: enabled) |
+| Azure Translator | `translation.azureKey`, `translation.azureRegion` |
+| Amazon Translate | `translation.amazonAccessKeyId`, `translation.amazonSecretAccessKey`, `translation.amazonRegion` (default: `us-east-1`) |
+| LibreTranslate | `translation.libreTranslateUrl` (default: `https://libretranslate.com`), `translation.libreTranslateApiKey` |
+
+Using the translation feature requires the `Translate FAQs` (`translate_faq`) right for all content types, including
+custom pages and categories. Every successful translation is recorded in the admin log.
+
+### 11.3.2 Provider-Specific Setup
+
+#### 11.3.2.1 Google Cloud Translation
 
 **Prerequisites:**
 - A Google Cloud Platform account
@@ -57,7 +72,7 @@ fits your needs and budget.
 **Pricing:** Pay-as-you-go, typically $20 per million characters
 **Languages:** 100+ languages supported
 
-#### 9.3.2.2 DeepL
+#### 11.3.2.2 DeepL
 
 **Prerequisites:**
 - A DeepL account (Free or Pro)
@@ -81,7 +96,7 @@ fits your needs and budget.
 
 **Languages:** 30+ languages (fewer than Google, but higher quality)
 
-#### 9.3.2.3 Azure Translator
+#### 11.3.2.3 Azure Translator
 
 **Prerequisites:**
 - Microsoft Azure account
@@ -109,7 +124,7 @@ fits your needs and budget.
 
 **Languages:** 90+ languages supported
 
-#### 9.3.2.4 Amazon Translate
+#### 11.3.2.4 Amazon Translate
 
 **Prerequisites:**
 - AWS account
@@ -134,7 +149,7 @@ fits your needs and budget.
 **Pricing:** Pay-as-you-go, typically $15 per million characters
 **Languages:** 75+ languages supported
 
-#### 9.3.2.5 LibreTranslate (Self-Hosted)
+#### 11.3.2.5 LibreTranslate (Self-Hosted)
 
 **Prerequisites:**
 - A server to host LibreTranslate (optional – can use public instance)
@@ -166,30 +181,30 @@ fits your needs and budget.
 **Pricing:** Free if self-hosted, or usage limits on public instance
 **Languages:** 30+ languages supported
 
-## 9.4 Using the Translation Feature
+## 11.4 Using the Translation Feature
 
-### 9.4.1 Translating FAQs
+### 11.4.1 Translating FAQs
 
-1. Navigate to **FAQs** → Edit an existing FAQ
-2. In the FAQ editor, switch to the **Translation** tab (or click **Translate FAQ**)
-3. Select the **target language** from the dropdown
-4. The original language will be auto-detected
-5. Click the **"Translate with AI"** button
-6. The system will automatically translate:
+1. Navigate to **Content** → **FAQ Administration**
+2. Open the translation menu of the FAQ and choose the language you want to translate into; the FAQ editor opens in
+   translation mode
+3. Select the **target language** in the language field; the source language is the language of the original FAQ
+4. Click the **"Translate with AI"** button below the answer
+5. The system will automatically translate:
    - Question text
    - Answer (preserving HTML formatting like bold, links, lists)
    - Keywords
-7. Review the translated content
-8. Make any necessary edits or adjustments
-9. Click **Save** to save the translation
+6. Review the translated content
+7. Make any necessary edits or adjustments
+8. Click **Save** to save the translation
 
 **Important:** HTML tags in the answer (like `<p>`, `<strong>`, `<a>`, etc.) are automatically preserved during 
 translation.
 
-### 9.4.2 Translating Custom Pages
+### 11.4.2 Translating Custom Pages
 
 1. Navigate to **Content** → **Custom Pages**
-2. Select a page and click **Translate**
+2. Click the translate icon of the page
 3. Select the **target language**
 4. Click **"Translate with AI"** button
 5. The system will translate:
@@ -201,11 +216,11 @@ translation.
 7. Configure the language and other settings in the **Settings** tab
 8. Click **Save** to add the translation
 
-### 9.4.3 Translating Categories
+### 11.4.3 Translating Categories
 
-1. Navigate to **Categorize**
-2. Select a category and click **Translate Category**
-3. Select the **target language**
+1. Navigate to **Content** → **Categories**
+2. In the category overview, open the translations of a category and choose a language that is not translated yet
+3. Select the **target language** in the language field
 4. Click **"Translate with AI"** button
 5. The system will translate:
    - Category name
@@ -213,16 +228,14 @@ translation.
 6. Review the translations
 7. Click **Save** to add the translation
 
-### 9.4.4 Translating News Articles
+### 11.4.4 News Articles
 
-Currently, news articles use a similar workflow:
-1. Create or edit a news article
-2. Use the translation interface to create language versions
-3. The AI can assist with translating the headline and content
+The news editor has no **"Translate with AI"** button yet. The admin API endpoint behind the feature already accepts
+news content (headline, message, and link title), but in the administration you currently translate news manually.
 
-## 9.5 Best Practices
+## 11.5 Best Practices
 
-### 9.5.1 Review All Translations
+### 11.5.1 Review All Translations
 
 AI translation is very good, but not perfect. Always review and edit translations before publishing, especially for:
 - Technical terms specific to your domain
@@ -230,19 +243,19 @@ AI translation is very good, but not perfect. Always review and edit translation
 - Legal or compliance-related content
 - Idiomatic expressions
 
-### 9.5.2 Maintain Consistency
+### 11.5.2 Maintain Consistency
 
 - Use the same translation provider across your site for consistency
 - Create a glossary of key terms and their preferred translations
 - Use the same terminology in source content to get consistent translations
 
-### 9.5.3 HTML Formatting
+### 11.5.3 HTML Formatting
 
 - The AI preserves HTML tags, but complex nested structures may occasionally need adjustment
 - Always preview translated content to ensure formatting is correct
 - Simple formatting (bold, italic, links, lists) works best
 
-### 9.5.4 Language Selection
+### 11.5.4 Language Selection
 
 Consider language support when choosing a provider:
 - **Most languages**: Google Cloud Translation (100+)
@@ -250,7 +263,7 @@ Consider language support when choosing a provider:
 - **Enterprise requirements**: Azure Translator or Amazon Translate
 - **Privacy/self-hosted**: LibreTranslate
 
-### 9.5.5 Cost Management
+### 11.5.5 Cost Management
 
 Monitor your translation usage to control costs:
 - Start with free tiers when available (Azure, DeepL Free, LibreTranslate)
@@ -258,74 +271,78 @@ Monitor your translation usage to control costs:
 - Review auto-translated content rather than re-translating
 - Consider caching translations for frequently updated content
 
-## 9.6 Workflow Recommendations
+## 11.6 Workflow Recommendations
 
-### 9.6.1 Initial Setup
+### 11.6.1 Initial Setup
 1. Choose your translation provider based on languages needed and budget
 2. Configure API credentials in phpMyFAQ admin
 3. Test with a single FAQ to verify the integration works
 4. Review quality and adjust provider if needed
 
-### 9.6.2 Creating Multilingual Content
+### 11.6.2 Creating Multilingual Content
 1. **Write in your primary language first** – Create high-quality source content
 2. **Translate one language at a time** – Easier to review and maintain consistency
 3. **Use AI as first draft** – Let AI do the initial translation
 4. **Review and refine** – Edit translations for accuracy and tone
-5. **Keep active** – Set translations to active/inactive to control publishing
+5. **Publish when ready** – Keep translated FAQs as drafts or in review until they have been checked
 
-### 9.6.3 Updating Content
+### 11.6.3 Updating Content
 1. Update the primary language version first
-2. Mark translations that need updating
+2. Note which translations need updating
 3. Re-translate or manually update other languages
 4. Review changes before publishing
 
-## 9.7 Troubleshooting
+## 11.7 Troubleshooting
 
-### 9.7.1 Translation button is disabled
+### 11.7.1 Translation button does nothing
+- **Check language selection**: The button only works after you have selected a target language that differs from the
+  source language. If the target language was preselected, select it again
 - **Check provider configuration**: Ensure you've selected a provider and entered valid credentials
-- **Check language selection**: Source and target languages must be different
+- **Check your rights**: The `Translate FAQs` right is required
 - **Check language support**: Ensure both languages are supported by your chosen provider
 
-### 9.7.2 Translation fails or returns errors
+### 11.7.2 Translation fails or returns errors
 - **API credentials**: Verify your API key/credentials are correct and active
 - **API quota**: Check if you've exceeded your free tier or quota limits
+- **Azure region**: Use the region identifier, e.g. `eastus`, not the display name `East US`
 - **Network issues**: Ensure your server can reach the translation API
 - **Content length**: Very long content may need to be translated in smaller chunks
 
-### 9.7.3 Poor translation quality
+### 11.7.3 Poor translation quality
 - **Try a different provider**: DeepL often has better quality for European languages
 - **Review source content**: Complex or unclear source content leads to poor translations
 - **Check language support**: Some language pairs work better than others
 - **Edit after translation**: Use AI as a starting point, then refine manually
 
-### 9.7.4 HTML formatting issues
+### 11.7.4 HTML formatting issues
 - **Check source HTML**: Ensure source content has valid, clean HTML
 - **Simplify complex structures**: Very complex HTML may need manual adjustment
 - **Preview before saving**: Always preview translated content
 - **Re-translate if needed**: If formatting is broken, try translating again
 
-### 9.7.5 Cost concerns
+### 11.7.5 Cost concerns
 - **Monitor usage**: Check your provider's dashboard for usage statistics
 - **Use free tiers**: Start with free options (Azure, DeepL Free, LibreTranslate)
 - **Set up billing alerts**: Configure alerts in your cloud provider console
 - **Optimize workflow**: Translate only when needed, not repeatedly
 
-## 9.8 Security and Privacy
+## 11.8 Security and Privacy
 
-### 9.8.1 Data Handling
+### 11.8.1 Data Handling
 - Translation content is sent to third-party APIs (except LibreTranslate self-hosted)
 - Consider data privacy regulations (GDPR, etc.) when choosing a provider
 - For sensitive content, consider self-hosted LibreTranslate
-- API credentials are stored encrypted in the database
+- API credentials are stored as configuration values in the `faqconfig` table and shown as password fields in the
+  admin; protect database access and backups accordingly
 
-### 9.8.2 API Security
+### 11.8.2 API Security
 - Keep API keys secure and never share them
 - Use environment-specific keys (dev vs. production)
 - Rotate keys periodically
 - Monitor API usage for anomalies
 - Consider IP restrictions where available
 
-## 9.9 Supported Languages by Provider
+## 11.9 Supported Languages by Provider
 
 ### Google Cloud Translation
 100+ languages including Arabic, Chinese (Simplified & Traditional), Czech, Danish, Dutch, English, Finnish, French, 

@@ -3,7 +3,6 @@ theme:
   name: readthedocs
   highlightjs: true
 not_in_nav: |
-  /s3-storage-checklist.md
   /keys/**
 extra_css:
   - css/custom.css
@@ -35,5 +34,5 @@ nav:
   - 14. Plugins: 'plugins.md'
   - 15. MCP Server: 'mcp-server.md'
   - 16. Release: 'release.md'
-  - 17. Security Processs: 'security-process.md'
+  - 17. Security Process: 'security-process.md'
   - 18. Thank you!: 'thank-you.md'

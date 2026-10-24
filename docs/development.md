@@ -1,68 +1,55 @@
-# 10. Developer documentation
+# 12. Developer documentation
 
-## 10.1 Customizing phpMyFAQ
+## 12.1 Customizing phpMyFAQ
 
 phpMyFAQ users have even more customization opportunities. The key feature is the user-selectable template sets, there
-is a templates/default directory where the default layouts get shipped.
+is an assets/templates/default directory where the default layouts get shipped.
 
 In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify to suit
 your own needs. All files for phpMyFAQ's default layout can be found in the directory _assets/templates/default/_.
 
-### 10.1.1 Creating a custom layout
+### 12.1.1 Creating a custom layout
 
 Follow these steps to create a custom template set:
 
 - copy the directory assets/templates/default to e.g., assets/templates/example
 - adjust template files in assets/templates/example to fit your needs
 - adjust the CSS theme in assets/templates/example/theme.css to fit your needs
-- activate your "example" template set within Admin → Configuration → Main
+- activate your "example" template set within Admin → Configuration → Layout (`layout.templateSet`)
 
 **Note:** There is a magic variable _{{ tplSetName }}_ containing the name of the actual layout available in each
 template file.
 
-### 10.1.2 Debug Configuration
+### 12.1.2 Environment configuration
 
-phpMyFAQ 4.1 and later uses environment variables for the application configuration.
+phpMyFAQ 4.1 and later reads its runtime configuration from environment variables. They are loaded from the file
+`phpmyfaq/.env` if it exists; variables set in the process environment (e.g., in Docker) are used as well.
+Create the file from the shipped template:
 
-#### Available Variables
+    cp phpmyfaq/.env.example phpmyfaq/.env
 
-##### Debug Configuration
+The most important variables are:
 
-| Variable            | Description        | Example            |
-|---------------------|--------------------|--------------------|
-| `DEBUG`             | Enables debug mode | `true` / `false`   |
-| `DEBUG_LEVEL`       | Debug detail level | `0`, `1`, `2`, `3` |
-| `DEBUG_LOG_QUERIES` | SQL query logging  | `true` / `false`   |
+| Variable                  | Description                                                                 | Default             |
+|---------------------------|-----------------------------------------------------------------------------|---------------------|
+| `APP_ENV`                 | Application environment: `production`, `development`, `staging`, or `demo` | `production`        |
+| `DEBUG`                   | Enables debug mode with detailed error messages; disables all caches        | `false`             |
+| `DEBUG_LOG_QUERIES`       | Logs all database queries (performance impact)                              | `false`             |
+| `ERROR_LOG`               | Target for error logs                                                       | `php://stderr`      |
+| `TRUSTED_PROXIES`         | Comma-separated IPs or CIDR ranges of reverse proxies allowed to set `X-Forwarded-*` headers, or `REMOTE_ADDR` | empty |
+| `ROUTING_CACHE_ENABLED`   | Caches the compiled routes                                                  | `true`              |
+| `CONFIG_CACHE_ENABLED`    | Caches the `faqconfig` table in the filesystem cache                       | `true`              |
+| `CONTAINER_CACHE_ENABLED` | Caches the compiled service container                                       | `true`              |
+| `TWIG_CACHE_ENABLED`      | Caches compiled Twig templates                                              | `true`              |
+| `ELASTICSEARCH_BASE_URI`  | Base URI of the Elasticsearch server                                        | `http://127.0.0.1:9200` |
+| `OPENSEARCH_BASE_URI`     | Base URI of the OpenSearch server                                           | `http://127.0.0.1:9201` |
+| `SEARCH_WAIT_TIMEOUT`     | Seconds to wait for the search engine to become available                  | `15`                |
 
-##### Application
+The cache directories can be overridden with `ROUTING_CACHE_DIR`, `CONTAINER_CACHE_DIR`, and `TWIG_CACHE_DIR` (absolute
+paths). All caches are disabled automatically in debug mode and on development versions. See `phpmyfaq/.env.example`
+for the full, commented list.
 
-| Variable  | Description             | Example                                |
-|-----------|-------------------------|----------------------------------------|
-| `APP_ENV` | Application environment | `development`, `production`, `testing` |
-
-#### Configuration Files
-
-##### .env.example
-
-Template for environment variables:
-
-    # Debug Configuration
-    DEBUG=false
-    DEBUG_LEVEL=0
-    DEBUG_LOG_QUERIES=false
-    
-    # Application Configuration
-    APP_ENV=production
-
-#### Configuration
-
-##### .env File
-
-Create a `.env` file in the project root based on `.env.example`:
-
-    cp .env.example .env
-
-### 10.1.3 Adding new language strings and translations
+### 12.1.3 Adding new language strings and translations
 
 Please add at least the English translation for your new language string, the translation files are located in the folder **phpmyfaq/translations**.
 
@@ -88,16 +75,16 @@ $PMF_LANG['direction'] = 'ltr';      // Text direction, 'ltr' for left-to-right,
 $PMF_LANG['nplurals'] = '2';         // Number of plural forms, e.g., '2' for English
 ```
 
-## 10.2 Templating
+## 12.2 Templating
 
-### 10.2.1 Introduction
+### 12.2.1 Introduction
 
 phpMyFAQ v4 and later uses Twig, a modern template engine for PHP. It is fast, secure, and flexible.
 This documentation provides an overview of how to use Twig in phpMyFAQ.
 
 The default layout of phpMyFAQ is saved in the **assets/templates/default/index.twig** file.
 
-### 10.2.2 Template files
+### 12.2.2 Template files
 
 #### Variables
 
@@ -160,13 +147,13 @@ You can then use the `dump` function in your templates.
 
 For more detailed information, visit the [Twig documentation](https://twig.symfony.com/doc/).
 
-### 10.2.3 Admin backend templates
+### 12.2.3 Admin backend templates
 
 The admin backend templates are located in the **assets/templates/admin** directory.
 Usually, you don't need to modify these templates, but if you want to, you can do so.
 Please be aware that changes to the admin backend templates can break the functionality of phpMyFAQ.
 
-### 10.2.4 Dynamic template set and theme upload
+### 12.2.4 Dynamic template set and theme upload
 
 phpMyFAQ v4.2 introduced dynamic template set loading and a storage-backed `ThemeManager`.
 
@@ -179,13 +166,18 @@ phpMyFAQ v4.2 introduced dynamic template set loading and a storage-backed `Them
 Theme uploads use `phpMyFAQ\Template\ThemeManager`:
 
 - Input format: ZIP archive.
+- Theme name: 2 to 64 characters, letters, numbers, `_` and `-` only.
+- Requires the PHP `zip` extension.
 - Required file: `index.twig` (theme root or `<themeName>/index.twig`).
+- `index.twig` is the only Twig file allowed in the archive, and it must be static: Twig syntax (`{{`, `{%`, `{#`)
+  is rejected.
 - Allowed file extensions:
   `.twig`, `.css`, `.js`, `.json`, `.png`, `.jpg`, `.jpeg`, `.svg`, `.webp`, `.gif`,
   `.woff`, `.woff2`, `.ttf`, `.otf`.
 - Upload target: `StorageInterface` at `<themeRootPath>/<themeName>/...`
   (default root path: `themes`).
-- Activation: `layout.templateSet` is updated via `ThemeManager::activateTheme()`.
+- Activation: `layout.templateSet` is updated via `ThemeManager::activateTheme()`, which fails if the theme has no
+  `index.twig` in the storage. `ThemeManager::activateDefaultTheme()` switches back to `default`.
 
 Example usage:
 
@@ -209,7 +201,7 @@ Security checks:
 - Requires `CONFIGURATION_EDIT` permission
 - CSRF token (`theme-manager`) is required for upload/activation
 
-## 10.3 Themes
+## 12.3 Themes
 
 The default CSS theme is located in the **assets/templates/default** directory and is stored in the file **theme.css**.
 You can create your own CSS theme by copying the default theme and modifying it to suit your needs.
@@ -254,14 +246,14 @@ phpMyFAQ uses Bootstrap’s color mode architecture. You can target specific mod
 
 For more information, check out the documentation on [Bootstrap](https://getbootstrap.com/docs/5.3/customize/css-variables/).
 
-## 10.4 Custom CSS
+## 12.4 Custom CSS
 
 You can add custom CSS to your phpMyFAQ installation by adding the CSS code in the admin configuration in the layout
 tab.
 This way, you can customize the look and feel of your phpMyFAQ installation, and you don't want to modify the SCSS
 files.
 
-## 10.5 REST APIs
+## 12.5 REST APIs
 
 phpMyFAQ offers interfaces to access phpMyFAQ installations with other clients like the iPhone App. phpMyFAQ includes a
 REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the
@@ -269,7 +261,7 @@ phpMyFAQ installation.
 
 The API documentation can be found at [https://api-docs.phpmyfaq.de/](https://api-docs.phpmyfaq.de/).
 
-## 10.6 phpMyFAQ development
+## 12.6 phpMyFAQ development
 
 Since phpMyFAQ is an Open Source project, we encourage developers to contribute patches and code for us to include in
 the main package of phpMyFAQ.
@@ -283,35 +275,34 @@ These basic rules make it possible for us to earn a living of the phpMyFAQ proje
 remains Open Source and under the MPL 2.0 license.
 All contributions will be added to the changelog and on the phpMyFAQ website.
 
-### 10.6.1 How to contribute?
+### 12.6.1 How to contribute?
 
 Contributing to phpMyFAQ is quite easy: just fork the [project on GitHub](https://github.com/thorsten/phpMyFAQ),
 work on your copy, and send pull requests.
 
-### 10.6.2 Setup a local phpMyFAQ development environment
+### 12.6.2 Setup a local phpMyFAQ development environment
 
 Before working on phpMyFAQ, set up a local environment with the following software:
 
 - Git
-- PHP 10.4 up to 10.6
-- PHPUnit 13.x
-- Composer
+- PHP 8.4 or later
+- Composer (installs PHPUnit 13, Mago, and Rector into `phpmyfaq/src/libs/bin/`)
 - Node.js 24+
-- TypeScript 5.x
-- PNPM
-- Docker
+- PNPM (installs TypeScript, Vitest, oxlint, oxfmt, and Stylelint)
+- Docker with Docker Compose
 
-### 10.6.3 Configure your Git installation
+### 12.6.3 Configure your Git installation
 
 Set up your user information with your real name and a working e-mail address:
 
     $ git config --global user.name "Your Name"
     $ git config --global user.email you@example.com
-    $ git config core.autocrlf # if you're on Windows
+    $ git config --global core.autocrlf true # if you're on Windows
 
-### 10.6.4 Background jobs during development
+### 12.6.4 Background jobs during development
 
-phpMyFAQ uses the internal queue for asynchronous tasks such as mail delivery.
+phpMyFAQ uses an internal, database-backed queue for asynchronous tasks. The worker has handlers for mail delivery,
+FAQ search indexing, and exports (see `phpmyfaq.queue.worker` in `phpmyfaq/src/services.php`).
 Run the worker locally while testing features that send email:
 
 ```bash
@@ -323,9 +314,15 @@ Optionally limit processing to a fixed number of jobs:
 ```bash
 php bin/worker.php 10
 ```
-    $ git config core.autocrlf # if you're on Windows
 
-### 10.6.5 How to get the phpMyFAQ source code?
+Recurring maintenance tasks (session cleanup, search index optimization, statistics aggregation, and backups) run
+via the task scheduler:
+
+```bash
+php bin/scheduler.php run
+```
+
+### 12.6.5 How to get the phpMyFAQ source code?
 
 Clone your forked phpMyFAQ repository locally:
 
@@ -334,71 +331,67 @@ Clone your forked phpMyFAQ repository locally:
 Add the upstream repository as remote:
 
     $ cd phpMyFAQ
-    $ git remote add upstream git://github.com/thorsten/phpMyFAQ.git
+    $ git remote add upstream https://github.com/thorsten/phpMyFAQ.git
 
-Please check our [coding standards](https://www.phpmyfaq.de/docs/standards) before sending patches or pull requests.
+Please check our [coding standards](#1269-coding-standards) before sending patches or pull requests.
 Every PR on GitHub will check the coding standards and tests as well.
 
-### 10.6.6 Run Docker Compose
+### 12.6.6 Run the Docker Compose development stacks
 
-The Dockerfile provided in the phpMyFAQ repository only builds an environment
-to run any release for development purposes.
-It does not contain any code as the phpmyfaq folder is meant to be mounted as the /var/www/html folder in the container.
+The repository ships a `docker-compose.yml` for development. It does not contain any code: the local `phpmyfaq`
+folder is mounted as `/var/www/html` into the web server containers, so you always run your current source code.
 
-For development purposes, you can start a full stack to run your current phpMyFAQ source code from your local repository.
-
-Before the first start, generate the local TLS certificate used by the
-`apache`, `nginx` and `frankenphp` containers. The certificate files
-(`.docker/cert.pem` and `.docker/cert-key.pem`) are not committed to the
-repository. Generate them with [mkcert](https://github.com/FiloSottile/mkcert):
+The `apache`, `nginx` and `frankenphp` containers use a local TLS certificate (`.docker/cert.pem` and
+`.docker/cert-key.pem`), which is not committed to the repository. If the files are missing, `bin/dev` generates a
+self-signed certificate with openssl. For a certificate your browser trusts, generate it with
+[mkcert](https://github.com/FiloSottile/mkcert) before the first start:
 
     $ mkcert -install
     $ mkcert -cert-file .docker/cert.pem -key-file .docker/cert-key.pem localhost 127.0.0.1 ::1
 
-Then start the stack:
+Every service is gated behind a Compose profile. The `bin/dev` script lets you pick the combination you need, for
+example a web server, a database and a search engine:
 
-    $ docker-compose up
+    $ bin/dev up nginx mariadb opensearch
+    $ bin/dev up apache postgres elasticsearch --tools
+    $ bin/dev preset default
 
-The command above starts nine containers for ^multi-database development as follows.
+The available profiles are:
 
-_Specific images started at once to prepare the project:_
+- web servers: `nginx` (nginx with PHP-FPM 8.5), `apache` (Apache with PHP 8.5), `frankenphp` (FrankenPHP with
+  worker mode)
+- databases: `mariadb`, `postgres`, `mssql` (Azure SQL Edge)
+- search engines: `elasticsearch`, `opensearch`
+- others: `redis`, `phpmyadmin`, `pgadmin`, `tools` (phpMyAdmin and pgAdmin), `build` (one-off `composer` and `pnpm`
+  containers that install the dependencies)
 
-- **composer**: update Composer dependencies
-- **pnpm**: update PNPM dependencies
+`bin/dev up` adds Redis automatically (skip it with `--no-redis`) and installs the Composer and PNPM dependencies
+before the first start (skip it with `--no-build`). `--tools` adds phpMyAdmin or pgAdmin for the selected database.
+The presets are `default` (nginx,
+MariaDB, OpenSearch, Redis, phpMyAdmin), `mysql-es`, `postgres`, `apache`, `frankenphp`, and `full`. Run
+`bin/dev presets` and `bin/dev help` for details.
 
-_Running using named volumes:_
+The most common commands are also available as PNPM scripts:
 
-- **mariadb**: image with MariaDB database with xtrabackup support
-- **phpmyadmin**: a PHP tool to have a look on your MariaDB database.
-- **postgres**: image with PostgreSQL database
-- **pgadmin**: a PHP tool to have a look on your PostgreSQL database.
-- **sqlserver**: image with Microsoft SQL Server for Linux
-- **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
-- **opensearch**: OpenSearch image (it means it does not have XPack installed)
+    $ pnpm dev:up nginx mariadb   # bin/dev up <profile...>
+    $ pnpm dev:down      # stop and remove the containers
+    $ pnpm dev:build     # install the Composer and PNPM dependencies
+    $ pnpm dev:ps        # show the running services
+    $ pnpm dev:logs      # follow the logs
+    $ pnpm dev:default   # start the default preset
+    $ pnpm dev:full      # start the full preset
 
-_Running apache web server with PHP 10.5 support:_
+The web servers all bind the same host ports, so start only one of them at a time. The services are available at:
 
-- **apache**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
+- phpMyFAQ with nginx or FrankenPHP: https://localhost (port 443) or http://localhost (port 80)
+- phpMyFAQ with Apache: https://localhost (port 443) or http://localhost:8080
+- phpMyAdmin: http://localhost:8000
+- pgAdmin: http://localhost:8008
 
-_Running nginx web server with PHP 10.5 support:_
+### 12.6.7 Fetch third party libraries and install phpMyFAQ
 
-- **nginx**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
-- **php-fpm**: PHP-FPM image with PHP 10.5 support
-
-_Running FrankenPHP with PHP 10.5 support:_
-
-- **frankenphp**: mounts the `phpmyfaq` folder in place of `/var/www/html`. Modern PHP application server built on Caddy with worker mode for better performance.
-
-Then services will be available at the following addresses:
-
-- phpMyFAQ: (https://localhost:443 by default or http://localhost:8080)
-- phpMyFAQ with FrankenPHP: (http://localhost:8888 or https://localhost:8443)
-- phpMyAdmin: (http://localhost:8000)
-- pgAdmin: (http://localhost:8008)
-
-### 10.6.7 Fetch third party libraries and install phpMyFAQ
-
-After cloning your forked repository, you have to fetch the 3rd party libraries used in phpMyFAQ:
+`bin/dev up` installs the dependencies automatically. Without Docker, fetch the 3rd party libraries used in phpMyFAQ
+after cloning your forked repository:
 
     $ cd phpMyFAQ
     $ curl -s https://getcomposer.org/installer | php
@@ -406,53 +399,63 @@ After cloning your forked repository, you have to fetch the 3rd party libraries 
     $ pnpm install
     $ pnpm build
 
+Composer installs the PHP dependencies into `phpmyfaq/src/libs`, not into `vendor/`.
 Then start a normal, local phpMyFAQ installation.
 
-If you change some TypeScript code, you have to re-build the .ts files into one with the following PNPM task:
+If you change TypeScript or SCSS code, rebuild the assets with `pnpm build`, or use `pnpm build:watch` during
+development. The most important PNPM scripts are:
 
-    $ pnpm build
+| Script                                | Description                                              |
+|---------------------------------------|----------------------------------------------------------|
+| `build`, `build:watch`, `build:prod`  | Build the TypeScript and SCSS assets with Vite           |
+| `test`, `test:watch`, `test:coverage` | Run the Vitest tests                                     |
+| `tsc`                                 | Type-check the TypeScript code                           |
+| `oxlint`                              | Lint the TypeScript code                                 |
+| `oxfmt`, `oxfmt:fix`                  | Check or fix the TypeScript/JSON/YAML/HTML formatting    |
+| `stylelint`, `stylelint:fix`          | Lint the SCSS code                                       |
+| `e2e:local`, `e2e:docker`             | Run the Playwright end-to-end tests (SQLite or MariaDB)  |
+| `docs:build`                          | Build this documentation with MkDocs                     |
 
-During development, you can use the watch mode:
+The PHP tests and checks are available as Composer scripts, see below.
 
-    $ pnpm build:watch
+The Git hooks (installed by `pnpm install` via Husky) run `bin/run-checks`: the pre-commit hook checks the
+pipelines affected by the staged files, the pre-push hook runs the full PHP and JavaScript pipelines. This can take a
+few minutes.
 
-For a production build, you can use the following command:
-
-    $ pnpm build:prod
-
-To run the PHPUnit-based tests, you can use the following command:
-
-    $ composer test
-
-To run the oxlint-based checks, you can use the following command:
-
-    $ pnpm run oxlint
-
-To run the Vitest-based tests, you can use the following command:
-
-    $ pnpm test
-
-### 10.6.8 Composer scripts
+### 12.6.8 Composer scripts
 
 phpMyFAQ provides a set of Composer scripts to simplify common development tasks. Run them with `composer <script>`.
 
 #### Code quality
 
-| Script         | Description                                      |
-|----------------|--------------------------------------------------|
-| `lint`         | Run Mago linter to check for code issues         |
-| `lint:fix`     | Run Mago linter and automatically fix issues     |
-| `format`       | Check PHP code formatting with Mago              |
-| `format:fix`   | Automatically fix PHP code formatting with Mago  |
-| `analyze`      | Run Mago static analysis                         |
+| Script             | Description                                                              |
+|--------------------|--------------------------------------------------------------------------|
+| `check`            | Run `format:dry-run`, `lint` and `analyze`, exactly like the CI Mago step |
+| `lint`             | Run Mago linter against the lint baseline                                |
+| `lint:fix`         | Run Mago linter and automatically fix issues                             |
+| `format`           | Format the PHP code with Mago                                            |
+| `format:dry-run`   | Check PHP code formatting with Mago without changing files               |
+| `analyze`          | Run Mago static analysis against the analyze baseline                    |
+| `analyze:all`      | Run Mago static analysis without the baseline                            |
+| `analyze:baseline` | Remove outdated entries from the analyze baseline                        |
+
+Mago lint and analyze run against baseline files (`mago-lint-baseline.toml`, `mago-analyze-baseline.toml`) that
+suppress pre-existing findings. Editing a baselined line resurfaces its finding: fix it instead of re-baselining it.
 
 #### Testing
 
-| Script              | Description                                     |
-|---------------------|-------------------------------------------------|
-| `test`              | Run PHPUnit tests without coverage              |
-| `test:coverage`     | Run PHPUnit tests with text coverage output     |
-| `test:coverage-html` | Run PHPUnit tests with HTML coverage report    |
+| Script                 | Description                                                              |
+|------------------------|--------------------------------------------------------------------------|
+| `test`                 | Run PHPUnit tests in parallel with ParaTest, without coverage            |
+| `test:sequential`      | Run PHPUnit tests in one process, without coverage                       |
+| `test:ci`              | Run PHPUnit exactly like the git hooks and CI (`bin/phpunit-ci`)         |
+| `test:coverage`        | Run PHPUnit tests with text coverage output                              |
+| `test:coverage-html`   | Run PHPUnit tests with HTML coverage report in `coverage/`               |
+| `test:coverage-clover` | Run PHPUnit tests with a Clover coverage report in `coverage/clover.xml` |
+| `coverage:classes`     | Report classes below 80% coverage from the Clover report                 |
+| `coverage:gate`        | Fail if a class is below 80% coverage in the Clover report               |
+
+A single test file runs much faster than the whole suite: `composer test -- tests/phpMyFAQ/Path/SomeTest.php`.
 
 #### API documentation
 
@@ -460,6 +463,7 @@ phpMyFAQ provides a set of Composer scripts to simplify common development tasks
 |----------------|--------------------------------------------------|
 | `openapi:json` | Generate OpenAPI specification in JSON format    |
 | `openapi:yaml` | Generate OpenAPI specification in YAML format    |
+| `docs:build`   | Build this documentation with MkDocs in strict mode |
 
 #### Refactoring
 
@@ -476,14 +480,14 @@ phpMyFAQ provides a set of Composer scripts to simplify common development tasks
 | `version:sync`  | Sync the version from PHP to package.json       |
 | `version:check` | Verify that PHP and package.json versions match |
 
-### 10.6.9 Coding standards
+### 12.6.9 Coding standards
 
 The following coding standards are used in phpMyFAQ:
 
 - PHP: [PER Coding Style 3.0](https://www.php-fig.org/per/coding-style/)
 - TypeScript with oxlint recommendations
 
-### 10.6.10 Rebase your Patch
+### 12.6.10 Rebase your Patch
 
 Before submitting your patch, please update your local branch:
 
@@ -493,22 +497,25 @@ Before submitting your patch, please update your local branch:
     $ git checkout YOUR_BRANCH_NAME
     $ git rebase main
 
-### 10.6.11 Make a Pull Request
+### 12.6.11 Make a Pull Request
 
 You can now make a pull request on the phpMyFAQ GitHub repository.
 
-## 10.7 Builtin Twig Extensions
+## 12.7 Builtin Twig Extensions
 
 phpMyFAQ v4 and later use the Twig template engine for the frontend and the backend.
-We have added some custom extensions to Twig to make it easier to work with phpMyFAQ.
+We have added some custom extensions to Twig to make it easier to work with phpMyFAQ. They are located in
+`phpmyfaq/src/phpMyFAQ/Twig/Extensions`.
 
 ### Category Name Twig Extension
 
-The category name extension is used to get the name of a category by its ID.
+The category name extension is used to get the name of a category by its ID. It is available as a filter and as a
+function.
 
 Example:
 
     {{ categoryId | categoryName }}
+    {{ categoryName(categoryId) }}
 
 ### Create Link Twig Extension
 
@@ -522,6 +529,8 @@ Example for a FAQ entry link:
 
     {{ faqLink(categoryId, faqId, faqLanguage) }}
 
+Both are available as functions and as filters.
+
 ### FAQ question Twig Extensions
 
 The FAQ question extension is used to get the question of a FAQ entry by its ID.
@@ -532,11 +541,13 @@ Example:
 
 ### Formatting bytes Twig Extensions
 
-The format bytes extension is used to format a number of bytes to a human-readable format.
+The format bytes extension is used to format a number of bytes to a human-readable format. The optional argument
+sets the number of decimals (default: 2).
 
 Example:
 
     {{ bytes | formatBytes }}
+    {{ bytes | formatBytes(1) }}
 
 ### Format date Twig Extensions
 
@@ -588,30 +599,70 @@ Example:
 
 ### User name Twig Extensions
 
-The username extension is used to get the name of a user by its ID.
+The username extension is used to get the login name of a user by its ID.
 
 Example:
 
     {{ userId | userName }}
 
-## 10.8 Working with the Docker containers
+The real name filter returns the display name of a user, falls back to the login name if no display name is stored,
+and returns a neutral placeholder if the user no longer exists.
 
-### 10.10.1 Create a new SSL certificate
+Example:
 
-To create a new SSL certificate, you can use the following command:
+    {{ userId | realName }}
 
-    $ mkcert -install -cert-file .docker/cert.pem -key-file .docker/cert-key.pem localhost
+### Tag name Twig Extension
+
+The tag name extension is used to get the name of a tag by its ID.
+
+Example:
+
+    {{ tagId | tagName }}
+
+### Asset version Twig Extension
+
+The asset function appends the modification time of a file as a `?v=` query parameter, so browsers fetch updated
+scripts and stylesheets after an upgrade while unchanged files stay cacheable. The path is relative to the phpMyFAQ
+root directory.
+
+Example:
+
+    <link href="{{ baseHref }}{{ asset('assets/public/styles.css') }}" rel="stylesheet">
+
+### Plugin Twig Extension
+
+The plugin function triggers a plugin event and outputs the rendered result of all plugins listening to it. See
+[Plugins](plugins.md) for details.
+
+Example:
+
+    {{ phpMyFAQPlugin('hello.world', 'Hello, World!') | raw }}
+
+## 12.8 Working with the Docker containers
+
+### 12.8.1 Create a new SSL certificate
+
+The `mkcert` commands in the Docker Compose section above create a locally trusted certificate. If
+`.docker/cert.pem` or `.docker/cert-key.pem` is missing or empty, `bin/dev up` generates a self-signed certificate
+for `localhost` with `openssl` before it starts the `nginx` or `frankenphp` profile. Browsers do not trust this
+certificate, so use `mkcert` if you want to avoid the certificate warning.
+
+To create a new certificate, replace both files. The `apache` image copies the certificate files at build time, so
+rebuild it afterwards with `bin/dev rebuild apache`; `nginx` and `frankenphp` mount the files and only need a
+restart.
 
 For more information, please visit the [mkcert](https://github.com/FiloSottile/mkcert) website.
 
-### 10.10.2 Using an OpenLDAP docker container for testing
+### 12.8.2 Using an OpenLDAP docker container for testing
 
 To test phpMyFAQ during development with an OpenLDAP docker container, you can use the following test setup:
 
     $ docker pull rroemhild/test-openldap
     $ docker run --rm -p 10389:10389 -p 10636:10636 rroemhild/test-openldap
 
-The credentials for the OpenLDAP container are stored in the file content/core/config/ldap.php:
+The credentials for the OpenLDAP container are stored in the file `phpmyfaq/content/core/config/ldap.php`
+(you can use `ldap.php.original` in the same directory as a template):
 
     <?php
     $PMF_LDAP['ldap_server'] = 'ldap://<your ip address>';

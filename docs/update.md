@@ -3,19 +3,26 @@
 First, please download the latest package of phpMyFAQ. Upgrading to phpMyFAQ 4.2 is possible from the following
 versions:
 
-- phpMyFAQ 3.1.x
+- phpMyFAQ 3.1.x (3.1.1 and later)
 - phpMyFAQ 3.2.x
 - phpMyFAQ 4.0.x
 - phpMyFAQ 4.1.x
+- phpMyFAQ 4.2.x
 
 If you're running an older version of phpMyFAQ than listed above, we recommend a new and fresh installation. If you need
 support for updating an old FAQ from the 1.x, 2.x, or 3.0 series, [please email us](mailto:thorsten_AT_phpmyfaq_DOT_de).
 
-Please note that the requirements of phpMyFAQ have to be fulfilled.
+If you run phpMyFAQ with the official Docker images, follow the update steps in [Production Deployment](deployment.md)
+instead.
 
 ## Before you upgrade
 
-Please make sure that you're running at least PHP 8.4, otherwise the upgrade won't work.
+- Please make sure that you're running at least PHP 8.4 and that all required PHP extensions are loaded (see the
+  installation requirements), otherwise the upgrade won't work.
+- Make a full backup of your database and your phpMyFAQ directory.
+- Enable the maintenance mode: log in as admin into the admin section and enable it under
+  _Configuration >> Edit Configuration >> Set FAQ in maintenance mode_. The update wizard refuses to update the
+  database while the maintenance mode is disabled.
 
 ## The update token
 
@@ -25,15 +32,18 @@ starts right away.
 
 If you are not logged in — which happens on major upgrades, where the old database doesn't match what the new code
 expects, so a login is impossible — the wizard asks for an update token instead. phpMyFAQ writes that token into the
-file `content/core/config/update-token.php` on your server. Open that file with your FTP client or on the console,
-copy the token from it, and paste it into the update wizard. The token is valid for one hour, reload the update page to
-get a new one, and phpMyFAQ deletes it once the database has been updated. The file cannot be read over HTTP.
+file `content/core/config/update-token.php` on your server. Open that file with your FTP client or on the console and
+copy the value of `"token"` from it: the file starts with a line `<?php exit; ?>`, followed by a JSON object like
+`{"token":"…","created":…}`. Paste the token into the update wizard.
+
+The token is valid for one hour. If it has expired, reload the update page to get a new one. phpMyFAQ deletes the token
+file once the database has been updated. The file cannot be read over HTTP.
 
 If phpMyFAQ can't create the token file, make the directory `content/core/config/` writable for your web server.
 
-## Upgrading from phpMyFAQ 3.1.x
+## Upgrading from phpMyFAQ 3.1.x or 3.2.x
 
-Upgrading from 3.1.x is a major upgrade.
+Upgrading from 3.1.x or 3.2.x is a major upgrade.
 Your existing templates will not work with phpMyFAQ 4.2.
 Please make a full backup before you run the upgrade!
 First, log in as admin into the admin section and enable the maintenance mode.
@@ -43,6 +53,7 @@ Second, you have to delete all files **except**:
 - in the directory **config/**
     - keep the file **database.php**
     - only if using LDAP/ActiveDirectory support also keep the file **ldap.php**
+    - only if using EntraID support (phpMyFAQ 3.2.x) also keep the file **azure.php**
 - the directory **attachments/**
 - the directory **data/**
 - the directory **images/**
@@ -54,111 +65,18 @@ URL in your browser:
 
 Click the button of the update script, your version will automatically be updated.
 
-## Upgrading from phpMyFAQ 3.2.x
+## Upgrading from phpMyFAQ 4.0.x, 4.1.x, or 4.2.x
 
-Upgrading from 3.2.x is a major upgrade.
-Your existing templates will not work with phpMyFAQ 4.2.
+### Manual upgrade
+
 Please make a full backup before you run the upgrade!
 First, log in as admin into the admin section and enable the maintenance mode.
 (Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
 Second, you have to delete all files **except**:
 
-- in the directory **config/**
-    - keep the file **database.php**
-    - only if using LDAP/ActiveDirectory support also keep the file **ldap.php**
-    - only if using EntraID support also keep the file **azure.php**
-- the directory **attachments/**
-- the directory **data/**
-- the directory **images/**
+- all files in the directory **content/**
 
 Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, then open the following
-URL in your browser:
-
-`http://www.example.com/faq/update`
-
-Click the button of the update script, your version will automatically be updated.
-
-## Upgrading from phpMyFAQ 4.0.x
-
-### Manual upgrade
-
-Please make a full backup before you run the upgrade!
-First, log in as admin into the admin section and enable the maintenance mode.
-(Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
-Second, you have to delete all files **except**:
-
-- all files in the directory **content/**
-
-Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
-URL in your browser:
-
-`http://www.example.com/faq/update`
-
-Click the button of the update script, your version will automatically be updated.
-
-### Online update
-
-If you're running phpMyFAQ 4.0 or later, you can use the built-in online update feature.
-Log in as admin into the admin section and enable the maintenance mode.
-(Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
-Then go to the "phpMyFAQ Update" page in the configuration section and click through the update wizard:
-
-1. Check for System Health: this checks if your system is ready for the upgrade
-2. Check for Updates: this checks if there is a new version of phpMyFAQ available
-3. Download of phpMyFAQ: this downloads the latest version of phpMyFAQ in the background, this can take some seconds
-4. Extracting phpMyFAQ: this extracts the downloaded archive, this can take a while
-5. Install downloaded package: first, it creates a backup of your current installation, then it copies the downloaded
-   files into your installation, and in the end, the database is updated
-
-Note:
-The online update feature is experimental and might not work in all environments.
-
-## Upgrading from phpMyFAQ 4.1.x
-
-### Manual upgrade
-
-Please make a full backup before you run the upgrade!
-First, log in as admin into the admin section and enable the maintenance mode.
-(Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
-Second, you have to delete all files **except**:
-
-- all files in the directory **content/**
-
-Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
-URL in your browser:
-
-`http://www.example.com/faq/update`
-
-Click the button of the update script, your version will automatically be updated.
-
-### Online update
-
-Log in as admin into the admin section and enable the maintenance mode.
-(Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
-Then go to the "phpMyFAQ Update" page in the configuration section and click through the update wizard:
-
-1. Check for System Health: this checks if your system is ready for the upgrade
-2. Check for Updates: this checks if there is a new version of phpMyFAQ available
-3. Download of phpMyFAQ: this downloads the latest version of phpMyFAQ in the background, this can take some seconds
-4. Extracting phpMyFAQ: this extracts the downloaded archive, this can take a while
-5. Install downloaded package: first, it creates a backup of your current installation, then it copies the downloaded
-   files into your installation, and in the end, the database is updated
-
-Note:
-The online update feature is experimental and might not work in all environments.
-
-## Upgrading from phpMyFAQ 4.2.x
-
-### Manual upgrade
-
-Please make a full backup before you run the upgrade!
-First, log in as admin into the admin section and enable the maintenance mode.
-(Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
-Second, you have to delete all files **except**:
-
-- all files in the directory **content/**
-
-Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
 URL in your browser:
 
 `http://www.example.com/faq/update`
@@ -167,10 +85,13 @@ Click the button of the update script, your version will automatically be update
 
 ### Online update (Experimental feature)
 
-If you're running phpMyFAQ 4.0.0 or later, you can use the built-in online update feature.
+If you're running phpMyFAQ 4.0 or later, you can use the built-in online update feature. It is disabled by default on
+new installations: enable it first under _Configuration >> Edit Configuration >> Online Update >> Online Update
+enabled_.
+
 Log in as admin into the admin section and enable the maintenance mode.
 (Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
-Then go to the "phpMyFAQ Update" page in the configuration section and click through the update wizard:
+Then go to the "phpMyFAQ Upgrade" page in the configuration section and click through the update wizard:
 
 1. Check for System Health: this checks if your system is ready for the upgrade
 2. Check for Updates: this checks if there is a new version of phpMyFAQ available
@@ -180,7 +101,8 @@ Then go to the "phpMyFAQ Update" page in the configuration section and click thr
    files into your installation, and in the end, the database is updated
 
 Note:
-The online update feature is experimental and might not work in all environments.
+The online update feature is experimental and might not work in all environments. Don't use it with the Docker images:
+the files it replaces are part of the image and would be reset when the container is recreated.
 
 ### Permission changes in phpMyFAQ 4.2
 
@@ -194,7 +116,7 @@ currently do:
   and group that currently holds `Approve FAQs` (`approverec`), including their category and language restrictions, so
   everyone who can publish today can still publish afterwards.
 
-Afterwards you can revoke `faq_publish` from editors who should be able to write but not publish. See section 5.1.5 of
+Afterwards you can revoke `faq_publish` from editors who should be able to write but not publish. See section 7.1.5 of
 the administration documentation for the details.
 
 ### Editorial workflow in phpMyFAQ 4.2
@@ -202,14 +124,20 @@ the administration documentation for the details.
 phpMyFAQ 4.2 replaces the boolean active flag on FAQs with a per-language editorial status: **Draft**, **Review**, or
 **Published**. The update migrates every existing FAQ automatically — active FAQs become published, inactive ones become
 drafts — so public visibility does not change. Transitions into or out of the published state require the `Publish FAQs`
-right described above; moving between draft and review only needs the edit rights. See section 5.2.3 of the
+right described above; moving between draft and review only needs the edit rights. See section 7.2.3 of the
 administration documentation for how the workflow behaves in the FAQ editor and overview.
 
 ## Modifying templates for phpMyFAQ 4.2
 
-We recommend you take a look at the main [Bootstrap documentation](https://getbootstrap.com/).
-Please remember that the style sheets are written with [SCSS](https://sass-lang.com/).
-You have to compile the SCSS files into CSS using a SCSS compiler with Node.js.
+The templates are written in [Twig](https://twig.symfony.com/) and are located in the directory
+**assets/templates/default/**. If you use your own template set, compare it with the default template set of the new
+version after the update, and copy the changes into your template set. The development documentation describes how to
+create a custom template set.
+
+The layout is based on [Bootstrap](https://getbootstrap.com/), we recommend you take a look at its documentation.
+Please remember that the style sheets are written with [SCSS](https://sass-lang.com/) and are located in the directory
+**assets/scss/**. You have to compile them into CSS with Node.js and PNPM: run `pnpm install` and `pnpm build` (or
+`pnpm build:prod` for a minified build) in a Git checkout of phpMyFAQ.
 
 If you need help with theming phpMyFAQ, please don't hesitate to ask in our [forum](https://forum.phpmyfaq.de/).
 

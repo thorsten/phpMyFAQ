@@ -1,7 +1,7 @@
 # 3. Production Deployment
 
 This guide explains how to run phpMyFAQ in production with the official Docker images, using Docker Compose
-directly or through Portainer.
+directly or through Portainer. The [Docker Compose Cheat Sheet](docker-cheatsheet.md) collects the everyday commands.
 
 ## Table of Contents
 
@@ -30,8 +30,9 @@ Every phpMyFAQ release publishes two images to the GitHub Container Registry:
 `<version>` is the release number, e.g. `4.2.1`; the floating tags `4.2`, `4` and `latest` follow the
 newest stable release, pre-releases only get their exact version. Nightly builds of the development
 branch are published as `nightly` and `nightly-<date>` (also with the `-frankenphp` suffix); they are
-untested snapshots, not for production. The images are public, no login is needed to pull them. Images are built for `linux/amd64` and `linux/arm64`, and contain the same payload as the
-release archive: PHP 8.4, all required extensions, production dependencies and the built frontend assets.
+untested snapshots, not for production. The images are public, no login is needed to pull them. Images are built
+for `linux/amd64` and `linux/arm64`, and contain the same payload as the release archive: PHP 8.4, all required
+extensions, production dependencies and the built frontend assets.
 
 The application writes only below `content/`. These directories are volumes in the compose file:
 
@@ -211,7 +212,8 @@ volumes:
   traefik_letsencrypt:
 ```
 
-Set `PMF_BASE_URL=https://faq.example.com` so that generated links use the public scheme and host.
+Set `PMF_BASE_URL=https://faq.example.com` so that generated links use the public scheme and host. The `!override`
+tag, which removes the published port of the Apache container, needs Docker Compose 2.24.4 or newer.
 
 ## Backup and Restore
 
@@ -246,15 +248,23 @@ shows the exact volume names of your project.
 
 ## Updates
 
-```bash
-./backup.sh
-sed -i 's/^PMF_VERSION=.*/PMF_VERSION=4.2.2/' .env
-docker compose -f docker-compose.prod.yml pull
-docker compose -f docker-compose.prod.yml up -d
-```
+1. Enable the maintenance mode in the administration under *Configuration*; the updater refuses to update the
+   database otherwise.
+2. Back up the database and the volumes, e.g. with the script above saved as `backup.sh`.
+3. Set the new version in `.env`, pull the new image and recreate the containers:
+   ```bash
+   sed -i 's/^PMF_VERSION=.*/PMF_VERSION=4.2.2/' .env
+   docker compose -f docker-compose.prod.yml pull
+   docker compose -f docker-compose.prod.yml up -d
+   ```
+4. Open `http://<host>/update/`; the updater migrates the database schema when necessary. If you are not logged in,
+   it asks for the update token from `content/core/config/update-token.php`, which you can read with
+   `docker exec phpmyfaq-apache cat content/core/config/update-token.php` (or `phpmyfaq-frankenphp`). See
+   [Updating phpMyFAQ](update.md) for details.
+5. Disable the maintenance mode again.
 
-After a version change, open `http://<host>/update/` or the administration; the updater migrates the
-database schema when necessary.
+Don't use the online update of the administration with the images: it replaces files that belong to the image, and
+these changes are lost when the container is recreated.
 
 ## Monitoring and Troubleshooting
 
@@ -282,6 +292,8 @@ Common problems:
 
 ## Running the image without Compose
 
+With an existing database server:
+
 ```bash
 docker run -d --name phpmyfaq -p 80:80 \
   -e PMF_DB_HOST=db.example.com -e PMF_DB_USER=phpmyfaq -e PMF_DB_PASS=secret \
@@ -293,6 +305,19 @@ docker run -d --name phpmyfaq -p 80:80 \
   -v phpmyfaq_images:/var/www/html/content/user/images \
   ghcr.io/thorsten/phpmyfaq:4.2.1
 ```
+
+To try the image locally together with a database container, create a network and start MariaDB first:
+
+```bash
+docker network create phpmyfaq
+docker run -d --name phpmyfaq-db --network phpmyfaq \
+  -e MARIADB_ROOT_PASSWORD=change-me -e MARIADB_DATABASE=phpmyfaq \
+  -e MARIADB_USER=phpmyfaq -e MARIADB_PASSWORD=change-me mariadb:11.8
+```
+
+Then start phpMyFAQ in the same network with `--network phpmyfaq -p 8080:80`, `-e PMF_DB_HOST=phpmyfaq-db`,
+`-e PMF_DB_PASS=change-me`, `-e PMF_BASE_URL=http://localhost:8080` and the volumes from the example above, open
+http://localhost:8080/ and log in at `/admin/` with the user `admin` and the password you set.
 
 SQLite works for small installations: `-e PMF_DB_TYPE=sqlite3 -e PMF_DB_HOST=/var/www/html/content/core/data/phpmyfaq.sqlite`.
 

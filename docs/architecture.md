@@ -1,4 +1,4 @@
-# phpMyFAQ Architecture &amp; Class Diagrams
+# 13. phpMyFAQ Architecture & Class Diagrams
 
 This document describes the architecture of the phpMyFAQ PHP backend
 (`phpmyfaq/src/phpMyFAQ`) and visualizes the most important classes and their
@@ -15,18 +15,18 @@ included only where they clarify the design.
 
 ## Table of Contents
 
-1. [Subsystem Overview](#1-subsystem-overview)
-2. [Request Lifecycle: Bootstrap, Kernel and Routing](#2-request-lifecycle-bootstrap-kernel-and-routing)
-3. [Database Abstraction Layer](#3-database-abstraction-layer)
-4. [Authentication, User and Permission](#4-authentication-user-and-permission)
-5. [FAQ Domain Model](#5-faq-domain-model)
-6. [Search Subsystem](#6-search-subsystem)
-7. [Export and Mail Subsystems](#7-export-and-mail-subsystems)
-8. [Cross-Cutting Patterns](#8-cross-cutting-patterns)
+1. [Subsystem Overview](#131-subsystem-overview)
+2. [Request Lifecycle: Bootstrap, Kernel and Routing](#132-request-lifecycle-bootstrap-kernel-and-routing)
+3. [Database Abstraction Layer](#133-database-abstraction-layer)
+4. [Authentication, User and Permission](#134-authentication-user-and-permission)
+5. [FAQ Domain Model](#135-faq-domain-model)
+6. [Search Subsystem](#136-search-subsystem)
+7. [Export and Mail Subsystems](#137-export-and-mail-subsystems)
+8. [Cross-Cutting Patterns](#138-cross-cutting-patterns)
 
 ---
 
-## 1. Subsystem Overview
+## 13.1 Subsystem Overview
 
 phpMyFAQ is a request/response web application built on **Symfony HttpKernel**,
 **Symfony Routing** (via PHP 8 `#[Route]` attributes), **Twig** templates, and a
@@ -85,7 +85,7 @@ objects (mail, search, security, LDAP, layout, URL).
 
 ---
 
-## 2. Request Lifecycle: Bootstrap, Kernel and Routing
+## 13.2 Request Lifecycle: Bootstrap, Kernel and Routing
 
 A request is bootstrapped, routed against attribute-defined routes, dispatched
 through Symfony event listeners, and resolved to a controller that is fetched —
@@ -112,21 +112,23 @@ classDiagram
     }
 
     class Environment {
-        +init() void
-        +isDebugMode() bool
-        +get(key, default) mixed
+        +init()$ void
+        +isDebugMode()$ bool
+        +get(key, default)$ mixed
     }
 
     class Configuration {
         +get(item) mixed
-        +set(item, value) void
-        +getAll() mixed
-        +getConfigurationInstance() Configuration
+        +set(key, value) bool
+        +getAll() array
+        +getDb() DatabaseDriver
+        +getPluginManager() PluginManager
+        +getConfigurationInstance()$ Configuration
     }
 
     class System {
-        +getVersion() string
-        +isUpdateNecessary(version) bool
+        +getVersion()$ string
+        +isUpdateNecessary(installedVersion)$ bool
         +checkRequiredExtensions() bool
     }
 
@@ -149,7 +151,7 @@ classDiagram
         +setContainer(ContainerInterface) void
         +render(file, context) Response
         +json(data, status) JsonResponse
-        #userIsAuthenticated() void
+        +userIsAuthenticated() void
         #userHasPermission(PermissionType) void
         #verifySessionCsrfToken(page, token) bool
     }
@@ -163,8 +165,18 @@ classDiagram
     class ControllerContainerListener {
         +onKernelController(ControllerEvent) void
     }
-    class ApiExceptionListener
-    class WebExceptionListener
+    class ApiRateLimiterListener {
+        +onKernelRequest(RequestEvent) void
+    }
+    class ApiExceptionListener {
+        +onKernelException(ExceptionEvent) void
+    }
+    class WebExceptionListener {
+        +onKernelException(ExceptionEvent) void
+    }
+    class SecurityHeadersListener {
+        +onKernelResponse(ResponseEvent) void
+    }
 
     Bootstrapper --> Configuration : builds
     Bootstrapper --> Environment : initializes
@@ -173,32 +185,43 @@ classDiagram
     Kernel --> RouterListener : registers
     Kernel --> LanguageListener : registers
     Kernel --> ControllerContainerListener : registers
+    Kernel --> ApiRateLimiterListener : registers (api)
     Kernel --> ApiExceptionListener : registers
     Kernel --> WebExceptionListener : registers
+    Kernel --> SecurityHeadersListener : registers
     Kernel --> ContainerControllerResolver : resolves with
     RouteCollectionBuilder --> AttributeRouteLoader : delegates
-    ContainerControllerResolver ..> AbstractController : instantiates
+    ContainerControllerResolver --> AbstractController : fetches from container
     ControllerContainerListener --> AbstractController : injects container
     AbstractController --> Configuration : uses
     System ..> Configuration : reads
 ```
 
-**Flow:** `index.php` → `Bootstrapper::run()` → `Kernel::boot()` (builds the
-container from `services.php`, loads routes from cache or attributes) →
-`Kernel::handle()` dispatches Symfony kernel events:
+**Flow:** `index.php` → `src/Bootstrap.php` (runs `Bootstrapper::run()`) →
+`new Kernel(routingContext, debug)` → `Kernel::handle()`, which boots the kernel
+on first use (`Kernel::boot()` builds or loads the cached container from
+`services.php` and loads routes from cache or attributes) and dispatches the
+Symfony kernel events:
 
-1. `LanguageListener` (priority 300) initializes i18n.
-2. `RouterListener` (priority 256) matches the URL to a route.
-3. `ApiRateLimiterListener` (API contexts only) enforces rate limits.
-4. `ControllerContainerListener` injects the shared container into the
-   `AbstractController` and enforces admin authentication by default.
-5. `ContainerControllerResolver` returns the pre-wired controller instance.
-6. On error, `ApiExceptionListener` (RFC 7807 JSON) or `WebExceptionListener`
-   (HTML error pages) produces the response.
+1. `LanguageListener` (request, priority 300) initializes i18n.
+2. `RouterListener` (request, priority 256) matches the URL to a route.
+3. `ApiRateLimiterListener` (request, priority 150, `api` context only) enforces
+   rate limits.
+4. `ContainerControllerResolver` fetches the controller from the DI container,
+   falling back to plain instantiation for unregistered controllers.
+5. `ControllerContainerListener` (controller event) injects the shared
+   container into the `AbstractController` and enforces authentication for
+   every controller in the `Administration` namespace unless it implements
+   `SkipsAuthenticationCheck`.
+6. On error, `ApiExceptionListener` (priority 0, RFC 7807 JSON) or
+   `WebExceptionListener` (priority -10, HTML error pages) produces the
+   response.
+7. `SecurityHeadersListener` (response, priority -100) adds CSP and hardening
+   headers to HTML responses.
 
 ---
 
-## 3. Database Abstraction Layer
+## 13.3 Database Abstraction Layer
 
 All persistence goes through the `DatabaseDriver` interface. A static `Database`
 factory instantiates the configured driver; native and PDO-based
@@ -222,6 +245,7 @@ classDiagram
         +query(query, offset, rowcount) mixed
         +escape(string) string
         +fetchObject(result) mixed
+        +queryPrepared(query, params) mixed
         +fetchAll(result) array
         +numRows(result) int
         +lastInsertId() int
@@ -238,7 +262,7 @@ classDiagram
 
     class DatabaseHelper {
         <<readonly>>
-        +alignTablePrefix(query, old, new) string
+        +alignTablePrefix(query, old, new)$ string
         +buildInsertQueries(query, table) array
     }
 
@@ -256,18 +280,20 @@ classDiagram
     Configuration --> DatabaseDriver : exposes
 ```
 
-> Native `Mysqli` and `Pgsql` drivers are deprecated in favor of the PDO
-> variants and scheduled for removal in a future major release.
+> The native `Mysqli`, `Pgsql`, `Sqlite3`, and `Sqlsrv` drivers are deprecated in
+> favor of the PDO variants and scheduled for removal in phpMyFAQ 5.0.
 
 ---
 
-## 4. Authentication, User and Permission
+## 13.4 Authentication, User and Permission
 
 Authentication uses the **strategy pattern**: `Auth::selectAuth()` returns a
-driver implementing `AuthDriverInterface`. A `User` composes one or more auth
-drivers plus a `PermissionInterface` strategy. `CurrentUser` extends `User` with
-session/cookie handling, login throttling, and 2FA. For API requests, `AuthChain`
-tries session → API key → OAuth2 in turn.
+driver that extends `Auth` and implements `AuthDriverInterface`. A `User`
+composes one or more auth drivers plus a `PermissionInterface` strategy.
+`CurrentUser` extends `User` with session/cookie handling, login throttling, and
+2FA. `AuthWebAuthn` extends `Auth` for passkey logins but is not an
+`AuthDriverInterface` driver. For API requests, `AuthChain` tries session → API
+key → OAuth2 (an optional callable set via `setOAuth2Authenticator()`) in turn.
 
 ```mermaid
 classDiagram
@@ -283,7 +309,7 @@ classDiagram
     }
 
     class Auth {
-        +selectAuth(method)$ Auth
+        +selectAuth(method) Auth
         +getEncryptionContainer(type) Encryption
         +encrypt(string) string
     }
@@ -295,9 +321,10 @@ classDiagram
     class AuthOidc
     class AuthEntraId
     class AuthHttp
+    class AuthWebAuthn
 
     class PasswordHasher {
-        <<readonly>>
+        <<final>>
         +hash(password) string
         +verify(login, password, hash) bool
         +needsRehash(hash) bool
@@ -305,19 +332,20 @@ classDiagram
 
     class User {
         +addPerm(PermissionInterface) bool
-        +addAuth(AuthDriverInterface, type) bool
-        +createUser(login, email, domain) bool
-        +login(login, password, isEmail) bool
-        +setStatus(status) void
+        +addAuth(AuthDriverInterface, name) bool
+        +createUser(login, pass, domain, userId) bool
+        +getUserByLogin(login, raiseError) bool
+        +changePassword(pass) bool
+        +setStatus(status) bool
     }
 
     class CurrentUser {
-        +login(login, pwd, isEmail, req, rememberMe) bool
-        +getFromSession(request) bool
-        +getFromCookie(request) bool
-        +logout(request) void
+        +login(login, password) bool
+        +getFromSession(Configuration)$ CurrentUser
+        +getFromCookie(Configuration)$ CurrentUser
+        +deleteFromSession(deleteCookie) bool
         +isLoggedIn() bool
-        +isTwoFactorEnabled() bool
+        +twoFactorSuccess() bool
     }
 
     class UserData {
@@ -325,33 +353,37 @@ classDiagram
         +set(field, value) bool
     }
     class UserSession {
-        +create() bool
-        +update() bool
-        +trackAction(actionType) void
+        +checkSessionId(sessionId, ipAddress) void
+        +userTracking(action, data) void
+        +setCookie(name, sessionId, timeout, strict) void
     }
 
     class AuthChain {
         <<final>>
         +authenticate(request, scopes) bool
+        +setOAuth2Authenticator(callable) void
         +getAuthenticatedUserId() int
     }
     class ApiKeyAuthenticator {
         <<final>>
         +authenticate(request, scopes) bool
+        +getAuthenticatedUserId() int
     }
 
     class PermissionInterface {
         <<interface>>
         +hasPermission(userId, right) bool
+        +grantUserRight(userId, rightId) bool
+        +getRightData(rightId) array
     }
     class BasicPermission {
-        +grantUserRight(userId, rightId) bool
-        +revokeUserRight(userId, rightId) bool
-        +getRightData(rightId) array
+        +checkUserRight(userId, rightId) bool
+        +refuseAllUserRights(userId) bool
+        +getAllUserRights(userId) array
     }
     class MediumPermission {
         +grantGroupRight(groupId, rightId) bool
-        +grantGroupMember(groupId, userId) bool
+        +addToGroup(userId, groupId) bool
         +getGroupRights(groupId) array
     }
 
@@ -367,12 +399,15 @@ classDiagram
     Auth <|-- AuthSso
     Auth <|-- AuthKeycloak
     Auth <|-- AuthOidc
+    Auth <|-- AuthEntraId
+    Auth <|-- AuthHttp
+    Auth <|-- AuthWebAuthn
 
     User <|-- CurrentUser
     User --> PermissionInterface : composes
     User --> AuthDriverInterface : auth container
     User --> UserData : profile
-    CurrentUser --> UserSession : tracks
+    CurrentUser --> UserSession : session and cookies
     AuthDatabase --> PasswordHasher : uses
 
     PermissionInterface <|.. BasicPermission
@@ -389,19 +424,21 @@ backed by readonly repository classes (`BasicPermissionRepository`,
 
 ---
 
-## 5. FAQ Domain Model
+## 13.5 FAQ Domain Model
 
 The domain layer is **service-oriented**: each aggregate (`Faq`, `Category`,
 `News`, …) is a service that operates on plain *entity* value objects from the
-`Entity\` namespace and persists through dedicated repositories. The `Faq`
-service is the hub, collaborating with the other content services.
+`Entity\` namespace and persists through dedicated repositories (`FaqRepository`,
+`CategoryRepository`, `CommentsRepository`, `NewsRepository`, …). The services
+are largely independent of each other; controllers such as the frontend
+`FaqController` combine them to build a page.
 
 ```mermaid
 classDiagram
     direction TB
 
     class Faq {
-        +getFaq(id, revisionId, admin) void
+        +getFaq(faqId, revisionId, isAdmin) void
         +getAllAvailableFaqsByCategoryId(id, ...) array
         +create(FaqEntity) FaqEntity
         +update(FaqEntity) FaqEntity
@@ -415,12 +452,12 @@ classDiagram
     }
     class News {
         <<readonly>>
-        +getAll(...) array
-        +create(NewsMessage) int
+        +getAll(showArchive, active) array
+        +create(NewsMessage) bool
         +update(NewsMessage) bool
     }
     class Comments {
-        +getCommentsData(id, type) Comment[]
+        +getCommentsData(referenceId, type) array
         +create(Comment) bool
         +delete(type, id) bool
     }
@@ -441,8 +478,8 @@ classDiagram
     }
     class Question {
         <<readonly>>
-        +add(QuestionEntity) bool
-        +getAll(...) QuestionEntity[]
+        +add(QuestionEntity) int
+        +getAll(showAll, language) array
     }
     class Glossary {
         +insertItemsIntoContent(content) string
@@ -456,23 +493,24 @@ classDiagram
 
     class FaqEntity {
         <<entity>>
-        +id : int
-        +language : string
-        +solutionId : int
-        +question : string
-        +answer : string
+        -id : int
+        -language : string
+        -solutionId : int
+        -status : FaqStatus
+        -question : string
+        -answer : string
     }
     class CategoryEntity {
         <<entity>>
-        +id : int
-        +parentId : int
-        +name : string
+        -id : int
+        -parentId : int
+        -name : string
     }
     class Comment {
         <<entity>>
-        +id : int
-        +type : string
-        +comment : string
+        -id : int
+        -type : string
+        -comment : string
     }
     class NewsMessage {
         <<entity>>
@@ -487,6 +525,10 @@ classDiagram
         <<entity>>
     }
 
+    class FaqRepository
+    class FaqStatus {
+        <<enum>>
+    }
     class PermissionType {
         <<enum>>
     }
@@ -498,12 +540,9 @@ classDiagram
     }
 
     Faq --> FaqEntity : reads/writes
+    Faq --> FaqRepository : persists via
     Faq --> Category : category data
-    Faq --> Comments : related
-    Faq --> Tags : related
-    Faq --> Rating : related
-    Faq --> Visits : related
-    Faq --> Glossary : enriches
+    FaqEntity --> FaqStatus : typed by
     Category --> CategoryEntity : reads/writes
     Comments --> Comment : reads/writes
     Comments --> CommentType : typed by
@@ -519,17 +558,19 @@ classDiagram
 ```
 
 All services receive `Configuration` via the constructor (omitted from most
-arrows above for clarity). Entities are fluent data containers; enums such as
-`PermissionType`, `AdminLogType`, `SeoType`, and `CommentType` model fixed sets
-to keep illegal states unrepresentable.
+arrows above for clarity). Entities are fluent data containers with private
+properties and getters/setters; enums such as `FaqStatus`, `PermissionType`,
+`AdminLogType`, and `SeoType` (in `Enums\`) model fixed sets to keep illegal
+states unrepresentable. `CommentType` lives in `Entity\` and holds string
+constants (`CommentType::FAQ`, …).
 
 ---
 
-## 6. Search Subsystem
+## 13.6 Search Subsystem
 
 Search follows the **strategy + factory** pattern. The high-level `Search`
 service routes to a database, Elasticsearch, or OpenSearch backend depending on
-configuration; all three implement `SearchInterface` via `AbstractSearch`.
+configuration; all three extend `AbstractSearch` and implement `SearchInterface`.
 `SearchResultSet` post-processes hits, applying permission filtering.
 
 ```mermaid
@@ -580,7 +621,9 @@ classDiagram
         +getNumberOfResults() int
     }
 
-    SearchInterface <|.. AbstractSearch
+    SearchInterface <|.. SearchDatabase
+    SearchInterface <|.. Elasticsearch
+    SearchInterface <|.. OpenSearch
     AbstractSearch <|-- SearchDatabase
     AbstractSearch <|-- Elasticsearch
     AbstractSearch <|-- OpenSearch
@@ -589,16 +632,18 @@ classDiagram
     SearchService --> SearchResultSet : reviews hits
     SearchService --> Faq : resolves
     SearchService --> Category : resolves
-    Search --> SearchFactory : builds backend
+    Search --> SearchFactory : builds database backend
+    Search ..> Elasticsearch : creates
+    Search ..> OpenSearch : creates
     SearchFactory ..> SearchDatabase : creates
     SearchResultSet --> CurrentUser : permission filter
 ```
 
 ---
 
-## 7. Export and Mail Subsystems
+## 13.7 Export and Mail Subsystems
 
-**Export** uses a static factory on the abstract `Export` base to produce a
+**Export** uses a static factory on the `Export` base class to produce a
 `Pdf` or `Json` exporter. **Mail** separates two extension points: low-level
 *user agents* (`MailUserAgentInterface`: SMTP, PHP `mail()`) and high-level
 *providers* (`MailProviderInterface`: SendGrid, Mailgun, AWS SES).
@@ -621,22 +666,23 @@ classDiagram
     Export <|-- Pdf
     Export ..> Json : creates
     Export ..> Pdf : creates
-    Pdf --> PdfWrapper : renders via
+    Pdf --> Wrapper : renders via
 
-    class PdfWrapper {
+    class Wrapper {
         +Open() void
-        +SetDisplayMode() void
+        +SetDisplayMode(zoom) void
+        +Output(name, dest) string
     }
     class PdfEngineInterface {
         <<interface>>
     }
     class TcpdfEngine
     PdfEngineInterface <|.. TcpdfEngine
-    PdfWrapper --> PdfEngineInterface : uses
+    Wrapper --> PdfEngineInterface : uses
 
     class Mail {
-        +addTo(recipient) bool
-        +send() int
+        +addTo(address, name) bool
+        +send(forceSynchronousDelivery) int
     }
     class MailUserAgentInterface {
         <<interface>>
@@ -669,7 +715,7 @@ database-specific `DialectInterface` produced by `DialectFactory`.
 
 ---
 
-## 8. Cross-Cutting Patterns
+## 13.8 Cross-Cutting Patterns
 
 The codebase consistently applies a small set of design patterns. Recognizing
 them makes the rest of the system predictable:
@@ -690,16 +736,19 @@ them makes the rest of the system predictable:
 
 | Concern | Path |
 | --- | --- |
-| Bootstrap &amp; kernel | `phpmyfaq/src/phpMyFAQ/Bootstrapper.php`, `Kernel.php`, `Bootstrap/` |
+| Bootstrap & kernel | `phpmyfaq/src/Bootstrap.php`, `phpmyfaq/src/phpMyFAQ/Bootstrapper.php`, `Kernel.php`, `Bootstrap/` |
+| Event listeners | `phpmyfaq/src/phpMyFAQ/EventListener/` |
 | Routing | `phpmyfaq/src/phpMyFAQ/Routing/`, controller `#[Route]` attributes |
 | Controllers | `phpmyfaq/src/phpMyFAQ/Controller/` |
 | DI configuration | `phpmyfaq/src/services.php` |
 | Database | `phpmyfaq/src/phpMyFAQ/Database/` |
 | Auth / User / Permission | `phpmyfaq/src/phpMyFAQ/Auth/`, `User/`, `Permission/` |
 | Domain services | `phpmyfaq/src/phpMyFAQ/Faq.php`, `Category.php`, `News.php`, … |
-| Entities &amp; enums | `phpmyfaq/src/phpMyFAQ/Entity/`, `Enums/` |
-| Search | `phpmyfaq/src/phpMyFAQ/Search/` |
-| Export / Mail | `phpmyfaq/src/phpMyFAQ/Export/`, `Mail/` |
+| Entities & enums | `phpmyfaq/src/phpMyFAQ/Entity/`, `Enums/` |
+| Search | `phpmyfaq/src/phpMyFAQ/Search.php`, `Search/` |
+| Export / Mail | `phpmyfaq/src/phpMyFAQ/Export.php`, `Export/`, `Mail.php`, `Mail/` |
+| Setup / migrations | `phpmyfaq/src/phpMyFAQ/Setup/Migration/` |
+| Plugins | `phpmyfaq/src/phpMyFAQ/Plugin/`, `phpmyfaq/content/plugins/` |
 | Templating | `phpmyfaq/src/phpMyFAQ/Twig/`, `Template/` |
 
 ---
