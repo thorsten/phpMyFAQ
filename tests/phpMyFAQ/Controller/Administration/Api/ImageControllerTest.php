@@ -315,6 +315,58 @@ final class ImageControllerTest extends TestCase
     }
 
     /**
+     * PHP fills $_FILES for a real upload, and the security log must not re-read the
+     * temporary file after it was moved into the images folder.
+     *
+     * @throws \Exception
+     */
+    public function testUploadSucceedsWhenTheTemporaryFileIsAlsoListedInFilesSuperglobal(): void
+    {
+        $uploadDir = PMF_CONTENT_DIR . '/user/images/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0o755, true);
+        }
+
+        $controller = new ImageController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'pmf-csrf-token');
+        $controller->setContainer($container);
+
+        $tmpFile = tempnam(sys_get_temp_dir(), 'pmf-test-img-');
+        self::assertNotFalse($tmpFile);
+        $img = imagecreatetruecolor(1, 1);
+        imagepng($img, $tmpFile);
+        unset($img);
+
+        $previousFiles = $_FILES;
+        $_FILES = [
+            'files' => [
+                'name' => ['global upload.png'],
+                'type' => ['image/png'],
+                'tmp_name' => [$tmpFile],
+                'error' => [UPLOAD_ERR_OK],
+                'size' => [(int) filesize($tmpFile)],
+            ],
+        ];
+
+        $file = new UploadedFile($tmpFile, 'global upload.png', 'image/png', null, true);
+        $request = new Request(['csrf' => $token], [], [], [], ['files' => [$file]]);
+
+        try {
+            $response = $controller->upload($request);
+        } finally {
+            $_FILES = $previousFiles;
+            foreach (glob($uploadDir . '*_global_upload.png') ?: [] as $uploadedFile) {
+                @unlink($uploadedFile);
+            }
+        }
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
      * @throws \Exception
      */
     public function testUploadRejectsMismatchedMimeType(): void

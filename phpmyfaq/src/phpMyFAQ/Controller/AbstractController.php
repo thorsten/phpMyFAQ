@@ -620,9 +620,11 @@ abstract class AbstractController
      */
     protected function logSecurityEvent(AdminLogType $type, string $detail): void
     {
+        // Only the server variables: Request::createFromGlobals() would rebuild every uploaded
+        // file from $_FILES and throw once an upload was moved out of its temporary location.
         new SecurityEventLogger($this->configuration->getLogger())->log(
             $type,
-            Request::createFromGlobals(),
+            new Request(server: $_SERVER),
             $detail,
             $this->currentUser->getUserId(),
         );
