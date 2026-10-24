@@ -11,6 +11,7 @@ use phpMyFAQ\CustomPage;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\CustomPageEntity;
+use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Seo;
@@ -103,7 +104,7 @@ final class CustomPageControllerTest extends TestCase
     public function testShowReturnsNotFoundWhenSlugIsMissing(): void
     {
         $customPage = $this->createStub(CustomPage::class);
-        $controller = new CustomPageController($customPage);
+        $controller = new CustomPageController($customPage, new FaqHelper($this->configuration));
         $controller->setContainer($this->createControllerContainer(
             new Session(new MockArraySessionStorage()),
             $this->createLoggedOutCurrentUser(),
@@ -140,7 +141,7 @@ final class CustomPageControllerTest extends TestCase
         $customPage = $this->createMock(CustomPage::class);
         $customPage->expects(self::once())->method('getBySlug')->with('seo-page', 'en')->willReturn($pageEntity);
 
-        $controller = new CustomPageController($customPage);
+        $controller = new CustomPageController($customPage, new FaqHelper($this->configuration));
         $controller->setContainer($this->createControllerContainer(
             new Session(new MockArraySessionStorage()),
             $this->createLoggedOutCurrentUser(),
@@ -174,7 +175,7 @@ final class CustomPageControllerTest extends TestCase
         $customPage = $this->createMock(CustomPage::class);
         $customPage->expects(self::once())->method('getBySlug')->with('fallback-page', 'en')->willReturn($pageEntity);
 
-        $controller = new CustomPageController($customPage);
+        $controller = new CustomPageController($customPage, new FaqHelper($this->configuration));
         $controller->setContainer($this->createControllerContainer(
             new Session(new MockArraySessionStorage()),
             $this->createLoggedOutCurrentUser(),
@@ -185,6 +186,44 @@ final class CustomPageControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('Fallback Page', (string) $response->getContent());
         self::assertStringNotContainsString('SEO Description', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testShowRewritesFragmentLinksToTheCurrentPage(): void
+    {
+        $pageEntity = new CustomPageEntity()
+            ->setId(503)
+            ->setPageTitle('Page with contents')
+            ->setContent(
+                '<nav class="pmf-toc"><ul><li><a href="#toc-intro">Intro</a></li></ul></nav><h2 id="toc-intro">Intro</h2>',
+            )
+            ->setAuthorName('Test Author')
+            ->setAuthorEmail('author@example.com')
+            ->setActive(true)
+            ->setCreated(new DateTime('2026-03-15 10:00:00'));
+
+        $customPage = $this->createMock(CustomPage::class);
+        $customPage->expects(self::once())->method('getBySlug')->with('toc-page', 'en')->willReturn($pageEntity);
+
+        $controller = new CustomPageController($customPage, new FaqHelper($this->configuration));
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            $this->createLoggedOutCurrentUser(),
+        ));
+
+        $request = Request::create('https://faq.example.org/page/toc-page.html');
+        $request->attributes->set('slug', 'toc-page');
+
+        $response = $controller->show($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString(
+            'href="//faq.example.org/page/toc-page.html#toc-intro"',
+            (string) $response->getContent(),
+        );
+        self::assertStringContainsString('<h2 id="toc-intro">Intro</h2>', (string) $response->getContent());
     }
 
     private function createControllerContainer(SessionInterface $session, CurrentUser $currentUser): ContainerInterface

@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\CustomPage;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\SeoType;
+use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Strings;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +35,7 @@ final class CustomPageController extends AbstractFrontController
 {
     public function __construct(
         private readonly CustomPage $customPage,
+        private readonly FaqHelper $faqHelper,
     ) {
         parent::__construct();
     }
@@ -87,10 +89,13 @@ final class CustomPageController extends AbstractFrontController
             $metaDescription = '';
         }
 
+        // Anchor links like the table of contents must point to this page, not to the <base href>
+        $currentUrl = sprintf('//%s%s', $request->getHost(), $request->getRequestUri());
+
         return $this->render('custom-page.twig', [
             ...$this->getHeader($request),
             'pageTitle' => Strings::htmlentities($pageEntity->getPageTitle()),
-            'pageContent' => $pageEntity->getContent(),
+            'pageContent' => $this->faqHelper->rewriteUrlFragments($pageEntity->getContent(), $currentUrl),
             'authorName' => Strings::htmlentities($pageEntity->getAuthorName()),
             'authorEmail' => $pageEntity->getAuthorEmail(),
             'pageCreated' => $pageEntity->getCreated()->format('Y-m-d H:i:s'),

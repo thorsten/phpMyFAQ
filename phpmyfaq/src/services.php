@@ -1032,6 +1032,7 @@ return static function (ContainerConfigurator $container): void {
     ]);
     $services->set(FrontendCustomPageController::class, FrontendCustomPageController::class)->args([
         service('phpmyfaq.custom-page'),
+        service('phpmyfaq.helper.faq'),
     ]);
     $services->set(FrontendFaqController::class, FrontendFaqController::class)->args([
         service('phpmyfaq.user.session'),

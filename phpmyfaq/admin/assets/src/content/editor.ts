@@ -43,6 +43,7 @@ import 'jodit/esm/plugins/video/video.js';
 import '../plugins/phpmyfaq/phpmyfaq.js';
 import '../plugins/code-snippet/code-snippet.js';
 import '../plugins/show-blocks/show-blocks.js';
+import '../plugins/table-of-contents/table-of-contents.js';
 import hljs from 'highlight.js/lib/common';
 
 interface UploaderResponse {
@@ -188,7 +189,7 @@ export const renderEditor = () => {
     imageProcessor: { replaceDataURIToBlobIdInView: false },
     removeButtons: [],
     disablePlugins: [],
-    extraPlugins: ['phpMyFAQ', 'codeSnippet', 'showBlocks'],
+    extraPlugins: ['phpMyFAQ', 'codeSnippet', 'showBlocks', 'tableOfContents'],
     extraButtons: [],
     buttons: [
       'source',
@@ -231,6 +232,7 @@ export const renderEditor = () => {
       '|',
       'classSpan',
       'hr',
+      'tableOfContents',
       'eraser',
       'copyformat',
       '|',
@@ -482,7 +484,7 @@ export const renderPageEditor = () => {
     imageProcessor: { replaceDataURIToBlobIdInView: false },
     removeButtons: [],
     disablePlugins: [],
-    extraPlugins: ['phpMyFAQ', 'codeSnippet'],
+    extraPlugins: ['phpMyFAQ', 'codeSnippet', 'tableOfContents'],
     extraButtons: [],
     buttons: [
       'source',
@@ -514,6 +516,7 @@ export const renderPageEditor = () => {
       'redo',
       '|',
       'hr',
+      'tableOfContents',
       'eraser',
       'copyformat',
       '|',

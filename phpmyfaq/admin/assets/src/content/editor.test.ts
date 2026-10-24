@@ -93,6 +93,7 @@ vi.mock('jodit/esm/plugins/video/video.js', () => ({}));
 vi.mock('../plugins/phpmyfaq/phpmyfaq.js', () => ({}));
 vi.mock('../plugins/code-snippet/code-snippet.js', () => ({}));
 vi.mock('../plugins/show-blocks/show-blocks.js', () => ({}));
+vi.mock('../plugins/table-of-contents/table-of-contents.js', () => ({}));
 
 import { getJoditEditor, renderEditor, renderPageEditor } from './editor';
 import { Jodit } from 'jodit';
@@ -137,6 +138,19 @@ describe('Editor', () => {
       const callArgs = vi.mocked(Jodit.make).mock.calls[0];
       const editorElement = callArgs[0] as HTMLElement;
       expect(editorElement.id).toBe('editor');
+    });
+
+    it('should enable the table of contents plugin and button', () => {
+      document.body.innerHTML = `
+        <div id="editor"></div>
+        <input id="pmf-csrf-token" value="test-csrf-token" />
+      `;
+
+      renderEditor();
+
+      const options = vi.mocked(Jodit.make).mock.calls[0][1] as { extraPlugins: string[]; buttons: string[] };
+      expect(options.extraPlugins).toContain('tableOfContents');
+      expect(options.buttons).toContain('tableOfContents');
     });
 
     it('should register event listeners on the editor after creation', () => {
@@ -186,6 +200,20 @@ describe('Editor', () => {
       const callArgs = vi.mocked(Jodit.make).mock.calls[0];
       const contentElement = callArgs[0] as HTMLTextAreaElement;
       expect(contentElement.id).toBe('content');
+    });
+
+    it('should enable the table of contents plugin and button', () => {
+      document.body.innerHTML = `
+        <div class="mb-3">
+          <textarea id="content"></textarea>
+        </div>
+      `;
+
+      renderPageEditor();
+
+      const options = vi.mocked(Jodit.make).mock.calls[0][1] as { extraPlugins: string[]; buttons: string[] };
+      expect(options.extraPlugins).toContain('tableOfContents');
+      expect(options.buttons).toContain('tableOfContents');
     });
 
     it('should register event listeners on the editor after creation', () => {
