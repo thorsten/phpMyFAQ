@@ -10,60 +10,66 @@ vi.mock('jodit', () => ({
   },
 }));
 
-const createWrapper = (width: number, height: number): HTMLElement => {
-  const wrapper = document.createElement('jodit-media');
-  wrapper.setAttribute('data-jodit_fake_wrapper', '1');
-  Object.defineProperty(wrapper, 'offsetWidth', { configurable: true, get: () => width });
-  Object.defineProperty(wrapper, 'offsetHeight', { configurable: true, get: () => height });
-
+const createVideo = (width: number, height: number): HTMLVideoElement => {
   const video = document.createElement('video');
   video.setAttribute('src', 'https://localhost/content/user/images/1_clip.mp4');
   video.setAttribute('width', '640');
-  video.style.width = '640px';
+  video.setAttribute('height', '360');
+  // The resizer sizes the video through its style
+  video.style.width = `${width}px`;
+  video.style.height = `${height}px`;
+  Object.defineProperty(video, 'offsetWidth', { configurable: true, get: () => width });
+  Object.defineProperty(video, 'offsetHeight', { configurable: true, get: () => height });
+
+  return video;
+};
+
+const wrap = (video: HTMLVideoElement): HTMLElement => {
+  const wrapper = document.createElement('jodit-media');
+  wrapper.setAttribute('data-jodit_fake_wrapper', '1');
   wrapper.appendChild(video);
 
   return wrapper;
 };
 
-describe('applyWrapperSizeToVideo', () => {
+describe('applyVideoSize', () => {
   beforeEach(() => {
     vi.resetModules();
   });
 
-  it('should store the wrapper size as width and height attributes of the video', async () => {
-    const { applyWrapperSizeToVideo } = await import('./video-resize');
-    const wrapper = createWrapper(480, 270);
+  it('should store the rendered size as width and height attributes', async () => {
+    const { applyVideoSize } = await import('./video-resize');
+    const video = createVideo(480, 270);
 
-    applyWrapperSizeToVideo(wrapper);
+    applyVideoSize(video);
 
-    const video = wrapper.querySelector('video') as HTMLVideoElement;
     expect(video.getAttribute('width')).toBe('480');
     expect(video.getAttribute('height')).toBe('270');
   });
 
-  it('should remove an inline size that would override the attributes', async () => {
-    const { applyWrapperSizeToVideo } = await import('./video-resize');
-    const wrapper = createWrapper(480, 270);
+  it('should remove the inline size, which the sanitizer drops on save', async () => {
+    const { applyVideoSize } = await import('./video-resize');
+    const video = createVideo(480, 270);
 
-    applyWrapperSizeToVideo(wrapper);
+    applyVideoSize(video);
 
-    const video = wrapper.querySelector('video') as HTMLVideoElement;
     expect(video.style.width).toBe('');
     expect(video.style.height).toBe('');
+    expect(video.hasAttribute('style')).toBe(false);
   });
 
-  it('should ignore a wrapper without a video', async () => {
-    const { applyWrapperSizeToVideo } = await import('./video-resize');
-    const wrapper = document.createElement('jodit-media');
-    wrapper.appendChild(document.createElement('audio'));
+  it('should keep other inline styles of the video', async () => {
+    const { applyVideoSize } = await import('./video-resize');
+    const video = createVideo(480, 270);
+    video.style.borderRadius = '4px';
 
-    expect(() => applyWrapperSizeToVideo(wrapper)).not.toThrow();
-    expect(wrapper.querySelector('audio')?.hasAttribute('width')).toBe(false);
+    applyVideoSize(video);
+
+    expect(video.getAttribute('style')).toBe('border-radius: 4px;');
   });
 });
 
 describe('video-resize plugin', () => {
-  let editorRoot: HTMLElement;
   let handlers: Map<unknown, Map<string, (event?: Event) => void>>;
   let mockEditor: {
     editor: HTMLElement;
@@ -75,7 +81,6 @@ describe('video-resize plugin', () => {
     vi.clearAllMocks();
     vi.resetModules();
 
-    editorRoot = document.createElement('div');
     handlers = new Map();
     // Jodit's on() takes (event, handler) for editor events and (element, event, handler) for elements
     const on = vi.fn((...args: unknown[]) => {
@@ -86,7 +91,7 @@ describe('video-resize plugin', () => {
       handlers.set(target, targetHandlers);
       return mockEditor.e;
     });
-    mockEditor = { editor: editorRoot, e: { on }, synchronizeValues: vi.fn() };
+    mockEditor = { editor: document.createElement('div'), e: { on }, synchronizeValues: vi.fn() };
   });
 
   const setUpPlugin = async (): Promise<void> => {
@@ -102,37 +107,49 @@ describe('video-resize plugin', () => {
     onMouseDown?.({ target } as unknown as Event);
   };
 
-  it('should copy the size to the video when a pressed video wrapper is resized', async () => {
+  it('should store the size when a pressed video is resized', async () => {
     await setUpPlugin();
-    const wrapper = createWrapper(480, 270);
-    editorRoot.appendChild(wrapper);
+    const video = createVideo(480, 270);
+    mockEditor.editor.appendChild(video);
 
-    pressOn(wrapper.querySelector('video') as Element);
-    handlers.get(wrapper)?.get('changesize')?.();
+    pressOn(video);
+    handlers.get(video)?.get('changesize')?.();
 
-    expect(wrapper.querySelector('video')?.getAttribute('width')).toBe('480');
+    expect(video.getAttribute('width')).toBe('480');
+    expect(video.getAttribute('height')).toBe('270');
     // The resizer synchronizes once the drag ends; syncing on every move would rebuild the content
     expect(mockEditor.synchronizeValues).not.toHaveBeenCalled();
   });
 
-  it('should bind a wrapper only once', async () => {
+  it('should bind the video when its media wrapper is pressed', async () => {
     await setUpPlugin();
-    const wrapper = createWrapper(480, 270);
-    editorRoot.appendChild(wrapper);
+    const video = createVideo(480, 270);
+    mockEditor.editor.appendChild(wrap(video));
 
-    pressOn(wrapper);
-    pressOn(wrapper);
+    pressOn(video.parentElement as Element);
+    handlers.get(video)?.get('changesize')?.();
+
+    expect(video.getAttribute('width')).toBe('480');
+  });
+
+  it('should bind a video only once', async () => {
+    await setUpPlugin();
+    const video = createVideo(480, 270);
+    mockEditor.editor.appendChild(video);
+
+    pressOn(video);
+    pressOn(video);
 
     const changeSizeBindings = mockEditor.e.on.mock.calls.filter(
-      ([target, event]) => target === wrapper && event === 'changesize'
+      ([target, event]) => target === video && event === 'changesize'
     );
     expect(changeSizeBindings).toHaveLength(1);
   });
 
-  it('should ignore presses outside of a video wrapper', async () => {
+  it('should ignore presses outside of a video', async () => {
     await setUpPlugin();
     const paragraph = document.createElement('p');
-    editorRoot.appendChild(paragraph);
+    mockEditor.editor.appendChild(paragraph);
 
     pressOn(paragraph);
 

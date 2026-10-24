@@ -110,7 +110,7 @@ class AdminMenuBuilder
         // read all rights, set them FALSE
         $allRights = $user->perm->getAllRightsData();
         foreach ($allRights as $right) {
-            $this->permission[$right['name']] = false;
+            $this->permission[(string) $right['name']] = false;
         }
 
         // check user rights, set them TRUE
@@ -120,13 +120,13 @@ class AdminMenuBuilder
                 continue;
             }
 
-            $this->permission[$allRight['name']] = true;
+            $this->permission[(string) $allRight['name']] = true;
         }
 
         // If a user is super admin, give all rights
         if ($user->isSuperAdmin()) {
             foreach ($allRights as $allRight) {
-                $this->permission[$allRight['name']] = true;
+                $this->permission[(string) $allRight['name']] = true;
             }
         }
     }

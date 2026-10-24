@@ -249,7 +249,7 @@ class UserData
         // update data
         $num = count($field);
         for ($i = 0; $i < $num; ++$i) {
-            $this->data[$field[$i]] = $value[$i];
+            $this->data[(string) $field[$i]] = $value[$i];
         }
 
         return $this->save();

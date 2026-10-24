@@ -162,15 +162,11 @@ describe('Editor', () => {
 
       renderEditor();
 
-      const options = vi.mocked(Jodit.make).mock.calls[0][1] as {
-        extraPlugins: string[];
-        allowResizeTags: Set<string>;
-        resizer: { useAspectRatio: Set<string> };
-      };
+      const options = vi.mocked(Jodit.make).mock.calls[0][1] as Record<string, unknown> & { extraPlugins: string[] };
       expect(options.extraPlugins).toContain('videoResize');
-      expect(options.allowResizeTags.has('jodit-media')).toBe(true);
-      expect(options.allowResizeTags.has('img')).toBe(true);
-      expect(options.resizer.useAspectRatio.has('jodit-media')).toBe(true);
+      // Jodit resizes videos itself; overriding these would drop 'video' from its defaults
+      expect(options).not.toHaveProperty('allowResizeTags');
+      expect(options).not.toHaveProperty('resizer');
     });
 
     it('should register event listeners on the editor after creation', () => {
@@ -245,15 +241,11 @@ describe('Editor', () => {
 
       renderPageEditor();
 
-      const options = vi.mocked(Jodit.make).mock.calls[0][1] as {
-        extraPlugins: string[];
-        allowResizeTags: Set<string>;
-        resizer: { useAspectRatio: Set<string> };
-      };
+      const options = vi.mocked(Jodit.make).mock.calls[0][1] as Record<string, unknown> & { extraPlugins: string[] };
       expect(options.extraPlugins).toContain('videoResize');
-      expect(options.allowResizeTags.has('jodit-media')).toBe(true);
-      expect(options.allowResizeTags.has('img')).toBe(true);
-      expect(options.resizer.useAspectRatio.has('jodit-media')).toBe(true);
+      // Jodit resizes videos itself; overriding these would drop 'video' from its defaults
+      expect(options).not.toHaveProperty('allowResizeTags');
+      expect(options).not.toHaveProperty('resizer');
     });
 
     it('should register event listeners on the editor after creation', () => {

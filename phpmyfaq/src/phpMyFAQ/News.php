@@ -205,7 +205,7 @@ readonly class News
         $headers = [];
         $language = $this->configuration->getLanguage()->getLanguage();
         foreach ($this->newsRepository->getHeaders($language) as $header) {
-            $headers[$header->id] = [
+            $headers[(int) $header->id] = [
                 'id' => $header->id,
                 'lang' => $header->lang,
                 'header' => $header->header,

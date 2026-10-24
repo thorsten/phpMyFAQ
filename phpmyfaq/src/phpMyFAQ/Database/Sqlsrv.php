@@ -230,7 +230,7 @@ class Sqlsrv implements DatabaseDriver
                 break;
             }
 
-            $tables[$row->table_name] = $row->table_rows;
+            $tables[(string) $row->table_name] = $row->table_rows;
         }
 
         return $tables;

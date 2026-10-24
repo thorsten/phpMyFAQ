@@ -1,10 +1,9 @@
 /**
- * Jodit Editor plugin to resize uploaded videos
+ * Jodit Editor plugin to keep the size of resized videos
  *
- * Jodit wraps every <video> in a <jodit-media> element, which the resizer handles
- * once it is listed in allowResizeTags. The wrapper is removed when the content is
- * saved, so this plugin copies its size onto the video as width and height
- * attributes, just like Jodit does for the wrapper of an iframe.
+ * Jodit's resizer sizes a <video> through its inline style, and the HTML
+ * sanitizer drops style attributes when the content is saved. This plugin
+ * moves the size into the width and height attributes of the video instead.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -23,36 +22,35 @@ import { Jodit } from 'jodit';
 const VIDEO_WRAPPER_TAG = 'jodit-media';
 
 /**
- * Stores the size of a resized video wrapper as width and height attributes of its video.
+ * Stores the rendered size of a video as its width and height attributes.
  */
-export const applyWrapperSizeToVideo = (wrapper: HTMLElement): void => {
-  const video = wrapper.querySelector('video');
-  if (!video) {
-    return;
-  }
+export const applyVideoSize = (video: HTMLVideoElement): void => {
+  video.setAttribute('width', String(Math.round(video.offsetWidth)));
+  video.setAttribute('height', String(Math.round(video.offsetHeight)));
 
-  video.setAttribute('width', String(Math.round(wrapper.offsetWidth)));
-  video.setAttribute('height', String(Math.round(wrapper.offsetHeight)));
-
-  // An inline size would win over the attributes, and the sanitizer drops style on save
   video.style.removeProperty('width');
   video.style.removeProperty('height');
+  if (video.getAttribute('style')?.trim() === '') {
+    video.removeAttribute('style');
+  }
 };
 
-Jodit.plugins.add('videoResize', (editor: Jodit): void => {
-  const boundWrappers = new WeakSet<HTMLElement>();
+const findVideo = (target: Element | null): HTMLVideoElement | null =>
+  target?.closest('video') ?? target?.closest(VIDEO_WRAPPER_TAG)?.querySelector('video') ?? null;
 
-  // The resizer binds an element on click, so binding on mousedown is always in time. The editor
-  // event survives a replaced editor element, unlike a listener on editor.editor at plugin start.
+Jodit.plugins.add('videoResize', (editor: Jodit): void => {
+  const boundVideos = new WeakSet<HTMLVideoElement>();
+
+  // A click on a video lands on its media wrapper; the resizer then resizes the
+  // video, so the video is bound here before a drag can start.
   editor.e.on('mousedown', (event: MouseEvent): void => {
-    const target = event.target as Element | null;
-    const wrapper = target?.closest<HTMLElement>(VIDEO_WRAPPER_TAG);
-    if (!wrapper || boundWrappers.has(wrapper)) {
+    const video = findVideo(event.target as Element | null);
+    if (!video || boundVideos.has(video)) {
       return;
     }
 
-    boundWrappers.add(wrapper);
+    boundVideos.add(video);
     // Fired on every move of a drag; the resizer synchronizes the value once the drag ends
-    editor.e.on(wrapper, 'changesize', (): void => applyWrapperSizeToVideo(wrapper));
+    editor.e.on(video, 'changesize', (): void => applyVideoSize(video));
   });
 });

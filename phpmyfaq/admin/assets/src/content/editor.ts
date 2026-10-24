@@ -191,9 +191,6 @@ export const renderEditor = () => {
     removeButtons: [],
     disablePlugins: [],
     extraPlugins: ['phpMyFAQ', 'codeSnippet', 'showBlocks', 'tableOfContents', 'videoResize'],
-    // jodit-media wraps uploaded videos, see the videoResize plugin
-    allowResizeTags: new Set(['img', 'iframe', 'table', 'jodit', 'jodit-media']),
-    resizer: { useAspectRatio: new Set(['img', 'jodit-media']) },
     extraButtons: [],
     buttons: [
       'source',
@@ -489,9 +486,6 @@ export const renderPageEditor = () => {
     removeButtons: [],
     disablePlugins: [],
     extraPlugins: ['phpMyFAQ', 'codeSnippet', 'tableOfContents', 'videoResize'],
-    // jodit-media wraps uploaded videos, see the videoResize plugin
-    allowResizeTags: new Set(['img', 'iframe', 'table', 'jodit', 'jodit-media']),
-    resizer: { useAspectRatio: new Set(['img', 'jodit-media']) },
     extraButtons: [],
     buttons: [
       'source',
