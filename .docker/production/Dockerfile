@@ -61,7 +61,10 @@ COPY bin/console ./bin/console
 # Strip development leftovers (mirrors scripts/prepare-release-artifacts.sh)
 # and any runtime state that a local checkout may contain. Never ship a
 # database.php: the container is configured through the installer or the
-# entrypoint.
+# entrypoint. COPY keeps the file modes of the build context: a file an editor
+# or formatter saved as 0600 would be unreadable for www-data and fail every
+# request with "Permission denied". Git only tracks the executable bit, so the
+# modes are normalized here.
 RUN set -eu \
     && rm -rf phpmyfaq/src/libs/tecnickcom/tcpdf/examples \
               phpmyfaq/src/libs/tecnickcom/tcpdf/test \
@@ -81,6 +84,7 @@ RUN set -eu \
             phpmyfaq/content/core/upgrades phpmyfaq/content/upgrades \
             -mindepth 1 -not -name '.gitkeep' -not -name '.htaccess' -delete \
     && find . -name '.DS_Store' -delete \
+    && chmod -R u+rwX,go+rX,go-w phpmyfaq bin \
     && chmod +x bin/console
 
 # ---------------------------------------------------------------------------
