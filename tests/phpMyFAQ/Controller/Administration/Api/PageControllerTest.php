@@ -987,4 +987,79 @@ final class PageControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
         self::assertSame($pageId, (int) $payload['id']);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateKeepsTheHtmlOfTheContent(): void
+    {
+        $controller = $this->createControllerWithSearchDependencies(
+            $this->createStub(Elasticsearch::class),
+            $this->createStub(OpenSearch::class),
+        );
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $slug = 'unit-test-html-' . bin2hex(random_bytes(4));
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'pageTitle' => 'HTML Page',
+            'slug' => $slug,
+            'content' => '<h2 id="toc-intro">Intro</h2><p><img src="https://localhost/content/user/images/1_a.png" width="300"></p>',
+            'authorName' => 'Test Author',
+            'authorEmail' => 'test@example.com',
+            'active' => true,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(
+            '<h2 id="toc-intro">Intro</h2><p><img src="https://localhost/content/user/images/1_a.png" width="300" /></p>',
+            $this->getStoredPageContent($slug),
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateKeepsTheHtmlOfTheContent(): void
+    {
+        $pageId = $this->createPageViaController('unit-test-html-update-' . bin2hex(random_bytes(4)));
+
+        $controller = $this->createControllerWithSearchDependencies(
+            $this->createStub(Elasticsearch::class),
+            $this->createStub(OpenSearch::class),
+        );
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-page');
+        $controller->setContainer($container);
+
+        $slug = 'updated-html-' . $pageId;
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => $pageId,
+            'pageTitle' => 'Updated HTML Page',
+            'slug' => $slug,
+            'content' => '<p>Updated <strong>content</strong></p>',
+            'authorName' => 'Test Author',
+            'authorEmail' => 'test@example.com',
+            'active' => true,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('<p>Updated <strong>content</strong></p>', $this->getStoredPageContent($slug));
+    }
+
+    private function getStoredPageContent(string $slug): string
+    {
+        $result = $this->dbHandle->query(sprintf("SELECT content FROM faqcustompages WHERE slug = '%s'", $slug));
+
+        return (string) $this->dbHandle->fetchObject($result)->content;
+    }
 }

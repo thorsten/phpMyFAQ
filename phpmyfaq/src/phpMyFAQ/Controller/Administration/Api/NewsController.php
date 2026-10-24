@@ -175,7 +175,9 @@ final class NewsController extends AbstractAdministrationApiController
     private function newsMessageFromPayload(\stdClass $data): NewsMessage
     {
         $header = Filter::filterVar($data->newsHeader ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $content = Filter::filterVar($data->news ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        // The news text is HTML from the editor: only the HtmlSanitizer may filter it, since
+        // FILTER_SANITIZE_SPECIAL_CHARS strips every tag
+        $content = Filter::removeAttributes(is_string($data->news ?? null) ? $data->news : '');
         $author = Filter::filterVar($data->authorName ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $email = Filter::filterEmail($data->authorEmail ?? '', default: '');
         $active = Filter::filterVar($data->active ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
@@ -189,7 +191,7 @@ final class NewsController extends AbstractAdministrationApiController
         $newsMessage
             ->setLanguage($newsLang)
             ->setHeader($header)
-            ->setMessage(Filter::removeAttributes(html_entity_decode($content)))
+            ->setMessage($content)
             ->setAuthor($author)
             ->setEmail($email)
             ->setActive((bool) $active)

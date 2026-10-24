@@ -250,10 +250,13 @@ final class NewsControllerTest extends TestCase
                     [
                         'csrfToken' => $token,
                         'newsHeader' => 'Sanitized News',
-                        // Entity-encoded markup passes the strip_tags() input filter and used to be decoded verbatim
+                        // The editor sends raw HTML; only the HtmlSanitizer may decide what survives.
+                        // Entity-encoded markup must stay inert text instead of being decoded into tags.
                         'news' =>
-                            '&lt;p&gt;Safe&lt;/p&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;img src=x onerror=alert(2)&gt;'
-                                . '&lt;a href="javascript:alert(3)"&gt;x&lt;/a&gt;',
+                            '<p>Safe</p><script>alert(1)</script><img src=x onerror=alert(2)>'
+                                . '<a href="javascript:alert(3)">x</a>'
+                                . '<p><img src="https://localhost/content/user/images/1_a.png" width="300"></p>'
+                                . '&lt;script&gt;alert(4)&lt;/script&gt;',
                         'authorName' => 'Tester',
                         'authorEmail' => 'tester@example.com',
                         'active' => '1',
@@ -277,6 +280,11 @@ final class NewsControllerTest extends TestCase
         $stored = (string) $this->dbHandle->fetchObject($result)->artikel;
 
         self::assertStringContainsString('<p>Safe</p>', $stored);
+        self::assertStringContainsString(
+            '<img src="https://localhost/content/user/images/1_a.png" width="300" />',
+            $stored,
+        );
+        self::assertStringContainsString('&lt;script&gt;alert(4)&lt;/script&gt;', $stored);
         self::assertStringNotContainsString('<script', $stored);
         self::assertStringNotContainsString('onerror', $stored);
         self::assertStringNotContainsString('javascript:', $stored);

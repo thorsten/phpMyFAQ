@@ -175,7 +175,9 @@ final class PageController extends AbstractAdministrationApiController
 
         $pageTitle = Filter::filterVar($data->pageTitle, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $content = Filter::filterVar($data->content ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        // The content is HTML from the editor: only the HtmlSanitizer may filter it, since
+        // FILTER_SANITIZE_SPECIAL_CHARS strips every tag
+        $content = Filter::removeAttributes(is_string($data->content ?? null) ? $data->content : '');
         $authorName = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $authorEmail = Filter::filterEmail($data->authorEmail);
         if (!is_string($authorEmail) || $authorEmail === '') {
@@ -218,11 +220,7 @@ final class PageController extends AbstractAdministrationApiController
             ->setLanguage($language)
             ->setPageTitle($pageTitle)
             ->setSlug($slug)
-            ->setContent(Filter::removeAttributes(html_entity_decode(
-                (string) $content,
-                ENT_QUOTES | ENT_HTML5,
-                encoding: 'UTF-8',
-            )))
+            ->setContent($content)
             ->setAuthorName($authorName)
             ->setAuthorEmail($authorEmail)
             ->setActive((bool) $active)
@@ -350,7 +348,9 @@ final class PageController extends AbstractAdministrationApiController
 
         $pageTitle = Filter::filterVar($data->pageTitle, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $slug = Filter::filterVar($data->slug, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $content = Filter::filterVar($data->content ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        // The content is HTML from the editor: only the HtmlSanitizer may filter it, since
+        // FILTER_SANITIZE_SPECIAL_CHARS strips every tag
+        $content = Filter::removeAttributes(is_string($data->content ?? null) ? $data->content : '');
         $authorName = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS, '');
         $authorEmail = Filter::filterEmail($data->authorEmail);
         if (!is_string($authorEmail) || $authorEmail === '') {
@@ -373,11 +373,7 @@ final class PageController extends AbstractAdministrationApiController
             ->setLanguage($language)
             ->setPageTitle($pageTitle)
             ->setSlug($slug)
-            ->setContent(Filter::removeAttributes(html_entity_decode(
-                (string) $content,
-                ENT_QUOTES | ENT_HTML5,
-                encoding: 'UTF-8',
-            )))
+            ->setContent($content)
             ->setAuthorName($authorName)
             ->setAuthorEmail($authorEmail)
             ->setActive((bool) $active)

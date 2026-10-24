@@ -44,6 +44,10 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 #[UsesNamespace('phpMyFAQ')]
 final class FaqControllerTest extends TestCase
 {
+    private const string HTML_ANSWER = '<p>Logitech Harmony Fehlercode:</p><p><img src="https://localhost/content/user/images/1792833065_IMG_1350.png" width="300"></p><pre><code>&lt;?php echo 1; ?&gt;</code></pre>';
+
+    private const string HTML_ANSWER_SAVED = '<p>Logitech Harmony Fehlercode:</p><p><img src="https://localhost/content/user/images/1792833065_IMG_1350.png" width="300" /></p><pre><code>&lt;?php echo 1; ?&gt;</code></pre>';
+
     private Configuration $configuration;
     private Sqlite3 $dbHandle;
     private string $databasePath;
@@ -3599,5 +3603,202 @@ final class FaqControllerTest extends TestCase
                 return new \GuzzleHttp\Psr7\Request('PUT', '/phpmyfaq-test/_doc/1001');
             }
         };
+    }
+    /**
+     * @throws \Exception
+     */
+    public function testCreateKeepsTheHtmlOfTheAnswer(): void
+    {
+        self::assertTrue($this->configuration->set('security.permLevel', 'basic'));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faqEntity = new \phpMyFAQ\Entity\FaqEntity()
+            ->setId(123)
+            ->setLanguage('en')
+            ->setSolutionId(1123)
+            ->setStatus(FaqStatus::Published)
+            ->setSticky(false)
+            ->setQuestion('Created FAQ')
+            ->setAnswer('Created answer')
+            ->setKeywords('created')
+            ->setAuthor('Author')
+            ->setEmail('author@example.com')
+            ->setComment(true)
+            ->setCreatedDate(new \DateTime())
+            ->setNotes('');
+
+        $faq = $this->createMock(Faq::class);
+        $faq
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->callback(static fn(\phpMyFAQ\Entity\FaqEntity $entity): bool => $entity->getAnswer() === self::HTML_ANSWER_SAVED))
+            ->willReturn($faqEntity);
+
+        $tags = $this->createMock(Tags::class);
+        $tags->expects($this->once())->method('create')->with(123, ['first-tag', ' second-tag']);
+
+        $changelog = $this->createMock(Changelog::class);
+        $changelog->expects($this->once())->method('add');
+
+        $visits = $this->createMock(Visits::class);
+        $visits->expects($this->once())->method('logViews')->with(123);
+
+        $seo = $this->createMock(Seo::class);
+        $seo->expects($this->once())->method('create');
+
+        $notification = $this->createMock(Notification::class);
+        $notification->expects($this->once())->method('sendNewFaqAdded');
+
+        $webPushService = $this->createMock(WebPushService::class);
+        $webPushService->expects($this->once())->method('sendToAll');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'question' => 'Created FAQ',
+                'categories[]' => 1,
+                'lang' => 'en',
+                'tags' => 'first-tag, second-tag',
+                'status' => 'published',
+                'sticky' => 'no',
+                'answer' => self::HTML_ANSWER,
+                'keywords' => 'created',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'comment' => 'y',
+                'userpermission' => 'restricted',
+                'restricted_users' => [],
+                'grouppermission' => 'restricted',
+                'restricted_groups' => [],
+                'changed' => 'Initial import',
+                'notes' => '',
+                'serpTitle' => 'Created title',
+                'serpDescription' => 'Created description',
+                'openQuestionId' => 0,
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithDependencies(
+            faq: $faq,
+            tags: $tags,
+            notification: $notification,
+            changelog: $changelog,
+            visits: $visits,
+            seo: $seo,
+            webPushService: $webPushService,
+        );
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+        self::assertStringContainsString('"id":123', $payload['data']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateKeepsTheHtmlOfTheAnswer(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        self::assertTrue($this->configuration->set('security.permLevel', 'basic'));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faqEntity = new \phpMyFAQ\Entity\FaqEntity()
+            ->setId(1)
+            ->setLanguage('en')
+            ->setRevisionId(0)
+            ->setSolutionId(1001)
+            ->setStatus(FaqStatus::Draft)
+            ->setSticky(false)
+            ->setQuestion('Updated FAQ')
+            ->setAnswer('Updated answer')
+            ->setKeywords('updated')
+            ->setAuthor('Author')
+            ->setEmail('author@example.com')
+            ->setComment(false)
+            ->setNotes('Updated notes');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
+        $faq->expects($this->exactly(2))->method('hasTranslation')->with(1, 'en')->willReturn(true);
+        $faq
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->callback(static fn(\phpMyFAQ\Entity\FaqEntity $entity): bool => $entity->getAnswer() === self::HTML_ANSWER_SAVED))
+            ->willReturn($faqEntity);
+
+        $tags = $this->createMock(Tags::class);
+        $tags->expects($this->never())->method('create');
+        $tags->expects($this->once())->method('deleteByRecordId')->with(1);
+
+        $seoEntity = new \phpMyFAQ\Entity\SeoEntity()->setId(5);
+        $seo = $this->createMock(Seo::class);
+        $seo->expects($this->exactly(2))->method('get')->willReturn($seoEntity);
+        $seo->expects($this->never())->method('create');
+        $seo->expects($this->once())->method('update');
+
+        $changelog = $this->createMock(Changelog::class);
+        $changelog->expects($this->once())->method('add');
+
+        $visits = $this->createMock(Visits::class);
+        $visits->expects($this->once())->method('logViews')->with(1);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'faqId' => 1,
+                'solutionId' => 1001,
+                'revisionId' => 0,
+                'question' => 'Updated FAQ',
+                'categories[]' => 1,
+                'lang' => 'en',
+                'tags' => '',
+                'status' => 'draft',
+                'sticky' => 'no',
+                'answer' => self::HTML_ANSWER,
+                'keywords' => 'updated',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'comment' => 'n',
+                'userpermission' => 'restricted',
+                'restricted_users' => [],
+                'grouppermission' => 'restricted',
+                'restricted_groups' => [],
+                'changed' => 'Updated',
+                'date' => '2026-03-08 10:00:00',
+                'notes' => 'Updated notes',
+                'revision' => 'no',
+                'recordDateHandling' => 'keepDate',
+                'serpTitle' => 'Updated title',
+                'serpDescription' => 'Updated description',
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithDependencies(
+            faq: $faq,
+            tags: $tags,
+            changelog: $changelog,
+            visits: $visits,
+            seo: $seo,
+        );
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->update($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
+        self::assertStringContainsString('"id":1', $payload['data']);
+        $this->removeCsrfCookie('pmf-csrf-token');
     }
 }
