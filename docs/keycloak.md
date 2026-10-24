@@ -3,6 +3,10 @@
 phpMyFAQ supports Keycloak as an OpenID Connect provider for frontend and administration logins.
 The integration uses Authorization Code flow with PKCE.
 
+Note:
+The Keycloak integration is experimental. Keycloak also works with the generic
+[OpenID Connect integration](openid-connect.md).
+
 ## 1. Prerequisites
 
 Before you configure phpMyFAQ, make sure you have:

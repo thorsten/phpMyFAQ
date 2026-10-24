@@ -9,6 +9,9 @@ Context Protocol. This enables AI assistants to provide contextually relevant an
 
 The current implementation uses the official PHP package `mcp/sdk` and exposes the server over STDIO.
 
+Note:
+The MCP server is experimental. Its tools and command-line options might change in future releases.
+
 ## 12.2 Usage
 
 ### 12.2.1 Starting the Server

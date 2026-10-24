@@ -241,7 +241,10 @@ each setting controls. These values are set during installation and can be chang
 | `api.rateLimit.requests`   | API rate limit | `100` | The maximum number of API requests allowed within the rate limit interval. |
 | `api.rateLimit.interval`   | API rate limit interval in seconds | `3600` | The time window (in seconds) for the API rate limit. Default is 1 hour (3600 seconds). |
 
-### 8.5.2 OAuth 2.0 settings
+### 8.5.2 OAuth 2.0 settings (Experimental feature)
+
+Note:
+OAuth 2.0 authentication for the REST API is experimental and disabled by default.
 
 | Key                      | Label | Default | Description |
 |--------------------------|-------|---------|-------------|
@@ -309,3 +312,22 @@ each setting controls. These values are set during installation and can be chang
 | `upgrade.onlineUpdateEnabled`   | Online Update enabled | `false` | When enabled, phpMyFAQ can download and install updates directly from the admin panel. |
 | `upgrade.releaseEnvironment`    | Release Environment | *(auto-detected)* | The release channel: `stable` for production releases or `development` for nightly builds. Set automatically based on the installed version. |
 | `upgrade.allowUnverifiedNightly` | Allow unverified nightly builds | `false` | Downloaded release packages are verified against the SHA-256 checksum (MD5 for older releases) published on download.phpmyfaq.de, nightly builds against the SHA-256 digest GitHub publishes for the release asset. A nightly build without such a digest is refused unless this option is enabled. Not recommended. |
+
+## 8.7 Tenant quotas (Experimental feature)
+
+Tenant quotas limit the resources of a single phpMyFAQ instance, for example in a hosted multi-tenant setup.
+They are not part of the admin configuration: set them as environment variables of the PHP process or the
+container. An unset or empty variable means no limit, so a regular installation has no quotas.
+
+| Variable                               | Description |
+|----------------------------------------|-------------|
+| `PMF_TENANT_ID`                        | Numeric tenant ID, default `0`. Attachments in the storage layer are stored under `<tenant ID>/attachments`. |
+| `PMF_TENANT_PLAN`                      | Name of the tenant plan, default `free`. Informational only. |
+| `PMF_TENANT_QUOTA_MAX_FAQS`            | Maximum number of FAQ records; every language version counts as one record. Creating a new FAQ fails once the limit is reached. |
+| `PMF_TENANT_QUOTA_MAX_CATEGORIES`      | Maximum number of categories; every language version counts as one category. |
+| `PMF_TENANT_QUOTA_MAX_USERS`           | Maximum number of users. |
+| `PMF_TENANT_QUOTA_MAX_ATTACHMENT_SIZE` | Maximum total size of all attachments in MB. |
+| `PMF_TENANT_QUOTA_MAX_API_REQUESTS`    | Reserved, not enforced yet. Use `api.rateLimit.requests` and `api.rateLimit.interval` to limit API requests. |
+
+Note:
+Tenant quotas are experimental. The variable names and the behavior might change in future releases.
