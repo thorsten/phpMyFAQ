@@ -2,6 +2,8 @@
 
 namespace phpMyFAQ\Service\McpServer;
 
+use Mcp\Server;
+use Mcp\Server\Transport\InMemoryTransport;
 use Monolog\Logger;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
@@ -179,6 +181,63 @@ class McpSdkRuntimeTest extends TestCase
 
         $this->assertIsArray($result);
         $this->assertSame(0, $result['total_found']);
+    }
+
+    public function testToolCallReturnsSearchResultsThatMatchTheOutputSchema(): void
+    {
+        $search = $this->createMock(Search::class);
+        $search->method('search')->willReturn([
+            (object) [
+                'id' => 42,
+                'lang' => 'en',
+                'question' => 'How do I reset my password?',
+                'answer' => 'Use the password reset form.',
+                'category_id' => 3,
+                'score' => 1.5,
+            ],
+        ]);
+
+        $runtime = new McpSdkRuntime(
+            new FaqSearchTool($this->createConfigurationMock(), $search, $this->createMock(Faq::class)),
+            ['name' => 'phpMyFAQ MCP Server', 'version' => '0.1.0-dev', 'description' => 'phpMyFAQ'],
+        );
+        $server = new ReflectionMethod($runtime, 'buildServer')->invoke($runtime);
+        self::assertInstanceOf(Server::class, $server);
+
+        $transport = new class([
+            '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25",'
+            . '"capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}',
+            '{"jsonrpc":"2.0","method":"notifications/initialized"}',
+            '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"faq_search",'
+            . '"arguments":{"query":"password"}}}',
+        ]) extends InMemoryTransport {
+            /** @var list<string> */
+            public array $sent = [];
+
+            public function send(string $data, array $context): void
+            {
+                $this->sent[] = $data;
+                parent::send($data, $context);
+            }
+        };
+
+        $server->run($transport);
+
+        $response = null;
+        foreach ($transport->sent as $message) {
+            $decoded = json_decode($message, true, 512, JSON_THROW_ON_ERROR);
+            foreach (array_is_list($decoded) ? $decoded : [$decoded] as $item) {
+                if (($item['id'] ?? null) === 2) {
+                    $response = $item;
+                }
+            }
+        }
+
+        self::assertIsArray($response, 'No response to tools/call: ' . implode("\n", $transport->sent));
+        self::assertArrayNotHasKey('error', $response);
+        self::assertFalse($response['result']['isError'] ?? false);
+        self::assertSame(1, $response['result']['structuredContent']['total_found']);
+        self::assertSame(42, $response['result']['structuredContent']['results'][0]['id']);
     }
 
     private function createConfigurationMock(): Configuration
