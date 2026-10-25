@@ -1,0 +1,158 @@
+//
+// Admin shell
+//
+// Top bar + side navigation + workspace layout. The side navigation slides in
+// from the leading edge below the lg breakpoint and is pinned open above it;
+// body.pmf-admin-sidenav-toggled inverts that state (driven by TypeScript).
+//
+
+#pmf-admin-layout-sidenav {
+  display: flex;
+
+  #pmf-admin-layout-sidenav_nav {
+    flex-basis: $pmf-admin-sidenav-base-width;
+    flex-shrink: 0;
+    transition: transform 0.15s ease-in-out;
+    z-index: $pmf-admin-zindex-sidenav;
+    transform: translateX(-$pmf-admin-sidenav-base-width);
+  }
+
+  #pmf-admin-layout-sidenav_content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+    flex-grow: 1;
+    min-height: calc(100vh - #{$pmf-admin-topnav-base-height});
+    margin-left: -$pmf-admin-sidenav-base-width;
+  }
+}
+
+.pmf-admin-sidenav-toggled {
+  #pmf-admin-layout-sidenav {
+    #pmf-admin-layout-sidenav_nav {
+      transform: translateX(0);
+    }
+
+    #pmf-admin-layout-sidenav_content {
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: $black;
+        z-index: $pmf-admin-zindex-content;
+        opacity: 0.5;
+        transition: opacity 0.3s ease-in-out;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  #pmf-admin-layout-sidenav {
+    #pmf-admin-layout-sidenav_nav {
+      transform: translateX(0);
+    }
+
+    #pmf-admin-layout-sidenav_content {
+      margin-left: 0;
+      transition: margin 0.15s ease-in-out;
+    }
+  }
+
+  .pmf-admin-sidenav-toggled {
+    #pmf-admin-layout-sidenav {
+      #pmf-admin-layout-sidenav_nav {
+        transform: translateX(-$pmf-admin-sidenav-base-width);
+      }
+
+      #pmf-admin-layout-sidenav_content {
+        margin-left: -$pmf-admin-sidenav-base-width;
+
+        // Removes the sidenav overlay on screens larger than the med breakpoint
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// Workspace ---------------------------------------------------------------
+#pmf-admin-layout-sidenav_content > main > .container-fluid {
+  padding: 1rem 1rem 2rem;
+
+  @include media-breakpoint-up(lg) {
+    padding: 1.25rem 2rem 2.5rem;
+  }
+}
+
+// Shared page header: icon chip, display title, toolbar on the trailing edge.
+// Replaces the former utility soup (d-flex justify-content-between … pt-3 mb-3
+// border-bottom) on every content template.
+.pmf-admin-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  padding: 0.25rem 0 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--pmf-border);
+
+  @include media-breakpoint-up(md) {
+    flex-wrap: nowrap;
+  }
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    font-size: var(--pmf-display-2);
+    font-weight: 700;
+    letter-spacing: var(--pmf-letter-spacing-tight);
+    line-height: 1.15;
+
+    > .bi:first-child {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--pmf-radius);
+      background-color: var(--pmf-accent-subtle);
+      color: var(--pmf-accent);
+      font-size: 1.15rem;
+    }
+  }
+
+  .btn-toolbar {
+    gap: 0.5rem;
+    margin: 0;
+  }
+}
+
+// Footer ------------------------------------------------------------------
+.pmf-admin-footer {
+  background-color: var(--pmf-surface);
+  color: var(--pmf-text-muted);
+  border-top: 1px solid var(--pmf-border);
+  padding: 1rem 0;
+  font-size: var(--pmf-font-size-sm);
+}
+
+.pmf-admin-footer-links a {
+  color: var(--pmf-accent);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

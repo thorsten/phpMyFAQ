@@ -20,16 +20,17 @@
     box-shadow 0.15s ease-in-out;
 
   &:hover {
-    border-color: var(--bs-primary);
+    border-color: var(--pmf-accent);
   }
 
   &:has(.form-check-input:checked) {
-    border-color: var(--bs-primary);
-    box-shadow: 0 0 0 0.2rem rgb(var(--bs-primary-rgb), 0.25);
+    border-color: var(--pmf-accent);
+    background-color: var(--pmf-accent-subtle);
+    box-shadow: 0 0 0 4px var(--pmf-focus-ring);
   }
 
   &:has(.form-check-input:focus-visible) {
-    border-color: var(--bs-primary);
-    box-shadow: 0 0 0 0.2rem rgb(var(--bs-primary-rgb), 0.25);
+    border-color: var(--pmf-accent);
+    box-shadow: 0 0 0 4px var(--pmf-focus-ring);
   }
 }

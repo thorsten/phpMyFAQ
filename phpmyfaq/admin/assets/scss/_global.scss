@@ -45,26 +45,11 @@ a {
 
 hr {
   border-color: var(--pmf-border);
+  opacity: 1;
 }
 
 .text-muted {
   color: var(--pmf-text-muted) !important;
-}
-
-// Footer ------------------------------------------------------------------
-footer.bg-light {
-  background-color: var(--pmf-surface) !important;
-  color: var(--pmf-text-muted);
-  border-top: 1px solid var(--pmf-border);
-}
-
-.pmf-admin-footer-links a {
-  color: var(--pmf-accent);
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
 // Cards -------------------------------------------------------------------
@@ -75,11 +60,50 @@ footer.bg-light {
   box-shadow: var(--pmf-shadow-sm);
   color: var(--pmf-text);
 
+  // Admin templates sprinkle Bootstrap's .shadow utility on cards; keep one
+  // elevation step for every card so the grid reads calm.
+  &.shadow,
+  &.shadow-sm,
+  &.shadow-lg {
+    box-shadow: var(--pmf-shadow-sm) !important;
+  }
+
   .card-header,
   .card-footer {
     background-color: transparent;
     border-color: var(--pmf-border);
     color: var(--pmf-text);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.25rem;
+    font-size: var(--pmf-font-size-base);
+    font-weight: 600;
+    letter-spacing: var(--pmf-letter-spacing-tight);
+
+    > .bi:first-child {
+      color: var(--pmf-accent);
+      font-size: 1.05rem;
+    }
+
+    // Headers that carry a right-aligned control (range switcher, buttons).
+    > span:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-right: auto;
+
+      .bi {
+        color: var(--pmf-accent);
+      }
+    }
+  }
+
+  .card-body {
+    padding: 1.25rem;
   }
 }
 
@@ -98,6 +122,7 @@ footer.bg-light {
 
   color: var(--pmf-text);
   border-color: var(--pmf-border);
+  vertical-align: middle;
 
   &.table-light,
   &.table-dark {
@@ -116,11 +141,24 @@ footer.bg-light {
     th {
       background-color: var(--pmf-surface-sunken);
       border-color: var(--pmf-border);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
+      white-space: nowrap;
+
+      &:first-child {
+        border-top-left-radius: var(--pmf-radius-sm);
+      }
+
+      &:last-child {
+        border-top-right-radius: var(--pmf-radius-sm);
+      }
     }
+  }
+
+  > tbody > tr {
+    transition: background-color var(--pmf-transition);
   }
 }
 
@@ -139,6 +177,7 @@ footer.bg-light {
   --bs-list-group-active-bg: var(--pmf-accent);
   --bs-list-group-active-border-color: var(--pmf-accent);
   --bs-list-group-active-color: var(--pmf-text-on-accent);
+  --bs-list-group-border-radius: var(--pmf-radius);
 }
 
 // Forms -------------------------------------------------------------------
@@ -156,12 +195,21 @@ footer.bg-light {
     background-color: var(--pmf-surface);
     border-color: var(--pmf-accent);
     color: var(--pmf-text);
-    box-shadow: 0 0 0 0.2rem var(--pmf-focus-ring);
+    box-shadow: 0 0 0 4px var(--pmf-focus-ring);
   }
 
   &::placeholder {
     color: var(--pmf-text-muted);
   }
+}
+
+.form-control-lg,
+.form-select-lg {
+  min-height: 3rem;
+}
+
+.form-floating > label {
+  color: var(--pmf-text-muted);
 }
 
 .form-label,
@@ -191,7 +239,7 @@ footer.bg-light {
 
   &:focus {
     border-color: var(--pmf-accent);
-    box-shadow: 0 0 0 0.2rem var(--pmf-focus-ring);
+    box-shadow: 0 0 0 4px var(--pmf-focus-ring);
   }
 }
 
@@ -230,16 +278,45 @@ footer.bg-light {
   font-weight: 600;
 }
 
+.btn-sm {
+  padding: 0.3rem 0.7rem;
+}
+
+.btn-lg {
+  min-height: 3rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--pmf-radius);
+}
+
 .btn-primary {
   background-color: var(--pmf-accent);
-  border-color: var(--pmf-accent);
+  background-image: var(--pmf-accent-gradient);
+  border-color: transparent;
   color: var(--pmf-text-on-accent);
 
   &:hover,
-  &:focus,
-  &:active {
+  &:focus-visible {
+    background-color: var(--pmf-accent);
+    background-image: var(--pmf-accent-gradient);
+    border-color: transparent;
+    color: var(--pmf-text-on-accent);
+    box-shadow: var(--pmf-shadow-accent);
+  }
+
+  &:active,
+  &.active,
+  &:first-child:active {
     background-color: var(--pmf-accent-hover);
-    border-color: var(--pmf-accent-hover);
+    background-image: none;
+    border-color: transparent;
+    color: var(--pmf-text-on-accent);
+  }
+
+  &:disabled,
+  &.disabled {
+    background-color: var(--pmf-accent);
+    background-image: var(--pmf-accent-gradient);
+    border-color: transparent;
     color: var(--pmf-text-on-accent);
   }
 }
@@ -249,16 +326,132 @@ footer.bg-light {
   border-color: var(--pmf-accent);
 
   &:hover,
-  &:focus,
-  &:active {
+  &:focus-visible {
+    background-color: var(--pmf-accent-subtle);
+    border-color: var(--pmf-accent);
+    color: var(--pmf-accent);
+  }
+
+  &:active,
+  &.active,
+  &:first-child:active {
     background-color: var(--pmf-accent);
     border-color: var(--pmf-accent);
     color: var(--pmf-text-on-accent);
   }
 }
 
+.btn-outline-secondary {
+  color: var(--pmf-text);
+  border-color: var(--pmf-border-strong);
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--pmf-surface-hover);
+    border-color: var(--pmf-border-strong);
+    color: var(--pmf-text);
+  }
+}
+
+.btn-secondary {
+  background-color: var(--pmf-surface-sunken);
+  border-color: var(--pmf-border-strong);
+  color: var(--pmf-text);
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--pmf-surface-hover);
+    border-color: var(--pmf-border-strong);
+    color: var(--pmf-text);
+  }
+}
+
 .btn:focus-visible {
-  box-shadow: 0 0 0 0.2rem var(--pmf-focus-ring);
+  box-shadow: 0 0 0 4px var(--pmf-focus-ring);
+}
+
+// Segmented control (dashboard chart range, theme switcher style variants).
+.pmf-segmented {
+  display: inline-flex;
+  padding: 0.2rem;
+  border: 1px solid var(--pmf-border);
+  border-radius: 999px;
+  background-color: var(--pmf-surface-sunken);
+
+  .btn {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    color: var(--pmf-text-muted);
+    background: transparent;
+    font-size: var(--pmf-font-size-sm);
+    line-height: 1.4;
+
+    &:hover {
+      color: var(--pmf-text);
+      background-color: var(--pmf-surface-hover);
+    }
+
+    &.active {
+      color: var(--pmf-accent);
+      background-color: var(--pmf-surface);
+      box-shadow: var(--pmf-shadow-sm);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 3px var(--pmf-focus-ring);
+    }
+  }
+}
+
+// Badges ------------------------------------------------------------------
+.badge {
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.pmf-badge-count {
+  background-color: var(--pmf-accent-subtle);
+  color: var(--pmf-accent);
+}
+
+// Status pill (online / maintenance mode on the dashboard)
+.pmf-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem 0.4rem 0.75rem;
+  font-size: var(--pmf-font-size-sm);
+  font-weight: 600;
+  border: 1px solid var(--pmf-border);
+  background-color: var(--pmf-surface);
+  color: var(--pmf-text);
+  text-decoration: none;
+  transition:
+    border-color var(--pmf-transition),
+    background-color var(--pmf-transition);
+
+  &::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--pmf-success);
+    box-shadow: 0 0 0 3px var(--pmf-success-subtle);
+  }
+
+  &:hover {
+    border-color: var(--pmf-border-strong);
+    background-color: var(--pmf-surface-hover);
+    color: var(--pmf-text);
+  }
+
+  &.pmf-status-pill--danger::before {
+    background-color: var(--pmf-danger);
+    box-shadow: 0 0 0 3px var(--pmf-danger-subtle);
+  }
 }
 
 // Dropdowns ---------------------------------------------------------------
@@ -266,10 +459,13 @@ footer.bg-light {
   background-color: var(--pmf-surface-raised);
   border: 1px solid var(--pmf-border);
   border-radius: var(--pmf-radius);
-  box-shadow: var(--pmf-shadow-md);
+  box-shadow: var(--pmf-shadow-lg);
+  padding: 0.35rem;
 
   .dropdown-item {
     color: var(--pmf-text);
+    border-radius: var(--pmf-radius-sm);
+    padding: 0.45rem 0.75rem;
 
     &:hover,
     &:focus {
@@ -285,7 +481,58 @@ footer.bg-light {
 
   .dropdown-divider {
     border-color: var(--pmf-border);
+    opacity: 1;
   }
+}
+
+// Modals ------------------------------------------------------------------
+.modal-content {
+  background-color: var(--pmf-surface-raised);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius-lg);
+  box-shadow: var(--pmf-shadow-lg);
+  color: var(--pmf-text);
+}
+
+.modal-header,
+.modal-footer {
+  border-color: var(--pmf-border);
+}
+
+.modal-title {
+  font-weight: 700;
+  letter-spacing: var(--pmf-letter-spacing-tight);
+}
+
+// Toasts ------------------------------------------------------------------
+.toast {
+  border-radius: var(--pmf-radius);
+  box-shadow: var(--pmf-shadow-lg);
+  overflow: hidden;
+  border: 1px solid var(--pmf-border);
+  background-color: var(--pmf-surface-raised);
+  color: var(--pmf-text);
+
+  // Both notification toasts carry text-bg-* in the markup (TypeScript reads
+  // the ids only). Paint them as raised surfaces with an accent bar instead.
+  &.text-bg-primary,
+  &.text-bg-danger {
+    background-color: var(--pmf-surface-raised) !important;
+    color: var(--pmf-text) !important;
+    border-left: 4px solid var(--pmf-accent);
+
+    .btn-close {
+      filter: none;
+    }
+  }
+
+  &.text-bg-danger {
+    border-left-color: var(--pmf-danger);
+  }
+}
+
+[data-bs-theme='dark'] .toast .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
 }
 
 // Alerts ------------------------------------------------------------------
@@ -294,27 +541,111 @@ footer.bg-light {
   border: 1px solid transparent;
 
   &.alert-info {
-    background-color: var(--pmf-accent-subtle);
+    background-color: var(--pmf-info-subtle);
     border-color: var(--pmf-info);
     color: var(--pmf-info);
   }
 
   &.alert-success {
-    background-color: rgb(31, 157, 107, 0.12);
+    background-color: var(--pmf-success-subtle);
     border-color: var(--pmf-success);
     color: var(--pmf-success);
   }
 
   &.alert-warning {
-    background-color: rgb(217, 148, 17, 0.12);
+    background-color: var(--pmf-warning-subtle);
     border-color: var(--pmf-warning);
     color: var(--pmf-warning);
   }
 
   &.alert-danger {
-    background-color: rgb(214, 69, 63, 0.12);
+    background-color: var(--pmf-danger-subtle);
     border-color: var(--pmf-danger);
     color: var(--pmf-danger);
+  }
+}
+
+// Nav tabs & pills --------------------------------------------------------
+.nav-tabs {
+  border-bottom-color: var(--pmf-border);
+
+  .nav-link {
+    color: var(--pmf-text-muted);
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    font-weight: 500;
+    padding: 0.6rem 1rem;
+
+    &:hover {
+      color: var(--pmf-text);
+      border-bottom-color: var(--pmf-border-strong);
+    }
+
+    &.active {
+      color: var(--pmf-accent);
+      background-color: transparent;
+      border-bottom-color: var(--pmf-accent);
+      font-weight: 600;
+    }
+  }
+}
+
+.nav-pills .nav-link {
+  color: var(--pmf-text-muted);
+  border-radius: 999px;
+  font-weight: 500;
+
+  &:hover {
+    color: var(--pmf-text);
+    background-color: var(--pmf-surface-hover);
+  }
+
+  &.active {
+    color: var(--pmf-accent);
+    background-color: var(--pmf-accent-subtle);
+    font-weight: 600;
+  }
+}
+
+// Pagination --------------------------------------------------------------
+.pagination {
+  gap: 0.25rem;
+
+  .page-link {
+    min-width: 2.25rem;
+    height: 2.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--pmf-border);
+    background-color: var(--pmf-surface);
+    color: var(--pmf-text);
+    font-weight: 500;
+
+    &:hover {
+      background-color: var(--pmf-surface-hover);
+      border-color: var(--pmf-border-strong);
+      color: var(--pmf-text);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 4px var(--pmf-focus-ring);
+    }
+  }
+
+  .page-item.active .page-link {
+    background-color: var(--pmf-accent);
+    background-image: var(--pmf-accent-gradient);
+    border-color: transparent;
+    color: var(--pmf-text-on-accent);
+  }
+
+  .page-item.disabled .page-link {
+    background-color: transparent;
+    color: var(--pmf-text-muted);
   }
 }
 
@@ -333,6 +664,14 @@ footer.bg-light {
 .bg-light-subtle {
   background-color: var(--pmf-surface-sunken) !important;
   color: var(--pmf-text) !important;
+}
+
+// Generic surface panel
+.pmf-surface {
+  background-color: var(--pmf-surface);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius-lg);
+  box-shadow: var(--pmf-shadow-sm);
 }
 
 // Configuration screens --------------------------------------------------
@@ -362,4 +701,32 @@ footer.bg-light {
   background-color: var(--pmf-surface);
   border-color: var(--pmf-border);
   color: var(--pmf-text);
+}
+
+// High-contrast: strong borders carry the structure that shadows carry elsewhere.
+[data-bs-theme='high-contrast'] {
+  .card,
+  .modal-content,
+  .toast,
+  .dropdown-menu {
+    border-width: 2px;
+  }
+}
+
+// Motion -----------------------------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .card,
+  .pmf-metric-card,
+  .pmf-admin-sidenav .nav-link,
+  .pmf-admin-sidenav-collapse-arrow {
+    transition: none !important;
+  }
+
+  // The off-canvas sidenav relies on transform for its position, so only the
+  // animation is dropped here, never the transform itself.
+  #pmf-admin-layout-sidenav_nav,
+  #pmf-admin-layout-sidenav_content {
+    transition: none !important;
+  }
 }

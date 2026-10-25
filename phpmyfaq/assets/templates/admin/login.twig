@@ -8,10 +8,10 @@
         <main>
           <div class="container">
             <div class="row justify-content-center">
-              <div class="col-md-8 col-lg-6 col-xl-5">
-                <div class="card shadow-lg border-0 rounded-3 mt-5">
+              <div class="col-md-8 col-lg-6 col-xl-5 pmf-login-column">
+                <div class="card pmf-login-card">
                   <div class="card-header bg-transparent border-0 pt-4">
-                    <h1 class="h3 text-center fw-light mb-0">{{ msgLoginUser }}</h1>
+                    <h1 class="h3 text-center mb-0">{{ msgLoginUser }}</h1>
                   </div>
                   <div class="card-body p-4">
                     {% if isError %}
@@ -89,31 +89,31 @@
                       <hr class="flex-grow-1">
                     </div>
                     {% if hasRegistrationEnabled %}
-                      <a class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" href="../user/register">
+                      <a class="w-100 mb-2 btn btn-outline-secondary" href="../user/register">
                         <i class="bi bi-person-plus" aria-hidden="true"></i>
                         {{ msgRegistration }}
                       </a>
                     {% endif %}
                     {% if hasSignInWithMicrosoftActive %}
-                      <a class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" href="../auth/azure/authorize">
+                      <a class="w-100 mb-2 btn btn-outline-secondary" href="../auth/azure/authorize">
                         <i class="bi bi-windows" aria-hidden="true"></i>
                         {{ msgSignInWithMicrosoft }}
                       </a>
                     {% endif %}
                     {% if hasSignInWithKeycloakActive %}
-                      <a class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" href="../auth/keycloak/authorize">
+                      <a class="w-100 mb-2 btn btn-outline-secondary" href="../auth/keycloak/authorize">
                         <i class="bi bi-shield-lock" aria-hidden="true"></i>
                         {{ msgSignInWithKeycloak }}
                       </a>
                     {% endif %}
                     {% if hasSignInWithOidcActive %}
-                      <a class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" href="../auth/oidc/authorize">
+                      <a class="w-100 mb-2 btn btn-outline-secondary" href="../auth/oidc/authorize">
                         <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
                         {{ msgSignInWithOidc }}
                       </a>
                     {% endif %}
                     {% if isWebAuthnEnabled %}
-                      <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" href="../services/webauthn">
+                      <a class="w-100 mb-2 btn btn-outline-primary" href="../services/webauthn">
                         <i class="bi bi-key" aria-hidden="true"></i>
                         {{ 'msgSignInWithPasskey' | translate }}
                       </a>

@@ -3,21 +3,23 @@
 //
 
 .pmf-tag-list-result {
-  background-color: white;
-  padding: 10px;
+  background-color: var(--pmf-surface-raised);
+  color: var(--pmf-text);
+  padding: 0.6rem 0.75rem;
   cursor: pointer;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: var(--pmf-surface-hover);
   }
 }
 
 .autocomplete {
   .empty {
-    background-color: white;
-    border: lightgray 1px solid;
+    background-color: var(--pmf-surface-raised);
+    color: var(--pmf-text-muted);
+    border: 1px solid var(--pmf-border);
     cursor: pointer;
-    padding: 10px;
+    padding: 0.6rem 0.75rem;
   }
 }
 
@@ -32,11 +34,15 @@
 }
 
 .pmf-attachment-dropzone {
-  border: 2px dashed var(--bs-border-color);
+  border: 2px dashed var(--pmf-border-strong);
+  border-radius: var(--pmf-radius);
   cursor: pointer;
+  transition:
+    background-color var(--pmf-transition),
+    border-color var(--pmf-transition);
 
   &.pmf-dragover {
-    background: var(--bs-primary-bg-subtle);
-    border-color: var(--bs-primary);
+    background: var(--pmf-accent-subtle);
+    border-color: var(--pmf-accent);
   }
 }

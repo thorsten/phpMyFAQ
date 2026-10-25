@@ -5,7 +5,7 @@
   {% set rows = trackingData | filter(line => (line | split(';'))[0] == sessionId) %}
   {% set meta = (rows | first) | default('') | split(';') %}
 
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
+  <div class="pmf-admin-page-header">
     <h1 class="h2">
       <i aria-hidden="true" class="bi bi-clock-history"></i>
       {{ ad_sess_session }} #{{ sessionId }}

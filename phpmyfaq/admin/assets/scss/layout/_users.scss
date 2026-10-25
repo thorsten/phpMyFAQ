@@ -3,27 +3,29 @@
 //
 
 .autocomplete {
-  @extend .shadow;
-  // Ensure dropdown background adapts to theme
-  background-color: var(--bs-body-bg);
-  border: 1px solid var(--bs-border-color);
-  border-radius: var(--bs-border-radius);
+  background-color: var(--pmf-surface-raised);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius);
+  box-shadow: var(--pmf-shadow-lg);
   overflow: hidden;
 }
 
 .pmf-user-list-result {
-  // Use theme variables so it works in light and dark mode
-  background-color: var(--bs-body-bg);
-  color: var(--bs-body-color);
-  padding: 10px;
+  background-color: var(--pmf-surface-raised);
+  color: var(--pmf-text);
+  padding: 0.6rem 0.75rem;
   cursor: pointer;
 
   &:hover,
   &.selected {
-    background-color: var(--bs-tertiary-bg);
+    background-color: var(--pmf-surface-hover);
+  }
+
+  &.selected {
+    background-color: var(--pmf-accent-subtle);
   }
 
   strong {
-    color: var(--bs-primary);
+    color: var(--pmf-accent);
   }
 }

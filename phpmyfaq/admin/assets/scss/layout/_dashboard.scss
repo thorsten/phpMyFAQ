@@ -1,7 +1,113 @@
 //
 // Dashboard
 //
+// Layout rules for the sidenav / content split live in layout/_shell.scss.
+//
 
+// Metric tiles ------------------------------------------------------------
+.pmf-metric-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 100%;
+  padding: 1.1rem 1.25rem;
+  background-color: var(--pmf-surface);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius-lg);
+  box-shadow: var(--pmf-shadow-sm);
+  transition:
+    box-shadow var(--pmf-transition),
+    transform var(--pmf-transition),
+    border-color var(--pmf-transition);
+
+  .pmf-metric-card-body {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .pmf-metric-card-label {
+    display: block;
+    margin-bottom: 0.2rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pmf-text-muted);
+    line-height: 1.3;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      // Stretch the link over the whole tile without nesting block content in <a>
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+      }
+    }
+  }
+
+  .pmf-metric-card-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: var(--pmf-letter-spacing-tight);
+    font-variant-numeric: tabular-nums;
+    color: var(--pmf-text);
+  }
+
+  .pmf-metric-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--pmf-radius);
+    background-color: var(--pmf-accent-subtle);
+    color: var(--pmf-accent);
+    font-size: 1.3rem;
+
+    .bi {
+      line-height: 1;
+    }
+  }
+
+  &:has(a):hover {
+    border-color: var(--pmf-border-strong);
+    box-shadow: var(--pmf-shadow-md);
+    transform: translateY(-2px);
+  }
+
+  &:has(a:focus-visible) {
+    box-shadow: 0 0 0 4px var(--pmf-focus-ring);
+  }
+
+  &.pmf-metric-card--success .pmf-metric-card-icon {
+    background-color: var(--pmf-success-subtle);
+    color: var(--pmf-success);
+  }
+
+  &.pmf-metric-card--info .pmf-metric-card-icon {
+    background-color: var(--pmf-info-subtle);
+    color: var(--pmf-info);
+  }
+
+  &.pmf-metric-card--warning .pmf-metric-card-icon {
+    background-color: var(--pmf-warning-subtle);
+    color: var(--pmf-warning);
+  }
+
+  &.pmf-metric-card--neutral .pmf-metric-card-icon {
+    background-color: var(--pmf-surface-sunken);
+    color: var(--pmf-text-muted);
+  }
+}
+
+// Charts ------------------------------------------------------------------
 .pmf-charts {
   position: relative;
   height: 20rem;
@@ -11,8 +117,13 @@
 .pmf-chart-skeleton {
   position: absolute;
   inset: 0;
-  border-radius: var(--bs-border-radius);
-  background: linear-gradient(90deg, var(--bs-tertiary-bg) 25%, var(--bs-secondary-bg) 37%, var(--bs-tertiary-bg) 63%);
+  border-radius: var(--pmf-radius);
+  background: linear-gradient(
+    90deg,
+    var(--pmf-surface-sunken) 25%,
+    var(--pmf-surface-hover) 37%,
+    var(--pmf-surface-sunken) 63%
+  );
   background-size: 400% 100%;
   animation: pmf-chart-skeleton-shimmer 1.4s ease infinite;
 }
@@ -33,83 +144,7 @@
   }
 }
 
-#pmf-admin-layout-sidenav {
-  display: flex;
-
-  #pmf-admin-layout-sidenav_nav {
-    flex-basis: $pmf-admin-sidenav-base-width;
-    flex-shrink: 0;
-    transition: transform 0.15s ease-in-out;
-    z-index: $pmf-admin-zindex-sidenav;
-    transform: translateX(-$pmf-admin-sidenav-base-width);
-  }
-
-  #pmf-admin-layout-sidenav_content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-width: 0;
-    flex-grow: 1;
-    min-height: calc(100vh - #{$pmf-admin-topnav-base-height});
-    margin-left: -$pmf-admin-sidenav-base-width;
-  }
-}
-
-.pmf-admin-sidenav-toggled {
-  #pmf-admin-layout-sidenav {
-    #pmf-admin-layout-sidenav_nav {
-      transform: translateX(0);
-    }
-
-    #pmf-admin-layout-sidenav_content {
-      &::before {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: $black;
-        z-index: $pmf-admin-zindex-content;
-        opacity: 0.5;
-        transition: opacity 0.3s ease-in-out;
-      }
-    }
-  }
-}
-
-@include media-breakpoint-up(lg) {
-  #pmf-admin-layout-sidenav {
-    #pmf-admin-layout-sidenav_nav {
-      transform: translateX(0);
-    }
-
-    #pmf-admin-layout-sidenav_content {
-      margin-left: 0;
-      transition: margin 0.15s ease-in-out;
-    }
-  }
-
-  .pmf-admin-sidenav-toggled {
-    #pmf-admin-layout-sidenav {
-      #pmf-admin-layout-sidenav_nav {
-        transform: translateX(-$pmf-admin-sidenav-base-width);
-      }
-
-      #pmf-admin-layout-sidenav_content {
-        margin-left: -$pmf-admin-sidenav-base-width;
-
-        // Removes the sidenav overlay on screens larger than the med breakpoint
-        &::before {
-          display: none;
-        }
-      }
-    }
-  }
-}
-
+// Widgets -----------------------------------------------------------------
 // Ensure bottom spacing for Masonry grid so last row doesn't stick to the footer
 .masonry-grid {
   padding-bottom: map-get($spacers, 4); // equals .mb-4 (≈1.5rem)
@@ -119,7 +154,8 @@
 .pmf-dashboard-editing {
   .card {
     position: relative;
-    outline: 2px dashed var(--bs-border-color);
+    outline: 2px dashed var(--pmf-accent);
+    outline-offset: 2px;
   }
 }
 
@@ -134,5 +170,7 @@
   top: 0.5rem;
   right: 0.5rem;
   z-index: 5;
-  box-shadow: var(--bs-box-shadow-sm);
+  border-radius: 999px;
+  background-color: var(--pmf-surface-raised);
+  box-shadow: var(--pmf-shadow-md);
 }

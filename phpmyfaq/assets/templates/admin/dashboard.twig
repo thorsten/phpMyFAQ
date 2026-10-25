@@ -1,21 +1,17 @@
 {% extends '@admin/index.twig' %}
 
 {% block content %}
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
+  <div class="pmf-admin-page-header">
     <h1 class="h2">
       <i aria-hidden="true" class="bi bi-speedometer"></i>
       {{ 'adminHeaderDashboard' | translate }}
     </h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group mr-2">
-        <a href="./configuration">
-          {% if isMaintenanceMode %}
-            <button class="btn btn-outline-danger">{{ 'msgMaintenanceMode' | translate }}</button>
-          {% else %}
-            <button class="btn btn-outline-success">{{ 'msgOnlineMode' | translate }}</button>
-          {% endif %}
-        </a>
-      </div>
+    <div class="btn-toolbar">
+      {% if isMaintenanceMode %}
+        <a class="pmf-status-pill pmf-status-pill--danger" href="./configuration">{{ 'msgMaintenanceMode' | translate }}</a>
+      {% else %}
+        <a class="pmf-status-pill" href="./configuration">{{ 'msgOnlineMode' | translate }}</a>
+      {% endif %}
     </div>
   </div>
 
@@ -66,124 +62,78 @@
   <section class="row" id="pmf-dashboard-metrics">
 
     <div class="col-xl-2 col-md-6 mb-4">
-      <div class="card text-bg-primary bg-primary shadow h-100 py-2">
-        <div class="card-body">
-          <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
-              <div class="text-xs font-weight-bold mb-1">
-                <a class="text-white" href="./statistics/sessions">
-                  {{ 'msgVisits' | translate }}
-                </a>
-              </div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumVisits }}</div>
-            </div>
-            <div class="col-auto">
-              <i class="bi bi-bar-chart h1 text-gray-300"></i>
-            </div>
-          </div>
+      <div class="pmf-metric-card pmf-metric-card--accent">
+        <div class="pmf-metric-card-body">
+          <span class="pmf-metric-card-label">
+            <a href="./statistics/sessions">{{ 'msgVisits' | translate }}</a>
+          </span>
+          <div class="pmf-metric-card-value">{{ adminDashboardInfoNumVisits }}</div>
         </div>
+        <span class="pmf-metric-card-icon" aria-hidden="true"><i class="bi bi-bar-chart"></i></span>
       </div>
     </div>
 
     <div class="col-xl-2 col-md-6 mb-4">
-      <div class="card text-bg-success bg-success shadow h-100 py-2">
-        <div class="card-body">
-          <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
-              <div class="text-xs font-weight-bold mb-1">
-                {% if canViewFaqOverview %}
-                <a class="text-white" href="./faqs">
-                  {{ 'ad_start_articles' | translate }}
-                </a>
-                {% else %}
-                {{ 'ad_start_articles' | translate }}
-                {% endif %}
-              </div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumFaqs }}</div>
-            </div>
-            <div class="col-auto">
-              <i class="bi bi-list-check h1 text-gray-300"></i>
-            </div>
-          </div>
+      <div class="pmf-metric-card pmf-metric-card--success">
+        <div class="pmf-metric-card-body">
+          <span class="pmf-metric-card-label">
+            {% if canViewFaqOverview %}
+            <a href="./faqs">{{ 'ad_start_articles' | translate }}</a>
+            {% else %}
+            {{ 'ad_start_articles' | translate }}
+            {% endif %}
+          </span>
+          <div class="pmf-metric-card-value">{{ adminDashboardInfoNumFaqs }}</div>
         </div>
+        <span class="pmf-metric-card-icon" aria-hidden="true"><i class="bi bi-list-check"></i></span>
       </div>
     </div>
 
     <div class="col-xl-2 col-md-6 mb-4">
-      <div class="card text-bg-info bg-info shadow h-100 py-2">
-        <div class="card-body">
-          <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
-              <div class="text-xs font-weight-bold mb-1">
-                <a class="text-white" href="./comments">
-                  {{ 'msgComments' | translate }}
-                </a>
-              </div>
-              <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ adminDashboardInfoNumComments }}</div>
-            </div>
-            <div class="col-auto">
-              <i class="bi bi-chat-left-text h1 text-gray-300"></i>
-            </div>
-          </div>
+      <div class="pmf-metric-card pmf-metric-card--info">
+        <div class="pmf-metric-card-body">
+          <span class="pmf-metric-card-label">
+            <a href="./comments">{{ 'msgComments' | translate }}</a>
+          </span>
+          <div class="pmf-metric-card-value">{{ adminDashboardInfoNumComments }}</div>
         </div>
+        <span class="pmf-metric-card-icon" aria-hidden="true"><i class="bi bi-chat-left-text"></i></span>
       </div>
     </div>
 
     <div class="col-xl-2 col-md-6 mb-4">
-      <div class="card text-bg-warning bg-warning shadow h-100 py-2">
-        <div class="card-body">
-          <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
-              <div class="text-xs font-weight-bold mb-1">
-                <a class="text-white" href="./questions">
-                  {{ 'msgOpenQuestions' | translate }}
-                </a>
-              </div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumQuestions }}</div>
-            </div>
-            <div class="col-auto">
-              <i class="bi bi-question-circle h1 text-gray-300"></i>
-            </div>
-          </div>
+      <div class="pmf-metric-card pmf-metric-card--warning">
+        <div class="pmf-metric-card-body">
+          <span class="pmf-metric-card-label">
+            <a href="./questions">{{ 'msgOpenQuestions' | translate }}</a>
+          </span>
+          <div class="pmf-metric-card-value">{{ adminDashboardInfoNumQuestions }}</div>
         </div>
+        <span class="pmf-metric-card-icon" aria-hidden="true"><i class="bi bi-question-circle"></i></span>
       </div>
     </div>
 
     <div class="col-xl-2 col-md-6 mb-4">
-      <div class="card text-bg-secondary bg-secondary shadow h-100 py-2">
-        <div class="card-body">
-          <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
-              <div class="text-xs font-weight-bold mb-1">
-                <span class="text-white">{{ adminDashboardHeaderUsersOnline }}</span>
-              </div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumUsersOnline }}</div>
-            </div>
-            <div class="col-auto">
-              <i class="bi bi-people h1 text-gray-300"></i>
-            </div>
-          </div>
+      <div class="pmf-metric-card pmf-metric-card--neutral">
+        <div class="pmf-metric-card-body">
+          <span class="pmf-metric-card-label">
+            {{ adminDashboardHeaderUsersOnline }}
+          </span>
+          <div class="pmf-metric-card-value">{{ adminDashboardInfoNumUsersOnline }}</div>
         </div>
+        <span class="pmf-metric-card-icon" aria-hidden="true"><i class="bi bi-people"></i></span>
       </div>
     </div>
 
     <div class="col-xl-2 col-md-6 mb-4">
-      <div class="card text-bg-warning bg-warning shadow h-100 py-2">
-        <div class="card-body">
-          <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
-              <div class="text-xs font-weight-bold mb-1">
-                <a class="text-white" href="./user/list">
-                  {{ 'msgNumberRegisteredUsers' | translate }}
-                </a>
-              </div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumUser }}</div>
-            </div>
-            <div class="col-auto">
-              <i class="bi bi-person-check h1 text-gray-300"></i>
-            </div>
-          </div>
+      <div class="pmf-metric-card pmf-metric-card--accent">
+        <div class="pmf-metric-card-body">
+          <span class="pmf-metric-card-label">
+            <a href="./user/list">{{ 'msgNumberRegisteredUsers' | translate }}</a>
+          </span>
+          <div class="pmf-metric-card-value">{{ adminDashboardInfoNumUser }}</div>
         </div>
+        <span class="pmf-metric-card-icon" aria-hidden="true"><i class="bi bi-person-check"></i></span>
       </div>
     </div>
 
@@ -192,12 +142,12 @@
 
   {% if canViewStatistics and hasUserTracking %}
     <section class="row">
-      <div class="col-8 mb-4">
+      <div class="col-lg-8 mb-4">
         <div class="card shadow h-100 mb-4">
           <h5 class="card-header py-3 d-flex justify-content-between align-items-center">
             <span><i aria-hidden="true" class="bi bi-bar-chart"></i> {{ adminDashboardHeaderVisits }}</span>
             <div
-              class="btn-group btn-group-sm"
+              class="btn-group btn-group-sm pmf-segmented"
               role="group"
               id="pmf-visits-range"
               aria-label="{{ 'msgVisitsRange' | translate | default('Visitor date range') }}"
@@ -216,7 +166,7 @@
         </div>
       </div>
 
-      <div class="col-4 mb-4">
+      <div class="col-lg-4 mb-4">
         <div class="card shadow h-100 mb-4">
           <h5 class="card-header py-3">
             <i aria-hidden="true" class="bi bi-bar-chart"></i> {{ 'msgTopTen' | translate }}

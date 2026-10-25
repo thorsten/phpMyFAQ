@@ -55,11 +55,12 @@
 <!-- phpMyFAQ Admin Top Bar -->
 <nav class="pmf-admin-topnav navbar navbar-expand">
   <a class="navbar-brand text-center ps-3" href="../" title="phpMyFAQ {{ version }}">
-    <img height="50" src="../assets/images/logo-transparent.svg" alt="phpMyFAQ Logo">
+    <img height="34" src="../assets/images/logo-transparent.svg" alt="phpMyFAQ Logo">
   </a>
 
   {% if userHasAccessPermission %}
-  <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+  <button class="btn btn-link btn-sm pmf-topnav-ghost order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"
+          aria-label="{{ 'msgToggleNavigation' | translate | default('Toggle navigation') }}">
     <i class="bi bi-list h6"></i>
   </button>
   {% endif %}
@@ -89,7 +90,7 @@
   {% if userHasAccessPermission %}
   <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
     <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+      <a class="nav-link dropdown-toggle pmf-topnav-ghost pmf-topnav-user" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
          aria-expanded="false">
         {% if hasGravatarSupport %}
           {{ gravatarImage | raw }}
@@ -129,7 +130,7 @@
                  data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
                 <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-person h6"></i></div>
                 {{ menuUsers }}
-                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
+                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
               </a>
               <div class="{{ userPage ? '' : 'collapse' }}" id="collapseUsers" aria-labelledby="headingOne"
                    data-bs-parent="#sidenavAccordion">
@@ -145,7 +146,7 @@
                  data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
                 <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-pencil-square h6"></i></div>
                 {{ menuContent }}
-                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
+                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
               </a>
               <div class="{{ contentPage ? '' : 'collapse' }}" id="collapseContent"
                    aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -161,7 +162,7 @@
                  data-bs-target="#collapseStatistics" aria-expanded="false" aria-controls="collapseStatistics">
                 <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-graph-up-arrow h6"></i></div>
                 {{ menuStatistics }}
-                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
+                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
               </a>
               <div class="{{ statisticsPage ? '' : 'collapse' }}" id="collapseStatistics"
                    aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -179,7 +180,7 @@
                   <i aria-hidden="true" class="bi bi-archive h6"></i>
                 </div>
                 {{ menuImportsExports }}
-                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
+                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
               </a>
               <div class="{{ exportsPage ? '' : 'collapse' }}" id="collapseExports"
                    aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -197,7 +198,7 @@
                   <i aria-hidden="true" class="bi bi-cloud-download"></i>
                 </div>
                 {{ menuBackup }}
-                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
+                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
               </a>
               <div class="{{ backupPage ? '' : 'collapse' }}" id="collapseBackupAdmin"
                    aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -214,7 +215,7 @@
                  aria-controls="collapseConfigAdmin">
                 <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-wrench"></i></div>
                 {{ menuConfiguration }}
-                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
+                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-chevron-down"></i></div>
               </a>
               <div class="{{ configurationPage ? '' : 'collapse' }}" id="collapseConfigAdmin"
                    aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -227,7 +228,7 @@
           </div>
         </div>
         {% if isSessionTimeoutCounterEnabled %}
-        <div class="pmf-admin-sidenav-footer p-2">
+        <div class="pmf-admin-sidenav-footer">
           <div class="small">{{ msgSessionExpiration }}:</div>
           <span id="pmf-session-counter" class="small pl-2">
             <span class="spinner-border spinner-border-sm" role="status">
@@ -302,7 +303,7 @@
       </div>
     </div>
 
-    <footer class="py-4 bg-light mt-auto">
+    <footer class="pmf-admin-footer mt-auto">
       <div class="container-fluid px-4">
         <div class="d-flex align-items-center justify-content-between small">
           <div class="text-muted">

@@ -2,7 +2,7 @@
 {% import 'core/category.macros.twig' as categoryMacros %}
 
 {% block content %}
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
+  <div class="pmf-admin-page-header">
     <h1 class="h2">
       <i aria-hidden="true" class="bi bi-pencil"></i>
       {{ header }}<span class="truncate-question" id="pmf-admin-question-output">
@@ -14,11 +14,11 @@
       <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
         <span class="btn btn-outline-info">
-          <i class="bi bi-hashtag" aria-hidden="true"></i>
+          <i class="bi bi-hash" aria-hidden="true"></i>
             {{ currentRevision }}
         </span>
           <a href="{{ faqUrl }}" class="btn btn-outline-success">
-            <i class="bi bi-arrow-alt-circle-right" aria-hidden="true"></i>
+            <i class="bi bi-arrow-right-circle" aria-hidden="true"></i>
             {{ ad_view_faq }}
           </a>
         </div>

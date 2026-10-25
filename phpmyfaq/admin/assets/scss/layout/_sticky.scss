@@ -8,17 +8,18 @@
 
 .no-drag {
   cursor: default !important;
-  background-color: rgb(var(--bs-light-rgb), 0.1);
+  background-color: var(--pmf-surface-sunken);
 }
 
 .js-unstick-button.sticky-toggle-btn {
-  color: var(--bs-secondary) !important;
+  color: var(--pmf-text-muted) !important;
   transition: all 0.15s ease-in-out;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 2.5rem;
   height: 2.5rem;
+  border-radius: 999px;
   text-decoration: none !important;
 }
 
@@ -28,7 +29,8 @@
 }
 
 .js-unstick-button.sticky-toggle-btn:hover {
-  color: var(--bs-danger) !important;
+  color: var(--pmf-danger) !important;
+  background-color: var(--pmf-danger-subtle);
 }
 
 .js-unstick-button.sticky-toggle-btn:hover i.sticky-icon::before {

@@ -5,12 +5,16 @@
 // and never !important. Switching theme means swapping token values, nothing
 // more. Three themes are supported: light (default), dark and high-contrast.
 //
+// Token names mirror the public frontend (phpmyfaq/assets/scss/_tokens.scss)
+// so the two stylesheets can be read side by side.
+//
 
-// Tokens shared across every theme (sizing, motion, elevation geometry).
+// Tokens shared across every theme (sizing, motion, type, elevation geometry).
 :root {
   --pmf-radius-sm: 0.375rem;
   --pmf-radius: 0.625rem;
   --pmf-radius-lg: 1rem;
+  --pmf-radius-xl: 1.5rem;
   --pmf-space-1: 0.25rem;
   --pmf-space-2: 0.5rem;
   --pmf-space-3: 0.75rem;
@@ -20,12 +24,20 @@
   --pmf-transition: 0.18s ease;
   --pmf-sidenav-width: 248px;
   --pmf-topnav-height: 60px;
+  --pmf-font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', roboto, sans-serif;
+  --pmf-font-size-sm: 0.875rem;
+  --pmf-font-size-base: 0.9375rem;
+  --pmf-font-size-lg: 1.0625rem;
+  --pmf-display-2: clamp(1.5rem, 1.2rem + 1vw, 1.875rem);
+  --pmf-line-height-body: 1.55;
+  --pmf-letter-spacing-tight: -0.015em;
 }
 
-// Light theme — the default. Cool neutral grays, modern indigo accent.
+// Light theme — the default. Cool neutral grays, modern indigo accent with a
+// violet second stop for the gradient.
 :root,
 [data-bs-theme='light'] {
-  --pmf-bg: #f3f4f9;
+  --pmf-bg: #f4f5fa;
   --pmf-surface: #fff;
   --pmf-surface-raised: #fff;
   --pmf-surface-sunken: #eceef4;
@@ -36,30 +48,42 @@
   --pmf-text-muted: #6b7280;
   --pmf-text-on-accent: #fff;
   --pmf-accent: #4d5ee8;
+  --pmf-accent-2: #7a5cf5;
   --pmf-accent-hover: #3f4fce;
   --pmf-accent-subtle: rgb(77, 94, 232, 0.1);
+  --pmf-accent-gradient: linear-gradient(135deg, var(--pmf-accent) 0%, var(--pmf-accent-2) 100%);
   --pmf-focus-ring: rgb(77, 94, 232, 0.35);
   --pmf-success: #1f9d6b;
+  --pmf-success-subtle: rgb(31, 157, 107, 0.12);
   --pmf-warning: #d99411;
+  --pmf-warning-subtle: rgb(217, 148, 17, 0.14);
   --pmf-danger: #d6453f;
+  --pmf-danger-subtle: rgb(214, 69, 63, 0.12);
   --pmf-info: #1591a8;
+  --pmf-info-subtle: rgb(21, 145, 168, 0.12);
   --pmf-shadow-sm: 0 1px 2px rgb(20, 24, 40, 0.06), 0 1px 3px rgb(20, 24, 40, 0.08);
-  --pmf-shadow-md: 0 4px 12px rgb(20, 24, 40, 0.08), 0 2px 4px rgb(20, 24, 40, 0.06);
-  --pmf-sidenav-bg: #1a1d2b;
-  --pmf-sidenav-surface: #1a1d2b;
+  --pmf-shadow-md: 0 4px 14px rgb(20, 24, 40, 0.08), 0 2px 5px rgb(20, 24, 40, 0.06), 0 16px 40px rgb(20, 24, 40, 0.04);
+  --pmf-shadow-lg: 0 12px 32px rgb(20, 24, 40, 0.12), 0 4px 10px rgb(20, 24, 40, 0.08);
+  --pmf-shadow-accent: 0 8px 24px rgb(77, 94, 232, 0.25);
+  --pmf-sidenav-bg: #161a2b;
+  --pmf-sidenav-surface: #161a2b;
   --pmf-sidenav-text: rgb(255, 255, 255, 0.82);
   --pmf-sidenav-text-active: #fff;
   --pmf-sidenav-icon: rgb(255, 255, 255, 0.92);
   --pmf-sidenav-heading: rgb(255, 255, 255, 0.55);
   --pmf-sidenav-hover: rgb(255, 255, 255, 0.09);
   --pmf-sidenav-active-bg: rgb(124, 138, 255, 0.26);
+  --pmf-sidenav-active-gradient: linear-gradient(135deg, #5a6cf0 0%, #7f63f7 100%);
   --pmf-sidenav-accent: #9aa6ff;
+  --pmf-sidenav-border: rgb(255, 255, 255, 0.08);
 
   // The top bar stays dark in every theme to match the side navigation.
-  --pmf-topnav-bg: #1a1d2b;
+  --pmf-topnav-bg: #161a2b;
   --pmf-topnav-text: rgb(255, 255, 255, 0.92);
   --pmf-topnav-muted: rgb(255, 255, 255, 0.72);
   --pmf-topnav-border: rgb(255, 255, 255, 0.08);
+  --pmf-topnav-hover: rgb(255, 255, 255, 0.1);
+  --pmf-topnav-active: rgb(255, 255, 255, 0.14);
 }
 
 // Dark theme — true dark surfaces with elevation steps, softened accent.
@@ -75,15 +99,24 @@
   --pmf-text-muted: #9aa1ba;
   --pmf-text-on-accent: #fff;
   --pmf-accent: #7c8aff;
+  --pmf-accent-2: #a08cff;
   --pmf-accent-hover: #93a0ff;
   --pmf-accent-subtle: rgb(124, 138, 255, 0.16);
+  // Darker stops than the link accent so white text keeps >= 4.5:1 on both ends.
+  --pmf-accent-gradient: linear-gradient(135deg, #4d5ee8 0%, #7a5cf5 100%);
   --pmf-focus-ring: rgb(124, 138, 255, 0.4);
   --pmf-success: #34c98a;
+  --pmf-success-subtle: rgb(52, 201, 138, 0.16);
   --pmf-warning: #e7b04a;
+  --pmf-warning-subtle: rgb(231, 176, 74, 0.16);
   --pmf-danger: #f0635d;
+  --pmf-danger-subtle: rgb(240, 99, 93, 0.16);
   --pmf-info: #3bb6cc;
+  --pmf-info-subtle: rgb(59, 182, 204, 0.16);
   --pmf-shadow-sm: 0 1px 2px rgb(0, 0, 0, 0.4), 0 1px 3px rgb(0, 0, 0, 0.5);
   --pmf-shadow-md: 0 6px 18px rgb(0, 0, 0, 0.5), 0 2px 6px rgb(0, 0, 0, 0.4);
+  --pmf-shadow-lg: 0 14px 36px rgb(0, 0, 0, 0.6), 0 4px 12px rgb(0, 0, 0, 0.5);
+  --pmf-shadow-accent: 0 8px 24px rgb(124, 138, 255, 0.3);
   --pmf-sidenav-bg: #0f111a;
   --pmf-sidenav-surface: #0f111a;
   --pmf-sidenav-text: rgb(255, 255, 255, 0.8);
@@ -92,14 +125,19 @@
   --pmf-sidenav-heading: rgb(255, 255, 255, 0.5);
   --pmf-sidenav-hover: rgb(255, 255, 255, 0.08);
   --pmf-sidenav-active-bg: rgb(124, 138, 255, 0.24);
+  --pmf-sidenav-active-gradient: linear-gradient(135deg, #4d5ee8 0%, #7a5cf5 100%);
   --pmf-sidenav-accent: #9aa6ff;
+  --pmf-sidenav-border: rgb(255, 255, 255, 0.07);
   --pmf-topnav-bg: #0f111a;
   --pmf-topnav-text: rgb(255, 255, 255, 0.92);
   --pmf-topnav-muted: rgb(255, 255, 255, 0.68);
   --pmf-topnav-border: rgb(255, 255, 255, 0.07);
+  --pmf-topnav-hover: rgb(255, 255, 255, 0.1);
+  --pmf-topnav-active: rgb(255, 255, 255, 0.14);
 }
 
-// High-contrast theme — pure black/white/yellow, AAA contrast, strong borders.
+// High-contrast theme — pure black/white/yellow, AAA contrast, strong borders,
+// no gradients, no shadows.
 [data-bs-theme='high-contrast'] {
   --pmf-bg: #000;
   --pmf-surface: #000;
@@ -112,26 +150,38 @@
   --pmf-text-muted: #e6e6e6;
   --pmf-text-on-accent: #000;
   --pmf-accent: #ff0;
+  --pmf-accent-2: #ff0;
   --pmf-accent-hover: #ff6;
   --pmf-accent-subtle: rgb(255, 255, 0, 0.18);
+  --pmf-accent-gradient: var(--pmf-accent);
   --pmf-focus-ring: rgb(255, 255, 0, 0.6);
   --pmf-success: #0f0;
+  --pmf-success-subtle: rgb(0, 255, 0, 0.15);
   --pmf-warning: #ff0;
+  --pmf-warning-subtle: rgb(255, 255, 0, 0.15);
   --pmf-danger: #ff3b3b;
+  --pmf-danger-subtle: rgb(255, 59, 59, 0.15);
   --pmf-info: #0ff;
+  --pmf-info-subtle: rgb(0, 255, 255, 0.15);
   --pmf-shadow-sm: none;
   --pmf-shadow-md: none;
+  --pmf-shadow-lg: none;
+  --pmf-shadow-accent: none;
   --pmf-sidenav-bg: #000;
   --pmf-sidenav-surface: #000;
   --pmf-sidenav-text: #fff;
-  --pmf-sidenav-text-active: #ff0;
+  --pmf-sidenav-text-active: #000;
   --pmf-sidenav-icon: #fff;
   --pmf-sidenav-heading: #ff0;
   --pmf-sidenav-hover: #1a1a1a;
   --pmf-sidenav-active-bg: #ff0;
+  --pmf-sidenav-active-gradient: #ff0;
   --pmf-sidenav-accent: #ff0;
+  --pmf-sidenav-border: #fff;
   --pmf-topnav-bg: #000;
   --pmf-topnav-text: #fff;
   --pmf-topnav-muted: #fff;
   --pmf-topnav-border: #fff;
+  --pmf-topnav-hover: #1a1a1a;
+  --pmf-topnav-active: #333;
 }

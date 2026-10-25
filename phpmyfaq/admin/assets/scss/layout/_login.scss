@@ -1,15 +1,103 @@
 //
 // Login
 //
+// Gradient-tinted backdrop (same recipe as the public start page hero) with a
+// single raised card. High-contrast flattens the backdrop to black.
+//
 
 #pmf-admin-login {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--pmf-topnav-height));
+  margin: -1rem -1rem -2rem;
+  position: relative;
+  isolation: isolate;
+  background-color: var(--pmf-bg);
+
+  @include media-breakpoint-up(lg) {
+    margin: -1.25rem -2rem -2.5rem;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--pmf-accent-gradient);
+    opacity: 0.1;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(60% 60% at 15% 0%, var(--pmf-accent-subtle) 0%, transparent 70%);
+  }
 
   #pmf-admin-login-content {
     min-width: 0;
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 0;
+
+    > main {
+      width: 100%;
+    }
+  }
+
+  .pmf-login-column {
+    max-width: 440px;
+  }
+
+  .pmf-login-card {
+    border: 1px solid var(--pmf-border);
+    border-radius: var(--pmf-radius-xl);
+    box-shadow: var(--pmf-shadow-lg);
+
+    .card-header {
+      display: block;
+      padding: 2rem 2rem 0;
+    }
+
+    .card-body {
+      padding: 1.5rem 2rem 2rem;
+    }
+
+    .card-footer {
+      padding: 0 2rem 2rem;
+    }
+
+    .form-floating > .form-control {
+      border-radius: var(--pmf-radius);
+    }
+
+    .input-group > .form-floating:first-child > .form-control {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .input-group > .input-group-text:last-child {
+      border-top-right-radius: var(--pmf-radius);
+      border-bottom-right-radius: var(--pmf-radius);
+    }
+
+    .btn {
+      border-radius: var(--pmf-radius);
+    }
+  }
+}
+
+[data-bs-theme='high-contrast'] #pmf-admin-login {
+  &::before,
+  &::after {
+    display: none;
+  }
+
+  .pmf-login-card {
+    border-width: 2px;
   }
 }
 

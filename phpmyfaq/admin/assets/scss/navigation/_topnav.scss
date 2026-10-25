@@ -3,41 +3,109 @@
 //
 // The top bar stays dark in every theme (see the --pmf-topnav-* tokens), so
 // all foreground colours are light-on-dark regardless of the active theme.
+// No drop shadow: the side navigation shares the colour and a shadow would
+// draw a seam between the two.
 //
 
 .pmf-admin-topnav {
-  padding-left: 0;
+  padding: 0 1rem 0 0;
   height: var(--pmf-topnav-height);
   z-index: $pmf-admin-zindex-topnav;
   background-color: var(--pmf-topnav-bg);
   color: var(--pmf-topnav-text);
   border-bottom: 1px solid var(--pmf-topnav-border);
-  box-shadow: var(--pmf-shadow-sm);
+  gap: 0.5rem;
 
+  // Brand slot: same width as the side navigation so the logo sits in the
+  // navigation column with a hairline on its trailing edge.
   .navbar-brand {
+    display: flex;
+    align-items: center;
     width: $pmf-admin-sidenav-base-width;
-    padding-left: $navbar-padding-x;
-    padding-right: $navbar-padding-x;
+    height: 100%;
+    padding: 0 1.25rem;
     margin: 0;
     font-weight: 700;
     color: var(--pmf-topnav-text);
+    border-right: 1px solid var(--pmf-topnav-border);
+
+    img {
+      height: 34px;
+      width: auto;
+    }
+
+    @include media-breakpoint-down(lg) {
+      width: auto;
+      border-right: 0;
+    }
   }
 
-  #sidebarToggle {
+  // Ghost pill shared by the sidebar toggle and the user menu trigger
+  .pmf-topnav-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
     color: var(--pmf-topnav-muted);
-    border-radius: var(--pmf-radius-sm);
     transition:
       background-color var(--pmf-transition),
       color var(--pmf-transition);
 
-    // The toggle icon carries an .h6 utility class — keep it on the bar colour.
     .bi {
       color: inherit;
+      font-size: 1.15rem;
+      line-height: 1;
     }
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       color: var(--pmf-topnav-text);
-      background-color: var(--pmf-sidenav-hover);
+      background-color: var(--pmf-topnav-hover);
+    }
+
+    &:focus-visible {
+      outline: 0;
+      box-shadow: 0 0 0 3px var(--pmf-focus-ring);
+    }
+  }
+
+  // #sidebarToggle and the user menu trigger carry .pmf-topnav-ghost in the markup.
+  #sidebarToggle {
+    margin-left: 0.5rem;
+
+    // The toggle icon carries an .h6 utility class — keep it on the bar colour.
+    .bi {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+  }
+
+  // Language selector rendered by PHP as a plain <select>
+  form .form-select,
+  form select {
+    height: 2.25rem;
+    padding: 0.3rem 2rem 0.3rem 0.75rem;
+    border: 1px solid var(--pmf-topnav-border);
+    border-radius: 999px;
+    background-color: var(--pmf-topnav-hover);
+    color: var(--pmf-topnav-text);
+    font-size: var(--pmf-font-size-sm);
+    font-weight: 500;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+
+    &:focus {
+      border-color: var(--pmf-sidenav-accent);
+      box-shadow: 0 0 0 3px var(--pmf-focus-ring);
+    }
+
+    option {
+      color: var(--pmf-text);
+      background-color: var(--pmf-surface-raised);
     }
   }
 
@@ -49,36 +117,65 @@
     }
   }
 
-  // Theme switcher (light / dark / high-contrast)
+  // Theme switcher (light / dark / high-contrast): segmented pill
   .pmf-theme-switcher {
-    border-color: var(--pmf-topnav-border) !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--pmf-topnav-border) !important;
+    border-radius: 999px;
+    background-color: rgb(255, 255, 255, 0.04);
 
     button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.9rem;
+      height: 1.9rem;
+      padding: 0 !important;
       color: var(--pmf-topnav-muted);
       border: none;
       background: transparent;
-      border-radius: var(--pmf-radius-sm);
+      border-radius: 999px;
       transition:
         color var(--pmf-transition),
         background-color var(--pmf-transition);
 
       i {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
+        line-height: 1;
       }
 
       &:hover {
         color: var(--pmf-topnav-text);
-        background: var(--pmf-sidenav-hover);
+        background: var(--pmf-topnav-hover);
       }
 
       &:focus-visible {
-        box-shadow: 0 0 0 0.2rem var(--pmf-focus-ring);
+        box-shadow: 0 0 0 3px var(--pmf-focus-ring);
       }
 
       &.active {
         color: var(--pmf-sidenav-accent);
-        background: var(--pmf-sidenav-active-bg);
+        background: var(--pmf-topnav-active);
       }
+    }
+  }
+
+  // User menu: avatar or icon in a ringed circle
+  .pmf-topnav-user {
+    border: 1px solid var(--pmf-topnav-border);
+
+    &::after {
+      display: none;
+    }
+
+    img {
+      width: 1.6rem;
+      height: 1.6rem;
+      object-fit: cover;
+      border-radius: 50%;
     }
   }
 }

@@ -3,36 +3,41 @@
 //
 
 .pmf-faq-list-result {
-  background-color: white;
-  padding: 10px;
+  background-color: var(--pmf-surface-raised);
+  color: var(--pmf-text);
+  padding: 0.6rem 0.75rem;
   cursor: pointer;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: var(--pmf-surface-hover);
   }
+}
+
+.category-header-indent-0,
+.category-header-indent-1,
+.category-header-indent-2,
+.category-header-indent-3,
+.category-header-indent-4 {
+  background-color: var(--pmf-surface-sunken);
+  color: var(--pmf-text);
 }
 
 .category-header-indent-0 {
   padding-left: 1px;
-  background: $secondary-bg-subtle;
 }
 
 .category-header-indent-1 {
   padding-left: 0.5rem;
-  background: $secondary-bg-subtle;
 }
 
 .category-header-indent-2 {
   padding-left: 1rem;
-  background: $secondary-bg-subtle;
 }
 
 .category-header-indent-3 {
   padding-left: 1.5rem;
-  background: $secondary-bg-subtle;
 }
 
 .category-header-indent-4 {
   padding-left: 2rem;
-  background: $secondary-bg-subtle;
 }

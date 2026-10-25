@@ -74,24 +74,39 @@
     }
   }
 
+  .pmf-configuration-tabs .nav-link {
+    border-radius: var(--pmf-radius-sm);
+    font-weight: 500;
+    transition:
+      background-color var(--pmf-transition),
+      color var(--pmf-transition);
+
+    &:hover {
+      background: var(--pmf-surface-hover);
+    }
+  }
+
   a.nav-link.active {
-    background: var(--pmf-surface);
+    background: var(--pmf-accent-subtle);
     color: var(--pmf-accent);
     border-radius: var(--pmf-radius-sm);
-    border: 1px solid var(--pmf-border);
+    border: 0;
+    font-weight: 600;
   }
 
   .tab-content {
     background: var(--pmf-surface);
     color: var(--pmf-text);
-    padding: 5px 15px;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--pmf-border);
+    border-radius: var(--pmf-radius-lg);
+    box-shadow: var(--pmf-shadow-sm);
   }
 }
 
 .pmf-configuration-panel {
   background: var(--pmf-surface);
   color: var(--pmf-text);
-  border-left: 1px solid var(--pmf-border);
-  border-right: 1px solid var(--pmf-border);
-  border-bottom: 1px solid var(--pmf-border);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius-lg);
 }
