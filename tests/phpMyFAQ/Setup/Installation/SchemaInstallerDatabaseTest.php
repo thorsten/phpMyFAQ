@@ -68,6 +68,31 @@ final class SchemaInstallerDatabaseTest extends TestCase
         $this->assertSame($before, $this->tableCount());
     }
 
+    public function testAddMissingColumnsRestoresAColumnTheSchemaDefines(): void
+    {
+        // Simulate an installation whose faquser table predates the remember_me_expires
+        // column and whose recorded update state cannot see the migration that adds it.
+        $db = $this->configuration->getDb();
+        $db->query('ALTER TABLE faquser DROP COLUMN remember_me_expires');
+        $this->assertSame(0, $db->numRows($db->query(
+            "SELECT name FROM pragma_table_info('faquser') WHERE name = 'remember_me_expires'",
+        )));
+
+        $installer = new SchemaInstaller($this->configuration, new SqliteDialect());
+        $installer->addMissingColumns();
+
+        $this->assertSame(1, $db->numRows($db->query(
+            "SELECT name FROM pragma_table_info('faquser') WHERE name = 'remember_me_expires'",
+        )));
+
+        // Existing columns are left alone: a second run issues nothing new.
+        $this->assertContains('ALTER TABLE faquser ADD COLUMN remember_me_expires INTEGER NULL', $installer->collectedSql);
+        $alreadyIssued = $installer->collectedSql;
+        $installer->dryRun = true;
+        $installer->addMissingColumns();
+        $this->assertSame($alreadyIssued, $installer->collectedSql);
+    }
+
     public function testTableExistenceCheckRejectsAnUnsupportedDatabaseType(): void
     {
         new ReflectionProperty(Database::class, 'dbType')->setValue(null, 'oracle');

@@ -151,6 +151,26 @@ class UpdateTest extends TestCase
         $this->assertNotEmpty($queries, 'Amended migration must be re-run for installations that already applied it');
     }
 
+    public function testApplyUpdatesAddsColumnsTheSchemaDefinesButNoMigrationWillRun(): void
+    {
+        // Simulate an installation that moved on to 4.2.0-RC.1 before Migration420Beta
+        // existed: the version comparison never selects that migration again, so the
+        // column it adds has to come from the schema convergence step.
+        $this->dbHandle->query('ALTER TABLE faquser DROP COLUMN remember_me_expires');
+
+        $configuration = new Configuration($this->dbHandle);
+        $configuration->set('main.currentVersion', '4.2.0-RC.1');
+
+        $update = new Update(new System(), $configuration);
+        $update->version = '4.2.0-RC.1';
+        $this->assertTrue($update->applyUpdates());
+
+        $result = $this->dbHandle->query(
+            "SELECT name FROM pragma_table_info('faquser') WHERE name = 'remember_me_expires'",
+        );
+        $this->assertSame(1, $this->dbHandle->numRows($result), 'Missing column must be added by the update');
+    }
+
     public function testApplyUpdatesReRunsMigrationRecordedWithoutChecksum(): void
     {
         // Simulate an installation that executed 4.2.0-alpha.2 before checksums were

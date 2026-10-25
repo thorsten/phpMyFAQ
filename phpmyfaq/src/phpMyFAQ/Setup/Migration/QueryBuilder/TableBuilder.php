@@ -326,6 +326,50 @@ class TableBuilder
     }
 
     /**
+     * Returns ALTER TABLE statements that append every defined column missing from
+     * $existingColumns. Used to converge a live table towards this definition.
+     *
+     * Skipped on purpose: AUTO_INCREMENT columns (cannot be appended) and NOT NULL
+     * columns without a default (cannot be added to a populated table on every
+     * database). Existing columns are never modified.
+     *
+     * @param string[] $existingColumns Column names currently present in the live table
+     * @return string[]
+     */
+    public function buildAddColumnStatements(array $existingColumns): array
+    {
+        if ($this->tableName === '') {
+            throw new LogicException('Table name not set: call table() before buildAddColumnStatements()');
+        }
+
+        $existing = array_map(strtolower(...), $existingColumns);
+        $statements = [];
+
+        foreach ($this->columns as $name => $def) {
+            if (in_array(strtolower($name), $existing, strict: true)) {
+                continue;
+            }
+
+            if ($def['type'] === 'AUTO_INCREMENT') {
+                continue;
+            }
+
+            if (!$def['nullable'] && $def['default'] === null) {
+                continue;
+            }
+
+            $type = $def['type'] . ($def['nullable'] ? ' NULL' : ' NOT NULL');
+            if ($def['default'] !== null) {
+                $type .= ' DEFAULT ' . $def['default'];
+            }
+
+            $statements[] = $this->dialect->addColumn($this->tableName, $name, $type);
+        }
+
+        return $statements;
+    }
+
+    /**
      * Returns separate CREATE INDEX statements.
      * For MySQL, returns empty array since indexes are inlined in CREATE TABLE.
      *

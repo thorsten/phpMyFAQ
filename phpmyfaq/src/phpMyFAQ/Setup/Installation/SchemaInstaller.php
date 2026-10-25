@@ -163,6 +163,56 @@ class SchemaInstaller implements DriverInterface
     }
 
     /**
+     * Appends any columns the authoritative DatabaseSchema defines that are missing from
+     * existing live tables. Catches installations whose recorded update state cannot see
+     * a new column — e.g. an installation that passed a version before the migration
+     * adding the column existed. Addition only: existing columns are never modified,
+     * and TableBuilder skips columns that cannot be appended safely.
+     */
+    public function addMissingColumns(): void
+    {
+        foreach ($this->schema->getAllTables() as $tableName => $tableBuilder) {
+            $liveTable = Database::getTablePrefix() . $tableName;
+            if (!$this->tableExists($liveTable)) {
+                continue;
+            }
+
+            foreach ($tableBuilder->buildAddColumnStatements($this->columnNames($liveTable)) as $statement) {
+                $this->executeSql($statement);
+            }
+        }
+    }
+
+    /**
+     * Returns the column names of a live table from the database catalog.
+     *
+     * @return string[]
+     */
+    private function columnNames(string $tableName): array
+    {
+        $query = match (Database::getType()) {
+            'mysqli', 'pdo_mysql' => "SHOW COLUMNS FROM {$tableName}",
+            'pgsql', 'pdo_pgsql' => 'SELECT column_name AS "Field" FROM information_schema.columns '
+                . "WHERE table_name = '{$tableName}'",
+            'sqlite3', 'pdo_sqlite' => "SELECT name AS Field FROM pragma_table_info('{$tableName}')",
+            'sqlsrv',
+            'pdo_sqlsrv',
+                => "SELECT name AS Field FROM sys.columns WHERE object_id = OBJECT_ID('{$tableName}')",
+            default => throw new \RuntimeException('Unsupported database type: ' . Database::getType()),
+        };
+
+        $db = $this->configuration->getDb();
+        $result = $db->query($query);
+        $columns = [];
+        foreach ($db->fetchAll($result) ?? [] as $row) {
+            $row = (array) $row;
+            $columns[] = (string) ($row['Field'] ?? $row['field'] ?? reset($row));
+        }
+
+        return $columns;
+    }
+
+    /**
      * Checks whether a table exists in the live database, mirroring the catalog
      * queries used by MigrationTracker::tableExists().
      */

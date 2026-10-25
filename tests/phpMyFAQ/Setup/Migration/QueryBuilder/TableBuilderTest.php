@@ -366,4 +366,24 @@ class TableBuilderTest extends TestCase
 
         $this->assertStringContainsString('data BLOB NOT NULL', $sql);
     }
+
+    public function testBuildAddColumnStatementsOnlyEmitsColumnsMissingFromTheLiveTable(): void
+    {
+        $builder = new TableBuilder(new SqliteDialect())
+            ->table('faquser', withPrefix: false)
+            ->autoIncrement('user_id')
+            ->varchar('login', 25, nullable: false)
+            ->integer('remember_me_expires')
+            ->integer('is_superadmin', nullable: false, default: 0)
+            ->varchar('auth_source', 100, nullable: false);
+
+        $statements = $builder->buildAddColumnStatements(['user_id', 'login']);
+
+        // AUTO_INCREMENT columns can never be appended, and a NOT NULL column without a
+        // default cannot be added to a populated table portably, so both are skipped.
+        $this->assertSame([
+            'ALTER TABLE faquser ADD COLUMN remember_me_expires INTEGER NULL',
+            'ALTER TABLE faquser ADD COLUMN is_superadmin INTEGER NOT NULL DEFAULT 0',
+        ], $statements);
+    }
 }

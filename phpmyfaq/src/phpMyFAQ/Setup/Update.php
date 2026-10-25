@@ -271,13 +271,16 @@ class Update extends AbstractSetup
     }
 
     /**
-     * Creates any tables the authoritative DatabaseSchema defines that are missing from
-     * the live database — e.g. for a fresh installation made at a version whose
-     * migration gained a table later.
+     * Converges the live database towards the authoritative DatabaseSchema: creates
+     * tables and appends columns it defines that are missing — e.g. for an installation
+     * made at, or already past, a version whose migration gained the table or column
+     * later. Version-based and checksum-based migration selection cannot see this state.
      */
     private function createMissingTables(): void
     {
-        new SchemaInstaller($this->configuration)->createMissingTables();
+        $schemaInstaller = new SchemaInstaller($this->configuration);
+        $schemaInstaller->createMissingTables();
+        $schemaInstaller->addMissingColumns();
     }
 
     /**
