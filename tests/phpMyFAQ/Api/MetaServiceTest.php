@@ -38,7 +38,7 @@ final class MetaServiceTest extends TestCase
         $this->assertIsArray($config);
         $this->originalConfig = $config;
 
-        $configProperty->setValue($this->configuration, array_merge($config, [
+        $overrides = [
             'main.currentVersion' => '4.2.0',
             'main.titleFAQ' => 'phpMyFAQ Test',
             'oauth2.enable' => 'true',
@@ -47,7 +47,15 @@ final class MetaServiceTest extends TestCase
             'search.enableOpenSearch' => 'false',
             'security.ssoSupport' => 'true',
             'main.referenceURL' => 'https://localhost/',
-        ]));
+        ];
+
+        // Persist the values in the private database copy as well: Configuration::get() reloads all values from the
+        // database whenever it meets an unknown key, which would silently discard in-memory overrides.
+        foreach ($overrides as $key => $value) {
+            $this->configuration->set($key, $value);
+        }
+
+        $configProperty->setValue($this->configuration, array_merge($config, $overrides));
 
         $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageWithDetection('language_en.php');

@@ -506,6 +506,12 @@ final class DashboardControllerTest extends TestCase
 
     private function overrideConfigurationValues(array $values): void
     {
+        // Persist the values in the private database copy as well: Configuration::get() reloads all values from the
+        // database whenever it meets an unknown key, which would silently discard in-memory overrides.
+        foreach ($values as $key => $value) {
+            $this->configuration->set($key, is_bool($value) ? ($value ? 'true' : 'false') : $value);
+        }
+
         $reflection = new \ReflectionClass(Configuration::class);
         $configProperty = $reflection->getProperty('config');
         $config = $configProperty->getValue($this->configuration);

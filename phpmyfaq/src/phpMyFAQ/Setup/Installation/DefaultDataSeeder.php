@@ -149,6 +149,7 @@ class DefaultDataSeeder
             'main.enableAutoUpdateHint' => 'true',
             'main.enableAskQuestions' => 'false',
             'main.enableNotifications' => 'false',
+            'main.enableRecentNews' => 'true',
             'main.botIgnoreList' =>
                 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,bravobrian,archiver,'
                     . 'w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,facebookcatalog/1.0,'
@@ -293,6 +294,13 @@ class DefaultDataSeeder
             'api.onlyActiveCategories' => 'true',
             'api.rateLimit.requests' => '100',
             'api.rateLimit.interval' => '3600',
+            'oauth2.enable' => 'false',
+            'oauth2.privateKeyPath' => '',
+            'oauth2.publicKeyPath' => '',
+            'oauth2.encryptionKey' => '',
+            'oauth2.accessTokenTTL' => 'PT1H',
+            'oauth2.refreshTokenTTL' => 'P1M',
+            'oauth2.authCodeTTL' => 'PT10M',
             'translation.provider' => 'none',
             'translation.googleApiKey' => '',
             'translation.deeplApiKey' => '',
