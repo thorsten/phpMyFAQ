@@ -23,7 +23,7 @@ final class SearchControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/search.html');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('<h2 class="mb-4 border-bottom">Advanced search</h2>', $response);
+        self::assertResponseContains('<h1 class="h2 mb-4 border-bottom">Advanced search</h1>', $response);
         self::assertResponseContains('id="pmf-main-search"', $response);
     }
 
@@ -38,7 +38,7 @@ final class SearchControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/search.html?tagging_id=12');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('<h2 class="mb-4 border-bottom">Tagged entries</h2>', $response);
+        self::assertResponseContains('<h1 class="h2 mb-4 border-bottom">Tagged entries</h1>', $response);
         self::assertResponseContains('<h4 class="fst-italic">Tags</h4>', $response);
         self::assertStringNotContainsString('id="pmf-main-search"', (string) $response->getContent());
     }

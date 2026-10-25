@@ -23,6 +23,8 @@ use phpMyFAQ\Captcha\BuiltinCaptcha;
 use phpMyFAQ\Captcha\CaptchaInterface;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Helper\AbstractHelper;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 
 /**
  * Class CaptchaHelper
@@ -57,10 +59,15 @@ class BuiltinCaptchaAbstractHelper extends AbstractHelper implements CaptchaHelp
         }
 
         $html = '';
+        $refreshLabel = Strings::htmlentities(Translation::getString(key: 'msgRefreshCaptcha'));
 
         if (true === $this->configuration->get(item: 'spam.enableCaptchaCode') && !$auth) {
             $html .= '<div class="row g-4">';
-            $html .= sprintf('<label class="col-md-3 col-sm-12 col-form-label">%s</label>', $label);
+            $html .= sprintf(
+                '<label class="col-md-3 col-sm-12 col-form-label" for="%s">%s</label>',
+                self::FORM_ID,
+                $label,
+            );
             $html .= '    <div class="col-md-4 col-sm-6 col-7">';
             $html .= sprintf('<p class="form-control-static">%s</p>', $captcha->renderCaptchaImage());
             $html .= '    </div>';
@@ -74,10 +81,12 @@ class BuiltinCaptchaAbstractHelper extends AbstractHelper implements CaptchaHelp
             );
             $html .= '            <span class="input-group-btn">';
             $html .= sprintf(
-                '<button type="button" class="btn btn-primary" id="%s" data-action="%s">'
+                '<button type="button" class="btn btn-primary" id="%s" data-action="%s" aria-label="%s" title="%s">'
                 . '<i aria-hidden="true" class="bi bi-arrow-repeat" data-action="%s"></i></button>',
                 self::FORM_BUTTON,
                 $action,
+                $refreshLabel,
+                $refreshLabel,
                 $action,
             );
             $html .= '            </span>';

@@ -109,6 +109,11 @@ final class AuthenticationController extends AbstractFrontController
 
         return $this->render('password.twig', [
             ...$this->getHeader($request),
+            'title' => sprintf(
+                '%s - %s',
+                Translation::getString(key: 'lostPassword'),
+                $this->configuration->getTitle(),
+            ),
             'lang' => $this->configuration->getLanguage()->getLanguage(),
             'username' => Translation::get(key: 'ad_auth_user'),
             'password' => Translation::get(key: 'ad_auth_passwd'),

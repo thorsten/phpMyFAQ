@@ -63,7 +63,7 @@ final class AttachmentControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/attachment/999999');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('<h2 class="border-bottom">Report a bug</h2>', $response);
+        self::assertResponseContains('<h1 class="h2 border-bottom">Report a bug</h1>', $response);
         self::assertResponseContains('An error occurred.', $response);
     }
 }

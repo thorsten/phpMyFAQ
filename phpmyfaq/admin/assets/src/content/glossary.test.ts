@@ -126,6 +126,12 @@ describe('Glossary Functions', () => {
       const rows = tableBody.querySelectorAll('tr');
       expect(rows.length).toBe(1);
 
+      const editButton = rows[0].querySelector('[data-bs-target="#updateGlossaryModal"]') as HTMLButtonElement;
+      expect(editButton.getAttribute('data-pmf-glossary-id')).toBe('API');
+      expect(editButton.querySelector('.bi-pencil')).not.toBeNull();
+      const deleteButton = rows[0].querySelector('.pmf-admin-delete-glossary') as HTMLButtonElement;
+      expect(deleteButton.getAttribute('data-pmf-glossary-language')).toBe('en');
+
       expect(pushNotification).toHaveBeenCalledWith('Glossary item created');
     });
   });

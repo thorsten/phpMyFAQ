@@ -1,14 +1,14 @@
 {% extends 'index.twig' %}
 
 {% block content %}
-<div class="row g-5">
+<div class="row g-3 g-md-5">
   <div class="{{ isAllCategories ? 'col-12' : 'col-md-8' }}">
 
     <div class="breadcrumb-wrapper">
       {{ breadcrumb | raw }}
     </div>
 
-    <h2 class="mb-4 border-bottom">{{ categoryHeader }}</h2>
+    <h1 class="h2 mb-4 border-bottom">{{ categoryHeader }}</h1>
 
     {% if isAllCategories %}
       {% if categoryTree is not empty %}

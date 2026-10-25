@@ -418,11 +418,21 @@ export const getLatestVersion = async (): Promise<void> => {
         }
       } else {
         loader.classList.add('d-none');
+        const fallbackMessage = versionText.dataset.pmfErrorMessage ?? 'Network response was not ok';
+        let errorMessage = fallbackMessage;
+        try {
+          const errorBody = (await response.json()) as { error?: string };
+          if (typeof errorBody.error === 'string' && errorBody.error !== '') {
+            errorMessage = `${fallbackMessage} (${errorBody.error})`;
+          }
+        } catch {
+          // Body was not JSON, keep the fallback message
+        }
         versionText.insertAdjacentElement(
           'afterend',
           addElement('div', {
-            classList: 'alert alert-danger',
-            innerText: 'Network response was not ok',
+            classList: 'alert alert-warning',
+            innerText: errorMessage,
           })
         );
       }

@@ -19,19 +19,19 @@ class PaginationTemplatesTest extends TestCase
             $templates->currentPage,
         );
         $this->assertEquals(
-            '<li class="page-item"><a class="page-link" href="{LINK_URL}">&rarr;</a></li>',
+            '<li class="page-item"><a class="page-link" href="{LINK_URL}">&rsaquo;</a></li>',
             $templates->nextPage,
         );
         $this->assertEquals(
-            '<li class="page-item"><a class="page-link" href="{LINK_URL}">&larr;</a></li>',
+            '<li class="page-item"><a class="page-link" href="{LINK_URL}">&lsaquo;</a></li>',
             $templates->prevPage,
         );
         $this->assertEquals(
-            '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8676;</a></li>',
+            '<li class="page-item"><a class="page-link" href="{LINK_URL}">&laquo;</a></li>',
             $templates->firstPage,
         );
         $this->assertEquals(
-            '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8677;</a></li>',
+            '<li class="page-item"><a class="page-link" href="{LINK_URL}">&raquo;</a></li>',
             $templates->lastPage,
         );
         $this->assertEquals('<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>', $templates->layout);

@@ -255,10 +255,11 @@ abstract class AbstractFrontController extends AbstractController
      * Checks if the URL is a reference to a custom page or external URL.
      *
      * @param string $configKey Configuration key for the URL (e.g., 'main.cookiePolicyURL')
+     * @param Request $request Current request, needed to render the full 404 page layout
      * @return Response RedirectResponse or 404 error page
      * @throws Exception|LoaderError|\Exception
      */
-    protected function handleStaticPageRedirect(string $configKey): Response
+    protected function handleStaticPageRedirect(string $configKey, Request $request): Response
     {
         $configuredUrl = $this->configuration->get($configKey);
         $url = is_string($configuredUrl) ? $configuredUrl : '';
@@ -281,10 +282,22 @@ abstract class AbstractFrontController extends AbstractController
             return new RedirectResponse($url);
         }
 
-        // If no URL configured and no fallback, return 404
+        // If no URL configured and no fallback, render the regular 404 page with the full layout
         $response = new Response();
         $response->setStatusCode(Response::HTTP_NOT_FOUND);
-        return $this->render('404.twig', [], $response);
+
+        return $this->render(
+            '404.twig',
+            [
+                ...$this->getHeader($request),
+                'title' => sprintf(
+                    '%s - %s',
+                    Translation::getString(key: 'msgError404'),
+                    $this->configuration->getTitle(),
+                ),
+            ],
+            $response,
+        );
     }
 
     /**

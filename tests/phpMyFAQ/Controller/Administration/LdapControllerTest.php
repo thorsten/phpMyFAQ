@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[CoversClass(LdapController::class)]
 #[UsesNamespace('phpMyFAQ')]
@@ -136,13 +135,15 @@ final class LdapControllerTest extends TestCase
         return $container;
     }
 
-    public function testIndexThrowsUnauthorizedWhenLdapDisabled(): void
+    public function testIndexRendersDisabledNoticeWhenLdapDisabled(): void
     {
         $controller = new LdapController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $this->expectException(UnauthorizedHttpException::class);
-        $controller->index(Request::create('/admin/ldap'));
+        $response = $controller->index(Request::create('/admin/ldap'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('href="./configuration"', (string) $response->getContent());
     }
 
     public function testIndexRendersLdapConfigurationWhenLdapIsActive(): void

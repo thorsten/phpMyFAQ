@@ -26,14 +26,14 @@
     <i class="bi bi-chevron-right" aria-hidden="true"></i>
   </button>
 
-  <div class="row g-5 pmf-faq-container">
+  <div class="row g-3 g-md-5 pmf-faq-container">
     <div class="col-md-8" id="pmf-content-column">
 
       <div class="breadcrumb-wrapper">
         {{ breadcrumb | raw }}
       </div>
 
-      <h2 class="mb-4 border-bottom">{{ question | raw }}</h2>
+      <h1 class="h2 mb-4 border-bottom">{{ question | raw }}</h1>
 
       <article class="pmf-faq-body pb-4 mb-4 border-bottom">{{ answer|raw }}</article>
 
@@ -238,6 +238,7 @@
             </div>
             <div class="row mb-2">
               <div class="col">
+              <label class="visually-hidden" for="comment_text">{{ msgYourComment }}</label>
               <textarea
                 rows="10"
                 name="comment_text"
@@ -275,28 +276,32 @@
         <div class="modal-body share-modal-body">
           <p>{{ 'msgShareLinkVia' | translate }}</p>
           <div class="d-flex align-items-center icons">
-            <a class="fs-5 d-flex align-items-center justify-content-center" target="_blank"
+            <a class="fs-5 d-flex align-items-center justify-content-center" target="_blank" rel="noopener"
+               aria-label="LinkedIn" title="LinkedIn"
                href="https://www.linkedin.com/sharing/share-offsite/?url={{ currentPageUrl | url_encode }}">
-              <span class="bi bi-linkedin"></span>
+              <span class="bi bi-linkedin" aria-hidden="true"></span>
             </a>
-            <a class="fs-5 d-flex align-items-center justify-content-center" target="_blank"
+            <a class="fs-5 d-flex align-items-center justify-content-center" target="_blank" rel="noopener"
+               aria-label="Reddit" title="Reddit"
                href="https://reddit.com/submit?url={{ currentPageUrl | url_encode }}&title={{ msgShareText | url_encode }}">
-              <span class="bi bi-reddit"></span>
+              <span class="bi bi-reddit" aria-hidden="true"></span>
             </a>
-            <a class="fs-5 d-flex align-items-center justify-content-center" target="_blank"
-               title="{{ msgShareViaWhatsapp }}"
+            <a class="fs-5 d-flex align-items-center justify-content-center" target="_blank" rel="noopener"
+               aria-label="WhatsApp" title="{{ msgShareViaWhatsapp }}"
                href="https://wa.me/?text={{ msgShareText | url_encode }}+{{ currentPageUrl | url_encode }}">
-              <span class="bi bi-whatsapp"></span>
+              <span class="bi bi-whatsapp" aria-hidden="true"></span>
             </a>
-            <a class="fs-5 d-flex align-items-center justify-content-center" target="_blank"
-               href="https://telegram.me/share/url?url={{ currentPageUrl | url_encode }}>&text={{ msgShareText | url_encode }}">
-              <span class="bi bi-telegram"></span>
+            <a class="fs-5 d-flex align-items-center justify-content-center" target="_blank" rel="noopener"
+               aria-label="Telegram" title="Telegram"
+               href="https://telegram.me/share/url?url={{ currentPageUrl | url_encode }}&text={{ msgShareText | url_encode }}">
+              <span class="bi bi-telegram" aria-hidden="true"></span>
             </a>
           </div>
           <p>{{ 'msgCopyLink' | translate }}</p>
           <div class="field d-flex align-items-center justify-content-between">
-            <span class="bi bi-link text-center"></span>
-            <input type="text" class="form-control" id="pmf-share-link" value="{{ currentPageUrl }}" readonly>
+            <span class="bi bi-link text-center" aria-hidden="true"></span>
+            <input type="text" class="form-control" id="pmf-share-link" value="{{ currentPageUrl }}" readonly
+                   aria-label="{{ 'msgCopyLink' | translate }}">
             <button class="btn btn-primary" id="pmf-share-link-copy-button"
                     data-pmf-message="{{ 'msgLinkCopied' | translate }}">
               {{ 'msgCopy' | translate }}

@@ -33,6 +33,6 @@ final class CookiePolicyController extends AbstractFrontController
     #[Route(path: '/cookies.html', name: 'public.cookies', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        return $this->handleStaticPageRedirect('main.cookiePolicyURL');
+        return $this->handleStaticPageRedirect('main.cookiePolicyURL', $request);
     }
 }

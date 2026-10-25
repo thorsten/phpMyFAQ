@@ -245,6 +245,24 @@ class MailTest extends TestCase
         $this->assertSame('smtp', $mail->agent);
     }
 
+    public function testConstructorSkipsDefaultSenderWhenAdminEmailIsEmpty(): void
+    {
+        $logger = $this->createMock(\Monolog\Logger::class);
+        $logger->expects($this->never())->method('error');
+        $logger->expects($this->never())->method('warning');
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('get')->willReturn(false);
+        $configuration->method('getVersion')->willReturn('4.2.0-alpha');
+        $configuration->method('getAdminEmail')->willReturn('');
+        $configuration->method('getTitle')->willReturn('phpMyFAQ');
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $mail = new Mail($configuration);
+
+        $this->assertSame('built-in', $mail->agent);
+    }
+
     public function testConstructorLogsWarningWhenDefaultSenderInitializationThrows(): void
     {
         $logger = $this->createMock(\Monolog\Logger::class);

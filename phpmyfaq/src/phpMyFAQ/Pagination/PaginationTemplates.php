@@ -24,10 +24,10 @@ readonly class PaginationTemplates
     public function __construct(
         public string $link = '<li class="page-item"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>',
         public string $currentPage = '<li class="page-item active"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>',
-        public string $nextPage = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&rarr;</a></li>',
-        public string $prevPage = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&larr;</a></li>',
-        public string $firstPage = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8676;</a></li>',
-        public string $lastPage = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8677;</a></li>',
+        public string $nextPage = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&rsaquo;</a></li>',
+        public string $prevPage = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&lsaquo;</a></li>',
+        public string $firstPage = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&laquo;</a></li>',
+        public string $lastPage = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&raquo;</a></li>',
         public string $layout = '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>',
     ) {
     }

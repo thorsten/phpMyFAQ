@@ -380,6 +380,6 @@ final class AbstractFrontControllerRenderTestStub extends AbstractFrontControlle
      */
     public function redirectStaticPage(string $configKey): Response
     {
-        return $this->handleStaticPageRedirect($configKey);
+        return $this->handleStaticPageRedirect($configKey, Request::create('/imprint.html'));
     }
 }

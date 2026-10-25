@@ -74,7 +74,7 @@
         <td>
           <a href="./user/edit/{{ user.id }}"
              class="btn">
-            <i class="bi bi-pencil text-info"></i> {{ ad_user_edit }}
+            <i class="bi bi-pencil text-info" aria-hidden="true"></i> {{ 'ad_user_edit' | translate }}
           </a>
           {% if user.status == 'blocked' %}
             <button type="button" class="btn btn-activate-user"

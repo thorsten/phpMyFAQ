@@ -12,13 +12,13 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesNamespace('phpMyFAQ')]
 final class UserControllerWebTest extends ControllerWebTestCase
 {
-    public function testRequestRemovalRedirectsHomeForAnonymousUser(): void
+    public function testRequestRemovalRedirectsToLoginForAnonymousUser(): void
     {
         $response = $this->requestPublic('GET', '/user/request-removal');
 
         self::assertResponseStatusCodeSame(302, $response);
         self::assertNotNull($response->headers->get('Location'));
-        self::assertStringEndsWith('/', (string) $response->headers->get('Location'));
+        self::assertStringEndsWith('/login', (string) $response->headers->get('Location'));
     }
 
     public function testBookmarksRedirectHomeForAnonymousUser(): void

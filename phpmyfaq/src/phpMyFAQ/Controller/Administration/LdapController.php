@@ -21,9 +21,9 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
@@ -40,7 +40,7 @@ final class LdapController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         if (!$this->configuration->isLdapActive()) {
-            throw new UnauthorizedHttpException('You are not allowed to access this page.');
+            return $this->renderFeatureDisabled($request, Translation::getString(key: 'msgAdminHeaderLdap'));
         }
 
         return $this->render('@admin/configuration/ldap.twig', [

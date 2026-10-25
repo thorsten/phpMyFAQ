@@ -37,21 +37,24 @@
               <td>{{ newsItem.date|formatDate }}</td>
               <td>
                 {% if permissionEditNews == true %}
-                <a class="btn btn-primary btn-sm" href="./news/edit/{{ newsItem.id }}">
-                  <span title="{{ ad_news_update }}" class="bi bi-pencil"></span>
+                <a class="btn btn-primary btn-sm" href="./news/edit/{{ newsItem.id }}"
+                   aria-label="{{ ad_news_update }}" title="{{ ad_news_update }}">
+                  <span class="bi bi-pencil" aria-hidden="true"></span>
                 </a>
                 {% endif %}
               </td>
               <td>
                 {% if permissionDeleteNews == true %}
-                <a class="btn btn-danger btn-sm" data-pmf-newsid="{{ newsItem.id }}" id="deleteNews">
-                  <span title="{{ ad_news_delete }}" class="bi bi-trash"></span>
+                <a class="btn btn-danger btn-sm" data-pmf-newsid="{{ newsItem.id }}" id="deleteNews" role="button"
+                   href="#" aria-label="{{ ad_news_delete }}" title="{{ ad_news_delete }}">
+                  <span class="bi bi-trash" aria-hidden="true"></span>
                 </a>
                 {% endif %}
               </td>
               <td>
                 {% if permissionEditNews == true %}
-                <input class="form-check-input"  type="checkbox" id="activate" data-pmf-id="{{ newsItem.id }}"
+                <input class="form-check-input" type="checkbox" id="activate" data-pmf-id="{{ newsItem.id }}"
+                       aria-label="{{ 'ad_entry_active' | translate }}: {{ newsItem.header|escape }}"
                        data-pmf-csrf-token="{{ csrfToken_activateNews }}"
                        {% if newsItem.active == 'y' %} checked {% endif %} />
                 {% endif %}

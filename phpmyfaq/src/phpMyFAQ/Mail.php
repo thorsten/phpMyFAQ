@@ -219,7 +219,10 @@ class Mail
         // Set phpMyFAQ related data
         $this->mailer = 'phpMyFAQ/' . $this->configuration->getVersion();
         try {
-            $this->setFrom($this->configuration->getAdminEmail(), $this->configuration->getTitle());
+            $adminEmail = $this->configuration->getAdminEmail();
+            if ($adminEmail !== '') {
+                $this->setFrom($adminEmail, $this->configuration->getTitle());
+            }
         } catch (Exception $exception) {
             $this->configuration
                 ->getLogger()

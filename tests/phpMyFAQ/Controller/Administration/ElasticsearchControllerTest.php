@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -19,9 +20,9 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[CoversClass(ElasticsearchController::class)]
 #[UsesNamespace('phpMyFAQ')]
@@ -95,22 +96,17 @@ final class ElasticsearchControllerTest extends TestCase
      *
      * @throws \Exception
      */
-    public function testIndexThrowsUnauthorizedWhenElasticsearchIsDisabled(): void
+    public function testIndexRendersDisabledNoticeWhenElasticsearchIsDisabled(): void
     {
         $this->configuration->set('search.enableElasticsearch', 'false');
 
         $controller = new ElasticsearchController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        try {
-            $controller->index(new Request());
-            self::fail('Expected an UnauthorizedHttpException.');
-        } catch (UnauthorizedHttpException $unauthorizedHttpException) {
-            self::assertSame(
-                'You are not allowed to access this page.',
-                $unauthorizedHttpException->getHeaders()['WWW-Authenticate'],
-            );
-        }
+        $response = $controller->index(new Request());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('href="./configuration"', (string) $response->getContent());
     }
 
     private function createAuthenticatedContainer(): ContainerInterface
@@ -125,16 +121,21 @@ final class ElasticsearchControllerTest extends TestCase
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
+        $adminHelper = $this->createStub(AdminMenuBuilder::class);
+        $adminHelper->method('setUser')->willReturnSelf();
+        $adminHelper->method('canAccessContent')->willReturn(true);
+        $adminHelper->method('addMenuEntry')->willReturn('');
 
         $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('get')
-            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
                 return match ($id) {
                     'phpmyfaq.configuration' => $this->configuration,
                     'phpmyfaq.user.current_user' => $currentUser,
                     'session' => $session,
                     'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
                     default => null,
                 };
             });

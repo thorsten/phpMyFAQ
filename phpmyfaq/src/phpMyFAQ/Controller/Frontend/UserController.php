@@ -59,7 +59,7 @@ final class UserController extends AbstractFrontController
     public function requestRemoval(Request $request): Response
     {
         if (!$this->currentUser->isLoggedIn()) {
-            return new RedirectResponse($this->configuration->getDefaultUrl());
+            return new RedirectResponse($this->configuration->getDefaultUrl() . 'login');
         }
 
         $this->faqSession->setCurrentUser($this->currentUser);

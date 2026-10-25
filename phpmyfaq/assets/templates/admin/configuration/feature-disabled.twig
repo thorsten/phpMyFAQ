@@ -1,0 +1,20 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-wrench"></i>
+      {{ featureName }}
+    </h1>
+  </div>
+
+  <div class="alert alert-info d-flex align-items-start gap-2" role="status">
+    <i aria-hidden="true" class="bi bi-info-circle-fill fs-5"></i>
+    <div>
+      <p class="mb-2">{{ 'msgAdminFeatureDisabled' | translate | format(featureName) }}</p>
+      <a class="btn btn-outline-primary btn-sm" href="./configuration">
+        <i aria-hidden="true" class="bi bi-wrench"></i> {{ 'ad_config_edit' | translate }}
+      </a>
+    </div>
+  </div>
+{% endblock %}

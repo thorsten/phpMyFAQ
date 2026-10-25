@@ -75,6 +75,21 @@ final class StaticPageControllerWebTest extends ControllerWebTestCase
         self::assertRedirectLocationContains($expectedTarget, $response);
     }
 
+    public function testUnconfiguredStaticPageRendersTheFullNotFoundLayout(): void
+    {
+        $this->getConfiguration()->getAll();
+        $this->overrideConfigurationValues(['main.privacyURL' => '']);
+
+        $response = $this->requestPublic('GET', '/privacy.html');
+        $content = (string) $response->getContent();
+
+        self::assertResponseStatusCodeSame(404, $response);
+        self::assertStringContainsString('<title>Error 404', $content);
+        self::assertStringContainsString('id="pmf-search-autocomplete"', $content);
+        self::assertStringContainsString('aria-controls="pmf-top-navbar"', $content);
+        self::assertStringNotContainsString('assets/templates//theme.css', $content);
+    }
+
     /**
      * @return iterable<string, array{path: string, configOverride: array<string, string>, expectedTarget: string}>
      */

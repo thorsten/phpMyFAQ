@@ -32,6 +32,6 @@ final class PrivacyController extends AbstractFrontController
     #[Route(path: '/privacy.html', name: 'public.privacy', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        return $this->handleStaticPageRedirect('main.privacyURL');
+        return $this->handleStaticPageRedirect('main.privacyURL', $request);
     }
 }

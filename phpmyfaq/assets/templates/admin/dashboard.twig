@@ -348,7 +348,8 @@
           </h5>
           <div class="card-body">
             {% if showVersion %}
-              <div id="phpmyfaq-latest-version">
+              <div id="phpmyfaq-latest-version"
+                   data-pmf-error-message="{{ 'msgDashboardVersionCheckFailed' | translate }}">
                 <div class="spinner-border text-secondary d-none" id="version-loader" role="status">
                   <span class="visually-hidden">Loading...</span>
                 </div>

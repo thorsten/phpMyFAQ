@@ -41,6 +41,9 @@
           <i class="bi bi-exclamation-square"></i>
           {{ stickyRecordsHeader }}
         </h5>
+        {% if stickyRecordsList is empty %}
+          <p class="text-body-secondary small mb-0">{{ 'msgNoStickyFaqs' | translate }}</p>
+        {% endif %}
         <ul class="list-unstyled">
           {% for stickyRecord in stickyRecordsList %}
             <li class="border-bottom pb-2 mb-2">

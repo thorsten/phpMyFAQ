@@ -43,7 +43,7 @@
                   <input type="checkbox" data-pmf-inputid="{{ input.input_id }}"
                          data-pmf-csrf-token="{{ csrfActivate }}"
                          data-pmf-formid="1"
-                         id="active"
+                         id="active" aria-label="{{ 'ad_entry_active' | translate }}: {{ input.input_label }}"
                          {% if input.input_active %} checked {% endif %} {% if input.input_active == -1 %} disabled {% endif %} />
                 </td>
                 <td>
@@ -51,7 +51,7 @@
                     <input type="checkbox" data-pmf-inputid="{{ input.input_id }}"
                            data-pmf-csrf-token="{{ csrfRequired }}"
                            data-pmf-formid="1"
-                           id="required" {% if input.input_required %} checked {% endif %} {% if input.input_required == -1 %} disabled {% endif %} />
+                           id="required" aria-label="{{ 'msgRequiredInputField' | translate }}: {{ input.input_label }}" {% if input.input_required %} checked {% endif %} {% if input.input_required == -1 %} disabled {% endif %} />
                   {% endif %}
                 </td>
                 <td>
@@ -89,14 +89,14 @@
                   <input type="checkbox" data-pmf-inputid="{{ input.input_id }}"
                          data-pmf-csrf-token="{{ csrfActivate }}"
                          data-pmf-formid="2"
-                         id="active" {% if input.input_active %} checked {% endif %} {% if input.input_active == -1 %} disabled {% endif %} />
+                         id="active" aria-label="{{ 'ad_entry_active' | translate }}: {{ input.input_label }}" {% if input.input_active %} checked {% endif %} {% if input.input_active == -1 %} disabled {% endif %} />
                 </td>
                 <td>
                   {% if input.input_type != 'title' and input.input_type != 'message' %}
                     <input type="checkbox" data-pmf-inputid="{{ input.input_id }}"
                            data-pmf-csrf-token="{{ csrfRequired }}"
                            data-pmf-formid="2"
-                           id="required" {% if input.input_required %} checked {% endif %} {% if input.input_required == -1 %} disabled {% endif %}/>
+                           id="required" aria-label="{{ 'msgRequiredInputField' | translate }}: {{ input.input_label }}" {% if input.input_required %} checked {% endif %} {% if input.input_required == -1 %} disabled {% endif %}/>
                   {% endif %}
                 </td>
                 <td>

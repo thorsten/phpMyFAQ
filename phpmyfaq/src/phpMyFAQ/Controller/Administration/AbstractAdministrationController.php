@@ -72,6 +72,21 @@ abstract class AbstractAdministrationController extends AbstractController
     }
 
     /**
+     * Renders the notice shown when an optional feature (e.g. Elasticsearch, LDAP) is switched off,
+     * instead of bouncing a logged-in administrator to the login page.
+     *
+     * @throws Exception
+     */
+    protected function renderFeatureDisabled(Request $request, string $featureName): Response
+    {
+        return $this->render('@admin/configuration/feature-disabled.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'featureName' => $featureName,
+        ]);
+    }
+
+    /**
      * @return array<string, mixed>
      * @throws Exception
      */

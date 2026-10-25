@@ -148,7 +148,8 @@
     <div class="col-md-8">
       <div class="search">
         <form action="./search.html" id="search" method="get" role="search">
-          <i class="bi bi-search"></i>
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <label class="visually-hidden" for="pmf-search-autocomplete">{{ searchBox }}</label>
           <input autocomplete="off" type="text" class="form-control form-control-lg" id="pmf-search-autocomplete"
                  name="search" placeholder="{{ searchBox }} ..." maxlength="255" value="{{ searchTerm }}">
           <kbd class="pmf-search-hint" id="pmf-search-hint" aria-hidden="true"></kbd>

@@ -33,6 +33,6 @@ final class ImprintController extends AbstractFrontController
     #[Route(path: '/imprint.html', name: 'public.imprint', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        return $this->handleStaticPageRedirect('main.imprintURL');
+        return $this->handleStaticPageRedirect('main.imprintURL', $request);
     }
 }

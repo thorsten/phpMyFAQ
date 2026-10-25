@@ -33,6 +33,6 @@ final class AccessibilityController extends AbstractFrontController
     #[Route(path: '/accessibility.html', name: 'public.accessibility', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        return $this->handleStaticPageRedirect('main.accessibilityStatementURL');
+        return $this->handleStaticPageRedirect('main.accessibilityStatementURL', $request);
     }
 }

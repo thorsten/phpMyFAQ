@@ -57,7 +57,8 @@
             <td>{{ site.instance|escape('html') }}</td>
             <td>{{ site.comment|escape('html') }}</td>
             <td>
-              <a href="instance/edit/{{ site.id }}" class="btn btn-info">
+              <a href="instance/edit/{{ site.id }}" class="btn btn-info"
+                 aria-label="{{ 'ad_user_edit' | translate }}: {{ site.url }}" title="{{ 'ad_user_edit' | translate }}">
                 <i aria-hidden="true" class="bi bi-pencil"></i>
               </a>
             </td>

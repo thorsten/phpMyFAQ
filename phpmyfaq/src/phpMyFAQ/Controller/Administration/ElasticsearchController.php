@@ -22,9 +22,9 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
@@ -41,7 +41,7 @@ final class ElasticsearchController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         if (!$this->configuration->get(item: 'search.enableElasticsearch')) {
-            throw new UnauthorizedHttpException('You are not allowed to access this page.');
+            return $this->renderFeatureDisabled($request, Translation::getString(key: 'msgAdminHeaderElasticsearch'));
         }
 
         return $this->render('@admin/configuration/elasticsearch.twig', [

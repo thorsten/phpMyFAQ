@@ -94,7 +94,7 @@ describe('dashboard getLatestVersion', () => {
     expect(alert?.textContent).not.toBeNull();
   });
 
-  it('renders error alert when API response is not ok', async () => {
+  it('renders warning alert when API response is not ok', async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: false,
       status: 500,
@@ -109,8 +109,40 @@ describe('dashboard getLatestVersion', () => {
 
     expect(loader?.classList.contains('d-none')).toBe(true);
     const alert = versionText?.nextElementSibling as HTMLElement | null;
-    expect(alert?.classList.contains('alert-danger')).toBe(true);
-    expect(alert?.textContent).not.toBeNull();
+    expect(alert?.classList.contains('alert-warning')).toBe(true);
+    expect(alert?.innerText).toBe('Network response was not ok');
+  });
+
+  it('prefers the translated message from the template and appends the server error', async () => {
+    const versionText = document.getElementById('phpmyfaq-latest-version') as HTMLElement;
+    versionText.dataset.pmfErrorMessage = 'Version check unavailable.';
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 400,
+      json: vi.fn().mockResolvedValue({ error: 'Could not resolve host' }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await getLatestVersion();
+
+    const alert = versionText.nextElementSibling as HTMLElement | null;
+    expect(alert?.classList.contains('alert-warning')).toBe(true);
+    expect(alert?.innerText).toBe('Version check unavailable. (Could not resolve host)');
+  });
+
+  it('keeps the fallback message when the error body is not JSON', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 502,
+      json: vi.fn().mockRejectedValue(new SyntaxError('Unexpected token')),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await getLatestVersion();
+
+    const versionText = document.getElementById('phpmyfaq-latest-version');
+    const alert = versionText?.nextElementSibling as HTMLElement | null;
+    expect(alert?.innerText).toBe('Network response was not ok');
   });
 });
 

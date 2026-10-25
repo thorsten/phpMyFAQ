@@ -70,18 +70,31 @@ export const handleAddGlossary = (): void => {
         const row = addElement('tr', {}, [
           addElement('td', { innerText: glossaryItem }),
           addElement('td', { innerText: glossaryDefinition }),
-          addElement('td', { classList: 'text-end' }, [
+          addElement('td', { classList: 'text-end text-nowrap' }, [
             addElement(
               'button',
               {
-                classList: 'btn btn-danger pmf-admin-delete-glossary',
-                'dataset.pmfGlossaryId': glossaryItem,
-                'dataset.pmfCsrfToken': '',
-                'dataset.pmfGlossaryLanguage': glossaryLanguage,
+                classList: 'btn btn-primary btn-sm me-1',
+                'data-bs-toggle': 'modal',
+                'data-bs-target': '#updateGlossaryModal',
+                'data-pmf-glossary-id': glossaryItem,
+                'data-pmf-glossary-language': glossaryLanguage,
                 type: 'button',
-                innerText: 'Delete',
+                title: 'Edit',
               },
-              [addElement('i', { class: 'bi bi-trash' })]
+              [addElement('i', { classList: 'bi bi-pencil' })]
+            ),
+            addElement(
+              'button',
+              {
+                classList: 'btn btn-danger btn-sm pmf-admin-delete-glossary',
+                'data-pmf-glossary-id': glossaryItem,
+                'data-pmf-csrf-token': '',
+                'data-pmf-glossary-language': glossaryLanguage,
+                type: 'button',
+                title: 'Delete',
+              },
+              [addElement('i', { classList: 'bi bi-trash' })]
             ),
           ]),
         ]);

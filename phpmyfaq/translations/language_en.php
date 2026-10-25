@@ -90,7 +90,7 @@ $PMF_LANG["msgNewContentTheme"] = "Your question";
 $PMF_LANG["msgNewContentArticle"] = "Your answer";
 $PMF_LANG["msgNewContentKeywords"] = "Keywords";
 $PMF_LANG["msgNewContentLink"] = "Link for this FAQ";
-$PMF_LANG["msgNewContentSubmit"] = "submit";
+$PMF_LANG["msgNewContentSubmit"] = "Submit";
 $PMF_LANG["msgInfo"] = "More information: ";
 $PMF_LANG["msgNewContentThanks"] = "Thank you for your suggestion!";
 
@@ -1098,7 +1098,7 @@ $PMF_LANG['msgSeeFAQinFrontend'] = 'See FAQ in Frontend';
 
 // added v.2.9.0-alpha - 2013-12-26 by Thorsten
 $PMF_LANG["msgRelatedTags"] = 'Add Search Word';
-$PMF_LANG["msgPopularTags"] = 'Most popular searches';
+$PMF_LANG["msgPopularTags"] = 'Popular tags';
 $LANG_CONF["search.enableHighlighting"] = ["checkbox", "Highlight search terms"];
 $LANG_CONF["records.allowCommentsForGuests"] = ["checkbox", "Allow comments for guests"];
 $LANG_CONF["records.allowQuestionsForGuests"] = ["checkbox", "Allow adding questions for guests"];
@@ -1931,5 +1931,11 @@ $PMF_LANG['msgTwofactorLockedOut'] = 'Too many wrong codes. Please try again lat
 $PMF_LANG['msgMailNewFaqSubject'] = 'New FAQ was added';
 $PMF_LANG['msgMailFaqUpdatedSubject'] = 'FAQ was updated';
 $PMF_LANG['msgMailCheckUpdated'] = 'An entry in the FAQ was updated! Please check it here or in the admin section.';
+
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s is currently disabled. Enable it in the configuration first.';
+$PMF_LANG['msgNoStickyFaqs'] = 'No sticky FAQs available yet.';
+$PMF_LANG['msgMultiSelectHint'] = 'Hold Ctrl (Cmd on macOS) to select more than one category.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Load a new captcha code';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'The version check is currently unavailable.';
 
 return $PMF_LANG;

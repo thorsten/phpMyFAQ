@@ -35,7 +35,7 @@
   {% endif %}
 
   <div class="row">
-    <div class="col-9">
+    <div class="col-lg-9">
       <div class="card shadow mb-4">
         <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
@@ -118,6 +118,7 @@
 
                 <!-- Question -->
                 <div class="form-group mb-2">
+                  <label class="visually-hidden" for="question">{{ 'msgQuestion' | translate }}</label>
                   <input type="text" name="question" id="question" class="form-control form-control-lg"
                          placeholder="{{ 'msgQuestion' | translate }}" value="{{ faqData['title'] }}">
                   <div class="invalid-feedback d-none" id="question-required-feedback" tabindex="-1"
@@ -531,7 +532,7 @@
     </div>
 
     <!-- Sidebar -->
-    <div class="col-3">
+    <div class="col-lg-3">
       <div class="card shadow mb-4 sticky-top pmf-faq-editor-sidebar">
         <div class="card-header text-end" role="tab" id="pmf-heading-date">
           {% if selectedRevisionId == faqData['revision_id'] %}
@@ -549,6 +550,7 @@
           {% endif %}
         </div>
         <div class="card-body">
+          {% if faqData['id'] > 0 %}
           <h5 class="mb-2">
             {{ 'msgDate' | translate }}
           </h5>
@@ -576,9 +578,10 @@
             </div>
             <div id="recordDateInputContainer" class="invisible mb-2">
               <input type="datetime-local" name="date" id="date" class="form-control"
-                     placeholder="{{ faqData['date'] }}">
+                     aria-label="{{ 'msgDate' | translate }}" placeholder="{{ faqData['date'] }}">
             </div>
           </div>
+          {% endif %}
 
           <fieldset class="form-group border-top mb-2">
             <legend class="h5 my-2">

@@ -23,9 +23,9 @@ class PaginationTest extends TestCase
             . '</li>&nbsp;&nbsp;<li class="page-item">'
             . '<a class="page-link" href="http://example.com/foo?page=3">3</a>'
             . '</li>&nbsp;&nbsp;<li class="page-item">'
-            . '<a class="page-link" href="http://example.com/foo?page=2">&rarr;</a>'
+            . '<a class="page-link" href="http://example.com/foo?page=2">&rsaquo;</a>'
             . '</li>&nbsp;&nbsp;<li class="page-item">'
-            . '<a class="page-link" href="http://example.com/foo?page=3">&#8677;</a>'
+            . '<a class="page-link" href="http://example.com/foo?page=3">&raquo;</a>'
             . '</li></ul>';
 
         $this->assertEquals($expectedOutput, $pagination->render());
@@ -101,10 +101,10 @@ class PaginationTest extends TestCase
         $output = $pagination->render();
 
         // Should have first, prev, next, and last buttons
-        $this->assertStringContainsString('&#8676;', $output); // First
-        $this->assertStringContainsString('&larr;', $output); // Prev
-        $this->assertStringContainsString('&rarr;', $output); // Next
-        $this->assertStringContainsString('&#8677;', $output); // Last
+        $this->assertStringContainsString('&laquo;', $output); // First
+        $this->assertStringContainsString('&lsaquo;', $output); // Prev
+        $this->assertStringContainsString('&rsaquo;', $output); // Next
+        $this->assertStringContainsString('&raquo;', $output); // Last
     }
 
     public function testNoNavigationOnFirstPage(): void
@@ -114,8 +114,8 @@ class PaginationTest extends TestCase
         $output = $pagination->render();
 
         // Should not have first and prev buttons on page 1
-        $this->assertStringNotContainsString('&#8676;', $output); // First
-        $this->assertStringNotContainsString('&larr;', $output); // Prev
+        $this->assertStringNotContainsString('&laquo;', $output); // First
+        $this->assertStringNotContainsString('&lsaquo;', $output); // Prev
     }
 
     public function testNoNavigationOnLastPage(): void
@@ -125,8 +125,8 @@ class PaginationTest extends TestCase
         $output = $pagination->render();
 
         // Should not have next and last buttons on last page
-        $this->assertStringNotContainsString('&rarr;', $output); // Next
-        $this->assertStringNotContainsString('&#8677;', $output); // Last
+        $this->assertStringNotContainsString('&rsaquo;', $output); // Next
+        $this->assertStringNotContainsString('&raquo;', $output); // Last
     }
 
     public function testSinglePage(): void
@@ -154,10 +154,10 @@ class PaginationTest extends TestCase
             $output,
         );
         $this->assertStringContainsString(
-            '<a class="page-link" href="http://example.com/admin/user/list?page=2">&rarr;</a>',
+            '<a class="page-link" href="http://example.com/admin/user/list?page=2">&rsaquo;</a>',
             $output,
         );
-        $this->assertStringNotContainsString('page=1">&rarr;</a>', $output);
+        $this->assertStringNotContainsString('page=1">&rsaquo;</a>', $output);
     }
 
     public function testRenderCollapsesPagesFarFromCurrentPageIntoEllipses(): void

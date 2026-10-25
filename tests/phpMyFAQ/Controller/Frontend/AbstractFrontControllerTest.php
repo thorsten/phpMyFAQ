@@ -24,6 +24,7 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -200,6 +201,6 @@ final class AbstractFrontControllerTestStub extends AbstractFrontController
 
     public function redirectStaticPage(string $configKey): Response
     {
-        return $this->handleStaticPageRedirect($configKey);
+        return $this->handleStaticPageRedirect($configKey, Request::create('/imprint.html'));
     }
 }

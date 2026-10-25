@@ -33,6 +33,6 @@ final class TermsController extends AbstractFrontController
     #[Route(path: '/terms.html', name: 'public.terms', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        return $this->handleStaticPageRedirect('main.termsURL');
+        return $this->handleStaticPageRedirect('main.termsURL', $request);
     }
 }
