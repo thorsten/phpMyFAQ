@@ -54,7 +54,7 @@ class Translation
     }
 
     /**
-     * @internal Only for tests to reset the static instance.
+     * Resets the static instance, e.g. between the requests of a long-running worker.
      */
     public static function resetInstance(): void
     {

@@ -66,6 +66,14 @@ class Strings
     }
 
     /**
+     * Forgets the initialized implementation, so init() picks up the language of the next request.
+     */
+    public static function reset(): void
+    {
+        self::$instance = null;
+    }
+
+    /**
      * Returns the initialized implementation, bootstrapping with the default
      * language when init() has not been called yet.
      */

@@ -7,7 +7,6 @@ This directory contains Docker configuration files for running phpMyFAQ with Fra
 - `Dockerfile` - FrankenPHP Docker image with all required PHP extensions
 - `Caddyfile` - Caddy web server configuration with FrankenPHP integration
 - `docker-entrypoint.sh` - Entry point script for container initialization
-- `frankenphp-worker.php` - Worker script for FrankenPHP worker mode (optional)
 
 ## Quick Start
 
@@ -15,9 +14,9 @@ This directory contains Docker configuration files for running phpMyFAQ with Fra
 
 ```bash
 # Start FrankenPHP service
-docker-compose up frankenphp
+bin/dev preset frankenphp
 
-# Access phpMyFAQ at http://localhost:8888 or https://localhost:8443
+# Access phpMyFAQ at http://localhost or https://localhost
 ```
 
 ### Using Docker directly
@@ -27,7 +26,7 @@ docker-compose up frankenphp
 docker build -t phpmyfaq-frankenphp -f .docker/frankenphp/Dockerfile .
 
 # Run the container
-docker run -p 8888:80 -v $(pwd)/phpmyfaq:/var/www/html phpmyfaq-frankenphp
+docker run -p 80:80 -v $(pwd)/phpmyfaq:/var/www/html phpmyfaq-frankenphp
 ```
 
 ## Features
@@ -41,13 +40,12 @@ docker run -p 8888:80 -v $(pwd)/phpmyfaq:/var/www/html phpmyfaq-frankenphp
 
 ## Configuration
 
-### Worker Mode
+### Worker Mode (experimental)
 
-Worker mode is disabled by default to avoid issues during initial setup. To enable it:
-
-1. Ensure composer dependencies are installed
-2. Uncomment the worker configuration in the Caddyfile
-3. Restart the container
+Worker mode keeps PHP in memory between requests. It is disabled by default. To enable it, start the container with
+`FRANKENPHP_WORKER_MODE=true`: the entrypoint then adds the worker script `phpmyfaq/frankenphp-worker.php` (mounted
+as `/var/www/html/frankenphp-worker.php`) to the `php_server` directive. Restart the container after code changes,
+because the worker keeps the application in memory.
 
 ### Environment Variables
 

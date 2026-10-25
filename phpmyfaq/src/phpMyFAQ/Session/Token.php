@@ -269,8 +269,16 @@ class Token
         return sprintf('%s-%s', self::PMF_SESSION_NAME, substr(string: md5($page), offset: 0, length: 10));
     }
 
-    public static function resetInstanceForTests(): void
+    /**
+     * Forgets the instance, e.g. between the requests of a long-running worker.
+     */
+    public static function resetInstance(): void
     {
         self::$token = null;
+    }
+
+    public static function resetInstanceForTests(): void
+    {
+        self::resetInstance();
     }
 }

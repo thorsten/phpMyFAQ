@@ -157,9 +157,10 @@ RUN install-php-extensions gd intl ldap mysqli pdo_mysql pdo_pgsql pgsql zip bz2
     } > "$PHP_INI_DIR/conf.d/opcache-recommended.ini"
 
 COPY .docker/production/Caddyfile /etc/frankenphp/Caddyfile
+COPY .docker/production/php_server.d /etc/frankenphp/php_server.d
 COPY .docker/production/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 COPY --from=payload /payload/phpmyfaq /var/www/html
-COPY --from=payload /payload/bin/console /var/www/bin/console
+COPY --from=payload /payload/bin /var/www/bin
 
 # FrankenPHP runs as www-data (the entrypoint starts as root to prepare the
 # volumes and drops privileges before exec'ing the server). The capability

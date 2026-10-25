@@ -70,6 +70,14 @@ class Tracking
     }
 
     /**
+     * Forgets the instance, e.g. between the requests of a long-running worker.
+     */
+    public static function resetInstance(): void
+    {
+        self::$tracking = null;
+    }
+
+    /**
      * @throws Exception
      */
     public function log(string $action, int|string|null $data = null): bool

@@ -739,11 +739,26 @@ For production use, consider these optimizations:
 - Use production-ready database connections
 - Enable compression and caching headers
 
-### Worker Mode
+### Worker Mode (Experimental feature)
 
-FrankenPHP's worker mode keeps the application in memory between requests. phpMyFAQ 4.2 does not support worker mode
-yet: the file `frankenphp-worker.php` in the phpMyFAQ directory is only a placeholder, and the shipped Caddyfiles do not
-enable it. Run phpMyFAQ in FrankenPHP's default mode.
+FrankenPHP's worker mode keeps PHP in memory between requests: one PHP process serves many requests instead of starting
+a new one per request. phpMyFAQ 4.2 ships the worker script `phpmyfaq/frankenphp-worker.php` for it. It resets the
+request-scoped state of phpMyFAQ before every request and runs the front controller the request path maps to (the
+rewrite rules of the Caddyfile are mirrored in PHP), so a worker-mode Caddyfile needs no rewrite rules for the front
+controllers.
+
+In the Docker images, set `FRANKENPHP_WORKER_MODE=true`. In your own Caddyfile, add the worker to the `php_server`
+directive:
+
+```caddyfile
+php_server {
+    worker /var/www/html/frankenphp-worker.php
+}
+```
+
+Worker mode is experimental: test it with your installation before using it in production, and report problems on
+GitHub. Set the environment variable `MAX_REQUESTS` to restart a worker after a fixed number of requests if its memory
+grows.
 
 ## 2.19 Redis-Backed Configuration Storage
 

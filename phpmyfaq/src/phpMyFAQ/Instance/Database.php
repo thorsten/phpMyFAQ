@@ -76,6 +76,14 @@ class Database
     }
 
     /**
+     * Forgets the single instance.
+     */
+    public static function reset(): void
+    {
+        self::$driver = null;
+    }
+
+    /**
      * Creates a dedicated tenant database for supported drivers (PostgreSQL, SQL Server).
      *
      * @throws \RuntimeException if the driver does not support database-per-tenant isolation

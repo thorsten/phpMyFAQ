@@ -15,7 +15,7 @@
 	# Server-side internals, the updater's working directory and raw
 	# attachments are never served directly; attachments go through the
 	# permission-checked /attachment/{id} route.
-	@internal path /content/core/* /content/upgrades/* /content/user/attachments/* /cache/*
+	@internal path /content/core/* /content/upgrades/* /content/user/attachments/* /cache/* /frankenphp-worker.php
 	respond @internal 403
 	@archives path_regexp ^/content/.*\.zip$
 	respond @archives 403
@@ -59,8 +59,12 @@
 	@update path /update /update/*
 	rewrite @update /index.php
 
-	# Everything else: static files, otherwise the Symfony front controller
-	php_server
+	# Everything else: static files, otherwise the Symfony front controller.
+	# The entrypoint drops a worker snippet into php_server.d/ when
+	# FRANKENPHP_WORKER_MODE=true (experimental worker mode).
+	php_server {
+		import /etc/frankenphp/php_server.d/*.caddyfile
+	}
 
 	handle_errors 404 {
 		rewrite * /404.html

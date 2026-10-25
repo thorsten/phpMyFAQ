@@ -75,6 +75,16 @@ class Database
     }
 
     /**
+     * Forgets the connection, the database type and the table prefix of the current request.
+     */
+    public static function reset(): void
+    {
+        self::$databaseDriver = null;
+        self::$dbType = '';
+        self::$tablePrefix = '';
+    }
+
+    /**
      * Returns the database type as string
      */
     public static function getType(): string

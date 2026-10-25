@@ -197,6 +197,7 @@ services:
       - OPENSEARCH_BASE_URI=http://opensearch:9201
       - ELASTICSEARCH_BASE_URI=http://elasticsearch:9200
       - SEARCH_WAIT_TIMEOUT=30
+      - FRANKENPHP_WORKER_MODE=${FRANKENPHP_WORKER_MODE:-false} # experimental
     ports:
       - '80:80'
       - '443:443'

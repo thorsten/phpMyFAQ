@@ -95,6 +95,7 @@ All settings live in `.env`; `.env.production.example` documents every variable.
 | `PMF_DB_*`, `PMF_ADMIN_*`, `PMF_BASE_URL` | headless installation, read only while no installation exists               |
 | `MYSQL_*`, `POSTGRES_*`           | credentials the database container is created with; `PMF_DB_*` must match them     |
 | `SERVER_NAME`                     | FrankenPHP only: a public host name turns on automatic HTTPS                        |
+| `FRANKENPHP_WORKER_MODE`          | FrankenPHP only, experimental: `true` keeps PHP in memory between requests (worker mode) |
 | `TRUSTED_PROXIES`                 | IPs/CIDRs of reverse proxies whose `X-Forwarded-*` headers are trusted, or `REMOTE_ADDR` |
 | `ELASTICSEARCH_BASE_URI`, `OPENSEARCH_BASE_URI` | search engine URL, e.g. `http://elasticsearch:9200`                   |
 

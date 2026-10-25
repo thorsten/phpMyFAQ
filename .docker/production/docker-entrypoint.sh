@@ -94,6 +94,21 @@ else
 fi
 
 # --- 4. web server ------------------------------------------------------------
+if [ "${1:-}" = "frankenphp" ]; then
+    # Experimental worker mode: one PHP process serves many requests. The
+    # Caddyfile imports every *.caddyfile from this directory into php_server.
+    worker_snippet=/etc/frankenphp/php_server.d/worker.caddyfile
+    case "${FRANKENPHP_WORKER_MODE:-false}" in
+        true|1|yes|on)
+            log "Enabling the experimental FrankenPHP worker mode"
+            printf 'worker %s\n' "$APP_DIR/frankenphp-worker.php" > "$worker_snippet"
+            ;;
+        *)
+            rm -f "$worker_snippet"
+            ;;
+    esac
+fi
+
 if [ "$(id -u)" = "0" ] && [ "${1:-}" = "frankenphp" ]; then
     # Caddy state (certificates, autosave config) lives in named volumes that
     # may be root-owned on first start.

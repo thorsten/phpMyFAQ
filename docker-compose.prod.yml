@@ -93,6 +93,8 @@ services:
       # ":80" serves plain HTTP. A public host name enables automatic HTTPS
       # (Let's Encrypt) and HTTP/3; ports 80 and 443 must then be reachable.
       SERVER_NAME: ${SERVER_NAME:-:80}
+      # Experimental: one PHP process serves many requests (see docs/deployment.md)
+      FRANKENPHP_WORKER_MODE: ${FRANKENPHP_WORKER_MODE:-false}
     volumes:
       - phpmyfaq_config:/var/www/html/content/core/config
       - phpmyfaq_data:/var/www/html/content/core/data

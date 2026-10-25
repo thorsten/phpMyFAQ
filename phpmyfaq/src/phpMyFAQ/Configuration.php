@@ -70,4 +70,13 @@ class Configuration
     {
         return self::$configuration ?? throw new \LogicException('Configuration has not been initialized yet.');
     }
+
+    /**
+     * Forgets the singleton, so the next constructed Configuration becomes the instance again.
+     * Used between the requests of a long-running worker.
+     */
+    public static function resetInstance(): void
+    {
+        self::$configuration = null;
+    }
 }

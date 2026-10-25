@@ -76,6 +76,18 @@ mkdir -p /var/www/html/content/user/images
 chown -R www-data:www-data /var/www/html/content
 chmod -R 755 /var/www/html/content
 
+# Experimental worker mode: one PHP process serves many requests.
+mkdir -p /etc/caddy/php_server.d
+case "${FRANKENPHP_WORKER_MODE:-false}" in
+    true|1|yes|on)
+        log "Enabling the experimental FrankenPHP worker mode"
+        printf 'worker %s\n' "/var/www/html/frankenphp-worker.php" > /etc/caddy/php_server.d/worker.caddyfile
+        ;;
+    *)
+        rm -f /etc/caddy/php_server.d/worker.caddyfile
+        ;;
+esac
+
 log "FrankenPHP configuration complete. Starting server..."
 
 # Execute the command

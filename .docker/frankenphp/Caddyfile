@@ -15,8 +15,10 @@
     # Enable compression
     encode gzip
 
-    # PHP Handler for FrankenPHP
-    php_server
+    # PHP Handler for FrankenPHP; FRANKENPHP_WORKER_MODE=true adds the worker snippet (see docker-entrypoint.sh)
+    php_server {
+        import /etc/caddy/php_server.d/*.caddyfile
+    }
 
     # Exclude assets from being handled by router
     @assets path /admin/assets*
@@ -79,8 +81,10 @@
     # TLS configuration with your certificate files
     tls /etc/ssl/cert.pem /etc/ssl/cert-key.pem
 
-    # PHP Handler for FrankenPHP
-    php_server
+    # PHP Handler for FrankenPHP; FRANKENPHP_WORKER_MODE=true adds the worker snippet (see docker-entrypoint.sh)
+    php_server {
+        import /etc/caddy/php_server.d/*.caddyfile
+    }
 
     # Exclude assets from being handled by router
     @assets path /admin/assets*
