@@ -7,7 +7,9 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\StreamOutput;
 
 #[AllowMockObjectsWithoutExpectations]
 class McpServerCommandTest extends TestCase
@@ -61,6 +63,66 @@ class McpServerCommandTest extends TestCase
 
         $result = $this->callExecute($input, $output);
         $this->assertSame(0, $result);
+    }
+
+    public function testExecuteWritesBannerToStderrSoStdoutStaysProtocolOnly(): void
+    {
+        $input = $this->createMock(InputInterface::class);
+        $input->method('getOption')->willReturn(false);
+        $output = $this->createConsoleOutput();
+
+        $result = $this->callExecute($input, $output);
+
+        $this->assertSame(0, $result);
+        $this->assertSame('', $this->readStream($output->getStream()));
+        $this->assertStringContainsString('phpMyFAQ MCP Server', $this->readStream($output->getErrorOutput()->getStream()));
+    }
+
+    public function testExecuteWritesStartupErrorToStderr(): void
+    {
+        $input = $this->createMock(InputInterface::class);
+        $input->method('getOption')->willReturn(false);
+        $this->serverMock->method('runConsole')->willThrowException(new \Exception('fail'));
+        $output = $this->createConsoleOutput();
+
+        $result = $this->callExecute($input, $output);
+
+        $this->assertSame(1, $result);
+        $this->assertSame('', $this->readStream($output->getStream()));
+        $this->assertStringContainsString('Failed to start MCP server: fail', $this->readStream($output->getErrorOutput()->getStream()));
+    }
+
+    private function createConsoleOutput(): StreamOutput&ConsoleOutputInterface
+    {
+        return new class(fopen('php://memory', 'w+')) extends StreamOutput implements ConsoleOutputInterface {
+            private StreamOutput $stderr;
+
+            public function __construct($stream)
+            {
+                parent::__construct($stream);
+                $this->stderr = new StreamOutput(fopen('php://memory', 'w+'));
+            }
+
+            public function getErrorOutput(): StreamOutput
+            {
+                return $this->stderr;
+            }
+
+            public function setErrorOutput(OutputInterface $error): void
+            {
+            }
+
+            public function section(): \Symfony\Component\Console\Output\ConsoleSectionOutput
+            {
+                throw new \LogicException('Not supported in tests');
+            }
+        };
+    }
+
+    private function readStream($stream): string
+    {
+        rewind($stream);
+        return (string) stream_get_contents($stream);
     }
 
     public function testExecuteHandlesException(): void

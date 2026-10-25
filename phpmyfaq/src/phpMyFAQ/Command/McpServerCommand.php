@@ -25,6 +25,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -61,12 +62,16 @@ class McpServerCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $symfonyStyle = new SymfonyStyle($input, $output);
-
         if ($input->getOption(name: 'info')) {
-            $this->showServerInfo($symfonyStyle);
+            $this->showServerInfo(new SymfonyStyle($input, $output));
             return Command::SUCCESS;
         }
+
+        // STDIO transport: stdout carries the JSON-RPC stream, so all human-readable output goes to stderr.
+        $symfonyStyle = new SymfonyStyle(
+            $input,
+            $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output,
+        );
 
         $symfonyStyle->title(message: 'phpMyFAQ MCP Server');
         $symfonyStyle->info(message: 'Starting MCP server for phpMyFAQ knowledge base...');
