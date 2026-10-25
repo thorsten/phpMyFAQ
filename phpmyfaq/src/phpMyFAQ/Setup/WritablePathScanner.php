@@ -22,6 +22,7 @@ namespace phpMyFAQ\Setup;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use UnexpectedValueException;
 
 final class WritablePathScanner
 {
@@ -42,6 +43,12 @@ final class WritablePathScanner
         $realDirectory = realpath($directory);
         if ($realDirectory === false) {
             $realDirectory = $directory;
+        }
+
+        // PHP's own message does not reliably name the directory, so fail with a
+        // message the caller can show to the user.
+        if (!is_dir($realDirectory)) {
+            throw new UnexpectedValueException(sprintf('The directory %s does not exist.', $realDirectory));
         }
 
         $realExcludedDirectory = realpath($excludedDirectory);

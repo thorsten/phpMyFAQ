@@ -22,12 +22,12 @@ namespace phpMyFAQ;
 use DateTime;
 use DirectoryIterator;
 use Exception;
+use FilesystemIterator;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Twig\TwigWrapper;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\HttpFoundation\Request;
-use UnexpectedValueException;
 
 /**
  * Class System
@@ -479,9 +479,12 @@ class System
     public function createHashes(): string
     {
         $dateTime = new DateTime();
+        // Unreadable directories are recorded below and then skipped instead of
+        // aborting the whole scan with PHP's own, version-dependent message.
         $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator((string) PMF_ROOT_DIR),
+            new RecursiveDirectoryIterator((string) PMF_ROOT_DIR, FilesystemIterator::SKIP_DOTS),
             RecursiveIteratorIterator::SELF_FIRST,
+            RecursiveIteratorIterator::CATCH_GET_CHILD,
         );
 
         $hashes = [
@@ -495,45 +498,49 @@ class System
             '/content/core/config/elasticsearch.php' => false,
             '/content/core/config/ldap.php' => false,
         ];
-        $current = '';
 
-        try {
-            foreach ($files as $file) {
-                if (!$file instanceof \SplFileInfo || !$file->isFile() || !$file->isReadable()) {
-                    continue;
-                }
-
-                if ('php' !== pathinfo($file->getFilename(), PATHINFO_EXTENSION)) {
-                    continue;
-                }
-
-                if (str_contains($file->getPath(), needle: '/tests/')) {
-                    continue;
-                }
-
-                if (str_contains($file->getPath(), needle: '/multisite/')) {
-                    continue;
-                }
-
-                if (str_contains($file->getPath(), needle: '/upgrade/')) {
-                    continue;
-                }
-
-                $current = str_replace((string) PMF_ROOT_DIR, replace: '', subject: $file->getPathname());
-
-                if (array_key_exists($current, $ignoredFiles)) {
-                    continue;
-                }
-
-                $contents = file_get_contents($file->getPathname());
-                if ($contents === false) {
-                    continue;
-                }
-
-                $hashes[$current] = sha1($contents);
+        foreach ($files as $file) {
+            if (!$file instanceof \SplFileInfo) {
+                continue;
             }
-        } catch (UnexpectedValueException $unexpectedValueException) {
-            $hashes[$current . ' failed'] = $unexpectedValueException->getMessage();
+
+            $current = str_replace((string) PMF_ROOT_DIR, replace: '', subject: $file->getPathname());
+
+            if ($file->isDir() && !$file->isReadable()) {
+                $hashes[$current . ' failed'] = sprintf('The directory %s is not readable.', $current);
+                continue;
+            }
+
+            if (!$file->isFile() || !$file->isReadable()) {
+                continue;
+            }
+
+            if ('php' !== pathinfo($file->getFilename(), PATHINFO_EXTENSION)) {
+                continue;
+            }
+
+            if (str_contains($file->getPath(), needle: '/tests/')) {
+                continue;
+            }
+
+            if (str_contains($file->getPath(), needle: '/multisite/')) {
+                continue;
+            }
+
+            if (str_contains($file->getPath(), needle: '/upgrade/')) {
+                continue;
+            }
+
+            if (array_key_exists($current, $ignoredFiles)) {
+                continue;
+            }
+
+            $contents = file_get_contents($file->getPathname());
+            if ($contents === false) {
+                continue;
+            }
+
+            $hashes[$current] = sha1($contents);
         }
 
         return json_encode($hashes, JSON_THROW_ON_ERROR);
