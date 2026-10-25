@@ -43,16 +43,16 @@
   width: 28px;
   height: 56px;
   padding: 0;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--pmf-border);
   border-right: none;
   border-radius: 8px 0 0 8px;
-  background-color: var(--bs-body-bg);
-  color: var(--bs-body-color);
+  background-color: var(--pmf-surface);
+  color: var(--pmf-text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: -2px 0 8px rgb(0, 0, 0, 0.1);
+  box-shadow: var(--pmf-shadow-sm);
   transition: all 0.2s ease-in-out;
 
   &:hover {
@@ -203,9 +203,16 @@
   border: none;
   font-size: 1.5em;
   padding: 0 0.15em;
+  color: var(--pmf-border-strong);
+  transition:
+    color var(--pmf-transition),
+    transform var(--pmf-transition);
 
+  &:hover,
+  &:focus-visible,
   &.selected {
-    color: $primary;
+    color: var(--pmf-accent);
+    transform: scale(1.08);
   }
 }
 
@@ -319,5 +326,140 @@
         height: 35px;
       }
     }
+  }
+}
+
+// Reading view -------------------------------------------------------------
+.pmf-faq-body {
+  max-width: 72ch;
+  font-size: var(--pmf-font-size-lg);
+  line-height: 1.7;
+
+  pre {
+    padding: 1rem 1.25rem;
+    background: var(--pmf-surface-sunken);
+    border: 1px solid var(--pmf-border);
+    border-radius: var(--pmf-radius);
+  }
+
+  :not(pre) > code {
+    padding: 0.1em 0.4em;
+    border-radius: var(--pmf-radius-sm);
+    background: var(--pmf-surface-sunken);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--pmf-radius);
+  }
+}
+
+// Sidebar: the stacked cards read as one panel with hairline sections.
+#pmf-sidebar .position-sticky .pmf-sidebar-card {
+  margin-bottom: 0 !important;
+  border-radius: 0;
+  box-shadow: none;
+  border-top-width: 0;
+
+  &:first-child {
+    border-top-width: 1px;
+    border-start-start-radius: var(--pmf-radius-lg);
+    border-start-end-radius: var(--pmf-radius-lg);
+  }
+
+  &:last-child {
+    border-end-start-radius: var(--pmf-radius-lg);
+    border-end-end-radius: var(--pmf-radius-lg);
+    box-shadow: var(--pmf-shadow-sm);
+  }
+}
+
+// FAQ overview page (overview.html) ----------------------------------------
+.pmf-overview-section {
+  margin-bottom: 3rem;
+}
+
+.pmf-overview-section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1rem;
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+}
+
+.pmf-overview-section-avatar {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--pmf-accent-gradient);
+  color: var(--pmf-text-on-accent);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.pmf-overview-item {
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.pmf-overview-item-title a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.pmf-overview-item-body {
+  max-width: 72ch;
+  color: var(--pmf-text);
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.pmf-overview-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--pmf-border);
+  font-size: var(--pmf-font-size-sm);
+  color: var(--pmf-text-muted);
+
+  a {
+    text-decoration: none;
+  }
+}
+
+// Open questions table -----------------------------------------------------
+.pmf-open-questions-table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--pmf-text);
+  --bs-table-border-color: var(--pmf-border);
+
+  thead th {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pmf-text-muted);
+    background: var(--pmf-surface-sunken);
+  }
+
+  tbody tr:hover > * {
+    background-color: var(--pmf-surface-hover);
   }
 }

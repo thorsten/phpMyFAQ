@@ -104,7 +104,7 @@
         </li>
         {% endif %}
         <li class="nav-item dropdown">
-          <button type="button" class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"
+          <button type="button" class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle pmf-nav-pill-ghost"
                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
             {{ msgLoginUser }}
           </button>
@@ -142,24 +142,13 @@
 
 <!-- SEARCH -->
 {% set isSearchPage = (currentPageUrl matches '/\\/search\\.html([?#]|$)/') or (currentPageUrl matches '/[?&]action=search(&|$)/') %}
-{% if not isMaintenanceMode and not isSearchPage %}
-<div class="container my-5">
-  <div class="row height d-flex justify-content-center align-items-center">
-    <div class="col-md-8">
-      <div class="search">
-        <form action="./search.html" id="search" method="get" role="search">
-          <i class="bi bi-search" aria-hidden="true"></i>
-          <label class="visually-hidden" for="pmf-search-autocomplete">{{ searchBox }}</label>
-          <input autocomplete="off" type="text" class="form-control form-control-lg" id="pmf-search-autocomplete"
-                 name="search" placeholder="{{ searchBox }} ..." maxlength="255" value="{{ searchTerm }}">
-          <kbd class="pmf-search-hint" id="pmf-search-hint" aria-hidden="true"></kbd>
-          <button type="submit" class="btn btn-primary btn-lg">{{ searchBox }}</button>
-        </form>
-      </div>
-      <div>
-        <small class="form-text text-muted">
-          <a class="help" href="./search.html">{{ msgAdvancedSearch }}</a>
-        </small>
+{# startpage.twig sets isStartPage and renders the search form inside its hero instead. #}
+{% if not isMaintenanceMode and not isSearchPage and not (isStartPage ?? false) %}
+<div class="pmf-search-band">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        {% include 'partials/search-form.twig' %}
       </div>
     </div>
   </div>
@@ -177,12 +166,13 @@
   </div>
 </section>
 
-<footer class="footer text-bg-pmf-footer pt-5 pb-4 pb-lg-5">
-  <div class="container pt-lg-4">
+<footer class="footer pmf-footer pt-5 pb-4">
+  <div class="container">
     <div class="row pb-2">
       <div class="col-lg-4 col-md-6">
         {% if not isMaintenanceMode %}
-        <label class="form-label" for="language">{{ languageBox }}</label>
+        <h2 class="pmf-footer-title">{{ languageBox }}</h2>
+        <label class="visually-hidden" for="language">{{ languageBox }}</label>
         <form accept-charset="utf-8" action="./" method="post" id="pmf-footer-language-switcher">
           <div class="form-group d-flex">
             {{ switchLanguages | raw }}
@@ -194,6 +184,7 @@
       <div class="col-xl-6 col-lg-7 col-md-5 offset-xl-2 offset-md-1 pt-4 pt-md-1 pt-lg-0">
         <div id="footer-links" class="row">
           <div class="col-lg-4">
+            <h2 class="pmf-footer-title">{{ 'msgFooterLinks' | translate }}</h2>
             <ul class="nav flex-column pb-lg-1 mb-lg-3">
               {% if not isMaintenanceMode %}
                 {% for item in footerNavigation %}
@@ -214,6 +205,7 @@
             </ul>
           </div>
           <div class="col-lg-4">
+            <h2 class="pmf-footer-title">{{ 'msgFooterLegal' | translate }}</h2>
             <ul class="nav flex-column pb-lg-1 mb-lg-3">
               {% if not isMaintenanceMode %}
                 {% if isPrivacyLinkEnabled %}
@@ -250,11 +242,10 @@
         </div>
       </div>
     </div>
-    <p class="nav d-block text-center text-md-start pb-2 pb-lg-0 mb-0">
-      <span class="text-light opacity-75">© {{ currentYear }} All rights reserved. Powered with ❤️ and ☕️ by </span>
-      <a class="nav-link d-inline-block p-0" href="https://www.phpmyfaq.de/" target="_blank" rel="noopener">phpMyFAQ</a>
-      <span class="text-light opacity-75">{{ version }}</span>
-    </p>
+    <div class="pmf-footer-bottom text-center text-md-start">
+      <span>© {{ currentYear }} All rights reserved. Powered with ❤️ and ☕️ by
+        <a href="https://www.phpmyfaq.de/" target="_blank" rel="noopener">phpMyFAQ</a> {{ version }}</span>
+    </div>
   </div>
 </footer>
 

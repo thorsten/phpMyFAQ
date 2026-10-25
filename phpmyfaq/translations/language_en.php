@@ -1937,5 +1937,9 @@ $PMF_LANG['msgNoStickyFaqs'] = 'No sticky FAQs available yet.';
 $PMF_LANG['msgMultiSelectHint'] = 'Hold Ctrl (Cmd on macOS) to select more than one category.';
 $PMF_LANG['msgRefreshCaptcha'] = 'Load a new captcha code';
 $PMF_LANG['msgDashboardVersionCheckFailed'] = 'The version check is currently unavailable.';
+$PMF_LANG['msgFooterLinks'] = 'Links';
+$PMF_LANG['msgFooterLegal'] = 'Legal';
+$PMF_LANG['msgPermalink'] = 'Permalink';
+$PMF_LANG['msgNoBookmarks'] = 'You have not bookmarked any FAQs yet.';
 
 return $PMF_LANG;

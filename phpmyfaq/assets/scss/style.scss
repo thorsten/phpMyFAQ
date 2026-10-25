@@ -23,8 +23,13 @@
 // component rules can consume the token values.
 @import 'tokens';
 
+// Inter Variable, self-hosted. Vite copies the woff2 files into assets/public/fonts
+// through the font asset rule in vite.config.ts.
+@import '@fontsource-variable/inter/index.css';
+
 // Import global styles
 @import 'global';
+@import 'layout/typography';
 
 // Bootstrap Icons — point the font dir at the real files so Vite can resolve
 // them at build time; the emitted assets land in fonts/ next to the CSS.

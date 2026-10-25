@@ -29,11 +29,10 @@
   <div class="row g-3 g-md-5 pmf-faq-container">
     <div class="col-md-8" id="pmf-content-column">
 
-      <div class="breadcrumb-wrapper">
-        {{ breadcrumb | raw }}
-      </div>
-
-      <h1 class="h2 mb-4 border-bottom">{{ question | raw }}</h1>
+      <header class="pmf-page-header">
+        <div class="breadcrumb-wrapper">{{ breadcrumb | raw }}</div>
+        <h1 class="h2 pmf-display-2 mb-0">{{ question | raw }}</h1>
+      </header>
 
       <article class="pmf-faq-body pb-4 mb-4 border-bottom">{{ answer|raw }}</article>
 

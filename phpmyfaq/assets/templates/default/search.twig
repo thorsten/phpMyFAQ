@@ -3,7 +3,9 @@
 {% block content %}
 <div class="row g-3 g-md-5">
   <div class="col-md-8">
-    <h1 class="h2 mb-4 border-bottom">{{ pageHeader }}</h1>
+    <header class="pmf-page-header">
+      <h1 class="h2 pmf-display-2 mb-0">{{ pageHeader }}</h1>
+    </header>
 
     {% if isTagSearch == false %}
     <div class="col-12 border rounded p-3 mb-2 bg-light-subtle" id="searchBox">
@@ -98,15 +100,15 @@
   <div class="col-md-4">
     <div class="position-sticky" style="top: 2rem">
       {% if isTagSearch %}
-      <div class="p-4 mb-3 bg-light-subtle border rounded">
-        <h4 class="fst-italic">{{ msgCurrentTags }}</h4>
+      <div class="pmf-surface p-4 mb-3">
+        <h2 class="h5 pmf-news-title">{{ msgCurrentTags }}</h2>
         <div class="pmf-tag-cloud">{{ searchTags | raw }}</div>
       </div>
       {% endif %}
 
       {% if searchTerm != '' %}
-      <div class="p-4 mb-3 bg-light-subtle border rounded">
-        <h4 class="fst-italic">{{ msgTags }}</h4>
+      <div class="pmf-surface p-4 mb-3">
+        <h2 class="h5 pmf-news-title">{{ msgTags }}</h2>
         <div class="clearfix">
           {% for tagId, tagFrequency in tagList %}
             <a class="btn btn-outline-primary m-1" href="./search.html?tagging_id={{ tagId }}">
@@ -118,15 +120,15 @@
       {% endif %}
 
       {% if isTagSearch %}
-      <div class="p-4 mb-3 bg-light-subtle border rounded">
-        <h4 class="fst-italic">{{ relatedTagsHeader }}</h4>
+      <div class="pmf-surface p-4 mb-3">
+        <h2 class="h5 pmf-news-title">{{ relatedTagsHeader }}</h2>
         <div class="pmf-tag-cloud">{{ relatedTags | raw }}</div>
       </div>
       {% endif %}
 
       {% if isTagSearch == false %}
-      <div class="p-4 mb-3 bg-light-subtle border rounded">
-        <h4 class="fst-italic">{{ msgMostPopularSearches }}</h4>
+      <div class="pmf-surface p-4 mb-3">
+        <h2 class="h5 pmf-news-title">{{ msgMostPopularSearches }}</h2>
         <div class="clearfix">
           {% for popular in mostPopularSearches %}
             <a class="btn btn-outline-primary m-1" href="./search.html?search={{ popular['searchterm'] }}">

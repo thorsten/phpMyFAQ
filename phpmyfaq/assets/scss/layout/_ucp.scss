@@ -16,3 +16,142 @@
   max-width: 100%;
   border-radius: var(--pmf-radius);
 }
+
+//
+// Bookmarks
+//
+.pmf-bookmark-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  .accordion-item {
+    overflow: hidden;
+  }
+
+  .accordion-button {
+    gap: 0.6rem;
+    font-weight: 600;
+    background: transparent;
+    color: var(--pmf-text);
+    box-shadow: none;
+
+    &:not(.collapsed) {
+      background: var(--pmf-surface-sunken);
+      color: var(--pmf-accent);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 4px var(--pmf-focus-ring);
+    }
+  }
+
+  .pmf-bookmark-icon {
+    color: var(--pmf-accent);
+  }
+
+  .pmf-delete-bookmark {
+    border-radius: var(--pmf-radius-sm);
+    padding: 0.2rem 0.35rem;
+    transition: background-color var(--pmf-transition);
+
+    &:hover,
+    &:focus-visible {
+      background: rgb(240, 23, 4, 0.1);
+    }
+  }
+
+  .pmf-bookmark-body {
+    border-top: 1px solid var(--pmf-border);
+    max-width: 72ch;
+  }
+}
+
+//
+// Chat
+//
+.pmf-chat {
+  // Fixed panel height on desktop so the message pane fills the card and
+  // scrolls internally; stacked and auto-height on small screens.
+  .pmf-chat-layout {
+    min-height: 32rem;
+
+    @media (min-width: 768px) {
+      height: 36rem;
+
+      > [class*='col-'] {
+        height: 100%;
+        min-height: 0;
+      }
+
+      > .col-md-4 {
+        display: flex;
+        flex-direction: column;
+
+        #pmf-chat-conversation-list {
+          flex: 1 1 auto;
+          min-height: 0;
+          overflow: auto;
+        }
+      }
+    }
+  }
+
+  .input-group-text {
+    background: var(--pmf-surface);
+    border-color: var(--pmf-border-strong);
+    color: var(--pmf-text-muted);
+  }
+
+  .pmf-chat-avatar {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--pmf-accent-gradient);
+    color: var(--pmf-text-on-accent);
+    font-weight: 700;
+  }
+
+  .list-group-item-action.active {
+    background: var(--pmf-accent-subtle);
+    border-color: var(--pmf-border);
+    color: var(--pmf-text);
+  }
+
+  .pmf-chat-messages {
+    min-height: 0;
+    max-height: 26rem;
+    background: var(--pmf-bg);
+
+    @media (min-width: 768px) {
+      max-height: none;
+    }
+
+    // Bubbles rendered by assets/src/chat/index.ts
+    .bg-primary {
+      background: var(--pmf-accent-gradient) !important;
+      border-radius: var(--pmf-radius-lg) var(--pmf-radius-lg) var(--pmf-radius-sm) var(--pmf-radius-lg);
+    }
+
+    .bg-body-secondary {
+      background: var(--pmf-surface) !important;
+      border: 1px solid var(--pmf-border);
+      border-radius: var(--pmf-radius-lg) var(--pmf-radius-lg) var(--pmf-radius-lg) var(--pmf-radius-sm);
+    }
+
+    .rounded {
+      padding: 0.6rem 0.9rem !important;
+    }
+  }
+
+  #pmf-chat-user-search-results .bg-white {
+    background: var(--pmf-surface-raised) !important;
+    border-color: var(--pmf-border) !important;
+  }
+
+  #pmf-chat-form .btn {
+    white-space: nowrap;
+  }
+}

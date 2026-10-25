@@ -127,7 +127,7 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/show-categories.html');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('<h1 class="h2 mb-4 border-bottom">All categories</h1>', $response);
+        self::assertResponseContains('<h1 class="h2 pmf-display-2 mb-0">All categories</h1>', $response);
         self::assertResponseContains('class="pmf-category-tree', $response);
         self::assertResponseContains('pmf-category-tree__item', $response);
     }

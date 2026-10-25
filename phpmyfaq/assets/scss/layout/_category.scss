@@ -9,7 +9,7 @@
   padding-left: 0;
 
   li {
-    padding: 0.3rem 0;
+    padding: 0.6rem 0.25rem;
     border-bottom: 1px solid var(--pmf-border);
   }
 
@@ -213,7 +213,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  background: var(--pmf-accent-gradient) !important; // overrides the per-letter inline colour
+  color: var(--pmf-text-on-accent);
   font-weight: 700;
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -242,4 +243,34 @@
 
 .pmf-category-tree__count {
   flex: 0 0 auto;
+}
+
+// FAQ rows inside a category -----------------------------------------------
+.pmf-category-faq-list {
+  gap: 0.25rem;
+}
+
+.pmf-faq-row {
+  padding: 0.9rem 1rem;
+  border: 0 !important;
+  border-radius: var(--pmf-radius);
+  transition: background-color var(--pmf-transition);
+
+  &:hover {
+    background-color: var(--pmf-surface-hover);
+  }
+
+  .fw-bold a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.pmf-faq-row-sticky {
+  background-color: var(--pmf-accent-subtle);
+  border-inline-start: 4px solid var(--pmf-accent) !important;
+  margin-bottom: 0.5rem;
 }

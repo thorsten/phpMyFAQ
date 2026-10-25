@@ -2,8 +2,10 @@
 
 {% block content %}
 <section class="col-12" aria-labelledby="page-header">
-  <h1 id="page-header" class="h2 mb-4 border-bottom">{{ pageHeader }}</h1>
-  <p>{{ msgQuestionText }}</p>
+  <header class="pmf-page-header">
+    <h1 id="page-header" class="h2 pmf-display-2 mb-0">{{ pageHeader }}</h1>
+    <p class="pmf-page-lead">{{ msgQuestionText }}</p>
+  </header>
 
   {% set showActionColumn = userHasPermissionToAnswer %}
 
@@ -18,9 +20,9 @@
   {% set totalColumns = showActionColumn ? 3 : 2 %}
   {% set questionColspan = showActionColumn ? 2 : 1 %}
 
-  <div class="d-none d-md-block shadow rounded-2 overflow-hidden mb-5">
+  <div class="d-none d-md-block pmf-surface overflow-hidden mb-5">
     <div class="table-responsive">
-      <table class="table table-striped align-middle mb-0"{% if openQuestions.numberInvisibleQuestions > 0 %} aria-describedby="questions-info"{% endif %}>
+      <table class="table align-middle mb-0 pmf-open-questions-table"{% if openQuestions.numberInvisibleQuestions > 0 %} aria-describedby="questions-info"{% endif %}>
         <caption class="visually-hidden">{{ pageHeader }}</caption>
         <colgroup>
           <col style="width: 25%;">
@@ -98,8 +100,8 @@
         <div class="card shadow mb-4">
           <div class="card-body">
             <h5 class="card-title text-center mb-3">
-              <i class="bi bi-card-list text-warning" aria-hidden="true"></i>
-              <span class="text-warning">{{ question.categoryName }}</span>
+              <i class="bi bi-card-list pmf-text-accent" aria-hidden="true"></i>
+              <span class="pmf-text-accent">{{ question.categoryName }}</span>
             </h5>
 
             <div class="mb-3 small text-muted border-bottom pb-2">
@@ -122,7 +124,7 @@
 
             <div class="card-text text-break mb-3 d-flex">
               <div class="flex-shrink-0 me-2">
-                <i class="bi bi-question-square text-warning" aria-hidden="true"></i>
+                <i class="bi bi-question-square pmf-text-accent" aria-hidden="true"></i>
               </div>
               <div>
                 {{ question.question }}
@@ -132,11 +134,11 @@
             {% if showActionColumn %}
               <div class="d-grid gap-2">
                 {% if isCloseQuestionEnabled and question.answerId > 0 %}
-                  <a class="btn btn-primary bg-gradient" href="./content/{{ question.categoryId }}/{{ question.answerId }}/{{ question.lang }}/{{ question.slug }}.html">
+                  <a class="btn btn-primary" href="./content/{{ question.categoryId }}/{{ question.answerId }}/{{ question.lang }}/{{ question.slug }}.html">
                     <i class="bi bi-check-circle me-2" aria-hidden="true"></i>{{ msg2answerFAQ }}
                   </a>
                 {% elseif userHasPermissionToAnswer %}
-                  <a class="btn btn-primary bg-gradient" href="./add-faq.html?question={{ question.id }}&cat={{ question.categoryId }}">
+                  <a class="btn btn-primary" href="./add-faq.html?question={{ question.id }}&cat={{ question.categoryId }}">
                     <i class="bi bi-chat-left-text me-2" aria-hidden="true"></i>{{ msg2answer }}
                   </a>
                 {% endif %}
@@ -157,7 +159,7 @@
   </div>
 
   {% if openQuestions.numberInvisibleQuestions > 0 %}
-    <div id="questions-info" class="alert alert-light border border-primary text-muted fst-italic text-center mb-5" role="note">
+    <div id="questions-info" class="pmf-callout text-center mb-5" role="note">
       <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
       <strong>{{ openQuestions.numberInvisibleQuestions }}</strong> {{ msgQuestionsWaiting }}
     </div>

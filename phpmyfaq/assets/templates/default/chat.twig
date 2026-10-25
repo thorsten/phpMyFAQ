@@ -1,23 +1,26 @@
 {% extends 'index.twig' %}
 
 {% block content %}
-<div class="row g-3">
+<div class="row g-3 pmf-chat">
   <div class="col-12">
-    <h1 class="h2">{{ 'msgChat' | translate }}</h1>
+    <header class="pmf-page-header">
+      <h1 class="h2 pmf-display-2 mb-0">{{ 'msgChat' | translate }}</h1>
+    </header>
   </div>
 
   <div class="col-12">
-    <div class="card shadow-sm">
+    <div class="pmf-surface overflow-hidden">
       <div class="card-body p-0">
-        <div class="row g-0" style="min-height: 500px;">
+        <div class="row g-0 pmf-chat-layout">
 
           <!-- Conversation List Sidebar -->
           <div class="col-md-4 col-lg-3 border-end">
             <div class="p-3 border-bottom">
               <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">
-                  <i class="bi bi-search"></i>
+                <span class="input-group-text border-end-0">
+                  <i class="bi bi-search" aria-hidden="true"></i>
                 </span>
+                <label class="visually-hidden" for="pmf-chat-user-search">{{ 'msgChatSearchUsers' | translate }}</label>
                 <input type="text" class="form-control border-start-0" id="pmf-chat-user-search"
                        placeholder="{{ 'msgChatSearchUsers' | translate }}" autocomplete="off">
               </div>
@@ -35,8 +38,7 @@
                   <a href="#" class="list-group-item list-group-item-action d-flex align-items-center pmf-chat-conversation"
                      data-user-id="{{ conversation.userId }}">
                     <div class="flex-shrink-0">
-                      <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
-                           style="width: 40px; height: 40px;">
+                      <div class="pmf-chat-avatar" aria-hidden="true">
                         {{ conversation.displayName|slice(0, 1)|upper }}
                       </div>
                     </div>
@@ -60,15 +62,13 @@
             <!-- Chat Header -->
             <div class="p-3 border-bottom d-none" id="pmf-chat-header">
               <div class="d-flex align-items-center">
-                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3"
-                     style="width: 40px; height: 40px;" id="pmf-chat-partner-avatar">
-                </div>
+                <div class="pmf-chat-avatar me-3" id="pmf-chat-partner-avatar" aria-hidden="true"></div>
                 <h5 class="mb-0" id="pmf-chat-partner-name"></h5>
               </div>
             </div>
 
             <!-- Messages Container -->
-            <div class="flex-grow-1 p-3 overflow-auto" id="pmf-chat-messages" style="max-height: 400px;">
+            <div class="flex-grow-1 p-3 overflow-auto pmf-chat-messages" id="pmf-chat-messages">
               <div class="text-center text-muted py-5" id="pmf-chat-placeholder">
                 <i class="bi bi-chat-text fs-1 d-block mb-3"></i>
                 <p>{{ 'msgChatSelectConversation' | translate }}</p>
@@ -80,6 +80,7 @@
               <form id="pmf-chat-form" class="d-flex gap-2">
                 <input type="hidden" id="pmf-chat-recipient-id" value="">
                 <input type="hidden" id="pmf-chat-csrf-token" value="{{ csrfTokenSendMessage }}">
+                <label class="visually-hidden" for="pmf-chat-message-input">{{ 'msgChatTypePlaceholder' | translate }}</label>
                 <input type="text" class="form-control" id="pmf-chat-message-input"
                        placeholder="{{ 'msgChatTypePlaceholder' | translate }}" autocomplete="off" maxlength="1000">
                 <button type="submit" class="btn btn-primary">

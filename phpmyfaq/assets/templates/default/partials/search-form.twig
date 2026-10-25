@@ -1,0 +1,16 @@
+{#
+  Shared search form. Included in the search band under the navbar (index.twig)
+  and inside the start page hero (startpage.twig). Keep the element ids: the
+  autocomplete and the Ctrl+K shortcut bind to them.
+#}
+<form action="./search.html" id="search" method="get" role="search" class="pmf-search-shell">
+  <i class="bi bi-search pmf-search-shell-icon" aria-hidden="true"></i>
+  <label class="visually-hidden" for="pmf-search-autocomplete">{{ searchBox }}</label>
+  <input autocomplete="off" type="text" class="form-control form-control-lg" id="pmf-search-autocomplete"
+         name="search" placeholder="{{ searchBox }} ..." maxlength="255" value="{{ searchTerm }}">
+  <kbd class="pmf-search-hint" id="pmf-search-hint" aria-hidden="true"></kbd>
+  <button type="submit" class="btn btn-primary btn-lg">{{ searchBox }}</button>
+</form>
+<p class="pmf-search-advanced small mb-0">
+  <a class="help" href="./search.html">{{ msgAdvancedSearch }}</a>
+</p>

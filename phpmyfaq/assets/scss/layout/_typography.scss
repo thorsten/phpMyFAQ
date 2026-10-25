@@ -1,0 +1,46 @@
+//
+// Typography
+//
+// Inter Variable for light and dark mode. High-contrast mode keeps Atkinson
+// Hyperlegible (set with !important in theme.css), so nothing here overrides it.
+//
+
+body {
+  font-family: var(--pmf-font-sans);
+  font-size: var(--pmf-font-size-base);
+  line-height: var(--pmf-line-height-body);
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-weight: 700;
+  letter-spacing: var(--pmf-letter-spacing-tight);
+  color: var(--pmf-text);
+}
+
+.pmf-display-1 {
+  font-size: var(--pmf-display-1);
+  line-height: 1.1;
+}
+
+.pmf-display-2 {
+  font-size: var(--pmf-display-2);
+  line-height: 1.15;
+}
+
+small,
+.small {
+  color: var(--pmf-text-muted);
+}

@@ -67,7 +67,7 @@ final class OverviewControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/overview.html');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('<h1 class="h2 mb-4 border-bottom">FAQ Overview</h1>', $response);
+        self::assertResponseContains('<h1 class="h2 pmf-display-2 mb-0">FAQ Overview</h1>', $response);
         self::assertResponseContains('<title>FAQ Overview - ', $response);
     }
 }

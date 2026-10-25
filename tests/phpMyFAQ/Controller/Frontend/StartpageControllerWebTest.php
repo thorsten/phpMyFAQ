@@ -73,6 +73,7 @@ final class StartpageControllerWebTest extends ControllerWebTestCase
 
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('<title>', $response);
-        self::assertResponseContains('Trending FAQs', $response);
+        self::assertResponseContains('Most popular FAQs', $response);
+        self::assertResponseContains('class="pmf-hero"', $response);
     }
 }

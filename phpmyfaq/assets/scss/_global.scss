@@ -38,6 +38,50 @@ a {
 //
 // Footer
 //
+.pmf-footer {
+  background-color: var(--pmf-surface);
+  border-top: 1px solid var(--pmf-border);
+  color: var(--pmf-text);
+
+  .pmf-footer-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pmf-text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .nav-link {
+    color: var(--pmf-text);
+    padding-inline: 0;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pmf-accent);
+      text-decoration: underline;
+    }
+  }
+
+  .pmf-footer-bottom {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--pmf-border);
+    font-size: var(--pmf-font-size-sm);
+    color: var(--pmf-text-muted);
+
+    a {
+      color: var(--pmf-accent);
+      text-decoration: none;
+    }
+  }
+}
+
+[data-bs-theme='dark'] .pmf-footer {
+  background-color: var(--pmf-surface-raised);
+}
+
+// Legacy footer class, kept for custom templates that still use it.
 .text-bg-pmf-footer {
   color: var(--bs-light);
   background-color: var(--bs-pmf-footer);
@@ -92,26 +136,50 @@ a {
 // Buttons
 //
 .btn {
-  border-radius: var(--pmf-radius-sm);
+  border-radius: var(--pmf-radius);
   font-weight: 600;
+  padding: 0.5rem 1rem;
+  transition:
+    background-color var(--pmf-transition),
+    border-color var(--pmf-transition),
+    box-shadow var(--pmf-transition),
+    transform var(--pmf-transition);
 
   &:active {
     transform: translateY(1px);
   }
 }
 
+.btn-sm {
+  padding: 0.3rem 0.7rem;
+}
+
+.btn-lg {
+  min-height: 3rem;
+  padding: 0.65rem 1.4rem;
+}
+
 .btn-primary {
   background-color: var(--pmf-accent);
-  border-color: var(--pmf-accent);
+  background-image: var(--pmf-accent-gradient);
+  border-color: transparent;
   color: var(--pmf-text-on-accent);
 
   &:hover,
-  &:focus,
+  &:focus-visible {
+    background-color: var(--pmf-accent);
+    background-image: var(--pmf-accent-gradient);
+    border-color: transparent;
+    color: var(--pmf-text-on-accent);
+    box-shadow: var(--pmf-shadow-accent);
+  }
+
   &:active {
     background-color: var(--pmf-accent);
-    border-color: var(--pmf-accent);
+    background-image: var(--pmf-accent-gradient);
+    border-color: transparent;
     color: var(--pmf-text-on-accent);
-    filter: brightness(1.08);
+    filter: brightness(0.96);
   }
 }
 
@@ -120,7 +188,12 @@ a {
   border-color: var(--pmf-accent);
 
   &:hover,
-  &:focus,
+  &:focus-visible {
+    background-color: var(--pmf-accent-subtle);
+    border-color: var(--pmf-accent);
+    color: var(--pmf-accent);
+  }
+
   &:active {
     background-color: var(--pmf-accent);
     border-color: var(--pmf-accent);
@@ -164,18 +237,62 @@ a {
 .form-select {
   background-color: var(--pmf-surface);
   border-color: var(--pmf-border-strong);
-  border-radius: var(--pmf-radius-sm);
+  border-radius: var(--pmf-radius);
   color: var(--pmf-text);
 
   &:focus {
     background-color: var(--pmf-surface);
     border-color: var(--pmf-accent);
     color: var(--pmf-text);
-    box-shadow: 0 0 0 0.2rem var(--pmf-focus-ring);
+    box-shadow: 0 0 0 4px var(--pmf-focus-ring);
   }
 
   &::placeholder {
     color: var(--pmf-text-muted);
+  }
+}
+
+.form-control-lg,
+.form-select-lg {
+  min-height: 3rem;
+  font-size: var(--pmf-font-size-lg);
+}
+
+//
+// Badges — pills by default; neutral counts use the subtle accent fill.
+//
+.badge {
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.pmf-badge-count {
+  background-color: var(--pmf-accent-subtle);
+  color: var(--pmf-accent);
+}
+
+//
+// Generic surface panel
+//
+.pmf-surface {
+  background-color: var(--pmf-surface);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius-lg);
+  box-shadow: var(--pmf-shadow-sm);
+}
+
+//
+// Motion
+//
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .card,
+  .pmf-search-result,
+  .pmf-category-tile,
+  .pmf-nav-link {
+    transition: none !important;
+    transform: none !important;
   }
 }
 
@@ -244,6 +361,109 @@ a {
 
   color: var(--pmf-text);
   border-color: var(--pmf-border);
+}
+
+//
+// Page header pattern (category, FAQ, search)
+//
+.pmf-page-header {
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--pmf-border);
+
+  .breadcrumb-wrapper {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.pmf-page-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+}
+
+.pmf-empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--pmf-text-muted);
+
+  i {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 2.5rem;
+    color: var(--pmf-border-strong);
+  }
+}
+
+.pmf-page-lead {
+  margin: 0.5rem 0 0;
+  max-width: 60ch;
+  color: var(--pmf-text-muted);
+}
+
+.pmf-text-accent {
+  color: var(--pmf-accent) !important;
+}
+
+//
+// Form pages (add FAQ, ask question, contact, register)
+//
+.pmf-form-card {
+  padding: 1.5rem 1.75rem;
+  max-width: 56rem;
+
+  .row.mb-2,
+  .row.g-4 {
+    margin-bottom: 1rem !important;
+  }
+
+  .col-form-label {
+    font-weight: 600;
+    font-size: var(--pmf-font-size-sm);
+  }
+
+  .form-text {
+    color: var(--pmf-text-muted);
+  }
+
+  .pmf-form-actions {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--pmf-border);
+  }
+}
+
+//
+// Pagination
+//
+.pagination {
+  gap: 0.25rem;
+
+  .page-link {
+    min-width: 2.25rem;
+    height: 2.25rem;
+    display: inline-grid;
+    place-items: center;
+    padding: 0 0.6rem;
+    border: 1px solid var(--pmf-border);
+    border-radius: 999px;
+    color: var(--pmf-text);
+    background: var(--pmf-surface);
+
+    &:hover {
+      background: var(--pmf-surface-hover);
+      color: var(--pmf-accent);
+    }
+  }
+
+  .page-item.active .page-link {
+    background-color: var(--pmf-accent);
+    background-image: var(--pmf-accent-gradient);
+    border-color: transparent;
+    color: var(--pmf-text-on-accent);
+  }
 }
 
 //

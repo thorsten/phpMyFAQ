@@ -1,16 +1,18 @@
 {% extends 'index.twig' %}
 
 {% block content %}
-<section class="col-12">
+<section class="col-12 pmf-form-page">
 {% if noCategories == true %}
 <div class="alert alert-danger">{{ msgFormDisabledDueToMissingCategories|raw }}</div>
 {% else %}
+  <header class="pmf-page-header">
   {% if (id1_active == true) or (displayFullForm == true) %}
-  <h1 class="h2 mb-4 border-bottom">{{ id1_label }}</h1>
+  <h1 class="h2 pmf-display-2 mb-0">{{ id1_label }}</h1>
   {% endif %}
   {% if (id2_active == true) or (displayFullForm == true) %}
-  <p>{{ id2_label|raw }}</p>
+  <p class="pmf-page-lead">{{ id2_label|raw }}</p>
   {% endif %}
+  </header>
 
   <div class="row mb-2">
     <div class="col">
@@ -21,7 +23,7 @@
     </div>
   </div>
 
-  <form id="pmf-add-faq-form" action="#" method="post" accept-charset="utf-8" class="needs-validation"
+  <form id="pmf-add-faq-form" action="#" method="post" accept-charset="utf-8" class="needs-validation pmf-surface pmf-form-card"
         data-wysiwyg-enabled="{{ enableWysiwygEditor ? 'true' : 'false' }}" novalidate>
     <input type="hidden" name="lang" id="lang" value="{{ lang }}">
     <input type="hidden" value="{{ openQuestionID }}" id="openQuestionID" name="openQuestionID">
@@ -107,7 +109,7 @@
 
     {{ captchaFieldset|raw }}
 
-    <div class="row mb-2">
+    <div class="row pmf-form-actions">
       <div class="col-sm-12 text-end">
         <button class="btn btn-primary btn-lg" type="submit" id="pmf-submit-faq" data-pmf-form="add-faq">
           {{ msgNewContentSubmit }}

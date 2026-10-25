@@ -4,11 +4,10 @@
 <div class="row g-3 g-md-5">
   <div class="{{ isAllCategories ? 'col-12' : 'col-md-8' }}">
 
-    <div class="breadcrumb-wrapper">
-      {{ breadcrumb | raw }}
-    </div>
-
-    <h1 class="h2 mb-4 border-bottom">{{ categoryHeader }}</h1>
+    <header class="pmf-page-header">
+      <div class="breadcrumb-wrapper">{{ breadcrumb | raw }}</div>
+      <h1 class="h2 pmf-display-2 mb-0">{{ categoryHeader }}</h1>
+    </header>
 
     {% if isAllCategories %}
       {% if categoryTree is not empty %}

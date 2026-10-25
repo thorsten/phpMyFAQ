@@ -1,226 +1,149 @@
 {% extends 'index.twig' %}
+{% set isStartPage = true %}
 
 {% block content %}
 
-<!-- Header -->
-<div class="row">
-  <div class="col-12">
-    <h1 class="mb-3 fw-bold text-center pmf-start-page">{{ pageHeader | raw }}</h1>
+<!-- Hero -->
+<section class="pmf-hero">
+  <div class="pmf-hero-inner">
+    <h1 class="pmf-display-1 mb-3 pmf-start-page">{{ pageHeader | raw }}</h1>
+    {% if metaDescription is defined and metaDescription is not empty %}
+      <p class="pmf-hero-subline">{{ metaDescription }}</p>
+    {% endif %}
+    {% if not isMaintenanceMode %}
+      {% include 'partials/search-form.twig' %}
+    {% endif %}
+    <span class="pmf-hero-pill">{{ writeNumberOfArticles }}</span>
   </div>
-</div>
+</section>
 
-<!-- Start page -->
+<!-- Start page category tiles -->
 {% if startPageCategories %}
-  <div class="row row-cols-1 row-cols-lg-3 align-items-stretch justify-content-center g-4 py-4 mb-4">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3 mb-5">
     {% for decks in startPageCategoryDecks %}
       <div class="col">
-        <div class="card card-cover h-100 overflow-hidden text-bg-light rounded-3 shadow-lg p-1"
+        <a class="pmf-category-tile" href="{{ decks['url'] }}">
           {% if decks['image'] != '' %}
-            style="background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url('{{ decks['image'] }}')"
+            <img class="pmf-category-tile-avatar" src="{{ decks['image'] }}" alt="" width="48" height="48">
+          {% else %}
+            <span class="pmf-category-tile-avatar" aria-hidden="true">{{ decks['name'] | first | upper }}</span>
           {% endif %}
-        >
-          <div class="d-flex flex-column h-100">
-            <h3 class="pt-5 mt-5 mb-3 fw-semibold text-center">{{ decks['name'] }}</h3>
-            <div class="mt-auto px-3 mb-3">
-              <a class="btn btn-primary bg-gradient w-100" href="{{ decks['url'] }}">{{ 'msgGoToCategory' | translate }}</a>
-            </div>
-          </div>
-        </div>
+          <span class="pmf-category-tile-body">
+            <span class="pmf-category-tile-name h5">{{ decks['name'] }}</span>
+            {% if decks['description'] is not empty %}
+              <span class="pmf-category-tile-desc">{{ decks['description'] }}</span>
+            {% endif %}
+          </span>
+          <i class="bi bi-arrow-right pmf-category-tile-chevron" aria-hidden="true"></i>
+        </a>
       </div>
     {% endfor %}
   </div>
 {% endif %}
 
 <!-- Start page content -->
-<div class="row masonry-grid">
-  <!-- Sticky FAQs -->
-  <div class="col-sm-6 col-lg-4 mb-4">
-    <div class="card shadow">
-      <div class="card-body">
-        <h5 class="card-title text-center mb-4">
-          <i class="bi bi-exclamation-square"></i>
-          {{ stickyRecordsHeader }}
-        </h5>
-        {% if stickyRecordsList is empty %}
-          <p class="text-body-secondary small mb-0">{{ 'msgNoStickyFaqs' | translate }}</p>
-        {% endif %}
-        <ul class="list-unstyled">
+{% set hasAside = newsList is not empty or tagsList is not empty %}
+<div class="row g-4">
+  <div class="{{ hasAside ? 'col-lg-8' : 'col-lg-12' }}">
+
+    {% if stickyRecordsList is not empty %}
+      <div class="pmf-callout mb-4">
+        <h2 class="h6 pmf-callout-title"><i class="bi bi-pin-angle-fill" aria-hidden="true"></i> {{ stickyRecordsHeader }}</h2>
+        <ul class="pmf-callout-list">
           {% for stickyRecord in stickyRecordsList %}
-            <li class="border-bottom pb-2 mb-2">
-              <h4 class="h6 mb-2">
-                <a class="sticky-faqs" data-bs-toggle="tooltip" data-bs-placement="top"
-                   title="{{ stickyRecord['question'] }}" href="{{ stickyRecord['url'] }}">
-                  {{ stickyRecord['question'] }}
-                </a>
-              </h4>
-            </li>
+            <li><a class="sticky-faqs" href="{{ stickyRecord['url'] }}">{{ stickyRecord['question'] }}</a></li>
           {% endfor %}
         </ul>
       </div>
-    </div>
-  </div>
+    {% endif %}
 
-  <!-- Top FAQs -->
-  <div class="col-sm-6 col-lg-4 mb-4">
-    <div class="card shadow">
-      <div class="card-body">
-        <h5 class="card-title text-center mb-4">
-          <i class="bi bi-trophy"></i>
-          {{ writeTopTenHeader }}
-        </h5>
-        <ol class="list-unstyled">
-          {% if topRecordsList is not empty %}
-            {% for topten in topRecordsList %}
-              <li class="border-bottom pb-2 mb-2">
-                <h4 class="h6 mb-2">
-                  <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top"
-                     title="{{ topten.title | raw }}" href="{{ topten.url }}">
-                    {{ topten.title | raw }}
-                  </a>
-                </h4>
-                <div class="d-flex align-items-center text-muted">
-                  <small class="pe-2 me-2">
-                    <i aria-hidden="true" class="bi bi-eye"></i>
-                    {{ topten.visits }}
-                  </small>
-                </div>
-              </li>
-            {% endfor %}
-          {% else %}
-          <li>{{ errorMsgTopTen }}</li>
-          {% endif %}
+    <section class="pmf-faq-list-section pmf-surface mb-4">
+      <header class="pmf-faq-list-header">
+        <h2 class="h5 mb-0"><i class="bi bi-trophy" aria-hidden="true"></i> {{ writeTopTenHeader }}</h2>
+        <span class="small">{{ writeNumberOfArticles }}</span>
+      </header>
+      {% if topRecordsList is not empty %}
+        <ol class="pmf-faq-list">
+          {% for topten in topRecordsList %}
+            <li class="pmf-faq-list-item">
+              <a class="latest-entries pmf-faq-list-link" href="{{ topten.url }}">{{ topten.title | raw }}</a>
+              <span class="pmf-faq-list-meta"><i class="bi bi-eye" aria-hidden="true"></i> {{ topten.visits }}</span>
+            </li>
+          {% endfor %}
         </ol>
-        <p class="card-text">
-          <small class="text-muted">{{ writeNumberOfArticles }}</small>
-        </p>
-      </div>
-    </div>
-  </div>
+      {% else %}
+        <p class="pmf-faq-list-empty small mb-0">{{ errorMsgTopTen }}</p>
+      {% endif %}
+    </section>
 
-  <!-- Latest FAQs -->
-  {% if latestRecordsList is not empty %}
-  <div class="col-sm-6 col-lg-4 mb-4">
-    <div class="card shadow">
-      <div class="card-body">
-        <h5 class="card-title text-center mb-4">
-          <i class="bi bi-lightning"></i>
-          {{ writeNewestHeader }}
-        </h5>
-        <ol class="list-unstyled">
-            {% for latest in latestRecordsList %}
-              <li class="border-bottom pb-2 mb-2">
-                <h4 class="h6 mb-2">
-                  <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top"
-                     title="{{ latest.preview }}" href="{{ latest.url }}">
-                    {{ latest.title | raw }}
-                  </a>
-                </h4>
-                <div class="d-flex align-items-center text-muted">
-                  <small class="pe-2 me-2">
-                    <i aria-hidden="true" class="bi bi-calendar-date"></i>
-                    {{ latest.date }}
-                  </small>
-                </div>
-              </li>
-            {% endfor %}
+    {% if latestRecordsList is not empty %}
+      <section class="pmf-faq-list-section pmf-surface mb-4">
+        <header class="pmf-faq-list-header">
+          <h2 class="h5 mb-0"><i class="bi bi-lightning" aria-hidden="true"></i> {{ writeNewestHeader }}</h2>
+        </header>
+        <ol class="pmf-faq-list">
+          {% for latest in latestRecordsList %}
+            <li class="pmf-faq-list-item">
+              <a class="latest-entries pmf-faq-list-link" href="{{ latest.url }}" title="{{ latest.preview }}">{{ latest.title | raw }}</a>
+              <span class="pmf-faq-list-meta"><i class="bi bi-calendar-date" aria-hidden="true"></i> {{ latest.date }}</span>
+            </li>
+          {% endfor %}
         </ol>
-      </div>
-    </div>
-  </div>
-  {% endif %}
+      </section>
+    {% endif %}
 
-  <!-- Trending FAQs -->
-  {% if trendingRecordsList is not empty %}
-  <div class="col-sm-6 col-lg-4 mb-4">
-    <div class="card shadow">
-      <div class="card-body">
-        <h5 class="card-title text-center mb-4">
-          <i class="bi bi-graph-up-arrow"></i>
-          {{ msgTrendingFAQs }}
-        </h5>
-        <ol class="list-unstyled">
+    {% if trendingRecordsList is not empty %}
+      <section class="pmf-faq-list-section pmf-surface mb-4">
+        <header class="pmf-faq-list-header">
+          <h2 class="h5 mb-0"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i> {{ msgTrendingFAQs }}</h2>
+        </header>
+        <ol class="pmf-faq-list">
           {% for trending in trendingRecordsList %}
-            <li class="border-bottom pb-2 mb-2">
-              <h4 class="h6 mb-2">
-                <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top"
-                   title="{{ trending.preview }}" href="{{ trending.url }}">
-                  {{ trending.title | raw }}
-                </a>
-              </h4>
-              <div class="d-flex align-items-center text-muted">
-                <small class="pe-2 me-2 border-end">
-                  <i aria-hidden="true" class="bi bi-eye"></i>
-                  {{ trending.visits }}
-                </small>
-                <small class="pe-2 me-2">
-                  <i aria-hidden="true" class="bi bi-calendar-date"></i>
-                  {{ trending.date }}
-                </small>
-              </div>
+            <li class="pmf-faq-list-item">
+              <a class="latest-entries pmf-faq-list-link" href="{{ trending.url }}" title="{{ trending.preview }}">{{ trending.title | raw }}</a>
+              <span class="pmf-faq-list-meta">
+                <i class="bi bi-eye" aria-hidden="true"></i> {{ trending.visits }}
+                <span class="pmf-faq-list-dot" aria-hidden="true"></span>
+                <i class="bi bi-calendar-date" aria-hidden="true"></i> {{ trending.date }}
+              </span>
             </li>
           {% endfor %}
         </ol>
-      </div>
-    </div>
+      </section>
+    {% endif %}
   </div>
-  {% endif %}
 
-  <!-- News -->
-  {% if newsList is not empty %}
-  <div class="col-sm-6 col-lg-4 mb-4">
-    <div class="card shadow">
-      <div class="card-body">
-        <h5 class="card-title text-center mb-4">
-          <i class="bi bi-newspaper"></i>
-          {{ msgNewsHeader }}
-        </h5>
-        <ol class="list-unstyled">
+  {% if hasAside %}
+  <aside class="col-lg-4">
+    {% if newsList is not empty %}
+      <section class="pmf-surface pmf-news mb-4">
+        <h2 class="h5 pmf-news-title"><i class="bi bi-newspaper" aria-hidden="true"></i> {{ msgNewsHeader }}</h2>
+        <ol class="pmf-news-list">
           {% for news in newsList %}
-            <li class="border-bottom pb-2 mb-2">
-              <h4 class="h6 mb-2">
-                <a class="news-entries" data-bs-toggle="tooltip" data-bs-placement="top"
-                   title="{{ news.header }}" href="{{ news.url }}">
-                  {{ news.header }}
-                </a>
-              </h4>
-              <p>
-                {{ news.content }}
-              </p>
-              <div class="d-flex align-items-center text-muted">
-                <small class="pe-2 me-2">
-                  <i aria-hidden="true" class="bi bi-calendar-date"></i>
-                  {{ news.date }}
-                </small>
-              </div>
+            <li class="pmf-news-item">
+              <time class="pmf-news-date">{{ news.date }}</time>
+              <a class="news-entries pmf-news-link" href="{{ news.url }}">{{ news.header }}</a>
+              <p class="pmf-news-excerpt">{{ news.content }}</p>
             </li>
           {% endfor %}
         </ol>
-      </div>
-    </div>
-  </div>
-  {% endif %}
+      </section>
+    {% endif %}
 
-  <!-- Tag Cloud -->
-  {% if tagsList is not empty %}
-  <div class="col-sm-6 col-lg-4 mb-4">
-    <div class="card shadow">
-      <div class="card-body">
-        <h5 class="card-title text-center mb-4">
-          <i class="bi bi-tags"></i>
-          {{ msgTags }}
-        </h5>
-        <p class="card-text pmf-tag-cloud">
+    {% if tagsList is not empty %}
+      <section class="pmf-surface pmf-tags mb-4">
+        <h2 class="h5 pmf-news-title"><i class="bi bi-tags" aria-hidden="true"></i> {{ msgTags }}</h2>
+        <div class="pmf-tag-cloud">
           {% for tagId, tagFrequency in tagsList %}
-            <a class="btn btn-outline-primary m-1" href="./search.html?tagging_id={{ tagId }}">
-              {{ tagId | tagName }} <span class="badge bg-info">{{ tagFrequency }}</span>
+            <a class="btn btn-outline-primary btn-sm m-1" href="./search.html?tagging_id={{ tagId }}">
+              {{ tagId | tagName }} <span class="badge pmf-badge-count">{{ tagFrequency }}</span>
             </a>
           {% endfor %}
-        </p>
-      </div>
-    </div>
-  </div>
+        </div>
+      </section>
+    {% endif %}
+  </aside>
   {% endif %}
-
 </div>
 
 {% endblock %}

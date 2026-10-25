@@ -13,12 +13,20 @@
   --pmf-radius-lg: 1rem;
   --pmf-radius-xl: 1.5rem;
   --pmf-transition: 0.18s ease;
+  --pmf-font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', roboto, sans-serif;
+  --pmf-font-size-sm: 0.875rem;
+  --pmf-font-size-base: 1rem;
+  --pmf-font-size-lg: 1.125rem;
+  --pmf-display-1: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+  --pmf-display-2: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
+  --pmf-line-height-body: 1.6;
+  --pmf-letter-spacing-tight: -0.015em;
 }
 
 // Light theme — the default.
 :root,
 [data-bs-theme='light'] {
-  --pmf-bg: #f4f6f9;
+  --pmf-bg: #f7f8fb;
   --pmf-surface: #fff;
   --pmf-surface-raised: #fff;
   --pmf-surface-sunken: #eef1f5;
@@ -33,8 +41,10 @@
   --pmf-accent-subtle: rgb(8, 60, 131, 0.09);
   --pmf-focus-ring: rgb(8, 60, 131, 0.3);
   --pmf-shadow-sm: 0 1px 2px rgb(16, 24, 40, 0.06), 0 1px 3px rgb(16, 24, 40, 0.08);
-  --pmf-shadow-md: 0 4px 14px rgb(16, 24, 40, 0.08), 0 2px 5px rgb(16, 24, 40, 0.06);
+  --pmf-shadow-md: 0 4px 14px rgb(16, 24, 40, 0.08), 0 2px 5px rgb(16, 24, 40, 0.06), 0 16px 40px rgb(16, 24, 40, 0.04);
   --pmf-shadow-lg: 0 12px 32px rgb(16, 24, 40, 0.12), 0 4px 10px rgb(16, 24, 40, 0.08);
+  --pmf-accent-gradient: linear-gradient(135deg, var(--pmf-accent) 0%, var(--pmf-accent-2) 100%);
+  --pmf-shadow-accent: 0 8px 24px rgb(8, 60, 131, 0.22);
 }
 
 // Dark theme — softened dark surfaces with elevation steps.
@@ -59,6 +69,9 @@
   --pmf-shadow-sm: 0 1px 2px rgb(0, 0, 0, 0.4), 0 1px 3px rgb(0, 0, 0, 0.5);
   --pmf-shadow-md: 0 6px 18px rgb(0, 0, 0, 0.5), 0 2px 6px rgb(0, 0, 0, 0.4);
   --pmf-shadow-lg: 0 14px 36px rgb(0, 0, 0, 0.6), 0 4px 12px rgb(0, 0, 0, 0.5);
+  // Darker stops than the link accent so white text keeps >= 4.5:1 on both ends.
+  --pmf-accent-gradient: linear-gradient(135deg, #2f5fa8 0%, #1f7a78 100%);
+  --pmf-shadow-accent: 0 8px 24px rgb(93, 143, 208, 0.3);
 }
 
 // High-contrast theme — black / white / yellow, strong borders, no shadows.
@@ -80,4 +93,6 @@
   --pmf-shadow-sm: none;
   --pmf-shadow-md: none;
   --pmf-shadow-lg: none;
+  --pmf-accent-gradient: var(--pmf-accent);
+  --pmf-shadow-accent: none;
 }

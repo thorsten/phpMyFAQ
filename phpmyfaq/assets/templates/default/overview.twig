@@ -1,57 +1,55 @@
 {% extends 'index.twig' %}
 
 {% block content %}
-<section class="col-12">
-  <h1 class="h2 mb-4 border-bottom">{{ pageHeader }}</h1>
+<section class="col-12 pmf-overview">
+  <header class="pmf-page-header">
+    <h1 class="h2 pmf-display-2 mb-0">{{ pageHeader }}</h1>
+  </header>
 
   {% set lastCategory = 0 %}
   {% for faq in faqOverview %}
 
     {% if (faq['category_id'] != null and faq['category_id'] != lastCategory) %}
-      <header class="d-flex align-items-center justify-content-between mt-5 mb-2">
-        <h3>
-          <span class="badge bg-info shadow-info">{{ faq['category_id'] | categoryName }}</span>
-        </h3>
-        <a href="{{ categoryLink(faq['category_id']) }}" class="btn btn-outline-primary ms-4">
+      {% if lastCategory != 0 %}
+        </div>
+      {% endif %}
+      <div class="pmf-overview-section">
+      <header class="pmf-overview-section-header">
+        <h2 class="h4 mb-0">
+          <span class="pmf-overview-section-avatar" aria-hidden="true">{{ (faq['category_id'] | categoryName) | first | upper }}</span>
+          {{ faq['category_id'] | categoryName }}
+        </h2>
+        <a href="{{ categoryLink(faq['category_id']) }}" class="btn btn-outline-primary btn-sm">
           {{ 'msgGoToCategory' | translate }}
-          <i class="bi bi-arrow-right ms-1"></i>
+          <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
         </a>
       </header>
     {% endif %}
 
     {% if (faq['category_id'] != null) %}
-    <article class="card mb-4">
-      <div class="card-body">
-        <div class="d-flex justify-content-between mb-3">
-          <a href="{{ faqLink(faq['category_id'], faq['id'], faq['lang']) }}"
-             class="btn btn-icon btn-secondary btn-sm rounded-circle position-absolute top-0 end-0 zindex-5 me-3 mt-3"
-             data-bs-toggle="tooltip" data-bs-placement="left" aria-label="{{ faq['id'] | faqQuestion }}"
-             data-bs-original-title="{{ faq['id'] | faqQuestion }}">
-            <i class="bi bi-link"></i>
-          </a>
-        </div>
-        <h4 class="h4">
-          {{ faq['title'] }}
-        </h4>
-        <p class="mb-4">
-          {{ faq['content'] | raw }}
-        </p>
-        <div class="d-flex align-items-center text-muted border-top pt-2">
-          <div class="border-end pe-3 me-3">
-            <i class="bi bi-calendar-date"></i>
-            {{ faq['updated'] | date('Y-m-d H:i') }}
-          </div>
-          <div class="d-flex align-items-center me-3">
-            <i class="bi bi-person me-1"></i>
-            {{ faq['author'] }}
-          </div>
-        </div>
+    <article class="pmf-surface pmf-overview-item">
+      <h3 class="h5 pmf-overview-item-title">
+        <a href="{{ faqLink(faq['category_id'], faq['id'], faq['lang']) }}">{{ faq['title'] }}</a>
+      </h3>
+      <div class="pmf-overview-item-body">
+        {{ faq['content'] | raw }}
       </div>
+      <footer class="pmf-overview-item-meta">
+        <span><i class="bi bi-calendar-date" aria-hidden="true"></i> {{ faq['updated'] | date('Y-m-d H:i') }}</span>
+        <span><i class="bi bi-person" aria-hidden="true"></i> {{ faq['author'] }}</span>
+        <a class="ms-auto" href="{{ faqLink(faq['category_id'], faq['id'], faq['lang']) }}"
+           aria-label="{{ faq['id'] | faqQuestion }}">
+          <i class="bi bi-link-45deg" aria-hidden="true"></i> {{ 'msgPermalink' | translate }}
+        </a>
+      </footer>
     </article>
     {% endif %}
 
     {% set lastCategory = faq['category_id'] %}
   {% endfor %}
+  {% if lastCategory != 0 %}
+    </div>
+  {% endif %}
 </section>
 
 {% endblock %}

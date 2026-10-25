@@ -8,37 +8,45 @@
 
 // Theme switcher button group ------------------------------------------------
 .pmf-theme-switcher {
-  button {
-    color: var(--bs-light);
-    border: none;
-    background: transparent;
-    border-radius: var(--pmf-radius-sm);
-    transition: all 0.3s ease;
-    opacity: 0.6;
+  border: 1px solid rgb(255, 255, 255, 0.18) !important;
+  border-radius: 999px;
+  padding: 2px;
+  background-color: rgb(255, 255, 255, 0.06);
 
-    &:hover {
-      color: var(--bs-warning);
-      background: rgb(255, 255, 255, 0.1);
-      opacity: 1;
+  button {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.3rem 0.6rem;
+    color: rgb(255, 255, 255, 0.75);
+    background: transparent;
+    line-height: 1;
+    transition:
+      color var(--pmf-transition),
+      background-color var(--pmf-transition);
+
+    &:hover,
+    &:focus-visible {
+      color: #fff;
+      background-color: rgb(255, 255, 255, 0.1);
+      box-shadow: none;
     }
 
-    &:focus {
-      box-shadow: 0 0 0 0.25rem rgb(255, 255, 255, 0.25);
+    &:focus-visible {
+      box-shadow: 0 0 0 0.2rem rgb(255, 255, 255, 0.25);
     }
 
     &.active {
-      color: var(--bs-warning);
-      opacity: 1;
-      background: rgb(255, 255, 255, 0.15);
+      // Bootstrap's .navbar-nav .nav-link.active paints via this variable and
+      // outranks a plain colour here, so set the variable too.
+      --bs-navbar-active-color: var(--bs-pmf-nav);
+      --bs-nav-link-color: var(--bs-pmf-nav);
+
+      color: var(--bs-pmf-nav);
+      background-color: #fff;
     }
 
     i {
-      font-size: 1.1rem;
-      transition: transform 0.3s ease;
-    }
-
-    &:hover i {
-      transform: scale(1.1);
+      font-size: 1rem;
     }
   }
 }
@@ -74,6 +82,29 @@
 
 // High contrast mode ---------------------------------------------------------
 [data-bs-theme='high-contrast'] {
+  // Flatten the refined-SaaS extras: no gradients, blur or shadows in high contrast.
+  .btn-primary,
+  .pmf-hero,
+  .pmf-category-tile-avatar,
+  .page-item.active .page-link {
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  .navbar.text-bg-pmf-nav,
+  .pmf-search-band {
+    backdrop-filter: none !important;
+    background-color: var(--bs-pmf-nav) !important;
+  }
+
+  .card,
+  .pmf-surface,
+  .pmf-sidebar-card,
+  .pmf-search-shell,
+  .form-control {
+    border-width: 2px !important;
+  }
+
   // Global background with maximum contrast
   html,
   body {
@@ -147,8 +178,9 @@
     border: 2px solid var(--bs-light) !important;
   }
 
-  // Search form high contrast mode
-  .search {
+  // Search form high contrast mode (header shell and the search modal)
+  .search,
+  .pmf-search-shell {
     .form-control {
       background-color: var(--bs-dark);
       border: 2px solid var(--bs-light);
@@ -169,6 +201,15 @@
 
     .bi-search {
       color: var(--bs-light);
+    }
+  }
+
+  .pmf-search-shell {
+    background-color: var(--bs-dark);
+    border: 2px solid var(--bs-light);
+
+    .form-control {
+      border: 0;
     }
   }
 
@@ -250,13 +291,12 @@
     width: 100%;
   }
 
-  // Heading style exceptions
+  // Heading style exceptions: the hero title is plain white on black.
   h1.pmf-start-page,
   .pmf-start-page.h1 {
-    background: var(--bs-primary);
-    background-clip: text;
-    border: 3px dashed var(--bs-primary);
-    border-radius: 8px;
+    background: none;
+    color: var(--pmf-text);
+    border: 0;
   }
 
   // Form elements

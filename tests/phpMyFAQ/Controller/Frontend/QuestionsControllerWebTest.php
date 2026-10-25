@@ -61,7 +61,7 @@ final class QuestionsControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/open-questions.html');
 
         self::assertResponseIsSuccessful($response);
-        self::assertResponseContains('<h1 id="page-header" class="h2 mb-4 border-bottom">Open questions</h1>', $response);
+        self::assertResponseContains('<h1 id="page-header" class="h2 pmf-display-2 mb-0">Open questions</h1>', $response);
         self::assertResponseContains('Currently there are no pending questions.', $response);
     }
 

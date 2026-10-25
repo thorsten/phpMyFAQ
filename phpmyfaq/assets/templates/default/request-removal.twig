@@ -1,17 +1,21 @@
 {% extends 'index.twig' %}
 
 {% block content %}
-<section class="col-12">
-  <h1 class="h2 mb-4 border-bottom">{{ 'msgUserRemoval' | translate }}</h1>
-  <p>{{ 'msgUserRemovalText' | translate }}</p>
+<section class="col-12 pmf-form-page">
+  <header class="pmf-page-header">
+    <h1 class="h2 pmf-display-2 mb-0">{{ 'msgUserRemoval' | translate }}</h1>
+    <p class="pmf-page-lead">{{ 'msgUserRemovalText' | translate }}</p>
+  </header>
 
-  <p>
-    {{ 'msgContactPrivacyNote' | translate }}
-    <a title="{{ 'msgPrivacyNote' | translate }}" href="{{ privacyURL }}" target="_blank" rel="noopener">
-      {{ 'msgPrivacyNote' | translate }}
-    </a>
-  </p>
-  <p><strong>{{ 'msgContactRemove' | translate }}</strong></p>
+  <div class="pmf-callout mb-4">
+    <p class="mb-1">
+      {{ 'msgContactPrivacyNote' | translate }}
+      <a title="{{ 'msgPrivacyNote' | translate }}" href="{{ privacyURL }}" target="_blank" rel="noopener">
+        {{ 'msgPrivacyNote' | translate }}
+      </a>
+    </p>
+    <p class="mb-0"><strong>{{ 'msgContactRemove' | translate }}</strong></p>
+  </div>
 
   <div class="row mb-2">
     <div class="col">
@@ -22,7 +26,7 @@
     </div>
   </div>
 
-  <form id="pmf-request-removal-form" action="#" method="post" class="needs-validation" novalidate>
+  <form id="pmf-request-removal-form" action="#" method="post" class="needs-validation pmf-surface pmf-form-card" novalidate>
     <input type="hidden" name="lang" id="lang" value="{{ lang }}">
     <input type="hidden" name="userId" id="userId" value="{{ userId }}">
     {{ csrf | raw }}
@@ -79,7 +83,7 @@
       </div>
     </div>
 
-    <div class="row mb-2">
+    <div class="row pmf-form-actions">
       <div class="col-sm-12 text-end">
         <button
           class="btn btn-primary btn-lg"

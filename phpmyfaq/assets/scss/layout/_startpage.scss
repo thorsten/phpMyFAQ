@@ -2,67 +2,296 @@
 // Startpage
 //
 
-h1.pmf-start-page {
-  font-size: clamp(2.25rem, 5vw, 3.25rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: var(--bs-primary);
-  background: linear-gradient(110deg, var(--bs-primary) 0%, var(--bs-secondary) 100%);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-// Hero cover cards (top of the startpage)
-.card.card-cover {
-  position: relative;
-  border-radius: var(--pmf-radius-xl);
+// Category tiles -----------------------------------------------------------
+.pmf-category-tile {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  height: 100%;
+  padding: 1.1rem 1.1rem 1.1rem 1rem;
+  background: var(--pmf-surface);
+  border: 1px solid var(--pmf-border);
+  border-radius: var(--pmf-radius-lg);
+  box-shadow: var(--pmf-shadow-sm);
+  color: var(--pmf-text);
+  text-decoration: none;
   transition:
     transform var(--pmf-transition),
-    box-shadow var(--pmf-transition);
+    box-shadow var(--pmf-transition),
+    border-color var(--pmf-transition);
 
-  // Scrim so the heading/button stay readable over a background image.
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgb(0, 0, 0, 0) 35%, rgb(0, 0, 0, 0.55) 100%);
-    pointer-events: none;
-    border-radius: inherit;
-  }
+  &:hover,
+  &:focus-visible {
+    color: var(--pmf-text);
+    border-color: var(--pmf-accent);
+    box-shadow: var(--pmf-shadow-md);
+    transform: translateY(-2px);
 
-  .d-flex {
-    position: relative;
-    z-index: 1;
-  }
-
-  h3 {
-    font-size: 1.5rem;
-    text-shadow: 0 1px 6px rgb(0, 0, 0, 0.35);
-  }
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--pmf-shadow-lg);
+    .pmf-category-tile-chevron {
+      transform: translateX(3px);
+      color: var(--pmf-accent);
+    }
   }
 }
 
-.masonry-grid {
-  padding-bottom: map-get($spacers, 4); // equals .mb-4 (≈1.5rem)
+.pmf-category-tile-avatar {
+  flex: 0 0 3rem;
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--pmf-radius);
+  background: var(--pmf-accent-gradient);
+  color: var(--pmf-text-on-accent);
+  font-weight: 700;
+  font-size: 1.25rem;
+  object-fit: cover;
+}
 
-  // Info cards: accent top edge + hover lift for a more tactile feel.
-  .card {
-    border-top: 3px solid var(--pmf-accent);
-    transition:
-      transform var(--pmf-transition),
-      box-shadow var(--pmf-transition);
+.pmf-category-tile-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
 
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--pmf-shadow-lg);
-    }
+.pmf-category-tile-name {
+  display: block;
+  margin-bottom: 0.2rem;
+}
 
-    .card-title i {
-      color: var(--pmf-accent);
-    }
+.pmf-category-tile-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: var(--pmf-font-size-sm);
+  color: var(--pmf-text-muted);
+}
+
+.pmf-category-tile-chevron {
+  align-self: center;
+  color: var(--pmf-text-muted);
+  transition:
+    transform var(--pmf-transition),
+    color var(--pmf-transition);
+}
+
+[dir='rtl'] .pmf-category-tile-chevron {
+  transform: scaleX(-1);
+}
+
+// Keep the mirror on hover; inside the flipped box translateX(3px) moves left.
+[dir='rtl'] .pmf-category-tile:hover .pmf-category-tile-chevron,
+[dir='rtl'] .pmf-category-tile:focus-visible .pmf-category-tile-chevron {
+  transform: scaleX(-1) translateX(3px);
+}
+
+// Sticky callout -----------------------------------------------------------
+.pmf-callout {
+  padding: 1rem 1.25rem;
+  border-inline-start: 4px solid var(--pmf-accent);
+  border-radius: var(--pmf-radius);
+  background: var(--pmf-accent-subtle);
+
+  .pmf-callout-title {
+    color: var(--pmf-accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .pmf-callout-list {
+    margin: 0;
+    padding-inline-start: 1.1rem;
+  }
+}
+
+// FAQ list sections --------------------------------------------------------
+.pmf-faq-list-section {
+  padding: 0.25rem 0 0.5rem;
+}
+
+.pmf-faq-list-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid var(--pmf-border);
+
+  i {
+    color: var(--pmf-accent);
+  }
+}
+
+.pmf-faq-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+}
+
+.pmf-faq-list-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--pmf-radius-sm);
+  transition: background-color var(--pmf-transition);
+
+  &:hover {
+    background-color: var(--pmf-surface-hover);
+  }
+}
+
+.pmf-faq-list-link {
+  font-weight: 600;
+  text-decoration: none;
+  flex: 1 1 16rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.pmf-faq-list-meta {
+  font-size: var(--pmf-font-size-sm);
+  color: var(--pmf-text-muted);
+  white-space: nowrap;
+}
+
+.pmf-faq-list-dot {
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  margin: 0 0.4rem;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+.pmf-faq-list-empty {
+  padding: 1rem 1.25rem;
+  color: var(--pmf-text-muted);
+}
+
+// News and tags ------------------------------------------------------------
+.pmf-news,
+.pmf-tags {
+  padding: 1.25rem;
+}
+
+.pmf-news-title {
+  margin-bottom: 1rem;
+
+  i {
+    color: var(--pmf-accent);
+  }
+}
+
+.pmf-news-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pmf-news-item {
+  position: relative;
+  padding: 0 0 1rem 1.1rem;
+  border-inline-start: 2px solid var(--pmf-border);
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: -6px;
+    top: 0.35rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--pmf-accent);
+  }
+}
+
+.pmf-news-date {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--pmf-text-muted);
+}
+
+.pmf-news-link {
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.pmf-news-excerpt {
+  margin: 0.25rem 0 0;
+  font-size: var(--pmf-font-size-sm);
+  color: var(--pmf-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Hero ---------------------------------------------------------------------
+// Bleeds to the viewport edges from inside .container; #wrapper clips the
+// overflow so the negative margin never produces a horizontal scrollbar.
+#wrapper:has(.pmf-hero) {
+  margin-top: 0 !important;
+  overflow-x: clip;
+}
+
+.pmf-hero {
+  position: relative;
+  padding: clamp(3rem, 8vw, 5.5rem) 0 clamp(2rem, 5vw, 3.5rem);
+  margin: 0 calc(50% - 50vw) 2.5rem;
+  background:
+    radial-gradient(60rem 30rem at 15% -10%, var(--pmf-accent-subtle), transparent 70%),
+    linear-gradient(180deg, var(--pmf-surface) 0%, var(--pmf-bg) 100%);
+  border-bottom: 1px solid var(--pmf-border);
+
+  .pmf-hero-inner {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+    text-align: center;
+  }
+
+  .pmf-hero-subline {
+    font-size: var(--pmf-font-size-lg);
+    color: var(--pmf-text-muted);
+    margin: 0 auto 1.75rem;
+    max-width: 38rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .pmf-search-shell {
+    text-align: start;
+  }
+
+  .pmf-search-advanced {
+    text-align: center;
+  }
+
+  .pmf-hero-pill {
+    display: inline-block;
+    margin-top: 1.25rem;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    background: var(--pmf-accent-subtle);
+    color: var(--pmf-accent);
+    font-size: var(--pmf-font-size-sm);
+    font-weight: 600;
   }
 }

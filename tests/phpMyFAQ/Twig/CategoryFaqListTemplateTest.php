@@ -47,15 +47,15 @@ class CategoryFaqListTemplateTest extends TestCase
 
         // List scaffolding
         $this->assertStringContainsString('<ul class="list-group list-group-flush mb-4 pmf-category-faq-list">', $html);
-        $this->assertStringContainsString('list-group-item d-flex justify-content-between align-items-start', $html);
-        $this->assertStringContainsString('badge text-bg-primary rounded-pill', $html);
+        $this->assertStringContainsString('list-group-item pmf-faq-row d-flex justify-content-between align-items-start', $html);
+        $this->assertStringContainsString('badge pmf-badge-count rounded-pill', $html);
 
         // Page indicator (pages > 1)
         $this->assertStringContainsString('<strong>1</strong>', $html);
         $this->assertStringContainsString('<strong>2</strong>', $html);
 
         // Sticky item gets the sticky classes, non-sticky does not
-        $this->assertStringContainsString('list-group-item-primary rounded mb-3', $html);
+        $this->assertStringContainsString('pmf-faq-row-sticky', $html);
 
         // Reusable components are passed through raw
         $this->assertStringContainsString(
