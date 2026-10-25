@@ -41,6 +41,39 @@ readonly class Migration400Alpha3 extends AbstractMigration
 
     public function up(OperationRecorder $recorder): void
     {
+        $this->createSeoTable($recorder);
+
+        // Update bot ignore list
+        $recorder->updateConfig(
+            'main.botIgnoreList',
+            'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,bravobrian,archiver,'
+            . 'w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,facebookcatalog/1.0,'
+            . 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php),facebookexternalhit/1.1',
+        );
+
+        // New configuration items
+        $recorder->addConfig('mail.noReplySenderAddress', '');
+        $recorder->addConfig('records.allowedMediaHosts', 'www.youtube.com');
+        $recorder->addConfig('seo.title', '');
+        $recorder->addConfig('seo.description', '');
+        $recorder->addConfig('layout.enablePrivacyLink', 'true');
+        $recorder->addConfig('layout.customCss', '');
+        $recorder->addConfig('seo.enableRichSnippets', 'false');
+
+        // Delete old config items
+        $recorder->deleteConfig('main.urlValidateInterval');
+        $recorder->deleteConfig('main.enableGzipCompression');
+        $recorder->deleteConfig('main.metaKeywords');
+        $recorder->deleteConfig('main.send2friendText');
+
+        // Rename config items
+        $recorder->renameConfig('main.templateSet', 'layout.templateSet');
+        $recorder->renameConfig('main.enableCookieConsent', 'layout.enableCookieConsent');
+        $recorder->renameConfig('main.contactInformationHTML', 'layout.contactInformationHTML');
+    }
+
+    private function createSeoTable(OperationRecorder $recorder): void
+    {
         // Create SEO table
         // "CREATE TABLE IF NOT EXISTS" keeps a re-run alive after a previously
         // failed update - SQL Server has no support for it
@@ -110,33 +143,5 @@ readonly class Migration400Alpha3 extends AbstractMigration
                 $this->tablePrefix,
             ), 'Create SEO table (PostgreSQL)');
         }
-
-        // Update bot ignore list
-        $recorder->updateConfig(
-            'main.botIgnoreList',
-            'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,bravobrian,archiver,'
-            . 'w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,facebookcatalog/1.0,'
-            . 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php),facebookexternalhit/1.1',
-        );
-
-        // New configuration items
-        $recorder->addConfig('mail.noReplySenderAddress', '');
-        $recorder->addConfig('records.allowedMediaHosts', 'www.youtube.com');
-        $recorder->addConfig('seo.title', '');
-        $recorder->addConfig('seo.description', '');
-        $recorder->addConfig('layout.enablePrivacyLink', 'true');
-        $recorder->addConfig('layout.customCss', '');
-        $recorder->addConfig('seo.enableRichSnippets', 'false');
-
-        // Delete old config items
-        $recorder->deleteConfig('main.urlValidateInterval');
-        $recorder->deleteConfig('main.enableGzipCompression');
-        $recorder->deleteConfig('main.metaKeywords');
-        $recorder->deleteConfig('main.send2friendText');
-
-        // Rename config items
-        $recorder->renameConfig('main.templateSet', 'layout.templateSet');
-        $recorder->renameConfig('main.enableCookieConsent', 'layout.enableCookieConsent');
-        $recorder->renameConfig('main.contactInformationHTML', 'layout.contactInformationHTML');
     }
 }
