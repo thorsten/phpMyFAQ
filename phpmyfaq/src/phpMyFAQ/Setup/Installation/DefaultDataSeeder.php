@@ -261,7 +261,7 @@ class DefaultDataSeeder
             'mail.remoteSMTPPassword' => '',
             'mail.remoteSMTPPort' => '25',
             'mail.remoteSMTPDisableTLSPeerVerification' => 'false',
-            'mail.useQueue' => 'true',
+            'mail.useQueue' => 'false',
             'mail.provider' => 'smtp',
             'mail.sendgridApiKey' => '',
             'mail.sesAccessKeyId' => '',

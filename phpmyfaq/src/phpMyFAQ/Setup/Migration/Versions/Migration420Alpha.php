@@ -236,7 +236,7 @@ readonly class Migration420Alpha extends AbstractMigration
         $recorder->addConfig('queue.transport', 'database');
         $recorder->addConfig('session.handler', 'files');
         $recorder->addConfig('session.redisDsn', 'tcp://redis:6379?database=0');
-        $recorder->addConfig('mail.useQueue', 'true');
+        $recorder->addConfig('mail.useQueue', 'false');
         $recorder->addConfig('mail.provider', 'smtp');
         $recorder->addConfig('mail.sendgridApiKey', '');
         $recorder->addConfig('mail.sesAccessKeyId', '');

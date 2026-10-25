@@ -47,6 +47,13 @@ class DefaultDataSeederTest extends TestCase
         $this->assertMatchesRegularExpression('/^[a-f0-9]{32}$/', $config['main.phpMyFAQToken']);
     }
 
+    public function testGetMainConfigDisablesMailQueueByDefault(): void
+    {
+        $config = $this->seeder->getMainConfig();
+
+        $this->assertSame('false', $config['mail.useQueue']);
+    }
+
     public function testGetMainConfigSeedsSymfonySafeCachePrefix(): void
     {
         $config = $this->seeder->getMainConfig();

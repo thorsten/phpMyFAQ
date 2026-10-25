@@ -82,6 +82,31 @@ class Migration420AlphaTest extends TestCase
         $this->assertTrue($foundOauthTable, 'Expected at least one SQL statement containing "faqoauth_clients"');
     }
 
+    public function testUpAddsMailQueueDisabledByDefault(): void
+    {
+        $recorder = $this->createStub(OperationRecorder::class);
+        $addedConfig = [];
+
+        $recorder
+            ->method('addConfig')
+            ->willReturnCallback(static function (string $name, string $value) use (
+                &$addedConfig,
+                $recorder,
+            ): OperationRecorder {
+                $addedConfig[$name] = $value;
+
+                return $recorder;
+            });
+        $recorder->method('addSql')->willReturn($recorder);
+        $recorder->method('grantPermission')->willReturn($recorder);
+
+        $this->migration->up($recorder);
+
+        // The worker (bin/worker.php) is neither part of the release package nor of the Docker image,
+        // so queued mails would never be sent on a default installation.
+        $this->assertSame('false', $addedConfig['mail.useQueue']);
+    }
+
     public function testUpAddsRateLimitConfigEntries(): void
     {
         $recorder = $this->createMock(OperationRecorder::class);
