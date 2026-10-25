@@ -336,27 +336,36 @@ stage_github_release() {
     release_notes=$("${PHP_BIN}" "${REPO_ROOT}/scripts/release-changelog.php" "${VERSION}")
     release_notes=$(printf '%s\n\n## Verification\n\nSee the [verification instructions](https://github.com/thorsten/phpMyFAQ/blob/main/docs/release.md#169-verification). The release public key is published at [docs/keys/phpmyfaq-release-public-key.asc](https://github.com/thorsten/phpMyFAQ/blob/main/docs/keys/phpmyfaq-release-public-key.asc).\n' "${release_notes}")
 
+    # Assets to publish. The signing step is skipped with SKIP_GPG=1, so the
+    # detached signatures only exist for signed releases.
+    release_assets="phpMyFAQ-${VERSION}.zip
+phpMyFAQ-${VERSION}.tar.gz
+SHA256SUMS
+phpMyFAQ-${VERSION}.php.sbom.cdx.json
+phpMyFAQ-${VERSION}.js.sbom.cdx.json
+phpMyFAQ-${VERSION}.sbom.cdx.json"
+    if [ "${SKIP_GPG:-0}" != '1' ]; then
+        release_assets="${release_assets}
+SHA256SUMS.asc
+phpMyFAQ-${VERSION}.zip.asc
+phpMyFAQ-${VERSION}.tar.gz.asc"
+    fi
+
     if [ "${RELEASE_TYPE}" = 'development' ]; then
         set -- --prerelease
     else
         set --
     fi
+    for asset_name in ${release_assets}; do
+        set -- "$@" "${RELEASE_DIR}/${asset_name}"
+    done
 
     if ! gh release view "${VERSION}" --repo thorsten/phpMyFAQ >/dev/null 2>&1; then
         run gh release create "${VERSION}" \
             --repo thorsten/phpMyFAQ \
             --title "phpMyFAQ ${VERSION}" \
             --notes "${release_notes}" \
-            "$@" \
-            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip" \
-            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.tar.gz" \
-            "${RELEASE_DIR}/SHA256SUMS" \
-            "${RELEASE_DIR}/SHA256SUMS.asc" \
-            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.zip.asc" \
-            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.tar.gz.asc" \
-            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.php.sbom.cdx.json" \
-            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.js.sbom.cdx.json" \
-            "${RELEASE_DIR}/phpMyFAQ-${VERSION}.sbom.cdx.json"
+            "$@"
 
         if [ "${DRY_RUN}" -eq 1 ]; then
             log 'github-release: dry-run — skipped release creation'
@@ -374,17 +383,7 @@ stage_github_release() {
     existing_assets=$(gh release view "${VERSION}" --repo thorsten/phpMyFAQ --json assets --jq '.assets[].name')
 
     missing_found=0
-    for asset_name in \
-        "phpMyFAQ-${VERSION}.zip" \
-        "phpMyFAQ-${VERSION}.tar.gz" \
-        'SHA256SUMS' \
-        'SHA256SUMS.asc' \
-        "phpMyFAQ-${VERSION}.zip.asc" \
-        "phpMyFAQ-${VERSION}.tar.gz.asc" \
-        "phpMyFAQ-${VERSION}.php.sbom.cdx.json" \
-        "phpMyFAQ-${VERSION}.js.sbom.cdx.json" \
-        "phpMyFAQ-${VERSION}.sbom.cdx.json"
-    do
+    for asset_name in ${release_assets}; do
         if printf '%s\n' "${existing_assets}" | grep -Fxq "${asset_name}"; then
             continue
         fi
