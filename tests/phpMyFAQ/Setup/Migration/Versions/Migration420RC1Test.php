@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Setup\Migration\Versions;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Setup\Migration\MigrationInterface;
 use phpMyFAQ\Setup\Migration\Operations\ConfigAddOperation;
 use phpMyFAQ\Setup\Migration\Operations\ConfigDeleteOperation;
@@ -17,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(Migration420RC1::class)]
+#[UsesClass(Database::class)]
 #[UsesClass(OperationRecorder::class)]
 #[UsesClass(ConfigAddOperation::class)]
 #[UsesClass(ConfigDeleteOperation::class)]

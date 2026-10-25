@@ -8,6 +8,7 @@ use LogicException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Container\ContainerRegistry;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -26,6 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 #[UsesClass(Configuration::class)]
 #[UsesClass(ContainerRegistry::class)]
 #[UsesClass(Database::class)]
+#[UsesClass(PdoSqlite::class)]
 #[UsesClass(InstanceDatabase::class)]
 #[UsesClass(Token::class)]
 #[UsesClass(Strings::class)]
