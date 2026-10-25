@@ -188,7 +188,7 @@ in the admin panel" are set automatically or can only be changed directly in the
 | `mail.remoteSMTPPassword`                   | Password | *(empty)* | The password for SMTP authentication. |
 | `mail.remoteSMTPPort`                       | SMTP server port | `25` | The port number of the SMTP server (common values: 25, 465, 587). |
 | `mail.remoteSMTPDisableTLSPeerVerification` | Disable SMTP TLS peer verification (not recommended) | `false` | Disables TLS certificate verification for the SMTP connection. Only use this for testing or with self-signed certificates. |
-| `mail.useQueue`                             | Use background worker queue for email delivery | `true` | When enabled, emails are queued and sent in the background instead of being sent immediately during the request. |
+| `mail.useQueue`                             | Use background worker queue for email delivery | `false` | When enabled, emails are queued and only sent when `bin/worker.php` runs, e.g., via cron (see 7.8.3). The worker is not part of the release packages and the Docker images. |
 | `mail.provider`                             | Mail provider | `smtp` | The mail delivery provider. Options: `none`, `smtp`, `sendgrid`, `ses`, `mailgun`. |
 | `mail.sendgridApiKey`                       | SendGrid API key | *(empty)* | API key for the SendGrid email delivery service. |
 | `mail.sesAccessKeyId`                       | Amazon SES Access Key ID | *(empty)* | AWS Access Key ID for Amazon Simple Email Service (SES). |

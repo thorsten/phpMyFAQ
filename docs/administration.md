@@ -957,8 +957,10 @@ Before phpMyFAQ is installed, only `phpmyfaq:install` and `phpmyfaq:hashes:creat
 
 ### 7.8.3 Background worker and scheduler
 
-phpMyFAQ queues some tasks, such as sending emails, if "Use background worker queue for email delivery"
-(`mail.useQueue`) is enabled, which is the default. Run the worker regularly, e.g., via cron, to process the queue:
+By default, phpMyFAQ sends emails immediately during the request. If you enable "Use background worker queue for
+email delivery" (`mail.useQueue`), emails are queued instead, and you have to run the worker regularly, e.g., via cron.
+Otherwise, queued emails are never sent. The worker script is part of the Git repository, but not of the release
+packages and the Docker images, so only enable the queue if you can run it:
 
 ```bash
 # Process all queued jobs
@@ -968,12 +970,16 @@ php bin/worker.php
 php bin/worker.php 10
 ```
 
-The task scheduler runs maintenance tasks such as the cleanup of old sessions, the search index optimization, and the
-aggregation of statistics:
+The task scheduler runs maintenance tasks such as the cleanup of old sessions, the search index optimization, the
+aggregation of statistics, and a data backup:
 
 ```bash
 php bin/scheduler.php run
 ```
+
+The scheduled backup is stored in `content/core/data/backups/` and is only readable by the owner of the file, because it
+contains password hashes. You can restore it in the backup administration like any other backup, as long as you keep
+the file name.
 
 ## 7.9 Troubleshooting
 

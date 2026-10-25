@@ -303,7 +303,8 @@ Set up your user information with your real name and a working e-mail address:
 
 phpMyFAQ uses an internal, database-backed queue for asynchronous tasks. The worker has handlers for mail delivery,
 FAQ search indexing, and exports (see `phpmyfaq.queue.worker` in `phpmyfaq/src/services.php`).
-Run the worker locally while testing features that send email:
+Mail delivery only uses the queue if `mail.useQueue` is enabled (it is disabled by default). Run the worker locally
+while testing queued email delivery:
 
 ```bash
 php bin/worker.php

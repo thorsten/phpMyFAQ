@@ -31,7 +31,8 @@ The command is only registered once phpMyFAQ is installed, because the server ne
 installation without a database configuration, `bin/console` reports the command as not defined.
 
 The command starts a STDIO MCP server. It is not meant to be run interactively: an MCP-capable client or the MCP
-Inspector launches it as a subprocess and talks to it via standard input and output.
+Inspector launches it as a subprocess and talks to it via standard input and output. Standard output only carries the
+MCP protocol messages; the startup banner and error messages are written to standard error.
 
 ### 15.2.2 Available Tools
 
@@ -132,8 +133,8 @@ Errors during a tool call are returned as text content of the tool result, not a
 - An empty `query` returns `Error: Search query cannot be empty.`
 - Exceptions during the search, e.g., database errors, return `Error searching FAQ database: <message>`
 
-If the server cannot start, the command prints `Failed to start MCP server: <message>` and exits with a non-zero exit
-code.
+If the server cannot start, the command prints `Failed to start MCP server: <message>` to standard error and exits with
+a non-zero exit code.
 
 ## 15.6 Security Considerations
 
