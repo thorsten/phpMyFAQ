@@ -57,7 +57,7 @@ FROM alpine:3.21 AS payload
 WORKDIR /payload
 COPY --from=frontend /app/phpmyfaq ./phpmyfaq
 COPY --from=php-deps /app/phpmyfaq/src/libs ./phpmyfaq/src/libs
-COPY bin/console ./bin/console
+COPY bin/console bin/worker.php bin/scheduler.php ./bin/
 # Strip development leftovers (mirrors scripts/prepare-release-artifacts.sh)
 # and any runtime state that a local checkout may contain. Never ship a
 # database.php: the container is configured through the installer or the
@@ -85,7 +85,7 @@ RUN set -eu \
             -mindepth 1 -not -name '.gitkeep' -not -name '.htaccess' -delete \
     && find . -name '.DS_Store' -delete \
     && chmod -R u+rwX,go+rX,go-w phpmyfaq bin \
-    && chmod +x bin/console
+    && chmod +x bin/console bin/worker.php bin/scheduler.php
 
 # ---------------------------------------------------------------------------
 # Apache + mod_php
@@ -108,7 +108,7 @@ RUN install-php-extensions gd intl ldap mysqli pdo_mysql pdo_pgsql pgsql zip bz2
 COPY .docker/production/apache.conf /etc/apache2/sites-available/000-default.conf
 COPY .docker/production/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 COPY --from=payload /payload/phpmyfaq /var/www/html
-COPY --from=payload /payload/bin/console /var/www/bin/console
+COPY --from=payload /payload/bin /var/www/bin
 
 # The Composer autoloader resolves the project root relative to the vendor
 # dir, so the document root must also be reachable as /var/www/phpmyfaq.

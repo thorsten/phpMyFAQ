@@ -160,16 +160,25 @@ generate_hash_manifest() {
     (cd "${CHECKOUT_DIR}" && "${PHP_BIN}" scripts/createHashes.php > "${HASH_MANIFEST}")
 }
 
+# Command line tools shipped next to the phpmyfaq/ web root: the console, the
+# queue worker and the task scheduler all expect ../phpmyfaq relative to bin/.
+PACKAGED_BIN_SCRIPTS="console worker.php scheduler.php"
+
 stage_for_packaging() {
     log "Staging phpMyFAQ payload"
-    rm -rf "${PACKAGE_DIR}/phpmyfaq"
+    rm -rf "${PACKAGE_DIR}/phpmyfaq" "${PACKAGE_DIR}/bin"
     mv "${CHECKOUT_DIR}/phpmyfaq" "${PACKAGE_DIR}/phpmyfaq"
+    mkdir -p "${PACKAGE_DIR}/bin"
+    for script in ${PACKAGED_BIN_SCRIPTS}; do
+        cp "${CHECKOUT_DIR}/bin/${script}" "${PACKAGE_DIR}/bin/${script}"
+        chmod 0755 "${PACKAGE_DIR}/bin/${script}"
+    done
 }
 
 create_packages() {
     log "Creating release archives in ${RELEASE_DIR}"
-    tar czf "${ARTIFACT_TAR}" -C "${PACKAGE_DIR}" phpmyfaq
-    (cd "${PACKAGE_DIR}" && zip -rq "${ARTIFACT_ZIP}" phpmyfaq)
+    tar czf "${ARTIFACT_TAR}" -C "${PACKAGE_DIR}" phpmyfaq bin
+    (cd "${PACKAGE_DIR}" && zip -rq "${ARTIFACT_ZIP}" phpmyfaq bin)
 }
 
 generate_sboms() {

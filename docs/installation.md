@@ -115,7 +115,9 @@ We recommend using the latest version of Firefox, Chrome, Safari, Opera, or Micr
 ### 2.2.1 Classic Shared Web Hosting
 
 You can install phpMyFAQ via one of the provided packages as .zip or .tar.gz or using Git. If you choose our package,
-download it and unzip the archive on your hard disk.
+download it and unzip the archive on your hard disk. It contains the web application in **phpmyfaq/** and the command
+line tools (`console`, `worker.php`, `scheduler.php`) in **bin/**; the tools expect `phpmyfaq/` next to `bin/`. Only
+**phpmyfaq/** belongs into the document root of your web server.
 
 If you want to use Git, please run the following commands on your shell:
 

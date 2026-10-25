@@ -260,8 +260,10 @@ docker exec phpmyfaq-apache ls -la /var/www/html
 # Run as different user
 docker exec -u www-data phpmyfaq-apache whoami
 
-# Run the phpMyFAQ console
+# Run the phpMyFAQ console, the mail queue worker or the task scheduler
 docker exec -u www-data phpmyfaq-apache php /var/www/bin/console list
+docker exec -u www-data phpmyfaq-apache php /var/www/bin/worker.php
+docker exec -u www-data phpmyfaq-apache php /var/www/bin/scheduler.php run
 ```
 
 ### File Operations

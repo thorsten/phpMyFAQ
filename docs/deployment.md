@@ -266,6 +266,19 @@ shows the exact volume names of your project.
 Don't use the online update of the administration with the images: it replaces files that belong to the image, and
 these changes are lost when the container is recreated.
 
+## Background jobs
+
+The images contain the command line tools in `/var/www/bin/`. Run them inside the web container as `www-data`, e.g.,
+from a cron job on the host (replace `phpmyfaq-apache` with `phpmyfaq-frankenphp` for the FrankenPHP image):
+
+```bash
+# Process the mail queue; only needed if "Use background worker queue for email delivery" is enabled
+docker exec -u www-data phpmyfaq-apache php /var/www/bin/worker.php
+
+# Maintenance tasks: session cleanup, search index optimization, statistics, data backup
+docker exec -u www-data phpmyfaq-apache php /var/www/bin/scheduler.php run
+```
+
 ## Monitoring and Troubleshooting
 
 Every image has a `HEALTHCHECK` on `GET /api/health`. The endpoint answers `{"status":"ok"}` when the

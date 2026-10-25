@@ -959,8 +959,8 @@ Before phpMyFAQ is installed, only `phpmyfaq:install` and `phpmyfaq:hashes:creat
 
 By default, phpMyFAQ sends emails immediately during the request. If you enable "Use background worker queue for
 email delivery" (`mail.useQueue`), emails are queued instead, and you have to run the worker regularly, e.g., via cron.
-Otherwise, queued emails are never sent. The worker script is part of the Git repository, but not of the release
-packages and the Docker images, so only enable the queue if you can run it:
+Otherwise, queued emails are never sent. The worker script ships in the `bin/` directory next to `phpmyfaq/` in the
+release packages, in the Git repository, and as `/var/www/bin/worker.php` in the Docker images:
 
 ```bash
 # Process all queued jobs

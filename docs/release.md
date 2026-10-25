@@ -24,6 +24,9 @@ Each release produces these package files:
 - `phpMyFAQ-<version>.zip`
 - `phpMyFAQ-<version>.tar.gz`
 
+Both archives contain the web application in `phpmyfaq/` and the command line tools (`console`, `worker.php`,
+`scheduler.php`) in `bin/`.
+
 Examples:
 
 - `phpMyFAQ-4.2.0.zip`
