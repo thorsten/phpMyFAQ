@@ -18,6 +18,69 @@ use RuntimeException;
 #[UsesClass(BackupExportResult::class)]
 class TaskSchedulerTest extends TestCase
 {
+    private string $backupDirectory;
+
+    protected function setUp(): void
+    {
+        $this->backupDirectory = sys_get_temp_dir() . '/pmf-scheduler-backups-' . bin2hex(random_bytes(6));
+    }
+
+    protected function tearDown(): void
+    {
+        foreach (glob($this->backupDirectory . '/*') ?: [] as $file) {
+            unlink($file);
+        }
+
+        if (is_dir($this->backupDirectory)) {
+            rmdir($this->backupDirectory);
+        }
+    }
+
+    public function testCreateBackupWritesBackupContentToBackupDirectory(): void
+    {
+        $backup = $this->createStub(Backup::class);
+        $backup->method('export')->willReturn(new BackupExportResult('phpmyfaq-data.sql', '-- sql --'));
+
+        $scheduler = new TaskScheduler(
+            $this->createConfigurationStub([]),
+            $this->createStub(Session::class),
+            $backup,
+            $this->createStub(Statistics::class),
+            $this->backupDirectory,
+        );
+        $result = $scheduler->createBackup();
+
+        $backupFile = $this->backupDirectory . '/phpmyfaq-data.sql';
+        $this->assertTrue($result['success']);
+        $this->assertSame($backupFile, $result['filePath']);
+        $this->assertSame('-- sql --', file_get_contents($backupFile));
+        $this->assertSame(0o600, fileperms($backupFile) & 0o777);
+    }
+
+    public function testCreateBackupReturnsFailureWhenBackupDirectoryIsNotWritable(): void
+    {
+        file_put_contents($this->backupDirectory, 'not a directory');
+
+        $backup = $this->createStub(Backup::class);
+        $backup->method('export')->willReturn(new BackupExportResult('phpmyfaq-data.sql', '-- sql --'));
+
+        $configuration = $this->createConfigurationStub([]);
+        $configuration->method('getLogger')->willReturn($this->createStub(Logger::class));
+
+        $scheduler = new TaskScheduler(
+            $configuration,
+            $this->createStub(Session::class),
+            $backup,
+            $this->createStub(Statistics::class),
+            $this->backupDirectory,
+        );
+        $result = $scheduler->createBackup();
+
+        unlink($this->backupDirectory);
+        $this->assertFalse($result['success']);
+        $this->assertNull($result['fileName']);
+    }
+
     public function testRunExecutesTasksAndReturnsSummary(): void
     {
         $configuration = $this->createConfigurationStub([
@@ -36,7 +99,7 @@ class TaskSchedulerTest extends TestCase
         $backup = $this->createStub(Backup::class);
         $backup->method('export')->willReturn(new BackupExportResult('phpmyfaq-data.sql', '-- sql --'));
 
-        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics);
+        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics, $this->backupDirectory);
         $result = $scheduler->run();
 
         $this->assertTrue($result['sessionCleanup']['success']);
@@ -69,7 +132,7 @@ class TaskSchedulerTest extends TestCase
         $backup = $this->createStub(Backup::class);
         $backup->method('export')->willReturn(new BackupExportResult('phpmyfaq-data.sql', '-- sql --'));
 
-        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics);
+        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics, $this->backupDirectory);
         $result = $scheduler->run();
 
         $this->assertIsArray($result['sessionCleanup']);
@@ -162,7 +225,7 @@ class TaskSchedulerTest extends TestCase
         $backup = $this->createStub(Backup::class);
         $statistics = $this->createStub(Statistics::class);
 
-        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics);
+        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics, $this->backupDirectory);
         $result = $scheduler->cleanupSessions();
 
         $this->assertFalse($result['success']);
@@ -189,7 +252,7 @@ class TaskSchedulerTest extends TestCase
         $backup = $this->createStub(Backup::class);
         $statistics = $this->createStub(Statistics::class);
 
-        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics);
+        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics, $this->backupDirectory);
         $result = $scheduler->optimizeSearchIndex();
 
         $this->assertFalse($result['success']);
@@ -214,7 +277,7 @@ class TaskSchedulerTest extends TestCase
         $statistics = $this->createStub(Statistics::class);
         $statistics->method('totalFaqs')->willThrowException(new RuntimeException('Query failed'));
 
-        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics);
+        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics, $this->backupDirectory);
         $result = $scheduler->aggregateStatistics();
 
         $this->assertFalse($result['success']);
@@ -240,7 +303,7 @@ class TaskSchedulerTest extends TestCase
         $backup = $this->createStub(Backup::class);
         $backup->method('export')->willThrowException(new RuntimeException('Cannot export backup'));
 
-        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics);
+        $scheduler = new TaskScheduler($configuration, $session, $backup, $statistics, $this->backupDirectory);
         $result = $scheduler->createBackup();
 
         $this->assertFalse($result['success']);

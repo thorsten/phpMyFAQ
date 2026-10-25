@@ -24,6 +24,7 @@ use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\BackupType;
 use phpMyFAQ\Faq\Statistics;
+use Symfony\Component\Filesystem\Filesystem;
 use Throwable;
 
 class TaskScheduler
@@ -35,6 +36,7 @@ class TaskScheduler
         private readonly AdminSession $adminSession,
         private readonly Backup $backup,
         private readonly Statistics $statistics,
+        private readonly ?string $backupDirectory = null,
     ) {
     }
 
@@ -212,16 +214,20 @@ class TaskScheduler
     }
 
     /**
-     * @return array{success: bool, fileName: string|null}
+     * Creates a data backup and stores it in the backup directory, so it can be restored later.
+     *
+     * @return array{success: bool, fileName: string|null, filePath: string|null}
      */
     public function createBackup(): array
     {
         try {
             $backupResult = $this->backup->export(BackupType::BACKUP_TYPE_DATA);
+            $filePath = $this->writeBackupFile($backupResult->fileName, $backupResult->content);
 
             return [
                 'success' => true,
                 'fileName' => $backupResult->fileName,
+                'filePath' => $filePath,
             ];
         } catch (Throwable $throwable) {
             $this->configuration->getLogger()->error('Scheduled backup creation failed.', [
@@ -232,7 +238,24 @@ class TaskScheduler
             return [
                 'success' => false,
                 'fileName' => null,
+                'filePath' => null,
             ];
         }
+    }
+
+    /**
+     * Backups contain password hashes, so the file is only readable by the owner.
+     */
+    private function writeBackupFile(string $fileName, string $content): string
+    {
+        $directory = $this->backupDirectory ?? PMF_CONTENT_DIR . '/core/data/backups';
+        $filePath = $directory . '/' . basename($fileName);
+
+        $filesystem = new Filesystem();
+        $filesystem->mkdir($directory, mode: 0o700);
+        $filesystem->dumpFile($filePath, $content);
+        $filesystem->chmod($filePath, mode: 0o600);
+
+        return $filePath;
     }
 }
