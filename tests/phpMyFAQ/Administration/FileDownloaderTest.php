@@ -53,4 +53,43 @@ class FileDownloaderTest extends TestCase
         $this->assertSame((string) strlen('{"faq":true}'), $response->headers->get('Content-Length'));
         $this->assertStringContainsString('attachment', (string) $response->headers->get('Content-Disposition'));
     }
+
+    public function testGetResponseDescribesCsvExports(): void
+    {
+        $export = new FileDownloader('csv', "id;title\n1;FAQ");
+
+        $response = $export->getResponse(HeaderUtils::DISPOSITION_INLINE);
+
+        $this->assertSame('text/csv', $response->headers->get('Content-Type'));
+        $this->assertSame('phpMyFAQ CSV export file', $response->headers->get('Content-Description'));
+        $this->assertStringContainsString('phpmyfaq.csv', (string) $response->headers->get('Content-Disposition'));
+    }
+
+    public function testGetResponseFallsBackToGenericExportForUnknownTypes(): void
+    {
+        $export = new FileDownloader('xml', '<faq/>');
+
+        $response = $export->getResponse(HeaderUtils::DISPOSITION_ATTACHMENT);
+
+        $this->assertSame('application/octet-stream', $response->headers->get('Content-Type'));
+        $this->assertSame('phpMyFAQ Generic export file', $response->headers->get('Content-Description'));
+        $this->assertStringContainsString('phpmyfaq.pmf', (string) $response->headers->get('Content-Disposition'));
+    }
+
+    public function testSendRefusesWhenOutputWasAlreadyBuffered(): void
+    {
+        if (headers_sent()) {
+            $this->markTestSkipped('Headers were already sent by the test runner.');
+        }
+
+        $export = new FileDownloader('pdf', 'test content');
+
+        $this->expectOutputString('already sent');
+        echo 'already sent';
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Error: unable to send my data: someone already sent other data!');
+
+        $export->send(HeaderUtils::DISPOSITION_ATTACHMENT);
+    }
 }

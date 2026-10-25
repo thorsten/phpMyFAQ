@@ -1369,4 +1369,88 @@ class WrapperTest extends TestCase
 
         self::assertSame('', $this->wrapper->convertExternalImagesToBase64('<img src="https://cdn.test:8443/a.png">'));
     }
+
+    public function testResolveImageSkipsUrlsWithoutAPath(): void
+    {
+        self::assertNull($this->captureImageResolver()('http://example.com', 'png'));
+    }
+
+    public function testResolveImageSkipsDirectoriesUnderContent(): void
+    {
+        self::assertDirectoryExists(PMF_ROOT_DIR . '/content/user/images');
+
+        self::assertNull($this->captureImageResolver()('/content/user/images', 'png'));
+    }
+
+    public function testInlineLocalImagesDropsImgTagWithAnEmptySrc(): void
+    {
+        $method = new ReflectionMethod(Wrapper::class, 'inlineLocalImages');
+        $result = $method->invoke(new Wrapper(), '<p>x</p><img src=""><p>y</p>');
+
+        self::assertSame('<p>x</p><p>y</p>', $result);
+    }
+
+    public function testConvertExternalImagesStripsAnImageWhoseFetchThrows(): void
+    {
+        $fetcher = $this->createStub(ExternalImageFetcher::class);
+        $fetcher->method('fetch')->willThrowException(new Exception('connection refused'));
+
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['cdn.test']);
+
+        $wrapper = new Wrapper(null, $fetcher);
+        $wrapper->setConfig($config);
+
+        self::assertSame('', $wrapper->convertExternalImagesToBase64('<img src="https://cdn.test/a.png">'));
+    }
+
+    public function testConvertExternalImagesStripsFetchedDataWithoutARecognisedMimeType(): void
+    {
+        WrapperTestFunctionState::$useFinfoStub = true;
+        WrapperTestFunctionState::$finfoBufferResult = false;
+
+        $fetcher = $this->createStub(ExternalImageFetcher::class);
+        $fetcher->method('fetch')->willReturn("\x89PNG\r\n\x1A\n" . str_repeat("\x00", 20));
+
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['cdn.test']);
+
+        $wrapper = new Wrapper(null, $fetcher);
+        $wrapper->setConfig($config);
+
+        self::assertSame('', $wrapper->convertExternalImagesToBase64('<img src="https://cdn.test/a.png">'));
+    }
+
+    public function testConvertExternalImagesEmbedsAFetchedImageAsDataUri(): void
+    {
+        $gif = base64_decode('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+        self::assertNotFalse($gif);
+
+        $fetcher = $this->createStub(ExternalImageFetcher::class);
+        $fetcher->method('fetch')->willReturn($gif);
+
+        $config = $this->createStub(Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['cdn.test']);
+
+        $wrapper = new Wrapper(null, $fetcher);
+        $wrapper->setConfig($config);
+
+        $result = $wrapper->convertExternalImagesToBase64('<p>x</p><img src="https://cdn.test/a.gif" alt="a"><p>y</p>');
+
+        self::assertSame(
+            '<p>x</p><img src="data:image/gif;base64,' . base64_encode($gif) . '" alt="a"><p>y</p>',
+            $result,
+        );
+    }
+
+    public function testGetImageMimeTypeFallsBackToJpegAndPngHeadersWhenFinfoIsUnavailable(): void
+    {
+        WrapperTestFunctionState::$useFinfoStub = true;
+        WrapperTestFunctionState::$finfoOpenReturnsFalse = true;
+
+        $method = new ReflectionMethod(Wrapper::class, 'getImageMimeType');
+
+        $this->assertSame('image/jpeg', $method->invoke($this->wrapper, "\xFF\xD8\xFF" . str_repeat("\x00", 20)));
+        $this->assertSame('image/png', $method->invoke($this->wrapper, "\x89PNG\r\n\x1A\n" . str_repeat("\x00", 20)));
+    }
 }

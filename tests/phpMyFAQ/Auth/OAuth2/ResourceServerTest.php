@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Auth\OAuth2;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -171,6 +172,83 @@ class ResourceServerTest extends TestCase
         $request = new Request(server: ['HTTP_AUTHORIZATION' => 'Bearer invalid-oauth-token']);
 
         $this->assertNull($server->authenticate($request));
+    }
+
+    public function testAuthenticateReturnsTheUserIdOfAValidAccessToken(): void
+    {
+        [$privateKeyPath, $publicKeyPath] = $this->getKeyPairPaths();
+        $server = $this->createConfiguredResourceServer($publicKeyPath, revoked: 0);
+
+        $token = $this->signAccessToken($privateKeyPath, ['sub' => '42']);
+        $request = new Request(server: ['HTTP_HOST' => 'localhost', 'HTTP_AUTHORIZATION' => 'Bearer ' . $token]);
+
+        $this->assertSame(42, $server->authenticate($request));
+    }
+
+    public function testAuthenticateReturnsNullForAValidAccessTokenWithoutAUser(): void
+    {
+        [$privateKeyPath, $publicKeyPath] = $this->getKeyPairPaths();
+        $server = $this->createConfiguredResourceServer($publicKeyPath, revoked: 0);
+
+        $token = $this->signAccessToken($privateKeyPath, []);
+        $request = new Request(server: ['HTTP_HOST' => 'localhost', 'HTTP_AUTHORIZATION' => 'Bearer ' . $token]);
+
+        $this->assertNull($server->authenticate($request));
+    }
+
+    public function testAuthenticateReturnsNullForARevokedAccessToken(): void
+    {
+        [$privateKeyPath, $publicKeyPath] = $this->getKeyPairPaths();
+        $server = $this->createConfiguredResourceServer($publicKeyPath, revoked: 1);
+
+        $token = $this->signAccessToken($privateKeyPath, ['sub' => '42']);
+        $request = new Request(server: ['HTTP_HOST' => 'localhost', 'HTTP_AUTHORIZATION' => 'Bearer ' . $token]);
+
+        $this->assertNull($server->authenticate($request));
+    }
+
+    private function createConfiguredResourceServer(string $publicKeyPath, int $revoked): ResourceServer
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $db->method('query')->willReturn(true);
+        $db->method('fetchObject')->willReturn((object) ['revoked' => $revoked]);
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['oauth2.enable',        'true'],
+                ['oauth2.publicKeyPath', $publicKeyPath],
+            ]);
+        $configuration->method('getDb')->willReturn($db);
+
+        return new ResourceServer($configuration);
+    }
+
+    /**
+     * @param array<string, mixed> $additionalClaims
+     */
+    private function signAccessToken(string $privateKeyPath, array $additionalClaims): string
+    {
+        $now = time();
+        $claims = $additionalClaims
+        + [
+            'jti' => 'access-token-id',
+            'aud' => ['phpmyfaq-client'],
+            'iat' => $now - 10,
+            'nbf' => $now - 10,
+            'exp' => $now + 3600,
+            'scopes' => ['faq.read'],
+        ];
+
+        $encode = static fn(string $value): string => rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
+        $signingInput = $encode(json_encode(['typ' => 'JWT', 'alg' => 'RS256'])) . '.' . $encode(json_encode($claims));
+
+        $signature = '';
+        openssl_sign($signingInput, $signature, (string) file_get_contents($privateKeyPath), OPENSSL_ALGO_SHA256);
+
+        return $signingInput . '.' . $encode($signature);
     }
 
     private function getKeyPairPaths(): array

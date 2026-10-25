@@ -143,6 +143,48 @@ class AttributeRouteLoaderTest extends TestCase
         $this->assertFalse($this->invokeLoaderMethod('matchesContext', $publicRoute, 'api'));
     }
 
+    public function testLoadHandlesUnnamedLocalizedAndInvalidRouteAttributes(): void
+    {
+        $controllerCode = <<<'PHP'
+            <?php
+
+            namespace phpMyFAQ\Routing\Fixtures;
+
+            use Symfony\Component\Routing\Attribute\Route;
+
+            class EdgeCaseController
+            {
+                #[Route(path: '/unnamed', methods: ['GET'])]
+                public function unnamed(): void
+                {
+                }
+
+                #[Route(path: ['en' => '/localized', 'de' => '/lokalisiert'], name: 'public.localized')]
+                public function localized(): void
+                {
+                }
+
+                #[Route(path: '/invalid/{id}', name: 'public.invalid', requirements: ['id' => ''])]
+                public function invalid(): void
+                {
+                }
+            }
+            PHP;
+
+        $edgeCaseDir = $this->fixturesDir . '/EdgeCase';
+        mkdir($edgeCaseDir, 0755, true);
+        file_put_contents($edgeCaseDir . '/EdgeCaseController.php', $controllerCode);
+        require_once $edgeCaseDir . '/EdgeCaseController.php';
+
+        $routes = $this->loader->load($edgeCaseDir, 'public');
+
+        $expectedName = 'route_' . md5('phpMyFAQ\Routing\Fixtures\EdgeCaseController' . 'unnamed');
+        $this->assertSame([$expectedName], array_keys($routes->all()));
+        $this->assertSame('/unnamed', $routes->get($expectedName)?->getPath());
+        $this->assertNull($routes->get('public.localized'));
+        $this->assertNull($routes->get('public.invalid'));
+    }
+
     private function createTestController(): void
     {
         $controllerCode = <<<'PHP'

@@ -622,7 +622,10 @@ final class OidcIdTokenValidatorTest extends TestCase
      */
     public static function brokenJwksProvider(): iterable
     {
-        yield 'server error' => [new MockResponse('', ['http_code' => 503]), 'OIDC JWKS request failed with status 503'];
+        yield 'server error' => [
+            new MockResponse('', ['http_code' => 503]),
+            'OIDC JWKS request failed with status 503',
+        ];
         yield 'not json' => [new MockResponse('<html>'), 'OIDC JWKS response is not valid JSON'];
         yield 'scalar json' => [new MockResponse('"keys"'), 'OIDC JWKS response is not valid'];
         yield 'no keys' => [new MockResponse('{"keys":[]}'), 'OIDC JWKS response does not contain any keys'];
@@ -651,13 +654,149 @@ final class OidcIdTokenValidatorTest extends TestCase
         self::assertSame('subject-123', $claims['sub']);
     }
 
+    public function testValidateRejectsANullPayload(): void
+    {
+        $encodedHeader = $this->base64UrlEncode(json_encode(['alg' => 'RS256', 'kid' => 'test-key']));
+        $idToken = $encodedHeader . '.' . $this->base64UrlEncode('null') . '.' . $this->base64UrlEncode('sig');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('OIDC id_token payload is not valid');
+
+        $this->validateWithJwksResponse(new MockResponse('{"keys":[]}'), $idToken);
+    }
+
+    /**
+     * @return iterable<string, array{mixed}>
+     */
+    public static function invalidAudienceProvider(): iterable
+    {
+        yield 'number' => [123];
+        yield 'empty list' => [[]];
+        yield 'list with a non-string entry' => [['phpmyfaq', 5]];
+        yield 'list with a blank entry' => [['phpmyfaq', ' ']];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidAudienceProvider')]
+    public function testValidateRejectsInvalidAudienceClaims(mixed $audience): void
+    {
+        $claims = $this->validClaims();
+        $claims['aud'] = $audience;
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('OIDC id_token audience claim is invalid');
+
+        $this->validateWithJwksResponse(new MockResponse('{"keys":[]}'), $this->signToken($claims));
+    }
+
+    public function testValidateRejectsAudienceListsWithoutTheExpectedAudience(): void
+    {
+        $claims = $this->validClaims();
+        $claims['aud'] = ['other-client'];
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('OIDC audience mismatch in id_token');
+
+        $this->validateWithJwksResponse(new MockResponse('{"keys":[]}'), $this->signToken($claims));
+    }
+
+    /**
+     * @return iterable<string, array{string, int}>
+     */
+    public static function rsaSigningAlgorithmProvider(): iterable
+    {
+        yield 'RS384' => ['RS384', OPENSSL_ALGO_SHA384];
+        yield 'RS512' => ['RS512', OPENSSL_ALGO_SHA512];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('rsaSigningAlgorithmProvider')]
+    public function testValidateAcceptsTheOtherRsaSigningAlgorithms(string $algorithm, int $opensslAlgorithm): void
+    {
+        $header = ['alg' => $algorithm, 'typ' => 'JWT', 'kid' => 'test-key'];
+        $encodedHeader = $this->base64UrlEncode(json_encode($header, JSON_THROW_ON_ERROR));
+        $encodedPayload = $this->base64UrlEncode(json_encode($this->validClaims(), JSON_THROW_ON_ERROR));
+        $signingInput = $encodedHeader . '.' . $encodedPayload;
+
+        $signature = '';
+        openssl_sign($signingInput, $signature, $this->privateKey, $opensslAlgorithm);
+        $idToken = $signingInput . '.' . $this->base64UrlEncode($signature);
+
+        $jwks = json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR);
+
+        $claims = $this->validateWithJwksResponse(new MockResponse($jwks), $idToken);
+
+        self::assertSame('subject-123', $claims['sub']);
+    }
+
+    public function testValidateRejectsKeysThatAreNotRsaKeys(): void
+    {
+        $jwks = json_encode(['keys' => [['kty' => 'EC', 'kid' => 'test-key', 'crv' => 'P-256']]], JSON_THROW_ON_ERROR);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('OIDC JWK is not a supported RSA key');
+
+        $this->validateWithJwksResponse(new MockResponse($jwks));
+    }
+
+    public function testValidateRejectsSignaturesThatAreNotBase64Url(): void
+    {
+        $idToken = $this->signToken($this->validClaims());
+        $idToken = substr($idToken, 0, strrpos($idToken, '.') + 1) . '***';
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('OIDC token could not be base64url decoded');
+
+        $this->validateWithJwksResponse(
+            new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
+            $idToken,
+        );
+    }
+
+    public function testValidateUsesTheSystemClockWithoutATimeProvider(): void
+    {
+        $now = time();
+        $claims = $this->validClaims();
+        $claims['iat'] = $now - 10;
+        $claims['nbf'] = $now - 10;
+        $claims['exp'] = $now + 60;
+
+        $httpClient = new MockHttpClient([
+            new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
+        ]);
+        $validator = new OidcIdTokenValidator($httpClient);
+
+        $result = $validator->validate(
+            $this->signToken($claims),
+            $this->createDiscoveryDocument(),
+            'phpmyfaq',
+            'nonce-123',
+        );
+
+        self::assertSame('subject-123', $result['sub']);
+    }
+
+    public function testPrivateHelpersHandleEmptyIntegersAndUnexpectedAudienceTypes(): void
+    {
+        $validator = new OidcIdTokenValidator(new MockHttpClient());
+        $reflection = new \ReflectionClass($validator);
+
+        self::assertSame("\x02\x01\x00", $reflection->getMethod('asn1Integer')->invoke($validator, ''));
+        self::assertFalse($reflection->getMethod('audienceMatches')->invoke($validator, 123, 'phpmyfaq'));
+    }
+
     public function testValidateRejectsUnsupportedSigningAlgorithms(): void
     {
-        $idToken = $this->signTokenWithHeader(['alg' => 'HS256', 'typ' => 'JWT', 'kid' => 'test-key'], $this->validClaims());
+        $idToken = $this->signTokenWithHeader([
+            'alg' => 'HS256',
+            'typ' => 'JWT',
+            'kid' => 'test-key',
+        ], $this->validClaims());
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Unsupported OIDC id_token signing algorithm');
 
-        $this->validateWithJwksResponse(new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)), $idToken);
+        $this->validateWithJwksResponse(
+            new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
+            $idToken,
+        );
     }
 }

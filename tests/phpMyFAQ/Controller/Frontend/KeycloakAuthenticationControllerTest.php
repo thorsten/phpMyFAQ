@@ -1153,4 +1153,111 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
         $this->assertSame('', $oidcSession->getAuthorizationState()['state']);
     }
+
+    public function testCallbackRedirectsHomeWhenTheProviderIsDisabled(): void
+    {
+        $this->disableProvider();
+
+        $response = $this->createController()->callback(new Request(['code' => 'x', 'state' => 'y']));
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+    }
+
+    /**
+     * The linked account is resolved by its stored subject, but the credential check re-reads
+     * the subject and finds a different one. A blank login is masked as "<empty>" in the log.
+     */
+    public function testCallbackRefusesLoginWhenTheCredentialCheckFindsAnUnlinkedAccount(): void
+    {
+        $idToken = $this->signToken([
+            'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => 'subject-123',
+            'aud' => ['phpmyfaq'],
+            'azp' => 'phpmyfaq',
+            'nonce' => 'nonce-456',
+            'iat' => time(),
+            'exp' => time() + 300,
+        ]);
+
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session, 'keycloak');
+        $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->never())->method('getUserByLogin');
+        $this->expectNoLogin($currentUser);
+
+        $authUser = $this->createMock(User::class);
+        $authUser->expects($this->once())->method('getUserIdByKeycloakSub')->with('subject-123')->willReturn(55);
+        $authUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
+        $authUser->expects($this->once())->method('getLogin')->willReturn(' ');
+        $authUser->expects($this->once())->method('getUserByLogin')->with(' ', false)->willReturn(true);
+        $authUser->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('different-subject');
+        $authUser->expects($this->never())->method('createUser');
+
+        $controller = $this->createController(
+            $this->createSuccessfulProviderResponses(
+                $idToken,
+                '{"sub":"subject-123","preferred_username":"john","email":"john@example.com","name":"John Doe"}',
+            ),
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+            static fn(): User => $authUser,
+        );
+
+        $response = $controller->callback(new Request(['code' => 'test-code', 'state' => 'state-123']));
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $this->assertSame('', $oidcSession->getAuthorizationState()['state']);
+        $this->assertSame('', $oidcSession->getIdToken());
+    }
+
+    public function testCallbackRefusesLoginWhenTheProvisionedUserCannotBeLoaded(): void
+    {
+        $idToken = $this->signToken([
+            'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => '123',
+            'aud' => ['phpmyfaq'],
+            'azp' => 'phpmyfaq',
+            'nonce' => 'nonce-456',
+            'iat' => time(),
+            'exp' => time() + 300,
+        ]);
+
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        $oidcSession = new OidcSession($session, 'keycloak');
+        $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->expects($this->once())->method('getUserByLogin')->with('john')->willReturn(false);
+        $this->expectNoLogin($currentUser);
+
+        $authUser = $this->createMock(User::class);
+        $authUser->expects($this->once())->method('getUserIdByKeycloakSub')->with('123')->willReturn(0);
+        $authUser->expects($this->exactly(2))->method('getUserByLogin')->with('john', false)->willReturn(false);
+        $authUser->expects($this->once())->method('getUserIdByEmail')->with('john@example.com')->willReturn(0);
+        $authUser->expects($this->once())->method('createUser')->with('john', '', '')->willReturn(true);
+        $authUser->expects($this->once())->method('setUserData')->willReturn(true);
+
+        $controller = $this->createController(
+            $this->createSuccessfulProviderResponses(
+                $idToken,
+                '{"sub":"123","preferred_username":"john","email":"john@example.com","name":"John Doe"}',
+            ),
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+            static fn(): User => $authUser,
+        );
+
+        $response = $controller->callback(new Request(['code' => 'test-code', 'state' => 'state-123']));
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $this->assertSame('', $oidcSession->getAuthorizationState()['state']);
+        $this->assertSame('', $oidcSession->getIdToken());
+    }
 }

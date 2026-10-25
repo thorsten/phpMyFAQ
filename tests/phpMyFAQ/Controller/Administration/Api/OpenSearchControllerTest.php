@@ -609,4 +609,30 @@ final class OpenSearchControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatisticsReturnsTheIndexStatistics(): void
+    {
+        $stats = ['indices' => ['phpmyfaq-test' => ['total' => ['docs' => ['count' => 3]]]]];
+        $indices = $this->createMock(\OpenSearch\Namespaces\IndicesNamespace::class);
+        $indices->expects($this->once())->method('stats')->with(['index' => 'phpmyfaq-test'])->willReturn($stats);
+        $client = $this->createStub(\OpenSearch\Client::class);
+        $client->method('indices')->willReturn($indices);
+
+        $openSearchConfiguration = $this->createStub(\phpMyFAQ\Configuration\OpenSearchConfiguration::class);
+        $openSearchConfiguration->method('getIndex')->willReturn('phpmyfaq-test');
+        $this->configuration->setOpenSearch($client);
+        $this->configuration->setOpenSearchConfig($openSearchConfiguration);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->statistics();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(['index' => 'phpmyfaq-test', 'stats' => $stats], $payload);
+    }
 }

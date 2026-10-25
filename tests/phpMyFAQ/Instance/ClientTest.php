@@ -9,6 +9,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\TenantIsolationMode;
 use phpMyFAQ\Filesystem\Filesystem;
+use phpMyFAQ\Instance;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
@@ -743,5 +744,186 @@ class ClientTest extends TestCase
         $this->expectExceptionMessage('insert failed');
 
         $this->client->createClientTables('broken_');
+    }
+
+    public function testSetClientTemplateSetFallsBackToTheDefaultForBlankNames(): void
+    {
+        $property = new \ReflectionProperty(Client::class, 'clientTemplateSet');
+
+        $this->client->setClientTemplateSet('tenant-theme');
+        $this->assertSame('tenant-theme', $property->getValue($this->client));
+
+        $this->client->setClientTemplateSet('   ');
+        $this->assertSame('default', $property->getValue($this->client));
+    }
+
+    public function testCreateClientMarksTheInstanceAsNonMaster(): void
+    {
+        $instance = $this->createMock(Instance::class);
+        $instance->expects($this->once())->method('addConfig')->with('isMaster', 'false');
+
+        $this->client->createClient($instance);
+    }
+
+    public function testCreateClientDatabaseFallsBackToPrefixForAnUnknownEnvironmentMode(): void
+    {
+        putenv('PMF_TENANT_ISOLATION_MODE=bogus');
+
+        try {
+            $dbMock = $this->createMock(DatabaseDriver::class);
+            $this->configuration->method('getDb')->willReturn($dbMock);
+
+            $queries = [];
+            $dbMock
+                ->method('query')
+                ->willReturnCallback(static function (string $query) use (&$queries): bool {
+                    $queries[] = $query;
+                    return true;
+                });
+            $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+
+            $this->client->setClientUrl('https://bogus.example.com');
+            $this->client->createClientDatabase('bogus_');
+
+            $this->assertTrue($this->queryContains($queries, 'bogus_faqconfig'));
+        } finally {
+            putenv('PMF_TENANT_ISOLATION_MODE');
+        }
+    }
+
+    public function testCreateClientDatabaseWithSchemaModeFailsWhenTheTablesCannotBeCreated(): void
+    {
+        Database::factory('pdo_pgsql');
+        Database::setTablePrefix('');
+
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $loggerMock = $this->createMock(Logger::class);
+        $this->configuration->method('getDb')->willReturn($dbMock);
+        $this->configuration->method('getLogger')->willReturn($loggerMock);
+
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static fn(string $query): bool => !str_contains($query, 'CREATE SCHEMA'));
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+
+        $loggerMock->expects($this->once())->method('error')->with('Failed to create tenant schema tables.');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Failed to create tenant tables in schema.');
+
+        $this->client->setClientUrl('https://tenant.example.com');
+        $this->client->createClientDatabase('no_schema', TenantIsolationMode::SCHEMA);
+    }
+
+    public function testCopyBaseDataToSchemaRejectsAnInvalidIdentifier(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid tenant schema identifier.');
+
+        new ReflectionMethod(Client::class, 'copyBaseDataToSchema')->invoke($this->client, 'bad schema;');
+    }
+
+    public function testCopyBaseDataToSchemaBracketsTheSchemaForSqlServer(): void
+    {
+        $previous = new \ReflectionProperty(Database::class, 'dbType')->getValue();
+        new \ReflectionProperty(Database::class, 'dbType')->setValue(null, 'sqlsrv');
+        Database::setTablePrefix('');
+
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $this->configuration->method('getDb')->willReturn($dbMock);
+
+        $queries = [];
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): bool {
+                $queries[] = $query;
+                return true;
+            });
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+
+        try {
+            $this->client->setClientUrl('https://tenant.example.com');
+            new ReflectionMethod(Client::class, 'copyBaseDataToSchema')->invoke($this->client, 'tenant');
+        } finally {
+            new \ReflectionProperty(Database::class, 'dbType')->setValue(null, $previous);
+        }
+
+        $this->assertContains('INSERT INTO [tenant].faqconfig SELECT * FROM faqconfig', $queries);
+        $this->assertFalse($this->queryContains($queries, 'SET search_path'));
+    }
+
+    public function testGetDatabaseCredentialsRejectsAnIncompleteDatabaseFile(): void
+    {
+        $databaseFile = PMF_CONFIG_DIR . '/database.php';
+        $backup = file_exists($databaseFile) ? file_get_contents($databaseFile) : null;
+        file_put_contents($databaseFile, "<?php\n\$DB = ['server' => 'localhost', 'user' => 'faq'];\n");
+
+        try {
+            $credentials = new ReflectionMethod(Client::class, 'getDatabaseCredentials')->invoke($this->client);
+        } finally {
+            if ($backup === null) {
+                unlink($databaseFile);
+            } else {
+                file_put_contents($databaseFile, $backup);
+            }
+        }
+
+        $this->assertNull($credentials);
+    }
+
+    public function testInsertRowsSkipsScalarRowsAndRendersNullValues(): void
+    {
+        $previous = new \ReflectionProperty(Database::class, 'dbType')->getValue();
+        new \ReflectionProperty(Database::class, 'dbType')->setValue(null, 'sqlite3');
+
+        $dbMock = $this->createMock(DatabaseDriver::class);
+        $this->configuration->method('getDb')->willReturn($dbMock);
+
+        $queries = [];
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): bool {
+                $queries[] = $query;
+                return true;
+            });
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+
+        try {
+            new ReflectionMethod(Client::class, 'insertRows')->invoke(
+                $this->client,
+                'tenant_faqconfig',
+                ['not a row', (object) ['config_name' => 'main.language', 'config_value' => null]],
+            );
+        } finally {
+            new \ReflectionProperty(Database::class, 'dbType')->setValue(null, $previous);
+        }
+
+        $this->assertSame(
+            ['INSERT INTO tenant_faqconfig ("config_name", "config_value") VALUES (\'main.language\', NULL)'],
+            $queries,
+        );
+    }
+
+    public function testFolderOperationsRequireAWritableMultisiteFolder(): void
+    {
+        $client = new class($this->configuration) extends Client {
+            public function isMultiSiteWriteable(): bool
+            {
+                return false;
+            }
+        };
+        $this->filesystem->expects($this->never())->method('moveDirectory');
+        $this->filesystem->expects($this->never())->method('deleteDirectory');
+        $client->setFileSystem($this->filesystem);
+
+        $this->assertFalse($client->moveClientFolder('https://old.example.com', 'https://new.example.com'));
+        $this->assertFalse($client->deleteClientFolder('https://old.example.com'));
+    }
+
+    public function testIsMultiSiteWriteableChecksTheMultisiteFolder(): void
+    {
+        $client = new Client($this->configuration);
+
+        $this->assertSame(is_writable(PMF_ROOT_DIR . '/multisite/'), $client->isMultiSiteWriteable());
     }
 }

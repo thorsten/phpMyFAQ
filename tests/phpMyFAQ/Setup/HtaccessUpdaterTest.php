@@ -275,7 +275,10 @@ class HtaccessUpdaterTest extends TestCase
         $this->assertTrue($this->htaccessUpdater->updateRewriteBase($this->testHtaccessPath, '/sub/dir'));
 
         $updatedContent = (string) file_get_contents($this->testHtaccessPath);
-        $this->assertStringStartsWith("Options -Indexes\nErrorDocument 404 /index.php\n\n<IfModule mod_rewrite.c>", $updatedContent);
+        $this->assertStringStartsWith(
+            "Options -Indexes\nErrorDocument 404 /index.php\n\n<IfModule mod_rewrite.c>",
+            $updatedContent,
+        );
         $this->assertStringContainsString("RewriteEngine On\n", $updatedContent);
         $this->assertStringContainsString("RewriteBase /sub/dir/\n</IfModule>\n", $updatedContent);
         $this->assertTrue($this->htaccessUpdater->validateHtaccessStructure($this->testHtaccessPath));
@@ -293,5 +296,106 @@ class HtaccessUpdaterTest extends TestCase
     public function testValidateHtaccessStructureFailsForNonExistentFile(): void
     {
         $this->assertFalse($this->htaccessUpdater->validateHtaccessStructure($this->testHtaccessPath));
+    }
+
+    public function testUpdateRewriteBaseReturnsTrueWithoutBackupWhenReplacementLeavesContentUnchanged(): void
+    {
+        $content = <<<HTACCESS
+            <IfModule mod_rewrite.c>
+                RewriteEngine On
+                RewriteBase /foo/bar/ trailing-token
+            </IfModule>
+            HTACCESS;
+        file_put_contents($this->testHtaccessPath, $content);
+
+        $this->assertTrue($this->htaccessUpdater->updateRewriteBase($this->testHtaccessPath, '/foo/bar/'));
+
+        $this->assertSame($content, file_get_contents($this->testHtaccessPath));
+        $this->assertCount(0, glob($this->testHtaccessPath . '.backup-*'));
+    }
+
+    public function testCreateBackupFailsWhenDirectoryIsNotWritable(): void
+    {
+        $directory = $this->createUnprivilegedTempDirectory();
+        $htaccessPath = $directory . '/.htaccess';
+        file_put_contents($htaccessPath, "RewriteEngine On\n");
+        chmod($directory, 0o555);
+
+        try {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage('Failed to create backup of .htaccess file');
+            $this->withoutWarnings(fn(): string => $this->htaccessUpdater->createBackup($htaccessPath));
+        } finally {
+            chmod($directory, 0o755);
+            unlink($htaccessPath);
+            rmdir($directory);
+        }
+    }
+
+    public function testUpdateRewriteBaseFailsWhenFileIsNotReadable(): void
+    {
+        $directory = $this->createUnprivilegedTempDirectory();
+        $htaccessPath = $directory . '/.htaccess';
+        file_put_contents($htaccessPath, "RewriteEngine On\n");
+        chmod($htaccessPath, 0o000);
+
+        try {
+            $this->assertFalse($this->withoutWarnings(
+                fn(): bool => $this->htaccessUpdater->validateHtaccessStructure($htaccessPath),
+            ));
+
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage('Failed to read .htaccess file');
+            $this->withoutWarnings(fn(): bool => $this->htaccessUpdater->updateRewriteBase($htaccessPath, '/foo/'));
+        } finally {
+            chmod($htaccessPath, 0o644);
+            unlink($htaccessPath);
+            rmdir($directory);
+        }
+    }
+
+    public function testUpdateRewriteBaseFailsWhenFileIsNotWritable(): void
+    {
+        $directory = $this->createUnprivilegedTempDirectory();
+        $htaccessPath = $directory . '/.htaccess';
+        file_put_contents($htaccessPath, "<IfModule mod_rewrite.c>\n    RewriteEngine On\n</IfModule>\n");
+        chmod($htaccessPath, 0o444);
+
+        try {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage('Failed to write updated .htaccess file');
+            $this->withoutWarnings(fn(): bool => $this->htaccessUpdater->updateRewriteBase($htaccessPath, '/foo/'));
+        } finally {
+            chmod($htaccessPath, 0o644);
+            array_map(unlink(...), glob($directory . '/.htaccess.backup-*') ?: []);
+            unlink($htaccessPath);
+            rmdir($directory);
+        }
+    }
+
+    /**
+     * File permission checks are bypassed for root, so these tests need an unprivileged user.
+     */
+    private function createUnprivilegedTempDirectory(): string
+    {
+        if (function_exists('posix_geteuid') && posix_geteuid() === 0) {
+            $this->markTestSkipped('File permission tests cannot run as root.');
+        }
+
+        $directory = sys_get_temp_dir() . '/pmf-htaccess-' . bin2hex(random_bytes(6));
+        mkdir($directory, 0o755, true);
+
+        return $directory;
+    }
+
+    private function withoutWarnings(callable $callback): mixed
+    {
+        set_error_handler(static fn(): bool => true);
+
+        try {
+            return $callback();
+        } finally {
+            restore_error_handler();
+        }
     }
 }

@@ -10,6 +10,7 @@ use phpMyFAQ\Database\PdoSqlsrv;
 use phpMyFAQ\Tenant\TenantContext;
 use phpMyFAQ\Tenant\TenantQuotas;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
@@ -265,6 +266,92 @@ class StorageFactoryTest extends TestCase
             $this->assertFileExists($tmpDir . '/42/attachments/my/file.txt');
         } finally {
             $this->removeDirectory($tmpDir);
+        }
+    }
+
+    public function testCreateReturnsS3StorageWithEndpointCredentialsAndPathStyle(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['storage.type',             's3'],
+                ['storage.s3.bucket',        'pmf-bucket'],
+                ['storage.s3.prefix',        'uploads'],
+                ['storage.s3.publicBaseUrl', 'https://cdn.example.com'],
+                ['storage.s3.region',        'eu-central-1'],
+                ['storage.s3.endpoint',      'https://minio.example.com:9000'],
+                ['storage.s3.key',           'AKIAIOSFODNN7EXAMPLE'],
+                ['storage.s3.secret',        'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'],
+                ['storage.s3.usePathStyle',  'true'],
+            ]);
+
+        $factory = new StorageFactory($configuration, $this->createTenantContext(13));
+        $storage = $factory->create();
+
+        $this->assertInstanceOf(TenantScopedStorage::class, $storage);
+        $this->assertSame('https://cdn.example.com/uploads/13/attachments/my/file.txt', $storage->url('my/file.txt'));
+    }
+
+    public function testCreateThrowsWhenFilesystemRootExistsButIsNotWritable(): void
+    {
+        $tmpDir = sys_get_temp_dir() . '/phpmyfaq-factory-readonly-' . uniqid('', true);
+        $this->assertTrue(mkdir($tmpDir, 0o555));
+
+        try {
+            if (is_writable($tmpDir)) {
+                $this->markTestSkipped('The current user can write to read-only directories.');
+            }
+
+            $configuration = $this->createStub(Configuration::class);
+            $configuration
+                ->method('get')
+                ->willReturnMap([
+                    ['storage.type',                     'filesystem'],
+                    ['storage.filesystem.root',          $tmpDir],
+                    ['storage.filesystem.publicBaseUrl', null],
+                ]);
+
+            $factory = new StorageFactory($configuration, $this->createTenantContext(10));
+
+            $this->expectException(StorageException::class);
+            $this->expectExceptionMessage('Storage root directory is not writable: ' . $tmpDir);
+            $factory->create();
+        } finally {
+            chmod($tmpDir, 0o755);
+            rmdir($tmpDir);
+        }
+    }
+
+    /**
+     * PMF_ATTACHMENTS_DIR is only defined by the bootstrap of a real installation, so it is
+     * defined here in an isolated process.
+     */
+    #[RunInSeparateProcess]
+    public function testCreateFallsBackToTheAttachmentsDirectoryConstant(): void
+    {
+        $tmpDir = sys_get_temp_dir() . '/phpmyfaq-factory-attachments-' . uniqid('', true);
+        if (!defined('PMF_ATTACHMENTS_DIR')) {
+            define('PMF_ATTACHMENTS_DIR', $tmpDir);
+        }
+
+        try {
+            $configuration = $this->createStub(Configuration::class);
+            $configuration
+                ->method('get')
+                ->willReturnMap([
+                    ['storage.type',                     'filesystem'],
+                    ['storage.filesystem.root',          ''],
+                    ['storage.filesystem.publicBaseUrl', null],
+                ]);
+
+            $factory = new StorageFactory($configuration, $this->createTenantContext(42));
+            $storage = $factory->create();
+            $this->assertTrue($storage->put('my/file.txt', 'content'));
+
+            $this->assertFileExists(PMF_ATTACHMENTS_DIR . '/42/attachments/my/file.txt');
+        } finally {
+            $this->removeDirectory(PMF_ATTACHMENTS_DIR);
         }
     }
 

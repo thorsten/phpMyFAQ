@@ -633,4 +633,118 @@ class PluginManagerTest extends TestCase
 
         $this->assertSame(PMF_ROOT_DIR . '/content/plugins/MyPlugin', $result);
     }
+
+    public function testRegisterPluginIgnoresUnknownClass(): void
+    {
+        $this->pluginManager->registerPlugin('phpMyFAQ\\Plugin\\DoesNotExistPlugin');
+
+        $this->assertSame([], $this->pluginManager->getPlugins());
+        $this->assertSame([], $this->pluginManager->getIncompatiblePlugins());
+    }
+
+    /**
+     * @throws PluginException
+     */
+    public function testLoadPluginsRegistersDiscoveredPluginsAndRejectsUnmetDependencies(): void
+    {
+        $dependentPlugin = $this->createPluginWithDependencies('dependentPlugin', ['nonExistentPlugin']);
+
+        $pluginsProperty = new ReflectionClass(PluginManager::class)->getProperty('plugins');
+        $pluginsProperty->setValue($this->pluginManager, ['dependentPlugin' => $dependentPlugin]);
+
+        $this->pluginManager->loadPlugins();
+
+        $plugins = $this->pluginManager->getPlugins();
+        $this->assertArrayNotHasKey('dependentPlugin', $plugins);
+        $this->assertNotEmpty($plugins);
+
+        $incompatible = $this->pluginManager->getIncompatiblePlugins();
+        $this->assertArrayHasKey('dependentPlugin', $incompatible);
+        $this->assertSame($dependentPlugin, $incompatible['dependentPlugin']['plugin']);
+        $this->assertSame('Missing dependencies: nonExistentPlugin', $incompatible['dependentPlugin']['reason']);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testDependencyChecksIgnoreAlreadyLoadedPlugins(): void
+    {
+        $reflection = new ReflectionClass(PluginManager::class);
+        $reflection->getProperty('loadedPlugins')->setValue($this->pluginManager, ['mockPlugin']);
+
+        $areDependenciesMet = $reflection->getMethod('areDependenciesMet');
+        $getMissingDependencies = $reflection->getMethod('getMissingDependencies');
+
+        $satisfied = $this->createPluginWithDependencies('satisfied', ['mockPlugin']);
+        $this->assertTrue($areDependenciesMet->invoke($this->pluginManager, $satisfied));
+        $this->assertSame([], $getMissingDependencies->invoke($this->pluginManager, $satisfied));
+
+        $partiallyMet = $this->createPluginWithDependencies('partial', ['mockPlugin', 'missingPlugin']);
+        $this->assertFalse($areDependenciesMet->invoke($this->pluginManager, $partiallyMet));
+        $this->assertSame(['missingPlugin'], $getMissingDependencies->invoke($this->pluginManager, $partiallyMet));
+    }
+
+    /**
+     * @param string[] $dependencies
+     */
+    private function createPluginWithDependencies(string $name, array $dependencies): PluginInterface
+    {
+        return new class($name, $dependencies) implements PluginInterface {
+            /**
+             * @param string[] $dependencies
+             */
+            public function __construct(
+                private readonly string $name,
+                private readonly array $dependencies,
+            ) {
+            }
+
+            public function getName(): string
+            {
+                return $this->name;
+            }
+
+            public function getVersion(): string
+            {
+                return '1.0.0';
+            }
+
+            public function getDescription(): string
+            {
+                return 'Plugin with dependencies';
+            }
+
+            public function getAuthor(): string
+            {
+                return 'Test';
+            }
+
+            public function getDependencies(): array
+            {
+                return $this->dependencies;
+            }
+
+            public function getConfig(): ?PluginConfigurationInterface
+            {
+                return null;
+            }
+
+            public function registerEvents(\Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher): void {}
+
+            public function getStylesheets(): array
+            {
+                return [];
+            }
+
+            public function getTranslationsPath(): ?string
+            {
+                return null;
+            }
+
+            public function getScripts(): array
+            {
+                return [];
+            }
+        };
+    }
 }

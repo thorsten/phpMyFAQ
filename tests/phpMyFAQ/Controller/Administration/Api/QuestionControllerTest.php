@@ -500,4 +500,148 @@ final class QuestionControllerTest extends TestCase
         self::assertSame(42, $events[0]['user_id']);
         self::assertSame('admin', $events[0]['username']);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsUnauthorizedWithoutADataObject(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'data' => 'not-an-object',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteSkipsQuestionIdsThatAreNotIntegers(): void
+    {
+        $this->seedOpenQuestion(4711);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-questions');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $token,
+                'questions[]' => ['not-a-number', 4711],
+            ],
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_open_question_deleted'), $payload['success']);
+        self::assertFalse($this->questionExists(4711));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testToggleReturnsBadRequestWithoutAQuestionId(): void
+    {
+        $question = $this->createMock(Question::class);
+        $question->expects($this->never())->method('setVisibility');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'toggle-question-visibility');
+
+        $controller = $this->createController($question);
+        $controller->setContainer($container);
+
+        $response = $controller->toggle(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('toggle not successful', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testReopenReturnsBadRequestWhenReopeningFails(): void
+    {
+        $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('get')->with(7)->willReturn(['id' => 7, 'lang' => 'en']);
+        $question->expects($this->once())->method('reopen')->with(7)->willReturn(false);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'reopen-question');
+
+        $controller = $this->createController($question);
+        $controller->setContainer($container);
+
+        $response = $controller->reopen(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'questionId' => 7,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgQuestionReopenError'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testReopenSucceedsAndLogsWhenTheHistoryEntryIsInvalid(): void
+    {
+        $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('get')->with(7)->willReturn(['id' => 7, 'lang' => 'en']);
+        $question->expects($this->once())->method('reopen')->with(7)->willReturn(true);
+
+        $questionHistory = $this->createMock(QuestionHistoryRepository::class);
+        $questionHistory->expects($this->never())->method('add');
+
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+
+        // A user without a login name makes the history entity reject its construction.
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+        $currentUser->method('getLogin')->willReturn('');
+
+        $session = new Session(new MockArraySessionStorage());
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(fn(string $id): mixed => match ($id) {
+                'phpmyfaq.configuration' => $this->configuration,
+                'phpmyfaq.user.current_user' => $currentUser,
+                'session' => $session,
+                default => null,
+            });
+        $token = $this->createValidCsrfToken($session, 'reopen-question');
+
+        $controller = $this->createController($question, $questionHistory);
+        $controller->setContainer($container);
+
+        $response = $controller->reopen(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'questionId' => 7,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('msgQuestionReopened'), $payload['success']);
+    }
 }

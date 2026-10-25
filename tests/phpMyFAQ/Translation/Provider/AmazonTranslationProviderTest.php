@@ -203,4 +203,70 @@ class AmazonTranslationProviderTest extends TestCase
 
         $this->assertEquals('Olá Mundo', $result);
     }
+
+    public function testTranslateThrowsExceptionForUnencodableText(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['translation.amazonAccessKeyId',     'test-access-key'],
+                ['translation.amazonSecretAccessKey', 'test-secret-key'],
+                ['translation.amazonRegion',          'us-east-1'],
+            ]);
+
+        $httpClient = new MockHttpClient();
+        $provider = new AmazonTranslationProvider($this->configuration, $httpClient);
+
+        $this->expectException(ApiException::class);
+        $this->expectExceptionMessage('Cannot encode the Amazon Translate API request payload');
+
+        $provider->translate("\xB1\x31", 'en', 'de', false);
+
+        $this->assertSame(0, $httpClient->getRequestsCount());
+    }
+
+    public function testTranslateThrowsExceptionOnTransportError(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['translation.amazonAccessKeyId',     'test-access-key'],
+                ['translation.amazonSecretAccessKey', 'test-secret-key'],
+                ['translation.amazonRegion',          'us-east-1'],
+            ]);
+
+        $mockResponse = new MockResponse('', ['error' => 'Connection refused']);
+
+        $httpClient = new MockHttpClient($mockResponse);
+        $provider = new AmazonTranslationProvider($this->configuration, $httpClient);
+
+        $this->expectException(ApiException::class);
+        $this->expectExceptionMessage('Amazon Translate API request failed: Connection refused');
+
+        $provider->translate('Hello', 'en', 'de', false);
+    }
+
+    public function testTranslateBatchWithHtmlPreservation(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['translation.amazonAccessKeyId',     'test-access-key'],
+                ['translation.amazonSecretAccessKey', 'test-secret-key'],
+                ['translation.amazonRegion',          'us-east-1'],
+            ]);
+
+        $responses = [
+            new MockResponse(json_encode(['TranslatedText' => '##HTML_TAG_0##Hallo##HTML_TAG_1##'])),
+            new MockResponse(json_encode(['TranslatedText' => '##HTML_TAG_0##Welt##HTML_TAG_1##'])),
+        ];
+
+        $httpClient = new MockHttpClient($responses);
+        $provider = new AmazonTranslationProvider($this->configuration, $httpClient);
+
+        $result = $provider->translateBatch(['<p>Hello</p>', '<p>World</p>'], 'en', 'de', true);
+
+        $this->assertEquals(['<p>Hallo</p>', '<p>Welt</p>'], $result);
+        $this->assertSame(2, $httpClient->getRequestsCount());
+    }
 }

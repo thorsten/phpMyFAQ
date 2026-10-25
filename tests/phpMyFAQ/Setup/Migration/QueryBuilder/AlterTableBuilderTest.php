@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Setup\Migration\QueryBuilder;
 
+use LogicException;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\MysqlDialect;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\PostgresDialect;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -180,5 +181,35 @@ class AlterTableBuilderTest extends TestCase
 
         $builder = new AlterTableBuilder(new MysqlDialect());
         $builder->addInteger('col1')->buildCombined();
+    }
+
+    public function testBuildCombinedThrowsOnDialectWithoutCombinedAlter(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Combined ALTER TABLE is only supported on MySQL. Current dialect: pgsql');
+
+        $this->pgsqlBuilder->table('test', false)->addInteger('col1')->buildCombined();
+    }
+
+    public function testBuildCombinedThrowsWithoutAlterations(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('No alterations defined for combined ALTER TABLE statement.');
+
+        $this->mysqlBuilder->table('test', false)->buildCombined();
+    }
+
+    public function testBuildCombinedWithDefaultAndModify(): void
+    {
+        $sql = $this->mysqlBuilder
+            ->table('test', false)
+            ->addInteger('count', true, 0)
+            ->modifyColumn('name', 'VARCHAR(255) NOT NULL')
+            ->buildCombined();
+
+        $this->assertSame(
+            'ALTER TABLE test ADD COLUMN count INT DEFAULT 0, MODIFY name VARCHAR(255) NOT NULL',
+            $sql,
+        );
     }
 }

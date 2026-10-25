@@ -349,4 +349,35 @@ class FilterRequestTest extends TestCase
         $this->assertTrue($filter->has('price'));
         $this->assertEquals(19.99, $filter->get('price'));
     }
+
+    public function testBooleanFilterAcceptsNativeBooleansAndNumbers(): void
+    {
+        $request = new Request(['active' => true, 'sticky' => 0, 'hidden' => ['nested']]);
+        $allowedFilters = ['active' => 'bool', 'sticky' => 'bool', 'hidden' => 'bool'];
+        $filter = FilterRequest::fromRequest($request, $allowedFilters);
+
+        $this->assertTrue($filter->get('active'));
+        $this->assertFalse($filter->get('sticky'));
+        $this->assertFalse($filter->has('hidden'));
+    }
+
+    public function testDateFiltersRejectNonStringValues(): void
+    {
+        $request = new Request(['created_from' => ['2024-01-01'], 'updated_from' => ['2024-01-01 10:00:00']]);
+        $allowedFilters = ['created_from' => 'date', 'updated_from' => 'datetime'];
+        $filter = FilterRequest::fromRequest($request, $allowedFilters);
+
+        $this->assertFalse($filter->has('created_from'));
+        $this->assertFalse($filter->has('updated_from'));
+    }
+
+    public function testDateTimeFilterRejectsUnparsableStrings(): void
+    {
+        $request = new Request(['updated_from' => 'not a date at all']);
+        $allowedFilters = ['updated_from' => 'datetime'];
+        $filter = FilterRequest::fromRequest($request, $allowedFilters);
+
+        $this->assertFalse($filter->has('updated_from'));
+        $this->assertNull($filter->toArray());
+    }
 }

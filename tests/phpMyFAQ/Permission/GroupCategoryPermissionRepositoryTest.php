@@ -4,6 +4,7 @@ namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -233,5 +234,78 @@ class GroupCategoryPermissionRepositoryTest extends TestCase
         $dbTypeProperty = $databaseReflection->getProperty('dbType');
         $dbTypeProperty->setValue(null, 'sqlite3');
         Database::setTablePrefix('');
+    }
+
+    public function testReadMethodsReturnEmptyArrayWhenQueryFails(): void
+    {
+        $repository = $this->createRepositoryWithFailingQueries(static fn(string $sql): bool => false);
+
+        $this->assertSame([], $repository->getCategoryRestrictions(1, 1));
+        $this->assertSame([], $repository->getAllCategoryRestrictions(1));
+    }
+
+    public function testSetCategoryRestrictionsRollsBackWhenDeleteFails(): void
+    {
+        $queries = [];
+        $repository = $this->createRepositoryWithFailingQueries(static function (string $sql) use (&$queries): bool {
+            $queries[] = $sql;
+            return !str_starts_with($sql, 'DELETE');
+        });
+
+        $this->assertFalse($repository->setCategoryRestrictions(1, 1, [5]));
+        $this->assertSame('ROLLBACK', end($queries));
+        $this->assertEmpty(array_filter($queries, static fn(string $sql): bool => str_starts_with($sql, 'INSERT')));
+    }
+
+    public function testSetCategoryRestrictionsRollsBackWhenInsertFails(): void
+    {
+        $queries = [];
+        $repository = $this->createRepositoryWithFailingQueries(static function (string $sql) use (&$queries): bool {
+            $queries[] = $sql;
+            return !str_starts_with($sql, 'INSERT');
+        });
+
+        $this->assertFalse($repository->setCategoryRestrictions(1, 1, [5]));
+        $this->assertSame('ROLLBACK', end($queries));
+        $this->assertNotContains('COMMIT', $queries);
+    }
+
+    public function testSetCategoryRestrictionsSkipsInvalidCategoryIds(): void
+    {
+        $this->assertTrue($this->repository->setCategoryRestrictions(1, 1, [0, -3, 5]));
+
+        $this->assertSame([5], $this->repository->getCategoryRestrictions(1, 1));
+    }
+
+    public function testSetCategoryRestrictionsUsesExplicitTransactionStatementOnSqlServer(): void
+    {
+        $queries = [];
+        $repository = $this->createRepositoryWithFailingQueries(static function (string $sql) use (&$queries): bool {
+            $queries[] = $sql;
+            return true;
+        });
+
+        $dbTypeProperty = new ReflectionClass(Database::class)->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlsrv');
+
+        try {
+            $this->assertTrue($repository->setCategoryRestrictions(1, 1, [5]));
+        } finally {
+            $dbTypeProperty->setValue(null, 'sqlite3');
+        }
+
+        $this->assertSame('BEGIN TRANSACTION', $queries[0]);
+        $this->assertSame('COMMIT', end($queries));
+    }
+
+    private function createRepositoryWithFailingQueries(callable $queryResult): GroupCategoryPermissionRepository
+    {
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('query')->willReturnCallback($queryResult);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+
+        return new GroupCategoryPermissionRepository($configuration);
     }
 }

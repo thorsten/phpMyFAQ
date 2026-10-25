@@ -117,4 +117,15 @@ final class PushEndpointValidatorTest extends TestCase
         self::assertTrue($validator->isValid('https://93.184.216.34/send'));
         self::assertFalse($validator->isValid('https://10.0.0.1/send'));
     }
+
+    /**
+     * RFC 6761 reserves the .invalid TLD: resolvers answer NXDOMAIN without
+     * consulting the network, so the default DNS resolver can be exercised safely.
+     */
+    public function testDefaultResolverRejectsUnresolvableHost(): void
+    {
+        $validator = new PushEndpointValidator();
+
+        self::assertFalse($validator->isValid('https://push.invalid/send'));
+    }
 }

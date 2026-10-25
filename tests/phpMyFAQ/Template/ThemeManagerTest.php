@@ -138,6 +138,77 @@ class ThemeManagerTest extends TestCase
         }
     }
 
+    public function testUploadThemeRejectsAFileThatIsNotAZipArchive(): void
+    {
+        if (!class_exists(ZipArchive::class)) {
+            $this->markTestSkipped('ZipArchive is not available in this environment.');
+        }
+
+        $archivePath = tempnam(sys_get_temp_dir(), 'pmf-theme-broken-');
+        if ($archivePath === false) {
+            $this->fail('Failed to create temp archive file.');
+        }
+
+        file_put_contents($archivePath, 'this is not a zip archive');
+
+        try {
+            $manager = new ThemeManager($this->createStub(Configuration::class), new InMemoryStorage(), 'themes');
+
+            $this->expectException(RuntimeException::class);
+            $this->expectExceptionMessage('Failed to open theme archive.');
+
+            $manager->uploadTheme('tenant-theme', $archivePath);
+        } finally {
+            @unlink($archivePath);
+        }
+    }
+
+    public function testUploadThemeSkipsDirectoryAndEmptyEntries(): void
+    {
+        if (!class_exists(ZipArchive::class)) {
+            $this->markTestSkipped('ZipArchive is not available in this environment.');
+        }
+
+        $archivePath = $this->createThemeArchive([
+            'tenant-theme/assets/' => '',
+            ' ' => 'whitespace only entry name',
+            'tenant-theme/index.twig' => '<h1>Hello</h1>',
+        ]);
+
+        try {
+            $storage = new InMemoryStorage();
+            $manager = new ThemeManager($this->createStub(Configuration::class), $storage, 'themes');
+
+            $this->assertSame(1, $manager->uploadTheme('tenant-theme', $archivePath));
+            $this->assertTrue($storage->exists('themes/tenant-theme/index.twig'));
+        } finally {
+            @unlink($archivePath);
+        }
+    }
+
+    public function testUploadThemeRejectsRelativePathTraversal(): void
+    {
+        if (!class_exists(ZipArchive::class)) {
+            $this->markTestSkipped('ZipArchive is not available in this environment.');
+        }
+
+        $archivePath = $this->createThemeArchive([
+            'tenant-theme/index.twig' => '<h1>Hello</h1>',
+            'tenant-theme/../escaped.css' => 'body { color: #000; }',
+        ]);
+
+        try {
+            $manager = new ThemeManager($this->createStub(Configuration::class), new InMemoryStorage(), 'themes');
+
+            $this->expectException(RuntimeException::class);
+            $this->expectExceptionMessage('Theme archive contains invalid relative paths.');
+
+            $manager->uploadTheme('tenant-theme', $archivePath);
+        } finally {
+            @unlink($archivePath);
+        }
+    }
+
     public function testActivateThemePersistsTemplateSetConfig(): void
     {
         $configuration = $this->createMock(Configuration::class);

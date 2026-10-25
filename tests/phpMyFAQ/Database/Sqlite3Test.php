@@ -485,4 +485,45 @@ class Sqlite3Test extends TestCase
         $this->assertTrue($this->sqlite3->close());
         @unlink($databaseFile);
     }
+
+    public function testFetchHelpersReturnEmptyResultsWithoutAResult(): void
+    {
+        $this->assertNull($this->sqlite3->fetchObject(false));
+        $this->assertSame([], $this->sqlite3->fetchArray(null));
+        $this->assertSame([], $this->sqlite3->fetchAssoc(null));
+        $this->assertFalse($this->sqlite3->fetchRow(null));
+        $this->assertSame(0, $this->sqlite3->numRows(null));
+        $this->assertTrue($this->sqlite3->close(), 'Closing without a connection is a no-op');
+    }
+
+    public function testFetchAllThrowsWithoutAResult(): void
+    {
+        $this->expectException(\phpMyFAQ\Core\Exception::class);
+        $this->expectExceptionMessage('Error while fetching result');
+
+        $this->sqlite3->fetchAll(false);
+    }
+
+    public function testQueryPreparedReturnsFalseWithoutAConnection(): void
+    {
+        $this->assertFalse($this->sqlite3->queryPrepared('SELECT 1', []));
+    }
+
+    public function testQueryPreparedReturnsFalseAndLogsWhenTheStatementCannotBePrepared(): void
+    {
+        $this->sqlite3->connect(':memory:', '', '');
+
+        $this->assertFalse($this->sqlite3->queryPrepared('SELECT * FROM missing WHERE id = ?', [1]));
+        $this->assertStringContainsString('no such table: missing', $this->sqlite3->log());
+    }
+
+    public function testQueryPreparedReturnsFalseAndLogsWhenTheExecutionFails(): void
+    {
+        $this->sqlite3->connect(':memory:', '', '');
+        $this->sqlite3->query('CREATE TABLE items (id INTEGER PRIMARY KEY)');
+        $this->sqlite3->query('INSERT INTO items (id) VALUES (1)');
+
+        $this->assertFalse($this->sqlite3->queryPrepared('INSERT INTO items (id) VALUES (?)', [1]));
+        $this->assertStringContainsString('UNIQUE constraint failed', $this->sqlite3->log());
+    }
 }

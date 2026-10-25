@@ -366,4 +366,54 @@ class OpenSearchConfigurationTest extends TestCase
         $this->assertEquals($config['hosts'], $osConfig->getHosts());
         $this->assertEquals('path_based_index', $osConfig->getIndex());
     }
+
+    public function testTlsOptionsDefaultToPeerVerificationWithoutCustomCertificates(): void
+    {
+        $configFile = $this->createConfigFile('tls_default_config.php', ['hosts' => ['localhost:9200'], 'index' => 'tls']);
+        $osConfig = new OpenSearchConfiguration($configFile);
+
+        $this->assertTrue($osConfig->isPeerVerificationEnabled());
+        $this->assertNull($osConfig->getCaFile());
+        $this->assertNull($osConfig->getCaPath());
+        $this->assertSame(['verify_peer' => true, 'verify_host' => true], $osConfig->getTlsClientOptions());
+    }
+
+    public function testTlsOptionsCarryTheConfiguredCertificateAuthorityPaths(): void
+    {
+        $configFile = $this->createConfigFile('tls_custom_config.php', [
+            'hosts' => ['https://localhost:9200'],
+            'index' => 'tls',
+            'verify_peer' => 'false',
+            'cafile' => '  /etc/ssl/certs/cluster-ca.pem ',
+            'capath' => '/etc/ssl/certs',
+        ]);
+        $osConfig = new OpenSearchConfiguration($configFile);
+
+        $this->assertFalse($osConfig->isPeerVerificationEnabled());
+        $this->assertSame('/etc/ssl/certs/cluster-ca.pem', $osConfig->getCaFile());
+        $this->assertSame('/etc/ssl/certs', $osConfig->getCaPath());
+        $this->assertSame(
+            [
+                'verify_peer' => false,
+                'verify_host' => false,
+                'cafile' => '/etc/ssl/certs/cluster-ca.pem',
+                'capath' => '/etc/ssl/certs',
+            ],
+            $osConfig->getTlsClientOptions(),
+        );
+    }
+
+    public function testBlankCertificatePathsAreTreatedAsAbsent(): void
+    {
+        $configFile = $this->createConfigFile('tls_blank_config.php', [
+            'hosts' => ['localhost:9200'],
+            'index' => 'tls',
+            'cafile' => '   ',
+            'capath' => '',
+        ]);
+        $osConfig = new OpenSearchConfiguration($configFile);
+
+        $this->assertNull($osConfig->getCaFile());
+        $this->assertNull($osConfig->getCaPath());
+    }
 }

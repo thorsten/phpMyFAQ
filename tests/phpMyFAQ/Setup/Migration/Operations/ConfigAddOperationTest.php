@@ -113,4 +113,30 @@ class ConfigAddOperationTest extends TestCase
 
         $this->assertEquals($expected, $operation->toArray());
     }
+
+    public function testGetDescriptionWithArrayAndObjectValues(): void
+    {
+        $shortArray = new ConfigAddOperation($this->configuration, 'test.key', ['a' => 1]);
+        $this->assertEquals('Add configuration: test.key = \'{"a":1}\'', $shortArray->getDescription());
+
+        $longArray = new ConfigAddOperation($this->configuration, 'test.key', array_fill(0, 30, 'value'));
+        $this->assertEquals("Add configuration: test.key = '[array]...'", $longArray->getDescription());
+
+        $shortObject = new ConfigAddOperation($this->configuration, 'test.key', (object) ['b' => true]);
+        $this->assertEquals('Add configuration: test.key = \'{"b":true}\'', $shortObject->getDescription());
+
+        $longObject = new ConfigAddOperation(
+            $this->configuration,
+            'test.key',
+            (object) ['text' => str_repeat('x', 60)],
+        );
+        $this->assertEquals("Add configuration: test.key = '[object stdClass]'", $longObject->getDescription());
+    }
+
+    public function testGetDescriptionWithNumericValue(): void
+    {
+        $operation = new ConfigAddOperation($this->configuration, 'test.key', 42);
+
+        $this->assertEquals('Add configuration: test.key = 42', $operation->getDescription());
+    }
 }

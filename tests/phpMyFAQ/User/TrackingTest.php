@@ -228,6 +228,54 @@ class TrackingTest extends TestCase
         ));
     }
 
+    public function testResetInstanceForgetsTheSingleton(): void
+    {
+        $request = Request::create('/', 'GET', [], [], [], ['REMOTE_ADDR' => '198.51.100.24']);
+        $userSession = $this->createMock(UserSession::class);
+
+        $first = $this->createTracking($request, $userSession);
+        $this->assertSame($first, $this->createTracking($request, $userSession));
+
+        Tracking::resetInstance();
+
+        $this->assertNotSame($first, $this->createTracking($request, $userSession));
+    }
+
+    /**
+     * @throws Exception
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testLogRefreshesTheSessionCookieWhenItDoesNotMatchTheNewSession(): void
+    {
+        $request = Request::create(
+            '/?pmf-sid=22',
+            'GET',
+            [],
+            [],
+            [],
+            [
+                'REMOTE_ADDR' => '203.0.113.99',
+                'HTTP_USER_AGENT' => 'Unit;Test/1.0',
+                'REQUEST_TIME' => 1234567890,
+            ],
+        );
+
+        $this->database->method('nextId')->willReturn(41);
+        $this->database->method('query')->willReturn('result');
+
+        $userSession = $this->createMock(UserSession::class);
+        $userSession->method('setCurrentSessionId')->willReturnSelf();
+        $userSession->method('getCurrentSessionId')->willReturn(41);
+        $userSession
+            ->expects($this->once())
+            ->method('setCookie')
+            ->with(UserSession::COOKIE_NAME_SESSION_ID, 41);
+
+        $tracking = $this->createTracking($request, $userSession);
+
+        $this->assertTrue($tracking->log('view', 99));
+    }
+
     /**
      * @param array<string, mixed> $overrides
      */

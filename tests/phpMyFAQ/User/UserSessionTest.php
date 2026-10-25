@@ -349,6 +349,88 @@ class UserSessionTest extends TestCase
         $this->assertCount(1, $files);
     }
 
+    public function testUserTrackingKeepsTheCookieSessionAndUsesTheForwardedAddress(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->expects($this->never())->method('nextId');
+        $db->expects($this->never())->method('query');
+
+        $configuration = $this->createConfiguration($db, [
+            'main.enableUserTracking' => true,
+            'main.botIgnoreList' => 'crawler',
+        ]);
+        $request = Request::create(
+            '/index.php',
+            'GET',
+            [UserSession::COOKIE_NAME_SESSION_ID => 22],
+            [],
+            [],
+            [
+                'REMOTE_ADDR' => '127.0.0.1',
+                'HTTP_X_FORWARDED_FOR' => '203.0.113.5',
+                'HTTP_USER_AGENT' => 'Mozilla/5.0',
+                'REQUEST_TIME' => 2000,
+                'SCRIPT_NAME' => '/index.php',
+            ],
+        );
+        $network = $this
+            ->getMockBuilder(Network::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isBanned'])
+            ->getMock();
+        $network->method('isBanned')->willReturn(false);
+
+        $session = new UserSession(
+            $configuration,
+            $request,
+            static fn(Configuration $configuration): Network => $network,
+            null,
+            $this->trackingDirectory,
+        );
+
+        $session->userTracking('view', 99);
+
+        $this->assertSame(22, $session->getCurrentSessionId());
+        $files = glob($this->trackingDirectory . '/tracking*');
+        $this->assertCount(1, $files);
+        $this->assertStringContainsString('22;view;99;203.0.113.0;', (string) file_get_contents($files[0]));
+    }
+
+    public function testUserTrackingFallsBackToLocalhostForAnInvalidAddress(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('nextId')->willReturn(56);
+        $db->method('query')->willReturn(true);
+
+        $configuration = $this->createConfiguration($db, [
+            'main.enableUserTracking' => true,
+            'main.botIgnoreList' => 'crawler',
+            'security.bannedIPs' => '',
+        ]);
+        $request = Request::create(
+            '/index.php',
+            'GET',
+            [],
+            [],
+            [],
+            [
+                'REMOTE_ADDR' => 'not-an-ip',
+                'HTTP_USER_AGENT' => 'Mozilla/5.0',
+                'REQUEST_TIME' => 2000,
+                'SCRIPT_NAME' => '/index.php',
+            ],
+        );
+
+        $session = new UserSession($configuration, $request, null, null, $this->trackingDirectory);
+        $session->setCurrentUser($this->getMockBuilder(CurrentUser::class)->disableOriginalConstructor()->getMock());
+
+        $session->userTracking('view', 99);
+
+        $files = glob($this->trackingDirectory . '/tracking*');
+        $this->assertCount(1, $files);
+        $this->assertStringContainsString('56;view;99;127.0.0.0;', (string) file_get_contents($files[0]));
+    }
+
     public function testSetCookieDelegatesToInjectedCookieSetter(): void
     {
         $calls = [];

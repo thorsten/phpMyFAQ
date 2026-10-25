@@ -159,4 +159,20 @@ class PaginationTest extends TestCase
         );
         $this->assertStringNotContainsString('page=1">&rarr;</a>', $output);
     }
+
+    public function testRenderCollapsesPagesFarFromCurrentPageIntoEllipses(): void
+    {
+        $pagination = new Pagination(baseUrl: 'http://example.com/foo?page=10', total: 200, perPage: 10, adjacent: 4);
+
+        $output = $pagination->render();
+
+        $this->assertSame(2, substr_count($output, '<li class="disabled"><a>&hellip;</a></li>'));
+        foreach ([1, 2, 3, 4, 8, 9, 10, 11, 12, 17, 18, 19, 20] as $page) {
+            $this->assertStringContainsString('page=' . $page . '">' . $page . '</a>', $output);
+        }
+
+        foreach ([5, 6, 7, 13, 14, 15, 16] as $page) {
+            $this->assertStringNotContainsString('page=' . $page . '">' . $page . '</a>', $output);
+        }
+    }
 }

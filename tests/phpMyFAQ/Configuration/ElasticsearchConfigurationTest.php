@@ -291,4 +291,54 @@ class ElasticsearchConfigurationTest extends TestCase
         $this->assertEquals([], $esConfig->getHosts());
         $this->assertEquals('', $esConfig->getIndex());
     }
+
+    public function testTlsOptionsDefaultToPeerVerificationWithoutCustomCertificates(): void
+    {
+        $configFile = $this->createConfigFile('tls_default_config.php', ['hosts' => ['localhost:9200'], 'index' => 'tls']);
+        $esConfig = new ElasticsearchConfiguration($configFile);
+
+        $this->assertTrue($esConfig->isPeerVerificationEnabled());
+        $this->assertNull($esConfig->getCaFile());
+        $this->assertNull($esConfig->getCaPath());
+        $this->assertSame(['verify_peer' => true, 'verify_host' => true], $esConfig->getTlsClientOptions());
+    }
+
+    public function testTlsOptionsCarryTheConfiguredCertificateAuthorityPaths(): void
+    {
+        $configFile = $this->createConfigFile('tls_custom_config.php', [
+            'hosts' => ['https://localhost:9200'],
+            'index' => 'tls',
+            'verify_peer' => 'false',
+            'cafile' => '  /etc/ssl/certs/cluster-ca.pem ',
+            'capath' => '/etc/ssl/certs',
+        ]);
+        $esConfig = new ElasticsearchConfiguration($configFile);
+
+        $this->assertFalse($esConfig->isPeerVerificationEnabled());
+        $this->assertSame('/etc/ssl/certs/cluster-ca.pem', $esConfig->getCaFile());
+        $this->assertSame('/etc/ssl/certs', $esConfig->getCaPath());
+        $this->assertSame(
+            [
+                'verify_peer' => false,
+                'verify_host' => false,
+                'cafile' => '/etc/ssl/certs/cluster-ca.pem',
+                'capath' => '/etc/ssl/certs',
+            ],
+            $esConfig->getTlsClientOptions(),
+        );
+    }
+
+    public function testBlankCertificatePathsAreTreatedAsAbsent(): void
+    {
+        $configFile = $this->createConfigFile('tls_blank_config.php', [
+            'hosts' => ['localhost:9200'],
+            'index' => 'tls',
+            'cafile' => '   ',
+            'capath' => '',
+        ]);
+        $esConfig = new ElasticsearchConfiguration($configFile);
+
+        $this->assertNull($esConfig->getCaFile());
+        $this->assertNull($esConfig->getCaPath());
+    }
 }

@@ -198,6 +198,33 @@ class UserAuthenticationTest extends TestCase
         $userAuth->authenticate('blocked-user', 'password');
     }
 
+    public function testAuthenticateFallsBackToAPlainMessageWithoutATranslation(): void
+    {
+        $translation = Translation::create();
+        $loadedLanguages = new \ReflectionProperty(Translation::class, 'loadedLanguages');
+        $originalLanguages = $loadedLanguages->getValue($translation);
+        $withoutMessage = $originalLanguages;
+        foreach (array_keys($withoutMessage) as $language) {
+            unset($withoutMessage[$language]['ad_auth_fail']);
+        }
+        $loadedLanguages->setValue($translation, $withoutMessage);
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->method('login')->willReturn(true);
+        $user->method('getUserData')->willReturn(0);
+        $user->method('getStatus')->willReturn('blocked');
+        $userAuth = new UserAuthentication($this->configuration, $user);
+
+        try {
+            $userAuth->authenticate('blocked-user', 'password');
+            $this->fail('A blocked account must not authenticate.');
+        } catch (UserException $userException) {
+            $this->assertSame('Authentication failed (blocked-user)', $userException->getMessage());
+        } finally {
+            $loadedLanguages->setValue($translation, $originalLanguages);
+        }
+    }
+
     public function testAuthenticateWrapsAuthenticationDriverFailures(): void
     {
         $user = $this->createMock(CurrentUser::class);

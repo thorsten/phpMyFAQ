@@ -124,4 +124,26 @@ class VanillaFileTest extends TestCase
         $this->assertTrue($result);
         $this->assertSame('test file content', file_get_contents(vfsStream::url('root/target.txt')));
     }
+
+    public function testCopyToRejectsTargetsThatAreNotFiles(): void
+    {
+        $source = new VanillaFile(vfsStream::url('root/file.txt'));
+
+        $this->assertFalse($source->copyTo(new \stdClass()));
+    }
+
+    public function testCopyToEncryptedFileTargetWritesTheContentInChunks(): void
+    {
+        file_put_contents(vfsStream::url('root/encrypted.txt'), '');
+
+        $key = '0123456789abcdef';
+        $source = new VanillaFile(vfsStream::url('root/file.txt'));
+        $target = new EncryptedFile(vfsStream::url('root/encrypted.txt'), EncryptedFile::MODE_WRITE, $key);
+
+        $this->assertTrue($source->copyTo($target));
+
+        $reader = new EncryptedFile(vfsStream::url('root/encrypted.txt'), EncryptedFile::MODE_READ, $key);
+        $this->assertSame('test file content', $reader->getChunk());
+        $this->assertNotSame('test file content', file_get_contents(vfsStream::url('root/encrypted.txt')));
+    }
 }

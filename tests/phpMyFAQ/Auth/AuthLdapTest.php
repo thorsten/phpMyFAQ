@@ -431,6 +431,112 @@ class AuthLdapTest extends TestCase
     /**
      * @throws \phpMyFAQ\Core\Exception
      */
+    public function testCheckCredentialsConnectsToTheFirstConfiguredServerWhenMultipleServersAreUsed(): void
+    {
+        $this->configValues['ldap.ldap_use_multiple_servers'] = true;
+        $this->configValues['ldap.ldap_use_domain_prefix'] = true;
+
+        $this->ldapCore->method('bind')->willReturn(true);
+        // constructor, server selection in checkCredentials, user bind
+        $this->ldapCore->expects($this->exactly(3))->method('connect');
+
+        $auth = $this
+            ->getMockBuilder(AuthLdap::class)
+            ->setConstructorArgs([$this->configuration, $this->ldapCore])
+            ->onlyMethods(['create'])
+            ->getMock();
+        $auth->expects($this->once())->method('create')->with('alice', 'secret')->willReturn(true);
+
+        $this->assertTrue($auth->checkCredentials('alice', 'secret', ['domain' => 'EXAMPLE']));
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testIsValidLoginConnectsToTheFirstConfiguredServerWhenMultipleServersAreUsed(): void
+    {
+        $this->configValues['ldap.ldap_use_multiple_servers'] = true;
+
+        // constructor, server selection in isValidLogin, and the lookup connection
+        $this->ldapCore->expects($this->exactly(3))->method('connect');
+        $this->ldapCore->expects($this->once())->method('getCompleteName')->with('alice')->willReturn('Alice');
+
+        $auth = $this->createAuthLdap();
+
+        $this->assertSame(5, $auth->isValidLogin('alice'));
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testCheckCredentialsThrowsWhenGroupMembershipsCannotBeRead(): void
+    {
+        $this->configValues['ldap.ldap_use_domain_prefix'] = true;
+        $this->ldapGroupConfig = [
+            'auto_assign' => false,
+            'group_mapping' => [],
+            'use_group_restriction' => 'true',
+            'allowed_groups' => ['CN=Admins'],
+        ];
+
+        $this->ldapCore->method('bind')->willReturn(true);
+        $this->ldapCore->expects($this->once())->method('getGroupMemberships')->with('alice')->willReturn(false);
+
+        $auth = $this->createAuthLdap();
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('Unable to retrieve user group memberships');
+
+        $auth->checkCredentials('alice', 'secret', ['domain' => 'EXAMPLE']);
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testCheckCredentialsAcceptsUsersInAnAllowedGroup(): void
+    {
+        $this->configValues['ldap.ldap_use_domain_prefix'] = true;
+        $this->ldapGroupConfig = [
+            'auto_assign' => false,
+            'group_mapping' => [],
+            'use_group_restriction' => 'true',
+            'allowed_groups' => ['CN=Editors', ' CN=Admins '],
+        ];
+
+        $this->ldapCore->method('bind')->willReturn(true);
+        $this->ldapCore
+            ->expects($this->once())
+            ->method('getGroupMemberships')
+            ->with('alice')
+            ->willReturn(['CN=Users,DC=example,DC=com', 'CN=Admins,CN=Users,DC=example,DC=com']);
+
+        $auth = $this
+            ->getMockBuilder(AuthLdap::class)
+            ->setConstructorArgs([$this->configuration, $this->ldapCore])
+            ->onlyMethods(['create'])
+            ->getMock();
+        $auth->expects($this->once())->method('create')->with('alice', 'secret')->willReturn(true);
+
+        $this->assertTrue($auth->checkCredentials('alice', 'secret', ['domain' => 'EXAMPLE']));
+    }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testPrivateCreateMediumPermissionFallsBackToConcreteMediumPermission(): void
+    {
+        $auth = $this->createAuthLdap();
+
+        $reflection = new ReflectionClass($auth);
+        $method = $reflection->getMethod('createMediumPermission');
+
+        $this->assertInstanceOf(MediumPermission::class, $method->invoke($auth));
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
     private function createAuthLdap(?callable $userFactory = null, ?callable $mediumPermissionFactory = null): AuthLdap
     {
         return new AuthLdap(

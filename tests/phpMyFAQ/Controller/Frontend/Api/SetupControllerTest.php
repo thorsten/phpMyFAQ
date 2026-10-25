@@ -282,4 +282,86 @@ final class SetupControllerTest extends ApiControllerTestCase
             (string) $response->getContent(),
         );
     }
+
+    public function testBackupReturnsConflictWhenMaintenanceModeIsDisabled(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.maintenanceMode' => '0']);
+
+        $controller = $this->createAuthenticatedController();
+
+        $response = $controller->backup(new Request([], [], [], [], [], [], '4.1.0'));
+
+        self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        self::assertJsonStringEqualsJsonString(
+            '{"message":"Maintenance mode is not enabled. Please enable it first."}',
+            (string) $response->getContent(),
+        );
+    }
+
+    public function testBackupUsesTheLegacyConfigDirectoryForInstallationsOlderThanVersionFour(): void
+    {
+        $backedUpDirectories = [];
+        $controller = new SetupController(static function (System $system, Configuration $configuration) use (
+            &$backedUpDirectories,
+        ): Update {
+            return new class ($system, $configuration, $backedUpDirectories) extends Update {
+            /** @param list<string> $backedUpDirectories */
+            public function __construct(System $system, Configuration $configuration, private array &$backedUpDirectories)
+            {
+                parent::__construct($system, $configuration);
+            }
+
+            public function checkMaintenanceMode(): bool
+            {
+                return true;
+            }
+
+            public function createConfigBackup(string $configDir): string
+            {
+                $this->backedUpDirectories[] = $configDir;
+
+                return $configDir . '/config-backup-legacy.zip';
+            }
+            };
+        });
+        $this->injectControllerState($controller, $this->createPrivilegedUser());
+
+        $response = $controller->backup(new Request([], [], [], [], [], [], '3.2.5'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([(string) PMF_ROOT_DIR . '/config'], $backedUpDirectories);
+    }
+
+    public function testSuperAdministratorsAreAuthorizedWithoutAnExplicitPermission(): void
+    {
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => false]);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('isSuperAdmin')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+
+        $controller = new SetupController();
+        $this->injectControllerState($controller, $currentUser);
+
+        $response = $controller->check(new Request([], [], [], [], [], [], ''));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertJsonStringEqualsJsonString('{"message":"No version given."}', (string) $response->getContent());
+    }
+
+    public function testABrokenPermissionLookupFallsBackToTheUpdateToken(): void
+    {
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $this->createStub(PermissionInterface::class);
+        $currentUser->method('isLoggedIn')->willThrowException(new \RuntimeException('Table faquser is missing.'));
+
+        $controller = new SetupController();
+        $this->injectControllerState($controller, $currentUser);
+
+        $response = $controller->check(new Request([], [], [], [], [], [], '4.1.0'));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertStringContainsString('provide the update token', (string) $response->getContent());
+    }
 }

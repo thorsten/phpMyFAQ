@@ -313,4 +313,74 @@ class UserDataTest extends TestCase
         $result = $this->userData->get('display_name');
         $this->assertEquals('Jürgen', $result);
     }
+
+    public function testGetTreatsAThrowingQueryAsAMissingColumn(): void
+    {
+        $this->database->method('query')->willThrowException(new \RuntimeException('no such column'));
+
+        $this->assertSame('', $this->userData->get('oidc_sub'));
+        $this->assertFalse($this->userData->get('display_name'));
+    }
+
+    public function testGetReturnsFalseWhenTheRowCannotBeFetched(): void
+    {
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn(null);
+
+        $this->userData->load(1);
+
+        $this->assertFalse($this->userData->get('display_name'));
+    }
+
+    public function testFetchByOidcIdentityReturnsNoUserWhenThePreparedQueryThrows(): void
+    {
+        $this->database->method('queryPrepared')->willThrowException(new \RuntimeException('no such column'));
+
+        $this->assertSame(['user_id' => -1], $this->userData->fetchByOidcIdentity('https://issuer', 'subject'));
+    }
+
+    public function testLoadFallsBackToTheLegacyColumnsWhenTheQueryThrows(): void
+    {
+        $queries = [];
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): bool {
+                $queries[] = $query;
+                if (count($queries) === 1) {
+                    throw new \RuntimeException('no such column: oidc_sub');
+                }
+
+                return true;
+            });
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn(['display_name' => 'Admin']);
+
+        $this->assertTrue($this->userData->load(1));
+        $this->assertCount(2, $queries);
+        $this->assertStringNotContainsString('oidc_sub', $queries[1]);
+    }
+
+    public function testSaveFallsBackToTheLegacyUpdateWhenTheQueryThrows(): void
+    {
+        $queries = [];
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): bool {
+                $queries[] = $query;
+                if (str_contains($query, 'oidc_sub = NULL')) {
+                    throw new \RuntimeException('no such column: oidc_sub');
+                }
+
+                return true;
+            });
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn(['display_name' => 'Admin']);
+        $this->database->method('escape')->willReturnArgument(0);
+
+        $this->userData->load(1);
+
+        $this->assertTrue($this->userData->save());
+        $this->assertStringNotContainsString('oidc_sub', end($queries));
+    }
 }

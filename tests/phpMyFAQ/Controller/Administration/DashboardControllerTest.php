@@ -561,4 +561,27 @@ final class DashboardControllerTest extends TestCase
         self::assertStringContainsString('card bg-danger text-white', (string) $response->getContent());
         self::assertStringContainsString('4.0.0', (string) $response->getContent());
     }
+    /**
+     * @throws \Exception
+     */
+    public function testIndexShowsVersionLoaderWhenConfigurationEditorRequestsTheVersionCheck(): void
+    {
+        $this->overrideConfigurationValues(['main.enableAutoUpdateHint' => false]);
+        [$adminSession, $adminFaq, $backup] = $this->createQuietWidgets();
+
+        $controller = new DashboardController(
+            $adminSession,
+            $adminFaq,
+            $backup,
+            new RecentUsers($this->configuration),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer(allowConfigEdit: true));
+
+        $request = new Request(['param' => 'version']);
+        $request->attributes->set('_route', 'admin.dashboard');
+        $response = $controller->index($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('id="phpmyfaq-latest-version"', (string) $response->getContent());
+    }
 }

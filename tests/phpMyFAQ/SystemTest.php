@@ -5,6 +5,7 @@ namespace phpMyFAQ;
 use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 #[AllowMockObjectsWithoutExpectations]
 class SystemTest extends TestCase
@@ -359,5 +360,86 @@ class SystemTest extends TestCase
         @rmdir(PMF_ROOT_DIR . '/multisite');
         @rmdir($upgradeDir);
         @rmdir(PMF_ROOT_DIR . '/upgrade');
+    }
+
+    public function testGetAvailableTemplatesIgnoresFilesAndSystemFolders(): void
+    {
+        $strayFile = PMF_ROOT_DIR . '/assets/templates/stray-file.txt';
+        file_put_contents($strayFile, 'not a template');
+
+        try {
+            $templates = new System()->getAvailableTemplates();
+        } finally {
+            @unlink($strayFile);
+        }
+
+        $this->assertArrayHasKey('default', $templates);
+        $this->assertArrayNotHasKey('stray-file.txt', $templates);
+        $this->assertArrayNotHasKey('admin', $templates);
+        $this->assertArrayNotHasKey('setup', $templates);
+    }
+
+    public function testGetSupportedSafeDatabasesSkipsMissingExtensionsAndTooNewRequirements(): void
+    {
+        $system = new System();
+        new ReflectionProperty(System::class, 'supportedDatabases')->setValue($system, [
+            'pmf_missing_extension' => ['5.6.0', 'Missing'],
+            'json' => ['99.0.0', 'Too new'],
+            'pdo' => ['5.6.0', 'PDO'],
+        ]);
+
+        $this->assertSame(['pdo' => 'PDO'], $system->getSupportedSafeDatabases());
+    }
+
+    public function testCheckDatabaseFailsWithoutAnyLoadedDatabaseExtension(): void
+    {
+        $system = new System();
+        new ReflectionProperty(System::class, 'supportedDatabases')->setValue($system, [
+            'pmf_missing_extension' => ['5.6.0', 'Missing'],
+        ]);
+
+        $this->assertFalse($system->checkDatabase());
+    }
+
+    public function testCheckRequiredExtensionsReportsMissingExtensions(): void
+    {
+        $system = new System();
+        new ReflectionProperty(System::class, 'requiredExtensions')->setValue($system, [
+            'json',
+            'pmf_missing_extension',
+        ]);
+
+        $this->assertFalse($system->checkRequiredExtensions());
+        $this->assertSame(['pmf_missing_extension'], $system->getMissingExtensions());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateHashesRecordsADirectoryThatCannotBeRead(): void
+    {
+        $lockedDir = PMF_ROOT_DIR . '/upgrade/locked';
+        @mkdir($lockedDir, 0755, true);
+        chmod($lockedDir, 0o000);
+
+        try {
+            if (is_readable($lockedDir)) {
+                $this->markTestSkipped('The current user can read directories without permissions.');
+            }
+
+            $decoded = json_decode(new System()->createHashes(), true);
+        } finally {
+            chmod($lockedDir, 0o755);
+            @rmdir($lockedDir);
+            @rmdir(PMF_ROOT_DIR . '/upgrade');
+        }
+
+        $failures = array_filter(
+            $decoded,
+            static fn(string $key): bool => str_ends_with($key, ' failed'),
+            ARRAY_FILTER_USE_KEY,
+        );
+        $this->assertCount(1, $failures);
+        $this->assertStringContainsString('upgrade/locked', (string) reset($failures));
     }
 }

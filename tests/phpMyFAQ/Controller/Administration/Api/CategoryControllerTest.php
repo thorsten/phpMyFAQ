@@ -457,6 +457,39 @@ final class CategoryControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testDeleteReturnsInternalServerErrorWhenTheRelationsCannotBeDeleted(): void
+    {
+        $this->configuration->getDb()->query("INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (99, 'en', 0, 'Delete Me', '', 1, -1, 1, '', 0)");
+        // Without the relations table the second DELETE statement fails.
+        $this->configuration->getDb()->query('DROP TABLE faqcategoryrelations');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('category');
+        $this->setCsrfCookie('category', $csrfToken);
+
+        $controller = $this->createControllerWithDependencies(
+            $this->createStub(Image::class),
+            $this->createStub(Order::class),
+            $this->createStub(Permission::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+            'categoryId' => 99,
+            'language' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_adus_dberr'), $payload['error']);
+        $this->removeCsrfCookie('category');
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testDeleteReturnsForbiddenForRestrictedCategory(): void
     {
         $session = new Session(new MockArraySessionStorage());

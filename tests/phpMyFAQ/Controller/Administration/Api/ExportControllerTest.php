@@ -10,6 +10,8 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Export;
+use phpMyFAQ\Export\Json;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
@@ -19,6 +21,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -30,6 +33,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(ExportController::class)]
+#[UsesClass(Export::class)]
+#[UsesClass(Json::class)]
 #[UsesNamespace('phpMyFAQ')]
 final class ExportControllerTest extends TestCase
 {
@@ -506,5 +511,79 @@ final class ExportControllerTest extends TestCase
         $url = array_values(array_filter($row, static fn(string $value): bool => str_contains($value, '/content/')));
         self::assertCount(1, $url);
         self::assertStringEndsWith('/content/501/4243/en/why-does-the-printer-jam.html', $url[0]);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportFileStreamsAJsonExport(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $token = Token::getInstance($session)->getTokenString('export');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('export'), 0, 10)] = $token;
+
+        $faq = $this->createStub(Faq::class);
+        $faq->method('get')->willReturn([]);
+        $controller = new ExportController($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->exportFile(
+            new Request([], [
+                'pmf-csrf-token' => $token,
+                'categoryId' => 0,
+                'downwards' => 'true',
+                'disposition' => 'inline',
+                'export-type' => 'json',
+            ]),
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringStartsWith('inline', (string) $response->headers->get('Content-Disposition'));
+        self::assertJson((string) $response->getContent());
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('export'), 0, 10)]);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportFileDefaultsToAnAttachmentDisposition(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $token = Token::getInstance($session)->getTokenString('export');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('export'), 0, 10)] = $token;
+
+        $faq = $this->createStub(Faq::class);
+        $faq->method('get')->willReturn([]);
+        $controller = new ExportController($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->exportFile(
+            new Request([], [
+                'pmf-csrf-token' => $token,
+                'categoryId' => 0,
+                'export-type' => 'json',
+            ]),
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringStartsWith('attachment', (string) $response->headers->get('Content-Disposition'));
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('export'), 0, 10)]);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportReportReturnsBadRequestWithoutADataObject(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->exportReport(new Request([], [], [], [], [], [], json_encode([
+            'data' => 'not-an-object',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('The request body must contain a data object.', $payload['error']);
     }
 }

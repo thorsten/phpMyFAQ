@@ -63,4 +63,79 @@ class UserRepositoryTest extends TestCase
 
         $this->assertNull($result);
     }
+
+    public function testGetUserEntityReturnsTheUserIdentifierForValidCredentials(): void
+    {
+        $this->allowLoginFor('admin', 'password');
+        $this->db
+            ->expects($this->once())
+            ->method('query')
+            ->with("SELECT user_id FROM faquser WHERE login = 'admin'")
+            ->willReturn(true);
+        $this->db->method('fetchObject')->willReturn((object) ['user_id' => 42]);
+
+        $user = $this->repository->getUserEntityByUserCredentials(
+            'admin',
+            'password',
+            'password',
+            $this->createStub(ClientEntityInterface::class),
+        );
+
+        $this->assertInstanceOf(UserEntity::class, $user);
+        $this->assertSame('42', $user->getIdentifier());
+    }
+
+    public function testGetUserEntityReturnsNullWhenTheUserLookupFails(): void
+    {
+        $this->allowLoginFor('admin', 'password');
+        $this->db->method('query')->willReturn(false);
+        $this->db->expects($this->never())->method('fetchObject');
+
+        $this->assertNull($this->repository->getUserEntityByUserCredentials(
+            'admin',
+            'password',
+            'password',
+            $this->createStub(ClientEntityInterface::class),
+        ));
+    }
+
+    /**
+     * @return iterable<string, array{mixed}>
+     */
+    public static function unusableUserRowProvider(): iterable
+    {
+        yield 'no row' => [false];
+        yield 'row without user id' => [(object) ['login' => 'admin']];
+        yield 'null user id' => [(object) ['user_id' => null]];
+        yield 'empty user id' => [(object) ['user_id' => '']];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('unusableUserRowProvider')]
+    public function testGetUserEntityReturnsNullWithoutAUsableUserId(mixed $row): void
+    {
+        $this->allowLoginFor('admin', 'password');
+        $this->db->method('query')->willReturn(true);
+        $this->db->method('fetchObject')->willReturn($row);
+
+        $this->assertNull($this->repository->getUserEntityByUserCredentials(
+            'admin',
+            'password',
+            'password',
+            $this->createStub(ClientEntityInterface::class),
+        ));
+    }
+
+    /**
+     * Lets AuthDatabase::checkCredentials() succeed for the given login and password.
+     */
+    private function allowLoginFor(string $login, string $password): void
+    {
+        $this->db->method('queryPrepared')->willReturn(true);
+        $this->db->method('error')->willReturn('');
+        $this->db->method('numRows')->willReturn(1);
+        $this->db->method('fetchArray')->willReturnOnConsecutiveCalls([
+            'login' => $login,
+            'pass' => password_hash($password, PASSWORD_BCRYPT, ['cost' => 4]),
+        ], false);
+    }
 }

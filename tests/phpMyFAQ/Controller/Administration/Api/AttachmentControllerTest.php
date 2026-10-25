@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\AttachmentStorageType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
@@ -954,6 +956,206 @@ final class AttachmentControllerTest extends TestCase
                 (int) $payload[0]['attachmentId'],
             )));
             self::assertSame(['filename' => 'user-manual.txt', 'record_id' => 1, 'record_lang' => 'en'], $row);
+        } finally {
+            new Filesystem()->remove([$storageRoot, $sourceFile]);
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsBadRequestForAnInvalidAttachmentId(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'attId' => 'not-a-number',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Invalid attachment ID', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRefreshReturnsBadRequestForAnInvalidAttachmentId(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'refresh-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $response = $controller->refresh(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'attId' => 0,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Invalid attachment ID', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsInternalServerErrorWhenTheStorageTypeIsUnknown(): void
+    {
+        $this->configuration->set('records.attachmentsStorageType', '99');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-attachment');
+
+        $controller = new AttachmentController();
+        try {
+            $controller->setContainer($container);
+
+            $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+                'csrf' => $token,
+                'attId' => 1,
+            ], JSON_THROW_ON_ERROR)));
+        } finally {
+            AttachmentFactory::init('', false, AttachmentStorageType::FILESYSTEM->value);
+        }
+
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame('Unknown attachment storage type', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRefreshReturnsInternalServerErrorWhenTheStorageTypeIsUnknown(): void
+    {
+        $this->configuration->set('records.attachmentsStorageType', '99');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'refresh-attachment');
+
+        $controller = new AttachmentController();
+        try {
+            $controller->setContainer($container);
+
+            $response = $controller->refresh(new Request([], [], [], [], [], [], json_encode([
+                'csrf' => $token,
+                'attId' => 1,
+            ], JSON_THROW_ON_ERROR)));
+        } finally {
+            AttachmentFactory::init('', false, AttachmentStorageType::FILESYSTEM->value);
+        }
+
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame('Unknown attachment storage type', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadReturnsBadRequestWhenAFileEntryIsNotAnUploadedFile(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        // An "empty" PHP upload entry is converted to null by the FileBag.
+        $noFile = ['name' => '', 'type' => '', 'tmp_name' => '', 'error' => UPLOAD_ERR_NO_FILE, 'size' => 0];
+        $request = new Request([], ['pmf-csrf-token' => $token], [], [], ['filesToUpload' => [$noFile]]);
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoImagesForUpload'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadReturnsBadRequestWithoutARecordId(): void
+    {
+        $file = $this->createMock(UploadedFile::class);
+        $file->method('isValid')->willReturn(true);
+        $file->method('getSize')->willReturn(128);
+        $file->method('getMimeType')->willReturn('image/png');
+        $file->method('getClientOriginalName')->willReturn('upload.png');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $request = new Request([], ['pmf-csrf-token' => $token], [], [], ['filesToUpload' => [$file]]);
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoImagesForUpload'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadReturnsInternalServerErrorWhenTheStorageRejectsTheFile(): void
+    {
+        // A regular file as storage root makes the directory creation fail.
+        $storageRoot = tempnam(sys_get_temp_dir(), 'pmf-upload-root-');
+        self::assertNotFalse($storageRoot);
+        $this->configuration->set('storage.type', 'filesystem');
+        $this->configuration->set('storage.filesystem.root', $storageRoot);
+        $this->configuration->set('records.maxAttachmentSize', '1048576');
+
+        $sourceFile = tempnam(sys_get_temp_dir(), 'pmf-upload-src-');
+        self::assertNotFalse($sourceFile);
+        file_put_contents($sourceFile, 'attachment payload');
+        $uploadedFile = new UploadedFile($sourceFile, 'manual.txt', 'text/plain', null, true);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        try {
+            $response = $controller->upload(
+                new Request(
+                    [],
+                    ['pmf-csrf-token' => $token, 'record_id' => 1, 'record_lang' => 'en'],
+                    [],
+                    [],
+                    ['filesToUpload' => [$uploadedFile]],
+                ),
+            );
+            $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+            self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+            self::assertStringContainsString('Storage root directory could not be created', $payload['error']);
         } finally {
             new Filesystem()->remove([$storageRoot, $sourceFile]);
         }

@@ -693,4 +693,73 @@ class BuiltinCaptchaTest extends TestCase
         $row = $this->configuration->getDb()->fetchArray($result);
         self::assertGreaterThanOrEqual(1, (int) $row['cnt']);
     }
+
+    /**
+     * A code is regenerated when its lookup fails or when it is already stored for another visitor.
+     */
+    public function testGenerateCaptchaCodeRetriesUntilTheCodeCanBeStored(): void
+    {
+        $selects = 0;
+        $inserts = 0;
+        $db = $this->createStub(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(static fn(mixed $value): string => (string) $value);
+        $db->method('query')->willReturnCallback(static function (string $query) use (&$selects, &$inserts): bool {
+            if (str_starts_with(trim($query), 'SELECT')) {
+                // the first lookup fails, every later one succeeds
+                return ++$selects > 1;
+            }
+
+            if (str_starts_with(trim($query), 'INSERT')) {
+                ++$inserts;
+            }
+
+            return true;
+        });
+        // the first successful lookup reports a duplicate, the next one does not
+        $db->method('numRows')->willReturnOnConsecutiveCalls(1, 0);
+
+        $language = $this->createStub(Language::class);
+        $language->method('getLanguage')->willReturn('en');
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+        $configuration->method('getLanguage')->willReturn($language);
+
+        $captcha = new BuiltinCaptcha($configuration);
+        $method = new ReflectionClass($captcha)->getMethod('generateCaptchaCode');
+
+        $code = $method->invoke($captcha, 6);
+
+        // every attempt appends another six characters to the code
+        self::assertSame(18, strlen($code));
+        self::assertMatchesRegularExpression('/^[A-Z0-9]{18}$/', $code);
+        self::assertSame(3, $selects);
+        self::assertSame(1, $inserts);
+    }
+
+    /**
+     * Test removeCaptcha without an explicit code removes the captcha's own code.
+     */
+    public function testRemoveCaptchaWithoutACodeRemovesTheGeneratedCode(): void
+    {
+        $code = 'OWN123';
+        $this->configuration->getDb()->query('DELETE FROM faqcaptcha');
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "INSERT INTO faqcaptcha (id, useragent, language, ip, captcha_time) VALUES ('%s', 'test', 'en', '::1', %d)",
+                $code,
+                time(),
+            ));
+
+        $reflection = new ReflectionClass($this->captcha);
+        $reflection->getProperty('code')->setValue($this->captcha, $code);
+        $reflection->getMethod('removeCaptcha')->invoke($this->captcha);
+
+        $result = $this->configuration
+            ->getDb()
+            ->query(sprintf("SELECT COUNT(*) AS cnt FROM faqcaptcha WHERE id = '%s'", $code));
+        $row = $this->configuration->getDb()->fetchArray($result);
+        self::assertSame(0, (int) $row['cnt']);
+    }
 }

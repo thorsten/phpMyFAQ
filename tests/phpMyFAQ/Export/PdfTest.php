@@ -432,4 +432,133 @@ final class PdfTest extends TestCase
 
         return $config;
     }
+
+    public function testGenerateSkipsEntriesThatAreNotArrays(): void
+    {
+        $this->category->method('getCategoryName')->willReturn('Category');
+        $this->category->method('getLevelOf')->willReturn(1);
+
+        $this->faq
+            ->method('get')
+            ->willReturn([
+                'not a faq row',
+                ['id' => 2, 'category_id' => 1, 'topic' => 'Real FAQ', 'content' => 'Answer', 'lastmodified' => '2026-01-01'],
+            ]);
+
+        $pdf = new Pdf($this->faq, $this->category, $this->configuration);
+
+        self::assertStringStartsWith('%PDF', $pdf->generate());
+    }
+
+    public function testGenerateWritesTheTagsOfAFaq(): void
+    {
+        $config = $this->createRealConfiguration();
+        $db = $config->getDb();
+        $db->query("INSERT INTO faqtags (tagging_id, tagging_name) VALUES (9001, 'export')");
+        $db->query("INSERT INTO faqtags (tagging_id, tagging_name) VALUES (9002, 'pdf')");
+        $db->query('INSERT INTO faqdata_tags (record_id, tagging_id) VALUES (777, 9001)');
+        $db->query('INSERT INTO faqdata_tags (record_id, tagging_id) VALUES (777, 9002)');
+
+        $category = $this->createMock(Category::class);
+        $category->method('getAllCategories')->willReturn([]);
+        $category->method('getCategoryName')->willReturn('Category');
+        $category->method('getLevelOf')->willReturn(1);
+
+        $faq = $this->createMock(Faq::class);
+        $faq
+            ->method('get')
+            ->willReturn([
+                ['id' => 777, 'category_id' => 1, 'topic' => 'Tagged FAQ', 'content' => 'Answer', 'lastmodified' => '2026-01-01'],
+            ]);
+
+        $pdf = new Pdf($faq, $category, $config);
+
+        self::assertStringStartsWith('%PDF', $pdf->generate());
+    }
+
+    public function testGenerateFileConvertsMarkdownWhenTheMarkdownEditorIsEnabled(): void
+    {
+        $config = $this->createRealConfiguration();
+        $config->set('main.enableMarkdownEditor', 'true');
+
+        $category = $this->createMock(Category::class);
+        $category->method('getAllCategories')->willReturn([]);
+
+        $faqData = [
+            'id' => 2,
+            'lang' => 'en',
+            'category_id' => 1,
+            'title' => 'Markdown FAQ',
+            'content' => "# Heading\n\n**Bold text**",
+            'solution_id' => 501,
+            'email' => 'test@example.com',
+            'author' => 'Author',
+            'date' => '2026-01-01 00:00:00',
+        ];
+
+        $pdf = new Pdf($this->createMock(Faq::class), $category, $config);
+
+        self::assertStringStartsWith('%PDF', $pdf->generateFile($faqData));
+    }
+
+    public function testGenerateFileSkipsAttachmentsThatAreNotArrays(): void
+    {
+        $config = $this->createRealConfiguration();
+
+        $category = $this->createMock(Category::class);
+        $category->method('getAllCategories')->willReturn([]);
+
+        $faqData = [
+            'id' => 11,
+            'lang' => 'en',
+            'category_id' => 1,
+            'title' => 'FAQ with a broken attachment entry',
+            'content' => 'Main content',
+            'solution_id' => 401,
+            'email' => 'test@example.com',
+            'author' => 'Author',
+            'date' => '2026-01-01 00:00:00',
+            'attachmentList' => [
+                'not an attachment',
+                ['url' => 'https://example.com/file1.pdf', 'filename' => 'Document.pdf'],
+            ],
+        ];
+
+        $pdf = new Pdf($this->createMock(Faq::class), $category, $config);
+
+        self::assertStringStartsWith('%PDF', $pdf->generateFile($faqData));
+    }
+
+    public function testGenerateFileHidesTheAuthorOfAUserWhoIsNotVisible(): void
+    {
+        $config = $this->createRealConfiguration();
+        $config
+            ->getDb()
+            ->query(
+                "INSERT INTO faquserdata (user_id, display_name, email, is_visible) VALUES (9009, 'Hidden Author', 'hidden@example.com', 0)",
+            );
+
+        $category = $this->createMock(Category::class);
+        $category->method('getAllCategories')->willReturn([]);
+
+        $faqData = [
+            'id' => 12,
+            'lang' => 'en',
+            'category_id' => 1,
+            'title' => 'FAQ by a hidden author',
+            'content' => 'Main content',
+            'solution_id' => 402,
+            'email' => 'hidden@example.com',
+            'author' => 'Hidden Author',
+            'date' => '2026-01-01 00:00:00',
+        ];
+
+        $pdf = new Pdf($this->createMock(Faq::class), $category, $config);
+        $result = $pdf->generateFile($faqData);
+
+        self::assertStringStartsWith('%PDF', $result);
+        // TCPDF stores the metadata strings as UTF-16BE with a byte order mark
+        self::assertStringContainsString("\xFE\xFF" . mb_convert_encoding('n/a', 'UTF-16BE', 'UTF-8'), $result);
+        self::assertStringNotContainsString(mb_convert_encoding('Hidden Author', 'UTF-16BE', 'UTF-8'), $result);
+    }
 }

@@ -464,4 +464,28 @@ class StatisticsHelperTest extends TestCase
 
         return $file;
     }
+
+    public function testRenderMonthSelectorListsEveryMonthOnce(): void
+    {
+        $this->createTrackingFile(mktime(0, 0, 0, 1, 15, 2099), ['a;b']);
+        $this->createTrackingFile(mktime(0, 0, 0, 1, 16, 2099), ['a;b']);
+        $this->createTrackingFile(mktime(0, 0, 0, 2, 1, 2099), ['a;b']);
+
+        $this->dateMock
+            ->method('getTrackingFileDateStart')
+            ->willReturnCallback(static fn(string $file): int => (int) gmmktime(
+                0,
+                0,
+                0,
+                (int) substr($file, 10, 2),
+                (int) substr($file, 8, 2),
+                (int) substr($file, 12, 4),
+            ));
+
+        $result = $this->statisticsHelper->renderMonthSelector();
+
+        $this->assertSame(1, substr_count($result, '>2099-01</option>'), 'A month with two files is listed once');
+        $this->assertSame(1, substr_count($result, '>2099-02</option>'));
+        $this->assertStringContainsString('<option value="012099">2099-01</option>', $result);
+    }
 }

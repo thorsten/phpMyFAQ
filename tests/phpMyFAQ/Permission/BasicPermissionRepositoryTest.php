@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -16,6 +17,7 @@ class BasicPermissionRepositoryTest extends TestCase
     private Sqlite3 $dbHandle;
     private Configuration $configuration;
     private BasicPermissionRepository $repository;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -184,5 +186,37 @@ class BasicPermissionRepositoryTest extends TestCase
         $this->assertStringNotContainsString('DROP TABLE', $this->dbHandle->log());
         $this->assertStringContainsString('ORDER BY', $this->dbHandle->log());
         $this->assertStringContainsString('right_id ASC', $this->dbHandle->log());
+    }
+
+    public function testGetRightDataReturnsEmptyArrayWhenRowCannotBeFetched(): void
+    {
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('query')->willReturn(true);
+        $database->method('numRows')->willReturn(1);
+        $database->method('fetchArray')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+
+        $repository = new BasicPermissionRepository($configuration);
+
+        $this->assertSame([], $repository->getRightData(1));
+    }
+
+    public function testGetUserIdsWithRightReturnsEmptyArrayForInvalidRight(): void
+    {
+        $this->assertSame([], $this->repository->getUserIdsWithRight(0));
+        $this->assertSame([], $this->repository->getUserIdsWithRight(-1));
+    }
+
+    public function testGetUserIdsWithRightReturnsSortedUserIds(): void
+    {
+        $this->dbHandle->query('INSERT INTO faquser_right (user_id, right_id) VALUES (2, 1)');
+
+        $this->assertSame([1, 2], $this->repository->getUserIdsWithRight(1));
+        $this->assertSame([], $this->repository->getUserIdsWithRight(999));
+
+        // Cleanup
+        $this->dbHandle->query('DELETE FROM faquser_right WHERE right_id = 1 AND user_id = 2');
     }
 }

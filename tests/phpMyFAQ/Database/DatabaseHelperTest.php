@@ -86,4 +86,38 @@ class DatabaseHelperTest extends TestCase
 
         $this->assertSame($query, $result);
     }
+
+    public function testBuildInsertQueriesReturnsNothingWhenTheQueryFails(): void
+    {
+        $queries = $this->databaseHelper->buildInsertQueries('SELECT * FROM no_such_table', 'no_such_table');
+
+        $this->assertSame([], $queries);
+    }
+
+    public function testBuildInsertQueriesRendersNumericAndNullValuesAndSkipsPositionalKeys(): void
+    {
+        $rows = [
+            [0 => 'positional duplicate', 'name' => 'foo', 'amount' => '42', 'rights' => '7', 'note' => null],
+            [],
+        ];
+        $driver = $this->createStub(DatabaseDriver::class);
+        $driver->method('query')->willReturn(true);
+        $driver->method('fetchArray')->willReturnCallback(static function () use (&$rows): array {
+            return array_shift($rows) ?? [];
+        });
+        $driver->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($driver);
+
+        $queries = new DatabaseHelper($configuration)->buildInsertQueries('SELECT * FROM faqtest', 'faqtest');
+
+        $this->assertSame(
+            [
+                "\r\n-- Table: faqtest",
+                "INSERT INTO faqtest (name,amount,rights,note) VALUES ('foo',42,'7',NULL);",
+            ],
+            $queries,
+        );
+    }
 }

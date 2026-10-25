@@ -481,6 +481,65 @@ class RelationTest extends TestCase
         $this->assertSame([], $this->relation->getCategories(1, $malicious));
     }
 
+    public function testGetCategoriesReturnsTheLinkedCategoriesKeyedById(): void
+    {
+        $this->databaseMock->method('escape')->willReturnArgument(0);
+        $this->databaseMock->method('query')->willReturn('query_result');
+
+        $first = new stdClass();
+        $first->category_id = '3';
+        $first->category_lang = 'en';
+        $second = new stdClass();
+        $second->category_id = 5;
+        $second->category_lang = 'de';
+
+        $this->databaseMock->method('fetchObject')->willReturnOnConsecutiveCalls($first, $second, false);
+
+        $this->assertSame(
+            [
+                3 => ['category_id' => 3, 'category_lang' => 'en'],
+                5 => ['category_id' => 5, 'category_lang' => 'de'],
+            ],
+            $this->relation->getCategories(1, 'en'),
+        );
+    }
+
+    public function testAddSkipsRelationsThatAlreadyExist(): void
+    {
+        $this->databaseMock->method('escape')->willReturnArgument(0);
+
+        $queries = [];
+        $this->databaseMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): bool {
+                $queries[] = $query;
+                return true;
+            });
+        // the relation to category 1 exists already, the one to category 2 does not
+        $this->databaseMock->method('numRows')->willReturnOnConsecutiveCalls(1, 0);
+
+        $this->assertTrue($this->relation->add([1, 2], 42, 'en'));
+
+        $inserts = array_values(array_filter($queries, static fn(string $query): bool => str_starts_with(
+            $query,
+            'INSERT',
+        )));
+        $this->assertCount(1, $inserts);
+        $this->assertStringContainsString("VALUES (2, 'en', 42, 'en')", $inserts[0]);
+    }
+
+    public function testGetAggregatedFaqNumbersReusesTotalsOfAlreadyProcessedChildren(): void
+    {
+        // the child is listed before its parent, so it is aggregated first and then reused
+        $categories = [
+            ['category_id' => 2, 'parent_id' => 1, 'faqs' => 3],
+            ['category_id' => 1, 'parent_id' => 0, 'faqs' => 1],
+            ['category_id' => 3, 'parent_id' => 2, 'faqs' => 2],
+        ];
+
+        $this->assertSame([2 => 5, 1 => 6, 3 => 2], $this->relation->getAggregatedFaqNumbers($categories));
+    }
+
     protected function tearDown(): void
     {
         // Reset table prefix if needed

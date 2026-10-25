@@ -105,4 +105,18 @@ final class MetaServiceTest extends TestCase
             $payload['oauthDiscovery']['tokenEndpointAuthMethodsSupported'],
         );
     }
+
+    public function testExtractThemeVariablesReturnsNothingForAnUnknownSelector(): void
+    {
+        $service = new MetaService($this->configuration, new OAuthDiscoveryService($this->configuration));
+        $method = new ReflectionClass(MetaService::class)->getMethod('extractThemeVariables');
+
+        $themeCss = ":root,\n[data-bs-theme='light'] {\n  --bs-primary: #083c83;\n}\n";
+
+        $this->assertSame(
+            ['--bs-primary' => '#083c83'],
+            $method->invoke($service, $themeCss, ":root,\n[data-bs-theme='light']"),
+        );
+        $this->assertSame([], $method->invoke($service, $themeCss, "[data-bs-theme='dark']"));
+    }
 }

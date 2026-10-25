@@ -304,4 +304,27 @@ ORDER BY fcr.category_id, fd.id";
 
         new QueryHelper(42, [1, 2, 3]);
     }
+
+    public function testGetQueryRestrictsToTheGivenFaqDateAndApprovalStatus(): void
+    {
+        $queryHelper = new QueryHelper(-1, [1], ReadScope::unrestricted());
+
+        $query = $queryHelper->getQuery(QueryHelper::FAQ_QUERY_TYPE_APPROVAL, 0, false, 'en', '2026%', 42);
+
+        $this->assertStringContainsString("fd.id = '42' AND", $query);
+        $this->assertStringContainsString("fd.updated LIKE '2026%'", $query);
+        $this->assertStringContainsString("fd.status != 'published'", $query);
+        $this->assertStringNotContainsString('fcr.category_id =', $query);
+        $this->assertStringEndsWith("ORDER BY fcr.category_id, fd.id", $query);
+    }
+
+    public function testGetQueryForTheJsonExportOrdersByCategoryAndId(): void
+    {
+        $queryHelper = new QueryHelper(-1, [1], ReadScope::unrestricted());
+
+        $query = $queryHelper->getQuery(QueryHelper::FAQ_QUERY_TYPE_EXPORT_JSON, 0, false, '', '', 0);
+
+        $this->assertStringContainsString("fd.status = 'published'", $query);
+        $this->assertStringEndsWith("ORDER BY fcr.category_id, fd.id", $query);
+    }
 }

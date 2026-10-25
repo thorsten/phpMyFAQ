@@ -316,6 +316,56 @@ class MailTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testSendBuildsRelatedBodyWithInlineAttachmentAndOptionalHeaders(): void
+    {
+        $attachmentPath = tempnam(sys_get_temp_dir(), 'phpmyfaq-mail-inline-');
+        file_put_contents($attachmentPath, 'inline-image');
+
+        $mail = $this->createCapturingMail($this->configuration, 4);
+        $mail->subject = 'Inline subject';
+        $mail->message = '<p><img src="cid:logo"></p>';
+        $mail->setFrom('admin@example.com', 'Admin User');
+        $mail->addTo('user@example.com', 'User Name');
+        $mail->addCc('copy@example.com', 'Copy User');
+        $mail->setReplyTo('reply@example.com', 'Reply User');
+        $mail->attachments[] = [
+            'name' => 'logo.png',
+            'path' => $attachmentPath,
+            'mimetype' => 'image/png',
+            'disposition' => 'inline',
+            'cid' => 'logo',
+        ];
+
+        foreach ([
+            'notifyTo' => ['notify@example.com' => 'Notify User'],
+            'returnPath' => ['bounce@example.com' => null],
+            'sender' => ['sender@example.com' => 'Sender User'],
+        ] as $property => $value) {
+            $reflection = new \ReflectionProperty(Mail::class, $property);
+            $reflection->setValue($mail, $value);
+        }
+
+        try {
+            $this->assertSame(4, $mail->send(true));
+            $headers = $mail->capturedHeaders;
+            $this->assertStringContainsString('multipart/related', (string) $headers['Content-Type']);
+            $this->assertSame('Notify User <notify@example.com>', $headers['Disposition-Notification-To']);
+            $this->assertStringEndsWith('<copy@example.com>', (string) $headers['CC']);
+            $this->assertStringEndsWith('<reply@example.com>', (string) $headers['Reply-To']);
+            $this->assertSame('<bounce@example.com>', $headers['Return-Path']);
+            $this->assertSame('Sender User <sender@example.com>', $headers['Sender']);
+            $this->assertStringContainsString('Content-ID: <logo>', $mail->capturedBody);
+            $this->assertStringContainsString('Content-Disposition: inline; filename="logo.png"', $mail->capturedBody);
+        } finally {
+            if (file_exists($attachmentPath)) {
+                unlink($attachmentPath);
+            }
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testSendBuildsMultipartBodyWithAlternativeAndAttachment(): void
     {
         $attachmentPath = tempnam(sys_get_temp_dir(), 'phpmyfaq-mail-attachment-');

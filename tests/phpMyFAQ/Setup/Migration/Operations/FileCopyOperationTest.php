@@ -67,4 +67,31 @@ class FileCopyOperationTest extends TestCase
         $array = $operation->toArray();
         $this->assertFalse($array['onlyIfExists']);
     }
+
+    public function testExecuteSkipsMissingSourceWhenOnlyIfExists(): void
+    {
+        $this->filesystem->expects($this->never())->method('copy');
+
+        $operation = new FileCopyOperation($this->filesystem, '/does/not/exist.txt', '/dest/file.txt');
+
+        $this->assertTrue($operation->execute());
+    }
+
+    public function testExecuteCopiesExistingSource(): void
+    {
+        $this->filesystem->expects($this->once())->method('copy')->with(__FILE__, '/dest/file.txt');
+
+        $operation = new FileCopyOperation($this->filesystem, __FILE__, '/dest/file.txt');
+
+        $this->assertTrue($operation->execute());
+    }
+
+    public function testExecuteReturnsFalseWhenCopyFails(): void
+    {
+        $this->filesystem->method('copy')->willThrowException(new \RuntimeException('copy failed'));
+
+        $operation = new FileCopyOperation($this->filesystem, '/does/not/exist.txt', '/dest/file.txt', false);
+
+        $this->assertFalse($operation->execute());
+    }
 }

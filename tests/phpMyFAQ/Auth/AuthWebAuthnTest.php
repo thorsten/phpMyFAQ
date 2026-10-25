@@ -1007,6 +1007,123 @@ class AuthWebAuthnTest extends TestCase
         self::assertCount(1, $keys);
     }
 
+    public function testRegisterSkipsExistingEntriesThatAreNotObjectsOrHaveUnreadableIds(): void
+    {
+        [$info, $credId] = $this->createAttestationInfo();
+        $existing = (string) json_encode([7, (object) ['id' => [[1], 2], 'key' => 'other key']]);
+
+        $keys = json_decode($this->authWebAuthn->register($info, $existing, 'issued-challenge'));
+
+        self::assertCount(3, $keys);
+        self::assertSame(array_values(unpack('C*', $credId)), $keys[0]->id);
+        self::assertSame(7, $keys[1]);
+        self::assertSame('other key', $keys[2]->key);
+    }
+
+    /**
+     * Authenticator data without the 16-byte AAGUID: the credential is found at the legacy offset.
+     */
+    public function testRegisterFallsBackToTheLegacyCredentialOffset(): void
+    {
+        [$info, $credId] = $this->createLegacyAttestationInfo(withPublicKey: true);
+
+        $keys = json_decode($this->authWebAuthn->register($info, '', 'issued-challenge'));
+
+        self::assertCount(1, $keys);
+        self::assertSame(array_values(unpack('C*', $credId)), $keys[0]->id);
+        self::assertStringContainsString('BEGIN PUBLIC KEY', $keys[0]->key);
+    }
+
+    public function testRegisterThrowsWhenNoPublicKeyCanBeDecodedAtEitherOffset(): void
+    {
+        [$info] = $this->createLegacyAttestationInfo(withPublicKey: false);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot decode key for key bytes');
+
+        $this->authWebAuthn->register($info, '', 'issued-challenge');
+    }
+
+    /**
+     * Builds an attestation whose authenticator data lacks the AAGUID, so the credential id
+     * length sits at bytes 38/39. The credential id is all zeros, which makes the regular
+     * offset decode to a CBOR integer instead of a COSE key.
+     *
+     * @return array{0: string, 1: string}
+     */
+    private function createLegacyAttestationInfo(bool $withPublicKey): array
+    {
+        $key = openssl_pkey_new(['curve_name' => 'prime256v1', 'private_key_type' => OPENSSL_KEYTYPE_EC]);
+        $details = openssl_pkey_get_details($key);
+
+        $cborPublicKey = $withPublicKey
+            ? (string) CBOREncoder::encode([
+                1 => 2,
+                3 => -7,
+                -1 => 1,
+                -2 => new CBORByteString(str_pad($details['ec']['x'], 32, "\0", STR_PAD_LEFT)),
+                -3 => new CBORByteString(str_pad($details['ec']['y'], 32, "\0", STR_PAD_LEFT)),
+            ])
+            : "\x00";
+
+        $credId = str_repeat("\x00", 32);
+        $authData =
+            hash('sha256', 'example.com', true)
+            . chr(0x45)
+            . "\x00\x00\x00\x00"
+            . "\x00"
+            . pack('n', strlen($credId))
+            . $credId
+            . $cborPublicKey;
+
+        $attestationObject = (string) CBOREncoder::encode([
+            'attStmt' => [],
+            'fmt' => 'none',
+            'authData' => new CBORByteString($authData),
+        ]);
+
+        $info = (string) json_encode([
+            'rawId' => array_values(unpack('C*', $credId)),
+            'response' => [
+                'attestationObject' => array_values(unpack('C*', $attestationObject)),
+                'clientDataJSON' => (object) [
+                    'challenge' => 'issued-challenge',
+                    'origin' => 'https://example.com',
+                    'type' => 'webauthn.create',
+                ],
+            ],
+        ]);
+
+        return [$info, $credId];
+    }
+
+    public function testAuthenticateThrowsWhenTheSignatureIsNotAByteList(): void
+    {
+        $info = $this->createAuthenticationInfo(
+            challenge: 'pending-challenge',
+            origin: 'https://example.com',
+            type: 'webauthn.get',
+        );
+        $info->response->authenticatorData = array_merge(
+            array_values(unpack('C*', hash('sha256', 'example.com', true))),
+            [0x01],
+            [0, 0, 0, 1],
+        );
+        $info->response->signature = 'not a byte list';
+        $userWebAuthn = json_encode([
+            (object) [
+                'id' => [1, 2, 3],
+                'key' => 'unused',
+                'challenge' => 'pending-challenge',
+            ],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot decode key response (3)');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
     /**
      * Signs an assertion like createSignedAssertion(), with a configurable relying party and flags.
      */

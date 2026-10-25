@@ -23,6 +23,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -226,6 +227,35 @@ final class BackupControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('only partially uploaded', (string) $response->getContent());
+    }
+
+    /**
+     * @return iterable<string, array{int, string}>
+     */
+    public static function uploadErrorProvider(): iterable
+    {
+        yield 'ini size' => [UPLOAD_ERR_INI_SIZE, 'exceeds the upload_max_filesize directive'];
+        yield 'form size' => [UPLOAD_ERR_FORM_SIZE, 'exceeds the MAX_FILE_SIZE directive'];
+        yield 'no file' => [UPLOAD_ERR_NO_FILE, 'No file was uploaded.'];
+        yield 'no tmp dir' => [UPLOAD_ERR_NO_TMP_DIR, 'Missing a temporary folder.'];
+        yield 'cannot write' => [UPLOAD_ERR_CANT_WRITE, 'Failed to write file to disk.'];
+        yield 'extension' => [UPLOAD_ERR_EXTENSION, 'A PHP extension stopped the file upload.'];
+        yield 'unknown' => [99, 'Undefined error.'];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('uploadErrorProvider')]
+    public function testRestoreExplainsEveryUploadErrorCode(int $error, string $expectedMessage): void
+    {
+        $controller = $this->createAuthenticatedController();
+        $request = $this->createRestoreRequestWithFile($this->createUploadedFile('backup', error: $error));
+
+        $response = $controller->restore($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString($expectedMessage, (string) $response->getContent());
     }
 
     /**

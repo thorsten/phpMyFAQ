@@ -4,6 +4,7 @@ namespace phpMyFAQ;
 
 use Elastic\Elasticsearch\ClientBuilder as ElasticsearchClientBuilder;
 use Exception;
+use GuzzleHttp\Psr7\Response;
 use OpenSearch\Client as OpenSearchClient;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
@@ -13,6 +14,9 @@ use phpMyFAQ\Search\Search\Elasticsearch;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
@@ -288,7 +292,8 @@ class SearchTest extends TestCase
      */
     public function testSearchForAdminSearchesAllLanguagesAndInactiveFaqsAsSubstring(): void
     {
-        $dbHandle = $this->getMockBuilder(Sqlite3::class)
+        $dbHandle = $this
+            ->getMockBuilder(Sqlite3::class)
             ->onlyMethods(['query', 'escape', 'numRows', 'fetchAll'])
             ->getMock();
         $dbHandle->method('escape')->willReturnCallback(static fn(string $value): string => $value);
@@ -296,11 +301,13 @@ class SearchTest extends TestCase
             ->expects($this->once())
             ->method('query')
             ->with($this->callback(static function (string $query): bool {
-                return str_contains($query, "fd.thema LIKE '%reinigung%' ESCAPE '|'")
+                return (
+                    str_contains($query, "fd.thema LIKE '%reinigung%' ESCAPE '|'")
                     && str_contains($query, "fd.keywords LIKE '%reinigung%' ESCAPE '|'")
                     && !str_contains($query, "fd.lang = '")
                     && !str_contains($query, 'fd.active')
-                    && !str_contains($query, 'MATCH');
+                    && !str_contains($query, 'MATCH')
+                );
             }))
             ->willReturn(true);
         $dbHandle->method('numRows')->willReturn(1);
@@ -316,7 +323,8 @@ class SearchTest extends TestCase
      */
     public function testSearchForAdminReturnsEmptyArrayWithoutHits(): void
     {
-        $dbHandle = $this->getMockBuilder(Sqlite3::class)
+        $dbHandle = $this
+            ->getMockBuilder(Sqlite3::class)
             ->onlyMethods(['query', 'escape', 'numRows', 'fetchAll'])
             ->getMock();
         $dbHandle->method('escape')->willReturnCallback(static fn(string $value): string => $value);
@@ -875,5 +883,178 @@ class SearchTest extends TestCase
         $this->assertIsArray($result);
 
         $this->dbHandle->query('DELETE FROM faqcustompages WHERE id = 612');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchBySolutionIdReturnsTheMatchingFaq(): void
+    {
+        $this->setConfigValue('search.searchForSolutionId', 'true');
+        $this->dbHandle->query("INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author,
+                email, comment, updated, date_start, date_end, created, notes, sticky_order)
+            VALUES (1, 'en', 1000, 0, 'published', 0, '', 'Solution question', 'Solution answer', 'author',
+                'author@example.com', 'n', '20260101000000', '00000000000000', '99991231235959',
+                '2026-01-01 00:00:00', '', 0)");
+        $this->dbHandle->query("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+            VALUES (1, 'en', 1, 'en')");
+
+        $results = $this->search->search('1000');
+
+        $this->assertCount(1, $results);
+        $this->assertSame('Solution question', $results[0]->question);
+        $this->assertSame(1000, (int) $results[0]->solution_id);
+        $this->assertSame([], $this->search->search('1001'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchElasticsearchUsesCategoryAndLanguageFilters(): void
+    {
+        $language = $this->createMock(Language::class);
+        $language->method('getLanguage')->willReturn('en');
+
+        $category = $this->createMock(Category::class);
+        $category->method('getAllCategoryIds')->willReturn([1, 2, 3]);
+        $category->expects($this->once())->method('getChildNodes')->with(2)->willReturn([4, 5]);
+
+        $httpClient = $this->createElasticsearchHttpClient([
+            'hits' => [
+                'total' => ['value' => 1],
+                'hits' => [
+                    [
+                        '_source' => [
+                            'id' => 84,
+                            'lang' => 'en',
+                            'question' => 'elasticsearch result',
+                            'answer' => 'answer',
+                            'keywords' => 'phpmyfaq',
+                            'category_id' => 2,
+                        ],
+                        '_score' => 1.5,
+                    ],
+                ],
+            ],
+        ]);
+
+        $config = $this->createElasticsearchConfigurationMock($httpClient, $language);
+
+        $search = new Search($config);
+        $search->setCategory($category);
+        $search->setCategoryId(2);
+
+        $results = $search->searchElasticsearch('elastic', false);
+
+        $this->assertCount(1, $results);
+        $this->assertSame('elasticsearch result', $results[0]->question);
+        $this->assertCount(1, $httpClient->requests);
+        $this->assertSame('/faq-index/_search', $httpClient->requests[0]->getUri()->getPath());
+        $this->assertStringContainsString('"category_id":[2,4,5]', (string) $httpClient->requests[0]->getBody());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAutoCompleteUsesElasticsearchWhenConfigured(): void
+    {
+        $language = $this->createMock(Language::class);
+        $language->method('getLanguage')->willReturn('en');
+
+        $category = $this->createMock(Category::class);
+        $category->method('getAllCategoryIds')->willReturn([1, 2, 3]);
+
+        $httpClient = $this->createElasticsearchHttpClient([
+            'hits' => [
+                'total' => ['value' => 1],
+                'hits' => [
+                    [
+                        '_source' => [
+                            'id' => 42,
+                            'lang' => 'en',
+                            'question' => 'elastic autocomplete',
+                            'answer' => 'answer',
+                            'keywords' => 'phpmyfaq',
+                            'category_id' => 1,
+                        ],
+                        '_score' => 1.0,
+                    ],
+                ],
+            ],
+        ]);
+
+        $config = $this->createElasticsearchConfigurationMock($httpClient, $language);
+        $config
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'search.enableElasticsearch' => true,
+                default => null,
+            });
+        $config->method('hasElasticsearch')->willReturn(true);
+
+        $search = new Search($config);
+        $search->setCategory($category);
+
+        $results = $search->autoComplete('elastic');
+
+        $this->assertCount(1, $results);
+        $this->assertSame('elastic autocomplete', $results[0]->question);
+        $this->assertStringContainsString('"lang":"en"', (string) $httpClient->requests[0]->getBody());
+    }
+
+    /**
+     * @param array<string, mixed> $body
+     * @return ClientInterface&object{requests: list<RequestInterface>}
+     */
+    private function createElasticsearchHttpClient(array $body): ClientInterface
+    {
+        return new class($body) implements ClientInterface {
+            /** @var list<RequestInterface> */
+            public array $requests = [];
+
+            /**
+             * @param array<string, mixed> $body
+             */
+            public function __construct(
+                private readonly array $body,
+            ) {
+            }
+
+            public function sendRequest(RequestInterface $request): ResponseInterface
+            {
+                $this->requests[] = $request;
+
+                return new Response(
+                    200,
+                    ['X-Elastic-Product' => 'Elasticsearch', 'Content-Type' => 'application/json'],
+                    json_encode($this->body, JSON_THROW_ON_ERROR),
+                );
+            }
+        };
+    }
+
+    private function createElasticsearchConfigurationMock(
+        ClientInterface $httpClient,
+        Language $language,
+    ): Configuration&\PHPUnit\Framework\MockObject\MockObject {
+        $client = ElasticsearchClientBuilder::create()
+            ->setHosts(['http://localhost:9200'])
+            ->setHttpClient($httpClient)
+            ->build();
+
+        $elasticsearchConfigFile = tempnam(sys_get_temp_dir(), 'pmf-elasticsearch-');
+        file_put_contents(
+            $elasticsearchConfigFile,
+            "<?php\n\$PMF_ES = ['hosts' => ['http://localhost:9200'], 'index' => 'faq-index'];\n",
+        );
+        $elasticsearchConfiguration = new ElasticsearchConfiguration($elasticsearchConfigFile);
+        unlink($elasticsearchConfigFile);
+
+        $config = $this->createMock(Configuration::class);
+        $config->method('getLanguage')->willReturn($language);
+        $config->method('getElasticsearch')->willReturn($client);
+        $config->method('getElasticsearchConfig')->willReturn($elasticsearchConfiguration);
+
+        return $config;
     }
 }

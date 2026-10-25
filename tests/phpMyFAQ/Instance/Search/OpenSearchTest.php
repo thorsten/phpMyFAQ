@@ -11,6 +11,7 @@ use OpenSearch\Namespaces\IndicesNamespace;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
@@ -795,5 +796,89 @@ class OpenSearchTest extends TestCase
             array_keys($mappings['properties']),
         );
         $this->assertSame('autocomplete', $mappings['properties']['question']['analyzer']);
+    }
+
+    public function testBulkIndexFlushesEveryThousandDocuments(): void
+    {
+        $faqs = [];
+        for ($id = 1; $id <= 1001; ++$id) {
+            $faqs[] = [
+                'status' => 'published',
+                'solution_id' => (string) (1000 + $id),
+                'id' => (string) $id,
+                'lang' => 'en',
+                'title' => 'FAQ ' . $id,
+                'content' => 'content',
+                'keywords' => '',
+                'category_id' => '1',
+            ];
+        }
+
+        $batchSizes = [];
+        $this->clientMock
+            ->expects($this->exactly(2))
+            ->method('bulk')
+            ->willReturnCallback(static function (array $params) use (&$batchSizes): array {
+                $batchSizes[] = count($params['body']);
+
+                return ['errors' => false, 'items' => []];
+            });
+
+        $this->openSearch->bulkIndex($faqs);
+
+        $this->assertSame([2000, 2], $batchSizes);
+    }
+
+    public function testBulkIndexCustomPagesFlushesEveryThousandDocuments(): void
+    {
+        $pages = [];
+        for ($id = 1; $id <= 1001; ++$id) {
+            $pages[] = [
+                'active' => 'y',
+                'id' => (string) $id,
+                'lang' => 'en',
+                'page_title' => 'Page ' . $id,
+                'content' => 'content',
+                'slug' => 'page-' . $id,
+            ];
+        }
+
+        $batchSizes = [];
+        $this->clientMock
+            ->expects($this->exactly(2))
+            ->method('bulk')
+            ->willReturnCallback(static function (array $params) use (&$batchSizes): array {
+                $batchSizes[] = count($params['body']);
+
+                return ['errors' => false, 'items' => []];
+            });
+
+        $this->openSearch->bulkIndexCustomPages($pages);
+
+        $this->assertSame([2000, 2], $batchSizes);
+    }
+
+    #[RunInSeparateProcess]
+    public function testGetParamsFallsBackToTheShippedDefaultsWithoutTheOpenSearchConstants(): void
+    {
+        $this->assertFalse(defined('PMF_OPENSEARCH_NUMBER_SHARDS'));
+
+        $params = new ReflectionClass(OpenSearch::class)->getMethod('getParams')->invoke($this->openSearch);
+        $settings = $params['body']['settings'];
+
+        $this->assertSame(2, $settings['number_of_shards']);
+        $this->assertSame(0, $settings['number_of_replicas']);
+        $this->assertSame('standard', $settings['analysis']['analyzer']['autocomplete']['tokenizer']);
+        $this->assertSame('english', $settings['analysis']['filter']['Language_stemmer']['name']);
+    }
+
+    #[RunInSeparateProcess]
+    public function testGetParamsFallsBackToEnglishWhenTheStemmingLanguagesAreNotAList(): void
+    {
+        define('PMF_OPENSEARCH_STEMMING_LANGUAGE', 'german');
+
+        $params = new ReflectionClass(OpenSearch::class)->getMethod('getParams')->invoke($this->openSearch);
+
+        $this->assertSame('english', $params['body']['settings']['analysis']['filter']['Language_stemmer']['name']);
     }
 }

@@ -363,4 +363,176 @@ final class GlossaryControllerTest extends TestCase
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame(Translation::get('ad_glossary_update_error'), $payload['error']);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsBadRequestWithoutAGlossaryId(): void
+    {
+        $glossary = $this->createMock(Glossary::class);
+        $glossary->expects($this->never())->method('delete');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-glossary');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'lang' => 'en',
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController($glossary);
+        $controller->setContainer($container);
+
+        $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_glossary_delete_error'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsSuccessWhenTheEntryIsDeleted(): void
+    {
+        $glossary = $this->createMock(Glossary::class);
+        $glossary->expects($this->once())->method('setLanguage')->with('en');
+        $glossary->expects($this->once())->method('delete')->with(1)->willReturn(true);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-glossary');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'id' => 1,
+            'lang' => 'en',
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController($glossary);
+        $controller->setContainer($container);
+
+        $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_glossary_delete_success'), $payload['success']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsBadRequestWhenTheEntryCannotBeDeleted(): void
+    {
+        $glossary = $this->createMock(Glossary::class);
+        $glossary->expects($this->once())->method('delete')->with(1)->willReturn(false);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-glossary');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'id' => 1,
+            'lang' => 'en',
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController($glossary);
+        $controller->setContainer($container);
+
+        $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_glossary_delete_error'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsBadRequestWhenTheEntryCannotBeSaved(): void
+    {
+        $glossary = $this->createMock(Glossary::class);
+        $glossary->expects($this->once())->method('create')->with('Term', 'Definition')->willReturn(false);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-glossary');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'lang' => 'en',
+            'item' => 'Term',
+            'definition' => 'Definition',
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController($glossary);
+        $controller->setContainer($container);
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_glossary_save_error'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsBadRequestWithoutAGlossaryId(): void
+    {
+        $glossary = $this->createMock(Glossary::class);
+        $glossary->expects($this->never())->method('update');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-glossary');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'lang' => 'en',
+            'item' => 'Term',
+            'definition' => 'Definition',
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController($glossary);
+        $controller->setContainer($container);
+
+        $response = $controller->update($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_glossary_update_error'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsSuccessWhenTheEntryIsUpdated(): void
+    {
+        $glossary = $this->createMock(Glossary::class);
+        $glossary->expects($this->once())->method('update')->with(1, 'Term', 'Definition')->willReturn(true);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-glossary');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'id' => 1,
+            'lang' => 'en',
+            'item' => 'Term',
+            'definition' => 'Definition',
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR));
+        $controller = $this->createController($glossary);
+        $controller->setContainer($container);
+
+        $response = $controller->update($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_glossary_update_success'), $payload['success']);
+    }
 }

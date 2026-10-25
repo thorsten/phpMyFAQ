@@ -359,4 +359,141 @@ final class TagControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_tag_delete_success'), $payload['success']);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsBadRequestWithoutATagId(): void
+    {
+        $tags = $this->createMock(Tags::class);
+        $tags->expects($this->never())->method('update');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'tags');
+
+        $controller = $this->createController($tags);
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'id' => 'not-a-number',
+            'tag' => 'foo',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgErrorOccurred'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsBadRequestWhenTheTagCannotBeUpdated(): void
+    {
+        $tags = $this->createMock(Tags::class);
+        $tags->expects($this->once())->method('update')->willReturn(false);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'tags');
+
+        $controller = $this->createController($tags);
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'id' => 1,
+            'tag' => 'foo',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgErrorOccurred'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSearchUsesTheLastValueOfACommaSeparatedList(): void
+    {
+        $tags = $this->createMock(Tags::class);
+        $tags
+            ->expects($this->once())
+            ->method('getAllTags')
+            ->with('bar', PMF_TAGS_CLOUD_RESULT_SET_SIZE)
+            ->willReturn(['bar', 'barbaz']);
+
+        $controller = $this->createController($tags);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->search(new Request(['search' => 'foo, Bar']));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([['id' => '0', 'name' => 'bar'], ['id' => '1', 'name' => 'barbaz']], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSearchReturnsAllTagsWithoutASearchTerm(): void
+    {
+        $tags = $this->createMock(Tags::class);
+        $tags->expects($this->once())->method('getAllTags')->with()->willReturn(['alpha', 'beta']);
+
+        $controller = $this->createController($tags);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->search(new Request());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([['id' => '0', 'name' => 'alpha'], ['id' => '1', 'name' => 'beta']], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsUnauthorizedForAnInvalidCsrfToken(): void
+    {
+        $tags = $this->createMock(Tags::class);
+        $tags->expects($this->never())->method('delete');
+
+        $controller = $this->createController($tags);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [], ['tagId' => 1], [], [], [], json_encode(['csrfToken' => 'invalid-token']));
+        $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsBadRequestWhenTheTagCannotBeDeleted(): void
+    {
+        $tags = $this->createMock(Tags::class);
+        $tags->expects($this->once())->method('delete')->with(1)->willReturn(false);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'tags');
+
+        $controller = $this->createController($tags);
+        $controller->setContainer($container);
+
+        $request = new Request([], [], ['tagId' => 1], [], [], [], json_encode(['csrfToken' => $token]));
+        $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_tag_delete_error'), $payload['error']);
+    }
 }

@@ -758,4 +758,116 @@ class BackupTest extends TestCase
             unlink($zipFile);
         }
     }
+
+    public function testGetLastBackupInfoTreatsRepositoryFailureAsOutdated(): void
+    {
+        $this->mockDb->method('query')->willThrowException(new \RuntimeException('database gone'));
+
+        $result = $this->backup->getLastBackupInfo();
+
+        $this->assertNull($result['lastBackupDate']);
+        $this->assertTrue($result['isBackupOlderThan30Days']);
+    }
+
+    /**
+     * A dangling symlink is a leaf without a real path; the backup must skip it instead of failing.
+     *
+     * @throws \Exception
+     */
+    public function testCreateContentFolderBackupSkipsEntriesWithoutRealPath(): void
+    {
+        if (!class_exists(ZipArchive::class)) {
+            $this->markTestSkipped('ZIP extension is not available.');
+        }
+
+        $danglingLink = PMF_CONTENT_DIR . '/dangling-link-' . uniqid('', true);
+        if (!@symlink(PMF_CONTENT_DIR . '/does-not-exist', $danglingLink)) {
+            $this->markTestSkipped('Symlinks are not supported here.');
+        }
+
+        try {
+            $zipFile = $this->backup->createContentFolderBackup();
+        } finally {
+            unlink($danglingLink);
+        }
+
+        try {
+            $zipArchive = new ZipArchive();
+            $this->assertTrue($zipArchive->open($zipFile));
+            $this->assertFalse($zipArchive->locateName(basename($danglingLink)));
+            $zipArchive->close();
+        } finally {
+            unlink($zipFile);
+        }
+    }
+
+    public function testParseBackupFileSkipsEmptyTableNamesAndBlankLines(): void
+    {
+        $backupFile = PMF_TEST_DIR . '/test-backup-blank-lines.sql';
+        $content =
+            "-- pmf4.0: faqconfig  faqinstances \n"
+            . "-- DO NOT REMOVE THE FIRST LINE!\n"
+            . "-- pmftableprefix: \n"
+            . "\n"
+            . "INSERT INTO faqconfig VALUES (1, 'test');\n"
+            . "   \n";
+
+        file_put_contents($backupFile, $content);
+
+        try {
+            $result = $this->backup->parseBackupFile($backupFile, '4.0.0');
+        } finally {
+            unlink($backupFile);
+        }
+
+        $this->assertSame(
+            ['DELETE FROM faqconfig', 'DELETE FROM faqinstances', "INSERT INTO faqconfig VALUES (1, 'test')"],
+            $result->queries,
+        );
+    }
+
+    public function testParseBackupFileKeepsAnUnterminatedTrailingStatement(): void
+    {
+        $backupFile = PMF_TEST_DIR . '/test-backup-unterminated.sql';
+        $content =
+            "-- pmf4.0: faqconfig\n"
+            . "-- DO NOT REMOVE THE FIRST LINE!\n"
+            . "-- pmftableprefix: \n"
+            . "INSERT INTO faqconfig VALUES (1, 'test');\n"
+            . "INSERT INTO faqconfig VALUES (2, 'no semicolon')";
+
+        file_put_contents($backupFile, $content);
+
+        try {
+            $result = $this->backup->parseBackupFile($backupFile, '4.0.0');
+        } finally {
+            unlink($backupFile);
+        }
+
+        $this->assertCount(3, $result->queries);
+        $this->assertSame("INSERT INTO faqconfig VALUES (2, 'no semicolon')", $result->queries[2]);
+    }
+
+    public function testParseBackupFileHandlesBackslashEscapedQuotes(): void
+    {
+        $backupFile = PMF_TEST_DIR . '/test-backup-backslash-quotes.sql';
+        $content =
+            "-- pmf4.0: faqconfig\n"
+            . "-- DO NOT REMOVE THE FIRST LINE!\n"
+            . "-- pmftableprefix: \n"
+            . "INSERT INTO faqconfig VALUES (1, 'it\\'s; escaped');\n"
+            . "INSERT INTO faqconfig VALUES (2, 'plain');";
+
+        file_put_contents($backupFile, $content);
+
+        try {
+            $result = $this->backup->parseBackupFile($backupFile, '4.0.0');
+        } finally {
+            unlink($backupFile);
+        }
+
+        $this->assertCount(3, $result->queries);
+        $this->assertSame("INSERT INTO faqconfig VALUES (1, 'it\\'s; escaped')", $result->queries[1]);
+        $this->assertSame("INSERT INTO faqconfig VALUES (2, 'plain')", $result->queries[2]);
+    }
 }

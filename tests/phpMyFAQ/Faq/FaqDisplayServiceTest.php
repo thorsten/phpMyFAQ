@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Faq;
 
+use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Helper\AttachmentHelper;
 use phpMyFAQ\Language;
+use phpMyFAQ\Relation;
 use phpMyFAQ\Strings;
 use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
@@ -17,6 +20,7 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -464,5 +468,63 @@ class FaqDisplayServiceTest extends TestCase
         $result = $this->service->isExpired();
 
         static::assertIsBool($result);
+    }
+
+    public function testProcessAnswerIgnoresHighlightTermsOfUpToTwoCharacters(): void
+    {
+        $this->faq->method('getQuestion')->willReturn('Test Question');
+
+        $plain = $this->service->processAnswer('http://example.com/faq.html', null);
+        $highlighted = $this->service->processAnswer('http://example.com/faq.html', 'answer to');
+
+        static::assertNotSame($plain, $highlighted, 'The long term is highlighted');
+        static::assertSame($plain, $this->service->processAnswer('http://example.com/faq.html', 'to on'));
+    }
+
+    public function testProcessQuestionIgnoresHighlightTermsOfUpToTwoCharacters(): void
+    {
+        $this->faq->method('getQuestion')->willReturn('Test Question');
+
+        $highlighted = $this->service->processQuestion('Question to');
+
+        static::assertNotSame('Test Question', $highlighted);
+        static::assertSame('Test Question', $this->service->processQuestion('to on'));
+    }
+
+    public function testGetAttachmentListFetchesTheAttachmentsOfAPublishedFaq(): void
+    {
+        $this->configuration->set('records.disableAttachments', true);
+        Language::$language = 'en';
+
+        try {
+            static::assertSame([], $this->service->getAttachmentList(1));
+        } finally {
+            Language::$language = '';
+        }
+    }
+
+    public function testGetAttachmentListReturnsNothingWhenTheAttachmentHelperFails(): void
+    {
+        $this->configuration->set('records.disableAttachments', true);
+        Language::$language = 'en';
+
+        $attachmentHelper = $this->createStub(AttachmentHelper::class);
+        $attachmentHelper->method('getAttachmentList')->willThrowException(new AttachmentException('broken'));
+        new ReflectionProperty(FaqDisplayService::class, 'attachmentHelper')->setValue($this->service, $attachmentHelper);
+
+        try {
+            static::assertSame([], $this->service->getAttachmentList(1));
+        } finally {
+            Language::$language = '';
+        }
+    }
+
+    public function testGetRelatedFaqsReturnsAnEmptyStringWhenTheRelationLookupFails(): void
+    {
+        $relation = $this->createStub(Relation::class);
+        $relation->method('getAllRelatedByQuestion')->willThrowException(new \Exception('search backend down'));
+        new ReflectionProperty(FaqDisplayService::class, 'relation')->setValue($this->service, $relation);
+
+        static::assertSame('', $this->service->getRelatedFaqs(1));
     }
 }

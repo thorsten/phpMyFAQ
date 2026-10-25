@@ -151,4 +151,33 @@ class QuestionTest extends TestCase
 
         $this->assertEquals('N', $this->question->getVisibility(1));
     }
+
+    public function testUpdateQuestionAnswerAndReopen(): void
+    {
+        $questionData = new Entity\QuestionEntity();
+        $questionData
+            ->setUsername('testuser')
+            ->setEmail('test@example.org')
+            ->setCategoryId(1)
+            ->setQuestion('Test question')
+            ->setLanguage('en')
+            ->setIsVisible(true);
+
+        $this->question->add($questionData);
+
+        $this->assertTrue($this->question->updateQuestionAnswer(1, 42, 7));
+        $this->assertSame(42, $this->fetchAnswerId(1));
+        $this->assertSame(7, (int) $this->question->get(1)['category_id']);
+
+        $this->assertTrue($this->question->reopen(1));
+        $this->assertSame(0, $this->fetchAnswerId(1));
+    }
+
+    private function fetchAnswerId(int $questionId): int
+    {
+        $result = $this->dbHandle->query(sprintf('SELECT answer_id FROM faqquestions WHERE id = %d', $questionId));
+        $row = $this->dbHandle->fetchArray($result);
+
+        return (int) ($row['answer_id'] ?? -1);
+    }
 }

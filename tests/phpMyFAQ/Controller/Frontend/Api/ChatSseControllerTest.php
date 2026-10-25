@@ -393,4 +393,107 @@ final class ChatSseControllerTest extends ApiControllerTestCase
         self::assertStringContainsString('First', $output);
         self::assertStringContainsString('Second', $output);
     }
+
+    /**
+     * Without injected emitters the stream falls back to header(), echo, ob_end_clean(), flush()
+     * and connection_aborted(). The output is captured in private buffers so that nothing leaks.
+     */
+    public function testStreamCallbackFallsBackToPhpOutputPrimitives(): void
+    {
+        $message = new ChatMessage()
+            ->setId(11)
+            ->setSenderId(2)
+            ->setRecipientId(1)
+            ->setMessage('Native output')
+            ->setIsRead(false)
+            ->setCreatedAt(new \DateTimeImmutable('2026-03-02T10:00:00+00:00'));
+
+        $chat = $this->createMock(Chat::class);
+        $chat->expects($this->once())->method('getNewMessages')->with(1, 0)->willReturn([$message]);
+        $chat->expects($this->once())->method('messagesToArray')->willReturn([['id' => 11, 'message' => 'Native output']]);
+
+        $controller = new ChatSseController(
+            chatFactory: static fn(): Chat => $chat,
+            sleep: static function (int $seconds): void {},
+            heartbeatInterval: 0,
+            maxRuntime: 0,
+        );
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+
+        $response = $controller->stream(Request::create('/chat/stream', 'GET'));
+        $output = $this->runCallbackWithNativeOutput($response);
+
+        self::assertStringContainsString('data: [{"id":11,"message":"Native output"}]', $output);
+        self::assertStringContainsString(': heartbeat', $output);
+        self::assertStringContainsString("event: reconnect\ndata: {\"lastId\": 11}", $output);
+    }
+
+    public function testStreamCallbackSleepsWithTheNativeSleepWhenNoSleeperIsInjected(): void
+    {
+        $chat = $this->createMock(Chat::class);
+        $chat->expects($this->exactly(2))->method('getNewMessages')->with(1, 0)->willReturn([]);
+
+        $timeValues = [0, 0, 0, 0, 31, 31, 31];
+        $output = '';
+        $controller = new ChatSseController(
+            chatFactory: static fn(): Chat => $chat,
+            timeProvider: static function () use (&$timeValues): int {
+                return array_shift($timeValues) ?? 31;
+            },
+            connectionAborted: static fn(): bool => false,
+            headerEmitter: static function (string $header): void {},
+            bufferCleaner: static function (): void {},
+            flusher: static function (): void {},
+            outputEmitter: static function (string $chunk) use (&$output): void {
+                $output .= $chunk;
+            },
+            heartbeatInterval: 15,
+            maxRuntime: 30,
+        );
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+
+        $response = $controller->stream(Request::create('/chat/stream', 'GET'));
+
+        $start = microtime(true);
+        $response->getCallback()();
+
+        self::assertGreaterThanOrEqual(1.5, microtime(true) - $start);
+        self::assertStringContainsString('event: reconnect', $output);
+    }
+
+    /**
+     * Runs the SSE callback with three private output buffers: the callback closes the innermost one
+     * itself, echoes into the second and ob_flush()es it into the outermost, which is returned here.
+     * header() warns in the CLI once output has started, so that one warning is swallowed.
+     */
+    private function runCallbackWithNativeOutput(StreamedResponse $response): string
+    {
+        $previousHandler = null;
+        $previousHandler = set_error_handler(
+            static function (int $severity, string $message, string $file, int $line) use (&$previousHandler): bool {
+                if (str_contains($message, 'headers already sent')) {
+                    return true;
+                }
+
+                return $previousHandler !== null ? (bool) $previousHandler($severity, $message, $file, $line) : false;
+            },
+        );
+
+        $level = ob_get_level();
+        ob_start();
+        ob_start();
+        ob_start();
+        try {
+            $response->getCallback()();
+        } finally {
+            $output = '';
+            while (ob_get_level() > $level) {
+                $output = (string) ob_get_clean() . $output;
+            }
+
+            restore_error_handler();
+        }
+
+        return $output;
+    }
 }

@@ -114,4 +114,119 @@ class CategoryRepositoryTest extends TestCase
 
         self::assertSame([], $repository->findCategoriesPaginated(sortField: 'name', sortOrder: 'desc'));
     }
+
+    public function testFindCategoriesPaginatedFallsBackToTheIdForUnknownSortFields(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db
+            ->expects($this->once())
+            ->method('query')
+            ->with(self::stringContains('ORDER BY fc.id ASC'))
+            ->willReturn(true);
+        $db->method('fetchArray')->willReturn(false);
+
+        $repository = new CategoryRepository($this->createConfiguration($db));
+
+        self::assertSame([], $repository->findCategoriesPaginated(sortField: 'description; DROP TABLE'));
+    }
+
+    public function testFindOrderedCategoriesIncludesInactiveCategoriesOnRequest(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $db
+            ->expects($this->once())
+            ->method('query')
+            ->with(self::callback(static function (string $query): bool {
+                self::assertStringNotContainsString('fc.active = 1', $query);
+                self::assertStringContainsString("fc.lang = 'en'", $query);
+                return true;
+            }))
+            ->willReturn(true);
+        $db->method('fetchArray')->willReturnOnConsecutiveCalls([
+            'id' => 3,
+            'lang' => 'en',
+            'parent_id' => 0,
+            'name' => 'Inactive',
+            'description' => '',
+            'user_id' => 1,
+            'group_id' => -1,
+            'active' => 0,
+            'image' => '',
+            'show_home' => 0,
+        ], false);
+
+        $repository = new CategoryRepository($this->createConfiguration($db));
+
+        $categories = $repository->findOrderedCategories([-1], -1, 'en', true, true);
+
+        self::assertSame([3], array_keys($categories));
+        self::assertSame(0, $categories[3]['active']);
+    }
+
+    public function testFindCategoryIdByNameReturnsNullForUnknownNames(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $db->method('query')->willReturn(true);
+        $db->method('numRows')->willReturn(0);
+        $db->expects($this->never())->method('fetchRow');
+
+        $repository = new CategoryRepository($this->createConfiguration($db));
+
+        self::assertNull($repository->findCategoryIdByName('Unknown'));
+    }
+
+    public function testCreateAssignsTheNextIdToNewCategories(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $db->expects($this->once())->method('nextId')->with('faqcategories', 'id')->willReturn(17);
+        $db->method('fetchArray')->willReturn(['amount' => 0]);
+        $db->method('query')->willReturnCallback(static function (string $query): bool {
+            if (str_starts_with($query, 'INSERT INTO')) {
+                self::assertStringContainsString('VALUES(17,', $query);
+            }
+
+            return true;
+        });
+
+        $repository = new CategoryRepository($this->createConfiguration($db));
+
+        $categoryEntity = new CategoryEntity()
+            ->setId(0)
+            ->setLang('en')
+            ->setParentId(0)
+            ->setName('Category')
+            ->setDescription(null)
+            ->setUserId(1)
+            ->setGroupId(-1)
+            ->setActive(true)
+            ->setImage(null)
+            ->setShowHome(true);
+
+        self::assertSame(17, $repository->create($categoryEntity));
+        self::assertSame(17, $categoryEntity->getId());
+    }
+
+    public function testCountAndLinkLookupsReturnNothingWhenTheQueryFails(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $db->method('query')->willReturn(false);
+        $db->expects($this->never())->method('fetchArray');
+
+        $repository = new CategoryRepository($this->createConfiguration($db));
+
+        self::assertSame(0, $repository->countByNameLangParent('Category', 'en', 0));
+        self::assertFalse($repository->hasLinkToFaq(1, 2));
+    }
+
+    private function createConfiguration(DatabaseDriver $db): Configuration
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        return $configuration;
+    }
 }

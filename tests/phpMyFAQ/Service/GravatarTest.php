@@ -39,4 +39,26 @@ class GravatarTest extends TestCase
         $result3 = $gravatar->getImage($email, $params);
         $this->assertEquals($expectedResult3, $result3);
     }
+
+    public function testGetImageUrl(): void
+    {
+        $gravatar = new Gravatar();
+        $email = 'test@example.com';
+
+        $this->assertEquals(
+            'https://secure.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0',
+            $gravatar->getImageUrl($email),
+        );
+        $this->assertEquals('https://secure.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0'
+        . '?default=identicon&size=100&rating=pg&forcedefault=y', $gravatar->getImageUrl($email, [
+            'size' => 100,
+            'default' => 'identicon',
+            'rating' => 'pg',
+            'force_default' => true,
+        ]));
+        $this->assertEquals('https://secure.gravatar.com/avatar/55502f40dc8b7c769880b10874abc9d0', $gravatar->getImageUrl($email, [
+            'force_default' => false,
+            'class' => 'ignored',
+        ]));
+    }
 }

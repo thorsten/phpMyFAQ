@@ -5,13 +5,24 @@ declare(strict_types=1);
 namespace phpMyFAQ\Auth;
 
 use Monolog\Logger;
+use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\Oidc\OidcClientConfig;
 use phpMyFAQ\Auth\Oidc\OidcProviderConfig;
-use phpMyFAQ\Core\Json;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Json;
+use phpMyFAQ\Encryption;
+use phpMyFAQ\EncryptionTypes\Hash;
 use phpMyFAQ\Enums\AuthenticationSourceType;
+use phpMyFAQ\Environment;
+use phpMyFAQ\Permission;
+use phpMyFAQ\Permission\BasicPermission;
+use phpMyFAQ\Permission\BasicPermissionRepository;
+use phpMyFAQ\Permission\GroupCategoryPermissionRepository;
+use phpMyFAQ\Permission\LanguagePermissionRepository;
 use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Permission\MediumPermissionRepository;
 use phpMyFAQ\User;
+use phpMyFAQ\User\UserData;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -22,6 +33,21 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Json::class)]
 #[UsesClass(OidcClientConfig::class)]
 #[UsesClass(OidcProviderConfig::class)]
+#[UsesClass(Auth::class)]
+#[UsesClass(AuthDatabase::class)]
+#[UsesClass(BasicPermission::class)]
+#[UsesClass(BasicPermissionRepository::class)]
+#[UsesClass(Encryption::class)]
+#[UsesClass(Environment::class)]
+#[UsesClass(GroupCategoryPermissionRepository::class)]
+#[UsesClass(Hash::class)]
+#[UsesClass(LanguagePermissionRepository::class)]
+#[UsesClass(MediumPermission::class)]
+#[UsesClass(MediumPermissionRepository::class)]
+#[UsesClass(PasswordHasher::class)]
+#[UsesClass(Permission::class)]
+#[UsesClass(User::class)]
+#[UsesClass(UserData::class)]
 final class AuthKeycloakTest extends TestCase
 {
     public function testCheckCredentialsReturnsTrueForExistingLinkedUser(): void
@@ -510,6 +536,155 @@ final class AuthKeycloakTest extends TestCase
 
         $this->assertSame(1, $auth->isValidLogin('john'));
         $this->assertSame(0, $auth->isValidLogin('jane'));
+    }
+
+    public function testGroupSynchronizationSkipsUsersWithoutAnId(): void
+    {
+        $configuration = $this->createGroupSyncConfiguration('{"manage-users":"Administrators"}');
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserByLogin')->willReturn(true);
+        $user->method('getUserData')->willReturn('subject-123');
+        $user->method('getUserId')->willReturn(0);
+
+        $permission = $this->createMock(MediumPermission::class);
+        $permission->expects($this->never())->method('getUserGroups');
+
+        $auth = $this->createAuthWithGroupSync($configuration, $user, $permission, ['manage-users']);
+
+        $this->assertTrue($auth->checkCredentials('john', ''));
+    }
+
+    /**
+     * @return iterable<string, array{mixed}>
+     */
+    public static function unusableGroupMappingProvider(): iterable
+    {
+        yield 'not configured' => [null];
+        yield 'blank' => ['   '];
+        yield 'not json' => ['{manage-users'];
+        yield 'no string group names' => ['{"manage-users":1,"faq-editors":["Editors"]}'];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('unusableGroupMappingProvider')]
+    public function testGroupSynchronizationDoesNothingWithoutAUsableGroupMapping(mixed $groupMapping): void
+    {
+        $configuration = $this->createGroupSyncConfiguration($groupMapping);
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserByLogin')->willReturn(true);
+        $user->method('getUserData')->willReturn('subject-123');
+        $user->method('getUserId')->willReturn(42);
+
+        $permission = $this->createMock(MediumPermission::class);
+        $permission->expects($this->never())->method('getUserGroups');
+        $permission->expects($this->never())->method('addToGroup');
+
+        $auth = $this->createAuthWithGroupSync($configuration, $user, $permission, ['manage-users']);
+
+        $this->assertTrue($auth->checkCredentials('john', ''));
+    }
+
+    public function testGroupSynchronizationIgnoresUnmappedRolesAndUnknownGroups(): void
+    {
+        $configuration = $this->createGroupSyncConfiguration(
+            '{"manage-users":"Administrators","faq-editors":"faq-editors"}',
+        );
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserByLogin')->willReturn(true);
+        $user->method('getUserData')->willReturn('subject-123');
+        $user->method('getUserId')->willReturn(42);
+
+        $permission = $this->createMock(MediumPermission::class);
+        $permission->method('getUserGroups')->willReturn([10]);
+        $permission
+            ->expects($this->exactly(2))
+            ->method('findOrCreateGroupByName')
+            ->willReturnCallback(static fn(string $groupName): int => $groupName === 'Administrators' ? 10 : 0);
+        $permission
+            ->expects($this->exactly(2))
+            ->method('getGroupId')
+            ->willReturnCallback(static fn(string $groupName): int => $groupName === 'Administrators' ? 10 : 0);
+        $permission->expects($this->never())->method('addToGroup');
+        $permission->expects($this->never())->method('removeFromGroup');
+
+        $auth = $this->createAuthWithGroupSync(
+            $configuration,
+            $user,
+            $permission,
+            ['manage-users', 42, '', 'unmapped-role'],
+            ['faq-editors', null],
+        );
+
+        $this->assertTrue($auth->checkCredentials('john', ''));
+    }
+
+    public function testPrivateFactoriesFallBackToConcreteUserAndMediumPermission(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('get')->willReturnCallback(static fn(string $item): mixed => $item
+            === 'security.permLevel'
+                ? 'basic'
+                : null);
+
+        $auth = new AuthKeycloak(
+            $configuration,
+            $this->createProviderConfig(autoProvision: false),
+            ['sub' => 'subject-123', 'preferred_username' => 'john'],
+            'john',
+        );
+
+        $reflection = new \ReflectionClass($auth);
+
+        $this->assertInstanceOf(User::class, $reflection->getMethod('createUser')->invoke($auth));
+        $this->assertInstanceOf(
+            MediumPermission::class,
+            $reflection->getMethod('createMediumPermission')->invoke($auth),
+        );
+    }
+
+    private function createGroupSyncConfiguration(mixed $groupMapping): Configuration
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'keycloak.groupSyncOnLogin' => 'true',
+                'keycloak.groupMapping' => $groupMapping,
+                'keycloak.clientId' => 'phpmyfaq',
+                'security.permLevel' => 'medium',
+                default => null,
+            });
+        $configuration->method('getLogger')->willReturn($this->createStub(Logger::class));
+
+        return $configuration;
+    }
+
+    /**
+     * @param array<mixed> $realmRoles
+     * @param array<mixed> $clientRoles
+     */
+    private function createAuthWithGroupSync(
+        Configuration $configuration,
+        User $user,
+        MediumPermission $permission,
+        array $realmRoles,
+        array $clientRoles = [],
+    ): AuthKeycloak {
+        return new AuthKeycloak(
+            $configuration,
+            $this->createProviderConfig(autoProvision: false),
+            [
+                'sub' => 'subject-123',
+                'preferred_username' => 'john',
+                'realm_access' => ['roles' => $realmRoles],
+                'resource_access' => ['phpmyfaq' => ['roles' => $clientRoles]],
+            ],
+            'john',
+            static fn(): User => $user,
+            static fn(): MediumPermission => $permission,
+        );
     }
 
     private function createProviderConfig(bool $autoProvision): OidcProviderConfig

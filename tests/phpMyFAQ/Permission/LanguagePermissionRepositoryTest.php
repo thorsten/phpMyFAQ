@@ -4,6 +4,7 @@ namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -367,5 +368,73 @@ class LanguagePermissionRepositoryTest extends TestCase
         $this->assertSame([], $this->repository->getAllUserLanguageRestrictions(0));
         $this->assertSame([], $this->repository->getAllUserLanguageRestrictions(-1));
         $this->assertSame([], $this->repository->getAllUserLanguageRestrictions(1));
+    }
+
+    public function testReadMethodsReturnEmptyArrayWhenQueryFails(): void
+    {
+        $repository = $this->createRepositoryWithQueryCallback(static fn(string $sql): bool => false);
+
+        $this->assertSame([], $repository->getUserLanguageRestrictions(1, 1));
+        $this->assertSame([], $repository->getAllUserLanguageRestrictions(1));
+        $this->assertSame([], $repository->getAllLanguageRestrictions(1));
+    }
+
+    public function testSetUserLanguageRestrictionsRollsBackWhenDeleteFails(): void
+    {
+        $queries = [];
+        $repository = $this->createRepositoryWithQueryCallback(static function (string $sql) use (&$queries): bool {
+            $queries[] = $sql;
+            return !str_starts_with($sql, 'DELETE');
+        });
+
+        $this->assertFalse($repository->setUserLanguageRestrictions(1, 1, ['de']));
+        $this->assertSame('ROLLBACK', end($queries));
+        $this->assertEmpty(array_filter($queries, static fn(string $sql): bool => str_starts_with($sql, 'INSERT')));
+    }
+
+    public function testSetLanguageRestrictionsRollsBackWhenInsertFails(): void
+    {
+        $queries = [];
+        $repository = $this->createRepositoryWithQueryCallback(static function (string $sql) use (&$queries): bool {
+            $queries[] = $sql;
+            return !str_starts_with($sql, 'INSERT');
+        });
+
+        $this->assertFalse($repository->setLanguageRestrictions(1, 1, ['de']));
+        $this->assertSame('ROLLBACK', end($queries));
+        $this->assertNotContains('COMMIT', $queries);
+    }
+
+    public function testSetLanguageRestrictionsUsesExplicitTransactionStatementOnSqlServer(): void
+    {
+        $queries = [];
+        $repository = $this->createRepositoryWithQueryCallback(static function (string $sql) use (&$queries): bool {
+            $queries[] = $sql;
+            return true;
+        });
+
+        $dbTypeProperty = new ReflectionClass(Database::class)->getProperty('dbType');
+        $dbTypeProperty->setValue(null, 'sqlsrv');
+
+        try {
+            $this->assertTrue($repository->setUserLanguageRestrictions(1, 1, ['de']));
+        } finally {
+            $dbTypeProperty->setValue(null, 'sqlite3');
+        }
+
+        $this->assertSame('BEGIN TRANSACTION', $queries[0]);
+        $this->assertSame('COMMIT', end($queries));
+    }
+
+    private function createRepositoryWithQueryCallback(callable $queryResult): LanguagePermissionRepository
+    {
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('query')->willReturnCallback($queryResult);
+        $database->method('escape')->willReturnArgument(0);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+
+        return new LanguagePermissionRepository($configuration);
     }
 }

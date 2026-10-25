@@ -11,6 +11,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -323,5 +324,62 @@ final class UserControllerTest extends TestCase
         $dbTypeProperty = $databaseReflection->getProperty('dbType');
         $dbTypeProperty->setValue(null, 'sqlite3');
         Database::setTablePrefix('');
+    }
+
+    public function testUcpGeneratesAndStoresASecretWhenNoneIsConfiguredYet(): void
+    {
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'main.enableGravatarSupport' => false,
+            'security.enableWebAuthnSupport' => false,
+        ]);
+        $this->dbHandle->query("UPDATE faquserdata SET twofactor_enabled = 0, secret = '' WHERE user_id = 1");
+
+        $controller = $this->createController();
+        $this->setCurrentUser($controller, $this->createLoggedInCurrentUser());
+
+        $content = (string) $controller->ucp(Request::create('/user/ucp', 'GET'))->getContent();
+
+        $result = $this->dbHandle->query('SELECT secret FROM faquserdata WHERE user_id = 1');
+        $storedSecret = (string) $this->dbHandle->fetchArray($result)['secret'];
+        self::assertNotSame('', $storedSecret);
+        self::assertStringContainsString($storedSecret, $content);
+        self::assertStringContainsString('data:image/png;base64,', $content);
+    }
+
+    public function testUcpStillRendersWhenTheSecondFactorSetupFails(): void
+    {
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'main.enableGravatarSupport' => false,
+            'security.enableWebAuthnSupport' => false,
+        ]);
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $this->createStub(PermissionInterface::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('isLocalUser')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getLogin')->willReturn('admin');
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['twofactor_enabled', 0],
+                ['secret', ''],
+                ['email', 'admin@example.com'],
+                ['display_name', 'Admin'],
+                ['is_visible', 1],
+            ]);
+        $currentUser->method('setUserData')->willThrowException(new \RuntimeException('user data table is locked'));
+
+        $controller = $this->createController();
+        $this->setCurrentUser($controller, $currentUser);
+
+        $response = $controller->ucp(Request::create('/user/ucp', 'GET'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString('id="pmf-user-control-panel-form"', $content);
+        self::assertStringNotContainsString('data:image/png;base64,', $content);
     }
 }

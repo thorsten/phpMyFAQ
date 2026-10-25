@@ -117,4 +117,96 @@ class ApiKeyAuthenticatorTest extends TestCase
         $this->assertSame('CI key', $authenticator->getAuthenticatedApiKey()['name']);
         $this->assertContains('UPDATE faqapi_keys SET last_used_at = NOW() WHERE id = 100', $queries);
     }
+
+    public function testAuthenticateReturnsFalseWhenTheLookupQueryFails(): void
+    {
+        $authenticator = new ApiKeyAuthenticator($this->configuration);
+        $request = new Request(server: ['HTTP_AUTHORIZATION' => 'Bearer pmf_abc123']);
+
+        $this->db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->db->method('query')->willReturn(false);
+        $this->db->expects($this->never())->method('fetchObject');
+
+        $this->assertFalse($authenticator->authenticate($request));
+        $this->assertNull($authenticator->getAuthenticatedUserId());
+    }
+
+    public function testAuthenticateReturnsFalseForAnUnknownApiKey(): void
+    {
+        $authenticator = new ApiKeyAuthenticator($this->configuration);
+        $request = new Request(server: ['HTTP_AUTHORIZATION' => 'Bearer pmf_unknown']);
+
+        $this->db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->db->method('query')->willReturn(new \stdClass());
+        $this->db->method('fetchObject')->willReturn(false);
+
+        $this->assertFalse($authenticator->authenticate($request));
+        $this->assertNull($authenticator->getAuthenticatedApiKey());
+    }
+
+    public function testAuthenticateTreatsAnEmptyExpiryAsNeverExpiring(): void
+    {
+        $authenticator = new ApiKeyAuthenticator($this->configuration);
+        $request = new Request(server: ['HTTP_AUTHORIZATION' => 'Bearer pmf_forever']);
+
+        $this->db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->db->method('now')->willReturn('NOW()');
+        $this->db->method('query')->willReturn(true);
+        $this->db
+            ->method('fetchObject')
+            ->willReturn((object) [
+                'id' => 5,
+                'user_id' => 3,
+                'api_key' => hash('sha256', 'pmf_forever'),
+                'name' => 'forever',
+                'scopes' => '["faq.read"]',
+                'expires_at' => '',
+                'created' => '2026-01-01 00:00:00',
+            ]);
+
+        $this->assertTrue($authenticator->authenticate($request, ['faq.read']));
+        $this->assertSame(3, $authenticator->getAuthenticatedUserId());
+    }
+
+    public function testAuthenticateRejectsAnUnparsableExpiryDate(): void
+    {
+        $authenticator = new ApiKeyAuthenticator($this->configuration);
+        $request = new Request(server: ['HTTP_AUTHORIZATION' => 'Bearer pmf_broken']);
+
+        $this->db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->db->method('query')->willReturn(true);
+        $this->db
+            ->method('fetchObject')
+            ->willReturn((object) [
+                'id' => 6,
+                'user_id' => 3,
+                'api_key' => hash('sha256', 'pmf_broken'),
+                'name' => 'broken expiry',
+                'scopes' => '["faq.read"]',
+                'expires_at' => 'not a date',
+                'created' => '2026-01-01 00:00:00',
+            ]);
+
+        $this->assertFalse($authenticator->authenticate($request));
+        $this->assertNull($authenticator->getAuthenticatedUserId());
+    }
+
+    public function testAuthenticateGrantsNoScopesForEmptyOrUnparsableScopeLists(): void
+    {
+        $this->db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->db->method('query')->willReturn(true);
+        $this->db->method('fetchObject')->willReturnOnConsecutiveCalls((object) [
+            'id' => 7,
+            'user_id' => 3,
+            'scopes' => '',
+            'expires_at' => null,
+        ], (object) ['id' => 8, 'user_id' => 3, 'scopes' => 'not json', 'expires_at' => null]);
+
+        $authenticator = new ApiKeyAuthenticator($this->configuration);
+        $request = new Request(server: ['HTTP_AUTHORIZATION' => 'Bearer pmf_scopeless']);
+
+        $this->assertFalse($authenticator->authenticate($request, ['faq.read']));
+        $this->assertFalse($authenticator->authenticate($request, ['faq.read']));
+        $this->assertNull($authenticator->getAuthenticatedUserId());
+    }
 }

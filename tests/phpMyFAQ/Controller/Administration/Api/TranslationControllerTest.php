@@ -17,9 +17,11 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Translation\ContentTranslationService;
 use phpMyFAQ\Translation\DTO\TranslationResult;
+use phpMyFAQ\Translation\Exception\TranslationException;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -325,5 +327,104 @@ final class TranslationControllerTest extends TestCase
         self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
         self::assertFalse($payload['success']);
         self::assertSame('Provider unavailable', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTranslateReturnsBadRequestWhenTheBodyIsNotAJsonObject(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->translate(new Request([], [], [], [], [], [], '"just a string"'));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame('The request body must be a JSON object.', $payload['error']);
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string, 2: string}>
+     */
+    public static function translatableContentTypes(): array
+    {
+        return [
+            'custom page' => ['customPage', 'translateCustomPage', 'page-translate:en->de'],
+            'category' => ['category', 'translateCategory', 'category-translate:en->de'],
+            'news' => ['news', 'translateNews', 'news-translate:en->de'],
+        ];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('translatableContentTypes')]
+    public function testTranslateLogsTheContentTypeSpecificEvent(
+        string $contentType,
+        string $serviceMethod,
+        string $expectedLogEntry,
+    ): void {
+        $session = new Session(new MockArraySessionStorage());
+        $token = $this->createValidCsrfToken($session, 'translate');
+
+        $translationService = $this->createMock(ContentTranslationService::class);
+        $translationService
+            ->expects($this->once())
+            ->method($serviceMethod)
+            ->willReturn(new TranslationResult(['title' => 'Titel'], true));
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog->expects($this->once())->method('log')->with($this->anything(), $expectedLogEntry);
+
+        $controller = $this->createControllerWithService($translationService);
+        $controller->setContainer($this->createAuthenticatedContainerWithAdminLog($adminLog, $session));
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'pmf-csrf-token' => $token,
+            'contentType' => $contentType,
+            'sourceLang' => 'en',
+            'targetLang' => 'de',
+            'fields' => ['title' => 'Title'],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->translate($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        self::assertSame(['title' => 'Titel'], $payload['translatedFields']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTranslateReturnsInternalServerErrorWhenTheServiceThrows(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $token = $this->createValidCsrfToken($session, 'translate');
+
+        $translationService = $this->createMock(ContentTranslationService::class);
+        $translationService
+            ->expects($this->once())
+            ->method('translateFaq')
+            ->willThrowException(new TranslationException('Provider rejected the request'));
+
+        $controller = $this->createControllerWithService($translationService);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'pmf-csrf-token' => $token,
+            'contentType' => 'faq',
+            'sourceLang' => 'en',
+            'targetLang' => 'de',
+            'fields' => ['question' => 'Question'],
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->translate($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame('Provider rejected the request', $payload['error']);
     }
 }

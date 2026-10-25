@@ -1224,4 +1224,56 @@ class FaqTest extends TestCase
             new \ReflectionMethod(Faq::class, 'normalizeFaqOrderBy')->invoke($this->faq, $requested),
         );
     }
+
+    public function testGetFaqsDataByCategoryIdShufflesTheItemsWhenRandomSortIsEnabled(): void
+    {
+        $this->configuration->set('records.randomSort', true);
+        $this->seedFaqRecord(id: 5301, solutionId: 7301, categoryId: 301, question: 'Random One');
+        $this->seedFaqRecord(id: 5302, solutionId: 7302, categoryId: 301, question: 'Random Two');
+
+        $data = $this->faq->getFaqsDataByCategoryId(301);
+
+        $this->assertCount(2, $data['items']);
+        $anchors = implode(' ', array_column($data['items'], 'anchor'));
+        $this->assertStringContainsString('Random One', $anchors);
+        $this->assertStringContainsString('Random Two', $anchors);
+    }
+
+    public function testGetStatusReturnsTheStoredStatus(): void
+    {
+        $this->seedFaqRecord(id: 5303, solutionId: 7303, active: 'yes');
+        $this->seedFaqRecord(id: 5304, solutionId: 7304, active: 'no');
+
+        $this->assertSame(FaqStatus::Published, $this->faq->getStatus(5303, 'en'));
+        $this->assertSame(FaqStatus::Draft, $this->faq->getStatus(5304, 'en'));
+    }
+
+    public function testGetAllFaqsSupportsEverySortingType(): void
+    {
+        $this->seedFaqRecord(id: 5305, solutionId: 7305, categoryId: 305, question: 'Charlie');
+        $this->seedFaqRecord(id: 5306, solutionId: 7306, categoryId: 305, question: 'Alpha');
+        $this->seedFaqRecord(id: 5307, solutionId: 7307, categoryId: 306, question: 'Bravo');
+        $condition = ['fd.id' => ['5305', '5306', '5307']];
+
+        $sortingTypes = [
+            Faq::SORTING_TYPE_CATID_FAQID,
+            Faq::SORTING_TYPE_FAQTITLE_FAQID,
+            Faq::SORTING_TYPE_DATE_FAQID,
+            Faq::SORTING_TYPE_AUTHOR,
+            Faq::SORTING_TYPE_UPDATED,
+            Faq::SORTING_TYPE_CREATED,
+            Faq::SORTING_TYPE_NONE,
+        ];
+        foreach ($sortingTypes as $sortingType) {
+            $this->faq->faqRecords = [];
+            $this->faq->getAllFaqs($sortingType, $condition, 'DESC');
+
+            $this->assertCount(3, $this->faq->faqRecords, 'Sorting type ' . $sortingType . ' loads every record');
+        }
+
+        $this->faq->faqRecords = [];
+        $this->faq->getAllFaqs(Faq::SORTING_TYPE_FAQTITLE_FAQID, $condition, 'ASC');
+
+        $this->assertSame(['Alpha', 'Charlie', 'Bravo'], array_column($this->faq->faqRecords, 'title'));
+    }
 }

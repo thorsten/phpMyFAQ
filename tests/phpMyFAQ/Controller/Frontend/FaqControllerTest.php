@@ -677,4 +677,166 @@ final class FaqControllerTest extends TestCase
 
         return $currentUser;
     }
+
+    /**
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
+    public function testPrepareCommentsDataSkipsEntriesThatAreNoComments(): void
+    {
+        $date = $this->createMock(Date::class);
+        $date->expects(self::never())->method('format');
+        $mail = $this->createMock(Mail::class);
+        $mail->expects(self::never())->method('safeEmail');
+        $gravatar = $this->createMock(Gravatar::class);
+        $gravatar->expects(self::never())->method('getImage');
+
+        $controller = $this->createController($date, $mail, $gravatar);
+
+        $result = $this->invokePrivateMethod($controller, 'prepareCommentsData', [[['id' => 7], 'plain text']]);
+
+        self::assertSame(
+            ['comments' => [], 'gravatarImages' => [], 'safeEmails' => [], 'formattedDates' => []],
+            $result,
+        );
+    }
+
+    public function testShowFallsBackToTheConfiguredLanguageWithoutALanguageAttribute(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+        $this->seedCategoryFor(faqId: 1);
+        $this->configuration->getAll();
+
+        $controller = $this->createController(
+            new Date($this->configuration),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $this->createCurrentUserStub(-1, false),
+        );
+
+        $request = new \Symfony\Component\HttpFoundation\Request(
+            [],
+            [],
+            ['categoryId' => '1', 'faqId' => '1', 'slug' => 'faq-title'],
+        );
+        $request->setSession(new Session(new MockArraySessionStorage()));
+
+        $response = $controller->show($request);
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('Answer body', (string) $response->getContent());
+    }
+
+    public function testShowSwitchesTheSessionLanguageToTheRequestedOne(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+        $this->seedCategoryFor(faqId: 1);
+        $this->configuration->getAll();
+
+        $controller = $this->createController(
+            new Date($this->configuration),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $this->createCurrentUserStub(-1, false),
+        );
+
+        $request = new \Symfony\Component\HttpFoundation\Request(
+            [],
+            [],
+            ['categoryId' => '1', 'faqId' => '1', 'faqLang' => 'de', 'slug' => 'faq-title'],
+        );
+        $request->setSession(new Session(new MockArraySessionStorage()));
+
+        $originalLanguage = Language::$language;
+        try {
+            $response = $controller->show($request);
+
+            self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_OK, $response->getStatusCode());
+            self::assertSame('de', Language::$language);
+        } finally {
+            Language::$language = $originalLanguage;
+        }
+    }
+
+    public function testShowTogglesTheBookmarkAndRevealsTheAuthorForLoggedInUsers(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+        $this->seedCategoryFor(faqId: 1);
+        $this->configuration->getAll();
+
+        $createController = function (): FaqController {
+            $permission = $this->createMock(BasicPermission::class);
+            $permission->method('hasPermission')->willReturn(false);
+            $permission->method('getUserGroups')->willReturn([-1]);
+
+            $currentUser = $this->createMock(CurrentUser::class);
+            $currentUser->perm = $permission;
+            $currentUser->method('getUserId')->willReturn(1);
+            $currentUser->method('isLoggedIn')->willReturn(true);
+            $currentUser->method('getUserData')->willReturn('');
+            $currentUser
+                ->expects(self::once())
+                ->method('getUserVisibilityByEmail')
+                ->with('draft@example.org')
+                ->willReturn(true);
+
+            return $this->createController(
+                new Date($this->configuration),
+                $this->createMock(Mail::class),
+                $this->createMock(Gravatar::class),
+                currentUser: $currentUser,
+            );
+        };
+
+        $addRequest = $this->showRequest(1, 1);
+        $addRequest->query->set('bookmark_action', 'add');
+        $content = (string) $createController()->show($addRequest)->getContent();
+
+        self::assertStringContainsString('bi bi-bookmark-fill', $content);
+        self::assertStringContainsString((string) Translation::get(key: 'removeBookmark'), $content);
+        self::assertStringContainsString('Draft Author', $content);
+
+        // A controller renders only once per instance, so the removal gets a fresh one.
+        $removeRequest = $this->showRequest(1, 1);
+        $removeRequest->query->set('bookmark_action', 'remove');
+        $content = (string) $createController()->show($removeRequest)->getContent();
+
+        self::assertStringNotContainsString('bi bi-bookmark-fill', $content);
+        self::assertStringContainsString((string) Translation::get(key: 'msgAddBookmark'), $content);
+    }
+
+    public function testShowOffersALanguageSwitchTagsAndCategoryPathsWhenAvailable(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+        $this->seedCategoryFor(faqId: 1);
+        $this->seedCategoryFor(faqId: 1, categoryId: 2);
+        $this->dbHandle->query(
+            "INSERT INTO faqdata
+                (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content,
+                 author, email, comment, updated, date_start, date_end, notes)
+             VALUES
+                (1, 'de', 2001, 0, 'published', 0, 'keyword', 'Deutscher Titel', 'Deutsche Antwort',
+                 'Draft Author', 'draft@example.org', 'n', '20260101120000',
+                 '00000000000000', '99991231235959', '')",
+        );
+        $this->dbHandle->query("INSERT INTO faqtags (tagging_id, tagging_name) VALUES (1, 'release notes')");
+        $this->dbHandle->query('INSERT INTO faqdata_tags (record_id, tagging_id) VALUES (1, 1)');
+        $this->configuration->getAll();
+
+        $controller = $this->createController(
+            new Date($this->configuration),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $this->createCurrentUserStub(-1, false),
+        );
+
+        $response = $controller->show($this->showRequest(1, 1));
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString((string) Translation::get(key: 'msgLanguageSubmit'), $content);
+        self::assertStringContainsString('release notes', $content);
+        self::assertStringContainsString((string) Translation::get(key: 'msg_tags'), $content);
+        self::assertStringContainsString((string) Translation::get(key: 'msgArticleCategories'), $content);
+    }
 }

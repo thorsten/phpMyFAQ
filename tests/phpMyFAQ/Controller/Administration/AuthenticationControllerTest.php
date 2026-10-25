@@ -782,4 +782,168 @@ final class AuthenticationControllerTest extends TestCase
 
         return $currentUser;
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthenticateRedirectsToDashboardAfterASuccessfulLogin(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: new CurrentUser($this->configuration),
+            configurationValues: [],
+            session: $session,
+        ));
+
+        $response = $controller->authenticate(new Request([], ['faqusername' => 'admin', 'faqpassword' => 'password']));
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame('./', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthenticateRedirectsToTheTokenStepWhenTwoFactorAuthenticationIsEnabled(): void
+    {
+        $currentUser = $this->createTwoFactorCurrentUser(lockedOut: false);
+
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $currentUser,
+            configurationValues: [],
+            session: $session,
+        ));
+
+        $response = $controller->authenticate(
+            new Request([], [
+                'faqusername' => 'admin',
+                'faqpassword' => 'password',
+                'faqrememberme' => 'true',
+            ]),
+        );
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame('./token?user-id=1', $response->getTargetUrl());
+        self::assertSame(1, $session->get('2fa_pending_user_id'));
+        self::assertTrue($session->get('2fa_pending_remember_me'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthenticateRedirectsToLoginWhenTheTwoFactorAccountIsLockedOut(): void
+    {
+        $currentUser = $this->createTwoFactorCurrentUser(lockedOut: true);
+
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(
+            currentUser: $currentUser,
+            configurationValues: [],
+            session: $session,
+        ));
+
+        $response = $controller->authenticate(new Request([], ['faqusername' => 'admin', 'faqpassword' => 'password']));
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame('./login', $response->getTargetUrl());
+        self::assertFalse($session->has('2fa_pending_user_id'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthenticateTakesTheUsernameFromTheSsoRemoteUser(): void
+    {
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $this->createMock(PermissionInterface::class);
+        $currentUser->method('isLoggedIn')->willReturn(false);
+        $currentUser->method('getUserId')->willReturn(0);
+        $currentUser->expects(self::once())->method('login')->with('sso-user', '')->willReturn(false);
+        $currentUser->errors = [];
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(currentUser: $currentUser, configurationValues: [
+            'security.ssoSupport' => true,
+        ]));
+
+        $response = $controller->authenticate(
+            new Request(
+                [],
+                ['faqusername' => 'ignored', 'faqpassword' => 'ignored'],
+                server: ['REMOTE_USER' => 'sso-user'],
+            ),
+        );
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame('./login', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLogoutRedirectsWithoutLoggingWhenTheCsrfTokenIsInvalid(): void
+    {
+        $currentUser = $this->createLoggedInCurrentUser();
+        $currentUser->expects(self::never())->method('deleteFromSession');
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(currentUser: $currentUser, configurationValues: []));
+
+        ob_start();
+        $response = $controller->logout(new Request(['csrf' => 'invalid-token']));
+        ob_end_clean();
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame($this->configuration->getDefaultUrl() . 'admin/login', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCheckRedirectsToDashboardWhenUserIsAlreadyLoggedIn(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(currentUser: $this->createLoggedInCurrentUser(), configurationValues: []));
+
+        $response = $controller->check(new Request([], ['token' => '123456', 'user-id' => 1]));
+
+        self::assertSame('./', $response->getTargetUrl());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testLoginFallsBackToAGenericOidcProviderName(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createControllerContainer(currentUser: $this->createLoggedOutCurrentUser(), configurationValues: [
+            'oidc.enable' => true,
+            'oidc.providerName' => '  ',
+        ]));
+
+        $response = $controller->login(new Request());
+
+        self::assertStringContainsString('Sign in with OpenID Connect', (string) $response->getContent());
+    }
+
+    /**
+     * A user whose credentials are accepted and who has two-factor authentication enabled.
+     */
+    private function createTwoFactorCurrentUser(bool $lockedOut): CurrentUser
+    {
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $this->createMock(PermissionInterface::class);
+        $currentUser->method('isLoggedIn')->willReturn(false);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getLogin')->willReturn('admin');
+        $currentUser->expects(self::once())->method('login')->with('admin', 'password')->willReturn(true);
+        $currentUser->expects(self::atLeastOnce())->method('getUserData')->with('twofactor_enabled')->willReturn(1);
+        $currentUser->method('isTwoFactorLockedOut')->willReturn($lockedOut);
+
+        return $currentUser;
+    }
 }

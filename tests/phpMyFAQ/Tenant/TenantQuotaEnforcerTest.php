@@ -105,4 +105,72 @@ class TenantQuotaEnforcerTest extends TestCase
         $this->expectException(RuntimeException::class);
         $enforcer->assertCanCreateUser();
     }
+
+    public function testAssertCanStoreAttachmentCapsAnOversizedLimitAtPhpIntMax(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->expects($this->once())->method('query')->willReturn(true);
+        $db->expects($this->once())->method('fetchArray')->with(true)->willReturn(['amount' => PHP_INT_MAX - 10]);
+
+        $enforcer = new TenantQuotaEnforcer(
+            $db,
+            new TenantContext(
+                1,
+                'tenant.example.test',
+                '',
+                PMF_CONFIG_DIR,
+                'free',
+                new TenantQuotas(null, PHP_INT_MAX),
+            ),
+        );
+
+        $enforcer->assertCanStoreAttachment(10);
+        $this->assertTrue(true);
+    }
+
+    public function testAssertCanStoreAttachmentThrowsRuntimeExceptionOnQueryFailure(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->expects($this->once())->method('query')->willReturn(false);
+        $db->expects($this->once())->method('error')->willReturn('db failed');
+
+        $enforcer = new TenantQuotaEnforcer(
+            $db,
+            new TenantContext(1, 'tenant.example.test', '', PMF_CONFIG_DIR, 'free', new TenantQuotas(null, 1)),
+        );
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Failed to evaluate tenant quota for attachments: db failed');
+        $enforcer->assertCanStoreAttachment(1);
+    }
+
+    public function testAssertCanCreateFaqTreatsAMissingRowAsZero(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->expects($this->once())->method('query')->willReturn(true);
+        $db->expects($this->once())->method('fetchArray')->with(true)->willReturn(false);
+
+        $enforcer = new TenantQuotaEnforcer(
+            $db,
+            new TenantContext(1, 'tenant.example.test', '', PMF_CONFIG_DIR, 'free', new TenantQuotas(1)),
+        );
+
+        $enforcer->assertCanCreateFaq();
+        $this->assertTrue(true);
+    }
+
+    public function testAssertCanCreateFaqTreatsAFalseCountAsZero(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->expects($this->once())->method('query')->willReturn(true);
+        $db->expects($this->once())->method('fetchArray')->with(true)->willReturn(['amount' => false]);
+
+        $enforcer = new TenantQuotaEnforcer(
+            $db,
+            new TenantContext(1, 'tenant.example.test', '', PMF_CONFIG_DIR, 'free', new TenantQuotas(1)),
+        );
+
+        $enforcer->assertCanCreateFaq();
+        $this->assertTrue(true);
+    }
 }

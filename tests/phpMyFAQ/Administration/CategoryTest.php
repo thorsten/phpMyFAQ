@@ -224,4 +224,50 @@ class CategoryTest extends TestCase
         $this->assertEquals(42, $this->category->getOwner(5));
         $this->assertEquals(1, $this->category->getOwner(999)); // Non-existent category
     }
+
+    public function testLoadCategoriesComputesLevelsAndStopsAtCircularParents(): void
+    {
+        $row = static fn(int $id, int $parentId): array => [
+            'id' => $id,
+            'lang' => 'en',
+            'parent_id' => $parentId,
+            'name' => 'Category ' . $id,
+            'description' => '',
+            'user_id' => 1,
+            'group_id' => 1,
+            'active' => 1,
+            'show_home' => 1,
+            'image' => '',
+        ];
+
+        // 1 -> 2 -> 3 is a proper chain; 10 and 11 reference each other as parents.
+        $this->databaseMock->method('query')->willReturn(true);
+        $this->databaseMock->method('fetchArray')->willReturnOnConsecutiveCalls(
+            $row(1, 0),
+            $row(2, 1),
+            $row(3, 2),
+            $row(10, 11),
+            $row(11, 10),
+            null,
+        );
+
+        $result = $this->category->loadCategories();
+
+        $this->assertSame(0, $result[1]['level']);
+        $this->assertSame(1, $result[2]['level']);
+        $this->assertSame(2, $result[3]['level']);
+        $this->assertSame(2, $this->category->categoryName[10]['level']);
+        $this->assertSame(2, $this->category->categoryName[11]['level']);
+    }
+
+    public function testLoadCategoriesIgnoresCachedEntriesWithoutAnId(): void
+    {
+        $this->category->categoryName[7] = ['name' => 'no id'];
+
+        $this->databaseMock->method('query')->willReturn(true);
+        $this->databaseMock->method('fetchArray')->willReturn(null);
+
+        $this->assertSame([], $this->category->loadCategories());
+        $this->assertArrayNotHasKey('level', $this->category->categoryName[7]);
+    }
 }

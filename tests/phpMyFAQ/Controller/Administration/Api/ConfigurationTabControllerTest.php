@@ -922,6 +922,7 @@ final class ConfigurationTabControllerTest extends TestCase
         yield 'string' => ['value', 'value'];
         yield 'object' => [new \stdClass(), 'stdClass'];
         yield 'array' => [['a'], 'array'];
+        yield 'resource' => [fopen('php://memory', 'r'), 'unknown'];
     }
 
     #[DataProvider('convertedValueProvider')]
@@ -1031,5 +1032,144 @@ final class ConfigurationTabControllerTest extends TestCase
         self::assertSame($after, $this->configuration->getAll()['main.maintenanceMode']);
         self::assertContains($expectedLogEntry, $logged);
         self::assertContains('config-change:main.maintenanceMode', $logged);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadThemeUsesTheArchiveNameWhenNoThemeNameIsGiven(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('theme-manager');
+        $this->setCsrfCookie('theme-manager', $csrfToken);
+
+        $archive = tempnam(sys_get_temp_dir(), 'pmf-theme-');
+        self::assertNotFalse($archive);
+        $this->temporaryFiles[] = $archive;
+        file_put_contents($archive, 'zip-placeholder');
+        $uploadedFile = new UploadedFile($archive, 'my-theme.zip', 'application/zip', null, true);
+
+        $themeManager = $this->createMock(ThemeManager::class);
+        $themeManager
+            ->expects($this->once())
+            ->method('uploadTheme')
+            ->with('my-theme', $uploadedFile->getPathname())
+            ->willReturn(2);
+
+        $controller = $this->createControllerWithThemeManager($themeManager);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request([], ['theme-csrf-token' => $csrfToken], [], [], ['themeArchive' => $uploadedFile]);
+        $response = $controller->uploadTheme($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('Theme "my-theme" uploaded (2 files).', $payload['success']);
+        $this->removeCsrfCookie('theme-manager');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveReplacesAChangedMainReferenceUrl(): void
+    {
+        $this->configuration->update(['main.referenceURL' => 'https://old.example.org/faq']);
+        $this->dbHandle->query(
+            "INSERT INTO faqdata (id, lang, solution_id, sticky, thema, content, author, email, updated)
+             VALUES (1, 'en', 1000, 0, 'Reference', 'See https://old.example.org/faq/index.php for details', 'a', 'a@b.c', '20240101000000')",
+        );
+
+        $stored = $this->saveConfiguration(['main.referenceURL' => 'https://new.example.org/faq']);
+
+        self::assertSame('https://new.example.org/faq', $stored['main.referenceURL']);
+        $row = $this->dbHandle->fetchArray($this->dbHandle->query('SELECT content FROM faqdata WHERE id = 1'));
+        self::assertSame('See https://new.example.org/faq/index.php for details', $row['content']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLogsEncryptionTypeChanges(): void
+    {
+        $this->configuration->update(['security.encryptionType' => 'bcrypt']);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $messages = [];
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog
+            ->method('log')
+            ->willReturnCallback(static function (CurrentUser $user, string $message) use (&$messages): bool {
+                $messages[] = $message;
+                return true;
+            });
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerWithAdminLog($adminLog, $session));
+
+        $response = $controller->save(
+            new Request([], [
+                'pmf-csrf-token' => $csrfToken,
+                'edit' => ['security.encryptionType' => 'argon2id'],
+            ]),
+        );
+        $this->removeCsrfCookie('configuration');
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertContains('config-encryption-changed:security.encryptionType', $messages);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveRejectsANonScalarUrlValue(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->save(
+            new Request([], [
+                'pmf-csrf-token' => $csrfToken,
+                'edit' => ['keycloak.baseUrl' => ['https://keycloak.example.org']],
+            ]),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->removeCsrfCookie('configuration');
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(
+            sprintf(Translation::get('msgInvalidConfigurationUrl'), 'keycloak.baseUrl'),
+            $payload['error'],
+        );
+    }
+
+    /**
+     * @return iterable<string, array{mixed, bool}>
+     */
+    public static function truthyValueProvider(): iterable
+    {
+        yield 'true' => [true, true];
+        yield 'false' => [false, false];
+        yield 'one' => [1, true];
+        yield 'zero' => [0, false];
+        yield 'array' => [['on'], false];
+        yield 'yes' => ['YES', true];
+    }
+
+    #[DataProvider('truthyValueProvider')]
+    public function testIsTruthyNormalisesBooleanAndIntegerValues(mixed $value, bool $expected): void
+    {
+        $controller = $this->createController();
+
+        self::assertSame($expected, new \ReflectionMethod(ConfigurationTabController::class, 'isTruthy')->invoke(
+            $controller,
+            $value,
+        ));
     }
 }

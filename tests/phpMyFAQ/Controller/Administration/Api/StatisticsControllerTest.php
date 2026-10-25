@@ -20,6 +20,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -369,5 +370,90 @@ final class StatisticsControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame(Translation::get('msgDeleteAllVotings'), $payload['error']);
+    }
+
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function csrfProtectedActions(): array
+    {
+        return [
+            'truncateSessions' => ['truncateSessions'],
+            'truncateSearchTerms' => ['truncateSearchTerms'],
+            'clearRatings' => ['clearRatings'],
+            'clearVisits' => ['clearVisits'],
+        ];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('csrfProtectedActions')]
+    public function testActionReturnsUnauthorizedForAnInvalidCsrfToken(string $action): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => 'invalid-token',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->{$action}($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTruncateSessionsReturnsBadRequestWhenTrackingFilesCannotBeDeleted(): void
+    {
+        $statisticsHelper = $this->createMock(StatisticsHelper::class);
+        $statisticsHelper->expects($this->once())->method('deleteTrackingFiles')->with('2025-03')->willReturn(false);
+
+        $controller = $this->createController($statisticsHelper);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'sessions');
+        $controller->setContainer($container);
+
+        $request = new Request([], ['month' => '2025-03'], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->truncateSessions($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Cannot delete sessions.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testClearVisitsReturnsSuccessWhenTheVisitsAreCleared(): void
+    {
+        $statisticsHelper = $this->createMock(StatisticsHelper::class);
+        $statisticsHelper->expects($this->once())->method('clearAllVisits')->willReturn(true);
+
+        $controller = $this->createController($statisticsHelper);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'clear-visits');
+        $controller->setContainer($container);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->clearVisits($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_reset_visits_success'), $payload['success']);
     }
 }

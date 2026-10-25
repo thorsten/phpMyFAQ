@@ -2,16 +2,25 @@
 
 namespace phpMyFAQ\Scheduler;
 
+use Elastic\Elasticsearch\ClientBuilder;
+use GuzzleHttp\Psr7\Response;
 use Monolog\Logger;
+use OpenSearch\Client as OpenSearchClient;
+use OpenSearch\Namespaces\IndicesNamespace;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Backup\BackupExportResult;
 use phpMyFAQ\Administration\Session;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Configuration\ElasticsearchConfiguration;
+use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Enums\BackupType;
 use phpMyFAQ\Faq\Statistics;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 
 #[CoversClass(TaskScheduler::class)]
@@ -259,6 +268,120 @@ class TaskSchedulerTest extends TestCase
         $this->assertFalse($result['skipped']);
         $this->assertFalse($result['elasticsearch']);
         $this->assertNull($result['opensearch']);
+    }
+
+    public function testOptimizeSearchIndexForceMergesElasticsearchIndex(): void
+    {
+        $httpClient = new class implements ClientInterface {
+            /** @var list<RequestInterface> */
+            public array $requests = [];
+
+            public function sendRequest(RequestInterface $request): ResponseInterface
+            {
+                $this->requests[] = $request;
+
+                return new Response(
+                    200,
+                    ['X-Elastic-Product' => 'Elasticsearch', 'Content-Type' => 'application/json'],
+                    '{"_shards":{"total":1,"successful":1,"failed":0}}',
+                );
+            }
+        };
+        $elasticsearch = ClientBuilder::create()
+            ->setHosts(['http://localhost:9200'])
+            ->setHttpClient($httpClient)
+            ->build();
+
+        $elasticsearchConfiguration = $this->createStub(ElasticsearchConfiguration::class);
+        $elasticsearchConfiguration->method('getIndex')->willReturn('phpmyfaq-test');
+
+        $configuration = $this->createConfigurationStub([
+            'search.enableElasticsearch' => true,
+            'search.enableOpenSearch' => false,
+        ]);
+        $configuration->method('getElasticsearch')->willReturn($elasticsearch);
+        $configuration->method('getElasticsearchConfig')->willReturn($elasticsearchConfiguration);
+
+        $scheduler = new TaskScheduler(
+            $configuration,
+            $this->createStub(Session::class),
+            $this->createStub(Backup::class),
+            $this->createStub(Statistics::class),
+            $this->backupDirectory,
+        );
+        $result = $scheduler->optimizeSearchIndex();
+
+        $this->assertTrue($result['success']);
+        $this->assertTrue($result['elasticsearch']);
+        $this->assertNull($result['opensearch']);
+        $this->assertCount(1, $httpClient->requests);
+        $this->assertSame('/phpmyfaq-test/_forcemerge', $httpClient->requests[0]->getUri()->getPath());
+        $this->assertSame('max_num_segments=1', $httpClient->requests[0]->getUri()->getQuery());
+    }
+
+    public function testOptimizeSearchIndexForceMergesOpenSearchIndex(): void
+    {
+        $indices = $this->createMock(IndicesNamespace::class);
+        $indices
+            ->expects($this->once())
+            ->method('forcemerge')
+            ->with(['index' => 'phpmyfaq-test', 'max_num_segments' => 1])
+            ->willReturn([]);
+
+        $openSearch = $this->createStub(OpenSearchClient::class);
+        $openSearch->method('indices')->willReturn($indices);
+
+        $openSearchConfiguration = $this->createStub(OpenSearchConfiguration::class);
+        $openSearchConfiguration->method('getIndex')->willReturn('phpmyfaq-test');
+
+        $configuration = $this->createConfigurationStub([
+            'search.enableElasticsearch' => false,
+            'search.enableOpenSearch' => true,
+        ]);
+        $configuration->method('getOpenSearch')->willReturn($openSearch);
+        $configuration->method('getOpenSearchConfig')->willReturn($openSearchConfiguration);
+
+        $scheduler = new TaskScheduler(
+            $configuration,
+            $this->createStub(Session::class),
+            $this->createStub(Backup::class),
+            $this->createStub(Statistics::class),
+            $this->backupDirectory,
+        );
+        $result = $scheduler->optimizeSearchIndex();
+
+        $this->assertTrue($result['success']);
+        $this->assertNull($result['elasticsearch']);
+        $this->assertTrue($result['opensearch']);
+    }
+
+    public function testOptimizeSearchIndexHandlesOpenSearchFailure(): void
+    {
+        $configuration = $this->createConfigurationStub([
+            'search.enableElasticsearch' => false,
+            'search.enableOpenSearch' => true,
+        ]);
+        $configuration->method('getOpenSearch')->willThrowException(new RuntimeException('Missing client'));
+
+        $logger = $this->createMock(Logger::class);
+        $logger
+            ->expects($this->once())
+            ->method('error')
+            ->with($this->stringContains('OpenSearch optimization failed'), $this->arrayHasKey('message'));
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $scheduler = new TaskScheduler(
+            $configuration,
+            $this->createStub(Session::class),
+            $this->createStub(Backup::class),
+            $this->createStub(Statistics::class),
+            $this->backupDirectory,
+        );
+        $result = $scheduler->optimizeSearchIndex();
+
+        $this->assertFalse($result['success']);
+        $this->assertNull($result['elasticsearch']);
+        $this->assertFalse($result['opensearch']);
     }
 
     public function testAggregateStatisticsReturnsFailureWhenExceptionThrown(): void

@@ -370,4 +370,33 @@ class CommentTest extends TestCase
         $this->assertEquals(2, $comment2->getId());
         $this->assertEquals('user2', $comment2->getUsername());
     }
+
+    public function testJsonSerializeExposesTheCommentFields(): void
+    {
+        $this->comment
+            ->setId(7)
+            ->setRecordId(42)
+            ->setCategoryId(3)
+            ->setType('faq')
+            ->setUsername('jane')
+            ->setEmail('jane@example.org')
+            ->setComment('Very helpful')
+            ->setDate('2026-01-01 12:00:00')
+            ->setHelped(true);
+
+        $this->assertSame(
+            [
+                'id' => 7,
+                'recordId' => 42,
+                'categoryId' => 3,
+                'type' => 'faq',
+                'username' => 'jane',
+                'comment' => 'Very helpful',
+                'date' => '2026-01-01 12:00:00',
+                'helped' => true,
+            ],
+            $this->comment->jsonSerialize(),
+        );
+        $this->assertJson(json_encode($this->comment, JSON_THROW_ON_ERROR));
+    }
 }

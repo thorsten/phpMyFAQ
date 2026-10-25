@@ -377,4 +377,37 @@ class RemoteApiClientTest extends TestCase
 
         $this->assertEquals($expectedHashes, $remoteHashes);
     }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     * @throws DecodingExceptionInterface
+     */
+    public function testGetVersionsWrapsDecodingFailuresOfTheResponse(): void
+    {
+        $response = $this->createStub(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(Response::HTTP_OK);
+        $response->method('toArray')->willThrowException(new TransportException('Connection reset', 7));
+
+        $this->httpClient->expects($this->once())->method('request')->willReturn($response);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('phpMyFAQ Verification API is not available: Connection reset');
+        $this->expectExceptionCode(7);
+
+        $this->api->getVersions();
+    }
+
+    /**
+     * @throws \JsonException|\Exception
+     */
+    public function testGetVerificationIssuesIgnoresScalarHashListsAndNonStringHashes(): void
+    {
+        $this->system->method('createHashes')->willReturn('{"file.php": "abc", "broken.php": 123}');
+
+        // A scalar remote hash list contains no hashes, so every local string hash is reported.
+        $this->api->setRemoteHashes('42');
+
+        $this->assertSame(['file.php' => 'abc'], $this->api->getVerificationIssues());
+    }
 }

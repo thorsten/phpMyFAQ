@@ -8,6 +8,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
+use phpMyFAQ\Search;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\TestDatabaseTrait;
@@ -450,5 +451,125 @@ class SearchServiceTest extends TestCase
         $this->assertTrue($result['tagSearch']);
         $this->assertSame(1, $result['numberOfSearchResults']);
         $this->assertStringContainsString('search.html?tagging_id=13,7', $result['relatedTags']);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function testProcessSearchFormatsResultsAndDropsFaqsThatNoLongerExist(): void
+    {
+        $searchService = new SearchService($this->configuration, $this->currentUser, $this->currentGroups);
+
+        $existing = new \stdClass();
+        $existing->id = 1;
+        $existing->lang = 'en';
+        $deleted = new \stdClass();
+        $deleted->id = 2;
+        $deleted->lang = 'en';
+
+        $faqSearch = $this->createMock(Search::class);
+        $faqSearch->method('search')->willReturn([$existing, $deleted]);
+
+        $database = $this->configuration->getDb();
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getFaqResult')->willReturnCallback(static fn(int $faqId): mixed => $database->query(
+            $faqId === 1 ? 'SELECT 1' : 'SELECT 1 WHERE 0',
+        ));
+
+        $searchResultSet = $this->createMock(SearchResultSet::class);
+        $searchResultSet
+            ->expects($this->once())
+            ->method('reviewResultSet')
+            ->with($this->callback(static fn(array $results): bool => array_keys($results) === [0]));
+        $searchResultSet->method('getNumberOfResults')->willReturn(1);
+
+        $reflection = new \ReflectionClass($searchService);
+        $reflection->getProperty('faqSearch')->setValue($searchService, $faqSearch);
+        $reflection->getProperty('faq')->setValue($searchService, $faq);
+        $reflection->getProperty('searchResultSet')->setValue($searchService, $searchResultSet);
+
+        $result = $searchService->processSearch(
+            inputSearchTerm: 'phpmyfaq',
+            inputTag: '',
+            inputCategory: 0,
+            allLanguages: false,
+            page: 1,
+        );
+
+        $this->assertSame(1, $result['numberOfSearchResults']);
+        $this->assertIsArray($result['searchResults']);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function testProcessSearchSurvivesFailingSearchAndLogging(): void
+    {
+        $searchService = new SearchService($this->configuration, $this->currentUser, $this->currentGroups);
+
+        $faqSearch = $this->createMock(Search::class);
+        $faqSearch->method('search')->willThrowException(new \Exception('search backend unavailable'));
+        $faqSearch->method('logSearchTerm')->willThrowException(new \Exception('logging unavailable'));
+
+        new \ReflectionProperty(SearchService::class, 'faqSearch')->setValue($searchService, $faqSearch);
+
+        $result = $searchService->processSearch(
+            inputSearchTerm: 'phpmyfaq',
+            inputTag: '',
+            inputCategory: 0,
+            allLanguages: true,
+            page: 1,
+        );
+
+        $this->assertSame(0, $result['numberOfSearchResults']);
+        $this->assertSame([], $result['searchResults']);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function testProcessSearchIgnoresDuplicateAndInvalidTagIdsAndLimitsRelatedTags(): void
+    {
+        $searchService = new SearchService($this->configuration, $this->currentUser, $this->currentGroups);
+
+        $relatedTags = [];
+        $tagNames = [[13, 'Shared']];
+        for ($tagId = 100; $tagId < 130; ++$tagId) {
+            $relatedTags[$tagId] = 'Related ' . $tagId;
+            $tagNames[] = [$tagId, 'Related ' . $tagId];
+        }
+
+        $tags = $this->createMock(Tags::class);
+        $tags->method('getTagNameById')->willReturnMap($tagNames);
+        $tags->expects($this->once())->method('getFaqsByIntersectionTags')->with([13 => 'Shared'])->willReturn([1]);
+        $tags
+            ->expects($this->once())
+            ->method('getAllTagsById')
+            ->with(1)
+            ->willReturn([13 => 'Shared'] + $relatedTags);
+        $tags->method('getPopularTags')->willReturn([]);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getFaqsDataByIds')->willReturn([]);
+
+        $reflection = new \ReflectionClass($searchService);
+        $reflection->getProperty('tags')->setValue($searchService, $tags);
+        $reflection->getProperty('faq')->setValue($searchService, $faq);
+
+        $result = $searchService->processSearch(
+            inputSearchTerm: '',
+            inputTag: '13,13,not-a-number',
+            inputCategory: 0,
+            allLanguages: false,
+            page: 1,
+        );
+
+        $this->assertTrue($result['tagSearch']);
+        $this->assertSame(1, $result['numberOfSearchResults']);
+        $this->assertSame(22, substr_count($result['relatedTags'], 'tagging_id=13,'));
+        $this->assertStringNotContainsString('tagging_id=13,129', $result['relatedTags']);
     }
 }

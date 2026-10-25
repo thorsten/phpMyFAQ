@@ -191,4 +191,83 @@ class GoogleTranslationProviderTest extends TestCase
 
         $this->assertEquals('你好', $result);
     }
+
+    public function testTranslateBatchWithoutApiKey(): void
+    {
+        $this->configuration->expects($this->once())->method('get')->with('translation.googleApiKey')->willReturn('');
+
+        $httpClient = new MockHttpClient();
+        $provider = new GoogleTranslationProvider($this->configuration, $httpClient);
+
+        $this->expectException(ApiException::class);
+        $this->expectExceptionMessage('Google Cloud Translation API key not configured');
+
+        $provider->translateBatch(['Hello'], 'en', 'de', false);
+    }
+
+    public function testTranslateBatchThrowsExceptionOnTransportError(): void
+    {
+        $this->configuration
+            ->expects($this->once())
+            ->method('get')
+            ->with('translation.googleApiKey')
+            ->willReturn('test-api-key');
+
+        $httpClient = new MockHttpClient(new MockResponse('', ['error' => 'Connection refused']));
+        $provider = new GoogleTranslationProvider($this->configuration, $httpClient);
+
+        $this->expectException(ApiException::class);
+        $this->expectExceptionMessage('Google Translation API error: Connection refused');
+
+        $provider->translateBatch(['Hello', 'World'], 'en', 'de', false);
+    }
+
+    public function testTranslateBatchWithHtmlPreservation(): void
+    {
+        $this->configuration
+            ->expects($this->exactly(2))
+            ->method('get')
+            ->with('translation.googleApiKey')
+            ->willReturn('test-api-key');
+
+        $responses = [
+            new MockResponse(json_encode([
+                'data' => ['translations' => [['translatedText' => '##HTML_TAG_0##Hallo##HTML_TAG_1##']]],
+            ])),
+            new MockResponse(json_encode([
+                'data' => ['translations' => [['translatedText' => '##HTML_TAG_0##Welt##HTML_TAG_1##']]],
+            ])),
+        ];
+
+        $httpClient = new MockHttpClient($responses);
+        $provider = new GoogleTranslationProvider($this->configuration, $httpClient);
+
+        $result = $provider->translateBatch(['<p>Hello</p>', '<p>World</p>'], 'en', 'de', true);
+
+        $this->assertEquals(['<p>Hallo</p>', '<p>Welt</p>'], $result);
+        $this->assertSame(2, $httpClient->getRequestsCount());
+    }
+
+    public function testLanguageCodeMappingForPortugueseAndNorwegian(): void
+    {
+        $this->configuration
+            ->expects($this->once())
+            ->method('get')
+            ->with('translation.googleApiKey')
+            ->willReturn('test-api-key');
+
+        $requestBodies = [];
+        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use (&$requestBodies) {
+            $requestBodies[] = (string) $options['body'];
+
+            return new MockResponse(json_encode(['data' => ['translations' => [['translatedText' => 'ok']]]]));
+        });
+        $provider = new GoogleTranslationProvider($this->configuration, $httpClient);
+
+        $this->assertSame('ok', $provider->translate('Hello', 'pt', 'nb', false));
+        $this->assertSame(['source' => 'pt-BR', 'target' => 'no'], array_intersect_key(
+            json_decode($requestBodies[0], true),
+            ['source' => 1, 'target' => 1],
+        ));
+    }
 }

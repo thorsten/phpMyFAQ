@@ -152,4 +152,32 @@ class SitemapXmlServiceTest extends TestCase
 
         $this->assertSame('2026-01-01 00:00:00', $urls[0]['lastmod']);
     }
+
+    public function testGenerateXmlRendersCollectedUrls(): void
+    {
+        $this->configuration->method('get')->willReturn(true);
+        $this->configuration->method('getDefaultUrl')->willReturn('https://example.com/');
+        $this->configuration->method('getTemplateSet')->willReturn('default');
+
+        $this->faqStatistics
+            ->method('getTopTenData')
+            ->willReturn([
+                1 => [
+                    'url' => 'https://example.com/faq/1',
+                    'date' => '2026-01-01T00:00:00+00:00',
+                    'question' => 'Test FAQ',
+                    'answer' => 'Test answer',
+                    'visits' => 100,
+                    'last_visit' => '2026-01-01T00:00:00+00:00',
+                ],
+            ]);
+        $this->customPage->method('getAllPages')->willReturn([]);
+
+        $xml = $this->service->generateXml();
+
+        $this->assertIsString($xml);
+        $this->assertStringContainsString('<urlset', $xml);
+        $this->assertStringContainsString('<loc>https://example.com/faq/1</loc>', $xml);
+        $this->assertStringContainsString('<priority>1.00</priority>', $xml);
+    }
 }

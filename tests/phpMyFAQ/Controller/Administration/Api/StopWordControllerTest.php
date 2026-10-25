@@ -13,6 +13,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -319,6 +320,149 @@ final class StopWordControllerTest extends TestCase
         $controller->setContainer($container);
 
         $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Language not supported', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteRemovesTheStopWordForASupportedLanguage(): void
+    {
+        $stopWords = new StopWords($this->configuration);
+        $stopWords->setLanguage('en')->add('removeme');
+        $stopWordId = (int) $this->dbHandle->fetchObject($this->dbHandle->query(
+            "SELECT id FROM faqstopwords WHERE stopword = 'removeme' AND lang = 'en'",
+        ))->id;
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'stopwords');
+
+        $controller = new StopWordController();
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'stopWordId' => $stopWordId,
+            'stopWordsLang' => 'en',
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($stopWordId, $payload['deleted']);
+        self::assertFalse($stopWords->match('removeme'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveUpdatesAnExistingStopWord(): void
+    {
+        $stopWords = new StopWords($this->configuration);
+        $stopWords->setLanguage('en')->add('oldword');
+        $stopWordId = (int) $this->dbHandle->fetchObject($this->dbHandle->query(
+            "SELECT id FROM faqstopwords WHERE stopword = 'oldword' AND lang = 'en'",
+        ))->id;
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'stopwords');
+
+        $controller = new StopWordController();
+        $controller->setContainer($container);
+
+        $response = $controller->save(new Request([], [], [], [], [], [], json_encode([
+            'stopWordId' => $stopWordId,
+            'stopWordsLang' => 'en',
+            'stopWord' => 'newword',
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($stopWordId, $payload['updated']);
+        self::assertTrue($stopWords->match('newword'));
+        self::assertFalse($stopWords->match('oldword'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveAddsANewStopWord(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'stopwords');
+
+        $controller = new StopWordController();
+        $controller->setContainer($container);
+
+        $response = $controller->save(new Request([], [], [], [], [], [], json_encode([
+            'stopWordsLang' => 'en',
+            'stopWord' => 'brandnew',
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_CREATED, $response->getStatusCode());
+        self::assertArrayHasKey('added', $payload);
+        self::assertTrue(
+            new StopWords($this->configuration)
+                ->setLanguage('en')
+                ->match('brandnew'),
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveRejectsADuplicateStopWord(): void
+    {
+        new StopWords($this->configuration)->setLanguage('en')->add('duplicate');
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'stopwords');
+
+        $controller = new StopWordController();
+        $controller->setContainer($container);
+
+        $response = $controller->save(new Request([], [], [], [], [], [], json_encode([
+            'stopWordsLang' => 'en',
+            'stopWord' => 'duplicate',
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Stop word already exists', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveReturnsBadRequestForAnUnsupportedLanguage(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'stopwords');
+
+        $controller = new StopWordController();
+        $controller->setContainer($container);
+
+        $response = $controller->save(new Request([], [], [], [], [], [], json_encode([
+            'stopWordsLang' => 'xx',
+            'stopWord' => 'word',
+            'csrf' => $token,
+        ], JSON_THROW_ON_ERROR)));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());

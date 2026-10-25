@@ -20,6 +20,7 @@ class BasicPermissionTest extends TestCase
 
     private Configuration $configuration;
     private BasicPermission $basicPermission;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -233,9 +234,7 @@ class BasicPermissionTest extends TestCase
         // Fixture user 1 is a superadmin and would bypass every restriction, so
         // demote them for the duration of this restriction-behaviour test.
         $this->dbHandle->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
-        $this->dbHandle->query(
-            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')",
-        );
+        $this->dbHandle->query("INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')");
 
         $this->assertTrue($this->basicPermission->hasPermissionForLanguage(1, 1, 'de'));
         $this->assertFalse($this->basicPermission->hasPermissionForLanguage(1, 1, 'en'));
@@ -265,9 +264,7 @@ class BasicPermissionTest extends TestCase
      */
     public function testHasPermissionForLanguageIgnoresRestrictionsForSuperAdmin(): void
     {
-        $this->dbHandle->query(
-            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')",
-        );
+        $this->dbHandle->query("INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')");
 
         $this->assertTrue($this->basicPermission->hasPermissionForLanguage(1, 1, 'en'));
         $this->assertNull($this->basicPermission->getAllowedLanguagesForRight(1, 1));
@@ -284,9 +281,7 @@ class BasicPermissionTest extends TestCase
     public function testGetAllowedLanguagesForRightReturnsRestrictedSet(): void
     {
         $this->dbHandle->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
-        $this->dbHandle->query(
-            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')",
-        );
+        $this->dbHandle->query("INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')");
 
         $allowed = $this->basicPermission->getAllowedLanguagesForRight(1, 1);
         $this->assertSame(['de'], $allowed);
@@ -299,5 +294,69 @@ class BasicPermissionTest extends TestCase
     public function testGetAllowedLanguagesForRightReturnsEmptyArrayWithoutRight(): void
     {
         $this->assertSame([], $this->basicPermission->getAllowedLanguagesForRight(0, 999));
+    }
+
+    public function testGrantUserRightRejectsUnknownRight(): void
+    {
+        $this->assertFalse($this->basicPermission->grantUserRight(2, 999));
+    }
+
+    public function testRenameRightRejectsUnknownRight(): void
+    {
+        $this->assertFalse($this->basicPermission->renameRight('does_not_exist', 'new_name'));
+    }
+
+    public function testGetUserGroupsIsAlwaysEmpty(): void
+    {
+        $this->assertSame([], $this->basicPermission->getUserGroups(1));
+    }
+
+    public function testAddRightReturnsZeroWhenRepositoryInsertFails(): void
+    {
+        $repository = $this->createStub(BasicPermissionRepository::class);
+        $repository->method('getRightId')->willReturn(0);
+        $repository->method('nextRightId')->willReturn(500);
+        $repository->method('addRight')->willReturn(false);
+        $this->injectRepository($repository);
+
+        $this->assertSame(0, $this->basicPermission->addRight(['name' => 'failing_right']));
+    }
+
+    public function testRefuseAllUserRightsReturnsFalseWhenRepositoryFails(): void
+    {
+        $repository = $this->createStub(BasicPermissionRepository::class);
+        $repository->method('refuseAllUserRights')->willReturn(false);
+        $this->injectRepository($repository);
+
+        $this->assertFalse($this->basicPermission->refuseAllUserRights(1));
+    }
+
+    public function testGetAllUserLanguageRestrictionsReturnsRestrictionsKeyedByRight(): void
+    {
+        $this->dbHandle->query("INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')");
+
+        $this->assertSame([1 => ['de']], $this->basicPermission->getAllUserLanguageRestrictions(1));
+
+        // Cleanup
+        $this->dbHandle->query('DELETE FROM faquser_right_language WHERE user_id = 1 AND right_id = 1');
+    }
+
+    public function testHasPermissionForLanguageResolvesPermissionTypeToRightId(): void
+    {
+        $this->dbHandle->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->dbHandle->query("INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')");
+
+        $this->assertTrue($this->basicPermission->hasPermissionForLanguage(1, PermissionType::USER_ADD, 'de'));
+        $this->assertFalse($this->basicPermission->hasPermissionForLanguage(1, PermissionType::USER_ADD, 'en'));
+
+        // Cleanup
+        $this->dbHandle->query('DELETE FROM faquser_right_language WHERE user_id = 1 AND right_id = 1');
+        $this->dbHandle->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
+    }
+
+    private function injectRepository(BasicPermissionRepository $repository): void
+    {
+        $property = new \ReflectionProperty(BasicPermission::class, 'repository');
+        $property->setValue($this->basicPermission, $repository);
     }
 }

@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -336,5 +337,52 @@ class MediumPermissionRepositoryTest extends TestCase
         $this->assertSame("Updated'; DROP TABLE faqgroup; --", $storedGroup['description']);
 
         $this->dbHandle->query('DELETE FROM faqgroup WHERE group_id = ' . $nextId);
+    }
+
+    public function testGetGroupIdsWithRightReturnsEmptyArrayForInvalidRight(): void
+    {
+        $this->assertSame([], $this->repository->getGroupIdsWithRight(0));
+        $this->assertSame([], $this->repository->getGroupIdsWithRight(-1));
+    }
+
+    public function testGetGroupIdsWithRightReturnsSortedGroupIds(): void
+    {
+        $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (3, 1)');
+        $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (2, 1)');
+
+        $this->assertSame([2, 3], $this->repository->getGroupIdsWithRight(1));
+        $this->assertSame([], $this->repository->getGroupIdsWithRight(999));
+
+        // Cleanup
+        $this->dbHandle->query('DELETE FROM faqgroup_right WHERE right_id = 1 AND group_id IN (2, 3)');
+    }
+
+    public function testGetGroupNameAndDataFallBackWhenRowCannotBeFetched(): void
+    {
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('query')->willReturn(true);
+        $database->method('numRows')->willReturn(1);
+        $database->method('fetchArray')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+
+        $repository = new MediumPermissionRepository($configuration);
+
+        $this->assertSame('-', $repository->getGroupName(1));
+        $this->assertSame([], $repository->getGroupData(1));
+    }
+
+    public function testGetAutoJoinGroupsReturnsEmptyArrayWhenQueryFails(): void
+    {
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('query')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+
+        $repository = new MediumPermissionRepository($configuration);
+
+        $this->assertSame([], $repository->getAutoJoinGroups());
     }
 }

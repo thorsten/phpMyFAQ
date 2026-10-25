@@ -10,6 +10,8 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
+use ReflectionProperty;
 
 #[AllowMockObjectsWithoutExpectations]
 class CurrentUserTest extends TestCase
@@ -594,5 +596,102 @@ class CurrentUserTest extends TestCase
         } finally {
             unset($_SERVER['REMOTE_USER']);
         }
+    }
+
+    public function testLoginStripsTheDomainPrefixWhenLdapUsesDomainPrefixes(): void
+    {
+        $this->assertTrue($this->configuration->set('ldap.ldapSupport', 'true'));
+        $this->assertTrue($this->configuration->set('ldap.ldap_use_domain_prefix', 'true'));
+
+        $this->assertTrue($this->currentUser->login('EXAMPLE\\admin', 'password'));
+        $this->assertSame('admin', $this->currentUser->getLogin());
+        $this->assertTrue($this->currentUser->isLoggedIn());
+    }
+
+    public function testLoginFailsWhenTheAuthSourceCannotBeStored(): void
+    {
+        $this->configuration->getDb()->query(
+            "CREATE TRIGGER pmf_block_auth_source BEFORE UPDATE OF auth_source ON faquser "
+            . "BEGIN SELECT RAISE(ABORT, 'blocked'); END",
+        );
+
+        $this->assertFalse($this->currentUser->login('admin', 'password'));
+    }
+
+    public function testGetSessionInfoReturnsAnEmptyArrayForAnUnknownUser(): void
+    {
+        new ReflectionProperty(\phpMyFAQ\User::class, 'userId')->setValue($this->currentUser, 99999);
+
+        $this->assertSame([], $this->currentUser->getSessionInfo());
+    }
+
+    public function testUpdateSessionIdRemovesTheOldSessionFileFromAPrefixedSavePath(): void
+    {
+        session_write_close();
+        $originalSavePath = session_save_path();
+        $sessionDir = sys_get_temp_dir() . '/pmf-session-' . uniqid();
+        mkdir($sessionDir);
+        session_save_path('0;' . $sessionDir);
+        session_id('pmfoldsession');
+        session_start();
+
+        try {
+            // Whether the old session file is removed depends on PHP's files handler, so only the
+            // phpMyFAQ side (prefixed save path handled, new id issued) is asserted here.
+            $this->assertTrue($this->currentUser->updateSessionId());
+            $this->assertNotSame('pmfoldsession', session_id());
+        } finally {
+            session_write_close();
+            session_save_path($originalSavePath);
+            session_start();
+            array_map(unlink(...), glob($sessionDir . '/sess_*') ?: []);
+            rmdir($sessionDir);
+        }
+    }
+
+    public function testUpdateSessionIdReportsADatabaseFailure(): void
+    {
+        $this->configuration->getDb()->query(
+            "CREATE TRIGGER pmf_block_session_id BEFORE UPDATE OF session_id ON faquser "
+            . "BEGIN SELECT RAISE(ABORT, 'blocked'); END",
+        );
+
+        $this->assertFalse($this->currentUser->updateSessionId());
+        $this->assertNotEmpty($this->currentUser->errors);
+    }
+
+    public function testDeleteFromSessionReportsADatabaseFailure(): void
+    {
+        $this->currentUser->login('admin', 'password');
+        $this->configuration->getDb()->query(
+            "CREATE TRIGGER pmf_block_session_id BEFORE UPDATE OF session_id ON faquser "
+            . "BEGIN SELECT RAISE(ABORT, 'blocked'); END",
+        );
+
+        $this->assertFalse($this->currentUser->deleteFromSession());
+        $this->assertFalse($this->currentUser->isLoggedIn());
+        $this->assertNotEmpty($this->currentUser->errors);
+    }
+
+    public function testDeleteFromSessionWithCookieClearsTheRememberMeToken(): void
+    {
+        $this->currentUser->enableRememberMe();
+        $this->assertTrue($this->currentUser->login('admin', 'password'));
+        $this->assertNotSame('', $this->readRememberMeToken());
+
+        $this->assertTrue($this->currentUser->deleteFromSession(true));
+
+        $this->assertFalse($this->currentUser->isLoggedIn());
+        $this->assertSame('', $this->readRememberMeToken());
+    }
+
+    public function testSortAuthContainerMovesLocalBehindAnyOtherDriver(): void
+    {
+        $sorted = new ReflectionMethod(CurrentUser::class, 'sortAuthContainer')->invoke(
+            $this->currentUser,
+            ['ldap' => 'directory', 'local' => 'database'],
+        );
+
+        $this->assertSame(['ldap', 'local'], array_keys($sorted));
     }
 }

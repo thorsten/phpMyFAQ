@@ -456,4 +456,72 @@ class PdoSqliteTest extends TestCase
     {
         // Clean up any resources if needed
     }
+
+    public function testFetchHelpersReturnEmptyResultsForNonStatements(): void
+    {
+        $this->assertNull($this->pdoSqlite->fetchArray(false));
+        $this->assertFalse($this->pdoSqlite->fetchRow(null));
+        $this->assertNull($this->pdoSqlite->fetchObject(new stdClass()));
+        $this->assertSame(0, $this->pdoSqlite->numRows('not a statement'));
+    }
+
+    public function testNextIdRequiresAConnection(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot prepare query: SELECT MAX(id) AS current_id FROM items');
+
+        $this->pdoSqlite->nextId('items', 'id');
+    }
+
+    public function testQueryPreparedRequiresAConnection(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No database connection available for query: SELECT 1');
+
+        $this->pdoSqlite->queryPrepared('SELECT 1', []);
+    }
+
+    public function testQueryAppliesOffsetAndRowCount(): void
+    {
+        $this->pdoSqlite->connect(':memory:', '', '');
+        $this->pdoSqlite->query('CREATE TABLE items (id INTEGER PRIMARY KEY, name TEXT)');
+        $this->pdoSqlite->query("INSERT INTO items (id, name) VALUES (1, 'one'), (2, 'two'), (3, 'three')");
+
+        $result = $this->pdoSqlite->query('SELECT id FROM items ORDER BY id', 1, 1);
+
+        $this->assertInstanceOf(PDOStatement::class, $result);
+        $this->assertSame(2, (int) $this->pdoSqlite->fetchRow($result));
+        $this->assertFalse($this->pdoSqlite->fetchRow($result));
+        $this->assertStringContainsString('LIMIT 1,1', $result->queryString);
+    }
+
+    public function testQueryWrapsPdoExceptions(): void
+    {
+        $this->pdoSqlite->connect(':memory:', '', '');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('no such table: missing');
+
+        $this->pdoSqlite->query('SELECT * FROM missing');
+    }
+
+    public function testQueryLogsTheErrorWhenTheDriverStaysSilent(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+        $this->setPdo($pdo);
+
+        $this->assertFalse($this->pdoSqlite->query('SELECT * FROM missing'));
+        $this->assertStringContainsString('no such table: missing', $this->pdoSqlite->log());
+    }
+
+    public function testQueryPreparedWrapsPdoExceptionsWithTheQuery(): void
+    {
+        $this->pdoSqlite->connect(':memory:', '', '');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('in query: SELECT * FROM missing WHERE id = ?');
+
+        $this->pdoSqlite->queryPrepared('SELECT * FROM missing WHERE id = ?', [1]);
+    }
 }

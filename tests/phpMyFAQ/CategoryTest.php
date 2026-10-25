@@ -541,4 +541,101 @@ class CategoryTest extends TestCase
         $this->category->delete(801, 'en');
         $this->category->delete(801, 'de');
     }
+
+    public function testCountCategoriesCountsTheCategoriesOfTheCurrentLanguage(): void
+    {
+        $this->category->create($this->createCategory(901));
+        $this->category->create($this->createCategory(902, 901));
+        $this->category->create($this->createCategory(903, 0, 'de'));
+
+        $prefix = Database::getTablePrefix();
+        foreach ([901, 902, 903] as $catId) {
+            $this->dbHandle->query(sprintf(
+                'INSERT INTO %sfaqcategory_group (category_id, group_id) VALUES (%d, -1)',
+                $prefix,
+                $catId,
+            ));
+            $this->dbHandle->query(sprintf(
+                'INSERT INTO %sfaqcategory_user (category_id, user_id) VALUES (%d, -1)',
+                $prefix,
+                $catId,
+            ));
+        }
+
+        $this->assertSame(2, $this->category->countCategories());
+        $this->assertSame(2, $this->category->countCategories(true));
+
+        $this->deleteCategories(901, 902);
+        $this->category->delete(903, 'de');
+    }
+
+    public function testTransformFillsTheTreeTabAndUnknownCategoriesHaveNoLine(): void
+    {
+        $this->category->create($this->createCategory(911));
+        $this->category->create($this->createCategory(912, 911));
+
+        $this->category->getOrderedCategories(false);
+        $this->category->buildCategoryTree();
+        $this->category->transform(0);
+
+        $cache = $this->readProperty($this->category, 'categoryCache');
+        assert($cache instanceof CategoryCache);
+        $this->assertSame(2, $cache->countTreeTab());
+        $this->assertSame(911, $cache->getTreeTabEntry(0)['id']);
+
+        $getLineCategory = new \ReflectionMethod($this->category, 'getLineCategory');
+        $this->assertSame(1, $getLineCategory->invoke($this->category, 912));
+        $this->assertSame(-1, $getLineCategory->invoke($this->category, 999));
+
+        $this->deleteCategories(911, 912);
+    }
+
+    public function testGetPathReturnsAnEmptyStringForUnknownCategories(): void
+    {
+        $this->assertSame('', $this->category->getPath(99_999));
+        $this->assertSame('', $this->category->getPath(99_999, ' > ', true));
+    }
+
+    public function testUpdateParentCategoryRefusesToMakeACategoryItsOwnParent(): void
+    {
+        $this->assertFalse($this->category->updateParentCategory(5, 5));
+    }
+
+    public function testGetCategoryLanguagesTranslatedListsTheLanguagesOfACategory(): void
+    {
+        $this->category->create($this->createCategory(921, 0, 'en'));
+        $this->category->create($this->createCategory(921, 0, 'de'));
+
+        $languages = $this->category->getCategoryLanguagesTranslated(921);
+
+        $this->assertSame(['de', 'en'], array_keys($languages));
+
+        $this->category->delete(921, 'en');
+        $this->category->delete(921, 'de');
+    }
+
+    public function testRepositoryRowsThatAreNotArraysOrLackAnIdAreIgnored(): void
+    {
+        $repository = $this->createStub(Category\CategoryRepositoryInterface::class);
+        $repository
+            ->method('findCategoriesPaginated')
+            ->willReturn([
+                1 => ['id' => 1, 'parent_id' => 0, 'name' => 'Root'],
+                2 => 'not a category row',
+            ]);
+        $repository
+            ->method('findCategoriesFromFaq')
+            ->willReturn([
+                7 => ['id' => 7, 'name' => 'Linked'],
+                8 => ['name' => 'Without id'],
+            ]);
+
+        new ReflectionProperty($this->category, 'categoryRepository')->setValue($this->category, $repository);
+
+        $this->assertSame(
+            [1 => ['id' => 1, 'parent_id' => 0, 'name' => 'Root', 'level' => 0]],
+            $this->category->getCategoriesPaginated(),
+        );
+        $this->assertSame([7], $this->category->getCategoryIdsFromFaq(42));
+    }
 }

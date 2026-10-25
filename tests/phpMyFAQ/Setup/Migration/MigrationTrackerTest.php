@@ -256,6 +256,116 @@ class MigrationTrackerTest extends TestCase
         }
     }
 
+    public function testEnsureTableExistsUsesDatabaseSpecificSyntax(): void
+    {
+        $expectations = [
+            'mysqli' => 'ENGINE = InnoDB',
+            'pgsql' => 'id SERIAL NOT NULL',
+            'sqlite3' => 'AUTOINCREMENT',
+            'sqlsrv' => 'IDENTITY(1,1)',
+        ];
+
+        $queries = [];
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): bool {
+                $queries[] = $query;
+                return true;
+            });
+
+        $previousDbType = $this->setDatabaseType('sqlite3');
+
+        try {
+            foreach ($expectations as $dbType => $fragment) {
+                $this->setDatabaseType($dbType);
+                $this->tracker->ensureTableExists();
+                $this->assertStringContainsString($fragment, end($queries), $dbType);
+                $this->assertStringContainsString('faqmigrations', end($queries), $dbType);
+            }
+        } finally {
+            $this->setDatabaseType($previousDbType);
+        }
+
+        $this->assertCount(count($expectations), $queries);
+    }
+
+    public function testEnsureTableExistsRejectsUnsupportedDatabaseType(): void
+    {
+        $previousDbType = $this->setDatabaseType('unsupported-db');
+
+        try {
+            $this->expectException(\RuntimeException::class);
+            $this->expectExceptionMessage('Unsupported database type: unsupported-db');
+            $this->tracker->ensureTableExists();
+        } finally {
+            $this->setDatabaseType($previousDbType);
+        }
+    }
+
+    public function testGetLastAppliedVersionUsesTopForSqlServer(): void
+    {
+        $rowMock = new stdClass();
+        $rowMock->version = '4.2.1';
+
+        $this->database
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->callback(static fn(string $query): bool => str_starts_with($query, 'SELECT TOP 1 version')))
+            ->willReturn(new stdClass());
+        $this->database->method('fetchObject')->willReturn($rowMock);
+
+        $previousDbType = $this->setDatabaseType('sqlsrv');
+
+        try {
+            $this->assertEquals('4.2.1', $this->tracker->getLastAppliedVersion());
+        } finally {
+            $this->setDatabaseType($previousDbType);
+        }
+    }
+
+    public function testTableExistsUsesDatabaseSpecificCatalogQueries(): void
+    {
+        $expectations = [
+            'mysqli' => 'SHOW TABLES LIKE',
+            'pgsql' => 'pg_catalog.pg_tables',
+            'sqlsrv' => 'FROM sysobjects',
+        ];
+
+        $queries = [];
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): stdClass {
+                $queries[] = $query;
+                return new stdClass();
+            });
+        $this->database->method('numRows')->willReturn(1);
+
+        $previousDbType = $this->setDatabaseType('sqlite3');
+
+        try {
+            foreach ($expectations as $dbType => $fragment) {
+                $this->setDatabaseType($dbType);
+                $this->assertTrue($this->tracker->tableExists());
+                $this->assertStringContainsString($fragment, end($queries), $dbType);
+            }
+        } finally {
+            $this->setDatabaseType($previousDbType);
+        }
+    }
+
+    public function testTableExistsRejectsUnsupportedDatabaseType(): void
+    {
+        $previousDbType = $this->setDatabaseType('unsupported-db');
+
+        try {
+            $this->expectException(\RuntimeException::class);
+            $this->expectExceptionMessage('Unsupported database type: unsupported-db');
+            $this->tracker->tableExists();
+        } finally {
+            $this->setDatabaseType($previousDbType);
+        }
+    }
+
     /**
      * tableExists() dispatches on the Database::getType() static, which these mock-based
      * tests cannot rely on being set by earlier tests in the same process. Returns the

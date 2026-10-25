@@ -216,4 +216,60 @@ final class PushControllerTest extends TestCase
     {
         unset($_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)]);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testGenerateVapidKeysReturnsInternalServerErrorWhenStoringTheKeysFails(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $logger = $this->createMock(\Monolog\Logger::class);
+        $logger
+            ->expects($this->once())
+            ->method('error')
+            ->with($this->stringContains('VAPID key generation failed: storage unavailable'), $this->anything());
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getTemplateSet')->willReturn('default');
+        $configuration->method('getLogger')->willReturn($logger);
+        $configuration->method('update')->willThrowException(new \RuntimeException('storage unavailable'));
+
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(fn(string $id): mixed => match ($id) {
+                'phpmyfaq.configuration' => $configuration,
+                'phpmyfaq.user.current_user' => $currentUser,
+                'session' => $session,
+                'phpmyfaq.admin.admin-log' => $this->createStub(\phpMyFAQ\Administration\AdminLog::class),
+                default => null,
+            });
+
+        $request = new Request([], [], [], [], [], [], json_encode(['csrf' => $csrfToken], JSON_THROW_ON_ERROR));
+        $controller = new PushController();
+        $controller->setContainer($container);
+
+        set_error_handler(static function (int $severity, string $message): bool {
+            return $severity === E_WARNING && str_contains($message, 'openssl_pkey_new()');
+        });
+        $response = $controller->generateVapidKeys($request);
+        restore_error_handler();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertFalse($payload['success']);
+        self::assertSame('An internal error occurred', $payload['error']);
+
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
 }

@@ -132,4 +132,77 @@ class RedisSessionHandlerTest extends TestCase
 
         RedisSessionHandler::validateConnection('://');
     }
+
+    public function testValidateConnectionAcceptsServerAnsweringPong(): void
+    {
+        [$process, $port] = $this->startFakeRedisServer("+PONG\r\n");
+
+        try {
+            RedisSessionHandler::validateConnection(sprintf('tcp://127.0.0.1:%d?database=0', $port));
+            $this->addToAssertionCount(1);
+        } finally {
+            proc_close($process);
+        }
+    }
+
+    public function testValidateConnectionRejectsServerNotAnsweringPong(): void
+    {
+        [$process, $port] = $this->startFakeRedisServer("-ERR unknown command\r\n");
+
+        try {
+            $this->expectException(RuntimeException::class);
+            $this->expectExceptionMessage(sprintf('Redis connection failed for 127.0.0.1:%d.', $port));
+            RedisSessionHandler::validateConnection(sprintf('tcp://127.0.0.1:%d', $port));
+        } finally {
+            proc_close($process);
+        }
+    }
+
+    /**
+     * Starts a one-shot TCP server in a child PHP process that answers the first line with $reply.
+     *
+     * @return array{0: resource, 1: int}
+     */
+    private function startFakeRedisServer(string $reply): array
+    {
+        $script = <<<'PHP'
+            $server = stream_socket_server('tcp://127.0.0.1:0', $errno, $errstr);
+            if ($server === false) {
+                fwrite(STDERR, $errstr);
+                exit(1);
+            }
+            $name = stream_socket_get_name($server, false);
+            fwrite(STDOUT, substr($name, strrpos($name, ':') + 1) . "\n");
+            fflush(STDOUT);
+            $connection = stream_socket_accept($server, 10);
+            if ($connection !== false) {
+                fgets($connection);
+                fwrite($connection, $argv[1]);
+                fclose($connection);
+            }
+            fclose($server);
+            PHP;
+
+        $pipes = [];
+        $process = proc_open(
+            [PHP_BINARY, '-r', $script, '--', $reply],
+            [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']],
+            $pipes,
+        );
+        if ($process === false) {
+            static::markTestSkipped('Unable to start the fake Redis server process.');
+        }
+
+        $port = (int) trim((string) fgets($pipes[1]));
+        fclose($pipes[0]);
+        fclose($pipes[1]);
+        fclose($pipes[2]);
+
+        if ($port <= 0) {
+            proc_close($process);
+            static::markTestSkipped('The fake Redis server did not report a port.');
+        }
+
+        return [$process, $port];
+    }
 }

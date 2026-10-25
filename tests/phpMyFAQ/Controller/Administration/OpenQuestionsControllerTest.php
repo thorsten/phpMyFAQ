@@ -144,6 +144,51 @@ final class OpenQuestionsControllerTest extends TestCase
         self::assertStringContainsString('Anna', (string) $response->getContent());
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testHistoryRendersTheRecordedEventsOfAQuestion(): void
+    {
+        $question = $this->createStub(Question::class);
+        $question->method('get')->willReturn(['id' => 7, 'question' => 'Where is the history?']);
+
+        $questionHistory = $this->createStub(QuestionHistoryRepository::class);
+        $questionHistory
+            ->method('getByQuestion')
+            ->willReturn([
+                [
+                    'event_type' => 'submitted',
+                    'user_id' => 3,
+                    'username' => 'Asker',
+                    'faq_id' => 0,
+                    'created' => '202603081000',
+                ],
+                [
+                    'event_type' => 'answered',
+                    'user_id' => 42,
+                    'username' => 'Editor',
+                    'faq_id' => 99,
+                    'created' => '202603091115',
+                ],
+            ]);
+
+        $controller = new OpenQuestionsController($question, $questionHistory);
+        $controller->setContainer($this->createControllerContainer());
+
+        $request = Request::create('https://localhost/admin/questions/history/7');
+        $request->attributes->set('_route', 'admin.questions.history');
+        $response = $controller->history($request, 7);
+
+        $content = (string) $response->getContent();
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('Where is the history?', $content);
+        self::assertStringContainsString('Asker', $content);
+        self::assertStringContainsString('Editor', $content);
+        self::assertStringContainsString('2026-03-08 10:00', $content);
+        self::assertStringContainsString('2026-03-09 11:15', $content);
+        self::assertStringContainsString('99', $content);
+    }
+
     private function createControllerContainer(): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);

@@ -151,4 +151,60 @@ class SessionTest extends TestCase
 
         $this->assertEquals($expectedVisits, $actualVisits);
     }
+
+    public function testGetNumberOfOnlineUsersCountsTrackedSessionsWhenUserTrackingIsEnabled(): void
+    {
+        $this->configurationMock->method('get')->willReturn(true);
+
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains('faqsessions'))
+            ->willReturn(true);
+        $this->databaseMock->method('fetchObject')->willReturn((object) ['cnt' => 3]);
+
+        $this->assertSame(3, $this->session->getNumberOfOnlineUsers());
+    }
+
+    public function testGetNumberOfOnlineUsersCountsLoggedInUsersWhenUserTrackingIsDisabled(): void
+    {
+        $this->configurationMock->method('get')->willReturn(false);
+
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains('faquser'))
+            ->willReturn(true);
+        $this->databaseMock->method('fetchObject')->willReturn((object) ['cnt' => 2]);
+
+        $this->assertSame(2, $this->session->getNumberOfOnlineUsers(300));
+    }
+
+    public function testGetNumberOfOnlineUsersReturnsZeroWhenTheQueryFails(): void
+    {
+        $this->configurationMock->method('get')->willReturn(true);
+        $this->databaseMock->method('query')->willThrowException(new \RuntimeException('database gone'));
+
+        $this->assertSame(0, $this->session->getNumberOfOnlineUsers());
+    }
+
+    public function testGetLast30DaysVisitsIgnoresVisitsOutsideTheRange(): void
+    {
+        $endDate = time();
+        $startDate = $endDate - (29 * 86400);
+
+        $outside = new stdClass();
+        $outside->time = $startDate - (5 * 86400);
+        $inside = new stdClass();
+        $inside->time = $endDate;
+
+        $this->databaseMock->method('query')->willReturn(true);
+        $this->databaseMock->method('fetchObject')->willReturnOnConsecutiveCalls($outside, $inside, false);
+
+        $visits = $this->session->getLast30DaysVisits($endDate);
+
+        self::assertCount(30, $visits);
+        self::assertSame(1, array_sum(array_map(static fn(stdClass $visit): int => $visit->number, $visits)));
+        self::assertSame(1, end($visits)->number);
+    }
 }

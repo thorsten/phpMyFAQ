@@ -5,6 +5,7 @@ namespace phpMyFAQ\EventListener;
 use Monolog\Logger;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
+use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Environment;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -222,5 +223,66 @@ class WebExceptionListenerTest extends TestCase
             sprintf('Oops: %s at %s line %d', $exception->getMessage(), $exception->getFile(), $exception->getLine()),
             $message,
         );
+    }
+
+    public function testForbiddenExceptionIsNotLoggedWhenTheConfigurationServiceIsNotAConfiguration(): void
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('has')->willReturnCallback(static fn(string $id): bool => $id === 'phpmyfaq.configuration');
+        $container->expects($this->once())->method('get')->with('phpmyfaq.configuration')->willReturn(new \stdClass());
+
+        $listener = new WebExceptionListener($container);
+        $event = $this->createEvent(Request::create('/admin/settings.html'), new ForbiddenException('No permission'));
+
+        $listener->onKernelException($event);
+
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $event->getResponse()?->getStatusCode());
+    }
+
+    public function testNotFoundIsRenderedByThePageNotFoundControllerRegisteredInTheContainer(): void
+    {
+        $controller = new class {
+            public function index(Request $request): Response
+            {
+                return new Response('styled 404 for ' . $request->getPathInfo(), Response::HTTP_NOT_FOUND);
+            }
+        };
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('has')->willReturnCallback(static fn(string $id): bool => $id === PageNotFoundController::class);
+        $container->method('get')->willReturn($controller);
+
+        $listener = new WebExceptionListener($container);
+        $request = Request::create('/missing-page.html');
+        $event = $this->createEvent($request, new ResourceNotFoundException('No route'));
+
+        $listener->onKernelException($event);
+
+        $this->assertSame(Response::HTTP_NOT_FOUND, $event->getResponse()?->getStatusCode());
+        $this->assertSame('styled 404 for /missing-page.html', $event->getResponse()?->getContent());
+        $this->assertSame('public.404', $request->attributes->get('_route'));
+    }
+
+    public function testNotFoundFallsBackToThePlainResponseWhenTheControllerReturnsNoResponse(): void
+    {
+        $controller = new class {
+            public function index(Request $request): string
+            {
+                return 'not a response object';
+            }
+        };
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('has')->willReturnCallback(static fn(string $id): bool => $id === PageNotFoundController::class);
+        $container->method('get')->willReturn($controller);
+
+        $listener = new WebExceptionListener($container);
+        $event = $this->createEvent(Request::create('/missing-page.html'), new ResourceNotFoundException('No route'));
+
+        $listener->onKernelException($event);
+
+        $this->assertSame(Response::HTTP_NOT_FOUND, $event->getResponse()?->getStatusCode());
+        $this->assertStringContainsString('Not Found', (string) $event->getResponse()?->getContent());
+        $this->assertStringNotContainsString('not a response object', (string) $event->getResponse()?->getContent());
     }
 }

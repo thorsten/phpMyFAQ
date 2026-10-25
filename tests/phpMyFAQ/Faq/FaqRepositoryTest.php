@@ -628,4 +628,50 @@ class FaqRepositoryTest extends TestCase
             ->setNotes('')
             ->setUpdatedDate(new DateTime());
     }
+
+    public function testFetchAllFaqsDropsMalformedOrderByClauses(): void
+    {
+        $this->seedFaqRecord(id: 5067, solutionId: 7570, question: 'Ordered C');
+        $this->seedFaqRecord(id: 5068, solutionId: 7580, question: 'Ordered D');
+        $condition = ['fd.id' => ['5067', '5068']];
+
+        $malformedClauses = [
+            'fd.id DESC',
+            'ORDER BY fd.unknown_column ASC',
+            'ORDER BY fd.id SIDEWAYS',
+        ];
+        foreach ($malformedClauses as $clause) {
+            $rows = $this->faqRepository->fetchAllFaqs($condition, $clause, -1, [-1], false);
+
+            $this->assertCount(2, $rows, 'The clause is dropped, both rows are returned: ' . $clause);
+        }
+    }
+
+    public function testIsActiveReturnsTrueForActiveNews(): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(
+                "INSERT INTO faqnews (id, lang, header, artikel, datum, active, target) VALUES (6002, 'en', 'Header', 'Body', '20260101000000', 'y', '')",
+            );
+
+        $this->assertTrue($this->faqRepository->isActive(6002, 'en', 'news'));
+    }
+
+    public function testFetchAllFaqsSupportsNullComparisonConditions(): void
+    {
+        $this->seedFaqRecord(id: 5090, solutionId: 7590, question: 'With email');
+
+        $notNull = $this->faqRepository->fetchAllFaqs(
+            ['fd.id' => ['5090'], 'fd.email' => 'IS NOT NULL'],
+            '',
+            -1,
+            [-1],
+            false,
+        );
+        $null = $this->faqRepository->fetchAllFaqs(['fd.id' => ['5090'], 'fd.email' => 'IS NULL'], '', -1, [-1], false);
+
+        $this->assertCount(1, $notNull);
+        $this->assertCount(0, $null);
+    }
 }

@@ -9,6 +9,7 @@ use phpMyFAQ\Attachment\Filesystem\File\EncryptedFile;
 use phpMyFAQ\Attachment\Filesystem\File\VanillaFile;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Storage\StorageException;
 use phpMyFAQ\Storage\StorageInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -631,5 +632,120 @@ class FileTest extends TestCase
         $this->expectExceptionMessage('not 16, 24 or 32 bytes long');
 
         $this->file->testGetFile();
+    }
+
+    public function testSaveDeletesTheAttachmentWhenTheStorageRefusesTheFile(): void
+    {
+        $filePath = vfsStream::url('attachments/refused.txt');
+        file_put_contents($filePath, 'content');
+
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('encrypted')->setValue($this->file, false);
+
+        $mockStorage = $this->createMock(StorageInterface::class);
+        $mockStorage->method('put')->willReturn(false);
+        $mockStorage->expects($this->once())->method('delete')->willReturn(true);
+        new ReflectionClass(File::class)
+            ->getProperty('storage')
+            ->setValue($this->file, $mockStorage);
+
+        $this->mockDb->method('query')->willReturn(true);
+        $this->mockDb->method('fetchArray')->willReturn(['count' => 0]);
+
+        self::assertFalse($this->file->save($filePath));
+    }
+
+    public function testSaveConvertsStorageFailuresIntoAttachmentExceptions(): void
+    {
+        $filePath = vfsStream::url('attachments/failing.txt');
+        file_put_contents($filePath, 'content');
+
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('encrypted')->setValue($this->file, false);
+
+        $mockStorage = $this->createMock(StorageInterface::class);
+        $mockStorage->method('put')->willThrowException(new StorageException('bucket unavailable'));
+        new ReflectionClass(File::class)
+            ->getProperty('storage')
+            ->setValue($this->file, $mockStorage);
+
+        $this->mockDb->method('query')->willReturn(true);
+        $this->mockDb->method('fetchArray')->willReturn(['count' => 0]);
+
+        $this->expectException(AttachmentException::class);
+        $this->expectExceptionMessage('bucket unavailable');
+
+        $this->file->save($filePath);
+    }
+
+    public function testDeleteConvertsStorageFailuresIntoAttachmentExceptions(): void
+    {
+        $mockStorage = $this->createMock(StorageInterface::class);
+        $mockStorage->method('delete')->willThrowException(new StorageException('delete denied'));
+
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('encrypted')->setValue($this->file, false);
+        $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+        $reflection->getProperty('id')->setValue($this->file, 1);
+        new ReflectionClass(File::class)
+            ->getProperty('storage')
+            ->setValue($this->file, $mockStorage);
+
+        $this->mockDb->method('fetchArray')->willReturn(['count' => 0]);
+        $this->mockDb->method('query')->willReturn(true);
+
+        $this->expectException(AttachmentException::class);
+        $this->expectExceptionMessage('delete denied');
+
+        $this->file->delete();
+    }
+
+    public function testGetConvertsStorageFailuresIntoAttachmentExceptions(): void
+    {
+        $mockStorage = $this->createMock(StorageInterface::class);
+        $mockStorage->method('get')->willThrowException(new StorageException('object missing'));
+
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('encrypted')->setValue($this->file, false);
+        $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+        new ReflectionClass(File::class)
+            ->getProperty('storage')
+            ->setValue($this->file, $mockStorage);
+
+        $this->expectException(AttachmentException::class);
+        $this->expectExceptionMessage('object missing');
+
+        $this->file->get();
+    }
+
+    public function testGetFileRefusesEncryptedAttachmentsWithoutAKey(): void
+    {
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('encrypted')->setValue($this->file, true);
+        $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+        $reflection->getProperty('key')->setValue($this->file, null);
+
+        $this->expectException(AttachmentException::class);
+        $this->expectExceptionMessage('Cannot open an encrypted attachment without a key.');
+
+        $this->file->testGetFile();
+    }
+
+    public function testIsStorageOkFallsBackToLocalStorageWithoutABootstrappedConfiguration(): void
+    {
+        $configRef = new ReflectionClass(Configuration::class);
+        $configProp = $configRef->getProperty('configuration');
+        $previousConfig = $configProp->getValue(null);
+        $configProp->setValue(null, null);
+
+        try {
+            $reflection = new ReflectionClass($this->file);
+            $reflection->getProperty('encrypted')->setValue($this->file, false);
+            $reflection->getProperty('realHash')->setValue($this->file, 'missing-storage-hash-123456789');
+
+            self::assertFalse($this->file->isStorageOk());
+        } finally {
+            $configProp->setValue(null, $previousConfig);
+        }
     }
 }

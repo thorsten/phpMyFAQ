@@ -11,6 +11,8 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -204,5 +206,37 @@ class SetupControllerTest extends TestCase
         $response = $controller->render('@setup/index.twig', []);
 
         $this->assertInstanceOf(Response::class, $response);
+    }
+
+    /**
+     * An administrator who is still logged in through the remember-me cookie does not need the update token.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateSkipsTheTokenForALoggedInAdministrator(): void
+    {
+        $anonymousContent = (string) new SetupController()->update(new Request())->getContent();
+        $this->assertStringContainsString('Update token required', $anonymousContent);
+
+        $this->dbHandle->query(sprintf(
+            "UPDATE faquser SET remember_me = '%s', remember_me_expires = %d WHERE user_id = 1",
+            hash('sha256', 'remember-me-token'),
+            time() + 3600,
+        ));
+        $_COOKIE[UserSession::COOKIE_NAME_REMEMBER_ME] = 'remember-me-token';
+        $_SERVER['REQUEST_TIME'] = time();
+
+        try {
+            $response = new SetupController()->update(new Request());
+        } finally {
+            unset(
+                $_COOKIE[UserSession::COOKIE_NAME_REMEMBER_ME],
+                $_SESSION[CurrentUser::SESSION_CURRENT_USER],
+                $_SESSION[CurrentUser::SESSION_ID_TIMESTAMP],
+            );
+        }
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertStringNotContainsString('Update token required', (string) $response->getContent());
     }
 }

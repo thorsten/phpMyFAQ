@@ -192,4 +192,98 @@ class DeepLTranslationProviderTest extends TestCase
         $provider = new DeepLTranslationProvider($this->configuration, $httpClient);
         $provider->translate('Hallo', 'de', 'en', false);
     }
+
+    public function testTranslateThrowsExceptionOnApiError(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['translation.deeplApiKey',     'test-api-key'],
+                ['translation.deeplUseFreeApi', true],
+            ]);
+
+        $httpClient = new MockHttpClient(new MockResponse('', ['http_code' => 403]));
+        $provider = new DeepLTranslationProvider($this->configuration, $httpClient);
+
+        $this->expectException(ApiException::class);
+        $this->expectExceptionMessage('DeepL API error:');
+
+        $provider->translate('Hello', 'en', 'de', false);
+    }
+
+    public function testTranslateBatchWithoutApiKey(): void
+    {
+        $this->configuration->expects($this->once())->method('get')->with('translation.deeplApiKey')->willReturn('');
+
+        $httpClient = new MockHttpClient();
+        $provider = new DeepLTranslationProvider($this->configuration, $httpClient);
+
+        $this->expectException(ApiException::class);
+        $this->expectExceptionMessage('DeepL API key not configured');
+
+        $provider->translateBatch(['Hello'], 'en', 'de', false);
+    }
+
+    public function testTranslateBatchThrowsExceptionOnTransportError(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['translation.deeplApiKey',     'test-api-key'],
+                ['translation.deeplUseFreeApi', true],
+            ]);
+
+        $httpClient = new MockHttpClient(new MockResponse('', ['error' => 'Connection refused']));
+        $provider = new DeepLTranslationProvider($this->configuration, $httpClient);
+
+        $this->expectException(ApiException::class);
+        $this->expectExceptionMessage('DeepL API error: Connection refused');
+
+        $provider->translateBatch(['Hello', 'World'], 'en', 'de', false);
+    }
+
+    public function testTranslateBatchWithHtmlPreservation(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['translation.deeplApiKey',     'test-api-key'],
+                ['translation.deeplUseFreeApi', true],
+            ]);
+
+        $responses = [
+            new MockResponse(json_encode(['translations' => [['text' => '##HTML_TAG_0##Hallo##HTML_TAG_1##']]])),
+            new MockResponse(json_encode(['translations' => [['text' => '##HTML_TAG_0##Welt##HTML_TAG_1##']]])),
+        ];
+
+        $httpClient = new MockHttpClient($responses);
+        $provider = new DeepLTranslationProvider($this->configuration, $httpClient);
+
+        $result = $provider->translateBatch(['<p>Hello</p>', '<p>World</p>'], 'en', 'de', true);
+
+        $this->assertEquals(['<p>Hallo</p>', '<p>Welt</p>'], $result);
+        $this->assertSame(2, $httpClient->getRequestsCount());
+    }
+
+    public function testLanguageCodeMappingForPortugueseAndChinese(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['translation.deeplApiKey',     'test-api-key'],
+                ['translation.deeplUseFreeApi', true],
+            ]);
+
+        $requestBodies = [];
+        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use (&$requestBodies) {
+            $requestBodies[] = (string) $options['body'];
+
+            return new MockResponse(json_encode(['translations' => [['text' => 'ok']]]));
+        });
+        $provider = new DeepLTranslationProvider($this->configuration, $httpClient);
+
+        $this->assertSame('ok', $provider->translate('Hello', 'pt', 'zh', false));
+        $this->assertStringContainsString('source_lang=PT-BR', $requestBodies[0]);
+        $this->assertStringContainsString('target_lang=ZH', $requestBodies[0]);
+    }
 }

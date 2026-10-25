@@ -212,6 +212,53 @@ final class QuestionControllerFlowTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testCreateRejectsABodyThatIsNotAJsonObject(): void
+    {
+        $before = $this->getQuestionCount();
+
+        $controller = new QuestionController(
+            $this->createStub(Notification::class),
+            $this->createStub(QuestionHistoryRepository::class),
+        );
+        $controller->setContainer($this->createContainer());
+
+        $response = $controller->create(new Request([], [], [], [], [], [], '[1, 2, 3]'));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(400, $response->getStatusCode());
+        self::assertSame(['stored' => false, 'error' => 'The request body must be a JSON object.'], $payload);
+        self::assertSame($before, $this->getQuestionCount());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateRejectsANonNumericCategoryId(): void
+    {
+        $before = $this->getQuestionCount();
+
+        $controller = new QuestionController(
+            $this->createStub(Notification::class),
+            $this->createStub(QuestionHistoryRepository::class),
+        );
+        $controller->setContainer($this->createContainer());
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'category-id' => 'general',
+            'question' => 'Is this a test question?',
+            'author' => 'Test Author',
+            'email' => 'test@example.com',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(400, $response->getStatusCode());
+        self::assertSame(['stored' => false, 'error' => 'Invalid category id.'], $payload);
+        self::assertSame($before, $this->getQuestionCount());
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testCreateThrowsForInvalidToken(): void
     {
         $_SERVER['HTTP_X_PMF_TOKEN'] = 'invalid-token';

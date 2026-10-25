@@ -140,6 +140,29 @@ class ConfigDirectoryResolverTest extends TestCase
     }
 
     #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testResolveSkipsTheLegacyDirectoryInMultiInstanceMode(): void
+    {
+        define('PMF_MULTI_INSTANCE_CONFIG_DIR', sys_get_temp_dir() . '/pmf-multi-instance');
+
+        ConfigDirectoryResolver::resolve();
+
+        $this->assertTrue(defined('PMF_CONFIG_DIR'));
+        $this->assertFalse(defined('PMF_LEGACY_CONFIG_DIR'));
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testLoadConfigConstantsDoesNothingWithoutAConstantsFileOrLegacyDirectory(): void
+    {
+        $this->assertFileDoesNotExist(PMF_CONFIG_DIR . '/constants.php');
+
+        ConfigDirectoryResolver::loadConfigConstants();
+
+        $this->assertFalse(defined('PMF_LEGACY_CONFIG_DIR'));
+    }
+
+    #[RunInSeparateProcess]
     public function testResolveAttachmentsDirDefinesConstant(): void
     {
         ConfigDirectoryResolver::resolveAttachmentsDir('attachments', '/app');

@@ -20,6 +20,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -1063,5 +1064,333 @@ final class PageControllerTest extends TestCase
         $result = $this->dbHandle->query(sprintf("SELECT content FROM faqcustompages WHERE slug = '%s'", $slug));
 
         return (string) $this->dbHandle->fetchObject($result)->content;
+    }
+
+    /**
+     * Blocks the given statement on the pages table, so the repository reports a failure.
+     */
+    private function blockPageStatement(string $statement): void
+    {
+        $this->dbHandle->query(sprintf(
+            "CREATE TRIGGER block_page_%s BEFORE %s ON faqcustompages BEGIN SELECT RAISE(ABORT, 'blocked'); END",
+            strtolower($statement),
+            $statement,
+        ));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsBadRequestForATranslationWithAMalformedPageId(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'pageId' => '7abc',
+            'pageTitle' => 'Translated page',
+            'slug' => 'translated-page',
+            'content' => 'Inhalt',
+            'authorName' => 'Test Author',
+            'authorEmail' => 'test@example.com',
+            'active' => true,
+            'lang' => 'de',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_page_insertfail'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsBadGatewayWhenTheTranslationCannotBeStored(): void
+    {
+        $pageId = $this->createPageViaController('unit-test-blocked-translation-' . bin2hex(random_bytes(4)));
+        $this->blockPageStatement('INSERT');
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'pageId' => $pageId,
+            'pageTitle' => 'Blockierte Seite',
+            'slug' => 'blockierte-seite-' . $pageId,
+            'content' => 'Inhalt',
+            'authorName' => 'Test Author',
+            'authorEmail' => 'test@example.com',
+            'active' => true,
+            'lang' => 'de',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_page_insertfail'), $payload['error']);
+    }
+
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function jsonActions(): array
+    {
+        return [
+            'delete' => ['delete'],
+            'update' => ['update'],
+            'activate' => ['activate'],
+            'checkSlug' => ['checkSlug'],
+        ];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('jsonActions')]
+    public function testActionReturnsBadRequestForInvalidJson(string $action): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->{$action}(new Request([], [], [], [], [], [], 'invalid json'));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertStringContainsString('Invalid JSON', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsBadGatewayWhenThePageCannotBeDeleted(): void
+    {
+        $pageId = $this->createPageViaController('unit-test-blocked-delete-' . bin2hex(random_bytes(4)));
+        $this->blockPageStatement('DELETE');
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-page');
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => $pageId,
+            'lang' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_page_updatefail'), $payload['error']);
+    }
+
+    /**
+     * @param array<string, mixed> $overrides
+     * @return array<string, mixed>
+     */
+    private function updatePayload(string $token, int $pageId, array $overrides = []): array
+    {
+        return array_replace([
+            'csrfToken' => $token,
+            'id' => $pageId,
+            'pageTitle' => 'Updated page',
+            'slug' => 'updated-page-' . $pageId,
+            'content' => 'Updated content',
+            'authorName' => 'Test Author',
+            'authorEmail' => 'test@example.com',
+            'active' => true,
+            'lang' => 'en',
+        ], $overrides);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsBadRequestForANonNumericPageId(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-page');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode($this->updatePayload(
+            $token,
+            1,
+            ['id' => 'abc'],
+        ), JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_page_updatefail'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateRejectsAnAuthorEmailThatIsNotAnEmailAddress(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-page');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode($this->updatePayload(
+            $token,
+            1,
+            ['authorEmail' => 'not-an-email'],
+        ), JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Missing required field: authorEmail', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsConflictWhenTheSlugBelongsToAnotherPage(): void
+    {
+        $existingSlug = 'unit-test-taken-' . bin2hex(random_bytes(4));
+        $this->createPageViaController($existingSlug);
+        $pageId = $this->createPageViaController('unit-test-renamed-' . bin2hex(random_bytes(4)));
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-page');
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode($this->updatePayload(
+            $token,
+            $pageId,
+            ['slug' => $existingSlug],
+        ), JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_page_slug_exists'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsBadGatewayWhenThePageCannotBeStored(): void
+    {
+        $pageId = $this->createPageViaController('unit-test-blocked-update-' . bin2hex(random_bytes(4)));
+        $this->blockPageStatement('UPDATE');
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-page');
+        $controller->setContainer($container);
+
+        $response = $controller->update(
+            new Request(
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                json_encode($this->updatePayload($token, $pageId), JSON_THROW_ON_ERROR),
+            ),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_page_updatefail'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateReturnsBadRequestForANonNumericPageId(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'activate-page');
+        $controller->setContainer($container);
+
+        $response = $controller->activate(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => 'abc',
+            'status' => true,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_page_updatefail'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateReturnsBadGatewayWhenTheStatusCannotBeStored(): void
+    {
+        $pageId = $this->createPageViaController('unit-test-blocked-activate-' . bin2hex(random_bytes(4)));
+        $this->blockPageStatement('UPDATE');
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'activate-page');
+        $controller->setContainer($container);
+
+        $response = $controller->activate(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => $pageId,
+            'status' => false,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_page_updatefail'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCheckSlugIgnoresThePageBeingEdited(): void
+    {
+        $slug = 'unit-test-own-slug-' . bin2hex(random_bytes(4));
+        $pageId = $this->createPageViaController($slug);
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-page');
+        $controller->setContainer($container);
+
+        $response = $controller->checkSlug(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'slug' => $slug,
+            'lang' => 'en',
+            'excludeId' => $pageId,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['available']);
     }
 }

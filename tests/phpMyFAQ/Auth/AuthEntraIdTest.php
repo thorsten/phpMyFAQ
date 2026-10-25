@@ -449,4 +449,85 @@ class AuthEntraIdTest extends TestCase
             $reflection->getConstant('ENTRAID_LOGOUT_URL'),
         );
     }
+
+    public function testCreateFailsWhenTheLocalAccountIsNotCreated(): void
+    {
+        $this->oAuthMock->method('getMail')->willReturn('john@example.com');
+
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willReturn(false);
+        $user->expects($this->never())->method('setUserData');
+
+        $auth = $this->createAuthWithUser($user);
+
+        $this->assertFalse($auth->create('john@example.com', ''));
+        $this->assertSame(0, $auth->getAuthenticatedUserId());
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string}>
+     */
+    public static function redactedLoginProvider(): array
+    {
+        return [
+            'mail address keeps its first letter and domain' => ['john@example.com', 'j***@example.com'],
+            'mail address without local part' => ['@example.com', '***@example.com'],
+            'short login is masked completely' => ['ab', '**'],
+            'long login keeps its first three characters' => ['johnny', 'joh…'],
+        ];
+    }
+
+    #[DataProvider('redactedLoginProvider')]
+    public function testCreateLogsARedactedLoginWhenUserCreationThrows(string $login, string $redacted): void
+    {
+        $logger = $this->createMock(Logger::class);
+        $logger
+            ->expects($this->once())
+            ->method('error')
+            ->with(sprintf('Entra ID user creation failed for "%s": database gone', $redacted));
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getLogger')->willReturn($logger);
+
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willThrowException(new \RuntimeException('database gone'));
+
+        $auth = new AuthEntraId($configuration, $this->oAuthMock, static fn(): User => $user);
+
+        $this->assertFalse($auth->create($login, ''));
+    }
+
+    public function testAuthorizeReusesTheStateAndNonceOfTheFirstCall(): void
+    {
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $first = (string) $this->authEntraId->authorize()->headers->get('Location');
+        $second = (string) $this->authEntraId->authorize()->headers->get('Location');
+
+        parse_str((string) parse_url($first, PHP_URL_QUERY), $firstQuery);
+        parse_str((string) parse_url($second, PHP_URL_QUERY), $secondQuery);
+
+        $this->assertMatchesRegularExpression('/^[0-9a-f]{64}$/', $firstQuery['state']);
+        $this->assertSame($firstQuery['state'], $secondQuery['state']);
+        $this->assertSame($firstQuery['nonce'], $secondQuery['nonce']);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testPrivateCreateUserFallsBackToConcreteUser(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getLogger')->willReturn($this->loggerMock);
+        $configuration->method('get')->willReturnCallback(static fn(string $item): mixed => $item
+            === 'security.permLevel'
+                ? 'basic'
+                : null);
+
+        $auth = new AuthEntraId($configuration, $this->oAuthMock);
+
+        $method = new ReflectionClass($auth)->getMethod('createUser');
+
+        $this->assertInstanceOf(User::class, $method->invoke($auth));
+    }
 }

@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(InstanceController::class)]
@@ -217,6 +218,96 @@ final class InstanceControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringNotContainsString('alert-success', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateRejectsInvalidCsrfToken(): void
+    {
+        $controller = new InstanceController(
+            $this->createStub(Instance::class),
+            new TestInstanceClient($this->configuration),
+        );
+        $controller->setContainer($this->createControllerContainer());
+
+        $this->expectException(UnauthorizedHttpException::class);
+
+        $controller->update(new Request([], ['pmf-csrf-token' => 'forged'], ['id' => '1']));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateRendersErrorForInvalidInstanceUrl(): void
+    {
+        $instance = $this->createMock(Instance::class);
+        $instance->method('getAll')->willReturn([$this->createSite(1, 'https://old.example.com', 'demo', 'Demo')]);
+        $instance->method('getInstanceConfig')->willReturn(['isMaster' => false]);
+        $instance->expects($this->never())->method('getConfig');
+
+        $client = new TestInstanceClient($this->configuration);
+        TestInstanceClient::$moveClientFolderCalls = [];
+        $client->currentInstance = (object) ['url' => 'https://old.example.com'];
+
+        $container = $this->createControllerContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-instance');
+
+        $controller = new InstanceController($instance, $client);
+        $controller->setContainer($container);
+
+        $response = $controller->update(
+            new Request(
+                [],
+                ['pmf-csrf-token' => $token],
+                ['id' => '1', 'url' => 'not a url', 'instance' => 'demo', 'comment' => 'Broken'],
+            ),
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('Invalid instance URL.', (string) $response->getContent());
+        self::assertSame([], TestInstanceClient::$moveClientFolderCalls);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReportsDatabaseErrorWhenOriginalUrlCannotBeMoved(): void
+    {
+        $instance = $this->createMock(Instance::class);
+        $instance->method('getAll')->willReturn([$this->createSite(1, 'broken', 'demo', 'Demo')]);
+        $instance->method('getInstanceConfig')->willReturn(['isMaster' => false]);
+        $instance->expects($this->once())->method('getConfig')->with('isMaster')->willReturn(false);
+
+        $client = new TestInstanceClient($this->configuration);
+        TestInstanceClient::$moveClientFolderCalls = [];
+        TestInstanceClient::$deleteClientFolderCalls = [];
+        $client->currentInstance = (object) ['url' => null];
+        $client->updateReturnValue = true;
+
+        $container = $this->createControllerContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-instance');
+
+        $controller = new InstanceController($instance, $client);
+        $controller->setContainer($container);
+
+        $response = $controller->update(
+            new Request(
+                [],
+                ['pmf-csrf-token' => $token],
+                ['id' => '1', 'url' => 'https://new.example.com', 'instance' => 'demo', 'comment' => 'Demo'],
+            ),
+        );
+
+        // The database error is logged, but a successful update still wins the rendered result.
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('alert-success', (string) $response->getContent());
+        self::assertSame([['', 'https://new.example.com']], TestInstanceClient::$moveClientFolderCalls);
+        self::assertSame([''], TestInstanceClient::$deleteClientFolderCalls);
     }
 
     /**

@@ -9,6 +9,7 @@ use phpMyFAQ\Filesystem\Filesystem;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 #[AllowMockObjectsWithoutExpectations]
 class OperationRecorderTest extends TestCase
@@ -46,6 +47,28 @@ class OperationRecorderTest extends TestCase
         $operations = $recorder->getOperations();
 
         $this->assertEquals('Test query', $operations[0]->getDescription());
+    }
+
+    public function testAddSqlForDbTypeRecordsOnlyForMatchingDatabaseType(): void
+    {
+        $databaseReflection = new ReflectionClass(Database::class);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $previousType = $dbTypeProperty->getValue();
+        $dbTypeProperty->setValue(null, 'sqlite3');
+
+        try {
+            $recorder = new OperationRecorder($this->configuration);
+            $result = $recorder
+                ->addSqlForDbType('SELECT 1', 'sqlite3', 'sqlite only')
+                ->addSqlForDbType('SELECT 2', ['mysqli', 'pgsql'])
+                ->addSqlForDbType('SELECT 3', ['sqlsrv', 'sqlite3']);
+        } finally {
+            $dbTypeProperty->setValue(null, $previousType);
+        }
+
+        $this->assertSame($recorder, $result);
+        $this->assertSame(['SELECT 1', 'SELECT 3'], $recorder->getSqlQueries());
+        $this->assertEquals('sqlite only', $recorder->getOperations()[0]->getDescription());
     }
 
     public function testAddConfig(): void
@@ -136,6 +159,32 @@ class OperationRecorderTest extends TestCase
         $this->assertInstanceOf(PermissionRenameOperation::class, $operations[0]);
         $this->assertSame('addfaq', $operations[0]->getOldName());
         $this->assertSame('add_faq', $operations[0]->getNewName());
+    }
+
+    public function testCreateUser(): void
+    {
+        $recorder = new OperationRecorder($this->configuration);
+        $result = $recorder->createUser('migrator', 'secret', 'Migration User', 'migrator@example.com', 42, true);
+
+        $operations = $recorder->getOperations();
+
+        $this->assertSame($recorder, $result);
+        $this->assertCount(1, $operations);
+        $this->assertInstanceOf(UserCreateOperation::class, $operations[0]);
+        $this->assertSame('Create user "migrator" (ID: 42)', $operations[0]->getDescription());
+    }
+
+    public function testInsertFormInput(): void
+    {
+        $recorder = new OperationRecorder($this->configuration);
+        $result = $recorder->insertFormInput(['form_id' => 1, 'input_id' => 9, 'input_label' => 'label']);
+
+        $operations = $recorder->getOperations();
+
+        $this->assertSame($recorder, $result);
+        $this->assertCount(1, $operations);
+        $this->assertInstanceOf(FormInputInsertOperation::class, $operations[0]);
+        $this->assertSame('form_input_insert', $operations[0]->getType());
     }
 
     public function testGetOperationsByType(): void

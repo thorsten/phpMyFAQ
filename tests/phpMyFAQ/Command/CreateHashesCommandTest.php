@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 #[CoversClass(CreateHashesCommand::class)]
@@ -94,5 +95,82 @@ class CreateHashesCommandTest extends TestCase
 
         $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('does not exist', $output->fetch());
+    }
+
+    /**
+     * @throws ExceptionInterface
+     */
+    public function testCommandFailsWhenHashCreationThrows(): void
+    {
+        $system = $this->createMock(System::class);
+        $system
+            ->expects($this->once())
+            ->method('createHashes')
+            ->willThrowException(new \RuntimeException('disk gone'));
+
+        $command = new CreateHashesCommand($system, new Filesystem());
+
+        $input = new ArrayInput(['--root' => PMF_ROOT_DIR]);
+        $output = new BufferedOutput();
+
+        $exitCode = $command->run($input, $output);
+
+        $this->assertSame(Command::FAILURE, $exitCode);
+        $this->assertStringContainsString('Failed to create hashes: disk gone', $output->fetch());
+    }
+
+    /**
+     * @throws ExceptionInterface
+     * @throws \JsonException
+     */
+    public function testCommandCreatesMissingOutputDirectory(): void
+    {
+        $hashes = json_encode(['created' => '2025-01-03T00:00:00Z'], JSON_THROW_ON_ERROR);
+
+        $system = $this->createMock(System::class);
+        $system->expects($this->once())->method('createHashes')->willReturn($hashes);
+
+        $directory = sys_get_temp_dir() . '/pmf-hashes-' . uniqid('', true);
+        $outputPath = $directory . '/hashes.json';
+        $this->assertDirectoryDoesNotExist($directory);
+
+        $command = new CreateHashesCommand($system, new Filesystem());
+
+        try {
+            $exitCode = $command->run(new ArrayInput([
+                '--root' => PMF_ROOT_DIR,
+                '--out' => $outputPath,
+            ]), new BufferedOutput());
+
+            $this->assertSame(Command::SUCCESS, $exitCode);
+            $this->assertFileExists($outputPath);
+            $this->assertSame($hashes, file_get_contents($outputPath));
+        } finally {
+            @unlink($outputPath);
+            @rmdir($directory);
+        }
+    }
+
+    /**
+     * @throws ExceptionInterface
+     */
+    public function testCommandFailsWhenHashesCannotBeWritten(): void
+    {
+        $system = $this->createMock(System::class);
+        $system->expects($this->once())->method('createHashes')->willReturn('{}');
+
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->method('exists')->willReturn(true);
+        $filesystem->method('dumpFile')->willThrowException(new IOException('read-only file system'));
+
+        $command = new CreateHashesCommand($system, $filesystem);
+
+        $input = new ArrayInput(['--root' => PMF_ROOT_DIR, '--out' => sys_get_temp_dir() . '/pmf-unwritable.json']);
+        $output = new BufferedOutput();
+
+        $exitCode = $command->run($input, $output);
+
+        $this->assertSame(Command::FAILURE, $exitCode);
+        $this->assertStringContainsString('Unable to write hashes: read-only file system', $output->fetch());
     }
 }

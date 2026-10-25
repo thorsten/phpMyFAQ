@@ -159,6 +159,37 @@ class UpdateTokenTest extends TestCase
         $updateToken->getOrCreate();
     }
 
+    public function testIsValidRejectsATokenFileWithoutTheExitHeader(): void
+    {
+        file_put_contents(
+            $this->updateToken->getTokenFilePath(),
+            json_encode(['token' => 'abc', 'created' => time()]),
+        );
+
+        $this->assertFalse($this->updateToken->isValid('abc'));
+    }
+
+    public function testIsValidRejectsATokenFileWithoutAToken(): void
+    {
+        file_put_contents(
+            $this->updateToken->getTokenFilePath(),
+            '<?php exit; ?>' . PHP_EOL . json_encode(['token' => '', 'created' => time()]),
+        );
+
+        $this->assertFalse($this->updateToken->isValid(''));
+        $this->assertFalse($this->updateToken->isValid('abc'));
+    }
+
+    public function testIsValidRejectsATokenFileWithoutACreationTime(): void
+    {
+        file_put_contents(
+            $this->updateToken->getTokenFilePath(),
+            '<?php exit; ?>' . PHP_EOL . json_encode(['token' => 'abc', 'created' => 'yesterday']),
+        );
+
+        $this->assertFalse($this->updateToken->isValid('abc'));
+    }
+
     private function writeTokenFile(string $token, int $created): void
     {
         file_put_contents(

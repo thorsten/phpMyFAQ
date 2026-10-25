@@ -992,10 +992,7 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->grantGroupRight(1, 1);
         $this->mediumPermission->setLanguageRestrictions(1, 1, ['fr']);
 
-        $this->assertEqualsCanonicalizing(
-            ['de', 'fr'],
-            $this->mediumPermission->getAllowedLanguagesForRight(1, 1),
-        );
+        $this->assertEqualsCanonicalizing(['de', 'fr'], $this->mediumPermission->getAllowedLanguagesForRight(1, 1));
 
         $this->mediumPermission->deleteGroup(1);
         $this->mediumPermission->setUserLanguageRestrictions(1, 1, []);
@@ -1067,5 +1064,129 @@ class MediumPermissionTest extends TestCase
         $dbTypeProperty = $databaseReflection->getProperty('dbType');
         $dbTypeProperty->setValue(null, 'sqlite3');
         Database::setTablePrefix('');
+    }
+
+    public function testHasPermissionGrantsThroughGroupRightForNonSuperAdmin(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+
+        $this->assertTrue($this->mediumPermission->hasPermission(1, 1));
+        $this->assertTrue($this->mediumPermission->hasPermission(1, PermissionType::USER_ADD));
+        $this->assertFalse($this->mediumPermission->hasPermission(1, 999));
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
+        $this->configuration->getDb()->query('INSERT INTO faquser_right (user_id, right_id) VALUES (1, 1)');
+    }
+
+    public function testAddGroupReturnsZeroWhenRepositoryInsertFails(): void
+    {
+        $repository = $this->createStub(MediumPermissionRepository::class);
+        $repository->method('getGroupId')->willReturn(0);
+        $repository->method('nextGroupId')->willReturn(7);
+        $repository->method('addGroup')->willReturn(false);
+        $this->injectMediumRepository($repository);
+
+        $this->assertSame(0, $this->mediumPermission->addGroup(['name' => 'FailingGroup']));
+    }
+
+    public function testDeleteGroupReturnsFalseWhenMembershipsCannotBeDeleted(): void
+    {
+        $repository = $this->createStub(MediumPermissionRepository::class);
+        $repository->method('deleteGroup')->willReturn(true);
+        $repository->method('deleteGroupMemberships')->willReturn(false);
+        $this->injectMediumRepository($repository);
+
+        $this->assertFalse($this->mediumPermission->deleteGroup(1));
+    }
+
+    public function testGetAllGroupsOptionsSkipsThePseudoGroupMinusOne(): void
+    {
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->dbHandle->query(
+            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (-1, 'Pseudo', 'Test', 0)",
+        );
+
+        $user = new CurrentUser($this->configuration);
+        $user->getUserById(1);
+
+        $options = $this->mediumPermission->getAllGroupsOptions([], $user);
+
+        $this->assertStringNotContainsString('value="-1"', $options);
+        $this->assertStringContainsString('value="1"', $options);
+
+        // Cleanup
+        $this->mediumPermission->deleteGroup(1);
+        $this->dbHandle->query('DELETE FROM faqgroup WHERE group_id = -1');
+    }
+
+    public function testGetAllGroupsReturnsOnlyOwnGroupsWithoutCategoryRestrictions(): void
+    {
+        $this->configuration->set('main.enableCategoryRestrictions', 'false');
+        $this->mediumPermission->addGroup(['name' => 'OwnGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addGroup(['name' => 'OtherGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (2, 1)');
+
+        $user = $this->createStub(CurrentUser::class);
+        $user->method('getUserId')->willReturn(2);
+        $user->method('isSuperAdmin')->willReturn(false);
+
+        try {
+            $this->assertSame([1], $this->mediumPermission->getAllGroups($user));
+        } finally {
+            $this->configuration->set('main.enableCategoryRestrictions', 'true');
+            $this->mediumPermission->deleteGroup(1);
+            $this->mediumPermission->deleteGroup(2);
+        }
+    }
+
+    public function testGetUserRightsCountCountsAllUserRights(): void
+    {
+        $user = new CurrentUser($this->configuration);
+        $user->getUserById(1);
+
+        $this->assertSame(
+            count($this->mediumPermission->getAllUserRights(1)),
+            $this->mediumPermission->getUserRightsCount($user),
+        );
+        $this->assertGreaterThan(0, $this->mediumPermission->getUserRightsCount($user));
+    }
+
+    public function testAddToGroupRejectsUnknownGroup(): void
+    {
+        $this->assertFalse($this->mediumPermission->addToGroup(1, 999));
+    }
+
+    public function testHasPermissionForCategoryGrantsThroughDirectUserRight(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+
+        $this->assertTrue($this->mediumPermission->hasPermissionForCategory(1, 1, 10));
+        $this->assertFalse($this->mediumPermission->hasPermissionForCategory(1, 999, 10));
+
+        // Cleanup
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSuperAdminBypassesCategoryAndLanguageRestrictions(): void
+    {
+        $this->assertNull($this->mediumPermission->getAllowedCategoriesForRight(1, 999));
+        $this->assertNull($this->mediumPermission->getAllowedLanguagesForRight(1, 999));
+        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 999, 'en'));
+    }
+
+    private function injectMediumRepository(MediumPermissionRepository $repository): void
+    {
+        $property = new \ReflectionProperty(MediumPermission::class, 'mediumRepository');
+        $property->setValue($this->mediumPermission, $repository);
     }
 }

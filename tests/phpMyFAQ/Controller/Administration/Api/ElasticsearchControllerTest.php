@@ -613,4 +613,85 @@ final class ElasticsearchControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
+
+    /**
+     * Registers an Elasticsearch client whose transport talks to a mocked PSR-18 HTTP client
+     * (the client class is final).
+     */
+    private function registerElasticsearchClient(\GuzzleHttp\Psr7\Response $response): \Psr\Http\Client\ClientInterface&\PHPUnit\Framework\MockObject\MockObject
+    {
+        $httpClient = $this->createMock(\Psr\Http\Client\ClientInterface::class);
+        $httpClient->expects($this->once())->method('sendRequest')->willReturn($response);
+        $nodePool = $this->createStub(\Elastic\Transport\NodePool\NodePoolInterface::class);
+        $nodePool->method('nextNode')->willReturn(new \Elastic\Transport\NodePool\Node('http://localhost:9200'));
+
+        $clientClass = new \ReflectionClass(\Elastic\Elasticsearch\Client::class);
+        $client = $clientClass->newInstanceWithoutConstructor();
+        $clientClass->getProperty('namespace')->setValue($client, []);
+        $clientClass->getProperty('transport')->setValue(
+            $client,
+            new \Elastic\Transport\Transport($httpClient, $nodePool, new \Psr\Log\NullLogger()),
+        );
+        $clientClass->getProperty('logger')->setValue($client, new \Psr\Log\NullLogger());
+        $clientClass->getProperty('responseException')->setValue($client, true);
+        $clientClass->getProperty('elasticMetaHeader')->setValue($client, false);
+        $clientClass->getProperty('async')->setValue($client, false);
+
+        $elasticsearchConfiguration = $this->createStub(\phpMyFAQ\Configuration\ElasticsearchConfiguration::class);
+        $elasticsearchConfiguration->method('getIndex')->willReturn('phpmyfaq-test');
+
+        $this->configuration->setElasticsearch($client);
+        $this->configuration->setElasticsearchConfig($elasticsearchConfiguration);
+
+        return $httpClient;
+    }
+
+    private function elasticsearchResponse(int $statusCode, array $body): \GuzzleHttp\Psr7\Response
+    {
+        return new \GuzzleHttp\Psr7\Response(
+            $statusCode,
+            ['Content-Type' => 'application/json', 'X-Elastic-Product' => 'Elasticsearch'],
+            json_encode($body, JSON_THROW_ON_ERROR),
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatisticsReturnsTheIndexStatistics(): void
+    {
+        $this->registerElasticsearchClient($this->elasticsearchResponse(200, [
+            'indices' => ['phpmyfaq-test' => ['total' => ['docs' => ['count' => 3]]]],
+        ]));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->statistics();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('phpmyfaq-test', $payload['index']);
+        self::assertSame(3, $payload['stats']['indices']['phpmyfaq-test']['total']['docs']['count']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatisticsReturnsBadRequestWhenTheIndexIsMissing(): void
+    {
+        $this->registerElasticsearchClient($this->elasticsearchResponse(404, [
+            'error' => ['type' => 'index_not_found_exception', 'reason' => 'no such index [phpmyfaq-test]'],
+            'status' => 404,
+        ]));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->statistics();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertStringContainsString('no such index', $payload['error']);
+    }
 }

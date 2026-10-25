@@ -404,4 +404,150 @@ final class ImageControllerTest extends TestCase
         $remainingFiles = glob($uploadDir . '*_evil.jpg');
         self::assertEmpty($remainingFiles);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadSkipsASingleInvalidFile(): void
+    {
+        $controller = new ImageController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'pmf-csrf-token');
+        $controller->setContainer($container);
+
+        $invalidFile = $this->createMock(UploadedFile::class);
+        $invalidFile->method('isValid')->willReturn(false);
+        $invalidFile->expects($this->never())->method('move');
+
+        $request = new Request(['csrf' => $token]);
+        $request->files->set('files', $invalidFile);
+
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        self::assertSame([], $payload['data']['files']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadAcceptsASafeSvg(): void
+    {
+        $uploadDir = PMF_CONTENT_DIR . '/user/images/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0o755, true);
+        }
+
+        $controller = new ImageController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'pmf-csrf-token');
+        $controller->setContainer($container);
+
+        $tmpFile = tempnam(sys_get_temp_dir(), 'pmf-test-svg-');
+        self::assertNotFalse($tmpFile);
+        file_put_contents($tmpFile, '<svg xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1"/></svg>');
+        $file = new UploadedFile($tmpFile, 'safe.svg', 'image/svg+xml', null, true);
+
+        $request = new Request(['csrf' => $token]);
+        $request->files->set('files', [$file]);
+
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $uploadedFiles = glob($uploadDir . '*_safe.svg');
+        foreach ($uploadedFiles as $uploadedFile) {
+            @unlink($uploadedFile);
+        }
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertCount(1, $payload['data']['files']);
+        self::assertStringEndsWith('_safe.svg', $payload['data']['files'][0]);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadSanitizesAnSvgWithAnEventHandler(): void
+    {
+        $uploadDir = PMF_CONTENT_DIR . '/user/images/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0o755, true);
+        }
+
+        $controller = new ImageController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'pmf-csrf-token');
+        $controller->setContainer($container);
+
+        $tmpFile = tempnam(sys_get_temp_dir(), 'pmf-test-svg-');
+        self::assertNotFalse($tmpFile);
+        file_put_contents(
+            $tmpFile,
+            '<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"><rect width="1" height="1"/></svg>',
+        );
+        $file = new UploadedFile($tmpFile, 'onload.svg', 'image/svg+xml', null, true);
+
+        $request = new Request(['csrf' => $token]);
+        $request->files->set('files', [$file]);
+
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $uploadedFiles = glob($uploadDir . '*_onload.svg');
+        $storedContent = $uploadedFiles === [] ? '' : (string) file_get_contents($uploadedFiles[0]);
+        foreach ($uploadedFiles as $uploadedFile) {
+            @unlink($uploadedFile);
+        }
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertCount(1, $payload['data']['files']);
+        self::assertStringNotContainsString('onload', $storedContent);
+        self::assertStringContainsString('<svg', $storedContent);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadDeletesAnSvgThatCannotBeSanitized(): void
+    {
+        $uploadDir = PMF_CONTENT_DIR . '/user/images/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0o755, true);
+        }
+
+        $controller = new ImageController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'pmf-csrf-token');
+        $controller->setContainer($container);
+
+        // The only <svg> element lives inside a script block: stripping the
+        // script leaves no SVG behind, so sanitizing fails and the file is removed.
+        $tmpFile = tempnam(sys_get_temp_dir(), 'pmf-test-svg-');
+        self::assertNotFalse($tmpFile);
+        file_put_contents(
+            $tmpFile,
+            "<?xml version=\"1.0\"?>\n<script><svg xmlns=\"http://www.w3.org/2000/svg\"></svg></script>",
+        );
+        $file = new UploadedFile($tmpFile, 'evil.svg', 'image/svg+xml', null, true);
+
+        $request = new Request(['csrf' => $token]);
+        $request->files->set('files', [$file]);
+
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([], $payload['data']['files']);
+        self::assertEmpty(glob($uploadDir . '*_evil.svg'));
+    }
 }

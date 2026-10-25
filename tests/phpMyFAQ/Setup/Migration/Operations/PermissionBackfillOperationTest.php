@@ -303,6 +303,118 @@ class PermissionBackfillOperationTest extends TestCase
         );
     }
 
+    public function testDoesNothingWithoutATargetAudience(): void
+    {
+        $this->dbHandle->query('DELETE FROM faquser_right');
+
+        $operation = new PermissionBackfillOperation(
+            $this->configuration,
+            PermissionType::FAQS_VIEW->value,
+            'Right to view FAQs',
+        );
+
+        self::assertTrue($operation->execute());
+        self::assertFalse($this->userHasRight(1, PermissionType::FAQS_VIEW->value));
+    }
+
+    public function testMirrorsUserLanguageRestrictions(): void
+    {
+        $this->dbHandle->query("DELETE FROM faqright WHERE name = 'faq_publish'");
+        $this->dbHandle->query('DELETE FROM faquser_right');
+        $approveRightId = $this->seedApproveRight();
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d), (2, %d)',
+            $approveRightId,
+            $approveRightId,
+        ));
+        new LanguagePermissionRepository($this->configuration)
+            ->setUserLanguageRestrictions(1, $approveRightId, ['de']);
+
+        $operation = new PermissionBackfillOperation(
+            $this->configuration,
+            'faq_publish',
+            'Right to publish FAQs',
+            mirrorFrom: 'approverec',
+            mirrorRestrictions: true,
+        );
+
+        self::assertTrue($operation->execute());
+
+        $publishRightId = $this->rightId('faq_publish');
+        $languageRepository = new LanguagePermissionRepository($this->configuration);
+        self::assertSame(['de'], $languageRepository->getUserLanguageRestrictions(1, $publishRightId));
+        self::assertSame([], $languageRepository->getUserLanguageRestrictions(2, $publishRightId));
+        self::assertTrue($this->userHasRight(2, 'faq_publish'));
+    }
+
+    public function testFailsWhenTheRightCannotBeCreated(): void
+    {
+        $this->dbHandle->query("DELETE FROM faqright WHERE name = 'faq_publish'");
+        $this->dbHandle->query(
+            "CREATE TRIGGER block_right BEFORE INSERT ON faqright BEGIN SELECT RAISE(ABORT, 'blocked'); END",
+        );
+
+        $operation = new PermissionBackfillOperation(
+            $this->configuration,
+            'faq_publish',
+            'Right to publish FAQs',
+            grantToAllUsers: true,
+        );
+
+        self::assertFalse($operation->execute());
+        self::assertSame(0, $this->countRights('faq_publish'));
+    }
+
+    public function testFailsWhenAUserGrantCannotBePersisted(): void
+    {
+        $this->dbHandle->query('DELETE FROM faquser_right');
+        $this->dbHandle->query(
+            "CREATE TRIGGER block_user_right BEFORE INSERT ON faquser_right BEGIN SELECT RAISE(ABORT, 'no'); END",
+        );
+
+        $operation = new PermissionBackfillOperation(
+            $this->configuration,
+            PermissionType::FAQS_VIEW->value,
+            'Right to view FAQs',
+            grantToAllUsers: true,
+        );
+
+        self::assertFalse($operation->execute());
+        self::assertFalse($this->userHasRight(1, PermissionType::FAQS_VIEW->value));
+    }
+
+    public function testFailsWhenAGroupGrantCannotBePersisted(): void
+    {
+        $this->createGroup(7);
+        $this->dbHandle->query(
+            "CREATE TRIGGER block_group_right BEFORE INSERT ON faqgroup_right BEGIN SELECT RAISE(ABORT, 'no'); END",
+        );
+
+        $operation = new PermissionBackfillOperation(
+            $this->configuration,
+            PermissionType::FAQS_VIEW->value,
+            'Right to view FAQs',
+            grantToAllGroups: true,
+        );
+
+        self::assertFalse($operation->execute());
+        self::assertFalse($this->groupHasRight(7, PermissionType::FAQS_VIEW->value));
+    }
+
+    public function testFailsWhenTheDatabaseIsUnavailable(): void
+    {
+        $operation = new PermissionBackfillOperation(
+            $this->configuration,
+            PermissionType::FAQS_VIEW->value,
+            'Right to view FAQs',
+            grantToAllUsers: true,
+        );
+
+        $this->dbHandle->close();
+
+        self::assertFalse($operation->execute());
+    }
+
     /**
      * approverec is no longer seeded by DefaultDataSeeder (Task 7 retired it), but these tests
      * use it as a stand-in source right to exercise the generic mirrorFrom mechanism, so they

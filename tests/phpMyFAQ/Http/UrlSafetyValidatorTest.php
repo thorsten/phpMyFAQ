@@ -153,4 +153,13 @@ final class UrlSafetyValidatorTest extends TestCase
         self::assertFalse($validator->isPublicHost('127.0.0.1'));
         self::assertFalse($validator->isPublicHost('fe80::1'));
     }
+
+    public function testDefaultResolverResolvesHostNamesThroughDns(): void
+    {
+        $validator = new UrlSafetyValidator();
+
+        // "localhost" is answered by the local resolver, so no external DNS traffic is needed
+        self::assertTrue($validator->isPublicHost('localhost', allowPrivateNetworks: true));
+        self::assertFalse($validator->isPublicHost('localhost'));
+    }
 }

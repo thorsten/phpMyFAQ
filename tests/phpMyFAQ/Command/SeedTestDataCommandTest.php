@@ -5,21 +5,23 @@ declare(strict_types=1);
 namespace phpMyFAQ\Command;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\PdoSqlite;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Language;
+use phpMyFAQ\Plugin\PluginDiscovery;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
-use phpMyFAQ\Database\PdoSqlite;
-use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[CoversClass(SeedTestDataCommand::class)]
 #[UsesClass(\phpMyFAQ\Core\Json::class)]
@@ -245,6 +247,29 @@ class SeedTestDataCommandTest extends TestCase
 
         $this->assertSame(Command::FAILURE, $exitCode);
         $this->assertStringContainsString('No valid locales', $this->commandTester->getDisplay());
+    }
+
+    public function testExecuteReportsSeedingFailuresWithTraceWhenVerbose(): void
+    {
+        // A database that fails on the first purge query makes the seeding run throw.
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $database->method('query')->willThrowException(new \RuntimeException('database is locked'));
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+
+        $reflection = new ReflectionClass(Configuration::class);
+        $reflection->getProperty('configuration')->setValue(null, $configuration);
+
+        $exitCode = $this->commandTester->execute(['--fresh' => true], [
+            'verbosity' => OutputInterface::VERBOSITY_VERBOSE,
+        ]);
+
+        $this->assertSame(Command::FAILURE, $exitCode);
+        $output = $this->commandTester->getDisplay();
+        $this->assertStringContainsString('Seeding failed: database is locked', $output);
+        $this->assertStringContainsString('SeedTestDataCommand', $output, 'The verbose output carries the trace');
     }
 
     private function countSeededFaqs(): int

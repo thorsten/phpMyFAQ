@@ -123,6 +123,112 @@ final class SystemInformationControllerTest extends TestCase
         self::assertStringContainsString('n/a', (string) $response->getContent());
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testIndexShowsTheElasticsearchVersion(): void
+    {
+        $httpClient = $this->enableElasticsearch();
+        $httpClient
+            ->method('sendRequest')
+            ->willReturn($this->elasticsearchResponse(200, ['version' => ['number' => '8.17.3']]));
+
+        $response = $this->createSystemInformationController()->index($this->createSystemRequest());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('8.17.3', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexFallsBackWhenElasticsearchRejectsTheInfoRequest(): void
+    {
+        $httpClient = $this->enableElasticsearch();
+        $httpClient
+            ->method('sendRequest')
+            ->willReturn($this->elasticsearchResponse(401, ['error' => 'security_exception']));
+
+        $response = $this->createSystemInformationController()->index($this->createSystemRequest());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('Elasticsearch Version', (string) $response->getContent());
+        self::assertStringNotContainsString('security_exception', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexShowsTheOpenSearchVersion(): void
+    {
+        $client = $this->createStub(\OpenSearch\Client::class);
+        $client->method('info')->willReturn(['version' => ['number' => '2.19.1']]);
+        $this->configuration->setOpenSearch($client);
+        self::assertTrue($this->configuration->set('search.enableOpenSearch', true));
+
+        $response = $this->createSystemInformationController()->index($this->createSystemRequest());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('2.19.1', (string) $response->getContent());
+    }
+
+    private function createSystemInformationController(): SystemInformationController
+    {
+        $controller = new SystemInformationController(new System());
+        $controller->setContainer($this->createControllerContainer());
+
+        return $controller;
+    }
+
+    private function createSystemRequest(): Request
+    {
+        $request = Request::create('https://localhost/admin/system');
+        $request->server->set('SCRIPT_FILENAME', '/var/www/html/admin/index.php');
+        $request->server->set('SERVER_SOFTWARE', 'PHPUnit Web Server');
+        $request->server->set('DOCUMENT_ROOT', '/var/www/html');
+
+        return $request;
+    }
+
+    /**
+     * Registers an Elasticsearch client that talks to a mocked PSR-18 HTTP client and enables the engine.
+     */
+    private function enableElasticsearch(): \Psr\Http\Client\ClientInterface&\PHPUnit\Framework\MockObject\Stub
+    {
+        $httpClient = $this->createStub(\Psr\Http\Client\ClientInterface::class);
+        $nodePool = $this->createStub(\Elastic\Transport\NodePool\NodePoolInterface::class);
+        $nodePool->method('nextNode')->willReturn(new \Elastic\Transport\NodePool\Node('http://localhost:9200'));
+
+        $clientClass = new \ReflectionClass(\Elastic\Elasticsearch\Client::class);
+        $client = $clientClass->newInstanceWithoutConstructor();
+        $clientClass->getProperty('namespace')->setValue($client, []);
+        $clientClass->getProperty('transport')->setValue(
+            $client,
+            new \Elastic\Transport\Transport($httpClient, $nodePool, new \Psr\Log\NullLogger()),
+        );
+        $clientClass->getProperty('logger')->setValue($client, new \Psr\Log\NullLogger());
+        $clientClass->getProperty('responseException')->setValue($client, true);
+        $clientClass->getProperty('elasticMetaHeader')->setValue($client, false);
+        $clientClass->getProperty('async')->setValue($client, false);
+
+        $this->configuration->setElasticsearch($client);
+        self::assertTrue($this->configuration->set('search.enableElasticsearch', true));
+
+        return $httpClient;
+    }
+
+    /**
+     * @param array<string, mixed> $body
+     */
+    private function elasticsearchResponse(int $statusCode, array $body): \GuzzleHttp\Psr7\Response
+    {
+        return new \GuzzleHttp\Psr7\Response(
+            $statusCode,
+            ['Content-Type' => 'application/json', 'X-Elastic-Product' => 'Elasticsearch'],
+            json_encode($body, JSON_THROW_ON_ERROR),
+        );
+    }
+
     private function createControllerContainer(): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);

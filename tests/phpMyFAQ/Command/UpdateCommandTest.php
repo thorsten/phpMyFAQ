@@ -10,6 +10,7 @@ use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionProperty;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -97,6 +98,24 @@ class UpdateCommandTest extends TestCase
         $this->expectExceptionMessage('Test exception');
 
         $commandTester->execute([]);
+    }
+
+    public function testExecuteReportsAnUpdateRunnerFailureAsError(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('get')->willThrowException(new RuntimeException('configuration unavailable'));
+
+        $command = new UpdateCommand();
+        new ReflectionProperty(UpdateCommand::class, 'configuration')->setValue($command, $configuration);
+
+        $commandTester = new CommandTester($command);
+        $exitCode = $commandTester->execute([]);
+
+        $this->assertSame(Command::FAILURE, $exitCode);
+        $this->assertStringContainsString(
+            'Error during update: configuration unavailable',
+            $commandTester->getDisplay(),
+        );
     }
 
     public function testCommandExtendsSymfonyCommand(): void

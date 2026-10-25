@@ -328,4 +328,103 @@ class WebPushServiceTest extends TestCase
 
         $this->service->sendToUsers([10, 11], "\xB1\x31", 'Body');
     }
+
+    public function testSendToAllLogsErrorWhenSubscriptionContentEncodingIsUnsupported(): void
+    {
+        $keys = $this->generateVapidKeysOrSkip();
+
+        $logger = $this->createMock(Logger::class);
+        $logger
+            ->expects($this->once())
+            ->method('error')
+            ->with($this->stringStartsWith('Web Push notification failed:'));
+
+        $subscription = new PushSubscriptionEntity()
+            ->setId(1)
+            ->setUserId(4)
+            ->setEndpoint('https://push.example.test/subscription')
+            ->setEndpointHash('hash')
+            ->setPublicKey('public')
+            ->setAuthToken('auth')
+            ->setContentEncoding('unsupported-encoding')
+            ->setCreatedAt(new \DateTimeImmutable('2026-03-09 12:00:00'));
+
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['push.enableWebPush', 'true'],
+                ['push.vapidPublicKey', $keys['publicKey']],
+                ['push.vapidPrivateKey', $keys['privateKey']],
+                ['push.vapidSubject', 'mailto:push@example.com'],
+            ]);
+        $this->configuration->method('getDefaultUrl')->willReturn('https://localhost/');
+        $this->configuration->method('getLogger')->willReturn($logger);
+
+        $this->repository->expects($this->once())->method('getAll')->willReturn([$subscription]);
+        $this->repository->expects($this->never())->method('deleteByEndpoint');
+
+        $this->service->sendToAll('Title', 'Body', '/faq', 'tag');
+    }
+
+    public function testSendToAllLogsErrorWhenSubscriptionKeyCannotBeUsedForEncryption(): void
+    {
+        $keys = $this->generateVapidKeysOrSkip();
+
+        $logger = $this->createMock(Logger::class);
+        $logger
+            ->expects($this->once())
+            ->method('error')
+            ->with($this->stringStartsWith('Web Push notification failed:'));
+
+        $subscription = new PushSubscriptionEntity()
+            ->setId(1)
+            ->setUserId(4)
+            ->setEndpoint('https://push.example.test/subscription')
+            ->setEndpointHash('hash')
+            ->setPublicKey('not-a-p256dh-key')
+            ->setAuthToken('auth')
+            ->setContentEncoding(null)
+            ->setCreatedAt(new \DateTimeImmutable('2026-03-09 12:00:00'));
+
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['push.enableWebPush', 'true'],
+                ['push.vapidPublicKey', $keys['publicKey']],
+                ['push.vapidPrivateKey', $keys['privateKey']],
+                ['push.vapidSubject', ''],
+            ]);
+        $this->configuration->method('getAdminEmail')->willReturn('admin@example.com');
+        $this->configuration->method('getDefaultUrl')->willReturn('https://localhost/');
+        $this->configuration->method('getLogger')->willReturn($logger);
+
+        $this->repository->expects($this->once())->method('getAll')->willReturn([$subscription]);
+        $this->repository->expects($this->never())->method('deleteByEndpoint');
+
+        $this->service->sendToAll('Title', 'Body', '/faq', 'tag');
+    }
+
+    /**
+     * @return array{publicKey: string, privateKey: string}
+     */
+    private function generateVapidKeysOrSkip(): array
+    {
+        $warnings = [];
+        set_error_handler(static function (int $severity, string $message) use (&$warnings): bool {
+            $warnings[] = $message;
+            return true;
+        });
+
+        try {
+            $keys = WebPushService::generateVapidKeys();
+        } finally {
+            restore_error_handler();
+        }
+
+        if ($warnings !== [] || $keys['publicKey'] === '' || $keys['privateKey'] === '') {
+            $this->markTestSkipped('VAPID key generation is not available in this environment.');
+        }
+
+        return $keys;
+    }
 }

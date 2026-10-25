@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace phpMyFAQ;
 
 use LogicException;
+use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Translation\Provider\DeepLTranslationProvider;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface as ServiceContainerInterface;
+use Symfony\Component\HttpClient\MockHttpClient;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversTrait(ConfigurationMethodsTrait::class)]
@@ -226,22 +230,94 @@ final class ConfigurationMethodsTraitTest extends TestCase
         $this->assertNull($this->configuration->getTranslationProvider());
     }
 
+    public function testGetAllKeepsStoredNullValuesAsNull(): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query("INSERT INTO faqconfig (config_name, config_value) VALUES ('test.nullValue', NULL)");
+
+        $all = $this->reloadedConfiguration()->getAll();
+
+        $this->assertArrayHasKey('test.nullValue', $all);
+        $this->assertNull($all['test.nullValue']);
+    }
+
+    public function testSignInWithOidcFlagReadsTheStoredSetting(): void
+    {
+        $this->assertFalse($this->configuration->isSignInWithOidcActive());
+
+        $this->configuration->set('oidc.enable', 'true');
+
+        $this->assertTrue($this->configuration->isSignInWithOidcActive());
+    }
+
+    public function testTranslationProviderIsCreatedLazilyFromTheContainerHttpClient(): void
+    {
+        $this->configuration->set('translation.provider', 'deepl');
+
+        $container = $this->createStub(ServiceContainerInterface::class);
+        $container->method('has')->willReturnCallback(static fn(string $id): bool => $id === 'phpmyfaq.http-client');
+        $container->method('get')->willReturn(new MockHttpClient());
+        $this->configuration->setContainer($container);
+
+        $provider = $this->configuration->getTranslationProvider();
+
+        $this->assertInstanceOf(DeepLTranslationProvider::class, $provider);
+        $this->assertSame($provider, $this->configuration->getTranslationProvider(), 'The provider is created once');
+    }
+
+    public function testTranslationProviderStaysUnsetWhenTheContainerHasNoUsableHttpClient(): void
+    {
+        $this->configuration->set('translation.provider', 'deepl');
+
+        // No container at all: nothing to build the provider from
+        $this->assertNull($this->configuration->getTranslationProvider());
+
+        $container = $this->createStub(ServiceContainerInterface::class);
+        $container->method('has')->willReturn(true);
+        $container->method('get')->willReturn(new \stdClass());
+        $this->configuration->setContainer($container);
+
+        $this->assertNull($this->configuration->getTranslationProvider());
+    }
+
+    public function testTranslationProviderInitializationFailureIsLoggedAndYieldsNull(): void
+    {
+        $this->configuration->set('translation.provider', 'deepl');
+
+        $container = $this->createStub(ServiceContainerInterface::class);
+        $container->method('has')->willReturn(true);
+        $container->method('get')->willThrowException(new \RuntimeException('service container broken'));
+        $this->configuration->setContainer($container);
+
+        $testHandler = new TestHandler();
+        $this->configuration->getLogger()->pushHandler($testHandler);
+
+        $this->assertNull($this->configuration->getTranslationProvider());
+        $this->assertTrue($testHandler->hasErrorThatContains(
+            'Failed to initialize translation provider: service container broken',
+        ));
+    }
+
     public function testReplaceMainReferenceUrlRewritesFaqContent(): void
     {
         $db = $this->configuration->getDb();
         $db->query(
-            "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, "
+            'INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, '
             . "comment, updated, date_start, date_end, notes) VALUES (9001, 'en', 10001, 0, 'published', 0, '', 'Moved', "
             . "'<img src=\"https://old.example.org/images/a.png\"> and https://old.example.org/faq/1', 'Author', "
             . "'author@example.org', 'y', '20250101120000', '00000000000000', '99991231235959', '')",
         );
         $db->query(
-            "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, "
+            'INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, '
             . "comment, updated, date_start, date_end, notes) VALUES (9002, 'en', 10002, 0, 'published', 0, '', 'Untouched', "
             . "'No links here', 'Author', 'author@example.org', 'y', '20250101120000', '00000000000000', '99991231235959', '')",
         );
 
-        $this->assertTrue($this->configuration->replaceMainReferenceUrl('https://old.example.org', 'https://new.example.org'));
+        $this->assertTrue($this->configuration->replaceMainReferenceUrl(
+            'https://old.example.org',
+            'https://new.example.org',
+        ));
 
         $result = $db->query('SELECT id, content FROM faqdata WHERE id IN (9001, 9002) ORDER BY id');
         $contents = [];

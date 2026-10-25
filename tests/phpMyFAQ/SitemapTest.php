@@ -324,6 +324,18 @@ class SitemapTest extends TestCase
         $this->assertTrue($hasSampleQuestion, 'Expected to find "sample question" in results');
     }
 
+    public function testGetFaqsFromLetterWithMediumPermLevelFiltersByGroup(): void
+    {
+        $this->configuration->set('security.permLevel', 'medium');
+        $sitemap = new Sitemap($this->configuration);
+        $sitemap->setUser(-1);
+        $sitemap->setGroups([-1]);
+
+        $questions = array_map(static fn(stdClass $faq): string => $faq->question, $sitemap->getFaqsFromLetter('S'));
+
+        $this->assertContains('sample question', $questions);
+    }
+
     public function testGetFaqsFromLetterWithMarkdownEnabled(): void
     {
         $this->configuration->set('main.enableMarkdownEditor', true);

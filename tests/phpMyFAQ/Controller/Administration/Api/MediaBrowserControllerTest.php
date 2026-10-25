@@ -234,4 +234,83 @@ final class MediaBrowserControllerTest extends TestCase
 
         return $container;
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexReturnsBadRequestWhenTheImagesDirectoryIsMissing(): void
+    {
+        $imagesDir = PMF_CONTENT_DIR . '/user/images';
+        $parkedDir = $imagesDir . '.pmf-missing-' . bin2hex(random_bytes(4));
+        self::assertTrue(rename($imagesDir, $parkedDir));
+
+        try {
+            $controller = new MediaBrowserController();
+            $controller->setContainer($this->createAuthenticatedContainer());
+
+            $response = $controller->index(new Request([], [], [], [], [], [], json_encode([
+                'action' => 'browse',
+            ], JSON_THROW_ON_ERROR)));
+        } finally {
+            rename($parkedDir, $imagesDir);
+        }
+
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(sprintf(Translation::getString('ad_dir_missing'), '/images'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexReturnsUnauthorizedForFileRemoveWithAnInvalidCsrfToken(): void
+    {
+        $controller = new MediaBrowserController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->index(new Request([], [], [], [], [], [], json_encode([
+            'action' => 'fileRemove',
+            'name' => 'anything.jpg',
+            'csrfToken' => 'invalid-token',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexRejectsFileRemoveForAFileOutsideTheImagesDirectory(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        Token::resetInstanceForTests();
+        $csrfToken = md5(base64_encode(random_bytes(32)));
+        $tokenPage = 'media-browser';
+        $tokenReflection = new \ReflectionClass(Token::class);
+        $storedToken = $tokenReflection->newInstanceWithoutConstructor();
+        $storedToken->setPage($tokenPage);
+        $storedToken->setExpiry(time() + 3600);
+        $storedToken->setSessionToken($csrfToken);
+        $storedToken->setCookieToken('');
+        $session->set(sprintf('%s.%s', Token::PMF_SESSION_NAME, $tokenPage), $storedToken);
+
+        $controller = new MediaBrowserController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        // basename() reduces the traversal to "..", which resolves to the parent directory.
+        $response = $controller->index(new Request([], [], [], [], [], [], json_encode([
+            'action' => 'fileRemove',
+            'name' => '..',
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Invalid file path', $payload['error']);
+        self::assertDirectoryExists(PMF_CONTENT_DIR . '/user');
+    }
 }

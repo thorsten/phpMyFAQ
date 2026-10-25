@@ -98,6 +98,35 @@ class AbstractControllerTest extends TestCase
                 return $this->captchaCodeIsValid($request);
             }
 
+            public function userHasPermissionForCategoriesPublic(PermissionType $permissionType, array $ids): void
+            {
+                $this->userHasPermissionForCategories($permissionType, $ids);
+            }
+
+            public function userHasPermissionForLanguagePublic(PermissionType $permissionType, string $lang): void
+            {
+                $this->userHasPermissionForLanguage($permissionType, $lang);
+            }
+
+            public function userMayPublishInPublic(array $categoryIds, string $language): bool
+            {
+                return $this->userMayPublishIn($categoryIds, $language);
+            }
+
+            public function userMayPublic(PermissionType $permissionType): bool
+            {
+                return $this->userMay($permissionType);
+            }
+
+            public function setSessionPublic(FlashBagAwareSessionInterface $session): void
+            {
+                $this->session = $session;
+            }
+
+            public function verifySessionCsrfTokenPublic(string $page, string $requestToken): bool
+            {
+                return $this->verifySessionCsrfToken($page, $requestToken);
+            }
         };
     }
 
@@ -646,6 +675,131 @@ class AbstractControllerTest extends TestCase
 
         $this->abstractController->captchaCodeIsValidPublic($request);
     }
+    public function testCaptchaCodeIsValidUsesTheRecaptchaResponseWhenGoogleRecaptchaIsEnabled(): void
+    {
+        $this->configurationMock
+            ->method('get')
+            ->willReturnCallback(static fn(string $item) => match ($item) {
+                'security.enableGoogleReCaptchaV2' => true,
+                default => null,
+            });
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
+
+        $request = Request::create('/', 'POST', [], [], [], [], '{"g-recaptcha-response":"token"}');
+        $request->headers->set('Content-Type', 'application/json');
+
+        $this->assertTrue($this->abstractController->captchaCodeIsValidPublic($request));
+    }
+
+    public function testUserHasPermissionForCategoriesThrowsWhenNotLoggedIn(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(false);
+
+        $this->expectException(UnauthorizedHttpException::class);
+
+        $this->abstractController->userHasPermissionForCategoriesPublic(PermissionType::FAQ_EDIT, [1]);
+    }
+
+    public function testUserHasPermissionForLanguageThrowsWhenNotLoggedIn(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(false);
+
+        $this->expectException(UnauthorizedHttpException::class);
+
+        $this->abstractController->userHasPermissionForLanguagePublic(PermissionType::FAQ_EDIT, 'en');
+    }
+
+    public function testUserMayPublishInReturnsFalseWhenNotLoggedIn(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(false);
+
+        $this->assertFalse($this->abstractController->userMayPublishInPublic([1], 'en'));
+    }
+
+    public function testUserMayPublishInReturnsFalseWithoutLanguagePermission(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
+        $this->currentUserMock->method('getUserId')->willReturn(1);
+        $this->permissionMock->method('hasPermission')->willReturn(true);
+        $this->permissionMock->method('hasPermissionForLanguage')->willReturn(false);
+
+        $this->assertFalse($this->abstractController->userMayPublishInPublic([1], 'en'));
+    }
+
+    public function testUserMayPublishInReturnsFalseWithoutCategoryPermission(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
+        $this->currentUserMock->method('getUserId')->willReturn(1);
+        $this->permissionMock->method('hasPermission')->willReturn(true);
+        $this->permissionMock->method('hasPermissionForLanguage')->willReturn(true);
+        $this->permissionMock->method('hasPermissionForCategory')->willReturn(false);
+
+        $this->assertFalse($this->abstractController->userMayPublishInPublic([1, 2], 'en'));
+    }
+
+    public function testUserMayReturnsFalseWhenNotLoggedIn(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(false);
+        $this->permissionMock->expects($this->never())->method('hasPermission');
+
+        $this->assertFalse($this->abstractController->userMayPublic(PermissionType::FAQ_EDIT));
+    }
+
+    public function testVerifySessionCsrfTokenRemovesAnExpiredToken(): void
+    {
+        $tokenSession = $this->createMock(\Symfony\Component\HttpFoundation\Session\SessionInterface::class);
+        \phpMyFAQ\Session\Token::resetInstanceForTests();
+        try {
+            $storedToken = \phpMyFAQ\Session\Token::getInstance($tokenSession)
+                ->setPage('faq')
+                ->setExpiry(time() - 10)
+                ->setSessionToken('stored');
+        } finally {
+            \phpMyFAQ\Session\Token::resetInstanceForTests();
+        }
+
+        $session = $this->createMock(FlashBagAwareSessionInterface::class);
+        $session->expects($this->once())->method('get')->with('pmf-csrf-token.faq')->willReturn($storedToken);
+        $session->expects($this->once())->method('remove')->with('pmf-csrf-token.faq');
+        $this->abstractController->setSessionPublic($session);
+
+        $this->assertFalse($this->abstractController->verifySessionCsrfTokenPublic('faq', 'stored'));
+    }
+
+    #[DataProvider('missingServiceProvider')]
+    public function testSetContainerThrowsWhenAServiceHasTheWrongType(string $missingId, string $message): void
+    {
+        $controller = new class() extends AbstractController {
+            public function __construct()
+            {
+            }
+        };
+
+        $services = [
+            'phpmyfaq.configuration' => $this->configurationMock,
+            'phpmyfaq.user.current_user' => $this->currentUserMock,
+            'session' => $this->createMock(FlashBagAwareSessionInterface::class),
+        ];
+        $services[$missingId] = new \stdClass();
+
+        $container = $this->createMock(ContainerInterface::class);
+        $container->method('get')->willReturnCallback(static fn(string $id) => $services[$id]);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage($message);
+
+        $controller->setContainer($container);
+    }
+
+    public static function missingServiceProvider(): array
+    {
+        return [
+            'configuration' => ['phpmyfaq.configuration', 'Configuration service not found in container.'],
+            'current user' => ['phpmyfaq.user.current_user', 'CurrentUser service not found in container.'],
+            'session' => ['session', 'Session service not found in container.'],
+        ];
+    }
+
 
     public function testJsonWithComplexData(): void
     {

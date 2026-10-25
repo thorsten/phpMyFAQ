@@ -134,4 +134,32 @@ class PhpMyFaqMcpServerTest extends TestCase
 
         $this->assertInstanceOf(McpServerRuntimeInterface::class, $server);
     }
+
+    public function testConstructorBuildsDefaultRuntimeWithServerInfo(): void
+    {
+        $configMock = $this->createMock(Configuration::class);
+        $configMock->method('getLogger')->willReturn($this->createMock(Logger::class));
+        $configMock
+            ->method('get')
+            ->willReturnMap([
+                ['main.languageDetection', false],
+                ['main.language',          'en'],
+            ]);
+
+        $server = new PhpMyFaqMcpServer(
+            $configMock,
+            $this->createMock(Language::class),
+            $this->createMock(Search::class),
+            $this->createMock(Faq::class),
+        );
+
+        $runtime = new \ReflectionProperty(PhpMyFaqMcpServer::class, 'runtime')->getValue($server);
+        $this->assertInstanceOf(McpSdkRuntime::class, $runtime);
+
+        $serverInfo = new \ReflectionMethod(PhpMyFaqMcpServer::class, 'createServerInfo')->invoke($server);
+        $this->assertSame('phpMyFAQ MCP Server', $serverInfo['name']);
+        $this->assertNotEmpty($serverInfo['version']);
+        $this->assertTrue($serverInfo['capabilities']['tools']);
+        $this->assertSame('faq_search', $serverInfo['tools'][0]['name']);
+    }
 }

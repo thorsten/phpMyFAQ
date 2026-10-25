@@ -473,4 +473,33 @@ final class InstanceControllerTest extends TestCase
 
         rmdir($directory);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddReturnsBadRequestWhenTheClientUrlContainsAPath(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-instance');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        // "https://tenant/path.localhost" is a valid URL, but not a bare client hostname.
+        $response = $controller->add(new Request(server: ['HTTP_HOST' => 'localhost'], content: json_encode([
+            'csrf' => $token,
+            'url' => 'tenant/path',
+            'instance' => 'Unit Test Instance',
+            'comment' => 'Unit Test Comment',
+            'email' => 'admin@example.com',
+            'admin' => 'admin',
+            'password' => 'password',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame('Cannot create instance: wrong URL', $payload['error']);
+    }
 }

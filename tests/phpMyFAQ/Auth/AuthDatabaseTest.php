@@ -5,7 +5,9 @@ namespace phpMyFAQ\Auth;
 use phpMyFAQ\Auth\PasswordHasher;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\User;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
@@ -304,5 +306,116 @@ class AuthDatabaseTest extends TestCase
         $row = $driver->fetchArray($result);
 
         return $row['pass'];
+    }
+
+    /**
+     * Builds an AuthDatabase on a driver whose error() reports the given messages in order, with the
+     * given number of matching rows for the login lookups and the given result for write queries.
+     *
+     * @param list<string> $errors
+     */
+    private function createAuthDatabaseWithFailingDriver(array $errors, int $numRows, bool $writeResult): AuthDatabase
+    {
+        $driver = $this->createStub(DatabaseDriver::class);
+        $driver->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $driver->method('queryPrepared')->willReturn(true);
+        $driver->method('numRows')->willReturn($numRows);
+        $driver->method('query')->willReturn($writeResult);
+        $driver->method('error')->willReturnOnConsecutiveCalls(...$errors);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($driver);
+
+        return new AuthDatabase($configuration);
+    }
+
+    public function testCreateReportsTheDatabaseError(): void
+    {
+        $authDatabase = $this->createAuthDatabaseWithFailingDriver(['', 'disk full'], 0, true);
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('disk full');
+
+        $authDatabase->create('testUser', 'secret');
+    }
+
+    public function testCreateFailsWhenTheInsertIsRejectedWithoutAnError(): void
+    {
+        $authDatabase = $this->createAuthDatabaseWithFailingDriver(['', ''], 0, false);
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage(User::ERROR_USER_ADD);
+
+        $authDatabase->create('testUser', 'secret');
+    }
+
+    public function testUpdateReportsTheDatabaseError(): void
+    {
+        $authDatabase = $this->createAuthDatabaseWithFailingDriver(['', 'table locked'], 1, true);
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('table locked');
+
+        $authDatabase->update('testUser', 'newSecret');
+    }
+
+    public function testUpdateFailsWhenTheChangeIsRejectedWithoutAnError(): void
+    {
+        $authDatabase = $this->createAuthDatabaseWithFailingDriver(['', ''], 1, false);
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage(User::ERROR_USER_CHANGE);
+
+        $authDatabase->update('testUser', 'newSecret');
+    }
+
+    public function testDeleteReportsTheDatabaseError(): void
+    {
+        $authDatabase = $this->createAuthDatabaseWithFailingDriver(['', 'foreign key'], 1, true);
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('foreign key');
+
+        $authDatabase->delete('testUser');
+    }
+
+    public function testDeleteFailsWhenTheDeleteIsRejectedWithoutAnError(): void
+    {
+        $authDatabase = $this->createAuthDatabaseWithFailingDriver(['', ''], 1, false);
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage(User::ERROR_USER_DELETE);
+
+        $authDatabase->delete('testUser');
+    }
+
+    public function testCheckCredentialsReportsTheDatabaseError(): void
+    {
+        $authDatabase = $this->createAuthDatabaseWithFailingDriver(['connection lost'], 1, true);
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('connection lost');
+
+        $authDatabase->checkCredentials('testUser', 'secret');
+    }
+
+    public function testCheckCredentialsRejectsAmbiguousLogins(): void
+    {
+        $authDatabase = $this->createAuthDatabaseWithFailingDriver([''], 2, true);
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage(User::ERROR_USER_LOGIN_NOT_UNIQUE);
+
+        $authDatabase->checkCredentials('testUser', 'secret');
+    }
+
+    public function testIsValidLoginReportsTheDatabaseError(): void
+    {
+        $authDatabase = $this->createAuthDatabaseWithFailingDriver(['no such table'], 0, true);
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('no such table');
+
+        $authDatabase->isValidLogin('testUser');
     }
 }

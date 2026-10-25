@@ -21,6 +21,7 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
@@ -59,6 +60,8 @@ class UserControllerTest extends TestCase
     protected function tearDown(): void
     {
         unset($_COOKIE['pmf-csrf-token-' . substr(md5('ucp'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('export-userdata'), 0, 10)]);
+        unset($_COOKIE['pmf-csrf-token-' . substr(md5('request-removal'), 0, 10)]);
         Token::resetInstanceForTests();
 
         parent::tearDown();
@@ -299,5 +302,94 @@ class UserControllerTest extends TestCase
         ] + $extraFields);
 
         return $controller->updateData(new Request([], [], [], [], [], [], $payload));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportUserDataRejectsAForeignUserId(): void
+    {
+        $currentUser = $this->createCurrentUserWithAuthSource('local');
+        [$controller, $token] = $this->createAuthenticatedController($currentUser, 'export-userdata');
+
+        $response = $controller->exportUserData(new Request([], ['pmf-csrf-token' => $token, 'userid' => '2']));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(['error' => 'User ID mismatch!'], $this->decodePayload($response));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportUserDataFailsWhenTheUserDataCannotBeEncoded(): void
+    {
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $this->createStub(PermissionInterface::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnCallback(static fn(string $field): mixed => $field === 'display_name' ? "\xB1\x31" : '');
+        [$controller, $token] = $this->createAuthenticatedController($currentUser, 'export-userdata');
+
+        $response = $controller->exportUserData(new Request([], ['pmf-csrf-token' => $token, 'userid' => '1']));
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame(['error' => 'Failed to encode userdata.'], $this->decodePayload($response));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRequestUserRemovalRejectsAMissingUserId(): void
+    {
+        $currentUser = $this->createCurrentUserWithAuthSource('local');
+        [$controller, $token] = $this->createAuthenticatedController($currentUser, 'request-removal');
+
+        $response = $controller->requestUserRemoval(new Request([], [], [], [], [], [], json_encode([
+            'name' => 'Test User',
+            'loginname' => 'testuser',
+            'email' => 'test@example.com',
+            'question' => 'Please remove my account',
+            'pmf-csrf-token' => $token,
+        ], JSON_THROW_ON_ERROR)));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(['error' => Translation::get('ad_user_error_loginInvalid')], $this->decodePayload($response));
+    }
+
+    /**
+     * @return array{UserController, string} the controller and a valid CSRF token for the given page
+     * @throws \Exception
+     */
+    private function createAuthenticatedController(CurrentUser $currentUser, string $tokenPage): array
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+        Token::resetInstanceForTests();
+        $token = Token::getInstance($session)->getTokenString($tokenPage);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($tokenPage), 0, 10)] = $token;
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('get')->willReturnCallback(fn(string $id): mixed => match ($id) {
+            'phpmyfaq.configuration' => $this->configuration,
+            'phpmyfaq.user.current_user' => $currentUser,
+            'session' => $session,
+            default => null,
+        });
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        return [$controller, $token];
+    }
+
+    /**
+     * @return array<string, mixed>
+     * @throws \JsonException
+     */
+    private function decodePayload(Response $response): array
+    {
+        return json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
     }
 }
