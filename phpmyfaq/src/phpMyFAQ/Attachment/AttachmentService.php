@@ -149,10 +149,6 @@ final readonly class AttachmentService
     {
         $permission = [];
 
-        if (!$this->currentUser->isLoggedIn()) {
-            return $permission;
-        }
-
         // Read all rights, set false
         $allRights = $this->currentUser->perm->getAllRightsData();
         foreach ($allRights as $right) {

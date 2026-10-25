@@ -37,9 +37,7 @@ final readonly class KeycloakProviderConfigFactory
         $realm = trim((string) $this->configuration->get('keycloak.realm'));
         $redirectUri = trim((string) $this->configuration->get('keycloak.redirectUri'));
         $scopes = preg_split('/\s+/', trim((string) $this->configuration->get('keycloak.scopes')));
-        if ($scopes === false) {
-            $scopes = [];
-        }
+        $scopes = $scopes === false ? [] : $scopes;
 
         $enabled = $this->toBool($this->configuration->get('keycloak.enable'));
 

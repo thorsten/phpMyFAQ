@@ -96,10 +96,7 @@ readonly class Import
 
         $faqEntity = $faq->create($faqEntity);
 
-        $faqId = $faqEntity->getId();
-        if ($faqId === null) {
-            return false;
-        }
+        $faqId = (int) $faqEntity->getId();
 
         $faqMetaData = new MetaData($this->configuration);
         $faqMetaData->setFaqId($faqId)->setFaqLanguage($languageCode)->setCategories($categories)->save();

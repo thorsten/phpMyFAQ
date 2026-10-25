@@ -60,12 +60,8 @@ readonly class BookmarkFormatter
         $faq->getFaq($faqId);
         $faqData = $faq->faqRecord;
 
-        if (($faqData['id'] ?? null) === null) {
-            return null;
-        }
-
         $category = new Category($this->configuration);
-        $categoryId = $category->getCategoryIdFromFaq((int) $faqData['id']);
+        $categoryId = $category->getCategoryIdFromFaq($faqId);
 
         $url = sprintf(
             '%scontent/%d/%d/%s/%s.html',

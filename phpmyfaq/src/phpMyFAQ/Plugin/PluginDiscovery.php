@@ -45,7 +45,8 @@ final class PluginDiscovery
      */
     public function getClassMap(): array
     {
-        if ($this->cacheFile === null) {
+        $cacheFile = $this->cacheFile;
+        if ($cacheFile === null) {
             return $this->scan();
         }
 
@@ -56,7 +57,7 @@ final class PluginDiscovery
         }
 
         $classMap = $this->scan();
-        $this->writeManifest($signature, $classMap);
+        $this->writeManifest($cacheFile, $signature, $classMap);
 
         return $classMap;
     }
@@ -129,20 +130,16 @@ final class PluginDiscovery
     /**
      * @param array<string, string> $classMap
      */
-    private function writeManifest(string $signature, array $classMap): void
+    private function writeManifest(string $cacheFile, string $signature, array $classMap): void
     {
-        if ($this->cacheFile === null) {
-            return;
-        }
-
-        $cacheDir = dirname($this->cacheFile);
+        $cacheDir = dirname($cacheFile);
         if (!is_dir($cacheDir)) {
             mkdir(directory: $cacheDir, permissions: 0o755, recursive: true);
         }
 
         $manifest = ['signature' => $signature, 'classMap' => $classMap];
         $payload = "<?php\n\nreturn " . var_export($manifest, return: true) . ";\n";
-        file_put_contents($this->cacheFile, $payload, LOCK_EX);
+        file_put_contents($cacheFile, $payload, LOCK_EX);
     }
 
     private function getNamespaceFromFile(string $file): ?string

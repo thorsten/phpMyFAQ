@@ -192,26 +192,12 @@ final class StreamHttpRequester implements HttpRequesterInterface
             return $firstOctet < 224;
         }
 
+        // IPv4-mapped (::ffff:a.b.c.d) and IPv4-compatible (::a.b.c.d) addresses are already
+        // rejected by FILTER_FLAG_NO_RES_RANGE above, so only multicast is left to exclude.
         $packed = inet_pton($address);
-        if ($packed === false || strlen($packed) !== 16) {
-            return false;
-        }
 
         // ff00::/8 multicast
-        if (ord($packed[0]) === 0xff) {
-            return false;
-        }
-
-        // IPv4-mapped (::ffff:a.b.c.d) and IPv4-compatible (::a.b.c.d) addresses must satisfy the
-        // IPv4 policy for the embedded address.
-        $prefix = substr($packed, offset: 0, length: 12);
-        if ($prefix === "\0\0\0\0\0\0\0\0\0\0\xff\xff" || $prefix === "\0\0\0\0\0\0\0\0\0\0\0\0") {
-            $embedded = inet_ntop(substr($packed, offset: 12, length: 4));
-
-            return $embedded !== false && $this->isRoutableAddress($embedded);
-        }
-
-        return true;
+        return $packed !== false && ord($packed[0]) !== 0xff;
     }
 
     /**

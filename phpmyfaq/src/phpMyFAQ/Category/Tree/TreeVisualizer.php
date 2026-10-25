@@ -38,10 +38,6 @@ final readonly class TreeVisualizer
         $ascendants = $this->treePathResolver->getNodes($categoryName, $categoryId);
         $tree = [];
         foreach ($ascendants as $i => $ascendantId) {
-            if ($ascendantId === 0) {
-                break;
-            }
-
             $brothers = $this->treePathResolver->getBrothers($categoryName, $childrenMap, (int) $ascendantId);
             $last = end($brothers);
             $tree[(int) $i] = $ascendantId === $last ? 'space' : 'vertical';

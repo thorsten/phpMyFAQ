@@ -22,7 +22,6 @@ namespace phpMyFAQ\Service\McpServer;
 use Mcp\Server;
 use Mcp\Server\Transport\StdioTransport;
 use phpMyFAQ\Core\Json;
-use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -84,12 +83,6 @@ final readonly class McpSdkRuntime implements McpServerRuntimeInterface
 
     private function buildServer(): Server
     {
-        if (!class_exists(Server::class) || !class_exists(StdioTransport::class)) {
-            throw new RuntimeException(
-                'The mcp/sdk package is not installed or does not expose the expected server classes.',
-            );
-        }
-
         $definition = $this->faqSearchTool->getDefinition();
 
         return Server::builder()

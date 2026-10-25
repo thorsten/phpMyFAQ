@@ -62,20 +62,12 @@ class PublicKeyConverter
                     throw new Exception('Cannot decode key response for curve P256');
                 }
 
-                if (!array_key_exists(-2, $cosePubKey) || $cosePubKey[-2] === null) { /* cose_crv_x */
-                    throw new Exception('x coordinate for curve missing');
-                }
-
                 if (!array_key_exists(1, $cosePubKey) || $cosePubKey[1] === null) { /* cose_kty */
                     throw new Exception('Cannot decode key response for key type');
                 }
 
                 if (!array_key_exists(-3, $cosePubKey) || $cosePubKey[-3] === null) { /* cose_crv_y */
                     throw new Exception('Cannot decode key response for y coordinate');
-                }
-
-                if (!array_key_exists(-3, $cosePubKey) || $cosePubKey[-3] === null) { /* cose_crv_y */
-                    throw new Exception('y coordinate for curve missing');
                 }
 
                 if ($cosePubKey[1] !== 2) { /* cose_kty_ec2 */

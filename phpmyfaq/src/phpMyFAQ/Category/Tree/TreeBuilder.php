@@ -77,10 +77,6 @@ class TreeBuilder implements TreeBuilderInterface
 
         $catTree = [];
         foreach ($childrenIds as $childId) {
-            if (!array_key_exists($childId, $categories)) {
-                continue;
-            }
-
             $row = $categories[$childId];
             $row['indent'] = $indent;
             $catTree[] = $row;

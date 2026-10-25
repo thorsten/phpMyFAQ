@@ -75,11 +75,6 @@ class EntraIdSession extends AbstractSession
      */
     public function setCurrentSessionKey(): EntraIdSession
     {
-        /* @mago-expect lint:no-isset - typed property may be uninitialized */
-        if (!isset($this->currentSessionKey)) {
-            $this->createCurrentSessionKey();
-        }
-
         $this->session->set(self::ENTRA_ID_SESSION_KEY, $this->currentSessionKey);
 
         return $this;

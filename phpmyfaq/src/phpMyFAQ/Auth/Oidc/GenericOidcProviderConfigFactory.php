@@ -37,9 +37,7 @@ final readonly class GenericOidcProviderConfigFactory
         $clientId = trim((string) $this->configuration->get('oidc.clientId'));
         $redirectUri = trim((string) $this->configuration->get('oidc.redirectUri'));
         $scopes = preg_split('/\s+/', trim((string) $this->configuration->get('oidc.scopes')));
-        if ($scopes === false) {
-            $scopes = [];
-        }
+        $scopes = $scopes === false ? [] : $scopes;
 
         $enabled = $this->toBool($this->configuration->get('oidc.enable'));
 

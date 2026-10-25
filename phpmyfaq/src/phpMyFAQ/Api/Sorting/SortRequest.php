@@ -75,7 +75,7 @@ class SortRequest
         }
 
         // Parse sort order
-        $orderParam = Filter::filterVar($request->query->get('order'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $orderParam = (string) Filter::filterVar($request->query->get('order'), FILTER_SANITIZE_SPECIAL_CHARS);
         $order = self::validateOrder($orderParam, $defaultOrder);
 
         return new self($field, $order);
@@ -84,16 +84,12 @@ class SortRequest
     /**
      * Validates sort order value
      *
-     * @param string|null $order Order value to validate
+     * @param string $order Order value to validate
      * @param string $default Default order if invalid
      * @return string Validated order (asc or desc)
      */
-    private static function validateOrder(?string $order, string $default): string
+    private static function validateOrder(string $order, string $default): string
     {
-        if ($order === null) {
-            return $default;
-        }
-
         $orderLower = strtolower($order);
 
         return match ($orderLower) {

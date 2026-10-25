@@ -54,10 +54,8 @@ final class FormsHelper
 
         foreach ($fallbackCandidates as $fallbackCandidate) {
             if (
-                !(
-                    $fallbackCandidate->input_lang === 'default'
-                    && !in_array($fallbackCandidate->input_id, $seenIds, strict: true)
-                )
+                $fallbackCandidate->input_lang !== 'default'
+                || in_array($fallbackCandidate->input_id, $seenIds, strict: true)
             ) {
                 continue;
             }

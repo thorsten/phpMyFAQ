@@ -82,12 +82,6 @@ final class AuthorizationServer
             return ($this->tokenIssuer)($request);
         }
 
-        if (!class_exists(\League\OAuth2\Server\AuthorizationServer::class)) {
-            throw new RuntimeException(
-                'OAuth2 server dependency not installed. Please add league/oauth2-server to enable OAuth2 token issuing.',
-            );
-        }
-
         if (!$this->isEnabled()) {
             throw new RuntimeException('OAuth2 authorization server is disabled.', Response::HTTP_SERVICE_UNAVAILABLE);
         }

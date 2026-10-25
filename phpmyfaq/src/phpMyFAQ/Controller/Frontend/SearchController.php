@@ -92,18 +92,10 @@ final class SearchController extends AbstractFrontController
             $inputTag = str_replace(search: ',,', replace: ',', subject: $inputTag);
         }
 
-        $searchTerm = Filter::filterVar($request->attributes->get('search'), FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $searchTerm = Strings::substr($searchTerm, 0, 255);
-
         $page = Filter::filterVar($request->query->get('seite'), FILTER_VALIDATE_INT, 1);
 
         // Determine search language scope
         $allLanguages = $inputLanguage !== '';
-
-        // Merge search terms
-        if ($searchTerm !== '') {
-            $inputSearchTerm = $searchTerm;
-        }
 
         // Track user session
         $this->faqSession->setCurrentUser($this->currentUser);

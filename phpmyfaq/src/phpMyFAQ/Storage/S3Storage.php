@@ -172,10 +172,6 @@ final readonly class S3Storage implements StorageInterface
             return $result[$field] ?? null;
         }
 
-        if ($result instanceof ArrayAccess) {
-            return $result->offsetGet($field);
-        }
-
-        return null;
+        return $result instanceof ArrayAccess ? $result->offsetGet($field) : null;
     }
 }
