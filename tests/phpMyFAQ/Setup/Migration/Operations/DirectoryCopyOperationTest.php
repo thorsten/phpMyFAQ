@@ -47,6 +47,38 @@ class DirectoryCopyOperationTest extends TestCase
         $this->assertEquals('/dest/dir', $operation->getDestination());
     }
 
+    public function testExecuteSkipsAMissingSourceWhenOnlyIfExistsIsSet(): void
+    {
+        $this->filesystem->expects($this->never())->method('recursiveCopy');
+        $operation = new DirectoryCopyOperation(
+            $this->filesystem,
+            sys_get_temp_dir() . '/pmf-missing-' . uniqid(),
+            '/dest',
+        );
+
+        $this->assertTrue($operation->execute());
+    }
+
+    public function testExecuteDelegatesTheCopyToTheFilesystem(): void
+    {
+        $this->filesystem
+            ->expects($this->once())
+            ->method('recursiveCopy')
+            ->with('/source/dir', '/dest/dir')
+            ->willReturn(true);
+        $operation = new DirectoryCopyOperation($this->filesystem, '/source/dir', '/dest/dir', false);
+
+        $this->assertTrue($operation->execute());
+    }
+
+    public function testExecuteReturnsFalseWhenTheCopyThrows(): void
+    {
+        $this->filesystem->method('recursiveCopy')->willThrowException(new \RuntimeException('disk full'));
+        $operation = new DirectoryCopyOperation($this->filesystem, '/source/dir', '/dest/dir', false);
+
+        $this->assertFalse($operation->execute());
+    }
+
     public function testToArray(): void
     {
         $operation = new DirectoryCopyOperation($this->filesystem, '/source/dir', '/dest/dir', true);

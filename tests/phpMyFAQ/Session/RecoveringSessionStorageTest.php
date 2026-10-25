@@ -113,6 +113,33 @@ class RecoveringSessionStorageTest extends TestCase
 
     #[RunInSeparateProcess]
     #[PreserveGlobalState(false)]
+    public function testLogsTheDiscardedSessionDataWhenErrorLoggingIsEnabled(): void
+    {
+        $errorLog = $this->savePath . '/error.log';
+        $originalErrorLog = (string) ini_get('error_log');
+        ini_set('log_errors', '1');
+        ini_set('error_log', $errorLog);
+
+        try {
+            $this->writeSessionFile('_sf2_attributes|a:2:{s:3:"foo";s:3:"bar";}_sf2_meta|');
+
+            $session = $this->startSession();
+
+            $this->assertSame(PHP_SESSION_ACTIVE, session_status());
+            $this->assertSame([], $session->all());
+            $this->assertFileExists($errorLog);
+            $this->assertStringContainsString(
+                'phpMyFAQ: discarded undecodable session data:',
+                (string) file_get_contents($errorLog),
+            );
+        } finally {
+            ini_set('error_log', $originalErrorLog);
+            @unlink($errorLog);
+        }
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testStartingTwiceIsANoOp(): void
     {
         $this->writeSessionFile('_sf2_attributes|a:1:{s:3:"foo";s:3:"bar";}');

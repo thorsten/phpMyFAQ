@@ -178,6 +178,27 @@ class UtilsTest extends TestCase
         $this->assertSame('Visit example.com and phpmyfaq.de for details.', $result);
     }
 
+    public function testIsForbiddenElementDetectsHtmlElementNames(): void
+    {
+        $this->assertTrue(Utils::isForbiddenElement('img'));
+        $this->assertTrue(Utils::isForbiddenElement('pic'));
+        $this->assertFalse(Utils::isForbiddenElement('phpMyFAQ'));
+    }
+
+    public function testHighlightNoLinksReturnsTheOriginalMatchForForbiddenElements(): void
+    {
+        $matches = ['<img', '', '', '<', 'img', ''];
+
+        $this->assertSame('<img', Utils::highlightNoLinks($matches));
+    }
+
+    public function testHighlightNoLinksWrapsAllowedMatchesInMark(): void
+    {
+        $matches = ['FAQ', '', '', '', 'FAQ', ''];
+
+        $this->assertSame('<mark class="pmf-highlighted-string">FAQ</mark>', Utils::highlightNoLinks($matches));
+    }
+
     public function testGetHostFromUrlReturnsHostOrNull(): void
     {
         $this->assertSame('www.example.com', Utils::getHostFromUrl('https://www.example.com/path?foo=bar'));

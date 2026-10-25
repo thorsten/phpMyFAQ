@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use Exception;
+use LogicException;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Faq;
@@ -225,19 +226,39 @@ class CommentControllerTest extends TestCase
         $this->assertInstanceOf(ContainerInterface::class, $realContainer);
 
         $container = $this->createMock(ContainerInterface::class);
-        $container
-            ->method('get')
-            ->willReturnCallback(
-                static fn(string $id): mixed => $id === 'phpmyfaq.faq' ? $faq : $realContainer->get($id),
-            );
-        $container
-            ->method('has')
-            ->willReturnCallback(static fn(string $id): bool => $realContainer->has($id));
+        $container->method('get')->willReturnCallback(static fn(string $id): mixed => $id === 'phpmyfaq.faq'
+            ? $faq
+            : $realContainer->get($id));
+        $container->method('has')->willReturnCallback(static fn(string $id): bool => $realContainer->has($id));
         $controller->setContainer($container);
 
         $response = $controller->list($request);
 
         $this->assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
         $this->assertSame([], json_decode($response->getContent(), true));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testListThrowsWhenFaqServiceIsMissingFromContainer(): void
+    {
+        $request = new Request();
+        $request->attributes->set('recordId', '1');
+
+        $controller = new CommentController($this->createStub(Comments::class));
+
+        $realContainer = new ReflectionProperty(AbstractController::class, 'container')->getValue($controller);
+        $this->assertInstanceOf(ContainerInterface::class, $realContainer);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('get')->willReturnCallback(static fn(string $id): mixed => $id === 'phpmyfaq.faq'
+            ? null
+            : $realContainer->get($id));
+        $controller->setContainer($container);
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Faq service not found in container.');
+        $controller->list($request);
     }
 }

@@ -203,6 +203,21 @@ class DatabaseAdaptersTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('pgsqlAdaptersProvider')]
+    public function testPgsqlAdaptersOrderOnlyByRelevanceColumnsThatWereSelected(string $adapterClass): void
+    {
+        $configuration = $this->createConfiguration($this->createStub(DatabaseDriver::class), [
+            'search.enableRelevance' => true,
+            'search.relevance' => 'thema,author,keywords',
+        ]);
+
+        $adapter = new $adapterClass($configuration);
+        $this->configureAdapter($adapter);
+
+        $this->assertStringNotContainsString('relevance_author', $adapter->getMatchingColumnsAsResult());
+        $this->assertSame('relevance_thema DESC, relevance_keywords DESC', $adapter->getMatchingOrder());
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('pgsqlAdaptersProvider')]
     public function testPgsqlAdaptersBuildMatchingColumnsForRelevanceAndFallback(string $adapterClass): void
     {
         $configuration = $this->createConfiguration($this->createStub(DatabaseDriver::class), [
@@ -271,8 +286,7 @@ class DatabaseAdaptersTest extends TestCase
             ->method('query')
             ->with($this->callback(static function (string $query): bool {
                 return (
-                    str_contains($query, "ILIKE ('%100|%|_||off%') ESCAPE '|'")
-                    && !str_contains($query, "ESCAPE '='")
+                    str_contains($query, "ILIKE ('%100|%|_||off%') ESCAPE '|'") && !str_contains($query, "ESCAPE '='")
                 );
             }))
             ->willReturn('pgsql-result');

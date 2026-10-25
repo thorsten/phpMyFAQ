@@ -3,9 +3,11 @@
 namespace phpMyFAQ\Helper;
 
 use League\CommonMark\Exception\CommonMarkException;
+use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -110,6 +112,39 @@ class FaqHelperTest extends TestCase
 
         $this->assertStringContainsString('https://localhost/images/a.png', $actualOutput);
         $this->assertStringNotContainsString('attacker.example', $actualOutput);
+    }
+
+    public function testCreateOverviewTransformsTheCategoryTreeAndCollectsPublishedFaqs(): void
+    {
+        $category = $this->createMock(Category::class);
+        $category->expects($this->once())->method('transform')->with(0);
+
+        $faq = new Faq($this->configuration);
+
+        $overview = $this->faqHelper->createOverview($category, $faq, 'en');
+
+        $this->assertSame($faq->faqRecords, $overview);
+        foreach ($overview as $record) {
+            $this->assertSame('en', $record['lang']);
+        }
+    }
+
+    public function testConvertOldInternalLinksFallsBackToEnglishWithoutACurrentLanguage(): void
+    {
+        $language = $this->createStub(Language::class);
+        $language->method('getLanguage')->willReturn('');
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost:443/');
+        $configuration->method('getLanguage')->willReturn($language);
+
+        $faqHelper = new FaqHelper($configuration);
+        $content = 'See <a href="http://example.org/index.php?action=artikel&cat=42&id=123">this link</a>';
+
+        $this->assertSame('See <a href="https://localhost:443/content/42/123/en/how-can-i-create-an-account.html">this link</a>', $faqHelper->convertOldInternalLinks(
+            'How can I create an account?',
+            $content,
+        ));
     }
 
     public function testCreateFaqUrl(): void

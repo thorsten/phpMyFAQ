@@ -46,6 +46,12 @@ final class CategoryTreeRestrictionFilterTest extends TestCase
         );
     }
 
+    public function testNestedKeepsNonArrayLeavesOfAllowedCategoriesUnchanged(): void
+    {
+        $nested = [1 => 'leaf', 2 => 'hidden'];
+        $this->assertSame([1 => 'leaf'], CategoryTreeRestrictionFilter::filterNested($nested, [1]));
+    }
+
     public function testNestedEmptyAllowListHidesEverything(): void
     {
         $this->assertSame([], CategoryTreeRestrictionFilter::filterNested([1 => [], 2 => []], []));

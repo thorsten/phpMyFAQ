@@ -6,6 +6,16 @@ use phpMyFAQ\Configuration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Takes the registry's constructor argument but does not implement MigrationInterface.
+ */
+final class NotAMigration
+{
+    public function __construct(Configuration $configuration)
+    {
+    }
+}
+
 #[AllowMockObjectsWithoutExpectations]
 class MigrationRegistryTest extends TestCase
 {
@@ -164,6 +174,19 @@ class MigrationRegistryTest extends TestCase
         $migrations2 = $this->registry->getMigrations();
 
         $this->assertSame($migrations1, $migrations2);
+    }
+
+    public function testGetMigrationsSkipsUnknownClassesAndClassesThatAreNoMigration(): void
+    {
+        $this->registry->register('9.0.0', 'phpMyFAQ\Setup\Migration\Versions\MigrationDoesNotExist');
+        $this->registry->register('9.0.1', NotAMigration::class);
+
+        $migrations = $this->registry->getMigrations();
+
+        $this->assertArrayNotHasKey('9.0.0', $migrations);
+        $this->assertArrayNotHasKey('9.0.1', $migrations);
+        $this->assertNull($this->registry->getMigration('9.0.1'));
+        $this->assertEquals('4.2.0-RC.1', $this->registry->getLatestVersion());
     }
 
     public function testRegisterClearsMigrationsCache(): void

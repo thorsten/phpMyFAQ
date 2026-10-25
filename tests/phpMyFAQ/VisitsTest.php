@@ -55,6 +55,18 @@ class VisitsTest extends TestCase
         $this->assertTrue($this->visits->add(1));
     }
 
+    public function testAddUpdatesAnExistingRecordInsteadOfInsertingTwice(): void
+    {
+        $this->assertTrue($this->visits->add(1));
+        $this->assertTrue($this->visits->add(1));
+
+        $result = $this->visits->getAllData();
+
+        $this->assertCount(1, $result);
+        $this->assertEquals(1, $result[0]['id']);
+        $this->assertEquals(2, $result[0]['visits']);
+    }
+
     public function testLogViews()
     {
         $id = 1;

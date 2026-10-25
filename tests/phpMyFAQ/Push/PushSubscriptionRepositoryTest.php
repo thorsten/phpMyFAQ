@@ -260,6 +260,26 @@ class PushSubscriptionRepositoryTest extends TestCase
         $this->assertSame('hash-c', $result[0]->getEndpointHash());
     }
 
+    public function testGetByUserIdReturnsEmptyArrayWhenQueryFails(): void
+    {
+        $this->dbDriver->method('query')->willReturn(false);
+        $this->dbDriver->expects($this->never())->method('fetchObject');
+
+        $repository = new PushSubscriptionRepository($this->configuration);
+
+        $this->assertSame([], $repository->getByUserId(5));
+    }
+
+    public function testGetAllReturnsEmptyArrayWhenQueryFails(): void
+    {
+        $this->dbDriver->method('query')->willReturn(false);
+        $this->dbDriver->expects($this->never())->method('fetchObject');
+
+        $repository = new PushSubscriptionRepository($this->configuration);
+
+        $this->assertSame([], $repository->getAll());
+    }
+
     public function testHasSubscriptionReturnsFalseWhenQueryFails(): void
     {
         $this->dbDriver->method('query')->willReturn(false);

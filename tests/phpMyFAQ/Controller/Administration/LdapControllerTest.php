@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -19,6 +21,7 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -110,16 +113,22 @@ final class LdapControllerTest extends TestCase
         $currentUser->method('getUserId')->willReturn(42);
 
         $session = new Session(new MockArraySessionStorage());
+        $adminLog = $this->createStub(AdminLog::class);
+        $adminHelper = $this->createStub(AdminMenuBuilder::class);
+        $adminHelper->method('setUser')->willReturnSelf();
+        $adminHelper->method('canAccessContent')->willReturn(true);
+        $adminHelper->method('addMenuEntry')->willReturn('');
 
         $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('get')
-            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog, $adminHelper) {
                 return match ($id) {
                     'phpmyfaq.configuration' => $this->configuration,
                     'phpmyfaq.user.current_user' => $currentUser,
                     'session' => $session,
-                    'phpmyfaq.admin.admin-log' => $this->createStub(\phpMyFAQ\Administration\AdminLog::class),
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    'phpmyfaq.admin.helper' => $adminHelper,
                     default => null,
                 };
             });
@@ -134,5 +143,18 @@ final class LdapControllerTest extends TestCase
 
         $this->expectException(UnauthorizedHttpException::class);
         $controller->index(Request::create('/admin/ldap'));
+    }
+
+    public function testIndexRendersLdapConfigurationWhenLdapIsActive(): void
+    {
+        $this->configuration->set('ldap.ldapSupport', 'true');
+
+        $controller = new LdapController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->index(Request::create('/admin/ldap'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertNotEmpty((string) $response->getContent());
     }
 }

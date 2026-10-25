@@ -327,8 +327,8 @@ class SearchHelperTest extends TestCase
             ->method('get')
             ->willReturnMap([
                 ['records.numberOfRecordsPerPage', 10],
-                ['search.enableHighlighting', true],
-                ['main.enableMarkdownEditor', false],
+                ['search.enableHighlighting',      true],
+                ['main.enableMarkdownEditor',      false],
             ]);
         $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
 
@@ -361,7 +361,10 @@ class SearchHelperTest extends TestCase
         $this->assertSame('', $pageResult->path);
         $this->assertStringContainsString('page/privacy.html', $pageResult->url);
         $this->assertStringContainsString('<mark class="pmf-highlighted-string">privacy</mark>', $pageResult->question);
-        $this->assertStringContainsString('<mark class="pmf-highlighted-string">policy</mark>', $pageResult->answerPreview);
+        $this->assertStringContainsString(
+            '<mark class="pmf-highlighted-string">policy</mark>',
+            $pageResult->answerPreview,
+        );
         $this->assertStringContainsString('<span title=', $pageResult->renderedScore);
 
         // A FAQ without any category keeps an empty path; a non-numeric score renders as zero.
@@ -369,6 +372,55 @@ class SearchHelperTest extends TestCase
         $this->assertObjectNotHasProperty('isCustomPage', $faqResult);
         $this->assertSame('', $faqResult->path);
         $this->assertStringContainsString('content/1/7/en/', $faqResult->url);
+    }
+
+    public function testGetSearchResultDoesNotHighlightSearchTermsOfUpToTwoCharacters(): void
+    {
+        $this->searchHelper->setSearchTerm('privacy is policy');
+
+        $this->configurationMock
+            ->method('get')
+            ->willReturnMap([
+                ['records.numberOfRecordsPerPage', 10],
+                ['search.enableHighlighting',      true],
+                ['main.enableMarkdownEditor',      false],
+            ]);
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $page = new stdClass();
+        $page->content_type = 'page';
+        $page->slug = 'privacy';
+        $page->question = 'Our privacy policy';
+        $page->answer = 'This is the privacy policy.';
+        $page->score = 2.5;
+
+        $faq = new stdClass();
+        $faq->id = 7;
+        $faq->lang = 'en';
+        $faq->category_id = 1;
+        $faq->question = 'Where is the privacy page?';
+        $faq->answer = 'It is the privacy policy page.';
+        $faq->score = 1.0;
+
+        $this->searchResultSetMock->method('getNumberOfResults')->willReturn(2);
+        $this->searchResultSetMock->method('getResultSet')->willReturn([$page, $faq]);
+        $this->categoryMock->method('getCategoriesFromFaq')->willReturn([]);
+
+        $results = $this->searchHelper->getSearchResult($this->searchResultSetMock, 1);
+
+        $this->assertCount(2, $results);
+        foreach ($results as $result) {
+            $this->assertStringContainsString('<mark class="pmf-highlighted-string">privacy</mark>', $result->question);
+            $this->assertStringContainsString(
+                '<mark class="pmf-highlighted-string">policy</mark>',
+                $result->answerPreview,
+            );
+            $this->assertStringNotContainsString('<mark class="pmf-highlighted-string">is</mark>', $result->question);
+            $this->assertStringNotContainsString(
+                '<mark class="pmf-highlighted-string">is</mark>',
+                $result->answerPreview,
+            );
+        }
     }
 
     public function testGetSearchResultWithPagination(): void

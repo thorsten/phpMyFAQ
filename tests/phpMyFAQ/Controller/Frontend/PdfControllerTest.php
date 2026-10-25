@@ -161,13 +161,9 @@ final class PdfControllerTest extends TestCase
      */
     public function testIndexReturnsPdfResponseWhenAttachmentLookupIsEnabled(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $configurationReflection = new \ReflectionClass(Configuration::class);
-        $configProperty = $configurationReflection->getProperty('config');
-        $config = $configProperty->getValue($configuration);
-        self::assertIsArray($config);
-        $config['records.disableAttachments'] = false;
-        $configProperty->setValue($configuration, $config);
+        // Any later lookup of a missing key reloads the whole config from the database, which
+        // would silently revert an in-memory override; persist the flag in the private copy.
+        self::assertTrue(Configuration::getConfigurationInstance()->set('records.disableAttachments', 'false'));
 
         $this->seedFaqRow(faqId: 1);
 
@@ -183,20 +179,16 @@ final class PdfControllerTest extends TestCase
      */
     public function testIndexReturnsPdfResponseWhenAttachmentLookupThrowsException(): void
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $configurationReflection = new \ReflectionClass(Configuration::class);
-        $configProperty = $configurationReflection->getProperty('config');
-        $config = $configProperty->getValue($configuration);
-        self::assertIsArray($config);
-        $config['records.disableAttachments'] = false;
-        $configProperty->setValue($configuration, $config);
+        // Any later lookup of a missing key reloads the whole config from the database, which
+        // would silently revert an in-memory override; persist the flag in the private copy.
+        self::assertTrue(Configuration::getConfigurationInstance()->set('records.disableAttachments', 'false'));
+
+        // The controller re-initializes the attachment factory from the configuration, so the
+        // unknown storage type has to come from there to make the attachment lookup throw.
+        self::assertTrue(Configuration::getConfigurationInstance()->set('records.attachmentsStorageType', '999'));
 
         $this->seedFaqRow(faqId: 1);
         $this->seedAttachmentRow(990001);
-
-        $attachmentFactoryReflection = new \ReflectionClass(\phpMyFAQ\Attachment\AttachmentFactory::class);
-        $storageTypeProperty = $attachmentFactoryReflection->getProperty('storageType');
-        $storageTypeProperty->setValue(null, 999);
 
         $response = $this->requestPdf(faqId: 1);
 

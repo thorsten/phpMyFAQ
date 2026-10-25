@@ -59,6 +59,49 @@ final class ApiRateLimiterListenerTest extends TestCase
         $this->assertNull($event->getResponse());
     }
 
+    public function testOnKernelRequestSkipsSafeRequests(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $rateLimiter = new RateLimiter(storage: new InMemoryStorage());
+
+        $configuration->expects($this->never())->method('get');
+
+        $listener = new ApiRateLimiterListener($configuration, $rateLimiter, $this->createTenantContext());
+        $request = Request::create('/api/v4.0/version', 'GET');
+        $request->server->set('REMOTE_ADDR', '127.0.0.1');
+        $event = new RequestEvent(
+            $this->createMock(HttpKernelInterface::class),
+            $request,
+            HttpKernelInterface::MAIN_REQUEST,
+        );
+
+        $listener->onKernelRequest($event);
+
+        $this->assertNull($event->getResponse());
+    }
+
+    public function testOnKernelRequestSkipsWhenIntervalIsNotPositive(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $rateLimiter = new RateLimiter(storage: new InMemoryStorage());
+
+        $configuration
+            ->expects($this->exactly(2))
+            ->method('get')
+            ->willReturnMap([
+                ['api.rateLimit.requests', '1'],
+                ['api.rateLimit.interval', '0'],
+            ]);
+
+        $listener = new ApiRateLimiterListener($configuration, $rateLimiter, $this->createTenantContext(1));
+        $event = $this->createEvent();
+
+        $listener->onKernelRequest($event);
+
+        $this->assertNull($event->getResponse());
+        $this->assertTrue($rateLimiter->peek('tenant-7', 1, 3600));
+    }
+
     public function testOnKernelRequestSkipsWhenRateLimitIsDisabled(): void
     {
         $configuration = $this->createMock(Configuration::class);

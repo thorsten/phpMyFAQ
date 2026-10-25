@@ -440,6 +440,135 @@ final class NewsControllerTest extends TestCase
     }
 
     /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsBadGatewayWhenNewsCannotBeStored(): void
+    {
+        // Dropping the table would already break the id lookup; a trigger makes only the insert fail.
+        self::assertNotFalse($this->dbHandle->query(
+            "CREATE TRIGGER faqnews_reject_insert BEFORE INSERT ON faqnews BEGIN SELECT RAISE(ABORT, 'rejected'); END",
+        ));
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'save-news');
+
+        $controller = new NewsController();
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'newsHeader' => 'Unit Test News',
+            'news' => 'Unit Test Content',
+            'authorName' => 'Tester',
+            'authorEmail' => 'tester@example.com',
+            'active' => '1',
+            'langTo' => 'en',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_news_insertfail'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteReturnsBadGatewayWhenNewsCannotBeDeleted(): void
+    {
+        self::assertNotFalse($this->dbHandle->query('DROP TABLE faqnews'));
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-news');
+
+        $controller = new NewsController();
+        $controller->setContainer($container);
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => 103,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_news_updatefail'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsBadRequestForNonNumericNewsId(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-news');
+
+        $controller = new NewsController();
+        $controller->setContainer($container);
+
+        $response = $controller->update(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => 'not-a-number',
+            'newsHeader' => 'Header',
+            'news' => 'Body',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_news_updatefail'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsBadGatewayWhenNewsCannotBeStored(): void
+    {
+        self::assertNotFalse($this->dbHandle->query('DROP TABLE faqnews'));
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-news');
+
+        $controller = new NewsController();
+        $controller->setContainer($container);
+
+        $response = $controller->update($this->updateRequest($token));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_GATEWAY, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_news_updatefail'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testActivateReturnsBadRequestForNonNumericNewsId(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'activate-news');
+
+        $controller = new NewsController();
+        $controller->setContainer($container);
+
+        $response = $controller->activate(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => 'not-a-number',
+            'status' => 'true',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_news_updatefail'), $payload['error']);
+    }
+
+    /**
      * Regression: a delegated admin holding NEWS_ADD and NEWS_DELETE but not NEWS_EDIT
      * must not be able to rewrite an existing news entry.
      *

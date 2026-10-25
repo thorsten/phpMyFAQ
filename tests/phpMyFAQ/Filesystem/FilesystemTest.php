@@ -87,6 +87,46 @@ class FilesystemTest extends TestCase
         $this->assertTrue($actual);
     }
 
+    public function testRecursiveCopyReturnsFalseWhenSourceCannotBeRead(): void
+    {
+        $source = PMF_CONTENT_DIR . '/recursive-copy-unreadable-source';
+        $target = PMF_CONTENT_DIR . '/recursive-copy-unreadable-target';
+        $this->filesystem->createDirectory($source);
+        chmod($source, 0o000);
+
+        set_error_handler(static fn(): bool => true);
+
+        try {
+            $this->assertFalse($this->filesystem->recursiveCopy($source, $target));
+        } finally {
+            restore_error_handler();
+            chmod($source, 0o700);
+            $this->filesystem->deleteDirectory($source);
+            $this->filesystem->deleteDirectory($target);
+        }
+    }
+
+    public function testRecursiveCopySkipsSymbolicLinks(): void
+    {
+        $source = PMF_CONTENT_DIR . '/recursive-copy-symlink-source';
+        $target = PMF_CONTENT_DIR . '/recursive-copy-symlink-target';
+        $this->filesystem->createDirectory($source);
+        file_put_contents($source . '/regular.txt', 'regular');
+        symlink($source . '/regular.txt', $source . '/link.txt');
+
+        try {
+            $this->assertTrue($this->filesystem->recursiveCopy($source, $target));
+
+            $copied = $target . '/recursive-copy-symlink-source';
+            $this->assertFileExists($copied . '/regular.txt');
+            $this->assertFileDoesNotExist($copied . '/link.txt');
+        } finally {
+            unlink($source . '/link.txt');
+            $this->filesystem->deleteDirectory($source);
+            $this->filesystem->deleteDirectory($target);
+        }
+    }
+
     public function testRecursiveCopyReturnsFalseWhenSourceIsNotDirectory(): void
     {
         $actual = $this->filesystem->recursiveCopy(

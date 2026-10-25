@@ -45,6 +45,39 @@ class TableBuilderTest extends TestCase
         $this->assertStringContainsString('id INT NOT NULL', $sql);
     }
 
+    public function testBooleanColumnWithoutDefault(): void
+    {
+        $sql = $this->builder->table('test', false)->boolean('is_active')->build();
+
+        $this->assertStringContainsString('is_active TINYINT(1) NULL', $sql);
+        $this->assertStringNotContainsString('is_active TINYINT(1) NULL DEFAULT', $sql);
+    }
+
+    public function testBooleanColumnWithFalseDefault(): void
+    {
+        $sql = $this->builder->table('test', false)->boolean('is_active', false, false)->build();
+
+        $this->assertStringContainsString('is_active TINYINT(1) NOT NULL DEFAULT 0', $sql);
+    }
+
+    public function testBuildWithoutTableNameThrows(): void
+    {
+        $this->builder->integer('id', false);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Table name not set: call table() before build()');
+        $this->builder->build();
+    }
+
+    public function testBuildIndexStatementsWithoutTableNameThrows(): void
+    {
+        $this->builder->varchar('email', 255)->index('idx_email', 'email');
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Table name not set: call table() before buildIndexStatements()');
+        $this->builder->buildIndexStatements();
+    }
+
     public function testIntegerColumnNullable(): void
     {
         $sql = $this->builder->table('test', false)->integer('nullable_col', true)->build();

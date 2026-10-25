@@ -152,6 +152,17 @@ class OrderTest extends TestCase
         $this->order->setCategoryTree($categoryTree);
     }
 
+    public function testSetCategoryTreeTreatsCategoryWithoutChildrenPropertyAsLeaf(): void
+    {
+        $category = new stdClass();
+        $category->id = 1;
+
+        // DELETE plus a single INSERT, no recursion into children
+        $this->databaseMock->expects($this->exactly(2))->method('query');
+
+        $this->order->setCategoryTree([$category]);
+    }
+
     public function testSetCategoryTreeWithInvalidId(): void
     {
         $category = new stdClass();
@@ -293,6 +304,14 @@ class OrderTest extends TestCase
 
         $result = $this->order->getParentId($categoryTree, 999);
         $this->assertNull($result);
+    }
+
+    public function testGetParentIdReturnsNullWhenCategoryWithoutChildrenPropertyDoesNotMatch(): void
+    {
+        $category = new stdClass();
+        $category->id = 1;
+
+        $this->assertNull($this->order->getParentId([$category], 2));
     }
 
     public function testGetParentIdTopLevel(): void

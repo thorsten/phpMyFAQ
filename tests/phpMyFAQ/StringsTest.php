@@ -287,6 +287,17 @@ class StringsTest extends TestCase
         $this->assertSame($expected, $property->getValue());
     }
 
+    public function testResetForgetsTheInitializedImplementation(): void
+    {
+        $property = new \ReflectionProperty(Strings::class, 'instance');
+        Strings::init('en');
+        $this->assertNotNull($property->getValue());
+
+        Strings::reset();
+
+        $this->assertNull($property->getValue());
+    }
+
     /**
      * Test htmlentities vs htmlspecialchars differences
      */

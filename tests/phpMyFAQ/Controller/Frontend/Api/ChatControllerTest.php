@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use Symfony\Component\HttpFoundation\Request;
@@ -206,6 +207,28 @@ final class ChatControllerTest extends ApiControllerTestCase
         self::assertSame('Invalid recipient or empty message', $payload['error']);
     }
 
+    public function testSendReturnsBadRequestWhenMessageCannotBeStored(): void
+    {
+        $this->blockChatMessageWrites();
+
+        $controller = new ChatController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidSessionToken($session, 'send-chat-message');
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $session);
+
+        $request = Request::create('/chat/send', 'POST', content: json_encode([
+            'recipientId' => 2,
+            'message' => 'Test chat message',
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->send($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgError'), $payload['error']);
+    }
+
     public function testMarkAsReadReturnsSuccessForExistingMessage(): void
     {
         $this->insertChatMessage(2, 1, 'Unread message', 0, '2026-03-02 10:00:00');
@@ -281,6 +304,51 @@ final class ChatControllerTest extends ApiControllerTestCase
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame('Invalid message ID', $payload['error']);
+    }
+
+    public function testMarkAsReadReturnsBadRequestWhenMessageCannotBeUpdated(): void
+    {
+        $this->insertChatMessage(2, 1, 'Unread message', 0, '2026-03-02 10:00:00');
+        $this->blockChatMessageWrites();
+
+        $controller = new ChatController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidSessionToken($session, 'mark-chat-read');
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $session);
+
+        $messageIdRow = $this->configuration
+            ->getDb()
+            ->fetchObject(
+                $this->configuration
+                    ->getDb()
+                    ->query('SELECT id FROM faqchat_messages WHERE sender_id = 2 AND recipient_id = 1 LIMIT 1'),
+            );
+
+        $request = Request::create('/chat/read/' . $messageIdRow->id, 'POST', content: json_encode([
+            'csrfToken' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+        $request->attributes->set('messageId', (int) $messageIdRow->id);
+
+        $response = $controller->markAsRead($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgError'), $payload['error']);
+    }
+
+    /**
+     * Lets reads succeed while every insert and update on the chat table fails, which is how
+     * the controller observes a failed database write.
+     */
+    private function blockChatMessageWrites(): void
+    {
+        $db = $this->configuration->getDb();
+        self::assertNotFalse($db->query(
+            "CREATE TRIGGER block_chat_insert BEFORE INSERT ON faqchat_messages BEGIN SELECT RAISE(ABORT, 'blocked'); END",
+        ));
+        self::assertNotFalse($db->query(
+            "CREATE TRIGGER block_chat_update BEFORE UPDATE ON faqchat_messages BEGIN SELECT RAISE(ABORT, 'blocked'); END",
+        ));
     }
 
     public function testSearchUsersReturnsMatchingUsers(): void

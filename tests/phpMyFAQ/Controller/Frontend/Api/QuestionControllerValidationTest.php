@@ -365,6 +365,59 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         self::assertArrayHasKey('success', $payload);
     }
 
+    /**
+     * A failure while recording the history event must not fail the submission itself:
+     * the question is stored, the failure is logged and the client still gets a success.
+     */
+    public function testCreateSucceedsWhenRecordingHistoryEventFails(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'records.allowQuestionsForGuests' => '1',
+            'main.enableSmartAnswering' => '0',
+            'main.enableAskQuestions' => '1',
+        ]);
+        $this->seedCategory();
+
+        $stopWords = $this->createStub(StopWords::class);
+        $stopWords->method('checkBannedWord')->willReturn(true);
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('add')->willReturn(42);
+
+        $questionHistory = $this->createMock(QuestionHistoryRepository::class);
+        $questionHistory
+            ->expects($this->once())
+            ->method('add')
+            ->willThrowException(new \InvalidArgumentException('history table unavailable'));
+
+        $controller = $this->createController(
+            stopWords: $stopWords,
+            question: $question,
+            notification: $this->createStub(Notification::class),
+            questionHistory: $questionHistory,
+        );
+        $currentUser = $this->createAuthenticatedUserMock();
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = Request::create('/api/question/create', 'POST', content: json_encode([
+            'pmf-csrf-token' => $csrfToken,
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'lang' => 'en',
+            'question' => 'How does this work?',
+            'captcha' => 'ignored-for-logged-in-user',
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->create($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
     public function testCreateRecordsSubmittedHistoryEventOnSuccess(): void
     {
         $this->configuration->getAll();

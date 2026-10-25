@@ -133,6 +133,29 @@ class DatabaseTest extends TestCase
         }
     }
 
+    public function testResetForgetsTheInstance(): void
+    {
+        Database::factory($this->configuration, 'mysqli');
+        $this->assertNotNull(Database::getInstance());
+
+        Database::reset();
+
+        $this->assertNull(Database::getInstance());
+    }
+
+    public function testConstructorIsPrivateAndKeepsTheConfiguration(): void
+    {
+        $reflection = new \ReflectionClass(Database::class);
+        $constructor = $reflection->getConstructor();
+        $this->assertNotNull($constructor);
+        $this->assertTrue($constructor->isPrivate());
+
+        $database = $reflection->newInstanceWithoutConstructor();
+        $constructor->invoke($database, $this->configuration);
+
+        $this->assertSame($this->configuration, $reflection->getProperty('configuration')->getValue($database));
+    }
+
     public function testGetInstanceReturnsSameDriverAfterFactory(): void
     {
         $driver = Database::factory($this->configuration, 'mysqli');

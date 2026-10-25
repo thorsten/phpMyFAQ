@@ -4,15 +4,18 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -394,5 +397,64 @@ class AttachmentControllerTest extends TestCase
         $this->assertFalse($payload['success']);
         $this->assertSame('Failed to fetch attachments', $payload['error']['message']);
         $this->assertSame('ATTACHMENT_ERROR', $payload['error']['code']);
+    }
+
+    /**
+     * Security regression: a requester who cannot see the FAQ must not receive its
+     * attachment metadata; the controller answers 404 before reading any attachment.
+     */
+    public function testListReturnsNotFoundWhenFaqIsNotAccessible(): void
+    {
+        $fixtureId = 990002;
+        $this->insertAttachmentFixture($fixtureId, 1);
+
+        $request = new Request();
+        $request->attributes->set('faqId', '1');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('setUser')->willReturnSelf();
+        $faq->method('setGroups')->willReturnSelf();
+        $faq->expects($this->once())->method('isFaqAccessibleForUser')->with(1)->willReturn(false);
+
+        $controller = new AttachmentController();
+        $controller->setContainer($this->createContainerOverridingFaqService($controller, $faq));
+
+        $response = $controller->list($request);
+        $this->deleteAttachmentFixture($fixtureId);
+
+        $this->assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->assertSame([], json_decode($response->getContent(), true));
+    }
+
+    public function testListThrowsWhenFaqServiceIsMissingFromContainer(): void
+    {
+        $request = new Request();
+        $request->attributes->set('faqId', '1');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($this->createContainerOverridingFaqService($controller, null));
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Faq service not found in container.');
+        $controller->list($request);
+    }
+
+    /**
+     * Delegates every service except 'phpmyfaq.faq' to the controller's real container.
+     */
+    private function createContainerOverridingFaqService(
+        AttachmentController $controller,
+        ?Faq $faq,
+    ): ContainerInterface {
+        $realContainer = new \ReflectionProperty(AbstractController::class, 'container')->getValue($controller);
+        $this->assertInstanceOf(ContainerInterface::class, $realContainer);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('get')->willReturnCallback(static fn(string $id): mixed => $id === 'phpmyfaq.faq'
+            ? $faq
+            : $realContainer->get($id));
+        $container->method('has')->willReturnCallback(static fn(string $id): bool => $realContainer->has($id));
+
+        return $container;
     }
 }

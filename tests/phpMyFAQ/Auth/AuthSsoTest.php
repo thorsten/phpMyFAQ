@@ -5,6 +5,7 @@ namespace phpMyFAQ\Auth;
 use Closure;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\AuthenticationSourceType;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\User;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -13,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 #[AllowMockObjectsWithoutExpectations]
 class AuthSsoTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private Configuration $configurationMock;
 
     protected function tearDown(): void
@@ -67,6 +70,34 @@ class AuthSsoTest extends TestCase
         );
 
         $this->assertTrue($authSso->create('testuser', 'password', 'example.com'));
+    }
+
+    public function testCreateWithLdapActiveFallsBackToRealLdapAuthWithoutFactory(): void
+    {
+        $this->configurationMock->method('isLdapActive')->willReturn(true);
+        $this->configurationMock->method('getLdapServer')->willReturn([]);
+
+        $authSso = new AuthSso($this->configurationMock, Request::create('/'));
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('An error occurred while contacting LDAP: No configuration found.');
+
+        $authSso->create('testuser', 'password', 'example.com');
+    }
+
+    public function testCreateWithoutLdapCreatesRealUserWithoutFactory(): void
+    {
+        $configuration = $this->createTestConfiguration();
+        $configuration->set('ldap.ldapSupport', false);
+
+        $authSso = new AuthSso($configuration, Request::create('/'));
+
+        $this->assertTrue($authSso->create('sso-created-user', 'password', 'example.com'));
+
+        $user = new User($configuration);
+        $this->assertTrue($user->getUserByLogin('sso-created-user'));
+        $this->assertSame('active', $user->getStatus());
+        $this->assertSame(AuthenticationSourceType::AUTH_SSO->value, $user->getUserAuthSource());
     }
 
     public function testUpdate(): void

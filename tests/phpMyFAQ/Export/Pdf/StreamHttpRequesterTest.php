@@ -126,4 +126,15 @@ final class StreamHttpRequesterTest extends TestCase
         self::assertNull($method->invoke($requester, 'http://127.0.0.1/x.png'));
         self::assertNull($method->invoke($requester, 'ftp://203.0.113.10/x.png'));
     }
+
+    public function testResolvePinnedTargetRefusesUrlsWithoutSchemeOrHost(): void
+    {
+        $requester = new StreamHttpRequester();
+        $method = new ReflectionMethod($requester, 'resolvePinnedTarget');
+
+        self::assertNull($method->invoke($requester, '/relative/image.png'));
+        self::assertNull($method->invoke($requester, '203.0.113.10/image.png'));
+        // parse_url() fails on an empty host.
+        self::assertNull($method->invoke($requester, 'http:///image.png'));
+    }
 }

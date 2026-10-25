@@ -95,6 +95,15 @@ class S3StorageTest extends TestCase
         $storage->get('missing-body.txt');
     }
 
+    public function testGetThrowsWhenResponseIsNeitherArrayNorArrayAccess(): void
+    {
+        $storage = new S3Storage(new ObjectResultS3Client(), 'pmf-bucket');
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Invalid S3 response while reading object: plain-object.txt');
+        $storage->get('plain-object.txt');
+    }
+
     public function testUrlUsesClientUrlWhenNoPublicBaseUrlIsConfigured(): void
     {
         $client = new FakeS3Client();
@@ -256,6 +265,17 @@ final class ArrayAccessResult implements \ArrayAccess
     public function offsetUnset(mixed $offset): void
     {
         unset($this->data[$offset]);
+    }
+}
+
+/**
+ * S3 client whose results are plain objects, neither arrays nor ArrayAccess.
+ */
+final class ObjectResultS3Client
+{
+    public function getObject(array $args): object
+    {
+        return (object) ['Body' => 'ignored'];
     }
 }
 

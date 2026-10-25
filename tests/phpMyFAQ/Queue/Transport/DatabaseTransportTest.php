@@ -184,6 +184,52 @@ class DatabaseTransportTest extends TestCase
         $this->assertSame([], $job['headers']);
     }
 
+    public function testReserveReturnsNullWhenNoJobIsDue(): void
+    {
+        Database::setTablePrefix('pmf_');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('now')->willReturn('CURRENT_TIMESTAMP');
+        $db->expects($this->once())->method('query')->willReturn('result-set');
+        $db->method('fetchArray')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $transport = new DatabaseTransport($configuration);
+
+        $this->assertNull($transport->reserve('default'));
+    }
+
+    public function testReserveReturnsEmptyHeadersWhenNoneWereStored(): void
+    {
+        Database::setTablePrefix('pmf_');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('now')->willReturn('CURRENT_TIMESTAMP');
+        $db->method('query')->willReturn(true);
+        $db->method('affectedRows')->willReturn(1);
+        $db->method('fetchArray')->willReturnOnConsecutiveCalls([
+            'id' => 6,
+            'queue' => 'default',
+            'body' => 'body-6',
+            'headers' => '',
+        ], false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $transport = new DatabaseTransport($configuration);
+        $job = $transport->reserve('default');
+
+        $this->assertNotNull($job);
+        $this->assertSame(6, $job['id']);
+        $this->assertSame('body-6', $job['body']);
+        $this->assertSame([], $job['headers']);
+    }
+
     public function testReserveSkipsJobsWithAffectedRowsMismatch(): void
     {
         Database::setTablePrefix('pmf_');

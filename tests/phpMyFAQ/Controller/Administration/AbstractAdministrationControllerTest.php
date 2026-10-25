@@ -109,6 +109,28 @@ final class AbstractAdministrationControllerTest extends TestCase
         self::assertSame($adminLog, $controller->getAdminLogInstance());
     }
 
+    public function testSetContainerThrowsWhenAdminLogServiceIsMissing(): void
+    {
+        $controller = new AbstractAdministrationControllerTestStub();
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('AdminLog service not found in container.');
+        $controller->setContainer($this->createContainerWithoutService('phpmyfaq.admin.admin-log'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testHeaderThrowsWhenAdminMenuBuilderServiceIsMissing(): void
+    {
+        $controller = new AbstractAdministrationControllerTestStub();
+        $controller->setContainer($this->createContainerWithoutService('phpmyfaq.admin.helper'));
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('AdminMenuBuilder service not found in container.');
+        $controller->fetchHeader(new Request(attributes: ['_route' => 'admin.group']));
+    }
+
     /**
      * @throws \Exception
      */
@@ -380,6 +402,21 @@ final class AbstractAdministrationControllerTest extends TestCase
                     default => null,
                 };
             });
+
+        return $container;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function createContainerWithoutService(string $missingServiceId): ContainerInterface
+    {
+        $inner = $this->createControllerContainer();
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('get')->willReturnCallback(static fn(string $id): mixed => $id === $missingServiceId
+            ? null
+            : $inner->get($id));
 
         return $container;
     }

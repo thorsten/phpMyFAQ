@@ -45,4 +45,21 @@ class WebAuthnUserTest extends TestCase
 
         $this->assertInstanceOf(WebAuthnUser::class, $result);
     }
+
+    public function testChallengeIsEmptyByDefault(): void
+    {
+        $user = new WebAuthnUser();
+
+        $this->assertSame('', $user->getChallenge());
+    }
+
+    public function testSetAndGetChallenge(): void
+    {
+        $user = new WebAuthnUser();
+
+        $result = $user->setChallenge('challenge-abc');
+
+        $this->assertSame($user, $result);
+        $this->assertSame('challenge-abc', $user->getChallenge());
+    }
 }

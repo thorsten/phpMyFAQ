@@ -6,7 +6,9 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\TestDatabaseTrait;
+use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
@@ -56,6 +58,26 @@ final class ErrorControllerTest extends TestCase
         self::assertSame(500, $response->getStatusCode());
         self::assertStringContainsString('500', (string) $response->getContent());
         self::assertStringContainsString('Test internal failure', (string) $response->getContent());
+    }
+
+    /**
+     * When the themed error page itself cannot be rendered, the dependency-free fallback is served.
+     */
+    public function testInternalServerErrorFallsBackToMinimalPageWhenHeaderCannotBeBuilt(): void
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willThrowException(new \Exception('permission backend unavailable'));
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->perm = $permission;
+
+        $controller = new ErrorController();
+        new \ReflectionProperty($controller, 'currentUser')->setValue($controller, $currentUser);
+
+        $response = $controller->internalServerError(Request::create('/error-test'), 'Fallback failure');
+
+        self::assertSame(500, $response->getStatusCode());
+        self::assertSame('text/html; charset=utf-8', $response->headers->get('Content-Type'));
+        self::assertStringContainsString('Fallback failure', (string) $response->getContent());
     }
 
     public function testRenderMinimalErrorReturnsHtml500Response(): void

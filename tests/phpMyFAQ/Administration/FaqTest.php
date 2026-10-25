@@ -389,6 +389,14 @@ class FaqTest extends TestCase
         $this->assertSame([], $this->faq->getInactiveFaqsData());
     }
 
+    public function testGetContentHealthStatisticsReturnsZeroCountsWhenQueriesFail(): void
+    {
+        $this->mockDb->expects($this->exactly(2))->method('query')->willReturn(false);
+        $this->mockDb->expects($this->never())->method('fetchObject');
+
+        $this->assertSame(['orphaned' => 0, 'stale' => 0], $this->faq->getContentHealthStatistics());
+    }
+
     public function testSetStickyFaqOrderNormalizesIds(): void
     {
         $row = new stdClass();

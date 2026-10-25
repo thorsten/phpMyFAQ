@@ -273,6 +273,137 @@ class SearchEngineTest extends TestCase
         $this->assertSame(10, $results[0]->id);
     }
 
+    public function testElasticsearchIgnoresResponsesWithoutAnArrayBody(): void
+    {
+        $client = new class {
+            public function search(array $params): object
+            {
+                return new class {
+                    public function asArray(): ?array
+                    {
+                        return null;
+                    }
+                };
+            }
+        };
+
+        $search = new Elasticsearch(
+            $this->createStub(Configuration::class),
+            $client,
+            $this->createElasticsearchConfiguration('faq-index'),
+        );
+
+        $this->assertSame([], $search->search('phpmyfaq'));
+    }
+
+    public function testElasticsearchIgnoresResponsesWithoutAHitsList(): void
+    {
+        $client = new class {
+            public function search(array $params): object
+            {
+                return new class {
+                    public function asArray(): array
+                    {
+                        return ['hits' => ['total' => ['value' => 0]]];
+                    }
+                };
+            }
+        };
+
+        $search = new Elasticsearch(
+            $this->createStub(Configuration::class),
+            $client,
+            $this->createElasticsearchConfiguration('faq-index'),
+        );
+
+        $this->assertSame([], $search->search('phpmyfaq'));
+    }
+
+    public function testElasticsearchSkipsMalformedHits(): void
+    {
+        $client = new class {
+            public function search(array $params): object
+            {
+                return new class {
+                    public function asArray(): array
+                    {
+                        return [
+                            'hits' => [
+                                'hits' => [
+                                    'not-an-array',
+                                    ['_source' => 'not-an-array', '_score' => 1.0],
+                                    ['_source' => ['id' => 3, 'question' => 'valid'], '_score' => 1.0],
+                                ],
+                            ],
+                        ];
+                    }
+                };
+            }
+        };
+
+        $search = new Elasticsearch(
+            $this->createStub(Configuration::class),
+            $client,
+            $this->createElasticsearchConfiguration('faq-index'),
+        );
+
+        $results = $search->search('valid');
+
+        $this->assertCount(1, $results);
+        $this->assertSame(3, $results[0]->id);
+        $this->assertSame('valid', $results[0]->question);
+    }
+
+    public function testOpenSearchIgnoresResponsesWithoutAHitsList(): void
+    {
+        $client = $this
+            ->getMockBuilder(OpenSearchClient::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['search'])
+            ->getMock();
+        $client->method('search')->willReturn(['hits' => ['total' => ['value' => 0]]]);
+
+        $search = new OpenSearch(
+            $this->createStub(Configuration::class),
+            $client,
+            $this->createOpenSearchConfiguration('faq-index'),
+        );
+
+        $this->assertSame([], $search->search('phpmyfaq'));
+    }
+
+    public function testOpenSearchSkipsMalformedHits(): void
+    {
+        $client = $this
+            ->getMockBuilder(OpenSearchClient::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['search'])
+            ->getMock();
+        $client
+            ->method('search')
+            ->willReturn([
+                'hits' => [
+                    'hits' => [
+                        'not-an-array',
+                        ['_source' => 'not-an-array', '_score' => 1.0],
+                        ['_source' => ['id' => 4, 'question' => 'valid'], '_score' => 1.0],
+                    ],
+                ],
+            ]);
+
+        $search = new OpenSearch(
+            $this->createStub(Configuration::class),
+            $client,
+            $this->createOpenSearchConfiguration('faq-index'),
+        );
+
+        $results = $search->search('valid');
+
+        $this->assertCount(1, $results);
+        $this->assertSame(4, $results[0]->id);
+        $this->assertSame('valid', $results[0]->question);
+    }
+
     private function createElasticsearchConfiguration(string $index): ElasticsearchConfiguration
     {
         $configuration = $this->createMock(ElasticsearchConfiguration::class);

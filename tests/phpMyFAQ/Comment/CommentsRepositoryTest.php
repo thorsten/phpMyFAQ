@@ -6,6 +6,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\Comment as CommentEntity;
 use phpMyFAQ\Entity\CommentType;
@@ -186,6 +187,24 @@ class CommentsRepositoryTest extends TestCase
             ->query(sprintf("UPDATE %sfaqdata SET comment = 'y' WHERE id = 1 AND lang = 'en'", $prefix));
 
         $this->assertTrue($this->repository->isCommentAllowed(1, 'en', CommentType::FAQ));
+    }
+
+    public function testIsCommentAllowedReturnsFalseForUnknownRecord(): void
+    {
+        $this->assertFalse($this->repository->isCommentAllowed(999999, 'en', CommentType::FAQ));
+    }
+
+    public function testCountByReferenceIdAndTypeReturnsZeroWhenQueryYieldsNoRow(): void
+    {
+        $databaseDriver = $this->createMock(DatabaseDriver::class);
+        $databaseDriver->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $databaseDriver->method('query')->willReturn(false);
+        $databaseDriver->method('fetchObject')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($databaseDriver);
+
+        $this->assertSame(0, new CommentsRepository($configuration)->countByReferenceIdAndType(1, CommentType::FAQ));
     }
 
     private function initializeDatabaseStatics(Sqlite3 $dbHandle): void

@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Setup\Installation;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\MysqlDialect;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\PostgresDialect;
@@ -11,6 +12,7 @@ use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\SqlServerDialect;
 use phpMyFAQ\Setup\Migration\QueryBuilder\DialectInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class SchemaInstallerTest extends TestCase
 {
@@ -85,6 +87,69 @@ class SchemaInstallerTest extends TestCase
         $this->assertFalse($result);
     }
 
+    public function testCreateTablesReturnsFalseWhenAnIndexCannotBeCreated(): void
+    {
+        $db = $this->createStub(DatabaseDriver::class);
+        $db->method('query')->willReturnCallback(static fn(string $sql): bool => !str_starts_with(
+            $sql,
+            'CREATE INDEX',
+        ));
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        // PostgreSQL emits separate CREATE INDEX statements; the first failing one aborts the installation
+        $installer = new SchemaInstaller($configuration, new PostgresDialect());
+
+        $this->assertFalse($installer->createTables(''));
+        $this->assertStringStartsWith('CREATE INDEX', (string) end($installer->collectedSql));
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function catalogQueryProvider(): array
+    {
+        return [
+            'mysql' => ['pdo_mysql', 'SHOW TABLES LIKE'],
+            'postgres' => ['pdo_pgsql', 'FROM pg_catalog.pg_tables'],
+            'sqlserver' => ['pdo_sqlsrv', 'FROM sysobjects'],
+        ];
+    }
+
+    #[DataProvider('catalogQueryProvider')]
+    public function testCreateMissingTablesUsesTheCatalogQueryOfTheDatabaseType(
+        string $databaseType,
+        string $expectedCatalogQueryFragment,
+    ): void {
+        $queries = [];
+        $db = $this->createStub(DatabaseDriver::class);
+        $db->method('query')->willReturnCallback(static function (string $sql) use (&$queries): bool {
+            $queries[] = $sql;
+
+            return true;
+        });
+        $db->method('numRows')->willReturn(1);
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $databaseReflection = new ReflectionClass(Database::class);
+        $dbTypeProperty = $databaseReflection->getProperty('dbType');
+        $previousType = $dbTypeProperty->getValue();
+        $dbTypeProperty->setValue(null, $databaseType);
+
+        try {
+            $installer = new SchemaInstaller($configuration, new MysqlDialect());
+            $installer->createMissingTables();
+        } finally {
+            $dbTypeProperty->setValue(null, $previousType);
+        }
+
+        $this->assertNotEmpty($queries);
+        $this->assertStringContainsString($expectedCatalogQueryFragment, $queries[0]);
+        // every table exists in the catalog, so nothing is created
+        $this->assertSame([], $installer->collectedSql);
+    }
+
     public function testMysqlDryRunContainsInnodb(): void
     {
         $db = $this->createStub(DatabaseDriver::class);
@@ -136,7 +201,10 @@ class SchemaInstallerTest extends TestCase
     {
         return [
             'mysql' => [new MysqlDialect(), ['CREATE DATABASE IF NOT EXISTS `tenant_a`', 'USE `tenant_a`']],
-            'postgres' => [new PostgresDialect(), ['CREATE SCHEMA IF NOT EXISTS "tenant_a"', 'SET search_path TO "tenant_a"']],
+            'postgres' => [
+                new PostgresDialect(),
+                ['CREATE SCHEMA IF NOT EXISTS "tenant_a"', 'SET search_path TO "tenant_a"'],
+            ],
             'sqlserver' => [
                 new SqlServerDialect(),
                 ["IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'tenant_a') EXEC('CREATE SCHEMA [tenant_a]')"],

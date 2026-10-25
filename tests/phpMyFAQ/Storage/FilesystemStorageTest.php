@@ -133,6 +133,53 @@ class FilesystemStorageTest extends TestCase
         $this->withoutFilesystemWarnings(fn() => $storage->put('nested/file.txt', 'data'));
     }
 
+    public function testPutThrowsWhenTargetCannotBeWritten(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir);
+        mkdir($this->tmpDir . '/existing-dir', 0777, true);
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Unable to write file to storage path: existing-dir');
+
+        $this->withoutFilesystemWarnings(fn() => $storage->put('existing-dir', 'data'));
+    }
+
+    public function testPutStreamThrowsWhenDirectoryCannotBeCreated(): void
+    {
+        $blockingFile = $this->tmpDir . '/blocked';
+        file_put_contents($blockingFile, 'x');
+        $storage = new FilesystemStorage($blockingFile);
+        $stream = fopen('php://memory', 'rb+');
+        $this->assertIsResource($stream);
+
+        try {
+            fwrite($stream, 'data');
+            rewind($stream);
+
+            $this->expectException(StorageException::class);
+            $this->expectExceptionMessage('Unable to create directory for storage path');
+            $this->withoutFilesystemWarnings(fn() => $storage->putStream('nested/file.txt', $stream));
+        } finally {
+            fclose($stream);
+        }
+    }
+
+    public function testPutStreamThrowsWhenTheSourceStreamCannotBeRead(): void
+    {
+        $storage = new FilesystemStorage($this->tmpDir);
+        $writeOnlySource = $this->tmpDir . '/write-only-source.txt';
+        $stream = fopen($writeOnlySource, 'wb');
+        $this->assertIsResource($stream);
+
+        try {
+            $this->expectException(StorageException::class);
+            $this->expectExceptionMessage('Unable to write stream contents: target.txt');
+            $this->withoutFilesystemWarnings(fn() => $storage->putStream('target.txt', $stream));
+        } finally {
+            fclose($stream);
+        }
+    }
+
     public function testPutStreamThrowsWhenTargetCannotBeOpened(): void
     {
         $storage = new FilesystemStorage($this->tmpDir);

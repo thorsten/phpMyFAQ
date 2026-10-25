@@ -232,4 +232,28 @@ final class SearchControllerTest extends TestCase
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertFalse($payload['error']);
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testDeleteTermReturnsBadRequestWithTermIdWhenDeletionFails(): void
+    {
+        self::assertNotFalse($this->dbHandle->query('DROP TABLE faqsearches'));
+
+        $controller = new SearchController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-searchterm');
+        $controller->setContainer($container);
+
+        $response = $controller->deleteTerm(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'searchTermId' => 7,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(7, $payload['error']);
+    }
 }

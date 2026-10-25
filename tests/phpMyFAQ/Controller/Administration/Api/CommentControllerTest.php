@@ -307,6 +307,7 @@ class CommentControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertTrue($payload['success']);
     }
+
     /**
      * Regression: comment IDs arrive as strings from the serialized admin form
      * data and must be deleted without a TypeError.
@@ -346,5 +347,37 @@ class CommentControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertTrue($payload['success']);
         self::assertSame([3, 5], $deletedIds);
+    }
+
+    /**
+     * Comment IDs that are not positive integers are skipped instead of being passed on for deletion.
+     *
+     * @throws \Exception
+     */
+    public function testDeleteSkipsInvalidCommentIds(): void
+    {
+        $comments = $this->createMock(Comments::class);
+        $comments->expects($this->never())->method('delete');
+
+        $sessionContainer = $this->createAuthenticatedContainer();
+        $session = $sessionContainer->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-comment');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $token,
+                'comments[]' => ['not-a-number', 0],
+            ],
+            'type' => 'faq',
+        ], JSON_THROW_ON_ERROR));
+        $controller = new CommentController($comments);
+        $controller->setContainer($sessionContainer);
+
+        $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertFalse($payload['success']);
     }
 }

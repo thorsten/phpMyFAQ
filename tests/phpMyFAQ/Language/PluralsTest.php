@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Language;
 
+use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -358,5 +359,71 @@ class PluralsTest extends TestCase
                 $this->assertIsInt($result, "plural() must return int for {$lang} with n={$n}");
             }
         }
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testGetMsgTemplateReturnsANonPluralTranslationAsIs(): void
+    {
+        $this->loadEnglishTranslations();
+
+        $plurals = new Plurals();
+
+        $this->assertSame('en', $plurals->getMsgTemplate('metaLanguage', 5));
+        $this->assertSame('', $plurals->getMsgTemplate('thisKeyDoesNotExist', 5));
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testGetFallsBackToTheEnglishPluralFormForAnUnsupportedLanguage(): void
+    {
+        $this->loadEnglishTranslations();
+
+        $plurals = $this->createPlurals(lang: 'xx', nPlurals: 2, useDefaultPluralForm: true);
+
+        $this->assertSame('1 user online', $plurals->get('plmsgUserOnline', 1));
+        $this->assertSame('3 users online', $plurals->get('plmsgUserOnline', 3));
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testGetClampsThePluralFormToTheDeclaredNumberOfForms(): void
+    {
+        $this->loadEnglishTranslations();
+
+        // Arabic yields form 3 for n=5, but only one form is declared: the last declared form wins.
+        $plurals = $this->createPlurals(lang: 'ar', nPlurals: 1, useDefaultPluralForm: false);
+
+        $this->assertSame('5 user online', $plurals->get('plmsgUserOnline', 5));
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    private function loadEnglishTranslations(): void
+    {
+        Translation::create()
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
+            ->setDefaultLanguage('en')
+            ->setCurrentLanguage('en');
+    }
+
+    /**
+     * Builds a Plurals instance for a language setup the shipped translation files cannot provide.
+     *
+     * @throws \ReflectionException
+     */
+    private function createPlurals(string $lang, int $nPlurals, bool $useDefaultPluralForm): Plurals
+    {
+        $reflection = new ReflectionClass(Plurals::class);
+        $plurals = $reflection->newInstanceWithoutConstructor();
+        $reflection->getProperty('lang')->setValue($plurals, $lang);
+        $reflection->getProperty('nPlurals')->setValue($plurals, $nPlurals);
+        $reflection->getProperty('useDefaultPluralForm')->setValue($plurals, $useDefaultPluralForm);
+
+        return $plurals;
     }
 }

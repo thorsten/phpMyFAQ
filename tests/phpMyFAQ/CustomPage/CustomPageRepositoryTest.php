@@ -192,6 +192,30 @@ class CustomPageRepositoryTest extends TestCase
         $this->assertLessThanOrEqual(2, count($pages));
     }
 
+    public function testGetAllPaginatedYieldsOnlyTheRequestedSlice(): void
+    {
+        for ($i = 1; $i <= 3; $i++) {
+            $page = new CustomPageEntity();
+            $page
+                ->setLanguage('en')
+                ->setPageTitle("Page $i")
+                ->setSlug("page-$i")
+                ->setContent("<p>Content $i</p>")
+                ->setAuthorName('Test')
+                ->setAuthorEmail('test@example.com')
+                ->setActive(true)
+                ->setCreated(new DateTime());
+
+            $this->repository->insert($page);
+        }
+
+        $pages = iterator_to_array($this->repository->getAllPaginated('en', false, 2, 0, 'page_title', 'ASC'));
+
+        $this->assertCount(2, $pages);
+        $this->assertSame('Page 1', $pages[0]->page_title);
+        $this->assertSame('Page 2', $pages[1]->page_title);
+    }
+
     public function testCountAll(): void
     {
         $count = $this->repository->countAll('en', false);

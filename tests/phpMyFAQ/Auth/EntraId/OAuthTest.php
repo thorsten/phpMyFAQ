@@ -90,11 +90,10 @@ class OAuthTest extends TestCase
      */
     private function issueNonce(string $nonce = self::NONCE): void
     {
-        $this->mockSession
-            ->method('get')
-            ->willReturnCallback(
-                static fn(string $key): ?string => $key === EntraIdSession::ENTRA_ID_OAUTH_NONCE ? $nonce : null,
-            );
+        $this->mockSession->method('get')->willReturnCallback(static fn(string $key): ?string => $key
+            === EntraIdSession::ENTRA_ID_OAUTH_NONCE
+                ? $nonce
+                : null);
     }
 
     /**
@@ -681,5 +680,48 @@ class OAuthTest extends TestCase
         $this->oAuth->setToken($token);
 
         $this->assertSame('john@example.com', $this->oAuth->getMail());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSetJwksProviderReplacesTheProviderUsedForSignatureChecks(): void
+    {
+        $result = $this->oAuth->setJwksProvider(null);
+
+        $this->assertSame($this->oAuth, $result);
+
+        // Without a provider every token is rejected, even a correctly signed one.
+        $this->issueNonce();
+        $token = new stdClass();
+        $token->id_token = $this->signedIdToken();
+        $this->oAuth->setToken($token);
+        $this->assertSame('', $this->oAuth->getName());
+
+        $this->oAuth->setJwksProvider($this->mockJwksProvider);
+        $this->oAuth->setToken($token);
+        $this->assertSame('John Doe', $this->oAuth->getName());
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     * @throws \JsonException
+     */
+    public function testGetOAuthTokenThrowsRuntimeExceptionForANonObjectPayload(): void
+    {
+        $mockResponse = $this->createStub(ResponseInterface::class);
+        $mockResponse->method('getContent')->willReturn('[]');
+        $mockResponse->method('getStatusCode')->willReturn(200);
+
+        $this->mockClient->method('request')->willReturn($mockResponse);
+
+        $reflection = new ReflectionClass($this->oAuth);
+        $reflection->getProperty('httpClient')->setValue($this->oAuth, $this->mockClient);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('OAuth token exchange returned an unexpected payload.');
+
+        $this->oAuth->getOAuthToken('authorization_code');
     }
 }

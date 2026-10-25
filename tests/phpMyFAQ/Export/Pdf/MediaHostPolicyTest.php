@@ -45,4 +45,25 @@ final class MediaHostPolicyTest extends TestCase
         self::assertSame('::1', MediaHostPolicy::normalizeHost('[::1]'));
         self::assertSame('2001:db8::1', MediaHostPolicy::normalizeHost('[2001:db8::1]'));
     }
+
+    public function testIsOriginAllowedRefusesUrlsWithoutAHost(): void
+    {
+        self::assertFalse(MediaHostPolicy::isOriginAllowed(parse_url('/relative/image.png'), ['cdn.test']));
+        self::assertFalse(MediaHostPolicy::isOriginAllowed(['scheme' => 'http', 'path' => '/x'], ['cdn.test']));
+    }
+
+    public function testIsOriginAllowedRefusesAHostThatNormalizesToAnEmptyString(): void
+    {
+        // "." and "[]" are reduced to "" by normalizeHost() and must never match an allowlist entry.
+        self::assertFalse(MediaHostPolicy::isOriginAllowed(['scheme' => 'http', 'host' => '.'], ['cdn.test', '.']));
+        self::assertFalse(MediaHostPolicy::isOriginAllowed(['scheme' => 'http', 'host' => '[]'], ['cdn.test']));
+    }
+
+    public function testIsOriginAllowedIgnoresEntriesWithAnOutOfRangePort(): void
+    {
+        self::assertFalse(MediaHostPolicy::isOriginAllowed(parse_url('http://cdn.test/x'), ['cdn.test:0']));
+        self::assertFalse(MediaHostPolicy::isOriginAllowed(parse_url('http://cdn.test/x'), ['cdn.test:65536']));
+        // The out-of-range entry is skipped, a later valid entry still applies.
+        self::assertTrue(MediaHostPolicy::isOriginAllowed(parse_url('http://cdn.test/x'), ['cdn.test:0', 'cdn.test']));
+    }
 }

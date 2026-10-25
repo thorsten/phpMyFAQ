@@ -172,4 +172,31 @@ class RegistrationControllerTest extends TestCase
         $this->expectException(\Exception::class);
         $controller->create($request);
     }
+
+    /**
+     * @throws \JsonException
+     */
+    public function testCreateReturnsBadRequestForInvalidCaptchaCode(): void
+    {
+        $this->configuration->set('spam.enableCaptchaCode', 'true');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'realname' => 'Test User',
+            'name' => 'testuser',
+            'email' => 'test@example.com',
+            'captcha' => 'x',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = new RegistrationController();
+
+        try {
+            $response = $controller->create($request);
+        } finally {
+            $this->configuration->set('spam.enableCaptchaCode', 'false');
+        }
+
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(Translation::get('msgCaptcha'), $payload['error']);
+    }
 }

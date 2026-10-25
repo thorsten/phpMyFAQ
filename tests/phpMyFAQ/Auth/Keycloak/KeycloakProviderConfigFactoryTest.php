@@ -74,6 +74,29 @@ final class KeycloakProviderConfigFactoryTest extends TestCase
         $this->assertSame('https://faq.example.com/auth/keycloak/callback', $config->client->redirectUri);
     }
 
+    public function testCreateLeavesDiscoveryUrlEmptyWhenDisabledAndBaseUrlMissing(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['keycloak.enable',            'false'],
+                ['keycloak.baseUrl',           ''],
+                ['keycloak.realm',             'faq'],
+                ['keycloak.clientId',          ''],
+                ['keycloak.clientSecret',      ''],
+                ['keycloak.redirectUri',       'https://faq.example.com/cb'],
+                ['keycloak.scopes',            ''],
+                ['keycloak.autoProvision',     0],
+                ['keycloak.logoutRedirectUrl', ''],
+            ]);
+
+        $config = new KeycloakProviderConfigFactory($configuration)->create();
+
+        $this->assertFalse($config->enabled);
+        $this->assertSame('', $config->discoveryUrl);
+    }
+
     public function testCreateThrowsWhenEnabledButBaseUrlMissing(): void
     {
         $configuration = $this->createStub(Configuration::class);

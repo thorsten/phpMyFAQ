@@ -213,6 +213,31 @@ class JsonTest extends TestCase
         $this->assertEmpty($decoded);
     }
 
+    public function testGenerateSkipsEntriesThatAreNotArrays(): void
+    {
+        $this->categoryMock->method('transform');
+        $this->categoryMock->method('getPath')->willReturn('General');
+        $this->faqMock->method('get')->willReturn([
+            'not-an-array',
+            [
+                'id' => 1,
+                'lang' => 'en',
+                'category_id' => 1,
+                'keywords' => 'test',
+                'topic' => 'Test Question',
+                'content' => 'Test Answer',
+                'author_name' => 'Test Author',
+                'lastmodified' => '2025-01-15 10:30:00',
+            ],
+        ]);
+
+        $decoded = json_decode($this->jsonExport->generate(), true);
+
+        $this->assertIsArray($decoded);
+        $this->assertCount(1, $decoded);
+        $this->assertSame('Test Question', $decoded[0]['faq']['question']);
+    }
+
     public function testGenerateWithMultipleFaqEntries(): void
     {
         $mockFaqData = [

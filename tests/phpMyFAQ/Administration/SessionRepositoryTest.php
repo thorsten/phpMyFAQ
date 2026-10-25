@@ -67,6 +67,14 @@ class SessionRepositoryTest extends TestCase
         $this->assertEquals($expectedCount, $actualCount);
     }
 
+    public function testCountOnlineUsersFromFaqUserReturnsZeroWhenQueryFails(): void
+    {
+        $this->mockDb->method('query')->willReturn(false);
+        $this->mockDb->expects($this->never())->method('fetchObject');
+
+        $this->assertSame(0, $this->repository->countOnlineUsersFromFaqUser(1609459200));
+    }
+
     public function testGetTimeBySessionIdReturnsTimestamp(): void
     {
         $sessionId = 123;

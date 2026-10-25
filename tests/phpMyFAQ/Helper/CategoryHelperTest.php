@@ -313,6 +313,36 @@ class CategoryHelperTest extends TestCase
         $this->assertSame([], $child['children']);
     }
 
+    public function testGetCategoryTreeDataBuildsTheNestedNodesForTheOrderedCategories(): void
+    {
+        $this->mockCategory->method('getGroups')->willReturn([-1]);
+        $this->mockCategory
+            ->method('getOrderedCategories')
+            ->willReturn([
+                1 => [
+                    'id' => 1,
+                    'parent_id' => 0,
+                    'name' => 'Root',
+                    'description' => 'Root description',
+                    'image' => '',
+                ],
+                2 => ['id' => 2, 'parent_id' => 1, 'name' => 'Child', 'description' => '', 'image' => ''],
+            ]);
+        $this->mockConfiguration->method('getDefaultUrl')->willReturn('http://localhost/');
+
+        $reflection = new ReflectionClass($this->categoryHelper);
+        $reflection->getProperty('configuration')->setValue($this->categoryHelper, $this->mockConfiguration);
+        $reflection->getProperty('plurals')->setValue($this->categoryHelper, new Plurals());
+
+        $nodes = $this->categoryHelper->getCategoryTreeData();
+
+        $this->assertCount(1, $nodes);
+        $this->assertSame(1, $nodes[0]['id']);
+        $this->assertSame('http://localhost/category/1/root.html', $nodes[0]['url']);
+        $this->assertCount(1, $nodes[0]['children']);
+        $this->assertSame(2, $nodes[0]['children'][0]['id']);
+    }
+
     public function testGetCategoryTreeDataReturnsEmptyArrayWhenNoCategories(): void
     {
         $this->mockCategory->method('getOrderedCategories')->willReturn([]);

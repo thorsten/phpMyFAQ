@@ -294,6 +294,32 @@ final class ApiKeyControllerTest extends TestCase
     }
 
     /**
+     * A super admin holds every permission implicitly, so the per-scope permission check is skipped.
+     *
+     * @throws \Exception
+     */
+    public function testCreateAcceptsAnyKnownScopeForSuperAdmin(): void
+    {
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer(isSuperAdmin: true);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'api-key-create');
+        $controller->setContainer($container);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'name' => 'Super admin key',
+            'scopes' => ['faq.read', 'news.write'],
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_CREATED, $response->getStatusCode());
+        self::assertSame(['faq.read', 'news.write'], $payload['scopes']);
+        self::assertSame(1, $this->countApiKeysForUser(42));
+    }
+
+    /**
      * @throws \Exception
      */
     public function testUpdateRejectsScopeWhosePermissionTheOwnerDoesNotHold(): void
@@ -682,13 +708,15 @@ final class ApiKeyControllerTest extends TestCase
         return $token;
     }
 
-    private function createAuthenticatedContainer(): ContainerInterface
+    private function createAuthenticatedContainer(bool $isSuperAdmin = false): ContainerInterface
     {
-        return $this->createAuthenticatedContainerWithDb($this->configuration->getDb());
+        return $this->createAuthenticatedContainerWithDb($this->configuration->getDb(), $isSuperAdmin);
     }
 
-    private function createAuthenticatedContainerWithDb(DatabaseDriver $db): ContainerInterface
-    {
+    private function createAuthenticatedContainerWithDb(
+        DatabaseDriver $db,
+        bool $isSuperAdmin = false,
+    ): ContainerInterface {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
@@ -709,7 +737,7 @@ final class ApiKeyControllerTest extends TestCase
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
-        $currentUser->method('isSuperAdmin')->willReturn(false);
+        $currentUser->method('isSuperAdmin')->willReturn($isSuperAdmin);
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);

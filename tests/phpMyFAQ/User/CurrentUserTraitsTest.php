@@ -266,6 +266,58 @@ class CurrentUserTraitsTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws \Exception
+     */
+    public function testGetFromSessionRemovesATimedOutUserFromTheSession(): void
+    {
+        $currentUser = new CurrentUser($this->configuration);
+        $currentUser->login('admin', 'password');
+
+        $sessionWrapper = new SessionWrapper();
+        $sessionWrapper->set(
+            CurrentUser::SESSION_ID_TIMESTAMP,
+            $_SERVER['REQUEST_TIME'] - ((PMF_AUTH_TIMEOUT + 1) * 60),
+        );
+
+        $this->assertNull(CurrentUser::getFromSession($this->configuration));
+        $this->assertFalse($sessionWrapper->has(CurrentUser::SESSION_CURRENT_USER));
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function testGetFromSessionReturnsNullWhenTheClientIpChangedAndIpCheckIsEnabled(): void
+    {
+        $currentUser = new CurrentUser($this->configuration);
+        $currentUser->login('admin', 'password');
+        $this->configuration->set('security.ipCheck', true);
+        $this->configuration->getDb()->query("UPDATE faquser SET ip = '10.0.0.1' WHERE user_id = 1");
+
+        $this->assertNull(CurrentUser::getFromSession($this->configuration));
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function testGetFromSessionRenewsATimedOutSessionId(): void
+    {
+        $currentUser = new CurrentUser($this->configuration);
+        $currentUser->login('admin', 'password');
+
+        $sessionWrapper = new SessionWrapper();
+        $sessionWrapper->set(CurrentUser::SESSION_ID_TIMESTAMP, $_SERVER['REQUEST_TIME'] - 120);
+
+        $result = CurrentUser::getFromSession($this->configuration);
+
+        $this->assertInstanceOf(CurrentUser::class, $result);
+        $this->assertTrue($result->isLoggedIn());
+        $this->assertSame($_SERVER['REQUEST_TIME'], (int) $sessionWrapper->get(CurrentUser::SESSION_ID_TIMESTAMP));
+    }
+
+    /**
+     * @throws Exception
      */
     public function testIsBlockedReturnsTrueForBlockedUser(): void
     {

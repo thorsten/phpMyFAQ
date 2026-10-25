@@ -78,6 +78,14 @@ class ClientRepositoryTest extends TestCase
         $this->assertNull($this->repository->getClientEntity('non-existent'));
     }
 
+    public function testGetClientEntityReturnsNullWhenRowHasEmptyClientId(): void
+    {
+        $this->db->method('query')->willReturn(new \stdClass());
+        $this->db->method('fetchObject')->willReturn((object) ['client_id' => '']);
+
+        $this->assertNull($this->repository->getClientEntity('my-app'));
+    }
+
     public function testGetClientEntityReturnsNullWhenRowNotFound(): void
     {
         $this->db->method('query')->willReturn(new \stdClass());

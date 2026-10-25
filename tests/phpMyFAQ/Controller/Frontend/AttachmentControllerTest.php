@@ -182,6 +182,30 @@ final class AttachmentControllerTest extends TestCase
     }
 
     /**
+     * The controller constructor re-initialises the AttachmentFactory from the configuration,
+     * so the unknown storage type has to be injected after construction to reach the lookup.
+     *
+     * @throws \Exception
+     */
+    public function testIndexRendersAttachmentExceptionMessageWhenLookupFails(): void
+    {
+        $this->enableGuestDownloads();
+        $controller = $this->createController();
+
+        $reflection = new \ReflectionClass(AttachmentFactory::class);
+        $storageTypeProperty = $reflection->getProperty('storageType');
+        $storageTypeProperty->setValue(null, 999);
+
+        $response = $controller->index(new Request([], [], ['attachmentId' => '1']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString(
+            Translation::get(key: 'msgAttachmentInvalid') . ' (Unknown attachment storage type)',
+            (string) $response->getContent(),
+        );
+    }
+
+    /**
      * @throws \Exception
      */
     public function testIndexStreamsPdfAttachmentInline(): void

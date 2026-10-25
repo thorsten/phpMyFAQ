@@ -7,6 +7,7 @@ use phpMyFAQ\Core\Json;
 use phpMyFAQ\Queue\Message\SendMailMessage;
 use phpMyFAQ\Queue\Transport\DatabaseTransport;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -58,6 +59,37 @@ class WorkerTest extends TestCase
         $this->assertTrue($worker->runOnce());
         $this->assertInstanceOf(SendMailMessage::class, $receivedMessage);
         $this->assertSame('user@example.org', $receivedMessage->recipient);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function undecodableJobBodyProvider(): array
+    {
+        return [
+            'invalid json' => ['{not json'],
+            'missing class key' => ['{"payload":{}}'],
+            'unknown message class' => ['{"class":"phpMyFAQ\\\\Queue\\\\Message\\\\DoesNotExist","payload":{}}'],
+            'class without message interface' => ['{"class":"stdClass","payload":{}}'],
+        ];
+    }
+
+    #[DataProvider('undecodableJobBodyProvider')]
+    public function testRunOnceReleasesJobsWhoseBodyCannotBeDecoded(string $body): void
+    {
+        $transport = $this->createMock(DatabaseTransport::class);
+        $transport->method('reserve')->willReturn(['id' => 11, 'queue' => 'default', 'body' => $body, 'headers' => []]);
+        $transport
+            ->expects($this->once())
+            ->method('release')
+            ->with(11, $this->isInstanceOf(DateTimeImmutable::class), $this->equalTo(['attempts' => 1]))
+            ->willReturn(true);
+        $transport->expects($this->never())->method('acknowledge');
+
+        $worker = new Worker($transport);
+        $worker->registerHandler(SendMailMessage::class, static function (): void {});
+
+        $this->assertTrue($worker->runOnce());
     }
 
     public function testRunOnceReleasesJobWithIncrementedAttemptsWhenNoHandlerExists(): void
@@ -157,10 +189,7 @@ class WorkerTest extends TestCase
             $processed = $worker->run(3);
 
             $this->assertSame(1, $processed);
-            $this->assertStringContainsString(
-                'Queue worker error in run()',
-                (string) file_get_contents($logFile),
-            );
+            $this->assertStringContainsString('Queue worker error in run()', (string) file_get_contents($logFile));
         } finally {
             if ($previousErrorLog !== false) {
                 ini_set('error_log', $previousErrorLog);

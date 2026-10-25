@@ -8,6 +8,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use RuntimeException;
 
 class PermissionRenameOperationTest extends TestCase
 {
@@ -127,6 +128,16 @@ class PermissionRenameOperationTest extends TestCase
         self::assertTrue($operation->execute());
         self::assertSame(0, $this->rightId('does_not_exist'));
         self::assertSame(0, $this->rightId('still_does_not_exist'));
+    }
+
+    public function testFailsInsteadOfThrowingWhenThePermissionLookupBreaks(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('get')->willThrowException(new RuntimeException('configuration unavailable'));
+
+        $operation = new PermissionRenameOperation($configuration, 'addfaq', PermissionType::FAQ_ADD->value);
+
+        self::assertFalse($operation->execute());
     }
 
     private function rightId(string $name): int

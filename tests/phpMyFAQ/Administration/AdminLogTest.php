@@ -232,6 +232,32 @@ class AdminLogTest extends TestCase
         $this->assertStringContainsString('Chain broken', $result['errors'][0]);
     }
 
+    public function testVerifyChainIntegrityRejectsFirstEntryWithPreviousHash(): void
+    {
+        $_SERVER['REQUEST_TIME'] = $this->now;
+        $this->adminLog->log(new User($this->configuration), 'first');
+
+        $firstEntry = array_values($this->adminLog->getAll())[0];
+        $bogusPreviousHash = str_repeat('a', 64);
+
+        // Give the first entry a previous hash and recalculate its own hash so verifyIntegrity() still passes
+        $firstEntry->setPreviousHash($bogusPreviousHash);
+        $this->configuration->getDb()->query(sprintf(
+            "UPDATE faqadminlog SET previous_hash = '%s', hash = '%s' WHERE id = %d",
+            $bogusPreviousHash,
+            $firstEntry->calculateHash(),
+            $firstEntry->getId(),
+        ));
+
+        $result = new AdminLog($this->configuration)->verifyChainIntegrity();
+
+        $this->assertFalse($result['valid']);
+        $this->assertSame(
+            [sprintf('Log ID %d: First entry should have null previous hash', $firstEntry->getId())],
+            $result['errors'],
+        );
+    }
+
     public function testCalculateHash(): void
     {
         $entity = new AdminLogEntity();

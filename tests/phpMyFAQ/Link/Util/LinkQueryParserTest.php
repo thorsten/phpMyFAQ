@@ -33,4 +33,16 @@ class LinkQueryParserTest extends TestCase
         $params = LinkQueryParser::parse('');
         $this->assertSame([], $params);
     }
+
+    public function testUnparsableUrlYieldsNoParameters(): void
+    {
+        $params = LinkQueryParser::parse('http:///example.org/index.php?foo=bar');
+        $this->assertSame([], $params);
+    }
+
+    public function testArrayParametersAreSkipped(): void
+    {
+        $params = LinkQueryParser::parse('https://example.org/index.php?foo[]=bar&baz=qux');
+        $this->assertSame(['baz' => 'qux'], $params);
+    }
 }

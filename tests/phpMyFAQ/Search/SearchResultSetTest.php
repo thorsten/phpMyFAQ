@@ -6,6 +6,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Faq\ReadScope;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -48,6 +49,7 @@ class SearchResultSetTest extends TestCase
         int $userId = 1,
         ?ReadScope $readScope = null,
         array $storedFaqRows = [],
+        ?PermissionInterface $userPermission = null,
     ): SearchResultSet {
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('get')->willReturn($permLevel);
@@ -61,11 +63,14 @@ class SearchResultSetTest extends TestCase
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('getUserId')->willReturn($userId);
+        if ($userPermission instanceof PermissionInterface) {
+            $currentUser->perm = $userPermission;
+        }
 
         $faqPermission = $this->createMock(Permission::class);
         $faqPermission->method('get')->willReturn($permissionResult);
 
-        return new class ($currentUser, $faqPermission, $configuration, $readScope) extends SearchResultSet {
+        return new class($currentUser, $faqPermission, $configuration, $readScope) extends SearchResultSet {
             public function __construct(
                 CurrentUser $currentUser,
                 Permission $faqPermission,
@@ -90,7 +95,7 @@ class SearchResultSetTest extends TestCase
      */
     private function makeRestrictedScope(?array $categoryIds, ?array $languages): ReadScope
     {
-        $permission = $this->createMock(\phpMyFAQ\Permission\PermissionInterface::class);
+        $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
         $permission->method('getAllowedCategoriesForRight')->willReturn($categoryIds);
         $permission->method('getAllowedLanguagesForRight')->willReturn($languages);
@@ -344,9 +349,41 @@ class SearchResultSetTest extends TestCase
         $this->assertSame([], $searchResultSet->getResultSet());
     }
 
+    public function testReviewResultSetUsesTheCurrentUsersGroupsForMediumPermLevel(): void
+    {
+        $userPermission = $this->createMock(PermissionInterface::class);
+        $userPermission->expects($this->once())->method('getUserGroups')->with(7)->willReturn([-1, 5]);
+
+        $searchResultSet = $this->makeReviewableResultSet('medium', [5], 7, null, [], $userPermission);
+
+        $searchResultSet->reviewResultSet([$this->makeResult(1)]);
+
+        $this->assertCount(1, $searchResultSet->getResultSet());
+    }
+
+    public function testReviewResultSetSkipsStoredRowsOfOtherLanguagesForIncompleteHit(): void
+    {
+        $scope = $this->makeRestrictedScope([3], ['de']);
+        $englishRow = new stdClass();
+        $englishRow->id = 1;
+        $englishRow->lang = 'en';
+        $englishRow->category_id = 3;
+        $germanRow = new stdClass();
+        $germanRow->id = 1;
+        $germanRow->lang = 'de';
+        $germanRow->category_id = 3;
+
+        $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1, $scope, [$englishRow, $germanRow]);
+
+        // The hit carries a language but no category; only the stored row of that language may admit it.
+        $searchResultSet->reviewResultSet([$this->makeResult(1, ['lang' => 'de'])]);
+
+        $this->assertCount(1, $searchResultSet->getResultSet());
+    }
+
     public function testReviewResultSetWithoutRightFailsClosedForIncompleteHit(): void
     {
-        $permission = $this->createMock(\phpMyFAQ\Permission\PermissionInterface::class);
+        $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(false);
         $scope = ReadScope::forUser($permission, 1);
 

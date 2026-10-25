@@ -77,6 +77,27 @@ class EnvironmentConfiguratorTest extends TestCase
     /**
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
+    public function testGetRewriteBaseThrowsWhenTheDirectiveIsMissing(): void
+    {
+        file_put_contents(dirname(__DIR__, 2) . '/.htaccess', "RewriteEngine On\nErrorDocument 404 /404.html\n");
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('RewriteBase directive not found in .htaccess file');
+        $this->configurator->getRewriteBase();
+    }
+
+    public function testGetRewriteBaseThrowsWhenTheFileCannotBeRead(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getRootPath')->willReturn(dirname(__DIR__, 2) . '/path/to');
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost/path/to');
+        $configurator = new EnvironmentConfigurator($configuration);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot read .htaccess file: ' . dirname(__DIR__, 2) . '/path/to/.htaccess');
+        $configurator->getRewriteBase();
+    }
+
     public function testAdjustRewriteBaseHtaccessThrowsExceptionForMissingFile(): void
     {
         $configuration = $this->createStub(Configuration::class);

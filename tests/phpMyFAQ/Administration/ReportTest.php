@@ -123,6 +123,14 @@ class ReportTest extends TestCase
         $this->assertEquals($inputString, $actualOutput);
     }
 
+    public function testConvertEncodingConvertsNonAsciiTextToUtf16(): void
+    {
+        $this->assertSame(
+            mb_convert_encoding('Müller', 'UTF-16', 'UTF-8'),
+            $this->report->convertEncoding('Müller'),
+        );
+    }
+
     public function testGetReportingDataReturnsEmptyArrayWhenNoResults(): void
     {
         $this->mockDb->method('query')->willReturn(true);

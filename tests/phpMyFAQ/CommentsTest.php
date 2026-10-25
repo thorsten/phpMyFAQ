@@ -154,6 +154,37 @@ class CommentsTest extends TestCase
         $this->assertCount(1, $this->comments->getAllComments());
     }
 
+    public function testGetAllCommentsIncludesTheCategoryOfTheRecord(): void
+    {
+        $this->comments->create($this->getComment());
+
+        $category = new Category($this->configuration);
+        $category->setLanguage('en');
+        $relation = new Relation($this->configuration, $category);
+        $relation->add([1], 1, 'en');
+
+        $allComments = $this->comments->getAllComments();
+
+        $this->assertCount(1, $allComments);
+        $this->assertSame(1, $allComments[0]->getCategoryId());
+    }
+
+    public function testIsCommentAllowedReflectsTheCommentFlagOfTheRecord(): void
+    {
+        $prefix = Database::getTablePrefix();
+        $this->configuration
+            ->getDb()
+            ->query(
+                "INSERT OR IGNORE INTO {$prefix}faqdata (id, lang, solution_id, revision_id, sticky, thema, author, email, comment, updated, date_start, date_end) VALUES (1, 'en', 1, 0, 0, 'Test', 'Admin', 'admin@example.org', 'n', '20200101000000', '00000000000000', '99991231235959')",
+            );
+        $this->configuration
+            ->getDb()
+            ->query(sprintf("UPDATE %sfaqdata SET comment = 'y' WHERE id = 1 AND lang = 'en'", $prefix));
+
+        $this->assertTrue($this->comments->isCommentAllowed(1, 'en', CommentType::FAQ));
+        $this->assertFalse($this->comments->isCommentAllowed(999999, 'en', CommentType::FAQ));
+    }
+
     private function getComment(): Comment
     {
         $comment = new Comment();

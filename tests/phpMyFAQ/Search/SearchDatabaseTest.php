@@ -145,6 +145,27 @@ class SearchDatabaseTest extends TestCase
         $this->assertEquals('', $this->searchDatabase->getConditions());
     }
 
+    public function testGetConditionsSkipsColumnsWithInvalidNames(): void
+    {
+        $this->searchDatabase->setConditions([
+            'faqdata.active; DROP TABLE faqdata' => 'yes',
+            '1faqdata.lang' => 'en',
+            'faqdata.lang' => 'en',
+        ]);
+
+        $this->assertEquals(" AND faqdata.lang = 'en'", $this->searchDatabase->getConditions());
+    }
+
+    public function testGetConditionsIgnoresEmptyIdLists(): void
+    {
+        $this->searchDatabase->setConditions([
+            'faqcategoryrelations.category_id' => [],
+            'faqdata.active' => 'yes',
+        ]);
+
+        $this->assertEquals(" AND faqdata.active = 'yes'", $this->searchDatabase->getConditions());
+    }
+
     public function testSearchSubstringUsesLikeMatchClauseWithConditions(): void
     {
         $dbHandle = $this->getMockBuilder(Sqlite3::class)->onlyMethods(['query', 'escape'])->getMock();
@@ -153,10 +174,12 @@ class SearchDatabaseTest extends TestCase
             ->expects($this->once())
             ->method('query')
             ->with($this->callback(static function (string $query): bool {
-                return str_contains($query, "fd.thema LIKE '%rein%' ESCAPE '|'")
+                return (
+                    str_contains($query, "fd.thema LIKE '%rein%' ESCAPE '|'")
                     && str_contains($query, "fd.content LIKE '%rein%' ESCAPE '|'")
                     && str_contains($query, "AND fd.active = 'yes'")
-                    && !str_contains($query, 'MATCH');
+                    && !str_contains($query, 'MATCH')
+                );
             }))
             ->willReturn(true);
 
@@ -211,10 +234,7 @@ class SearchDatabaseTest extends TestCase
         // placed immediately before the appended AND condition.
         $this->assertStringStartsWith(' ((', $matchClause);
         $this->assertStringEndsWith('))', $matchClause);
-        $this->assertMatchesRegularExpression(
-            "/^ \(\(.*\)\) AND faqdata\.status = 'published'$/",
-            $where,
-        );
+        $this->assertMatchesRegularExpression("/^ \(\(.*\)\) AND faqdata\.status = 'published'$/", $where);
     }
 
     public function testGetMatchClauseWithTwoColumns()
@@ -239,10 +259,7 @@ class SearchDatabaseTest extends TestCase
             " (faqdata.author LIKE '%100|%%' ESCAPE '|')",
             $this->searchDatabase->getMatchClause('100%'),
         );
-        $this->assertEquals(
-            " (faqdata.author LIKE '%a|_b%' ESCAPE '|')",
-            $this->searchDatabase->getMatchClause('a_b'),
-        );
+        $this->assertEquals(" (faqdata.author LIKE '%a|_b%' ESCAPE '|')", $this->searchDatabase->getMatchClause('a_b'));
     }
 
     /**
@@ -252,10 +269,7 @@ class SearchDatabaseTest extends TestCase
     public function testGetMatchClauseEscapesTheEscapeCharacter()
     {
         $this->searchDatabase->setMatchingColumns(['faqdata.author']);
-        $this->assertEquals(
-            " (faqdata.author LIKE '%a||b%' ESCAPE '|')",
-            $this->searchDatabase->getMatchClause('a|b'),
-        );
+        $this->assertEquals(" (faqdata.author LIKE '%a||b%' ESCAPE '|')", $this->searchDatabase->getMatchClause('a|b'));
     }
 
     /**

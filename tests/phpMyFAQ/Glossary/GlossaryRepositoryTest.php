@@ -71,6 +71,31 @@ final class GlossaryRepositoryTest extends TestCase
         $this->assertFalse($repository->create('en', 'Item', 'Definition'));
     }
 
+    public function testCreateTruncatesEncodedItemWithoutLeavingHalfAnEntity(): void
+    {
+        $capturedQuery = '';
+        $databaseDriver = $this->createMock(DatabaseDriver::class);
+        $databaseDriver->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $databaseDriver->method('nextId')->willReturn(100);
+        $databaseDriver
+            ->expects($this->once())
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$capturedQuery): bool {
+                $capturedQuery = $query;
+                return true;
+            });
+
+        $repository = new GlossaryRepository(
+            $this->createConfiguration($databaseDriver),
+            $this->createStub(LoggerInterface::class),
+        );
+
+        // 254 ampersands encode to 1270 characters; the cut at 254 would end in the half entity "&amp"
+        $this->assertTrue($repository->create('en', str_repeat('&', 254), 'Definition'));
+        $this->assertSame(1, preg_match("/VALUES \\(100, 'en', '([^']*)', 'Definition'\\)/", $capturedQuery, $matches));
+        $this->assertSame(str_repeat('&amp;', 50), $matches[1]);
+    }
+
     public function testUpdateReturnsFalseAndLogsErrorWhenUpdateFails(): void
     {
         $databaseDriver = $this->createMock(DatabaseDriver::class);

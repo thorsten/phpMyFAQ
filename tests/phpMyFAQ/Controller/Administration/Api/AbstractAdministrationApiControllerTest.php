@@ -8,6 +8,7 @@ use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -34,7 +35,53 @@ final class AbstractAdministrationApiControllerTest extends TestCase
         self::assertSame($adminLog, $controller->getAdminLogInstance());
     }
 
-    private function createControllerContainer(AdminLog $adminLog): ContainerInterface
+    public function testSetContainerThrowsWhenAdminLogServiceIsMissing(): void
+    {
+        $controller = new AbstractAdministrationApiControllerTestStub();
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('AdminLog service not found in container.');
+
+        $controller->setContainer($this->createControllerContainer(null));
+    }
+
+    public function testRestrictGroupRightToScopeFailsWhenLanguageRestrictionCannotBeStored(): void
+    {
+        $permission = $this->createStub(MediumPermission::class);
+        $permission->method('setLanguageRestrictions')->willReturn(false);
+        $permission->method('setCategoryRestrictions')->willReturn(true);
+
+        $controller = new AbstractAdministrationApiControllerTestStub();
+
+        self::assertFalse($controller->restrictScope($permission, 1, 2, ['de'], [3]));
+        self::assertFalse($controller->restrictScope($permission, 1, 2, [], null));
+    }
+
+    public function testRestrictGroupRightToScopeFailsWhenCategoryRestrictionCannotBeStored(): void
+    {
+        $permission = $this->createStub(MediumPermission::class);
+        $permission->method('setLanguageRestrictions')->willReturn(true);
+        $permission->method('setCategoryRestrictions')->willReturn(false);
+
+        $controller = new AbstractAdministrationApiControllerTestStub();
+
+        self::assertFalse($controller->restrictScope($permission, 1, 2, ['de'], ['3']));
+        self::assertFalse($controller->restrictScope($permission, 1, 2, null, []));
+    }
+
+    public function testRestrictGroupRightToScopeSucceedsWhenBothRestrictionsAreStored(): void
+    {
+        $permission = $this->createStub(MediumPermission::class);
+        $permission->method('setLanguageRestrictions')->willReturn(true);
+        $permission->method('setCategoryRestrictions')->willReturn(true);
+
+        $controller = new AbstractAdministrationApiControllerTestStub();
+
+        self::assertTrue($controller->restrictScope($permission, 1, 2, ['de'], ['3']));
+        self::assertTrue($controller->restrictScope($permission, 1, 2, null, null));
+    }
+
+    private function createControllerContainer(?AdminLog $adminLog): ContainerInterface
     {
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('getTemplateSet')->willReturn('default');
@@ -75,5 +122,15 @@ final class AbstractAdministrationApiControllerTestStub extends AbstractAdminist
     public function getAdminLogInstance(): ?AdminLog
     {
         return $this->adminLog;
+    }
+
+    public function restrictScope(
+        MediumPermission $permission,
+        int $groupId,
+        int $rightId,
+        ?array $ownLanguages,
+        ?array $ownCategories,
+    ): bool {
+        return $this->restrictGroupRightToScope($permission, $groupId, $rightId, $ownLanguages, $ownCategories);
     }
 }

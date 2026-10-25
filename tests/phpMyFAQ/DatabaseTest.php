@@ -286,6 +286,18 @@ class DatabaseTest extends TestCase
     /**
      * Test database cleanup
      */
+    public function testResetForgetsConnectionTypeAndTablePrefix(): void
+    {
+        Database::factory('pdo_sqlite');
+        Database::setTablePrefix('pmf_');
+
+        Database::reset();
+
+        $this->assertNull($this->getStaticPropertyValue('databaseDriver'));
+        $this->assertSame('', Database::getType());
+        $this->assertSame('', Database::getTablePrefix());
+    }
+
     public function testDatabaseCleanup(): void
     {
         $db = new Sqlite3();

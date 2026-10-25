@@ -263,4 +263,38 @@ class PdfControllerTest extends TestCase
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame('{}', (string) $response->getContent());
     }
+
+    /**
+     * Without an injected factory the controller builds the link with the real Services class.
+     *
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testGetByIdBuildsPdfLinkWithDefaultServices(): void
+    {
+        $request = new Request();
+        $request->attributes->set('categoryId', '3');
+        $request->attributes->set('faqId', '7');
+
+        $faq = $this->createMock(\phpMyFAQ\Faq::class);
+        $faq
+            ->expects($this->once())
+            ->method('getFaq')
+            ->with(7)
+            ->willReturnCallback(function () use ($faq): void {
+                $faq->faqRecord = ['solution_id' => 1007, 'status' => 'published'];
+            });
+        $faq->method('isFaqRecordVisible')->willReturn(true);
+
+        $controller = new PdfController();
+        $controller->setFaqFactory(static fn() => $faq);
+
+        $response = $controller->getById($request);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(
+            json_encode($this->configuration->getDefaultUrl() . 'pdf/3/7/en'),
+            (string) $response->getContent(),
+        );
+    }
 }

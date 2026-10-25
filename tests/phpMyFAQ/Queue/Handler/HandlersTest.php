@@ -4,6 +4,7 @@ namespace phpMyFAQ\Queue\Handler;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
@@ -154,6 +155,50 @@ class HandlersTest extends TestCase
         $handler(new IndexFaqMessage(42));
     }
 
+    public function testIndexFaqHandlerLooksUpTheCategoryItselfWithoutACategoryFactory(): void
+    {
+        $configuration = new class($this->createSqliteDatabase()) extends Configuration {
+            public function isElasticsearchActive(): bool
+            {
+                return true;
+            }
+        };
+        $language = new Language($configuration, $this->createStub(Session::class));
+        $language->setLanguageFromConfiguration('en');
+        $configuration->setLanguage($language);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = [
+            'id' => 1,
+            'status' => FaqStatus::Published->value,
+            'content' => 'Answer',
+            'lang' => 'en',
+            'solution_id' => 1000,
+            'title' => 'Question',
+            'keywords' => '',
+        ];
+        $faq->expects($this->once())->method('getFaq')->with(1);
+
+        $expectedCategoryId = new Category($configuration)->getCategoryIdFromFaq(1);
+
+        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch
+            ->expects($this->once())
+            ->method('index')
+            ->with($this->callback(
+                static fn(array $document): bool => $document['category_id'] === $expectedCategoryId,
+            ));
+
+        $handler = new IndexFaqHandler(
+            $configuration,
+            static fn(): Faq => $faq,
+            null,
+            static fn(): Elasticsearch => $elasticsearch,
+        );
+
+        $handler(new IndexFaqMessage(1, 'en'));
+    }
+
     public function testExportHandlerAcceptsConfiguration(): void
     {
         $configuration = $this->createStub(Configuration::class);
@@ -222,6 +267,32 @@ class HandlersTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Export generated empty content');
         $handler(new ExportMessage('pdf', 5));
+    }
+
+    public function testExportHandlerFallsBackToTheBuiltInExportersWhenTheFactoryReturnsNoExporter(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission->expects($this->once())->method('hasPermission')->with(5, 'export')->willReturn(true);
+
+        $user = $this->createMock(User::class);
+        $user->perm = $permission;
+        $user->expects($this->once())->method('getUserById')->with(5)->willReturn(true);
+
+        $faq = $this->createMock(Faq::class);
+        $category = $this->createMock(Category::class);
+
+        $handler = new ExportHandler(
+            $configuration,
+            static fn(): User => $user,
+            static fn(): Faq => $faq,
+            static fn(): Category => $category,
+            static fn(Faq $faq, Category $category, string $format): mixed => null,
+        );
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Export not implemented!');
+        $handler(new ExportMessage('xml', 5));
     }
 
     public function testExportHandlerWritesExportsBelowContentCore(): void

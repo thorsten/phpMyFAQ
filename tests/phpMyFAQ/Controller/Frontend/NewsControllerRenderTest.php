@@ -168,6 +168,33 @@ final class NewsControllerRenderTest extends TestCase
         self::assertStringNotContainsString('hidden@example.com', (string) $response->getContent());
     }
 
+    /**
+     * A news id that is not an integer must yield the 404 page instead of a news lookup.
+     */
+    public function testIndexReturnsNotFoundPageForNonNumericNewsId(): void
+    {
+        $controller = new NewsController(
+            new UserSession($this->configuration),
+            new BuiltinCaptcha($this->configuration),
+            new Date($this->configuration),
+            new Mail($this->configuration),
+            new Gravatar(),
+        );
+        $configurationProperty = new \ReflectionProperty($controller, 'configuration');
+        $configurationProperty->setValue($controller, $this->configuration);
+
+        $request = Request::create('/news/abc/en/test-news-header.html', 'GET');
+        $request->attributes->set('newsId', 'abc');
+        $request->attributes->set('newsLang', 'en');
+        $request->attributes->set('slug', 'test-news-header');
+
+        $response = $controller->index($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('404', (string) $response->getContent());
+        self::assertStringNotContainsString('Test News Header', (string) $response->getContent());
+    }
+
     private function overrideConfigurationValues(array $values): void
     {
         $reflection = new \ReflectionClass(Configuration::class);

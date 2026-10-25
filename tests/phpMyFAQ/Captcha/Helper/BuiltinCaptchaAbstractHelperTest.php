@@ -17,6 +17,7 @@
 namespace phpMyFAQ\Captcha\Helper;
 
 use phpMyFAQ\Captcha\BuiltinCaptcha;
+use phpMyFAQ\Captcha\CaptchaInterface;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -72,6 +73,15 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
         $this->assertStringContainsString('required', $result);
         $this->assertStringContainsString('autocomplete="off"', $result);
         $this->assertStringContainsString('bi bi-arrow-repeat', $result);
+    }
+
+    public function testRenderCaptchaReturnsEmptyStringForNonBuiltinCaptcha(): void
+    {
+        $this->configuration->method('get')->willReturn(true);
+
+        $otherCaptcha = $this->createStub(CaptchaInterface::class);
+
+        $this->assertSame('', $this->helper->renderCaptcha($otherCaptcha, 'refresh-captcha', 'Captcha Label'));
     }
 
     /**

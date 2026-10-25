@@ -317,6 +317,39 @@ class FormsTest extends TestCase
         $this->assertFalse($forms->addTranslation(1, 2, 'English', 'Translated label'));
     }
 
+    public function testAddTranslationReturnsFalseForUnknownLanguageName(): void
+    {
+        $inputData = (object) [
+            'input_type' => 'text',
+            'input_active' => 1,
+            'input_required' => 0,
+        ];
+
+        $repository = $this->createMock(FormsRepositoryInterface::class);
+        $repository->expects($this->once())->method('fetchDefaultInputData')->with(1, 2)->willReturn($inputData);
+        $repository->expects($this->never())->method('insertTranslationRow');
+
+        $forms = new Forms($this->createStub(Configuration::class), $repository);
+
+        $this->assertFalse($forms->addTranslation(1, 2, 'Klingon', 'Translated label'));
+    }
+
+    public function testGetTranslationsLeavesLabelsOfTranslatedLanguagesUntouched(): void
+    {
+        $translation = (object) ['input_lang' => 'en', 'input_label' => 'msgNewContentName'];
+
+        $repository = $this->createMock(FormsRepositoryInterface::class);
+        $repository
+            ->expects($this->once())
+            ->method('fetchTranslationsByFormAndInput')
+            ->with(1, 2)
+            ->willReturn([$translation]);
+
+        $forms = new Forms($this->createStub(Configuration::class), $repository);
+
+        $this->assertSame('msgNewContentName', $forms->getTranslations(1, 2)[0]->input_label);
+    }
+
     public function testAddTranslationInsertsResolvedLanguageCode(): void
     {
         $inputData = (object) [

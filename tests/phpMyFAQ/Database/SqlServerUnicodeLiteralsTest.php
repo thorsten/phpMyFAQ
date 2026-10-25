@@ -90,6 +90,14 @@ class SqlServerUnicodeLiteralsTest extends TestCase
         ];
     }
 
+    public function testHonoursDoubledDelimitersInsideIdentifiers(): void
+    {
+        $this->assertSame(
+            'SELECT [we]]ird], "qu""oted" FROM faqdata WHERE thema = N\'ünicode\'',
+            SqlServerUnicodeLiterals::apply('SELECT [we]]ird], "qu""oted" FROM faqdata WHERE thema = \'ünicode\''),
+        );
+    }
+
     public function testLeavesNonAsciiOutsideLiteralsUntouched(): void
     {
         $query = 'SELECT id, thema_日本語 FROM faqdata';

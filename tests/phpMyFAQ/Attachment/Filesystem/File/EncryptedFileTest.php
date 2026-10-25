@@ -133,6 +133,19 @@ final class EncryptedFileTest extends TestCase
         self::assertSame('secret data', file_get_contents($decPath));
     }
 
+    public function testCopyToRejectsAnObjectThatIsNotAFile(): void
+    {
+        $encPath = $this->tempDir . '/enc-src.bin';
+        file_put_contents($encPath, '');
+
+        $file = new EncryptedFile($encPath, 'rb', str_repeat('c', 16));
+
+        $this->expectException(FileException::class);
+        $this->expectExceptionMessage('copyTo() expects a file path or an AbstractFile instance.');
+
+        $file->copyTo(new \stdClass());
+    }
+
     public function testGetChunkReturnsEmptyStringAtEof(): void
     {
         $key = str_repeat('e', 16);

@@ -238,4 +238,44 @@ final class AbstractFileTest extends TestCase
 
         self::assertFalse(is_resource($handle));
     }
+
+    public function testDeleteRemovesTheContainingDirectoryWhenTheFileIsNotTheUploadedTempFile(): void
+    {
+        $dir = $this->tempDir . '/attachment';
+        mkdir($dir);
+        $path = $dir . '/stored.bin';
+        file_put_contents($path, 'stored');
+
+        $previousFiles = $_FILES;
+        $_FILES['userfile'] = ['tmp_name' => $this->tempDir . '/php-upload-tmp'];
+
+        try {
+            $file = new VanillaFile($path);
+            $result = $file->delete();
+        } finally {
+            $_FILES = $previousFiles;
+        }
+
+        self::assertTrue($result);
+        self::assertDirectoryDoesNotExist($dir);
+    }
+
+    public function testDeleteDirThrowsWhenAFileIsNotWritable(): void
+    {
+        $dir = $this->tempDir . '/locked';
+        mkdir($dir);
+        file_put_contents($dir . '/readonly.txt', 'locked');
+        chmod($dir . '/readonly.txt', 0o444);
+
+        $dummyPath = $this->createTempFile();
+        $file = new VanillaFile($dummyPath);
+
+        try {
+            $this->expectException(FileException::class);
+            $this->expectExceptionMessage("File can't be deleted.");
+            $file->deleteDir($dir);
+        } finally {
+            chmod($dir . '/readonly.txt', 0o644);
+        }
+    }
 }

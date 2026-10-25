@@ -149,6 +149,37 @@ class TwoFactorTest extends TestCase
     }
 
     /**
+     * A user without a user data row has no recorded slice yet, so the current one is accepted.
+     *
+     * @throws Exception
+     */
+    public function testValidateTokenAcceptsTheCurrentSliceWhenNoSliceWasRecorded(): void
+    {
+        $this->currentUser->method('getUserData')->willReturn('testsecret');
+        $this->currentUser->method('getUserById')->willReturn(true);
+
+        $twoFactorAuth = $this->createMock(TwoFactorAuth::class);
+        $twoFactorAuth->method('verifyCode')->willReturn(true);
+        $this->replaceTwoFactorAuth($twoFactorAuth);
+
+        $updates = [];
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$updates): bool {
+                if (str_starts_with($query, 'UPDATE')) {
+                    $updates[] = $query;
+                }
+
+                return true;
+            });
+        $this->database->method('numRows')->willReturn(0);
+        $this->database->expects($this->never())->method('fetchArray');
+
+        $this->assertTrue($this->twoFactor->validateToken('123456', 1));
+        $this->assertCount(1, $updates);
+    }
+
+    /**
      * A code that was already accepted for the current slice must not be usable a
      * second time, even though it is still mathematically valid.
      *

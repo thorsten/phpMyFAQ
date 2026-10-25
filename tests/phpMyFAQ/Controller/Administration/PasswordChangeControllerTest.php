@@ -208,6 +208,44 @@ final class PasswordChangeControllerTest extends TestCase
     }
 
     /**
+     * A read-only authentication source (e.g. LDAP or SSO) must be put back into
+     * read-only mode before the password check runs.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateKeepsReadOnlyAuthSourceReadOnly(): void
+    {
+        $authSource = $this->createMock(AuthDatabase::class);
+        $authSource->method('getEncryptionContainer')->willReturn($this->createStub(Encryption::class));
+        $authSource->expects($this->once())->method('disableReadOnly');
+        $authSource->expects($this->once())->method('enableReadOnly');
+        $authSource->method('checkCredentials')->willReturn(true);
+
+        $auth = $this->createMock(Auth::class);
+        $auth->method('selectAuth')->willReturn($authSource);
+
+        $controller = $this->createController($auth);
+        $container = $this->createAuthenticatedContainer(changePasswordResult: true, readOnly: true);
+        $controller->setContainer($container);
+
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'password');
+
+        $response = $controller->update(
+            new Request([], [
+                'pmf-csrf-token' => $token,
+                'faqpassword_old' => 'old-password',
+                'faqpassword' => 'new-password-123',
+                'faqpassword_confirm' => 'new-password-123',
+            ]),
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString(Translation::get('ad_passwdsuc'), (string) $response->getContent());
+    }
+
+    /**
      * An incorrect current password makes checkCredentials() throw; the form must
      * render the failure message instead of bubbling up a 500 error.
      *
@@ -257,8 +295,10 @@ final class PasswordChangeControllerTest extends TestCase
         return $token;
     }
 
-    private function createAuthenticatedContainer(bool $changePasswordResult = false): ContainerInterface
-    {
+    private function createAuthenticatedContainer(
+        bool $changePasswordResult = false,
+        bool $readOnly = false,
+    ): ContainerInterface {
         $permission = $this->createStub(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
 
@@ -278,7 +318,7 @@ final class PasswordChangeControllerTest extends TestCase
             ->method('getAuthData')
             ->willReturnMap([
                 ['encType',  'password_hash'],
-                ['readOnly', false],
+                ['readOnly', $readOnly],
             ]);
         $currentUser->method('getLogin')->willReturn('test-user');
         $currentUser->method('changePassword')->willReturn($changePasswordResult);

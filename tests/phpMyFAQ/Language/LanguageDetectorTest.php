@@ -66,4 +66,26 @@ class LanguageDetectorTest extends TestCase
     {
         $this->assertEquals('en', $this->languageDetector->selectLanguage([]));
     }
+
+    public function testDetectAllWithBrowserFallsBackToThePrimarySubtagOfARegionalLanguage(): void
+    {
+        $previous = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? null;
+        // Symfony reports "de-DE" as "de_DE", which is not a supported phpMyFAQ language code,
+        // so the detector has to fall back to the first two letters.
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'de-DE';
+
+        try {
+            $detected = $this->languageDetector->detectAllWithBrowser('language_en.php');
+        } finally {
+            if ($previous === null) {
+                unset($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+            } else {
+                $_SERVER['HTTP_ACCEPT_LANGUAGE'] = $previous;
+            }
+        }
+
+        $this->assertSame('de', $this->languageDetector->getAcceptLanguage());
+        $this->assertSame('de', $detected['detection']);
+        $this->assertSame('en', $detected['config']);
+    }
 }

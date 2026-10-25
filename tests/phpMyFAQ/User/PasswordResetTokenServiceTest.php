@@ -22,6 +22,27 @@ class PasswordResetTokenServiceTest extends TestCase
         $this->assertTrue($service->verify(42, $token['expires'], $token['signature'], 'secret-key'));
     }
 
+    public function testIssueFallsBackToDefaultLifetimeForOutOfRangeValues(): void
+    {
+        $service = new PasswordResetTokenService();
+
+        $tooShort = $service->issue(42, 'secret-key', 10);
+        $tooLong = $service->issue(42, 'secret-key', PasswordResetTokenService::MAX_LIFETIME_SECONDS + 1);
+        $now = time();
+
+        $this->assertEqualsWithDelta(
+            $now + PasswordResetTokenService::DEFAULT_LIFETIME_SECONDS,
+            $tooShort['expires'],
+            2,
+        );
+        $this->assertEqualsWithDelta(
+            $now + PasswordResetTokenService::DEFAULT_LIFETIME_SECONDS,
+            $tooLong['expires'],
+            2,
+        );
+        $this->assertTrue($service->verify(42, $tooShort['expires'], $tooShort['signature'], 'secret-key'));
+    }
+
     public function testVerifyRejectsExpiredToken(): void
     {
         $service = new PasswordResetTokenService();

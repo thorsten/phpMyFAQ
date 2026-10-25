@@ -6,10 +6,15 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Database\PdoMysql;
+use phpMyFAQ\Database\PdoPgsql;
+use phpMyFAQ\Database\PdoSqlsrv;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -81,6 +86,39 @@ class SearchFactoryTest extends TestCase
         $search = SearchFactory::create($this->configuration, ['database' => 'pdo_sqlsrv']);
 
         $this->assertInstanceOf('phpMyFAQ\Search\Database\PdoSqlsrv', $search);
+    }
+
+    public function testCreateThrowsForUnknownSearchBackend(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Unknown search backend: \phpMyFAQ\Search\Database\Nosuchdriver');
+
+        SearchFactory::create($this->configuration, ['database' => 'nosuchdriver']);
+    }
+
+    /**
+     * @return array<string, array{0: class-string<DatabaseDriver>, 1: class-string<SearchDatabase>}>
+     */
+    public static function pdoDriverProvider(): array
+    {
+        return [
+            'mysql' => [PdoMysql::class, \phpMyFAQ\Search\Database\PdoMysql::class],
+            'pgsql' => [PdoPgsql::class, \phpMyFAQ\Search\Database\PdoPgsql::class],
+            'sqlsrv' => [PdoSqlsrv::class, \phpMyFAQ\Search\Database\PdoSqlsrv::class],
+        ];
+    }
+
+    #[DataProvider('pdoDriverProvider')]
+    public function testCreateResolvesThePdoDriverClassWhenHandlerIsEmpty(
+        string $driverClass,
+        string $searchClass,
+    ): void {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn(new $driverClass());
+
+        $search = SearchFactory::create($configuration, ['database' => '']);
+
+        $this->assertInstanceOf($searchClass, $search);
     }
 
     public function testCreateBuildsNonPdoSearchForMysqliHandler(): void

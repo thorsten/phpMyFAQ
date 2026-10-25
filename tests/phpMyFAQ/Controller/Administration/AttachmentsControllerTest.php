@@ -172,10 +172,37 @@ final class AttachmentsControllerTest extends TestCase
         self::assertStringNotContainsString('file2.pdf', $content);
     }
 
+    /**
+     * Callers may pass plain array rows instead of the objects the database drivers return.
+     *
+     * @throws \Exception
+     */
+    public function testIndexRestrictsPlainArrayRowsForRestrictedUser(): void
+    {
+        $this->seedCategoryRelation(3, 1, 'en');
+        $this->seedCategoryRelation(666, 2, 'en');
+
+        $rows = array_map(static fn(object $row): array => (array) $row, array_slice($this->buildBreadcrumbs(), 0, 2));
+        $collection = $this->createMock(AttachmentCollection::class);
+        $collection->method('getBreadcrumbs')->willReturn($rows);
+
+        $controller = new AttachmentsController($collection);
+        $controller->setContainer($this->createControllerContainer([3]));
+
+        $request = Request::create('https://localhost/admin/attachments');
+        $request->attributes->set('_route', 'admin.attachments');
+        $response = $controller->index($request);
+        $content = (string) $response->getContent();
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString('file1.pdf', $content);
+        self::assertStringNotContainsString('file2.pdf', $content);
+    }
+
     private function seedCategoryRelation(int $categoryId, int $recordId, string $recordLang): void
     {
         self::assertNotFalse($this->dbHandle->query(sprintf(
-            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)"
+            'INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)'
             . " VALUES (%d, '%s', %d, '%s')",
             $categoryId,
             $recordLang,

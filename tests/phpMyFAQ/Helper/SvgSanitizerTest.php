@@ -358,6 +358,58 @@ class SvgSanitizerTest extends TestCase
         $this->assertFalse($this->sanitizer->isSafe($this->testDir . '/nonexistent.svg'));
     }
 
+    public function testSanitizeReturnsFalseForUnreadableFile(): void
+    {
+        $filePath = $this->createUnreadableSvgFile();
+
+        $this->assertFalse(@$this->sanitizer->sanitize($filePath));
+    }
+
+    public function testIsSafeReturnsFalseForUnreadableFile(): void
+    {
+        $filePath = $this->createUnreadableSvgFile();
+
+        $this->assertFalse(@$this->sanitizer->isSafe($filePath));
+    }
+
+    public function testSanitizeReturnsFalseWhenNoSvgRootSurvivesTheCleanup(): void
+    {
+        $filePath = $this->testDir . '/script-only.svg';
+        file_put_contents($filePath, '<script><svg xmlns="http://www.w3.org/2000/svg"></svg></script>');
+
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertStringEqualsFile($filePath, '<script><svg xmlns="http://www.w3.org/2000/svg"></svg></script>');
+    }
+
+    public function testSanitizeReturnsFalseWhenDeeplyEncodedPayloadSurvivesTheCleanup(): void
+    {
+        // Twelve entity layers exceed the decoder's ten passes, so the cleanup never sees the
+        // script tag - the final re-check must still catch it and fail closed.
+        $payload = '<script>alert(1)</script>';
+        for ($layer = 0; $layer < 12; ++$layer) {
+            $payload = htmlspecialchars($payload, ENT_QUOTES, 'UTF-8');
+        }
+
+        $filePath = $this->testDir . '/deeply-encoded.svg';
+        file_put_contents($filePath, '<svg xmlns="http://www.w3.org/2000/svg"><text>' . $payload . '</text></svg>');
+
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+    }
+
+    private function createUnreadableSvgFile(): string
+    {
+        $filePath = $this->testDir . '/unreadable.svg';
+        file_put_contents($filePath, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
+        chmod($filePath, 0o000);
+
+        if (@file_get_contents($filePath) !== false) {
+            chmod($filePath, 0o644);
+            $this->markTestSkipped('File permissions are not enforced for the current user (running as root).');
+        }
+
+        return $filePath;
+    }
+
     public function testSanitizeReturnsFalseForNonSvgContent(): void
     {
         $filePath = $this->testDir . '/plain.txt';
@@ -2032,8 +2084,7 @@ class SvgSanitizerTest extends TestCase
 
     public function testSanitizeDoesNotReassembleEventHandlerSplitByProcessingInstruction(): void
     {
-        $maliciousSvg =
-            '<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10" onl<?php?>oad="alert(1)"/></svg>';
+        $maliciousSvg = '<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10" onl<?php?>oad="alert(1)"/></svg>';
 
         $filePath = $this->testDir . '/split_onload.svg';
         file_put_contents($filePath, $maliciousSvg);
@@ -2096,7 +2147,9 @@ class SvgSanitizerTest extends TestCase
     {
         $maliciousSvg =
             "<svg xmlns=\"http://www.w3.org/2000/svg\"><a href=\"java\tscript:alert(1)\">"
-            . '<text y="20">x</text></a><path d="M 0 0' . "\n" . 'L 10 10"/></svg>';
+            . '<text y="20">x</text></a><path d="M 0 0'
+            . "\n"
+            . 'L 10 10"/></svg>';
 
         $filePath = $this->testDir . '/tab_in_scheme_sanitize.svg';
         file_put_contents($filePath, $maliciousSvg);

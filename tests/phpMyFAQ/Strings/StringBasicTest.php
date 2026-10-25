@@ -15,6 +15,32 @@ class StringBasicTest extends TestCase
         $this->stringBasic = StringBasic::getStringBasic();
     }
 
+    protected function tearDown(): void
+    {
+        $this->resetStringBasicInstance();
+        parent::tearDown();
+    }
+
+    public function testGetStringBasicFallsBackToTheDefaultLanguageForUnsupportedLanguages(): void
+    {
+        $this->resetStringBasicInstance();
+
+        $stringBasic = StringBasic::getStringBasic('xx');
+
+        $language = new \ReflectionProperty(StringBasic::class, 'language');
+        $this->assertSame('en', $language->getValue($stringBasic));
+    }
+
+    public function testGetStringBasicKeepsASupportedLanguage(): void
+    {
+        $this->resetStringBasicInstance();
+
+        $stringBasic = StringBasic::getStringBasic('de');
+
+        $language = new \ReflectionProperty(StringBasic::class, 'language');
+        $this->assertSame('de', $language->getValue($stringBasic));
+    }
+
     public function testStrlen(): void
     {
         // Test case 1: Check the length of a regular string
@@ -87,5 +113,11 @@ class StringBasicTest extends TestCase
     public function testPregReplace(): void
     {
         $this->assertEquals('h*ll*', $this->stringBasic->preg_replace('/[aeiou]/', '*', 'hello'));
+    }
+
+    private function resetStringBasicInstance(): void
+    {
+        $property = new \ReflectionProperty(StringBasic::class, 'stringBasic');
+        $property->setValue(null, null);
     }
 }

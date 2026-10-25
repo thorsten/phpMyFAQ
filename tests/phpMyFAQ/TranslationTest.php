@@ -419,6 +419,33 @@ class TranslationTest extends TestCase
         }
     }
 
+    public function testLoadingALanguageSkipsValuesThatAreNeitherStringsNorPluralForms(): void
+    {
+        $translationsDir = sys_get_temp_dir() . '/pmf-translations-mixed-' . uniqid('', true);
+        mkdir($translationsDir);
+        file_put_contents(
+            $translationsDir . '/language_en.php',
+            "<?php\n\nreturn ['plain.key' => 'plain', 'broken.key' => 42, 'plural.key' => ['one', 'many']];\n",
+        );
+
+        try {
+            Translation::resetInstance();
+            Translation::create()
+                ->setTranslationsDir($translationsDir)
+                ->setDefaultLanguage('en')
+                ->setCurrentLanguage('en');
+
+            $this->assertSame('plain', Translation::get('plain.key'));
+            $this->assertNull(Translation::get('broken.key'));
+            $this->assertArrayNotHasKey('broken.key', Translation::getInstance()->getAll());
+            $this->assertSame(['one', 'many'], Translation::getInstance()->getAll()['plural.key']);
+        } finally {
+            Translation::resetInstance();
+            unlink($translationsDir . '/language_en.php');
+            rmdir($translationsDir);
+        }
+    }
+
     public function testSettingTheSameTranslationsDirectoryKeepsLoadedLanguages(): void
     {
         $this->assertSame('Default Label', Translation::get('test.key'));

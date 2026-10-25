@@ -197,6 +197,24 @@ class LoginControllerTest extends TestCase
      * @throws Exception
      * @throws \JsonException
      */
+    public function testLoginRejectsJsonBodyThatIsNotAnObject(): void
+    {
+        $request = new Request([], [], [], [], [], [], '["testuser", "testpassword"]');
+        $controller = new LoginController();
+
+        $response = $controller->login($request);
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertSame(
+            ['loggedin' => false, 'error' => 'The request body must be a JSON object.'],
+            json_decode((string) $response->getContent(), true),
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws \JsonException
+     */
     public function testLoginResponseIsValidJson(): void
     {
         $requestData = json_encode([

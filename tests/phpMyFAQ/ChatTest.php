@@ -388,6 +388,48 @@ class ChatTest extends TestCase
         $this->assertTrue($reflection->isReadOnly());
     }
 
+    public function testGetConversationReturnsTheMessagesOfBothDirectionsInChronologicalOrder(): void
+    {
+        $this->seedChatUser(501, 'chat-user-501', 'First User', 'first@example.com');
+        $this->seedChatUser(502, 'chat-user-502', 'Second User', 'second@example.com');
+        $this->seedChatMessage(30, 501, 502, 'Hello', 1, '2026-02-04 10:00:00');
+        $this->seedChatMessage(31, 502, 501, 'Hi back', 0, '2026-02-04 10:05:00');
+
+        $chat = new Chat($this->configuration);
+        $conversation = $chat->getConversation(501, 502);
+
+        $this->assertCount(2, $conversation);
+        $this->assertContainsOnlyInstancesOf(ChatMessage::class, $conversation);
+        $this->assertSame(30, $conversation[0]->getId());
+        $this->assertSame('Hello', $conversation[0]->getMessage());
+        $this->assertSame(31, $conversation[1]->getId());
+        $this->assertSame(502, $conversation[1]->getSenderId());
+        $this->assertFalse($conversation[1]->isRead());
+    }
+
+    public function testGetConversationListReturnsEmptyArrayWhenThePartnerQueryFails(): void
+    {
+        $database = $this->createStub(Database\DatabaseDriver::class);
+        $database->method('query')->willReturn(false);
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+
+        $chat = new Chat($configuration);
+
+        $this->assertSame([], $chat->getConversationList(1));
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testGetBatchUserInfoReturnsEmptyArrayWithoutUserIds(): void
+    {
+        $chat = new Chat($this->configuration);
+        $method = new ReflectionClass($chat)->getMethod('getBatchUserInfo');
+
+        $this->assertSame([], $method->invoke($chat, []));
+    }
+
     private function seedChatUser(
         int $userId,
         string $login,

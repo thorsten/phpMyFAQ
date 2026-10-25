@@ -14,6 +14,7 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -119,5 +120,30 @@ class TagControllerTest extends TestCase
 
         // Data can be empty array if no tags exist
         $this->assertIsArray($data['data']);
+    }
+
+    public function testListSortsTagsByRequestedFieldAndOrder(): void
+    {
+        $tags = $this->createStub(Tags::class);
+        $tags->method('getPopularTagsAsArray')->willReturn([
+            ['tagId' => 1, 'tagName' => 'php', 'tagFrequency' => 5],
+            ['tagId' => 2, 'tagName' => 'apache', 'tagFrequency' => 9],
+            ['tagId' => 3, 'tagName' => 'mysql', 'tagFrequency' => 1],
+        ]);
+        $controller = new TagController($tags);
+
+        $ascending = $controller->list(
+            Request::create('/api/v4.0/tags', 'GET', ['sort' => 'tagName', 'order' => 'asc']),
+        );
+        $ascendingData = json_decode((string) $ascending->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(Response::HTTP_OK, $ascending->getStatusCode());
+        $this->assertSame(['apache', 'mysql', 'php'], array_column($ascendingData['data'], 'tagName'));
+        $this->assertSame(['field' => 'tagName', 'order' => 'asc'], $ascendingData['meta']['sorting']);
+
+        $descending = $controller->list(Request::create('/api/v4.0/tags', 'GET', ['sort' => 'tagFrequency']));
+        $descendingData = json_decode((string) $descending->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame([9, 5, 1], array_column($descendingData['data'], 'tagFrequency'));
     }
 }

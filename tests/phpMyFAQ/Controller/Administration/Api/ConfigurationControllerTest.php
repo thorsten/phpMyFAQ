@@ -420,4 +420,32 @@ class ConfigurationControllerTest extends TestCase
             $payload['error'],
         );
     }
+
+    /**
+     * A non-positive timeout falls back to the one second default instead of being passed on.
+     *
+     * @throws Exception
+     */
+    public function testTestRedisConnectionFallsBackToDefaultTimeoutForNonPositiveTimeout(): void
+    {
+        $controller = new ConfigurationController($this->mail);
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'configuration');
+        $controller->setContainer($container);
+
+        $response = $controller->testRedisConnection(new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $token,
+            'redisDsn' => 'invalid://redis',
+            'timeout' => 0,
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(
+            'Redis connection failed. Please verify the DSN and ensure the server is running.',
+            $payload['error'],
+        );
+    }
 }

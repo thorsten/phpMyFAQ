@@ -134,4 +134,58 @@ class DashboardLayoutTest extends TestCase
 
         self::assertTrue($this->dashboardLayout->reset(7));
     }
+
+    public function testGetReturnsEmptyArrayWhenTheQueryFails(): void
+    {
+        $this->databaseMock->method('query')->willReturn(false);
+        $this->databaseMock->expects($this->never())->method('fetchObject');
+
+        self::assertSame([], $this->dashboardLayout->get(42));
+    }
+
+    public function testGetReturnsEmptyArrayWhenTheStoredConfigIsJsonNull(): void
+    {
+        $row = new \stdClass();
+        $row->config = 'null';
+
+        $this->databaseMock->method('query')->willReturn(new \stdClass());
+        $this->databaseMock->method('fetchObject')->willReturn($row);
+
+        self::assertSame([], $this->dashboardLayout->get(42));
+    }
+
+    public function testGetSkipsEntriesThatAreNotObjects(): void
+    {
+        $row = new \stdClass();
+        $row->config = '["broken", 7, {"key":"support","position":2,"visible":false}]';
+
+        $this->databaseMock->method('query')->willReturn(new \stdClass());
+        $this->databaseMock->method('fetchObject')->willReturn($row);
+
+        self::assertSame([['key' => 'support', 'position' => 2, 'visible' => false]], $this->dashboardLayout->get(42));
+    }
+
+    public function testSaveInsertsWhenTheExistenceCheckFails(): void
+    {
+        $this->databaseMock->method('escape')->willReturnArgument(0);
+        $this->databaseMock->expects($this->never())->method('fetchObject');
+
+        $queries = [];
+        $this->databaseMock
+            ->method('query')
+            ->willReturnCallback(function (string $query) use (&$queries): \stdClass|false {
+                $queries[] = $query;
+                // The SELECT fails, the INSERT succeeds
+                return str_starts_with($query, 'SELECT') ? false : new \stdClass();
+            });
+
+        $result = $this->dashboardLayout->save(7, [
+            ['key' => 'support', 'position' => 0, 'visible' => true],
+        ]);
+
+        self::assertTrue($result);
+        self::assertCount(2, $queries);
+        self::assertStringStartsWith('SELECT user_id FROM faqadmindashboard', $queries[0]);
+        self::assertStringStartsWith('INSERT INTO faqadmindashboard', $queries[1]);
+    }
 }

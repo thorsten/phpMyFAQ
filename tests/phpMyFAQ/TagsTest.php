@@ -233,6 +233,32 @@ class TagsTest extends TestCase
         $this->assertIsArray($allTags);
     }
 
+    public function testGetAllTagsStopsAtTheRequestedLimit(): void
+    {
+        $this->seedFaqRecord(1);
+        $this->dbHandle->query('INSERT INTO faqdata_user (record_id, user_id) VALUES (1, -1)');
+        $this->tags->setUser(-1);
+        $this->tags->setGroups([-1]);
+        $this->tags->create(1, ['Alpha', 'Beta', 'Gamma']);
+
+        $allTags = $this->tags->getAllTags(null, 2);
+
+        $this->assertCount(2, $allTags);
+        $this->assertSame(['Alpha', 'Beta'], array_values($allTags));
+    }
+
+    public function testBypassingThePermissionCheckSkipsThePermissionClause(): void
+    {
+        $this->configuration->set('security.permLevel', 'medium');
+        $tags = new Tags($this->configuration);
+        $tags->setUser(-1);
+        $tags->setGroups([-1]);
+
+        $this->assertSame($tags, $tags->setBypassPermissionCheck());
+        $this->assertIsArray($tags->getAllTags());
+        $this->assertStringNotContainsString('fdg.group_id IN', $this->dbHandle->log());
+    }
+
     public function testPermissionChecksNormalizeGroupIds(): void
     {
         $this->configuration->set('security.permLevel', 'medium');

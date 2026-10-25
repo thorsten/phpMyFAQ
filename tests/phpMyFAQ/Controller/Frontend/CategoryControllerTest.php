@@ -268,6 +268,52 @@ final class CategoryControllerTest extends TestCase
     }
 
     /**
+     * @throws \ReflectionException
+     */
+    public function testGetFaqRecordsRendersListWhenCategoryHasFaqs(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq
+            ->expects(self::once())
+            ->method('getFaqsDataByCategoryId')
+            ->with(5)
+            ->willReturn([
+                'items' => [
+                    [
+                        'sticky' => false,
+                        'anchor' => '<a href="/faq/5/1/en/first.html">First question</a>',
+                        'preview' => 'First preview',
+                        'views' => 7,
+                    ],
+                ],
+                'page' => 1,
+                'pages' => 1,
+                'pagination' => '',
+                'msgPage' => 'Page',
+                'msgVoteFrom' => 'of',
+                'msgPages' => 'pages',
+            ]);
+
+        $result = $this->invokePrivateMethod($this->createController(), 'getFaqRecords', [$faq, 5]);
+
+        self::assertStringContainsString('First question', $result);
+        self::assertStringContainsString('First preview', $result);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testGetFaqRecordsReturnsEmptyStringWhenCategoryHasNoFaqs(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getFaqsDataByCategoryId')->willReturn(['items' => []]);
+
+        $result = $this->invokePrivateMethod($this->createController(), 'getFaqRecords', [$faq, 5]);
+
+        self::assertSame('', $result);
+    }
+
+    /**
      * Creates a controller subclass that stubs the DB-touching sub-category
      * preparation and exposes an injectable CategoryHelper for assertions.
      *

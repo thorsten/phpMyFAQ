@@ -393,6 +393,17 @@ class ConfigurationTest extends TestCase
         $this->assertSame($firstInstance, Configuration::getConfigurationInstance());
     }
 
+    public function testResetInstanceLetsTheNextConfigurationBecomeTheSingleton(): void
+    {
+        Configuration::resetInstance();
+
+        $dbHandle = new Sqlite3();
+        $dbHandle->connect($this->databaseFile, '', '');
+        $nextInstance = new Configuration($dbHandle);
+
+        $this->assertSame($nextInstance, Configuration::getConfigurationInstance());
+    }
+
     private function getStaticConfigurationInstance(): ?Configuration
     {
         $reflection = new \ReflectionProperty(Configuration::class, 'configuration');

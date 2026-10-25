@@ -448,6 +448,84 @@ final class AuthenticationControllerTest extends TestCase
     }
 
     /**
+     * A correct password must not unlock an account whose second factor is locked out: the
+     * user is sent back to the login form with the generic error and no 2FA step is started.
+     *
+     * @throws \Exception
+     */
+    public function testAuthenticateRedirectsToLoginWhenTwoFactorIsLockedOut(): void
+    {
+        $currentUser = $this->createAuthenticationCurrentUser(
+            twoFactorEnabled: true,
+            loginResult: true,
+            userId: 42,
+            twoFactorLockedOut: true,
+        );
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+
+        $controller = new AuthenticationController(
+            $this->createStub(UserSession::class),
+            $currentUser,
+            $this->createStub(TwoFactor::class),
+        );
+        $controller->setContainer($this->createControllerContainer($session, $currentUser));
+
+        $response = $controller->authenticate(
+            new Request([], [
+                'faqusername' => 'admin',
+                'faqpassword' => 'secret',
+            ]),
+        );
+
+        self::assertSame('./login', $response->getTargetUrl());
+        self::assertContains(Translation::get('ad_auth_fail'), $session->getFlashBag()->get('error'));
+        self::assertNull($session->get('2fa_pending_user_id'));
+    }
+
+    /**
+     * Too many failed logins are logged as suspicious activity, but the user still only sees
+     * the generic error message.
+     *
+     * @throws \Exception
+     */
+    public function testAuthenticateShowsGenericErrorWhenTooManyLoginsFailed(): void
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(false);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(false);
+        $currentUser->method('enableRememberMe');
+        $currentUser
+            ->method('login')
+            ->willThrowException(new UserException(CurrentUser::ERROR_USER_TOO_MANY_FAILED_LOGINS));
+
+        $session = new Session(new MockArraySessionStorage());
+        $session->start();
+
+        $controller = new AuthenticationController(
+            $this->createStub(UserSession::class),
+            $currentUser,
+            $this->createStub(TwoFactor::class),
+        );
+        $controller->setContainer($this->createControllerContainer($session, $currentUser));
+
+        $response = $controller->authenticate(
+            new Request([], [
+                'faqusername' => 'admin',
+                'faqpassword' => 'wrong',
+            ]),
+        );
+
+        self::assertSame('./login', $response->getTargetUrl());
+        $errors = $session->getFlashBag()->get('error');
+        self::assertContains(Translation::get('ad_auth_fail'), $errors);
+        self::assertNotContains(CurrentUser::ERROR_USER_TOO_MANY_FAILED_LOGINS, $errors);
+    }
+
+    /**
      * A specific authentication error (e.g. "login name not found" vs. "wrong password") must
      * never leak to the user — the flashed message is always the generic one, to prevent
      * account enumeration.
@@ -821,6 +899,7 @@ final class AuthenticationControllerTest extends TestCase
         bool $twoFactorEnabled,
         bool $loginResult,
         int $userId,
+        bool $twoFactorLockedOut = false,
     ): CurrentUser {
         $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(false);
@@ -834,6 +913,7 @@ final class AuthenticationControllerTest extends TestCase
         $currentUser->method('enableRememberMe');
         $currentUser->method('setLoggedIn');
         $currentUser->method('getStatus')->willReturn('active');
+        $currentUser->method('isTwoFactorLockedOut')->willReturn($twoFactorLockedOut);
         $currentUser
             ->method('getUserData')
             ->willReturnMap([

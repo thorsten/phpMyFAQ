@@ -304,7 +304,7 @@ class SearchControllerTest extends TestCase
         $search->method('search')->willReturn($hits);
 
         $request = new Request(['q' => 'question', 'page' => 2, 'per_page' => 10]);
-        $response = (new SearchController($search))->search($request);
+        $response = new SearchController($search)->search($request);
         $payload = json_decode((string) $response->getContent(), true);
 
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -317,5 +317,33 @@ class SearchControllerTest extends TestCase
         $this->assertSame('<p>Answer 1</p>', $hits[0]->answer);
         $this->assertFalse(property_exists($hits[0], 'link'));
         $this->assertSame('<p>Answer 30</p>', $hits[29]->answer);
+    }
+
+    public function testSearchSortsHitsByQuestionAsString(): void
+    {
+        $hits = [];
+        foreach ([1 => 'Charlie', 2 => 'Alice', 3 => 'Bob'] as $id => $question) {
+            $this->dbHandle->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)', $id));
+            $this->dbHandle->query(sprintf('INSERT INTO faqdata_group (record_id, group_id) VALUES (%d, -1)', $id));
+
+            $hit = new stdClass();
+            $hit->id = $id;
+            $hit->lang = 'en';
+            $hit->category_id = 1;
+            $hit->question = $question;
+            $hit->answer = '<p>Answer ' . $id . '</p>';
+            $hits[] = $hit;
+        }
+
+        $search = $this->createMock(Search::class);
+        $search->method('search')->willReturn($hits);
+
+        $request = new Request(['q' => 'question', 'sort' => 'question', 'order' => 'desc']);
+        $response = new SearchController($search)->search($request);
+        $payload = json_decode((string) $response->getContent(), true);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertSame(['Charlie', 'Bob', 'Alice'], array_column($payload['data'], 'question'));
+        $this->assertSame('question', $payload['meta']['sorting']['field']);
     }
 }

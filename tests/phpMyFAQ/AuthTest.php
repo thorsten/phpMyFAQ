@@ -103,4 +103,33 @@ class AuthTest extends TestCase
         $this->assertIsString($hash);
         $this->assertStringNotContainsString('foobar', $hash);
     }
+
+    public function testAddErrorCollectsMessages(): void
+    {
+        $this->auth->addError('first problem');
+        $this->auth->addError('second problem');
+
+        $this->assertEquals("first problem\nsecond problem\n", $this->auth->getErrors());
+    }
+
+    public function testSelectAuthRejectsAnAuthClassWithoutTheDriverInterface(): void
+    {
+        // AuthWebAuthn extends Auth but does not implement AuthDriverInterface.
+        try {
+            $this->auth->selectAuth('webauthn');
+            $this->fail('selectAuth() must reject a class that is not an AuthDriverInterface');
+        } catch (Exception $exception) {
+            $this->assertSame('Specified authentication access class could not be found.', $exception->getMessage());
+        }
+
+        $this->assertStringContainsString('could not be found', $this->auth->getErrors());
+    }
+
+    public function testEncryptThrowsWithoutAnEncryptionContainer(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No encryption container configured');
+
+        $this->auth->encrypt('foobar');
+    }
 }

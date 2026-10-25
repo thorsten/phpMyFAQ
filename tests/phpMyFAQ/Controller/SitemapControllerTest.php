@@ -83,4 +83,36 @@ class SitemapControllerTest extends TestCase
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
         $this->assertEquals('XML Sitemap is disabled.', $response->getContent());
     }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testGzippedSitemapReturns404WhenDisabled(): void
+    {
+        $this->sitemapXmlService->method('generateXml')->willReturn(null);
+
+        $response = $this->controller->sitemapGz();
+
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->assertEquals('XML Sitemap is disabled.', $response->getContent());
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testGzippedSitemapReturnsCompressedXml(): void
+    {
+        $xml =
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            . "\n"
+            . '<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
+
+        $this->sitemapXmlService->method('generateXml')->willReturn($xml);
+
+        $response = $this->controller->sitemapXmlGz();
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertEquals('application/x-gzip', $response->headers->get('Content-Type'));
+        $this->assertSame($xml, gzdecode((string) $response->getContent()));
+    }
 }

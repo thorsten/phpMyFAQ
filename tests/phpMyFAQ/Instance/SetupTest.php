@@ -279,6 +279,25 @@ class SetupTest extends TestCase
         $this->assertStringContainsString("\$PMF_OS['index'] = 'phpmyfaq_os'", $content);
     }
 
+    public function testCheckDirsReportsADirThatCannotBeCreated(): void
+    {
+        mkdir($this->tmpRootDir, 0777, true);
+        chmod($this->tmpRootDir, 0555);
+        $this->setup->setRootDir($this->tmpRootDir);
+
+        // mkdir() warns on failure; checkDirs() reports the failure itself.
+        set_error_handler(static fn(): bool => true);
+        try {
+            $result = $this->setup->checkDirs(['/cannot-create']);
+        } finally {
+            restore_error_handler();
+            chmod($this->tmpRootDir, 0777);
+        }
+
+        $this->assertSame(['Folder [/cannot-create] could not be created.'], $result);
+        $this->assertDirectoryDoesNotExist($this->tmpRootDir . '/cannot-create');
+    }
+
     private function removeDirectory(string $directory): void
     {
         $entries = scandir($directory);

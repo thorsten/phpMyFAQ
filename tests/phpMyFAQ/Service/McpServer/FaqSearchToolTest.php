@@ -144,6 +144,19 @@ class FaqSearchToolTest extends TestCase
         $this->assertSame('https://example.com/content/42/en', $faq['url']);
     }
 
+    public function testExecuteReportsNoAccessibleEntriesWhenTheLimitLeavesNoResults(): void
+    {
+        $searchResult = new stdClass();
+        $searchResult->id = 42;
+        $searchResult->lang = 'en';
+
+        $this->searchMock->method('search')->willReturn([$searchResult]);
+
+        $result = $this->tool->execute(['query' => 'install', 'limit' => 0]);
+
+        $this->assertSame('No accessible FAQ entries found for the given query.', $result['content']);
+    }
+
     public function testExecuteWithCategoryIdSetsCategoryOnSearch(): void
     {
         $this->searchMock->expects($this->once())->method('setCategoryId')->with(7);

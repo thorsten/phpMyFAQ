@@ -89,6 +89,35 @@ class JwksProviderTest extends TestCase
         $this->assertSame('RS256', $keys['test-kid']->getAlgorithm());
     }
 
+    public function testDefaultsCacheDirectoryToTheApplicationCache(): void
+    {
+        $provider = new JwksProvider($this->createStub(HttpClientInterface::class));
+
+        $cacheDir = new \ReflectionProperty(JwksProvider::class, 'cacheDir')->getValue($provider);
+
+        $this->assertSame(PMF_ROOT_DIR . '/cache/jwks', $cacheDir);
+    }
+
+    public function testStillReturnsKeysWhenCacheDirectoryCannotBeCreated(): void
+    {
+        // A regular file where the parent directory should be makes mkdir() fail.
+        $blockingFile = tempnam(sys_get_temp_dir(), 'pmf-jwks-blocker-');
+        $this->assertNotFalse($blockingFile);
+        $unusableCacheDir = $blockingFile . '/jwks';
+
+        $httpClient = $this->createMock(HttpClientInterface::class);
+        $httpClient->expects($this->once())->method('request')->willReturn($this->mockResponse($this->jwksJson()));
+
+        try {
+            $keys = new JwksProvider($httpClient, $unusableCacheDir)->getKeys('my-tenant');
+
+            $this->assertArrayHasKey('test-kid', $keys);
+            $this->assertDirectoryDoesNotExist($unusableCacheDir);
+        } finally {
+            unlink($blockingFile);
+        }
+    }
+
     public function testCachesJwksAcrossCalls(): void
     {
         $httpClient = $this->createMock(HttpClientInterface::class);

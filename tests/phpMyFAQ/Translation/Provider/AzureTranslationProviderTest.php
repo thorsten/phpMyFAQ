@@ -6,6 +6,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Translation\Exception\ApiException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
@@ -177,6 +178,55 @@ class AzureTranslationProviderTest extends TestCase
 
         $provider = new AzureTranslationProvider($this->configuration, $httpClient);
         $provider->translate('Hello', 'en', 'de', false);
+    }
+
+    public function testTranslateWrapsTransportFailuresInAnApiException(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['translation.azureKey',    'test-api-key'],
+                ['translation.azureRegion', 'eastus'],
+            ]);
+
+        $httpClient = new MockHttpClient(static function (): never {
+            throw new TransportException('Connection refused');
+        });
+        $provider = new AzureTranslationProvider($this->configuration, $httpClient);
+
+        $this->expectException(ApiException::class);
+        $this->expectExceptionMessage('Azure Translator API error: Connection refused');
+        $provider->translate('Hello World', 'en', 'de', false);
+    }
+
+    public function testTranslateBatchPreservingHtmlTranslatesEveryTextIndividually(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['translation.azureKey',    'test-api-key'],
+                ['translation.azureRegion', 'eastus'],
+            ]);
+
+        $requestBodies = [];
+        $httpClient = new MockHttpClient(static function (string $method, string $url, array $options) use (
+            &$requestBodies,
+        ): MockResponse {
+            $body = json_decode((string) $options['body'], true);
+            $requestBodies[] = $body;
+
+            return new MockResponse(json_encode([
+                ['translations' => [['text' => 'Übersetzt: ' . $body[0]['text']]]],
+            ]));
+        });
+        $provider = new AzureTranslationProvider($this->configuration, $httpClient);
+
+        $result = $provider->translateBatch(['<b>Hello</b>', 'World'], 'en', 'de', true);
+
+        $this->assertCount(2, $requestBodies);
+        $this->assertStringContainsString('Übersetzt: ', $result[0]);
+        $this->assertStringContainsString('<b>', $result[0]);
+        $this->assertSame('Übersetzt: World', $result[1]);
     }
 
     public function testSupportsLanguagePair(): void

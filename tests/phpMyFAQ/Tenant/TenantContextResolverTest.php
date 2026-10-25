@@ -58,6 +58,18 @@ class TenantContextResolverTest extends TestCase
         $this->assertSame(200, $context->getQuotas()->getMaxCategories());
     }
 
+    public function testResolveIgnoresNonNumericQuotaValues(): void
+    {
+        putenv('PMF_TENANT_QUOTA_MAX_FAQS=unlimited');
+        putenv('PMF_TENANT_QUOTA_MAX_USERS=50');
+
+        $resolver = new TenantContextResolver();
+        $context = $resolver->resolve(Request::create('https://acme.faq.example.com/'));
+
+        $this->assertNull($context->getQuotas()->getMaxFaqs());
+        $this->assertSame(50, $context->getQuotas()->getMaxUsers());
+    }
+
     /**
      * @throws Exception
      */

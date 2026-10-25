@@ -131,6 +131,16 @@ class PostgresDialectTest extends TestCase
         $this->assertFalse($this->dialect->supportsColumnPositioning());
     }
 
+    public function testDate(): void
+    {
+        $this->assertEquals('DATE', $this->dialect->date());
+    }
+
+    public function testSupportsCombinedAlter(): void
+    {
+        $this->assertFalse($this->dialect->supportsCombinedAlter());
+    }
+
     public function testQuoteIdentifier(): void
     {
         $this->assertEquals('"column_name"', $this->dialect->quoteIdentifier('column_name'));

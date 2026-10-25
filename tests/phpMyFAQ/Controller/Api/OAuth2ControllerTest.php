@@ -381,4 +381,31 @@ class OAuth2ControllerTest extends TestCase
         $reflectionSession = new \ReflectionProperty($controller, 'session');
         $reflectionSession->setValue($controller, $session ?? new Session(new MockArraySessionStorage()));
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAuthorizePostNormalizesUnexpectedRuntimeCodeToServiceUnavailable(): void
+    {
+        $controller = new OAuth2Controller(new OAuth2AuthorizationServer($this->configuration));
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('oauth2-authorize');
+        $this->injectAuthenticatedContext($controller, $session);
+
+        $authorizationServer = new OAuth2AuthorizationServer($this->configuration);
+        $authorizationServer->setAuthorizationCompleter(static function (): array {
+            throw new \RuntimeException('Broken', 1);
+        });
+        $controller->setAuthorizationServer($authorizationServer);
+
+        $request = Request::create('/oauth/authorize', 'POST', [
+            'csrf' => $csrfToken,
+            'approve' => 'true',
+        ]);
+
+        $response = $controller->authorize($request);
+
+        $this->assertSame(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
+        $this->assertStringContainsString('oauth2_unavailable', (string) $response->getContent());
+    }
 }

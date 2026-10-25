@@ -201,6 +201,50 @@ class ImageTest extends TestCase
         $this->assertArrayNotHasKey('image', $_FILES);
     }
 
+    public function testUploadThrowsWhenUploadDirectoryCannotBeCreated(): void
+    {
+        $userDirectory = PMF_CONTENT_DIR . '/user';
+        $uploadDirectory = $userDirectory . '/images';
+        $parkedDirectory = $userDirectory . '/images-parked-' . uniqid();
+        if (!is_dir($userDirectory)) {
+            mkdir($userDirectory, 0o755, true);
+        }
+
+        $hadUploadDirectory = is_dir($uploadDirectory);
+        if ($hadUploadDirectory) {
+            rename($uploadDirectory, $parkedDirectory);
+        }
+
+        // A read-only parent makes mkdir() fail for the upload directory.
+        chmod($userDirectory, 0o555);
+
+        $uploadedFileMock = $this->createMock(UploadedFile::class);
+        $uploadedFileMock->method('isValid')->willReturn(true);
+        $uploadedFileMock->method('getSize')->willReturn(1024);
+        $uploadedFileMock->method('getClientMimeType')->willReturn('image/jpeg');
+        $uploadedFileMock->expects($this->never())->method('move');
+
+        $this->configurationMock->method('get')->willReturn(2048);
+
+        $this->image->setUploadedFile($uploadedFileMock);
+        $this->image->setFileName('category-test-no-directory.jpg');
+
+        try {
+            $this->image->upload();
+            $this->fail('upload() must fail when the upload directory cannot be created');
+        } catch (Exception $exception) {
+            $this->assertStringContainsString(
+                'Upload directory does not exist and could not be created',
+                $exception->getMessage(),
+            );
+        } finally {
+            chmod($userDirectory, 0o755);
+            if ($hadUploadDirectory) {
+                rename($parkedDirectory, $uploadDirectory);
+            }
+        }
+    }
+
     public function testUploadWithInvalidFile(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);

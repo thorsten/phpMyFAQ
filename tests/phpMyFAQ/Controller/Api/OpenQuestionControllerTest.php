@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use Exception;
-use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Question;
 use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -193,5 +193,36 @@ class OpenQuestionControllerTest extends TestCase
             ->setIsVisible(true);
 
         return $questionEntity;
+    }
+
+    /**
+     * Non-numeric fields are compared as strings.
+     *
+     * @throws Exception
+     */
+    public function testListSortsByUsernameAsString(): void
+    {
+        $question = $this->createMock(Question::class);
+        $question
+            ->method('getAll')
+            ->willReturn([
+                self::createQuestionEntity(1, 'Charlie', '20240101', 5),
+                self::createQuestionEntity(2, 'Alice', '20240102', 4),
+                self::createQuestionEntity(3, 'Bob', '20240103', 3),
+            ]);
+
+        $controller = new OpenQuestionController($question);
+        $this->configuration->set('api.onlyPublicQuestions', true);
+
+        $request = Request::create('/api/v4.0/open-questions', 'GET', [
+            'sort' => 'username',
+            'order' => 'desc',
+        ]);
+
+        $response = $controller->list($request);
+
+        $data = json_decode((string) $response->getContent(), true);
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertSame(['Charlie', 'Bob', 'Alice'], array_column($data['data'], 'username'));
     }
 }

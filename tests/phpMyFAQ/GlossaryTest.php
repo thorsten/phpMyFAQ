@@ -7,6 +7,7 @@ use phpMyFAQ\Glossary\GlossaryRepository;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -236,5 +237,25 @@ class GlossaryTest extends TestCase
         $this->assertFalse($glossary->delete(1));
         $this->assertEmpty($glossary->fetchAll());
         $this->assertEmpty($glossary->fetch(1));
+    }
+
+    public function testGetLanguageReturnsTheConfiguredLanguage(): void
+    {
+        $this->assertSame('en', $this->glossary->getLanguage());
+
+        $this->glossary->setLanguage('de');
+
+        $this->assertSame('de', $this->glossary->getLanguage());
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testSetTooltipLazilyCreatesTheHelperAndKeepsAMatchWithoutAnItem(): void
+    {
+        // Built without the constructor, like a partial mock: the helper has to be created on demand.
+        $glossary = new ReflectionClass(Glossary::class)->newInstanceWithoutConstructor();
+
+        $this->assertSame('plain text', $glossary->setTooltip(['plain text']));
     }
 }

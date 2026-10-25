@@ -133,6 +133,14 @@ class BookmarkTest extends TestCase
         $this->assertFalse($this->bookmark->isFaqBookmark(-10));
     }
 
+    public function testIsFaqBookmarkReturnsFalseWhenUserHasNoBookmarks(): void
+    {
+        $this->bookmark->removeAll();
+
+        $this->assertSame([], $this->bookmark->getAll());
+        $this->assertFalse($this->bookmark->isFaqBookmark(1));
+    }
+
     public function testIsFaqBookmarkIgnoresBookmarksWithoutFaqIdProperty(): void
     {
         $reflection = new ReflectionClass(Bookmark::class);

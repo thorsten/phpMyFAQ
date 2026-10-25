@@ -52,6 +52,27 @@ class McpServerCommandTest extends TestCase
         $this->assertSame(0, $result);
     }
 
+    public function testExecuteWithInfoOptionSkipsToolEntriesThatAreNotArrays(): void
+    {
+        $input = $this->createMock(InputInterface::class);
+        $input->method('getOption')->willReturn(true);
+        $output = new StreamOutput(fopen('php://memory', 'w+'));
+
+        $this->serverMock->method('getServerInfo')->willReturn([
+            'name' => 'phpMyFAQ MCP Server',
+            'version' => '0.1.0-dev',
+            'description' => 'Test server',
+            'capabilities' => ['tools' => true],
+            'tools' => ['not-a-tool', ['name' => 'faq_search', 'description' => 'Search tool']],
+        ]);
+
+        $this->assertSame(0, $this->callExecute($input, $output));
+
+        $rendered = $this->readStream($output->getStream());
+        $this->assertStringContainsString('faq_search', $rendered);
+        $this->assertStringNotContainsString('not-a-tool', $rendered);
+    }
+
     public function testExecuteRunsServerSuccessfully(): void
     {
         $input = $this->createMock(InputInterface::class);

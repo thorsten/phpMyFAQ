@@ -180,6 +180,60 @@ final class GroupControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testCreateReportsDatabaseErrorWhenGroupNameAlreadyExists(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-group');
+
+        $groupData = ['group_name' => 'Duplicate Group', 'group_description' => 'Test', 'group_auto_join' => 'n'];
+
+        $firstController = $this->createController();
+        $firstController->setContainer($container);
+        $firstController->create(new Request([], $groupData, ['csrf' => $token]));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+        $response = $controller->create(new Request([], $groupData, ['csrf' => $token]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringContainsString(
+            '<div class="alert alert-danger">' . Translation::get('ad_adus_dberr') . '</div>',
+            (string) $response->getContent(),
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateWithEmptyGroupNameRendersGroupPage(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-group');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->create(
+            new Request(
+                [],
+                ['group_name' => '', 'group_description' => 'Test', 'group_auto_join' => 'n'],
+                [
+                    'csrf' => $token,
+                ],
+            ),
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringNotContainsString(Translation::get('ad_adus_dberr'), (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
     private function createValidCsrfToken(Session $session, string $page): string
     {
         Token::resetInstanceForTests();
@@ -236,5 +290,4 @@ final class GroupControllerTest extends TestCase
 
         return $container;
     }
-
 }

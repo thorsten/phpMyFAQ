@@ -584,6 +584,55 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * Selecting a revision in the editor must load that revision instead of the current record.
+     *
+     * @throws \Exception
+     */
+    public function testEditLoadsSelectedRevisionWhenItDiffersFromCurrentOne(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = $this->editableFaqRecord(['revision_id' => 5]);
+        $faq->method('getNextSolutionId')->willReturn(1001);
+
+        $loadedRevisions = [];
+        $faq
+            ->expects($this->exactly(2))
+            ->method('getFaq')
+            ->willReturnCallback(
+                static function (int $faqId, ?int $revisionId, bool $isAdmin) use (&$loadedRevisions): bool {
+                    $loadedRevisions[] = $revisionId;
+                    return true;
+                },
+            );
+
+        $tags = $this->createMock(Tags::class);
+        $tags->method('getAllTagsById')->willReturn([]);
+
+        $seo = $this->createMock(Seo::class);
+        $seo->method('get')->willReturn(new SeoEntity());
+
+        $controller = new FaqController(
+            $this->createStub(Comments::class),
+            $faq,
+            $tags,
+            $seo,
+            $this->createStub(CategoryHelper::class),
+            $this->createStub(UserHelper::class),
+            new FaqPermission($this->configuration),
+            $this->createStub(Changelog::class),
+            $this->createStub(Question::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->edit(
+            new Request([], ['selectedRevisionId' => '3'], ['faqId' => '1', 'faqLanguage' => 'en']),
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([null, 3], $loadedRevisions);
+    }
+
+    /**
      * Returns a stored FAQ record for the editor, with optional overrides merged in.
      *
      * @param array<string, mixed> $overrides

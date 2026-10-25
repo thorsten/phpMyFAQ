@@ -15,6 +15,7 @@ use phpMyFAQ\Configuration\SecuritySettings;
 use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettings;
 use phpMyFAQ\Configuration\Storage\ConfigurationStorageSettingsResolver;
 use phpMyFAQ\Configuration\Storage\DatabaseConfigurationStore;
+use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
 use phpMyFAQ\Configuration\Storage\HybridConfigurationStore;
 use phpMyFAQ\Configuration\UrlSettings;
 use phpMyFAQ\Database;
@@ -24,8 +25,11 @@ use phpMyFAQ\EncryptionTypes\Hash;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Permission;
 use phpMyFAQ\Permission\BasicPermissionRepository;
+use phpMyFAQ\Permission\GroupCategoryPermissionRepository;
+use phpMyFAQ\Permission\LanguagePermissionRepository;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\MediumPermissionRepository;
+use phpMyFAQ\Plugin\PluginDiscovery;
 use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\Setup\Migration\Operations\UserCreateOperation;
 use phpMyFAQ\System;
@@ -40,10 +44,6 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
-use phpMyFAQ\Permission\GroupCategoryPermissionRepository;
-use phpMyFAQ\Permission\LanguagePermissionRepository;
-use phpMyFAQ\Plugin\PluginDiscovery;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(UserCreateOperation::class)]
@@ -195,6 +195,37 @@ final class UserCreateOperationTest extends TestCase
         $this->assertFalse($operation->execute());
     }
 
+    public function testExecuteReturnsFalseWhenTheUserDataCannotBeStored(): void
+    {
+        $configuration = new Configuration($this->createDatabaseFailingOn('faquserdata'));
+        $operation = new UserCreateOperation(
+            $configuration,
+            'userdata_failure_user',
+            'Secret123!',
+            'Userdata Failure',
+            'userdata-failure@example.com',
+            8108,
+        );
+
+        $this->assertFalse($operation->execute());
+    }
+
+    public function testExecuteReturnsFalseWhenTheSuperAdminFlagCannotBeStored(): void
+    {
+        $configuration = new Configuration($this->createDatabaseFailingOn('is_superadmin'));
+        $operation = new UserCreateOperation(
+            $configuration,
+            'superadmin_failure_user',
+            'Secret123!',
+            'Superadmin Failure',
+            'superadmin-failure@example.com',
+            8109,
+            true,
+        );
+
+        $this->assertFalse($operation->execute());
+    }
+
     public function testToArray(): void
     {
         $operation = $this->createOperation(loginName: 'migration_superadmin', userId: 8107, isSuperAdmin: true);
@@ -209,6 +240,32 @@ final class UserCreateOperationTest extends TestCase
             ],
             $operation->toArray(),
         );
+    }
+
+    /**
+     * Connects a second driver to the test database that rejects every query mentioning the given fragment.
+     */
+    private function createDatabaseFailingOn(string $fragment): PdoSqlite
+    {
+        $database = new class($fragment) extends PdoSqlite {
+            public function __construct(
+                private readonly string $fragment,
+            ) {
+                parent::__construct();
+            }
+
+            public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
+            {
+                if (str_contains($query, $this->fragment) && str_contains($query, 'UPDATE')) {
+                    return false;
+                }
+
+                return parent::query($query, $offset, $rowcount);
+            }
+        };
+        $database->connect($this->databaseFile, '', '');
+
+        return $database;
     }
 
     private function createOperation(

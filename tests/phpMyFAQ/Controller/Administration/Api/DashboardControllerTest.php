@@ -592,6 +592,69 @@ final class DashboardControllerTest extends TestCase
     }
 
     /**
+     * A cache entry without the expected envelope must be ignored, not served.
+     *
+     * @throws \Exception
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testVersionsIgnoresCachedEntryWithoutEnvelope(): void
+    {
+        $this->configuration->set('upgrade.releaseEnvironment', 'stable');
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $item = $this->cache->getItem('dashboard.versions.stable');
+        $item->set('not an envelope');
+        $this->cache->save($item);
+
+        $response = $controller->versions();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
+    }
+
+    /**
+     * @throws \Exception
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function testVersionsIgnoresCachedEntryWhosePayloadIsNotAnArray(): void
+    {
+        $this->configuration->set('upgrade.releaseEnvironment', 'stable');
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $item = $this->cache->getItem('dashboard.versions.stable');
+        $item->set(['fetchedAt' => time(), 'payload' => 'phpMyFAQ 4.2.0']);
+        $this->cache->save($item);
+
+        $response = $controller->versions();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertArrayHasKey('error', $payload);
+    }
+
+    /**
+     * The remote API answers, but knows nothing about the configured release channel.
+     *
+     * @throws \Exception
+     */
+    public function testVersionsReturnsBadRequestWhenReleaseEnvironmentIsUnknownToTheApi(): void
+    {
+        $httpClient = $this->createVersionsApi('4.2.0', '4.2.0');
+        $this->configuration->set('upgrade.releaseEnvironment', 'non-existent-release-channel');
+        $controller = $this->createController($httpClient);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->versions();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertStringContainsString('non-existent-release-channel', $payload['error']);
+    }
+
+    /**
      * @throws \Exception
      * @throws \JsonException
      */
@@ -817,6 +880,47 @@ final class DashboardControllerTest extends TestCase
 
         $layout = json_decode((string) $controller->getLayout()->getContent(), true, 512, JSON_THROW_ON_ERROR);
         self::assertNotSame([['key' => 'sponsor', 'position' => 0, 'visible' => false]], $layout['config']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveLayoutReportsServerErrorWhenLayoutCannotBeStored(): void
+    {
+        self::assertNotFalse($this->dbHandle->query('DROP TABLE faqadmindashboard'));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+        $csrfToken = $this->createValidCsrfToken();
+
+        $body = json_encode([
+            'csrfToken' => $csrfToken,
+            'config' => [['key' => 'sponsor', 'visible' => false]],
+        ], JSON_THROW_ON_ERROR);
+        $response = $controller->saveLayout(new Request([], [], [], [], [], [], $body));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame('Could not save layout.', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testResetLayoutReportsServerErrorWhenLayoutCannotBeRemoved(): void
+    {
+        self::assertNotFalse($this->dbHandle->query('DROP TABLE faqadmindashboard'));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+        $csrfToken = $this->createValidCsrfToken();
+
+        $resetBody = json_encode(['csrfToken' => $csrfToken], JSON_THROW_ON_ERROR);
+        $response = $controller->resetLayout(new Request([], [], [], [], [], [], $resetBody));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame('Could not reset layout.', $payload['error']);
     }
 
     /**

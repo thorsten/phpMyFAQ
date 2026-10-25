@@ -70,6 +70,14 @@ class ScopeRepositoryTest extends TestCase
         $this->assertNull($this->repository->getScopeEntityByIdentifier('missing'));
     }
 
+    public function testGetScopeEntityByIdentifierReturnsNullWhenRowHasEmptyScopeId(): void
+    {
+        $this->db->method('query')->willReturn(new \stdClass());
+        $this->db->method('fetchObject')->willReturn((object) ['scope_id' => '']);
+
+        $this->assertNull($this->repository->getScopeEntityByIdentifier('read'));
+    }
+
     public function testFinalizeScopesReturnsScopesUnchanged(): void
     {
         $scope1 = $this->createStub(ScopeEntityInterface::class);

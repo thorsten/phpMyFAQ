@@ -116,6 +116,34 @@ class LibreTranslationProviderTest extends TestCase
         $this->assertEquals(2, $callCount);
     }
 
+    public function testTranslateBatchPreservesHtmlForEveryText(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['translation.libreTranslateUrl',    'https://libretranslate.com'],
+                ['translation.libreTranslateApiKey', ''],
+            ]);
+
+        $sentTexts = [];
+        $httpClient = new MockHttpClient(function ($method, $url, $options) use (&$sentTexts) {
+            $body = json_decode($options['body'], true);
+            $sentTexts[] = $body['q'];
+
+            return new MockResponse(json_encode([
+                'translatedText' => str_replace(['Hello', 'World'], ['Hallo', 'Welt'], $body['q']),
+            ]));
+        });
+
+        $provider = new LibreTranslationProvider($this->configuration, $httpClient);
+        $result = $provider->translateBatch(['<p>Hello</p>', '<b>World</b>'], 'en', 'de', true);
+
+        $this->assertEquals(['<p>Hallo</p>', '<b>Welt</b>'], $result);
+        $this->assertCount(2, $sentTexts);
+        $this->assertStringNotContainsString('<p>', $sentTexts[0]);
+        $this->assertStringNotContainsString('<b>', $sentTexts[1]);
+    }
+
     public function testTranslateEmptyString(): void
     {
         $httpClient = new MockHttpClient();

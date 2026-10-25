@@ -7,6 +7,7 @@ namespace phpMyFAQ\Setup;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
+use UnexpectedValueException;
 
 #[CoversClass(WritablePathScanner::class)]
 final class WritablePathScannerTest extends TestCase
@@ -87,6 +88,15 @@ final class WritablePathScannerTest extends TestCase
         }
     }
 
+    public function testScanningAMissingDirectoryFails(): void
+    {
+        $missing = $this->root . '/does-not-exist';
+
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage($missing);
+        WritablePathScanner::getNonWritablePaths($missing, $this->root . '/excluded');
+    }
+
     public function testFormatPathListJoinsUpToFivePaths(): void
     {
         $this->assertSame('', WritablePathScanner::formatPathList([]));
@@ -96,9 +106,14 @@ final class WritablePathScannerTest extends TestCase
 
     public function testFormatPathListTruncatesAndCountsTheRest(): void
     {
-        $this->assertSame(
-            '/a, /b, /c, /d, /e and 2 more',
-            WritablePathScanner::formatPathList(['/a', '/b', '/c', '/d', '/e', '/f', '/g']),
-        );
+        $this->assertSame('/a, /b, /c, /d, /e and 2 more', WritablePathScanner::formatPathList([
+            '/a',
+            '/b',
+            '/c',
+            '/d',
+            '/e',
+            '/f',
+            '/g',
+        ]));
     }
 }

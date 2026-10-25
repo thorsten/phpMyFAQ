@@ -173,6 +173,26 @@ class LinkTest extends TestCase
         $this->assertEquals('https://', $this->link->getSystemScheme());
     }
 
+    public function testGetSystemSchemeFollowsTheRequestWhenSslIsNotEnforced(): void
+    {
+        $this->configuration->set('security.useSslOnly', 'false');
+        unset($_SERVER['HTTPS']);
+
+        $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
+        $this->assertEquals('http://', $this->link->getSystemScheme());
+
+        $_SERVER['HTTPS'] = 'on';
+        $this->assertEquals('https://', $this->link->getSystemScheme());
+        unset($_SERVER['HTTPS']);
+    }
+
+    public function testToStringKeepsIndexUrlWithoutActionParameter(): void
+    {
+        $this->link = new Link('http://example.com/my-test-faq/index.php?sid=4711', $this->configuration);
+
+        $this->assertEquals('http://example.com/my-test-faq/index.php?sid=4711', $this->link->toString());
+    }
+
     /**
      * Tests getSystemRelativeUri()
      */

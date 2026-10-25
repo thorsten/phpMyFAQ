@@ -62,6 +62,20 @@ class ConfigUpdateOperationTest extends TestCase
         $this->assertStringContainsString('...', $description);
     }
 
+    public function testGetDescriptionWithNull(): void
+    {
+        $operation = new ConfigUpdateOperation($this->configuration, 'test.key', null);
+
+        $this->assertEquals('Update configuration: test.key = null', $operation->getDescription());
+    }
+
+    public function testGetDescriptionWithInteger(): void
+    {
+        $operation = new ConfigUpdateOperation($this->configuration, 'records.numberOfRecordsPerPage', 20);
+
+        $this->assertEquals('Update configuration: records.numberOfRecordsPerPage = 20', $operation->getDescription());
+    }
+
     public function testExecute(): void
     {
         $this->configuration->expects($this->once())->method('update')->with(['test.key' => 'value'])->willReturn(true);

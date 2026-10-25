@@ -323,6 +323,14 @@ class ImportTest extends TestCase
         $this->assertFalse($isValid);
     }
 
+    public function testValidateCSVRejectsRowsWithoutZeroBasedColumnKeys(): void
+    {
+        $row = ['1', 'Question?', 'Answer', 'keyword', 'en', 'Author', 'test@example.com', 'true', 'false'];
+        $shiftedRow = array_combine(range(1, 9), $row);
+
+        $this->assertFalse($this->faqImport->validateCSV([$shiftedRow]));
+    }
+
     public function testValidateCSVWithTooManyColumns(): void
     {
         $invalidCSVData = [

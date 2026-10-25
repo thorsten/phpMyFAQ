@@ -336,6 +336,29 @@ class RegistrationControllerTest extends TestCase
      * @throws Exception
      * @throws \JsonException
      */
+    public function testCreateRejectsJsonBodyThatIsNotAnObject(): void
+    {
+        $token = bin2hex(random_bytes(16));
+        $this->configuration->set('api.apiClientToken', $token);
+        $_SERVER['HTTP_X_PMF_TOKEN'] = $token;
+
+        $request = new Request([], [], [], [], [], [], '["grace", "Grace Hopper"]');
+        $controller = new RegistrationController();
+
+        $response = $controller->create($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(
+            ['registered' => false, 'error' => 'The request body must be a JSON object.'],
+            json_decode((string) $response->getContent(), true),
+        );
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     * @throws \JsonException
+     */
     public function testCreateReturnsForbiddenWhenRegistrationIsDisabled(): void
     {
         $token = bin2hex(random_bytes(16));

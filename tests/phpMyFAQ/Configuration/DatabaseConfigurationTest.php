@@ -4,6 +4,7 @@ namespace phpMyFAQ\Configuration;
 
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 #[AllowMockObjectsWithoutExpectations]
 class DatabaseConfigurationTest extends TestCase
@@ -20,5 +21,15 @@ class DatabaseConfigurationTest extends TestCase
         $this->assertEquals('', $config->getPrefix());
         $this->assertEquals('pdo_sqlite', $config->getType());
         $this->assertNull($config->getSchema());
+    }
+
+    public function testThrowsWhenConfigurationFileIsNotReadable(): void
+    {
+        $filename = sys_get_temp_dir() . '/pmf-missing-' . uniqid() . '/database.php';
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(sprintf('Database configuration file "%s" is not readable.', $filename));
+
+        new DatabaseConfiguration($filename);
     }
 }

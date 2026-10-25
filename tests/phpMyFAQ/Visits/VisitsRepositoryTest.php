@@ -6,6 +6,7 @@ namespace phpMyFAQ\Visits\Test;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Visits\VisitsRepository;
@@ -46,6 +47,20 @@ class VisitsRepositoryTest extends TestCase
     {
         $exists = $this->repository->exists(999, 'en');
         $this->assertFalse($exists);
+    }
+
+    public function testExistsReturnsFalseWhenTheQueryFails(): void
+    {
+        $db = $this->createStub(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('query')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $repository = new VisitsRepository($configuration);
+
+        $this->assertFalse($repository->exists(1, 'en'));
     }
 
     public function testInsertCreatesNewRecord(): void

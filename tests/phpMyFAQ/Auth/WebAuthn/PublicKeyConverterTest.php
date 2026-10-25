@@ -174,4 +174,40 @@ class PublicKeyConverterTest extends TestCase
         $this->assertStringContainsString('BEGIN PUBLIC KEY', $result);
         $this->assertStringContainsString('END PUBLIC KEY', $result);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testFromCoseToPkcsReturnsNullWhenTheCborPayloadIsNotAMap(): void
+    {
+        $encoded = CBOREncoder::encode(5);
+
+        $this->assertNull(PublicKeyConverter::fromCoseToPkcs($encoded));
+    }
+
+    public function testFromCoseToPkcsThrowsWhenEs256CoordinatesAreNotByteStrings(): void
+    {
+        $encoded = CBOREncoder::encode([3 => -7, -1 => 1, -2 => 1, 1 => 2, -3 => 1]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot decode key response for x or y coordinate');
+
+        PublicKeyConverter::fromCoseToPkcs($encoded);
+    }
+
+    public function testFromCoseToPkcsThrowsWhenEs256CoordinatesHaveTheWrongLength(): void
+    {
+        $encoded = CBOREncoder::encode([
+            3 => -7,
+            -1 => 1,
+            -2 => new CBORByteString(str_repeat('x', 31)),
+            1 => 2,
+            -3 => new CBORByteString(str_repeat('y', 32)),
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot decode key response for x or y coordinate');
+
+        PublicKeyConverter::fromCoseToPkcs($encoded);
+    }
 }

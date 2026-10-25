@@ -49,6 +49,14 @@ class RouteCacheManagerTest extends TestCase
         $this->assertEquals(1, $routes->count());
     }
 
+    public function testGetRoutesRejectsLoadersThatDoNotReturnARouteCollection(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Route loader for context "public" did not return a RouteCollection.');
+
+        $this->cacheManager->getRoutes('public', static fn(): array => []);
+    }
+
     public function testGetRoutesWritesCacheInProductionMode(): void
     {
         $expectedRoutes = new RouteCollection();

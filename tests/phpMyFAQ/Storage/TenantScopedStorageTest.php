@@ -40,6 +40,15 @@ class TenantScopedStorageTest extends TestCase
 
         fclose($stream);
     }
+
+    public function testEmptyPathResolvesToTheTenantPrefixItself(): void
+    {
+        $inner = new RecordingStorage();
+        $storage = new TenantScopedStorage($inner, '/15/attachments/');
+
+        $this->assertSame('https://example.com/15/attachments', $storage->url(''));
+        $this->assertSame([['url', '15/attachments']], $inner->calls);
+    }
 }
 
 final class RecordingStorage implements StorageInterface

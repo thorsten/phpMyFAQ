@@ -48,6 +48,14 @@ class TwigWrapperTest extends TestCase
         $this->assertInstanceOf(TemplateWrapper::class, $result);
     }
 
+    public function testLoadTemplateThrowsExceptionForMissingTemplate(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/does-not-exist\.twig/');
+
+        $this->twigWrapper->loadTemplate('does-not-exist.twig');
+    }
+
     public function testAddExtension(): void
     {
         $extensionMock = $this->createStub(ExtensionInterface::class);

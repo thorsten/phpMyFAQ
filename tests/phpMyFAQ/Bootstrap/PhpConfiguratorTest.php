@@ -190,6 +190,25 @@ class PhpConfiguratorTest extends TestCase
         PhpConfigurator::configureSession($configuration);
     }
 
+    public function testConfigureSessionThrowsWhenRedisHandlerHasNoConfigurator(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['session.handler',  'redis'],
+                ['session.redisDsn', 'tcp://127.0.0.1:6379'],
+                ['session.savePath', ''],
+            ]);
+
+        $this->reflection->getProperty('redisConfigurator')->setValue(null, null);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('No Redis session configurator is registered.');
+
+        PhpConfigurator::configureSession($configuration);
+    }
+
     public function testConfigureSessionUsesRedisHandlerWhenConfigured(): void
     {
         $configuration = $this->createMock(Configuration::class);

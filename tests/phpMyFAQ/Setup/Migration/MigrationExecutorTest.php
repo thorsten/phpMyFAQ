@@ -8,6 +8,7 @@ use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Filesystem\Filesystem;
+use phpMyFAQ\Setup\Migration\Operations\OperationInterface;
 use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
@@ -137,6 +138,78 @@ class MigrationExecutorTest extends TestCase
         $this->assertCount(2, $results);
         $this->assertEquals('4.0.0', $results[0]->getVersion());
         $this->assertEquals('4.1.0', $results[1]->getVersion());
+    }
+
+    public function testExecuteMigrationStopsAtTheFirstFailingOperation(): void
+    {
+        $migration = $this->createMockMigration('4.2.0', 'Failing');
+        $migration
+            ->method('up')
+            ->willReturnCallback(function (OperationRecorder $recorder): void {
+                $recorder->addOperation($this->createOperation('first', false));
+                $recorder->addOperation($this->createOperation('second', true));
+            });
+        $this->tracker->expects($this->never())->method('recordMigration');
+
+        $result = $this->executor->executeMigration($migration);
+
+        $this->assertFalse($result->isSuccess());
+        $this->assertSame('Failed at operation: first', $result->getErrorMessage());
+        $this->assertCount(1, $result->getOperationResults());
+    }
+
+    public function testExecuteMigrationsStopsAfterAFailedMigration(): void
+    {
+        $failing = $this->createMockMigration('4.0.0', 'Failing');
+        $failing
+            ->method('up')
+            ->willReturnCallback(function (OperationRecorder $recorder): void {
+                $recorder->addOperation($this->createOperation('broken', false));
+            });
+        $neverRun = $this->createMockMigration('4.1.0', 'Never run');
+        $neverRun->expects($this->never())->method('up');
+
+        $results = $this->executor->executeMigrations([$failing, $neverRun]);
+
+        $this->assertCount(1, $results);
+        $this->assertFalse($results[0]->isSuccess());
+    }
+
+    public function testFormatDryRunReportSkipsMalformedOperationEntries(): void
+    {
+        $report = [
+            'migrations' => [
+                '4.0.0' => [
+                    'description' => 'Test migration',
+                    'operationCount' => 1,
+                    'operationsByType' => ['sql' => 1],
+                    'operations' => [
+                        'not an operation',
+                        ['type' => 'sql', 'description' => 'SQL 1', 'query' => 'SELECT 1'],
+                    ],
+                ],
+            ],
+            'summary' => [
+                'migrationCount' => 1,
+                'totalOperations' => 1,
+                'operationsByType' => ['sql' => 1],
+            ],
+        ];
+
+        $formatted = $this->executor->formatDryRunReport($report);
+
+        $this->assertStringContainsString('SQL 1', $formatted);
+        $this->assertStringNotContainsString('not an operation', $formatted);
+    }
+
+    private function createOperation(string $description, bool $success): OperationInterface
+    {
+        $operation = $this->createMock(OperationInterface::class);
+        $operation->method('getType')->willReturn('sql');
+        $operation->method('getDescription')->willReturn($description);
+        $operation->method('execute')->willReturn($success);
+
+        return $operation;
     }
 
     public function testClearResultsRemovesStoredResults(): void

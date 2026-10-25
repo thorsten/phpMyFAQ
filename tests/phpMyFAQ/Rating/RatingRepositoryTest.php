@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Rating;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\Vote;
 use phpMyFAQ\Language;
@@ -144,6 +145,18 @@ class RatingRepositoryTest extends TestCase
     {
         $this->repository->deleteAll();
         $this->assertEquals(0, $this->repository->getNumberOfVotings(999));
+    }
+
+    public function testGetNumberOfVotingsReturnsZeroWhenTheQueryFails(): void
+    {
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('query')->willReturn(false);
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+
+        $repository = new RatingRepository($configuration);
+
+        $this->assertSame(0, $repository->getNumberOfVotings(1));
     }
 
     public function testIsVoteAllowed(): void

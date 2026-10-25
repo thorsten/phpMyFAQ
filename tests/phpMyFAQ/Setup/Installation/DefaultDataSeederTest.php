@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Setup\Installation;
 
+use phpMyFAQ\Configuration;
 use PHPUnit\Framework\TestCase;
 
 class DefaultDataSeederTest extends TestCase
@@ -70,6 +71,25 @@ class DefaultDataSeederTest extends TestCase
         $this->assertEquals('john@example.com', $config['main.administrationMail']);
         $this->assertEquals('de', $config['main.language']);
         $this->assertEquals('medium', $config['security.permLevel']);
+    }
+
+    public function testSeedConfigAddsEveryMainConfigEntry(): void
+    {
+        $added = [];
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('add')
+            ->willReturnCallback(static function (string $name, mixed $value) use (&$added): bool {
+                $added[$name] = $value;
+
+                return true;
+            });
+
+        $this->seeder->applyPersonalSettings('Jane Doe', 'jane@example.com', 'en', 'basic');
+        $this->seeder->seedConfig($configuration);
+
+        $this->assertSame($this->seeder->getMainConfig(), $added);
+        $this->assertSame('jane@example.com', $added['main.administrationMail']);
     }
 
     public function testGetMainRightsReturnsNonEmptyArray(): void

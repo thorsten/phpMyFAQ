@@ -239,6 +239,105 @@ class UnauthorizedUserControllerTest extends TestCase
     }
 
     /**
+     * A failing mail delivery must be swallowed: the response stays the generic success so the
+     * caller cannot tell an existing account from a missing one.
+     *
+     * @throws Exception
+     */
+    public function testRequestResetReturnsGenericSuccessWhenMailDeliveryFails(): void
+    {
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->once())->method('getUserByLogin')->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('email')->willReturn('real@example.com');
+        $user->expects($this->once())->method('getEncryptedPassword')->willReturn('hashed-pw-123');
+        $user->method('getUserId')->willReturn(42);
+
+        $mail = $this->createMock(Mail::class);
+        $mail->expects($this->once())->method('addTo')->with('real@example.com');
+        $mail->expects($this->once())->method('send')->willThrowException(new Exception('SMTP unavailable'));
+
+        $controller = $this->makeController($user, $mail);
+        $response = $controller->requestReset($this->jsonRequest([
+            'username' => 'realuser',
+            'email' => 'real@example.com',
+        ]));
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(Translation::get('lostpwd_mail_okay'), $payload['success']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testResetRejectsJsonBodyThatIsNotAnObject(): void
+    {
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->never())->method('getUserById');
+
+        $controller = $this->makeController($user);
+        $response = $controller->reset(new Request([], [], [], [], [], [], '[7, "NewSecret123"]'));
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(Translation::get('resetpwd_err_invalid'), $payload['error']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testResetRejectsUserWithoutStoredPassword(): void
+    {
+        $tokenService = new PasswordResetTokenService();
+        $token = $tokenService->issue(7, 'pw-key');
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->once())->method('getUserById')->willReturn(true);
+        $user->expects($this->once())->method('getEncryptedPassword')->willReturn('');
+        $user->expects($this->never())->method('changePassword');
+
+        $controller = $this->makeController($user, null, $tokenService);
+        $response = $controller->reset($this->jsonRequest([
+            'u' => 7,
+            'exp' => $token['expires'],
+            'sig' => $token['signature'],
+            'password' => 'NewSecret123',
+            'password_repeat' => 'NewSecret123',
+        ]));
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(Translation::get('resetpwd_err_invalid'), $payload['error']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testResetReportsFailureWhenPasswordCannotBeChanged(): void
+    {
+        $tokenService = new PasswordResetTokenService();
+        $token = $tokenService->issue(7, 'pw-key');
+
+        $user = $this->createMock(CurrentUser::class);
+        $user->expects($this->once())->method('getUserById')->with(7, true)->willReturn(true);
+        $user->expects($this->once())->method('getEncryptedPassword')->willReturn('pw-key');
+        $user->expects($this->once())->method('changePassword')->with('NewSecret123')->willReturn(false);
+
+        $controller = $this->makeController($user, null, $tokenService);
+        $response = $controller->reset($this->jsonRequest([
+            'u' => 7,
+            'exp' => $token['expires'],
+            'sig' => $token['signature'],
+            'password' => 'NewSecret123',
+            'password_repeat' => 'NewSecret123',
+        ]));
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(Translation::get('ad_passwd_fail'), $payload['error']);
+    }
+
+    /**
      * @throws Exception
      */
     public function testResetRejectsTamperedSignature(): void

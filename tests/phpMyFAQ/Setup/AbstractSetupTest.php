@@ -132,6 +132,39 @@ class AbstractSetupTest extends TestCase
         $this->addToAssertionCount(1);
     }
 
+    public function testCheckPreUpgradeRejectsATooOldPhpVersion(): void
+    {
+        $setup = new class($this->createStub(System::class)) extends AbstractSetup {
+            public function checkMinimumPhpVersion(): bool
+            {
+                return false;
+            }
+        };
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP));
+
+        $setup->checkPreUpgrade('sqlite3');
+    }
+
+    public function testCheckPreUpgradeRejectsAMissingDatabaseConfigurationFile(): void
+    {
+        $setup = new class($this->createStub(System::class)) extends AbstractSetup {};
+        $hiddenConfigFile = $this->configFilePath . '.hidden';
+        self::assertTrue(rename($this->configFilePath, $hiddenConfigFile));
+
+        try {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage(
+                'Sorry, but the database configuration file is not readable. Please check the permissions.',
+            );
+
+            $setup->checkPreUpgrade('sqlite3');
+        } finally {
+            rename($hiddenConfigFile, $this->configFilePath);
+        }
+    }
+
     private function initializeDatabaseStatics(Sqlite3 $dbHandle): void
     {
         $databaseReflection = new ReflectionClass(Database::class);

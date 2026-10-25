@@ -56,6 +56,14 @@ final class PackageVerifierTest extends TestCase
         self::assertFalse($this->createVerifier('not json')->verifyRelease($this->package, '4.2.0'));
     }
 
+    public function testReleaseWithoutZipInformationIsRefused(): void
+    {
+        $verifier = $this->createVerifier(['assets' => [['name' => basename($this->package)]]]);
+
+        self::assertFalse($verifier->verifyRelease($this->package, '4.2.0'));
+        self::assertFalse($this->logHandler->hasErrorRecords());
+    }
+
     public function testNightlyDigestIsCompared(): void
     {
         $name = basename($this->package);

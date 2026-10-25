@@ -163,4 +163,27 @@ class TranslationStatisticsTest extends TestCase
             }
         }
     }
+
+    public function testGetMissingKeysForNonExistentLanguageReportsEveryReferenceKey(): void
+    {
+        $missingKeys = $this->translation->getMissingKeys('xx');
+        $englishStatistics = $this->translation->getLanguageStatistics('en');
+
+        $this->assertNotEmpty($missingKeys);
+        $this->assertCount($englishStatistics['total_keys'], $missingKeys);
+        $this->assertContains('metaLanguage', $missingKeys);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testExtractLanguageCodeReturnsNullForFileNamesOutsideTheTranslationPattern(): void
+    {
+        $method = new \ReflectionClass($this->translation)->getMethod('extractLanguageCode');
+
+        $this->assertSame('pt_br', $method->invoke($this->translation, '/translations/language_pt_br.php'));
+        $this->assertNull($method->invoke($this->translation, '/translations/language_EN.php'));
+        $this->assertNull($method->invoke($this->translation, '/translations/language_en.php.bak'));
+        $this->assertNull($method->invoke($this->translation, '/translations/README.md'));
+    }
 }

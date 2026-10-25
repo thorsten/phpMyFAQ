@@ -79,6 +79,20 @@ class PdoPgsqlTest extends TestCase
         $this->assertFalse($result);
     }
 
+    public function testCreateTablesReturnsFalseWhenAnIndexStatementFails(): void
+    {
+        $executedQueries = [];
+        $this->dbMock
+            ->method('query')
+            ->willReturnCallback(function (string $query) use (&$executedQueries) {
+                $executedQueries[] = $query;
+                return !str_contains($query, 'idx_records');
+            });
+
+        $this->assertFalse($this->pdoPgsql->createTables());
+        $this->assertStringContainsString('idx_records', end($executedQueries));
+    }
+
     public function testCreateTablesStopsOnFirstFailure(): void
     {
         $queryCount = 0;

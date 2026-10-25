@@ -224,6 +224,18 @@ class NotificationTest extends TestCase
         $this->assertStringContainsString('admin/faq/edit/42/en', $this->mail->message);
     }
 
+    public function testSendNewFaqAddedIgnoresAnEntityWithoutId(): void
+    {
+        $faqEntity = new FaqEntity();
+        $faqEntity->setLanguage('en');
+
+        $this->faq->expects($this->never())->method('getQuestion');
+        $this->mail->expects($this->never())->method('addTo');
+        $this->mail->expects($this->never())->method('send');
+
+        $this->notification->sendNewFaqAdded(['extra@example.com'], $faqEntity);
+    }
+
     public function testSendNewFaqAddedSkipsDuplicateAdminEmail(): void
     {
         $faqEntity = new FaqEntity();
@@ -420,6 +432,38 @@ class NotificationTest extends TestCase
         $this->category->expects($this->once())->method('getOwner')->with(5)->willReturn(10);
 
         $notification->sendQuestionSuccessMail($questionEntity, $categories);
+    }
+
+    public function testSendFaqCommentNotificationSkipsCategoryOwnerWithoutEmailAddress(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = [
+            'id' => 11,
+            'email' => 'faqauthor@example.com',
+            'title' => 'Test FAQ Title',
+            'lang' => 'en',
+        ];
+
+        $comment = new Comment();
+        $comment->setUsername('Commenter');
+        $comment->setEmail('commenter@example.com');
+        $comment->setComment('This is a test comment on the FAQ.');
+
+        $category = $this->createMock(Category::class);
+        $category->expects($this->once())->method('getCategoryIdFromFaq')->with(11)->willReturn(5);
+        $category->expects($this->once())->method('getCategoryIdsFromFaq')->with(11)->willReturn([5]);
+        $category->expects($this->once())->method('getOwner')->with(5)->willReturn(77);
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserById')->with(77)->willReturn(true);
+        $user->expects($this->once())->method('getUserData')->with('email')->willReturn(null);
+
+        $this->mail->expects($this->once())->method('addTo')->with('faqauthor@example.com');
+        $this->mail->expects($this->never())->method('addCc');
+        $this->mail->expects($this->once())->method('send');
+
+        $notification = $this->createNotificationWithFactories($category, $user);
+        $notification->sendFaqCommentNotification($faq, $comment);
     }
 
     public function testSendQuestionSuccessMailAddsCcForCategoryOwnerEmail(): void
@@ -693,7 +737,9 @@ class NotificationTest extends TestCase
         $configuration->method('getTitle')->willReturn('phpMyFAQ Test');
         $configuration->method('get')->willReturnMap([['main.enableNotifications', true]]);
 
-        $this->assertTrue((new Notification($configuration, null, $this->mail, $this->faq, $this->category))->isEnabled());
+        $this->assertTrue(
+            new Notification($configuration, null, $this->mail, $this->faq, $this->category)->isEnabled(),
+        );
     }
 
     /**
@@ -731,7 +777,7 @@ class NotificationTest extends TestCase
      */
     public function testQuestionSuccessMailHonoursDisabledSwitch(): void
     {
-        $questionEntity = (new QuestionEntity())
+        $questionEntity = new QuestionEntity()
             ->setUsername('Asker')
             ->setEmail('asker@example.com')
             ->setCategoryId(1)
@@ -767,7 +813,7 @@ class NotificationTest extends TestCase
      */
     public function testFaqUpdatedHonoursDisabledSwitch(): void
     {
-        $faqEntity = (new FaqEntity())
+        $faqEntity = new FaqEntity()
             ->setId(1)
             ->setLanguage('en');
 
@@ -789,7 +835,7 @@ class NotificationTest extends TestCase
 
     public function testNewFaqAddedHonoursDisabledSwitch(): void
     {
-        $faqEntity = (new FaqEntity())
+        $faqEntity = new FaqEntity()
             ->setId(1)
             ->setLanguage('en');
 

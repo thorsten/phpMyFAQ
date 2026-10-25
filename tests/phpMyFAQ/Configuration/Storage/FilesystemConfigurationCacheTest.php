@@ -7,6 +7,7 @@ namespace phpMyFAQ\Configuration\Storage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Filesystem\Filesystem;
 
 #[CoversClass(FilesystemConfigurationCache::class)]
@@ -49,6 +50,38 @@ final class FilesystemConfigurationCacheTest extends TestCase
         $this->assertSame('phpMyFAQ', $rows[0]->config_value);
         $this->assertSame('3', $rows[1]->config_value);
         $this->assertSame('', $rows[2]->config_value);
+    }
+
+    public function testReadReturnsNullWhenCachedPayloadIsNotAListOfRows(): void
+    {
+        $this->storeRawPayload('identity', 'not-an-array');
+
+        $this->assertNull(new FilesystemConfigurationCache($this->cacheDir, 'identity')->read());
+    }
+
+    public function testReadReturnsNullWhenACachedRowHasNoName(): void
+    {
+        $this->storeRawPayload('identity', [
+            ['config_name' => 'main.title', 'config_value' => 'phpMyFAQ'],
+            ['config_value' => 'orphan'],
+        ]);
+
+        $this->assertNull(new FilesystemConfigurationCache($this->cacheDir, 'identity')->read());
+    }
+
+    /**
+     * Writes a payload straight into the cache entry the class reads, bypassing warm()'s validation.
+     */
+    private function storeRawPayload(string $identity, mixed $payload): void
+    {
+        $adapter = new FilesystemAdapter(
+            namespace: 'pmf-config-' . substr(md5($identity), offset: 0, length: 12),
+            defaultLifetime: 300,
+            directory: $this->cacheDir,
+        );
+        $item = $adapter->getItem('configuration-rows');
+        $item->set($payload);
+        $adapter->save($item);
     }
 
     public function testWarmSkipsRowsWithoutName(): void

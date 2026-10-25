@@ -77,4 +77,36 @@ final class QuestionsControllerWebTest extends ControllerWebTestCase
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('missing configured categories', $response);
     }
+
+    /**
+     * Deactivated form inputs contribute no label to the rendered form.
+     */
+    public function testAskQuestionPageOmitsDeactivatedFormInputs(): void
+    {
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'records.allowQuestionsForGuests' => 1,
+        ]);
+        $db = $this->getConfiguration()->getDb();
+        self::assertNotFalse($db->query(
+            'INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)'
+            . " VALUES (9001, 'en', 0, 'Ask category', '', 1, -1, 1, '', 1)",
+        ));
+        self::assertNotFalse($db->query('INSERT INTO faqcategory_group (category_id, group_id) VALUES (9001, -1)'));
+        self::assertNotFalse($db->query('INSERT INTO faqcategory_user (category_id, user_id) VALUES (9001, -1)'));
+        self::assertNotFalse($db->query('UPDATE faqforms SET input_active = 0 WHERE form_id = 1 AND input_id = 3'));
+
+        try {
+            $response = $this->requestPublic('GET', '/add-question.html');
+        } finally {
+            $db->query('UPDATE faqforms SET input_active = 1 WHERE form_id = 1 AND input_id = 3');
+            $db->query('DELETE FROM faqcategory_user WHERE category_id = 9001');
+            $db->query('DELETE FROM faqcategory_group WHERE category_id = 9001');
+            $db->query('DELETE FROM faqcategories WHERE id = 9001');
+        }
+
+        self::assertResponseIsSuccessful($response);
+        self::assertResponseContains('Your email address', $response);
+        self::assertStringNotContainsString('Your name', (string) $response->getContent());
+    }
 }

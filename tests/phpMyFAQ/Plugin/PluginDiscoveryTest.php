@@ -35,10 +35,7 @@ class PluginDiscoveryTest extends TestCase
 
         $classMap = $discovery->getClassMap();
 
-        $this->assertSame(
-            [$this->pluginDir . '/Demo/DemoPlugin.php' => 'Demo\\DemoPlugin'],
-            $classMap,
-        );
+        $this->assertSame([$this->pluginDir . '/Demo/DemoPlugin.php' => 'Demo\\DemoPlugin'], $classMap);
     }
 
     public function testWritesManifestOnFirstDiscovery(): void
@@ -61,7 +58,7 @@ class PluginDiscoveryTest extends TestCase
         $manifest['classMap'] = ['sentinel.php' => 'Sentinel\\SentinelPlugin'];
         file_put_contents($this->cacheFile, "<?php\n\nreturn " . var_export($manifest, true) . ";\n");
 
-        $classMap = (new PluginDiscovery($this->pluginDir, $this->cacheFile))->getClassMap();
+        $classMap = new PluginDiscovery($this->pluginDir, $this->cacheFile)->getClassMap();
 
         $this->assertSame(['sentinel.php' => 'Sentinel\\SentinelPlugin'], $classMap);
     }
@@ -79,7 +76,7 @@ class PluginDiscoveryTest extends TestCase
         // mtime granularity is one second — force a visibly newer directory mtime
         touch($this->pluginDir, time() + 10);
 
-        $classMap = (new PluginDiscovery($this->pluginDir, $this->cacheFile))->getClassMap();
+        $classMap = new PluginDiscovery($this->pluginDir, $this->cacheFile)->getClassMap();
 
         $this->assertArrayHasKey($this->pluginDir . '/Extra/ExtraPlugin.php', $classMap);
         $this->assertSame('Extra\\ExtraPlugin', $classMap[$this->pluginDir . '/Extra/ExtraPlugin.php']);
@@ -100,7 +97,7 @@ class PluginDiscoveryTest extends TestCase
         rmdir($this->pluginDir . '/Extra');
         touch($this->pluginDir, time() + 10);
 
-        $classMap = (new PluginDiscovery($this->pluginDir, $this->cacheFile))->getClassMap();
+        $classMap = new PluginDiscovery($this->pluginDir, $this->cacheFile)->getClassMap();
 
         $this->assertArrayNotHasKey($this->pluginDir . '/Extra/ExtraPlugin.php', $classMap);
         $this->assertCount(1, $classMap);
@@ -109,12 +106,9 @@ class PluginDiscoveryTest extends TestCase
     public function testMapsPluginWithoutNamespaceToGlobalClassName(): void
     {
         mkdir($this->pluginDir . '/Legacy', 0o777, true);
-        file_put_contents(
-            $this->pluginDir . '/Legacy/LegacyPlugin.php',
-            "<?php\n\nclass LegacyPlugin\n{\n}\n",
-        );
+        file_put_contents($this->pluginDir . '/Legacy/LegacyPlugin.php', "<?php\n\nclass LegacyPlugin\n{\n}\n");
 
-        $classMap = (new PluginDiscovery($this->pluginDir))->getClassMap();
+        $classMap = new PluginDiscovery($this->pluginDir)->getClassMap();
 
         $this->assertSame('\\LegacyPlugin', $classMap[$this->pluginDir . '/Legacy/LegacyPlugin.php']);
     }
@@ -124,5 +118,40 @@ class PluginDiscoveryTest extends TestCase
         $discovery = new PluginDiscovery($this->pluginDir . '/does-not-exist');
 
         $this->assertSame([], $discovery->getClassMap());
+    }
+
+    public function testWritesAnEmptyManifestForMissingDirectory(): void
+    {
+        $discovery = new PluginDiscovery($this->pluginDir . '/does-not-exist', $this->cacheFile);
+
+        $this->assertSame([], $discovery->getClassMap());
+        $this->assertFileExists($this->cacheFile);
+        $this->assertSame([], (include $this->cacheFile)['classMap']);
+    }
+
+    public function testRebuildsManifestWhenItHasAnUnexpectedShape(): void
+    {
+        mkdir(dirname($this->cacheFile), 0o777, true);
+        file_put_contents($this->cacheFile, "<?php\n\nreturn 'not a manifest';\n");
+
+        $classMap = new PluginDiscovery($this->pluginDir, $this->cacheFile)->getClassMap();
+
+        $this->assertSame([$this->pluginDir . '/Demo/DemoPlugin.php' => 'Demo\\DemoPlugin'], $classMap);
+        $this->assertSame($classMap, (include $this->cacheFile)['classMap']);
+    }
+
+    public function testRebuildsManifestWhenAClassMapEntryIsNotAString(): void
+    {
+        mkdir(dirname($this->cacheFile), 0o777, true);
+        $manifest = [
+            'signature' => 'irrelevant',
+            'classMap' => [$this->pluginDir . '/Demo/DemoPlugin.php' => 42],
+        ];
+        file_put_contents($this->cacheFile, "<?php\n\nreturn " . var_export($manifest, true) . ";\n");
+
+        $classMap = new PluginDiscovery($this->pluginDir, $this->cacheFile)->getClassMap();
+
+        $this->assertSame([$this->pluginDir . '/Demo/DemoPlugin.php' => 'Demo\\DemoPlugin'], $classMap);
+        $this->assertSame($classMap, (include $this->cacheFile)['classMap']);
     }
 }

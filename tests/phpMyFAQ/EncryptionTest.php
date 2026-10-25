@@ -61,6 +61,13 @@ class EncryptionTest extends TestCase
         $this->assertNotEmpty($encryption->errors);
     }
 
+    public function testEncryptReturnsPasswordUnchangedForUnknownEncryptionType(): void
+    {
+        $encryption = Encryption::getInstance('invalid', $this->config);
+
+        $this->assertSame('secret', $encryption->encrypt('secret'));
+    }
+
     public function testEncryptPasswordReturnsString(): void
     {
         $password = 'testPassword123';
