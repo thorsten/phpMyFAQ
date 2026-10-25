@@ -1,6 +1,106 @@
 @import 'choices.js/src/styles/choices';
 
 //
+// Choices.js (category select on the search page)
+//
+// Choices ships light-only fallback colours (#fff dropdown, #333 text). Map its
+// custom properties onto the theme tokens so the widget follows light, dark and
+// high-contrast like a native .form-select would.
+//
+.choices {
+  --choices-bg-color: var(--pmf-surface);
+  --choices-bg-color-dropdown: var(--pmf-surface-raised);
+  --choices-bg-color-disabled: var(--pmf-surface-sunken);
+  --choices-text-color: var(--pmf-text);
+  --choices-keyline-color: var(--pmf-border-strong);
+  --choices-primary-color: var(--pmf-accent);
+  --choices-highlight-color: var(--pmf-accent);
+  --choices-highlighted-color: var(--pmf-surface-hover);
+  --choices-item-color: var(--pmf-text-on-accent);
+  --choices-disabled-color: var(--pmf-surface-sunken);
+  --choices-item-disabled-color: var(--pmf-text-muted);
+  --choices-invalid-color: var(--bs-danger);
+  --choices-border-radius: var(--pmf-radius);
+  --choices-input-height: 3rem;
+  --choices-font-size-lg: var(--pmf-font-size-lg);
+  --choices-font-size-md: var(--pmf-font-size-base);
+  --choices-guttering: 0;
+  --choices-z-index: 10;
+
+  color: var(--pmf-text);
+
+  .choices__inner {
+    color: var(--pmf-text);
+    transition:
+      border-color var(--pmf-transition),
+      box-shadow var(--pmf-transition);
+  }
+
+  &.is-focused .choices__inner,
+  &.is-open .choices__inner {
+    border-color: var(--pmf-accent);
+    box-shadow: 0 0 0 4px var(--pmf-focus-ring);
+  }
+
+  // The selected value in the closed control, including the "all categories"
+  // option that Choices flags as placeholder.
+  .choices__list--single .choices__item,
+  .choices__list--single .choices__placeholder {
+    color: var(--pmf-text);
+    opacity: 1;
+  }
+
+  .choices__list--dropdown,
+  .choices__list[aria-expanded] {
+    color: var(--pmf-text);
+    box-shadow: var(--pmf-shadow-md);
+    word-break: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .choices__list--dropdown .choices__item--selectable.is-highlighted,
+  .choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
+    background-color: var(--pmf-surface-hover);
+    color: var(--pmf-text);
+  }
+
+  .choices__input {
+    color: var(--pmf-text);
+
+    &::placeholder {
+      color: var(--pmf-text-muted);
+    }
+  }
+
+  .choices__placeholder {
+    color: var(--pmf-text-muted);
+    opacity: 1;
+  }
+
+  .choices__heading {
+    color: var(--pmf-text-muted);
+    border-color: var(--pmf-border);
+  }
+}
+
+// High-contrast: no shadows, strong borders, selected row in accent.
+[data-bs-theme='high-contrast'] .choices {
+  --choices-keyline-color: var(--pmf-border);
+
+  .choices__list--dropdown,
+  .choices__list[aria-expanded] {
+    box-shadow: none;
+    border-width: 2px;
+  }
+
+  .choices__list--dropdown .choices__item--selectable.is-highlighted,
+  .choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
+    background-color: var(--pmf-accent);
+    color: var(--pmf-text-on-accent);
+  }
+}
+
+//
 // Search results
 //
 .phpmyfaq-search-results {

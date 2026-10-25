@@ -68,8 +68,10 @@ export const handleCategorySelection = async (): Promise<void> => {
         return value1 === value2;
       },
       classNames: {
-        containerOuter: ['choices', 'rounded', 'border', 'border-1', 'bg-white'],
-        containerInner: ['choices__inner', 'border', 'border-0', 'bg-white'],
+        // No colour utilities here: the theme tokens in layout/_search.scss paint
+        // the widget so it follows light, dark and high-contrast mode.
+        containerOuter: ['choices'],
+        containerInner: ['choices__inner'],
         input: ['choices__input'],
         inputCloned: ['choices__input--cloned'],
         list: ['choices__list'],

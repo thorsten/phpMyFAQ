@@ -135,18 +135,17 @@ describe('handleCategorySelection', () => {
     );
   });
 
-  it('should configure custom class names with Bootstrap classes', async (): Promise<void> => {
+  it('should configure plain class names without colour utilities', async (): Promise<void> => {
     await handleCategorySelection();
 
     const config = mockChoices.mock.calls[0][1] as Record<string, unknown>;
     const classNames = config.classNames as Record<string, string[]>;
 
-    expect(classNames.containerOuter).toContain('choices');
-    expect(classNames.containerOuter).toContain('rounded');
-    expect(classNames.containerOuter).toContain('border');
-    expect(classNames.containerOuter).toContain('bg-white');
-    expect(classNames.containerInner).toContain('border-0');
-    expect(classNames.containerInner).toContain('bg-white');
+    expect(classNames.containerOuter).toEqual(['choices']);
+    expect(classNames.containerInner).toEqual(['choices__inner']);
+    // Colour utilities would override the theme tokens in dark and high-contrast mode.
+    expect(classNames.containerOuter).not.toContain('bg-white');
+    expect(classNames.containerInner).not.toContain('bg-white');
   });
 
   it('should configure sorting and positioning options', async (): Promise<void> => {
