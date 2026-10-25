@@ -72,7 +72,7 @@ final class SetupControllerTest extends ApiControllerTestCase
 
         self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
         self::assertStringContainsString(
-            'Please update to at least phpMyFAQ 3.0 first.',
+            'Please update to at least phpMyFAQ 3.1.1 first.',
             (string) $response->getContent(),
         );
     }

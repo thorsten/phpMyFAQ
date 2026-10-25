@@ -82,6 +82,14 @@ class AbstractSetupTest extends TestCase
         $this->assertTrue($setup->checkMinimumUpdateVersion('3.2.0'));
     }
 
+    public function testCheckMinimumUpdateVersionAcceptsMinimumUpdateVersion(): void
+    {
+        $setup = new class($this->createStub(System::class)) extends AbstractSetup {};
+
+        $this->assertSame('3.1.1', AbstractSetup::MINIMUM_UPDATE_VERSION);
+        $this->assertTrue($setup->checkMinimumUpdateVersion(AbstractSetup::MINIMUM_UPDATE_VERSION));
+    }
+
     public function testCheckMaintenanceModeReadsConfigurationSingleton(): void
     {
         $setup = new class($this->createStub(System::class)) extends AbstractSetup {};

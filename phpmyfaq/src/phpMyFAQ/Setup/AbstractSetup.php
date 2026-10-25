@@ -25,6 +25,11 @@ use phpMyFAQ\System;
 
 abstract class AbstractSetup
 {
+    /**
+     * Oldest installed version that can be updated directly. The update steps for older versions were removed.
+     */
+    public const string MINIMUM_UPDATE_VERSION = '3.1.1';
+
     public function __construct(
         protected System $system,
     ) {
@@ -39,12 +44,9 @@ abstract class AbstractSetup
         return version_compare(version1: PHP_VERSION, version2: System::VERSION_MINIMUM_PHP) > 0;
     }
 
-    /**
-     * We only support updates from 3.2.0 and later.
-     */
     public function checkMinimumUpdateVersion(string $version): bool
     {
-        return version_compare(version1: $version, version2: '3.1.0', operator: '>');
+        return version_compare(version1: $version, version2: self::MINIMUM_UPDATE_VERSION, operator: '>=');
     }
 
     /**

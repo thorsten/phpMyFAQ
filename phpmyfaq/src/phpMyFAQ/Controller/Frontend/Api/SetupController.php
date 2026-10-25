@@ -82,7 +82,9 @@ final class SetupController extends AbstractController
             $message =
                 'Your installed version is phpMyFAQ '
                 . $installedVersion
-                . '. Please update to at least phpMyFAQ 3.0 first.';
+                . '. Please update to at least phpMyFAQ '
+                . Update::MINIMUM_UPDATE_VERSION
+                . ' first.';
             return $this->json(['message' => $message], Response::HTTP_CONFLICT);
         }
 
