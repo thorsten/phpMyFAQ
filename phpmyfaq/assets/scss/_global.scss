@@ -70,9 +70,12 @@ a {
     font-size: var(--pmf-font-size-sm);
     color: var(--pmf-text-muted);
 
+    // Underlined: the accent alone has < 3:1 contrast against the muted
+    // surrounding text, so colour cannot be the only link indicator.
     a {
       color: var(--pmf-accent);
-      text-decoration: none;
+      text-decoration: underline;
+      text-underline-offset: 0.15em;
     }
   }
 }

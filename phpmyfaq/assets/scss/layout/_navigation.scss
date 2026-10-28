@@ -43,9 +43,13 @@ li.pmf-nav-link {
   border: 1px solid rgb(255, 255, 255, 0.18);
   border-radius: 999px;
   padding: 0.35rem 0.9rem !important;
+  // Bootstrap's navbar-dark nav-link colour (55% white) only reaches 4.06:1 on
+  // the translucent bar; use the same solid white as the other nav pills.
+  color: var(--bs-white);
 
   &:hover,
   &:focus-visible {
+    color: var(--bs-white);
     background-color: rgb(255, 255, 255, 0.1);
   }
 }
