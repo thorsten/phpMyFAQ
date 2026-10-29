@@ -30,6 +30,10 @@ For a complete and up-to-date list of system requirements, please refer to the o
 
 ## Installation
 
+### One-Click Deploy
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/phpMyFAQ/)
+
 ### phpMyFAQ installation package for end-users
 
 The best way to install phpMyFAQ is to download it on [phpmyfaq.de](https://www.phpmyfaq.de/download), unzip the package,
