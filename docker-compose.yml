@@ -254,7 +254,7 @@ services:
 
   phpmyadmin:
     profiles: ['phpmyadmin', 'tools']
-    image: phpmyadmin/phpmyadmin:5
+    image: phpmyadmin:5
     restart: always
     environment:
       PMA_HOST: db
