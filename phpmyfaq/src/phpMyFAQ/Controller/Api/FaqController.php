@@ -318,7 +318,7 @@ final class FaqController extends AbstractApiController
      * @throws Exception
      */
     #[OA\Operation\Get(
-        path: 'v4.0/faqs/latest',
+        path: '/api/v4.0/faqs/latest',
         operationId: 'getLatest',
         description: 'This endpoint returns the latest FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints'],

@@ -845,7 +845,7 @@
         }
       }
     },
-    "v4.0/faqs/latest": {
+    "/api/v4.0/faqs/latest": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the latest FAQs for the given language provided by \"Accept-Language\".",

@@ -617,7 +617,7 @@ paths:
             application/json:
               schema: {}
               example: []
-  v4.0/faqs/latest:
+  /api/v4.0/faqs/latest:
     get:
       tags:
         - 'Public Endpoints'
