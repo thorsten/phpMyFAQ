@@ -21,7 +21,7 @@ namespace phpMyFAQ\Controller\Api;
 
 use Exception;
 use LogicException;
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Faq;
@@ -43,14 +43,14 @@ final class CommentController extends AbstractApiController
     /**
      * @throws Exception
      */
-    #[OA\Get(
+    #[OA\Operation\Get(
         path: '/api/v4.0/comments/{faqId}',
         operationId: 'getComments',
         description: 'Returns a paginated list of comments for a given FAQ record ID.',
         tags: ['Public Endpoints'],
     )]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the login.',
         schema: new OA\Schema(type: 'string'),
     )]
@@ -104,7 +104,7 @@ final class CommentController extends AbstractApiController
     #[OA\Response(
         response: 200,
         description: 'Returns paginated comments for the FAQ.',
-        content: new OA\JsonContent(example: [
+        content: new OA\MediaType\Json(example: [
             'success' => true,
             'data' => [[
                 'id' => 2,

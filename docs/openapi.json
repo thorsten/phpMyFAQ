@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.1.0",
   "info": {
     "title": "REST API for phpMyFAQ 4.2",
     "description": "phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the phpMyFAQ installation.",
@@ -27,6 +27,14 @@
         "operationId": "getAttachments",
         "parameters": [
           {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the attachment.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "faqId",
             "in": "path",
             "description": "The FAQ record ID.",
@@ -42,8 +50,8 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "default": 1,
-              "minimum": 1
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -53,9 +61,9 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "default": 25,
+              "minimum": 1,
               "maximum": 100,
-              "minimum": 1
+              "default": 25
             }
           },
           {
@@ -65,9 +73,9 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "default": 25,
+              "minimum": 1,
               "maximum": 100,
-              "minimum": 1
+              "default": 25
             }
           },
           {
@@ -77,8 +85,8 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "default": 0,
-              "minimum": 0
+              "minimum": 0,
+              "default": 0
             }
           },
           {
@@ -98,22 +106,14 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "asc",
-              "enum": ["asc", "desc"]
+              "enum": ["asc", "desc"],
+              "default": "asc"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Paginated list of attachments with metadata.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the attachment.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -157,14 +157,6 @@
           },
           "500": {
             "description": "If the attachments cannot be fetched.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the attachment.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -187,6 +179,23 @@
         "operationId": "createBackup",
         "parameters": [
           {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the login.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-pmf-token",
+            "in": "header",
+            "description": "phpMyFAQ client API Token, generated in admin backend",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "type",
             "in": "path",
             "description": "The backup type. Can be \"data\", \"logs\" or \"content\".",
@@ -199,20 +208,6 @@
         "responses": {
           "200": {
             "description": "The current backup as a file or a ZipArchive in case of \"content\"-type.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/octet-stream or application/zip": {
                 "schema": {
@@ -223,20 +218,6 @@
           },
           "400": {
             "description": "If the backup type is wrong or an internal error occurred",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/octet-stream": {
                 "schema": {
@@ -246,21 +227,7 @@
             }
           },
           "401": {
-            "description": "If the user is not authenticated and/or does not have sufficient permissions.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "description": "If the user is not authenticated and/or does not have sufficient permissions."
           }
         }
       }
@@ -270,6 +237,14 @@
         "tags": ["Public Endpoints"],
         "operationId": "getCategories",
         "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the categories.",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "page",
             "in": "query",
@@ -317,8 +292,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "id",
-              "enum": ["id", "name", "parent_id", "active"]
+              "enum": ["id", "name", "parent_id", "active"],
+              "default": "id"
             }
           },
           {
@@ -328,22 +303,14 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "asc",
-              "enum": ["asc", "desc"]
+              "enum": ["asc", "desc"],
+              "default": "asc"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Returns paginated categories for the given language provided by \"Accept-Language\".",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the categories.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -394,23 +361,31 @@
       "post": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createCategory",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the login.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-pmf-token",
+            "in": "header",
+            "description": "phpMyFAQ client API Token, generated in admin backend",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "description": "The parent category ID is a required value, the parent category name is optional. If the parent category name is present and the ID can be mapped, the parent category ID from the name will be used. If the parent category name cannot be mapped, a 409 error is thrown",
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "language",
-                  "parent-id",
-                  "parent-category-name",
-                  "category-name",
-                  "description",
-                  "user-id",
-                  "group-id",
-                  "is-active",
-                  "show-on-homepage"
-                ],
+                "type": "object",
                 "properties": {
                   "language": {
                     "type": "string"
@@ -440,29 +415,26 @@
                     "type": "boolean"
                   }
                 },
-                "type": "object"
+                "required": [
+                  "language",
+                  "parent-id",
+                  "parent-category-name",
+                  "category-name",
+                  "description",
+                  "user-id",
+                  "group-id",
+                  "is-active",
+                  "show-on-homepage"
+                ]
               },
               "example": "{\n                \"language\": \"en\",\n                \"parent-id\": 1,\n                \"parent-category-name\": \"Test\",\n                \"category-name\": \"Test 2\",\n                \"description\": \"Hello, World! Hello, Tests!\",\n                \"user-id\": 1,\n                \"group-id\": 1,\n                \"is-active\": true,\n                \"show-on-homepage\": true\n            }"
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
             "description": "If all posted data is correct.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -474,20 +446,6 @@
           },
           "400": {
             "description": "If something didn't worked out.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -500,20 +458,6 @@
           },
           "409": {
             "description": "If the parent category name cannot be mapped.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -525,21 +469,7 @@
             }
           },
           "401": {
-            "description": "If the user is not authenticated.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "description": "If the user is not authenticated."
           }
         }
       }
@@ -550,6 +480,14 @@
         "description": "Returns a paginated list of comments for a given FAQ record ID.",
         "operationId": "getComments",
         "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the login.",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "faqId",
             "in": "path",
@@ -606,8 +544,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "id_comment",
-              "enum": ["id_comment", "id", "usr", "datum"]
+              "enum": ["id_comment", "id", "usr", "datum"],
+              "default": "id_comment"
             }
           },
           {
@@ -617,22 +555,14 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "asc",
-              "enum": ["asc", "desc"]
+              "enum": ["asc", "desc"],
+              "default": "asc"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Returns paginated comments for the FAQ.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -683,6 +613,14 @@
         "operationId": "getByCategoryId",
         "parameters": [
           {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the FAQ.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "categoryId",
             "in": "path",
             "description": "The category ID.",
@@ -695,14 +633,6 @@
         "responses": {
           "200": {
             "description": "If the category returns at least one FAQ.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -724,14 +654,6 @@
           },
           "500": {
             "description": "If fetching the FAQs fails.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -750,6 +672,14 @@
         "description": "This endpoint returns the FAQ for the given FAQ ID and the language provided by \"Accept-Language\".",
         "operationId": "getFaqById",
         "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the FAQ.",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "categoryId",
             "in": "path",
@@ -772,14 +702,6 @@
         "responses": {
           "200": {
             "description": "If the FAQ exists.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -808,14 +730,6 @@
           },
           "404": {
             "description": "If there are no FAQs for the given FAQ ID.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -833,6 +747,14 @@
         "operationId": "getByTagId",
         "parameters": [
           {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the FAQ.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "tagId",
             "in": "path",
             "description": "The tag ID.",
@@ -845,14 +767,6 @@
         "responses": {
           "200": {
             "description": "If the tag ID returns at least one FAQ.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -874,14 +788,6 @@
           },
           "500": {
             "description": "If fetching the tagged FAQs fails.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -899,17 +805,19 @@
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the popular FAQs for the given language provided by \"Accept-Language\".",
         "operationId": "getPopular",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the FAQ.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "If there's at least one popular FAQ.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -927,14 +835,6 @@
           },
           "404": {
             "description": "If there's not a single popular FAQ.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -950,17 +850,19 @@
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the latest FAQs for the given language provided by \"Accept-Language\".",
         "operationId": "getLatest",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the FAQ.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "If there's at least one latest FAQ.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -978,14 +880,6 @@
           },
           "404": {
             "description": "If there's not one latest FAQ.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1001,17 +895,19 @@
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the trending FAQs for the given language provided by \"Accept-Language\".",
         "operationId": "getTrending",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the FAQ.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "If there's at least one trending FAQ.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1029,14 +925,6 @@
           },
           "404": {
             "description": "If there's not a single trending FAQ.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1052,17 +940,19 @@
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the sticky FAQs for the given language provided by \"Accept-Language\".",
         "operationId": "getSticky",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the FAQ.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "If there's at least one sticky FAQ.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1085,14 +975,6 @@
           },
           "404": {
             "description": "If there's not one sticky FAQ.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1109,6 +991,14 @@
         "description": "This endpoint returns paginated FAQs for the given language provided by \"Accept-Language\".",
         "operationId": "getAll",
         "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the FAQ.",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "page",
             "in": "query",
@@ -1156,8 +1046,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "id",
-              "enum": ["id", "title", "author", "updated", "created"]
+              "enum": ["id", "title", "author", "updated", "created"],
+              "default": "id"
             }
           },
           {
@@ -1167,22 +1057,14 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "asc",
-              "enum": ["asc", "desc"]
+              "enum": ["asc", "desc"],
+              "default": "asc"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Returns paginated FAQs.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1239,24 +1121,31 @@
       "post": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createFaq",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the login.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-pmf-token",
+            "in": "header",
+            "description": "phpMyFAQ client API Token, generated in admin backend",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "description": "The category ID is a required value, the category name is optional. If the category name is present and the ID can be mapped, the category ID from the name will be used. If the category name cannot be mapped, a 409 error is thrown.",
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "language",
-                  "category-id",
-                  "category-name",
-                  "question",
-                  "answer",
-                  "keywords",
-                  "author",
-                  "email",
-                  "is-active",
-                  "is-sticky"
-                ],
+                "type": "object",
                 "properties": {
                   "language": {
                     "type": "string"
@@ -1289,29 +1178,27 @@
                     "type": "boolean"
                   }
                 },
-                "type": "object"
+                "required": [
+                  "language",
+                  "category-id",
+                  "category-name",
+                  "question",
+                  "answer",
+                  "keywords",
+                  "author",
+                  "email",
+                  "is-active",
+                  "is-sticky"
+                ]
               },
               "example": "{\n                \"language\": \"de\",\n                \"category-id\": 1,\n                \"category-name\": \"Queen Songs\",\n                \"question\": \"Is this the world we created?\",\n                \"answer\": \"What did we do it for, is this the world we invaded, against the law, so it seems in the end, is this what we're all living for today\",\n                \"keywords\": \"phpMyFAQ, FAQ, Foo, Bar\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\",\n                \"is-active\": \"true\",\n                \"is-sticky\": \"false\"\n            }"
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
             "description": "If all posted data is correct.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1323,20 +1210,6 @@
           },
           "400": {
             "description": "If something didn't worked out.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1349,20 +1222,6 @@
           },
           "409": {
             "description": "If the parent category name cannot be mapped.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1374,21 +1233,7 @@
             }
           },
           "401": {
-            "description": "If the user is not authenticated.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "description": "If the user is not authenticated."
           }
         }
       }
@@ -1398,23 +1243,30 @@
         "tags": ["Endpoints with Authentication"],
         "description": "Used to update a FAQ in one existing category.",
         "operationId": "updateFaq",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the login.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-pmf-token",
+            "in": "header",
+            "description": "phpMyFAQ client API Token, generated in admin backend",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "faq-id",
-                  "language",
-                  "category-id",
-                  "question",
-                  "answer",
-                  "keywords",
-                  "author",
-                  "email",
-                  "is-active",
-                  "is-sticky"
-                ],
+                "type": "object",
                 "properties": {
                   "faq-id": {
                     "type": "integer"
@@ -1447,29 +1299,27 @@
                     "type": "boolean"
                   }
                 },
-                "type": "object"
+                "required": [
+                  "faq-id",
+                  "language",
+                  "category-id",
+                  "question",
+                  "answer",
+                  "keywords",
+                  "author",
+                  "email",
+                  "is-active",
+                  "is-sticky"
+                ]
               },
               "example": "{\n                \"faq-id\": 1,\n                \"language\": \"de\",\n                \"category-id\": 1,\n                \"question\": \"Is this the world we updated?\",\n                \"answer\": \"What did we do it for, is this the world we invaded, against the law, so it seems in the \" .\n                    \"end, is this what we're all living for today\",\n                \"keywords\": \"phpMyFAQ, FAQ, Foo, Bar\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\",\n                \"is-active\": \"true\",\n                \"is-sticky\": \"false\"\n            }"
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
             "description": "If all posted data is correct.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1481,20 +1331,6 @@
           },
           "400": {
             "description": "If something didn't worked out.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1506,38 +1342,10 @@
             }
           },
           "401": {
-            "description": "If the user is not authenticated.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "description": "If the user is not authenticated."
           },
           "404": {
             "description": "If the FAQ does not exist or the user is not permitted to access it.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1554,6 +1362,14 @@
         "description": "Returns paginated glossary items.",
         "operationId": "getGlossary",
         "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the glossary items.",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "page",
             "in": "query",
@@ -1601,8 +1417,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "item",
-              "enum": ["id", "item", "definition"]
+              "enum": ["id", "item", "definition"],
+              "default": "item"
             }
           },
           {
@@ -1612,22 +1428,14 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "asc",
-              "enum": ["asc", "desc"]
+              "enum": ["asc", "desc"],
+              "default": "asc"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Returns paginated glossary items.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the glossary items.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1680,6 +1488,14 @@
         "operationId": "getGroups",
         "parameters": [
           {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the login.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "page",
             "in": "query",
             "description": "Page number for pagination (page-based)",
@@ -1726,8 +1542,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "group-id",
-              "enum": ["group-id"]
+              "enum": ["group-id"],
+              "default": "group-id"
             }
           },
           {
@@ -1737,22 +1553,14 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "asc",
-              "enum": ["asc", "desc"]
+              "enum": ["asc", "desc"],
+              "default": "asc"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Returns paginated list of group IDs.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1790,26 +1598,10 @@
             }
           },
           "401": {
-            "description": "If the user is not authenticated.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "description": "If the user is not authenticated."
           },
           "403": {
-            "description": "If the user does not hold the user and group administration permissions.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "description": "If the user does not hold the user and group administration permissions."
           }
         }
       }
@@ -1852,13 +1644,22 @@
       "post": {
         "tags": ["Public Endpoints"],
         "operationId": "login",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the login.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "description": "The username and password for the login.",
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "required": ["username", "password"],
+                "type": "object",
                 "properties": {
                   "username": {
                     "type": "string"
@@ -1867,22 +1668,15 @@
                     "type": "string"
                   }
                 },
-                "type": "object"
+                "required": ["username", "password"]
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
             "description": "If \"username\" and \"password\" combination are correct.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1894,14 +1688,6 @@
           },
           "400": {
             "description": "If \"username\" and \"password\" combination are wrong.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -1925,6 +1711,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "object",
                   "properties": {
                     "version": {
                       "type": "string",
@@ -1972,8 +1759,7 @@
                     "oauthDiscovery": {
                       "type": "object"
                     }
-                  },
-                  "type": "object"
+                  }
                 }
               }
             }
@@ -1986,6 +1772,14 @@
         "tags": ["Public Endpoints"],
         "operationId": "getNews",
         "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the news.",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "page",
             "in": "query",
@@ -2033,8 +1827,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "datum",
-              "enum": ["id", "datum", "header", "author_name"]
+              "enum": ["id", "datum", "header", "author_name"],
+              "default": "datum"
             }
           },
           {
@@ -2044,22 +1838,14 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "desc",
-              "enum": ["asc", "desc"]
+              "enum": ["asc", "desc"],
+              "default": "desc"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Returns paginated news for the given language provided by \"Accept-Language\".",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the news.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -2115,6 +1901,14 @@
         "operationId": "getOpenQuestions",
         "parameters": [
           {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the open questions.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "page",
             "in": "query",
             "description": "Page number for pagination (page-based)",
@@ -2161,8 +1955,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "id",
-              "enum": ["id", "username", "created", "categoryId"]
+              "enum": ["id", "username", "created", "categoryId"],
+              "default": "id"
             }
           },
           {
@@ -2172,22 +1966,14 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "asc",
-              "enum": ["asc", "desc"]
+              "enum": ["asc", "desc"],
+              "default": "asc"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Returns paginated open questions.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the open questions.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -2239,6 +2025,14 @@
         "operationId": "getPdfById",
         "parameters": [
           {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the FAQ.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "categoryId",
             "in": "path",
             "description": "The category ID.",
@@ -2260,14 +2054,6 @@
         "responses": {
           "200": {
             "description": "If the PDF of the FAQ exists.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -2277,14 +2063,6 @@
           },
           "404": {
             "description": "If there's no FAQ and PDF for the given FAQ ID.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the FAQ.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -2299,12 +2077,30 @@
       "post": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createQuestion",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the question.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-pmf-token",
+            "in": "header",
+            "description": "phpMyFAQ client API Token, generated in admin backend",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "required": ["category-id", "question", "author", "email"],
+                "type": "object",
                 "properties": {
                   "category-id": {
                     "type": "integer"
@@ -2319,29 +2115,16 @@
                     "type": "string"
                   }
                 },
-                "type": "object"
+                "required": ["category-id", "question", "author", "email"]
               },
               "example": "{\n                \"category-id\": \"1\",\n                \"question\": \"Is this the world we created?\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\"\n            }"
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
             "description": "Used to add a new question in one existing category.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the question.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -2352,21 +2135,7 @@
             }
           },
           "401": {
-            "description": "If the user is not authenticated.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the question.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "description": "If the user is not authenticated."
           }
         }
       }
@@ -2375,12 +2144,30 @@
       "post": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createUser",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the question.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-pmf-token",
+            "in": "header",
+            "description": "phpMyFAQ client API Token, generated in admin backend",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "required": ["username", "fullname", "email", "is-visible"],
+                "type": "object",
                 "properties": {
                   "username": {
                     "type": "string"
@@ -2395,29 +2182,16 @@
                     "type": "boolean"
                   }
                 },
-                "type": "object"
+                "required": ["username", "fullname", "email", "is-visible"]
               },
               "example": "{\n                \"username\": \"ada\",\n                \"fullname\": \"Ada Lovelace\",\n                \"email\": \"ada.lovelace@example.org\",\n                \"is-visible\": false\n            }"
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
             "description": "If \"username\", \"fullname\", \"email\", and \"is-visible\" combination is correct.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the question.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -2430,20 +2204,6 @@
           },
           "400": {
             "description": "If \"username\", \"fullname\", \"email\", and \"is-visible\" combination is not correct.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the question.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -2456,20 +2216,6 @@
           },
           "409": {
             "description": "If the domain of the email address is not allowed.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the question.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -2482,20 +2228,6 @@
           },
           "401": {
             "description": "If the user is not authenticated.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the question.",
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "x-pmf-token": {
-                "description": "phpMyFAQ client API Token, generated in admin backend",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -2570,8 +2302,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "id",
-              "enum": ["id", "question", "category_id"]
+              "enum": ["id", "question", "category_id"],
+              "default": "id"
             }
           },
           {
@@ -2581,8 +2313,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "asc",
-              "enum": ["asc", "desc"]
+              "enum": ["asc", "desc"],
+              "default": "asc"
             }
           }
         ],
@@ -2634,17 +2366,19 @@
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getPopularSearch",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "The language code for the login.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Returns the popular search terms for the given language provided by \"Accept-Language\"",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -2667,14 +2401,6 @@
           },
           "404": {
             "description": "If the popular search returns no results.",
-            "headers": {
-              "Accept-Language": {
-                "description": "The language code for the login.",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {},
@@ -2738,8 +2464,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "tagFrequency",
-              "enum": ["tagId", "tagName", "tagFrequency"]
+              "enum": ["tagId", "tagName", "tagFrequency"],
+              "default": "tagFrequency"
             }
           },
           {
@@ -2749,8 +2475,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "desc",
-              "enum": ["asc", "desc"]
+              "enum": ["asc", "desc"],
+              "default": "desc"
             }
           }
         ],
@@ -2844,6 +2570,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "object",
                   "properties": {
                     "issuer": {
                       "type": "string",
@@ -2873,8 +2600,7 @@
                         "type": "string"
                       }
                     }
-                  },
-                  "type": "object"
+                  }
                 }
               }
             }

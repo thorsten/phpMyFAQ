@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Permission\MediumPermission;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,14 +27,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class GroupController extends AbstractApiController
 {
-    #[OA\Get(
+    #[OA\Operation\Get(
         path: '/api/v4.0/groups',
         operationId: 'getGroups',
         description: 'Returns paginated list of group IDs. Requires the user and group administration permissions.',
         tags: ['Endpoints with Authentication'],
     )]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the login.',
         schema: new OA\Schema(type: 'string'),
     )]
@@ -83,7 +83,7 @@ final class GroupController extends AbstractApiController
     #[OA\Response(
         response: 200,
         description: 'Returns paginated list of group IDs.',
-        content: new OA\JsonContent(example: [
+        content: new OA\MediaType\Json(example: [
             'success' => true,
             'data' => [
                 ['group-id' => 1],

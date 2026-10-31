@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Api\OAuthDiscoveryService;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,7 +34,7 @@ final class OAuthDiscoveryController extends AbstractController
         parent::__construct();
     }
 
-    #[OA\Get(
+    #[OA\Operation\Get(
         path: '/.well-known/oauth-authorization-server',
         operationId: 'getOAuthAuthorizationServerMetadata',
         tags: ['Public Endpoints'],
@@ -42,16 +42,24 @@ final class OAuthDiscoveryController extends AbstractController
     #[OA\Response(
         response: 200,
         description: 'Returns OAuth 2.0 Authorization Server Metadata.',
-        content: new OA\JsonContent(properties: [
-            new OA\Property(property: 'issuer', type: 'string', example: 'https://localhost/api'),
-            new OA\Property(property: 'authorization_endpoint', type: 'string'),
-            new OA\Property(property: 'token_endpoint', type: 'string'),
-            new OA\Property(property: 'grant_types_supported', type: 'array', items: new OA\Items(type: 'string')),
-            new OA\Property(property: 'response_types_supported', type: 'array', items: new OA\Items(type: 'string')),
+        content: new OA\MediaType\Json(properties: [
+            new OA\Property(
+                property: 'issuer',
+                schema: new OA\Schema(type: 'string', example: 'https://localhost/api'),
+            ),
+            new OA\Property(property: 'authorization_endpoint', schema: new OA\Schema(type: 'string')),
+            new OA\Property(property: 'token_endpoint', schema: new OA\Schema(type: 'string')),
+            new OA\Property(
+                property: 'grant_types_supported',
+                schema: new OA\Schema(type: 'array', items: new OA\Schema\Items(type: 'string')),
+            ),
+            new OA\Property(
+                property: 'response_types_supported',
+                schema: new OA\Schema(type: 'array', items: new OA\Schema\Items(type: 'string')),
+            ),
             new OA\Property(
                 property: 'token_endpoint_auth_methods_supported',
-                type: 'array',
-                items: new OA\Items(type: 'string'),
+                schema: new OA\Schema(type: 'array', items: new OA\Schema\Items(type: 'string')),
             ),
         ]),
     )]

@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
@@ -59,15 +59,16 @@ final class RegistrationController extends AbstractController
      * @throws Exception
      * @throws \JsonException
      */
-    #[OA\Post(path: '/api/v4.0/register', operationId: 'createUser', tags: ['Endpoints with Authentication'])]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Operation\Post(path: '/api/v4.0/register', operationId: 'createUser', tags: ['Endpoints with Authentication'])]
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the question.',
         schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Header(
-        header: 'x-pmf-token',
+    #[OA\Parameter\Header(
+        name: 'x-pmf-token',
         description: 'phpMyFAQ client API Token, generated in admin backend',
+        required: true,
         schema: new OA\Schema(type: 'string'),
     )]
     #[OA\RequestBody(required: true, content: new OA\MediaType(
@@ -80,10 +81,10 @@ final class RegistrationController extends AbstractController
                 'is-visible',
             ],
             properties: [
-                new OA\Property(property: 'username', type: 'string'),
-                new OA\Property(property: 'fullname', type: 'string'),
-                new OA\Property(property: 'email', type: 'string'),
-                new OA\Property(property: 'is-visible', type: 'boolean'),
+                new OA\Property(property: 'username', schema: new OA\Schema(type: 'string')),
+                new OA\Property(property: 'fullname', schema: new OA\Schema(type: 'string')),
+                new OA\Property(property: 'email', schema: new OA\Schema(type: 'string')),
+                new OA\Property(property: 'is-visible', schema: new OA\Schema(type: 'boolean')),
             ],
             type: 'object',
         ),
@@ -97,22 +98,22 @@ final class RegistrationController extends AbstractController
     #[OA\Response(
         response: 201,
         description: 'If "username", "fullname", "email", and "is-visible" combination is correct.',
-        content: new OA\JsonContent(example: ['registered' => true, 'success' => 'User created.']),
+        content: new OA\MediaType\Json(example: ['registered' => true, 'success' => 'User created.']),
     )]
     #[OA\Response(
         response: 400,
         description: 'If "username", "fullname", "email", and "is-visible" combination is not correct.',
-        content: new OA\JsonContent(example: ['registered' => false, 'error' => 'Error message']),
+        content: new OA\MediaType\Json(example: ['registered' => false, 'error' => 'Error message']),
     )]
     #[OA\Response(
         response: 409,
         description: 'If the domain of the email address is not allowed.',
-        content: new OA\JsonContent(example: ['registered' => false, 'error' => 'The domain is not allowed.']),
+        content: new OA\MediaType\Json(example: ['registered' => false, 'error' => 'The domain is not allowed.']),
     )]
     #[OA\Response(
         response: 401,
         description: 'If the user is not authenticated.',
-        content: new OA\JsonContent(example: ['registered' => false]),
+        content: new OA\MediaType\Json(example: ['registered' => false]),
     )]
     #[Route(path: 'v4.0/register', name: 'api.registration.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse

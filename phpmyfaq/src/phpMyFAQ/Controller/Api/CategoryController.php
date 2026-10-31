@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use JsonException;
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission as CategoryPermission;
@@ -78,9 +78,9 @@ final class CategoryController extends AbstractApiController
     /**
      * @throws \Exception
      */
-    #[OA\Get(path: '/api/v4.0/categories', operationId: 'getCategories', tags: ['Public Endpoints'])]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Operation\Get(path: '/api/v4.0/categories', operationId: 'getCategories', tags: ['Public Endpoints'])]
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the categories.',
         schema: new OA\Schema(type: 'string'),
     )]
@@ -127,7 +127,7 @@ final class CategoryController extends AbstractApiController
     #[OA\Response(
         response: 200,
         description: 'Returns paginated categories for the given language provided by "Accept-Language".',
-        content: new OA\JsonContent(example: [
+        content: new OA\MediaType\Json(example: [
             'success' => true,
             'data' => [[
                 'id' => 1,
@@ -212,15 +212,20 @@ final class CategoryController extends AbstractApiController
      * @throws JsonException
      * @throws \Exception
      */
-    #[OA\Post(path: '/api/v4.0/category', operationId: 'createCategory', tags: ['Endpoints with Authentication'])]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Operation\Post(
+        path: '/api/v4.0/category',
+        operationId: 'createCategory',
+        tags: ['Endpoints with Authentication'],
+    )]
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the login.',
         schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Header(
-        header: 'x-pmf-token',
+    #[OA\Parameter\Header(
+        name: 'x-pmf-token',
         description: 'phpMyFAQ client API Token, generated in admin backend',
+        required: true,
         schema: new OA\Schema(type: 'string'),
     )]
     #[OA\RequestBody(
@@ -243,15 +248,15 @@ final class CategoryController extends AbstractApiController
                     'show-on-homepage',
                 ],
                 properties: [
-                    new OA\Property(property: 'language', type: 'string'),
-                    new OA\Property(property: 'parent-id', type: 'integer'),
-                    new OA\Property(property: 'parent-category-name', type: 'string'),
-                    new OA\Property(property: 'category-name', type: 'string'),
-                    new OA\Property(property: 'description', type: 'string'),
-                    new OA\Property(property: 'user-id', type: 'integer'),
-                    new OA\Property(property: 'group-id', type: 'integer'),
-                    new OA\Property(property: 'is-active', type: 'boolean'),
-                    new OA\Property(property: 'show-on-homepage', type: 'boolean'),
+                    new OA\Property(property: 'language', schema: new OA\Schema(type: 'string')),
+                    new OA\Property(property: 'parent-id', schema: new OA\Schema(type: 'integer')),
+                    new OA\Property(property: 'parent-category-name', schema: new OA\Schema(type: 'string')),
+                    new OA\Property(property: 'category-name', schema: new OA\Schema(type: 'string')),
+                    new OA\Property(property: 'description', schema: new OA\Schema(type: 'string')),
+                    new OA\Property(property: 'user-id', schema: new OA\Schema(type: 'integer')),
+                    new OA\Property(property: 'group-id', schema: new OA\Schema(type: 'integer')),
+                    new OA\Property(property: 'is-active', schema: new OA\Schema(type: 'boolean')),
+                    new OA\Property(property: 'show-on-homepage', schema: new OA\Schema(type: 'boolean')),
                 ],
                 type: 'object',
             ),
@@ -268,17 +273,25 @@ final class CategoryController extends AbstractApiController
             }',
         ),
     )]
-    #[OA\Response(response: 201, description: 'If all posted data is correct.', content: new OA\JsonContent(example: [
-        'stored' => true,
-    ]))]
-    #[OA\Response(response: 400, description: "If something didn't worked out.", content: new OA\JsonContent(example: [
-        'stored' => false,
-        'error' => 'Cannot add category',
-    ]))]
+    #[OA\Response(
+        response: 201,
+        description: 'If all posted data is correct.',
+        content: new OA\MediaType\Json(example: [
+            'stored' => true,
+        ]),
+    )]
+    #[OA\Response(
+        response: 400,
+        description: "If something didn't worked out.",
+        content: new OA\MediaType\Json(example: [
+            'stored' => false,
+            'error' => 'Cannot add category',
+        ]),
+    )]
     #[OA\Response(
         response: 409,
         description: 'If the parent category name cannot be mapped.',
-        content: new OA\JsonContent(example: [
+        content: new OA\MediaType\Json(example: [
             'stored' => false,
             'error' => 'The given parent category name was not found.',
         ]),

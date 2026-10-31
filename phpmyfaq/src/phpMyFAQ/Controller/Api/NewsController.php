@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\News;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,9 +27,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class NewsController extends AbstractApiController
 {
-    #[OA\Get(path: '/api/v4.0/news', operationId: 'getNews', tags: ['Public Endpoints'])]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Operation\Get(path: '/api/v4.0/news', operationId: 'getNews', tags: ['Public Endpoints'])]
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the news.',
         schema: new OA\Schema(type: 'string'),
     )]
@@ -76,7 +76,7 @@ final class NewsController extends AbstractApiController
     #[OA\Response(
         response: 200,
         description: 'Returns paginated news for the given language provided by "Accept-Language".',
-        content: new OA\JsonContent(example: [
+        content: new OA\MediaType\Json(example: [
             'success' => true,
             'data' => [[
                 'id' => 1,

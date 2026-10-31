@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,7 +37,7 @@ final class TagController extends AbstractApiController
     /**
      * @throws \Exception
      */
-    #[OA\Get(
+    #[OA\Operation\Get(
         path: '/api/v4.0/tags',
         operationId: 'getTags',
         description: 'Returns paginated tags.',
@@ -85,7 +85,7 @@ final class TagController extends AbstractApiController
         required: false,
         schema: new OA\Schema(type: 'string', default: 'desc', enum: ['asc', 'desc']),
     )]
-    #[OA\Response(response: 200, description: 'Returns paginated tags.', content: new OA\JsonContent(example: [
+    #[OA\Response(response: 200, description: 'Returns paginated tags.', content: new OA\MediaType\Json(example: [
         'success' => true,
         'data' => [
             ['tagId' => 4, 'tagName' => 'phpMyFAQ', 'tagFrequency' => 3],

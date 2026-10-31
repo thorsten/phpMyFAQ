@@ -44,6 +44,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added embedded videos from allowed media hosts like YouTube and Vimeo in FAQs, news, and custom pages (Thorsten)
 - improved audit and activity log with comprehensive security event tracking (Thorsten)
 - improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
+- changed the REST API documentation to OpenAPI 3.1 and documented the `Accept-Language` and `x-pmf-token` request headers as header parameters (Thorsten)
 - improved support for PDO (Thorsten)
 - improved sticky FAQs administration (Thorsten)
 - improved update process (Thorsten)

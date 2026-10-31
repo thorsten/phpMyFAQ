@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use JsonException;
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
@@ -47,9 +47,9 @@ final class LoginController extends AbstractController
     /**
      * @throws JsonException|Exception
      */
-    #[OA\Post(path: '/api/v4.0/login', operationId: 'login', tags: ['Public Endpoints'])]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Operation\Post(path: '/api/v4.0/login', operationId: 'login', tags: ['Public Endpoints'])]
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the login.',
         schema: new OA\Schema(type: 'string'),
     )]
@@ -61,8 +61,8 @@ final class LoginController extends AbstractController
             schema: new OA\Schema(
                 required: ['username', 'password'],
                 properties: [
-                    new OA\Property(property: 'username', type: 'string'),
-                    new OA\Property(property: 'password', type: 'string'),
+                    new OA\Property(property: 'username', schema: new OA\Schema(type: 'string')),
+                    new OA\Property(property: 'password', schema: new OA\Schema(type: 'string')),
                 ],
                 type: 'object',
             ),
@@ -71,12 +71,12 @@ final class LoginController extends AbstractController
     #[OA\Response(
         response: 200,
         description: 'If "username" and "password" combination are correct.',
-        content: new OA\JsonContent(example: ['loggedin' => true]),
+        content: new OA\MediaType\Json(example: ['loggedin' => true]),
     )]
     #[OA\Response(
         response: 400,
         description: 'If "username" and "password" combination are wrong.',
-        content: new OA\JsonContent(example: ['loggedin' => false, 'error' => 'Wrong username or password.']),
+        content: new OA\MediaType\Json(example: ['loggedin' => false, 'error' => 'Wrong username or password.']),
     )]
     #[Route(path: 'v4.0/login', name: 'api.login', methods: ['POST'])]
     public function login(Request $request): JsonResponse

@@ -234,7 +234,7 @@ You can read the complete documentation on [here](https://phpmyfaq.readthedocs.i
 
 ## REST API documentation
 
-The REST API documentation is available as an OpenAPI 3.0 specification:
+The REST API documentation is available as an OpenAPI 3.1 specification:
 
 - [JSON](docs/openapi.json)
 - [YAML](docs/openapi.yaml)

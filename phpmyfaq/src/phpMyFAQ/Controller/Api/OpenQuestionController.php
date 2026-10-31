@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Question;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,14 +37,14 @@ final class OpenQuestionController extends AbstractApiController
     /**
      * @throws \Exception
      */
-    #[OA\Get(
+    #[OA\Operation\Get(
         path: '/api/v4.0/open-questions',
         operationId: 'getOpenQuestions',
         description: 'Returns paginated open questions.',
         tags: ['Public Endpoints'],
     )]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the open questions.',
         schema: new OA\Schema(type: 'string'),
     )]
@@ -91,7 +91,7 @@ final class OpenQuestionController extends AbstractApiController
     #[OA\Response(
         response: 200,
         description: 'Returns paginated open questions.',
-        content: new OA\JsonContent(example: [
+        content: new OA\MediaType\Json(example: [
             'success' => true,
             'data' => [[
                 'id' => 1,

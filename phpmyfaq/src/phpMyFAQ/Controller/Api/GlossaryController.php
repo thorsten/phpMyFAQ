@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use Exception;
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Language;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,14 +39,14 @@ final class GlossaryController extends AbstractApiController
     /**
      * @throws Exception
      */
-    #[OA\Get(
+    #[OA\Operation\Get(
         path: '/api/v4.0/glossary',
         operationId: 'getGlossary',
         description: 'Returns paginated glossary items.',
         tags: ['Public Endpoints'],
     )]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the glossary items.',
         schema: new OA\Schema(type: 'string'),
     )]
@@ -95,7 +95,7 @@ final class GlossaryController extends AbstractApiController
     #[OA\Response(
         response: 200,
         description: 'Returns paginated glossary items.',
-        content: new OA\JsonContent(example: [
+        content: new OA\MediaType\Json(example: [
             'success' => true,
             'data' => [
                 ['id' => 1, 'language' => 'en', 'item' => 'API', 'definition' => 'Application Programming Interface'],

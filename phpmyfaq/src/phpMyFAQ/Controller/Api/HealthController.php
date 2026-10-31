@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -35,11 +35,11 @@ use Symfony\Component\Routing\Attribute\Route;
  */
 final class HealthController extends AbstractController
 {
-    #[OA\Get(path: '/api/health', operationId: 'getHealth', tags: ['Public Endpoints'])]
+    #[OA\Operation\Get(path: '/api/health', operationId: 'getHealth', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'The application is running and connected to its database.',
-        content: new OA\JsonContent(example: '{"status": "ok"}'),
+        content: new OA\MediaType\Json(example: '{"status": "ok"}'),
     )]
     #[Route(path: 'health', name: 'api.health', methods: ['GET'])]
     public function index(): JsonResponse

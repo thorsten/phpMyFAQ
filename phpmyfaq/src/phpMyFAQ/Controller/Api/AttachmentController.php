@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use LogicException;
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Faq;
@@ -33,14 +33,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class AttachmentController extends AbstractApiController
 {
-    #[OA\Get(
+    #[OA\Operation\Get(
         path: '/api/v4.0/attachments/{faqId}',
         operationId: 'getAttachments',
         description: 'Returns a paginated list of attachments for a given FAQ record ID with optional sorting.',
         tags: ['Public Endpoints'],
     )]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the attachment.',
         schema: new OA\Schema(type: 'string'),
     )]
@@ -96,7 +96,7 @@ final class AttachmentController extends AbstractApiController
     #[OA\Response(
         response: 200,
         description: 'Paginated list of attachments with metadata.',
-        content: new OA\JsonContent(example: [
+        content: new OA\MediaType\Json(example: [
             'success' => true,
             'data' => [
                 [
@@ -135,7 +135,7 @@ final class AttachmentController extends AbstractApiController
     #[OA\Response(
         response: 500,
         description: 'If the attachments cannot be fetched.',
-        content: new OA\JsonContent(example: [
+        content: new OA\MediaType\Json(example: [
             'success' => false,
             'error' => [
                 'code' => 'ATTACHMENT_ERROR',

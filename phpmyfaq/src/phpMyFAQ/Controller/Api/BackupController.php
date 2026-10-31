@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use Exception;
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Database\DatabaseHelper;
@@ -50,15 +50,20 @@ final class BackupController extends AbstractController
     /**
      * @throws Exception
      */
-    #[OA\Get(path: '/api/v4.0/backup/{type}', operationId: 'createBackup', tags: ['Endpoints with Authentication'])]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Operation\Get(
+        path: '/api/v4.0/backup/{type}',
+        operationId: 'createBackup',
+        tags: ['Endpoints with Authentication'],
+    )]
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the login.',
         schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Header(
-        header: 'x-pmf-token',
+    #[OA\Parameter\Header(
+        name: 'x-pmf-token',
         description: 'phpMyFAQ client API Token, generated in admin backend',
+        required: true,
         schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Parameter(

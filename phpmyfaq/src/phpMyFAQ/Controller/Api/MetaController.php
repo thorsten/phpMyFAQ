@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Api\MetaService;
 use phpMyFAQ\Api\OAuthDiscoveryService;
 use phpMyFAQ\Controller\AbstractController;
@@ -44,25 +44,27 @@ final class MetaController extends AbstractController
         }
     }
 
-    #[OA\Get(path: '/api/v4.0/meta', operationId: 'getMeta', tags: ['Public Endpoints'])]
+    #[OA\Operation\Get(path: '/api/v4.0/meta', operationId: 'getMeta', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns bootstrap metadata for the phpMyFAQ instance.',
-        content: new OA\JsonContent(properties: [
-            new OA\Property(property: 'version', type: 'string', example: '4.0.0'),
-            new OA\Property(property: 'title', type: 'string', example: 'phpMyFAQ Codename Porus'),
-            new OA\Property(property: 'language', type: 'string', example: 'en'),
-            new OA\Property(property: 'availableLanguages', type: 'object', example: [
+        content: new OA\MediaType\Json(properties: [
+            new OA\Property(property: 'version', schema: new OA\Schema(type: 'string', example: '4.0.0')),
+            new OA\Property(
+                property: 'title',
+                schema: new OA\Schema(type: 'string', example: 'phpMyFAQ Codename Porus'),
+            ),
+            new OA\Property(property: 'language', schema: new OA\Schema(type: 'string', example: 'en')),
+            new OA\Property(property: 'availableLanguages', schema: new OA\Schema(type: 'object', example: [
                 'de' => 'German',
                 'en' => 'English',
-            ]),
-            new OA\Property(property: 'enabledFeatures', type: 'object'),
+            ])),
+            new OA\Property(property: 'enabledFeatures', schema: new OA\Schema(type: 'object')),
             new OA\Property(
                 property: 'publicLogoUrl',
-                type: 'string',
-                example: 'https://localhost/assets/images/logo-transparent.svg',
+                schema: new OA\Schema(type: 'string', example: 'https://localhost/assets/images/logo-transparent.svg'),
             ),
-            new OA\Property(property: 'themeColors', type: 'object', example: [
+            new OA\Property(property: 'themeColors', schema: new OA\Schema(type: 'object', example: [
                 'light' => [
                     '--bs-primary' => '#083c83',
                     '--bs-body-bg' => '#ffffff',
@@ -75,8 +77,8 @@ final class MetaController extends AbstractController
                     '--bs-primary' => '#ffff00',
                     '--bs-body-bg' => '#000000',
                 ],
-            ]),
-            new OA\Property(property: 'oauthDiscovery', type: 'object'),
+            ])),
+            new OA\Property(property: 'oauthDiscovery', schema: new OA\Schema(type: 'object')),
         ]),
     )]
     #[Route(path: 'v4.0/meta', name: 'api.meta', methods: ['GET'])]

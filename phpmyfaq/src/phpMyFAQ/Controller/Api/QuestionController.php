@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use InvalidArgumentException;
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\QuestionEntity;
@@ -50,15 +50,20 @@ final class QuestionController extends AbstractApiController
      * @throws \JsonException
      * @throws \Exception
      */
-    #[OA\Post(path: '/api/v4.0/question', operationId: 'createQuestion', tags: ['Endpoints with Authentication'])]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Operation\Post(
+        path: '/api/v4.0/question',
+        operationId: 'createQuestion',
+        tags: ['Endpoints with Authentication'],
+    )]
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the question.',
         schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Header(
-        header: 'x-pmf-token',
+    #[OA\Parameter\Header(
+        name: 'x-pmf-token',
         description: 'phpMyFAQ client API Token, generated in admin backend',
+        required: true,
         schema: new OA\Schema(type: 'string'),
     )]
     #[OA\RequestBody(required: true, content: new OA\MediaType(
@@ -71,10 +76,10 @@ final class QuestionController extends AbstractApiController
                 'email',
             ],
             properties: [
-                new OA\Property(property: 'category-id', type: 'integer'),
-                new OA\Property(property: 'question', type: 'string'),
-                new OA\Property(property: 'author', type: 'string'),
-                new OA\Property(property: 'email', type: 'string'),
+                new OA\Property(property: 'category-id', schema: new OA\Schema(type: 'integer')),
+                new OA\Property(property: 'question', schema: new OA\Schema(type: 'string')),
+                new OA\Property(property: 'author', schema: new OA\Schema(type: 'string')),
+                new OA\Property(property: 'email', schema: new OA\Schema(type: 'string')),
             ],
             type: 'object',
         ),
@@ -88,7 +93,7 @@ final class QuestionController extends AbstractApiController
     #[OA\Response(
         response: 201,
         description: 'Used to add a new question in one existing category.',
-        content: new OA\JsonContent(example: ['stored' => true]),
+        content: new OA\MediaType\Json(example: ['stored' => true]),
     )]
     #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
     #[Route(path: 'v4.0/question', name: 'api.question.create', methods: ['POST'])]

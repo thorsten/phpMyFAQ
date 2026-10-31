@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
@@ -68,15 +68,15 @@ final class PdfController extends AbstractController
     /**
      * @throws Exception
      */
-    #[OA\Get(
+    #[OA\Operation\Get(
         path: '/api/v4.0/pdf/{categoryId}/{faqId}',
         operationId: 'getPdfById',
         description: 'This endpoint returns the URL to the PDF of FAQ for the given FAQ ID and the language provided '
         . 'by "Accept-Language".',
         tags: ['Public Endpoints'],
     )]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the FAQ.',
         schema: new OA\Schema(type: 'string'),
     )]
@@ -97,12 +97,12 @@ final class PdfController extends AbstractController
     #[OA\Response(
         response: 200,
         description: 'If the PDF of the FAQ exists.',
-        content: new OA\JsonContent(example: 'https://www.example.org/pdf.php?cat=3&id=142&artlang=de'),
+        content: new OA\MediaType\Json(example: 'https://www.example.org/pdf.php?cat=3&id=142&artlang=de'),
     )]
     #[OA\Response(
         response: 404,
         description: "If there's no FAQ and PDF for the given FAQ ID.",
-        content: new OA\JsonContent(example: []),
+        content: new OA\MediaType\Json(example: []),
     )]
     #[Route(path: 'v4.0/pdf/{categoryId}/{faqId}', name: 'api.pdf.getById', methods: ['GET'])]
     public function getById(Request $request): JsonResponse

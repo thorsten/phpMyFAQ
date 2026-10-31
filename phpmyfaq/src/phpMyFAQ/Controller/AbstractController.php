@@ -21,7 +21,7 @@ namespace phpMyFAQ\Controller;
 
 use JsonException;
 use LogicException;
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Configuration;

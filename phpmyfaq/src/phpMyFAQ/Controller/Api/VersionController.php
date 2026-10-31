@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -36,11 +36,11 @@ final class VersionController extends AbstractController
         }
     }
 
-    #[OA\Get(path: '/api/v4.0/version', operationId: 'getVersion', tags: ['Public Endpoints'])]
+    #[OA\Operation\Get(path: '/api/v4.0/version', operationId: 'getVersion', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the phpMyFAQ version number as string.',
-        content: new OA\JsonContent(example: '4.0.0'),
+        content: new OA\MediaType\Json(example: '4.0.0'),
     )]
     #[Route(path: 'v4.0/version', name: 'api.version', methods: ['GET'])]
     public function index(): JsonResponse

@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -36,11 +36,11 @@ final class TitleController extends AbstractController
         }
     }
 
-    #[OA\Get(path: '/api/v4.0/title', operationId: 'getTitle', tags: ['Public Endpoints'])]
+    #[OA\Operation\Get(path: '/api/v4.0/title', operationId: 'getTitle', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the title of the phpMyFAQ instance as a string.',
-        content: new OA\JsonContent(example: 'phpMyFAQ Codename Porus'),
+        content: new OA\MediaType\Json(example: 'phpMyFAQ Codename Porus'),
     )]
     #[Route(path: 'v4.0/title', name: 'api.title', methods: ['GET'])]
     public function index(): JsonResponse

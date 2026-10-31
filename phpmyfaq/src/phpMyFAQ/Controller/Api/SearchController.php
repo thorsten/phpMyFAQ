@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Api;
 
 use Exception;
-use OpenApi\Attributes as OA;
+use OpenApi\Spec as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
@@ -44,7 +44,7 @@ final class SearchController extends AbstractApiController
     /**
      * @throws Exception
      */
-    #[OA\Get(
+    #[OA\Operation\Get(
         path: '/api/v4.0/search',
         operationId: 'getSearch',
         description: 'Returns paginated search results.',
@@ -102,7 +102,7 @@ final class SearchController extends AbstractApiController
     #[OA\Response(
         response: 200,
         description: 'Returns paginated search results.',
-        content: new OA\JsonContent(example: [
+        content: new OA\MediaType\Json(example: [
             'success' => true,
             'data' => [[
                 'id' => '1',
@@ -198,16 +198,16 @@ final class SearchController extends AbstractApiController
     /**
      * @throws Exception
      */
-    #[OA\Get(path: '/api/v4.0/searches/popular', operationId: 'getPopularSearch', tags: ['Public Endpoints'])]
-    #[OA\Header(
-        header: 'Accept-Language',
+    #[OA\Operation\Get(path: '/api/v4.0/searches/popular', operationId: 'getPopularSearch', tags: ['Public Endpoints'])]
+    #[OA\Parameter\Header(
+        name: 'Accept-Language',
         description: 'The language code for the login.',
         schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Response(
         response: 200,
         description: 'Returns the popular search terms for the given language provided by "Accept-Language"',
-        content: new OA\JsonContent(example: [
+        content: new OA\MediaType\Json(example: [
             [
                 'id' => 3,
                 'searchterm' => 'mac',
@@ -225,7 +225,7 @@ final class SearchController extends AbstractApiController
     #[OA\Response(
         response: 404,
         description: 'If the popular search returns no results.',
-        content: new OA\JsonContent(example: []),
+        content: new OA\MediaType\Json(example: []),
     )]
     #[Route(path: 'v4.0/searches/popular', name: 'api.search.popular', methods: ['GET'])]
     public function popular(): JsonResponse
