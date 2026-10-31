@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Administration;
 
+use DateTimeImmutable;
 use phpMyFAQ\Configuration;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -134,13 +135,17 @@ readonly class Session
         $stats = [];
         $completeData = [];
         // Inclusive range: the loop below counts both the start and end day,
-        // so subtract one day to yield exactly $days buckets.
-        $startDate = $endDate - (($days - 1) * 86_400);
+        // so subtract one day to yield exactly $days buckets. Step by calendar
+        // day, not 86400 seconds, as days around a DST change are 23 or 25 hours.
+        $lastDay = new DateTimeImmutable()
+            ->setTimestamp($endDate)
+            ->setTime(0, 0);
+        $firstDay = $lastDay->modify(sprintf('-%d days', $days - 1));
 
-        $visits = $this->sessionRepository->getSessionTimestamps($startDate, $endDate);
+        $visits = $this->sessionRepository->getSessionTimestamps($firstDay->getTimestamp(), $endDate);
 
-        for ($date = $startDate; $date <= $endDate; $date += 86_400) {
-            $stats[date(format: 'Y-m-d', timestamp: $date)] = 0;
+        for ($day = $firstDay; $day <= $lastDay; $day = $day->modify('+1 day')) {
+            $stats[$day->format('Y-m-d')] = 0;
         }
 
         foreach ($visits as $visitDate) {

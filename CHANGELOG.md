@@ -63,6 +63,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - upgraded PDF engine to TCPDF 7 / tc-lib-pdf; PDF fonts are now JSON descriptors in src/fonts (Thorsten)
 - updated third party dependencies (Thorsten)
 - fixed security vulnerabilities (Thorsten)
+- fixed the admin dashboard visits chart, which skipped or merged a day when the range crossed a daylight saving time change (Thorsten)
 - fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.12 - unreleased

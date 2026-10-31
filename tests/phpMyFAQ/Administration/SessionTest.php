@@ -5,6 +5,7 @@ namespace phpMyFAQ\Administration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -127,7 +128,8 @@ class SessionTest extends TestCase
      */
     public function testGetLast30DaysVisits()
     {
-        $endDate = time();
+        // A fixed date far from a DST change; the expected buckets below step in 86400-second jumps
+        $endDate = strtotime('2026-06-15 12:00:00');
         // 30 days is an inclusive range, so it spans exactly 30 daily buckets
         $startDate = $endDate - (29 * 86400);
 
@@ -206,5 +208,63 @@ class SessionTest extends TestCase
         self::assertCount(30, $visits);
         self::assertSame(1, array_sum(array_map(static fn(stdClass $visit): int => $visit->number, $visits)));
         self::assertSame(1, end($visits)->number);
+    }
+    /**
+     * @return iterable<string, array{string, string, string}>
+     */
+    public static function daylightSavingTimeChanges(): iterable
+    {
+        yield 'end of DST, late evening' => ['2026-10-31 23:30:00', '2026-10-02', '2026-10-31'];
+        yield 'start of DST, just after midnight' => ['2027-04-10 00:30:00', '2027-03-12', '2027-04-10'];
+    }
+
+    #[DataProvider('daylightSavingTimeChanges')]
+    public function testGetLast30DaysVisitsReturnsOneBucketPerCalendarDayAcrossDaylightSavingTime(
+        string $end,
+        string $expectedFirstDay,
+        string $expectedLastDay,
+    ): void {
+        $previousTimezone = date_default_timezone_get();
+        date_default_timezone_set('Europe/Berlin');
+
+        try {
+            $this->databaseMock->method('query')->willReturn(true);
+            $this->databaseMock->method('fetchObject')->willReturn(false);
+
+            $visits = $this->session->getLast30DaysVisits(strtotime($end));
+        } finally {
+            date_default_timezone_set($previousTimezone);
+        }
+
+        $dates = array_map(static fn(stdClass $visit): string => $visit->date, $visits);
+        self::assertCount(30, $dates);
+        self::assertSame($expectedFirstDay, $dates[0]);
+        self::assertSame($expectedLastDay, $dates[29]);
+        self::assertCount(30, array_unique($dates));
+    }
+
+    public function testGetLast30DaysVisitsCountsVisitsFromTheWholeFirstDay(): void
+    {
+        $previousTimezone = date_default_timezone_get();
+        date_default_timezone_set('Europe/Berlin');
+
+        try {
+            $firstDayMorning = new stdClass();
+            $firstDayMorning->time = strtotime('2026-05-17 08:00:00');
+
+            $this->databaseMock
+                ->expects($this->once())
+                ->method('query')
+                ->with($this->stringContains('time > ' . strtotime('2026-05-17 00:00:00')))
+                ->willReturn(true);
+            $this->databaseMock->method('fetchObject')->willReturnOnConsecutiveCalls($firstDayMorning, false);
+
+            $visits = $this->session->getLast30DaysVisits(strtotime('2026-06-15 12:00:00'));
+        } finally {
+            date_default_timezone_set($previousTimezone);
+        }
+
+        self::assertSame('2026-05-17', $visits[0]->date);
+        self::assertSame(1, $visits[0]->number);
     }
 }
