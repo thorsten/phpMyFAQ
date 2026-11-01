@@ -39,7 +39,7 @@ final class SecurityHeadersListenerTest extends TestCase
         self::assertStringContainsString("style-src 'self' 'unsafe-inline'", $csp);
         self::assertStringContainsString("img-src 'self' data: https:", $csp);
         self::assertStringContainsString("font-src 'self' data:", $csp);
-        self::assertStringContainsString("connect-src 'self'", $csp);
+        self::assertStringContainsString("connect-src 'self' https://api.phpmyfaq.de", $csp);
         self::assertStringContainsString("frame-src 'self' https://www.google.com", $csp);
         self::assertStringContainsString("frame-ancestors 'self'", $csp);
         self::assertStringContainsString("object-src 'none'", $csp);

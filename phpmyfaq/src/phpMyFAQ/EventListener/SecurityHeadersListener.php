@@ -40,6 +40,12 @@ final readonly class SecurityHeadersListener
 
     private const array RECAPTCHA_FRAME_HOSTS = ['https://www.google.com'];
 
+    /**
+     * The admin dashboard fetches the release file hashes for the
+     * installation check directly from the phpMyFAQ API.
+     */
+    private const array CONNECT_HOSTS = ['https://api.phpmyfaq.de'];
+
     public function __construct(
         private ?Configuration $configuration = null,
     ) {
@@ -79,7 +85,7 @@ final readonly class SecurityHeadersListener
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: https:",
             "font-src 'self' data:",
-            "connect-src 'self'",
+            "connect-src 'self' " . implode(' ', self::CONNECT_HOSTS),
             "media-src 'self'" . $this->joinOrigins($mediaHosts),
             "frame-src 'self' " . implode(' ', self::RECAPTCHA_FRAME_HOSTS) . $this->joinOrigins($mediaHosts),
             "frame-ancestors 'self'",
