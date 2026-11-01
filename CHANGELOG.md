@@ -33,7 +33,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental support for API key authentication via OAuth2 (Thorsten)
 - added experimental per-tenant quota enforcement and API request rate limits (Thorsten)
 - added SBOM (Software Bill of Materials) generation (Thorsten)
-- added separate read, write and publish permissions for FAQs (Thorsten)
+- added granular permission model with category- and language-scoped permissions and separate read, write and publish permissions for FAQs (Thorsten)
 - added an editorial workflow with per-language draft, review, and published states for FAQs (Thorsten)
 - added question metadata tracking, an audit log of the open question lifecycle (submitted, answered, reopened) (Thorsten)
 - added support for generic OpenID Connect providers such as Authentik (Thorsten)
