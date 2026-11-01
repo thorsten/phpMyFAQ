@@ -9,6 +9,7 @@ import {
   renderTopTenCharts,
   handleVerificationModal,
 } from './dashboard';
+import { TranslationService } from '../../../assets/src/utils';
 
 vi.mock('masonry-layout', () => ({
   default: vi.fn(),
@@ -616,6 +617,14 @@ describe('handleVerificationModal', () => {
     await handleVerificationModal();
 
     expect(getRemoteHashes).not.toHaveBeenCalled();
+  });
+
+  it('loads translations from the public API, not the admin API', async () => {
+    document.body.innerHTML = '<div id="verificationModal" data-pmf-current-version="4.2.0"></div>';
+
+    await handleVerificationModal();
+
+    expect(TranslationService).toHaveBeenCalledWith('../api');
   });
 
   it('fetches and verifies hashes when modal is shown', async () => {

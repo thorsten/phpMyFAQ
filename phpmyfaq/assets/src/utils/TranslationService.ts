@@ -3,10 +3,12 @@ import { fetchTranslations } from '../api/translations';
 export class TranslationService {
   private translations: Record<string, string> = {};
 
+  constructor(private readonly apiBasePath = 'api') {}
+
   // Load translations from JSON
   async loadTranslations(locale: string): Promise<void> {
     try {
-      this.translations = await fetchTranslations(locale);
+      this.translations = await fetchTranslations(locale, this.apiBasePath);
     } catch (error) {
       console.error('Failed to load translations:', error);
     }

@@ -548,7 +548,7 @@ export const fetchRecentNews = async (): Promise<void> => {
 
 export const handleVerificationModal = async (): Promise<void> => {
   const verificationModal = document.getElementById('verificationModal') as HTMLDivElement;
-  const Translator = new TranslationService();
+  const Translator = new TranslationService('../api');
   if (verificationModal) {
     verificationModal.addEventListener('show.bs.modal', async (): Promise<void> => {
       const spinner = document.getElementById('pmf-verification-spinner') as HTMLDivElement;

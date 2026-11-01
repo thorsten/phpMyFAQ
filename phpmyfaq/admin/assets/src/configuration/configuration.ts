@@ -495,7 +495,7 @@ export const handleThemes = async (): Promise<void> => {
 
       const archiveFile = themeArchiveInput?.files?.[0];
       if (!archiveFile) {
-        const translator = new TranslationService();
+        const translator = new TranslationService('../api');
         await translator.loadTranslations(document.documentElement.lang);
         pushErrorNotification(translator.translate('msgThemeUploadNoZip'));
         return;

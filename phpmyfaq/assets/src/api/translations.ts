@@ -13,8 +13,12 @@
  * @since     2025-03-17
  */
 
-export const fetchTranslations = async (locale: string): Promise<Record<string, string>> => {
-  const response: Response = await fetch(`api/translations/${locale}`, {
+/**
+ * @param apiBasePath Path of the public API relative to the document's <base href>;
+ *                    the admin pages live one directory deeper and pass '../api'.
+ */
+export const fetchTranslations = async (locale: string, apiBasePath = 'api'): Promise<Record<string, string>> => {
+  const response: Response = await fetch(`${apiBasePath}/translations/${locale}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {

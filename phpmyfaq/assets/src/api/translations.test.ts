@@ -32,6 +32,14 @@ describe('fetchTranslations', () => {
     });
   });
 
+  test('should resolve the endpoint against a custom API base path', async (): Promise<void> => {
+    fetchMocker.mockResponseOnce(JSON.stringify({}));
+
+    await fetchTranslations('de', '../api');
+
+    expect(fetch).toHaveBeenCalledWith('../api/translations/de', expect.any(Object));
+  });
+
   test('should throw an error when the response is not successful', async (): Promise<void> => {
     fetchMocker.mockResponseOnce(null, { status: 500 });
 

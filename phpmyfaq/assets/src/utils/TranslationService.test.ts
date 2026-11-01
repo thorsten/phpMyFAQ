@@ -19,7 +19,7 @@ describe('TranslationService', (): void => {
 
     await service.loadTranslations('en');
 
-    expect(fetchTranslations).toHaveBeenCalledWith('en');
+    expect(fetchTranslations).toHaveBeenCalledWith('en', 'api');
     expect(service.translate('hello')).toBe('Hello');
     expect(service.translate('goodbye')).toBe('Goodbye');
   });
@@ -30,11 +30,19 @@ describe('TranslationService', (): void => {
 
     await service.loadTranslations('en');
 
-    expect(fetchTranslations).toHaveBeenCalledWith('en');
+    expect(fetchTranslations).toHaveBeenCalledWith('en', 'api');
     expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to load translations:', expect.any(Error));
     expect(service.translate('hello')).toBe('hello');
 
     consoleErrorSpy.mockRestore();
+  });
+
+  test('should pass a custom API base path to fetchTranslations', async (): Promise<void> => {
+    (fetchTranslations as Mock).mockResolvedValue({});
+
+    await new TranslationService('../api').loadTranslations('de');
+
+    expect(fetchTranslations).toHaveBeenCalledWith('de', '../api');
   });
 
   test('should return key if translation is not found', (): void => {
