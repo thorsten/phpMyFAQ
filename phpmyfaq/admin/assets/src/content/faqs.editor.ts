@@ -34,8 +34,10 @@ export const handleSaveFaqData = (): void => {
 
       const serializedData = serialize(formData) as SerializedData;
 
+      const isNewFaq = serializedData.faqId === '0';
+
       let response: Response | undefined;
-      if (serializedData.faqId === '0') {
+      if (isNewFaq) {
         response = await create(serializedData);
       } else {
         response = await update(serializedData);
@@ -50,6 +52,14 @@ export const handleSaveFaqData = (): void => {
         revisionId.value = data.revisionId;
 
         pushNotification(response.success);
+
+        if (isNewFaq && data.id && data.language) {
+          // Leave the "add" form: a second save on this page would otherwise
+          // update the FAQ that was just created instead of adding a new one.
+          window.setTimeout(() => {
+            window.location.href = `./faq/edit/${data.id}/${data.language}`;
+          }, 1000);
+        }
       } else {
         if (response && response.error) {
           pushErrorNotification(response.error);
