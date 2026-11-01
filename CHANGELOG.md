@@ -6,12 +6,11 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.2.0-RC.1 - unreleased
+### phpMyFAQ v4.2.0-RC.1 - 2026-11-01
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
 - added experimental FrankenPHP worker mode, enabled with `FRANKENPHP_WORKER_MODE=true` in the Docker images (Thorsten)
 - added the command line tools (`bin/console`, `bin/worker.php`, `bin/scheduler.php`) to the release packages and the Docker images (Thorsten)
-- fixed the 4.0.0-alpha.3 database update, which skipped its configuration changes on MySQL, SQLite and SQL Server since February 2026; the 4.2.0-RC.1 update re-applies them (Thorsten)
 - added official Docker images (Apache and FrankenPHP) published to the GitHub Container Registry, including nightly images, with headless installation via environment variables (Thorsten)
 - added `GET /api/health` endpoint for container health checks (Thorsten)
 - added Symfony Router for frontend (Thorsten)
@@ -62,8 +61,6 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated experimental MCP Server to mcp/sdk (Thorsten)
 - upgraded PDF engine to TCPDF 7 / tc-lib-pdf; PDF fonts are now JSON descriptors in src/fonts (Thorsten)
 - updated third party dependencies (Thorsten)
-- fixed security vulnerabilities (Thorsten)
-- fixed the admin dashboard visits chart, which skipped or merged a day when the range crossed a daylight saving time change (Thorsten)
 - fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.12 - unreleased
