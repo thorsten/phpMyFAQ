@@ -87,7 +87,6 @@ vi.mock('jodit/esm/plugins/resizer/resizer.js', () => ({}));
 vi.mock('jodit/esm/plugins/search/search.js', () => ({}));
 vi.mock('jodit/esm/plugins/select/select.js', () => ({}));
 vi.mock('jodit/esm/plugins/source/source.js', () => ({}));
-vi.mock('jodit/esm/plugins/sticky/sticky.js', () => ({}));
 vi.mock('jodit/esm/plugins/symbols/symbols.js', () => ({}));
 vi.mock('jodit/esm/modules/uploader/uploader.js', () => ({}));
 vi.mock('jodit/esm/plugins/video/video.js', () => ({}));
@@ -168,18 +167,6 @@ describe('Editor', () => {
       // Jodit resizes videos itself; overriding these would drop 'video' from its defaults
       expect(options).not.toHaveProperty('allowResizeTags');
       expect(options).not.toHaveProperty('resizer');
-    });
-
-    it('should keep the toolbar visible while scrolling through a long answer', () => {
-      document.body.innerHTML = `
-        <div id="editor"></div>
-        <input id="pmf-csrf-token" value="test-csrf-token" />
-      `;
-
-      renderEditor();
-
-      const options = vi.mocked(Jodit.make).mock.calls[0][1] as { toolbarSticky: boolean };
-      expect(options.toolbarSticky).toBe(true);
     });
 
     it('should register event listeners on the editor after creation', () => {

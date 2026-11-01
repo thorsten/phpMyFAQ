@@ -1,5 +1,14 @@
 @import 'jodit/es2015/jodit.min.css';
 
+// The admin shell scrolls inside #pmf-admin-layout-sidenav, not the window, so
+// Jodit's own sticky plugin (it listens to window scroll) never engages. Pin the
+// toolbar with CSS instead; the editor container bounds it automatically.
+.jodit-container:not(.jodit_inline) > .jodit-toolbar__box {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
 .truncate-question {
   display: inline-block;
   width: 750px;

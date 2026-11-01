@@ -39,7 +39,6 @@ import 'jodit/esm/plugins/search/search.js';
 import 'jodit/esm/plugins/select/select.js';
 import 'jodit/esm/plugins/select-cells/select-cells.js';
 import 'jodit/esm/plugins/source/source.js';
-import 'jodit/esm/plugins/sticky/sticky.js';
 import 'jodit/esm/plugins/symbols/symbols.js';
 import 'jodit/esm/plugins/table/table.js';
 import 'jodit/esm/plugins/table-keyboard-navigation/table-keyboard-navigation.js';
@@ -96,7 +95,6 @@ export const renderEditor = () => {
     debugLanguage: false,
     tabIndex: -1,
     toolbar: true,
-    toolbarSticky: true,
     enter: 'p',
     defaultMode: 1, // MODE_WYSIWYG
     useSplitMode: false,
@@ -392,7 +390,6 @@ export const renderPageEditor = () => {
     debugLanguage: false,
     tabIndex: -1,
     toolbar: true,
-    toolbarSticky: true,
     enter: 'p',
     defaultMode: 1, // MODE_WYSIWYG
     useSplitMode: false,
