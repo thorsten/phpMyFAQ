@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use phpMyFAQ\Auth\AuthDatabase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail;
@@ -255,6 +256,63 @@ class UserControllerTest extends TestCase
         $response = $this->runProfileUpdate($currentUser, []);
 
         self::assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * A remember-me token is a password-equivalent credential. The self-service password change
+     * writes the new password through the auth drivers directly, so it must revoke the tokens
+     * itself: a stolen pmf-remember-me cookie must not survive the rotation meant to lock it out.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateDataRevokesPersistentLoginsAfterAPasswordChange(): void
+    {
+        $driver = $this->createMock(AuthDatabase::class);
+        $driver->expects(self::atLeastOnce())->method('checkCredentials')->with('jdoe', 'correct-current')->willReturn(true);
+        $driver->method('disableReadOnly')->willReturn(false);
+        $driver->expects(self::once())->method('update')->with('jdoe', 'NewPass123!')->willReturn(true);
+
+        $currentUser = $this->createCurrentUserWithAuthSource('local');
+        $currentUser->method('getLogin')->willReturn('jdoe');
+        $currentUser->method('getAuthContainer')->willReturn([$driver]);
+        $currentUser->method('setUserData')->willReturn(true);
+        $currentUser->expects(self::once())->method('revokePersistentLogins')->willReturn(true);
+        $currentUser->expects(self::once())->method('updateSessionId')->willReturn(true);
+
+        $response = $this->runProfileUpdate($currentUser, [
+            'faqpassword_current' => 'correct-current',
+            'faqpassword' => 'NewPass123!',
+            'faqpassword_confirm' => 'NewPass123!',
+        ]);
+
+        self::assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateDataDoesNotRevokePersistentLoginsWhenThePasswordChangeFails(): void
+    {
+        $driver = $this->createMock(AuthDatabase::class);
+        $driver->expects(self::atLeastOnce())->method('checkCredentials')->with('jdoe', 'correct-current')->willReturn(true);
+        $driver->method('disableReadOnly')->willReturn(false);
+        $driver->method('update')->willReturn(false);
+        $driver->method('getErrors')->willReturn('driver error');
+
+        $currentUser = $this->createCurrentUserWithAuthSource('local');
+        $currentUser->method('getLogin')->willReturn('jdoe');
+        $currentUser->method('getAuthContainer')->willReturn([$driver]);
+        $currentUser->method('setUserData')->willReturn(true);
+        $currentUser->expects(self::never())->method('revokePersistentLogins');
+        $currentUser->expects(self::never())->method('updateSessionId');
+
+        $response = $this->runProfileUpdate($currentUser, [
+            'faqpassword_current' => 'correct-current',
+            'faqpassword' => 'NewPass123!',
+            'faqpassword_confirm' => 'NewPass123!',
+        ]);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 
     private function createCurrentUserWithAuthSource(string $authSource): CurrentUser

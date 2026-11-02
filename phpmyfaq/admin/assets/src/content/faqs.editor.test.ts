@@ -89,6 +89,75 @@ describe('faqs.editor', () => {
       expect(revisionIdInput.value).toBe('1');
     });
 
+    it('should redirect to the edit page after creating a new FAQ so a second save does not overwrite it', async () => {
+      vi.useFakeTimers();
+      const originalLocation = window.location;
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        writable: true,
+        value: { href: 'http://localhost/admin/faq/add' },
+      });
+
+      try {
+        document.body.innerHTML = `
+          <form id="faqEditor">
+            <input name="faqId" value="0" />
+            <input name="question" value="Test question" />
+          </form>
+          <input id="faqId" value="0" />
+          <input id="revisionId" value="0" />
+          <button id="faqEditorSubmit">Save</button>
+        `;
+
+        const responseData = JSON.stringify({ id: 42, language: 'en', revisionId: 0 });
+        (create as Mock).mockResolvedValue({ success: 'FAQ created', data: responseData });
+
+        await saveFaq();
+
+        expect(window.location.href).toBe('http://localhost/admin/faq/add');
+
+        vi.runAllTimers();
+
+        expect(window.location.href).toBe('./faq/edit/42/en');
+      } finally {
+        vi.useRealTimers();
+        Object.defineProperty(window, 'location', { configurable: true, writable: true, value: originalLocation });
+      }
+    });
+
+    it('should not redirect after updating an existing FAQ', async () => {
+      vi.useFakeTimers();
+      const originalLocation = window.location;
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        writable: true,
+        value: { href: 'http://localhost/admin/faq/edit/7/en' },
+      });
+
+      try {
+        document.body.innerHTML = `
+          <form id="faqEditor">
+            <input name="faqId" value="7" />
+            <input name="question" value="Test question" />
+          </form>
+          <input id="faqId" value="7" />
+          <input id="revisionId" value="0" />
+          <button id="faqEditorSubmit">Save</button>
+        `;
+
+        const responseData = JSON.stringify({ id: 7, language: 'en', revisionId: 1 });
+        (update as Mock).mockResolvedValue({ success: 'FAQ updated', data: responseData });
+
+        await saveFaq();
+        vi.runAllTimers();
+
+        expect(window.location.href).toBe('http://localhost/admin/faq/edit/7/en');
+      } finally {
+        vi.useRealTimers();
+        Object.defineProperty(window, 'location', { configurable: true, writable: true, value: originalLocation });
+      }
+    });
+
     it('should call update() when faqId is not "0"', async () => {
       document.body.innerHTML = `
         <form id="faqEditor">

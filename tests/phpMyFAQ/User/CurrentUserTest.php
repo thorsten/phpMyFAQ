@@ -524,6 +524,53 @@ class CurrentUserTest extends TestCase
     }
 
     /**
+     * A remember-me token is a password-equivalent credential. Rotating the password is how a
+     * user locks out a stolen credential, so the rotation must also revoke any remember-me
+     * token issued under the old password. Otherwise an attacker holding the cookie keeps
+     * full access until it expires client-side.
+     *
+     * @throws Exception
+     */
+    public function testChangePasswordRevokesTheRememberMeToken(): void
+    {
+        $this->resetRememberMeToken();
+
+        try {
+            $user = new CurrentUser($this->configuration);
+            $this->assertTrue($user->getUserById(1));
+            $this->assertTrue($user->setRememberMe('stale-token'));
+            $this->assertSame('stale-token', $this->readRememberMeToken());
+
+            $this->assertTrue($user->changePassword('password'));
+
+            $this->assertSame(
+                '',
+                $this->readRememberMeToken(),
+                'Changing the password must revoke the remember-me token issued under the old password.',
+            );
+        } finally {
+            $this->resetRememberMeToken();
+        }
+    }
+
+    public function testRevokePersistentLoginsClearsTheStoredToken(): void
+    {
+        $this->resetRememberMeToken();
+
+        try {
+            $user = new CurrentUser($this->configuration);
+            $this->assertTrue($user->getUserById(1));
+            $this->assertTrue($user->setRememberMe('stale-token'));
+
+            $this->assertTrue($user->revokePersistentLogins());
+
+            $this->assertSame('', $this->readRememberMeToken());
+        } finally {
+            $this->resetRememberMeToken();
+        }
+    }
+
+    /**
      * Reads the persisted remember-me token for the shared fixture user, normalising the
      * absent state (SQL NULL) to an empty string.
      */
