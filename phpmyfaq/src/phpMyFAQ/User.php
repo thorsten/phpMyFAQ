@@ -930,7 +930,29 @@ class User
             $success = true;
         }
 
+        if ($success) {
+            // A remember-me token is a password-equivalent credential. Rotating the password
+            // must also revoke any token issued under the old one, otherwise a stolen
+            // pmf-remember-me cookie survives the very change meant to lock it out.
+            $this->revokeRememberMe();
+        }
+
         return $success;
+    }
+
+    /**
+     * Revokes the user's remember-me token so that a previously issued
+     * pmf-remember-me cookie can no longer authenticate.
+     */
+    public function revokeRememberMe(): bool
+    {
+        $update = sprintf(
+            'UPDATE %sfaquser SET remember_me = NULL WHERE user_id = %d',
+            Database::getTablePrefix(),
+            $this->getUserId(),
+        );
+
+        return (bool) $this->configuration->getDb()->query($update);
     }
 
     /**

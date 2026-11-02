@@ -114,6 +114,42 @@ class UserControllerTest extends TestCase
         $this->assertTrue($this->changePassword('correct-current', 'NewPass123!', 'NewPass123!'));
     }
 
+    /**
+     * The self-service path writes the new password through the auth drivers directly, so it
+     * must revoke the remember-me token itself: a stolen pmf-remember-me cookie must not
+     * survive the password rotation that was meant to lock it out.
+     */
+    public function testValidPasswordChangeRevokesTheRememberMeToken(): void
+    {
+        $driver = $this->createMock(AuthDatabase::class);
+        $driver->method('disableReadOnly')->willReturn(false);
+        $driver->method('update')->willReturn(true);
+
+        $this->currentUserMock->method('verifyPassword')->with('correct-current')->willReturn(true);
+        $this->currentUserMock->method('getLogin')->willReturn('jdoe');
+        $this->currentUserMock->method('getAuthContainer')->willReturn([$driver]);
+        $this->currentUserMock->expects($this->once())->method('revokeRememberMe')->willReturn(true);
+
+        $this->assertTrue($this->changePassword('correct-current', 'NewPass123!', 'NewPass123!'));
+    }
+
+    public function testFailedPasswordChangeDoesNotRevokeTheRememberMeToken(): void
+    {
+        $driver = $this->createMock(AuthDatabase::class);
+        $driver->method('disableReadOnly')->willReturn(false);
+        $driver->method('update')->willReturn(false);
+        $driver->method('getErrors')->willReturn('driver error');
+
+        $this->currentUserMock->method('verifyPassword')->with('correct-current')->willReturn(true);
+        $this->currentUserMock->method('getLogin')->willReturn('jdoe');
+        $this->currentUserMock->method('getAuthContainer')->willReturn([$driver]);
+        $this->currentUserMock->expects($this->never())->method('revokeRememberMe');
+
+        $result = $this->changePassword('correct-current', 'NewPass123!', 'NewPass123!');
+        $this->assertInstanceOf(JsonResponse::class, $result);
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $result->getStatusCode());
+    }
+
     private function requireTwoFactorStepUp(
         bool $isCurrentlyEnabled,
         bool $willBeEnabled,

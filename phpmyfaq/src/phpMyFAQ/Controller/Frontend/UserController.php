@@ -173,6 +173,11 @@ final class UserController extends AbstractController
             $changed = true;
         }
 
+        if ($changed) {
+            // Revoke the remember-me token issued under the old password (see User::changePassword()).
+            $this->currentUser->revokeRememberMe();
+        }
+
         return $changed;
     }
 
