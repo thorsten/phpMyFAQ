@@ -7182,16 +7182,16 @@
         },
         {
             "name": "symfony/routing",
-            "version": "v8.1.9",
+            "version": "v8.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/routing.git",
-                "reference": "edb06fb6ced3c1faaaed74c1c6c0f176a614c330"
+                "reference": "41b32d2c5d907abe2c3ffaa7a112dd7492353822"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/routing/zipball/edb06fb6ced3c1faaaed74c1c6c0f176a614c330",
-                "reference": "edb06fb6ced3c1faaaed74c1c6c0f176a614c330",
+                "url": "https://api.github.com/repos/symfony/routing/zipball/41b32d2c5d907abe2c3ffaa7a112dd7492353822",
+                "reference": "41b32d2c5d907abe2c3ffaa7a112dd7492353822",
                 "shasum": ""
             },
             "require": {
@@ -7238,7 +7238,7 @@
                 "url"
             ],
             "support": {
-                "source": "https://github.com/symfony/routing/tree/v8.1.9"
+                "source": "https://github.com/symfony/routing/tree/v8.1.10"
             },
             "funding": [
                 {
@@ -7258,7 +7258,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-12T12:37:13+00:00"
+            "time": "2026-10-26T21:55:04+00:00"
         },
         {
             "name": "symfony/service-contracts",
