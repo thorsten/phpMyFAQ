@@ -28,6 +28,37 @@ class SystemTest extends TestCase
         );
     }
 
+    public function testHasDatabaseConfigurationDetectsLegacyConfigDuringUpgrade(): void
+    {
+        $root = sys_get_temp_dir() . '/pmf-system-' . uniqid();
+        mkdir($root . '/content/core/config', 0777, true);
+        mkdir($root . '/config', 0777, true);
+
+        $configDirs = [$root . '/content/core/config', $root . '/config'];
+
+        try {
+            // Fresh package: no database.php anywhere, installer may run
+            $this->assertFalse(System::hasDatabaseConfiguration($configDirs));
+
+            // 3.x upgrade window: only the legacy file exists, installer must refuse
+            file_put_contents($root . '/config/database.php', '<?php');
+            $this->assertTrue(System::hasDatabaseConfiguration($configDirs));
+
+            // 4.x layout
+            unlink($root . '/config/database.php');
+            file_put_contents($root . '/content/core/config/database.php', '<?php');
+            $this->assertTrue(System::hasDatabaseConfiguration($configDirs));
+        } finally {
+            @unlink($root . '/config/database.php');
+            @unlink($root . '/content/core/config/database.php');
+            rmdir($root . '/content/core/config');
+            rmdir($root . '/content/core');
+            rmdir($root . '/content');
+            rmdir($root . '/config');
+            rmdir($root);
+        }
+    }
+
     public function testIsSqlite(): void
     {
         $this->assertTrue(System::isSqlite('sqlite3'));

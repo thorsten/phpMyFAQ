@@ -422,11 +422,47 @@ class System
     }
 
     /**
-     * Checks for an installed phpMyFAQ version
+     * Checks for an installed phpMyFAQ version.
+     *
+     * Returns true when the installer may run, i.e. no database configuration
+     * exists that the application would boot from.
      */
     public function checkInstallation(): bool
     {
-        return !is_file(PMF_ROOT_DIR . '/content/core/config/database.php');
+        $configDirs = [
+            PMF_ROOT_DIR . '/content/core/config', // 4.x single instance configuration
+            PMF_ROOT_DIR . '/config', // 3.x single instance configuration
+        ];
+
+        if (defined('PMF_CONFIG_DIR')) {
+            $configDirs[] = (string) PMF_CONFIG_DIR;
+        }
+
+        if (defined('PMF_LEGACY_CONFIG_DIR')) {
+            $configDirs[] = (string) PMF_LEGACY_CONFIG_DIR;
+        }
+
+        return !self::hasDatabaseConfiguration($configDirs);
+    }
+
+    /**
+     * Returns true if a database.php exists in any of the given configuration
+     * directories. The installer must refuse to run when any configuration the
+     * application boots from exists, including the legacy 3.x config/ directory,
+     * otherwise a live site in the middle of a 3.x upgrade could be re-installed
+     * by an unauthenticated request.
+     *
+     * @param string[] $configDirs
+     */
+    public static function hasDatabaseConfiguration(array $configDirs): bool
+    {
+        foreach (array_unique($configDirs) as $configDir) {
+            if (is_file($configDir . '/database.php')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
