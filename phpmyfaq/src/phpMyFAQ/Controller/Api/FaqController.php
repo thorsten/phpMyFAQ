@@ -157,7 +157,6 @@ final class FaqController extends AbstractApiController
         'question' => 'Is there life after death?',
         'answer' => 'Maybe!',
         'author' => 'phpMyFAQ User',
-        'email' => 'user@example.org',
         'comment' => 'y',
         'updated' => '2019-10-10 17:54',
         'dateStart' => '00000000000000',
@@ -195,7 +194,7 @@ final class FaqController extends AbstractApiController
                 return $this->json($result, Response::HTTP_NOT_FOUND);
             }
 
-            return $this->json($result, Response::HTTP_OK);
+            return $this->json($this->toPublicRecord($result), Response::HTTP_OK);
         });
     }
 
@@ -535,7 +534,6 @@ final class FaqController extends AbstractApiController
             'title' => 'Is there life after death?',
             'content' => 'Maybe!',
             'author' => 'phpMyFAQ User',
-            'email' => 'user@example.org',
             'comment' => 'y',
             'updated' => '2009-10-10 17:54:00',
             'dateStart' => '00000000000000',
@@ -601,12 +599,7 @@ final class FaqController extends AbstractApiController
                 $pagination->offset,
             );
 
-            // The "private notes" field is reserved for editors (FAQ_EDIT) and must never
-            // leave the server through this unauthenticated endpoint.
-            $publicRecords = array_map(static function (array $record): array {
-                unset($record['notes']);
-                return $record;
-            }, array_values($this->faq->faqRecords));
+            $publicRecords = array_map($this->toPublicRecord(...), array_values($this->faq->faqRecords));
 
             return $this->paginatedResponse(
                 $request,
@@ -992,6 +985,29 @@ final class FaqController extends AbstractApiController
         $this->faq->update($faqEntity);
 
         return $this->json(['stored' => true], Response::HTTP_OK);
+    }
+
+    /**
+     * Strips fields that must never leave the server through the unauthenticated public
+     * endpoints: the author e-mail address and the editor-only "private notes" field.
+     * The author name follows the same "Author visibility (GDPR)" rule as the HTML
+     * frontend and the PDF export: a registered user who opted out is shown as "n/a".
+     *
+     * @param array<string, mixed> $record
+     *
+     * @return array<string, mixed>
+     */
+    private function toPublicRecord(array $record): array
+    {
+        if (array_key_exists('author', $record)) {
+            $record['author'] = $this->currentUser->getUserVisibilityByEmail((string) ($record['email'] ?? ''))
+                ? $record['author']
+                : 'n/a';
+        }
+
+        unset($record['email'], $record['notes']);
+
+        return $record;
     }
 
     private function applyRequestLanguage(Request $request): void

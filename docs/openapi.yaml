@@ -532,7 +532,6 @@ paths:
                 question: 'Is there life after death?'
                 answer: Maybe!
                 author: 'phpMyFAQ User'
-                email: user@example.org
                 comment: 'y'
                 updated: '2019-10-10 17:54'
                 dateStart: '00000000000000'
@@ -793,7 +792,6 @@ paths:
                       title: 'Is there life after death?',
                       content: Maybe!,
                       author: 'phpMyFAQ User',
-                      email: user@example.org,
                       comment: 'y',
                       updated: '2009-10-10 17:54:00',
                       dateStart: '00000000000000',
@@ -1334,7 +1332,6 @@ paths:
                       header: 'Hallo, World!',
                       content: 'Hello, phpMyFAQ!',
                       authorName: 'phpMyFAQ User',
-                      authorEmail: user@example.org,
                       active: true,
                       allowComments: true,
                       link: '',

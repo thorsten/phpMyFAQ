@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
+use DateTime;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Entity\NewsMessage;
 use phpMyFAQ\Language;
+use phpMyFAQ\News;
 use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -81,6 +84,36 @@ class NewsControllerTest extends TestCase
         $response = $controller->list($this->createRequest());
 
         $this->assertNotNull($response->getContent());
+    }
+
+    /**
+     * Security regression: the author's e-mail address must never reach the unauthenticated
+     * public news endpoint (GET /news).
+     */
+    public function testListDoesNotExposeAuthorEmail(): void
+    {
+        $newsMessage = new NewsMessage()
+            ->setCreated(new DateTime())
+            ->setLanguage('en')
+            ->setHeader('Public news')
+            ->setMessage('Hello, phpMyFAQ!')
+            ->setAuthor('Jane Doe')
+            ->setEmail('jane.doe@corp.example')
+            ->setActive(true)
+            ->setComment(false);
+        $this->assertTrue(new News($this->configuration)->create($newsMessage));
+
+        $controller = new NewsController();
+        $response = $controller->list($this->createRequest());
+        $payload = json_decode((string) $response->getContent(), true);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertNotEmpty($payload['data']);
+        foreach ($payload['data'] as $item) {
+            $this->assertArrayHasKey('authorName', $item);
+            $this->assertArrayNotHasKey('authorEmail', $item);
+        }
+        $this->assertStringNotContainsString('corp.example', (string) $response->getContent());
     }
 
     public function testListReturnsEmptyArrayOn404(): void

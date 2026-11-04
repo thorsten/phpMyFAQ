@@ -1620,6 +1620,118 @@ class FaqControllerTest extends TestCase
     }
 
     /**
+     * Security regression: the author's e-mail address must never reach the unauthenticated
+     * public list endpoint (GET /faqs).
+     *
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testListDoesNotExposeAuthorEmail(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [
+            ['id' => 11, 'title' => 'Public question', 'author' => 'Jane Doe', 'email' => 'jane.doe@corp.example'],
+            ['id' => 12, 'title' => 'Another question', 'author' => 'John Doe', 'email' => 'john.doe@corp.example'],
+        ];
+        $faq->method('countAllFaqs')->willReturn(2);
+
+        $response = $this->createFaqControllerWith($faq)->list(new Request());
+        $payload = json_decode((string) $response->getContent(), true);
+
+        $this->assertSame(['Jane Doe', 'John Doe'], array_column($payload['data'], 'author'));
+        foreach ($payload['data'] as $record) {
+            $this->assertArrayNotHasKey('email', $record);
+        }
+        $this->assertStringNotContainsString('corp.example', (string) $response->getContent());
+    }
+
+    /**
+     * Security regression: the author's e-mail address must never reach the unauthenticated
+     * public single-record endpoint (GET /faq/{categoryId}/{faqId}).
+     *
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testGetByIdDoesNotExposeAuthorEmail(): void
+    {
+        $this->forceConfigurationValue('api.onlyActiveFaqs', false);
+
+        $request = new Request();
+        $request->attributes->set('faqId', '9');
+        $request->attributes->set('categoryId', '4');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getFaqByIdAndCategoryId')->willReturn([
+            'id' => 9,
+            'solution_id' => 123,
+            'status' => 'published',
+            'question' => 'Active FAQ',
+            'author' => 'Jane Doe',
+            'email' => 'jane.doe@corp.example',
+            'notes' => 'INTERNAL: ticket #4711',
+        ]);
+
+        $response = $this->createFaqControllerWith($faq)->getById($request);
+        $payload = json_decode((string) $response->getContent(), true);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('Jane Doe', $payload['author']);
+        $this->assertArrayNotHasKey('email', $payload);
+        $this->assertArrayNotHasKey('notes', $payload);
+    }
+
+    /**
+     * Security regression: the "Author visibility (GDPR)" rule of the HTML frontend and the
+     * PDF export also applies to the public API. A registered user who opted out of being
+     * visible must not be de-anonymised through GET /faq/{categoryId}/{faqId} or GET /faqs.
+     *
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testPublicEndpointsHideAuthorOfInvisibleUser(): void
+    {
+        $this->forceConfigurationValue('api.onlyActiveFaqs', false);
+
+        $request = new Request();
+        $request->attributes->set('faqId', '9');
+        $request->attributes->set('categoryId', '4');
+
+        $record = [
+            'id' => 9,
+            'solution_id' => 123,
+            'status' => 'published',
+            'question' => 'Active FAQ',
+            'author' => 'Jane Doe',
+            'email' => 'jane.doe@corp.example',
+        ];
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getFaqByIdAndCategoryId')->willReturn($record);
+        $faq->faqRecords = [$record];
+        $faq->method('countAllFaqs')->willReturn(1);
+
+        $controller = $this->createFaqControllerWith($faq);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $this->createMock(BasicPermission::class);
+        $currentUser->method('getUserId')->willReturn(-1);
+        $currentUser
+            ->expects($this->exactly(2))
+            ->method('getUserVisibilityByEmail')
+            ->with('jane.doe@corp.example')
+            ->willReturn(false);
+        new \ReflectionProperty(AbstractController::class, 'currentUser')->setValue($controller, $currentUser);
+
+        $single = json_decode((string) $controller->getById($request)->getContent(), true);
+        $this->assertSame('n/a', $single['author']);
+        $this->assertArrayNotHasKey('email', $single);
+
+        $list = json_decode((string) $controller->list(new Request())->getContent(), true);
+        $this->assertSame('n/a', $list['data'][0]['author']);
+        $this->assertArrayNotHasKey('email', $list['data'][0]);
+    }
+
+    /**
      * @param array<string, mixed> $overrides
      *
      * @throws \JsonException

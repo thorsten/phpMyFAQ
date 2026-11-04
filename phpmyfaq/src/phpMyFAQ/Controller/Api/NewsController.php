@@ -85,7 +85,6 @@ final class NewsController extends AbstractApiController
                 'header' => 'Hallo, World!',
                 'content' => 'Hello, phpMyFAQ!',
                 'authorName' => 'phpMyFAQ User',
-                'authorEmail' => 'user@example.org',
                 'active' => true,
                 'allowComments' => true,
                 'link' => '',
@@ -136,6 +135,13 @@ final class NewsController extends AbstractApiController
             sortField: $sort->getField() ?? 'datum',
             sortOrder: $sort->getOrderSql(),
         );
+
+        // The author's e-mail address must never leave the server through this
+        // unauthenticated endpoint.
+        $data = array_map(static function (array $item): array {
+            unset($item['authorEmail']);
+            return $item;
+        }, $data);
 
         // Get total count
         $total = $news->countLatestData();
