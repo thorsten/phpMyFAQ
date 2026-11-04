@@ -77,7 +77,7 @@ class HybridConfigurationStoreTest extends TestCase
 
         $store = new HybridConfigurationStore(
             $this->databaseConfigurationStore,
-            new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore),
+            new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore, 'test-identity'),
             new NullLogger(),
         );
 
@@ -102,7 +102,7 @@ class HybridConfigurationStoreTest extends TestCase
 
         $store = new HybridConfigurationStore(
             $this->databaseConfigurationStore,
-            new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore),
+            new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore, 'test-identity'),
             new NullLogger(),
         );
 
@@ -114,7 +114,7 @@ class HybridConfigurationStoreTest extends TestCase
     {
         return new HybridConfigurationStore(
             $this->databaseConfigurationStore,
-            new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore),
+            new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore, 'test-identity'),
             new NullLogger(),
             $cache,
         );

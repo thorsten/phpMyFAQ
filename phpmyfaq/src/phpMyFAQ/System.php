@@ -452,6 +452,15 @@ class System
     }
 
     /**
+     * A multisite tenant boots from its own config directory (PMF_MULTI_INSTANCE_CONFIG_DIR);
+     * only the master instance may change infrastructure settings shared with the tenants.
+     */
+    public function isMasterInstance(): bool
+    {
+        return !defined('PMF_MULTI_INSTANCE_CONFIG_DIR');
+    }
+
+    /**
      * Checks for an installed phpMyFAQ version. Returns true when no instance exists yet,
      * i.e. when the installer may run.
      *

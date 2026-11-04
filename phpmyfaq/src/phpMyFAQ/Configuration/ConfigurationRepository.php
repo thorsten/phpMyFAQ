@@ -42,7 +42,11 @@ class ConfigurationRepository
             $this->coreConfiguration->getDb(),
             $tableName,
         );
-        $settingsResolver = new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore);
+        $instanceIdentity = ConfigurationStorageSettingsResolver::instanceIdentity($tableName);
+        $settingsResolver = new ConfigurationStorageSettingsResolver(
+            $this->databaseConfigurationStore,
+            $instanceIdentity,
+        );
         $this->hybridConfigurationStore = new HybridConfigurationStore(
             $this->databaseConfigurationStore,
             $settingsResolver,
@@ -50,13 +54,8 @@ class ConfigurationRepository
             FilesystemConfigurationCache::createIfEnabled(
                 debug: Environment::isDebugMode() || System::isDevelopmentVersion(),
                 enabled: Environment::get('CONFIG_CACHE_ENABLED'),
-                cacheDir: (string) PMF_CONTENT_DIR . '/core/cache',
-                identity: sprintf(
-                    '%s|%s|%s',
-                    defined('PMF_CONFIG_DIR') ? (string) PMF_CONFIG_DIR : '',
-                    Database::getTablePrefix(),
-                    $tableName,
-                ),
+                cacheDir: PMF_CONTENT_DIR . '/core/cache',
+                identity: $instanceIdentity,
             ),
         );
     }

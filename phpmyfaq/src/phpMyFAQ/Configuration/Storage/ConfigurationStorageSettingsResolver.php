@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Configuration\Storage;
 
+use phpMyFAQ\Database;
+
 readonly class ConfigurationStorageSettingsResolver
 {
     private const string DEFAULT_REDIS_DSN = 'tcp://redis:6379?database=1';
@@ -27,7 +29,23 @@ readonly class ConfigurationStorageSettingsResolver
 
     public function __construct(
         private DatabaseConfigurationStore $databaseConfigurationStore,
+        private string $instanceIdentity,
     ) {
+    }
+
+    /**
+     * Identifies the instance whose configuration is stored: config directory, table prefix and
+     * table. Shared by the filesystem cache and the Redis hash key so that multisite tenants
+     * never see each other's configuration.
+     */
+    public static function instanceIdentity(string $tableName): string
+    {
+        return sprintf(
+            '%s|%s|%s',
+            defined('PMF_CONFIG_DIR') ? (string) PMF_CONFIG_DIR : '',
+            Database::getTablePrefix(),
+            $tableName,
+        );
     }
 
     public function resolve(): ConfigurationStorageSettings
@@ -53,6 +71,12 @@ readonly class ConfigurationStorageSettingsResolver
             $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
         }
 
-        return new ConfigurationStorageSettings($enabled, $redisDsn, $redisPrefix, $connectTimeout);
+        return new ConfigurationStorageSettings(
+            $enabled,
+            $redisDsn,
+            $redisPrefix,
+            $connectTimeout,
+            $this->instanceIdentity,
+        );
     }
 }

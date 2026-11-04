@@ -198,6 +198,14 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
         // reset without relying on the client-side "availableFields" list.
         $checkboxKeys = $this->getCheckboxKeys();
 
+        // storage.* points at the Redis server shared across a multisite setup. A tenant admin
+        // must never repoint it, otherwise they could read or overwrite the master configuration.
+        if (!$this->faqSystem->isMasterInstance()) {
+            $isNotStorageKey = static fn(string $key): bool => !str_starts_with($key, 'storage.');
+            $configurationData = array_filter($configurationData, $isNotStorageKey, ARRAY_FILTER_USE_KEY);
+            $availableFields = array_values(array_filter($availableFields, $isNotStorageKey));
+        }
+
         // Special checks
         if ($this->isTruthy($configurationData['main.enableMarkdownEditor'] ?? null)) {
             $configurationData['main.enableWysiwygEditor'] = 'false'; // Disable WYSIWYG editor if Markdown is enabled

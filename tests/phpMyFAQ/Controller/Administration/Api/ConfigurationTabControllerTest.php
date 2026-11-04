@@ -116,11 +116,19 @@ final class ConfigurationTabControllerTest extends TestCase
         parent::tearDown();
     }
 
-    private function createController(): ConfigurationTabController
+    private function createSystemStub(bool $isMasterInstance = true): System
+    {
+        $system = $this->createStub(System::class);
+        $system->method('isMasterInstance')->willReturn($isMasterInstance);
+
+        return $system;
+    }
+
+    private function createController(bool $isMasterInstance = true): ConfigurationTabController
     {
         return new ConfigurationTabController(
             $this->createStub(Language::class),
-            $this->createStub(System::class),
+            $this->createSystemStub($isMasterInstance),
             $this->createStub(ThemeManager::class),
         );
     }
@@ -129,7 +137,7 @@ final class ConfigurationTabControllerTest extends TestCase
     {
         return new ConfigurationTabController(
             $this->createStub(Language::class),
-            $this->createStub(System::class),
+            $this->createSystemStub(),
             $this->createStub(ThemeManager::class),
             $validator,
         );
@@ -139,7 +147,7 @@ final class ConfigurationTabControllerTest extends TestCase
     {
         return new ConfigurationTabController(
             $this->createStub(Language::class),
-            $this->createStub(System::class),
+            $this->createSystemStub(),
             $themeManager,
         );
     }
@@ -148,7 +156,7 @@ final class ConfigurationTabControllerTest extends TestCase
     {
         return new ConfigurationTabController(
             $language ?? $this->createStub(Language::class),
-            $this->createStub(System::class),
+            $this->createSystemStub(),
             $this->createStub(ThemeManager::class),
         );
     }
@@ -560,6 +568,103 @@ final class ConfigurationTabControllerTest extends TestCase
     }
 
     /**
+     * A tenant admin must not be able to repoint the shared Redis configuration storage:
+     * every storage.* key is dropped from the payload on a non-master instance.
+     *
+     * @throws \Exception
+     */
+    public function testSaveIgnoresStorageKeysOnTenantInstance(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $controller = $this->createController(isMasterInstance: false);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $originalPrefix = $this->configuration->get('storage.redisPrefix');
+        $originalDsn = $this->configuration->get('storage.redisDsn');
+
+        $values = [
+            'storage.useRedisForConfiguration' => 'true',
+            'storage.redisDsn' => 'tcp://redis:6379?database=1',
+            'storage.redisPrefix' => 'pmf:config:',
+            'main.titleFAQ' => 'Tenant title',
+        ];
+
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'availableFields' => json_encode(array_keys($values), JSON_THROW_ON_ERROR),
+            'edit' => $values,
+        ]);
+
+        $response = $controller->save($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('Tenant title', $this->configuration->get('main.titleFAQ'));
+        self::assertSame($originalPrefix, $this->configuration->get('storage.redisPrefix'));
+        self::assertSame($originalDsn, $this->configuration->get('storage.redisDsn'));
+        self::assertNotSame(true, $this->configuration->get('storage.useRedisForConfiguration'));
+        $this->removeCsrfCookie('configuration');
+    }
+
+    /**
+     * The "unchecked checkbox" fallback must not reset storage.* on a tenant either.
+     *
+     * @throws \Exception
+     */
+    public function testSaveKeepsStorageCheckboxOnTenantInstanceWhenListedAsAvailableField(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $this->configuration->set('storage.useRedisForConfiguration', 'true');
+
+        $controller = $this->createController(isMasterInstance: false);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'availableFields' => json_encode(['storage.useRedisForConfiguration'], JSON_THROW_ON_ERROR),
+            'edit' => [],
+        ]);
+
+        $response = $controller->save($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($this->configuration->get('storage.useRedisForConfiguration'));
+        $this->removeCsrfCookie('configuration');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSaveStillAcceptsStorageKeysOnMasterInstance(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $controller = $this->createController(isMasterInstance: true);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $values = ['storage.redisPrefix' => 'pmf:master:'];
+
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'availableFields' => json_encode(array_keys($values), JSON_THROW_ON_ERROR),
+            'edit' => $values,
+        ]);
+
+        $response = $controller->save($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('pmf:master:', $this->configuration->get('storage.redisPrefix'));
+        $this->removeCsrfCookie('configuration');
+    }
+
+    /**
      * @throws \Exception
      */
     public function testSavePersistsCheckboxAndSecurityConfigurationChanges(): void
@@ -930,10 +1035,10 @@ final class ConfigurationTabControllerTest extends TestCase
     {
         $controller = $this->createController();
 
-        self::assertSame(
-            $expected,
-            new \ReflectionMethod(ConfigurationTabController::class, 'convertToString')->invoke($controller, $value),
-        );
+        self::assertSame($expected, new \ReflectionMethod(ConfigurationTabController::class, 'convertToString')->invoke(
+            $controller,
+            $value,
+        ));
     }
 
     /**
@@ -1009,11 +1114,13 @@ final class ConfigurationTabControllerTest extends TestCase
 
         $logged = [];
         $adminLog = $this->createStub(AdminLog::class);
-        $adminLog->method('log')->willReturnCallback(static function ($user, string $message) use (&$logged): bool {
-            $logged[] = $message;
+        $adminLog
+            ->method('log')
+            ->willReturnCallback(static function ($user, string $message) use (&$logged): bool {
+                $logged[] = $message;
 
-            return true;
-        });
+                return true;
+            });
 
         $session = new Session(new MockArraySessionStorage());
         $csrfToken = Token::getInstance($session)->getTokenString('configuration');
@@ -1022,10 +1129,12 @@ final class ConfigurationTabControllerTest extends TestCase
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainerWithAdminLog($adminLog, $session));
 
-        $response = $controller->save(new Request([], [
-            'pmf-csrf-token' => $csrfToken,
-            'edit' => ['main.maintenanceMode' => $after],
-        ]));
+        $response = $controller->save(
+            new Request([], [
+                'pmf-csrf-token' => $csrfToken,
+                'edit' => ['main.maintenanceMode' => $after],
+            ]),
+        );
         $this->removeCsrfCookie('configuration');
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());

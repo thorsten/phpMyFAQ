@@ -189,10 +189,67 @@ class ClientTest extends TestCase
         $dbMock = $this->createMock(DatabaseDriver::class);
         $this->configuration->method('getDb')->willReturn($dbMock);
 
-        $dbMock->expects($this->atLeastOnce())->method('query');
+        $queries = [];
+        $dbMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): bool {
+                $queries[] = $query;
+                return true;
+            });
+        $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
 
         $this->client->setClientUrl('https://tenant.example.com');
         $this->client->createClientDatabase($prefix, TenantIsolationMode::PREFIX);
+
+        $this->assertContains('INSERT INTO tenant_faqconfig SELECT * FROM faqconfig', $queries);
+        $this->assertTenantConfigurationIsReset($queries, 'tenant_');
+    }
+
+    /**
+     * The tenant starts with a copy of the master faqconfig, so the Redis configuration
+     * storage switch and every secret must be reset before the tenant admin gets access.
+     *
+     * @param string[] $queries
+     */
+    private function assertTenantConfigurationIsReset(array $queries, string $targetPrefix): void
+    {
+        $this->assertContains(
+            sprintf(
+                "UPDATE %sfaqconfig SET config_value = 'false' WHERE config_name = 'storage.useRedisForConfiguration'",
+                $targetPrefix,
+            ),
+            $queries,
+        );
+        $this->assertContains(
+            sprintf(
+                "UPDATE %sfaqconfig SET config_value = '' WHERE config_name IN ('api.apiClientToken', "
+                . "'keycloak.clientSecret', 'mail.mailgunApiKey', 'mail.remoteSMTPPassword', 'mail.sendgridApiKey', "
+                . "'mail.sesSecretAccessKey', 'oidc.clientSecret', 'push.vapidPrivateKey', 'push.vapidPublicKey')",
+                $targetPrefix,
+            ),
+            $queries,
+        );
+        $this->assertTrue(
+            $this->queryMatches($queries, sprintf("/^UPDATE %sfaqconfig SET config_value = '[0-9a-f]{32}' WHERE config_name = 'main.phpMyFAQToken'\$/", preg_quote(
+                $targetPrefix,
+                '/',
+            ))),
+            'The tenant must get its own main.phpMyFAQToken',
+        );
+    }
+
+    /**
+     * @param string[] $queries
+     */
+    private function queryMatches(array $queries, string $pattern): bool
+    {
+        foreach ($queries as $query) {
+            if (preg_match($pattern, $query) === 1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function testCreateClientDatabaseWithSchemaMode(): void
@@ -231,6 +288,7 @@ class ClientTest extends TestCase
             "UPDATE \"tenant_schema\".faqconfig SET config_value = 'https://tenant.example.com' WHERE config_name = 'main.referenceURL'",
             $queries,
         );
+        $this->assertTenantConfigurationIsReset($queries, '"tenant_schema".');
     }
 
     public function testCreateClientDatabaseWithSchemaModeThrowsOnQueryFailure(): void
@@ -333,6 +391,7 @@ class ClientTest extends TestCase
             "UPDATE faqconfig SET config_value = 'https://tenant.example.com' WHERE config_name = 'main.referenceURL'",
             $queries,
         );
+        $this->assertTenantConfigurationIsReset($queries, '');
     }
 
     /**
@@ -675,7 +734,10 @@ class ClientTest extends TestCase
         new \ReflectionProperty(Database::class, 'dbType')->setValue(null, $dbType);
 
         try {
-            $this->assertSame($expected, new ReflectionMethod($this->client, 'quoteIdentifier')->invoke($this->client, $name));
+            $this->assertSame($expected, new ReflectionMethod($this->client, 'quoteIdentifier')->invoke(
+                $this->client,
+                $name,
+            ));
         } finally {
             new \ReflectionProperty(Database::class, 'dbType')->setValue(null, $previous);
         }
@@ -736,8 +798,15 @@ class ClientTest extends TestCase
         $logger
             ->expects($this->once())
             ->method('error')
-            ->with('Failed to create tenant prefix tables.', $this->callback(static fn(array $context): bool => $context['prefix'] === 'broken_'
-                && $context['message'] === 'insert failed'));
+            ->with(
+                'Failed to create tenant prefix tables.',
+                $this->callback(
+                    static fn(array $context): bool => (
+                        $context['prefix'] === 'broken_'
+                        && $context['message'] === 'insert failed'
+                    ),
+                ),
+            );
         $this->configuration->method('getLogger')->willReturn($logger);
 
         $this->expectException(Exception::class);
@@ -889,11 +958,10 @@ class ClientTest extends TestCase
         $dbMock->method('escape')->willReturnCallback(static fn(string $value): string => $value);
 
         try {
-            new ReflectionMethod(Client::class, 'insertRows')->invoke(
-                $this->client,
-                'tenant_faqconfig',
-                ['not a row', (object) ['config_name' => 'main.language', 'config_value' => null]],
-            );
+            new ReflectionMethod(Client::class, 'insertRows')->invoke($this->client, 'tenant_faqconfig', [
+                'not a row',
+                (object) ['config_name' => 'main.language', 'config_value' => null],
+            ]);
         } finally {
             new \ReflectionProperty(Database::class, 'dbType')->setValue(null, $previous);
         }

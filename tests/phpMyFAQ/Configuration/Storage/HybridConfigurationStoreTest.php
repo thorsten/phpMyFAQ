@@ -43,7 +43,7 @@ final class HybridConfigurationStoreTest extends TestCase
         ?FilesystemConfigurationCache $cache = null,
     ): HybridConfigurationStore {
         // An unreachable loopback port makes every Redis call fail fast with a RuntimeException.
-        $settings = new ConfigurationStorageSettings($redisEnabled, 'tcp://127.0.0.1:1', 'pmf:test:', 0.1);
+        $settings = new ConfigurationStorageSettings($redisEnabled, 'tcp://127.0.0.1:1', 'pmf:test:', 0.1, 'test-identity');
 
         $resolver = $this->createStub(ConfigurationStorageSettingsResolver::class);
         $resolver->method('resolve')->willReturn($settings);

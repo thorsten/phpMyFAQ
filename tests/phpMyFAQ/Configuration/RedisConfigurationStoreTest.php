@@ -104,13 +104,17 @@ namespace phpMyFAQ\Configuration {
     #[UsesClass(PdoSqlite::class)]
     class RedisConfigurationStoreTest extends TestCase
     {
+        private const string IDENTITY = 'config-dir|pmf_|faqconfig';
+
+        private const string HASH_KEY = 'pmf:config:' . '5ad07a586a16cd4a0ade032a2e7cb3346e55562b' . ':items';
+
         private ConfigurationStorageSettings $settings;
 
         protected function setUp(): void
         {
             parent::setUp();
 
-            $this->settings = new ConfigurationStorageSettings(true, 'tcp://redis:6379?database=1', 'pmf:config:', 1.0);
+            $this->settings = new ConfigurationStorageSettings(true, 'tcp://redis:6379?database=1', 'pmf:config:', 1.0, self::IDENTITY);
             RedisConfigurationStoreTestShim::$redisExtensionLoaded = true;
             RedisConfigurationStoreTestShim::$redisExtensionVersion = '6.1.0';
         }
@@ -130,12 +134,34 @@ namespace phpMyFAQ\Configuration {
             $redis
                 ->expects($this->once())
                 ->method('hSet')
-                ->with('pmf:config:items', 'main.language', 'en')
+                ->with(self::HASH_KEY, 'main.language', 'en')
                 ->willReturn(1);
 
             $store = $this->createStoreWithRedisClient($redis);
 
             $this->assertTrue($store->updateConfigValue('main.language', 'en'));
+        }
+
+        public function testHashKeyIsScopedToInstanceIdentity(): void
+        {
+            $otherInstance = new ConfigurationStorageSettings(
+                true,
+                'tcp://redis:6379?database=1',
+                'pmf:config:',
+                1.0,
+                'config-dir|tenant_|faqconfig',
+            );
+
+            $redis = $this->createMock(Redis::class);
+            $redis
+                ->expects($this->once())
+                ->method('hSet')
+                ->with('pmf:config:' . sha1('config-dir|tenant_|faqconfig') . ':items', 'main.titleFAQ', 'tenant')
+                ->willReturn(1);
+
+            $store = $this->createStoreWithRedisClient($redis, $otherInstance);
+
+            $this->assertTrue($store->updateConfigValue('main.titleFAQ', 'tenant'));
         }
 
         public function testUpdateConfigValueWrapsRedisExceptions(): void
@@ -156,7 +182,7 @@ namespace phpMyFAQ\Configuration {
             $redis
                 ->expects($this->once())
                 ->method('hGetAll')
-                ->with('pmf:config:items')
+                ->with(self::HASH_KEY)
                 ->willReturn([
                     'main.language' => 'en',
                     'main.titleFAQ' => 'Test FAQ',
@@ -188,14 +214,14 @@ namespace phpMyFAQ\Configuration {
             $redis
                 ->expects($this->once())
                 ->method('hSetNx')
-                ->with('pmf:config:items', 'new.key', 'value')
+                ->with(self::HASH_KEY, 'new.key', 'value')
                 ->willReturn(true);
             $redis->expects($this->exactly(3))->method('hDel')->willReturnOnConsecutiveCalls(0, 1, 1);
             $redis->expects($this->exactly(2))->method('hGet')->willReturnOnConsecutiveCalls(false, 'stored-value');
             $redis
                 ->expects($this->once())
                 ->method('hSet')
-                ->with('pmf:config:items', 'new.name', 'stored-value')
+                ->with(self::HASH_KEY, 'new.name', 'stored-value')
                 ->willReturn(1);
 
             $store = $this->createStoreWithRedisClient($redis);
@@ -213,12 +239,12 @@ namespace phpMyFAQ\Configuration {
             $redis
                 ->expects($this->once())
                 ->method('hGet')
-                ->with('pmf:config:items', 'old.name')
+                ->with(self::HASH_KEY, 'old.name')
                 ->willReturn('stored-value');
             $redis
                 ->expects($this->once())
                 ->method('hSet')
-                ->with('pmf:config:items', 'new.name', 'stored-value')
+                ->with(self::HASH_KEY, 'new.name', 'stored-value')
                 ->willReturn(1);
             $redis->expects($this->exactly(2))->method('hDel')->willReturnOnConsecutiveCalls(0, 1);
 
@@ -248,11 +274,11 @@ namespace phpMyFAQ\Configuration {
             ];
 
             $redis->expects($this->once())->method('multi');
-            $redis->expects($this->once())->method('del')->with('pmf:config:items');
+            $redis->expects($this->once())->method('del')->with(self::HASH_KEY);
             $redis
                 ->expects($this->once())
                 ->method('hMSet')
-                ->with('pmf:config:items', [
+                ->with(self::HASH_KEY, [
                     'main.language' => 'en',
                     'main.titleFAQ' => 'Test FAQ',
                 ]);
@@ -293,7 +319,7 @@ namespace phpMyFAQ\Configuration {
         public function testFetchAllThrowsRuntimeExceptionForInvalidDsn(): void
         {
             $store = new RedisConfigurationStore(
-                new ConfigurationStorageSettings(true, 'not-a-valid-dsn', 'pmf:config:', 1.0),
+                new ConfigurationStorageSettings(true, 'not-a-valid-dsn', 'pmf:config:', 1.0, self::IDENTITY),
             );
 
             $this->expectException(RuntimeException::class);
@@ -304,7 +330,7 @@ namespace phpMyFAQ\Configuration {
         public function testFetchAllThrowsRuntimeExceptionForUnsupportedScheme(): void
         {
             $store = new RedisConfigurationStore(
-                new ConfigurationStorageSettings(true, 'http://localhost:6379', 'pmf:config:', 1.0),
+                new ConfigurationStorageSettings(true, 'http://localhost:6379', 'pmf:config:', 1.0, self::IDENTITY),
             );
 
             $this->expectException(RuntimeException::class);
@@ -323,9 +349,11 @@ namespace phpMyFAQ\Configuration {
             $store->fetchAll();
         }
 
-        private function createStoreWithRedisClient(Redis $redis): RedisConfigurationStore
-        {
-            $store = new RedisConfigurationStore($this->settings);
+        private function createStoreWithRedisClient(
+            Redis $redis,
+            ?ConfigurationStorageSettings $settings = null,
+        ): RedisConfigurationStore {
+            $store = new RedisConfigurationStore($settings ?? $this->settings);
 
             $reflectionProperty = new ReflectionProperty($store, 'redisClient');
             $reflectionProperty->setValue($store, $redis);

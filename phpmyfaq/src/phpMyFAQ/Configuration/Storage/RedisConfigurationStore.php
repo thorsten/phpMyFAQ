@@ -180,7 +180,9 @@ class RedisConfigurationStore implements ConfigurationStoreInterface
 
     private function getHashKey(): string
     {
-        return $this->settings->redisPrefix . 'items';
+        // Scoped per instance, like the filesystem cache: a multisite tenant that shares the Redis
+        // server, prefix and DSN with the master must never read or write the master's hash.
+        return $this->settings->redisPrefix . sha1($this->settings->instanceIdentity) . ':items';
     }
 
     private function createRedisClient(): Redis

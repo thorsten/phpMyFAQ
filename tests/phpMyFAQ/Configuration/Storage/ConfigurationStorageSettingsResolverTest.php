@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Configuration\Storage;
 
+use phpMyFAQ\Database;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -11,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ConfigurationStorageSettingsResolver::class)]
 #[UsesClass(ConfigurationStorageSettings::class)]
+#[UsesClass(Database::class)]
 final class ConfigurationStorageSettingsResolverTest extends TestCase
 {
     /**
@@ -21,7 +23,7 @@ final class ConfigurationStorageSettingsResolverTest extends TestCase
         $store = $this->createStub(DatabaseConfigurationStore::class);
         $store->method('fetchValue')->willReturnCallback(static fn(string $name): ?string => $values[$name] ?? null);
 
-        return new ConfigurationStorageSettingsResolver($store);
+        return new ConfigurationStorageSettingsResolver($store, 'config-dir|pmf_|faqconfig');
     }
 
     public function testResolveFallsBackToDefaultsWhenNothingIsConfigured(): void
@@ -32,6 +34,25 @@ final class ConfigurationStorageSettingsResolverTest extends TestCase
         $this->assertSame('tcp://redis:6379?database=1', $settings->redisDsn);
         $this->assertSame('pmf:config:', $settings->redisPrefix);
         $this->assertSame(1.0, $settings->connectTimeout);
+    }
+
+    public function testResolvePassesTheInstanceIdentityThrough(): void
+    {
+        $settings = $this->createResolver([])->resolve();
+
+        $this->assertSame('config-dir|pmf_|faqconfig', $settings->instanceIdentity);
+    }
+
+    public function testInstanceIdentityCombinesConfigDirectoryTablePrefixAndTable(): void
+    {
+        Database::setTablePrefix('tenant_');
+        try {
+            $identity = ConfigurationStorageSettingsResolver::instanceIdentity('faqconfig');
+        } finally {
+            Database::setTablePrefix('');
+        }
+
+        $this->assertSame(PMF_CONFIG_DIR . '|tenant_|faqconfig', $identity);
     }
 
     public function testResolveUsesConfiguredValues(): void

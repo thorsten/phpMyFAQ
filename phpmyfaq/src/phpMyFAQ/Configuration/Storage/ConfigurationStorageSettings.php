@@ -26,6 +26,7 @@ readonly class ConfigurationStorageSettings
         public string $redisDsn,
         public string $redisPrefix,
         public float $connectTimeout,
+        public string $instanceIdentity,
     ) {
     }
 }

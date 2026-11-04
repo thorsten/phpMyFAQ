@@ -44,7 +44,7 @@ class ConfigurationStorageSettingsResolverTest extends TestCase
 
     public function testResolveReturnsDefaultsIfKeysAreMissing(): void
     {
-        $resolver = new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore);
+        $resolver = new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore, 'test-identity');
         $settings = $resolver->resolve();
 
         $this->assertFalse($settings->enabled);
@@ -60,7 +60,7 @@ class ConfigurationStorageSettingsResolverTest extends TestCase
         $this->databaseConfigurationStore->insert('storage.redisPrefix', 'custom:cfg:');
         $this->databaseConfigurationStore->insert('storage.redisConnectTimeout', '2.5');
 
-        $resolver = new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore);
+        $resolver = new ConfigurationStorageSettingsResolver($this->databaseConfigurationStore, 'test-identity');
         $settings = $resolver->resolve();
 
         $this->assertTrue($settings->enabled);

@@ -80,7 +80,10 @@ final class SystemInformationController extends AbstractAdministrationController
         if (extension_loaded('redis')) {
             try {
                 $databaseStore = new DatabaseConfigurationStore($this->configuration->getDb());
-                $settingsResolver = new ConfigurationStorageSettingsResolver($databaseStore);
+                $settingsResolver = new ConfigurationStorageSettingsResolver(
+                    $databaseStore,
+                    ConfigurationStorageSettingsResolver::instanceIdentity('faqconfig'),
+                );
                 $settings = $settingsResolver->resolve();
 
                 if ($settings->enabled) {

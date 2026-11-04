@@ -35,6 +35,21 @@ use phpMyFAQ\Instance\Database as InstanceDatabase;
 /* @mago-expect lint:too-many-methods - covers the full tenant-provisioning lifecycle; split planned with the multi-tenancy rework */
 class Client extends Instance
 {
+    /**
+     * Secrets that must never be copied from the master into a new tenant.
+     */
+    private const array TENANT_SECRET_CONFIG_KEYS = [
+        'api.apiClientToken',
+        'keycloak.clientSecret',
+        'mail.mailgunApiKey',
+        'mail.remoteSMTPPassword',
+        'mail.sendgridApiKey',
+        'mail.sesSecretAccessKey',
+        'oidc.clientSecret',
+        'push.vapidPrivateKey',
+        'push.vapidPublicKey',
+    ];
+
     private ?Filesystem $filesystem = null;
 
     private readonly string $clientFolder;
@@ -312,6 +327,10 @@ class Client extends Instance
             $sourcePrefix,
         );
 
+        foreach ($this->tenantConfigurationResetQueries($targetPrefix) as $query) {
+            $this->executeSchemaQuery($query, 'UPDATE faqconfig', $targetPrefix, $sourcePrefix);
+        }
+
         $this->executeSchemaQuery(
             sprintf('INSERT INTO %sfaqright SELECT * FROM %sfaqright', $targetPrefix, $sourcePrefix),
             'INSERT faqright',
@@ -429,9 +448,41 @@ class Client extends Instance
                 $prefix,
                 $this->configuration->getDb()->escape($this->clientTemplateSet),
             ));
+        foreach ($this->tenantConfigurationResetQueries($prefix) as $query) {
+            $this->configuration->getDb()->query($query);
+        }
 
         $this->insertRows($prefix . 'faqright', $seedRows['faqright'] ?? []);
         $this->insertRows($prefix . 'faquser_right', $seedRows['faquser_right'] ?? []);
+    }
+
+    /**
+     * The tenant starts from a copy of the master faqconfig. Everything that would let the
+     * tenant admin reach the master instance is reset: the shared Redis configuration storage
+     * stays off until the tenant opts in, every secret is blanked and the tenant gets its own
+     * phpMyFAQ token.
+     *
+     * @return list<string>
+     */
+    private function tenantConfigurationResetQueries(string $targetPrefix): array
+    {
+        $secretKeys = implode(', ', array_map(static fn(string $key): string => sprintf(
+            "'%s'",
+            $key,
+        ), self::TENANT_SECRET_CONFIG_KEYS));
+
+        return [
+            sprintf(
+                "UPDATE %sfaqconfig SET config_value = 'false' WHERE config_name = 'storage.useRedisForConfiguration'",
+                $targetPrefix,
+            ),
+            sprintf("UPDATE %sfaqconfig SET config_value = '' WHERE config_name IN (%s)", $targetPrefix, $secretKeys),
+            sprintf(
+                "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'main.phpMyFAQToken'",
+                $targetPrefix,
+                bin2hex(random_bytes(16)),
+            ),
+        ];
     }
 
     private function insertRows(string $table, array $rows): void
@@ -524,6 +575,9 @@ class Client extends Instance
                     $prefix,
                     $this->configuration->getDb()->escape($this->clientTemplateSet),
                 ));
+            foreach ($this->tenantConfigurationResetQueries($prefix) as $query) {
+                $this->configuration->getDb()->query($query);
+            }
             $this->configuration
                 ->getDb()
                 ->query(sprintf(

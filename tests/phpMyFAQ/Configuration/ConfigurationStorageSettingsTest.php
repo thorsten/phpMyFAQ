@@ -13,11 +13,18 @@ class ConfigurationStorageSettingsTest extends TestCase
 {
     public function testConstructorAssignsAllValues(): void
     {
-        $settings = new ConfigurationStorageSettings(true, 'tcp://redis:6379?database=5', 'custom:config:', 2.5);
+        $settings = new ConfigurationStorageSettings(
+            true,
+            'tcp://redis:6379?database=5',
+            'custom:config:',
+            2.5,
+            'config-dir|pmf_|faqconfig',
+        );
 
         $this->assertTrue($settings->enabled);
         $this->assertSame('tcp://redis:6379?database=5', $settings->redisDsn);
         $this->assertSame('custom:config:', $settings->redisPrefix);
         $this->assertSame(2.5, $settings->connectTimeout);
+        $this->assertSame('config-dir|pmf_|faqconfig', $settings->instanceIdentity);
     }
 }
