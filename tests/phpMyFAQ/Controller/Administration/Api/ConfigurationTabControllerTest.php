@@ -619,6 +619,11 @@ final class ConfigurationTabControllerTest extends TestCase
         $csrfToken = Token::getInstance($session)->getTokenString('configuration');
         $this->setCsrfCookie('configuration', $csrfToken);
 
+        // Enabling Redis storage makes every later configuration write try to connect. The seeded
+        // DSN points at the "redis" host, which has no DNS entry on CI and makes ext-redis emit a
+        // PHP warning per attempt; a closed local port fails fast and silently instead.
+        $this->configuration->set('storage.redisDsn', 'tcp://127.0.0.1:1?database=1');
+        $this->configuration->set('storage.redisConnectTimeout', '0.1');
         $this->configuration->set('storage.useRedisForConfiguration', 'true');
 
         $controller = $this->createController(isMasterInstance: false);
