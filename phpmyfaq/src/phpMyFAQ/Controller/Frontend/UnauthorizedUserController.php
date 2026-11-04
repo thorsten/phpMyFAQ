@@ -22,9 +22,11 @@ namespace phpMyFAQ\Controller\Frontend;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -48,8 +50,11 @@ final class UnauthorizedUserController
      * Step 1: request a password reset link.
      *
      * Always returns a generic success response so the endpoint cannot be used
-     * to enumerate accounts. When username and email match an existing user,
-     * a signed reset link is emailed to the on-file address. The link contains
+     * to enumerate accounts. When username and email match an existing local
+     * user, a signed reset link is emailed to the on-file address. Accounts
+     * authenticated by an external source (LDAP, Entra ID, SSO, HTTP, WebAuthn)
+     * are skipped: phpMyFAQ does not own their password, and resetting the
+     * local one would bypass the identity provider (see isLocalAccount()). The link contains
      * an HMAC bound to the user's current password hash, which makes it
      * effectively single-use (changing the password invalidates outstanding
      * tokens).
@@ -76,6 +81,10 @@ final class UnauthorizedUserController
         }
 
         if (!hash_equals((string) $user->getUserData('email'), $email)) {
+            return $genericSuccess;
+        }
+
+        if (!$this->isLocalAccount($user)) {
             return $genericSuccess;
         }
 
@@ -158,6 +167,12 @@ final class UnauthorizedUserController
             return $invalidToken;
         }
 
+        // Checked again here, not only when the link is requested: the account's
+        // auth source may have changed while the token was outstanding.
+        if (!$this->isLocalAccount($user)) {
+            return $invalidToken;
+        }
+
         $passHash = $this->getUserPasswordHash($user->getLogin());
         if ($passHash === null) {
             return $invalidToken;
@@ -177,6 +192,24 @@ final class UnauthorizedUserController
         }
 
         return $this->json(['success' => Translation::get(key: 'resetpwd_success')], Response::HTTP_OK);
+    }
+
+    /**
+     * Whether phpMyFAQ owns the account's password.
+     *
+     * Every external auth driver provisions its users through User::createUser()
+     * with an empty password, which stores a random hash in faquserlogin. That
+     * hash exists only to satisfy the schema; the real credential lives in the
+     * directory or identity provider. Letting the public reset flow overwrite it
+     * would hand out a local password that skips the provider's MFA, conditional
+     * access and deprovisioning (CWE-640). Accounts created before auth_source
+     * was recorded carry an empty value and are treated as local.
+     */
+    private function isLocalAccount(User $user): bool
+    {
+        $authSource = $user->getUserAuthSource();
+
+        return $authSource === '' || $authSource === AuthenticationSourceType::AUTH_LOCAL->value;
     }
 
     private function signResetToken(int $userId, int $expires, string $passHash): string
