@@ -37,7 +37,7 @@ class FaqControllerTest extends TestCase
         parent::tearDown();
     }
 
-    private function buildController(Faq $faq): FaqController
+    private function buildController(Faq $faq, bool $authorVisible = true): FaqController
     {
         $reflection = new ReflectionClass(FaqController::class);
         $controller = $reflection->newInstanceWithoutConstructor();
@@ -60,6 +60,7 @@ class FaqControllerTest extends TestCase
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('getUserId')->willReturn(self::EDITOR_ID);
+        $currentUser->method('getUserVisibilityByEmail')->willReturn($authorVisible);
         $currentUser->perm = $permission;
 
         $container = $this->createMock(ContainerBuilder::class);
@@ -171,5 +172,74 @@ class FaqControllerTest extends TestCase
         $this->assertArrayNotHasKey('notes', $payload[0]);
         $this->assertSame('Public question', $payload[0]['title']);
         $this->assertStringNotContainsString('ACME', $response->getContent());
+    }
+
+    /**
+     * Security regression (GHSA-j4rc-96xj-gvqc follow-up): the public FAQ list must not leak the
+     * author's e-mail address, and must honour the author's "not visible" (GDPR) choice.
+     */
+    public function testListDoesNotExposeEmailAndHonoursAuthorVisibility(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [
+            [
+                'id' => 1,
+                'category_id' => 1,
+                'lang' => 'en',
+                'title' => 'Public question',
+                'content' => 'Public answer',
+                'author' => 'Jane Doe',
+                'email' => 'jane.doe@corp.example',
+            ],
+        ];
+
+        $response = $this->buildController($faq, authorVisible: false)->list();
+        $payload = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertArrayNotHasKey('email', $payload[0]);
+        $this->assertSame('n/a', $payload[0]['author']);
+        $this->assertStringNotContainsString('jane.doe@corp.example', $response->getContent());
+        $this->assertStringNotContainsString('Jane Doe', $response->getContent());
+    }
+
+    public function testListKeepsAuthorNameOfVisibleUser(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [
+            ['id' => 1, 'author' => 'Jane Doe', 'email' => 'jane.doe@corp.example'],
+        ];
+
+        $response = $this->buildController($faq)->list();
+        $payload = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame('Jane Doe', $payload[0]['author']);
+        $this->assertArrayNotHasKey('email', $payload[0]);
+    }
+
+    public function testGetByIdDoesNotExposeEmailAndHonoursAuthorVisibility(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getFaqByIdAndCategoryId')->willReturn([
+            'id' => 12,
+            'solution_id' => 1011,
+            'question' => 'Public question',
+            'answer' => 'Public answer',
+            'author' => 'Jane Doe',
+            'email' => 'jane.doe@corp.example',
+        ]);
+
+        $request = Request::create('/api/v3.1/faq/1/12', 'GET');
+        $request->attributes->set('categoryId', 1);
+        $request->attributes->set('faqId', 12);
+
+        $response = $this->buildController($faq, authorVisible: false)->getById($request);
+        $payload = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertSame(12, $payload['id']);
+        $this->assertArrayNotHasKey('email', $payload);
+        $this->assertSame('n/a', $payload['author']);
+        $this->assertStringNotContainsString('jane.doe@corp.example', $response->getContent());
     }
 }

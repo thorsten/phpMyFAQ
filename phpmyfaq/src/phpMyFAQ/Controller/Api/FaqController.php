@@ -141,7 +141,6 @@ final class FaqController extends AbstractController
             "question": "Is there life after death?",
             "answer": "Maybe!",
             "author": "phpMyFAQ User",
-            "email": "user@example.org",
             "comment": "y",
             "updated": "2019-10-10 17:54",
             "dateStart": "00000000000000",
@@ -173,7 +172,7 @@ final class FaqController extends AbstractController
             return $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($result, Response::HTTP_OK);
+        return $this->json($this->sanitizePublicRecord($result), Response::HTTP_OK);
     }
 
     /**
@@ -457,7 +456,6 @@ final class FaqController extends AbstractController
                 "title": "Is there life after death?",
                 "content": "Maybe!",
                 "author": "phpMyFAQ User",
-                "email": "user@example.org",
                 "comment": "y",
                 "updated": "2009-10-10 17:54:00",
                 "dateStart": "00000000000000",
@@ -482,11 +480,7 @@ final class FaqController extends AbstractController
             'lang' => $this->configuration->getLanguage()->getLanguage(),
             'fcr.category_id' => 'IS NOT NULL',
         ]);
-        // The private editor notes must never leave the system through the public API.
-        $result = array_map(static function (array $record): array {
-            unset($record['notes']);
-            return $record;
-        }, $faq->faqRecords);
+        $result = array_map($this->sanitizePublicRecord(...), $faq->faqRecords);
 
         if ($result === []) {
             return $this->json($result, Response::HTTP_NOT_FOUND);
@@ -811,5 +805,26 @@ final class FaqController extends AbstractController
         $faq->update($faqEntity);
 
         return $this->json(['stored' => true], Response::HTTP_OK);
+    }
+
+    /**
+     * Strips the fields that must never leave the system through the public API: the private
+     * editor notes and the author's e-mail address. The author name honours the user's
+     * "Author visibility (GDPR)" choice, exactly like the HTML frontend and the PDF export.
+     *
+     * @param array<string, mixed> $record
+     * @return array<string, mixed>
+     */
+    private function sanitizePublicRecord(array $record): array
+    {
+        if (array_key_exists('author', $record)) {
+            $record['author'] = $this->currentUser->getUserVisibilityByEmail((string) ($record['email'] ?? ''))
+                ? $record['author']
+                : 'n/a';
+        }
+
+        unset($record['notes'], $record['email']);
+
+        return $record;
     }
 }

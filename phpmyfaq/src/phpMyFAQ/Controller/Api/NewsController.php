@@ -21,7 +21,6 @@ namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\News;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -55,7 +54,6 @@ final class NewsController extends AbstractController
                 "header": "Hallo, World!",
                 "content": "Hello, phpMyFAQ!",
                 "authorName": "phpMyFAQ User",
-                "authorEmail": "user@example.org",
                 "dateStart": "0",
                 "dateEnd": "99991231235959",
                 "active": true,
@@ -70,11 +68,17 @@ final class NewsController extends AbstractController
     #[OA\Response(response: 404, description: 'If no news are stored.', content: new OA\JsonContent(example: []))]
     public function list(): JsonResponse
     {
-        $news = new News($this->configuration);
+        $news = $this->container->get(id: 'phpmyfaq.news');
         $result = $news->getLatestData(showArchive: false, active: true, forceConfLimit: true);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json($result, Response::HTTP_NOT_FOUND);
         }
+
+        // The author's e-mail address must never leave the system through the public API.
+        $result = array_map(static function (array $item): array {
+            unset($item['authorEmail']);
+            return $item;
+        }, $result);
 
         return $this->json($result, Response::HTTP_OK);
     }
