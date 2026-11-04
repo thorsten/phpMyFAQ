@@ -35,6 +35,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -70,6 +71,7 @@ readonly class WebExceptionListener
             $throwable instanceof NotFoundHttpException,
                 => $this->handleNotFound($event),
             $throwable instanceof UnauthorizedHttpException => new RedirectResponse(url: $loginPath),
+            $throwable instanceof MethodNotAllowedHttpException => $this->handleMethodNotAllowed($throwable),
             $throwable instanceof ForbiddenException => $this->handleErrorResponse(
                 'An error occurred: :message at line :line at :file',
                 'Forbidden',
@@ -146,6 +148,24 @@ readonly class WebExceptionListener
                 $throwable,
             );
         }
+    }
+
+    /**
+     * A request with the wrong HTTP method is a client error, not a server error, and the response
+     * has to advertise the allowed methods.
+     */
+    private function handleMethodNotAllowed(MethodNotAllowedHttpException $throwable): Response
+    {
+        $response = $this->handleErrorResponse(
+            'An error occurred: :message at line :line at :file',
+            'Method Not Allowed',
+            Response::HTTP_METHOD_NOT_ALLOWED,
+            $throwable,
+        );
+
+        $response->headers->add($throwable->getHeaders());
+
+        return $response;
     }
 
     private function handleServerError(Throwable $throwable): Response

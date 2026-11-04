@@ -107,10 +107,18 @@ final class SetupControllerWebTest extends ControllerWebTestCase
     public function testSetupInstallPageRenders(): void
     {
         $this->hideDatabaseConfig();
-        $response = $this->requestPublic('GET', '/setup/install');
+        $response = $this->requestPublic('POST', '/setup/install');
 
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('Installation', $response);
+    }
+
+    public function testSetupInstallRejectsGetRequests(): void
+    {
+        $this->hideDatabaseConfig();
+        $response = $this->requestPublic('GET', '/setup/install');
+
+        self::assertResponseStatusCodeSame(405, $response);
     }
 
     public function testSetupPageReturnsForbiddenWhenAlreadyInstalled(): void
@@ -125,7 +133,7 @@ final class SetupControllerWebTest extends ControllerWebTestCase
     public function testSetupInstallPageReturnsForbiddenWhenAlreadyInstalled(): void
     {
         $this->createDatabaseConfig();
-        $response = $this->requestPublic('GET', '/setup/install');
+        $response = $this->requestPublic('POST', '/setup/install');
 
         self::assertResponseStatusCodeSame(403, $response);
         self::assertResponseContains('phpMyFAQ is already installed.', $response);

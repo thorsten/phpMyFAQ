@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -154,6 +155,19 @@ class WebExceptionListenerTest extends TestCase
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 
+    public function testHandlesMethodNotAllowedException(): void
+    {
+        $request = Request::create('/setup/install');
+        $event = $this->createEvent($request, new MethodNotAllowedHttpException(['POST'], 'Method not allowed'));
+
+        $this->listener->onKernelException($event);
+
+        $response = $event->getResponse();
+        $this->assertNotNull($response);
+        $this->assertEquals(Response::HTTP_METHOD_NOT_ALLOWED, $response->getStatusCode());
+        $this->assertEquals('POST', $response->headers->get('Allow'));
+    }
+
     public function testHandlesGenericException(): void
     {
         $request = Request::create('/page.html');
@@ -229,7 +243,11 @@ class WebExceptionListenerTest extends TestCase
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->willReturnCallback(static fn(string $id): bool => $id === 'phpmyfaq.configuration');
-        $container->expects($this->once())->method('get')->with('phpmyfaq.configuration')->willReturn(new \stdClass());
+        $container
+            ->expects($this->once())
+            ->method('get')
+            ->with('phpmyfaq.configuration')
+            ->willReturn(new \stdClass());
 
         $listener = new WebExceptionListener($container);
         $event = $this->createEvent(Request::create('/admin/settings.html'), new ForbiddenException('No permission'));
@@ -249,7 +267,9 @@ class WebExceptionListenerTest extends TestCase
         };
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('has')->willReturnCallback(static fn(string $id): bool => $id === PageNotFoundController::class);
+        $container
+            ->method('has')
+            ->willReturnCallback(static fn(string $id): bool => $id === PageNotFoundController::class);
         $container->method('get')->willReturn($controller);
 
         $listener = new WebExceptionListener($container);
@@ -273,7 +293,9 @@ class WebExceptionListenerTest extends TestCase
         };
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('has')->willReturnCallback(static fn(string $id): bool => $id === PageNotFoundController::class);
+        $container
+            ->method('has')
+            ->willReturnCallback(static fn(string $id): bool => $id === PageNotFoundController::class);
         $container->method('get')->willReturn($controller);
 
         $listener = new WebExceptionListener($container);

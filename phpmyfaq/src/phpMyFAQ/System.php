@@ -452,7 +452,13 @@ class System
     }
 
     /**
-     * Checks for an installed phpMyFAQ version
+     * Checks for an installed phpMyFAQ version. Returns true when no instance exists yet,
+     * i.e. when the installer may run.
+     *
+     * Every config directory the application would boot from is inspected, not only the
+     * current one: an instance upgraded from phpMyFAQ 3.x still runs from the legacy
+     * config directory until the 4.0.0-alpha migration copies the file over. Treating such
+     * an instance as "not installed" would let the installer overwrite a live site.
      */
     public function checkInstallation(): bool
     {
@@ -460,7 +466,33 @@ class System
             ? (string) PMF_CONFIG_DIR
             : (string) PMF_ROOT_DIR . '/content/core/config';
 
-        return !is_file($configDir . '/database.php');
+        // A multi-instance config directory never falls back to the legacy location.
+        $legacyConfigDir = null;
+        if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
+            $legacyConfigDir = defined('PMF_LEGACY_CONFIG_DIR')
+                ? PMF_LEGACY_CONFIG_DIR
+                : (string) PMF_ROOT_DIR . '/config';
+        }
+
+        return !self::hasDatabaseConfigFile($configDir, $legacyConfigDir);
+    }
+
+    /**
+     * Tells whether a database configuration file exists in any of the given config directories.
+     */
+    public static function hasDatabaseConfigFile(string $configDir, ?string $legacyConfigDir): bool
+    {
+        foreach ([$configDir, $legacyConfigDir] as $directory) {
+            if ($directory === null) {
+                continue;
+            }
+
+            if (is_file(rtrim($directory, characters: '/\\') . '/database.php')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

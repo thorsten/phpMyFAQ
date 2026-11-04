@@ -112,4 +112,22 @@ class InstallerTest extends TestCase
             @rmdir($tempDir);
         }
     }
+
+    public function testStartInstallThrowsExceptionForLegacyConfigInTargetRoot(): void
+    {
+        $tempDir = sys_get_temp_dir() . '/pmf-installer-test-' . uniqid();
+        mkdir($tempDir . '/config', 0777, true);
+        touch($tempDir . '/config/database.php');
+
+        try {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage('phpMyFAQ is already installed!');
+
+            $this->installer->startInstall(['rootDir' => $tempDir]);
+        } finally {
+            @unlink($tempDir . '/config/database.php');
+            @rmdir($tempDir . '/config');
+            @rmdir($tempDir);
+        }
+    }
 }

@@ -24,6 +24,7 @@
  */
 
 use Composer\Autoload\ClassLoader;
+use phpMyFAQ\Bootstrap\ConfigDirectoryResolver;
 use phpMyFAQ\Controller\Frontend\SetupController;
 use phpMyFAQ\Environment;
 use phpMyFAQ\EventListener\RouterListener;
@@ -71,6 +72,13 @@ $loader->addPsr4('phpMyFAQ\\', PMF_SRC_DIR . '/phpMyFAQ');
 $loader->register();
 
 //
+// Define PMF_CONFIG_DIR and PMF_LEGACY_CONFIG_DIR exactly like the application bootstrap, so the
+// installer sees every config directory the application would boot from. Without this, an instance
+// still running from the legacy phpMyFAQ 3.x config directory looks uninstalled to the installer.
+//
+ConfigDirectoryResolver::resolve();
+
+//
 // Initialize environment configuration
 //
 Environment::init();
@@ -95,13 +103,15 @@ try {
 
 $routes = new RouteCollection();
 
+// The #[Route] attributes of the controller are not evaluated here, so the HTTP methods have to be
+// restricted explicitly: the installation is a state-changing action and must not run on a GET.
 $routeDefinitions = [
-    'public.setup.index' => ['/', SetupController::class, 'index'],
-    'public.setup.install' => ['/install', SetupController::class, 'install'],
+    'public.setup.index' => ['/', SetupController::class, 'index', ['GET']],
+    'public.setup.install' => ['/install', SetupController::class, 'install', ['POST']],
 ];
 
-foreach ($routeDefinitions as $name => [$path, $controller, $action]) {
-    $routes->add($name, new Route($path, ['_controller' => [$controller, $action]]));
+foreach ($routeDefinitions as $name => [$path, $controller, $action, $methods]) {
+    $routes->add($name, new Route($path, ['_controller' => [$controller, $action]], methods: $methods));
 }
 
 $dispatcher = new EventDispatcher();
@@ -115,12 +125,7 @@ $dispatcher->addListener(KernelEvents::EXCEPTION, [$webExceptionListener, 'onKer
 $securityHeadersListener = new SecurityHeadersListener();
 $dispatcher->addListener(KernelEvents::RESPONSE, [$securityHeadersListener, 'onKernelResponse'], -100);
 
-$kernel = new HttpKernel(
-    $dispatcher,
-    new ControllerResolver(),
-    new RequestStack(),
-    new ArgumentResolver(),
-);
+$kernel = new HttpKernel($dispatcher, new ControllerResolver(), new RequestStack(), new ArgumentResolver());
 
 try {
     $request = Request::createFromGlobals();

@@ -242,6 +242,40 @@ class SystemTest extends TestCase
         $this->assertIsBool($result);
     }
 
+    public function testHasDatabaseConfigFileDetectsCurrentAndLegacyConfigDirectory(): void
+    {
+        $tempDir = sys_get_temp_dir() . '/pmf-system-test-' . uniqid();
+        $configDir = $tempDir . '/content/core/config';
+        $legacyConfigDir = $tempDir . '/config';
+        mkdir($configDir, 0777, true);
+        mkdir($legacyConfigDir, 0777, true);
+
+        try {
+            $this->assertFalse(System::hasDatabaseConfigFile($configDir, $legacyConfigDir));
+            $this->assertFalse(System::hasDatabaseConfigFile($configDir, null));
+
+            // An instance upgraded from phpMyFAQ 3.x only has the legacy file.
+            touch($legacyConfigDir . '/database.php');
+            $this->assertTrue(System::hasDatabaseConfigFile($configDir, $legacyConfigDir));
+            $this->assertFalse(System::hasDatabaseConfigFile($configDir, null));
+
+            touch($configDir . '/database.php');
+            $this->assertTrue(System::hasDatabaseConfigFile($configDir, $legacyConfigDir));
+            $this->assertTrue(System::hasDatabaseConfigFile($configDir, null));
+
+            // Trailing separators must not change the result.
+            $this->assertTrue(System::hasDatabaseConfigFile($configDir . '/', $legacyConfigDir . '/'));
+        } finally {
+            @unlink($configDir . '/database.php');
+            @unlink($legacyConfigDir . '/database.php');
+            @rmdir($legacyConfigDir);
+            @rmdir($configDir);
+            @rmdir($tempDir . '/content/core');
+            @rmdir($tempDir . '/content');
+            @rmdir($tempDir);
+        }
+    }
+
     public function testGetMissingExtensions(): void
     {
         $system = new System();

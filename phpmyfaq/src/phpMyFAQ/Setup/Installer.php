@@ -215,8 +215,8 @@ class Installer extends Setup
     public function startInstall(?array $setup = null): void
     {
         // An explicit root directory (programmatic or test installs) is checked for its own
-        // marker file; the web installer defers to System::checkInstallation(), which honours
-        // PMF_CONFIG_DIR exactly like the setup controller that called us.
+        // marker files; the web installer defers to System::checkInstallation(), which honours
+        // PMF_CONFIG_DIR and PMF_LEGACY_CONFIG_DIR exactly like the setup controller that called us.
         $rootDir = $setup['rootDir'] ?? null;
         $alreadyInstalled = $rootDir !== null
             ? $this->isAlreadyInstalled((string) $rootDir)
@@ -267,6 +267,10 @@ class Installer extends Setup
 
     private function isAlreadyInstalled(string $rootDir): bool
     {
-        return is_file(rtrim($rootDir, DIRECTORY_SEPARATOR) . '/content/core/config/database.php');
+        $rootDir = rtrim($rootDir, DIRECTORY_SEPARATOR);
+
+        // The legacy phpMyFAQ 3.x location counts as installed, too: the application boots from it
+        // until the 4.0.0-alpha migration moves the file into content/core/config.
+        return is_file($rootDir . '/content/core/config/database.php') || is_file($rootDir . '/config/database.php');
     }
 }

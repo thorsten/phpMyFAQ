@@ -88,7 +88,7 @@ final class SetupController
      * @throws TemplateException
      * @throws \Exception
      */
-    #[Route(path: '/setup/install', name: 'public.setup.install', methods: ['GET'])]
+    #[Route(path: '/setup/install', name: 'public.setup.install', methods: ['POST'])]
     public function install(): Response
     {
         $system = new System();
