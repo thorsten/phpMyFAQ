@@ -8,6 +8,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Kernel;
 use phpMyFAQ\Mail;
@@ -547,5 +548,57 @@ class UnauthorizedUserControllerTest extends TestCase
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * Regression: an account provisioned by an external identity provider (OIDC here) gets a
+     * random local hash from createUser(). The reset flow must neither mail a token for such an
+     * account nor accept a token forged from that hash, otherwise anyone reading the mailbox
+     * could give the account a local password and bypass the identity provider entirely.
+     *
+     * @throws Exception
+     */
+    public function testResetFlowRefusesExternallyProvisionedAccount(): void
+    {
+        $provisioned = new CurrentUser($this->configuration);
+        $this->assertTrue($provisioned->createUser('oidc-alice', ''));
+        $this->assertTrue($provisioned->setUserData(['email' => 'alice@corp.example']));
+        $this->assertTrue($provisioned->setAuthSource(AuthenticationSourceType::AUTH_OIDC->value));
+        $userId = $provisioned->getUserId();
+
+        $db = $this->configuration->getDb();
+        $row = $db->fetchArray($db->query("SELECT pass FROM faquserlogin WHERE login = 'oidc-alice'"));
+        $this->assertIsArray($row);
+        $storedHash = (string) $row['pass'];
+        $this->assertNotSame('', $storedHash);
+
+        $mail = $this->createMock(Mail::class);
+        $mail->expects($this->never())->method('send');
+
+        $tokenService = new PasswordResetTokenService();
+        $controller = $this->makeController(new CurrentUser($this->configuration), $mail, $tokenService);
+
+        $issue = $controller->requestReset($this->jsonRequest([
+            'username' => 'oidc-alice',
+            'email' => 'alice@corp.example',
+        ]));
+        $this->assertSame(Response::HTTP_OK, $issue->getStatusCode());
+
+        $forged = $tokenService->issue($userId, $storedHash);
+        $reset = $controller->reset($this->jsonRequest([
+            'u' => $userId,
+            'exp' => $forged['expires'],
+            'sig' => $forged['signature'],
+            'password' => 'Attacker123!',
+            'password_repeat' => 'Attacker123!',
+        ]));
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $reset->getStatusCode());
+        $payload = json_decode((string) $reset->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(Translation::get('resetpwd_err_invalid'), $payload['error']);
+
+        $after = $db->fetchArray($db->query("SELECT pass FROM faquserlogin WHERE login = 'oidc-alice'"));
+        $this->assertIsArray($after);
+        $this->assertSame($storedHash, $after['pass']);
     }
 }

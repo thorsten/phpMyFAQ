@@ -23,6 +23,7 @@ namespace phpMyFAQ;
 
 use Exception;
 use phpMyFAQ\Auth\AuthDriverInterface;
+use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
@@ -227,6 +228,15 @@ class User
     public function getUserAuthSource(): string
     {
         return $this->authSource;
+    }
+
+    /**
+     * Whether phpMyFAQ owns the loaded account's password. Accounts created before
+     * auth_source existed carry an empty value and are local as well.
+     */
+    public function isLocallyAuthenticated(): bool
+    {
+        return $this->authSource === '' || $this->authSource === AuthenticationSourceType::AUTH_LOCAL->value;
     }
 
     /**
@@ -980,12 +990,14 @@ class User
      *
      * Used as the per-user signing key for password-reset tokens: the token is
      * implicitly invalidated as soon as the password changes. Returns an empty
-     * string for non-local auth sources (LDAP, Keycloak, OAuth2, ...) since the
-     * password is not owned by phpMyFAQ in that case.
+     * string when the loaded account's auth_source is an external identity
+     * (LDAP, Keycloak, OIDC, Entra ID, SSO, HTTP, WebAuthn): phpMyFAQ does not
+     * own that password, and the random local hash written at provisioning time
+     * must never let a reset hand such an account a local password.
      */
     public function getEncryptedPassword(): string
     {
-        if ($this->getAuthSource('name') !== 'database') {
+        if (!$this->isLocallyAuthenticated()) {
             return '';
         }
 
