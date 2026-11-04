@@ -462,8 +462,7 @@ final class FaqController extends AbstractController
                 "updated": "2009-10-10 17:54:00",
                 "dateStart": "00000000000000",
                 "dateEnd": "99991231235959",
-                "created": "2008-09-03T21:30:17+02:00",
-                "notes": ""
+                "created": "2008-09-03T21:30:17+02:00"
             }
         ]',
     ))]
@@ -483,9 +482,13 @@ final class FaqController extends AbstractController
             'lang' => $this->configuration->getLanguage()->getLanguage(),
             'fcr.category_id' => 'IS NOT NULL',
         ]);
-        $result = $faq->faqRecords;
+        // The private editor notes must never leave the system through the public API.
+        $result = array_map(static function (array $record): array {
+            unset($record['notes']);
+            return $record;
+        }, $faq->faqRecords);
 
-        if ((is_countable($result) ? count($result) : 0) === 0) {
+        if ($result === []) {
             return $this->json($result, Response::HTTP_NOT_FOUND);
         }
 

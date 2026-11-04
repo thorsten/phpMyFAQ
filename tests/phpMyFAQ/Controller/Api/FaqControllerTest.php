@@ -46,10 +46,12 @@ class FaqControllerTest extends TestCase
         $language->method('getLanguage')->willReturn('en');
 
         $configuration = $this->createMock(Configuration::class);
-        $configuration->method('get')->willReturnCallback(static fn(string $item) => match ($item) {
-            'api.apiClientToken' => self::TOKEN,
-            default => null,
-        });
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $item) => match ($item) {
+                'api.apiClientToken' => self::TOKEN,
+                default => null,
+            });
         $configuration->method('getLanguage')->willReturn($language);
 
         // An authenticated editor holding the global "edit FAQ" right.
@@ -61,10 +63,12 @@ class FaqControllerTest extends TestCase
         $currentUser->perm = $permission;
 
         $container = $this->createMock(ContainerBuilder::class);
-        $container->method('get')->willReturnCallback(static fn(string $id) => match ($id) {
-            'phpmyfaq.faq' => $faq,
-            default => null,
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(static fn(string $id) => match ($id) {
+                'phpmyfaq.faq' => $faq,
+                default => null,
+            });
 
         $parent = $reflection->getParentClass();
         $parent->getProperty('container')->setValue($controller, $container);
@@ -139,5 +143,33 @@ class FaqControllerTest extends TestCase
 
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSame(['stored' => true], json_decode($response->getContent(), true));
+    }
+
+    /**
+     * Security regression: the public list endpoint must not expose the private editor notes
+     * ("only visible for editors") to anonymous API clients.
+     */
+    public function testListDoesNotExposePrivateNotes(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [
+            [
+                'id' => 1,
+                'category_id' => 1,
+                'lang' => 'en',
+                'title' => 'Public question',
+                'content' => 'Public answer',
+                'notes' => 'INTERNAL: customer ACME escalated, ticket #4711',
+            ],
+        ];
+
+        $response = $this->buildController($faq)->list();
+        $payload = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertCount(1, $payload);
+        $this->assertArrayNotHasKey('notes', $payload[0]);
+        $this->assertSame('Public question', $payload[0]['title']);
+        $this->assertStringNotContainsString('ACME', $response->getContent());
     }
 }
