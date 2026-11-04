@@ -83,6 +83,34 @@ final class UserPasswordKeyTest extends TestCase
         }
     }
 
+    #[DataProvider('externalAuthSources')]
+    public function testOnlyLdapAccountsMayFallBackToALocalPassword(string $authSource): void
+    {
+        $user = new User($this->configuration);
+        $this->assertTrue($user->createUser('external-' . $authSource, ''));
+        $this->assertTrue($user->setAuthSource($authSource));
+
+        $reloaded = new User($this->configuration);
+        $this->assertTrue($reloaded->getUserByLogin('external-' . $authSource, false));
+
+        $this->assertSame(
+            $authSource === AuthenticationSourceType::AUTH_LDAP->value,
+            $reloaded->mayAuthenticateWithLocalPassword(),
+        );
+    }
+
+    public function testLocalAndLegacyAccountsMayAuthenticateWithALocalPassword(): void
+    {
+        $user = new User($this->configuration);
+        $this->assertTrue($user->getUserById(1, true));
+        $this->assertTrue($user->mayAuthenticateWithLocalPassword());
+
+        $this->assertTrue($user->setAuthSource(''));
+        $legacy = new User($this->configuration);
+        $this->assertTrue($legacy->getUserById(1, true));
+        $this->assertTrue($legacy->mayAuthenticateWithLocalPassword());
+    }
+
     public function testEncryptedPasswordIsTheStoredHashOfALocallyProvisionedUser(): void
     {
         $user = new User($this->configuration);

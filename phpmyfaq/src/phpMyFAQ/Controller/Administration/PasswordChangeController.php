@@ -26,6 +26,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -73,7 +74,7 @@ final class PasswordChangeController extends AbstractAdministrationController
         }
 
         $auth = $this->auth;
-        $authSource = $auth->selectAuth($this->currentUser->getAuthSource('name') ?? '');
+        $authSource = $auth->selectAuth(User::LOCAL_AUTH_DRIVER);
         $authSource->getEncryptionContainer((string) $this->currentUser->getAuthData('encType'));
 
         $authSource->disableReadOnly();

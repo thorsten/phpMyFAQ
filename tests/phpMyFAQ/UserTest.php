@@ -670,10 +670,6 @@ class UserTest extends TestCase
     public function testGetUserByIdLoadsUserDataOnSuccess(): void
     {
         $this->setPrivateProperty('authData', [
-            'authSource' => [
-                'name' => 'local',
-                'type' => 'local',
-            ],
             'encType' => User::DEFAULT_ENCRYPTION_TYPE,
             'readOnly' => false,
         ]);

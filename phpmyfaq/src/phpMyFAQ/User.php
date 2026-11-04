@@ -43,6 +43,9 @@ class User
 {
     final public const string DEFAULT_ENCRYPTION_TYPE = 'hash';
 
+    /** Name of the driver (see Auth::selectAuth()) that owns the local faquserlogin passwords. */
+    final public const string LOCAL_AUTH_DRIVER = 'database';
+
     final public const string ERROR_USER_ADD = 'Account could not be created. ';
 
     final public const string ERROR_USER_CANNOT_CREATE_USER = 'User account could not be created. ';
@@ -119,15 +122,11 @@ class User
     protected array $authContainer = [];
 
     /**
-     * Default Authentication properties.
+     * Default properties of the local authentication driver.
      *
-     * @var array<string, array<string, string>|string|false>
+     * @var array<string, string|false>
      */
     private array $authData = [
-        'authSource' => [
-            'name' => 'database',
-            'type' => 'local',
-        ],
         'encType' => self::DEFAULT_ENCRYPTION_TYPE,
         'readOnly' => false,
     ];
@@ -182,7 +181,7 @@ class User
         $this->authContainer = [];
         $auth = new Auth($this->configuration);
 
-        $selectedAuth = $auth->selectAuth($this->getAuthSource('name') ?? 'database');
+        $selectedAuth = $auth->selectAuth(self::LOCAL_AUTH_DRIVER);
         $selectedAuth->getEncryptionContainer(
             (string) ($this->getAuthData('encType') ?? self::DEFAULT_ENCRYPTION_TYPE),
         );
@@ -191,7 +190,7 @@ class User
             $selectedAuth->enableReadOnly();
         }
 
-        $this->addAuth($selectedAuth, $this->getAuthSource('type') ?? 'local');
+        $this->addAuth($selectedAuth, AuthenticationSourceType::AUTH_LOCAL->value);
 
         // additionally, set given $auth objects
         foreach ($this->authContainer as $name => $authObject) {
@@ -217,14 +216,6 @@ class User
         return true;
     }
 
-    /**
-     * Returns a specific entry from the auth data source array.
-     */
-    public function getAuthSource(string $key): ?string
-    {
-        return $this->authData['authSource'][$key] ?? null;
-    }
-
     public function getUserAuthSource(): string
     {
         return $this->authSource;
@@ -237,6 +228,18 @@ class User
     public function isLocallyAuthenticated(): bool
     {
         return $this->authSource === '' || $this->authSource === AuthenticationSourceType::AUTH_LOCAL->value;
+    }
+
+    /**
+     * Whether the local database driver may authenticate the loaded account. An
+     * account that an identity provider (OIDC, Keycloak, Entra ID, SSO, HTTP,
+     * WebAuthn) provisioned only ever carries a random local hash; accepting a
+     * local password for it would bypass the provider's MFA and deprovisioning.
+     * LDAP accounts keep the local fallback for a directory that is unreachable.
+     */
+    public function mayAuthenticateWithLocalPassword(): bool
+    {
+        return $this->isLocallyAuthenticated() || $this->authSource === AuthenticationSourceType::AUTH_LDAP->value;
     }
 
     /**

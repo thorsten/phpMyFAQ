@@ -30,6 +30,7 @@ use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\SessionWrapper;
 use phpMyFAQ\User;
@@ -190,6 +191,13 @@ class CurrentUser extends User
                 continue; // Login does not exist, try the next auth method
             }
 
+            // The local driver must not authenticate an account owned by an identity
+            // provider: its faquserlogin row holds a random hash from provisioning, or a
+            // password set through a flaw, and the provider's controls would be skipped.
+            if ($this->isLocalAuthSource($authSource) && !$this->accountAcceptsLocalPassword($login)) {
+                continue;
+            }
+
             try {
                 $credentialsAreValid = $auth->checkCredentials($login, $password, $optData);
             } catch (AuthException) {
@@ -228,7 +236,10 @@ class CurrentUser extends User
                 }
             }
 
-            if (!$this->setAuthSource($authSource)) {
+            // A local fallback login (LDAP directory unreachable) keeps the account's
+            // external auth_source; only an external driver may claim the account.
+            $keepsAuthSource = $this->isLocalAuthSource($authSource) && !$this->isLocallyAuthenticated();
+            if (!$keepsAuthSource && !$this->setAuthSource($authSource)) {
                 $this->setSuccess(false);
                 return false;
             }
@@ -753,5 +764,23 @@ class CurrentUser extends User
         });
 
         return $authContainer;
+    }
+
+    private function isLocalAuthSource(string $authSource): bool
+    {
+        return $authSource === AuthenticationSourceType::AUTH_LOCAL->value;
+    }
+
+    /**
+     * Loads the account behind $login and decides whether the local driver may
+     * verify its password. An unknown login is left to the driver, which fails it.
+     */
+    private function accountAcceptsLocalPassword(string $login): bool
+    {
+        if (!$this->getUserByLogin($login, false)) {
+            return true;
+        }
+
+        return $this->mayAuthenticateWithLocalPassword();
     }
 }

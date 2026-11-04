@@ -313,7 +313,6 @@ final class PasswordChangeControllerTest extends TestCase
                 ['display_name', 'Test User'],
                 ['email',        'test@example.com'],
             ]);
-        $currentUser->method('getAuthSource')->willReturn('database');
         $currentUser
             ->method('getAuthData')
             ->willReturnMap([

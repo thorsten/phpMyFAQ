@@ -328,7 +328,7 @@ final class UserController extends AbstractAdministrationApiController
         }
 
         $auth = new Auth($this->configuration);
-        $authSource = $auth->selectAuth($targetUser->getAuthSource(key: 'name') ?? '');
+        $authSource = $auth->selectAuth(User::LOCAL_AUTH_DRIVER);
         $authSource->getEncryptionContainer((string) ($targetUser->getAuthData(key: 'encType') ?? ''));
 
         if (hash_equals($newPassword, $retypedPassword)) {

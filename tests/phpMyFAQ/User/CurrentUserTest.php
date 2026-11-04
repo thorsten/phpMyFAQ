@@ -600,10 +600,11 @@ class CurrentUserTest extends TestCase
 
     public function testLocalAuthenticationIsConsultedLast(): void
     {
-        $sorted = new \ReflectionMethod(CurrentUser::class, 'sortAuthContainer')->invoke(
-            $this->currentUser,
-            ['local' => 'database', 'ldap' => 'directory', 'sso' => 'single sign-on'],
-        );
+        $sorted = new \ReflectionMethod(CurrentUser::class, 'sortAuthContainer')->invoke($this->currentUser, [
+            'local' => 'database',
+            'ldap' => 'directory',
+            'sso' => 'single sign-on',
+        ]);
 
         $this->assertSame(['ldap', 'sso', 'local'], array_keys($sorted));
     }
@@ -657,10 +658,12 @@ class CurrentUserTest extends TestCase
 
     public function testLoginFailsWhenTheAuthSourceCannotBeStored(): void
     {
-        $this->configuration->getDb()->query(
-            "CREATE TRIGGER pmf_block_auth_source BEFORE UPDATE OF auth_source ON faquser "
-            . "BEGIN SELECT RAISE(ABORT, 'blocked'); END",
-        );
+        $this->configuration
+            ->getDb()
+            ->query(
+                'CREATE TRIGGER pmf_block_auth_source BEFORE UPDATE OF auth_source ON faquser '
+                . "BEGIN SELECT RAISE(ABORT, 'blocked'); END",
+            );
 
         $this->assertFalse($this->currentUser->login('admin', 'password'));
     }
@@ -698,10 +701,12 @@ class CurrentUserTest extends TestCase
 
     public function testUpdateSessionIdReportsADatabaseFailure(): void
     {
-        $this->configuration->getDb()->query(
-            "CREATE TRIGGER pmf_block_session_id BEFORE UPDATE OF session_id ON faquser "
-            . "BEGIN SELECT RAISE(ABORT, 'blocked'); END",
-        );
+        $this->configuration
+            ->getDb()
+            ->query(
+                'CREATE TRIGGER pmf_block_session_id BEFORE UPDATE OF session_id ON faquser '
+                . "BEGIN SELECT RAISE(ABORT, 'blocked'); END",
+            );
 
         $this->assertFalse($this->currentUser->updateSessionId());
         $this->assertNotEmpty($this->currentUser->errors);
@@ -710,10 +715,12 @@ class CurrentUserTest extends TestCase
     public function testDeleteFromSessionReportsADatabaseFailure(): void
     {
         $this->currentUser->login('admin', 'password');
-        $this->configuration->getDb()->query(
-            "CREATE TRIGGER pmf_block_session_id BEFORE UPDATE OF session_id ON faquser "
-            . "BEGIN SELECT RAISE(ABORT, 'blocked'); END",
-        );
+        $this->configuration
+            ->getDb()
+            ->query(
+                'CREATE TRIGGER pmf_block_session_id BEFORE UPDATE OF session_id ON faquser '
+                . "BEGIN SELECT RAISE(ABORT, 'blocked'); END",
+            );
 
         $this->assertFalse($this->currentUser->deleteFromSession());
         $this->assertFalse($this->currentUser->isLoggedIn());
@@ -734,11 +741,70 @@ class CurrentUserTest extends TestCase
 
     public function testSortAuthContainerMovesLocalBehindAnyOtherDriver(): void
     {
-        $sorted = new ReflectionMethod(CurrentUser::class, 'sortAuthContainer')->invoke(
-            $this->currentUser,
-            ['ldap' => 'directory', 'local' => 'database'],
-        );
+        $sorted = new ReflectionMethod(CurrentUser::class, 'sortAuthContainer')->invoke($this->currentUser, [
+            'ldap' => 'directory',
+            'local' => 'database',
+        ]);
 
         $this->assertSame(['ldap', 'local'], array_keys($sorted));
+    }
+
+    /**
+     * Provisions an account the way the external drivers do: createUser($login, '')
+     * followed by setAuthSource(), then plants a known local password as a reset or
+     * an admin edit would.
+     */
+    private function provisionExternalAccount(string $login, string $authSource, string $localPassword): void
+    {
+        $user = new \phpMyFAQ\User($this->configuration);
+        $this->assertTrue($user->createUser($login, ''));
+        $this->assertTrue($user->setAuthSource($authSource));
+        $this->assertTrue($user->changePassword($localPassword));
+    }
+
+    private function storedAuthSource(string $login): string
+    {
+        $db = $this->configuration->getDb();
+        $row = $db->fetchArray($db->query(sprintf(
+            "SELECT auth_source FROM %sfaquser WHERE login = '%s'",
+            Database::getTablePrefix(),
+            $db->escape($login),
+        )));
+
+        return (string) $row['auth_source'];
+    }
+
+    public function testLocalPasswordIsRefusedForAnIdentityProviderAccount(): void
+    {
+        $this->provisionExternalAccount('oidc-user', 'oidc', 'Attacker123!');
+
+        try {
+            $this->currentUser->login('oidc-user', 'Attacker123!');
+            $this->fail('An OIDC account must not authenticate with a local password.');
+        } catch (UserException $userException) {
+            $this->assertSame(\phpMyFAQ\User::ERROR_USER_INCORRECT_PASSWORD, $userException->getMessage());
+        }
+
+        $this->assertFalse($this->currentUser->isLoggedIn());
+        $this->assertSame('oidc', $this->storedAuthSource('oidc-user'));
+    }
+
+    public function testLocalPasswordStillWorksForAnLdapAccountAndKeepsItsAuthSource(): void
+    {
+        $this->provisionExternalAccount('ldap-user', 'ldap', 'Fallback123!');
+
+        $this->assertTrue($this->currentUser->login('ldap-user', 'Fallback123!'));
+        $this->assertTrue($this->currentUser->isLoggedIn());
+        $this->assertSame('ldap', $this->storedAuthSource('ldap-user'));
+    }
+
+    public function testLocalLoginMarksAnAccountWithoutAuthSourceAsLocal(): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(sprintf("UPDATE %sfaquser SET auth_source = '' WHERE user_id = 1", Database::getTablePrefix()));
+
+        $this->assertTrue($this->currentUser->login('admin', 'password'));
+        $this->assertSame('local', $this->storedAuthSource('admin'));
     }
 }
