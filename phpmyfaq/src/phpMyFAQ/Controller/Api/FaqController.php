@@ -541,7 +541,6 @@ final class FaqController extends AbstractApiController
             'dateStart' => '00000000000000',
             'dateEnd' => '99991231235959',
             'created' => '2008-09-03T21:30:17+02:00',
-            'notes' => '',
         ]],
         'meta' => [
             'pagination' => [
@@ -602,9 +601,16 @@ final class FaqController extends AbstractApiController
                 $pagination->offset,
             );
 
+            // The "private notes" field is reserved for editors (FAQ_EDIT) and must never
+            // leave the server through this unauthenticated endpoint.
+            $publicRecords = array_map(static function (array $record): array {
+                unset($record['notes']);
+                return $record;
+            }, array_values($this->faq->faqRecords));
+
             return $this->paginatedResponse(
                 $request,
-                data: array_values($this->faq->faqRecords),
+                data: $publicRecords,
                 total: $this->faq->countAllFaqs($condition),
                 pagination: $pagination,
                 options: new PaginatedResponseOptions(sort: $sort),

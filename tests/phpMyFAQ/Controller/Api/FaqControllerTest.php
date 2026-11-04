@@ -1594,6 +1594,32 @@ class FaqControllerTest extends TestCase
     }
 
     /**
+     * Security regression: the editor-only "private notes" field must never reach the
+     * unauthenticated public list endpoint (GET /faqs).
+     *
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testListDoesNotExposePrivateNotes(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [
+            ['id' => 11, 'title' => 'Public question', 'notes' => 'INTERNAL: ticket #4711'],
+            ['id' => 12, 'title' => 'Another question', 'notes' => ''],
+        ];
+        $faq->method('countAllFaqs')->willReturn(2);
+
+        $response = $this->createFaqControllerWith($faq)->list(new Request());
+        $payload = json_decode((string) $response->getContent(), true);
+
+        $this->assertSame([11, 12], array_column($payload['data'], 'id'));
+        foreach ($payload['data'] as $record) {
+            $this->assertArrayNotHasKey('notes', $record);
+        }
+        $this->assertStringNotContainsString('INTERNAL', (string) $response->getContent());
+    }
+
+    /**
      * @param array<string, mixed> $overrides
      *
      * @throws \JsonException

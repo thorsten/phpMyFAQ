@@ -799,7 +799,6 @@ paths:
                       dateStart: '00000000000000',
                       dateEnd: '99991231235959',
                       created: '2008-09-03T21:30:17+02:00',
-                      notes: '',
                     }
                 meta:
                   pagination:
