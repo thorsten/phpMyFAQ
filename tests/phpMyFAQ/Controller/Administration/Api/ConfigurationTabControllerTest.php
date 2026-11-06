@@ -87,7 +87,7 @@ class ConfigurationTabControllerTest extends TestCase
                 'false' => false,
                 default => $oldConfiguration[$item] ?? null,
             });
-        $configuration->expects($this->never())->method('replaceMainReferenceUrl');
+        $configuration->method('replaceMainReferenceUrl')->willReturn(true);
         $configuration
             ->method('update')
             ->willReturnCallback(function (array $newConfigs): bool {
@@ -230,6 +230,50 @@ class ConfigurationTabControllerTest extends TestCase
 
         $this->assertSame('false', $updated['main.enableMarkdownEditor']);
         $this->assertSame('true', $updated['main.enableWysiwygEditor']);
+    }
+
+    public function testHttpsReferenceUrlIsPersisted(): void
+    {
+        $updated = $this->save(['main.referenceURL' => 'https://new.example.test/faq']);
+
+        $this->assertSame('https://new.example.test/faq', $updated['main.referenceURL']);
+    }
+
+    public function testUpperCaseHttpSchemeReferenceUrlIsPersisted(): void
+    {
+        $updated = $this->save(['main.referenceURL' => 'HTTP://new.example.test/']);
+
+        $this->assertSame('HTTP://new.example.test/', $updated['main.referenceURL']);
+    }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function nonHttpReferenceUrlProvider(): iterable
+    {
+        // Authority-form javascript URL that passes FILTER_VALIDATE_URL (CVE-2023-5320 bypass)
+        yield 'javascript authority form' => ["javascript://x/%0Avoid(document.body.dataset.pmfPoc='executed')//"];
+        yield 'javascript mixed case' => ['JavaScript://x/%0Aalert(1)//'];
+        yield 'javascript leading whitespace' => [' javascript://x/%0Aalert(1)//'];
+        yield 'javascript tab in scheme' => ['java	script://x/%0Aalert(1)//'];
+        yield 'bare javascript' => ['javascript:alert(1)'];
+        yield 'data url' => ['data:text/html,<script>alert(1)</script>'];
+        yield 'ftp url' => ['ftp://files.example.test/'];
+        yield 'vbscript url' => ['vbscript://x/%0Amsgbox(1)'];
+        yield 'scheme relative' => ['//evil.example.test/'];
+        yield 'empty string' => [''];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('nonHttpReferenceUrlProvider')]
+    public function testNonHttpReferenceUrlIsRejectedAndStoredValueKept(string $url): void
+    {
+        $updated = $this->save(['main.referenceURL' => $url]);
+
+        $this->assertSame(
+            'https://faq.example.test',
+            $updated['main.referenceURL'],
+            'Only http(s) URLs may be stored as main.referenceURL',
+        );
     }
 
     public function testInvalidCsrfTokenIsRejected(): void

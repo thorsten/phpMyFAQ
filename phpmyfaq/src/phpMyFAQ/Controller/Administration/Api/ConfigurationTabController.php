@@ -21,10 +21,10 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Attachment\AttachmentFactory;
+use phpMyFAQ\Configuration\UrlSettings;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\PermissionHelper;
 use phpMyFAQ\Session\Token;
@@ -150,9 +150,11 @@ final class ConfigurationTabController extends AbstractController
             }
         }
 
+        // Only absolute http(s) URLs are allowed: the value is rendered into href attributes,
+        // so authority-form "javascript://..." URLs must not be stored (CVE-2023-5320).
         if (
             isset($configurationData['main.referenceURL'])
-            && is_null(Filter::filterVar($configurationData['main.referenceURL'], FILTER_VALIDATE_URL))
+            && !UrlSettings::isAllowedReferenceUrl((string) $configurationData['main.referenceURL'])
         ) {
             unset($configurationData['main.referenceURL']);
         }
