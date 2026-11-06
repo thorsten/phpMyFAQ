@@ -9,6 +9,7 @@ use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Language;
@@ -95,11 +96,42 @@ class CategoryControllerTest extends TestCase
     {
         $permission = $this->createMock(BasicPermission::class);
         $permission->method('hasPermission')->willReturn(true);
+        $permission->method('hasPermissionForCategory')->willReturn(true);
+        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn($userId);
+
+        new \ReflectionProperty(AbstractController::class, 'currentUser')->setValue($controller, $currentUser);
+    }
+
+    /**
+     * Injects a logged-in CurrentUser whose rights are limited to the given categories.
+     *
+     * @param int[] $allowedCategoryIds
+     * @throws MockException
+     */
+    private function authorizeCategoryRestrictedUser(AbstractController $controller, array $allowedCategoryIds): void
+    {
+        $permission = $this->createMock(BasicPermission::class);
+        $permission->method('hasPermission')->willReturn(true);
+        $permission
+            ->method('hasPermissionForCategory')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right, int $categoryId): bool => in_array(
+                    $categoryId,
+                    $allowedCategoryIds,
+                    true,
+                ),
+            );
+        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategoryIds);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(23);
 
         new \ReflectionProperty(AbstractController::class, 'currentUser')->setValue($controller, $currentUser);
     }
@@ -402,5 +434,125 @@ class CategoryControllerTest extends TestCase
 
         $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $this->assertSame(['stored' => false, 'error' => 'Cannot add category'], $payload);
+    }
+
+    /**
+     * Security regression: a CATEGORY_ADD right limited to certain categories only covers
+     * children of those categories.
+     *
+     * @throws \Exception
+     */
+    public function testCreateIsForbiddenWhenParentIsOutsideTheScopeOfTheAddRight(): void
+    {
+        $this->authenticateApiToken();
+
+        $category = $this->createMock(Category::class);
+        $category->expects($this->never())->method('create');
+
+        $controller = $this->createControllerWith($category);
+        $this->authorizeCategoryRestrictedUser($controller, [5]);
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "CATEGORY_ADD" permission for category 9.');
+
+        $controller->create($this->createCategoryRequest(['parent-id' => 9]));
+    }
+
+    /**
+     * Root categories stay reserved for holders of an unrestricted CATEGORY_ADD right.
+     *
+     * @throws \Exception
+     */
+    public function testCreateIsForbiddenAtRootWhenAddRightIsCategoryRestricted(): void
+    {
+        $this->authenticateApiToken();
+
+        $category = $this->createMock(Category::class);
+        $category->expects($this->never())->method('create');
+
+        $controller = $this->createControllerWith($category);
+        $this->authorizeCategoryRestrictedUser($controller, [5]);
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "CATEGORY_ADD" permission for uncategorized content.');
+
+        $controller->create($this->createCategoryRequest(['parent-id' => 0]));
+    }
+
+    /**
+     * The scope applies to the parent resolved from "parent-category-name" as well.
+     *
+     * @throws \Exception
+     */
+    public function testCreateIsForbiddenWhenMappedParentCategoryNameIsOutsideTheScope(): void
+    {
+        $this->authenticateApiToken();
+
+        $category = $this->createMock(Category::class);
+        $category->expects($this->once())->method('getCategoryIdFromName')->with('Other Team')->willReturn(9);
+        $category->expects($this->never())->method('create');
+
+        $controller = $this->createControllerWith($category);
+        $this->authorizeCategoryRestrictedUser($controller, [5]);
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "CATEGORY_ADD" permission for category 9.');
+
+        $controller->create($this->createCategoryRequest(['parent-id' => 5, 'parent-category-name' => 'Other Team']));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateStoresWhenParentIsWithinTheScopeOfTheAddRight(): void
+    {
+        $this->authenticateApiToken();
+
+        $category = $this->createMock(Category::class);
+        $category->expects($this->once())->method('create')->willReturn(125);
+
+        $controller = $this->createControllerWith($category);
+        $this->authorizeCategoryRestrictedUser($controller, [5]);
+
+        $response = $controller->create($this->createCategoryRequest(['parent-id' => 5]));
+
+        $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());
+    }
+
+    private function createCategoryRequest(array $overrides = []): Request
+    {
+        return new Request(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            json_encode(
+                $overrides
+                + [
+                    'language' => 'en',
+                    'parent-id' => 5,
+                    'category-name' => 'Scoped Category',
+                    'description' => 'Created in unit test',
+                    'is-active' => true,
+                    'show-on-homepage' => false,
+                ],
+                JSON_THROW_ON_ERROR,
+            ),
+        );
+    }
+
+    private function createControllerWith(Category $category): CategoryController
+    {
+        $permission = $this->createStub(CategoryPermission::class);
+        $permission->method('add')->willReturn(true);
+
+        $controller = new CategoryController($this->createStub(Language::class));
+        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $controller->setCategoryPermissionFactory(static fn(): CategoryPermission => $permission);
+        $controller->setOrderFactory(fn(): Order => $this->createStub(Order::class));
+
+        return $controller;
     }
 }

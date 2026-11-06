@@ -754,6 +754,11 @@ final class FaqController extends AbstractApiController
             $categoryId = $categoryIdFound;
         }
 
+        // The global right can be limited to categories and languages; the scope is part of
+        // the right, so it has to hold for the category and language the FAQ is created in.
+        $this->userHasPermissionForCategories(PermissionType::FAQ_ADD, [(int) $categoryId]);
+        $this->userHasPermissionForLanguage(PermissionType::FAQ_ADD, $languageCode);
+
         if ($this->faq->hasTitleAHash($question)) {
             $result = [
                 'stored' => false,
@@ -937,6 +942,13 @@ final class FaqController extends AbstractApiController
             return $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
+        // The "edit FAQ" right can be limited to categories and languages. The record ACL above
+        // only tells whether the requester may see the FAQ; the scope decides whether the right
+        // applies to the categories and language the FAQ lives in.
+        $faqCategories = new CategoryRelation($this->configuration, $category)->getCategories($faqId, $languageCode);
+        $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, array_keys($faqCategories));
+        $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $languageCode);
+
         if ($this->faq->hasTitleAHash($question)) {
             $result = [
                 'stored' => false,
@@ -960,10 +972,6 @@ final class FaqController extends AbstractApiController
         // Editing an FAQ and deciding that it goes live are separate rights, so a change of
         // the publication state needs FAQ_PUBLISH on top of the FAQ_EDIT guard above.
         if ($isActive !== ($currentStatus === FaqStatus::Published)) {
-            $faqCategories = new CategoryRelation($this->configuration, $category)->getCategories(
-                $faqId,
-                $languageCode,
-            );
             $this->userMayPublish(array_keys($faqCategories), $languageCode);
         }
 

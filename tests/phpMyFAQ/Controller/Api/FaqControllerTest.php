@@ -6,7 +6,9 @@ namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq;
@@ -113,6 +115,65 @@ class FaqControllerTest extends TestCase
         $currentUser->method('getUserId')->willReturn($userId);
 
         new \ReflectionProperty(AbstractController::class, 'currentUser')->setValue($controller, $currentUser);
+    }
+
+    /**
+     * Injects a logged-in CurrentUser who holds every right globally, but only for the given
+     * categories and languages: the scoped grant of the medium permission mode.
+     *
+     * @param int[] $allowedCategoryIds
+     * @param string[] $allowedLanguages
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    private function authorizeScopedUser(
+        AbstractController $controller,
+        array $allowedCategoryIds,
+        array $allowedLanguages,
+    ): void {
+        $permission = $this->createMock(BasicPermission::class);
+        $permission->method('hasPermission')->willReturn(true);
+        $permission
+            ->method('hasPermissionForCategory')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right, int $categoryId): bool => in_array(
+                    $categoryId,
+                    $allowedCategoryIds,
+                    true,
+                ),
+            );
+        $permission
+            ->method('hasPermissionForLanguage')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right, string $language): bool => in_array(
+                    $language,
+                    $allowedLanguages,
+                    true,
+                ),
+            );
+        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategoryIds);
+        $permission->method('getAllowedLanguagesForRight')->willReturn($allowedLanguages);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(23);
+
+        new \ReflectionProperty(AbstractController::class, 'currentUser')->setValue($controller, $currentUser);
+    }
+
+    private function relateFaqToCategory(int $faqId, string $language, int $categoryId): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "INSERT INTO %sfaqcategoryrelations (category_id, category_lang, record_id, record_lang)
+             VALUES (%d, '%s', %d, '%s')",
+                Database::getTablePrefix(),
+                $categoryId,
+                $language,
+                $faqId,
+                $language,
+            ));
     }
 
     /**
@@ -1465,20 +1526,25 @@ class FaqControllerTest extends TestCase
     {
         $this->authenticateApiToken();
 
-        $request = Request::create('/api/v4.0/faq/7', 'PUT', server: [
-            'CONTENT_TYPE' => 'application/json',
-        ], content: json_encode([
-            'faq-id' => 7,
-            'language' => 'en',
-            'category-id' => 1,
-            'question' => 'Updated via API?',
-            'answer' => 'Still yes.',
-            'keywords' => 'update, faq',
-            'author' => 'API Updater',
-            'email' => 'update@example.com',
-            'is-active' => 'false',
-            'is-sticky' => 'false',
-        ], JSON_THROW_ON_ERROR));
+        $request = Request::create(
+            '/api/v4.0/faq/7',
+            'PUT',
+            server: [
+                'CONTENT_TYPE' => 'application/json',
+            ],
+            content: json_encode([
+                'faq-id' => 7,
+                'language' => 'en',
+                'category-id' => 1,
+                'question' => 'Updated via API?',
+                'answer' => 'Still yes.',
+                'keywords' => 'update, faq',
+                'author' => 'API Updater',
+                'email' => 'update@example.com',
+                'is-active' => 'false',
+                'is-sticky' => 'false',
+            ], JSON_THROW_ON_ERROR),
+        );
 
         $faq = $this->createMock(Faq::class);
         $faq->method('isFaqEditableForUser')->willReturn(true);
@@ -1488,9 +1554,7 @@ class FaqControllerTest extends TestCase
         $faq
             ->expects($this->once())
             ->method('update')
-            ->with($this->callback(
-                static fn(FaqEntity $entity): bool => $entity->getStatus() === FaqStatus::Review,
-            ))
+            ->with($this->callback(static fn(FaqEntity $entity): bool => $entity->getStatus() === FaqStatus::Review))
             ->willReturn(new FaqEntity()->setId(7));
 
         $controller = new FaqController(
@@ -1584,7 +1648,12 @@ class FaqControllerTest extends TestCase
             $this->createStub(FaqMetaData::class),
             $this->configuration->getLanguage(),
         );
-        $response = $controller->list(new Request(['sort' => 'title', 'order' => 'desc', 'page' => 2, 'per_page' => 10]));
+        $response = $controller->list(new Request([
+            'sort' => 'title',
+            'order' => 'desc',
+            'page' => 2,
+            'per_page' => 10,
+        ]));
         $payload = json_decode((string) $response->getContent(), true);
 
         $this->assertSame([11, 12], array_column($payload['data'], 'id'));
@@ -1738,21 +1807,30 @@ class FaqControllerTest extends TestCase
      */
     private function createUpdateRequest(array $overrides = []): Request
     {
-        return new Request([], [], [], [], [], [], json_encode(
-            $overrides + [
-                'faq-id' => 7,
-                'language' => 'en',
-                'category-id' => 1,
-                'question' => 'Updated via API?',
-                'answer' => 'Still yes.',
-                'keywords' => 'update, faq',
-                'author' => 'API Updater',
-                'email' => 'update@example.com',
-                'is-active' => false,
-                'is-sticky' => false,
-            ],
-            JSON_THROW_ON_ERROR,
-        ));
+        return new Request(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            json_encode(
+                $overrides
+                + [
+                    'faq-id' => 7,
+                    'language' => 'en',
+                    'category-id' => 1,
+                    'question' => 'Updated via API?',
+                    'answer' => 'Still yes.',
+                    'keywords' => 'update, faq',
+                    'author' => 'API Updater',
+                    'email' => 'update@example.com',
+                    'is-active' => false,
+                    'is-sticky' => false,
+                ],
+                JSON_THROW_ON_ERROR,
+            ),
+        );
     }
 
     private function createFaqControllerWith(Faq $faq): FaqController
@@ -1837,5 +1915,171 @@ class FaqControllerTest extends TestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('{"stored":true}', (string) $response->getContent());
+    }
+
+    /**
+     * Security regression: a FAQ_EDIT right limited to certain categories must not rewrite a
+     * published FAQ in another category, even when the publication state stays untouched and
+     * the publish check therefore never runs.
+     *
+     * @throws \JsonException|\Exception
+     */
+    public function testUpdateIsForbiddenWhenEditRightIsRestrictedToOtherCategories(): void
+    {
+        $this->authenticateApiToken();
+        $this->relateFaqToCategory(7, 'en', 9);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('isFaqEditableForUser')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->never())->method('update');
+
+        $controller = $this->createFaqControllerWith($faq);
+        $this->authorizeScopedUser($controller, allowedCategoryIds: [5], allowedLanguages: ['en']);
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 9.');
+
+        $controller->update($this->createUpdateRequest(['is-active' => true]));
+    }
+
+    /**
+     * @throws \JsonException|\Exception
+     */
+    public function testUpdateIsForbiddenWhenEditRightIsRestrictedToOtherLanguages(): void
+    {
+        $this->authenticateApiToken();
+        $this->relateFaqToCategory(7, 'en', 5);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('isFaqEditableForUser')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->never())->method('update');
+
+        $controller = $this->createFaqControllerWith($faq);
+        $this->authorizeScopedUser($controller, allowedCategoryIds: [5], allowedLanguages: ['de']);
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "en".');
+
+        $controller->update($this->createUpdateRequest(['is-active' => true]));
+    }
+
+    /**
+     * @throws \JsonException|\Exception
+     */
+    public function testUpdateWritesWhenFaqIsWithinTheScopeOfTheEditRight(): void
+    {
+        $this->authenticateApiToken();
+        $this->relateFaqToCategory(7, 'en', 5);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('isFaqEditableForUser')->willReturn(true);
+        $faq->method('hasTitleAHash')->willReturn(false);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('update')->willReturn(new FaqEntity()->setId(7));
+
+        $controller = $this->createFaqControllerWith($faq);
+        $this->authorizeScopedUser($controller, allowedCategoryIds: [5], allowedLanguages: ['en']);
+
+        $response = $controller->update($this->createUpdateRequest(['is-active' => true]));
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * Security regression: a FAQ_ADD right limited to certain categories or languages must not
+     * create FAQs outside that scope.
+     *
+     * @throws \JsonException|\Exception
+     */
+    public function testCreateIsForbiddenWhenAddRightIsRestrictedToOtherCategories(): void
+    {
+        $this->authenticateApiToken();
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('create');
+
+        $controller = $this->createFaqControllerWith($faq);
+        $this->authorizeScopedUser($controller, allowedCategoryIds: [5], allowedLanguages: ['en']);
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 9.');
+
+        $controller->create($this->createCreateRequest(['category-id' => 9]));
+    }
+
+    /**
+     * @throws \JsonException|\Exception
+     */
+    public function testCreateIsForbiddenWhenAddRightIsRestrictedToOtherLanguages(): void
+    {
+        $this->authenticateApiToken();
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('create');
+
+        $controller = $this->createFaqControllerWith($faq);
+        $this->authorizeScopedUser($controller, allowedCategoryIds: [5], allowedLanguages: ['de']);
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for language "en".');
+
+        $controller->create($this->createCreateRequest(['category-id' => 5]));
+    }
+
+    /**
+     * The scope applies to the category resolved from "category-name" as well.
+     *
+     * @throws \JsonException|\Exception
+     */
+    public function testCreateIsForbiddenWhenMappedCategoryNameIsOutsideTheScope(): void
+    {
+        $this->authenticateApiToken();
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "INSERT INTO %sfaqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (1, 'en', 0, 'Other Team', '', 1, -1, 1, '', 0)",
+                Database::getTablePrefix(),
+            ));
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('create');
+
+        $controller = $this->createFaqControllerWith($faq);
+        $this->authorizeScopedUser($controller, allowedCategoryIds: [5], allowedLanguages: ['en']);
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 1.');
+
+        $controller->create($this->createCreateRequest(['category-id' => 5, 'category-name' => 'Other Team']));
+    }
+
+    private function createCreateRequest(array $overrides = []): Request
+    {
+        return new Request(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            json_encode(
+                $overrides
+                + [
+                    'language' => 'en',
+                    'category-id' => 5,
+                    'question' => 'Created via API?',
+                    'answer' => 'Yes.',
+                    'keywords' => '',
+                    'author' => 'API Author',
+                    'email' => 'api@example.com',
+                    'is-active' => false,
+                    'is-sticky' => false,
+                ],
+                JSON_THROW_ON_ERROR,
+            ),
+        );
     }
 }
