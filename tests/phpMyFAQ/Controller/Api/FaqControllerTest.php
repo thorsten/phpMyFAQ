@@ -2040,7 +2040,7 @@ class FaqControllerTest extends TestCase
             ->getDb()
             ->query(sprintf(
                 "INSERT INTO %sfaqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
-             VALUES (1, 'en', 0, 'Other Team', '', 1, -1, 1, '', 0)",
+             VALUES (9, 'en', 0, 'Other Team', '', 1, -1, 1, '', 0)",
                 Database::getTablePrefix(),
             ));
 
@@ -2051,7 +2051,7 @@ class FaqControllerTest extends TestCase
         $this->authorizeScopedUser($controller, allowedCategoryIds: [5], allowedLanguages: ['en']);
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 1.');
+        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 9.');
 
         $controller->create($this->createCreateRequest(['category-id' => 5, 'category-name' => 'Other Team']));
     }

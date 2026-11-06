@@ -47,7 +47,7 @@ final class CategoryRepositoryDatabaseTest extends TestCase
     ): void {
         $db = $this->configuration->getDb();
         $db->query(sprintf(
-            "INSERT INTO %sfaqcategories (id, lang, parent_id, name, description, user_id, group_id, active)"
+            'INSERT INTO %sfaqcategories (id, lang, parent_id, name, description, user_id, group_id, active)'
             . " VALUES (%d, '%s', 0, '%s', '%s', 1, %d, %d)",
             Database::getTablePrefix(),
             $id,
@@ -94,10 +94,13 @@ final class CategoryRepositoryDatabaseTest extends TestCase
         $this->insertCategory(9010, 'de', 'Hardware');
         $this->insertCategory(9011, 'fr', 'Logiciel', 'Programmes');
 
-        $this->assertSame([
-            'de' => 'Hardware',
-            'en' => 'Hardware  (Devices and drivers)',
-        ], $this->repository->getCategoryLanguagesTranslated(9010));
+        $this->assertSame(
+            [
+                'de' => 'Hardware',
+                'en' => 'Hardware  (Devices and drivers)',
+            ],
+            $this->repository->getCategoryLanguagesTranslated(9010),
+        );
     }
 
     public function testCategoryLanguagesTranslatedForAllCategoriesCoversEveryLanguage(): void
@@ -114,5 +117,18 @@ final class CategoryRepositoryDatabaseTest extends TestCase
     public function testCategoryLanguagesTranslatedIsEmptyForAnUnknownCategory(): void
     {
         $this->assertSame([], $this->repository->getCategoryLanguagesTranslated(424242));
+    }
+
+    /**
+     * Regression: the id was read with fetchRow(), which returns the whole row on SQLite and
+     * PostgreSQL, so every known name resolved to category 1.
+     */
+    public function testFindCategoryIdByNameReturnsTheIdOfTheMatchingCategory(): void
+    {
+        $this->insertCategory(9001, 'en', 'Public');
+        $this->insertCategory(9042, 'en', 'Other Team');
+
+        $this->assertSame(9042, $this->repository->findCategoryIdByName('Other Team'));
+        $this->assertNull($this->repository->findCategoryIdByName('Unknown Team'));
     }
 }

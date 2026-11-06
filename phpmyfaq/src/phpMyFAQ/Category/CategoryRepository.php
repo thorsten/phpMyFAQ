@@ -401,7 +401,9 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            return (int) $this->configuration->getDb()->fetchRow($result);
+            $row = $this->configuration->getDb()->fetchObject($result);
+
+            return $row instanceof \stdClass ? (int) $row->id : null;
         }
 
         return null;
