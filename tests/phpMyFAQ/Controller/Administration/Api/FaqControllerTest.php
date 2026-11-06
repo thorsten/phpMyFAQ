@@ -238,37 +238,41 @@ final class FaqControllerTest extends TestCase
         $permission
             ->method('hasPermissionForCategory')
             ->willReturnCallback(
-                static fn(int $userId, mixed $right, int $categoryId): bool => $userId === 42
-                && in_array(
-                    $right,
-                    [
-                        PermissionType::FAQ_ADD->value,
-                        PermissionType::FAQ_EDIT->value,
-                        PermissionType::FAQ_DELETE->value,
-                        PermissionType::FAQ_PUBLISH->value,
-                        PermissionType::FAQ_TRANSLATE->value,
-                    ],
-                    true,
-                )
-                && $categoryId !== 666, // sentinel forbidden category for tests
+                static fn(int $userId, mixed $right, int $categoryId): bool => (
+                    $userId === 42
+                    && in_array(
+                        $right,
+                        [
+                            PermissionType::FAQ_ADD->value,
+                            PermissionType::FAQ_EDIT->value,
+                            PermissionType::FAQ_DELETE->value,
+                            PermissionType::FAQ_PUBLISH->value,
+                            PermissionType::FAQ_TRANSLATE->value,
+                        ],
+                        true,
+                    )
+                    && $categoryId !== 666 // sentinel forbidden category for tests
+                ),
             );
         $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
         $permission
             ->method('hasPermissionForLanguage')
             ->willReturnCallback(
-                static fn(int $userId, mixed $right, string $language): bool => $userId === 42
-                && in_array(
-                    $right,
-                    [
-                        PermissionType::FAQ_ADD->value,
-                        PermissionType::FAQ_EDIT->value,
-                        PermissionType::FAQ_DELETE->value,
-                        PermissionType::FAQ_PUBLISH->value,
-                        PermissionType::FAQ_TRANSLATE->value,
-                    ],
-                    true,
-                )
-                && $language !== 'fr', // sentinel forbidden language for tests
+                static fn(int $userId, mixed $right, string $language): bool => (
+                    $userId === 42
+                    && in_array(
+                        $right,
+                        [
+                            PermissionType::FAQ_ADD->value,
+                            PermissionType::FAQ_EDIT->value,
+                            PermissionType::FAQ_DELETE->value,
+                            PermissionType::FAQ_PUBLISH->value,
+                            PermissionType::FAQ_TRANSLATE->value,
+                        ],
+                        true,
+                    )
+                    && $language !== 'fr' // sentinel forbidden language for tests
+                ),
             );
         $permission->method('getAllowedLanguagesForRight')->willReturn(null);
 
@@ -331,11 +335,7 @@ final class FaqControllerTest extends TestCase
     {
         $result = $this->configuration
             ->getDb()
-            ->query(sprintf(
-                "SELECT status FROM faqdata WHERE id = %d AND lang = '%s'",
-                $faqId,
-                $language,
-            ));
+            ->query(sprintf("SELECT status FROM faqdata WHERE id = %d AND lang = '%s'", $faqId, $language));
         self::assertNotFalse($result);
         $row = $this->configuration->getDb()->fetchObject($result);
         self::assertIsObject($row);
@@ -988,14 +988,14 @@ final class FaqControllerTest extends TestCase
     {
         $this->seedFaqRecord(faqId: 1, question: 'Draft FAQ');
 
-        $this->configuration->getDb()->query(
-            "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+        $this->configuration
+            ->getDb()
+            ->query(
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
              VALUES (2, 'en', 1002, 0, 'published', 0, '', 'Published FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
-        );
-        $this->configuration->getDb()->query(
-            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
-             VALUES (1, 'en', 2, 'en')",
-        );
+            );
+        $this->configuration->getDb()->query("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+             VALUES (1, 'en', 2, 'en')");
 
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
@@ -2011,10 +2011,12 @@ final class FaqControllerTest extends TestCase
 
     private function countFaqsWithQuestion(string $question): int
     {
-        $result = $this->configuration->getDb()->query(sprintf(
-            "SELECT COUNT(*) AS total FROM faqdata WHERE thema = '%s'",
-            $this->configuration->getDb()->escape($question),
-        ));
+        $result = $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "SELECT COUNT(*) AS total FROM faqdata WHERE thema = '%s'",
+                $this->configuration->getDb()->escape($question),
+            ));
         $row = $this->configuration->getDb()->fetchArray($result);
 
         return (int) ($row['total'] ?? 0);
@@ -2110,6 +2112,114 @@ final class FaqControllerTest extends TestCase
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "fr".');
         $controller->update($request);
+    }
+
+    /**
+     * The ACL and tag rows of an FAQ are shared by all of its translations, so a request for a
+     * language the FAQ does not exist in yet must still be checked against the categories of
+     * the existing translations.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateReturnsForbiddenWhenExistingTranslationIsInRestrictedCategory(): void
+    {
+        $this->seedFaqRecord(categoryId: 666, faqId: 42, language: 'de');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => $this->buildUpdatePayload($csrfToken, faqId: 42, language: 'en', categories: [1]),
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666.');
+        $controller->update($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateReturnsForbiddenWhenExistingTranslationIsInRestrictedLanguage(): void
+    {
+        $this->seedFaqRecord(categoryId: 1, faqId: 42, language: 'fr');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => $this->buildUpdatePayload($csrfToken, faqId: 42, language: 'en', categories: [1]),
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "fr".');
+        $controller->update($request);
+    }
+
+    /**
+     * Naming an allowed category in the request must not make an uncategorized FAQ editable
+     * for a category-restricted user.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateReturnsForbiddenForUncategorizedFaqWhenUserIsCategoryRestricted(): void
+    {
+        $this->seedFaqRecord(categoryId: 1, faqId: 77);
+        $this->configuration->getDb()->query('DELETE FROM faqcategoryrelations WHERE record_id = 77');
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => $this->buildUpdatePayload($csrfToken, faqId: 77, language: 'en', categories: [1]),
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerWithAllowedCategories($session, [1]));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for uncategorized content.');
+        $controller->update($request);
+    }
+
+    /**
+     * @param int[] $categories
+     * @return array<string, mixed>
+     */
+    private function buildUpdatePayload(string $csrfToken, int $faqId, string $language, array $categories): array
+    {
+        return [
+            'pmf-csrf-token' => $csrfToken,
+            'faqId' => $faqId,
+            'solutionId' => 1,
+            'revisionId' => 0,
+            'question' => 'Updated question?',
+            'categories[]' => $categories,
+            'lang' => $language,
+            'tags' => '',
+            'answer' => 'Updated answer',
+            'keywords' => '',
+            'author' => 'Author',
+            'email' => 'author@example.com',
+            'userpermission' => 'all',
+            'grouppermission' => 'all',
+            'changed' => 'Updated',
+            'date' => '2026-03-08 10:00:00',
+            'notes' => '',
+            'revision' => 'no',
+            'recordDateHandling' => 'keepDate',
+            'serpTitle' => '',
+            'serpDescription' => '',
+        ];
     }
 
     /**
@@ -2411,8 +2521,9 @@ final class FaqControllerTest extends TestCase
         $permission
             ->method('hasPermissionForLanguage')
             ->willReturnCallback(
-                static fn(int $userId, mixed $right, string $language): bool => $right
-                    !== PermissionType::FAQ_TRANSLATE->value,
+                static fn(int $userId, mixed $right, string $language): bool => (
+                    $right !== PermissionType::FAQ_TRANSLATE->value
+                ),
             );
         $permission->method('getAllowedLanguagesForRight')->willReturn(null);
 
@@ -2457,6 +2568,7 @@ final class FaqControllerTest extends TestCase
                 $language,
                 $faqId + 1000,
             ));
+
         // Intentionally no faqcategoryrelations row — this is the orphaned-FAQ case.
     }
 
@@ -2482,9 +2594,7 @@ final class FaqControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
-        $controller->setContainer(
-            $this->createAuthenticatedContainerWithAllowedCategories($session, [10]),
-        );
+        $controller->setContainer($this->createAuthenticatedContainerWithAllowedCategories($session, [10]));
 
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_DELETE" permission for uncategorized content.');
@@ -2560,9 +2670,12 @@ final class FaqControllerTest extends TestCase
         $request = $this->createRequestForNewFaq($csrfToken, status: 'draft');
 
         $faq = $this->createMock(Faq::class);
-        $faq->expects($this->once())
+        $faq
+            ->expects($this->once())
             ->method('create')
-            ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1));
+            ->willReturnCallback(
+                static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1),
+            );
 
         $controller = $this->createControllerWithFaq($faq);
         $controller->setContainer($this->createContainerWithoutPublishPermission($session));
@@ -2616,9 +2729,12 @@ final class FaqControllerTest extends TestCase
         $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
 
         $faq = $this->createMock(Faq::class);
-        $faq->expects($this->exactly(2))
+        $faq
+            ->expects($this->exactly(2))
             ->method('create')
-            ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1));
+            ->willReturnCallback(
+                static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1),
+            );
 
         $controller = $this->createControllerWithFaq($faq);
         $controller->setContainer($this->createAuthenticatedContainer($session));
@@ -2653,9 +2769,12 @@ final class FaqControllerTest extends TestCase
         $request = $this->createRequestForNewFaq($csrfToken, status: 'published');
 
         $faq = $this->createMock(Faq::class);
-        $faq->expects($this->once())
+        $faq
+            ->expects($this->once())
             ->method('create')
-            ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1));
+            ->willReturnCallback(
+                static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1),
+            );
 
         $controller = $this->createControllerWithFaq($faq);
         $controller->setContainer($this->createAuthenticatedContainer($session));
@@ -2687,9 +2806,12 @@ final class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->method('hasTranslation')->willReturn(true);
         $faq->method('getStatus')->willReturn(FaqStatus::Published);
-        $faq->expects($this->once())
+        $faq
+            ->expects($this->once())
             ->method('update')
-            ->willReturnCallback(static function (\phpMyFAQ\Entity\FaqEntity $faqEntity) use (&$persisted): \phpMyFAQ\Entity\FaqEntity {
+            ->willReturnCallback(static function (\phpMyFAQ\Entity\FaqEntity $faqEntity) use (
+                &$persisted,
+            ): \phpMyFAQ\Entity\FaqEntity {
                 $persisted = $faqEntity;
 
                 return $faqEntity;
@@ -2727,9 +2849,12 @@ final class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->method('hasTranslation')->willReturn(true);
         $faq->method('getStatus')->willReturn(FaqStatus::Draft);
-        $faq->expects($this->once())->method('update')->willReturnCallback(
-            static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity,
-        );
+        $faq
+            ->expects($this->once())
+            ->method('update')
+            ->willReturnCallback(
+                static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity,
+            );
 
         $controller = $this->createControllerWithFaq($faq);
         $controller->setContainer($this->createContainerWithoutPublishPermission($session));
@@ -2785,9 +2910,12 @@ final class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->method('hasTranslation')->willReturn(true);
         $faq->method('getStatus')->willReturn(FaqStatus::Draft);
-        $faq->expects($this->once())
+        $faq
+            ->expects($this->once())
             ->method('update')
-            ->willReturnCallback(static function (\phpMyFAQ\Entity\FaqEntity $faqEntity) use (&$persisted): \phpMyFAQ\Entity\FaqEntity {
+            ->willReturnCallback(static function (\phpMyFAQ\Entity\FaqEntity $faqEntity) use (
+                &$persisted,
+            ): \phpMyFAQ\Entity\FaqEntity {
                 $persisted = $faqEntity;
 
                 return $faqEntity;
@@ -2877,9 +3005,12 @@ final class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->method('hasTranslation')->willReturn(true);
         $faq->method('getStatus')->willReturn(FaqStatus::Review);
-        $faq->expects($this->once())
+        $faq
+            ->expects($this->once())
             ->method('update')
-            ->willReturnCallback(static function (\phpMyFAQ\Entity\FaqEntity $faqEntity) use (&$persisted): \phpMyFAQ\Entity\FaqEntity {
+            ->willReturnCallback(static function (\phpMyFAQ\Entity\FaqEntity $faqEntity) use (
+                &$persisted,
+            ): \phpMyFAQ\Entity\FaqEntity {
                 $persisted = $faqEntity;
 
                 return $faqEntity;
@@ -2946,8 +3077,7 @@ final class FaqControllerTest extends TestCase
         $permission
             ->method('hasPermission')
             ->willReturnCallback(
-                static fn(int $userId, mixed $right): bool => $userId === 42
-                && in_array($right, $writeRights, true),
+                static fn(int $userId, mixed $right): bool => $userId === 42 && in_array($right, $writeRights, true),
             );
         $permission
             ->method('hasPermissionForCategory')
@@ -3199,10 +3329,14 @@ final class FaqControllerTest extends TestCase
         $client
             ->expects($this->once())
             ->method('index')
-            ->with($this->callback(static fn(array $params): bool => $params['index'] === 'phpmyfaq-test'
-                && $params['body']['id'] === 1
-                && $params['body']['question'] === 'New question'
-                && $params['body']['content_type'] === 'faq'))
+            ->with($this->callback(
+                static fn(array $params): bool => (
+                    $params['index'] === 'phpmyfaq-test'
+                    && $params['body']['id'] === 1
+                    && $params['body']['question'] === 'New question'
+                    && $params['body']['content_type'] === 'faq'
+                ),
+            ))
             ->willReturn(['result' => 'created']);
 
         $session = new Session(new MockArraySessionStorage());
@@ -3210,9 +3344,12 @@ final class FaqControllerTest extends TestCase
         $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
 
         $faq = $this->createMock(Faq::class);
-        $faq->expects($this->once())
+        $faq
+            ->expects($this->once())
             ->method('create')
-            ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1));
+            ->willReturnCallback(
+                static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(1),
+            );
 
         $controller = $this->createControllerWithFaq($faq);
         $controller->setContainer($this->createAuthenticatedContainer($session));
@@ -3235,8 +3372,12 @@ final class FaqControllerTest extends TestCase
         $client
             ->expects($this->once())
             ->method('index')
-            ->with($this->callback(static fn(array $params): bool => $params['id'] === '1001'
-                && $params['body']['question'] === 'Updated FAQ'))
+            ->with($this->callback(
+                static fn(array $params): bool => (
+                    $params['id'] === '1001'
+                    && $params['body']['question'] === 'Updated FAQ'
+                ),
+            ))
             ->willReturn(['result' => 'created']);
 
         $session = new Session(new MockArraySessionStorage());
@@ -3300,9 +3441,13 @@ final class FaqControllerTest extends TestCase
         $client
             ->expects($this->once())
             ->method('index')
-            ->with($this->callback(static fn(array $params): bool => $params['id'] === '1001'
-                && $params['body']['question'] === 'Publishable FAQ'
-                && $params['body']['lang'] === 'en'))
+            ->with($this->callback(
+                static fn(array $params): bool => (
+                    $params['id'] === '1001'
+                    && $params['body']['question'] === 'Publishable FAQ'
+                    && $params['body']['lang'] === 'en'
+                ),
+            ))
             ->willReturn(['result' => 'created']);
 
         $session = new Session(new MockArraySessionStorage());
@@ -3385,10 +3530,12 @@ final class FaqControllerTest extends TestCase
             ->with($this->callback(static function (\Psr\Http\Message\RequestInterface $request): bool {
                 $body = json_decode((string) $request->getBody(), true);
 
-                return $request->getMethod() === 'PUT'
+                return (
+                    $request->getMethod() === 'PUT'
                     && $request->getUri()->getPath() === '/phpmyfaq-test/_doc/1'
                     && $body['question'] === 'New question'
-                    && $body['content_type'] === 'faq';
+                    && $body['content_type'] === 'faq'
+                );
             }))
             ->willReturn($this->elasticsearchResponse(201, ['result' => 'created']));
 
@@ -3397,11 +3544,14 @@ final class FaqControllerTest extends TestCase
         $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
 
         $faq = $this->createMock(Faq::class);
-        $faq->expects($this->once())
+        $faq
+            ->expects($this->once())
             ->method('create')
-            ->willReturnCallback(static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity
-                ->setId(1)
-                ->setSolutionId(1));
+            ->willReturnCallback(
+                static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity
+                    ->setId(1)
+                    ->setSolutionId(1),
+            );
 
         $controller = $this->createControllerWithFaq($faq);
         $controller->setContainer($this->createAuthenticatedContainer($session));
@@ -3425,9 +3575,11 @@ final class FaqControllerTest extends TestCase
             ->with($this->callback(static function (\Psr\Http\Message\RequestInterface $request): bool {
                 $body = json_decode((string) $request->getBody(), true);
 
-                return $request->getMethod() === 'PUT'
+                return (
+                    $request->getMethod() === 'PUT'
                     && $request->getUri()->getPath() === '/phpmyfaq-test/_doc/1001'
-                    && $body['question'] === 'Updated FAQ';
+                    && $body['question'] === 'Updated FAQ'
+                );
             }))
             ->willReturn($this->elasticsearchResponse(200, ['result' => 'created']));
 
@@ -3459,8 +3611,12 @@ final class FaqControllerTest extends TestCase
         $httpClient
             ->expects($this->once())
             ->method('sendRequest')
-            ->with($this->callback(static fn(\Psr\Http\Message\RequestInterface $request): bool => $request->getMethod() === 'DELETE'
-                && $request->getUri()->getPath() === '/phpmyfaq-test/_doc/1001'))
+            ->with($this->callback(
+                static fn(\Psr\Http\Message\RequestInterface $request): bool => (
+                    $request->getMethod() === 'DELETE'
+                    && $request->getUri()->getPath() === '/phpmyfaq-test/_doc/1001'
+                ),
+            ))
             ->willReturn($this->elasticsearchResponse(200, ['result' => 'deleted']));
 
         $session = new Session(new MockArraySessionStorage());
@@ -3597,13 +3753,15 @@ final class FaqControllerTest extends TestCase
      */
     private function searchNetworkException(): \Psr\Http\Client\NetworkExceptionInterface
     {
-        return new class ('Connection refused') extends \RuntimeException implements \Psr\Http\Client\NetworkExceptionInterface {
+        return new class('Connection refused') extends \RuntimeException implements
+            \Psr\Http\Client\NetworkExceptionInterface {
             public function getRequest(): \Psr\Http\Message\RequestInterface
             {
                 return new \GuzzleHttp\Psr7\Request('PUT', '/phpmyfaq-test/_doc/1001');
             }
         };
     }
+
     /**
      * @throws \Exception
      */
@@ -3634,7 +3792,9 @@ final class FaqControllerTest extends TestCase
         $faq
             ->expects($this->once())
             ->method('create')
-            ->with($this->callback(static fn(\phpMyFAQ\Entity\FaqEntity $entity): bool => $entity->getAnswer() === self::HTML_ANSWER_SAVED))
+            ->with($this->callback(
+                static fn(\phpMyFAQ\Entity\FaqEntity $entity): bool => $entity->getAnswer() === self::HTML_ANSWER_SAVED,
+            ))
             ->willReturn($faqEntity);
 
         $tags = $this->createMock(Tags::class);
@@ -3734,7 +3894,9 @@ final class FaqControllerTest extends TestCase
         $faq
             ->expects($this->once())
             ->method('update')
-            ->with($this->callback(static fn(\phpMyFAQ\Entity\FaqEntity $entity): bool => $entity->getAnswer() === self::HTML_ANSWER_SAVED))
+            ->with($this->callback(
+                static fn(\phpMyFAQ\Entity\FaqEntity $entity): bool => $entity->getAnswer() === self::HTML_ANSWER_SAVED,
+            ))
             ->willReturn($faqEntity);
 
         $tags = $this->createMock(Tags::class);

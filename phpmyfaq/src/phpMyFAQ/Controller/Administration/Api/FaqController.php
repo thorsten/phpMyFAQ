@@ -413,8 +413,22 @@ final class FaqController extends AbstractAdministrationApiController
         $faqLang = Filter::filterVar($data->lang ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $categoryRelation = new Relation($this->configuration, $category);
-        $currentCategoryIds = array_keys($categoryRelation->getCategories($faqId, $faqLang));
-        $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, [...$categories, ...$currentCategoryIds]);
+
+        // User and group permissions as well as tags are keyed by the record id and shared by
+        // every translation of the FAQ. The caller therefore has to be allowed to edit the FAQ
+        // as it is stored, in all of its categories and languages, before the requested
+        // categories and language are checked. Doing so from the request alone would let a
+        // caller pick a language the FAQ has no translation in and bypass the scope check.
+        $existingLanguages = $faqId > 0 ? $this->configuration->getLanguage()->isLanguageAvailable($faqId) : [];
+        $currentCategoryIds = $existingLanguages === [] ? [] : $categoryRelation->getCategoryIdsForAllLanguages($faqId);
+        if ($existingLanguages !== []) {
+            $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, $currentCategoryIds);
+            foreach (array_unique($existingLanguages) as $existingLanguage) {
+                $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $existingLanguage);
+            }
+        }
+
+        $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, $categories);
         $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $faqLang);
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');

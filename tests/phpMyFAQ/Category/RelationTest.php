@@ -504,6 +504,31 @@ class RelationTest extends TestCase
         );
     }
 
+    public function testGetCategoryIdsForAllLanguagesIgnoresTheRecordLanguage(): void
+    {
+        $queries = [];
+        $this->databaseMock
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): string {
+                $queries[] = $query;
+                return 'query_result';
+            });
+
+        $first = new stdClass();
+        $first->category_id = '9';
+        $second = new stdClass();
+        $second->category_id = 5;
+        $duplicate = new stdClass();
+        $duplicate->category_id = 9;
+
+        $this->databaseMock->method('fetchObject')->willReturnOnConsecutiveCalls($first, $second, $duplicate, false);
+
+        $this->assertSame([9, 5], $this->relation->getCategoryIdsForAllLanguages(42));
+        $this->assertCount(1, $queries);
+        $this->assertStringContainsString('record_id = 42', $queries[0]);
+        $this->assertStringNotContainsString('record_lang', $queries[0]);
+    }
+
     public function testAddSkipsRelationsThatAlreadyExist(): void
     {
         $this->databaseMock->method('escape')->willReturnArgument(0);

@@ -375,6 +375,38 @@ class Relation
     }
 
     /**
+     * Returns the ids of every category any translation of the FAQ is linked to.
+     *
+     * Permissions, tags and other record-id-keyed data are shared by all translations of
+     * an FAQ, so an authorization decision about such data has to look at all of them.
+     *
+     * @return list<int>
+     */
+    public function getCategoryIdsForAllLanguages(int $faqId): array
+    {
+        $query = sprintf(
+            'SELECT DISTINCT category_id FROM %sfaqcategoryrelations WHERE record_id = %d',
+            Database::getTablePrefix(),
+            $faqId,
+        );
+
+        $categoryIds = [];
+        $result = $this->configuration->getDb()->query($query);
+        if ($result) {
+            while (true) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                if (!$row instanceof \stdClass) {
+                    break;
+                }
+
+                $categoryIds[] = (int) $row->category_id;
+            }
+        }
+
+        return array_values(array_unique($categoryIds));
+    }
+
+    /**
      * Returns the categories from a FAQ id and language.
      *
      * @param int    $faqId FAQ id
