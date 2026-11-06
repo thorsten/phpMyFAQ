@@ -675,6 +675,14 @@ final class UserController extends AbstractAdministrationApiController
                     return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
                 }
 
+                // A direct user right is never category-restricted. A right the acting user holds
+                // only for some categories (through a category-restricted group) must therefore
+                // not be re-granted as a direct right at all, or it would become global.
+                // null means unrestricted; an empty array fails closed like the language scope.
+                if ($this->currentUser->perm->getAllowedCategoriesForRight($actingUserId, (int) $userRight) !== null) {
+                    return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+                }
+
                 $ownScopes[(int) $userRight] = $ownScope;
             }
         }

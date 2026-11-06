@@ -1659,6 +1659,40 @@ final class UserControllerTest extends TestCase
     }
 
     /**
+     * A non-SuperAdmin holding a right only through a category-restricted group must not be
+     * able to turn it into a direct user right: direct user rights carry no category
+     * restriction, so the re-grant would widen the right to every category.
+     */
+    public function testUpdateRightsNonSuperAdminCannotRegrantCategoryRestrictedRight(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        $perm = $this->createMock(PermissionInterface::class);
+        $perm->method('hasPermission')->willReturn(true);
+        $perm->method('getAllowedLanguagesForRight')->willReturn(null);
+        $perm->method('getAllowedCategoriesForRight')->willReturn([5]);
+        $perm->expects($this->never())->method('refuseAllUserRights');
+        $perm->expects($this->never())->method('grantUserRight');
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $perm;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'userId' => 5,
+            'csrfToken' => $csrf,
+            'userRights' => [42],
+        ]));
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    /**
      * A non-SuperAdmin holding a right for one language only must not be able to widen it to
      * every language by re-saving the rights they already hold: the re-grant must keep the
      * per-right language restriction rows instead of dropping them.
@@ -2140,10 +2174,10 @@ final class UserControllerTest extends TestCase
         self::assertGreaterThan(1, $victimId);
 
         $adminLog = $this->createMock(AdminLog::class);
-        $adminLog->expects($this->once())->method('log')->with(
-            $this->anything(),
-            $this->stringEndsWith(':' . $victimId),
-        );
+        $adminLog
+            ->expects($this->once())
+            ->method('log')
+            ->with($this->anything(), $this->stringEndsWith(':' . $victimId));
         $container = $this->createAuthenticatedContainerWithAdminLog($adminLog);
         $session = $container->get('session');
         self::assertInstanceOf(Session::class, $session);
@@ -2227,9 +2261,11 @@ final class UserControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
-        self::assertSame('blocked', $this->dbHandle->fetchArray($this->dbHandle->query(
-            'SELECT account_status FROM faquser WHERE user_id = ' . $superAdminId,
-        ))['account_status']);
+        self::assertSame(
+            'blocked',
+            $this->dbHandle->fetchArray($this->dbHandle->query('SELECT account_status FROM faquser WHERE user_id = '
+            . $superAdminId))['account_status'],
+        );
     }
 
     /**
@@ -2325,9 +2361,11 @@ final class UserControllerTest extends TestCase
         ]));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertSame('0', (string) $this->dbHandle->fetchArray($this->dbHandle->query(
-            'SELECT is_superadmin FROM faquser WHERE user_id = ' . $managedUserId,
-        ))['is_superadmin']);
+        self::assertSame(
+            '0',
+            (string) $this->dbHandle->fetchArray($this->dbHandle->query('SELECT is_superadmin FROM faquser WHERE user_id = '
+            . $managedUserId))['is_superadmin'],
+        );
     }
 
     /**
@@ -2414,7 +2452,7 @@ final class UserControllerTest extends TestCase
                 ['security.permLevel', 'basic'],
             ]);
 
-        $parent = (new \ReflectionClass(UserController::class))->getParentClass();
+        $parent = new \ReflectionClass(UserController::class)->getParentClass();
         $parent->getProperty('configuration')->setValue($controller, $configuration);
 
         return $controller;
