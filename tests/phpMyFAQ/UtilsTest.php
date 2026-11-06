@@ -155,11 +155,13 @@ class UtilsTest extends TestCase
         $this->assertStringContainsString('&quot;', $result);
     }
 
-    public function testParseUrlEscapesHtmlInUrl(): void
+    public function testParseUrlStopsUrlAtTagStart(): void
     {
-        $result = Utils::parseUrl('https://www.evil.com/<script>alert(1)</script>');
-        $this->assertStringNotContainsString('<script>', $result);
-        $this->assertStringContainsString('&lt;script&gt;', $result);
+        $result = Utils::parseUrl('https://www.evil.com/<br />next');
+        $this->assertStringContainsString(
+            '<a href="https://www.evil.com/">https://www.evil.com/</a><br />next',
+            $result,
+        );
     }
 
     public function testParseUrlEscapesSingleQuotesInUrl(): void
@@ -167,6 +169,34 @@ class UtilsTest extends TestCase
         $result = Utils::parseUrl("https://www.evil.com/'onmouseover='alert(1)");
         $this->assertStringNotContainsString("' onmouseover='", $result);
         $this->assertStringContainsString('&#039;', $result);
+    }
+
+    public function testParseUrlDoesNotRewriteExistingHrefAttributes(): void
+    {
+        $input = '<a href="https://javascript:443/alert(document.domain)">Click for the fix</a>';
+        $result = Utils::parseUrl($input);
+        $this->assertStringNotContainsString('href="javascript:', $result);
+        $this->assertSame($input, $result);
+    }
+
+    public function testParseUrlKeepsAbsoluteUrlScheme(): void
+    {
+        $result = Utils::parseUrl('See https://example.com/x now');
+        $this->assertStringContainsString('<a href="https://example.com/x">https://example.com/x</a>', $result);
+        $this->assertStringNotContainsString('>example.com/x<', $result);
+    }
+
+    public function testParseUrlLinkifiesBareWwwUrl(): void
+    {
+        $result = Utils::parseUrl('Go to www.example.com today');
+        $this->assertStringContainsString('<a href="https://www.example.com">www.example.com</a>', $result);
+    }
+
+    public function testParseUrlDoesNotTouchUrlsInsideTags(): void
+    {
+        $input = '<a href="https://example.com">https://example.com</a> and <br /> text';
+        $result = Utils::parseUrl($input);
+        $this->assertSame($input, $result);
     }
 
     public function testRedactSensitiveQueryStringRedactsResetToken(): void

@@ -277,24 +277,51 @@ class Utils
 
     /**
      * Parses a given string and convert all the URLs into links.
+     *
+     * Only text nodes are linkified. Existing markup, in particular attribute values such as href,
+     * is never rewritten, and text that already sits inside an <a> element is left untouched.
      */
     public static function parseUrl(string $string): string
     {
-        $protocols = ['http://', 'https://'];
+        $parts = preg_split('/(<[^>]*>)/', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
+        if ($parts === false) {
+            return $string;
+        }
 
-        $string = str_replace(search: $protocols, replace: '', subject: $string);
-        $string = str_replace(search: 'www.', replace: 'https://www.', subject: $string);
+        $pattern = '/\b(?:https?:\/\/|www\.)[^\s<]+/i';
+        $insideAnchor = 0;
+        $output = '';
 
-        $pattern = '/(https?:\/\/[^\s]+)/i';
+        foreach ($parts as $part) {
+            if ($part !== '' && $part[0] === '<') {
+                if (preg_match('/^<a[\s>]/i', $part) === 1) {
+                    ++$insideAnchor;
+                }
+                if (preg_match('/^<\/a\s*>/i', $part) === 1) {
+                    $insideAnchor = max(0, $insideAnchor - 1);
+                }
+                $output .= $part;
+                continue;
+            }
 
-        return preg_replace_callback(
-            $pattern,
-            static function (array $matches): string {
-                $url = htmlspecialchars($matches[1], ENT_QUOTES, 'UTF-8');
-                return '<a href="' . $url . '">' . $url . '</a>';
-            },
-            $string,
-        );
+            if ($insideAnchor > 0) {
+                $output .= $part;
+                continue;
+            }
+
+            $output .=
+                preg_replace_callback(
+                    $pattern,
+                    static function (array $matches): string {
+                        $text = htmlspecialchars($matches[0], ENT_QUOTES, encoding: 'UTF-8');
+                        $href = preg_match('/^https?:\/\//i', $matches[0]) === 1 ? $text : 'https://' . $text;
+                        return '<a href="' . $href . '">' . $text . '</a>';
+                    },
+                    $part,
+                ) ?? $part;
+        }
+
+        return $output;
     }
 
     /**
