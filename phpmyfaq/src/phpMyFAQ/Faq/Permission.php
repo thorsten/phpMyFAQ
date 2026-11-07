@@ -159,13 +159,16 @@ class Permission
     /**
      * Creates the permission array.
      *
+     * @param Request|null $request the request carrying the permission payload; defaults to the
+     *                              current request built from the PHP globals
      * @return array<string, array<int>>
      */
-    public function createPermissionArray(): array
+    public function createPermissionArray(?Request $request = null): array
     {
         $permissions = [];
 
-        $payload = Json::decodeObject(Request::createFromGlobals()->getContent());
+        $request ??= Request::createFromGlobals();
+        $payload = Json::decodeObject($request->getContent());
         $candidate = $payload === null ? null : $payload->data ?? null;
         $data = $candidate instanceof stdClass ? $candidate : (object) [];
 

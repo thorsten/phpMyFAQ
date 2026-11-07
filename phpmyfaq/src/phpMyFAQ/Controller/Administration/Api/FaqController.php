@@ -51,6 +51,7 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
 use phpMyFAQ\Notification;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Question;
 use phpMyFAQ\Question\QuestionHistoryRepository;
@@ -174,7 +175,7 @@ final class FaqController extends AbstractAdministrationApiController
         $serpDescription = Filter::filterVar($data->serpDescription ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         // Permissions
-        $permissions = $faqPermission->createPermissionArray();
+        $permissions = $faqPermission->createPermissionArray($request);
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_ADD->value);
 
@@ -339,6 +340,9 @@ final class FaqController extends AbstractAdministrationApiController
             // Send Web Push notification for newly published FAQs.
             // This is done here (not in Notification::sendNewFaqAdded) to provide
             // the public FAQ URL, which is more useful for end-users.
+            // The payload carries the question and the slug, so it must honour the
+            // user/group restrictions stored above: a restricted FAQ is pushed only to
+            // the permitted users, never broadcast to every subscriber.
             if ($faqData->getStatus() === FaqStatus::Published) {
                 try {
                     $faqUrl = sprintf(
@@ -349,12 +353,28 @@ final class FaqController extends AbstractAdministrationApiController
                         $faqData->getLanguage(),
                         TitleSlugifier::slug($faqData->getQuestion()),
                     );
-                    $this->webPushService->sendToAll(
-                        Translation::getString('msgPushNewFaq'),
-                        $faqData->getQuestion(),
-                        $faqUrl,
-                        'new-faq-' . $faqId,
+                    $recipients = $this->resolvePushRecipients(
+                        $permissions['restricted_user'],
+                        $permissions['restricted_groups'],
                     );
+                    if ($recipients === null) {
+                        $this->webPushService->sendToAll(
+                            Translation::getString('msgPushNewFaq'),
+                            $faqData->getQuestion(),
+                            $faqUrl,
+                            'new-faq-' . $faqId,
+                        );
+                    }
+
+                    if ($recipients !== null && $recipients !== []) {
+                        $this->webPushService->sendToUsers(
+                            $recipients,
+                            Translation::getString('msgPushNewFaq'),
+                            $faqData->getQuestion(),
+                            $faqUrl,
+                            'new-faq-' . $faqId,
+                        );
+                    }
                 } catch (\Throwable $e) {
                     $this->configuration->getLogger()->error('Send web push notification failed: ' . $e->getMessage());
                 }
@@ -477,7 +497,7 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         // Permissions
-        $permissions = $faqPermission->createPermissionArray();
+        $permissions = $faqPermission->createPermissionArray($request);
 
         $this->logging->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
         if ($status !== $previousStatus) {
@@ -1260,5 +1280,41 @@ final class FaqController extends AbstractAdministrationApiController
         }
 
         return $requestedStatus;
+    }
+
+    /**
+     * Resolves who may receive the "new FAQ" Web Push for the given permissions.
+     *
+     * Returns null when the FAQ is unrestricted (every subscriber may be notified) and
+     * otherwise the IDs of the users allowed to read the FAQ: the explicitly permitted
+     * users plus the members of the permitted groups. An empty array means nobody.
+     *
+     * @param int[] $restrictedUsers  the permitted user IDs, [-1] meaning every user
+     * @param int[] $restrictedGroups the permitted group IDs, [-1] meaning every group
+     * @return int[]|null
+     */
+    private function resolvePushRecipients(array $restrictedUsers, array $restrictedGroups): ?array
+    {
+        $groupsApply = $this->configuration->get(item: 'security.permLevel') !== 'basic';
+        $allUsers = $restrictedUsers === [-1];
+        $allGroups = !$groupsApply || $restrictedGroups === [-1];
+
+        if ($allUsers && $allGroups) {
+            return null;
+        }
+
+        $userIds = array_filter($restrictedUsers, static fn(int $id): bool => $id > 0);
+
+        if ($groupsApply && $this->currentUser->perm instanceof MediumPermission) {
+            foreach ($restrictedGroups as $groupId) {
+                if ($groupId <= 0) {
+                    continue;
+                }
+
+                $userIds = [...$userIds, ...$this->currentUser->perm->getGroupMembers($groupId)];
+            }
+        }
+
+        return array_values(array_unique(array_map(intval(...), $userIds)));
     }
 }

@@ -17,6 +17,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Notification;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Question;
@@ -213,12 +214,15 @@ final class FaqControllerTest extends TestCase
 
     /**
      * @param int[]|null $allowedCategories null = unrestricted, int[] = category-restricted
+     * @param PermissionInterface|null $permission pre-built permission mock, e.g. a MediumPermission
+     *                                             mock when group membership matters
      */
     private function createAuthenticatedContainerWithAllowedCategories(
         ?Session $session,
         ?array $allowedCategories,
+        ?PermissionInterface $permission = null,
     ): ContainerInterface {
-        $permission = $this->createMock(PermissionInterface::class);
+        $permission ??= $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
             ->willReturnCallback(
@@ -765,10 +769,8 @@ final class FaqControllerTest extends TestCase
                 'author' => 'Author',
                 'email' => 'author@example.com',
                 'comment' => 'y',
-                'userpermission' => 'restricted',
-                'restricted_users' => [],
-                'grouppermission' => 'restricted',
-                'restricted_groups' => [],
+                'userpermission' => 'all',
+                'grouppermission' => 'all',
                 'changed' => 'Initial import',
                 'notes' => '',
                 'serpTitle' => 'Created title',
@@ -795,6 +797,203 @@ final class FaqControllerTest extends TestCase
         self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
         self::assertStringContainsString('"id":123', $payload['data']);
         $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * A published FAQ restricted to specific users must not be broadcast: the push
+     * payload carries the question and the slug, which the ACL protects everywhere else.
+     */
+    public function testCreatePushesUserRestrictedFaqOnlyToThePermittedUsers(): void
+    {
+        self::assertTrue($this->configuration->set('security.permLevel', 'basic'));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('create')->willReturn($this->createPublishedFaqEntity());
+
+        $webPushService = $this->createMock(WebPushService::class);
+        $webPushService->expects($this->never())->method('sendToAll');
+        $webPushService
+            ->expects($this->once())
+            ->method('sendToUsers')
+            ->with([7, 9], $this->anything(), 'Created FAQ', $this->anything(), 'new-faq-123');
+
+        $request = $this->createPublishedFaqRequest($csrfToken, [
+            'userpermission' => 'restricted',
+            'restricted_users' => [7, 9],
+            'grouppermission' => 'all',
+        ]);
+
+        $controller = $this->createControllerWithDependencies(faq: $faq, webPushService: $webPushService);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * With group permissions in force, the recipients are the explicitly permitted users
+     * plus the members of the permitted groups, mirroring the "user OR group" frontend ACL.
+     */
+    public function testCreatePushesGroupRestrictedFaqOnlyToUsersAndGroupMembers(): void
+    {
+        self::assertTrue($this->configuration->set('security.permLevel', 'medium'));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('create')->willReturn($this->createPublishedFaqEntity());
+
+        $permission = $this->createMock(MediumPermission::class);
+        $permission->method('getGroupMembers')->willReturnMap([[5, [7, 11]], [6, [11, 13]]]);
+
+        $webPushService = $this->createMock(WebPushService::class);
+        $webPushService->expects($this->never())->method('sendToAll');
+        $webPushService
+            ->expects($this->once())
+            ->method('sendToUsers')
+            ->with([7, 11, 13], $this->anything(), 'Created FAQ', $this->anything(), 'new-faq-123');
+
+        $request = $this->createPublishedFaqRequest($csrfToken, [
+            'userpermission' => 'restricted',
+            'restricted_users' => [7],
+            'grouppermission' => 'restricted',
+            'restricted_groups' => [5, 6],
+        ]);
+
+        $controller = $this->createControllerWithDependencies(faq: $faq, webPushService: $webPushService);
+        $controller->setContainer($this->createAuthenticatedContainerWithAllowedCategories(
+            $session,
+            null,
+            $permission,
+        ));
+
+        $response = $controller->create($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * A restricted FAQ that names nobody is readable by nobody, so no push leaves at all.
+     */
+    public function testCreateDoesNotPushAFaqRestrictedToNobody(): void
+    {
+        self::assertTrue($this->configuration->set('security.permLevel', 'basic'));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('create')->willReturn($this->createPublishedFaqEntity());
+
+        $webPushService = $this->createMock(WebPushService::class);
+        $webPushService->expects($this->never())->method('sendToAll');
+        $webPushService->expects($this->never())->method('sendToUsers');
+
+        $request = $this->createPublishedFaqRequest($csrfToken, [
+            'userpermission' => 'restricted',
+            'restricted_users' => [],
+            'grouppermission' => 'restricted',
+            'restricted_groups' => [],
+        ]);
+
+        $controller = $this->createControllerWithDependencies(faq: $faq, webPushService: $webPushService);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * In basic permission mode groups do not exist, so an "all users" FAQ is unrestricted
+     * no matter what the (ignored) group field says.
+     */
+    public function testCreateBroadcastsUnrestrictedFaqInBasicModeRegardlessOfGroupField(): void
+    {
+        self::assertTrue($this->configuration->set('security.permLevel', 'basic'));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('create')->willReturn($this->createPublishedFaqEntity());
+
+        $webPushService = $this->createMock(WebPushService::class);
+        $webPushService->expects($this->once())->method('sendToAll');
+        $webPushService->expects($this->never())->method('sendToUsers');
+
+        $request = $this->createPublishedFaqRequest($csrfToken, [
+            'userpermission' => 'all',
+            'grouppermission' => 'restricted',
+            'restricted_groups' => [5],
+        ]);
+
+        $controller = $this->createControllerWithDependencies(faq: $faq, webPushService: $webPushService);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    private function createPublishedFaqEntity(): \phpMyFAQ\Entity\FaqEntity
+    {
+        return new \phpMyFAQ\Entity\FaqEntity()
+            ->setId(123)
+            ->setLanguage('en')
+            ->setSolutionId(1123)
+            ->setStatus(FaqStatus::Published)
+            ->setSticky(false)
+            ->setQuestion('Created FAQ')
+            ->setAnswer('Created answer')
+            ->setKeywords('created')
+            ->setAuthor('Author')
+            ->setEmail('author@example.com')
+            ->setComment(true)
+            ->setCreatedDate(new \DateTime())
+            ->setNotes('');
+    }
+
+    /**
+     * @param array<string, mixed> $permissionFields the userpermission/grouppermission payload fields
+     */
+    private function createPublishedFaqRequest(string $csrfToken, array $permissionFields): Request
+    {
+        return new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'question' => 'Created FAQ',
+                'categories[]' => 1,
+                'lang' => 'en',
+                'tags' => '',
+                'status' => 'published',
+                'sticky' => 'no',
+                'answer' => 'Created answer',
+                'keywords' => 'created',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'comment' => 'y',
+                'changed' => '',
+                'notes' => '',
+                'serpTitle' => '',
+                'serpDescription' => '',
+                'openQuestionId' => 0,
+                ...$permissionFields,
+            ],
+        ], JSON_THROW_ON_ERROR));
     }
 
     /**
@@ -3901,10 +4100,8 @@ final class FaqControllerTest extends TestCase
                 'author' => 'Author',
                 'email' => 'author@example.com',
                 'comment' => 'y',
-                'userpermission' => 'restricted',
-                'restricted_users' => [],
-                'grouppermission' => 'restricted',
-                'restricted_groups' => [],
+                'userpermission' => 'all',
+                'grouppermission' => 'all',
                 'changed' => 'Initial import',
                 'notes' => '',
                 'serpTitle' => 'Created title',
