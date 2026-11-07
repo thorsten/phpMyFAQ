@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Auth\AuthWebAuthn;
+use phpMyFAQ\Auth\WebAuthn\WebAuthnUser;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -323,6 +324,116 @@ class WebAuthnControllerTest extends TestCase
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
+    public function testRegisterRejectsSessionStateIssuedByOtherInstance(): void
+    {
+        // Multisite instances share one session store. State prepared on tenant A (where the
+        // ownership check passed for A's "admin") must not key the master's "admin".
+        $this->primeRegister(sessionAppId: 'a.faq.test', instanceAppId: 'faq.test');
+
+        $userMock = $this->createMock(User::class);
+        $userMock->expects($this->never())->method('setWebAuthnKeys');
+        $this->injectControllerProperty('user', $userMock);
+
+        $response = $this->controller->register($this->registerRequest());
+
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    public function testRegisterRejectsSessionStateWithoutInstanceBinding(): void
+    {
+        // Fails closed: state without an appId (e.g. from before the binding existed) is rejected.
+        $this->primeRegister(sessionAppId: '', instanceAppId: 'faq.test');
+
+        $userMock = $this->createMock(User::class);
+        $userMock->expects($this->never())->method('setWebAuthnKeys');
+        $this->injectControllerProperty('user', $userMock);
+
+        $response = $this->controller->register($this->registerRequest());
+
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    public function testRegisterRejectsAccountIdMismatch(): void
+    {
+        // The login in the session must resolve to the very account prepare() staged.
+        $this->primeRegister(sessionAppId: 'faq.test', instanceAppId: 'faq.test', sessionUserId: '7');
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUserByLogin')->with('admin')->willReturn(true);
+        $userMock->method('getUserId')->willReturn(1);
+        $userMock->expects($this->never())->method('setWebAuthnKeys');
+        $this->injectControllerProperty('user', $userMock);
+
+        $response = $this->controller->register($this->registerRequest());
+
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    public function testRegisterRejectsAnonymousCallerForPasswordAccount(): void
+    {
+        // Independent of prepare(): an anonymous caller must not replace the passkeys of an
+        // existing password-based account, even with matching session state.
+        $this->primeRegister(sessionAppId: 'faq.test', instanceAppId: 'faq.test');
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUserByLogin')->with('admin')->willReturn(true);
+        $userMock->method('getUserId')->willReturn(1);
+        $userMock->method('getUserAuthSource')->willReturn('local');
+        $userMock->method('getWebAuthnKeys')->willReturn('');
+        $userMock->expects($this->never())->method('setWebAuthnKeys');
+        $this->injectControllerProperty('user', $userMock);
+
+        $currentUserMock = $this->createMock(CurrentUser::class);
+        $currentUserMock->method('isLoggedIn')->willReturn(false);
+        $this->injectCurrentUser($currentUserMock);
+
+        $response = $this->controller->register($this->registerRequest());
+
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    public function testRegisterAcceptsAuthenticatedOwner(): void
+    {
+        $this->primeRegister(sessionAppId: 'faq.test', instanceAppId: 'faq.test');
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUserByLogin')->with('admin')->willReturn(true);
+        $userMock->method('getUserId')->willReturn(1);
+        $userMock->expects($this->once())->method('setWebAuthnKeys')->with('[new-key]')->willReturn(true);
+        $this->injectControllerProperty('user', $userMock);
+
+        $currentUserMock = $this->createMock(CurrentUser::class);
+        $currentUserMock->method('isLoggedIn')->willReturn(true);
+        $currentUserMock->method('getUserId')->willReturn(1);
+        $this->injectCurrentUser($currentUserMock);
+
+        $response = $this->controller->register($this->registerRequest());
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testRegisterAcceptsFreshPasswordlessSignUp(): void
+    {
+        // The account prepare() just created: WebAuthn auth source, no passkey yet, not logged in.
+        $this->primeRegister(sessionAppId: 'faq.test', instanceAppId: 'faq.test');
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUserByLogin')->with('admin')->willReturn(true);
+        $userMock->method('getUserId')->willReturn(1);
+        $userMock->method('getUserAuthSource')->willReturn('webauthn');
+        $userMock->method('getWebAuthnKeys')->willReturn('');
+        $userMock->expects($this->once())->method('setWebAuthnKeys')->with('[new-key]')->willReturn(true);
+        $this->injectControllerProperty('user', $userMock);
+
+        $currentUserMock = $this->createMock(CurrentUser::class);
+        $currentUserMock->method('isLoggedIn')->willReturn(false);
+        $this->injectCurrentUser($currentUserMock);
+
+        $response = $this->controller->register($this->registerRequest());
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+    }
+
     public function testLoginDefersToTokenStepWhenTwoFactorIsEnabled(): void
     {
         // A passkey is only the first factor on a TOTP-protected account: the session must be
@@ -416,6 +527,42 @@ class WebAuthnControllerTest extends TestCase
         $this->injectControllerProperty('authWebAuthn', $authWebAuthnMock);
 
         return $session;
+    }
+
+    /**
+     * Enables WebAuthn, primes the register CSRF token and stubs AuthWebAuthn with session state
+     * for login "admin" issued by $sessionAppId while this instance runs as $instanceAppId.
+     */
+    private function primeRegister(string $sessionAppId, string $instanceAppId, string $sessionUserId = '1'): void
+    {
+        $this->configurationMock
+            ->method('get')
+            ->willReturnCallback(fn(string $item) => match ($item) {
+                'security.enableWebAuthnSupport' => true,
+                default => null,
+            });
+        $this->primeCsrfToken('webauthn-register', 'valid-token');
+
+        $webAuthnUser = (new WebAuthnUser())
+            ->setName('admin')
+            ->setId($sessionUserId)
+            ->setWebAuthnKeys('')
+            ->setChallenge('challenge')
+            ->setAppId($sessionAppId);
+
+        $authWebAuthnMock = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthnMock->method('getUserFromSession')->willReturn($webAuthnUser);
+        $authWebAuthnMock->method('getAppId')->willReturn($instanceAppId);
+        $authWebAuthnMock->method('register')->willReturn('[new-key]');
+        $this->injectControllerProperty('authWebAuthn', $authWebAuthnMock);
+    }
+
+    private function registerRequest(): Request
+    {
+        return Request::create('/api/webauthn/register', 'POST', [], [], [], [], json_encode([
+            'csrfToken' => 'valid-token',
+            'register' => '{}',
+        ]));
     }
 
     private function passkeyLoginRequest(): Request

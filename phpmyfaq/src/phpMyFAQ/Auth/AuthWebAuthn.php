@@ -414,6 +414,11 @@ class AuthWebAuthn extends Auth
         $this->appId = $appId;
     }
 
+    public function getAppId(): string
+    {
+        return $this->appId;
+    }
+
     /**
      * Convert an array of uint8's to a binary string
      */
