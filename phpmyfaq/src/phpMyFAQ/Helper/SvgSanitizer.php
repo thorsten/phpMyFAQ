@@ -32,14 +32,22 @@ namespace phpMyFAQ\Helper;
 class SvgSanitizer
 {
     /**
+     * Optional XML namespace prefix in front of an element name.
+     * The browser's XML parser resolves <x:script> with xmlns:x bound to the
+     * SVG or XHTML namespace to a real script element, so every element
+     * pattern must tolerate a prefix.
+     */
+    private const string NAMESPACE_PREFIX = '(?:[\w.-]+:)?';
+
+    /**
      * Dangerous patterns to detect and remove.
      * These are applied AFTER entity decoding, so encoded bypasses are neutralized.
      */
     private const array DANGEROUS_PATTERNS = [
         // Script tags (any variation)
-        '/<script\b[^>]*>.*?<\/script>/is',
-        '/<script\b[^>]*\/>/is',
-        '/<script\b[^>]*>/is',
+        '/<' . self::NAMESPACE_PREFIX . 'script\b[^>]*>.*?<\/' . self::NAMESPACE_PREFIX . 'script>/is',
+        '/<' . self::NAMESPACE_PREFIX . 'script\b[^>]*\/>/is',
+        '/<' . self::NAMESPACE_PREFIX . 'script\b[^>]*>/is',
 
         // Event handlers (onclick, onload, onerror, etc.). HTML parsers accept
         // "/" as an attribute separator (<svg/onload=...>), so it counts as
@@ -48,8 +56,8 @@ class SvgSanitizer
         '/[\s\/]+on\w+\s*=\s*[^"\'\s>][^\s>]*/i',
 
         // ForeignObject tags
-        '/<foreignObject\b[^>]*>.*?<\/foreignObject>/is',
-        '/<foreignObject\b[^>]*\/>/is',
+        '/<' . self::NAMESPACE_PREFIX . 'foreignObject\b[^>]*>.*?<\/' . self::NAMESPACE_PREFIX . 'foreignObject>/is',
+        '/<' . self::NAMESPACE_PREFIX . 'foreignObject\b[^>]*\/>/is',
 
         // JavaScript URLs in href/xlink:href (after entity decoding, these are plain text)
         '/href\s*=\s*["\'][\s]*javascript\s*:[^"\']*["\']/i',
@@ -83,7 +91,7 @@ class SvgSanitizer
         '/<!ENTITY\b[^>]*>/i',
 
         // HTML tags that shouldn't be in SVG
-        '/<(iframe|embed|object|applet|meta|link|base)\b[^>]*>/i',
+        '/<' . self::NAMESPACE_PREFIX . '(iframe|embed|object|applet|meta|link|base)\b[^>]*>/i',
     ];
 
     /**
@@ -188,10 +196,16 @@ class SvgSanitizer
 
         return array_any(
             self::DANGEROUS_ELEMENTS,
-            static fn(string $element): bool => (
-                preg_match('/<' . preg_quote($element, delimiter: '/') . '\b/i', $decoded) === 1
-            ),
+            static fn(string $element): bool => preg_match('/<' . self::elementName($element) . '\b/i', $decoded) === 1,
         );
+    }
+
+    /**
+     * Regex fragment matching an element name with an optional namespace prefix.
+     */
+    private static function elementName(string $element): string
+    {
+        return self::NAMESPACE_PREFIX . preg_quote($element, delimiter: '/');
     }
 
     /**
@@ -217,7 +231,7 @@ class SvgSanitizer
         }
 
         foreach (self::DANGEROUS_ELEMENTS as $element) {
-            if (!preg_match('/<' . preg_quote($element, delimiter: '/') . '\b/i', $decoded)) {
+            if (!preg_match('/<' . self::elementName($element) . '\b/i', $decoded)) {
                 continue;
             }
 
@@ -374,33 +388,18 @@ class SvgSanitizer
 
         // Remove dangerous element tags with their content
         foreach (self::DANGEROUS_ELEMENTS as $element) {
+            $name = self::elementName($element);
+
             // Remove opening and closing tags with content
             $sanitized =
-                preg_replace(
-                    '/<'
-                    . preg_quote($element, delimiter: '/')
-                    . '\b[^>]*>.*?<\/'
-                    . preg_quote($element, delimiter: '/')
-                    . '>/is',
-                    replacement: '',
-                    subject: $sanitized,
-                ) ?? '';
+                preg_replace('/<' . $name . '\b[^>]*>.*?<\/' . $name . '>/is', replacement: '', subject: $sanitized)
+                ?? '';
 
             // Remove self-closing tags
-            $sanitized =
-                preg_replace(
-                    '/<' . preg_quote($element, delimiter: '/') . '\b[^>]*\/>/is',
-                    replacement: '',
-                    subject: $sanitized,
-                ) ?? '';
+            $sanitized = preg_replace('/<' . $name . '\b[^>]*\/>/is', replacement: '', subject: $sanitized) ?? '';
 
             // Remove unclosed tags
-            $sanitized =
-                preg_replace(
-                    '/<' . preg_quote($element, delimiter: '/') . '\b[^>]*>/is',
-                    replacement: '',
-                    subject: $sanitized,
-                ) ?? '';
+            $sanitized = preg_replace('/<' . $name . '\b[^>]*>/is', replacement: '', subject: $sanitized) ?? '';
         }
 
         // Remove dangerous patterns using regex

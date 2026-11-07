@@ -2198,4 +2198,92 @@ class SvgSanitizerTest extends TestCase
         $this->assertStringContainsString('circle', $sanitizedContent);
         $this->assertTrue($this->sanitizer->isSafe($filePath));
     }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function namespacePrefixedDangerousElementProvider(): array
+    {
+        return [
+            'svg-namespace prefixed script' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:x="http://www.w3.org/2000/svg">'
+                    . '<x:script>alert(document.domain)</x:script></svg>',
+            ],
+            'xhtml-namespace prefixed script' => [
+                '<svg xmlns="http://www.w3.org/2000/svg">'
+                    . '<h:script xmlns:h="http://www.w3.org/1999/xhtml">alert(document.domain)</h:script></svg>',
+            ],
+            'prefixed self-closing script' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:x="http://www.w3.org/2000/svg">'
+                    . '<x:script href="https://evil.example/x.js"/></svg>',
+            ],
+            'prefixed foreignObject' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:x="http://www.w3.org/2000/svg">'
+                    . '<x:foreignObject><body xmlns="http://www.w3.org/1999/xhtml" onload="alert(1)"/>'
+                    . '</x:foreignObject></svg>',
+            ],
+            'prefixed use' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:x="http://www.w3.org/2000/svg">'
+                    . '<x:use href="data:image/svg+xml;base64,PHN2Zy8+#x"/></svg>',
+            ],
+            'prefixed animate' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:x="http://www.w3.org/2000/svg">'
+                    . '<a><x:animate attributeName="href" values="javascript:alert(1)"/></a></svg>',
+            ],
+            'prefixed set' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:x="http://www.w3.org/2000/svg">'
+                    . '<a><x:set attributeName="href" to="javascript:alert(1)"/></a></svg>',
+            ],
+            'prefixed iframe' => [
+                '<svg xmlns="http://www.w3.org/2000/svg">'
+                    . '<h:iframe xmlns:h="http://www.w3.org/1999/xhtml" src="https://evil.example"/></svg>',
+            ],
+            'prefix with dot and dash' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:a.b-c="http://www.w3.org/2000/svg">'
+                    . '<a.b-c:script>alert(1)</a.b-c:script></svg>',
+            ],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('namespacePrefixedDangerousElementProvider')]
+    public function testIsSafeReturnsFalseForNamespacePrefixedDangerousElement(string $maliciousSvg): void
+    {
+        $filePath = $this->testDir . '/prefixed.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+        $this->assertNotEmpty($this->sanitizer->detectIssues($maliciousSvg));
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('namespacePrefixedDangerousElementProvider')]
+    public function testSanitizeRemovesNamespacePrefixedDangerousElement(string $maliciousSvg): void
+    {
+        $filePath = $this->testDir . '/prefixed_sanitize.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+
+        $sanitizedContent = file_get_contents($filePath);
+        $this->assertStringNotContainsString('alert', $sanitizedContent);
+        $this->assertStringNotContainsString('evil.example', $sanitizedContent);
+        $this->assertStringContainsString('<svg', $sanitizedContent);
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testSanitizeRemovesPrefixedScriptWithCloseTagUsingDifferentPrefixCase(): void
+    {
+        $maliciousSvg =
+            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:x="http://www.w3.org/2000/svg">'
+            . '<x:SCRIPT>alert(1)</x:script><circle r="1"/></svg>';
+
+        $filePath = $this->testDir . '/prefixed_case.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+
+        $sanitizedContent = file_get_contents($filePath);
+        $this->assertStringNotContainsStringIgnoringCase('script', $sanitizedContent);
+        $this->assertStringNotContainsString('alert', $sanitizedContent);
+        $this->assertStringContainsString('circle', $sanitizedContent);
+    }
 }
