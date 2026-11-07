@@ -4,6 +4,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\PdoSqlite;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
@@ -15,6 +16,11 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class BookmarkTest extends TestCase
 {
+    private const int VISIBLE_FAQ_ID = 1;
+    private const int HIDDEN_FAQ_ID = 2;
+
+    private Configuration $configuration;
+
     private Bookmark $bookmark;
     private DatabaseDriver $dbHandle;
     private string $dbPath;
@@ -49,7 +55,46 @@ class BookmarkTest extends TestCase
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 
+        $this->configuration = $configuration;
         $this->bookmark = new Bookmark($configuration, $user);
+
+        $this->insertFaq(self::VISIBLE_FAQ_ID, FaqStatus::Published->value);
+        $this->insertFaq(self::HIDDEN_FAQ_ID, FaqStatus::Draft->value);
+    }
+
+    private function insertFaq(int $faqId, string $status): void
+    {
+        $this->configuration->getDb()->query(sprintf(
+            "INSERT INTO faqdata
+                (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content,
+                 author, email, comment, updated, date_start, date_end)
+             VALUES
+                (%d, 'en', %d, 0, '%s', 0, '', 'FAQ %d', '<p>Answer</p>', 'Tester', 'tester@example.com', 'y',
+                 '20260501010101', '00000000000000', '99991231235959')",
+            $faqId,
+            1000 + $faqId,
+            $status,
+            $faqId,
+        ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)', $faqId));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf('INSERT INTO faqdata_group (record_id, group_id) VALUES (%d, -1)', $faqId));
+    }
+
+    public function testAddRefusesHiddenFaq(): void
+    {
+        $this->assertFalse($this->bookmark->add(self::HIDDEN_FAQ_ID));
+        $this->assertFalse($this->bookmark->isFaqBookmark(self::HIDDEN_FAQ_ID));
+        $this->assertSame([], $this->bookmark->getAll());
+    }
+
+    public function testAddRefusesNonExistingFaq(): void
+    {
+        $this->assertFalse($this->bookmark->add(99999));
+        $this->assertSame([], $this->bookmark->getAll());
     }
 
     protected function tearDown(): void

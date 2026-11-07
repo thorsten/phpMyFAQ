@@ -321,19 +321,11 @@ final class FaqController extends AbstractFrontController
         $solutionId = Filter::filterVar($request->query->get('solution_id'), FILTER_VALIDATE_INT);
         $highlight = Filter::filterVar($request->query->get('highlight'), FILTER_SANITIZE_SPECIAL_CHARS);
         $bookmarkAction = Filter::filterVar($request->query->get('bookmark_action'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $bookmarkCsrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Initialize core objects
         $faq = new Faq($this->configuration);
         $currentGroups = $this->applyFaqAccessContext($faq);
-
-        // Handle bookmarks
-        if ($bookmarkAction === 'add' && $faqId > 0) {
-            $this->bookmark->add($faqId);
-        }
-
-        if ($bookmarkAction === 'remove' && $faqId > 0) {
-            $this->bookmark->remove($faqId);
-        }
 
         // Create a detail service
         $faqDisplayService = new FaqDisplayService(
@@ -353,6 +345,18 @@ final class FaqController extends AbstractFrontController
         // placeholder. Checked before the visit is tracked so hidden records leave no trace.
         if (!$faq->isFaqRecordVisible()) {
             return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
+        // Handle bookmarks only after the visibility check above, otherwise a hidden FAQ could be
+        // bookmarked and its title disclosed on the bookmark page. The request must carry the same
+        // CSRF token the JSON API expects, otherwise a cross-site link could alter a user's bookmarks.
+        $token = Token::getInstance($this->session);
+        if ($bookmarkAction === 'add' && $token->verifyToken('add-bookmark', $bookmarkCsrfToken)) {
+            $this->bookmark->add($faqId);
+        }
+
+        if ($bookmarkAction === 'remove' && $token->verifyToken('delete-bookmark', $bookmarkCsrfToken)) {
+            $this->bookmark->remove($faqId);
         }
 
         // Track visit

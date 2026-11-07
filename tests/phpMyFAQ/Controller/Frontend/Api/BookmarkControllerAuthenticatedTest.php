@@ -50,6 +50,8 @@ final class BookmarkControllerAuthenticatedTest extends ApiControllerTestCase
 
     public function testCreateReturnsSuccessForValidBookmarkRequest(): void
     {
+        $this->seedPublishedFaq(1);
+
         $controller = new BookmarkController();
         $session = $this->createSession();
         $csrfToken = Token::getInstance($session)->getTokenString('add-bookmark');
@@ -135,6 +137,8 @@ final class BookmarkControllerAuthenticatedTest extends ApiControllerTestCase
 
     public function testDeleteReturnsSuccessForExistingBookmark(): void
     {
+        $this->seedPublishedFaq(1);
+
         $controller = new BookmarkController();
         $session = $this->createSession();
         $addCsrfToken = Token::getInstance($session)->getTokenString('add-bookmark');
@@ -280,6 +284,8 @@ final class BookmarkControllerAuthenticatedTest extends ApiControllerTestCase
 
     public function testDeleteAllReturnsSuccessWhenBookmarksExist(): void
     {
+        $this->seedPublishedFaq(1);
+
         $controller = new BookmarkController();
         $session = $this->createSession();
         $addCsrfToken = Token::getInstance($session)->getTokenString('add-bookmark');
@@ -299,5 +305,32 @@ final class BookmarkControllerAuthenticatedTest extends ApiControllerTestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
+    }
+
+    /**
+     * Bookmark::add() refuses FAQs the requester may not see, so a bookmarkable FAQ has to exist.
+     */
+    private function seedPublishedFaq(int $faqId): void
+    {
+        self::assertNotFalse(
+            $this->configuration
+                ->getDb()
+                ->query(sprintf(
+                    "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end)
+             VALUES (%d, 'en', %d, 0, 'published', 0, '', 'Public FAQ', 'Answer', 'Admin', 'admin@example.com', 'y', '20260301120000', '00000000000000', '99991231235959')",
+                    $faqId,
+                    1000 + $faqId,
+                )),
+        );
+        self::assertNotFalse(
+            $this->configuration
+                ->getDb()
+                ->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)', $faqId)),
+        );
+        self::assertNotFalse(
+            $this->configuration
+                ->getDb()
+                ->query(sprintf('INSERT INTO faqdata_group (record_id, group_id) VALUES (%d, -1)', $faqId)),
+        );
     }
 }

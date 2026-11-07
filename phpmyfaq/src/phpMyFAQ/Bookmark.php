@@ -82,10 +82,17 @@ class Bookmark
     /**
      * Saves a given FAQ to the bookmark collection of the current user.
      *
+     * Refuses FAQs the current user may not see (ACL, inactive, not yet published, expired),
+     * otherwise a bookmark of a hidden record would disclose its title via the bookmark list.
+     *
      * @param int $faqId ID of the Faq
      */
     public function add(int $faqId): bool
     {
+        if ($faqId <= 0 || !$this->isFaqVisible($faqId)) {
+            return false;
+        }
+
         $result = $this->bookmarkRepository->add($faqId);
 
         if ($result) {
@@ -139,6 +146,19 @@ class Bookmark
         }
 
         return $result;
+    }
+
+    /**
+     * Returns true if the current user may see the given FAQ.
+     */
+    private function isFaqVisible(int $faqId): bool
+    {
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        $faq = new Faq($this->configuration);
+        $faq->setUser($currentUser)->setGroups($currentGroups);
+        $faq->getFaq($faqId);
+
+        return $faq->isFaqRecordVisible();
     }
 
     /**

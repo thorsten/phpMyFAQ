@@ -26,11 +26,14 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\RegistrationHelper;
 use phpMyFAQ\Http\RateLimiter;
+use phpMyFAQ\Mail;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Utils;
 use Random\RandomException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -118,17 +121,32 @@ final class WebAuthnController extends AbstractController
                 return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
             }
 
+            // A passwordless sign-up is a registration and must follow the same policy as
+            // /api/register: the username doubles as the e-mail address, so the domain whitelist
+            // applies to it, and the account starts blocked unless the administrator has turned
+            // manual activation off.
+            $registrationHelper = new RegistrationHelper($this->configuration);
+            if (!$registrationHelper->isDomainAllowed($username)) {
+                return $this->json(['error' => 'The domain is not allowed.'], Response::HTTP_BAD_REQUEST);
+            }
+
             try {
                 $this->user->createUser($username);
-                $this->user->setStatus(status: 'active');
+                $this->user->setStatus(status: 'blocked');
                 $this->user->setAuthSource(AuthenticationSourceType::AUTH_WEB_AUTHN->value);
                 $this->user->setUserData([
                     'display_name' => $username,
                     'email' => $username,
                 ]);
+
+                $isNowActive =
+                    !$this->configuration->get(item: 'spam.manualActivation')
+                    && $this->user->setStatus(status: 'active');
             } catch (\Exception $e) {
                 return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
             }
+
+            $this->notifyAdminAboutNewAccount($username, $isNowActive);
         }
 
         $challengeData = $this->authWebAuthn->prepareChallengeForRegistration(
@@ -150,6 +168,42 @@ final class WebAuthnController extends AbstractController
         return $this->json([
             'challenge' => $challengeData,
         ], Response::HTTP_OK);
+    }
+
+    /**
+     * Tells the administrator about a passwordless sign-up, like RegistrationHelper::createUser()
+     * does for password registrations. A failing mail must not break the sign-up itself.
+     */
+    private function notifyAdminAboutNewAccount(string $username, bool $isNowActive): void
+    {
+        $adminMessage = $isNowActive
+            ? 'This user has been automatically activated, you can still'
+            . ' modify the users permissions or decline membership by visiting the admin section'
+            : 'To activate this user please use';
+
+        try {
+            $mail = new Mail($this->configuration);
+            $mail->addTo($this->configuration->getAdminEmail());
+            $emailRegSubject = Translation::get(key: 'emailRegSubject');
+            $mail->subject = Utils::resolveMarkers(
+                is_string($emailRegSubject) ? $emailRegSubject : '',
+                $this->configuration,
+            );
+            $mail->message = sprintf(
+                'A new user has been registered via passkey:<br><br>Login name: %s<br><br>%s the administration at %s.',
+                $username,
+                $adminMessage,
+                $this->configuration->getDefaultUrl() . '/admin/',
+            );
+            $mail->send();
+        } catch (\Throwable $throwable) {
+            $this->configuration
+                ->getLogger()
+                ->warning(
+                    message: 'Could not notify the administrator about a new passkey account: '
+                        . $throwable->getMessage(),
+                );
+        }
     }
 
     /**

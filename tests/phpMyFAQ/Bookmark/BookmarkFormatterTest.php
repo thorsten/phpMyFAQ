@@ -5,6 +5,7 @@ namespace phpMyFAQ\Bookmark;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\PdoSqlite;
+use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -17,6 +18,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class BookmarkFormatterTest extends TestCase
 {
+    private const int TEST_FAQ_ID = 1;
+
     private Configuration $configuration;
     private CurrentUser $currentUser;
     private BookmarkFormatter $formatter;
@@ -53,7 +56,30 @@ class BookmarkFormatterTest extends TestCase
         $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
 
+        $this->seedFaq(self::TEST_FAQ_ID);
+
         $this->formatter = new BookmarkFormatter($this->configuration, $this->currentUser);
+    }
+
+    private function seedFaq(int $faqId): void
+    {
+        $this->configuration->getDb()->query(sprintf(
+            "INSERT INTO faqdata
+                (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content,
+                 author, email, comment, updated, date_start, date_end)
+             VALUES
+                (%d, 'en', %d, 0, '%s', 0, '', 'Test FAQ', '<p>Safe</p>', 'Tester', 'tester@example.com', 'y',
+                 '20260501010101', '00000000000000', '99991231235959')",
+            $faqId,
+            1000 + $faqId,
+            FaqStatus::Published->value,
+        ));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)', $faqId));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf('INSERT INTO faqdata_group (record_id, group_id) VALUES (%d, -1)', $faqId));
     }
 
     protected function tearDown(): void
@@ -67,7 +93,7 @@ class BookmarkFormatterTest extends TestCase
 
     public function testFormatValidBookmark(): void
     {
-        $bookmark = (object) ['faqid' => 1];
+        $bookmark = (object) ['faqid' => self::TEST_FAQ_ID];
         $result = $this->formatter->format($bookmark);
 
         $this->assertIsArray($result);
@@ -75,8 +101,35 @@ class BookmarkFormatterTest extends TestCase
         $this->assertArrayHasKey('title', $result);
         $this->assertArrayHasKey('id', $result);
         $this->assertArrayHasKey('answer', $result);
-        $this->assertSame(1, $result['id']);
+        $this->assertSame(self::TEST_FAQ_ID, $result['id']);
         $this->assertStringContainsString('/content/', $result['url']);
+    }
+
+    public function testFormatReturnsNullForDraftFaq(): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query("UPDATE faqdata SET status = 'draft' WHERE id = " . self::TEST_FAQ_ID . " AND lang = 'en'");
+
+        $this->assertNull($this->formatter->format((object) ['faqid' => self::TEST_FAQ_ID]));
+    }
+
+    public function testFormatReturnsNullForNotYetPublishedFaq(): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(
+                "UPDATE faqdata SET date_start = '99991231000000' WHERE id = " . self::TEST_FAQ_ID . " AND lang = 'en'",
+            );
+
+        $this->assertNull($this->formatter->format((object) ['faqid' => self::TEST_FAQ_ID]));
+    }
+
+    public function testFormatReturnsNullForNotPermittedFaq(): void
+    {
+        $this->configuration->getDb()->query('DELETE FROM faqdata_user WHERE record_id = ' . self::TEST_FAQ_ID);
+
+        $this->assertNull($this->formatter->format((object) ['faqid' => self::TEST_FAQ_ID]));
     }
 
     public function testFormatReturnsNullWhenFaqIdMissingOrInvalid(): void

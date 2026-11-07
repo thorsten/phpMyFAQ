@@ -39,7 +39,9 @@ readonly class BookmarkFormatter
     /**
      * Format a single bookmark DB object into the array used by the UI.
      *
-     * Returns null if the bookmark cannot be resolved (missing FAQ, invalid id, ...).
+     * Returns null if the bookmark cannot be resolved (missing FAQ, invalid id, ...) or if the
+     * current user may not see the FAQ (ACL, inactive, not yet published, expired). getFaq()
+     * keeps the title of hidden records intact, so rendering them would disclose it.
      *
      * @return array{url:string,title:string,id:int,answer:string}|null
      */
@@ -58,6 +60,10 @@ readonly class BookmarkFormatter
         $faq = new Faq($this->configuration);
         $faq->setUser($currentUser)->setGroups($currentGroups);
         $faq->getFaq($faqId);
+        if (!$faq->isFaqRecordVisible()) {
+            return null;
+        }
+
         $faqData = $faq->faqRecord;
 
         $category = new Category($this->configuration);

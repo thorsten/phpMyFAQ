@@ -20,6 +20,7 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Service\Gravatar;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -596,11 +597,13 @@ final class FaqControllerTest extends TestCase
         ?Faq $faq = null,
         ?Category $category = null,
         ?CurrentUser $currentUser = null,
+        ?Bookmark $bookmark = null,
     ): FaqController {
         $currentUser ??= new CurrentUser($this->configuration);
         $faq ??= new Faq($this->configuration);
         $category ??= new Category($this->configuration, [-1]);
         $category->setLanguage('en');
+        $bookmark ??= new Bookmark($this->configuration, $currentUser);
 
         $controller = new FaqController(
             new UserSession($this->configuration),
@@ -608,7 +611,7 @@ final class FaqControllerTest extends TestCase
             $this->createMock(CaptchaHelperInterface::class),
             $faq,
             $category,
-            new Bookmark($this->configuration, $currentUser),
+            $bookmark,
             $date,
             $mail,
             $gravatar,
@@ -790,6 +793,7 @@ final class FaqControllerTest extends TestCase
 
         $addRequest = $this->showRequest(1, 1);
         $addRequest->query->set('bookmark_action', 'add');
+        $addRequest->query->set('csrf', $this->createCsrfToken('add-bookmark'));
         $content = (string) $createController()->show($addRequest)->getContent();
 
         self::assertStringContainsString('bi bi-bookmark-fill', $content);
@@ -799,10 +803,52 @@ final class FaqControllerTest extends TestCase
         // A controller renders only once per instance, so the removal gets a fresh one.
         $removeRequest = $this->showRequest(1, 1);
         $removeRequest->query->set('bookmark_action', 'remove');
+        $removeRequest->query->set('csrf', $this->createCsrfToken('delete-bookmark'));
         $content = (string) $createController()->show($removeRequest)->getContent();
 
         self::assertStringNotContainsString('bi bi-bookmark-fill', $content);
         self::assertStringContainsString((string) Translation::get(key: 'msgAddBookmark'), $content);
+    }
+
+    /**
+     * A cross-site link such as faq/1/1?bookmark_action=add must not alter the user's bookmarks:
+     * the GET toggle needs the same CSRF token as the JSON bookmark API.
+     */
+    public function testShowIgnoresTheBookmarkToggleWithoutACsrfToken(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+        $this->seedCategoryFor(faqId: 1);
+        $this->configuration->getAll();
+
+        $bookmark = $this->createMock(Bookmark::class);
+        $bookmark->expects(self::never())->method('add');
+        $bookmark->expects(self::never())->method('remove');
+        $bookmark->method('isFaqBookmark')->willReturn(false);
+
+        $controller = $this->createController(
+            new Date($this->configuration),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $this->createCurrentUserStub(userId: 1, canAddFaq: false),
+            bookmark: $bookmark,
+        );
+
+        $request = $this->showRequest(1, 1);
+        $request->query->set('bookmark_action', 'add');
+        $request->query->set('csrf', 'not-the-session-token');
+
+        self::assertSame(200, $controller->show($request)->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function createCsrfToken(string $page): string
+    {
+        $token = Token::getInstance(new Session(new MockArraySessionStorage()))->getTokenString($page);
+        $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;
+
+        return $token;
     }
 
     public function testShowOffersALanguageSwitchTagsAndCategoryPathsWhenAvailable(): void

@@ -53,6 +53,7 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         $this->overrideConfigurationValues([
             'security.enableWebAuthnSupport' => '1',
             'security.enableRegistration' => '1',
+            'spam.manualActivation' => 'false',
         ]);
 
         $session = $this->createSession();
@@ -62,7 +63,16 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         $user = $this->createMock(User::class);
         $user->expects($this->once())->method('getUserByLogin')->with('new@example.com', false)->willReturn(false);
         $user->expects($this->once())->method('createUser')->with('new@example.com')->willReturn(true);
-        $user->expects($this->once())->method('setStatus')->with('active')->willReturn(true);
+        // A passkey sign-up starts blocked like a password registration and is only activated
+        // afterwards because manual activation is off.
+        $statuses = [];
+        $user
+            ->expects($this->exactly(2))
+            ->method('setStatus')
+            ->willReturnCallback(static function (string $status) use (&$statuses): bool {
+                $statuses[] = $status;
+                return true;
+            });
         $user
             ->expects($this->once())
             ->method('setAuthSource')
@@ -109,6 +119,7 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame('def', $payload['challenge']['b64challenge']);
+        self::assertSame(['blocked', 'active'], $statuses);
     }
 
     public function testPrepareLoginReturnsChallengeForExistingUser(): void

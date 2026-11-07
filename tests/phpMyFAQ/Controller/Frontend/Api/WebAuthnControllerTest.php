@@ -381,6 +381,95 @@ class WebAuthnControllerTest extends TestCase
     }
 
     /**
+     * GHSA-w22q-m2fm-x9f4 follow-up: a passwordless sign-up must not bypass the admin's
+     * registration policy. With spam.manualActivation on, the account stays blocked.
+     *
+     * @throws \Exception
+     */
+    public function testPrepareCreatesNewAccountBlockedWhenManualActivationIsOn(): void
+    {
+        $this->enableWebAuthnRegistration(['spam.manualActivation' => 'true']);
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserByLogin')->willReturn(false);
+        $user->method('getUserId')->willReturn(42);
+        $user->expects($this->once())->method('createUser')->with('newbie@corp.example')->willReturn(true);
+        $user->expects($this->once())->method('setStatus')->with('blocked')->willReturn(true);
+
+        $controller = new WebAuthnController($this->createAuthWebAuthnStub(), $user);
+        $session = $this->createSession();
+        $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: false, userId: -1), $session);
+
+        $response = $controller->prepare($this->createJsonRequest([
+            'username' => 'newbie@corp.example',
+            'pmf-csrf-token' => $this->createCsrfToken($session, 'webauthn'),
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testPrepareActivatesNewAccountWhenManualActivationIsOff(): void
+    {
+        $this->enableWebAuthnRegistration(['spam.manualActivation' => 'false']);
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserByLogin')->willReturn(false);
+        $user->method('getUserId')->willReturn(42);
+        $user->method('createUser')->willReturn(true);
+        $statuses = [];
+        $user
+            ->expects($this->exactly(2))
+            ->method('setStatus')
+            ->willReturnCallback(function (string $status) use (&$statuses): bool {
+                $statuses[] = $status;
+                return true;
+            });
+
+        $controller = new WebAuthnController($this->createAuthWebAuthnStub(), $user);
+        $session = $this->createSession();
+        $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: false, userId: -1), $session);
+
+        $response = $controller->prepare($this->createJsonRequest([
+            'username' => 'newbie@corp.example',
+            'pmf-csrf-token' => $this->createCsrfToken($session, 'webauthn'),
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(['blocked', 'active'], $statuses);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testPrepareRejectsNewAccountOutsideDomainWhitelist(): void
+    {
+        $this->enableWebAuthnRegistration(['security.domainWhiteListForRegistrations' => 'corp.example']);
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserByLogin')->willReturn(false);
+        $user->expects($this->never())->method('createUser');
+        $user->expects($this->never())->method('setStatus');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->never())->method('prepareChallengeForRegistration');
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $session = $this->createSession();
+        $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: false, userId: -1), $session);
+
+        $response = $controller->prepare($this->createJsonRequest([
+            'username' => 'outsider@evil.example',
+            'pmf-csrf-token' => $this->createCsrfToken($session, 'webauthn'),
+        ]));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertStringContainsString('domain is not allowed', (string) $response->getContent());
+    }
+
+    /**
      * @throws \Exception
      */
     public function testRegisterFailsWithoutAPreparedUserInTheSession(): void
@@ -710,6 +799,37 @@ class WebAuthnControllerTest extends TestCase
         new \ReflectionProperty($controller, 'currentUser')->setValue($controller, $currentUser);
         new \ReflectionProperty($controller, 'session')->setValue($controller, $session);
         new \ReflectionProperty($controller, 'configuration')->setValue($controller, $this->configuration);
+    }
+
+    /**
+     * Enables WebAuthn and open registration without a captcha so prepare() reaches the account
+     * creation; extra configuration items (e.g. spam.manualActivation) are applied on top.
+     *
+     * @param array<string, string> $extraConfig
+     */
+    private function enableWebAuthnRegistration(array $extraConfig = []): void
+    {
+        $config =
+            [
+                'security.enableWebAuthnSupport' => 'true',
+                'security.enableRegistration' => 'true',
+                'spam.enableCaptchaCode' => 'false',
+            ] + $extraConfig;
+
+        foreach ($config as $key => $value) {
+            $this->setInMemoryConfig($key, $value);
+        }
+    }
+
+    private function createAuthWebAuthnStub(): AuthWebAuthn
+    {
+        $authWebAuthn = $this->createStub(AuthWebAuthn::class);
+        $authWebAuthn
+            ->method('prepareChallengeForRegistration')
+            ->willReturn(['b64challenge' => 'Y2hhbGxlbmdl', 'publicKey' => []]);
+        $authWebAuthn->method('getAppId')->willReturn('faq.test');
+
+        return $authWebAuthn;
     }
 
     /**
