@@ -28,6 +28,19 @@
   </script>
   {% endif %}
 
+  <script>
+    (function () {
+      try {
+        var size = localStorage.getItem('pmf-font-size');
+        if (['80', '90', '110', '120'].indexOf(size) !== -1) {
+          document.documentElement.setAttribute('data-pmf-font-size', size);
+        }
+      } catch (e) {
+        // localStorage may be unavailable (e.g. blocked storage); keep the default font size
+      }
+    })();
+  </script>
+
   <title>{{ title }}</title>
   <base href="{{ baseHref }}">
 
@@ -103,6 +116,19 @@
           </div>
         </li>
         {% endif %}
+        <li class="nav-item me-2">
+          <div class="btn-group pmf-theme-switcher pmf-font-size-switcher border" role="group"
+               aria-label="{{ 'msgFontSize' | translate }}">
+            <button type="button" class="btn btn-link nav-link py-2 px-2" id="font-size-decrease"
+                    aria-label="{{ 'msgFontSizeDecrease' | translate }}" title="{{ 'msgFontSizeDecrease' | translate }}">
+              <i class="bi bi-dash-lg"></i>
+            </button>
+            <button type="button" class="btn btn-link nav-link py-2 px-2" id="font-size-increase"
+                    aria-label="{{ 'msgFontSizeIncrease' | translate }}" title="{{ 'msgFontSizeIncrease' | translate }}">
+              <i class="bi bi-plus-lg"></i>
+            </button>
+          </div>
+        </li>
         <li class="nav-item dropdown">
           <button type="button" class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle pmf-nav-pill-ghost"
                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">

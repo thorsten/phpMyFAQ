@@ -128,6 +128,11 @@ vi.mock('../../../assets/src/utils/theme-switcher', () => ({
   initThemeSwitcher: vi.fn(() => trackCall('initThemeSwitcher')),
 }));
 
+// Mock font size switcher
+vi.mock('../../../assets/src/utils/font-size-switcher', () => ({
+  initFontSizeSwitcher: vi.fn(() => trackCall('initFontSizeSwitcher')),
+}));
+
 describe('admin index.ts', () => {
   beforeEach(() => {
     calls.length = 0;
@@ -145,6 +150,7 @@ describe('admin index.ts', () => {
 
     // Theme switcher
     expect(calls).toContain('initThemeSwitcher');
+    expect(calls).toContain('initFontSizeSwitcher');
 
     // Session & login
     expect(calls).toContain('handleSessionTimeout');

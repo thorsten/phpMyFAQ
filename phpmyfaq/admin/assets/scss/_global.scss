@@ -11,6 +11,24 @@ body {
   height: 100%;
 }
 
+// Font size switcher: the user picks a base size in fixed steps; every
+// rem-based size follows. 100% needs no rule, the attribute is then absent.
+[data-pmf-font-size='80'] {
+  font-size: 80%;
+}
+
+[data-pmf-font-size='90'] {
+  font-size: 90%;
+}
+
+[data-pmf-font-size='110'] {
+  font-size: 110%;
+}
+
+[data-pmf-font-size='120'] {
+  font-size: 120%;
+}
+
 body {
   background-color: var(--pmf-bg);
   color: var(--pmf-text);

@@ -50,6 +50,7 @@ import {
   handleReloadCaptcha,
 } from './utils';
 import './utils/tooltip';
+import { initFontSizeSwitcher } from './utils/font-size-switcher';
 import { handleWebAuthn } from './webauthn/webauthn';
 import { handleChat } from './chat';
 import { handlePushNotifications } from './push';
@@ -59,6 +60,9 @@ document.addEventListener('DOMContentLoaded', (): void => {
   if (!document.documentElement.hasAttribute('data-pmf-forced-theme')) {
     void import('./utils/theme-switcher').then(({ initThemeSwitcher }) => initThemeSwitcher());
   }
+
+  // Font size switcher
+  initFontSizeSwitcher();
 
   // Reload Captchas
   const reloadButton: HTMLButtonElement | null = document.querySelector('#captcha-button');

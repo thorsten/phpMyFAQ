@@ -160,6 +160,13 @@
         color: var(--pmf-sidenav-accent);
         background: var(--pmf-topnav-active);
       }
+
+      &:disabled {
+        color: var(--pmf-topnav-muted);
+        background: transparent;
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
     }
   }
 

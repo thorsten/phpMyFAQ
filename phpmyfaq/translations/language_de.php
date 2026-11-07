@@ -1924,4 +1924,9 @@ $LANG_CONF['oidc.redirectUri'] = ['input', 'Redirect-URI', 'Beim Provider regist
 $LANG_CONF['oidc.scopes'] = ['input', 'Scopes', 'Durch Leerzeichen getrennte Scopes, z.B. openid profile email'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Installation von Nightly-Builds erlauben, deren SHA-256-Prüfsumme nicht gegen GitHub verifiziert werden kann (nicht empfohlen)'];
 
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Schriftgröße';
+$PMF_LANG['msgFontSizeDecrease'] = 'Schrift verkleinern';
+$PMF_LANG['msgFontSizeIncrease'] = 'Schrift vergrößern';
+
 return $PMF_LANG;

@@ -99,6 +99,11 @@ vi.mock('./utils/theme-switcher', () => ({
   initThemeSwitcher: () => mockInitThemeSwitcher(),
 }));
 
+const mockInitFontSizeSwitcher = vi.fn();
+vi.mock('./utils/font-size-switcher', () => ({
+  initFontSizeSwitcher: () => mockInitFontSizeSwitcher(),
+}));
+
 describe('frontend.ts', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -136,6 +141,7 @@ describe('frontend.ts', () => {
     expect(mockHandleCategorySelection).toHaveBeenCalled();
     expect(mockHandleChat).toHaveBeenCalled();
     expect(mockHandlePushNotifications).toHaveBeenCalled();
+    expect(mockInitFontSizeSwitcher).toHaveBeenCalled();
   });
 
   it('should load the theme switcher when no layout mode is forced', async () => {
@@ -152,6 +158,7 @@ describe('frontend.ts', () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(mockInitThemeSwitcher).not.toHaveBeenCalled();
+    expect(mockInitFontSizeSwitcher).toHaveBeenCalled();
     document.documentElement.removeAttribute('data-pmf-forced-theme');
   });
 

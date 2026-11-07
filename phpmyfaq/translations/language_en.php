@@ -1942,4 +1942,9 @@ $PMF_LANG['msgFooterLegal'] = 'Legal';
 $PMF_LANG['msgPermalink'] = 'Permalink';
 $PMF_LANG['msgNoBookmarks'] = 'You have not bookmarked any FAQs yet.';
 
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Font size';
+$PMF_LANG['msgFontSizeDecrease'] = 'Decrease font size';
+$PMF_LANG['msgFontSizeIncrease'] = 'Increase font size';
+
 return $PMF_LANG;

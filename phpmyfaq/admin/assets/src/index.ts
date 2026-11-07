@@ -98,12 +98,16 @@ import { handleGroups } from './group';
 import { handleLoginForm, handlePasswordStrength, handlePasswordToggle } from '../../../assets/src/utils';
 import { handleSessionTimeout, initializeTooltips, sidebarToggle } from './utils';
 import { initThemeSwitcher } from '../../../assets/src/utils/theme-switcher';
+import { initFontSizeSwitcher } from '../../../assets/src/utils/font-size-switcher';
 
 document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   'use strict';
 
   // Theme switcher
   initThemeSwitcher();
+
+  // Font size switcher
+  initFontSizeSwitcher();
 
   // Session timeout
   handleSessionTimeout();

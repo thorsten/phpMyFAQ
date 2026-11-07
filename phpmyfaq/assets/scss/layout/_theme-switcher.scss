@@ -48,7 +48,32 @@
     i {
       font-size: 1rem;
     }
+
+    &:disabled {
+      color: rgb(255, 255, 255, 0.35);
+      background: transparent;
+      cursor: not-allowed;
+    }
   }
+}
+
+// Font size switcher ---------------------------------------------------------
+// The visitor picks a base size in fixed steps; every rem-based size follows.
+// Resetting to 100% needs no rule: the attribute is simply absent or '100'.
+[data-pmf-font-size='80'] {
+  font-size: 80%;
+}
+
+[data-pmf-font-size='90'] {
+  font-size: 90%;
+}
+
+[data-pmf-font-size='110'] {
+  font-size: 110%;
+}
+
+[data-pmf-font-size='120'] {
+  font-size: 120%;
 }
 
 // Dark mode ------------------------------------------------------------------
@@ -163,6 +188,12 @@
         color: var(--bs-dark) !important;
         opacity: 1;
         background: var(--bs-primary) !important;
+      }
+
+      &:disabled {
+        color: var(--bs-light) !important;
+        background: transparent !important;
+        opacity: 0.5;
       }
 
       i {
