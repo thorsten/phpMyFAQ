@@ -108,8 +108,8 @@ class HttpStreamer
                 $description = 'phpMyFAQ JSON export file';
                 $mimeType = 'application/json';
                 break;
-            // In this case, no default statement is required:
-            // the one above is just for clean coding style
+                // In this case, no default statement is required:
+                // the one above is just for clean coding style
             default:
                 $filename = 'phpmyfaq.pmf';
                 $description = 'phpMyFAQ Generic export file';
