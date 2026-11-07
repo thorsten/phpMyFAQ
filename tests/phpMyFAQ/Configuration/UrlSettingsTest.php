@@ -12,7 +12,7 @@ class UrlSettingsTest extends TestCase
 {
     private function urlSettings(string $referenceUrl): UrlSettings
     {
-        $configuration = $this->createMock(Configuration::class);
+        $configuration = $this->createStub(Configuration::class);
         $configuration
             ->method('get')
             ->willReturnMap([
