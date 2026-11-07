@@ -1116,9 +1116,12 @@ final class FaqController extends AbstractAdministrationApiController
 
     /**
      * Returns one message per CSV row whose target category or language lies outside
-     * the current user's FAQ_ADD scope. An empty array means every row may be imported.
+     * the current user's FAQ_ADD scope, or that would go live without the publish right.
+     * An empty array means every row may be imported.
      *
-     * Column layout matches Import::import(): 0 = category id, 4 = language code.
+     * Column layout matches Import::import(): 0 = category id, 4 = language code,
+     * 7 = active flag. A row with the active flag set is a create with status "published",
+     * so it is gated by FAQ_PUBLISH exactly like create() is.
      *
      * @param array<array-key, array<array-key, mixed>> $csvData
      * @return array<int, string>
@@ -1152,6 +1155,16 @@ final class FaqController extends AbstractAdministrationApiController
                     $rowNumber,
                     PermissionType::FAQ_ADD->name,
                     $language,
+                );
+                continue;
+            }
+
+            $isPublished = Filter::filterVar($record[7] ?? null, FILTER_VALIDATE_BOOLEAN) === true;
+            if ($isPublished && !$this->userMayPublishIn([$categoryId], $language)) {
+                $messages[] = sprintf(
+                    Translation::getString(key: 'msgImportRowNoPublishPermission'),
+                    $rowNumber,
+                    PermissionType::FAQ_PUBLISH->name,
                 );
             }
         }

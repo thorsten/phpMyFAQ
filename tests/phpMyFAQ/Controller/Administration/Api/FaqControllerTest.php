@@ -2009,6 +2009,78 @@ final class FaqControllerTest extends TestCase
         $this->removeCsrfCookie('importfaqs');
     }
 
+    /**
+     * Column 8 of a CSV row makes the FAQ public at once, so it is a publish decision:
+     * a user with faq_add but without faq_publish must not get it past the import.
+     *
+     * @throws \Exception
+     */
+    public function testImportReturnsForbiddenForPublishedRowWithoutPublishPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('importfaqs');
+        $this->setCsrfCookie('importfaqs', $csrfToken);
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
+        self::assertNotFalse($tempFile);
+        $this->temporaryFiles[] = $tempFile;
+        file_put_contents(
+            $tempFile,
+            "1,Draft question,Draft answer,keywords,en,Author,author@example.com,false,false\n"
+            . "1,Published question,Published answer,keywords,en,Author,author@example.com,true,false\n",
+        );
+        $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
+
+        $request = new Request([], ['csrf' => $csrfToken], [], [], ['file' => $uploadedFile]);
+        $controller = $this->createController();
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $response = $controller->import($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertFalse($payload['storedAll']);
+        self::assertSame(['Row 2: no "FAQ_PUBLISH" permission to import this row as published.'], $payload['messages']);
+
+        // The whole upload is refused, so the draft row must not have been stored either.
+        self::assertSame(0, $this->countFaqsWithQuestion('Draft question'));
+        self::assertSame(0, $this->countFaqsWithQuestion('Published question'));
+        $this->removeCsrfCookie('importfaqs');
+    }
+
+    /**
+     * Draft rows are plain creates: the missing publish right must not block them.
+     *
+     * @throws \Exception
+     */
+    public function testImportStoresDraftRowsWithoutPublishPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('importfaqs');
+        $this->setCsrfCookie('importfaqs', $csrfToken);
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'pmf-faq-import-');
+        self::assertNotFalse($tempFile);
+        $this->temporaryFiles[] = $tempFile;
+        file_put_contents(
+            $tempFile,
+            "1,Imported draft question,Imported draft answer,keywords,en,Author,author@example.com,false,false\n",
+        );
+        $uploadedFile = new UploadedFile($tempFile, 'faq.csv', null, null, true);
+
+        $request = new Request([], ['csrf' => $csrfToken], [], [], ['file' => $uploadedFile]);
+        $controller = $this->createController();
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $response = $controller->import($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['storedAll']);
+        self::assertSame(1, $this->countFaqsWithQuestion('Imported draft question'));
+        $this->removeCsrfCookie('importfaqs');
+    }
+
     private function countFaqsWithQuestion(string $question): int
     {
         $result = $this->configuration

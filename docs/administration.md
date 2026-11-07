@@ -119,7 +119,8 @@ Reading FAQs, changing them, and deciding that a change goes public are three in
 
 - The publish right maps onto the editorial workflow described in 7.2.3: every FAQ is a **Draft**, in **Review**, or
   **Published**, per language. Moving between draft and review only needs the edit rights, while every transition into
-  or out of the published state needs `Publish FAQs`.
+  or out of the published state needs `Publish FAQs`. This includes the CSV import: a row whose active column is `true`
+  is only accepted from a user who may publish in that category and language.
 - **A user with write but not publish can edit a published FAQ without changing whether it is public.** For a published
   FAQ, the editor shows the status read-only instead of the status radio buttons, and saving leaves that state alone.
   The status selector in the FAQ overview is likewise shown read-only.
