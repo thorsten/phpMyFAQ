@@ -14,6 +14,11 @@ use Symfony\Component\HttpFoundation\Session\Session;
 #[AllowMockObjectsWithoutExpectations]
 class BookmarkTest extends TestCase
 {
+    private const int VISIBLE_FAQ_ID = 1;
+    private const int HIDDEN_FAQ_ID = 2;
+
+    private Configuration $configuration;
+
     private Bookmark $bookmark;
 
     /**
@@ -42,7 +47,62 @@ class BookmarkTest extends TestCase
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 
+        $this->configuration = $configuration;
         $this->bookmark = new Bookmark($configuration, $user);
+
+        $this->insertFaq(self::VISIBLE_FAQ_ID, 'yes');
+        $this->insertFaq(self::HIDDEN_FAQ_ID, 'no');
+    }
+
+    protected function tearDown(): void
+    {
+        $this->bookmark->removeAll();
+        foreach ([self::VISIBLE_FAQ_ID, self::HIDDEN_FAQ_ID] as $faqId) {
+            $this->configuration->getDb()->query('DELETE FROM faqdata_user WHERE record_id = ' . $faqId);
+            $this->configuration->getDb()->query('DELETE FROM faqdata WHERE id = ' . $faqId . " AND lang = 'en'");
+        }
+
+        parent::tearDown();
+    }
+
+    private function insertFaq(int $faqId, string $active): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(
+                'INSERT INTO faqdata (
+                id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email, comment,
+                updated, date_start, date_end
+            ) VALUES (
+                '
+                . $faqId
+                . ", 'en', "
+                . (1000 + $faqId)
+                . ", 0, '"
+                . $active
+                . "', 0, '', 'FAQ "
+                . $faqId
+                . "',
+                '<p>Answer</p>', 'Tester', 'tester@example.com', 'y', '20260501010101', '00000000000000',
+                '99991231235959'
+            )",
+            );
+        $this->configuration
+            ->getDb()
+            ->query('INSERT INTO faqdata_user (record_id, user_id) VALUES (' . $faqId . ', -1)');
+    }
+
+    public function testAddRefusesHiddenFaq(): void
+    {
+        $this->assertFalse($this->bookmark->add(self::HIDDEN_FAQ_ID));
+        $this->assertFalse($this->bookmark->isFaqBookmark(self::HIDDEN_FAQ_ID));
+        $this->assertSame([], $this->bookmark->getAll());
+    }
+
+    public function testAddRefusesNonExistingFaq(): void
+    {
+        $this->assertFalse($this->bookmark->add(99999));
+        $this->assertSame([], $this->bookmark->getAll());
     }
 
     public function testSaveFaqAsBookmarkById(): void

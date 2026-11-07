@@ -114,6 +114,33 @@ class BookmarkFormatterTest extends TestCase
         $this->assertSame('<p>Safe</p><img src="foo" />', $result['answer']);
     }
 
+    public function testFormatReturnsNullForInactiveFaq(): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query("UPDATE faqdata SET active = 'no' WHERE id = " . self::TEST_FAQ_ID . " AND lang = 'en'");
+
+        $this->assertNull($this->formatter->format((object) ['faqid' => self::TEST_FAQ_ID]));
+    }
+
+    public function testFormatReturnsNullForNotYetPublishedFaq(): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(
+                "UPDATE faqdata SET date_start = '99991231000000' WHERE id = " . self::TEST_FAQ_ID . " AND lang = 'en'",
+            );
+
+        $this->assertNull($this->formatter->format((object) ['faqid' => self::TEST_FAQ_ID]));
+    }
+
+    public function testFormatReturnsNullForNotPermittedFaq(): void
+    {
+        $this->configuration->getDb()->query('DELETE FROM faqdata_user WHERE record_id = ' . self::TEST_FAQ_ID);
+
+        $this->assertNull($this->formatter->format((object) ['faqid' => self::TEST_FAQ_ID]));
+    }
+
     public function testFormatReturnsNullWhenFaqIdMissingOrInvalid(): void
     {
         $this->assertNull($this->formatter->format((object) []));

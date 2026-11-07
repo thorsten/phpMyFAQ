@@ -105,16 +105,7 @@ $faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT, 0);
 $solutionId = Filter::filterVar($request->query->get('solution_id'), FILTER_VALIDATE_INT);
 $highlight = Filter::filterVar($request->query->get('highlight'), FILTER_SANITIZE_SPECIAL_CHARS);
 $bookmarkAction = Filter::filterVar($request->query->get('bookmark_action'), FILTER_SANITIZE_SPECIAL_CHARS);
-
-// Handle bookmarks
-$bookmark = $container->get('phpmyfaq.bookmark');
-if ($bookmarkAction === 'add' && isset($faqId)) {
-    $bookmark->add($faqId);
-}
-
-if ($bookmarkAction === 'remove' && isset($faqId)) {
-    $bookmark->remove($faqId);
-}
+$bookmarkCsrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 // Get all data from the FAQ record
 if (0 === (int) $solutionId) {
@@ -137,6 +128,19 @@ if (!$faq->isFaqRecordVisible()) {
 
 if (isset($faq->faqRecord['id'])) {
     $faqId = $faq->faqRecord['id'];
+}
+
+// Handle bookmarks only after the visibility check above, otherwise a hidden FAQ could be
+// bookmarked and its title disclosed on the bookmark page. The request must carry the same
+// CSRF token the JSON API expects, otherwise a cross-site link could alter a user's bookmarks.
+$bookmark = $container->get('phpmyfaq.bookmark');
+$token = Token::getInstance($container->get('session'));
+if ($bookmarkAction === 'add' && isset($faqId) && $token->verifyToken('add-bookmark', $bookmarkCsrfToken)) {
+    $bookmark->add($faqId);
+}
+
+if ($bookmarkAction === 'remove' && isset($faqId) && $token->verifyToken('delete-bookmark', $bookmarkCsrfToken)) {
+    $bookmark->remove($faqId);
 }
 
 $faqSession->userTracking('article_view', $faqId);
