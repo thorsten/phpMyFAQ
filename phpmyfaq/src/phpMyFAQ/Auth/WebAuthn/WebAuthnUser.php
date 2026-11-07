@@ -29,6 +29,12 @@ class WebAuthnUser
 
     private string $challenge = '';
 
+    /**
+     * Host (relying party id) of the instance that issued this registration state. Multisite
+     * instances share one session store, so register() must refuse state issued elsewhere.
+     */
+    private string $appId = '';
+
     public function getId(): string
     {
         return $this->id;
@@ -70,6 +76,17 @@ class WebAuthnUser
     public function setChallenge(string $challenge): WebAuthnUser
     {
         $this->challenge = $challenge;
+        return $this;
+    }
+
+    public function getAppId(): string
+    {
+        return $this->appId;
+    }
+
+    public function setAppId(string $appId): WebAuthnUser
+    {
+        $this->appId = $appId;
         return $this;
     }
 }

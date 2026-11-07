@@ -1011,6 +1011,55 @@ final class ConfigurationTabControllerTest extends TestCase
         self::assertSame('true', $stored['main.enableWysiwygEditor']);
     }
 
+    public function testHttpsReferenceUrlIsPersisted(): void
+    {
+        $stored = $this->saveConfiguration(['main.referenceURL' => 'https://new.example.test/faq']);
+
+        self::assertSame('https://new.example.test/faq', $stored['main.referenceURL']);
+    }
+
+    public function testUpperCaseHttpSchemeReferenceUrlIsPersisted(): void
+    {
+        $stored = $this->saveConfiguration(['main.referenceURL' => 'HTTP://new.example.test/']);
+
+        self::assertSame('HTTP://new.example.test/', $stored['main.referenceURL']);
+    }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function nonHttpReferenceUrlProvider(): iterable
+    {
+        // Authority-form javascript URL that passes FILTER_VALIDATE_URL (CVE-2023-5320 bypass)
+        yield 'javascript authority form' => ["javascript://x/%0Avoid(document.body.dataset.pmfPoc='executed')//"];
+        yield 'javascript mixed case' => ['JavaScript://x/%0Aalert(1)//'];
+        yield 'javascript leading whitespace' => [' javascript://x/%0Aalert(1)//'];
+        yield 'javascript tab in scheme' => ["java\tscript://x/%0Aalert(1)//"];
+        yield 'bare javascript' => ['javascript:alert(1)'];
+        yield 'data url' => ['data:text/html,<script>alert(1)</script>'];
+        yield 'ftp url' => ['ftp://files.example.test/'];
+        yield 'vbscript url' => ['vbscript://x/%0Amsgbox(1)'];
+        yield 'scheme relative' => ['//evil.example.test/'];
+        yield 'empty string' => [''];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('nonHttpReferenceUrlProvider')]
+    public function testNonHttpReferenceUrlIsRejectedAndStoredValueKept(string $url): void
+    {
+        $originalReferenceUrl = (string) $this->configuration->get('main.referenceURL');
+
+        $stored = $this->saveConfiguration(['main.referenceURL' => $url]);
+
+        self::assertSame(
+            $originalReferenceUrl,
+            $stored['main.referenceURL'],
+            'Only http(s) URLs may be stored as main.referenceURL',
+        );
+    }
+
     private function setCsrfCookie(string $page, string $token): void
     {
         $_COOKIE['pmf-csrf-token-' . substr(md5($page), 0, 10)] = $token;

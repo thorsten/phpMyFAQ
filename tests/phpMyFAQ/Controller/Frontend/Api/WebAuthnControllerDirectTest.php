@@ -338,10 +338,12 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
             ->setName('alice')
             ->setId('1')
             ->setWebAuthnKeys('existing-keys')
-            ->setChallenge('issued-challenge');
+            ->setChallenge('issued-challenge')
+            ->setAppId('faq.test');
 
         $authWebAuthn = $this->createMock(AuthWebAuthn::class);
         $authWebAuthn->expects($this->once())->method('getUserFromSession')->willReturn($webAuthnUser);
+        $authWebAuthn->method('getAppId')->willReturn('faq.test');
         $authWebAuthn
             ->expects($this->once())
             ->method('register')
@@ -350,6 +352,7 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
 
         $user = $this->createMock(User::class);
         $user->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $user->method('getUserId')->willReturn(1);
         $user->expects($this->once())->method('setWebAuthnKeys')->with('new-keys')->willReturn(true);
 
         $controller = new WebAuthnController($authWebAuthn, $user);
@@ -381,10 +384,12 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
             ->setName('alice')
             ->setId('1')
             ->setWebAuthnKeys('existing-keys')
-            ->setChallenge('issued-challenge');
+            ->setChallenge('issued-challenge')
+            ->setAppId('faq.test');
 
         $authWebAuthn = $this->createMock(AuthWebAuthn::class);
         $authWebAuthn->expects($this->once())->method('getUserFromSession')->willReturn($webAuthnUser);
+        $authWebAuthn->method('getAppId')->willReturn('faq.test');
         $authWebAuthn
             ->expects($this->once())
             ->method('register')
@@ -393,6 +398,7 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
 
         $user = $this->createMock(User::class);
         $user->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $user->method('getUserId')->willReturn(1);
         $user->expects($this->once())->method('setWebAuthnKeys')->with('new-keys')->willReturn(false);
 
         $controller = new WebAuthnController($authWebAuthn, $user);

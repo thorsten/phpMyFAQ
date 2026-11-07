@@ -133,7 +133,7 @@ final class FaqControllerTest extends TestCase
 
         self::assertSame(7, $result['comments'][0]['id']);
         self::assertSame('&lt;John&gt;', $result['comments'][0]['username']);
-        self::assertSame('Visit example.com', $result['comments'][0]['comment']);
+        self::assertSame('Visit <a href="https://example.com">https://example.com</a>', $result['comments'][0]['comment']);
         self::assertSame('<img src="avatar.png">', $result['gravatarImages'][7]);
         self::assertSame('john [at] example.com', $result['safeEmails'][7]);
         self::assertSame('2026-03-01', $result['formattedDates'][7]);

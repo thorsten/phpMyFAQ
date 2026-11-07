@@ -57,7 +57,7 @@ final class NewsControllerTest extends TestCase
 
         self::assertSame(42, $result['comments'][0]['id']);
         self::assertSame('John Doe', $result['comments'][0]['username']);
-        self::assertSame('Visit example.com', $result['comments'][0]['comment']);
+        self::assertSame('Visit <a href="https://example.com">https://example.com</a>', $result['comments'][0]['comment']);
         self::assertSame('<img src="avatar.jpg">', $result['gravatarImages'][42]);
         self::assertSame('john [at] example.com', $result['safeEmails'][42]);
         self::assertSame('Mar 1, 2026', $result['formattedDates'][42]);

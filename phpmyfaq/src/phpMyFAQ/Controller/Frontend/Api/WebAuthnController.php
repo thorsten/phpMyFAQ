@@ -142,7 +142,8 @@ final class WebAuthnController extends AbstractController
             ->setName($username)
             ->setId((string) $this->user->getUserId())
             ->setWebAuthnKeys(webAuthnKeys: '')
-            ->setChallenge(is_string($b64Challenge) ? $b64Challenge : '');
+            ->setChallenge(is_string($b64Challenge) ? $b64Challenge : '')
+            ->setAppId($this->authWebAuthn->getAppId());
 
         $this->authWebAuthn->storeUserInSession($webAuthnUser);
 
@@ -181,21 +182,56 @@ final class WebAuthnController extends AbstractController
             throw new Exception('User not found in session');
         }
 
-        $webAuthnUser->setWebAuthnKeys($this->authWebAuthn->register(
-            $register,
-            $webAuthnUser->getWebAuthnKeys(),
-            $webAuthnUser->getChallenge(),
-        ));
-
-        // Burn the registration challenge so the ceremony cannot be replayed against this session.
-        $webAuthnUser->setChallenge('');
-        $this->authWebAuthn->storeUserInSession($webAuthnUser);
+        // Multisite instances share one PHP session store, so the state prepare() stored may have
+        // been issued by another instance where the ownership check passed for a different
+        // account with the same login. Only accept state issued by this instance; an empty appId
+        // (state from before this check) is rejected as well.
+        if (
+            $webAuthnUser->getAppId() === ''
+            || !hash_equals($this->authWebAuthn->getAppId(), $webAuthnUser->getAppId())
+        ) {
+            return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
 
         try {
             $this->user->getUserByLogin($webAuthnUser->getName());
         } catch (Exception) {
             return $this->json(['error' => Translation::get(key: 'ad_auth_fail')], Response::HTTP_BAD_REQUEST);
         }
+
+        // The account the login resolves to here must be the one prepare() staged. The check is
+        // enforced again, independently of prepare(), so a stale or foreign session cannot write
+        // keys into a different account.
+        if ($this->user->getUserId() !== (int) $webAuthnUser->getId()) {
+            return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        // Either the authenticated owner is adding a passkey, or this is the passwordless sign-up
+        // that prepare() just created: a WebAuthn-sourced account that has no passkey yet. Any
+        // other account (e.g. a password-based admin) must not get its passkeys replaced.
+        $isOwner = $this->currentUser->isLoggedIn() && $this->currentUser->getUserId() === $this->user->getUserId();
+        $isFreshSignUp =
+            $this->user->getUserAuthSource() === AuthenticationSourceType::AUTH_WEB_AUTHN->value
+            && in_array($this->user->getWebAuthnKeys(), ['', '0', '[]'], strict: true);
+        if (!$isOwner && !$isFreshSignUp) {
+            return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        try {
+            $webAuthnKeys = $this->authWebAuthn->register(
+                $register,
+                $webAuthnUser->getWebAuthnKeys(),
+                $webAuthnUser->getChallenge(),
+            );
+        } catch (Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+        $webAuthnUser->setWebAuthnKeys($webAuthnKeys);
+
+        // Burn the registration challenge so the ceremony cannot be replayed against this session.
+        $webAuthnUser->setChallenge('');
+        $this->authWebAuthn->storeUserInSession($webAuthnUser);
 
         if ($this->user->setWebAuthnKeys($webAuthnUser->getWebAuthnKeys())) {
             return $this->json([

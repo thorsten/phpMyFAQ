@@ -66,7 +66,7 @@
         <ol class="pmf-faq-list">
           {% for topten in topRecordsList %}
             <li class="pmf-faq-list-item">
-              <a class="latest-entries pmf-faq-list-link" href="{{ topten.url }}">{{ topten.title | raw }}</a>
+              <a class="latest-entries pmf-faq-list-link" href="{{ topten.url }}" title="{{ topten.preview }}">{{ topten.title | raw }}</a>
               <span class="pmf-faq-list-meta"><i class="bi bi-eye" aria-hidden="true"></i> {{ topten.visits }}</span>
             </li>
           {% endfor %}

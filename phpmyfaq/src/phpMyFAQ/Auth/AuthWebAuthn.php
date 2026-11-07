@@ -489,6 +489,11 @@ class AuthWebAuthn extends Auth
         $this->appId = $appId;
     }
 
+    public function getAppId(): string
+    {
+        return $this->appId;
+    }
+
     /**
      * Deterministic per-login decoy credential ID (32 bytes) for logins without stored keys.
      */

@@ -410,16 +410,12 @@ class WebAuthnControllerTest extends TestCase
     {
         $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
 
-        $webAuthnUser = new WebAuthnUser()
-            ->setId('7')
-            ->setName('alice')
-            ->setWebAuthnKeys('')
-            ->setChallenge('challenge');
+        $webAuthnUser = $this->createPreparedWebAuthnUser(appId: 'faq.test', userId: '7');
 
         $authWebAuthn = $this->createMock(AuthWebAuthn::class);
         $authWebAuthn->method('getUserFromSession')->willReturn($webAuthnUser);
-        $authWebAuthn->method('register')->willReturn('stored-keys');
-        $authWebAuthn->expects($this->once())->method('storeUserInSession')->with($webAuthnUser);
+        $authWebAuthn->method('getAppId')->willReturn('faq.test');
+        $authWebAuthn->expects($this->never())->method('register');
 
         $user = $this->createMock(User::class);
         $user
@@ -433,15 +429,213 @@ class WebAuthnControllerTest extends TestCase
         $session = $this->createSession();
         $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: false, userId: -1), $session);
 
-        $response = $controller->register($this->createJsonRequest([
-            'register' => 'attestation',
-            'pmf-csrf-token' => $this->createCsrfToken($session, 'webauthn'),
-        ]));
+        $response = $controller->register($this->registerRequest($session));
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame(['error' => Translation::get('ad_auth_fail')], $this->decodePayload($response));
+    }
+
+    /**
+     * Multisite instances share one session store. State prepared on tenant A (where the
+     * ownership check passed for A's "alice") must not key the master's "alice".
+     *
+     * @throws \Exception
+     */
+    public function testRegisterRejectsSessionStateIssuedByOtherInstance(): void
+    {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->method('getUserFromSession')->willReturn($this->createPreparedWebAuthnUser(appId: 'a.faq.test'));
+        $authWebAuthn->method('getAppId')->willReturn('faq.test');
+        $authWebAuthn->expects($this->never())->method('register');
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->never())->method('setWebAuthnKeys');
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $session = $this->createSession();
+        $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: true, userId: 1), $session);
+
+        $response = $controller->register($this->registerRequest($session));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(['error' => Translation::get('err_NotAuth')], $this->decodePayload($response));
+    }
+
+    /**
+     * Fails closed: state without an appId (e.g. from before the binding existed) is rejected.
+     *
+     * @throws \Exception
+     */
+    public function testRegisterRejectsSessionStateWithoutInstanceBinding(): void
+    {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->method('getUserFromSession')->willReturn($this->createPreparedWebAuthnUser(appId: ''));
+        $authWebAuthn->method('getAppId')->willReturn('faq.test');
+        $authWebAuthn->expects($this->never())->method('register');
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->never())->method('setWebAuthnKeys');
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $session = $this->createSession();
+        $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: true, userId: 1), $session);
+
+        $response = $controller->register($this->registerRequest($session));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * The login in the session must resolve to the very account prepare() staged.
+     *
+     * @throws \Exception
+     */
+    public function testRegisterRejectsAccountIdMismatch(): void
+    {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn
+            ->method('getUserFromSession')
+            ->willReturn($this->createPreparedWebAuthnUser(appId: 'faq.test', userId: '7'));
+        $authWebAuthn->method('getAppId')->willReturn('faq.test');
+        $authWebAuthn->expects($this->never())->method('register');
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $user->method('getUserId')->willReturn(1);
+        $user->expects($this->never())->method('setWebAuthnKeys');
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $session = $this->createSession();
+        $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: true, userId: 1), $session);
+
+        $response = $controller->register($this->registerRequest($session));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * Independent of prepare(): an anonymous caller must not replace the passkeys of an
+     * existing password-based account, even with matching session state.
+     *
+     * @throws \Exception
+     */
+    public function testRegisterRejectsAnonymousCallerForPasswordAccount(): void
+    {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->method('getUserFromSession')->willReturn($this->createPreparedWebAuthnUser(appId: 'faq.test'));
+        $authWebAuthn->method('getAppId')->willReturn('faq.test');
+        $authWebAuthn->expects($this->never())->method('register');
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $user->method('getUserId')->willReturn(1);
+        $user->method('getUserAuthSource')->willReturn('local');
+        $user->method('getWebAuthnKeys')->willReturn('');
+        $user->expects($this->never())->method('setWebAuthnKeys');
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $session = $this->createSession();
+        $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: false, userId: -1), $session);
+
+        $response = $controller->register($this->registerRequest($session));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRegisterAcceptsAuthenticatedOwner(): void
+    {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
+        $webAuthnUser = $this->createPreparedWebAuthnUser(appId: 'faq.test');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->method('getUserFromSession')->willReturn($webAuthnUser);
+        $authWebAuthn->method('getAppId')->willReturn('faq.test');
+        $authWebAuthn->method('register')->willReturn('[new-key]');
+        $authWebAuthn->expects($this->once())->method('storeUserInSession')->with($webAuthnUser);
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $user->method('getUserId')->willReturn(1);
+        $user->expects($this->once())->method('setWebAuthnKeys')->with('[new-key]')->willReturn(true);
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $session = $this->createSession();
+        $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: true, userId: 1), $session);
+
+        $response = $controller->register($this->registerRequest($session));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // The registration challenge is burnt so the ceremony cannot be replayed against this session.
         self::assertSame('', $webAuthnUser->getChallenge());
-        self::assertSame('stored-keys', $webAuthnUser->getWebAuthnKeys());
+    }
+
+    /**
+     * The account prepare() just created: WebAuthn auth source, no passkey yet, not logged in.
+     *
+     * @throws \Exception
+     */
+    public function testRegisterAcceptsFreshPasswordlessSignUp(): void
+    {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->method('getUserFromSession')->willReturn($this->createPreparedWebAuthnUser(appId: 'faq.test'));
+        $authWebAuthn->method('getAppId')->willReturn('faq.test');
+        $authWebAuthn->method('register')->willReturn('[new-key]');
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $user->method('getUserId')->willReturn(1);
+        $user->method('getUserAuthSource')->willReturn('webauthn');
+        $user->method('getWebAuthnKeys')->willReturn('');
+        $user->expects($this->once())->method('setWebAuthnKeys')->with('[new-key]')->willReturn(true);
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $session = $this->createSession();
+        $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: false, userId: -1), $session);
+
+        $response = $controller->register($this->registerRequest($session));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testRegisterReportsAttestationErrorsAsBadRequest(): void
+    {
+        $this->setInMemoryConfig('security.enableWebAuthnSupport', 'true');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->method('getUserFromSession')->willReturn($this->createPreparedWebAuthnUser(appId: 'faq.test'));
+        $authWebAuthn->method('getAppId')->willReturn('faq.test');
+        $authWebAuthn->method('register')->willThrowException(new Exception('Invalid attestation'));
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
+        $user->method('getUserId')->willReturn(1);
+        $user->expects($this->never())->method('setWebAuthnKeys');
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $session = $this->createSession();
+        $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: true, userId: 1), $session);
+
+        $response = $controller->register($this->registerRequest($session));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(['error' => 'Invalid attestation'], $this->decodePayload($response));
     }
 
     /**
@@ -455,7 +649,11 @@ class WebAuthnControllerTest extends TestCase
         $user->expects($this->never())->method('getUserByLogin');
 
         $controller = new WebAuthnController($this->createStub(AuthWebAuthn::class), $user);
-        $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: false, userId: -1), $this->createSession());
+        $this->injectControllerState(
+            $controller,
+            $this->createCurrentUser(loggedIn: false, userId: -1),
+            $this->createSession(),
+        );
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing login data');
@@ -471,6 +669,30 @@ class WebAuthnControllerTest extends TestCase
         return $session;
     }
 
+    /**
+     * Session state as prepare() leaves it for login "alice", issued by the instance $appId.
+     */
+    private function createPreparedWebAuthnUser(string $appId, string $userId = '1'): WebAuthnUser
+    {
+        return new WebAuthnUser()
+            ->setId($userId)
+            ->setName('alice')
+            ->setWebAuthnKeys('')
+            ->setChallenge('challenge')
+            ->setAppId($appId);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function registerRequest(Session $session): Request
+    {
+        return $this->createJsonRequest([
+            'register' => 'attestation',
+            'pmf-csrf-token' => $this->createCsrfToken($session, 'webauthn'),
+        ]);
+    }
+
     private function createCurrentUser(bool $loggedIn, int $userId): CurrentUser
     {
         $currentUser = $this->createStub(CurrentUser::class);
@@ -480,8 +702,11 @@ class WebAuthnControllerTest extends TestCase
         return $currentUser;
     }
 
-    private function injectControllerState(WebAuthnController $controller, CurrentUser $currentUser, Session $session): void
-    {
+    private function injectControllerState(
+        WebAuthnController $controller,
+        CurrentUser $currentUser,
+        Session $session,
+    ): void {
         new \ReflectionProperty($controller, 'currentUser')->setValue($controller, $currentUser);
         new \ReflectionProperty($controller, 'session')->setValue($controller, $session);
         new \ReflectionProperty($controller, 'configuration')->setValue($controller, $this->configuration);
