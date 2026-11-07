@@ -324,6 +324,71 @@ class WebAuthnControllerTest extends TestCase
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
+    public function testPrepareCreatesNewAccountBlockedWhenManualActivationIsOn(): void
+    {
+        // GHSA-w22q-m2fm-x9f4 follow-up: a passwordless sign-up must not bypass the admin's
+        // registration policy. With spam.manualActivation on, the account stays blocked.
+        $this->enableWebAuthnAndRegistration(['spam.manualActivation' => true]);
+        $this->primeCsrfToken('webauthn-prepare', 'valid-token');
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUserByLogin')->with('newbie@corp.example', false)->willReturn(false);
+        $userMock->method('getUserId')->willReturn(42);
+        $userMock->expects($this->once())->method('createUser')->with('newbie@corp.example')->willReturn(true);
+        $userMock->expects($this->once())->method('setStatus')->with('blocked')->willReturn(true);
+        $this->injectControllerProperty('user', $userMock);
+        $this->injectControllerProperty('authWebAuthn', $this->createAuthWebAuthnMock());
+
+        $response = $this->controller->prepare($this->prepareRequest('newbie@corp.example'));
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testPrepareActivatesNewAccountWhenManualActivationIsOff(): void
+    {
+        $this->enableWebAuthnAndRegistration(['spam.manualActivation' => false]);
+        $this->primeCsrfToken('webauthn-prepare', 'valid-token');
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUserByLogin')->with('newbie@corp.example', false)->willReturn(false);
+        $userMock->method('getUserId')->willReturn(42);
+        $userMock->method('createUser')->willReturn(true);
+        $statuses = [];
+        $userMock
+            ->expects($this->exactly(2))
+            ->method('setStatus')
+            ->willReturnCallback(function (string $status) use (&$statuses): bool {
+                $statuses[] = $status;
+                return true;
+            });
+        $this->injectControllerProperty('user', $userMock);
+        $this->injectControllerProperty('authWebAuthn', $this->createAuthWebAuthnMock());
+
+        $response = $this->controller->prepare($this->prepareRequest('newbie@corp.example'));
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertSame(['blocked', 'active'], $statuses);
+    }
+
+    public function testPrepareRejectsNewAccountOutsideDomainWhitelist(): void
+    {
+        $this->enableWebAuthnAndRegistration([
+            'security.domainWhiteListForRegistrations' => 'corp.example',
+        ]);
+        $this->primeCsrfToken('webauthn-prepare', 'valid-token');
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getUserByLogin')->with('outsider@evil.example', false)->willReturn(false);
+        $userMock->expects($this->never())->method('createUser');
+        $userMock->expects($this->never())->method('setStatus');
+        $this->injectControllerProperty('user', $userMock);
+
+        $response = $this->controller->prepare($this->prepareRequest('outsider@evil.example'));
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertStringContainsString('domain is not allowed', (string) $response->getContent());
+    }
+
     public function testRegisterRejectsSessionStateIssuedByOtherInstance(): void
     {
         // Multisite instances share one session store. State prepared on tenant A (where the
@@ -573,15 +638,37 @@ class WebAuthnControllerTest extends TestCase
         ]));
     }
 
-    private function enableWebAuthnAndRegistration(): void
+    /**
+     * @param array<string, mixed> $extraConfig additional configuration items, e.g. spam.manualActivation
+     */
+    private function enableWebAuthnAndRegistration(array $extraConfig = []): void
     {
-        $this->configurationMock
-            ->method('get')
-            ->willReturnCallback(fn(string $item) => match ($item) {
+        $config =
+            [
                 'security.enableWebAuthnSupport' => true,
                 'security.enableRegistration' => true,
-                default => null,
-            });
+            ] + $extraConfig;
+
+        $this->configurationMock->method('get')->willReturnCallback(fn(string $item) => $config[$item] ?? null);
+    }
+
+    private function prepareRequest(string $username): Request
+    {
+        return Request::create('/api/webauthn/prepare', 'POST', [], [], [], [], json_encode([
+            'username' => $username,
+            'csrfToken' => 'valid-token',
+        ]));
+    }
+
+    private function createAuthWebAuthnMock(): AuthWebAuthn
+    {
+        $authWebAuthnMock = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthnMock
+            ->method('prepareChallengeForRegistration')
+            ->willReturn(['b64challenge' => 'Y2hhbGxlbmdl', 'publicKey' => []]);
+        $authWebAuthnMock->method('getAppId')->willReturn('faq.test');
+
+        return $authWebAuthnMock;
     }
 
     /**
