@@ -515,15 +515,17 @@ class System
     /**
      * Creates a JSON object with all .php files of phpMyFAQ with their sha1 hashes.
      *
+     * @param string|null $rootDirectory The installation to scan; defaults to this one.
      * @throws Exception
      */
-    public function createHashes(): string
+    public function createHashes(?string $rootDirectory = null): string
     {
+        $rootDirectory ??= (string) PMF_ROOT_DIR;
         $dateTime = new DateTime();
         // Unreadable directories are recorded below and then skipped instead of
         // aborting the whole scan with PHP's own, version-dependent message.
         $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator((string) PMF_ROOT_DIR, FilesystemIterator::SKIP_DOTS),
+            new RecursiveDirectoryIterator($rootDirectory, FilesystemIterator::SKIP_DOTS),
             RecursiveIteratorIterator::SELF_FIRST,
             RecursiveIteratorIterator::CATCH_GET_CHILD,
         );
@@ -545,7 +547,7 @@ class System
                 continue;
             }
 
-            $current = str_replace((string) PMF_ROOT_DIR, replace: '', subject: $file->getPathname());
+            $current = str_replace($rootDirectory, replace: '', subject: $file->getPathname());
 
             if ($file->isDir() && !$file->isReadable()) {
                 $hashes[$current . ' failed'] = sprintf('The directory %s is not readable.', $current);

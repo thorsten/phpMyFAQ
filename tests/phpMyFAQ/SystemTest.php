@@ -448,12 +448,18 @@ class SystemTest extends TestCase
     }
 
     /**
+     * The unreadable directory lives in a private temporary tree: creating it inside the
+     * shared phpmyfaq/ directory would break every test scanning that tree at the same time
+     * (ParaTest runs them concurrently) and, after an aborted run, every later run as well.
+     *
      * @throws \Exception
      */
     public function testCreateHashesRecordsADirectoryThatCannotBeRead(): void
     {
-        $lockedDir = PMF_ROOT_DIR . '/upgrade/locked';
-        @mkdir($lockedDir, 0755, true);
+        $root = sys_get_temp_dir() . '/pmf-system-test-' . bin2hex(random_bytes(4));
+        $lockedDir = $root . '/upgrade/locked';
+        mkdir($lockedDir, 0755, true);
+        file_put_contents($root . '/index.php', '<?php // test');
         chmod($lockedDir, 0o000);
 
         try {
@@ -461,11 +467,13 @@ class SystemTest extends TestCase
                 $this->markTestSkipped('The current user can read directories without permissions.');
             }
 
-            $decoded = json_decode(new System()->createHashes(), true);
+            $decoded = json_decode(new System()->createHashes($root), true);
         } finally {
             chmod($lockedDir, 0o755);
-            @rmdir($lockedDir);
-            @rmdir(PMF_ROOT_DIR . '/upgrade');
+            rmdir($lockedDir);
+            rmdir($root . '/upgrade');
+            unlink($root . '/index.php');
+            rmdir($root);
         }
 
         $failures = array_filter(
@@ -475,5 +483,6 @@ class SystemTest extends TestCase
         );
         $this->assertCount(1, $failures);
         $this->assertStringContainsString('upgrade/locked', (string) reset($failures));
+        $this->assertArrayHasKey('/index.php', $decoded);
     }
 }
