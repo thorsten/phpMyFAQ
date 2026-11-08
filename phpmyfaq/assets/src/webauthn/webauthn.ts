@@ -31,12 +31,15 @@ export const handleWebAuthn = (): void => {
       try {
         const registerUsername = (document.querySelector('[id=webauthn]') as HTMLInputElement).value;
         const csrfToken = (document.getElementById('pmf-csrf-token-webauthn') as HTMLInputElement).value;
+        // Adding a passkey to an existing account requires the current password (step-up).
+        const currentPasswordInput = document.getElementById('webauthn-current-password') as HTMLInputElement | null;
+        const currentPassword = currentPasswordInput ? currentPasswordInput.value : '';
         const response = await fetch('./api/webauthn/prepare', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ username: registerUsername, csrfToken }),
+          body: JSON.stringify({ username: registerUsername, csrfToken, currentPassword }),
         });
 
         if (response.ok) {
@@ -76,7 +79,8 @@ export const handleWebAuthn = (): void => {
             }
           );
         } else {
-          errorMessage.textContent = "Couldn't initiate registration.";
+          const errorResponse = (await response.json().catch(() => null)) as { error?: string } | null;
+          errorMessage.textContent = errorResponse?.error ?? "Couldn't initiate registration.";
           errorMessage.classList.remove('d-none');
         }
       } catch (error: unknown) {

@@ -15,6 +15,7 @@
  * @since     2012-01-12
  */
 
+use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
@@ -106,6 +107,7 @@ if ($user->isLoggedIn()) {
         ),
         'msgGravatarNotConnected' => Translation::get(key: 'msgGravatarNotConnected'),
         'webauthnSupportEnabled' => $faqConfig->get('security.enableWebAuthnSupport'),
+        'isWebAuthnUser' => $user->getUserAuthSource() === AuthenticationSourceType::AUTH_WEB_AUTHN->value,
         'csrfTokenWebauthn' => Token::getInstance($container->get('session'))->getTokenString('webauthn-prepare'),
         'csrfExportUserData' => Token::getInstance($container->get('session'))->getTokenInput('export-userdata'),
         'exportUserDataUrl' => 'api/user/data/export',

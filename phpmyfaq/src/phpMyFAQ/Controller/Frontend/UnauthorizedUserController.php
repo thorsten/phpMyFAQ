@@ -187,6 +187,10 @@ final class UnauthorizedUserController
             if (!$user->changePassword($password)) {
                 return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_BAD_REQUEST);
             }
+
+            // The reset proves control of the mailbox, not of any passkey on the account. Drop
+            // them, so a passkey planted during a session compromise does not outlive the reset.
+            $user->revokeWebAuthnKeys();
         } catch (\Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }

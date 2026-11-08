@@ -37,10 +37,17 @@ use Random\RandomException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class WebAuthnController extends AbstractController implements SkipsAuthenticationCheck
 {
+    /** Session key holding the time of the last successful passkey assertion. */
+    public const string SESSION_PASSKEY_ASSERTED_AT = 'webauthn_asserted_at';
+
+    /** Seconds a passkey assertion counts as fresh for adding another passkey. */
+    public const int PASSKEY_REAUTH_WINDOW = 300;
+
     private readonly AuthWebAuthn $authWebAuthn;
 
     private readonly User $user;
@@ -104,6 +111,20 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
             return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
+        if ($userExists) {
+            // The session alone is not enough. A passkey is a durable, password-independent
+            // credential: planted through a hijacked session it would outlive logout, remember-me
+            // revocation and even a password reset. The same step-up that guards password
+            // changes, 2FA removal and e-mail changes applies here (CWE-620).
+            $stepUp = $this->requireEnrollmentStepUp(
+                (string) ($data->currentPassword ?? ''),
+                $this->container->get(id: 'session'),
+            );
+            if ($stepUp instanceof JsonResponse) {
+                return $stepUp;
+            }
+        }
+
         if (!$userExists) {
             // A passwordless sign-up is a registration and must follow the same policy as
             // /api/register: the username doubles as the e-mail address, so the domain whitelist
@@ -135,11 +156,14 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
 
         $challenge = $this->authWebAuthn->prepareChallengeForRegistration($username, (string) $this->user->getUserId());
 
+        // Seed the ceremony with the keys already on the account. AuthWebAuthn::register() merges
+        // the new key into this list; seeded with '' it would return only the new key and
+        // register() would overwrite every passkey the owner already has.
         $webAuthnUser = new WebAuthnUser();
         $webAuthnUser
             ->setName($username)
             ->setId((string) $this->user->getUserId())
-            ->setWebAuthnKeys(webAuthnKeys: '')
+            ->setWebAuthnKeys($userExists ? $this->user->getWebAuthnKeys() : '')
             ->setChallenge($challenge['b64challenge'])
             ->setAppId($this->authWebAuthn->getAppId());
 
@@ -151,6 +175,73 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
                 'webauthn-register',
             ),
         ], Response::HTTP_OK);
+    }
+
+    /**
+     * Requires proof of the account's existing credential before a passkey is added.
+     *
+     * Password accounts re-enter the current password; failures consume the shared login
+     * failure budget and lock the step-up once it is exhausted (CWE-307). Passwordless accounts
+     * have no password to ask for, so a recent passkey assertion (see login()) stands in: the
+     * current session must have authenticated with a passkey within the last
+     * self::PASSKEY_REAUTH_WINDOW seconds.
+     *
+     * Returns a JsonResponse that short-circuits the request, or null when the caller may proceed.
+     */
+    private function requireEnrollmentStepUp(
+        #[\SensitiveParameter]
+        string $currentPassword,
+        SessionInterface $session,
+    ): ?JsonResponse {
+        if ($this->user->getUserAuthSource() === AuthenticationSourceType::AUTH_WEB_AUTHN->value) {
+            $assertedAt = (int) $session->get(self::SESSION_PASSKEY_ASSERTED_AT, 0);
+            if ($assertedAt <= 0 || (time() - $assertedAt) > self::PASSKEY_REAUTH_WINDOW) {
+                return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_FORBIDDEN);
+            }
+
+            return null;
+        }
+
+        if ($this->currentUser->isStepUpLockedOut()) {
+            return $this->json([
+                'error' => Translation::get(key: 'msgStepUpLockedOut'),
+            ], Response::HTTP_TOO_MANY_REQUESTS);
+        }
+
+        if (!$this->currentUser->verifyPassword($currentPassword)) {
+            $this->currentUser->stepUpFailure();
+
+            return $this->json([
+                'error' => Translation::get(key: 'ad_user_error_currentPasswordInvalid'),
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        $this->currentUser->stepUpSuccess();
+
+        return null;
+    }
+
+    /**
+     * Tells the account owner that a passkey was added, so an enrollment made through a
+     * hijacked session does not go unnoticed. A failing mail must not undo the enrollment.
+     */
+    private function notifyOwnerAboutNewPasskey(): void
+    {
+        try {
+            $this->user->mailUser(
+                Utils::resolveMarkers(Translation::get(key: 'msgPasskeyAddedMailSubject'), $this->configuration),
+                sprintf(
+                    Translation::get(key: 'msgPasskeyAddedMailBody'),
+                    $this->user->getLogin(),
+                    date('Y-m-d H:i:s'),
+                    $this->configuration->getDefaultUrl() . 'user/ucp',
+                ),
+            );
+        } catch (\Throwable $throwable) {
+            $this->configuration
+                ->getLogger()
+                ->warning(message: 'Could not notify the user about a new passkey: ' . $throwable->getMessage());
+        }
     }
 
     /**
@@ -265,6 +356,10 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
         $this->authWebAuthn->storeUserInSession($webAuthnUser);
 
         if ($this->user->setWebAuthnKeys($webAuthnUser->getWebAuthnKeys())) {
+            if ($isOwner) {
+                $this->notifyOwnerAboutNewPasskey();
+            }
+
             return $this->json([
                 'success' => 'ok',
                 'message' => Translation::get(key: 'msgPasskeyRegistrationSuccess'),
@@ -368,6 +463,9 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
             $currentUser->setSuccess(success: true);
             $currentUser->updateSessionId(updateLastLogin: true);
             $currentUser->saveToSession();
+            // Lets a passwordless account add another passkey shortly after signing in; see
+            // requireEnrollmentStepUp().
+            $this->container->get(id: 'session')->set(self::SESSION_PASSKEY_ASSERTED_AT, time());
             return $this->json([
                 'success' => 'ok',
                 'redirect' => $this->configuration->getDefaultUrl(),

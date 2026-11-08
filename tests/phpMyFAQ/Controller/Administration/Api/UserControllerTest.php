@@ -341,6 +341,7 @@ class UserControllerTest extends TestCase
         CurrentUser $actingUser,
         int $targetUserId,
         array &$executed,
+        string $authSource = 'ldap',
     ): UserController {
         $controller = $this->buildController($session, $actingUser);
 
@@ -359,7 +360,7 @@ class UserControllerTest extends TestCase
                 'login' => 'target_user',
                 'account_status' => 'active',
                 'is_superadmin' => 0,
-                'auth_source' => 'ldap',
+                'auth_source' => $authSource,
                 // the same stub row is also returned for faqright lookups
                 'for_users' => 1,
                 'for_groups' => 1,
@@ -378,6 +379,64 @@ class UserControllerTest extends TestCase
         $parent->getProperty('configuration')->setValue($controller, $configuration);
 
         return $controller;
+    }
+
+    /**
+     * A passkey is a password-independent credential. When an administrator overwrites
+     * another account's password, its passkeys are revoked with it, otherwise a passkey planted
+     * during a session compromise would survive the reset.
+     */
+    public function testOverwritingAnotherUsersPasswordRevokesTheirPasskeys(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: true);
+        $executed = [];
+        $controller = $this->buildControllerWithRecordingDatabase($session, $actingUser, 7, $executed, 'local');
+        $csrf = $this->primeCsrf($session, 'overwrite-password');
+
+        $request = $this->jsonRequest([
+            'userId' => 7,
+            'csrf' => $csrf,
+            'newPassword' => 'NewTarget123!',
+            'passwordRepeat' => 'NewTarget123!',
+        ]);
+
+        $response = $controller->overwritePassword($request);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $revokes = array_filter($executed, static fn(string $query): bool => str_contains($query, "webauthnkeys = ''"));
+        $this->assertCount(1, $revokes, 'Passkeys of the target account must be revoked.');
+    }
+
+    public function testSelfServicePasswordChangeKeepsOwnPasskeys(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: true);
+        $actingUser->method('isStepUpLockedOut')->willReturn(false);
+        $actingUser->method('verifyPassword')->with('Current123!')->willReturn(true);
+        $actingUser->method('stepUpSuccess')->willReturn(true);
+        $executed = [];
+        $controller = $this->buildControllerWithRecordingDatabase($session, $actingUser, 5, $executed, 'local');
+        $csrf = $this->primeCsrf($session, 'overwrite-password');
+
+        $request = $this->jsonRequest([
+            'userId' => 5,
+            'csrf' => $csrf,
+            'newPassword' => 'NewSelf123!',
+            'passwordRepeat' => 'NewSelf123!',
+            'currentPassword' => 'Current123!',
+        ]);
+
+        $response = $controller->overwritePassword($request);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        foreach ($executed as $query) {
+            $this->assertStringNotContainsString(
+                'webauthnkeys',
+                $query,
+                'Proving the current password keeps passkeys.',
+            );
+        }
     }
 
     /**
@@ -531,13 +590,15 @@ class UserControllerTest extends TestCase
         $database = $this->createStub(Sqlite3::class);
         $database->method('query')->willReturn(true);
         $database->method('numRows')->willReturn(1);
-        $database->method('fetchArray')->willReturn([
-            'user_id' => 7,
-            'login' => 'second_superadmin',
-            'account_status' => 'active',
-            'is_superadmin' => 1,
-            'auth_source' => 'ldap', // non-'db' source: no password row lookup needed
-        ]);
+        $database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => 7,
+                'login' => 'second_superadmin',
+                'account_status' => 'active',
+                'is_superadmin' => 1,
+                'auth_source' => 'ldap', // non-'db' source: no password row lookup needed
+            ]);
 
         $configuration = $this->createStub(Configuration::class);
         $configuration->method('getDb')->willReturn($database);
@@ -595,38 +656,34 @@ class UserControllerTest extends TestCase
         $database = $this->createStub(Sqlite3::class);
         $database
             ->method('query')
-            ->willReturnCallback(
-                static function (string $query) use (&$executed, &$lastQuery, &$rightsRows): bool {
-                    $executed[] = $query;
-                    $lastQuery = $query;
-                    if (str_contains($query, 'faquser_right')) {
-                        $rightsRows = [['right_id' => 42]];
-                    }
+            ->willReturnCallback(static function (string $query) use (&$executed, &$lastQuery, &$rightsRows): bool {
+                $executed[] = $query;
+                $lastQuery = $query;
+                if (str_contains($query, 'faquser_right')) {
+                    $rightsRows = [['right_id' => 42]];
+                }
 
-                    return true;
-                },
-            );
+                return true;
+            });
         $database->method('numRows')->willReturn(1);
         $database
             ->method('fetchArray')
-            ->willReturnCallback(
-                static function () use (&$lastQuery, &$rightsRows, $targetUserId): ?array {
-                    if (str_contains($lastQuery, 'faquser_right')) {
-                        return array_shift($rightsRows);
-                    }
+            ->willReturnCallback(static function () use (&$lastQuery, &$rightsRows, $targetUserId): ?array {
+                if (str_contains($lastQuery, 'faquser_right')) {
+                    return array_shift($rightsRows);
+                }
 
-                    return [
-                        'user_id' => $targetUserId,
-                        'login' => 'privileged_admin',
-                        'account_status' => 'active',
-                        'is_superadmin' => 0,
-                        'auth_source' => 'ldap',
-                        'for_users' => 1,
-                        'for_groups' => 1,
-                        'for_sections' => 1,
-                    ];
-                },
-            );
+                return [
+                    'user_id' => $targetUserId,
+                    'login' => 'privileged_admin',
+                    'account_status' => 'active',
+                    'is_superadmin' => 0,
+                    'auth_source' => 'ldap',
+                    'for_users' => 1,
+                    'for_groups' => 1,
+                    'for_sections' => 1,
+                ];
+            });
 
         $configuration = $this->createStub(Configuration::class);
         $configuration->method('getDb')->willReturn($database);
@@ -652,9 +709,10 @@ class UserControllerTest extends TestCase
 
         $executed = [];
         $parent = (new ReflectionClass(UserController::class))->getParentClass();
-        $parent
-            ->getProperty('configuration')
-            ->setValue($controller, $this->buildConfigurationWithTargetHoldingRight(7, $executed));
+        $parent->getProperty('configuration')->setValue($controller, $this->buildConfigurationWithTargetHoldingRight(
+            7,
+            $executed,
+        ));
 
         $request = $this->jsonRequest([
             'userId' => 7,
@@ -687,9 +745,10 @@ class UserControllerTest extends TestCase
 
         $executed = [];
         $parent = (new ReflectionClass(UserController::class))->getParentClass();
-        $parent
-            ->getProperty('configuration')
-            ->setValue($controller, $this->buildConfigurationWithTargetHoldingRight(7, $executed));
+        $parent->getProperty('configuration')->setValue($controller, $this->buildConfigurationWithTargetHoldingRight(
+            7,
+            $executed,
+        ));
 
         $request = $this->jsonRequest([
             'userId' => 7,
@@ -763,16 +822,18 @@ class UserControllerTest extends TestCase
         $actingUser = $this->buildActingUser(userId: 1, isSuperAdmin: true);
 
         $userData = $this->createMock(UserData::class);
-        $userData->method('get')->willReturn([
-            'user_id' => 7,
-            'last_modified' => '20260101000000',
-            'display_name' => 'Jane Doe',
-            'email' => 'jane@example.test',
-            'is_visible' => 1,
-            'twofactor_enabled' => 1,
-            'secret' => 'TOPSECRETTOTPSEEDVALUE',
-            'keycloak_sub' => 'kc-subject-uuid-123',
-        ]);
+        $userData
+            ->method('get')
+            ->willReturn([
+                'user_id' => 7,
+                'last_modified' => '20260101000000',
+                'display_name' => 'Jane Doe',
+                'email' => 'jane@example.test',
+                'is_visible' => 1,
+                'twofactor_enabled' => 1,
+                'secret' => 'TOPSECRETTOTPSEEDVALUE',
+                'keycloak_sub' => 'kc-subject-uuid-123',
+            ]);
 
         $targetUser = $this->createMock(CurrentUser::class);
         $targetUser->userdata = $userData;
@@ -816,13 +877,15 @@ class UserControllerTest extends TestCase
         $database = $this->createStub(Sqlite3::class);
         $database->method('query')->willReturn(true);
         $database->method('numRows')->willReturn(1);
-        $database->method('fetchArray')->willReturn([
-            'user_id' => 7,
-            'login' => 'second_superadmin',
-            'account_status' => 'active',
-            'is_superadmin' => 1,
-            'auth_source' => 'ldap',
-        ]);
+        $database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => 7,
+                'login' => 'second_superadmin',
+                'account_status' => 'active',
+                'is_superadmin' => 1,
+                'auth_source' => 'ldap',
+            ]);
 
         $configuration = $this->createStub(Configuration::class);
         $configuration->method('getDb')->willReturn($database);

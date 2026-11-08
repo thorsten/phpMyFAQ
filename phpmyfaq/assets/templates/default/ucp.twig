@@ -316,6 +316,23 @@
               </div>
             </div>
 
+            {% if not isWebAuthnUser %}
+            <div class="row mb-2">
+              <label class="col-lg-4 col-form-label" for="webauthn-current-password">{{ msgCurrentPassword }}: *</label>
+              <div class="col-lg-8 controls">
+                <input
+                  type="password"
+                  autocomplete="current-password"
+                  name="webauthn-current-password"
+                  id="webauthn-current-password"
+                  class="form-control"
+                  required
+                >
+                <small class="form-text text-muted">{{ 'msgPasskeyCurrentPasswordHint' | translate }}</small>
+              </div>
+            </div>
+            {% endif %}
+
             <div class="row">
               <div class="col-12 text-end">
                 <button type="submit" class="btn btn-primary">

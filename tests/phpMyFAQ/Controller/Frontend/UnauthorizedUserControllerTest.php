@@ -151,6 +151,22 @@ class UnauthorizedUserControllerTest extends TestCase
         $this->assertTrue($this->credentialsValid($user->getLogin(), 'NewLocal123!'));
     }
 
+    /**
+     * A passkey is a password-independent credential. One planted through a hijacked session
+     * must not survive the password reset meant to lock the intruder out.
+     */
+    public function testResetRevokesPasskeysOfLocalAccount(): void
+    {
+        $user = $this->provisionUser('reset-passkey-user', AuthenticationSourceType::AUTH_LOCAL->value);
+        $this->assertTrue($user->setWebAuthnKeys('[{"key":"PLANTED","id":[9,9,9]}]'));
+        $this->assertSame('[{"key":"PLANTED","id":[9,9,9]}]', $user->getWebAuthnKeys());
+
+        $response = $this->controller->resetPassword($this->signedResetRequest($user, 'NewLocal123!'));
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertSame('', $user->getWebAuthnKeys());
+    }
+
     public function testUpdatePasswordDoesNotIssueTokenForExternalAccount(): void
     {
         $user = $this->provisionUser('reset-sso-user', AuthenticationSourceType::AUTH_SSO->value);

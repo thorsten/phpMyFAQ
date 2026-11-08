@@ -333,6 +333,12 @@ final class UserController extends AbstractController
                 return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_BAD_REQUEST);
             }
 
+            // An administrator overwriting another account's password is resetting its
+            // credentials; passkeys are credentials too and must not survive that reset.
+            if (!$isSelf) {
+                $targetUser->revokeWebAuthnKeys();
+            }
+
             return $this->json(['success' => Translation::get(key: 'ad_passwdsuc')], Response::HTTP_OK);
         }
 

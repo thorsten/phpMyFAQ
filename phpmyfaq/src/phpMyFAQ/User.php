@@ -956,6 +956,25 @@ class User
     }
 
     /**
+     * Removes every passkey from the account.
+     *
+     * A passkey is a password-independent credential, so it must go whenever the
+     * password is reset without proof of the old one (anonymous reset link, administrator
+     * overwrite): otherwise a passkey planted through a hijacked session would survive
+     * the very reset meant to lock the intruder out.
+     */
+    public function revokeWebAuthnKeys(): bool
+    {
+        $update = sprintf(
+            "UPDATE %sfaquser SET webauthnkeys = '' WHERE user_id = %d",
+            Database::getTablePrefix(),
+            $this->getUserId(),
+        );
+
+        return (bool) $this->configuration->getDb()->query($update);
+    }
+
+    /**
      * Sends mail to the current user.
      *
      * @throws Core\Exception|TransportExceptionInterface
