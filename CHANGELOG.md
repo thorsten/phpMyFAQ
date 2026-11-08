@@ -62,7 +62,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated experimental MCP Server to mcp/sdk (Thorsten)
 - upgraded PDF engine to TCPDF 7 / tc-lib-pdf; PDF fonts are now JSON descriptors in src/fonts (Thorsten)
 - updated third party dependencies (Thorsten)
-- fixed multisite tenant isolation for the Redis configuration storage: the Redis hash is scoped per instance, tenants cannot change `storage.*` settings, and tenant provisioning no longer copies master secrets (Thorsten)
+- fixed stored XSS in the custom CSS setting: a delegated admin could break out of the `<style>` element on every public page (Thorsten)
 - fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.12 - unreleased
