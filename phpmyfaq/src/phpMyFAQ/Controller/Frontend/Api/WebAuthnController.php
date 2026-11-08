@@ -116,6 +116,19 @@ final class WebAuthnController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
+        // The owner's session alone is not proof enough either: a stolen session cookie or a
+        // same-origin script would otherwise plant a passkey that outlives the session, the
+        // remember-me token and a password change (CWE-620), the same way a password or e-mail
+        // change must not be possible with just session plus CSRF token. The owner proves
+        // control of the account first: a password account with its current password, a
+        // passkey account with one of the passkeys it already holds.
+        if ($userExists) {
+            $stepUp = $this->verifyAccountOwnership($data);
+            if ($stepUp instanceof JsonResponse) {
+                return $stepUp;
+            }
+        }
+
         if (!$userExists) {
             if (!$this->captchaCodeIsValid($request)) {
                 return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
@@ -155,11 +168,13 @@ final class WebAuthnController extends AbstractController
         );
         $b64Challenge = $challengeData['b64challenge'] ?? '';
 
+        // The ceremony starts from the passkeys the account already holds, so register() adds
+        // the new key to them instead of replacing them: the owner's other devices keep working.
         $webAuthnUser = new WebAuthnUser();
         $webAuthnUser
             ->setName($username)
             ->setId((string) $this->user->getUserId())
-            ->setWebAuthnKeys(webAuthnKeys: '')
+            ->setWebAuthnKeys($userExists ? $this->user->getWebAuthnKeys() : '')
             ->setChallenge(is_string($b64Challenge) ? $b64Challenge : '')
             ->setAppId($this->authWebAuthn->getAppId());
 
@@ -168,6 +183,63 @@ final class WebAuthnController extends AbstractController
         return $this->json([
             'challenge' => $challengeData,
         ], Response::HTTP_OK);
+    }
+
+    /**
+     * Step-up for adding a passkey to an existing account. Returns null when the caller proved
+     * control of the account, otherwise the error response to send. Password accounts (local,
+     * LDAP, ...) present their current password; passkey accounts present an assertion from
+     * one of their existing passkeys, obtained through prepare-login. Failures consume the
+     * account's login-attempt budget like every other step-up.
+     */
+    private function verifyAccountOwnership(\stdClass $data): ?JsonResponse
+    {
+        if ($this->user->getUserAuthSource() !== AuthenticationSourceType::AUTH_WEB_AUTHN->value) {
+            // Sanitised the same way the UCP sanitises a password before storing it, so the
+            // comparison sees the same bytes the password change saw.
+            $currentPassword = trim((string) Filter::filterVar(
+                $data->{'current-password'} ?? null,
+                FILTER_SANITIZE_SPECIAL_CHARS,
+            ));
+
+            return $this->verifyCurrentPassword($currentPassword);
+        }
+
+        $storedKeys = $this->user->getWebAuthnKeys();
+
+        // A passwordless account without any passkey has nothing it could prove itself with.
+        if (in_array($storedKeys, ['', '0', '[]'], strict: true)) {
+            return null;
+        }
+
+        if ($this->currentUser->isStepUpLockedOut()) {
+            return $this->json([
+                'error' => Translation::get(key: 'msgStepUpLockedOut'),
+            ], Response::HTTP_TOO_MANY_REQUESTS);
+        }
+
+        $verified = false;
+        if (property_exists($data, 'assertion') && $data->assertion instanceof \stdClass) {
+            try {
+                $verified = $this->authWebAuthn->authenticate($data->assertion, $storedKeys);
+            } catch (Exception) {
+                $verified = false;
+            }
+
+            // authenticate() blanks the challenge it consumed; persist that so the same
+            // assertion cannot be presented a second time.
+            $this->user->setWebAuthnKeys($storedKeys);
+        }
+
+        if (!$verified) {
+            $this->currentUser->stepUpFailure();
+
+            return $this->json(['error' => Translation::get(key: 'ad_auth_fail')], Response::HTTP_FORBIDDEN);
+        }
+
+        $this->currentUser->stepUpSuccess();
+
+        return null;
     }
 
     /**
@@ -376,10 +448,11 @@ final class WebAuthnController extends AbstractController
         }
 
         $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $loginData = $data->login;
-        if (!$loginData instanceof \stdClass) {
+        if (!$data->login instanceof \stdClass) {
             throw new Exception('Missing login data');
         }
+
+        $loginData = $data->login;
 
         $this->user->getUserByLogin($login);
 

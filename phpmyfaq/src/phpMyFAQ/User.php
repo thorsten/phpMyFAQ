@@ -1080,6 +1080,18 @@ class User
     }
 
     /**
+     * Removes every passkey of the user. A passkey is a long-lived credential that neither a
+     * logout nor revokePersistentLogins() touches, so whenever a password is set without
+     * proof of the old credentials (the anonymous reset link, an administrator overwriting
+     * the password) the passkeys have to go as well, or a key planted during an earlier
+     * session compromise would outlive the recovery.
+     */
+    public function revokePasskeys(): bool
+    {
+        return $this->setWebAuthnKeys('');
+    }
+
+    /**
      * Sends mail to the current user.
      *
      * @throws Core\Exception|TransportExceptionInterface

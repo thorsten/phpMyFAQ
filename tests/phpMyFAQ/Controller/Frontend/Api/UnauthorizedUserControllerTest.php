@@ -323,6 +323,7 @@ class UnauthorizedUserControllerTest extends TestCase
         $user->expects($this->once())->method('getUserById')->with(7, true)->willReturn(true);
         $user->expects($this->once())->method('getEncryptedPassword')->willReturn('pw-key');
         $user->expects($this->once())->method('changePassword')->with('NewSecret123')->willReturn(false);
+        $user->expects($this->never())->method('revokePasskeys');
 
         $controller = $this->makeController($user, null, $tokenService);
         $response = $controller->reset($this->jsonRequest([
@@ -429,6 +430,9 @@ class UnauthorizedUserControllerTest extends TestCase
         $user->expects($this->once())->method('getUserById')->with(7, true)->willReturn(true);
         $user->expects($this->once())->method('getEncryptedPassword')->willReturn('pw-key');
         $user->expects($this->once())->method('changePassword')->with('NewSecret123')->willReturn(true);
+        // The reset proves the mailbox, not the old credentials: passkeys planted by whoever
+        // held the account before must not survive it.
+        $user->expects($this->once())->method('revokePasskeys')->willReturn(true);
 
         $controller = $this->makeController($user, null, $tokenService);
         $response = $controller->reset($this->jsonRequest([

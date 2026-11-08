@@ -23,6 +23,7 @@ use JsonException;
 use LogicException;
 use OpenApi\Spec as OA;
 use phpMyFAQ\Attachment\AttachmentFactory;
+use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Container\ContainerRegistry;
@@ -37,6 +38,7 @@ use phpMyFAQ\Form\FormsServiceProvider;
 use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Http\SecurityEventLogger;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\Config\FileLocator;
@@ -613,6 +615,66 @@ abstract class AbstractController
         }
 
         return true;
+    }
+
+    /**
+     * Step-up verification of the logged-in user's current password. Shared by every
+     * self-service endpoint that changes a credential of the account (password, e-mail
+     * address, passkey): a valid session plus CSRF token must not be enough for that, or a
+     * hijacked session takes the account over (CWE-620).
+     *
+     * Failed attempts consume the account's login failure budget and lock the step-up
+     * (and the login) once it is exhausted, so a hijacked session cannot guess the
+     * password without limit (CWE-307).
+     *
+     * Returns a 429 JsonResponse while the account is locked out, a 403 JsonResponse
+     * when the password is missing or wrong (an empty password never verifies), or
+     * null when it verifies and the caller may proceed.
+     */
+    protected function verifyCurrentPassword(#[\SensitiveParameter] string $currentPassword): ?JsonResponse
+    {
+        if ($this->currentUser->isStepUpLockedOut()) {
+            return $this->json([
+                'error' => Translation::get(key: 'msgStepUpLockedOut'),
+            ], Response::HTTP_TOO_MANY_REQUESTS);
+        }
+
+        if (!$this->currentPasswordIsValid($currentPassword)) {
+            $this->currentUser->stepUpFailure();
+
+            return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_FORBIDDEN);
+        }
+
+        $this->currentUser->stepUpSuccess();
+
+        return null;
+    }
+
+    /**
+     * Verifies the supplied password against the currently logged-in user's stored credentials.
+     */
+    private function currentPasswordIsValid(#[\SensitiveParameter] string $currentPassword): bool
+    {
+        if ($currentPassword === '') {
+            return false;
+        }
+
+        $login = $this->currentUser->getLogin();
+
+        foreach ($this->currentUser->getAuthContainer() as $authDriver) {
+            try {
+                // checkCredentials() signals a wrong password by throwing rather than
+                // returning false, so treat any failure as "not verified" and fall
+                // through to the next configured auth driver.
+                if ($authDriver->checkCredentials($login, $currentPassword)) {
+                    return true;
+                }
+            } catch (AuthException) {
+                continue;
+            }
+        }
+
+        return false;
     }
 
     /**

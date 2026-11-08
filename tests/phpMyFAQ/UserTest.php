@@ -730,9 +730,13 @@ class UserTest extends TestCase
         $this->userData
             ->expects($this->exactly(3))
             ->method('fetchAll')
-            ->willReturnOnConsecutiveCalls(['user_id' => 11, 'is_visible' => true], ['user_id' => 12], [
-                'user_id' => 13,
-            ]);
+            ->willReturnOnConsecutiveCalls(
+                ['user_id' => 11, 'is_visible' => true],
+                ['user_id' => 12],
+                [
+                    'user_id' => 13,
+                ],
+            );
 
         $this->assertSame('Thorsten', $this->user->getUserData('display_name'));
         $this->assertTrue($this->user->setUserData(['display_name' => 'Thorsten']));
@@ -1023,6 +1027,19 @@ class UserTest extends TestCase
         $this->assertTrue($this->user->terminateSessionId());
         $this->assertTrue($this->user->setWebAuthnKeys('{"id":"key-1"}'));
         $this->assertSame('{"id":"key-1"}', $this->user->getWebAuthnKeys());
+    }
+
+    public function testRevokePasskeysClearsTheStoredKeys(): void
+    {
+        $this->setPrivateProperty('userId', 15);
+        $this->database->method('escape')->willReturnArgument(0);
+        $this->database
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->logicalAnd($this->stringContains("webauthnkeys = ''"), $this->stringContains('user_id = 15')))
+            ->willReturn(true);
+
+        $this->assertTrue($this->user->revokePasskeys());
     }
 
     public function testGetWebAuthnKeysReturnsEmptyStringWhenMissing(): void

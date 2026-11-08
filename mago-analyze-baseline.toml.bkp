@@ -1,0 +1,937 @@
+variant = "loose"
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/AdminLogRepository.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/AdminMenuBuilder.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/Backup.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/DashboardLayout.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/DashboardLayout.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/Faq.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Administration/RemoteApiClient.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Api/Filtering/FilterRequest.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 4
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Api/Filtering/FilterRequest.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractAttachment.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Attachment/AbstractMimeType.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/ApiKeyAuthenticator.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthKeycloak.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthKeycloak.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthLdap.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthLdap.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthSso.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 12
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/AuthWebAuthn.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/EntraIdSession.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/EntraId/OAuth.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/OAuth2/ResourceServer.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/Oidc/OidcClient.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/Oidc/OidcDiscoveryService.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/Oidc/OidcIdTokenValidator.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 9
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/PasswordHasher.php"
+code = "redundant-comparison"
+message = "Redundant `===` comparison: left-hand side is never identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Auth/WebAuthn/PublicKeyConverter.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 6
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/CategoryPermissionContext.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Category/Relation.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Command/CreateHashesCommand.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Command/McpServerCommand.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Command/McpServerCommand.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Command/SeedTestDataCommand.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 9
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Configuration/LdapSettings.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Configuration/Storage/RedisConfigurationStore.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/AbstractController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ApiKeyController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/AttachmentController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CategoryController.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CommentController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/CommentController.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ConfigurationTabController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 5
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/DashboardController.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ExportController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/FaqController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 7
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/GroupController.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/ImageController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/PageController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/QuestionController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TranslationController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/TranslationController.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/Api/UserController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/AuthenticationController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/BackupController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/CategoryController.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/FormsController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/GroupController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Administration/SystemInformationController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Api/SearchController.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/ContainerControllerResolver.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/Api/WebAuthnController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AuthenticationController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/AzureAuthenticationController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/FaqController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 5
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Controller/Frontend/QuestionsController.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/CustomPage.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/DatabaseHelper.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/PdoMysql.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/PdoPgsql.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 4
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlite.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 5
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/PdoSqlsrv.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 5
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/Sqlite3.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Database/Sqlsrv.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/EventListener/RouterListener.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/EventListener/WebExceptionListener.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/EventListener/WebExceptionListener.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Export.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Export/Json.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Export/Pdf.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq/FaqRepository.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq/Import.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq/Permission.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Faq/QueryHelper.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Filter.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Helper/StatisticsHelper.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 7
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Client.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Search/Elasticsearch.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 4
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Search/Elasticsearch.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Instance/Search/OpenSearch.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Kernel.php"
+code = "write-only-property"
+message = "Property `$routes` is written to but never read."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Language.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Language/LanguageCodes.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Language/LanguageDetector.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Ldap.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Mail.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/News.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Pagination.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermission.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Permission/BasicPermissionRepository.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Push/PushSubscriptionRepository.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Push/WebPushService.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/ExportHandler.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/ExportHandler.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Queue/Handler/SendMailHandler.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Queue/Message/ExportMessage.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Queue/Message/SendMailMessage.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Queue/Transport/DatabaseTransport.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Queue/Worker.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Relation.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Routing/AttributeRouteLoader.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Routing/RouteCacheManager.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search/Search/Elasticsearch.php"
+code = "ambiguous-object-method-access"
+message = "Cannot statically verify method call on a generic `object` type."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search/Search/Elasticsearch.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 5
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search/Search/OpenSearch.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 4
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Search/SearchService.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/FaqSearchTool.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/FaqSearchTool.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/FaqSearchTool.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Service/McpServer/McpSdkRuntime.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Session/Token.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationInputValidator.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 4
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationRunner.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/InstallationRunner.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 2
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Installer.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationExecutor.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/MigrationExecutor.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Migration/Operations/ConfigUpdateOperation.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Update.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/Update.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Setup/UpdateRunner.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 4
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Storage/S3Storage.php"
+code = "ambiguous-object-method-access"
+message = "Cannot statically verify method call on a generic `object` type."
+count = 7
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Storage/S3Storage.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Storage/S3Storage.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/System.php"
+code = "redundant-comparison"
+message = "Redundant `!==` comparison: left-hand side is always not identical to right-hand side."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Tenant/TenantQuotaEnforcer.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Translation.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/DeepLTranslationProvider.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 3
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Translation/Provider/GoogleTranslationProvider.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 5
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User/CurrentUser.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User/CurrentUserAccountStateTrait.php"
+code = "mixed-operand"
+message = "Casting `mixed` to `bool`."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User/CurrentUserSessionLookupTrait.php"
+code = "mixed-assignment"
+message = "Assigning `nonnull` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/User/UserData.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1
+
+[[issues]]
+file = "phpmyfaq/src/phpMyFAQ/Visits.php"
+code = "mixed-assignment"
+message = "Assigning `mixed` type to a variable may lead to unexpected behavior."
+count = 1

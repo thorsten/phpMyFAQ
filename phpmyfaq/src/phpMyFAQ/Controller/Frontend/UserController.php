@@ -24,6 +24,7 @@ use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\CaptchaInterface;
 use phpMyFAQ\Captcha\Helper\CaptchaHelperInterface;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
@@ -184,6 +185,20 @@ final class UserController extends AbstractFrontController
     }
 
     /**
+     * How the passkey form has to prove account ownership before a new passkey is added, so
+     * the form asks for the right thing: "password" for password accounts, "passkey" for a
+     * passwordless account that already holds one, "none" for a passwordless account without.
+     */
+    private function passkeyStepUp(): string
+    {
+        if ($this->currentUser->getUserAuthSource() !== AuthenticationSourceType::AUTH_WEB_AUTHN->value) {
+            return 'password';
+        }
+
+        return in_array($this->currentUser->getWebAuthnKeys(), ['', '0', '[]'], strict: true) ? 'none' : 'passkey';
+    }
+
+    /**
      * Displays the User Control Panel.
      *
      * @throws Exception
@@ -274,6 +289,7 @@ final class UserController extends AbstractFrontController
             'msgGravatarNotConnected' => Translation::get(key: 'msgGravatarNotConnected'),
             'webauthnSupportEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
             'csrfTokenWebAuthn' => Token::getInstance($this->session)->getTokenString('webauthn'),
+            'passkeyStepUp' => $this->passkeyStepUp(),
             'loginName' => $this->currentUser->getLogin(),
             'csrfExportUserData' => Token::getInstance($this->session)->getTokenInput('export-userdata'),
             'exportUserDataUrl' => 'api/user/data/export',

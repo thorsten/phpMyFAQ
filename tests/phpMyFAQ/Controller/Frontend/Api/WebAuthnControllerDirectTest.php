@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use phpMyFAQ\Auth\AuthDatabase;
 use phpMyFAQ\Auth\AuthWebAuthn;
 use phpMyFAQ\Auth\WebAuthn\WebAuthnUser;
 use phpMyFAQ\Core\Exception;
@@ -15,8 +16,10 @@ use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 #[CoversClass(WebAuthnController::class)]
 #[UsesNamespace('phpMyFAQ')]
@@ -750,46 +753,303 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
     }
 
     /**
-     * The authenticated owner of an existing account may (re-)register a passkey.
+     * The authenticated owner of an existing password account may add a passkey once the
+     * current password is proven, and the ceremony starts from the passkeys already stored,
+     * so the new key is added to them instead of replacing them.
      */
-    public function testPrepareAllowsExistingUserForAuthenticatedOwner(): void
+    public function testPrepareAllowsExistingUserForAuthenticatedOwnerWithTheCurrentPassword(): void
     {
-        $this->configuration->getAll();
-        $this->overrideConfigurationValues([
-            'security.enableWebAuthnSupport' => '1',
-            'security.enableRegistration' => '1',
-        ]);
-
+        $this->enableWebAuthn();
         $session = $this->createSession();
-        $csrfToken = Token::getInstance($session)->getTokenString('webauthn');
-        $_COOKIE[sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(md5('webauthn'), 0, 10))] = $csrfToken;
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
 
-        $user = $this->createMock(User::class);
-        $user->expects($this->once())->method('getUserByLogin')->with('owner@example.com', false)->willReturn(true);
-        $user->method('getUserId')->willReturn(42);
+        $user = $this->createPasswordAccount(42, storedKeys: '[{"id":[1,2,3],"key":"existing"}]');
         $user->expects($this->never())->method('createUser');
 
         $authWebAuthn = $this->createMock(AuthWebAuthn::class);
-        $authWebAuthn->expects($this->once())->method('storeUserInSession');
+        $authWebAuthn
+            ->expects($this->once())
+            ->method('storeUserInSession')
+            ->with(self::callback(
+                static fn(WebAuthnUser $webAuthnUser): bool => (
+                    $webAuthnUser->getWebAuthnKeys() === '[{"id":[1,2,3],"key":"existing"}]'
+                ),
+            ));
         $authWebAuthn
             ->expects($this->once())
             ->method('prepareChallengeForRegistration')
             ->with('owner@example.com', '42')
             ->willReturn(['publicKey' => ['challenge' => 'abc'], 'b64challenge' => 'def']);
 
+        $currentUser = $this->createOwnerMock(42, passwordIsValid: true);
+        $currentUser->expects($this->once())->method('stepUpSuccess')->willReturn(true);
+        $currentUser->expects($this->never())->method('stepUpFailure');
+
         $controller = new WebAuthnController($authWebAuthn, $user);
-        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(42), $session);
+        $this->injectControllerState($controller, $currentUser, $session);
 
-        $request = Request::create('/api/webauthn/prepare', 'POST', content: json_encode([
-            'username' => 'owner@example.com',
-            'pmf-csrf-token' => $csrfToken,
-        ], JSON_THROW_ON_ERROR));
-
-        $response = $controller->prepare($request);
+        $response = $controller->prepare($this->prepareRequest($csrfToken, ['current-password' => 'correct horse']));
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame('def', $payload['challenge']['b64challenge']);
+    }
+
+    /**
+     * Regression test: the owner's session plus the CSRF token must not be enough to add a
+     * passkey, otherwise a hijacked session plants a credential that survives logout, remember-me
+     * revocation and a password change (CWE-620).
+     */
+    public function testPrepareRejectsOwnerOfPasswordAccountWithoutTheCurrentPassword(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->never())->method('prepareChallengeForRegistration');
+        $authWebAuthn->expects($this->never())->method('storeUserInSession');
+
+        $currentUser = $this->createOwnerMock(42, passwordIsValid: true);
+        $currentUser->expects($this->once())->method('stepUpFailure')->willReturn(true);
+        $currentUser->expects($this->never())->method('stepUpSuccess');
+
+        $controller = new WebAuthnController($authWebAuthn, $this->createPasswordAccount(42));
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->prepare($this->prepareRequest($csrfToken));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_passwd_fail'), $payload['error']);
+    }
+
+    public function testPrepareRejectsOwnerOfPasswordAccountWithAWrongPassword(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->never())->method('storeUserInSession');
+
+        $currentUser = $this->createOwnerMock(42, passwordIsValid: false);
+        $currentUser->expects($this->once())->method('stepUpFailure')->willReturn(true);
+
+        $controller = new WebAuthnController($authWebAuthn, $this->createPasswordAccount(42));
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->prepare($this->prepareRequest($csrfToken, ['current-password' => 'wrong']));
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testPrepareRefusesTheStepUpWhileTheAccountIsLockedOut(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->never())->method('storeUserInSession');
+
+        $currentUser = $this->createOwnerMock(42, passwordIsValid: true, lockedOut: true);
+        $currentUser->expects($this->never())->method('stepUpSuccess');
+
+        $controller = new WebAuthnController($authWebAuthn, $this->createPasswordAccount(42));
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->prepare($this->prepareRequest($csrfToken, ['current-password' => 'correct horse']));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
+        self::assertSame(Translation::get('msgStepUpLockedOut'), $payload['error']);
+    }
+
+    /**
+     * A passwordless account proves itself with one of the passkeys it already holds: the
+     * assertion from prepare-login is verified, and its consumed challenge is persisted.
+     */
+    public function testPrepareAcceptsAnAssertionFromAnExistingPasskeyForAPasskeyAccount(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $user = $this->createPasskeyAccount(42, storedKeys: '[{"id":[1],"key":"existing","challenge":"c"}]');
+        $user->expects($this->once())->method('setWebAuthnKeys')->willReturn(true);
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->once())->method('authenticate')->willReturn(true);
+        $authWebAuthn->expects($this->once())->method('storeUserInSession');
+        $authWebAuthn
+            ->method('prepareChallengeForRegistration')
+            ->willReturn(['publicKey' => ['challenge' => 'abc'], 'b64challenge' => 'def']);
+
+        $currentUser = $this->createOwnerMock(42, passwordIsValid: false);
+        $currentUser->expects($this->once())->method('stepUpSuccess')->willReturn(true);
+        $currentUser->expects($this->never())->method('stepUpFailure');
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->prepare($this->prepareRequest($csrfToken, [
+            'assertion' => ['type' => 'public-key', 'rawId' => [1], 'response' => []],
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testPrepareRejectsAPasskeyAccountWithoutAnAssertion(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $user = $this->createPasskeyAccount(42, storedKeys: '[{"id":[1],"key":"existing"}]');
+        $user->expects($this->never())->method('setWebAuthnKeys');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->never())->method('authenticate');
+        $authWebAuthn->expects($this->never())->method('storeUserInSession');
+
+        $currentUser = $this->createOwnerMock(42, passwordIsValid: false);
+        $currentUser->expects($this->once())->method('stepUpFailure')->willReturn(true);
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->prepare($this->prepareRequest($csrfToken, ['current-password' => 'irrelevant']));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_auth_fail'), $payload['error']);
+    }
+
+    public function testPrepareRejectsAPasskeyAccountWithAnInvalidAssertion(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $user = $this->createPasskeyAccount(42, storedKeys: '[{"id":[1],"key":"existing"}]');
+        // The consumed challenge is persisted even on failure, so the assertion cannot be retried.
+        $user->expects($this->once())->method('setWebAuthnKeys')->willReturn(true);
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->method('authenticate')->willThrowException(new Exception('Signature invalid'));
+        $authWebAuthn->expects($this->never())->method('storeUserInSession');
+
+        $currentUser = $this->createOwnerMock(42, passwordIsValid: false);
+        $currentUser->expects($this->once())->method('stepUpFailure')->willReturn(true);
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->prepare($this->prepareRequest($csrfToken, [
+            'assertion' => ['type' => 'public-key', 'rawId' => [1], 'response' => []],
+        ]));
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    /**
+     * A passwordless account that holds no passkey yet has nothing it could prove itself with.
+     */
+    public function testPrepareNeedsNoStepUpForAPasskeyAccountWithoutKeys(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->never())->method('authenticate');
+        $authWebAuthn->expects($this->once())->method('storeUserInSession');
+        $authWebAuthn
+            ->method('prepareChallengeForRegistration')
+            ->willReturn(['publicKey' => ['challenge' => 'abc'], 'b64challenge' => 'def']);
+
+        $currentUser = $this->createOwnerMock(42, passwordIsValid: false);
+        $currentUser->expects($this->never())->method('stepUpFailure');
+
+        $controller = new WebAuthnController($authWebAuthn, $this->createPasskeyAccount(42, storedKeys: ''));
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->prepare($this->prepareRequest($csrfToken));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    private function enableWebAuthn(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'security.enableWebAuthnSupport' => '1',
+            'security.enableRegistration' => '1',
+        ]);
+    }
+
+    private function createWebAuthnCsrfToken(Session $session): string
+    {
+        $csrfToken = Token::getInstance($session)->getTokenString('webauthn');
+        $_COOKIE[sprintf('%s-%s', Token::PMF_SESSION_NAME, substr(md5('webauthn'), 0, 10))] = $csrfToken;
+
+        return $csrfToken;
+    }
+
+    /**
+     * @param array<string, mixed> $extra
+     */
+    private function prepareRequest(string $csrfToken, array $extra = []): Request
+    {
+        return Request::create('/api/webauthn/prepare', 'POST', content: json_encode([
+            'username' => 'owner@example.com',
+            'pmf-csrf-token' => $csrfToken,
+            ...$extra,
+        ], JSON_THROW_ON_ERROR));
+    }
+
+    private function createPasswordAccount(int $userId, string $storedKeys = ''): User&MockObject
+    {
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('owner@example.com', false)->willReturn(true);
+        $user->method('getUserId')->willReturn($userId);
+        $user->method('getUserAuthSource')->willReturn(AuthenticationSourceType::AUTH_LOCAL->value);
+        $user->method('getWebAuthnKeys')->willReturn($storedKeys);
+
+        return $user;
+    }
+
+    private function createPasskeyAccount(int $userId, string $storedKeys): User&MockObject
+    {
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserByLogin')->with('owner@example.com', false)->willReturn(true);
+        $user->method('getUserId')->willReturn($userId);
+        $user->method('getUserAuthSource')->willReturn(AuthenticationSourceType::AUTH_WEB_AUTHN->value);
+        $user->method('getWebAuthnKeys')->willReturn($storedKeys);
+
+        return $user;
+    }
+
+    /**
+     * The logged-in owner, whose single auth driver accepts or rejects every password.
+     */
+    private function createOwnerMock(
+        int $userId,
+        bool $passwordIsValid,
+        bool $lockedOut = false,
+    ): CurrentUser&MockObject {
+        $authDriver = $this->createStub(AuthDatabase::class);
+        $authDriver->method('checkCredentials')->willReturn($passwordIsValid);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn($userId);
+        $currentUser->method('getLogin')->willReturn('owner@example.com');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser->method('isStepUpLockedOut')->willReturn($lockedOut);
+
+        return $currentUser;
     }
 
     /**

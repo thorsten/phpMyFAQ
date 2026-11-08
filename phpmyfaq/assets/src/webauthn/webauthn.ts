@@ -14,7 +14,52 @@
  */
 import { webauthnRegister } from './register';
 import { webauthnAuthenticate } from './authenticate';
-import { Callback } from '../interfaces';
+import { AuthenticatorResponse, Callback } from '../interfaces';
+
+/**
+ * Adding a passkey to an existing account needs proof of ownership beyond the session: the
+ * server tells the form which kind through data-pmf-step-up. A password account sends its
+ * current password; a passkey account first signs a login challenge with one of its existing
+ * passkeys and sends that assertion along.
+ */
+const collectStepUp = async (registerForm: HTMLFormElement, username: string): Promise<Record<string, unknown>> => {
+  const stepUp = registerForm.dataset.pmfStepUp ?? 'none';
+
+  if (stepUp === 'password') {
+    const passwordField = document.getElementById('pmf-webauthn-current-password') as HTMLInputElement | null;
+    return { 'current-password': passwordField?.value ?? '' };
+  }
+
+  if (stepUp !== 'passkey') {
+    return {};
+  }
+
+  const response = await fetch('./api/webauthn/prepare-login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error?.error ?? "Couldn't initiate registration.");
+  }
+
+  const loginChallenge = await response.json();
+  const assertion = await new Promise<AuthenticatorResponse>((resolve, reject) => {
+    void webauthnAuthenticate(loginChallenge, (success: boolean, info: Parameters<Callback>[1]) => {
+      if (success) {
+        resolve(info as AuthenticatorResponse);
+      } else {
+        reject(new Error(info as string));
+      }
+    });
+  });
+
+  return { assertion };
+};
 
 export const handleWebAuthn = (): void => {
   const registerForm = document.getElementById('pmf-webauthn-form') as HTMLFormElement | null;
@@ -31,12 +76,13 @@ export const handleWebAuthn = (): void => {
       try {
         const registerUsername = (document.querySelector('[id=webauthn]') as HTMLInputElement).value;
         const csrfToken = (document.getElementById('pmf-csrf-token-webauthn') as HTMLInputElement)?.value ?? '';
+        const stepUp = await collectStepUp(registerForm, registerUsername);
         const response = await fetch('./api/webauthn/prepare', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ username: registerUsername, 'pmf-csrf-token': csrfToken }),
+          body: JSON.stringify({ username: registerUsername, 'pmf-csrf-token': csrfToken, ...stepUp }),
         });
 
         if (response.ok) {
@@ -72,7 +118,10 @@ export const handleWebAuthn = (): void => {
             }
           });
         } else {
-          errorMessage.textContent = "Couldn't initiate registration.";
+          // A failed step-up (wrong password, lockout) is reported by the server; show it so the
+          // owner knows what to correct instead of a generic failure.
+          const error = await response.json();
+          errorMessage.textContent = error?.error ?? "Couldn't initiate registration.";
           errorMessage.classList.remove('d-none');
         }
       } catch (error: unknown) {

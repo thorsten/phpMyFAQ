@@ -208,6 +208,10 @@ final class UnauthorizedUserController
             return $this->json(['error' => Translation::get('ad_passwd_fail')], Response::HTTP_BAD_REQUEST);
         }
 
+        // The reset proves control of the mailbox, not of the old credentials. Passkeys added
+        // while the account was compromised would otherwise keep working after the reset.
+        $user->revokePasskeys();
+
         $this->logSecurityEvent(
             AdminLogType::USER_PASSWORD_RESET_COMPLETED,
             $request,

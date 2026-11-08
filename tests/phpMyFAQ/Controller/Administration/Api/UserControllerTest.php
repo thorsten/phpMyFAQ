@@ -792,6 +792,10 @@ final class UserControllerTest extends TestCase
     public function testOverwritePasswordReturnsSuccessWithValidCsrf(): void
     {
         $this->seedCurrentUserSession();
+        // A self-service change proved the current password: the user's own passkeys stay.
+        self::assertNotFalse($this->dbHandle->query(
+            "UPDATE faquser SET webauthnkeys = '[{\"id\":[1],\"key\":\"own\"}]' WHERE user_id = 1",
+        ));
 
         $container = $this->createSelfServiceContainer('current-password-123');
         $session = $container->get('session');
@@ -818,6 +822,9 @@ final class UserControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_passwdsuc'), $payload['success']);
+
+        $result = $this->dbHandle->query('SELECT webauthnkeys FROM faquser WHERE user_id = 1');
+        self::assertSame('[{"id":[1],"key":"own"}]', $this->dbHandle->fetchArray($result)['webauthnkeys']);
     }
 
     /**
@@ -940,6 +947,11 @@ final class UserControllerTest extends TestCase
         self::assertNotFalse($this->dbHandle->query(
             "INSERT INTO faquserlogin (login, pass, domain) VALUES ('password-reset-target', 'old-hash', '')",
         ));
+        // A passkey whoever held the account before may have planted; the reset must remove it.
+        self::assertNotFalse($this->dbHandle->query(sprintf(
+            "UPDATE faquser SET webauthnkeys = '[{\"id\":[9],\"key\":\"planted\"}]' WHERE user_id = %d",
+            $targetUserId,
+        )));
 
         $container = $this->createSelfServiceContainer('current-password-123');
         $session = $container->get('session');
@@ -966,6 +978,9 @@ final class UserControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_passwdsuc'), $payload['success']);
+
+        $result = $this->dbHandle->query(sprintf('SELECT webauthnkeys FROM faquser WHERE user_id = %d', $targetUserId));
+        self::assertSame('', (string) $this->dbHandle->fetchArray($result)['webauthnkeys']);
     }
 
     /**

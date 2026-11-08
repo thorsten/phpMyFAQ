@@ -147,6 +147,30 @@ final class UserControllerTest extends TestCase
         self::assertStringContainsString('id="pmf-submit-user-control-panel"', (string) $response->getContent());
     }
 
+    /**
+     * A password account has to confirm with its current password before a passkey is added,
+     * so the passkey form asks for it.
+     */
+    public function testUcpAsksAPasswordAccountForItsPasswordBeforeAddingAPasskey(): void
+    {
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'main.enableGravatarSupport' => false,
+        ]);
+        // Configuration::get() reloads the whole array from the database as soon as a key is
+        // missing, which would discard an in-memory override of this flag.
+        self::assertTrue($this->configuration->set('security.enableWebAuthnSupport', 'true'));
+
+        $controller = $this->createController();
+        $this->setCurrentUser($controller, $this->createLoggedInCurrentUser());
+
+        $content = (string) $controller->ucp(Request::create('/user/ucp', 'GET'))->getContent();
+
+        self::assertStringContainsString('data-pmf-step-up="password"', $content);
+        self::assertStringContainsString('id="pmf-webauthn-current-password"', $content);
+        self::assertStringContainsString(Translation::get('msgPasskeyConfirmWithPassword'), $content);
+    }
+
     public function testUcpExposesTheSecretOnlyDuringEnrolment(): void
     {
         $this->overrideConfigurationValues([
@@ -365,10 +389,10 @@ final class UserControllerTest extends TestCase
             ->method('getUserData')
             ->willReturnMap([
                 ['twofactor_enabled', 0],
-                ['secret', ''],
-                ['email', 'admin@example.com'],
-                ['display_name', 'Admin'],
-                ['is_visible', 1],
+                ['secret',            ''],
+                ['email',             'admin@example.com'],
+                ['display_name',      'Admin'],
+                ['is_visible',        1],
             ]);
         $currentUser->method('setUserData')->willThrowException(new \RuntimeException('user data table is locked'));
 

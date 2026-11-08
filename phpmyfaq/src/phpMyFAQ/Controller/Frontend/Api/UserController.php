@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
-use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
@@ -184,66 +183,6 @@ final class UserController extends AbstractController
         }
 
         return $this->json(['error' => Translation::get(key: 'ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
-    }
-
-    /**
-     * Verifies the current user's password as a step-up check before a password change.
-     *
-     * Failed attempts consume the account's login failure budget and lock the step-up
-     * (and the login) once it is exhausted, so a hijacked session cannot guess the
-     * password without limit (CWE-307). This route is exempt from the generic API rate
-     * limiter, so the lockout is the only throttle.
-     *
-     * Returns a 429 JsonResponse while the account is locked out, a 403 JsonResponse
-     * when the password is missing or wrong (an empty password never verifies), or
-     * null when it verifies and the caller may proceed.
-     */
-    private function verifyCurrentPassword(#[\SensitiveParameter] string $currentPassword): ?JsonResponse
-    {
-        if ($this->currentUser->isStepUpLockedOut()) {
-            return $this->json([
-                'error' => Translation::get(key: 'msgStepUpLockedOut'),
-            ], Response::HTTP_TOO_MANY_REQUESTS);
-        }
-
-        if (!$this->currentPasswordIsValid($currentPassword)) {
-            $this->currentUser->stepUpFailure();
-
-            return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_FORBIDDEN);
-        }
-
-        $this->currentUser->stepUpSuccess();
-
-        return null;
-    }
-
-    /**
-     * Verifies the supplied password against the currently logged-in user's stored
-     * credentials. Used to authorise a self-service password change so that a
-     * session or CSRF-token foothold alone cannot reset the password (CWE-620).
-     */
-    private function currentPasswordIsValid(#[\SensitiveParameter] string $currentPassword): bool
-    {
-        if ($currentPassword === '') {
-            return false;
-        }
-
-        $login = $this->currentUser->getLogin();
-
-        foreach ($this->currentUser->getAuthContainer() as $authDriver) {
-            try {
-                // checkCredentials() signals a wrong password by throwing rather than
-                // returning false, so treat any failure as "not verified" and fall
-                // through to the next configured auth driver.
-                if ($authDriver->checkCredentials($login, $currentPassword)) {
-                    return true;
-                }
-            } catch (AuthException) {
-                continue;
-            }
-        }
-
-        return false;
     }
 
     /**
