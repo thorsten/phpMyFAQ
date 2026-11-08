@@ -22,6 +22,7 @@ namespace phpMyFAQ\Bootstrap;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Container\ContainerRegistry;
 use phpMyFAQ\Database;
+use phpMyFAQ\Http\ContentSecurityPolicyNonce;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -47,6 +48,7 @@ final readonly class WorkerState
         Token::resetInstance();
         Tracking::resetInstance();
         ContainerRegistry::reset();
+        ContentSecurityPolicyNonce::reset();
         TwigWrapper::setTemplateSetName();
     }
 }

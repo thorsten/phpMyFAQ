@@ -99,6 +99,7 @@ import { handleLoginForm, handlePasswordStrength, handlePasswordToggle } from '.
 import { handleSessionTimeout, initializeTooltips, sidebarToggle } from './utils';
 import { initThemeSwitcher } from '../../../assets/src/utils/theme-switcher';
 import { initFontSizeSwitcher } from '../../../assets/src/utils/font-size-switcher';
+import { initDeclarativeActions } from '../../../assets/src/utils/declarative-actions';
 
 document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   'use strict';
@@ -108,6 +109,9 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
 
   // Font size switcher
   initFontSizeSwitcher();
+
+  // Behaviours declared in the markup, replacing the inline event handlers the CSP no longer allows
+  initDeclarativeActions();
 
   // Session timeout
   handleSessionTimeout();

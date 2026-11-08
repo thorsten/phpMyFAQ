@@ -46,7 +46,7 @@ class LanguageHelper
             $id,
             ucfirst($id),
             $id,
-            $submitOnChange ? ' onchange="this.form.submit();"' : '',
+            $submitOnChange ? ' data-pmf-submit-on-change' : '',
         );
         $languages = self::getAvailableLanguages();
 

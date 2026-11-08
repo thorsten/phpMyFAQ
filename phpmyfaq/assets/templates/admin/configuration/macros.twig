@@ -69,7 +69,7 @@
       <input class="form-control" type="{{ type }}" name="edit[{{ key }}]" id="edit[{{ key }}]"
              value="{{ value | raw }}" step="1" min="0">
       {% if key == 'api.apiClientToken' %}
-        <button class="btn btn-outline-primary" id="pmf-generate-api-token" type="button" onclick="generateApiToken()">
+        <button class="btn btn-outline-primary" id="pmf-generate-api-token" type="button">
           {{ 'msgGenerateApiClientToken' | translate }}
         </button>
       {% endif %}

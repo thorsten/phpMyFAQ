@@ -98,7 +98,7 @@
 </div>
 
 <!-- Data attributes for JavaScript -->
-<script>
+<script nonce="{{ cspNonce() }}">
   window.pmfChatConfig = {
     currentUserId: {{ currentUserId }},
     csrfTokenSendMessage: '{{ csrfTokenSendMessage }}',

@@ -3,7 +3,7 @@
 {% import 'core/faq.macros.twig' as faqMacros %}
 
 {% block richSnippets %}
-  <script type="application/ld+json">
+  <script type="application/ld+json" nonce="{{ cspNonce() }}">
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",

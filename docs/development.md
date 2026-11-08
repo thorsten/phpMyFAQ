@@ -20,6 +20,25 @@ Follow these steps to create a custom template set:
 **Note:** There is a magic variable _{{ tplSetName }}_ containing the name of the actual layout available in each
 template file.
 
+**Inline scripts need a nonce.** The Content-Security-Policy that phpMyFAQ sends allows no `'unsafe-inline'` for
+scripts. Every inline `<script>` in a template must carry the nonce of the current request, otherwise the browser
+refuses to run it:
+
+```twig
+<script nonce="{{ cspNonce() }}">
+  // ...
+</script>
+```
+
+Inline event handler attributes such as `onclick` or `onchange` cannot be allowed by a nonce at all and never run.
+Bind the behaviour with `addEventListener()` from a nonced inline script or from a script file instead. The default
+template set uses the data attributes `data-pmf-submit-on-change`, `data-pmf-navigate-on-change` and
+`data-pmf-reload-on-click` for the three cases it needs; they are bound in
+`assets/src/utils/declarative-actions.ts`.
+
+A template set copied from an older phpMyFAQ release keeps its inline scripts without the nonce attribute, so add
+`nonce="{{ cspNonce() }}"` to each of them after an update.
+
 ### 12.1.2 Environment configuration
 
 phpMyFAQ 4.1 and later reads its runtime configuration from environment variables. They are loaded from the file

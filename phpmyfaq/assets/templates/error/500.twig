@@ -128,8 +128,15 @@
 
         <div class="btn-group">
             <a href="./" class="btn btn-primary">Return to Home</a>
-            <button class="btn btn-outline-secondary" onclick="window.location.reload()">Try Again</button>
+            <button class="btn btn-outline-secondary" type="button" id="pmf-error-reload">Try Again</button>
         </div>
     </div>
+
+    {# This page is standalone: the JavaScript bundle may be exactly what failed, so the handler is inline. #}
+    <script nonce="{{ cspNonce() }}">
+        document.getElementById('pmf-error-reload').addEventListener('click', function () {
+            window.location.reload();
+        });
+    </script>
 </body>
 </html>

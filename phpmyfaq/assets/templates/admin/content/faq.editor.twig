@@ -85,7 +85,7 @@
                 <form id="selectRevision" name="selectRevision" method="post"
                       action="./faq/edit/{{ faqData['id'] }}/{{ faqLang }}">
                   <select class="form-select" name="selectedRevisionId" id="selectedRevisionId"
-                          onchange="this.form.submit();">
+                          data-pmf-submit-on-change>
                     <option value="0">{{ ad_changerev }}</option>
                     {% for currentRevision in revisions %}
                       {% set selected = selectedRevisionId == currentRevision['revision_id'] %}
@@ -557,21 +557,19 @@
           <div class="form-group">
             <div class="form-check">
               <input type="radio" id="updateDate" checked name="recordDateHandling" class="form-check-input"
-                     onchange="setRecordDate(this.id);" value="updateDate">
+                     value="updateDate">
               <label class="form-check-label" for="updateDate">
                 {{ 'msgUpdateFaqDate' | translate }}
               </label>
             </div>
             <div class="form-check">
-              <input type="radio" id="keepDate" name="recordDateHandling" class="form-check-input" value="keepDate"
-                     onchange="setRecordDate(this.id);">
+              <input type="radio" id="keepDate" name="recordDateHandling" class="form-check-input" value="keepDate">
               <label class="form-check-label" for="keepDate">
                 {{ 'msgKeepFaqDate' | translate }}
               </label>
             </div>
             <div class="form-check">
-              <input type="radio" id="manualDate" name="recordDateHandling" class="form-check-input" value="manualDate"
-                     onchange="setRecordDate(this.id);">
+              <input type="radio" id="manualDate" name="recordDateHandling" class="form-check-input" value="manualDate">
               <label class="form-check-label" for="manualDate">
                 {{ 'msgEditFaqDate' | translate }}
               </label>
@@ -781,7 +779,7 @@
   {% endif %}
 
 
-  <script>
+  <script nonce="{{ cspNonce() }}">
     function setRecordDate(how) {
       if ('updateDate' === how) {
         document.getElementById('date').value = '';
@@ -792,5 +790,11 @@
         document.getElementById('date').value = '';
       }
     }
+
+    document.querySelectorAll('input[name="recordDateHandling"]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        setRecordDate(radio.id);
+      });
+    });
   </script>
 {% endblock %}

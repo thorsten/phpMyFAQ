@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace phpMyFAQ\EventListener;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Http\ContentSecurityPolicyNonce;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,8 +18,46 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(SecurityHeadersListener::class)]
+#[UsesClass(ContentSecurityPolicyNonce::class)]
 final class SecurityHeadersListenerTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        ContentSecurityPolicyNonce::reset();
+    }
+
+    public function testScriptSourceAllowsNoInlineScriptWithoutTheNonce(): void
+    {
+        $response = new Response('<html></html>');
+
+        new SecurityHeadersListener()->onKernelResponse($this->createEvent($response));
+
+        $csp = (string) $response->headers->get('Content-Security-Policy');
+        [$scriptSource] = array_values(array_filter(
+            array_map('trim', explode(';', $csp)),
+            static fn(string $directive): bool => str_starts_with($directive, 'script-src '),
+        ));
+
+        self::assertStringNotContainsString("'unsafe-inline'", $scriptSource);
+        self::assertStringNotContainsString("'unsafe-eval'", $scriptSource);
+        self::assertStringContainsString("'nonce-" . ContentSecurityPolicyNonce::get() . "'", $scriptSource);
+    }
+
+    public function testTwoResponsesInTheSameRequestShareOneNonce(): void
+    {
+        $first = new Response('<html></html>');
+        $second = new Response('<html></html>');
+
+        $listener = new SecurityHeadersListener();
+        $listener->onKernelResponse($this->createEvent($first));
+        $listener->onKernelResponse($this->createEvent($second));
+
+        self::assertSame(
+            $first->headers->get('Content-Security-Policy'),
+            $second->headers->get('Content-Security-Policy'),
+        );
+    }
+
     public function testHtmlResponseGetsAllHardeningHeaders(): void
     {
         $response = new Response('<html></html>');
@@ -33,7 +73,10 @@ final class SecurityHeadersListenerTest extends TestCase
         $csp = (string) $response->headers->get('Content-Security-Policy');
         self::assertStringContainsString("default-src 'self'", $csp);
         self::assertStringContainsString(
-            "script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com",
+            sprintf(
+                "script-src 'self' 'nonce-%s' https://www.google.com https://www.gstatic.com",
+                ContentSecurityPolicyNonce::get(),
+            ),
             $csp,
         );
         self::assertStringContainsString("style-src 'self' 'unsafe-inline'", $csp);

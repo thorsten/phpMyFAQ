@@ -7,7 +7,7 @@
   <meta charset="utf-8">
 
   {% if forcedLayoutMode is not defined or forcedLayoutMode is null %}
-  <script>
+  <script nonce="{{ cspNonce() }}">
     (function () {
       try {
         var root = document.documentElement;
@@ -28,7 +28,7 @@
   </script>
   {% endif %}
 
-  <script>
+  <script nonce="{{ cspNonce() }}">
     (function () {
       try {
         var size = localStorage.getItem('pmf-font-size');
@@ -327,7 +327,7 @@
 {% endif %}
 <script type="module" src="./{{ asset('assets/public/frontend.js') }}"></script>
 {% if successMessage or errorMessage %}
-<script type="module">
+<script type="module" nonce="{{ cspNonce() }}">
   import { pushNotification, pushErrorNotification } from './{{ asset('assets/public/notifications.js') }}';
   {% if successMessage %}
   pushNotification('{{ successMessage|e('js') }}');

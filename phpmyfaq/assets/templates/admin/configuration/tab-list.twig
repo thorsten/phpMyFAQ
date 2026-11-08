@@ -50,7 +50,7 @@
   } only %}
 {% endif %}
 
-<script>
+<script nonce="{{ cspNonce() }}">
   try {
     const generateUUID = () => {
       let date = new Date().getTime();

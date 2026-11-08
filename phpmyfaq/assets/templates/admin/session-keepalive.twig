@@ -12,7 +12,7 @@
   <meta content="© 2001-{{ currentYear }} phpMyFAQ Team" name="copyright">
   <meta content="phpMyFAQ Team" name="publisher">
   {% if isUserLoggedIn %}
-  <script>
+  <script nonce="{{ cspNonce() }}">
     const sessionTimeoutWarning = () => {
       const showWarning = top.document.getElementById('pmf-show-session-warning');
       showWarning.dataset.value = 'show';

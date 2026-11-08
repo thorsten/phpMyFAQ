@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\EventListener;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Http\ContentSecurityPolicyNonce;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
@@ -28,11 +29,16 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
  * Permissions-Policy and a Content-Security-Policy on every HTML response.
  * Headers a controller already set are never overwritten.
  *
- * The policy keeps 'unsafe-inline' for scripts and styles because the
- * templates still contain inline scripts and style attributes; moving them
- * to nonces is a separate task. External hosts that phpMyFAQ legitimately
- * loads (Google reCAPTCHA, Gravatar avatars, embedded media from the
- * records.allowedMediaHosts configuration) are allowed explicitly.
+ * script-src allows no 'unsafe-inline'. Every inline script carries the
+ * per-request nonce of ContentSecurityPolicyNonce instead, which the
+ * templates render with the cspNonce() Twig function, so an injected script
+ * element is refused by the browser.
+ *
+ * style-src still needs 'unsafe-inline', because a nonce only covers <style>
+ * elements, and the templates use inline style attributes, which no nonce can
+ * allow. External hosts that phpMyFAQ legitimately loads (Google reCAPTCHA,
+ * Gravatar avatars, embedded media from the records.allowedMediaHosts
+ * configuration) are allowed explicitly.
  */
 final readonly class SecurityHeadersListener
 {
@@ -81,7 +87,11 @@ final readonly class SecurityHeadersListener
 
         $directives = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' " . implode(' ', self::RECAPTCHA_SCRIPT_HOSTS),
+            sprintf(
+                "script-src 'self' 'nonce-%s' %s",
+                ContentSecurityPolicyNonce::get(),
+                implode(' ', self::RECAPTCHA_SCRIPT_HOSTS),
+            ),
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: https:",
             "font-src 'self' data:",

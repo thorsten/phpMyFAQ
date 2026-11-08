@@ -49,7 +49,8 @@ class LanguageHelperTest extends TestCase
         $submitting = LanguageHelper::renderSelectLanguage('en', true, [], 'content-language');
         $this->assertStringContainsString('name="content-language"', $submitting);
         $this->assertStringContainsString('aria-label="Content-language"', $submitting);
-        $this->assertStringContainsString('onchange="this.form.submit();"', $submitting);
+        $this->assertStringContainsString('data-pmf-submit-on-change', $submitting);
+        $this->assertStringNotContainsString('onchange=', $submitting);
     }
 
     public function testRenderSelectLanguageLeavesOutExcludedLanguages(): void

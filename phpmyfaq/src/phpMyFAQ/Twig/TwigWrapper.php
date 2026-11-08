@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Environment as phpMyFAQEnvironment;
 use phpMyFAQ\System;
 use phpMyFAQ\Twig\Extensions\AssetVersionTwigExtension;
+use phpMyFAQ\Twig\Extensions\ContentSecurityPolicyTwigExtension;
 use phpMyFAQ\Twig\Extensions\PluginTwigExtension;
 use phpMyFAQ\Twig\Extensions\TranslateTwigExtension;
 use Twig\Environment;
@@ -75,9 +76,10 @@ class TwigWrapper
             'auto_reload' => true,
         ]);
 
-        // Always add the translation and asset-versioning extensions
+        // Always add the translation, asset-versioning and CSP nonce extensions
         $this->twigEnvironment->addExtension(new AttributeExtension(TranslateTwigExtension::class));
         $this->twigEnvironment->addExtension(new AttributeExtension(AssetVersionTwigExtension::class));
+        $this->twigEnvironment->addExtension(new AttributeExtension(ContentSecurityPolicyTwigExtension::class));
 
         // Add the plugin extension if it's not in the setup phase
         if (!$this->isSetup) {

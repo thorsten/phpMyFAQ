@@ -350,6 +350,11 @@ public function getScripts(): array
 ```
 
 **Security notes:**
+- The Content-Security-Policy allows no `'unsafe-inline'` for scripts: put your code in a `.js` file returned by
+  `getScripts()`, never in an inline `<script>` or an `onclick`/`onchange` attribute of a plugin template. An inline
+  `<script>` in a plugin template needs `nonce="{{ cspNonce() }}"`; handler attributes cannot be allowed at all, so
+  bind them with `addEventListener()`
+- `eval()` and `new Function()` are blocked as well, because the policy carries no `'unsafe-eval'`
 - Always use strict mode (`'use strict'`)
 - Lint your code with oxlint, you can run `pnpm oxlint phpmyfaq/content/plugins/YourPlugin/assets/` from the
   phpMyFAQ root

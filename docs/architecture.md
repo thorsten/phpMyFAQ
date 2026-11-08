@@ -217,7 +217,9 @@ Symfony kernel events:
    `WebExceptionListener` (priority -10, HTML error pages) produces the
    response.
 7. `SecurityHeadersListener` (response, priority -100) adds CSP and hardening
-   headers to HTML responses.
+   headers to HTML responses. Its `script-src` carries the per-request nonce of
+   `ContentSecurityPolicyNonce` instead of `'unsafe-inline'`; the templates render the
+   same nonce into every inline `<script>` through the `cspNonce()` Twig function.
 
 ---
 

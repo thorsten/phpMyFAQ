@@ -21,9 +21,11 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use Exception;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\Extensions\ContentSecurityPolicyTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
+use Twig\Extension\AttributeExtension;
 use Twig\Loader\FilesystemLoader;
 
 final class ErrorController extends AbstractFrontController
@@ -39,6 +41,7 @@ final class ErrorController extends AbstractFrontController
     {
         $filesystemLoader = new FilesystemLoader((string) PMF_ROOT_DIR . '/assets/templates/error');
         $twigEnvironment = new Environment($filesystemLoader);
+        $twigEnvironment->addExtension(new AttributeExtension(ContentSecurityPolicyTwigExtension::class));
         $html = $twigEnvironment->render('500.twig', [
             'errorMessage' => $errorMessage,
         ]);
@@ -86,6 +89,7 @@ final class ErrorController extends AbstractFrontController
     {
         $filesystemLoader = new FilesystemLoader((string) PMF_ROOT_DIR . '/assets/templates/error');
         $twigEnvironment = new Environment($filesystemLoader);
+        $twigEnvironment->addExtension(new AttributeExtension(ContentSecurityPolicyTwigExtension::class));
         $html = $twigEnvironment->render('500.twig', [
             'errorMessage' => $errorMessage,
         ]);

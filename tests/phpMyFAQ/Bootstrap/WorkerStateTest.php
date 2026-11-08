@@ -9,6 +9,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Container\ContainerRegistry;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\PdoSqlite;
+use phpMyFAQ\Http\ContentSecurityPolicyNonce;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -26,6 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 #[CoversClass(WorkerState::class)]
 #[UsesClass(Configuration::class)]
 #[UsesClass(ContainerRegistry::class)]
+#[UsesClass(ContentSecurityPolicyNonce::class)]
 #[UsesClass(Database::class)]
 #[UsesClass(PdoSqlite::class)]
 #[UsesClass(InstanceDatabase::class)]
@@ -66,6 +68,15 @@ final class WorkerStateTest extends TestCase
         foreach ($this->previous as [$reflection, $value]) {
             $reflection->setValue(null, $value);
         }
+    }
+
+    public function testResetForgetsTheContentSecurityPolicyNonce(): void
+    {
+        $nonce = ContentSecurityPolicyNonce::get();
+
+        WorkerState::reset();
+
+        $this->assertNotSame($nonce, ContentSecurityPolicyNonce::get());
     }
 
     public function testResetForgetsTheConfigurationSingleton(): void

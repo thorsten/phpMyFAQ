@@ -51,6 +51,7 @@ import {
 } from './utils';
 import './utils/tooltip';
 import { initFontSizeSwitcher } from './utils/font-size-switcher';
+import { initDeclarativeActions } from './utils/declarative-actions';
 import { handleWebAuthn } from './webauthn/webauthn';
 import { handleChat } from './chat';
 import { handlePushNotifications } from './push';
@@ -63,6 +64,9 @@ document.addEventListener('DOMContentLoaded', (): void => {
 
   // Font size switcher
   initFontSizeSwitcher();
+
+  // Behaviours declared in the markup, replacing the inline event handlers the CSP no longer allows
+  initDeclarativeActions();
 
   // Reload Captchas
   const reloadButton: HTMLButtonElement | null = document.querySelector('#captcha-button');
