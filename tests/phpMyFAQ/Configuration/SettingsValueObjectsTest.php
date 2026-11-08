@@ -6,6 +6,7 @@ namespace phpMyFAQ\Configuration;
 
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -13,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(SearchSettings::class)]
 #[CoversClass(SecuritySettings::class)]
 #[CoversClass(UrlSettings::class)]
+#[UsesClass(CustomCss::class)]
 class SettingsValueObjectsTest extends TestCase
 {
     public function testLayoutSettingsReturnConfiguredTemplateAndCustomCss(): void

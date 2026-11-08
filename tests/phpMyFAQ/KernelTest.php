@@ -14,6 +14,7 @@ use phpMyFAQ\EventListener\RouterListener;
 use phpMyFAQ\EventListener\SecurityHeadersListener;
 use phpMyFAQ\EventListener\WebExceptionListener;
 use phpMyFAQ\Form\FormsServiceProvider;
+use phpMyFAQ\Http\ContentSecurityPolicyNonce;
 use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Routing\AttributeRouteLoader;
 use phpMyFAQ\Routing\RouteCacheManager;
@@ -54,6 +55,7 @@ use Symfony\Component\Routing\RouteCollection;
 #[UsesClass(RouteCacheManager::class)]
 #[UsesClass(RouteCollectionBuilder::class)]
 #[UsesClass(PdoSqlite::class)]
+#[UsesClass(ContentSecurityPolicyNonce::class)]
 #[UsesClass(RateLimiter::class)]
 #[UsesClass(TenantContext::class)]
 #[UsesClass(TenantQuotas::class)]
