@@ -19,6 +19,9 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use phpMyFAQ\Auth;
+use phpMyFAQ\Auth\AuthDriverInterface;
+use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -80,21 +83,32 @@ final class PasswordChangeController extends AbstractAdministrationController
             FILTER_SANITIZE_SPECIAL_CHARS,
         );
 
+        if ($this->currentUser->isStepUpLockedOut()) {
+            return $this->render(
+                '@admin/user/password.twig',
+                [
+                    ...$this->getHeader($request),
+                    ...$this->getFooter(),
+                    ...$this->getBaseTemplateVars(),
+                    'successMessage' => '',
+                    'errorMessage' => Translation::get(key: 'msgStepUpLockedOut'),
+                ],
+                new Response(status: Response::HTTP_TOO_MANY_REQUESTS),
+            );
+        }
+
         $successMessage = '';
         $errorMessage = '';
         if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
             $errorMessage = Translation::get(key: 'ad_passwd_fail');
-        } elseif (
-            $authSource->checkCredentials($this->currentUser->getLogin(), $oldPassword)
-            && $newPassword == $retypedPassword
-        ) {
-            if (!$this->currentUser->changePassword($newPassword)) {
-                $errorMessage = Translation::get(key: 'ad_passwd_fail');
-            }
-
-            $successMessage = Translation::get(key: 'ad_passwdsuc');
-        } else {
+        } elseif (!$this->verifyCurrentPassword($authSource, (string) $oldPassword)) {
             $errorMessage = Translation::get(key: 'ad_passwd_fail');
+        } elseif (!hash_equals((string) $newPassword, (string) $retypedPassword)) {
+            $errorMessage = Translation::get(key: 'ad_passwd_fail');
+        } elseif (!$this->currentUser->changePassword($newPassword)) {
+            $errorMessage = Translation::get(key: 'ad_passwd_fail');
+        } else {
+            $successMessage = Translation::get(key: 'ad_passwdsuc');
         }
 
         return $this->render('@admin/user/password.twig', [
@@ -104,6 +118,37 @@ final class PasswordChangeController extends AbstractAdministrationController
             'successMessage' => $successMessage,
             'errorMessage' => $errorMessage,
         ]);
+    }
+
+    /**
+     * Verifies the current password as a step-up check before the password is changed.
+     *
+     * Failed attempts consume the account's login failure budget and lock the step-up
+     * (and the login) once it is exhausted, so a hijacked admin session cannot guess
+     * the current password without limit (CWE-307). This mirrors the step-up check of
+     * the frontend user API.
+     *
+     * @throws \Exception
+     */
+    private function verifyCurrentPassword(Auth $authSource, #[\SensitiveParameter] string $currentPassword): bool
+    {
+        try {
+            $isValid =
+                $authSource instanceof AuthDriverInterface
+                && $authSource->checkCredentials($this->currentUser->getLogin(), $currentPassword);
+        } catch (AuthException) {
+            $isValid = false;
+        }
+
+        if (!$isValid) {
+            $this->currentUser->stepUpFailure();
+
+            return false;
+        }
+
+        $this->currentUser->stepUpSuccess();
+
+        return true;
     }
 
     /**

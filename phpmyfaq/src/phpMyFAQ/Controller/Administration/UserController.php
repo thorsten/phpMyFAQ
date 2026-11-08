@@ -181,6 +181,7 @@ final class UserController extends AbstractAdministrationController
             'csrfToken_deleteUser' => Token::getInstance($session)->getTokenString('delete-user'),
             'csrfToken_addUser' => Token::getInstance($session)->getTokenString('add-user'),
             'csrfToken_overwritePassword' => Token::getInstance($session)->getTokenString('overwrite-password'),
+            'loggedInUserId' => $currentUserId,
             'userRights' => $user->perm->getAllRightsData(),
             'userIsSuperAdmin' => $this->currentUser->isSuperAdmin(),
         ];

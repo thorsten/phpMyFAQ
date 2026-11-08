@@ -88,7 +88,8 @@ export const overwritePassword = async (
   csrf: string,
   userId: string,
   newPassword: string,
-  passwordRepeat: string
+  passwordRepeat: string,
+  currentPassword: string = ''
 ): Promise<Response | undefined> => {
   const response = await fetch('./api/user/overwrite-password', {
     method: 'POST',
@@ -101,6 +102,7 @@ export const overwritePassword = async (
       userId: userId,
       newPassword: newPassword,
       passwordRepeat: passwordRepeat,
+      currentPassword: currentPassword,
     }),
   });
 

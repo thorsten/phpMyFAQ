@@ -202,6 +202,79 @@ class UserControllerTest extends TestCase
         $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
+    /**
+     * Regression guard: self-service password overwrite is a step-up protected action.
+     * A hijacked admin session must not be able to rotate the account password without
+     * proving the current one (CWE-620).
+     */
+    public function testSelfServiceWithWrongCurrentPasswordIsForbiddenAndConsumesTheBudget(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: false);
+        $actingUser->method('isStepUpLockedOut')->willReturn(false);
+        $actingUser->method('verifyPassword')->with('wrong')->willReturn(false);
+        $actingUser->expects($this->once())->method('stepUpFailure')->willReturn(true);
+        $actingUser->expects($this->never())->method('stepUpSuccess');
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'overwrite-password');
+
+        $request = $this->jsonRequest([
+            'userId' => 5,
+            'csrf' => $csrf,
+            'newPassword' => 'Attacker123!',
+            'passwordRepeat' => 'Attacker123!',
+            'currentPassword' => 'wrong',
+        ]);
+
+        $response = $controller->overwritePassword($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testSelfServiceWithoutCurrentPasswordIsForbidden(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: true);
+        $actingUser->method('isStepUpLockedOut')->willReturn(false);
+        $actingUser->method('verifyPassword')->with('')->willReturn(false);
+        $actingUser->expects($this->once())->method('stepUpFailure')->willReturn(true);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'overwrite-password');
+
+        $request = $this->jsonRequest([
+            'userId' => 5,
+            'csrf' => $csrf,
+            'newPassword' => 'Attacker123!',
+            'passwordRepeat' => 'Attacker123!',
+        ]);
+
+        $response = $controller->overwritePassword($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testSelfServiceIsThrottledWhileTheAccountIsLockedOut(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUser(userId: 5, isSuperAdmin: true);
+        $actingUser->method('isStepUpLockedOut')->willReturn(true);
+        $actingUser->expects($this->never())->method('verifyPassword');
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'overwrite-password');
+
+        $request = $this->jsonRequest([
+            'userId' => 5,
+            'csrf' => $csrf,
+            'newPassword' => 'Attacker123!',
+            'passwordRepeat' => 'Attacker123!',
+            'currentPassword' => 'guess',
+        ]);
+
+        $response = $controller->overwritePassword($request);
+
+        $this->assertSame(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
+    }
+
     public function testEditUserNonSuperAdminCannotGrantSuperAdminFlag(): void
     {
         $session = new Session(new MockArraySessionStorage());

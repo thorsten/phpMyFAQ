@@ -251,6 +251,27 @@ export const handleUsers = async (): Promise<void> => {
 
   if (buttonOverwritePassword) {
     const modal = new Modal(container);
+    const currentPasswordRow = document.getElementById('pmf-user-password-overwrite-current') as HTMLElement;
+    const currentPasswordInput = document.getElementById('cpass') as HTMLInputElement;
+
+    // Changing your own password needs the current one as a step-up check, so only show
+    // and require that field when the selected user is the logged-in user.
+    const isSelf = (): boolean => {
+      const userId = (document.getElementById('modal_user_id') as HTMLInputElement)?.value;
+      const loggedInUserId = (document.getElementById('logged_in_user_id') as HTMLInputElement)?.value;
+
+      return !!userId && userId === loggedInUserId;
+    };
+
+    container.addEventListener('show.bs.modal', () => {
+      if (currentPasswordRow) {
+        currentPasswordRow.classList.toggle('d-none', !isSelf());
+      }
+      if (currentPasswordInput) {
+        currentPasswordInput.required = isSelf();
+        currentPasswordInput.value = '';
+      }
+    });
 
     buttonOverwritePassword.addEventListener('click', async (event) => {
       event.preventDefault();
@@ -259,8 +280,15 @@ export const handleUsers = async (): Promise<void> => {
       const userId = (document.getElementById('modal_user_id') as HTMLInputElement).value;
       const newPassword = (document.getElementById('npass') as HTMLInputElement).value;
       const passwordRepeat = (document.getElementById('bpass') as HTMLInputElement).value;
+      const currentPassword = isSelf() ? (currentPasswordInput?.value ?? '') : '';
 
-      const response = (await overwritePassword(csrf, userId, newPassword, passwordRepeat)) as unknown as Response;
+      const response = (await overwritePassword(
+        csrf,
+        userId,
+        newPassword,
+        passwordRepeat,
+        currentPassword
+      )) as unknown as Response;
       if (response.success) {
         pushNotification(response.success);
         modal.hide();

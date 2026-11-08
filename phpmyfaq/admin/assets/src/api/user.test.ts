@@ -203,6 +203,7 @@ describe('User API', () => {
           userId: userId,
           newPassword: newPassword,
           passwordRepeat: passwordRepeat,
+          currentPassword: '',
         }),
       });
     });

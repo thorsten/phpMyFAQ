@@ -41,10 +41,10 @@ Object.defineProperty(globalThis, 'navigator', {
 
 // Mock the required modules
 vi.mock('bootstrap', () => ({
-  Modal: vi.fn(() => ({
-    show: vi.fn(),
-    hide: vi.fn(),
-  })),
+  Modal: class {
+    show = vi.fn();
+    hide = vi.fn();
+  },
 }));
 
 vi.mock('../api', () => ({
@@ -106,6 +106,69 @@ describe('User Management Functions', () => {
 
     expect(pushErrorNotification).toHaveBeenCalledWith('Unauthorized access');
     expect(fetchUserRights).not.toHaveBeenCalled();
+  });
+
+  test('self-service password overwrite shows the current password field and sends it', async () => {
+    document.body.innerHTML = `
+      <input id="pmf-user-password-overwrite-action" />
+      <div id="pmf-modal-user-password-overwrite"></div>
+      <input id="modal_csrf" value="test-csrf" />
+      <input id="modal_user_id" value="5" />
+      <input id="logged_in_user_id" value="5" />
+      <div id="pmf-user-password-overwrite-current" class="row mb-2 d-none"></div>
+      <input id="cpass" type="password" value="" />
+      <input id="npass" value="NewPass123!" />
+      <input id="bpass" value="NewPass123!" />
+    `;
+
+    const { overwritePassword } = await import('../api');
+    vi.mocked(overwritePassword).mockResolvedValue({ success: 'ok' } as unknown as Response);
+    const { handleUsers } = await import('./users');
+
+    await handleUsers();
+
+    const container = document.getElementById('pmf-modal-user-password-overwrite') as HTMLElement;
+    const row = document.getElementById('pmf-user-password-overwrite-current') as HTMLElement;
+    container.dispatchEvent(new window.Event('show.bs.modal'));
+
+    expect(row.classList.contains('d-none')).toBe(false);
+
+    (document.getElementById('cpass') as HTMLInputElement).value = 'Correct#Pass1';
+    (document.getElementById('pmf-user-password-overwrite-action') as HTMLInputElement).click();
+    await vi.waitFor(() => expect(overwritePassword).toHaveBeenCalled());
+
+    expect(overwritePassword).toHaveBeenCalledWith('test-csrf', '5', 'NewPass123!', 'NewPass123!', 'Correct#Pass1');
+  });
+
+  test('overwriting another user password hides the current password field and sends none', async () => {
+    document.body.innerHTML = `
+      <input id="pmf-user-password-overwrite-action" />
+      <div id="pmf-modal-user-password-overwrite"></div>
+      <input id="modal_csrf" value="test-csrf" />
+      <input id="modal_user_id" value="42" />
+      <input id="logged_in_user_id" value="5" />
+      <div id="pmf-user-password-overwrite-current" class="row mb-2"></div>
+      <input id="cpass" type="password" value="leftover" />
+      <input id="npass" value="NewPass123!" />
+      <input id="bpass" value="NewPass123!" />
+    `;
+
+    const { overwritePassword } = await import('../api');
+    vi.mocked(overwritePassword).mockResolvedValue({ success: 'ok' } as unknown as Response);
+    const { handleUsers } = await import('./users');
+
+    await handleUsers();
+
+    const container = document.getElementById('pmf-modal-user-password-overwrite') as HTMLElement;
+    const row = document.getElementById('pmf-user-password-overwrite-current') as HTMLElement;
+    container.dispatchEvent(new window.Event('show.bs.modal'));
+
+    expect(row.classList.contains('d-none')).toBe(true);
+
+    (document.getElementById('pmf-user-password-overwrite-action') as HTMLInputElement).click();
+    await vi.waitFor(() => expect(overwritePassword).toHaveBeenCalled());
+
+    expect(overwritePassword).toHaveBeenCalledWith('test-csrf', '42', 'NewPass123!', 'NewPass123!', '');
   });
 
   test('users module should be able to import overwritePassword without errors', async () => {

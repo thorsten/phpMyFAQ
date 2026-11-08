@@ -11,6 +11,22 @@
           <input type="hidden" name="csrf" id="modal_csrf"
                  value="{{ csrfToken_overwritePassword }}" />
           <input type="hidden" name="user_id" id="modal_user_id" value="{{ userId }}" />
+          <input type="hidden" id="logged_in_user_id" value="{{ loggedInUserId }}" />
+
+          <div class="row mb-2 d-none" id="pmf-user-password-overwrite-current">
+            <label class="col-5 col-form-label" for="cpass">
+              {{ 'ad_passwd_old' | translate }}
+            </label>
+            <div class="col-7">
+              <div class="input-group">
+                <input type="password" autocomplete="off" name="cpass" id="cpass" class="form-control"
+                       data-pmf-toggle="cpass_togglePassword">
+                <span class="input-group-text" id="cpass_togglePassword">
+                  <i class="bi bi-eye-slash" id="cpass_togglePassword_icon"></i>
+                </span>
+              </div>
+            </div>
+          </div>
 
           <div class="row mb-2">
             <label class="col-5 col-form-label" for="npass">

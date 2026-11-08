@@ -275,6 +275,7 @@ final class UserController extends AbstractController
         $csrfToken = Filter::filterVar($data->csrf ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
         $newPassword = is_string($data->newPassword ?? null) ? $data->newPassword : '';
         $retypedPassword = is_string($data->passwordRepeat ?? null) ? $data->passwordRepeat : '';
+        $currentPassword = is_string($data->currentPassword ?? null) ? $data->currentPassword : '';
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
             page: 'overwrite-password',
@@ -297,6 +298,17 @@ final class UserController extends AbstractController
         // Only SuperAdmins may change other users' passwords. Self-service is always allowed.
         if (!$isSelf && !$actingIsSuperAdmin) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
+        // Self-service skips the "old password" form of the password-change page, so the step-up
+        // has to happen here: a hijacked session must not be able to take the account over, and
+        // the attempts must consume the account's failure budget (CWE-307, CWE-620).
+        if ($isSelf) {
+            $stepUpResponse = $this->verifyCurrentPasswordStepUp($currentPassword);
+
+            if ($stepUpResponse instanceof JsonResponse) {
+                return $stepUpResponse;
+            }
         }
 
         $targetUser = new User($this->configuration);
@@ -325,6 +337,40 @@ final class UserController extends AbstractController
         }
 
         return $this->json(['error' => Translation::get(key: 'msgPasswordsMustBeEqual')], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Verifies the acting user's current password as a step-up check.
+     *
+     * Failed attempts consume the account's login failure budget and lock the step-up
+     * (and the login) once it is exhausted, so a hijacked session cannot guess the
+     * password without limit (CWE-307). Mirrors the step-up of the frontend user API
+     * and of the administration password-change form.
+     *
+     * Returns a JsonResponse that the caller must return as is, or null when the
+     * password verifies and the caller may proceed.
+     *
+     * @throws \Exception
+     */
+    private function verifyCurrentPasswordStepUp(#[\SensitiveParameter] string $currentPassword): ?JsonResponse
+    {
+        if ($this->currentUser->isStepUpLockedOut()) {
+            return $this->json([
+                'error' => Translation::get(key: 'msgStepUpLockedOut'),
+            ], Response::HTTP_TOO_MANY_REQUESTS);
+        }
+
+        if (!$this->currentUser->verifyPassword($currentPassword)) {
+            $this->currentUser->stepUpFailure();
+
+            return $this->json([
+                'error' => Translation::get(key: 'ad_user_error_currentPasswordInvalid'),
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        $this->currentUser->stepUpSuccess();
+
+        return null;
     }
 
     /**
