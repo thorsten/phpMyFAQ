@@ -173,6 +173,15 @@ class AuthWebAuthnTest extends TestCase
         $this->assertEquals($newAppId, $result['publicKey']['rp']['id']);
     }
 
+    public function testGetAppIdReturnsTheConfiguredAppId(): void
+    {
+        $this->assertSame('example.com', $this->authWebAuthn->getAppId());
+
+        $this->authWebAuthn->setAppId('faq.example.org');
+
+        $this->assertSame('faq.example.org', $this->authWebAuthn->getAppId());
+    }
+
     public function testSetAppIdWithLocalhost(): void
     {
         $localhostAppId = 'localhost:3000';
@@ -538,6 +547,24 @@ class AuthWebAuthnTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('No key with ID 1,2,3');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testAuthenticateTreatsANonListRawIdAsEmptyAndFindsNoKey(): void
+    {
+        $info = $this->createAuthenticationInfo();
+        $info->rawId = 'not a byte list';
+        $userWebAuthn = json_encode([
+            (object) [
+                'id' => [1, 2, 3],
+                'key' => 'unused',
+                'challenge' => '',
+            ],
+        ]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No key with ID ');
 
         $this->authWebAuthn->authenticate($info, $userWebAuthn);
     }
@@ -1005,6 +1032,19 @@ class AuthWebAuthnTest extends TestCase
         $keys = json_decode($this->authWebAuthn->register($info, 'not json', 'issued-challenge'));
 
         self::assertCount(1, $keys);
+    }
+
+    public function testRegisterKeepsExistingEntriesWhoseIdIsNotAByteList(): void
+    {
+        [$info, $credId] = $this->createAttestationInfo();
+        $existing = (string) json_encode([(object) ['id' => 'not a byte list', 'key' => 'other key']]);
+
+        $keys = json_decode($this->authWebAuthn->register($info, $existing, 'issued-challenge'));
+
+        self::assertCount(2, $keys);
+        self::assertSame(array_values(unpack('C*', $credId)), $keys[0]->id);
+        self::assertSame('not a byte list', $keys[1]->id);
+        self::assertSame('other key', $keys[1]->key);
     }
 
     public function testRegisterSkipsExistingEntriesThatAreNotObjectsOrHaveUnreadableIds(): void

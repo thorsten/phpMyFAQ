@@ -496,6 +496,24 @@ class Sqlite3Test extends TestCase
         $this->assertTrue($this->sqlite3->close(), 'Closing without a connection is a no-op');
     }
 
+    public function testNumRowsRefusesAResultThatWasAlreadyFetched(): void
+    {
+        // SQLite3Result cannot be constructed directly, and numRows() only inspects the
+        // marker property, so a subclass carrying the marker stands in for a consumed result.
+        $consumedResult = new class extends \SQLite3Result {
+            public bool $fetchedByPMF = true;
+
+            public function __construct()
+            {
+            }
+        };
+
+        $this->expectException(\phpMyFAQ\Core\Exception::class);
+        $this->expectExceptionMessage("Do not call numRows() after you've fetched one or more result records");
+
+        $this->sqlite3->numRows($consumedResult);
+    }
+
     public function testFetchAllThrowsWithoutAResult(): void
     {
         $this->expectException(\phpMyFAQ\Core\Exception::class);

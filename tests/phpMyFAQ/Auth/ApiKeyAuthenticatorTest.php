@@ -191,6 +191,31 @@ class ApiKeyAuthenticatorTest extends TestCase
         $this->assertNull($authenticator->getAuthenticatedUserId());
     }
 
+    public function testAuthenticateAcceptsAnyValidKeyWhenNoScopesAreRequired(): void
+    {
+        $authenticator = new ApiKeyAuthenticator($this->configuration);
+        $request = new Request(server: ['HTTP_AUTHORIZATION' => 'Bearer pmf_anyscope']);
+
+        $this->db->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->db->method('now')->willReturn('NOW()');
+        $this->db->method('query')->willReturn(true);
+        $this->db
+            ->method('fetchObject')
+            ->willReturn((object) [
+                'id' => 9,
+                'user_id' => 4,
+                'api_key' => hash('sha256', 'pmf_anyscope'),
+                'name' => 'scopeless',
+                'scopes' => '[]',
+                'expires_at' => null,
+                'created' => '2026-01-01 00:00:00',
+            ]);
+
+        $this->assertTrue($authenticator->authenticate($request));
+        $this->assertSame(4, $authenticator->getAuthenticatedUserId());
+        $this->assertSame([], $authenticator->getAuthenticatedApiKey()['scopes']);
+    }
+
     public function testAuthenticateGrantsNoScopesForEmptyOrUnparsableScopeLists(): void
     {
         $this->db->method('escape')->willReturnCallback(static fn(string $value): string => $value);

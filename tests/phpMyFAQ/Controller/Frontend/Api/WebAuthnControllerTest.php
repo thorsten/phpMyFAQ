@@ -381,6 +381,40 @@ class WebAuthnControllerTest extends TestCase
     }
 
     /**
+     * A passwordless sign-up of an unknown user is a registration and has to pass the captcha first.
+     *
+     * @throws \Exception
+     */
+    public function testPrepareRejectsNewAccountWithAnInvalidCaptcha(): void
+    {
+        // Persisted in the private database copy: Configuration::get() reloads every item from the
+        // database as soon as it meets an unknown key, which would drop in-memory-only overrides.
+        self::assertTrue($this->configuration->set('security.enableWebAuthnSupport', 'true'));
+        self::assertTrue($this->configuration->set('security.enableRegistration', 'true'));
+        self::assertTrue($this->configuration->set('spam.enableCaptchaCode', 'true'));
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserByLogin')->willReturn(false);
+        $user->expects($this->never())->method('createUser');
+
+        $authWebAuthn = $this->createMock(AuthWebAuthn::class);
+        $authWebAuthn->expects($this->never())->method('prepareChallengeForRegistration');
+
+        $controller = new WebAuthnController($authWebAuthn, $user);
+        $session = $this->createSession();
+        $this->injectControllerState($controller, $this->createCurrentUser(loggedIn: false, userId: -1), $session);
+
+        $response = $controller->prepare($this->createJsonRequest([
+            'username' => 'newbie@corp.example',
+            'captcha' => 'wrong',
+            'pmf-csrf-token' => $this->createCsrfToken($session, 'webauthn'),
+        ]));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(['error' => Translation::get(key: 'msgCaptcha')], $this->decodePayload($response));
+    }
+
+    /**
      * GHSA-w22q-m2fm-x9f4 follow-up: a passwordless sign-up must not bypass the admin's
      * registration policy. With spam.manualActivation on, the account stays blocked.
      *

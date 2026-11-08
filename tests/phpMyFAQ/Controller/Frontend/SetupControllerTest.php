@@ -209,13 +209,72 @@ class SetupControllerTest extends TestCase
     }
 
     /**
+     * When the configuration directory is gone, the update token cannot be created and the wizard says so.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateReportsWhenTheUpdateTokenCannotBeCreated(): void
+    {
+        $configDir = (string) PMF_CONFIG_DIR;
+        $hiddenConfigDir = $configDir . '.hidden-' . getmypid();
+        self::assertTrue(rename($configDir, $hiddenConfigDir));
+
+        try {
+            $response = new SetupController()->update(new Request());
+        } finally {
+            self::assertTrue(rename($hiddenConfigDir, $configDir));
+        }
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        $this->assertStringContainsString('The update token could not be created', $content);
+        $this->assertStringContainsString('Cannot create the update token, the directory', $content);
+    }
+
+    /**
+     * A broken user setup (here: an unknown permission level) must not break the wizard, it falls back to the token.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateRequiresTheTokenWhenTheCurrentUserCannotBeResolved(): void
+    {
+        // Persisted in the private database copy, an in-memory override would be lost on the next reload.
+        self::assertTrue($this->configuration->set('security.permLevel', 'unknown-level'));
+
+        // The same remember-me cookie that lets testUpdateSkipsTheTokenForALoggedInAdministrator()
+        // pass without a token, so only the failing user lookup can explain the token requirement.
+        $this->dbHandle->query(sprintf(
+            "UPDATE faquser SET remember_me = '%s', remember_me_expires = %d WHERE user_id = 1",
+            hash('sha256', 'remember-me-token'),
+            time() + 3600,
+        ));
+        $_COOKIE[UserSession::COOKIE_NAME_REMEMBER_ME] = 'remember-me-token';
+        $_SERVER['REQUEST_TIME'] = time();
+
+        try {
+            $response = new SetupController()->update(new Request());
+        } finally {
+            unset(
+                $_COOKIE[UserSession::COOKIE_NAME_REMEMBER_ME],
+                $_SESSION[CurrentUser::SESSION_CURRENT_USER],
+                $_SESSION[CurrentUser::SESSION_ID_TIMESTAMP],
+            );
+        }
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertStringContainsString('Update token required', (string) $response->getContent());
+    }
+
+    /**
      * An administrator who is still logged in through the remember-me cookie does not need the update token.
      *
      * @throws \Exception
      */
     public function testUpdateSkipsTheTokenForALoggedInAdministrator(): void
     {
-        $anonymousContent = (string) new SetupController()->update(new Request())->getContent();
+        $anonymousContent = (string) new SetupController()
+            ->update(new Request())
+            ->getContent();
         $this->assertStringContainsString('Update token required', $anonymousContent);
 
         $this->dbHandle->query(sprintf(

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Helper;
 
+use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 class LanguageHelperTest extends TestCase
 {
@@ -60,5 +62,25 @@ class LanguageHelperTest extends TestCase
         $this->assertStringContainsString('value="en"', $result);
         $this->assertStringNotContainsString('value="de"', $result);
         $this->assertStringNotContainsString('value="fr"', $result);
+    }
+
+    public function testRenderSelectLanguageFallsBackToEnglishWhenNoLanguageIsAvailable(): void
+    {
+        $languageCodes = new ReflectionProperty(LanguageCodes::class, 'languageCodes');
+        $previous = $languageCodes->getValue();
+        // Without any known language code no translation file counts as a language.
+        $languageCodes->setValue(null, []);
+
+        try {
+            $result = LanguageHelper::renderSelectLanguage('de');
+        } finally {
+            $languageCodes->setValue(null, $previous);
+        }
+
+        $this->assertSame(
+            '<select class="form-select" name="language" aria-label="Language" id="language" >'
+            . '<option value="en"></option></select>',
+            $result,
+        );
     }
 }

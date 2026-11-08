@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Configuration\Storage;
 
+use phpMyFAQ\Configuration\RedisConfigurationStoreTest;
+use phpMyFAQ\Configuration\RedisConfigurationStoreTestShim;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Redis;
 use Symfony\Component\Filesystem\Filesystem;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -36,14 +39,24 @@ final class HybridConfigurationStoreTest extends TestCase
     protected function tearDown(): void
     {
         new Filesystem()->remove($this->cacheDir);
+        RedisConfigurationStoreTestShim::$redisExtensionLoaded = null;
+        if (class_exists(Redis::class) && property_exists(Redis::class, 'hGetAllResult')) {
+            Redis::$hGetAllResult = [];
+        }
     }
 
     private function createStore(
         bool $redisEnabled = false,
         ?FilesystemConfigurationCache $cache = null,
     ): HybridConfigurationStore {
-        // An unreachable loopback port makes every Redis call fail fast with a RuntimeException.
-        $settings = new ConfigurationStorageSettings($redisEnabled, 'tcp://127.0.0.1:1', 'pmf:test:', 0.1, 'test-identity');
+        // Should a Redis client ever be created, the unreachable loopback port fails fast.
+        $settings = new ConfigurationStorageSettings(
+            $redisEnabled,
+            'tcp://127.0.0.1:1',
+            'pmf:test:',
+            0.1,
+            'test-identity',
+        );
 
         $resolver = $this->createStub(ConfigurationStorageSettingsResolver::class);
         $resolver->method('resolve')->willReturn($settings);
@@ -168,43 +181,49 @@ final class HybridConfigurationStoreTest extends TestCase
         $this->assertSame($databaseRows, $this->createStore()->fetchAll());
     }
 
-    public function testFetchAllLogsWarningsAndFallsBackToDatabaseWhenRedisIsUnreachable(): void
+    public function testFetchAllLogsWarningsAndFallsBackToDatabaseWhenRedisIsUnavailable(): void
     {
-        $this->requireRedisExtension();
+        $this->simulateMissingRedisExtension();
 
         $databaseRows = [(object) ['config_name' => 'from.db', 'config_value' => '1']];
         $this->databaseStore->method('fetchAll')->willReturn($databaseRows);
 
         // One warning for the failed Redis read, one for the failed warm-up from the database rows.
-        $this->logger->expects($this->exactly(2))->method('warning')->with(
-            $this->logicalOr(
-                'Failed to fetch configuration from Redis storage.',
-                'Failed to warm Redis configuration storage from database.',
-            ),
-            $this->arrayHasKey('error'),
-        );
+        $this->logger
+            ->expects($this->exactly(2))
+            ->method('warning')
+            ->with(
+                $this->logicalOr(
+                    'Failed to fetch configuration from Redis storage.',
+                    'Failed to warm Redis configuration storage from database.',
+                ),
+                $this->arrayHasKey('error'),
+            );
 
         $this->assertSame($databaseRows, $this->createStore(redisEnabled: true)->fetchAll());
     }
 
-    public function testWriteOperationsSucceedAndLogWhenRedisIsUnreachable(): void
+    public function testWriteOperationsSucceedAndLogWhenRedisIsUnavailable(): void
     {
-        $this->requireRedisExtension();
+        $this->simulateMissingRedisExtension();
 
         $this->databaseStore->method('updateConfigValue')->willReturn(true);
         $this->databaseStore->method('insert')->willReturn(true);
         $this->databaseStore->method('delete')->willReturn(true);
         $this->databaseStore->method('renameKey')->willReturn(true);
 
-        $this->logger->expects($this->exactly(4))->method('warning')->with(
-            $this->logicalOr(
-                'Failed to update configuration key in Redis storage.',
-                'Failed to insert configuration key into Redis storage.',
-                'Failed to delete configuration key from Redis storage.',
-                'Failed to rename configuration key in Redis storage.',
-            ),
-            $this->arrayHasKey('error'),
-        );
+        $this->logger
+            ->expects($this->exactly(4))
+            ->method('warning')
+            ->with(
+                $this->logicalOr(
+                    'Failed to update configuration key in Redis storage.',
+                    'Failed to insert configuration key into Redis storage.',
+                    'Failed to delete configuration key from Redis storage.',
+                    'Failed to rename configuration key in Redis storage.',
+                ),
+                $this->arrayHasKey('error'),
+            );
 
         $store = $this->createStore(redisEnabled: true);
 
@@ -214,12 +233,52 @@ final class HybridConfigurationStoreTest extends TestCase
         $this->assertTrue($store->renameKey('b', 'c'));
     }
 
-    private function requireRedisExtension(): void
+    public function testFetchAllServesTheRedisRowsAndWarmsTheFilesystemCache(): void
     {
-        // Fully qualified on purpose: RedisConfigurationStoreTest installs a shim named
-        // phpMyFAQ\Configuration\Storage\extension_loaded() that an unqualified call would hit.
-        if (!\extension_loaded('redis')) {
-            $this->markTestSkipped('The redis extension is required for the Redis fallback tests.');
+        $this->simulateFakeRedisExtension(['from.redis' => 'yes']);
+        $cache = $this->createCache();
+
+        $this->databaseStore->expects($this->never())->method('fetchAll');
+        $this->logger->expects($this->never())->method('warning');
+
+        $rows = $this->createStore(redisEnabled: true, cache: $cache)->fetchAll();
+
+        $this->assertCount(1, $rows);
+        $this->assertSame('from.redis', $rows[0]->config_name);
+        $this->assertSame('yes', $rows[0]->config_value);
+
+        $cached = $cache->read();
+        $this->assertNotNull($cached);
+        $this->assertSame('from.redis', $cached[0]->config_name);
+    }
+
+    /**
+     * Without ext-redis every Redis call fails with a RuntimeException before touching the network,
+     * which is the same failure mode as an unreachable server. The shim makes that deterministic.
+     */
+    private function simulateMissingRedisExtension(): void
+    {
+        RedisConfigurationStoreTestShim::$redisExtensionLoaded = false;
+    }
+
+    /**
+     * RedisConfigurationStoreTest ships an in-memory stand-in for the Redis class that is only
+     * declared when ext-redis is absent; with the real extension this needs a server instead.
+     *
+     * @param array<string, string> $hash
+     */
+    private function simulateFakeRedisExtension(array $hash): void
+    {
+        if (\extension_loaded('redis')) {
+            $this->markTestSkipped('The in-memory Redis stand-in is only available without ext-redis.');
         }
+
+        // Autoloading the test class declares the global Redis stand-in.
+        if (!class_exists(RedisConfigurationStoreTest::class) || !property_exists(Redis::class, 'hGetAllResult')) {
+            $this->markTestSkipped('The Redis stand-in from RedisConfigurationStoreTest is not available.');
+        }
+
+        Redis::$hGetAllResult = $hash;
+        RedisConfigurationStoreTestShim::$redisExtensionLoaded = true;
     }
 }

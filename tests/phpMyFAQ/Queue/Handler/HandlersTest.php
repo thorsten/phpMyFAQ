@@ -2,8 +2,14 @@
 
 namespace phpMyFAQ\Queue\Handler;
 
+use Elastic\Elasticsearch\Client;
+use Elastic\Transport\NodePool\Node;
+use Elastic\Transport\NodePool\NodePoolInterface;
+use Elastic\Transport\Transport;
+use GuzzleHttp\Psr7\Response;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\FaqStatus;
@@ -19,6 +25,10 @@ use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\User;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface as HttpClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Log\NullLogger;
+use ReflectionClass;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -199,6 +209,73 @@ class HandlersTest extends TestCase
         $handler(new IndexFaqMessage(1, 'en'));
     }
 
+    public function testIndexFaqHandlerBuildsTheElasticsearchClientItselfWithoutAFactory(): void
+    {
+        $httpClient = $this->createMock(HttpClientInterface::class);
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->with($this->callback(
+                static fn(RequestInterface $request): bool => $request->getMethod() === 'DELETE'
+                && str_contains($request->getUri()->getPath(), '/phpmyfaq_queue/_doc/99'),
+            ))
+            ->willReturn(
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/json', 'X-Elastic-Product' => 'Elasticsearch'],
+                    '{"result":"deleted"}',
+                ),
+            );
+
+        $elasticsearchConfiguration = $this->createStub(ElasticsearchConfiguration::class);
+        $elasticsearchConfiguration->method('getIndex')->willReturn('phpmyfaq_queue');
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('isElasticsearchActive')->willReturn(true);
+        $configuration->method('getElasticsearch')->willReturn($this->createElasticClient($httpClient));
+        $configuration->method('getElasticsearchConfig')->willReturn($elasticsearchConfiguration);
+        $configuration->method('getDefaultLanguage')->willReturn('en');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = [
+            'id' => 42,
+            'status' => FaqStatus::Review->value,
+            'content' => 'Answer',
+            'lang' => 'de',
+            'solution_id' => 99,
+            'title' => 'Question',
+            'keywords' => '',
+        ];
+        $faq->expects($this->once())->method('getFaq')->with(42);
+
+        $handler = new IndexFaqHandler($configuration, static fn(): Faq => $faq);
+
+        $handler(new IndexFaqMessage(42));
+    }
+
+    /**
+     * The Elasticsearch client is final: build it via reflection around a mocked PSR-18 transport.
+     */
+    private function createElasticClient(HttpClientInterface $httpClient): Client
+    {
+        $clientReflection = new ReflectionClass(Client::class);
+        $client = $clientReflection->newInstanceWithoutConstructor();
+
+        $nodePool = $this->createStub(NodePoolInterface::class);
+        $nodePool->method('nextNode')->willReturn(new Node('http://localhost:9200'));
+
+        $clientReflection->getProperty('transport')->setValue(
+            $client,
+            new Transport($httpClient, $nodePool, new NullLogger()),
+        );
+        $clientReflection->getProperty('logger')->setValue($client, new NullLogger());
+        $clientReflection->getProperty('responseException')->setValue($client, true);
+        $clientReflection->getProperty('elasticMetaHeader')->setValue($client, false);
+        $clientReflection->getProperty('async')->setValue($client, false);
+
+        return $client;
+    }
+
     public function testExportHandlerAcceptsConfiguration(): void
     {
         $configuration = $this->createStub(Configuration::class);
@@ -340,6 +417,127 @@ class HandlersTest extends TestCase
         }
     }
 
+    public function testExportHandlerLooksUpTheCategoryItselfWithoutACategoryFactory(): void
+    {
+        $configuration = new Configuration($this->createSqliteDatabase());
+        $language = new Language($configuration, $this->createStub(Session::class));
+        $language->setLanguageFromConfiguration('en');
+        $configuration->setLanguage($language);
+
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+
+        $user = $this->createStub(User::class);
+        $user->perm = $permission;
+        $user->method('getUserById')->willReturn(true);
+        $user->method('getUserData')->willReturn('');
+
+        $receivedCategory = null;
+        $exporter = new class {
+            public function generate(int $categoryId = 0, bool $downwards = true, string $language = ''): string
+            {
+                return '{"export":"default-category"}';
+            }
+        };
+
+        $handler = new ExportHandler(
+            $configuration,
+            static fn(): User => $user,
+            fn(): Faq => $this->createStub(Faq::class),
+            null,
+            static function (Faq $faq, Category $category, string $format) use ($exporter, &$receivedCategory): object {
+                $receivedCategory = $category;
+
+                return $exporter;
+            },
+        );
+
+        $written = $this->runExportAndCollectFiles($handler, 'json', 11);
+
+        try {
+            $this->assertInstanceOf(Category::class, $receivedCategory);
+            $this->assertCount(1, $written);
+        } finally {
+            foreach ($written as $file) {
+                unlink($file);
+            }
+        }
+    }
+
+    public function testExportHandlerFailsWhenTheExportDirectoryCannotBeCreated(): void
+    {
+        $exportDir = ExportHandler::getExportDirectory();
+        $backupDir = $exportDir . '.pmf-test-backup';
+        if (is_dir($exportDir) && !rename($exportDir, $backupDir)) {
+            $this->markTestSkipped('Cannot move the export directory aside.');
+        }
+
+        // A regular file in the way of the directory makes mkdir() fail without any permission tricks.
+        file_put_contents($exportDir, 'not a directory');
+        [$handler] = $this->createExportHandlerForMailDelivery('');
+
+        try {
+            $this->expectException(RuntimeException::class);
+            $this->expectExceptionMessage('Unable to create export directory: ' . $exportDir);
+
+            $this->invokeSilencingWarnings($handler, new ExportMessage('json', 7));
+        } finally {
+            unlink($exportDir);
+            if (is_dir($backupDir)) {
+                rename($backupDir, $exportDir);
+            }
+        }
+    }
+
+    public function testExportHandlerFailsWhenTheExportFileCannotBeWritten(): void
+    {
+        $exportDir = ExportHandler::getExportDirectory();
+        if (!is_dir($exportDir) && !mkdir($exportDir, 0o775, true) && !is_dir($exportDir)) {
+            $this->markTestSkipped('Cannot create the export directory.');
+        }
+
+        // Occupy the file name the handler is about to use (this second and the next one) with a
+        // directory, so file_put_contents() fails independently of file-mode enforcement.
+        $now = time();
+        $blockers = [];
+        foreach ([$now, $now + 1] as $timestamp) {
+            $blocker = sprintf('%s/export-7-%s.json', $exportDir, date('Y-m-d-H-i-s', $timestamp));
+            if (!is_dir($blocker)) {
+                mkdir($blocker);
+            }
+
+            $blockers[] = $blocker;
+        }
+
+        [$handler] = $this->createExportHandlerForMailDelivery('');
+
+        try {
+            $this->expectException(RuntimeException::class);
+            $this->expectExceptionMessage('Unable to write export file: ' . $exportDir . '/export-7-');
+
+            $this->invokeSilencingWarnings($handler, new ExportMessage('json', 7));
+        } finally {
+            foreach ($blockers as $blocker) {
+                rmdir($blocker);
+            }
+        }
+    }
+
+    /**
+     * mkdir() and file_put_contents() raise E_WARNING on failure; PHPUnit would otherwise
+     * report that warning instead of the RuntimeException the handler throws.
+     */
+    private function invokeSilencingWarnings(ExportHandler $handler, ExportMessage $message): void
+    {
+        set_error_handler(static fn(int $severity): bool => $severity === E_WARNING);
+
+        try {
+            $handler($message);
+        } finally {
+            restore_error_handler();
+        }
+    }
+
     public function testIndexFaqHandlerReturnsWithoutIndexingWhenFaqIsMissing(): void
     {
         $configuration = new class($this->createSqliteDatabase()) extends Configuration {
@@ -405,11 +603,11 @@ class HandlersTest extends TestCase
     /**
      * @return list<string>
      */
-    private function runExportAndCollectFiles(ExportHandler $handler, string $format): array
+    private function runExportAndCollectFiles(ExportHandler $handler, string $format, int $userId = 7): array
     {
-        $pattern = ExportHandler::getExportDirectory() . '/export-7-*.' . $format;
+        $pattern = sprintf('%s/export-%d-*.%s', ExportHandler::getExportDirectory(), $userId, $format);
         $before = glob($pattern) ?: [];
-        $handler(new ExportMessage($format, 7));
+        $handler(new ExportMessage($format, $userId));
 
         return array_values(array_diff(glob($pattern) ?: [], $before));
     }

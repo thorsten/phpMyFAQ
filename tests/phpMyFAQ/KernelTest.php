@@ -39,6 +39,7 @@ use Symfony\Component\RateLimiter\Storage\InMemoryStorage;
 use Symfony\Component\Routing\RouteCollection;
 
 #[CoversClass(Kernel::class)]
+#[UsesClass(Configuration::class)]
 #[UsesClass(ContainerControllerResolver::class)]
 #[UsesClass(ApiExceptionListener::class)]
 #[UsesClass(ApiRateLimiterListener::class)]
@@ -135,6 +136,56 @@ class KernelTest extends TestCase
 
         $reflection = new ReflectionClass(Kernel::class);
         $this->assertTrue($reflection->getProperty('booted')->getValue($kernel));
+    }
+
+    public function testBootBuildsTheRealContainerAndRoutesOnceInDebugMode(): void
+    {
+        // Debug mode bypasses the container and route caches, so the real boot() runs end to end
+        // without touching the filesystem caches; the second call must be a no-op.
+        $kernel = new Kernel(routingContext: 'public', debug: true);
+        $kernel->boot();
+
+        $reflection = new ReflectionClass(Kernel::class);
+        $container = $reflection->getProperty('container')->getValue($kernel);
+        $httpKernel = $reflection->getProperty('httpKernel')->getValue($kernel);
+
+        $this->assertTrue($reflection->getProperty('booted')->getValue($kernel));
+        $this->assertInstanceOf(ContainerBuilder::class, $container);
+        $this->assertSame($kernel, $container->get('kernel'));
+        $this->assertSame($container, ContainerRegistry::get());
+        $this->assertInstanceOf(HttpKernel::class, $httpKernel);
+        $this->assertGreaterThan(0, $reflection->getProperty('routes')->getValue($kernel)->count());
+
+        $kernel->boot();
+
+        $this->assertSame($container, $reflection->getProperty('container')->getValue($kernel));
+        $this->assertSame($httpKernel, $reflection->getProperty('httpKernel')->getValue($kernel));
+    }
+
+    public function testHandleRejectsABootedKernelWithoutAnHttpKernel(): void
+    {
+        $kernel = new Kernel(routingContext: 'public', debug: true);
+        new ReflectionClass(Kernel::class)
+            ->getProperty('booted')
+            ->setValue($kernel, true);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The Kernel booted without creating an HttpKernel.');
+
+        $kernel->handle(Request::create('/test'));
+    }
+
+    public function testGetContainerRejectsABootedKernelWithoutAContainer(): void
+    {
+        $kernel = new Kernel(routingContext: 'public', debug: true);
+        new ReflectionClass(Kernel::class)
+            ->getProperty('booted')
+            ->setValue($kernel, true);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The Kernel booted without building a container.');
+
+        $kernel->getContainer();
     }
 
     public function testGetContainerAutoBoots(): void

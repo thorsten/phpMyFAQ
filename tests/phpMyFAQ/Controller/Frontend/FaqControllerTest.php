@@ -134,7 +134,10 @@ final class FaqControllerTest extends TestCase
 
         self::assertSame(7, $result['comments'][0]['id']);
         self::assertSame('&lt;John&gt;', $result['comments'][0]['username']);
-        self::assertSame('Visit <a href="https://example.com">https://example.com</a>', $result['comments'][0]['comment']);
+        self::assertSame(
+            'Visit <a href="https://example.com">https://example.com</a>',
+            $result['comments'][0]['comment'],
+        );
         self::assertSame('<img src="avatar.png">', $result['gravatarImages'][7]);
         self::assertSame('john [at] example.com', $result['safeEmails'][7]);
         self::assertSame('2026-03-01', $result['formattedDates'][7]);
@@ -295,10 +298,9 @@ final class FaqControllerTest extends TestCase
 
     public function testShowRouteRestrictsLanguageParameterToLanguageCodes(): void
     {
-        $attributes = new \ReflectionMethod(
-            FaqController::class,
-            'show',
-        )->getAttributes(\Symfony\Component\Routing\Attribute\Route::class);
+        $attributes = new \ReflectionMethod(FaqController::class, 'show')->getAttributes(
+            \Symfony\Component\Routing\Attribute\Route::class,
+        );
 
         self::assertCount(1, $attributes);
         $route = $attributes[0]->newInstance();
@@ -332,8 +334,14 @@ final class FaqControllerTest extends TestCase
             $categoryId,
             $faqId,
         ));
-        $this->dbHandle->query(sprintf('INSERT INTO faqcategory_user (category_id, user_id) VALUES (%d, -1)', $categoryId));
-        $this->dbHandle->query(sprintf('INSERT INTO faqcategory_group (category_id, group_id) VALUES (%d, -1)', $categoryId));
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faqcategory_user (category_id, user_id) VALUES (%d, -1)',
+            $categoryId,
+        ));
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faqcategory_group (category_id, group_id) VALUES (%d, -1)',
+            $categoryId,
+        ));
     }
 
     private function showRequest(int $categoryId, int $faqId): \Symfony\Component\HttpFoundation\Request
@@ -341,7 +349,12 @@ final class FaqControllerTest extends TestCase
         $request = new \Symfony\Component\HttpFoundation\Request(
             [],
             [],
-            ['categoryId' => (string) $categoryId, 'faqId' => (string) $faqId, 'faqLang' => 'en', 'slug' => 'faq-title'],
+            [
+                'categoryId' => (string) $categoryId,
+                'faqId' => (string) $faqId,
+                'faqLang' => 'en',
+                'slug' => 'faq-title',
+            ],
         );
         $request->setSession(new Session(new MockArraySessionStorage()));
 
@@ -410,7 +423,10 @@ final class FaqControllerTest extends TestCase
             new \Symfony\Component\HttpFoundation\Request([], [], ['solutionId' => '1001']),
         );
 
-        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_MOVED_PERMANENTLY, $response->getStatusCode());
+        self::assertSame(
+            \Symfony\Component\HttpFoundation\Response::HTTP_MOVED_PERMANENTLY,
+            $response->getStatusCode(),
+        );
         self::assertSame('/content/1/1/en/unreleased-product-name.html', $response->headers->get('Location'));
     }
 
@@ -430,7 +446,10 @@ final class FaqControllerTest extends TestCase
             new \Symfony\Component\HttpFoundation\Request([], [], ['faqId' => '1', 'faqLang' => 'en']),
         );
 
-        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_MOVED_PERMANENTLY, $response->getStatusCode());
+        self::assertSame(
+            \Symfony\Component\HttpFoundation\Response::HTTP_MOVED_PERMANENTLY,
+            $response->getStatusCode(),
+        );
         self::assertSame('/content/1/1/en/unreleased-product-name.html', $response->headers->get('Location'));
     }
 
@@ -456,6 +475,96 @@ final class FaqControllerTest extends TestCase
         $content = (string) $response->getContent();
         self::assertStringContainsString((string) Translation::get(key: 'msgNewContentHeader'), $content);
         self::assertStringContainsString('Rendered category', $content);
+    }
+
+    /**
+     * Form data rows that are not plain row objects carry no input definition and must not end up in the template.
+     *
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
+    public function testAddSkipsFormDataEntriesThatAreNoRowObjects(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+        $this->seedCategoryFor(faqId: 1);
+        $this->configuration->getAll();
+        $this->setDatabaseDriver($this->createDatabaseDriverWithForeignFormDataRow());
+
+        $controller = $this->createController(
+            $this->createMock(Date::class),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $this->createCurrentUserStub(1, true),
+        );
+
+        $request = new \Symfony\Component\HttpFoundation\Request(['cat' => '1']);
+        $request->setSession(new Session(new MockArraySessionStorage()));
+
+        $response = $controller->add($request);
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString((string) Translation::get(key: 'msgNewContentHeader'), $content);
+        self::assertStringNotContainsString('Foreign form row label', $content);
+    }
+
+    /**
+     * Forwards every call to the real SQLite driver, but answers the form definition query with a
+     * single row object that is not a stdClass.
+     */
+    private function createDatabaseDriverWithForeignFormDataRow(): DatabaseDriver
+    {
+        $realDriver = $this->dbHandle;
+        $formsResult = null;
+        $driver = $this->createStub(DatabaseDriver::class);
+
+        foreach (new \ReflectionClass(DatabaseDriver::class)->getMethods() as $method) {
+            $name = $method->getName();
+
+            if ($name === 'query') {
+                $driver
+                    ->method('query')
+                    ->willReturnCallback(static function (string $query, int $offset = 0, int $rowcount = 0) use (
+                        $realDriver,
+                        &$formsResult,
+                    ): mixed {
+                        $result = $realDriver->query($query, $offset, $rowcount);
+                        if (str_contains($query, 'faqforms')) {
+                            $formsResult = $result;
+                        }
+
+                        return $result;
+                    });
+                continue;
+            }
+
+            if ($name === 'fetchAll') {
+                $driver
+                    ->method('fetchAll')
+                    ->willReturnCallback(static function (mixed $result) use ($realDriver, &$formsResult): ?array {
+                        if ($formsResult !== null && $result === $formsResult) {
+                            return [
+                                new class {
+                                    public string $input_lang = 'en';
+                                    public int $input_id = 1;
+                                    public string $input_label = 'Foreign form row label';
+                                    public int $input_active = 1;
+                                    public int $input_required = 1;
+                                },
+                            ];
+                        }
+
+                        return $realDriver->fetchAll($result);
+                    });
+                continue;
+            }
+
+            $driver
+                ->method($name)
+                ->willReturnCallback(static fn(mixed ...$arguments): mixed => [$realDriver, $name](...$arguments));
+        }
+
+        return $driver;
     }
 
     private function seedFaqRow(int $faqId, string $status = 'published'): void
@@ -856,15 +965,13 @@ final class FaqControllerTest extends TestCase
         $this->seedFaqRow(faqId: 1);
         $this->seedCategoryFor(faqId: 1);
         $this->seedCategoryFor(faqId: 1, categoryId: 2);
-        $this->dbHandle->query(
-            "INSERT INTO faqdata
+        $this->dbHandle->query("INSERT INTO faqdata
                 (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content,
                  author, email, comment, updated, date_start, date_end, notes)
              VALUES
                 (1, 'de', 2001, 0, 'published', 0, 'keyword', 'Deutscher Titel', 'Deutsche Antwort',
                  'Draft Author', 'draft@example.org', 'n', '20260101120000',
-                 '00000000000000', '99991231235959', '')",
-        );
+                 '00000000000000', '99991231235959', '')");
         $this->dbHandle->query("INSERT INTO faqtags (tagging_id, tagging_name) VALUES (1, 'release notes')");
         $this->dbHandle->query('INSERT INTO faqdata_tags (record_id, tagging_id) VALUES (1, 1)');
         $this->configuration->getAll();

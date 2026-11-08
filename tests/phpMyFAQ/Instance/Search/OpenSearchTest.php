@@ -350,9 +350,7 @@ class OpenSearchTest extends TestCase
      */
     public function testDeleteFaqReturnsErrorWhenDocumentIsMissing(): void
     {
-        $this->clientMock
-            ->method('delete')
-            ->willThrowException(new NotFoundHttpException('document missing'));
+        $this->clientMock->method('delete')->willThrowException(new NotFoundHttpException('document missing'));
 
         $result = $this->openSearch->delete(42);
 
@@ -442,7 +440,7 @@ class OpenSearchTest extends TestCase
      */
     private function networkException(): NetworkExceptionInterface
     {
-        return new class ('Connection refused') extends \RuntimeException implements NetworkExceptionInterface {
+        return new class('Connection refused') extends \RuntimeException implements NetworkExceptionInterface {
             public function getRequest(): RequestInterface
             {
                 return new \GuzzleHttp\Psr7\Request('PUT', '/phpmyfaq_os_test/_doc/42');
@@ -829,6 +827,33 @@ class OpenSearchTest extends TestCase
         $this->assertSame([2000, 2], $batchSizes);
     }
 
+    public function testBulkIndexReturnsAnEmptySuccessWhenTheLastFullBatchDrainedTheBuffer(): void
+    {
+        $faqs = [];
+        for ($id = 1; $id <= 1000; ++$id) {
+            $faqs[] = [
+                'status' => 'published',
+                'solution_id' => (string) (1000 + $id),
+                'id' => (string) $id,
+                'lang' => 'en',
+                'title' => 'FAQ ' . $id,
+                'content' => 'content',
+                'keywords' => '',
+                'category_id' => '1',
+            ];
+        }
+
+        // Exactly one full batch: the flush inside the loop sends everything, so there is
+        // nothing left for the trailing bulk request, which would be rejected when empty.
+        $this->clientMock
+            ->expects($this->once())
+            ->method('bulk')
+            ->with($this->callback(static fn(array $params): bool => count($params['body']) === 2000))
+            ->willReturn(['errors' => false, 'items' => []]);
+
+        $this->assertSame(['success' => []], $this->openSearch->bulkIndex($faqs));
+    }
+
     public function testBulkIndexCustomPagesFlushesEveryThousandDocuments(): void
     {
         $pages = [];
@@ -863,7 +888,9 @@ class OpenSearchTest extends TestCase
     {
         $this->assertFalse(defined('PMF_OPENSEARCH_NUMBER_SHARDS'));
 
-        $params = new ReflectionClass(OpenSearch::class)->getMethod('getParams')->invoke($this->openSearch);
+        $params = new ReflectionClass(OpenSearch::class)
+            ->getMethod('getParams')
+            ->invoke($this->openSearch);
         $settings = $params['body']['settings'];
 
         $this->assertSame(2, $settings['number_of_shards']);
@@ -877,7 +904,9 @@ class OpenSearchTest extends TestCase
     {
         define('PMF_OPENSEARCH_STEMMING_LANGUAGE', 'german');
 
-        $params = new ReflectionClass(OpenSearch::class)->getMethod('getParams')->invoke($this->openSearch);
+        $params = new ReflectionClass(OpenSearch::class)
+            ->getMethod('getParams')
+            ->invoke($this->openSearch);
 
         $this->assertSame('english', $params['body']['settings']['analysis']['filter']['Language_stemmer']['name']);
     }

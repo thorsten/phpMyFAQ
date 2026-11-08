@@ -611,4 +611,133 @@ class CategoryControllerTest extends TestCase
 
         return $controller;
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsBadRequestWhenTheBodyIsNotAJsonObject(): void
+    {
+        $this->authenticateApiToken();
+
+        $controller = new CategoryController($this->createStub(Language::class));
+        $this->authorizeCurrentUser($controller);
+
+        $response = $controller->create(new Request([], [], [], [], [], [], '[1, 2]'));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertSame(['stored' => false, 'error' => 'The request body must be a JSON object.'], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsConflictWhenTheParentCategoryNameIsUnknown(): void
+    {
+        $this->authenticateApiToken();
+
+        $category = $this->createMock(Category::class);
+        $category->expects($this->once())->method('getCategoryIdFromName')->with('Unknown parent')->willReturn(false);
+        $category->expects($this->never())->method('create');
+
+        $controller = $this->createControllerWith($category);
+        $this->authorizeCurrentUser($controller);
+
+        $response = $controller->create($this->createCategoryRequest(['parent-category-name' => 'Unknown parent']));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        $this->assertSame(['stored' => false, 'error' => 'The given parent category name was not found.'], $payload);
+    }
+
+    /**
+     * Without a parent id there is nothing to attach the category to; the default permission
+     * collaborator is constructed before that check, so no factory is injected here.
+     *
+     * @throws \Exception
+     */
+    public function testCreateReturnsBadRequestWithoutAParentCategory(): void
+    {
+        $this->authenticateApiToken();
+
+        $category = $this->createMock(Category::class);
+        $category->expects($this->never())->method('create');
+
+        $controller = new CategoryController($this->createStub(Language::class));
+        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $controller->setOrderFactory(fn(): Order => $this->createStub(Order::class));
+        $this->authorizeCurrentUser($controller);
+
+        $response = $controller->create($this->createCategoryRequest(['parent-id' => null]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertSame(['stored' => false, 'error' => 'Cannot add category'], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateReturnsBadRequestWhenNoCategoryIdIsReturned(): void
+    {
+        $this->authenticateApiToken();
+
+        $category = $this->createMock(Category::class);
+        $category->expects($this->once())->method('create')->willReturn(null);
+
+        $order = $this->createMock(Order::class);
+        $order->expects($this->never())->method('add');
+
+        $permission = $this->createMock(CategoryPermission::class);
+        $permission->expects($this->never())->method('add');
+
+        $controller = new CategoryController($this->createStub(Language::class));
+        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $controller->setCategoryPermissionFactory(static fn(): CategoryPermission => $permission);
+        $controller->setOrderFactory(static fn(): Order => $order);
+        $this->authorizeCurrentUser($controller);
+
+        $response = $controller->create($this->createCategoryRequest());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertSame(['stored' => false, 'error' => 'Cannot add category'], $payload);
+    }
+
+    /**
+     * Without injected factories the controller stores the order and the permissions
+     * through the real collaborators on the test database.
+     *
+     * @throws \Exception
+     */
+    public function testCreateStoresOrderAndPermissionsThroughTheDefaultCollaborators(): void
+    {
+        $this->authenticateApiToken();
+
+        $category = $this->createMock(Category::class);
+        $category->expects($this->once())->method('create')->willReturn(777);
+
+        $controller = new CategoryController($this->createStub(Language::class));
+        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $this->authorizeCurrentUser($controller);
+
+        $response = $controller->create($this->createCategoryRequest(['parent-id' => 0]));
+
+        $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());
+        $this->assertSame('{"stored":true}', (string) $response->getContent());
+
+        $database = $this->configuration->getDb();
+        $order = $database->fetchArray($database->query(
+            'SELECT parent_id FROM faqcategory_order WHERE category_id = 777',
+        ));
+        $this->assertSame(['parent_id' => 0], $order);
+        $this->assertSame(
+            1,
+            $database->numRows($database->query('SELECT * FROM faqcategory_user WHERE category_id = 777')),
+        );
+        $this->assertSame(
+            1,
+            $database->numRows($database->query('SELECT * FROM faqcategory_group WHERE category_id = 777')),
+        );
+    }
 }

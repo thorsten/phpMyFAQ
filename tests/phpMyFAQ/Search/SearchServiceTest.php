@@ -501,6 +501,44 @@ class SearchServiceTest extends TestCase
         $this->assertIsArray($result['searchResults']);
     }
 
+    public function testProcessSearchFallsBackToTheRawResultsWhenFormattingThemFails(): void
+    {
+        $searchService = new SearchService($this->configuration, $this->currentUser, $this->currentGroups);
+
+        $rawResult = new \stdClass();
+        $rawResult->id = 1;
+        $rawResult->lang = 'en';
+
+        $faqSearch = $this->createMock(Search::class);
+        $faqSearch->method('search')->willReturn([$rawResult]);
+
+        $database = $this->configuration->getDb();
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getFaqResult')->willReturnCallback(static fn(): mixed => $database->query('SELECT 1'));
+
+        // The SearchHelper reads the result set while formatting; a failure there must not
+        // break the search page but fall back to the unformatted results.
+        $searchResultSet = $this->createMock(SearchResultSet::class);
+        $searchResultSet->method('getNumberOfResults')->willReturn(1);
+        $searchResultSet->method('getResultSet')->willThrowException(new \Exception('result set unavailable'));
+
+        $reflection = new \ReflectionClass($searchService);
+        $reflection->getProperty('faqSearch')->setValue($searchService, $faqSearch);
+        $reflection->getProperty('faq')->setValue($searchService, $faq);
+        $reflection->getProperty('searchResultSet')->setValue($searchService, $searchResultSet);
+
+        $result = $searchService->processSearch(
+            inputSearchTerm: 'phpmyfaq',
+            inputTag: '',
+            inputCategory: 0,
+            allLanguages: false,
+            page: 1,
+        );
+
+        $this->assertSame(1, $result['numberOfSearchResults']);
+        $this->assertSame([$rawResult], $result['searchResults']);
+    }
+
     /**
      * @throws Exception
      * @throws \Exception

@@ -186,4 +186,23 @@ class TranslationStatisticsTest extends TestCase
         $this->assertNull($method->invoke($this->translation, '/translations/language_en.php.bak'));
         $this->assertNull($method->invoke($this->translation, '/translations/README.md'));
     }
+
+    public function testGetStatisticsSkipsFilesWhoseLanguageCodeCannotBeDerived(): void
+    {
+        $before = $this->translation->getStatistics();
+
+        // Digits never match the language code pattern, so this file has no derivable language.
+        $strayFile = PMF_TRANSLATION_DIR . '/language_0stray' . bin2hex(random_bytes(4)) . '.php';
+        file_put_contents($strayFile, "<?php\n\$PMF_LANG = ['stray' => 'value'];\n");
+
+        try {
+            $statistics = $this->translation->getStatistics();
+        } finally {
+            // nosemgrep: php.lang.security.unlink-use.unlink-use - temp file created above
+            unlink($strayFile);
+        }
+
+        $this->assertSame(array_keys($before), array_keys($statistics));
+        $this->assertSame($before, $statistics);
+    }
 }

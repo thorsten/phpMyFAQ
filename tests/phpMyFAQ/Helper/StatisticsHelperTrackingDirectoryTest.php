@@ -89,11 +89,14 @@ final class StatisticsHelperTrackingDirectoryTest extends TestCase
         $this->assertSame((int) gmmktime(0, 0, 0, 1, 5, 2024), $statistics->firstDate);
         $this->assertSame((int) gmmktime(0, 0, 0, 2, 20, 2024), $statistics->lastDate);
 
-        $this->assertEqualsCanonicalizing([
-            (int) gmmktime(0, 0, 0, 1, 5, 2024),
-            (int) gmmktime(0, 0, 0, 1, 10, 2024),
-            (int) gmmktime(0, 0, 0, 2, 20, 2024),
-        ], $this->helper->getAllTrackingDates());
+        $this->assertEqualsCanonicalizing(
+            [
+                (int) gmmktime(0, 0, 0, 1, 5, 2024),
+                (int) gmmktime(0, 0, 0, 1, 10, 2024),
+                (int) gmmktime(0, 0, 0, 2, 20, 2024),
+            ],
+            $this->helper->getAllTrackingDates(),
+        );
     }
 
     public function testFirstAndLastTrackingDatesComeFromTheFilesThemselves(): void
@@ -109,6 +112,27 @@ final class StatisticsHelperTrackingDirectoryTest extends TestCase
             Translation::getString('ad_sess_noentry'),
             $this->helper->getFirstTrackingDate((int) gmmktime(0, 0, 0, 3, 1, 2024)),
         );
+    }
+
+    public function testATrackingFileThatCannotBeOpenedYieldsNoEntry(): void
+    {
+        $first = (int) gmmktime(0, 0, 0, 1, 5, 2024);
+        $last = (int) gmmktime(0, 0, 0, 2, 20, 2024);
+        $firstFile = $this->writeTrackingFile(date('dmY', $first), 1704412800);
+        $lastFile = $this->writeTrackingFile(date('dmY', $last), 1708387200);
+        chmod($firstFile, 0o000);
+        chmod($lastFile, 0o000);
+
+        // PHP warns about the refused read; the warning is not the behaviour under test.
+        set_error_handler(static fn(): bool => true);
+        try {
+            $this->assertSame(Translation::getString('ad_sess_noentry'), $this->helper->getFirstTrackingDate($first));
+            $this->assertSame(Translation::getString('ad_sess_noentry'), $this->helper->getLastTrackingDate($last));
+        } finally {
+            restore_error_handler();
+            chmod($firstFile, 0o644);
+            chmod($lastFile, 0o644);
+        }
     }
 
     public function testDeletingAMonthRemovesOnlyThatMonthsFilesAndItsSessions(): void

@@ -386,4 +386,28 @@ class TableBuilderTest extends TestCase
             'ALTER TABLE faquser ADD COLUMN is_superadmin INTEGER NOT NULL DEFAULT 0',
         ], $statements);
     }
+
+    public function testBuildAddColumnStatementsWithoutTableNameThrows(): void
+    {
+        $this->builder->integer('counter');
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('call table() before buildAddColumnStatements()');
+
+        $this->builder->buildAddColumnStatements([]);
+    }
+
+    public function testBuildAddColumnStatementsNeverAppendsAnAutoIncrementColumn(): void
+    {
+        $builder = new TableBuilder(new SqliteDialect())
+            ->table('faqcounter', withPrefix: false)
+            ->autoIncrement('id')
+            ->integer('hits', nullable: false, default: 0);
+
+        // The live table knows neither column, yet AUTO_INCREMENT can never be added afterwards.
+        $this->assertSame(
+            ['ALTER TABLE faqcounter ADD COLUMN hits INTEGER NOT NULL DEFAULT 0'],
+            $builder->buildAddColumnStatements([]),
+        );
+    }
 }

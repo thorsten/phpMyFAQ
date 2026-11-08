@@ -7,8 +7,8 @@ namespace phpMyFAQ\Command;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\Storage\FilesystemConfigurationCache;
 use phpMyFAQ\Database;
-use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Database\PdoSqlite;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Language;
@@ -270,6 +270,195 @@ class SeedTestDataCommandTest extends TestCase
         $output = $this->commandTester->getDisplay();
         $this->assertStringContainsString('Seeding failed: database is locked', $output);
         $this->assertStringContainsString('SeedTestDataCommand', $output, 'The verbose output carries the trace');
+    }
+
+    public function testLoadFixtureRejectsAMissingFile(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Fixture file not found: ');
+
+        $this->invokePrivate('loadFixture', 'does-not-exist.json');
+    }
+
+    public function testLoadFixtureRejectsAFileThatCannotBeRead(): void
+    {
+        $fixture = $this->createTemporaryFixture('[]');
+        chmod($fixture, 0o000);
+
+        // PHP warns about the refused read; the warning is not the behaviour under test.
+        set_error_handler(static fn(): bool => true);
+        try {
+            $this->invokePrivate('loadFixture', $this->relativeToFixtureDirectory($fixture));
+            $this->fail('An unreadable fixture must not be seeded.');
+        } catch (\RuntimeException $runtimeException) {
+            $this->assertStringStartsWith('Unable to read fixture file: ', $runtimeException->getMessage());
+        } finally {
+            restore_error_handler();
+            chmod($fixture, 0o644);
+            unlink($fixture);
+        }
+    }
+
+    public function testLoadFixtureRejectsAFileWithoutAJsonArray(): void
+    {
+        $fixture = $this->createTemporaryFixture('"not a list of entries"');
+
+        try {
+            $this->invokePrivate('loadFixture', $this->relativeToFixtureDirectory($fixture));
+            $this->fail('A fixture without a JSON array must not be seeded.');
+        } catch (\RuntimeException $runtimeException) {
+            $this->assertStringEndsWith('does not contain a JSON array.', $runtimeException->getMessage());
+        } finally {
+            unlink($fixture);
+        }
+    }
+
+    public function testSeedCategoriesSkipsTranslationsThatAreNotObjects(): void
+    {
+        $this->useConfiguration($this->configuration);
+
+        $categoryIdMap = $this->invokePrivate(
+            'seedCategories',
+            [
+                ['slug' => 'broken', 'translations' => ['en' => 'Broken', 'de' => null]],
+            ],
+            ['de', 'en'],
+        );
+
+        $this->assertSame([], $categoryIdMap);
+        $this->assertSame(
+            0,
+            $this->countScalar(sprintf(
+                "SELECT COUNT(*) AS c FROM %sfaqcategories WHERE name = 'Broken'",
+                Database::getTablePrefix(),
+            )),
+        );
+    }
+
+    public function testSeedFaqsSkipsUnknownCategoriesAndTranslationsThatAreNotObjects(): void
+    {
+        $this->useConfiguration($this->configuration);
+        $translation = ['question' => 'Q?', 'answer' => 'A.'];
+
+        $inserted = $this->invokePrivate(
+            'seedFaqs',
+            [
+                ['category' => 'unknown', 'translations' => ['en' => $translation]],
+                ['category' => 'known', 'translations' => ['en' => 'Q?', 'de' => null]],
+            ],
+            ['known' => 1],
+            ['de', 'en'],
+        );
+
+        $this->assertSame(0, $inserted);
+        $this->assertSame(0, $this->countSeededFaqs());
+    }
+
+    public function testSeedFaqsSkipsRecordsTheDatabaseDidNotNumber(): void
+    {
+        // A driver that hands out no id leaves the FAQ without a usable record id.
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $database->method('nextId')->willReturn(0);
+        $database->method('fetchArray')->willReturn(['max_solution_id' => 1000, 'c' => 0]);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+        $configuration->method('get')->willReturn('basic');
+        $this->useConfiguration($configuration);
+
+        $inserted = $this->invokePrivate(
+            'seedFaqs',
+            [
+                [
+                    'category' => 'known',
+                    'tags' => ['phpmyfaq'],
+                    'translations' => ['en' => ['question' => 'Q?', 'answer' => 'A.']],
+                ],
+            ],
+            ['known' => 1],
+            ['en'],
+        );
+
+        $this->assertSame(0, $inserted);
+    }
+
+    public function testSeedGlossaryAndNewsSkipTranslationsThatAreNotObjects(): void
+    {
+        $this->useConfiguration($this->configuration);
+        $entries = [['translations' => ['en' => 'flat', 'de' => null]]];
+
+        $this->assertSame(0, $this->invokePrivate('seedGlossary', $entries, ['de', 'en']));
+        $this->assertSame(0, $this->invokePrivate('seedNews', $entries, ['de', 'en']));
+        $this->assertSame(0, $this->countSeededNews());
+    }
+
+    public function testPurgeSkipsRowsWithoutIdentifiers(): void
+    {
+        $queries = [];
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): bool {
+                $queries[] = $query;
+                return true;
+            });
+        // Rows without an id or language cannot be cleaned up and are skipped.
+        $database
+            ->method('fetchAll')
+            ->willReturn([
+                (object) ['id' => null, 'lang' => 'en'],
+                (object) ['id' => null, 'lang' => null],
+                (object) ['lang' => 'en'],
+            ]);
+        $database->method('affectedRows')->willReturn(0);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+        $this->useConfiguration($configuration);
+
+        $this->assertSame(0, $this->invokePrivate('purge'));
+
+        $relationDeletes = array_filter(
+            $queries,
+            static fn(string $query): bool => (
+                str_contains($query, 'DELETE FROM')
+                && (str_contains($query, 'faqcategoryrelations') || str_contains($query, 'faqcategory_user'))
+            ),
+        );
+        $this->assertSame([], $relationDeletes, 'Rows without identifiers trigger no related deletes');
+    }
+
+    private function invokePrivate(string $method, mixed ...$arguments): mixed
+    {
+        return new \ReflectionMethod(SeedTestDataCommand::class, $method)->invoke($this->command, ...$arguments);
+    }
+
+    private function useConfiguration(Configuration $configuration): void
+    {
+        new \ReflectionProperty(SeedTestDataCommand::class, 'configuration')->setValue($this->command, $configuration);
+    }
+
+    private function createTemporaryFixture(string $json): string
+    {
+        $fixture = sys_get_temp_dir() . '/pmf-seed-fixture-' . bin2hex(random_bytes(6)) . '.json';
+        file_put_contents($fixture, $json);
+
+        return $fixture;
+    }
+
+    /**
+     * The command resolves fixture names below its own fixture directory, so a file elsewhere
+     * is addressed by climbing out of that directory first.
+     */
+    private function relativeToFixtureDirectory(string $path): string
+    {
+        $fixtureDirectory =
+            dirname((string) new ReflectionClass(SeedTestDataCommand::class)->getFileName()) . '/Fixtures/testdata';
+        $depth = count(array_filter(explode('/', $fixtureDirectory)));
+
+        return str_repeat('../', $depth) . ltrim($path, '/');
     }
 
     private function countSeededFaqs(): int

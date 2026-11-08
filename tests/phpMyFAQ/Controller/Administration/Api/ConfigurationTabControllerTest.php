@@ -949,6 +949,52 @@ final class ConfigurationTabControllerTest extends TestCase
     }
 
     /**
+     * When the configuration schema cannot be read, the checkbox detection falls back to the
+     * stored value: a missing field that currently holds a truthy value was an unchecked box.
+     *
+     * @throws \Exception
+     */
+    public function testMissingCheckboxFallsBackToTheStoredValueWhenTheSchemaCannotBeRead(): void
+    {
+        $this->configuration->update(['main.enableNotifications' => 'true']);
+
+        // A private translations directory: the "zz" language loads fine once, but the file is
+        // then replaced by one that throws, so re-reading the configuration schema fails.
+        $translationsDir = sys_get_temp_dir() . '/pmf-translations-' . bin2hex(random_bytes(6));
+        self::assertTrue(mkdir($translationsDir));
+        self::assertTrue(copy(PMF_TRANSLATION_DIR . '/language_en.php', $translationsDir . '/language_en.php'));
+        $brokenLanguageFile = $translationsDir . '/language_zz.php';
+        self::assertNotFalse(file_put_contents($brokenLanguageFile, "<?php\n\nreturn ['metaLanguage' => 'zz'];\n"));
+
+        try {
+            Translation::create()
+                ->setTranslationsDir($translationsDir)
+                ->setDefaultLanguage('en')
+                ->setCurrentLanguage('zz');
+            self::assertNotFalse(file_put_contents(
+                $brokenLanguageFile,
+                "<?php\n\nthrow new \\RuntimeException('The translation file is broken.');\n",
+            ));
+
+            $stored = $this->saveConfiguration(['main.titleFAQ' => 'New title'], [
+                'main.titleFAQ',
+                'main.enableNotifications',
+            ]);
+        } finally {
+            Translation::create()
+                ->setTranslationsDir(PMF_TRANSLATION_DIR)
+                ->setDefaultLanguage('en')
+                ->setCurrentLanguage('en');
+            unlink($brokenLanguageFile);
+            unlink($translationsDir . '/language_en.php');
+            rmdir($translationsDir);
+        }
+
+        self::assertSame('false', $stored['main.enableNotifications']);
+        self::assertSame('New title', $stored['main.titleFAQ']);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testUncheckedCheckboxIsPersistedAsFalseWithoutAvailableFields(): void

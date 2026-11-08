@@ -4,6 +4,7 @@ namespace phpMyFAQ\EventListener;
 
 use Monolog\Logger;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Environment;
@@ -13,6 +14,7 @@ use ReflectionMethod;
 use ReflectionProperty;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -281,6 +283,72 @@ class WebExceptionListenerTest extends TestCase
         $this->assertSame(Response::HTTP_NOT_FOUND, $event->getResponse()?->getStatusCode());
         $this->assertSame('styled 404 for /missing-page.html', $event->getResponse()?->getContent());
         $this->assertSame('public.404', $request->attributes->get('_route'));
+    }
+
+    public function testNotFoundHandsTheContainerToAnAbstractControllerFromTheContainer(): void
+    {
+        $controller = new class extends AbstractController {
+            public ?ContainerInterface $receivedContainer = null;
+
+            public function __construct()
+            {
+                // Skip the parent constructor: the listener is responsible for injecting the container.
+            }
+
+            public function setContainer(ContainerInterface $container): void
+            {
+                $this->receivedContainer = $container;
+            }
+
+            public function index(Request $request): Response
+            {
+                return new Response('styled 404', Response::HTTP_NOT_FOUND);
+            }
+        };
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('has')
+            ->willReturnCallback(static fn(string $id): bool => $id === PageNotFoundController::class);
+        $container->method('get')->willReturn($controller);
+
+        $listener = new WebExceptionListener($container);
+        $event = $this->createEvent(Request::create('/missing-page.html'), new ResourceNotFoundException('No route'));
+
+        $listener->onKernelException($event);
+
+        $this->assertSame($container, $controller->receivedContainer);
+        $this->assertSame('styled 404', $event->getResponse()?->getContent());
+    }
+
+    public function testNotFoundFallsBackToThePlainResponseWhenNoControllerCanBeResolved(): void
+    {
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('has')->willReturn(false);
+
+        // A request whose attribute bag drops "_controller" leaves the resolver without a
+        // controller, which is the only way Symfony's resolver reports false.
+        $request = Request::create('/missing-page.html');
+        $request->attributes = new class extends ParameterBag {
+            public function set(string $key, mixed $value): void
+            {
+                if ($key === '_controller') {
+                    return;
+                }
+
+                parent::set($key, $value);
+            }
+        };
+
+        $listener = new WebExceptionListener($container);
+        $event = $this->createEvent($request, new ResourceNotFoundException('No route'));
+
+        $listener->onKernelException($event);
+
+        $this->assertSame('public.404', $request->attributes->get('_route'));
+        $this->assertNull($request->attributes->get('_controller'));
+        $this->assertSame(Response::HTTP_NOT_FOUND, $event->getResponse()?->getStatusCode());
+        $this->assertStringContainsString('Not Found', (string) $event->getResponse()?->getContent());
     }
 
     public function testNotFoundFallsBackToThePlainResponseWhenTheControllerReturnsNoResponse(): void

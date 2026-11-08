@@ -9,6 +9,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\CustomPage;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\CustomPageEntity;
 use phpMyFAQ\Helper\FaqHelper;
@@ -186,6 +187,90 @@ final class CustomPageControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('Fallback Page', (string) $response->getContent());
         self::assertStringNotContainsString('SEO Description', (string) $response->getContent());
+    }
+
+    /**
+     * A failing SEO lookup must not break the page: the page title is used and the description stays empty.
+     *
+     * @throws \Exception
+     */
+    public function testShowFallsBackToPageDefaultsWhenTheSeoLookupFails(): void
+    {
+        $this->dbHandle->query(
+            "INSERT INTO faqseo (id, type, reference_id, reference_language, title, description, slug, created)
+             VALUES (504, 'page', 504, 'en', 'Stored SEO Title', 'Stored SEO Description', 'broken-seo', '2026-03-15 10:00:00')",
+        );
+        $this->useDatabaseDriver($this->createDatabaseDriverFailingOnSeoQueries());
+
+        $pageEntity = new CustomPageEntity()
+            ->setId(504)
+            ->setPageTitle('Broken SEO Page')
+            ->setContent('<p>Content without SEO</p>')
+            ->setAuthorName('Test Author')
+            ->setAuthorEmail('author@example.com')
+            ->setActive(true)
+            ->setCreated(new DateTime('2026-03-15 10:00:00'));
+
+        $customPage = $this->createMock(CustomPage::class);
+        $customPage->expects(self::once())->method('getBySlug')->with('broken-seo', 'en')->willReturn($pageEntity);
+
+        $controller = new CustomPageController($customPage, new FaqHelper($this->configuration));
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            $this->createLoggedOutCurrentUser(),
+        ));
+
+        $response = $controller->show(new Request([], [], ['slug' => 'broken-seo']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString('Broken SEO Page', $content);
+        self::assertStringContainsString('<meta content="" name="description">', $content);
+        self::assertStringNotContainsString('Stored SEO Title', $content);
+        self::assertStringNotContainsString('Stored SEO Description', $content);
+    }
+
+    /**
+     * Forwards every call to the real SQLite driver, except that queries against the SEO table fail.
+     */
+    private function createDatabaseDriverFailingOnSeoQueries(): DatabaseDriver
+    {
+        $realDriver = $this->dbHandle;
+        $driver = $this->createStub(DatabaseDriver::class);
+
+        foreach (new \ReflectionClass(DatabaseDriver::class)->getMethods() as $method) {
+            $name = $method->getName();
+
+            if ($name === 'query') {
+                $driver
+                    ->method('query')
+                    ->willReturnCallback(static function (string $query, int $offset = 0, int $rowcount = 0) use (
+                        $realDriver,
+                    ): mixed {
+                        if (str_contains($query, 'faqseo')) {
+                            throw new Exception('SEO storage is unavailable');
+                        }
+
+                        return $realDriver->query($query, $offset, $rowcount);
+                    });
+                continue;
+            }
+
+            $driver
+                ->method($name)
+                ->willReturnCallback(static fn(mixed ...$arguments): mixed => [$realDriver, $name](...$arguments));
+        }
+
+        return $driver;
+    }
+
+    private function useDatabaseDriver(DatabaseDriver $databaseDriver): void
+    {
+        $configProperty = new \ReflectionProperty(Configuration::class, 'config');
+        $config = $configProperty->getValue($this->configuration);
+        self::assertIsArray($config);
+        $config['core.database'] = $databaseDriver;
+        $configProperty->setValue($this->configuration, $config);
     }
 
     /**

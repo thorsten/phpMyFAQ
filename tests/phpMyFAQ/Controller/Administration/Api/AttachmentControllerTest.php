@@ -784,16 +784,17 @@ final class AttachmentControllerTest extends TestCase
         self::assertArrayHasKey('error', $payload);
     }
 
-    private function seedAttachment(int $attachmentId, int $recordId, string $recordLang): void
+    private function seedAttachment(int $attachmentId, int $recordId, string $recordLang, bool $encrypted = false): void
     {
         self::assertNotFalse($this->dbHandle->query(sprintf(
             'INSERT INTO faqattachment (id, record_id, record_lang, real_hash, virtual_hash, filename, filesize,'
-            . " encrypted, mime_type) VALUES (%d, %d, '%s', '%s', '%s', 'file.txt', 18, 0, 'text/plain')",
+            . " encrypted, mime_type) VALUES (%d, %d, '%s', '%s', '%s', 'file.txt', 18, %d, 'text/plain')",
             $attachmentId,
             $recordId,
             $recordLang,
             md5('real-' . $attachmentId),
             md5('virtual-' . $attachmentId),
+            $encrypted ? 1 : 0,
         )));
     }
 
@@ -923,18 +924,20 @@ final class AttachmentControllerTest extends TestCase
         $controller->setContainer($container);
 
         try {
-            $response = $controller->upload(new Request(
-                [],
-                [
-                    'pmf-csrf-token' => $token,
-                    'record_id' => 1,
-                    'record_lang' => 'en',
-                    'customFileNames' => ['user-manual'],
-                ],
-                [],
-                [],
-                ['filesToUpload' => [$uploadedFile]],
-            ));
+            $response = $controller->upload(
+                new Request(
+                    [],
+                    [
+                        'pmf-csrf-token' => $token,
+                        'record_id' => 1,
+                        'record_lang' => 'en',
+                        'customFileNames' => ['user-manual'],
+                    ],
+                    [],
+                    [],
+                    ['filesToUpload' => [$uploadedFile]],
+                ),
+            );
             $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
             self::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
@@ -944,9 +947,13 @@ final class AttachmentControllerTest extends TestCase
             self::assertSame(1, $payload[0]['faqId']);
             self::assertSame('en', $payload[0]['faqLanguage']);
 
-            $storedFiles = iterator_to_array(new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($storageRoot, \FilesystemIterator::SKIP_DOTS),
-            ), false);
+            $storedFiles = iterator_to_array(
+                new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(
+                    $storageRoot,
+                    \FilesystemIterator::SKIP_DOTS,
+                )),
+                false,
+            );
             $storedFiles = array_filter($storedFiles, static fn(\SplFileInfo $file): bool => $file->isFile());
             self::assertCount(1, $storedFiles);
             self::assertSame('attachment payload', file_get_contents(reset($storedFiles)->getPathname()));
@@ -1088,6 +1095,93 @@ final class AttachmentControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame(Translation::get('msgNoImagesForUpload'), $payload['error']);
+    }
+
+    /**
+     * The FileBag keeps scalar entries of a list untouched, so a crafted multipart body can
+     * leave a plain string where an UploadedFile is expected.
+     *
+     * @throws \Exception
+     */
+    public function testUploadReturnsBadRequestWhenAFileEntryIsAPlainString(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'upload-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        $request = new Request(
+            [],
+            ['pmf-csrf-token' => $token, 'record_id' => 1, 'record_lang' => 'en'],
+            [],
+            [],
+            ['filesToUpload' => ['not-a-file']],
+        );
+        self::assertSame(['not-a-file'], $request->files->get('filesToUpload'));
+
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoImagesForUpload'), $payload['error']);
+    }
+
+    /**
+     * An encrypted attachment removes its storage directory on delete. When that directory
+     * cannot be removed, the metadata is still dropped but the request reports the failure.
+     *
+     * @throws \Exception
+     */
+    public function testDeleteReturnsBadRequestWhenTheEncryptedFileCannotBeRemoved(): void
+    {
+        $encryptionKey = str_repeat('k', 32);
+        $this->configuration->set('records.defaultAttachmentEncKey', $encryptionKey);
+        $this->configuration->set('records.enableAttachmentEncryption', 'true');
+        $this->seedAttachment(7, 5, 'en', encrypted: true);
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'delete-attachment');
+
+        $controller = new AttachmentController();
+        $controller->setContainer($container);
+
+        // Resolve the storage path the way the attachment does and create the encrypted file there.
+        $attachment = AttachmentFactory::create(7);
+        $filePath = (string) new \ReflectionMethod($attachment, 'buildFilePath')->invoke($attachment);
+        $fileDirectory = dirname($filePath);
+        $lockedDirectory = dirname($fileDirectory);
+        $storageRoot = dirname($lockedDirectory);
+        self::assertTrue(mkdir($fileDirectory, 0o777, true));
+        self::assertNotFalse(file_put_contents($filePath, 'cipher text'));
+        // rmdir() on the file directory fails because its parent is not writable.
+        self::assertTrue(chmod($lockedDirectory, 0o555));
+        $_FILES['userfile'] = ['tmp_name' => sys_get_temp_dir() . '/pmf-unrelated-upload'];
+
+        // rmdir() emits a warning for the failed removal; PHPUnit would otherwise fail the test.
+        set_error_handler(static fn(): bool => true);
+        try {
+            $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+                'csrf' => $token,
+                'attId' => 7,
+            ], JSON_THROW_ON_ERROR)));
+        } finally {
+            restore_error_handler();
+            unset($_FILES['userfile']);
+            chmod($lockedDirectory, 0o755);
+            new Filesystem()->remove($storageRoot);
+            AttachmentFactory::init('', false, AttachmentStorageType::FILESYSTEM->value);
+        }
+
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_att_delfail'), $payload['error']);
+        self::assertSame(0, $this->countAttachments(7), 'The metadata is removed even when the file is not');
     }
 
     /**

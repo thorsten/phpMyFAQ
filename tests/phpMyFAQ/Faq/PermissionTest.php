@@ -8,6 +8,7 @@ use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class PermissionTest
@@ -455,5 +456,75 @@ class PermissionTest extends TestCase
         $this->assertArrayHasKey('restricted_groups', $result);
         $this->assertEquals([], $result['restricted_user']);
         $this->assertEquals([], $result['restricted_groups']);
+    }
+
+    public function testCreatePermissionArrayGrantsEveryoneForTheAllPermission(): void
+    {
+        $request = $this->createJsonRequest([
+            'userpermission' => 'all',
+            'restricted_users' => '5',
+            'grouppermission' => 'all',
+            'restricted_groups' => ['7', '8'],
+        ]);
+
+        $result = $this->permission->createPermissionArray($request);
+
+        // "all" wins over any restricted selection.
+        $this->assertSame(['restricted_user' => [-1], 'restricted_groups' => [-1]], $result);
+    }
+
+    public function testCreatePermissionArrayAcceptsSingleRestrictedUserAndGroup(): void
+    {
+        $request = $this->createJsonRequest([
+            'userpermission' => 'restricted',
+            'restricted_users' => '5',
+            'grouppermission' => 'restricted',
+            'restricted_groups' => '7',
+        ]);
+
+        $result = $this->permission->createPermissionArray($request);
+
+        $this->assertSame(['restricted_user' => [5], 'restricted_groups' => [7]], $result);
+    }
+
+    public function testCreatePermissionArrayDropsNonNumericSingleSelections(): void
+    {
+        $request = $this->createJsonRequest([
+            'userpermission' => 'restricted',
+            'restricted_users' => 'not-a-number',
+            'grouppermission' => 'restricted',
+            'restricted_groups' => 'nope',
+        ]);
+
+        $result = $this->permission->createPermissionArray($request);
+
+        $this->assertSame(['restricted_user' => [], 'restricted_groups' => []], $result);
+    }
+
+    public function testCreatePermissionArrayKeepsOnlyIntegersFromRestrictedLists(): void
+    {
+        $request = $this->createJsonRequest([
+            'userpermission' => 'restricted',
+            'restricted_users' => ['1', 2, 'x'],
+            'grouppermission' => 'restricted',
+            'restricted_groups' => [3, 'abc', '4'],
+        ]);
+
+        $result = $this->permission->createPermissionArray($request);
+
+        $this->assertSame(['restricted_user' => [1, 2], 'restricted_groups' => [3, 4]], $result);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function createJsonRequest(array $data): Request
+    {
+        return Request::create(
+            '/admin/api/faq/permissions',
+            'POST',
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: json_encode(['data' => $data], JSON_THROW_ON_ERROR),
+        );
     }
 }

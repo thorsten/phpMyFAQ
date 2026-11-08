@@ -385,4 +385,18 @@ class MediumPermissionRepositoryTest extends TestCase
 
         $this->assertSame([], $repository->getAutoJoinGroups());
     }
+
+    public function testGetGroupNameFallsBackWhenTheGroupDoesNotExist(): void
+    {
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('query')->willReturn(true);
+        $database->method('numRows')->willReturn(0);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+
+        $repository = new MediumPermissionRepository($configuration);
+
+        $this->assertSame('-', $repository->getGroupName(4711));
+    }
 }

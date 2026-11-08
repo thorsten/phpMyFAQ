@@ -11,6 +11,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\FaqStatus;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData as FaqMetaData;
 use phpMyFAQ\Faq\Statistics as FaqStatistics;
@@ -23,6 +24,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -2081,5 +2083,217 @@ class FaqControllerTest extends TestCase
                 JSON_THROW_ON_ERROR,
             ),
         );
+    }
+
+    private function createFaqControllerWithStatistics(FaqStatistics $faqStatistics): FaqController
+    {
+        return new FaqController(
+            $this->createStub(Faq::class),
+            $this->createStub(Tags::class),
+            $faqStatistics,
+            $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetLatestReturnsTheLatestFaqs(): void
+    {
+        $latest = [['id' => 1, 'question' => 'Latest?', 'answer' => 'Yes.', 'visits' => 3]];
+        $faqStatistics = $this->createStub(FaqStatistics::class);
+        $faqStatistics->method('getLatestData')->willReturn(['first' => $latest[0]]);
+
+        $response = $this->createFaqControllerWithStatistics($faqStatistics)->getLatest(Request::create(
+            '/api/v4.0/faqs/latest',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame($latest, json_decode((string) $response->getContent(), true));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetTrendingReturnsTheTrendingFaqs(): void
+    {
+        $trending = [['id' => 2, 'question' => 'Trending?', 'answer' => 'Yes.', 'visits' => 42]];
+        $faqStatistics = $this->createStub(FaqStatistics::class);
+        $faqStatistics->method('getTrendingData')->willReturn(['first' => $trending[0]]);
+
+        $response = $this->createFaqControllerWithStatistics($faqStatistics)->getTrending(Request::create(
+            '/api/v4.0/faqs/trending',
+            'GET',
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT_LANGUAGE' => 'en'],
+        ));
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame($trending, json_decode((string) $response->getContent(), true));
+    }
+
+    /**
+     * @throws \JsonException|\Exception
+     */
+    public function testCreateReturnsBadRequestWhenNoFaqIdIsAssigned(): void
+    {
+        $this->authenticateApiToken();
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTitleAHash')->willReturn(false);
+        $faq->expects($this->once())->method('create')->willReturn(new FaqEntity());
+
+        $faqMetaData = $this->createMock(FaqMetaData::class);
+        $faqMetaData->expects($this->never())->method('save');
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $faqMetaData,
+            $this->configuration->getLanguage(),
+        );
+        $this->authorizeCurrentUser($controller);
+
+        $response = $controller->create($this->createCreateRequest());
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(['stored' => false, 'error' => 'Cannot add FAQ'], $payload);
+    }
+
+    /**
+     * @throws \JsonException|\Exception
+     */
+    public function testUpdateReturnsBadRequestWithoutAFaqId(): void
+    {
+        $this->authenticateApiToken();
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('isFaqEditableForUser');
+        $faq->expects($this->never())->method('update');
+
+        $controller = $this->createFaqControllerWith($faq);
+        $this->authorizeCurrentUser($controller);
+
+        $response = $controller->update($this->createUpdateRequest(['faq-id' => null]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(['stored' => false, 'error' => 'Cannot update FAQ'], $payload);
+    }
+
+    /**
+     * Publishing a draft through an update changes the publication state, which needs the
+     * publish right on top of the edit right.
+     *
+     * @throws \JsonException|\Exception
+     */
+    public function testUpdateRequiresThePublishRightWhenADraftIsPublished(): void
+    {
+        $this->authenticateApiToken();
+        $this->relateFaqToCategory(7, 'en', 5);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('isFaqEditableForUser')->willReturn(true);
+        $faq->method('hasTitleAHash')->willReturn(false);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
+        $faq
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->callback(static fn(FaqEntity $entity): bool => $entity->getStatus() === FaqStatus::Published))
+            ->willReturn(new FaqEntity()->setId(7));
+
+        $controller = $this->createFaqControllerWith($faq);
+        $permission = $this->createMock(BasicPermission::class);
+        $permission
+            ->expects($this->atLeastOnce())
+            ->method('hasPermission')
+            ->willReturnCallback(static fn(int $userId, mixed $right): bool => true);
+        $permission->method('hasPermissionForCategory')->willReturn(true);
+        $permission->method('hasPermissionForLanguage')->willReturn(true);
+        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
+        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(-1);
+        new \ReflectionProperty(AbstractController::class, 'currentUser')->setValue($controller, $currentUser);
+
+        $response = $controller->update($this->createUpdateRequest(['is-active' => true]));
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \JsonException|\Exception
+     */
+    public function testUpdateIsForbiddenWhenADraftIsPublishedWithoutThePublishRight(): void
+    {
+        $this->authenticateApiToken();
+        $this->relateFaqToCategory(7, 'en', 5);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('isFaqEditableForUser')->willReturn(true);
+        $faq->method('hasTitleAHash')->willReturn(false);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
+        $faq->expects($this->never())->method('update');
+
+        $controller = $this->createFaqControllerWith($faq);
+        $permission = $this->createMock(BasicPermission::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right): bool => $right !== PermissionType::FAQ_PUBLISH->value,
+            );
+        $permission->method('hasPermissionForCategory')->willReturn(true);
+        $permission->method('hasPermissionForLanguage')->willReturn(true);
+        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
+        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->perm = $permission;
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(-1);
+        new \ReflectionProperty(AbstractController::class, 'currentUser')->setValue($controller, $currentUser);
+
+        $this->expectException(ForbiddenException::class);
+        $controller->update($this->createUpdateRequest(['is-active' => true]));
+    }
+
+    /**
+     * @return iterable<string, array{string, int}>
+     */
+    public static function sortFieldProvider(): iterable
+    {
+        yield 'author' => ['author', Faq::SORTING_TYPE_AUTHOR];
+        yield 'updated' => ['updated', Faq::SORTING_TYPE_UPDATED];
+        yield 'created' => ['created', Faq::SORTING_TYPE_CREATED];
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[DataProvider('sortFieldProvider')]
+    public function testListMapsTheSortFieldToTheFaqSorting(string $field, int $expectedSorting): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecords = [];
+        $faq
+            ->expects($this->once())
+            ->method('getAllFaqs')
+            ->with($expectedSorting, $this->anything(), 'ASC', $this->anything(), $this->anything());
+        $faq->method('countAllFaqs')->willReturn(0);
+
+        $response = $this->createFaqControllerWith($faq)->list(new Request(['sort' => $field]));
+
+        $this->assertSame(200, $response->getStatusCode());
     }
 }

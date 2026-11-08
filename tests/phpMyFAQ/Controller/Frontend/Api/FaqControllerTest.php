@@ -210,6 +210,102 @@ class FaqControllerTest extends TestCase
     }
 
     /**
+     * @throws \JsonException
+     */
+    public function testCreateUsesTheConfiguredLanguageWhenDetectionIsDisabled(): void
+    {
+        self::assertTrue($this->configuration->set('main.languageDetection', 'false'));
+        self::assertTrue($this->configuration->set('records.allowNewFaqsForGuests', 'false'));
+
+        $language = $this->createMock(Language::class);
+        $language->expects($this->once())->method('setLanguageFromConfiguration')->with('en')->willReturn('en');
+        $language->expects($this->never())->method('setLanguageWithDetection');
+        $this->language = $language;
+
+        $controller = $this->createController();
+        $this->injectControllerState($controller, $this->createUser(loggedIn: false, mayAddFaqs: false));
+
+        $response = $controller->create($this->createFaqRequest());
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    /**
+     * Without a category in the payload the FAQ is filed under the first existing category.
+     *
+     * @throws \Exception
+     */
+    public function testCreateFallsBackToTheFirstExistingCategoryWhenNoneIsGiven(): void
+    {
+        self::assertTrue($this->configuration->set('records.defaultActivation', 'true'));
+        $this->configuration
+            ->getDb()
+            ->query("INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (7, 'en', 0, 'Fallback category', '', 1, -1, 1, '', 0)");
+
+        $this->stopWords = $this->createStub(StopWords::class);
+        $this->stopWords->method('checkBannedWord')->willReturn(true);
+
+        $faq = $this->createMock(Faq::class);
+        $faq
+            ->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static fn(FaqEntity $faqEntity): FaqEntity => $faqEntity->setId(4711));
+        $this->faq = $faq;
+
+        $this->faqHelper = $this->createMock(FaqHelper::class);
+        $this->faqHelper
+            ->expects($this->once())
+            ->method('createFaqUrl')
+            ->with(self::isInstanceOf(FaqEntity::class), 7)
+            ->willReturn('https://faq.example.com/content/7/4711/en/q.html');
+
+        $controller = $this->createController();
+        $this->injectControllerState($controller, $this->createUser(loggedIn: true, mayAddFaqs: true));
+
+        $response = $controller->create($this->createFaqRequest());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('https://faq.example.com/content/7/4711/en/q.html', $this->decodePayload($response)['link']);
+
+        $result = $this->configuration
+            ->getDb()
+            ->query('SELECT category_id FROM faqcategoryrelations WHERE record_id = 4711');
+        self::assertSame(7, (int) $this->configuration->getDb()->fetchArray($result)['category_id']);
+    }
+
+    /**
+     * An answer that is only "0" is stored as an empty answer, not as the string "0".
+     *
+     * @throws \Exception
+     */
+    public function testCreateStoresAZeroAnswerAsAnEmptyAnswer(): void
+    {
+        $this->stopWords = $this->createStub(StopWords::class);
+        $this->stopWords->method('checkBannedWord')->willReturn(true);
+
+        $storedFaq = null;
+        $faq = $this->createMock(Faq::class);
+        $faq
+            ->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(static function (FaqEntity $faqEntity) use (&$storedFaq): FaqEntity {
+                $storedFaq = $faqEntity;
+                return $faqEntity->setId(4712);
+            });
+        $this->faq = $faq;
+
+        $controller = $this->createController();
+        $this->injectControllerState($controller, $this->createUser(loggedIn: true, mayAddFaqs: true));
+
+        $response = $controller->create($this->createFaqRequest(['rubrik' => '1', 'answer' => '0']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertInstanceOf(FaqEntity::class, $storedFaq);
+        self::assertSame('', $storedFaq->getAnswer());
+    }
+
+    /**
      * @throws \Exception
      */
     public function testCreateFailsWhenNoCategoryExistsForTheFaq(): void
@@ -267,11 +363,7 @@ class FaqControllerTest extends TestCase
         self::assertTrue($this->configuration->set('main.enableWysiwygEditorFrontend', 'true'));
 
         $faqHelper = $this->createMock(FaqHelper::class);
-        $faqHelper
-            ->expects($this->once())
-            ->method('cleanUpContent')
-            ->with('Rich answer')
-            ->willReturn('Rich answer');
+        $faqHelper->expects($this->once())->method('cleanUpContent')->with('Rich answer')->willReturn('Rich answer');
         $this->faqHelper = $faqHelper;
         $this->stopWords = $this->createStub(StopWords::class);
         $this->stopWords->method('checkBannedWord')->willReturn(true);

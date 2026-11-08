@@ -7,6 +7,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
@@ -17,6 +18,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -101,8 +103,10 @@ class FormControllerTest extends TestCase
         parent::tearDown();
     }
 
-    private function createAuthenticatedContainer(): ContainerInterface
+    private function createAuthenticatedContainer(?Configuration $configuration = null): ContainerInterface
     {
+        $configuration ??= $this->configuration;
+
         $permission = $this->createStub(PermissionInterface::class);
         $permission
             ->method('hasPermission')
@@ -123,9 +127,9 @@ class FormControllerTest extends TestCase
         $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('get')
-            ->willReturnCallback(function (string $id) use ($currentUser, $session) {
+            ->willReturnCallback(static function (string $id) use ($configuration, $currentUser, $session) {
                 return match ($id) {
-                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.configuration' => $configuration,
                     'phpmyfaq.user.current_user' => $currentUser,
                     'session' => $session,
                     default => null,
@@ -133,6 +137,82 @@ class FormControllerTest extends TestCase
             });
 
         return $container;
+    }
+
+    /**
+     * A configuration whose database driver fails every query, so the Forms layer throws.
+     */
+    private function createConfigurationWithFailingDatabase(): Configuration
+    {
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('escape')->willReturnArgument(0);
+        $database->method('query')->willThrowException(new Exception('The forms table is unavailable.'));
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+        $configuration->method('getTemplateSet')->willReturn('default');
+
+        return $configuration;
+    }
+
+    /**
+     * @return iterable<string, array{string, string, array<string, mixed>}>
+     */
+    public static function failingFormActionProvider(): iterable
+    {
+        yield 'activateInput' => [
+            'activateInput',
+            'activate-input',
+            ['formid' => 1, 'inputid' => 1, 'checked' => true],
+        ];
+        yield 'setInputAsRequired' => [
+            'setInputAsRequired',
+            'require-input',
+            ['formid' => 1, 'inputid' => 1, 'checked' => true],
+        ];
+        yield 'editTranslation' => [
+            'editTranslation',
+            'edit-translation',
+            ['formId' => 1, 'inputId' => 1, 'lang' => 'en', 'label' => 'Updated label'],
+        ];
+        yield 'deleteTranslation' => [
+            'deleteTranslation',
+            'delete-translation',
+            ['formId' => 1, 'inputId' => 1, 'lang' => 'de'],
+        ];
+        yield 'addTranslation' => [
+            'addTranslation',
+            'add-translation',
+            ['formId' => 1, 'inputId' => 1, 'lang' => 'Deutsch', 'translation' => 'Beispiel'],
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     * @throws \Exception
+     */
+    #[DataProvider('failingFormActionProvider')]
+    public function testActionReturnsBadRequestWhenTheFormsLayerThrows(
+        string $method,
+        string $csrfPage,
+        array $payload,
+    ): void {
+        $container = $this->createAuthenticatedContainer($this->createConfigurationWithFailingDatabase());
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, $csrfPage);
+
+        $controller = new FormController();
+        $controller->setContainer($container);
+
+        $request = new Request([], [], [], [], [], [], json_encode(['csrf' => $token] + $payload, JSON_THROW_ON_ERROR));
+
+        $response = $controller->{$method}($request);
+        self::assertInstanceOf(Response::class, $response);
+        $body = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(['error' => 'The forms table is unavailable.'], $body);
     }
 
     /**

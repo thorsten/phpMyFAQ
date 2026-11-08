@@ -7,6 +7,7 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Configuration\RedisConfigurationStoreTestShim;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
@@ -84,6 +85,7 @@ final class SystemInformationControllerTest extends TestCase
     protected function tearDown(): void
     {
         Token::resetInstanceForTests();
+        RedisConfigurationStoreTestShim::$redisExtensionLoaded = null;
 
         $configurationReflection = new \ReflectionClass(Configuration::class);
         $configurationProperty = $configurationReflection->getProperty('configuration');
@@ -170,6 +172,80 @@ final class SystemInformationControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('2.19.1', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexFallsBackWhenOpenSearchReportsNoVersion(): void
+    {
+        $client = $this->createStub(\OpenSearch\Client::class);
+        $client->method('info')->willReturn(['cluster_name' => 'opensearch', 'tagline' => 'The OpenSearch Project']);
+        $this->configuration->setOpenSearch($client);
+        self::assertTrue($this->configuration->set('search.enableOpenSearch', true));
+
+        $response = $this->createSystemInformationController()->index($this->createSystemRequest());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('n/a', $this->readSystemInformationValue(
+            (string) $response->getContent(),
+            'OpenSearch Version',
+        ));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexReportsNoRedisVersionWhenRedisConfigurationStorageIsDisabled(): void
+    {
+        RedisConfigurationStoreTestShim::$redisExtensionLoaded = true;
+
+        $response = $this->createSystemInformationController()->index($this->createSystemRequest());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('n/a', $this->readSystemInformationValue((string) $response->getContent(), 'Redis Version'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testIndexReportsTheRedisErrorWhenTheServerCannotBeReached(): void
+    {
+        $controller = $this->createSystemInformationController();
+
+        // Written straight to the table once the controller is wired up: the configuration object
+        // keeps serving its cached values, only the resolver inside the action sees Redis enabled.
+        self::assertNotFalse($this->dbHandle->query(
+            "UPDATE faqconfig SET config_value = 'true' WHERE config_name = 'storage.useRedisForConfiguration'",
+        ));
+        // A DSN without a scheme makes the store fail before any client is built, so the outcome does
+        // not depend on whether ext-redis or the in-memory Redis stand-in from another test is loaded.
+        self::assertNotFalse($this->dbHandle->query(
+            "UPDATE faqconfig SET config_value = 'no scheme here' WHERE config_name = 'storage.redisDsn'",
+        ));
+        RedisConfigurationStoreTestShim::$redisExtensionLoaded = true;
+
+        $response = $controller->index($this->createSystemRequest());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $redisVersion = $this->readSystemInformationValue((string) $response->getContent(), 'Redis Version');
+        self::assertStringStartsWith('n/a (', $redisVersion);
+        self::assertStringEndsWith(')', $redisVersion);
+        self::assertNotSame('n/a ()', $redisVersion, 'The failure reason is reported');
+    }
+
+    /**
+     * Extracts the value rendered next to the given system information label.
+     */
+    private function readSystemInformationValue(string $html, string $label): string
+    {
+        $pattern = sprintf('#<td[^>]*><strong>%s</strong></td>\s*<td[^>]*>(.*?)</td>#s', preg_quote(
+            htmlspecialchars($label, ENT_QUOTES),
+            '#',
+        ));
+        self::assertSame(1, preg_match($pattern, $html, $matches), 'Label not found: ' . $label);
+
+        return html_entity_decode(trim(strip_tags($matches[1])), ENT_QUOTES);
     }
 
     private function createSystemInformationController(): SystemInformationController

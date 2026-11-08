@@ -18,7 +18,10 @@ declare(strict_types=1);
 namespace phpMyFAQ\Configuration\Storage {
     function extension_loaded(string $extension): bool
     {
-        if ($extension === 'redis' && \phpMyFAQ\Configuration\RedisConfigurationStoreTestShim::$redisExtensionLoaded !== null) {
+        if (
+            $extension === 'redis'
+            && \phpMyFAQ\Configuration\RedisConfigurationStoreTestShim::$redisExtensionLoaded !== null
+        ) {
             return \phpMyFAQ\Configuration\RedisConfigurationStoreTestShim::$redisExtensionLoaded;
         }
 
@@ -27,11 +30,32 @@ namespace phpMyFAQ\Configuration\Storage {
 
     function phpversion(?string $extension = null): string|false
     {
-        if ($extension === 'redis' && \phpMyFAQ\Configuration\RedisConfigurationStoreTestShim::$redisExtensionVersion !== null) {
+        if (
+            $extension === 'redis'
+            && \phpMyFAQ\Configuration\RedisConfigurationStoreTestShim::$redisExtensionVersion !== null
+        ) {
             return \phpMyFAQ\Configuration\RedisConfigurationStoreTestShim::$redisExtensionVersion;
         }
 
         return \phpversion($extension);
+    }
+}
+
+/*
+ * SystemInformationController reports the Redis server version; the same switch lets
+ * SystemInformationControllerTest walk the Redis branch without the extension.
+ */
+namespace phpMyFAQ\Controller\Administration {
+    function extension_loaded(string $extension): bool
+    {
+        if (
+            $extension === 'redis'
+            && \phpMyFAQ\Configuration\RedisConfigurationStoreTestShim::$redisExtensionLoaded !== null
+        ) {
+            return \phpMyFAQ\Configuration\RedisConfigurationStoreTestShim::$redisExtensionLoaded;
+        }
+
+        return \extension_loaded($extension);
     }
 }
 

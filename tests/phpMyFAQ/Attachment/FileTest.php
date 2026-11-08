@@ -12,6 +12,8 @@ use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Storage\StorageException;
 use phpMyFAQ\Storage\StorageInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
@@ -31,10 +33,6 @@ class FileTest extends TestCase
 
     protected function setUp(): void
     {
-        if (!defined('PMF_ATTACHMENTS_DIR')) {
-            define('PMF_ATTACHMENTS_DIR', '/tmp/attachments');
-        }
-
         // Setup virtual file system
         $this->vfsRoot = vfsStream::setup('attachments', 0777);
 
@@ -747,5 +745,70 @@ class FileTest extends TestCase
         } finally {
             $configProp->setValue(null, $previousConfig);
         }
+    }
+
+    /**
+     * The attachments directory constant is only defined by the application bootstrap; this test
+     * needs a fresh process where no earlier test has defined it.
+     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testIsStorageOkReturnsFalseWithoutTheAttachmentsDirectoryConstant(): void
+    {
+        $this->assertFalse(defined('PMF_ATTACHMENTS_DIR'));
+
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('encrypted')->setValue($this->file, false);
+        $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+
+        $this->assertFalse($this->file->isStorageOk());
+    }
+
+    public function testStoreEncryptedFileReturnsFalseWhenTheSubDirectoriesCannotBeCreated(): void
+    {
+        $file = new class($this->mockDb) extends File {
+            public function __construct(DatabaseDriver $mockDb)
+            {
+                $this->databaseDriver = $mockDb;
+            }
+
+            public function createSubDirs(string $filepath): bool
+            {
+                return false;
+            }
+        };
+
+        // A plain hash keeps the path deterministic; storeEncryptedFile() itself does not check the flag.
+        $reflection = new ReflectionClass($file);
+        $reflection->getProperty('encrypted')->setValue($file, false);
+        $reflection->getProperty('realHash')->setValue($file, 'abcdefghijklmnopqrstuvwxyz123456');
+
+        $storeEncryptedFile = new ReflectionMethod(File::class, 'storeEncryptedFile');
+
+        $this->assertFalse($storeEncryptedFile->invoke($file, vfsStream::url('attachments/source.bin')));
+        $this->assertSame([], $this->vfsRoot->getChildren());
+    }
+
+    public function testStorePlainFileReturnsFalseWhenTheSourceFileCannotBeRead(): void
+    {
+        $storage = $this->createMock(StorageInterface::class);
+        $storage->expects($this->never())->method('put');
+        new ReflectionClass(File::class)->getProperty('storage')->setValue($this->file, $storage);
+
+        $reflection = new ReflectionClass($this->file);
+        $reflection->getProperty('encrypted')->setValue($this->file, false);
+        $reflection->getProperty('realHash')->setValue($this->file, 'abcdefghijklmnopqrstuvwxyz123456');
+
+        $storePlainFile = new ReflectionMethod(File::class, 'storePlainFile');
+
+        // Reading a missing file emits a warning; silence it to reach the false return value.
+        set_error_handler(static fn(): bool => true);
+        try {
+            $result = $storePlainFile->invoke($this->file, vfsStream::url('attachments/missing.bin'));
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertFalse($result);
     }
 }

@@ -8,6 +8,23 @@ use PHPUnit\Framework\TestCase;
 #[AllowMockObjectsWithoutExpectations]
 class WebAuthnUserTest extends TestCase
 {
+    public function testAppIdIsEmptyByDefault(): void
+    {
+        $user = new WebAuthnUser();
+
+        $this->assertSame('', $user->getAppId());
+    }
+
+    public function testSetAndGetAppId(): void
+    {
+        $user = new WebAuthnUser();
+
+        $result = $user->setAppId('faq.example.com');
+
+        $this->assertSame($user, $result);
+        $this->assertSame('faq.example.com', $user->getAppId());
+    }
+
     public function testSetAndGetId(): void
     {
         $user = new WebAuthnUser();

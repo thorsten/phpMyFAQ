@@ -8,6 +8,13 @@ namespace {
         {
             public const OPT_READ_TIMEOUT = 3;
 
+            /**
+             * What hGetAll() hands back; HybridConfigurationStoreTest fills it to simulate a warm hash.
+             *
+             * @var array<string, string>
+             */
+            public static array $hGetAllResult = [];
+
             public function hSet(string $key, string $field, string $value): int|false
             {
                 return 1;
@@ -15,7 +22,7 @@ namespace {
 
             public function hGetAll(string $key): array|false
             {
-                return [];
+                return self::$hGetAllResult;
             }
 
             public function hSetNx(string $key, string $field, string $value): bool
@@ -114,7 +121,13 @@ namespace phpMyFAQ\Configuration {
         {
             parent::setUp();
 
-            $this->settings = new ConfigurationStorageSettings(true, 'tcp://redis:6379?database=1', 'pmf:config:', 1.0, self::IDENTITY);
+            $this->settings = new ConfigurationStorageSettings(
+                true,
+                'tcp://redis:6379?database=1',
+                'pmf:config:',
+                1.0,
+                self::IDENTITY,
+            );
             RedisConfigurationStoreTestShim::$redisExtensionLoaded = true;
             RedisConfigurationStoreTestShim::$redisExtensionVersion = '6.1.0';
         }
@@ -131,11 +144,7 @@ namespace phpMyFAQ\Configuration {
         public function testUpdateConfigValueReturnsTrueWhenRedisHashSetSucceeds(): void
         {
             $redis = $this->createMock(Redis::class);
-            $redis
-                ->expects($this->once())
-                ->method('hSet')
-                ->with(self::HASH_KEY, 'main.language', 'en')
-                ->willReturn(1);
+            $redis->expects($this->once())->method('hSet')->with(self::HASH_KEY, 'main.language', 'en')->willReturn(1);
 
             $store = $this->createStoreWithRedisClient($redis);
 

@@ -374,6 +374,189 @@ final class InstanceControllerTest extends TestCase
     }
 
     /**
+     * Lets the tenant provisioning run through on the private SQLite copy. SQLite keeps index
+     * names per database file, so the tenant tables cannot be created next to the master tables
+     * while the master indexes exist. The tenant admin is created as user 1 and inherits the
+     * master rights of user 1, so the read right it is granted on creation must not be among them.
+     */
+    private function prepareDatabaseForTenantProvisioning(): void
+    {
+        $result = $this->dbHandle->query("SELECT name FROM sqlite_master WHERE type = 'index' AND sql IS NOT NULL");
+        self::assertNotFalse($result);
+
+        $indexNames = [];
+        while (($row = $this->dbHandle->fetchArray($result)) !== null && $row !== []) {
+            $indexNames[] = (string) $row['name'];
+        }
+
+        foreach ($indexNames as $indexName) {
+            self::assertNotFalse($this->dbHandle->query(sprintf('DROP INDEX %s', $indexName)));
+        }
+
+        self::assertNotFalse($this->dbHandle->query(
+            'DELETE FROM faquser_right WHERE user_id = 1'
+            . " AND right_id = (SELECT right_id FROM faqright WHERE name = 'view_faqs')",
+        ));
+    }
+
+    /**
+     * @return array{Request, string, string}
+     * @throws \Exception
+     */
+    private function createTenantRequest(string $token, string $tenantPrefix): array
+    {
+        $tenantHost = $tenantPrefix . '.localhost';
+        $request = new Request(server: ['HTTP_HOST' => 'localhost'], content: json_encode([
+            'csrf' => $token,
+            'url' => $tenantPrefix,
+            'instance' => 'Unit Test Instance',
+            'comment' => 'Unit Test Comment',
+            'email' => 'tenant-admin@example.com',
+            'admin' => 'tenantadmin',
+            'password' => 'tenant-password',
+        ], JSON_THROW_ON_ERROR));
+
+        return [$request, $tenantHost, PMF_ROOT_DIR . '/multisite/' . $tenantHost];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddProvisionsTheTenantAndReturnsTheNewInstanceId(): void
+    {
+        $this->prepareDatabaseForTenantProvisioning();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-instance');
+
+        $tenantPrefix = 'tenant' . substr(md5((string) microtime(true)), 0, 6);
+        [$request, $tenantHost, $tenantDir] = $this->createTenantRequest($token, $tenantPrefix);
+
+        $instance = $this->createMock(Instance::class);
+        $instance->expects($this->once())->method('create')->willReturn(23);
+        $instance->expects($this->never())->method('delete');
+
+        $controller = new InstanceController($instance);
+        $controller->setContainer($container);
+
+        try {
+            $response = $controller->add($request);
+            $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+            self::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
+            self::assertSame(['added' => 23, 'url' => 'https://' . $tenantHost], $payload);
+            self::assertFileExists($tenantDir . '/database.php');
+            self::assertFileExists($tenantDir . '/constants.php');
+        } finally {
+            $this->removeDirectory($tenantDir);
+        }
+
+        // The table prefix of the master instance is restored once the tenant is provisioned.
+        self::assertSame('', Database::getTablePrefix());
+
+        $admin = $this->fetchTenantUser($tenantPrefix, 1);
+        self::assertSame('tenantadmin', $admin['login']);
+        self::assertSame('protected', $admin['account_status']);
+        self::assertSame('tenant-admin@example.com', $admin['email']);
+
+        $anonymous = $this->fetchTenantUser($tenantPrefix, -1);
+        self::assertSame('anonymous', $anonymous['login']);
+        self::assertSame('protected', $anonymous['account_status']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddReturnsBadRequestWhenNoInstanceIdWasAssigned(): void
+    {
+        $this->prepareDatabaseForTenantProvisioning();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-instance');
+
+        $tenantPrefix = 'tenant' . substr(md5((string) microtime(true)), 0, 6);
+        [$request, , $tenantDir] = $this->createTenantRequest($token, $tenantPrefix);
+
+        $instance = $this->createMock(Instance::class);
+        $instance->expects($this->once())->method('create')->willReturn(0);
+        $instance->expects($this->never())->method('delete');
+
+        $controller = new InstanceController($instance);
+        $controller->setContainer($container);
+
+        try {
+            $response = $controller->add($request);
+        } finally {
+            $this->removeDirectory($tenantDir);
+        }
+
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(['error' => 0], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddRemovesTheInstanceWhenTheClientFolderCannotBeCreated(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-instance');
+
+        $tenantPrefix = 'blocked' . substr(md5((string) microtime(true)), 0, 6);
+        [$request, , $tenantDir] = $this->createTenantRequest($token, $tenantPrefix);
+
+        // A regular file where the client folder should go makes mkdir() fail.
+        self::assertNotFalse(file_put_contents($tenantDir, ''));
+
+        $instance = $this->createMock(Instance::class);
+        $instance->expects($this->once())->method('create')->willReturn(17);
+        $instance->expects($this->once())->method('delete')->with(17);
+
+        $controller = new InstanceController($instance);
+        $controller->setContainer($container);
+
+        // mkdir() warns about the existing path; PHPUnit would otherwise fail the test on it.
+        set_error_handler(static fn(): bool => true);
+        try {
+            $response = $controller->add($request);
+        } finally {
+            restore_error_handler();
+            unlink($tenantDir);
+        }
+
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(['error' => 'Cannot create instance.'], $payload);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function fetchTenantUser(string $tablePrefix, int $userId): array
+    {
+        $result = $this->dbHandle->query(sprintf(
+            'SELECT u.login, u.account_status, d.email FROM %1$sfaquser u'
+            . ' LEFT JOIN %1$sfaquserdata d ON d.user_id = u.user_id WHERE u.user_id = %2$d',
+            $tablePrefix,
+            $userId,
+        ));
+        self::assertNotFalse($result);
+        $row = $this->dbHandle->fetchArray($result);
+        self::assertIsArray($row);
+
+        return $row;
+    }
+
+    /**
      * @throws \Exception
      */
     private function createValidCsrfToken(Session $session, string $page): string

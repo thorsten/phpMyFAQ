@@ -244,6 +244,24 @@ class CommentControllerTest extends TestCase
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
+    public function testCreateUsesTheConfiguredLanguageWhenDetectionIsDisabled(): void
+    {
+        self::assertTrue($this->configuration->set('main.languageDetection', 'false'));
+        self::assertTrue($this->configuration->set('records.allowCommentsForGuests', 'false'));
+
+        $language = $this->createMock(Language::class);
+        $language->expects($this->once())->method('setLanguageFromConfiguration')->with('en')->willReturn('en');
+        $language->expects($this->never())->method('setLanguageWithDetection');
+        $this->language = $language;
+
+        $controller = $this->createController();
+        $this->injectControllerState($controller, $this->createGuestUser(), $this->createSession());
+
+        $response = $controller->create(new Request([], [], [], [], [], [], '{}'));
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
     /**
      * @throws \Exception
      */
@@ -357,8 +375,11 @@ class CommentControllerTest extends TestCase
         return $currentUser;
     }
 
-    private function injectControllerState(CommentController $controller, CurrentUser $currentUser, Session $session): void
-    {
+    private function injectControllerState(
+        CommentController $controller,
+        CurrentUser $currentUser,
+        Session $session,
+    ): void {
         new \ReflectionProperty($controller, 'currentUser')->setValue($controller, $currentUser);
         new \ReflectionProperty($controller, 'session')->setValue($controller, $session);
         new \ReflectionProperty($controller, 'configuration')->setValue($controller, $this->configuration);

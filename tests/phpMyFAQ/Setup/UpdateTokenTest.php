@@ -159,6 +159,26 @@ class UpdateTokenTest extends TestCase
         $updateToken->getOrCreate();
     }
 
+    public function testGetOrCreateThrowsWhenTheTokenFileCannotBeWritten(): void
+    {
+        // A directory squatting on the token path: the configuration directory is writable,
+        // yet the token itself cannot be stored.
+        mkdir($this->updateToken->getTokenFilePath());
+
+        // PHP warns about the refused write; the warning is not the behaviour under test.
+        set_error_handler(static fn(): bool => true);
+        try {
+            $this->updateToken->getOrCreate();
+            $this->fail('A token that cannot be stored must not be handed out.');
+        } catch (Exception $exception) {
+            $this->assertStringContainsString('Cannot write the update token to', $exception->getMessage());
+            $this->assertStringContainsString(UpdateToken::TOKEN_FILENAME, $exception->getMessage());
+        } finally {
+            restore_error_handler();
+            rmdir($this->updateToken->getTokenFilePath());
+        }
+    }
+
     public function testIsValidRejectsATokenFileWithoutTheExitHeader(): void
     {
         file_put_contents(

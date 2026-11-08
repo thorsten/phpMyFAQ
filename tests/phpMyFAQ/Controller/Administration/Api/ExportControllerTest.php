@@ -444,11 +444,11 @@ final class ExportControllerTest extends TestCase
     public function testExportReportRendersEveryColumnForAFaqInASubcategory(): void
     {
         $this->dbHandle->query(
-            "INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active)"
+            'INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active)'
             . " VALUES (500, 'en', 0, 'Hardware', '', 1, -1, 1)",
         );
         $this->dbHandle->query(
-            "INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active)"
+            'INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active)'
             . " VALUES (501, 'en', 500, 'Printers', '', 1, -1, 1)",
         );
         $this->dbHandle->query(
@@ -458,12 +458,14 @@ final class ExportControllerTest extends TestCase
             . "'body', 'Report Author', 'author@example.org', '20240102030405')",
         );
         $this->dbHandle->query(
-            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)"
+            'INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)'
             . " VALUES (501, 'en', 4243, 'en')",
         );
-        $this->dbHandle->query("INSERT INTO faqvisits (id, lang, visits, last_visit) VALUES (4243, 'en', 77, 1704164645)");
         $this->dbHandle->query(
-            "INSERT INTO faqchanges (id, beitrag, lang, revision_id, usr, datum, what)"
+            "INSERT INTO faqvisits (id, lang, visits, last_visit) VALUES (4243, 'en', 77, 1704164645)",
+        );
+        $this->dbHandle->query(
+            'INSERT INTO faqchanges (id, beitrag, lang, revision_id, usr, datum, what)'
             . " VALUES (4243, 4243, 'en', 0, 1, 1704164645, 'created')",
         );
 
@@ -568,6 +570,33 @@ final class ExportControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringStartsWith('attachment', (string) $response->headers->get('Content-Disposition'));
         unset($_COOKIE['pmf-csrf-token-' . substr(md5('export'), 0, 10)]);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExportReportReturnsInternalServerErrorWhenTheReportCannotBeBuilt(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $token = Token::getInstance($session)->getTokenString('create-report');
+        $_COOKIE['pmf-csrf-token-' . substr(md5('create-report'), 0, 10)] = $token;
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        // The report data is read lazily; a lost database connection surfaces while building it.
+        self::assertTrue($this->dbHandle->close());
+
+        $response = $controller->exportReport(new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $token,
+                'title' => true,
+            ],
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertSame('There is no open database connection.', $payload['error']);
     }
 
     /**

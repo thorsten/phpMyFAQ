@@ -3,22 +3,35 @@
 namespace phpMyFAQ;
 
 use DateTime;
+use Elastic\Elasticsearch\ClientBuilder;
+use GuzzleHttp\Psr7\Response;
 use phpMyFAQ\Attachment\AttachmentException;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
+use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\AttachmentStorageType;
 use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Tenant\QuotaExceededException;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
-use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use ReflectionProperty;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
-#[UsesClass(Faq::class)]
+#[CoversClass(Faq::class)]
+#[UsesNamespace('phpMyFAQ')]
 class FaqTest extends TestCase
 {
     use TestDatabaseTrait;
@@ -1275,5 +1288,133 @@ class FaqTest extends TestCase
         $this->faq->getAllFaqs(Faq::SORTING_TYPE_FAQTITLE_FAQID, $condition, 'ASC');
 
         $this->assertSame(['Alpha', 'Charlie', 'Bravo'], array_column($this->faq->faqRecords, 'title'));
+    }
+
+    public function testDeleteRemovesTheAttachmentsOfTheFaq(): void
+    {
+        $this->seedFaqRecord(id: 5401, solutionId: 7401, question: 'FAQ with attachment');
+
+        // Attachments read their metadata through the Database singleton; point it at the private copy.
+        $databaseDriver = new ReflectionProperty(Database::class, 'databaseDriver');
+        $databaseType = new ReflectionProperty(Database::class, 'dbType');
+        $previousDriver = $databaseDriver->getValue();
+        $previousType = $databaseType->getValue();
+        $previousFactoryState = [];
+        foreach (['defaultKey', 'storageType', 'encryptionEnabled'] as $name) {
+            $previousFactoryState[$name] = new ReflectionProperty(AttachmentFactory::class, $name)->getValue();
+        }
+
+        $storageRoot = sys_get_temp_dir() . '/pmf-faq-attachment-' . bin2hex(random_bytes(6));
+        $sourceFile = tempnam(sys_get_temp_dir(), 'pmf-faq-attachment-src-');
+        $this->assertNotFalse($sourceFile);
+        file_put_contents($sourceFile, 'attachment payload');
+
+        try {
+            $databaseDriver->setValue(null, $this->configuration->getDb());
+            $databaseType->setValue(null, 'sqlite3');
+            $this->configuration->set('storage.type', 'filesystem');
+            $this->configuration->set('storage.filesystem.root', $storageRoot);
+            AttachmentFactory::init('', false, AttachmentStorageType::FILESYSTEM->value);
+
+            $attachment = AttachmentFactory::create();
+            $attachment->setRecordId(5401);
+            $attachment->setRecordLang('en');
+            $this->assertTrue($attachment->save($sourceFile, 'manual.txt'));
+            $this->assertSame(1, $this->countAttachmentRows(5401));
+            $this->assertCount(1, $this->storedFiles($storageRoot));
+
+            $this->assertTrue($this->faq->delete(5401, 'en'));
+
+            $this->assertFalse($this->faq->hasTranslation(5401, 'en'));
+            $this->assertSame(0, $this->countAttachmentRows(5401));
+            $this->assertSame([], $this->storedFiles($storageRoot));
+        } finally {
+            foreach ($previousFactoryState as $name => $value) {
+                new ReflectionProperty(AttachmentFactory::class, $name)->setValue(null, $value);
+            }
+
+            $databaseDriver->setValue(null, $previousDriver);
+            $databaseType->setValue(null, $previousType);
+            new Filesystem()->remove([$storageRoot, $sourceFile]);
+        }
+    }
+
+    public function testDeleteRemovesTheElasticsearchDocumentWhenElasticsearchIsEnabled(): void
+    {
+        $this->seedFaqRecord(id: 5402, solutionId: 7402, question: 'Indexed FAQ');
+        $this->configuration->set('search.enableElasticsearch', true);
+        $this->setConfigurationValue('search.enableElasticsearch', true);
+
+        $httpClient = new class implements ClientInterface {
+            /** @var list<RequestInterface> */
+            public array $requests = [];
+
+            public function sendRequest(RequestInterface $request): ResponseInterface
+            {
+                $this->requests[] = $request;
+
+                return new Response(
+                    200,
+                    ['X-Elastic-Product' => 'Elasticsearch', 'Content-Type' => 'application/json'],
+                    '{"result":"deleted"}',
+                );
+            }
+        };
+        $this->configuration->setElasticsearch(
+            ClientBuilder::create()->setHosts(['http://localhost:9200'])->setHttpClient($httpClient)->build(),
+        );
+
+        $elasticsearchConfigFile = tempnam(sys_get_temp_dir(), 'pmf-faq-elasticsearch-');
+        $this->assertNotFalse($elasticsearchConfigFile);
+        file_put_contents(
+            $elasticsearchConfigFile,
+            "<?php\n\$PMF_ES = ['hosts' => ['http://localhost:9200'], 'index' => 'faq-index'];\n",
+        );
+        try {
+            $this->configuration->setElasticsearchConfig(new ElasticsearchConfiguration($elasticsearchConfigFile));
+        } finally {
+            // nosemgrep: php.lang.security.unlink-use.unlink-use - temp file created above
+            unlink($elasticsearchConfigFile);
+        }
+
+        $this->assertTrue($this->faq->delete(5402, 'en'));
+
+        $this->assertFalse($this->faq->hasTranslation(5402, 'en'));
+        $this->assertCount(1, $httpClient->requests);
+        $this->assertSame('DELETE', $httpClient->requests[0]->getMethod());
+        $this->assertSame('/faq-index/_doc/7402', $httpClient->requests[0]->getUri()->getPath());
+    }
+
+    private function countAttachmentRows(int $recordId): int
+    {
+        $db = $this->configuration->getDb();
+        $row = $db->fetchArray($db->query(sprintf(
+            'SELECT COUNT(*) AS n FROM faqattachment WHERE record_id = %d',
+            $recordId,
+        )));
+
+        return (int) ($row['n'] ?? 0);
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function storedFiles(string $storageRoot): array
+    {
+        if (!is_dir($storageRoot)) {
+            return [];
+        }
+
+        $files = [];
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($storageRoot, \FilesystemIterator::SKIP_DOTS),
+        );
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                $files[] = $file->getPathname();
+            }
+        }
+
+        return $files;
     }
 }
