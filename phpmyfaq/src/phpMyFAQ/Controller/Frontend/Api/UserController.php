@@ -317,6 +317,8 @@ final class UserController extends AbstractController
     #[Route(path: 'user/request-removal', name: 'api.private.user.request-removal', methods: ['POST'])]
     public function requestUserRemoval(Request $request): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $data = $this->getJsonObject($request);
 
         if (($data->{'pmf-csrf-token'} ?? null) === null) {
@@ -334,15 +336,11 @@ final class UserController extends AbstractController
         $email = trim((string) Filter::filterEmail($data->email ?? null));
         $question = trim((string) Filter::filterVar($data->question ?? null, FILTER_SANITIZE_SPECIAL_CHARS));
 
-        // Validate User ID, Username and email
-        if ($userId === null) {
-            return $this->json([
-                'error' => Translation::get(key: 'ad_user_error_loginInvalid'),
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
+        // The request must describe the logged-in user. Compare against the session user only;
+        // never load the submitted id into $this->currentUser, as that would make the check
+        // compare the input with itself (GHSA-6648-6g96-mg35).
         if (
-            !$this->currentUser->getUserById($userId)
+            $userId === null
             || $userId !== $this->currentUser->getUserId()
             || $loginName !== $this->currentUser->getLogin()
             || $email !== $this->currentUser->getUserData('email')

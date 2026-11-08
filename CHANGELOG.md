@@ -65,6 +65,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated third party dependencies (Thorsten)
 - fixed stored XSS in the custom CSS setting: a delegated admin could break out of the `<style>` element on every public page (Thorsten)
 - fixed missing language check on the category write endpoints: an editor whose category right was restricted to one language could add, edit or delete a category translation in another language (Thorsten, thanks to 대전대학교 한혁(Akarang))
+- fixed incomplete fix for GHSA-6648-6g96-mg35: the user removal request compared the submitted user id, login and email with the account it had just loaded instead of with the logged-in user, so a logged-in user could still send the admin a removal request in another user's name (Thorsten)
 - fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.12 - unreleased

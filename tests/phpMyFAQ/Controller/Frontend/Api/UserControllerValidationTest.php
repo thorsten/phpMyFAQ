@@ -19,6 +19,7 @@ use RobThree\Auth\TwoFactorAuth;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 #[CoversClass(UserController::class)]
 #[UsesNamespace('phpMyFAQ')]
@@ -1028,9 +1029,8 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         $session = $this->createSession();
         $csrfToken = $this->createValidCsrfToken($session, 'request-removal');
 
-        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
-        $currentUser->expects($this->once())->method('getUserById')->with(1)->willReturn(true);
         $currentUser->method('getUserId')->willReturn(1);
         $currentUser->method('getLogin')->willReturn('testuser');
         $currentUser
@@ -1109,9 +1109,8 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         $session = $this->createSession();
         $csrfToken = $this->createValidCsrfToken($session, 'request-removal');
 
-        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
-        $currentUser->expects($this->once())->method('getUserById')->with(1)->willReturn(false);
         $currentUser->method('getUserId')->willReturn(1);
         $currentUser->method('getLogin')->willReturn('testuser');
         $currentUser
@@ -1126,7 +1125,7 @@ final class UserControllerValidationTest extends ApiControllerTestCase
             'userId' => 1,
             'name' => 'Test User',
             'loginname' => 'testuser',
-            'email' => 'test@example.com',
+            'email' => 'other@example.com',
             'question' => 'Please remove my account.',
             'pmf-csrf-token' => $csrfToken,
         ], JSON_THROW_ON_ERROR));
@@ -1138,6 +1137,72 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         self::assertSame(Translation::get('ad_user_error_loginInvalid'), $payload['error']);
     }
 
+    public function testRequestUserRemovalRejectsRequestForAnotherUser(): void
+    {
+        $stopWords = $this->createStub(StopWords::class);
+        $stopWords->method('checkBannedWord')->willReturn(true);
+
+        $mailer = $this->createMock(Mail::class);
+        $mailer->expects($this->never())->method('send');
+
+        $controller = new UserController($stopWords, $mailer);
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'request-removal');
+
+        // The session user is id 1; the request names a different, existing account.
+        // The ownership check must compare against the session user, never load the target.
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->expects($this->never())->method('getUserById');
+        $currentUser->method('getUserId')->willReturn(1);
+        $currentUser->method('getLogin')->willReturn('testuser');
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([
+                ['email', 'test@example.com'],
+            ]);
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userId' => 7,
+            'name' => 'Victim',
+            'loginname' => 'victim',
+            'email' => 'victim@example.com',
+            'question' => 'Please remove my account.',
+            'pmf-csrf-token' => $csrfToken,
+        ], JSON_THROW_ON_ERROR));
+
+        $response = $controller->requestUserRemoval($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_user_error_loginInvalid'), $payload['error']);
+    }
+
+    public function testRequestUserRemovalThrowsWhenUserIsNotAuthenticated(): void
+    {
+        $controller = $this->createController();
+        $session = $this->createSession();
+        $csrfToken = $this->createValidCsrfToken($session, 'request-removal');
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(false);
+
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $this->expectException(UnauthorizedHttpException::class);
+
+        $controller->requestUserRemoval(new Request([], [], [], [], [], [], json_encode([
+            'userId' => 1,
+            'name' => 'Test User',
+            'loginname' => 'testuser',
+            'email' => 'test@example.com',
+            'question' => 'Please remove my account.',
+            'pmf-csrf-token' => $csrfToken,
+        ], JSON_THROW_ON_ERROR)));
+    }
+
     public function testRequestUserRemovalReturnsBadRequestWhenStopWordValidationFails(): void
     {
         $stopWords = $this->createStub(StopWords::class);
@@ -1147,9 +1212,8 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         $session = $this->createSession();
         $csrfToken = $this->createValidCsrfToken($session, 'request-removal');
 
-        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
-        $currentUser->expects($this->once())->method('getUserById')->with(1)->willReturn(true);
         $currentUser->method('getUserId')->willReturn(1);
         $currentUser->method('getLogin')->willReturn('testuser');
         $currentUser
@@ -1196,9 +1260,8 @@ final class UserControllerValidationTest extends ApiControllerTestCase
         $session = $this->createSession();
         $csrfToken = $this->createValidCsrfToken($session, 'request-removal');
 
-        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
-        $currentUser->expects($this->once())->method('getUserById')->with(1)->willReturn(true);
         $currentUser->method('getUserId')->willReturn(1);
         $currentUser->method('getLogin')->willReturn('testuser');
         $currentUser
