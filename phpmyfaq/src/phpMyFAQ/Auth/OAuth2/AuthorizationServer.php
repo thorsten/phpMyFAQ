@@ -45,10 +45,22 @@ final class AuthorizationServer
     private $tokenIssuer = null;
     /** @var callable(Request, string, bool): array{body: array<array-key, mixed>|string, status: int, headers?: array<string, string>}|null */
     private $authorizationCompleter = null;
+    /** @var callable(): LeagueAuthorizationServer|null */
+    private $leagueServerFactory = null;
 
     public function __construct(
         private readonly Configuration $configuration,
     ) {
+    }
+
+    /**
+     * Replaces the league server construction, so tests can drive issueToken() with a stand-in.
+     *
+     * @param callable(): LeagueAuthorizationServer $factory
+     */
+    public function setLeagueAuthorizationServerFactory(callable $factory): void
+    {
+        $this->leagueServerFactory = $factory;
     }
 
     /**
@@ -125,6 +137,10 @@ final class AuthorizationServer
 
     private function buildLeagueAuthorizationServer(): LeagueAuthorizationServer
     {
+        if (is_callable($this->leagueServerFactory)) {
+            return ($this->leagueServerFactory)();
+        }
+
         $privateKeyPath = $this->getConfigString('oauth2.privateKeyPath');
         $encryptionKey = $this->getConfigString('oauth2.encryptionKey');
 

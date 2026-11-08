@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Auth\OAuth2;
 
+use GuzzleHttp\Psr7\Response as Psr7Response;
 use League\OAuth2\Server\AuthorizationServer as LeagueAuthorizationServer;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -238,6 +239,29 @@ class AuthorizationServerTest extends TestCase
         $this->assertIsArray($result['body']);
         $this->assertArrayHasKey('error', $result['body']);
         $this->assertGreaterThanOrEqual(400, $result['status']);
+    }
+
+    public function testIssueTokenFallsBackToAServerErrorWhenTheTokenResponseBodyIsNotJson(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('get')->willReturnMap([['oauth2.enable', 'true']]);
+
+        $leagueServer = $this->createMock(LeagueAuthorizationServer::class);
+        $leagueServer
+            ->method('respondToAccessTokenRequest')
+            ->willReturn(new Psr7Response(200, ['Cache-Control' => ['no-store', 'private']], 'not json'));
+
+        $server = new AuthorizationServer($configuration);
+        $server->setLeagueAuthorizationServerFactory(static fn(): LeagueAuthorizationServer => $leagueServer);
+
+        $result = $server->issueToken(Request::create('https://localhost/token', 'POST'));
+
+        $this->assertSame(200, $result['status']);
+        $this->assertSame(
+            ['error' => 'server_error', 'error_description' => 'Invalid OAuth2 token response body'],
+            $result['body'],
+        );
+        $this->assertSame('no-store, private', $result['headers']['Cache-Control']);
     }
 
     public function testCompleteAuthorizationReturnsOauthErrorPayloadForInvalidRequest(): void
