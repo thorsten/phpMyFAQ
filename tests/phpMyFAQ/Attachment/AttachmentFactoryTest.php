@@ -38,6 +38,7 @@ class AttachmentFactoryTest extends TestCase
         $this->mockConfiguration = $this->createStub(Configuration::class);
         $this->mockDb = $this->createMock(DatabaseDriver::class);
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDb);
+        $this->mockDb->method('escape')->willReturnArgument(0);
 
         // Set default Language for tests
         Language::$language = 'en';
@@ -241,6 +242,26 @@ class AttachmentFactoryTest extends TestCase
         $this->mockDb->method('fetchAll')->willReturn([]);
 
         AttachmentFactory::fetchByRecordId($this->mockConfiguration, 456);
+    }
+
+    public function testFetchByRecordIdUsesGivenLanguageInsteadOfUiLanguage(): void
+    {
+        $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
+        Language::$language = 'de';
+
+        $this->mockDb
+            ->expects($this->once())
+            ->method('query')
+            ->willReturnCallback(function ($query) {
+                $this->assertStringContainsString('record_id = 456', $query);
+                $this->assertStringContainsString("record_lang = 'fr'", $query);
+                $this->assertStringNotContainsString("record_lang = 'de'", $query);
+                return true;
+            });
+
+        $this->mockDb->method('fetchAll')->willReturn([]);
+
+        AttachmentFactory::fetchByRecordId($this->mockConfiguration, 456, 'fr');
     }
 
     public function testInitFirstTime(): void

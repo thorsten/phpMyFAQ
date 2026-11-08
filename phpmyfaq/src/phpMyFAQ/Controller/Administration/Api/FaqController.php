@@ -647,8 +647,12 @@ final class FaqController extends AbstractController
             ], Response::HTTP_UNAUTHORIZED);
         }
 
+        if (!$faq->hasTranslation($faqId, $faqLanguage)) {
+            return $this->json(['error' => Translation::get(key: 'msgErrorNoRecords')], Response::HTTP_NOT_FOUND);
+        }
+
         $adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
-        $adminLog->log($this->currentUser, 'Deleted FAQ ID ' . $faqId);
+        $adminLog->log($this->currentUser, 'Deleted FAQ ID ' . $faqId . ' (' . $faqLanguage . ')');
 
         try {
             $faq->delete($faqId, $faqLanguage);

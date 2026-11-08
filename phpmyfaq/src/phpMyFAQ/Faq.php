@@ -1183,10 +1183,13 @@ class Faq
      */
     public function delete(int $faqId, string $faqLang): bool
     {
+        if (!$this->hasTranslation($faqId, $faqLang)) {
+            return false;
+        }
+
         $solutionId = $this->getSolutionIdFromId($faqId, $faqLang);
 
         $queries = [
-            sprintf('DELETE FROM %sfaqbookmarks WHERE faqid = %d', Database::getTablePrefix(), $faqId),
             sprintf(
                 "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
                 Database::getTablePrefix(),
@@ -1217,26 +1220,41 @@ class Faq
                 $faqId,
                 $this->configuration->getDb()->escape($faqLang),
             ),
-            sprintf('DELETE FROM %sfaqdata_user WHERE record_id = %d', Database::getTablePrefix(), $faqId),
-            sprintf('DELETE FROM %sfaqdata_group WHERE record_id = %d', Database::getTablePrefix(), $faqId),
-            sprintf('DELETE FROM %sfaqdata_tags WHERE record_id = %d', Database::getTablePrefix(), $faqId),
-            sprintf(
-                'DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-            ),
-            sprintf('DELETE FROM %sfaqcomments WHERE id = %d', Database::getTablePrefix(), $faqId),
-            sprintf('DELETE FROM %sfaqvoting WHERE artikel = %d', Database::getTablePrefix(), $faqId),
         ];
 
         foreach ($queries as $query) {
             $this->configuration->getDb()->query($query);
         }
 
-        // Delete possible attachments
-        $attachments = AttachmentFactory::fetchByRecordId($this->configuration, $faqId);
+        // Bookmarks, permissions, tags, comments and votes are keyed by record ID only and are shared
+        // by all translations of a FAQ. Delete them only once the last translation is gone.
+        $queries = [];
+        if (!$this->hasOtherTranslations($faqId)) {
+            $queries[] = sprintf('DELETE FROM %sfaqbookmarks WHERE faqid = %d', Database::getTablePrefix(), $faqId);
+            $queries[] = sprintf('DELETE FROM %sfaqdata_user WHERE record_id = %d', Database::getTablePrefix(), $faqId);
+            $queries[] = sprintf(
+                'DELETE FROM %sfaqdata_group WHERE record_id = %d',
+                Database::getTablePrefix(),
+                $faqId,
+            );
+            $queries[] = sprintf('DELETE FROM %sfaqdata_tags WHERE record_id = %d', Database::getTablePrefix(), $faqId);
+            $queries[] = sprintf(
+                'DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+            );
+            $queries[] = sprintf('DELETE FROM %sfaqcomments WHERE id = %d', Database::getTablePrefix(), $faqId);
+            $queries[] = sprintf('DELETE FROM %sfaqvoting WHERE artikel = %d', Database::getTablePrefix(), $faqId);
+        }
+
+        foreach ($queries as $query) {
+            $this->configuration->getDb()->query($query);
+        }
+
+        // Delete possible attachments of this translation only
+        $attachments = AttachmentFactory::fetchByRecordId($this->configuration, $faqId, $faqLang);
         foreach ($attachments as $attachment) {
             $currentAttachment = AttachmentFactory::create($attachment->getId());
             $currentAttachment->delete();
@@ -1294,6 +1312,17 @@ class Faq
             $faqId,
             $this->configuration->getDb()->escape($faqLang),
         );
+
+        $result = $this->configuration->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->numRows($result);
+    }
+
+    /**
+     * Checks if any translation of the given FAQ ID still exists, regardless of language.
+     */
+    public function hasOtherTranslations(int $faqId): bool
+    {
+        $query = sprintf('SELECT id FROM %sfaqdata WHERE id = %d', Database::getTablePrefix(), $faqId);
 
         $result = $this->configuration->getDb()->query($query);
         return (bool) $this->configuration->getDb()->numRows($result);
