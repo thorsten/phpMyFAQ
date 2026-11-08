@@ -35,6 +35,10 @@ readonly class LayoutSettings
 
     public function getCustomCss(): string
     {
-        return (string) $this->configuration->get(item: 'layout.customCss');
+        // The value is rendered verbatim inside a <style> block via Twig's |raw filter.
+        // Strip HTML tags so a stored "</style><script>...</script>" payload cannot break
+        // out of the style element and execute as script (stored XSS). strip_tags() leaves
+        // the ">" child combinator and other CSS syntax intact.
+        return strip_tags((string) $this->configuration->get(item: 'layout.customCss'));
     }
 }

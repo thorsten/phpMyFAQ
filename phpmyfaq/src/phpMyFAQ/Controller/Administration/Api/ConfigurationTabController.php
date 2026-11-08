@@ -172,6 +172,13 @@ final class ConfigurationTabController extends AbstractController
             if (isset($escapeValues[$key])) {
                 $newConfigValues[$key] = Strings::htmlspecialchars($value, ENT_QUOTES);
             }
+
+            // Custom CSS is rendered verbatim into a <style> block via Twig's |raw filter.
+            // Strip HTML tags so a "</style><script>...</script>" payload cannot be stored and
+            // break out of the style element as executable script (stored XSS).
+            if ($key === 'layout.customCss') {
+                $newConfigValues[$key] = strip_tags((string) $value);
+            }
         }
 
         // Fallback for clients that do not send the hidden 'false' value of a checkbox:
