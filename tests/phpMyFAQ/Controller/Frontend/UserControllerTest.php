@@ -52,6 +52,59 @@ class UserControllerTest extends TestCase
         $currentUserProp->setValue($this->controller, $this->currentUserMock);
     }
 
+    private function isRemovalRequestForCurrentUser(int|false|null $userId, string $loginName, string $email): bool
+    {
+        $method = new ReflectionMethod(UserController::class, 'isRemovalRequestForCurrentUser');
+
+        return $method->invoke($this->controller, $userId, $loginName, $email);
+    }
+
+    private function sessionUserIs(int $userId, string $login, string $email, bool $loggedIn = true): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn($loggedIn);
+        $this->currentUserMock->method('getUserId')->willReturn($userId);
+        $this->currentUserMock->method('getLogin')->willReturn($login);
+        $this->currentUserMock->method('getUserData')->with('email')->willReturn($email);
+    }
+
+    /**
+     * Regression for GHSA-6648-6g96-mg35: the old check called getUserById() on the
+     * session user with the submitted id, so any self-consistent triple of another
+     * existing account passed. The check must never touch getUserById().
+     */
+    public function testRemovalRequestForAnotherExistingUserIsRejected(): void
+    {
+        $this->sessionUserIs(3, 'attacker', 'att@x.test');
+        $this->currentUserMock->expects($this->never())->method('getUserById');
+
+        $this->assertFalse($this->isRemovalRequestForCurrentUser(7, 'victim', 'victim@example.com'));
+    }
+
+    public function testRemovalRequestForTheSessionUserIsAccepted(): void
+    {
+        $this->sessionUserIs(3, 'attacker', 'att@x.test');
+        $this->currentUserMock->expects($this->never())->method('getUserById');
+
+        $this->assertTrue($this->isRemovalRequestForCurrentUser(3, 'attacker', 'att@x.test'));
+    }
+
+    public function testRemovalRequestWithMismatchedLoginOrEmailIsRejected(): void
+    {
+        $this->sessionUserIs(3, 'attacker', 'att@x.test');
+
+        $this->assertFalse($this->isRemovalRequestForCurrentUser(3, 'victim', 'att@x.test'));
+        $this->assertFalse($this->isRemovalRequestForCurrentUser(3, 'attacker', 'victim@example.com'));
+        $this->assertFalse($this->isRemovalRequestForCurrentUser(false, 'attacker', 'att@x.test'));
+        $this->assertFalse($this->isRemovalRequestForCurrentUser(null, 'attacker', 'att@x.test'));
+    }
+
+    public function testRemovalRequestFromAnonymousUserIsRejected(): void
+    {
+        $this->sessionUserIs(-1, '', '', loggedIn: false);
+
+        $this->assertFalse($this->isRemovalRequestForCurrentUser(-1, '', ''));
+    }
+
     private function changePassword(string $currentPassword, string $password, string $confirm): JsonResponse|bool
     {
         $method = new ReflectionMethod(UserController::class, 'changePassword');

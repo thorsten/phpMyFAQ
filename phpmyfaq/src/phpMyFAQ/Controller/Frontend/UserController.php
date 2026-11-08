@@ -352,11 +352,36 @@ final class UserController extends AbstractController
     }
 
     /**
+     * Checks that the submitted identity matches the session user.
+     *
+     * The check must never load the submitted user id into $this->currentUser:
+     * User::getUserById() replaces the object's id, login and user data with the
+     * looked-up row, so a comparison afterwards would only confirm that the
+     * attacker-supplied triple is self-consistent, not that it belongs to the
+     * logged-in user (GHSA-6648-6g96-mg35, incomplete fix).
+     */
+    private function isRemovalRequestForCurrentUser(int|false|null $userId, string $loginName, string $email): bool
+    {
+        if (!$this->currentUser->isLoggedIn()) {
+            return false;
+        }
+
+        return (
+            $userId === $this->currentUser->getUserId()
+            && $loginName === $this->currentUser->getLogin()
+            && $email !== ''
+            && $email === (string) $this->currentUser->getUserData('email')
+        );
+    }
+
+    /**
      * @throws Exception|\Exception
      */
     #[Route(path: 'api/user/request-removal', methods: ['POST'])]
     public function requestUserRemoval(Request $request): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         $data = json_decode($request->getContent());
 
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -370,13 +395,8 @@ final class UserController extends AbstractController
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
         $question = trim((string) Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS));
 
-        // Validate User ID, Username and email
-        if (
-            !$this->currentUser->getUserById($userId)
-            || $userId !== $this->currentUser->getUserId()
-            || $loginName !== $this->currentUser->getLogin()
-            || $email !== $this->currentUser->getUserData('email')
-        ) {
+        // Validate User ID, Username and email against the logged-in user
+        if (!$this->isRemovalRequestForCurrentUser($userId, $loginName, $email)) {
             return $this->json([
                 'error' => Translation::get(key: 'ad_user_error_loginInvalid'),
             ], Response::HTTP_BAD_REQUEST);
