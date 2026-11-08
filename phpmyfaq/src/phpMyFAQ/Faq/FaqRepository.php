@@ -1081,10 +1081,19 @@ final class FaqRepository implements FaqRepositoryInterface
         $this->configuration->getDb()->query($query);
     }
 
+    /**
+     * Deletes one translation of a record.
+     *
+     * Only the rows that carry a language are removed. faqbookmarks, faqdata_user,
+     * faqdata_group, faqdata_tags, faqcomments and faqvoting are keyed by the record
+     * id alone, so a single row there serves every translation: deleting them while
+     * another translation still exists would strip that translation's ACL, which hides
+     * it from every non-admin reader, and would destroy its tags, votes, bookmarks and
+     * comments. They are therefore only removed once the last translation is gone.
+     */
     public function deleteByIdAndLanguage(int $faqId, string $faqLang): void
     {
         $queries = [
-            sprintf('DELETE FROM %sfaqbookmarks WHERE faqid = %d', Database::getTablePrefix(), $faqId),
             sprintf(
                 "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
                 Database::getTablePrefix(),
@@ -1115,6 +1124,18 @@ final class FaqRepository implements FaqRepositoryInterface
                 $faqId,
                 $this->configuration->getDb()->escape($faqLang),
             ),
+        ];
+
+        foreach ($queries as $query) {
+            $this->configuration->getDb()->query($query);
+        }
+
+        if ($this->exists($faqId)) {
+            return;
+        }
+
+        $sharedQueries = [
+            sprintf('DELETE FROM %sfaqbookmarks WHERE faqid = %d', Database::getTablePrefix(), $faqId),
             sprintf('DELETE FROM %sfaqdata_user WHERE record_id = %d', Database::getTablePrefix(), $faqId),
             sprintf('DELETE FROM %sfaqdata_group WHERE record_id = %d', Database::getTablePrefix(), $faqId),
             sprintf('DELETE FROM %sfaqdata_tags WHERE record_id = %d', Database::getTablePrefix(), $faqId),
@@ -1129,7 +1150,7 @@ final class FaqRepository implements FaqRepositoryInterface
             sprintf('DELETE FROM %sfaqvoting WHERE artikel = %d', Database::getTablePrefix(), $faqId),
         ];
 
-        foreach ($queries as $query) {
+        foreach ($sharedQueries as $query) {
             $this->configuration->getDb()->query($query);
         }
     }

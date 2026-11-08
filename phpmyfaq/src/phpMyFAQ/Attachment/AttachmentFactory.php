@@ -111,20 +111,27 @@ class AttachmentFactory
     /**
      * Fetch all record attachments.
      *
-     * @param int           $recordId ID of the record
+     * @param int         $recordId   ID of the record
+     * @param string|null $recordLang Language of the record, defaults to the language
+     *                                of the current request. Pass it explicitly when
+     *                                acting on a specific translation, so the request
+     *                                language cannot select another one's attachments.
      *
      * @throws AttachmentException
      * @return File[]
      */
-    public static function fetchByRecordId(Configuration $configuration, int $recordId): array
-    {
+    public static function fetchByRecordId(
+        Configuration $configuration,
+        int $recordId,
+        ?string $recordLang = null,
+    ): array {
         $files = [];
 
         $sql = sprintf(
             "SELECT id FROM %sfaqattachment WHERE record_id = %d AND record_lang = '%s'",
             Database::getTablePrefix(),
             $recordId,
-            $configuration->getDb()->escape(Language::$language),
+            $configuration->getDb()->escape($recordLang ?? Language::$language),
         );
 
         $result = $configuration->getDb()->fetchAll($configuration->getDb()->query($sql));

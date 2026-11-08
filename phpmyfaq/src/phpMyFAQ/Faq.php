@@ -803,8 +803,10 @@ class Faq
 
         $this->faqRepository->deleteByIdAndLanguage($faqId, $faqLang);
 
-        // Delete possible attachments
-        $attachments = AttachmentFactory::fetchByRecordId($this->configuration, $faqId);
+        // Delete possible attachments of the deleted translation. The language must be
+        // passed explicitly: fetchByRecordId() otherwise falls back to the language of
+        // the current request, which would delete another translation's files.
+        $attachments = AttachmentFactory::fetchByRecordId($this->configuration, $faqId, $faqLang);
         foreach ($attachments as $attachment) {
             $currentAttachment = AttachmentFactory::create($attachment->getId());
             $currentAttachment->delete();

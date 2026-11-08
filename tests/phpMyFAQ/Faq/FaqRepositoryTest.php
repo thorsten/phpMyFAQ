@@ -105,6 +105,44 @@ class FaqRepositoryTest extends TestCase
         ));
     }
 
+    /**
+     * Seeds the rows that are keyed by the record id and therefore shared by every
+     * translation of that record.
+     */
+    private function seedSharedFaqRows(int $id): void
+    {
+        $database = $this->configuration->getDb();
+        $prefix = Database::getTablePrefix();
+
+        $database->query(sprintf('INSERT INTO %sfaqdata_group (record_id, group_id) VALUES (%d, -1)', $prefix, $id));
+        $database->query(sprintf('INSERT INTO %sfaqdata_tags (record_id, tagging_id) VALUES (%d, 77)', $prefix, $id));
+        $database->query(sprintf('INSERT INTO %sfaqbookmarks (userid, faqid) VALUES (9, %d)', $prefix, $id));
+        $database->query(sprintf(
+            "INSERT INTO %sfaqcomments (id_comment, id, type, usr, email, comment, datum)
+             VALUES (%d, %d, 'faq', 'Commenter', 'commenter@example.com', 'Comment', '1700000000')",
+            $prefix,
+            $id,
+            $id,
+        ));
+        $database->query(sprintf("INSERT INTO %sfaqvoting (id, artikel, vote, usr, datum, ip)
+             VALUES (%d, %d, 5, -1, '1700000000', '127.0.0.1')", $prefix, $id, $id));
+    }
+
+    private function countSharedRows(string $table, string $column, int $id): int
+    {
+        $database = $this->configuration->getDb();
+        $result = $database->query(sprintf(
+            'SELECT %s FROM %s%s WHERE %s = %d',
+            $column,
+            Database::getTablePrefix(),
+            $table,
+            $column,
+            $id,
+        ));
+
+        return $database->numRows($result);
+    }
+
     public function testGetNextSolutionIdReturnsMaxPlusIncrement(): void
     {
         $this->seedFaqRecord(id: 5010, solutionId: 7010);
@@ -387,6 +425,46 @@ class FaqRepositoryTest extends TestCase
         $this->faqRepository->deleteByIdAndLanguage(5052, 'en');
 
         $this->assertFalse($this->faqRepository->hasTranslation(5052, 'en'));
+    }
+
+    /**
+     * faqdata_user, faqdata_group, faqdata_tags, faqbookmarks, faqcomments and
+     * faqvoting are keyed by the record id alone. Deleting one translation must leave
+     * them alone, or the surviving translation loses its ACL and its tags, votes,
+     * bookmarks and comments.
+     */
+    public function testDeleteByIdAndLanguageKeepsSharedRowsWhileAnotherTranslationExists(): void
+    {
+        $this->seedFaqRecord(id: 5054, solutionId: 7440, question: 'English', lang: 'en');
+        $this->seedFaqRecord(id: 5054, solutionId: 7440, question: 'Deutsch', lang: 'de');
+        $this->seedSharedFaqRows(5054);
+
+        $this->faqRepository->deleteByIdAndLanguage(5054, 'en');
+
+        $this->assertFalse($this->faqRepository->hasTranslation(5054, 'en'));
+        $this->assertTrue($this->faqRepository->hasTranslation(5054, 'de'));
+        $this->assertSame(1, $this->countSharedRows('faqdata_user', 'record_id', 5054));
+        $this->assertSame(1, $this->countSharedRows('faqdata_group', 'record_id', 5054));
+        $this->assertSame(1, $this->countSharedRows('faqdata_tags', 'record_id', 5054));
+        $this->assertSame(1, $this->countSharedRows('faqbookmarks', 'faqid', 5054));
+        $this->assertSame(1, $this->countSharedRows('faqcomments', 'id', 5054));
+        $this->assertSame(1, $this->countSharedRows('faqvoting', 'artikel', 5054));
+    }
+
+    public function testDeleteByIdAndLanguageRemovesSharedRowsWithTheLastTranslation(): void
+    {
+        $this->seedFaqRecord(id: 5055, solutionId: 7450, question: 'Only English', lang: 'en');
+        $this->seedSharedFaqRows(5055);
+
+        $this->faqRepository->deleteByIdAndLanguage(5055, 'en');
+
+        $this->assertFalse($this->faqRepository->exists(5055));
+        $this->assertSame(0, $this->countSharedRows('faqdata_user', 'record_id', 5055));
+        $this->assertSame(0, $this->countSharedRows('faqdata_group', 'record_id', 5055));
+        $this->assertSame(0, $this->countSharedRows('faqdata_tags', 'record_id', 5055));
+        $this->assertSame(0, $this->countSharedRows('faqbookmarks', 'faqid', 5055));
+        $this->assertSame(0, $this->countSharedRows('faqcomments', 'id', 5055));
+        $this->assertSame(0, $this->countSharedRows('faqvoting', 'artikel', 5055));
     }
 
     public function testQueryRenderableFaqsByCategoryIdReturnsResult(): void

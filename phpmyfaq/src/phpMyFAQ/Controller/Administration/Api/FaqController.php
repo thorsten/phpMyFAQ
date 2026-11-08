@@ -952,13 +952,24 @@ final class FaqController extends AbstractAdministrationApiController
             ], Response::HTTP_UNAUTHORIZED);
         }
 
+        // The language right does not depend on the record, so it is checked first:
+        // a caller without any right for this language must not learn whether the
+        // translation exists.
+        $this->userHasPermissionForLanguage(PermissionType::FAQ_DELETE, $faqLanguage);
+
+        // Without this guard a request naming a language the record is not translated
+        // into would pass the category check with an empty category list, and the
+        // delete below would still remove the rows that every translation shares.
+        if (!$faq->hasTranslation($faqId, $faqLanguage)) {
+            return $this->json(['error' => Translation::get(key: 'ad_entry_delfail')], Response::HTTP_NOT_FOUND);
+        }
+
         $deleteCategory = new Category($this->configuration, [], withPermission: false);
         $deleteCategoryRelation = new Relation($this->configuration, $deleteCategory);
         $this->userHasPermissionForCategories(
             PermissionType::FAQ_DELETE,
             array_keys($deleteCategoryRelation->getCategories($faqId, $faqLanguage)),
         );
-        $this->userHasPermissionForLanguage(PermissionType::FAQ_DELETE, $faqLanguage);
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_DELETE->value . ':' . $faqId);
 

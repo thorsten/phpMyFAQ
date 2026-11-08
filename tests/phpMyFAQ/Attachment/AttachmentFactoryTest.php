@@ -252,6 +252,30 @@ class AttachmentFactoryTest extends TestCase
         AttachmentFactory::fetchByRecordId($this->mockConfiguration, 456);
     }
 
+    /**
+     * An explicit record language must win over the language of the current request,
+     * so acting on one translation cannot touch another translation's attachments.
+     */
+    public function testFetchByRecordIdPrefersTheExplicitRecordLanguage(): void
+    {
+        $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
+        Language::$language = 'de';
+        $this->mockDb->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+
+        $this->mockDb
+            ->expects($this->once())
+            ->method('query')
+            ->willReturnCallback(function ($query) {
+                $this->assertStringContainsString("record_lang = 'en'", $query);
+                $this->assertStringNotContainsString("record_lang = 'de'", $query);
+                return true;
+            });
+
+        $this->mockDb->method('fetchAll')->willReturn([]);
+
+        AttachmentFactory::fetchByRecordId($this->mockConfiguration, 456, 'en');
+    }
+
     public function testInitFirstTime(): void
     {
         AttachmentFactory::init('secret123', true);

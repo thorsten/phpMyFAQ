@@ -335,6 +335,29 @@ final class FaqControllerTest extends TestCase
              VALUES (%d, '%s', %d, '%s')", $categoryId, $language, $faqId, $language));
     }
 
+    /**
+     * Seeds rows that are keyed by the record id alone and therefore shared by every
+     * translation of the record.
+     */
+    private function seedSharedFaqRows(int $faqId): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(sprintf('INSERT INTO faqdata_user (record_id, user_id) VALUES (%d, -1)', $faqId));
+        $this->configuration
+            ->getDb()
+            ->query(sprintf('INSERT INTO faqdata_tags (record_id, tagging_id) VALUES (%d, 77)', $faqId));
+    }
+
+    private function countRows(string $table, string $column, int $id): int
+    {
+        $database = $this->configuration->getDb();
+        $result = $database->query(sprintf('SELECT %s FROM %s WHERE %s = %d', $column, $table, $column, $id));
+        self::assertNotFalse($result);
+
+        return $database->numRows($result);
+    }
+
     private function getPersistedFaqStatus(int $faqId, string $language): string
     {
         $result = $this->configuration
@@ -1957,6 +1980,43 @@ final class FaqControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_entry_delsuc'), $payload['success']);
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * A FAQ that is not translated into the requested language has no category
+     * relation in that language, so the category guard sees an empty list and passes.
+     * The delete must stop at the missing translation: the rows keyed by the record id
+     * alone are shared with the translations the caller may not touch.
+     *
+     * @throws \Exception
+     */
+    public function testDeleteReturnsNotFoundForALanguageTheFaqIsNotTranslatedInto(): void
+    {
+        $this->seedFaqRecord(language: 'fr', question: 'Seulement en français');
+        $this->seedSharedFaqRows(1);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqId' => 1,
+            'faqLanguage' => 'en',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->delete($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_entry_delfail'), $payload['error']);
+        self::assertSame('draft', $this->getPersistedFaqStatus(1, 'fr'));
+        self::assertSame(1, $this->countRows('faqdata_user', 'record_id', 1));
+        self::assertSame(1, $this->countRows('faqdata_tags', 'record_id', 1));
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
