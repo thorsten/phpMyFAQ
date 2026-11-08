@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Auth\AuthDatabase;
+use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -22,6 +24,7 @@ use phpMyFAQ\User\UserData;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -130,7 +133,31 @@ final class UserControllerTest extends TestCase
         return $this->createAuthenticatedContainerWithAdminLog($this->createStub(AdminLog::class));
     }
 
-    private function createAuthenticatedContainerWithAdminLog(AdminLog $adminLog): ContainerInterface
+    private function createAuthenticatedContainerWithAdminLog(
+        AdminLog $adminLog,
+        ?CurrentUser $currentUser = null,
+    ): ContainerInterface {
+        $currentUser ??= $this->createActingUserMock();
+
+        $session = new Session(new MockArraySessionStorage());
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container
+            ->method('get')
+            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
+                return match ($id) {
+                    'phpmyfaq.configuration' => $this->configuration,
+                    'phpmyfaq.user.current_user' => $currentUser,
+                    'session' => $session,
+                    'phpmyfaq.admin.admin-log' => $adminLog,
+                    default => null,
+                };
+            });
+
+        return $container;
+    }
+
+    private function createActingUserMock(): CurrentUser&MockObject
     {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
@@ -154,22 +181,36 @@ final class UserControllerTest extends TestCase
         $currentUser->method('getUserId')->willReturn(1);
         $currentUser->method('isSuperAdmin')->willReturn(true);
 
-        $session = new Session(new MockArraySessionStorage());
+        return $currentUser;
+    }
 
-        $container = $this->createStub(ContainerInterface::class);
-        $container
-            ->method('get')
-            ->willReturnCallback(function (string $id) use ($currentUser, $session, $adminLog) {
-                return match ($id) {
-                    'phpmyfaq.configuration' => $this->configuration,
-                    'phpmyfaq.user.current_user' => $currentUser,
-                    'session' => $session,
-                    'phpmyfaq.admin.admin-log' => $adminLog,
-                    default => null,
-                };
+    /**
+     * The acting user is user 1, so passing user 1 as the target drives the
+     * self-service branch of overwritePassword(). Its auth driver accepts
+     * $verifiablePassword and throws for everything else, exactly like
+     * AuthDatabase::checkCredentials().
+     */
+    private function createSelfServiceContainer(
+        string $verifiablePassword,
+        bool $stepUpLockedOut = false,
+    ): ContainerInterface {
+        $authDriver = $this->createMock(AuthDatabase::class);
+        $authDriver
+            ->method('checkCredentials')
+            ->willReturnCallback(static function (string $login, string $password) use ($verifiablePassword): bool {
+                if (hash_equals($verifiablePassword, $password)) {
+                    return true;
+                }
+
+                throw new AuthException('ERROR_USER_INCORRECT_PASSWORD');
             });
 
-        return $container;
+        $currentUser = $this->createActingUserMock();
+        $currentUser->method('getLogin')->willReturn('admin');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser->method('isStepUpLockedOut')->willReturn($stepUpLockedOut);
+
+        return $this->createAuthenticatedContainerWithAdminLog($this->createStub(AdminLog::class), $currentUser);
     }
 
     private function seedCurrentUserSession(): void
@@ -752,13 +793,166 @@ final class UserControllerTest extends TestCase
     {
         $this->seedCurrentUserSession();
 
-        $container = $this->createAuthenticatedContainer();
+        $container = $this->createSelfServiceContainer('current-password-123');
         $session = $container->get('session');
         self::assertInstanceOf(Session::class, $session);
         $token = $this->createValidCsrfToken($session, 'overwrite-password');
 
+        $currentUser = $container->get('phpmyfaq.user.current_user');
+        self::assertInstanceOf(MockObject::class, $currentUser);
+        $currentUser->expects($this->once())->method('stepUpSuccess')->willReturn(true);
+
         $request = new Request([], [], [], [], [], [], json_encode([
             'userId' => 1,
+            'csrf' => $token,
+            'currentPassword' => 'current-password-123',
+            'newPassword' => 'updatedPassword123',
+            'passwordRepeat' => 'updatedPassword123',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->overwritePassword($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_passwdsuc'), $payload['success']);
+    }
+
+    /**
+     * Changing your own password requires the current one, so a stolen session or
+     * CSRF token alone cannot take the account over (CWE-620).
+     *
+     * @throws \Exception
+     */
+    public function testOverwritePasswordRejectsSelfServiceWithoutTheCurrentPassword(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createSelfServiceContainer('current-password-123');
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'overwrite-password');
+
+        $currentUser = $container->get('phpmyfaq.user.current_user');
+        self::assertInstanceOf(MockObject::class, $currentUser);
+        $currentUser->expects($this->once())->method('stepUpFailure')->willReturn(true);
+        $currentUser->expects($this->never())->method('updateSessionId');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userId' => 1,
+            'csrf' => $token,
+            'newPassword' => 'updatedPassword123',
+            'passwordRepeat' => 'updatedPassword123',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->overwritePassword($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_passwd_fail'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testOverwritePasswordConsumesTheFailureBudgetOnAWrongCurrentPassword(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createSelfServiceContainer('current-password-123');
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'overwrite-password');
+
+        $currentUser = $container->get('phpmyfaq.user.current_user');
+        self::assertInstanceOf(MockObject::class, $currentUser);
+        $currentUser->expects($this->once())->method('stepUpFailure')->willReturn(true);
+        $currentUser->expects($this->never())->method('stepUpSuccess');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userId' => 1,
+            'csrf' => $token,
+            'currentPassword' => 'wrong-password-123',
+            'newPassword' => 'updatedPassword123',
+            'passwordRepeat' => 'updatedPassword123',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->overwritePassword($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_passwd_fail'), $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testOverwritePasswordRefusesSelfServiceWhileStepUpIsLockedOut(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createSelfServiceContainer('current-password-123', stepUpLockedOut: true);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'overwrite-password');
+
+        $currentUser = $container->get('phpmyfaq.user.current_user');
+        self::assertInstanceOf(MockObject::class, $currentUser);
+        $currentUser->expects($this->never())->method('stepUpFailure');
+        $currentUser->expects($this->never())->method('updateSessionId');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userId' => 1,
+            'csrf' => $token,
+            'currentPassword' => 'current-password-123',
+            'newPassword' => 'updatedPassword123',
+            'passwordRepeat' => 'updatedPassword123',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->overwritePassword($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
+        self::assertSame(Translation::get('msgStepUpLockedOut'), $payload['error']);
+    }
+
+    /**
+     * A SuperAdmin resetting someone else's password is an admin reset, not a
+     * step-up: it must keep working without a current password.
+     *
+     * @throws \Exception
+     */
+    public function testOverwritePasswordForAnotherUserNeedsNoCurrentPassword(): void
+    {
+        $this->seedCurrentUserSession();
+        $targetUserId = $this->seedManagedUser('password-reset-target');
+        self::assertNotFalse($this->dbHandle->query(
+            "INSERT INTO faquserlogin (login, pass, domain) VALUES ('password-reset-target', 'old-hash', '')",
+        ));
+
+        $container = $this->createSelfServiceContainer('current-password-123');
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'overwrite-password');
+
+        $currentUser = $container->get('phpmyfaq.user.current_user');
+        self::assertInstanceOf(MockObject::class, $currentUser);
+        $currentUser->expects($this->never())->method('stepUpFailure');
+        $currentUser->expects($this->never())->method('stepUpSuccess');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'userId' => $targetUserId,
             'csrf' => $token,
             'newPassword' => 'updatedPassword123',
             'passwordRepeat' => 'updatedPassword123',

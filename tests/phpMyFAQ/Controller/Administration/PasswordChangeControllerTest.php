@@ -23,6 +23,7 @@ use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -284,6 +285,161 @@ final class PasswordChangeControllerTest extends TestCase
     }
 
     /**
+     * The CSRF token is consumed per attempt, so one token cannot authorise an
+     * unlimited number of concurrent password guesses.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateConsumesTheCsrfTokenOnEveryAttempt(): void
+    {
+        $authSource = $this->createMock(AuthDatabase::class);
+        $authSource->method('getEncryptionContainer')->willReturn($this->createStub(Encryption::class));
+        $authSource->method('disableReadOnly');
+        $authSource->method('checkCredentials')->willThrowException(new AuthException('incorrect password'));
+
+        $auth = $this->createMock(Auth::class);
+        $auth->method('selectAuth')->willReturn($authSource);
+
+        $controller = $this->createController($auth);
+        $container = $this->createAuthenticatedContainer();
+        $controller->setContainer($container);
+
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'password');
+
+        $payload = [
+            'pmf-csrf-token' => $token,
+            'faqpassword_old' => 'wrong-old-password',
+            'faqpassword' => 'new-password-123',
+            'faqpassword_confirm' => 'new-password-123',
+        ];
+
+        $controller->update(new Request([], $payload));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid CSRF token');
+        $controller->update(new Request([], $payload));
+    }
+
+    /**
+     * The admin form shares the account's login failure budget: while the account is
+     * locked out it must not verify the current password at all (CWE-307).
+     *
+     * @throws \Exception
+     */
+    public function testUpdateRefusesToVerifyThePasswordWhileStepUpIsLockedOut(): void
+    {
+        $authSource = $this->createMock(AuthDatabase::class);
+        $authSource->method('getEncryptionContainer')->willReturn($this->createStub(Encryption::class));
+        $authSource->expects($this->never())->method('checkCredentials');
+
+        $auth = $this->createMock(Auth::class);
+        $auth->method('selectAuth')->willReturn($authSource);
+
+        $currentUser = $this->createCurrentUserMock();
+        $currentUser->method('isStepUpLockedOut')->willReturn(true);
+        $currentUser->expects($this->never())->method('changePassword');
+
+        $controller = $this->createController($auth);
+        $container = $this->createAuthenticatedContainer(currentUser: $currentUser);
+        $controller->setContainer($container);
+
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'password');
+
+        $response = $controller->update(
+            new Request([], [
+                'pmf-csrf-token' => $token,
+                'faqpassword_old' => 'guess-me',
+                'faqpassword' => 'new-password-123',
+                'faqpassword_confirm' => 'new-password-123',
+            ]),
+        );
+
+        self::assertSame(Response::HTTP_TOO_MANY_REQUESTS, $response->getStatusCode());
+        self::assertStringContainsString(Translation::get('msgStepUpLockedOut'), (string) $response->getContent());
+        self::assertStringNotContainsString(Translation::get('ad_passwdsuc'), (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testWrongCurrentPasswordConsumesTheStepUpFailureBudget(): void
+    {
+        $authSource = $this->createMock(AuthDatabase::class);
+        $authSource->method('getEncryptionContainer')->willReturn($this->createStub(Encryption::class));
+        $authSource->method('disableReadOnly');
+        $authSource->method('checkCredentials')->willThrowException(new AuthException('incorrect password'));
+
+        $auth = $this->createMock(Auth::class);
+        $auth->method('selectAuth')->willReturn($authSource);
+
+        $currentUser = $this->createCurrentUserMock();
+        $currentUser->method('isStepUpLockedOut')->willReturn(false);
+        $currentUser->expects($this->once())->method('stepUpFailure')->willReturn(true);
+        $currentUser->expects($this->never())->method('stepUpSuccess');
+
+        $controller = $this->createController($auth);
+        $container = $this->createAuthenticatedContainer(currentUser: $currentUser);
+        $controller->setContainer($container);
+
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'password');
+
+        $response = $controller->update(
+            new Request([], [
+                'pmf-csrf-token' => $token,
+                'faqpassword_old' => 'wrong-old-password',
+                'faqpassword' => 'new-password-123',
+                'faqpassword_confirm' => 'new-password-123',
+            ]),
+        );
+
+        self::assertStringContainsString(Translation::get('ad_passwd_fail'), (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCorrectCurrentPasswordClearsTheStepUpFailureBudget(): void
+    {
+        $authSource = $this->createMock(AuthDatabase::class);
+        $authSource->method('getEncryptionContainer')->willReturn($this->createStub(Encryption::class));
+        $authSource->method('disableReadOnly');
+        $authSource->method('checkCredentials')->willReturn(true);
+
+        $auth = $this->createMock(Auth::class);
+        $auth->method('selectAuth')->willReturn($authSource);
+
+        $currentUser = $this->createCurrentUserMock(changePasswordResult: true);
+        $currentUser->method('isStepUpLockedOut')->willReturn(false);
+        $currentUser->expects($this->once())->method('stepUpSuccess')->willReturn(true);
+        $currentUser->expects($this->never())->method('stepUpFailure');
+
+        $controller = $this->createController($auth);
+        $container = $this->createAuthenticatedContainer(currentUser: $currentUser);
+        $controller->setContainer($container);
+
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'password');
+
+        $response = $controller->update(
+            new Request([], [
+                'pmf-csrf-token' => $token,
+                'faqpassword_old' => 'old-password',
+                'faqpassword' => 'new-password-123',
+                'faqpassword_confirm' => 'new-password-123',
+            ]),
+        );
+
+        self::assertStringContainsString(Translation::get('ad_passwdsuc'), (string) $response->getContent());
+    }
+
+    /**
      * @throws \Exception
      */
     private function createValidCsrfToken(Session $session, string $page): string
@@ -295,10 +451,10 @@ final class PasswordChangeControllerTest extends TestCase
         return $token;
     }
 
-    private function createAuthenticatedContainer(
+    private function createCurrentUserMock(
         bool $changePasswordResult = false,
         bool $readOnly = false,
-    ): ContainerInterface {
+    ): CurrentUser&MockObject {
         $permission = $this->createStub(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
 
@@ -321,6 +477,16 @@ final class PasswordChangeControllerTest extends TestCase
             ]);
         $currentUser->method('getLogin')->willReturn('test-user');
         $currentUser->method('changePassword')->willReturn($changePasswordResult);
+
+        return $currentUser;
+    }
+
+    private function createAuthenticatedContainer(
+        bool $changePasswordResult = false,
+        bool $readOnly = false,
+        ?CurrentUser $currentUser = null,
+    ): ContainerInterface {
+        $currentUser ??= $this->createCurrentUserMock($changePasswordResult, $readOnly);
 
         $session = new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);

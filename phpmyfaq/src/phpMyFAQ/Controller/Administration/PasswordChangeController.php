@@ -69,8 +69,24 @@ final class PasswordChangeController extends AbstractAdministrationController
 
         $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->session)->verifyToken('password', $csrfToken)) {
+        // The token is consumed on every attempt, successful or not, and every response
+        // renders a fresh one. Without that a single token would authorise an unlimited
+        // number of concurrent guesses, which would let an attacker burn through the
+        // failure budget in parallel before the lockout below takes effect.
+        if (!Token::getInstance($this->session)->verifyToken('password', $csrfToken, removeToken: true)) {
             throw new Exception('Invalid CSRF token');
+        }
+
+        // Re-entering the current password is a step-up check and shares the account's
+        // login failure budget, so a hijacked session cannot guess the password without
+        // limit (CWE-307). The admin context has no request rate limiter, so the
+        // per-account lockout is the only throttle on this form.
+        if ($this->currentUser->isStepUpLockedOut()) {
+            return $this->renderPasswordForm(
+                $request,
+                errorMessage: Translation::getString('msgStepUpLockedOut'),
+                response: new Response(status: Response::HTTP_TOO_MANY_REQUESTS),
+            );
         }
 
         $auth = $this->auth;
@@ -107,26 +123,48 @@ final class PasswordChangeController extends AbstractAdministrationController
             $currentPasswordIsValid = false;
         }
 
-        $passwordChanged =
-            $newPasswordIsValid && $currentPasswordIsValid && $this->currentUser->changePassword($newPassword);
+        // Record the outcome of the step-up check: a wrong password consumes the
+        // failure budget (and locks the login once it is exhausted), a correct one
+        // clears it.
+        if (!$currentPasswordIsValid) {
+            $this->currentUser->stepUpFailure();
 
-        $successMessage = '';
-        $errorMessage = '';
+            return $this->renderPasswordForm($request, errorMessage: Translation::getString('ad_passwd_fail'));
+        }
+
+        $this->currentUser->stepUpSuccess();
+
+        $passwordChanged = $newPasswordIsValid && $this->currentUser->changePassword($newPassword);
+
         if ($passwordChanged) {
-            $successMessage = Translation::get(key: 'ad_passwdsuc');
+            return $this->renderPasswordForm($request, successMessage: Translation::getString('ad_passwdsuc'));
         }
 
-        if (!$passwordChanged) {
-            $errorMessage = Translation::get(key: 'ad_passwd_fail');
-        }
+        return $this->renderPasswordForm($request, errorMessage: Translation::getString('ad_passwd_fail'));
+    }
 
-        return $this->render('@admin/user/password.twig', [
-            ...$this->getHeader($request),
-            ...$this->getFooter(),
-            ...$this->getBaseTemplateVars(),
-            'successMessage' => $successMessage,
-            'errorMessage' => $errorMessage,
-        ]);
+    /**
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     */
+    private function renderPasswordForm(
+        Request $request,
+        string $successMessage = '',
+        string $errorMessage = '',
+        ?Response $response = null,
+    ): Response {
+        return $this->render(
+            '@admin/user/password.twig',
+            [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                ...$this->getBaseTemplateVars(),
+                'successMessage' => $successMessage,
+                'errorMessage' => $errorMessage,
+            ],
+            $response,
+        );
     }
 
     /**
