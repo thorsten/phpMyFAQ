@@ -235,6 +235,9 @@ final class CategoryController extends AbstractAdministrationController
         $categoryId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
         $categoryLang = Filter::filterVar($request->request->get(key: 'lang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
+        // A language-restricted CATEGORY_ADD right must not create a category in another language.
+        $this->userHasPermissionForLanguage(PermissionType::CATEGORY_ADD, $categoryLang);
+
         $uploadedFile = $request->files->get('image') ?? [];
         if ($uploadedFile instanceof UploadedFile) {
             $this->categoryImage->setUploadedFile($uploadedFile);
@@ -623,6 +626,12 @@ final class CategoryController extends AbstractAdministrationController
         $this->userHasPermissionForCategories(PermissionType::CATEGORY_EDIT, [$categoryId]);
 
         $categoryLang = Filter::filterVar($request->request->get(key: 'catlang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
+
+        // The update writes the faqcategories row selected by id *and* lang, so the submitted
+        // language decides which translation changes. Without this check an editor whose
+        // CATEGORY_EDIT right is restricted to one language could edit any other translation.
+        $this->userHasPermissionForLanguage(PermissionType::CATEGORY_EDIT, $categoryLang);
+
         $existingImage = Filter::filterVar(
             $request->request->get(key: 'existing_image'),
             FILTER_SANITIZE_SPECIAL_CHARS,

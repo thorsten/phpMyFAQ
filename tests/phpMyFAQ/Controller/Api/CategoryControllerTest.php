@@ -98,6 +98,13 @@ class CategoryControllerTest extends TestCase
         $permission->method('hasPermission')->willReturn(true);
         $permission->method('hasPermissionForCategory')->willReturn(true);
         $permission->method('getAllowedCategoriesForRight')->willReturn(null);
+        $permission
+            ->method('hasPermissionForLanguage')
+            ->willReturnCallback(
+                // sentinel forbidden language for tests
+                static fn(int $userId, mixed $right, string $language): bool => $language !== 'fr',
+            );
+        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -127,6 +134,13 @@ class CategoryControllerTest extends TestCase
                 ),
             );
         $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategoryIds);
+        $permission
+            ->method('hasPermissionForLanguage')
+            ->willReturnCallback(
+                // sentinel forbidden language for tests
+                static fn(int $userId, mixed $right, string $language): bool => $language !== 'fr',
+            );
+        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -338,6 +352,48 @@ class CategoryControllerTest extends TestCase
 
         $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());
         $this->assertSame('{"stored":true}', (string) $response->getContent());
+    }
+
+    /**
+     * The new category is stored in the language taken from the request body, so a
+     * language-restricted CATEGORY_ADD right must not let its holder create one in
+     * another language.
+     *
+     * @throws \Exception
+     */
+    public function testCreateIsForbiddenForALanguageTheUserMayNotAdd(): void
+    {
+        $this->authenticateApiToken();
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'language' => 'fr',
+            'parent-id' => 0,
+            'category-name' => 'Categorie non autorisee',
+            'description' => 'Created in unit test',
+            'is-active' => true,
+            'show-on-homepage' => false,
+        ], JSON_THROW_ON_ERROR));
+
+        $category = $this->createMock(Category::class);
+        $category->method('setUser')->willReturnSelf();
+        $category->method('setGroups')->willReturnSelf();
+        $category->method('setLanguage')->willReturnSelf();
+        $category->expects($this->never())->method('create');
+
+        $order = $this->createMock(Order::class);
+        $order->expects($this->never())->method('add');
+
+        $permission = $this->createMock(CategoryPermission::class);
+        $permission->expects($this->never())->method('add');
+
+        $controller = new CategoryController($this->createStub(Language::class));
+        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $controller->setCategoryPermissionFactory(static fn(): CategoryPermission => $permission);
+        $controller->setOrderFactory(static fn(): Order => $order);
+        $this->authorizeCurrentUser($controller);
+
+        $this->expectException(ForbiddenException::class);
+        $controller->create($request);
     }
 
     /**

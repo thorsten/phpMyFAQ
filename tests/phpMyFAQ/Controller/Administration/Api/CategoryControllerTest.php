@@ -177,6 +177,13 @@ final class CategoryControllerTest extends TestCase
                 && $categoryId !== 666, // sentinel forbidden category for tests
             );
         $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
+        $permission
+            ->method('hasPermissionForLanguage')
+            ->willReturnCallback(
+                // sentinel forbidden language for tests
+                static fn(int $userId, mixed $right, string $language): bool => $language !== 'fr',
+            );
+        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -451,6 +458,52 @@ final class CategoryControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_categ_deleted'), $payload['success']);
+        $this->removeCsrfCookie('category');
+    }
+
+    /**
+     * The delete removes the faqcategories row selected by id and lang, so a CATEGORY_DELETE
+     * right restricted to one language must not reach another language's translation.
+     *
+     * @throws \Exception
+     */
+    public function testDeleteIsForbiddenForALanguageTheUserMayNotDelete(): void
+    {
+        $this->configuration->getDb()->query("INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (99, 'en', 0, 'Keep Me', '', 1, -1, 1, '', 0)");
+        $this->configuration->getDb()->query("INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (99, 'fr', 0, 'Gardez Moi', '', 1, -1, 1, '', 0)");
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('category');
+        $this->setCsrfCookie('category', $csrfToken);
+
+        $categoryPermission = $this->createMock(Permission::class);
+        $categoryPermission->expects($this->never())->method('delete');
+
+        $controller = $this->createControllerWithDependencies(
+            $this->createStub(Image::class),
+            $this->createStub(Order::class),
+            $categoryPermission,
+        );
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+            'categoryId' => 99,
+            'language' => 'fr',
+        ], JSON_THROW_ON_ERROR));
+
+        $thrown = null;
+        try {
+            $controller->delete($request);
+        } catch (ForbiddenException $exception) {
+            $thrown = $exception;
+        }
+
+        self::assertInstanceOf(ForbiddenException::class, $thrown);
+        $result = $this->configuration->getDb()->query("SELECT COUNT(*) AS total FROM faqcategories WHERE id = 99");
+        self::assertSame(2, (int) $this->configuration->getDb()->fetchObject($result)->total);
         $this->removeCsrfCookie('category');
     }
 

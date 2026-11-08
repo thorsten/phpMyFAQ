@@ -9,6 +9,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v4.2.0-RC.2 - unreleased
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
+- changed the Content-Security-Policy to allow inline scripts only with a per-request nonce instead of `'unsafe-inline'`; inline scripts in a custom template set or a plugin template need `nonce="{{ cspNonce() }}"`, and inline `onclick`/`onchange` attributes no longer run (Thorsten)
 - added experimental FrankenPHP worker mode, enabled with `FRANKENPHP_WORKER_MODE=true` in the Docker images (Thorsten)
 - added the command line tools (`bin/console`, `bin/worker.php`, `bin/scheduler.php`) to the release packages and the Docker images (Thorsten)
 - added official Docker images (Apache and FrankenPHP) published to the GitHub Container Registry, including nightly images, with headless installation via environment variables (Thorsten)
@@ -62,6 +63,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated experimental MCP Server to mcp/sdk (Thorsten)
 - upgraded PDF engine to TCPDF 7 / tc-lib-pdf; PDF fonts are now JSON descriptors in src/fonts (Thorsten)
 - updated third party dependencies (Thorsten)
+- fixed stored XSS in the custom CSS setting: a delegated admin could break out of the `<style>` element on every public page (Thorsten)
+- fixed missing language check on the category write endpoints: an editor whose category right was restricted to one language could add, edit or delete a category translation in another language (Thorsten, thanks to 대전대학교 한혁(Akarang))
 - fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.12 - unreleased

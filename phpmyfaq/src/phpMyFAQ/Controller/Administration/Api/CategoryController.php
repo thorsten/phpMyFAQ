@@ -67,6 +67,10 @@ final class CategoryController extends AbstractAdministrationApiController
 
         $this->userHasPermissionForCategories(PermissionType::CATEGORY_DELETE, [$categoryId]);
 
+        // The delete removes the translation selected by id and lang, so the submitted language
+        // must be one the user may delete in.
+        $this->userHasPermissionForLanguage(PermissionType::CATEGORY_DELETE, $categoryLang);
+
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, [], false);

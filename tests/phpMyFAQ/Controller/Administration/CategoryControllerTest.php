@@ -514,6 +514,110 @@ final class CategoryControllerTest extends TestCase
     }
 
     /**
+     * A CATEGORY_EDIT right restricted to one language must not let its holder edit the
+     * translation of another language: the update targets the faqcategories row selected by
+     * id *and* lang, so the submitted "catlang" decides which translation is written.
+     */
+    public function testUpdateIsForbiddenForALanguageTheUserMayNotEdit(): void
+    {
+        $this->insertTestCategory();
+        $context = $this->createAuthenticatedContext();
+
+        $controller = new CategoryController(
+            new AdminCategory($this->configuration),
+            $this->createStub(Order::class),
+            $this->createStub(CategoryPermission::class),
+            $this->createStub(Image::class),
+            $this->createStub(Seo::class),
+            $this->createStub(UserHelper::class),
+        );
+        $controller->setContainer($context['container']);
+
+        // The attack edits an existing translation in a language the user may not touch.
+        $this->configuration->getDb()->query(
+            "INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, show_home, image)
+             VALUES (1, 'fr', 0, 'Categorie', 'Description', 42, -1, 1, 1, '')",
+        );
+
+        $csrfToken = $this->createCsrfToken($context['session'], 'update-category');
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'id' => '1',
+            'parent_id' => '0',
+            'catlang' => 'fr',
+            'name' => 'Unauthorized translation edit',
+            'description' => 'Updated description',
+            'user_id' => '42',
+            'group_id' => '-1',
+            'active' => '1',
+            'show_home' => '1',
+            'existing_image' => '',
+            'userpermission' => 'all',
+            'grouppermission' => 'all',
+            'serpTitle' => '',
+            'serpDescription' => '',
+        ]);
+
+        $thrown = null;
+        try {
+            $controller->update($request);
+        } catch (ForbiddenException $exception) {
+            $thrown = $exception;
+        }
+
+        self::assertInstanceOf(ForbiddenException::class, $thrown);
+        // The guard must run before the row is written.
+        self::assertSame('Categorie', $this->fetchCategoryName(1, 'fr'));
+        self::assertSame('Parent Category', $this->fetchCategoryName(1, 'en'));
+    }
+
+    private function fetchCategoryName(int $categoryId, string $language): ?string
+    {
+        $database = $this->configuration->getDb();
+        $result = $database->query(sprintf(
+            "SELECT name FROM faqcategories WHERE id = %d AND lang = '%s'",
+            $categoryId,
+            $database->escape($language),
+        ));
+        $row = $database->fetchObject($result);
+
+        return $row === false || $row === null ? null : (string) $row->name;
+    }
+
+    public function testCreateIsForbiddenForALanguageTheUserMayNotAdd(): void
+    {
+        $context = $this->createAuthenticatedContext();
+
+        $controller = new CategoryController(
+            new AdminCategory($this->configuration),
+            $this->createStub(Order::class),
+            $this->createStub(CategoryPermission::class),
+            $this->createStub(Image::class),
+            $this->createStub(Seo::class),
+            $this->createStub(UserHelper::class),
+        );
+        $controller->setContainer($context['container']);
+
+        $csrfToken = $this->createCsrfToken($context['session'], 'save-category');
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'parent_id' => '0',
+            'lang' => 'fr',
+            'name' => 'Unauthorized new translation',
+            'description' => 'Description',
+            'user_id' => '42',
+            'group_id' => '-1',
+            'active' => '1',
+            'show_home' => '1',
+            'userpermission' => 'all',
+            'grouppermission' => 'all',
+        ]);
+
+        $this->expectException(ForbiddenException::class);
+        $controller->create($request);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testCreateRendersSuccessForNewCategory(): void
@@ -678,6 +782,13 @@ final class CategoryControllerTest extends TestCase
                 static fn(int $userId, mixed $right, int $categoryId): bool => $categoryId !== 666,
             );
         $permission->method('getAllowedCategoriesForRight')->willReturn(null);
+        $permission
+            ->method('hasPermissionForLanguage')
+            ->willReturnCallback(
+                // sentinel forbidden language for tests
+                static fn(int $userId, mixed $right, string $language): bool => $language !== 'fr',
+            );
+        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
         $permission->method('getAllGroupsOptions')->willReturn($groupsOptions);
 
         $currentUser = $this->createMock(CurrentUser::class);
