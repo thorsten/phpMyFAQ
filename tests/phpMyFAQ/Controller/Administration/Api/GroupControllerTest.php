@@ -890,10 +890,12 @@ final class GroupControllerTest extends TestCase
         $this->dbHandle->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->dbHandle->query('DELETE FROM faquser_right WHERE user_id = 1');
         $this->dbHandle->query('DELETE FROM faquser_group WHERE user_id = 1');
-        foreach (
-            [PermissionType::USER_ADD, PermissionType::USER_EDIT, PermissionType::USER_DELETE, PermissionType::GROUP_EDIT]
-            as $permissionType
-        ) {
+        foreach ([
+            PermissionType::USER_ADD,
+            PermissionType::USER_EDIT,
+            PermissionType::USER_DELETE,
+            PermissionType::GROUP_EDIT,
+        ] as $permissionType) {
             $this->dbHandle->query(sprintf(
                 'INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d)',
                 $this->rightId($permissionType),
@@ -1256,6 +1258,52 @@ final class GroupControllerTest extends TestCase
     }
 
     /**
+     * updatePermissions() replaces the group's rights, so an empty list revokes all of them.
+     * The "only rights you hold" check loops over the submitted rights and therefore never runs
+     * for an empty list: a GROUP_EDIT holder must still be refused when the group holds a right
+     * they do not hold, exactly as deleteGroup() refuses it.
+     *
+     * @throws \Exception
+     */
+    public function testUpdatePermissionsRejectsEmptyRightsListForGroupRightNotHeld(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('update-group-permissions');
+        $this->setCsrfCookie('update-group-permissions', $csrfToken);
+
+        // The target group holds right id 42, which the acting user does NOT hold.
+        // hasPermission() returns true for the string-keyed permission gate but false for 42.
+        $perm = $this->getMockBuilder(MediumPermission::class)->disableOriginalConstructor()->getMock();
+        $perm->method('getGroupRights')->willReturn([42]);
+        $perm->method('hasPermission')->willReturnCallback(
+            static fn(int $userId, mixed $right): bool => is_string($right),
+        );
+        $perm->expects(self::never())->method('refuseAllGroupRights');
+
+        $actingUser = $this->createStub(CurrentUser::class);
+        $actingUser->perm = $perm;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createContainerForUser($actingUser, $session));
+
+        $response = $controller->updatePermissions(
+            new Request(content: json_encode([
+                'groupId' => 1,
+                'rightIds' => [],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame('Cannot change the permissions of a group whose rights you do not hold.', $payload['error']);
+        $this->removeCsrfCookie('update-group-permissions');
+    }
+
+    /**
      * @throws \Exception
      */
     public function testUpdatePermissionsReplacesRightsForSuperAdmin(): void
@@ -1400,7 +1448,9 @@ final class GroupControllerTest extends TestCase
     {
         $this->seedScopedGroupAdministrator();
         $faqEdit = $this->rightId(PermissionType::FAQ_EDIT);
-        $this->dbHandle->query("INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (4243, 'News', '', 0)");
+        $this->dbHandle->query(
+            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (4243, 'News', '', 0)",
+        );
         $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 4243)');
         $this->dbHandle->query(sprintf('INSERT INTO faqgroup_right (group_id, right_id) VALUES (4243, %d)', $faqEdit));
         $this->dbHandle->query(sprintf(
@@ -1872,10 +1922,20 @@ final class GroupControllerTest extends TestCase
     public static function invalidPayloadProvider(): iterable
     {
         yield 'updateGroup: invalid json' => ['updateGroup', 'update-group', 'not json', 'Invalid JSON payload.'];
-        yield 'updateGroup: no group' => ['updateGroup', 'update-group', ['groupId' => 0, 'name' => 'x'], 'Invalid group ID.'];
+        yield 'updateGroup: no group' => [
+            'updateGroup',
+            'update-group',
+            ['groupId' => 0, 'name' => 'x'],
+            'Invalid group ID.',
+        ];
 
         yield 'updateMembers: invalid json' => ['updateMembers', 'update-group-members', '[', 'Invalid JSON payload.'];
-        yield 'updateMembers: no group' => ['updateMembers', 'update-group-members', ['groupId' => 0], 'Invalid group ID.'];
+        yield 'updateMembers: no group' => [
+            'updateMembers',
+            'update-group-members',
+            ['groupId' => 0],
+            'Invalid group ID.',
+        ];
         yield 'updateMembers: members not a list' => [
             'updateMembers',
             'update-group-members',
@@ -1883,8 +1943,18 @@ final class GroupControllerTest extends TestCase
             'memberIds must be an array.',
         ];
 
-        yield 'updatePermissions: invalid json' => ['updatePermissions', 'update-group-permissions', '', 'Invalid JSON payload.'];
-        yield 'updatePermissions: no group' => ['updatePermissions', 'update-group-permissions', ['groupId' => -5], 'Invalid group ID.'];
+        yield 'updatePermissions: invalid json' => [
+            'updatePermissions',
+            'update-group-permissions',
+            '',
+            'Invalid JSON payload.',
+        ];
+        yield 'updatePermissions: no group' => [
+            'updatePermissions',
+            'update-group-permissions',
+            ['groupId' => -5],
+            'Invalid group ID.',
+        ];
         yield 'updatePermissions: rights not a list' => [
             'updatePermissions',
             'update-group-permissions',

@@ -569,6 +569,20 @@ final class GroupController extends AbstractAdministrationApiController
             }
         }
 
+        // The submitted rights are not the whole story: this endpoint replaces the group's rights,
+        // so every right the group currently holds is about to be revoked. Checking only the
+        // submitted list would let an administrator holding the delegable GROUP_EDIT right wipe
+        // rights they do not hold themselves - with an empty list, nothing would be checked at all.
+        // Mirrors deleteGroup(), which destroys the same rights.
+        $denied = $this->denyUnlessGroupRightsHeld(
+            $groupId,
+            'Cannot change group permissions without group permission support.',
+            'Cannot change the permissions of a group whose rights you do not hold.',
+        );
+        if ($denied instanceof JsonResponse) {
+            return $denied;
+        }
+
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
         if (!$currentUser->perm instanceof MediumPermission) {
             return $this->json(['error' => 'Group permissions are not enabled.'], Response::HTTP_BAD_REQUEST);

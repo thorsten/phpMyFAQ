@@ -1682,6 +1682,98 @@ final class UserControllerTest extends TestCase
     }
 
     /**
+     * updateUserRights() replaces the target's rights, so an empty list revokes all of them.
+     * A USER_EDIT holder must not be able to strip the rights of an administrator who holds
+     * rights the acting user lacks, which would demote them without ever granting anything.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateUserRightsCannotStripRightsOfUserHoldingRightsTheyLack(): void
+    {
+        $managedUserId = $this->seedManagedUser(login: 'privileged-rights-admin');
+        $this->grantUserRight($managedUserId, 1);
+
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUserWithRights(userId: 5, heldRightIds: []);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'userId' => $managedUserId,
+            'userRights' => [],
+            'csrfToken' => $csrf,
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+        self::assertSame([1], $this->userRightIds($managedUserId));
+    }
+
+    /**
+     * Deleting an account destroys every right it holds, so the same rule applies: a
+     * USER_DELETE holder must not be able to remove an administrator holding rights they lack.
+     *
+     * @throws \Exception
+     */
+    public function testDeleteUserCannotDeleteUserHoldingRightsTheyLack(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser(login: 'privileged-delete-target');
+        $this->grantUserRight($managedUserId, 1);
+
+        $session = new Session(new MockArraySessionStorage());
+
+        // hasPermission() grants the string-keyed USER_DELETE gate but no integer right id,
+        // so the acting user holds none of the target's rights.
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(static fn(int $userId, mixed $right): bool => is_string($right));
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $permission;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'delete-user');
+
+        $response = $controller->deleteUser($this->jsonRequest([
+            'userId' => $managedUserId,
+            'csrfToken' => $csrf,
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+
+        $row = $this->dbHandle->fetchObject($this->dbHandle->query(sprintf(
+            'SELECT COUNT(*) AS count FROM faquser WHERE user_id = %d',
+            $managedUserId,
+        )));
+        self::assertSame(1, (int) $row->count);
+    }
+
+    /**
+     * @return array<int>
+     */
+    private function userRightIds(int $userId): array
+    {
+        $rightIds = [];
+        $result = $this->dbHandle->query(sprintf(
+            'SELECT right_id FROM faquser_right WHERE user_id = %d ORDER BY right_id',
+            $userId,
+        ));
+        while ($row = $this->dbHandle->fetchArray($result)) {
+            $rightIds[] = (int) $row['right_id'];
+        }
+
+        return $rightIds;
+    }
+
+    /**
      * Builds a non-SuperAdmin acting user that holds the USER_EDIT gate plus exactly the
      * given right IDs.
      *

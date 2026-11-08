@@ -460,6 +460,14 @@ final class UserController extends AbstractAdministrationApiController
             ], Response::HTTP_BAD_REQUEST);
         }
 
+        // Deleting an account destroys every right it holds, so the "only rights you hold" rule
+        // applies here as well: a non-SuperAdmin holding the delegable USER_DELETE right must not
+        // be able to remove a more privileged administrator. Blocking SuperAdmin and protected
+        // targets alone leaves every other, more privileged account reachable.
+        if (!$this->currentUser->isSuperAdmin() && !$this->actingUserHoldsAllRightsOf($currentUser)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         if (!$currentUser->deleteUser()) {
             return $this->json(['error' => Translation::get(key: 'ad_user_error_delete')], Response::HTTP_BAD_REQUEST);
         }
@@ -770,6 +778,14 @@ final class UserController extends AbstractAdministrationApiController
         // Defense in depth: a non-SuperAdmin must never be able to alter a SuperAdmin or
         // protected account.
         if (!$actingIsSuperAdmin && ($user->isSuperAdmin() || $user->getStatus() === 'protected')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
+        // The "only rights you hold" rule above covers the rights being granted. This endpoint also
+        // revokes every right the target currently holds, so it must apply in the removal direction
+        // too: otherwise a USER_EDIT holder could strip the rights of a more privileged
+        // administrator - with an empty list, the grant check never runs at all.
+        if (!$actingIsSuperAdmin && !$this->actingUserHoldsAllRightsOf($user)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
