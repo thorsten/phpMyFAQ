@@ -20,17 +20,26 @@ declare(strict_types=1);
 namespace phpMyFAQ\Captcha;
 
 use phpMyFAQ\Configuration;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GoogleRecaptcha implements CaptchaInterface
 {
-    private bool $userIsLoggedIn;
+    private const string VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
+
+    private bool $userIsLoggedIn = false;
+
+    private readonly HttpClientInterface $httpClient;
 
     /**
      * Constructor.
      */
     public function __construct(
         private readonly Configuration $configuration,
+        ?HttpClientInterface $httpClient = null,
     ) {
+        $this->httpClient = $httpClient ?? HttpClient::create();
     }
 
     public function checkCaptchaCode(string $code): bool
@@ -39,15 +48,20 @@ class GoogleRecaptcha implements CaptchaInterface
             return true;
         }
 
-        $url = sprintf(
-            'https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s',
-            $this->configuration->get(item: 'security.googleReCaptchaV2SecretKey'),
-            $code,
-        );
+        try {
+            $response = $this->httpClient->request('POST', self::VERIFY_URL, [
+                'body' => [
+                    'secret' => (string) $this->configuration->get(item: 'security.googleReCaptchaV2SecretKey'),
+                    'response' => $code,
+                ],
+            ]);
 
-        $response = file_get_contents($url);
-        $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
-        return $response['success'] === true;
+            $data = $response->toArray();
+        } catch (ExceptionInterface) {
+            return false;
+        }
+
+        return ($data['success'] ?? false) === true;
     }
 
     public function isUserIsLoggedIn(): bool
