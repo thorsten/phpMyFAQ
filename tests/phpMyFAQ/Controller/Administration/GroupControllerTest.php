@@ -139,6 +139,39 @@ class GroupControllerTest extends TestCase
         $controller->updateMembers($request);
     }
 
+    public function testUpdatePermissionsNonSuperAdminCannotWipeRightsOfGroupTheyDoNotHold(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        // The target group holds right id 42, which the acting user does NOT hold. Submitting an
+        // empty rights list would wipe that right, so the request must be refused before
+        // refuseAllGroupRights() is reached.
+        $perm = $this->createMock(MediumPermission::class);
+        $perm->method('getGroupRights')->willReturn([42]);
+        $perm->method('hasPermission')->willReturnCallback(
+            static fn(int $userId, mixed $right): bool => is_string($right),
+        );
+        $perm->expects($this->never())->method('refuseAllGroupRights');
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $perm;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-group-permissions');
+
+        $request = new Request(request: [
+            'pmf-csrf-token' => $csrf,
+            'group_id' => '2',
+            'group_rights' => [], // empty list: every right the group holds would be removed
+        ]);
+
+        $this->expectException(ForbiddenException::class);
+        $controller->updatePermissions($request);
+    }
+
     private function buildNonSuperAdminLackingGroupRight(): CurrentUser
     {
         // The target group holds right id 42, which the acting user does NOT hold.

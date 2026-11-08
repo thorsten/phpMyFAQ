@@ -23,6 +23,7 @@ use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\PermissionTranslationTwigExtension;
@@ -323,6 +324,11 @@ final class GroupController extends AbstractAdministrationController
             $groupPermissions = [];
         }
 
+        // A non-SuperAdmin may only replace the rights of a group whose rights they fully hold.
+        // Without this check an administrator with the delegable GROUP_EDIT right could submit an
+        // empty rights list and destroy privileges they could never grant.
+        $this->assertActorHoldsAllGroupRights($groupId);
+
         // A non-SuperAdmin may only assign rights they hold themselves. This prevents an
         // administrator with the delegable GROUP_EDIT right from granting privileges they do not
         // possess to a group (privilege escalation via group membership inheritance).
@@ -361,9 +367,9 @@ final class GroupController extends AbstractAdministrationController
     }
 
     /**
-     * A non-SuperAdmin may only manage (edit members of, delete) a group whose rights they fully
-     * hold themselves. Otherwise an administrator holding only a delegable group right could
-     * remove or take over a higher-privileged group.
+     * A non-SuperAdmin may only manage (edit members of, replace the rights of, delete) a group
+     * whose rights they fully hold themselves. Otherwise an administrator holding only a delegable
+     * group right could remove or take over a higher-privileged group.
      *
      * @throws ForbiddenException
      */
@@ -373,9 +379,15 @@ final class GroupController extends AbstractAdministrationController
             return;
         }
 
+        $perm = $this->currentUser->perm;
+        if (!$perm instanceof MediumPermission) {
+            // Group rights only exist with the medium permission level.
+            return;
+        }
+
         $actingUserId = $this->currentUser->getUserId();
-        foreach ($this->currentUser->perm->getGroupRights($groupId) as $groupRight) {
-            if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $groupRight)) {
+        foreach ($perm->getGroupRights($groupId) as $groupRight) {
+            if (!$perm->hasPermission($actingUserId, (int) $groupRight)) {
                 throw new ForbiddenException('Cannot manage a group whose rights you do not hold');
             }
         }

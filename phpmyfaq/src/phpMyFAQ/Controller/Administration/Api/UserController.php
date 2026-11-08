@@ -408,6 +408,13 @@ final class UserController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
+        // Deleting a user destroys all of their rights, so the acting user must hold every right
+        // the target has. Otherwise an administrator with the delegable USER_DELETE right could
+        // remove a higher-privileged, non-SuperAdmin administrator.
+        if (!$this->actingUserHoldsAllRightsOf($currentUser)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         if (!$currentUser->deleteUser()) {
             return $this->json(['error' => Translation::get(key: 'ad_user_error_delete')], Response::HTTP_BAD_REQUEST);
         }
@@ -642,6 +649,14 @@ final class UserController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
+        // The rights of the target user are wiped before the submitted ones are granted again, so
+        // the acting user must hold every right the target currently has. Without this check an
+        // administrator with the delegable USER_EDIT right could submit an empty rights list and
+        // destroy privileges they could never grant.
+        if (!$this->actingUserHoldsAllRightsOf($user)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         if (!$user->perm->refuseAllUserRights($userId)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_mysqlerr')], Response::HTTP_BAD_REQUEST);
         }
@@ -672,5 +687,28 @@ final class UserController extends AbstractController
             . Translation::get(key: 'ad_msg_savedsuc_2');
 
         return $this->json(['success' => $success], Response::HTTP_OK);
+    }
+
+    /**
+     * A non-SuperAdmin may only remove or replace rights they hold themselves. This mirrors the
+     * "only rights you hold" rule that updateUserRights() applies to rights being granted, and
+     * applies it to rights being taken away as well.
+     *
+     * @throws \Exception
+     */
+    private function actingUserHoldsAllRightsOf(User $user): bool
+    {
+        if ($this->currentUser->isSuperAdmin()) {
+            return true;
+        }
+
+        $actingUserId = $this->currentUser->getUserId();
+        foreach ($user->perm->getUserRights($user->getUserId()) as $userRight) {
+            if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $userRight)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

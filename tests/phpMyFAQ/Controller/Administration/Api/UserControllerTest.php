@@ -562,6 +562,153 @@ class UserControllerTest extends TestCase
     }
 
     /**
+     * Builds an acting user that holds the string-keyed permission gates (such as 'edit_user')
+     * but none of the integer right ids, so it never holds the rights of the target user.
+     */
+    private function buildNonSuperAdminHoldingNoRightIds(int $userId): CurrentUser
+    {
+        $perm = $this->createMock(PermissionInterface::class);
+        $perm->method('hasPermission')->willReturnCallback(
+            static fn(int $actingUserId, mixed $right): bool => is_string($right),
+        );
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $perm;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn($userId);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        return $actingUser;
+    }
+
+    /**
+     * Stubs a database in which the target user owns the single user-right id 42 and is neither
+     * a SuperAdmin nor protected. All executed queries are recorded in $executed.
+     *
+     * @param string[] $executed
+     */
+    private function buildConfigurationWithTargetHoldingRight(int $targetUserId, array &$executed): Configuration
+    {
+        $lastQuery = '';
+        $rightsRows = [];
+
+        $database = $this->createStub(Sqlite3::class);
+        $database
+            ->method('query')
+            ->willReturnCallback(
+                static function (string $query) use (&$executed, &$lastQuery, &$rightsRows): bool {
+                    $executed[] = $query;
+                    $lastQuery = $query;
+                    if (str_contains($query, 'faquser_right')) {
+                        $rightsRows = [['right_id' => 42]];
+                    }
+
+                    return true;
+                },
+            );
+        $database->method('numRows')->willReturn(1);
+        $database
+            ->method('fetchArray')
+            ->willReturnCallback(
+                static function () use (&$lastQuery, &$rightsRows, $targetUserId): ?array {
+                    if (str_contains($lastQuery, 'faquser_right')) {
+                        return array_shift($rightsRows);
+                    }
+
+                    return [
+                        'user_id' => $targetUserId,
+                        'login' => 'privileged_admin',
+                        'account_status' => 'active',
+                        'is_superadmin' => 0,
+                        'auth_source' => 'ldap',
+                        'for_users' => 1,
+                        'for_groups' => 1,
+                        'for_sections' => 1,
+                    ];
+                },
+            );
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+        $configuration
+            ->method('get')
+            ->willReturnMap([
+                ['security.permLevel', 'basic'],
+            ]);
+
+        return $configuration;
+    }
+
+    /**
+     * An empty rights list wipes every right of the target user. A non-SuperAdmin must not be able
+     * to use that to destroy rights they could never grant.
+     */
+    public function testUpdateRightsNonSuperAdminCannotWipeRightsTheyDoNotHold(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildNonSuperAdminHoldingNoRightIds(userId: 5);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $executed = [];
+        $parent = (new ReflectionClass(UserController::class))->getParentClass();
+        $parent
+            ->getProperty('configuration')
+            ->setValue($controller, $this->buildConfigurationWithTargetHoldingRight(7, $executed));
+
+        $request = $this->jsonRequest([
+            'userId' => 7,
+            'csrfToken' => $csrf,
+            'userRights' => [], // empty list: every right the target holds would be removed
+        ]);
+
+        $response = $controller->updateUserRights($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        foreach ($executed as $query) {
+            $this->assertStringNotContainsString(
+                'DELETE FROM',
+                $query,
+                'No rights may be removed when the request is refused.',
+            );
+        }
+    }
+
+    /**
+     * Deleting a user destroys all of their rights, so the same rule applies as for replacing
+     * them: a non-SuperAdmin may not delete an account holding rights they do not hold.
+     */
+    public function testDeleteUserNonSuperAdminCannotDeleteMorePrivilegedAccount(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildNonSuperAdminHoldingNoRightIds(userId: 5);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'delete-user');
+
+        $executed = [];
+        $parent = (new ReflectionClass(UserController::class))->getParentClass();
+        $parent
+            ->getProperty('configuration')
+            ->setValue($controller, $this->buildConfigurationWithTargetHoldingRight(7, $executed));
+
+        $request = $this->jsonRequest([
+            'userId' => 7,
+            'csrfToken' => $csrf,
+        ]);
+
+        $response = $controller->deleteUser($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        foreach ($executed as $query) {
+            $this->assertStringNotContainsString(
+                'DELETE FROM',
+                $query,
+                'Nothing may be deleted when the request is refused.',
+            );
+        }
+    }
+
+    /**
      * A logged-out caller must trigger UnauthorizedHttpException (translated to a
      * login redirect / 401 by Application::run()), not a bare 403, because the
      * user permission gate now authenticates first.
