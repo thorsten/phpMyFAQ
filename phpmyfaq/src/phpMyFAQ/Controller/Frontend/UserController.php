@@ -20,10 +20,12 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Auth\WebAuthn\StoredPasskeys;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\CaptchaInterface;
 use phpMyFAQ\Captcha\Helper\CaptchaHelperInterface;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Date;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Service\Gravatar;
@@ -199,6 +201,28 @@ final class UserController extends AbstractFrontController
     }
 
     /**
+     * The passkeys of the logged-in user for the UCP list: credential ID plus, when recorded,
+     * the registration date in the configured date format.
+     *
+     * @return list<array{id: string, created: string}>
+     */
+    private function registeredPasskeys(): array
+    {
+        $date = new Date($this->configuration);
+        $passkeys = [];
+        foreach (StoredPasskeys::fromJson($this->currentUser->getWebAuthnKeys())->summaries() as $summary) {
+            $passkeys[] = [
+                'id' => $summary['id'],
+                'created' => $summary['created'] === null
+                    ? ''
+                    : $date->format(date('Y-m-d H:i:s', $summary['created'])),
+            ];
+        }
+
+        return $passkeys;
+    }
+
+    /**
      * Displays the User Control Panel.
      *
      * @throws Exception
@@ -290,6 +314,7 @@ final class UserController extends AbstractFrontController
             'webauthnSupportEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
             'csrfTokenWebAuthn' => Token::getInstance($this->session)->getTokenString('webauthn'),
             'passkeyStepUp' => $this->passkeyStepUp(),
+            'passkeys' => $this->registeredPasskeys(),
             'loginName' => $this->currentUser->getLogin(),
             'csrfExportUserData' => Token::getInstance($this->session)->getTokenInput('export-userdata'),
             'exportUserDataUrl' => 'api/user/data/export',

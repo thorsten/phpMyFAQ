@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Auth;
+use phpMyFAQ\Auth\WebAuthn\StoredPasskeys;
 use phpMyFAQ\Category;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AdminLogType;
@@ -203,6 +204,8 @@ final class UserController extends AbstractAdministrationApiController
             $userData['authSource'] = $this->currentUserService->getUserAuthSource();
             $userData['isVisible'] = $userData['is_visible'];
             $userData['twoFactorEnabled'] = $userData['twofactor_enabled'];
+            $userData['hasPasskeys'] =
+                StoredPasskeys::fromJson($this->currentUserService->getWebAuthnKeys())->count() > 0;
             $userData['lastModified'] = $userData['last_modified'];
         }
 
@@ -551,6 +554,7 @@ final class UserController extends AbstractAdministrationApiController
         );
         $isSuperAdmin = Filter::filterVar($data->is_superadmin ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $deleteTwoFactor = (bool) Filter::filterVar($data->overwrite_twofactor ?? false, FILTER_VALIDATE_BOOLEAN);
+        $revokePasskeys = (bool) Filter::filterVar($data->revoke_passkeys ?? false, FILTER_VALIDATE_BOOLEAN);
 
         $actingIsSuperAdmin = $this->currentUser->isSuperAdmin();
 
@@ -586,6 +590,12 @@ final class UserController extends AbstractAdministrationApiController
         if ($deleteTwoFactor) {
             $user->setUserData(['secret' => '', 'twofactor_enabled' => 0]);
             $this->adminLog->log($this->currentUser, AdminLogType::AUTH_2FA_RESET->value . ':' . $userId);
+        }
+
+        // Removes every passkey of the account, e.g. one planted during a session compromise.
+        if ($revokePasskeys) {
+            $user->revokePasskeys();
+            $this->adminLog->log($this->currentUser, AdminLogType::AUTH_WEBAUTHN_REMOVED->value . ':' . $userId);
         }
 
         // set a new password and sent email if a user is switched to active

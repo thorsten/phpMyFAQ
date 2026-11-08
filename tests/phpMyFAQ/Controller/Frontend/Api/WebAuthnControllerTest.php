@@ -692,6 +692,8 @@ class WebAuthnControllerTest extends TestCase
         $user->expects($this->once())->method('getUserByLogin')->with('alice')->willReturn(true);
         $user->method('getUserId')->willReturn(1);
         $user->expects($this->once())->method('setWebAuthnKeys')->with('[new-key]')->willReturn(true);
+        // The owner is told about the new passkey, so one planted by a hijacked session is noticed.
+        $user->expects($this->once())->method('mailUser')->willReturn(1);
 
         $controller = new WebAuthnController($authWebAuthn, $user);
         $session = $this->createSession();
@@ -724,6 +726,8 @@ class WebAuthnControllerTest extends TestCase
         $user->method('getUserAuthSource')->willReturn('webauthn');
         $user->method('getWebAuthnKeys')->willReturn('');
         $user->expects($this->once())->method('setWebAuthnKeys')->with('[new-key]')->willReturn(true);
+        // The sign-up notifies the administrator; the new account has no owner to tell yet.
+        $user->expects($this->never())->method('mailUser');
 
         $controller = new WebAuthnController($authWebAuthn, $user);
         $session = $this->createSession();

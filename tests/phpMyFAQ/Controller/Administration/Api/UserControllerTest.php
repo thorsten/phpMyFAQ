@@ -518,6 +518,7 @@ final class UserControllerTest extends TestCase
         $userService->method('getLogin')->willReturn('admin');
         $userService->method('isSuperAdmin')->willReturn(true);
         $userService->method('getUserAuthSource')->willReturn('local');
+        $userService->method('getWebAuthnKeys')->willReturn('[{"key":"K","id":[1]}]');
 
         $controller = new UserController($userService);
         $controller->setContainer($this->createAuthenticatedContainer());
@@ -530,6 +531,51 @@ final class UserControllerTest extends TestCase
         self::assertSame('admin', $payload['login']);
         self::assertSame('Admin User', $payload['displayName']);
         self::assertTrue($payload['isSuperadmin']);
+        // Only the fact that passkeys exist is exposed, never the keys themselves.
+        self::assertTrue($payload['hasPasskeys']);
+        self::assertArrayNotHasKey('webauthnkeys', $payload);
+    }
+
+    /**
+     * An administrator can strip every passkey from an account, e.g. one planted while the
+     * account was compromised.
+     *
+     * @throws \Exception
+     */
+    public function testEditUserRevokesThePasskeysWhenAsked(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser(login: 'passkey-user', lastModified: '20260228093848');
+        self::assertNotFalse($this->dbHandle->query(sprintf(
+            "UPDATE faquser SET webauthnkeys = '[{\"id\":[9],\"key\":\"planted\"}]' WHERE user_id = %d",
+            $managedUserId,
+        )));
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-data');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'userId' => $managedUserId,
+            'display_name' => 'Passkey User',
+            'email' => 'passkey-user@example.com',
+            'last_modified' => '20260228093848',
+            'user_status' => 'active',
+            'is_superadmin' => false,
+            'overwrite_twofactor' => 'off',
+            'revoke_passkeys' => 'on',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->editUser($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $result = $this->dbHandle->query(sprintf('SELECT webauthnkeys FROM faquser WHERE user_id = %d', $managedUserId));
+        self::assertSame('', (string) $this->dbHandle->fetchArray($result)['webauthnkeys']);
     }
 
     /**

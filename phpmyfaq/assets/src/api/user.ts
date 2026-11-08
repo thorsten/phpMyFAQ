@@ -92,6 +92,25 @@ export const requestUserRemoval = async (data: FormData): Promise<ApiResponse> =
   return await response.json();
 };
 
+export const revokePasskey = async (csrfToken: string, id: string): Promise<ApiResponse> => {
+  const response: Response = await fetch('api/webauthn/revoke', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      'pmf-csrf-token': csrfToken,
+      id: id,
+    }),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+
+  // Error responses carry the reason (unknown passkey, last passkey of a passwordless account).
+  return await response.json();
+};
+
 export const removeTwofactorConfig = async (csrfToken: string, code: string): Promise<ApiResponse> => {
   const response: Response = await fetch('api/user/remove-twofactor', {
     method: 'POST',

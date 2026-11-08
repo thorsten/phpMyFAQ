@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Auth\AuthWebAuthn;
+use phpMyFAQ\Auth\WebAuthn\StoredPasskeys;
 use phpMyFAQ\Auth\WebAuthn\WebAuthnUser;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
@@ -360,6 +361,12 @@ final class WebAuthnController extends AbstractController
         $this->authWebAuthn->storeUserInSession($webAuthnUser);
 
         if ($this->user->setWebAuthnKeys($webAuthnUser->getWebAuthnKeys())) {
+            // The sign-up has just told the administrator; an existing account tells its owner,
+            // so a passkey added by someone else holding the session does not go unnoticed.
+            if ($isOwner) {
+                $this->notifyOwnerAboutNewPasskey();
+            }
+
             return $this->json([
                 'success' => 'ok',
                 'message' => Translation::get(key: 'msgPasskeyRegistrationSuccess'),
@@ -367,6 +374,82 @@ final class WebAuthnController extends AbstractController
         }
 
         return $this->json(['error' => 'Cannot set WebAuthn keys'], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * A failing mail must not undo the registration that already happened.
+     */
+    private function notifyOwnerAboutNewPasskey(): void
+    {
+        try {
+            $subject = Translation::get(key: 'msgPasskeyAddedMailSubject');
+            $body = Translation::get(key: 'msgPasskeyAddedMailBody');
+            $this->user->mailUser(
+                Utils::resolveMarkers(is_string($subject) ? $subject : '', $this->configuration),
+                sprintf(is_string($body) ? $body : '%s', $this->configuration->getDefaultUrl() . 'user/ucp'),
+            );
+        } catch (\Throwable $throwable) {
+            $this->configuration
+                ->getLogger()
+                ->warning(message: 'Could not notify the user about a new passkey: ' . $throwable->getMessage());
+        }
+    }
+
+    /**
+     * Removes one of the logged-in user's passkeys. The last passkey of a passwordless account
+     * stays, since removing it would lock the account out.
+     *
+     * @throws \JsonException
+     */
+    #[Route(path: 'webauthn/revoke', name: 'api.private.webauthn.revoke', methods: ['POST'])]
+    public function revoke(Request $request): JsonResponse
+    {
+        if (!$this->configuration->get('security.enableWebAuthnSupport')) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
+        $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR) ?? new \stdClass();
+
+        $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->session)->verifyToken('webauthn', $csrfToken)) {
+            return $this->json(['error' => Translation::get(key: 'msgSessionExpired')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if (!$this->currentUser->isLoggedIn()) {
+            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $credentialId = Filter::filterVar($data->id ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        if ($credentialId === '') {
+            return $this->json(['error' => Translation::get(key: 'msgPasskeyUnknown')], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!$this->user->getUserById($this->currentUser->getUserId())) {
+            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $passkeys = StoredPasskeys::fromJson($this->user->getWebAuthnKeys());
+        if (!$passkeys->has($credentialId)) {
+            return $this->json(['error' => Translation::get(key: 'msgPasskeyUnknown')], Response::HTTP_NOT_FOUND);
+        }
+
+        $isPasswordless = $this->user->getUserAuthSource() === AuthenticationSourceType::AUTH_WEB_AUTHN->value;
+        if ($isPasswordless && $passkeys->count() === 1) {
+            return $this->json([
+                'error' => Translation::get(key: 'msgPasskeyCannotRevokeLast'),
+            ], Response::HTTP_CONFLICT);
+        }
+
+        if (!$this->user->setWebAuthnKeys($passkeys->without($credentialId)->toJson())) {
+            return $this->json(['error' => 'Cannot set WebAuthn keys'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->logSecurityEvent(AdminLogType::AUTH_WEBAUTHN_REMOVED, 'passkey removed by its owner');
+
+        return $this->json([
+            'success' => Translation::get(key: 'msgPasskeyRevoked'),
+            'remaining' => $passkeys->count() - 1,
+        ], Response::HTTP_OK);
     }
 
     /**

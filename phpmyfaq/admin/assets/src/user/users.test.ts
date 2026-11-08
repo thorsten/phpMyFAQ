@@ -68,6 +68,7 @@ const setupFullDom = (userId = ''): void => {
       <input id="email" type="email" />
       <input id="is_superadmin" type="checkbox" />
       <input id="overwrite_twofactor" type="checkbox" disabled />
+      <input id="revoke_passkeys" type="checkbox" disabled />
       <button id="pmf-user-save" type="button"></button>
       <input id="pmf-user-permission-filter" type="search" />
       <button id="pmf-user-check-all" type="button"></button>
@@ -327,6 +328,28 @@ describe('handleUsers', () => {
     expect((document.getElementById('overwrite_twofactor') as HTMLInputElement).disabled).toBe(true);
   });
 
+  it('should enable the passkey revoke checkbox only when the user has passkeys', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (fetchUserData as Mock).mockResolvedValue({ ...aliceData, hasPasskeys: true });
+
+    await handleUsers();
+    await selectFirstUser();
+
+    expect((document.getElementById('revoke_passkeys') as HTMLInputElement).disabled).toBe(false);
+  });
+
+  it('should keep the passkey revoke checkbox disabled when the user has none', async () => {
+    setupFullDom();
+    mockDefaultApis();
+    (fetchUserData as Mock).mockResolvedValue({ ...aliceData, hasPasskeys: false });
+
+    await handleUsers();
+    await selectFirstUser();
+
+    expect((document.getElementById('revoke_passkeys') as HTMLInputElement).disabled).toBe(true);
+  });
+
   it('should leave is_superadmin unchecked when isSuperadmin is the "0" string', async () => {
     setupFullDom();
     mockDefaultApis();
@@ -358,6 +381,7 @@ describe('handleUsers', () => {
       user_status: 'active',
       is_superadmin: false,
       overwrite_twofactor: false,
+      revoke_passkeys: false,
     });
     expect(pushNotification).toHaveBeenCalledWith('saved');
   });

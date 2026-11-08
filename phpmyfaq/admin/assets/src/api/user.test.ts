@@ -231,6 +231,7 @@ describe('User API', () => {
         user_status: 'active',
         is_superadmin: false,
         overwrite_twofactor: false,
+        revoke_passkeys: false,
       };
       const result = await updateUserData(payload);
 

@@ -980,6 +980,133 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
+    public function testRevokeRemovesOneOfTheOwnersPasskeys(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())->method('getUserById')->with(42)->willReturn(true);
+        $user->method('getUserAuthSource')->willReturn(AuthenticationSourceType::AUTH_LOCAL->value);
+        $user->method('getWebAuthnKeys')->willReturn('[{"key":"A","id":[1,2,3]},{"key":"B","id":[9,9,9]}]');
+        $user->expects($this->once())->method('setWebAuthnKeys')->with('[{"key":"B","id":[9,9,9]}]')->willReturn(true);
+
+        $controller = new WebAuthnController($this->createStub(AuthWebAuthn::class), $user);
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(42), $session);
+
+        $response = $controller->revoke($this->revokeRequest($csrfToken, 'AQID'));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('msgPasskeyRevoked'), $payload['success']);
+        self::assertSame(1, $payload['remaining']);
+    }
+
+    public function testRevokeRejectsAPasskeyTheAccountDoesNotHold(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserById')->willReturn(true);
+        $user->method('getWebAuthnKeys')->willReturn('[{"key":"A","id":[1,2,3]}]');
+        $user->expects($this->never())->method('setWebAuthnKeys');
+
+        $controller = new WebAuthnController($this->createStub(AuthWebAuthn::class), $user);
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(42), $session);
+
+        $response = $controller->revoke($this->revokeRequest($csrfToken, 'CQkJ'));
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
+    /**
+     * Removing the only passkey of a passwordless account would lock it out.
+     */
+    public function testRevokeKeepsTheLastPasskeyOfAPasswordlessAccount(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserById')->willReturn(true);
+        $user->method('getUserAuthSource')->willReturn(AuthenticationSourceType::AUTH_WEB_AUTHN->value);
+        $user->method('getWebAuthnKeys')->willReturn('[{"key":"A","id":[1,2,3]}]');
+        $user->expects($this->never())->method('setWebAuthnKeys');
+
+        $controller = new WebAuthnController($this->createStub(AuthWebAuthn::class), $user);
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(42), $session);
+
+        $response = $controller->revoke($this->revokeRequest($csrfToken, 'AQID'));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+        self::assertSame(Translation::get('msgPasskeyCannotRevokeLast'), $payload['error']);
+    }
+
+    public function testRevokeRequiresALoggedInUser(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->never())->method('setWebAuthnKeys');
+
+        $anonymous = $this->createStub(CurrentUser::class);
+        $anonymous->method('isLoggedIn')->willReturn(false);
+
+        $controller = new WebAuthnController($this->createStub(AuthWebAuthn::class), $user);
+        $this->injectControllerState($controller, $anonymous, $session);
+
+        $response = $controller->revoke($this->revokeRequest($csrfToken, 'AQID'));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    public function testRevokeRejectsAnInvalidCsrfToken(): void
+    {
+        $this->enableWebAuthn();
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->never())->method('setWebAuthnKeys');
+
+        $controller = new WebAuthnController($this->createStub(AuthWebAuthn::class), $user);
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(42), $this->createSession());
+
+        $response = $controller->revoke($this->revokeRequest('forged', 'AQID'));
+
+        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    public function testRevokeRejectsAnEmptyCredentialId(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $user = $this->createMock(User::class);
+        $user->expects($this->never())->method('setWebAuthnKeys');
+
+        $controller = new WebAuthnController($this->createStub(AuthWebAuthn::class), $user);
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(42), $session);
+
+        $response = $controller->revoke($this->revokeRequest($csrfToken, ''));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    private function revokeRequest(string $csrfToken, string $credentialId): Request
+    {
+        return Request::create('/api/webauthn/revoke', 'POST', content: json_encode([
+            'pmf-csrf-token' => $csrfToken,
+            'id' => $credentialId,
+        ], JSON_THROW_ON_ERROR));
+    }
+
     private function enableWebAuthn(): void
     {
         $this->configuration->getAll();

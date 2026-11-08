@@ -8,6 +8,17 @@ vi.mock('./authenticate', () => ({
   webauthnAuthenticate: vi.fn(),
 }));
 
+vi.mock('../api', () => ({
+  revokePasskey: vi.fn(),
+}));
+
+vi.mock('../utils', () => ({
+  pushNotification: vi.fn(),
+  pushErrorNotification: vi.fn(),
+}));
+
+import { revokePasskey } from '../api';
+import { pushErrorNotification, pushNotification } from '../utils';
 import { webauthnAuthenticate } from './authenticate';
 import { webauthnRegister } from './register';
 import { handleWebAuthn } from './webauthn';
@@ -287,6 +298,72 @@ describe('handleWebAuthn', () => {
     const errorMessage = document.getElementById('pmf-webauthn-error') as HTMLElement;
     expect(errorMessage.textContent).toBe("Couldn't initiate registration.");
     expect(errorMessage.classList.contains('d-none')).toBe(false);
+  });
+
+  describe('revoking a passkey', () => {
+    const passkeyListDom = `
+      <input id="pmf-csrf-token-webauthn" value="csrf-123" />
+      <div id="pmf-webauthn-error"></div>
+      <div id="pmf-webauthn-success" class="d-none"></div>
+      <ul id="pmf-passkey-list" data-pmf-empty-text="No passkeys">
+        <li data-pmf-passkey-id="AQID"><button data-pmf-passkey-revoke="AQID">Remove</button></li>
+        <li data-pmf-passkey-id="CQkJ"><button data-pmf-passkey-revoke="CQkJ">Remove</button></li>
+      </ul>
+    `;
+
+    it('removes the entry and reports success', async () => {
+      document.body.innerHTML = passkeyListDom;
+      vi.mocked(revokePasskey).mockResolvedValue({ success: 'Removed' });
+
+      handleWebAuthn();
+      (document.querySelector('[data-pmf-passkey-revoke="AQID"]') as HTMLButtonElement).click();
+
+      await vi.waitFor(() => {
+        expect(revokePasskey).toHaveBeenCalledWith('csrf-123', 'AQID');
+        expect(pushNotification).toHaveBeenCalledWith('Removed');
+      });
+
+      expect(document.querySelector('[data-pmf-passkey-id="AQID"]')).toBeNull();
+      expect(document.querySelector('[data-pmf-passkey-id="CQkJ"]')).not.toBeNull();
+      expect(document.body.textContent).not.toContain('No passkeys');
+    });
+
+    it('shows the empty text once the last passkey is gone', async () => {
+      document.body.innerHTML = passkeyListDom;
+      vi.mocked(revokePasskey).mockResolvedValue({ success: 'Removed' });
+
+      handleWebAuthn();
+      (document.querySelector('[data-pmf-passkey-revoke="AQID"]') as HTMLButtonElement).click();
+      await vi.waitFor(() => expect(document.querySelector('[data-pmf-passkey-id="AQID"]')).toBeNull());
+      (document.querySelector('[data-pmf-passkey-revoke="CQkJ"]') as HTMLButtonElement).click();
+
+      await vi.waitFor(() => {
+        expect(document.getElementById('pmf-passkey-list')?.textContent).toContain('No passkeys');
+      });
+    });
+
+    it('keeps the entry and shows the server error when the removal is refused', async () => {
+      document.body.innerHTML = passkeyListDom;
+      vi.mocked(revokePasskey).mockResolvedValue({ error: 'Last passkey' });
+
+      handleWebAuthn();
+      (document.querySelector('[data-pmf-passkey-revoke="CQkJ"]') as HTMLButtonElement).click();
+
+      await vi.waitFor(() => {
+        expect(pushErrorNotification).toHaveBeenCalledWith('Last passkey');
+      });
+
+      expect(document.querySelector('[data-pmf-passkey-id="CQkJ"]')).not.toBeNull();
+    });
+
+    it('ignores clicks that are not on a revoke button', async () => {
+      document.body.innerHTML = passkeyListDom;
+
+      handleWebAuthn();
+      (document.querySelector('[data-pmf-passkey-id="AQID"]') as HTMLElement).click();
+
+      expect(revokePasskey).not.toHaveBeenCalled();
+    });
   });
 
   it('shows the callback error when login authentication fails', async () => {

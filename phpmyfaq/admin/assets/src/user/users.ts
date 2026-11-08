@@ -259,6 +259,13 @@ const fillProfile = (userData: UserData): void => {
   twoFactor.checked = false;
   twoFactor.disabled = !isFlagSet(userData.twoFactorEnabled);
 
+  // Likewise, passkeys can only be removed from a user who has registered some.
+  const passkeys = document.getElementById('revoke_passkeys') as HTMLInputElement | null;
+  if (passkeys) {
+    passkeys.checked = false;
+    passkeys.disabled = !isFlagSet(userData.hasPasskeys ?? false);
+  }
+
   // Protected accounts (e.g. the main admin) cannot be deleted.
   const deleteButton = document.getElementById('pmf-delete-user-button') as HTMLButtonElement | null;
   deleteButton?.classList.toggle('d-none', userData.status === 'protected');
@@ -357,6 +364,7 @@ const wireSaveButtons = (): void => {
       user_status: (document.getElementById('user_status') as HTMLSelectElement).value,
       is_superadmin: (document.getElementById('is_superadmin') as HTMLInputElement).checked,
       overwrite_twofactor: (document.getElementById('overwrite_twofactor') as HTMLInputElement).checked,
+      revoke_passkeys: (document.getElementById('revoke_passkeys') as HTMLInputElement | null)?.checked ?? false,
     };
 
     try {

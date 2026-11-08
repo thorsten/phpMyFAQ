@@ -267,6 +267,8 @@ class AuthWebAuthn extends Auth
         $publicKey = new stdClass();
         $publicKey->key = $keyBytes;
         $publicKey->id = $info->rawId;
+        // Lets the owner tell the passkeys apart when listing them.
+        $publicKey->created = time();
 
         if ($userWebAuthn === '' || $userWebAuthn === '0') {
             return (string) json_encode([$publicKey]);

@@ -10,6 +10,7 @@ export interface UserEditPayload {
   user_status: string;
   is_superadmin: boolean;
   overwrite_twofactor: boolean;
+  revoke_passkeys: boolean;
 }
 
 /**

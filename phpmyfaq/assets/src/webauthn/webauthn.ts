@@ -14,7 +14,9 @@
  */
 import { webauthnRegister } from './register';
 import { webauthnAuthenticate } from './authenticate';
+import { revokePasskey } from '../api';
 import { AuthenticatorResponse, Callback } from '../interfaces';
+import { pushErrorNotification, pushNotification } from '../utils';
 
 /**
  * Adding a passkey to an existing account needs proof of ownership beyond the session: the
@@ -127,6 +129,40 @@ export const handleWebAuthn = (): void => {
       } catch (error: unknown) {
         errorMessage.textContent = error instanceof Error ? error.message : String(error);
         errorMessage.classList.remove('d-none');
+      }
+    });
+  }
+
+  // Removing one of the registered passkeys from the UCP list
+  const passkeyList = document.getElementById('pmf-passkey-list');
+  if (passkeyList) {
+    passkeyList.addEventListener('click', async (event: Event) => {
+      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-pmf-passkey-revoke]');
+      if (!button) {
+        return;
+      }
+
+      event.preventDefault();
+      const csrfToken = (document.getElementById('pmf-csrf-token-webauthn') as HTMLInputElement | null)?.value ?? '';
+      const credentialId = button.dataset.pmfPasskeyRevoke ?? '';
+
+      try {
+        const response = await revokePasskey(csrfToken, credentialId);
+        if (response.success) {
+          pushNotification(response.success);
+          button.closest('li')?.remove();
+          if (passkeyList.querySelector('[data-pmf-passkey-id]') === null) {
+            const empty = document.createElement('li');
+            empty.className = 'list-group-item text-muted';
+            empty.textContent = passkeyList.dataset.pmfEmptyText ?? '';
+            passkeyList.appendChild(empty);
+          }
+        }
+        if (response.error) {
+          pushErrorNotification(response.error);
+        }
+      } catch (error: unknown) {
+        pushErrorNotification(error instanceof Error ? error.message : String(error));
       }
     });
   }

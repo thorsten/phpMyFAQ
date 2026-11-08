@@ -324,6 +324,30 @@
 
           <p id="pmf-webauthn-success" class="alert alert-success d-none"></p>
 
+          <h6 class="fw-bold">{{ 'msgPasskeysRegistered' | translate }}</h6>
+          <ul class="list-group mb-4" id="pmf-passkey-list" data-pmf-empty-text="{{ 'msgNoPasskeysRegistered' | translate }}">
+            {% for passkey in passkeys %}
+            <li class="list-group-item d-flex justify-content-between align-items-center" data-pmf-passkey-id="{{ passkey.id }}">
+              <span>
+                <i aria-hidden="true" class="bi bi-key"></i>
+                <code>…{{ passkey.id|slice(-8) }}</code>
+                <small class="text-muted">
+                  {% if passkey.created %}
+                    {{ 'msgPasskeyRegisteredOn' | translate }} {{ passkey.created }}
+                  {% else %}
+                    {{ 'msgPasskeyRegisteredUnknownDate' | translate }}
+                  {% endif %}
+                </small>
+              </span>
+              <button type="button" class="btn btn-sm btn-outline-danger" data-pmf-passkey-revoke="{{ passkey.id }}">
+                <i aria-hidden="true" class="bi bi-trash"></i> {{ 'msgPasskeyRevoke' | translate }}
+              </button>
+            </li>
+            {% else %}
+            <li class="list-group-item text-muted">{{ 'msgNoPasskeysRegistered' | translate }}</li>
+            {% endfor %}
+          </ul>
+
           <form action="{{ loginUrl }}" method="post" accept-charset="utf-8" role="form" id="pmf-webauthn-form"
                 data-pmf-step-up="{{ passkeyStepUp }}">
             <input type="hidden" name="lang" id="lang" value="{{ lang }}">

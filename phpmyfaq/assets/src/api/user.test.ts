@@ -5,6 +5,7 @@ import {
   resetUserPassword,
   requestUserRemoval,
   removeTwofactorConfig,
+  revokePasskey,
 } from './user';
 import { serialize } from '../utils';
 
@@ -191,5 +192,39 @@ describe('removeTwofactorConfig', () => {
     });
 
     await expect(removeTwofactorConfig('bad-token', '123456')).rejects.toThrow('HTTP 400');
+  });
+});
+
+describe('revokePasskey', () => {
+  test('posts the credential id with the webauthn CSRF token', async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ success: 'Removed', remaining: 1 }),
+    });
+
+    const result = await revokePasskey('csrf-token-123', 'AQID');
+
+    expect(result).toEqual({ success: 'Removed', remaining: 1 });
+    expect(fetch).toHaveBeenCalledWith('api/webauthn/revoke', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'pmf-csrf-token': 'csrf-token-123', id: 'AQID' }),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+  });
+
+  test('returns the server error instead of throwing on a refused removal', async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 409,
+      json: () => Promise.resolve({ error: 'Last passkey' }),
+    });
+
+    await expect(revokePasskey('csrf-token-123', 'AQID')).resolves.toEqual({ error: 'Last passkey' });
   });
 });

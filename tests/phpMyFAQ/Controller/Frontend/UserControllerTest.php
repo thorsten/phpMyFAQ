@@ -169,6 +169,32 @@ final class UserControllerTest extends TestCase
         self::assertStringContainsString('data-pmf-step-up="password"', $content);
         self::assertStringContainsString('id="pmf-webauthn-current-password"', $content);
         self::assertStringContainsString(Translation::get('msgPasskeyConfirmWithPassword'), $content);
+        self::assertStringContainsString(Translation::get('msgNoPasskeysRegistered'), $content);
+    }
+
+    public function testUcpListsTheRegisteredPasskeysWithARevokeButton(): void
+    {
+        $this->overrideConfigurationValues([
+            'main.enableUserTracking' => false,
+            'main.enableGravatarSupport' => false,
+        ]);
+        self::assertTrue($this->configuration->set('security.enableWebAuthnSupport', 'true'));
+        $this->dbHandle->query(
+            'UPDATE faquser SET webauthnkeys = \'[{"key":"K","id":[1,2,3],"created":1700000000}]\' WHERE user_id = 1',
+        );
+
+        $controller = $this->createController();
+        $this->setCurrentUser($controller, $this->createLoggedInCurrentUser());
+
+        $content = (string) $controller->ucp(Request::create('/user/ucp', 'GET'))->getContent();
+
+        self::assertStringContainsString('data-pmf-passkey-id="AQID"', $content);
+        self::assertStringContainsString('data-pmf-passkey-revoke="AQID"', $content);
+        self::assertStringContainsString(Translation::get('msgPasskeyRegisteredOn'), $content);
+        // The empty-list placeholder is only kept as a data attribute for the script.
+        self::assertStringNotContainsString('<li class="list-group-item text-muted">', $content);
+        // The key material itself never reaches the page.
+        self::assertStringNotContainsString('"key":"K"', $content);
     }
 
     public function testUcpExposesTheSecretOnlyDuringEnrolment(): void

@@ -7,5 +7,6 @@ export interface UserData {
   lastModified: string;
   authSource: string;
   twoFactorEnabled: string | number | boolean;
+  hasPasskeys?: boolean;
   isSuperadmin: string | number | boolean;
 }

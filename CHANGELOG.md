@@ -67,6 +67,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - fixed missing language check on the category write endpoints: an editor whose category right was restricted to one language could add, edit or delete a category translation in another language (Thorsten, thanks to 대전대학교 한혁(Akarang))
 - fixed incomplete fix for GHSA-6648-6g96-mg35: the user removal request compared the submitted user id, login and email with the account it had just loaded instead of with the logged-in user, so a logged-in user could still send the admin a removal request in another user's name (Thorsten)
 - fixed adding a passkey to an existing account with nothing but a valid session and CSRF token: the owner now confirms with the current password (passkey accounts with an existing passkey), the new passkey is added to the stored ones instead of replacing them, and an anonymous password reset or an administrator overwriting a password removes the account's passkeys (Thorsten)
+- added a list of the registered passkeys with a remove button to the user control panel, an e-mail to the account owner when a passkey is added, and a checkbox for administrators to remove all passkeys of a user (Thorsten)
 - fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.12 - unreleased
