@@ -20,18 +20,26 @@ declare(strict_types=1);
 namespace phpMyFAQ\Captcha;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Json;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GoogleRecaptcha implements CaptchaInterface
 {
-    private bool $userIsLoggedIn;
+    private const string VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
+
+    private bool $userIsLoggedIn = false;
+
+    private readonly HttpClientInterface $httpClient;
 
     /**
      * Constructor.
      */
     public function __construct(
         private readonly Configuration $configuration,
+        ?HttpClientInterface $httpClient = null,
     ) {
+        $this->httpClient = $httpClient ?? HttpClient::create();
     }
 
     public function checkCaptchaCode(string $code): bool
@@ -40,42 +48,20 @@ class GoogleRecaptcha implements CaptchaInterface
             return true;
         }
 
-        $url =
-            'https://www.google.com/recaptcha/api/siteverify?'
-            . http_build_query([
-                'secret' => (string) $this->configuration->get(item: 'security.googleReCaptchaV2SecretKey'),
-                'response' => $code,
-            ], encoding_type: PHP_QUERY_RFC3986);
+        try {
+            $response = $this->httpClient->request('POST', self::VERIFY_URL, [
+                'body' => [
+                    'secret' => (string) $this->configuration->get(item: 'security.googleReCaptchaV2SecretKey'),
+                    'response' => $code,
+                ],
+            ]);
 
-        $response = $this->fetchUrl($url);
-
-        if (!is_string($response) || $response === '') {
+            $data = $response->toArray();
+        } catch (ExceptionInterface) {
             return false;
         }
 
-        try {
-            $decoded = Json::decodeAssoc($response, JSON_THROW_ON_ERROR);
-        } catch (\JsonException) {
-            return false;
-        }
-
-        return $decoded !== null && ($decoded['success'] ?? false) === true;
-    }
-
-    /**
-     * Fetch the contents of a URL.
-     */
-    protected function fetchUrl(string $url): string|false
-    {
-        $response = false;
-        set_error_handler(static fn() => true);
-        try {
-            $response = file_get_contents($url);
-        } finally {
-            restore_error_handler();
-        }
-
-        return $response;
+        return ($data['success'] ?? false) === true;
     }
 
     public function isUserIsLoggedIn(): bool

@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\AdminMenuBuilder;
 use phpMyFAQ\Attachment\AttachmentFactory;
+use phpMyFAQ\Configuration\CustomCss;
 use phpMyFAQ\Configuration\UrlSettings;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Core\Json;
@@ -261,6 +262,13 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
             // Escape some values
             if (in_array($key, $escapeValues, strict: true)) {
                 $newConfigValues[$key] = Strings::htmlspecialchars($stringValue, ENT_QUOTES);
+            }
+
+            // Custom CSS is rendered verbatim into a <style> block via Twig's |raw filter, so a
+            // payload must not reach the database in the first place. CustomCss is also applied on
+            // read, which covers values stored before this check existed.
+            if ($key === 'layout.customCss') {
+                $newConfigValues[$key] = (string) new CustomCss($stringValue);
             }
         }
 

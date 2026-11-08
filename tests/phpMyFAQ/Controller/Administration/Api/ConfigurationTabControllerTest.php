@@ -842,6 +842,58 @@ final class ConfigurationTabControllerTest extends TestCase
         $this->removeCsrfCookie('configuration');
     }
 
+    public function testSaveStripsStyleTerminatorsFromCustomCss(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'availableFields' => json_encode(['layout.customCss'], JSON_THROW_ON_ERROR),
+            'edit' => ['layout.customCss' => '</style><script>alert(document.domain)</script><style>'],
+        ]);
+
+        $response = $controller->save($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // The payload must not reach the database: the value is rendered into a <style> block
+        // with Twig's |raw filter, so a stored "</style" would break out of the element.
+        self::assertDoesNotMatchRegularExpression(
+            '#</style(?=[\s/>])|</style$#i',
+            (string) $this->configuration->get('layout.customCss'),
+        );
+        $this->removeCsrfCookie('configuration');
+    }
+
+    public function testSaveKeepsValidCustomCssVerbatim(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('configuration');
+        $this->setCsrfCookie('configuration', $csrfToken);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        // Angle brackets are legal CSS: the child combinator and the media query range syntax.
+        $css = '@media (width <= 600px) { nav > ul { display: none; } }';
+
+        $request = new Request([], [
+            'pmf-csrf-token' => $csrfToken,
+            'availableFields' => json_encode(['layout.customCss'], JSON_THROW_ON_ERROR),
+            'edit' => ['layout.customCss' => $css],
+        ]);
+
+        $response = $controller->save($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame($css, (string) $this->configuration->get('layout.customCss'));
+        $this->removeCsrfCookie('configuration');
+    }
+
     /**
      * @throws \Exception
      */
