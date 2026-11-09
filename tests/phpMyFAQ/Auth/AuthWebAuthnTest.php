@@ -358,32 +358,129 @@ class AuthWebAuthnTest extends TestCase
     }
 
     /**
-     * Builds a minimal assertion that reaches the challenge check in authenticate().
+     * Builds a minimal assertion that reaches the challenge check in authenticate(). The challenge
+     * is placed in the signed clientDataJSON bytes; the unsigned clientData copy mirrors it unless
+     * overridden.
      */
-    private function createLoginInfo(string $clientChallenge): \stdClass
+    private function createLoginInfo(string $clientChallenge, ?string $unsignedChallenge = null): \stdClass
     {
+        $clientDataJson = json_encode([
+            'type' => 'webauthn.get',
+            'challenge' => $clientChallenge,
+            'origin' => 'https://attacker.example.net',
+        ]);
+
         $info = new \stdClass();
         $info->rawId = [1, 2, 3];
         $info->response = new \stdClass();
+        $info->response->clientDataJSONarray = array_map('ord', str_split($clientDataJson));
         $info->response->clientData = new \stdClass();
-        $info->response->clientData->challenge = $clientChallenge;
+        $info->response->clientData->challenge = $unsignedChallenge ?? $clientChallenge;
         $info->response->clientData->origin = 'https://attacker.example.net';
         $info->response->clientData->type = 'webauthn.get';
 
         return $info;
     }
 
-    private function createStoredKeys(?string $challenge): string
+    private function createStoredKeys(?string $challenge, string $publicKey = 'test-public-key'): string
     {
         $key = new \stdClass();
         $key->id = [1, 2, 3];
-        $key->key = 'test-public-key';
+        $key->key = $publicKey;
 
         if ($challenge !== null) {
             $key->challenge = $challenge;
         }
 
         return json_encode([$key]);
+    }
+
+    /**
+     * Builds a complete, correctly signed assertion for the configured RP ID, as a browser would
+     * hand it to the server after navigator.credentials.get().
+     *
+     * @return array{0: \stdClass, 1: \OpenSSLAsymmetricKey}
+     */
+    private function createSignedLoginInfo(string $challenge, ?\OpenSSLAsymmetricKey $privateKey = null): array
+    {
+        $privateKey ??= openssl_pkey_new(['curve_name' => 'prime256v1', 'private_key_type' => OPENSSL_KEYTYPE_EC]);
+
+        $clientDataJson = json_encode([
+            'type' => 'webauthn.get',
+            'challenge' => $challenge,
+            'origin' => 'https://example.com',
+        ]);
+
+        $authenticatorData = hash('sha256', 'example.com', true) . chr(0x01) . "\x00\x00\x00\x01";
+        $signedData = $authenticatorData . hash('sha256', $clientDataJson, true);
+        openssl_sign($signedData, $signature, $privateKey, OPENSSL_ALGO_SHA256);
+
+        $info = new \stdClass();
+        $info->rawId = [1, 2, 3];
+        $info->response = new \stdClass();
+        $info->response->authenticatorData = array_map('ord', str_split($authenticatorData));
+        $info->response->clientDataJSONarray = array_map('ord', str_split($clientDataJson));
+        $info->response->signature = array_map('ord', str_split($signature));
+        $info->response->clientData = json_decode($clientDataJson);
+
+        return [$info, $privateKey];
+    }
+
+    public function testAuthenticateAcceptsCorrectlySignedAssertion(): void
+    {
+        [$info, $privateKey] = $this->createSignedLoginInfo('server-issued-challenge');
+        $publicKeyPem = openssl_pkey_get_details($privateKey)['key'];
+        $userWebAuthn = $this->createStoredKeys('server-issued-challenge', $publicKeyPem);
+
+        $this->assertTrue($this->authWebAuthn->authenticate($info, $userWebAuthn));
+    }
+
+    public function testAuthenticateRejectsReplayedAssertionWithRewrittenUnsignedChallenge(): void
+    {
+        // Replay: the signed bytes carry the challenge of an older ceremony. Only the separate,
+        // unsigned clientData copy is rewritten to the freshly issued challenge. The server must
+        // check the challenge inside the bytes the signature covers, not the loose copy.
+        [$info, $privateKey] = $this->createSignedLoginInfo('challenge-from-an-older-assertion');
+        $publicKeyPem = openssl_pkey_get_details($privateKey)['key'];
+        $userWebAuthn = $this->createStoredKeys('server-issued-challenge', $publicKeyPem);
+        $info->response->clientData->challenge = 'server-issued-challenge';
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('You cannot use the same login more than once');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testAuthenticateRejectsUnsignedOriginAndTypeOverrides(): void
+    {
+        // Origin and type must also come from the signed clientDataJSON, not the loose copy.
+        [$info, $privateKey] = $this->createSignedLoginInfo('server-issued-challenge');
+        $publicKeyPem = openssl_pkey_get_details($privateKey)['key'];
+        $userWebAuthn = $this->createStoredKeys('server-issued-challenge', $publicKeyPem);
+
+        $clientDataJson = json_encode([
+            'type' => 'webauthn.get',
+            'challenge' => 'server-issued-challenge',
+            'origin' => 'https://attacker.example.net',
+        ]);
+        $info->response->clientDataJSONarray = array_map('ord', str_split($clientDataJson));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Origin mismatch');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    public function testAuthenticateRejectsMissingSignedClientData(): void
+    {
+        $userWebAuthn = $this->createStoredKeys('server-issued-challenge');
+        $info = $this->createLoginInfo('server-issued-challenge');
+        unset($info->response->clientDataJSONarray);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot decode client data');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
     }
 
     public function testPrepareForLoginStampsChallengeOnStoredKeys(): void

@@ -346,13 +346,23 @@ class AuthWebAuthn extends Auth
             throw new Exception('No key with ID ' . implode(',', $info->rawId));
         }
 
+        // Challenge, origin and type are read from the raw clientDataJSON bytes, because those are
+        // the bytes the signature covers. The request also carries a pre-parsed clientData object,
+        // but nothing binds it to the signature: an attacker can replay an old signed assertion and
+        // rewrite only that loose copy to the freshly issued challenge. It is therefore ignored.
+        $clientDataBytes = $this->arrayToString((array) ($info->response->clientDataJSONarray ?? []));
+        $clientData = $clientDataBytes === '' ? null : json_decode($clientDataBytes);
+        if (!$clientData instanceof stdClass) {
+            throw new Exception('Cannot decode client data');
+        }
+
         // The challenge stored by prepareForLogin() is the only server-side state that proves this
         // assertion is fresh, so it is compared here. This fails closed: a missing or already
         // cleared challenge means freshness cannot be established, and the assertion is rejected.
         // Comparing $info->originalChallenge against the client data would be meaningless, as both
         // values arrive in the same request and an attacker controls them.
         $storedChallenge = (string) ($key->challenge ?? '');
-        $clientChallenge = (string) ($info->response->clientData->challenge ?? '');
+        $clientChallenge = (string) ($clientData->challenge ?? '');
 
         if ($storedChallenge === '' || !hash_equals($storedChallenge, $clientChallenge)) {
             throw new Exception('You cannot use the same login more than once');
@@ -366,13 +376,15 @@ class AuthWebAuthn extends Auth
 
         $userWebAuthn = json_encode($webauthn);
 
-        $origin = parse_url((string) $info->response->clientData->origin);
-        if ($this->appId !== $origin['host']) {
-            throw new Exception(sprintf("Origin mismatch for '%s'", $info->response->clientData->origin));
+        $clientOrigin = (string) ($clientData->origin ?? '');
+        $origin = parse_url($clientOrigin);
+        if (!is_array($origin) || $this->appId !== ($origin['host'] ?? null)) {
+            throw new Exception(sprintf("Origin mismatch for '%s'", $clientOrigin));
         }
 
-        if ($info->response->clientData->type !== 'webauthn.get') {
-            throw new Exception(sprintf("Type mismatch for '%s'", $info->response->clientData->type));
+        $clientType = (string) ($clientData->type ?? '');
+        if ($clientType !== 'webauthn.get') {
+            throw new Exception(sprintf("Type mismatch for '%s'", $clientType));
         }
 
         $authDataString = $this->arrayToString($info->response->authenticatorData);
@@ -391,9 +403,11 @@ class AuthWebAuthn extends Auth
             throw new Exception('Cannot decode key response (2c)');
         }
 
-        $clientData = $this->arrayToString($info->response->clientDataJSONarray);
         $signedData =
-            $hashId . chr($authenticatorData->flags) . $authenticatorData->counter . hash('sha256', $clientData, true);
+            $hashId
+            . chr($authenticatorData->flags)
+            . $authenticatorData->counter
+            . hash('sha256', $clientDataBytes, true);
 
         if (count($info->response->signature) < 70) {
             throw new Exception('Cannot decode key response (3)');
