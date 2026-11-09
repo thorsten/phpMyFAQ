@@ -573,6 +573,15 @@ final class UserController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
+        // Editing an account changes its recovery email and may wipe its TOTP secret, which hands
+        // the password-reset flow of that account to the editor. The "only rights you hold" rule
+        // therefore applies here as well: a non-SuperAdmin may not edit an account holding rights
+        // they do not hold themselves, otherwise USER_EDIT alone would allow taking over any more
+        // privileged non-SuperAdmin account.
+        if (!$this->actingUserHoldsAllRightsOf($user)) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        }
+
         $stats = $user->getStatus();
 
         // reset two-factor authentication if required

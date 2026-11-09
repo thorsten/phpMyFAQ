@@ -768,6 +768,48 @@ class UserControllerTest extends TestCase
     }
 
     /**
+     * Editing an account changes its recovery email and can wipe its TOTP secret, which hands the
+     * password-reset flow of that account to the editor. A non-SuperAdmin must therefore not be
+     * able to edit an account holding rights they do not hold themselves.
+     */
+    public function testEditUserNonSuperAdminCannotEditMorePrivilegedAccount(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildNonSuperAdminHoldingNoRightIds(userId: 5);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-data');
+
+        $executed = [];
+        $parent = (new ReflectionClass(UserController::class))->getParentClass();
+        $parent->getProperty('configuration')->setValue($controller, $this->buildConfigurationWithTargetHoldingRight(
+            7,
+            $executed,
+        ));
+
+        $request = $this->jsonRequest([
+            'userId' => 7,
+            'csrfToken' => $csrf,
+            'display_name' => 'Privileged Admin',
+            'email' => 'attacker@example.org', // redirect the password-reset mail
+            'last_modified' => '20261109000000',
+            'user_status' => 'active',
+            'is_superadmin' => false,
+            'overwrite_twofactor' => 'on', // and drop the TOTP secret
+        ]);
+
+        $response = $controller->editUser($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        foreach ($executed as $query) {
+            $this->assertStringNotContainsString(
+                'UPDATE',
+                $query,
+                'Nothing may be changed when the request is refused.',
+            );
+        }
+    }
+
+    /**
      * A logged-out caller must trigger UnauthorizedHttpException (translated to a
      * login redirect / 401 by Application::run()), not a bare 403, because the
      * user permission gate now authenticates first.
