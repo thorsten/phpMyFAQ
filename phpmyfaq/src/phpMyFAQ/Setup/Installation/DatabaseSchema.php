@@ -705,6 +705,8 @@ class DatabaseSchema
             ->varchar('member_since', 14)
             ->varchar('remember_me', 150)
             ->integer('remember_me_expires')
+            ->varchar('password_reset_token', 64)
+            ->integer('password_reset_expires')
             ->smallInteger('success', true, 1)
             ->smallInteger('is_superadmin', true, 0)
             ->smallInteger('login_attempts', true, 0)

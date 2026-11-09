@@ -991,8 +991,9 @@ class User
     /**
      * Returns the encrypted password (hash) stored for the local "db" auth source.
      *
-     * Used as the per-user signing key for password-reset tokens: the token is
-     * implicitly invalidated as soon as the password changes. Returns an empty
+     * The password-reset flow uses it to tell a local account apart from an
+     * externally provisioned one; it must never be used as a signing key, because
+     * whoever reads the hash could then forge a reset link. Returns an empty
      * string when the loaded account's auth_source is an external identity
      * (LDAP, Keycloak, OIDC, Entra ID, SSO, HTTP, WebAuthn): phpMyFAQ does not
      * own that password, and the random local hash written at provisioning time
@@ -1065,18 +1066,61 @@ class User
     }
 
     /**
-     * Revokes the remember-me token and the stored session of the user, so that every
-     * device that was logged in before has to authenticate again.
+     * Revokes the remember-me token, the stored session and any outstanding password-reset
+     * token of the user, so that every device that was logged in before has to authenticate
+     * again and a reset link issued before the change cannot be replayed.
      */
     public function revokePersistentLogins(): bool
     {
         $update = sprintf(
-            'UPDATE %sfaquser SET remember_me = NULL, remember_me_expires = NULL, session_id = NULL WHERE user_id = %d',
+            'UPDATE %sfaquser SET remember_me = NULL, remember_me_expires = NULL, session_id = NULL, '
+            . 'password_reset_token = NULL, password_reset_expires = NULL WHERE user_id = %d',
             Database::getTablePrefix(),
             $this->userId,
         );
 
         return (bool) $this->configuration->getDb()->query($update);
+    }
+
+    /**
+     * Stores the SHA-256 hash of a password-reset token and its expiry. Only the hash is
+     * persisted: a copy of the database must not yield a usable reset link.
+     */
+    public function storePasswordResetToken(string $tokenHash, int $expires): bool
+    {
+        $update = sprintf(
+            "UPDATE %sfaquser SET password_reset_token = '%s', password_reset_expires = %d WHERE user_id = %d",
+            Database::getTablePrefix(),
+            $this->configuration->getDb()->escape($tokenHash),
+            $expires,
+            $this->userId,
+        );
+
+        return (bool) $this->configuration->getDb()->query($update);
+    }
+
+    /**
+     * The hash and expiry of the outstanding password-reset token; an empty hash and 0
+     * when none is outstanding.
+     *
+     * @return array{hash: string, expires: int}
+     */
+    public function getPasswordResetToken(): array
+    {
+        $select = sprintf(
+            'SELECT password_reset_token, password_reset_expires FROM %sfaquser WHERE user_id = %d',
+            Database::getTablePrefix(),
+            $this->userId,
+        );
+
+        $db = $this->configuration->getDb();
+        $row = $db->fetchArray($db->query($select));
+        $row = is_array($row) ? $row : [];
+
+        return [
+            'hash' => (string) ($row['password_reset_token'] ?? ''),
+            'expires' => (int) ($row['password_reset_expires'] ?? 0),
+        ];
     }
 
     /**

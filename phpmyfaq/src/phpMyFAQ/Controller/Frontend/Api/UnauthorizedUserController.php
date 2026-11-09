@@ -40,6 +40,7 @@ use phpMyFAQ\Mail;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\PasswordResetTokenService;
+use phpMyFAQ\User\UserException;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -127,13 +128,21 @@ final class UnauthorizedUserController
             return $this->genericIssuanceResponse();
         }
 
-        $passwordKey = $user->getEncryptedPassword();
-        if ($passwordKey === '') {
+        // Externally provisioned accounts carry no local password that could be reset
+        if ($user->getEncryptedPassword() === '') {
             return $this->genericIssuanceResponse();
         }
 
         $userId = $user->getUserId();
-        $token = $this->tokenService->issue($userId, $passwordKey, self::RESET_TOKEN_LIFETIME_SECONDS);
+
+        try {
+            $token = $this->tokenService->issue($user, self::RESET_TOKEN_LIFETIME_SECONDS);
+        } catch (UserException $exception) {
+            // Keep the generic response so a storage failure does not leak account existence.
+            error_log('phpMyFAQ password reset token could not be stored: ' . $exception->getMessage());
+            return $this->genericIssuanceResponse();
+        }
+
         $this->logSecurityEvent(
             AdminLogType::USER_PASSWORD_RESET_REQUESTED,
             $request,
@@ -195,12 +204,12 @@ final class UnauthorizedUserController
             return $this->json(['error' => Translation::get('resetpwd_err_invalid')], Response::HTTP_BAD_REQUEST);
         }
 
-        $passwordKey = $user->getEncryptedPassword();
-        if ($passwordKey === '') {
+        // Externally provisioned accounts must never be handed a local password
+        if ($user->getEncryptedPassword() === '') {
             return $this->json(['error' => Translation::get('resetpwd_err_invalid')], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!$this->tokenService->verify($userId, $expires, $signature, $passwordKey)) {
+        if (!$this->tokenService->verify($user, $expires, $signature)) {
             return $this->json(['error' => Translation::get('resetpwd_err_invalid')], Response::HTTP_BAD_REQUEST);
         }
 

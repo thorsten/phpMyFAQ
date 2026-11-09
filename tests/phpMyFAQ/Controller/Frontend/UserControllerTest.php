@@ -250,7 +250,7 @@ final class UserControllerTest extends TestCase
         $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
         $user = new CurrentUser($this->configuration);
         self::assertTrue($user->getUserById(1, true));
-        $token = new PasswordResetTokenService()->issue(1, $user->getEncryptedPassword());
+        $token = new PasswordResetTokenService()->issue($user);
 
         $controller = $this->createController();
         $response = $controller->resetPassword(Request::create('/user/password/reset', 'GET', [

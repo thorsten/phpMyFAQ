@@ -301,11 +301,52 @@ class UserTest extends TestCase
                 $this->stringContains('remember_me = NULL'),
                 $this->stringContains('remember_me_expires = NULL'),
                 $this->stringContains('session_id = NULL'),
+                $this->stringContains('password_reset_token = NULL'),
+                $this->stringContains('password_reset_expires = NULL'),
                 $this->stringContains('user_id = 15'),
             ))
             ->willReturn(true);
 
         $this->assertTrue($this->user->changePassword('Secret123'));
+    }
+
+    public function testStorePasswordResetTokenWritesHashAndExpiryForTheLoadedUser(): void
+    {
+        $this->setProtectedProperty('userId', 15);
+        $this->database->method('escape')->willReturnArgument(0);
+        $this->database
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->logicalAnd(
+                $this->stringContains("password_reset_token = 'abc123'"),
+                $this->stringContains('password_reset_expires = 1700000000'),
+                $this->stringContains('user_id = 15'),
+            ))
+            ->willReturn(true);
+
+        $this->assertTrue($this->user->storePasswordResetToken('abc123', 1700000000));
+    }
+
+    public function testGetPasswordResetTokenReturnsTheStoredHashAndExpiry(): void
+    {
+        $this->setProtectedProperty('userId', 15);
+        $this->database->method('query')->willReturn(true);
+        $this->database
+            ->method('fetchArray')
+            ->willReturn(['password_reset_token' => 'abc123', 'password_reset_expires' => '1700000000']);
+
+        $this->assertSame(['hash' => 'abc123', 'expires' => 1700000000], $this->user->getPasswordResetToken());
+    }
+
+    public function testGetPasswordResetTokenReturnsNoTokenWhenNoneIsStored(): void
+    {
+        $this->setProtectedProperty('userId', 15);
+        $this->database->method('query')->willReturn(true);
+        $this->database
+            ->method('fetchArray')
+            ->willReturn(['password_reset_token' => null, 'password_reset_expires' => null]);
+
+        $this->assertSame(['hash' => '', 'expires' => 0], $this->user->getPasswordResetToken());
     }
 
     public function testChangePasswordDoesNotRevokeAnythingWhenNoDriverUpdated(): void

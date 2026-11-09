@@ -168,11 +168,9 @@ final class UserController extends AbstractFrontController
         $valid = false;
         if ($userId > 0 && $expires > 0 && $signature !== '') {
             $candidate = CurrentUser::getCurrentUser($this->configuration);
-            if ($candidate->getUserById($userId, true)) {
-                $passwordKey = $candidate->getEncryptedPassword();
-                if ($passwordKey !== '') {
-                    $valid = new PasswordResetTokenService()->verify($userId, $expires, $signature, $passwordKey);
-                }
+            // Externally provisioned accounts carry no local password that could be reset
+            if ($candidate->getUserById($userId, true) && $candidate->getEncryptedPassword() !== '') {
+                $valid = new PasswordResetTokenService()->verify($candidate, $expires, $signature);
             }
         }
 

@@ -89,32 +89,4 @@ readonly class Migration420Beta3 extends AbstractMigration
         $recorder->addConfig('oidc.logoutRedirectUrl', '');
         $recorder->addConfig('layout.forceLayoutMode', 'auto');
     }
-
-    private function columnExists(string $table, string $column): bool
-    {
-        $tableName = $this->table($table);
-
-        $query = match (true) {
-            $this->isMySql() => sprintf("SHOW COLUMNS FROM %s LIKE '%s'", $tableName, $column),
-            $this->isPostgreSql() => sprintf(
-                "SELECT column_name FROM information_schema.columns WHERE table_name = '%s' AND column_name = '%s'",
-                $tableName,
-                $column,
-            ),
-            $this->isSqlite() => sprintf(
-                "SELECT name FROM pragma_table_info('%s') WHERE name = '%s'",
-                $tableName,
-                $column,
-            ),
-            default => sprintf(
-                "SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('%s') AND name = '%s'",
-                $tableName,
-                $column,
-            ),
-        };
-
-        $result = $this->configuration->getDb()->query($query);
-
-        return $this->configuration->getDb()->numRows($result) > 0;
-    }
 }
