@@ -24,6 +24,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Link;
 use phpMyFAQ\Link\Util\TitleSlugifier;
+use phpMyFAQ\User\CurrentUser;
 use Twig\Attribute\AsTwigFilter;
 use Twig\Attribute\AsTwigFunction;
 use Twig\Extension\AbstractExtension;
@@ -36,7 +37,16 @@ class CreateLinkTwigExtension extends AbstractExtension
     {
         $configuration = Configuration::getConfigurationInstance();
 
-        $category = new Category($configuration);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId(CurrentUser::getCurrentUser(
+            $configuration,
+        ));
+        $category = new Category($configuration, $currentGroups, true, user: $currentUser);
+
+        // getCategoryData() ignores the category permissions, so never link to a hidden category.
+        if (!$category->isCategoryVisible($categoryId)) {
+            return '';
+        }
+
         $categoryEntity = $category->getCategoryData($categoryId);
 
         $urlString = '%scategory/%d/%s.html';

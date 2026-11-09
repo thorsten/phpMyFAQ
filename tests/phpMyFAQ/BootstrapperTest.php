@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Attachment\AttachmentDirectoryResolver;
 use phpMyFAQ\Bootstrap\ConfigDirectoryResolver;
 use phpMyFAQ\Bootstrap\PhpConfigurator;
 use phpMyFAQ\Bootstrap\TrustedProxyConfigurator;
@@ -56,6 +57,7 @@ use Symfony\Component\HttpFoundation\Request;
 #[UsesClass(PhpConfigurator::class)]
 #[UsesClass(TrustedProxyConfigurator::class)]
 #[UsesClass(ConfigDirectoryResolver::class)]
+#[UsesClass(AttachmentDirectoryResolver::class)]
 #[UsesClass(FilesystemConfigurationCache::class)]
 #[UsesClass(PluginDiscovery::class)]
 class BootstrapperTest extends TestCase

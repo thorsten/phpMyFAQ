@@ -715,9 +715,7 @@ final class FaqController extends AbstractApiController
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = new Category($this->configuration, $currentGroups, withPermission: true);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
+        $category = new Category($this->configuration, $currentGroups, withPermission: true, user: $currentUser);
         $category->setLanguage($currentLanguage);
 
         $this->faq->setUser($currentUser);
@@ -904,9 +902,7 @@ final class FaqController extends AbstractApiController
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = new Category($this->configuration, $currentGroups, withPermission: true);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
+        $category = new Category($this->configuration, $currentGroups, withPermission: true, user: $currentUser);
         $category->setLanguage($currentLanguage);
 
         $this->faq->setUser($currentUser);

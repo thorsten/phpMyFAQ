@@ -58,9 +58,7 @@ final class AutoCompleteController extends AbstractController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $category = new Category($this->configuration, $currentGroups);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
+        $category = new Category($this->configuration, $currentGroups, user: $currentUser);
         $category->transform(categoryId: 0);
         $category->buildCategoryTree();
 

@@ -36,7 +36,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryController extends AbstractApiController
 {
-    /** @var (callable(array<array-key, mixed>): Category)|null */
+    /** @var (callable(array<array-key, mixed>, int): Category)|null */
     private $categoryFactory = null;
 
     /** @var (callable(): CategoryPermission)|null */
@@ -52,7 +52,7 @@ final class CategoryController extends AbstractApiController
     }
 
     /**
-     * @param callable(array<array-key, mixed>): Category $categoryFactory
+     * @param callable(array<array-key, mixed>, int): Category $categoryFactory
      */
     public function setCategoryFactory(callable $categoryFactory): void
     {
@@ -171,9 +171,7 @@ final class CategoryController extends AbstractApiController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $category = $this->createCategory($currentGroups);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
+        $category = $this->createCategory($currentGroups, $currentUser);
         $category->setLanguage($currentLanguage);
 
         $onlyActive = (bool) $this->configuration->get('api.onlyActiveCategories');
@@ -315,9 +313,7 @@ final class CategoryController extends AbstractApiController
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = $this->createCategory($currentGroups);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
+        $category = $this->createCategory($currentGroups, $currentUser);
         $category->setLanguage($currentLanguage);
 
         $categoryPermission = $this->createCategoryPermission();
@@ -416,13 +412,13 @@ final class CategoryController extends AbstractApiController
         return $this->json($result, Response::HTTP_BAD_REQUEST);
     }
 
-    private function createCategory(array $currentGroups): Category
+    private function createCategory(array $currentGroups, int $currentUser): Category
     {
         if ($this->categoryFactory !== null) {
-            return ($this->categoryFactory)($currentGroups);
+            return ($this->categoryFactory)($currentGroups, $currentUser);
         }
 
-        return new Category($this->configuration, $currentGroups, withPermission: true);
+        return new Category($this->configuration, $currentGroups, withPermission: true, user: $currentUser);
     }
 
     private function createCategoryPermission(): CategoryPermission

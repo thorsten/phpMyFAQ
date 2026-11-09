@@ -308,8 +308,6 @@ class CategoryControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $category = $this->createMock(Category::class);
-        $category->expects($this->once())->method('setUser')->with(-1)->willReturnSelf();
-        $category->expects($this->once())->method('setGroups')->with([-1])->willReturnSelf();
         $category->expects($this->once())->method('setLanguage')->with('en')->willReturnSelf();
         $category
             ->expects($this->once())
@@ -343,7 +341,13 @@ class CategoryControllerTest extends TestCase
             });
 
         $controller = new CategoryController($this->createStub(Language::class));
-        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $controller->setCategoryFactory(static function (array $currentGroups, int $currentUser) use ($category): Category {
+            // The permission-filtered category cache is built in the constructor, so the
+            // requester's groups and user id have to reach the factory.
+            TestCase::assertSame([-1], $currentGroups);
+            TestCase::assertSame(-1, $currentUser);
+            return $category;
+        });
         $controller->setCategoryPermissionFactory(static fn(): CategoryPermission => $permission);
         $controller->setOrderFactory(static fn(): Order => $order);
         $this->authorizeCurrentUser($controller);
@@ -375,8 +379,6 @@ class CategoryControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $category = $this->createMock(Category::class);
-        $category->method('setUser')->willReturnSelf();
-        $category->method('setGroups')->willReturnSelf();
         $category->method('setLanguage')->willReturnSelf();
         $category->expects($this->never())->method('create');
 
@@ -387,7 +389,13 @@ class CategoryControllerTest extends TestCase
         $permission->expects($this->never())->method('add');
 
         $controller = new CategoryController($this->createStub(Language::class));
-        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $controller->setCategoryFactory(static function (array $currentGroups, int $currentUser) use ($category): Category {
+            // The permission-filtered category cache is built in the constructor, so the
+            // requester's groups and user id have to reach the factory.
+            TestCase::assertSame([-1], $currentGroups);
+            TestCase::assertSame(-1, $currentUser);
+            return $category;
+        });
         $controller->setCategoryPermissionFactory(static fn(): CategoryPermission => $permission);
         $controller->setOrderFactory(static fn(): Order => $order);
         $this->authorizeCurrentUser($controller);
@@ -414,8 +422,6 @@ class CategoryControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $category = $this->createMock(Category::class);
-        $category->expects($this->once())->method('setUser')->with(-1)->willReturnSelf();
-        $category->expects($this->once())->method('setGroups')->with([-1])->willReturnSelf();
         $category->expects($this->once())->method('setLanguage')->with('en')->willReturnSelf();
         $category->expects($this->once())->method('getCategoryIdFromName')->with('Mapped Parent')->willReturn(55);
         $category
@@ -438,7 +444,13 @@ class CategoryControllerTest extends TestCase
         $permission->expects($this->exactly(2))->method('add')->willReturn(true);
 
         $controller = new CategoryController($this->createStub(Language::class));
-        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $controller->setCategoryFactory(static function (array $currentGroups, int $currentUser) use ($category): Category {
+            // The permission-filtered category cache is built in the constructor, so the
+            // requester's groups and user id have to reach the factory.
+            TestCase::assertSame([-1], $currentGroups);
+            TestCase::assertSame(-1, $currentUser);
+            return $category;
+        });
         $controller->setCategoryPermissionFactory(static fn(): CategoryPermission => $permission);
         $controller->setOrderFactory(static fn(): Order => $order);
         $this->authorizeCurrentUser($controller);
@@ -468,8 +480,6 @@ class CategoryControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $category = $this->createMock(Category::class);
-        $category->expects($this->once())->method('setUser')->with(-1)->willReturnSelf();
-        $category->expects($this->once())->method('setGroups')->with([-1])->willReturnSelf();
         $category->expects($this->once())->method('setLanguage')->with('en')->willReturnSelf();
         $category->expects($this->once())->method('create')->willReturn(0);
 
@@ -480,7 +490,13 @@ class CategoryControllerTest extends TestCase
         $permission->expects($this->never())->method('add');
 
         $controller = new CategoryController($this->createStub(Language::class));
-        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $controller->setCategoryFactory(static function (array $currentGroups, int $currentUser) use ($category): Category {
+            // The permission-filtered category cache is built in the constructor, so the
+            // requester's groups and user id have to reach the factory.
+            TestCase::assertSame([-1], $currentGroups);
+            TestCase::assertSame(-1, $currentUser);
+            return $category;
+        });
         $controller->setCategoryPermissionFactory(static fn(): CategoryPermission => $permission);
         $controller->setOrderFactory(static fn(): Order => $order);
         $this->authorizeCurrentUser($controller);
@@ -605,7 +621,7 @@ class CategoryControllerTest extends TestCase
         $permission->method('add')->willReturn(true);
 
         $controller = new CategoryController($this->createStub(Language::class));
-        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $controller->setCategoryFactory(static fn(array $currentGroups, int $currentUser): Category => $category);
         $controller->setCategoryPermissionFactory(static fn(): CategoryPermission => $permission);
         $controller->setOrderFactory(fn(): Order => $this->createStub(Order::class));
 
@@ -664,7 +680,13 @@ class CategoryControllerTest extends TestCase
         $category->expects($this->never())->method('create');
 
         $controller = new CategoryController($this->createStub(Language::class));
-        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $controller->setCategoryFactory(static function (array $currentGroups, int $currentUser) use ($category): Category {
+            // The permission-filtered category cache is built in the constructor, so the
+            // requester's groups and user id have to reach the factory.
+            TestCase::assertSame([-1], $currentGroups);
+            TestCase::assertSame(-1, $currentUser);
+            return $category;
+        });
         $controller->setOrderFactory(fn(): Order => $this->createStub(Order::class));
         $this->authorizeCurrentUser($controller);
 
@@ -692,7 +714,13 @@ class CategoryControllerTest extends TestCase
         $permission->expects($this->never())->method('add');
 
         $controller = new CategoryController($this->createStub(Language::class));
-        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $controller->setCategoryFactory(static function (array $currentGroups, int $currentUser) use ($category): Category {
+            // The permission-filtered category cache is built in the constructor, so the
+            // requester's groups and user id have to reach the factory.
+            TestCase::assertSame([-1], $currentGroups);
+            TestCase::assertSame(-1, $currentUser);
+            return $category;
+        });
         $controller->setCategoryPermissionFactory(static fn(): CategoryPermission => $permission);
         $controller->setOrderFactory(static fn(): Order => $order);
         $this->authorizeCurrentUser($controller);
@@ -718,7 +746,13 @@ class CategoryControllerTest extends TestCase
         $category->expects($this->once())->method('create')->willReturn(777);
 
         $controller = new CategoryController($this->createStub(Language::class));
-        $controller->setCategoryFactory(static fn(array $currentGroups): Category => $category);
+        $controller->setCategoryFactory(static function (array $currentGroups, int $currentUser) use ($category): Category {
+            // The permission-filtered category cache is built in the constructor, so the
+            // requester's groups and user id have to reach the factory.
+            TestCase::assertSame([-1], $currentGroups);
+            TestCase::assertSame(-1, $currentUser);
+            return $category;
+        });
         $this->authorizeCurrentUser($controller);
 
         $response = $controller->create($this->createCategoryRequest(['parent-id' => 0]));

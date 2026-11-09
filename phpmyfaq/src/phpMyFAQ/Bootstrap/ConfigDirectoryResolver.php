@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Bootstrap;
 
+use phpMyFAQ\Attachment\AttachmentDirectoryResolver;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ConfigDirectoryResolver
@@ -110,38 +111,33 @@ class ConfigDirectoryResolver
 
     /**
      * Resolves the attachments directory with path-traversal protection and defines PMF_ATTACHMENTS_DIR.
+     *
+     * Client instances of a multisite installation get their own sub-directory, otherwise all
+     * instances would share one blob store keyed by file hash only.
      */
     public static function resolveAttachmentsDir(string $confAttachmentsPath, string $rootDir): void
     {
         if (!defined('PMF_ATTACHMENTS_DIR')) {
-            define('PMF_ATTACHMENTS_DIR', self::computeAttachmentsPath($confAttachmentsPath, $rootDir));
+            define('PMF_ATTACHMENTS_DIR', self::computeAttachmentsPath(
+                $confAttachmentsPath,
+                $rootDir,
+                defined('PMF_MULTI_INSTANCE_CONFIG_DIR') ? (string) constant('PMF_MULTI_INSTANCE_CONFIG_DIR') : null,
+            ));
         }
     }
 
     /**
      * Computes the resolved attachments path without side effects (no constant definition).
      *
+     * @param string|null $instanceConfigDir PMF_MULTI_INSTANCE_CONFIG_DIR of a client instance, null for the master
+     *
      * @return string|false The resolved path, or false if path traversal was detected
      */
-    public static function computeAttachmentsPath(string $confAttachmentsPath, string $rootDir): string|false
-    {
-        $confAttachmentsPath = trim($confAttachmentsPath);
-        if ($confAttachmentsPath === '') {
-            return $rootDir . DIRECTORY_SEPARATOR;
-        }
-
-        if ($confAttachmentsPath[0] === '/' || preg_match('%^[a-z]:[\\\\/]%i', $confAttachmentsPath)) {
-            return $confAttachmentsPath;
-        }
-
-        $pathSegments = preg_split('%[\\\\/]%', $confAttachmentsPath);
-        $pathSegments = $pathSegments === false ? [] : $pathSegments;
-        foreach ($pathSegments as $pathSegment) {
-            if ($pathSegment === '..') {
-                return false;
-            }
-        }
-
-        return $rootDir . DIRECTORY_SEPARATOR . $confAttachmentsPath;
+    public static function computeAttachmentsPath(
+        string $confAttachmentsPath,
+        string $rootDir,
+        ?string $instanceConfigDir = null,
+    ): string|false {
+        return AttachmentDirectoryResolver::resolve($confAttachmentsPath, $rootDir, $instanceConfigDir);
     }
 }

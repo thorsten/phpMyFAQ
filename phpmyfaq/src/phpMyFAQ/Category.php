@@ -92,9 +92,12 @@ class Category
         array $groups = [],
         bool $withPermission = true,
         ?string $faqLanguage = null,
+        int $user = -1,
     ) {
         $this->categoryCache = new CategoryCache();
-        $this->categoryPermissionContext = new CategoryPermissionContext($groups);
+        // The permission-filtered category cache is built right here, so the user has to be known
+        // before. A later setUser() call does not reload the cache.
+        $this->categoryPermissionContext = new CategoryPermissionContext($groups, $user);
         $languageToUse =
             $faqLanguage !== null && $faqLanguage !== ''
                 ? $faqLanguage

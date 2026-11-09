@@ -207,6 +207,30 @@ class CategoryTest extends TestCase
         $this->assertFalse($member->isCategoryVisible(9302));
     }
 
+    public function testIsCategoryVisibleHidesUserRestrictedCategoriesFromOtherUsers(): void
+    {
+        $this->category->create($this->createCategory(9311));
+        $this->category->create($this->createCategory(9312));
+
+        $permission = new Permission($this->configuration);
+        // Basic permission level: the group permission is always "all" (-1), only the user is restricted.
+        $permission->add(Permission::GROUP, [9311, 9312], [-1]);
+        $permission->add(Permission::USER, [9311], [-1]);
+        $permission->add(Permission::USER, [9312], [777]);
+
+        $anonymous = new Category($this->configuration, [-1]);
+        $this->assertTrue($anonymous->isCategoryVisible(9311));
+        $this->assertFalse($anonymous->isCategoryVisible(9312));
+
+        $otherUser = new Category($this->configuration, [-1], true, user: 778);
+        $this->assertTrue($otherUser->isCategoryVisible(9311));
+        $this->assertFalse($otherUser->isCategoryVisible(9312));
+
+        $restrictedUser = new Category($this->configuration, [-1], true, user: 777);
+        $this->assertTrue($restrictedUser->isCategoryVisible(9311));
+        $this->assertTrue($restrictedUser->isCategoryVisible(9312));
+    }
+
     public function testAdminCategoryTree(): void
     {
         $category = $this->createCategory();

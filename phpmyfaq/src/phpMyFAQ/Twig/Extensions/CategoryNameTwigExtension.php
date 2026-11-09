@@ -21,6 +21,7 @@ namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\User\CurrentUser;
 use Twig\Attribute\AsTwigFilter;
 use Twig\Attribute\AsTwigFunction;
 use Twig\Extension\AbstractExtension;
@@ -31,7 +32,16 @@ class CategoryNameTwigExtension extends AbstractExtension
     #[AsTwigFunction(name: 'categoryName')]
     public static function getCategoryName(int $categoryId): string
     {
-        $category = new Category(Configuration::getConfigurationInstance());
+        $configuration = Configuration::getConfigurationInstance();
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId(CurrentUser::getCurrentUser(
+            $configuration,
+        ));
+        $category = new Category($configuration, $currentGroups, true, user: $currentUser);
+
+        // getCategoryData() ignores the category permissions, so never name a hidden category.
+        if (!$category->isCategoryVisible($categoryId)) {
+            return '';
+        }
 
         $categoryEntity = $category->getCategoryData($categoryId);
         return $categoryEntity->getName();

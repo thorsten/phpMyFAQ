@@ -2,12 +2,15 @@
 
 namespace phpMyFAQ\Bootstrap;
 
+use phpMyFAQ\Attachment\AttachmentDirectoryResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ConfigDirectoryResolver::class)]
+#[UsesClass(AttachmentDirectoryResolver::class)]
 class ConfigDirectoryResolverTest extends TestCase
 {
     public function testComputeAttachmentsPathWithAbsoluteUnixPath(): void

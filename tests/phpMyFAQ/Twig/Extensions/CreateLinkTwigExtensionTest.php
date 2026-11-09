@@ -17,9 +17,12 @@
 
 namespace phpMyFAQ\Twig\Extensions;
 
+use phpMyFAQ\Category;
+use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -78,17 +81,37 @@ class CreateLinkTwigExtensionTest extends TestCase
         $this->assertInstanceOf(AbstractExtension::class, new CreateLinkTwigExtension());
     }
 
-    public function testCategoryLinkReturnsString(): void
+    public function testCategoryLinkIsEmptyForHiddenCategory(): void
     {
-        $result = CreateLinkTwigExtension::categoryLink(99999);
-        $this->assertIsString($result);
-        $this->assertStringContainsString('category', $result);
+        // getCategoryData() ignores permissions, so an unknown or hidden category must not be linked.
+        $this->assertSame('', CreateLinkTwigExtension::categoryLink(99999));
     }
 
     public function testCategoryLinkContainsHtmlExtension(): void
     {
-        $result = CreateLinkTwigExtension::categoryLink(1);
-        $this->assertStringContainsString('.html', $result);
+        $configuration = Configuration::getConfigurationInstance();
+        $category = new Category($configuration);
+        $categoryEntity = new CategoryEntity();
+        $categoryEntity
+            ->setId(9401)
+            ->setLang('en')
+            ->setParentId(0)
+            ->setName('Linked category')
+            ->setDescription('Description')
+            ->setUserId(1)
+            ->setGroupId(1)
+            ->setActive(true)
+            ->setShowHome(true)
+            ->setImage('');
+        $category->create($categoryEntity);
+
+        $permission = new Permission($configuration);
+        $permission->add(Permission::GROUP, [9401], [-1]);
+        $permission->add(Permission::USER, [9401], [-1]);
+
+        $result = CreateLinkTwigExtension::categoryLink(9401);
+
+        $this->assertStringContainsString('category/9401/linked-category.html', $result);
     }
 
     public function testFaqLinkReturnsString(): void
