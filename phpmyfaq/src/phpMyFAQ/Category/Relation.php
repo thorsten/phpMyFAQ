@@ -128,20 +128,21 @@ class Relation
             Database::getTablePrefix(),
         );
 
-        if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
-            if (-1 === $this->category->getUser()) {
-                $query .= sprintf('AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)', $groupList, $groupList);
-            }
-            if (-1 !== $this->category->getUser()) {
-                $query .= sprintf(
-                    'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )
-                    AND ( fcu.user_id = %d OR fcg.group_id IN (%s) )',
-                    $this->category->getUser(),
-                    $groupList,
-                    $this->category->getUser(),
-                    $groupList,
-                );
-            }
+        $userId = $this->category->getUser();
+        // The category must be visible to the requester: a granted group AND a user grant that
+        // covers them (-1 or no row means "all users"). Same semantics as CategoryPermissionService.
+        $categoryUserClause = sprintf('( fcu.user_id IS NULL OR fcu.user_id = -1 OR fcu.user_id = %d )', $userId);
+
+        $isBasicPermissionLevel = $this->configuration->get(item: 'security.permLevel') === 'basic';
+        if ($isBasicPermissionLevel) {
+            $query .= sprintf('AND ( fdu.user_id = -1 OR fdu.user_id = %d ) AND %s', $userId, $categoryUserClause);
+        }
+
+        if (!$isBasicPermissionLevel) {
+            $faqClause = -1 === $userId
+                ? sprintf('AND fdg.group_id IN (%s)', $groupList)
+                : sprintf('AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )', $userId, $groupList);
+            $query .= sprintf('%s AND fcg.group_id IN (%s) AND %s', $faqClause, $groupList, $categoryUserClause);
         }
 
         if ($this->configuration->getLanguage()->getLanguage() !== '') {

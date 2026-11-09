@@ -241,6 +241,9 @@ class CategoryHelperTest extends TestCase
         );
         $db->query("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
              VALUES (9001, 'en', 9001, 'en')");
+        // The "all users" grants the admin stores; the FAQ count applies both ACLs in basic mode too.
+        $db->query('INSERT INTO faqdata_user (record_id, user_id) VALUES (9001, -1)');
+        $db->query('INSERT INTO faqcategory_user (category_id, user_id) VALUES (9001, -1)');
 
         $category = $this->createStub(Category::class);
         $category->method('getGroups')->willReturn([-1]);

@@ -44,6 +44,7 @@ final class CategoryRepositoryDatabaseTest extends TestCase
         string $description = '',
         bool $active = true,
         int $groupId = -1,
+        int $userId = -1,
     ): void {
         $db = $this->configuration->getDb();
         $db->query(sprintf(
@@ -63,6 +64,50 @@ final class CategoryRepositoryDatabaseTest extends TestCase
             $id,
             $groupId,
         ));
+        $db->query(sprintf(
+            'INSERT OR IGNORE INTO %sfaqcategory_user (category_id, user_id) VALUES (%d, %d)',
+            Database::getTablePrefix(),
+            $id,
+            $userId,
+        ));
+    }
+
+    /**
+     * Regression: the permission clause was "group OR (user AND group)", which the group term
+     * alone satisfies. A category restricted to one user (the default basic permission level
+     * stores group -1 for every category) was therefore listed to everybody.
+     */
+    public function testUserRestrictedCategoryIsOnlyListedToThatUser(): void
+    {
+        $this->insertCategory(9020, 'en', 'Public');
+        $this->insertCategory(9021, 'en', 'Board only', userId: 7);
+
+        $listedIds = static fn(array $rows): array => array_values(array_map(
+            static fn(array $row): int => (int) $row['id'],
+            $rows,
+        ));
+
+        $this->assertSame([9020], $listedIds($this->repository->findOrderedCategories([-1], -1, 'en')));
+        $this->assertSame([9020], $listedIds($this->repository->findOrderedCategories([-1], 5, 'en')));
+        $this->assertSame([9020, 9021], $listedIds($this->repository->findOrderedCategories([-1], 7, 'en')));
+
+        $this->assertSame([9020], $listedIds($this->repository->findCategoriesPaginated('en', activeOnly: true)));
+        $this->assertSame(
+            [9020, 9021],
+            $listedIds($this->repository->findCategoriesPaginated('en', activeOnly: true, userId: 7)),
+        );
+
+        $this->assertSame(1, $this->repository->countCategories('en', activeOnly: true, userId: 5));
+        $this->assertSame(2, $this->repository->countCategories('en', activeOnly: true, userId: 7));
+    }
+
+    public function testGroupAndUserRestrictionsBothHaveToMatch(): void
+    {
+        $this->insertCategory(9022, 'en', 'HR board', groupId: 5, userId: 7);
+
+        $this->assertSame([], $this->repository->findOrderedCategories([5], 8, 'en'));
+        $this->assertSame([], $this->repository->findOrderedCategories([-1], 7, 'en'));
+        $this->assertCount(1, $this->repository->findOrderedCategories([-1, 5], 7, 'en'));
     }
 
     public function testCountCategoriesHonoursLanguageActivityAndGroups(): void

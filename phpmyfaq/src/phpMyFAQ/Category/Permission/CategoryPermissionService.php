@@ -44,6 +44,11 @@ final class CategoryPermissionService
     /**
      * Internal helper to build the WHERE clause with permission logic.
      *
+     * A category is visible when one of the requester's groups is granted AND the user grant
+     * covers the requester: -1 (or no row at all) means "all users". Both restrictions narrow
+     * the result on their own; the former "group OR (user AND group)" clause was satisfied by
+     * the group term alone, so a user restriction never hid anything.
+     *
      * @param int[] $groups
      */
     private function buildPermissionWhereClause(array $groups, int $userId, string $activeClause): string
@@ -51,7 +56,7 @@ final class CategoryPermissionService
         $groupsList = $groups === []
             ? '-1'
             : implode(separator: ', ', array: array_map(callback: intval(...), array: $groups));
-        return strtr('WHERE ( fg.group_id IN ({groups}) OR (fu.user_id = {userId} AND fg.group_id IN ({groups}))) {active}', [
+        return strtr('WHERE ( fg.group_id IN ({groups}) AND (fu.user_id IS NULL OR fu.user_id = -1 OR fu.user_id = {userId}) ) {active}', [
             '{groups}' => $groupsList,
             '{userId}' => (string) $userId,
             '{active}' => $activeClause,

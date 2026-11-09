@@ -151,16 +151,21 @@ class RelationTest extends TestCase
             ->with('security.permLevel')
             ->willReturn('basic');
 
+        $this->categoryMock->method('getUser')->willReturn(42);
         $this->languageMock->method('getLanguage')->willReturn('en');
 
         $this->databaseMock->expects($this->once())->method('escape')->with('en')->willReturn('en');
 
+        // Basic mode applied no ACL at all, so user-restricted FAQs and categories were counted.
         $this->databaseMock
             ->expects($this->once())
             ->method('query')
             ->with($this->logicalAnd(
                 $this->stringContains("fd.lang = 'en'"),
                 $this->stringContains('count(DISTINCT fcr.record_id)'),
+                $this->stringContains('( fdu.user_id = -1 OR fdu.user_id = 42 )'),
+                $this->stringContains('( fcu.user_id IS NULL OR fcu.user_id = -1 OR fcu.user_id = 42 )'),
+                $this->logicalNot($this->stringContains('fcg.group_id')),
             ))
             ->willReturn('query_result');
 
@@ -210,7 +215,11 @@ class RelationTest extends TestCase
         $this->databaseMock
             ->expects($this->once())
             ->method('query')
-            ->with($this->stringContains('fdu.user_id = 42'))
+            ->with($this->logicalAnd(
+                $this->stringContains('( fdu.user_id = 42 OR fdg.group_id IN (1, 2, 3) )'),
+                $this->stringContains('fcg.group_id IN (1, 2, 3)'),
+                $this->stringContains('( fcu.user_id IS NULL OR fcu.user_id = -1 OR fcu.user_id = 42 )'),
+            ))
             ->willReturn('query_result');
 
         $this->databaseMock->expects($this->once())->method('numRows')->willReturn(0);
