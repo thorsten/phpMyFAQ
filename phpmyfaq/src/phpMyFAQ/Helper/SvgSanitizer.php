@@ -36,8 +36,14 @@ class SvgSanitizer
      * The browser's XML parser resolves <x:script> with xmlns:x bound to the
      * SVG or XHTML namespace to a real script element, so every element
      * pattern must tolerate a prefix.
+     *
+     * An XML NCName may contain non-ASCII letters, and \w without the /u
+     * modifier only matches ASCII, so the byte range \x80-\xff is listed
+     * explicitly: it covers every byte of a UTF-8 multibyte character. The
+     * patterns stay byte-oriented on purpose, because /u makes preg_match()
+     * return false on malformed UTF-8, which would report the content as safe.
      */
-    private const string NAMESPACE_PREFIX = '(?:[\w.-]+:)?';
+    private const string NAMESPACE_PREFIX = '(?:[\w.\-\x80-\xff]+:)?';
 
     /**
      * Dangerous patterns to detect and remove.

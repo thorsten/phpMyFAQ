@@ -2242,6 +2242,31 @@ class SvgSanitizerTest extends TestCase
                 '<svg xmlns="http://www.w3.org/2000/svg" xmlns:a.b-c="http://www.w3.org/2000/svg">'
                     . '<a.b-c:script>alert(1)</a.b-c:script></svg>',
             ],
+            'non-ascii prefix script' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xé="http://www.w3.org/2000/svg">'
+                    . '<xé:script>alert(1)</xé:script></svg>',
+            ],
+            'non-ascii only prefix script' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:é="http://www.w3.org/2000/svg">'
+                    . '<é:script>alert(1)</é:script></svg>',
+            ],
+            'entity encoded non-ascii prefix script' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:x&#233;="http://www.w3.org/2000/svg">'
+                    . '<x&#233;:script>alert(1)</x&#233;:script></svg>',
+            ],
+            'non-ascii prefix foreignObject' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xé="http://www.w3.org/1999/xhtml">'
+                    . '<xé:foreignObject><body xmlns="http://www.w3.org/1999/xhtml" onload="alert(1)"/>'
+                    . '</xé:foreignObject></svg>',
+            ],
+            'non-ascii prefix iframe' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xé="http://www.w3.org/1999/xhtml">'
+                    . '<xé:iframe src="https://evil.example"/></svg>',
+            ],
+            'cjk prefix script' => [
+                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:名="http://www.w3.org/2000/svg">'
+                    . '<名:script>alert(1)</名:script></svg>',
+            ],
         ];
     }
 
