@@ -23,6 +23,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Link;
+use phpMyFAQ\User\CurrentUser;
 use Twig\Attribute\AsTwigFilter;
 use Twig\Attribute\AsTwigFunction;
 use Twig\Extension\AbstractExtension;
@@ -37,7 +38,16 @@ class CreateLinkTwigExtension extends AbstractExtension
         $urlString = '%sindex.php?action=show&cat=%d';
         $url = sprintf($urlString, $configuration->getDefaultUrl(), $categoryId);
 
-        $category = new Category($configuration);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId(CurrentUser::getCurrentUser(
+            $configuration,
+        ));
+        $category = new Category($configuration, $currentGroups, true, $currentUser);
+
+        // getCategoryData() ignores the category permissions, so never link to a hidden category.
+        if (!$category->isCategoryVisible($categoryId)) {
+            return '';
+        }
+
         $categoryEntity = $category->getCategoryData($categoryId);
 
         $link = new Link($url, $configuration);

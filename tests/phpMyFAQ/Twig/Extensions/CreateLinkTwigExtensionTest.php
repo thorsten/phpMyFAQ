@@ -304,7 +304,7 @@ class CreateLinkTwigExtensionTest extends TestCase
         $source = file_get_contents($filename);
 
         // Should pass configuration to Category and Link constructors
-        $this->assertStringContainsString('new Category($configuration)', $source);
+        $this->assertStringContainsString('new Category($configuration, $currentGroups, true, $currentUser)', $source);
         $this->assertStringContainsString('new Link($url, $configuration)', $source);
     }
 }

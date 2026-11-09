@@ -157,6 +157,7 @@ class CategoryTest extends TestCase
         $permission = new Permission($this->configuration);
         $permission->add(Permission::GROUP, [9301, 9302], [-1]);
         $permission->add(Permission::GROUP, [9303], [999]);
+        $permission->add(Permission::USER, [9301, 9302, 9303], [-1]);
 
         // An anonymous visitor only holds the default group -1.
         $category = new Category($this->configuration, [-1]);
@@ -174,7 +175,39 @@ class CategoryTest extends TestCase
 
         // Cleanup
         $permission->delete(Permission::GROUP, [9301, 9302, 9303]);
+        $permission->delete(Permission::USER, [9301, 9302, 9303]);
         foreach ([9301, 9302, 9303] as $id) {
+            $this->category->delete($id, 'en');
+        }
+    }
+
+    public function testIsCategoryVisibleHidesUserRestrictedCategoriesFromOtherUsers(): void
+    {
+        $this->category->create($this->createCategory(9311));
+        $this->category->create($this->createCategory(9312));
+
+        $permission = new Permission($this->configuration);
+        // Basic permission level: the group permission is always "all" (-1), only the user is restricted.
+        $permission->add(Permission::GROUP, [9311, 9312], [-1]);
+        $permission->add(Permission::USER, [9311], [-1]);
+        $permission->add(Permission::USER, [9312], [777]);
+
+        $anonymous = new Category($this->configuration, [-1]);
+        $this->assertTrue($anonymous->isCategoryVisible(9311));
+        $this->assertFalse($anonymous->isCategoryVisible(9312));
+
+        $otherUser = new Category($this->configuration, [-1], true, 778);
+        $this->assertTrue($otherUser->isCategoryVisible(9311));
+        $this->assertFalse($otherUser->isCategoryVisible(9312));
+
+        $restrictedUser = new Category($this->configuration, [-1], true, 777);
+        $this->assertTrue($restrictedUser->isCategoryVisible(9311));
+        $this->assertTrue($restrictedUser->isCategoryVisible(9312));
+
+        // Cleanup
+        $permission->delete(Permission::GROUP, [9311, 9312]);
+        $permission->delete(Permission::USER, [9311, 9312]);
+        foreach ([9311, 9312] as $id) {
             $this->category->delete($id, 'en');
         }
     }

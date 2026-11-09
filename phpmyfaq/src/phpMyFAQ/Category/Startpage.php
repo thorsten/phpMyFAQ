@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Category;
 
+use phpMyFAQ\Category\Permission\CategoryPermissionService;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Link;
@@ -96,12 +97,7 @@ readonly class Startpage
                 %sfaqcategory_user fu
             ON
                 fc.id = fu.category_id
-            WHERE 
-                ( fg.group_id IN (%s)
-            OR
-                (fu.user_id = %d AND fg.group_id IN (%s)))
-            AND
-                fc.active = 1
+            %s
             AND
                 fc.show_home = 1
                 %s
@@ -116,9 +112,7 @@ readonly class Startpage
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            implode(', ', $this->groups),
-            $this->user,
-            implode(', ', $this->groups),
+            (new CategoryPermissionService())->buildWhereClause($this->groups, $this->user),
             $where,
         );
 

@@ -114,9 +114,12 @@ class Category
         private readonly Configuration $configuration,
         array $groups = [],
         bool $withPermission = true,
+        int $user = -1,
     ) {
         $this->cache = new CategoryCache();
-        $this->permissionContext = new CategoryPermissionContext($groups);
+        // The permission-filtered category cache is built right here, so the user has to be known
+        // before. A later setUser() call does not reload the cache.
+        $this->permissionContext = new CategoryPermissionContext($groups, $user);
         $this->setLanguage($this->configuration->getLanguage()->getLanguage());
 
         $this->getOrderedCategories($withPermission);

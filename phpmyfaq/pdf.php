@@ -112,8 +112,7 @@ $faq = $container->get('phpmyfaq.faq');
 $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
 
-$category = new Category($faqConfig, $currentGroups, true);
-$category->setUser($currentUser);
+$category = new Category($faqConfig, $currentGroups, true, $currentUser);
 
 try {
     $pdf = new Pdf($faq, $category, $faqConfig);

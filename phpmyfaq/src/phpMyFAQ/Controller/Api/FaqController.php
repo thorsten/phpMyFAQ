@@ -581,9 +581,7 @@ final class FaqController extends AbstractController
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = new Category($this->configuration, $currentGroups, withPermission: true);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
+        $category = new Category($this->configuration, $currentGroups, withPermission: true, user: $currentUser);
         $category->setLanguage($currentLanguage);
 
         $faq = $this->container->get(id: 'phpmyfaq.faq');
@@ -745,9 +743,7 @@ final class FaqController extends AbstractController
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = new Category($this->configuration, $currentGroups, withPermission: true);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
+        $category = new Category($this->configuration, $currentGroups, withPermission: true, user: $currentUser);
         $category->setLanguage($currentLanguage);
 
         $faq = $this->container->get(id: 'phpmyfaq.faq');

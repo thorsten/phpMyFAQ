@@ -66,9 +66,7 @@ readonly class Import
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        $category = new Category($this->configuration, $currentGroups, true);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
+        $category = new Category($this->configuration, $currentGroups, true, $currentUser);
         $category->setLanguage($languageCode);
 
         if ($faq->hasTitleAHash($question)) {

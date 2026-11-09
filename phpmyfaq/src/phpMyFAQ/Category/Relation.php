@@ -119,20 +119,21 @@ class Relation
             Database::getTablePrefix(),
         );
 
+        $user = $this->category->getUser();
         if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
-            if (-1 === $this->category->getUser()) {
-                $query .= sprintf('AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)', $groupList, $groupList);
+            if (-1 === $user) {
+                $query .= sprintf('AND fdg.group_id IN (%s) ', $groupList);
             } else {
-                $query .= sprintf(
-                    'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )
-                    AND ( fcu.user_id = %d OR fcg.group_id IN (%s) )',
-                    $this->category->getUser(),
-                    $groupList,
-                    $this->category->getUser(),
-                    $groupList,
-                );
+                $query .= sprintf('AND ( fdu.user_id = %d OR fdg.group_id IN (%s) ) ', $user, $groupList);
             }
+        } else {
+            // Basic permission level: only the user restriction of the FAQ applies, see Faq\QueryHelper.
+            $query .= sprintf('AND ( fdu.user_id = -1 OR fdu.user_id = %d ) ', $user);
         }
+
+        // Category restriction, same semantics as CategoryPermissionService: the requester has to be
+        // in one of the category's groups and the category must be open to all users or to the requester.
+        $query .= sprintf('AND fcg.group_id IN (%s) AND ( fcu.user_id = -1 OR fcu.user_id = %d ) ', $groupList, $user);
 
         if (strlen($this->configuration->getLanguage()->getLanguage()) > 0) {
             $query .= sprintf(

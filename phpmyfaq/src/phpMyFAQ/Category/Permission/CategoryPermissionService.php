@@ -51,7 +51,10 @@ final class CategoryPermissionService
         $groupsList = $groups === []
             ? '-1'
             : implode(separator: ', ', array: array_map(callback: 'intval', array: $groups));
-        return strtr('WHERE ( fg.group_id IN ({groups}) OR (fu.user_id = {userId} AND fg.group_id IN ({groups}))) {active}', [
+        // A category is visible when its group restriction matches one of the requester's groups AND its
+        // user restriction is either "all users" (-1) or the requester. The former clause
+        // "A OR (B AND A)" collapsed to "A", so a user restriction never narrowed the result.
+        return strtr('WHERE ( fg.group_id IN ({groups}) AND ( fu.user_id = -1 OR fu.user_id = {userId} ) ) {active}', [
             '{groups}' => $groupsList,
             '{userId}' => (string) $userId,
             '{active}' => $activeClause,

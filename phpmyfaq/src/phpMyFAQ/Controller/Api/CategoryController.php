@@ -88,9 +88,7 @@ final class CategoryController extends AbstractController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $category = new Category($this->configuration, $currentGroups, withPermission: true);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
+        $category = new Category($this->configuration, $currentGroups, withPermission: true, user: $currentUser);
         $category->setLanguage($currentLanguage);
 
         // getAllCategories() returns every category row, including inactive and group-restricted
@@ -192,9 +190,7 @@ final class CategoryController extends AbstractController
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = new Category($this->configuration, $currentGroups, withPermission: true);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
+        $category = new Category($this->configuration, $currentGroups, withPermission: true, user: $currentUser);
         $category->setLanguage($currentLanguage);
 
         $categoryPermission = new CategoryPermission($this->configuration);

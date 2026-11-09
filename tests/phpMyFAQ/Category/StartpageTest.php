@@ -102,8 +102,8 @@ class StartpageTest extends TestCase
             ->method('query')
             ->with($this->logicalAnd(
                 $this->stringContains("fc.lang = 'de'"),
-                $this->stringContains('fu.user_id = 42'),
-                $this->stringContains('fg.group_id IN (1, 2)'),
+                $this->stringContains('fg.group_id IN (1, 2) AND ( fu.user_id = -1 OR fu.user_id = 42 )'),
+                $this->stringContains('fc.active = 1'),
             ))
             ->willReturn('query_result');
 

@@ -72,8 +72,7 @@ if (!is_null($selectedCategoryId)) {
     );
 
     if (empty($records) || $category->getChildNodes((int) $selectedCategoryId)) {
-        $subCategory = new Category($faqConfig, $currentGroups, true);
-        $subCategory->setUser($currentUser);
+        $subCategory = new Category($faqConfig, $currentGroups, true, $currentUser);
         $subCategory->transform($selectedCategoryId);
         $categoryHelper->setConfiguration($faqConfig)->setCategory($subCategory);
 

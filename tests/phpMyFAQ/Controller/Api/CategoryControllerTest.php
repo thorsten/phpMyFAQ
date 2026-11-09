@@ -52,12 +52,14 @@ class CategoryControllerTest extends TestCase
         $permission = new CategoryPermission($this->configuration);
         $permission->add(CategoryPermission::GROUP, [self::PUBLIC_ID, self::INACTIVE_ID], [-1]);
         $permission->add(CategoryPermission::GROUP, [self::PRIVATE_ID], [self::PRIVATE_GROUP_ID]);
+        $permission->add(CategoryPermission::USER, [self::PUBLIC_ID, self::INACTIVE_ID, self::PRIVATE_ID], [-1]);
     }
 
     protected function tearDown(): void
     {
         $permission = new CategoryPermission($this->configuration);
         $permission->delete(CategoryPermission::GROUP, [self::PUBLIC_ID, self::INACTIVE_ID, self::PRIVATE_ID]);
+        $permission->delete(CategoryPermission::USER, [self::PUBLIC_ID, self::INACTIVE_ID, self::PRIVATE_ID]);
 
         foreach ([self::PUBLIC_ID, self::INACTIVE_ID, self::PRIVATE_ID] as $id) {
             $this->category->delete($id, 'en');

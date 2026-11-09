@@ -370,8 +370,7 @@ $faq->setUser($currentUser)->setGroups($currentGroups);
 //
 // Create a new Category object
 //
-$category = new Category($faqConfig, $currentGroups, true);
-$category->setUser($currentUser)->setGroups($currentGroups);
+$category = new Category($faqConfig, $currentGroups, true, $currentUser);
 
 //
 // Create a new Tags object
