@@ -405,6 +405,34 @@ final class FaqControllerTest extends TestCase
         $content = (string) $response->getContent();
         self::assertStringContainsString('internal notes', $content);
         self::assertStringContainsString('bi bi-bookmark', $content);
+        self::assertStringContainsString('admin/faq/edit/1/en', $content);
+    }
+
+    /**
+     * An editor whose edit_faq right is restricted to other categories or languages gets the
+     * public page like everyone else: no private notes and no edit link, matching the 403 the
+     * admin edit route returns for the same FAQ.
+     */
+    public function testShowHidesNotesFromEditorsWithoutScopeForTheFaq(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+        $this->seedCategoryFor(faqId: 1);
+        $this->configuration->getAll();
+
+        $controller = $this->createController(
+            new Date($this->configuration),
+            $this->createMock(Mail::class),
+            $this->createMock(Gravatar::class),
+            currentUser: $this->createCurrentUserStub(1, true, inEditScope: false),
+        );
+
+        $response = $controller->show($this->showRequest(1, 1));
+
+        self::assertSame(\Symfony\Component\HttpFoundation\Response::HTTP_OK, $response->getStatusCode());
+        $content = (string) $response->getContent();
+        self::assertStringContainsString('Answer body', $content);
+        self::assertStringNotContainsString('internal notes', $content);
+        self::assertStringNotContainsString('admin/faq/edit/1/en', $content);
     }
 
     public function testSolutionRedirectsToTheFaqPage(): void
@@ -775,10 +803,12 @@ final class FaqControllerTest extends TestCase
         $configProperty->setValue($this->configuration, $config);
     }
 
-    private function createCurrentUserStub(int $userId, bool $canAddFaq): CurrentUser
+    private function createCurrentUserStub(int $userId, bool $canAddFaq, bool $inEditScope = true): CurrentUser
     {
         $permission = $this->createMock(BasicPermission::class);
         $permission->method('hasPermission')->willReturn($canAddFaq);
+        $permission->method('hasPermissionForCategory')->willReturn($inEditScope);
+        $permission->method('hasPermissionForLanguage')->willReturn($inEditScope);
         $permission->expects($this->atLeastOnce())->method('getUserGroups')->with($userId)->willReturn([-1]);
 
         $currentUser = $this->createMock(CurrentUser::class);

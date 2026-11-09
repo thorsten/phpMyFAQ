@@ -388,21 +388,7 @@ final class FaqController extends AbstractFrontController
         $availableLanguages = $faqDisplayService->getAvailableLanguages((int) $faq->faqRecord['id']);
         $tagsHtml = $faqDisplayService->getTagsHtml($faqId);
 
-        // Generate language URLs with SEO slugs
-        $languageUrls = [];
-        foreach ($availableLanguages as $language) {
-            $url = sprintf(
-                '%scontent/%d/%d/%s/%s.html',
-                $this->configuration->getDefaultUrl(),
-                $categoryId,
-                $faqId,
-                $language,
-                TitleSlugifier::slug($question),
-            );
-            $link = new Link($url, $this->configuration);
-            $link->setTitle($question);
-            $languageUrls[$language] = $link->toString();
-        }
+        $languageUrls = $this->buildLanguageUrls($availableLanguages, $categoryId, $faqId, $question);
 
         // Comment permissions
         $expired = $faqDisplayService->isExpired();
@@ -432,6 +418,12 @@ final class FaqController extends AbstractFrontController
         $author = $this->currentUser->getUserVisibilityByEmail((string) $faq->faqRecord['email'])
             ? $faq->faqRecord['author']
             : 'n/a';
+
+        // Editor-only extras (edit link, private notes) follow the same scope as the admin edit
+        // route: the edit_faq right must cover every category the FAQ is linked to and its language,
+        // not only exist at all. Otherwise an editor scoped to one category could read the notes
+        // of any published FAQ.
+        $mayEditFaq = $this->userMayEditFaq($faqId, (string) $faq->faqRecord['lang']);
 
         // SEO
         $seo = new Seo($this->configuration);
@@ -502,10 +494,7 @@ final class FaqController extends AbstractFrontController
             'msgShowMore' => Translation::get(key: 'msgShowMore'),
             'msgAboutFAQ' => Translation::get(key: 'msgAboutFAQ'),
             'userId' => $this->currentUser->getUserId(),
-            'permissionEditFaq' => $this->currentUser->perm->hasPermission(
-                $this->currentUser->getUserId(),
-                PermissionType::FAQ_EDIT->value,
-            ),
+            'permissionEditFaq' => $mayEditFaq,
             'ad_entry_edit_1' => Translation::get(key: 'ad_entry_edit_1'),
             'ad_entry_edit_2' => Translation::get(key: 'ad_entry_edit_2'),
             'bookmarkAction' => $bookmarkAction ?? '',
@@ -536,11 +525,7 @@ final class FaqController extends AbstractFrontController
             $templateVars['msgChangeLanguage'] = Translation::get(key: 'msgLanguageSubmit');
         }
 
-        if (
-            $this->currentUser->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_EDIT->value)
-            && array_key_exists('notes', $faq->faqRecord)
-            && $faq->faqRecord['notes'] !== ''
-        ) {
+        if ($mayEditFaq && array_key_exists('notes', $faq->faqRecord) && $faq->faqRecord['notes'] !== '') {
             $templateVars['notesHeader'] = Translation::get(key: 'ad_admin_notes');
             $templateVars['notes'] = $faq->faqRecord['notes'];
         }
@@ -562,6 +547,72 @@ final class FaqController extends AbstractFrontController
 
         $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
         return $this->render('faq.twig', $templateVars);
+    }
+
+    /**
+     * Generates the language switch URLs with SEO slugs, keyed by language code.
+     *
+     * @param string[] $availableLanguages
+     * @return array<string, string>
+     */
+    private function buildLanguageUrls(array $availableLanguages, int $categoryId, int $faqId, string $question): array
+    {
+        $languageUrls = [];
+        foreach ($availableLanguages as $language) {
+            $url = sprintf(
+                '%scontent/%d/%d/%s/%s.html',
+                $this->configuration->getDefaultUrl(),
+                $categoryId,
+                $faqId,
+                $language,
+                TitleSlugifier::slug($question),
+            );
+            $link = new Link($url, $this->configuration);
+            $link->setTitle($question);
+            $languageUrls[$language] = $link->toString();
+        }
+
+        return $languageUrls;
+    }
+
+    /**
+     * Whether the current user may open the given FAQ in the admin editor: the edit_faq right
+     * has to be held for every category the FAQ is linked to and for its language, like the
+     * admin edit route demands. An FAQ without any category only passes for an unrestricted right.
+     *
+     * @throws \Exception
+     */
+    private function userMayEditFaq(int $faqId, string $faqLanguage): bool
+    {
+        if (!$this->currentUser->isLoggedIn()) {
+            return false;
+        }
+
+        $userId = $this->currentUser->getUserId();
+        $permission = $this->currentUser->perm;
+        $right = PermissionType::FAQ_EDIT->value;
+
+        if (!$permission->hasPermission($userId, $right)) {
+            return false;
+        }
+
+        $categoryIds = array_filter(
+            $this->category->getCategoryIdsFromFaq($faqId),
+            static fn(int $id): bool => $id > 0,
+        );
+        if ($categoryIds === []) {
+            if ($permission->getAllowedCategoriesForRight($userId, $right) !== null) {
+                return false;
+            }
+        }
+
+        foreach ($categoryIds as $categoryId) {
+            if (!$permission->hasPermissionForCategory($userId, $right, $categoryId)) {
+                return false;
+            }
+        }
+
+        return $permission->hasPermissionForLanguage($userId, $right, $faqLanguage);
     }
 
     /**
