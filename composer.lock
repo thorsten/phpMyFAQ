@@ -11661,16 +11661,16 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v8.1.10",
+            "version": "v8.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
-                "reference": "bea5590ad99da19e537a782ca5557ecc3baae938"
+                "reference": "cc23f4014de03abce0425f9c6ff01c2d1e93ca5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/bea5590ad99da19e537a782ca5557ecc3baae938",
-                "reference": "bea5590ad99da19e537a782ca5557ecc3baae938",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/cc23f4014de03abce0425f9c6ff01c2d1e93ca5c",
+                "reference": "cc23f4014de03abce0425f9c6ff01c2d1e93ca5c",
                 "shasum": ""
             },
             "require": {
@@ -11710,7 +11710,7 @@
             "description": "Simulates the behavior of a web browser, allowing you to make requests, click on links and submit forms programmatically",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/browser-kit/tree/v8.1.10"
+                "source": "https://github.com/symfony/browser-kit/tree/v8.1.11"
             },
             "funding": [
                 {
@@ -11730,7 +11730,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-20T19:26:02+00:00"
+            "time": "2026-11-01T07:18:47+00:00"
         },
         {
             "name": "symfony/css-selector",
