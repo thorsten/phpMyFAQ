@@ -20,14 +20,15 @@ declare(strict_types=1);
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Exception\AuthenticationException;
 use OpenSearch\SymfonyClientFactory;
+use phpMyFAQ\Attachment\AttachmentDirectoryResolver;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
-use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Session\SessionStarter;
 use phpMyFAQ\System;
@@ -43,7 +44,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 $foundCurrPath = false;
 $includePaths = explode(PATH_SEPARATOR, ini_get('include_path'));
 $i = 0;
-while ((!$foundCurrPath) && ($i < count($includePaths))) {
+while (!$foundCurrPath && $i < count($includePaths)) {
     if ('.' == $includePaths[$i]) {
         $foundCurrPath = true;
     }
@@ -156,7 +157,7 @@ try {
         $dbConfig->getUser(),
         $dbConfig->getPassword(),
         $dbConfig->getDatabase(),
-        $dbConfig->getPort()
+        $dbConfig->getPort(),
     );
 } catch (Exception $exception) {
     Database::errorPage($exception->getMessage());
@@ -177,9 +178,7 @@ $isUpdateContext = System::isUpdateExemptRequest($scriptName, $pathInfo);
 if (!$isUpdateContext && System::isUpdateNecessary((string) $faqConfig->get('main.currentVersion'))) {
     $systemUri = (new System())->getSystemUri($faqConfig);
 
-    $redirectTarget = str_contains($scriptName, '/admin/')
-        ? $systemUri . 'admin/update'
-        : $systemUri . 'update/';
+    $redirectTarget = str_contains($scriptName, '/admin/') ? $systemUri . 'admin/update' : $systemUri . 'update/';
 
     $response = new RedirectResponse($redirectTarget);
     $response->send();
@@ -233,7 +232,7 @@ if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR 
     // Optional: wait for Elasticsearch to be ready (HTTP health)
     try {
         $http = HttpClient::create(['verify_peer' => false]);
-        $deadline = time() + (int)($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15);
+        $deadline = time() + (int) ($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15);
         do {
             try {
                 $res = $http->request('GET', rtrim($esBaseUri, '/') . '/_cluster/health');
@@ -270,7 +269,7 @@ if ($faqConfig->get('search.enableOpenSearch') && file_exists(PMF_CONFIG_DIR . '
     // Optional: wait for OpenSearch to be ready (HTTP health)
     try {
         $http = HttpClient::create(['verify_peer' => false]);
-        $deadline = time() + (int)($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15);
+        $deadline = time() + (int) ($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15);
         do {
             try {
                 $res = $http->request('GET', rtrim($baseUri, '/') . '/_cluster/health');
@@ -298,21 +297,14 @@ if ($faqConfig->get('search.enableOpenSearch') && file_exists(PMF_CONFIG_DIR . '
 //
 // Build an attachment path
 //
-$confAttachmentsPath = trim($faqConfig->get('records.attachmentsPath'));
-if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:[\\/]%i', $confAttachmentsPath)) {
-    // If we're here, some Windows or unix style absolute path was detected.
-    define('PMF_ATTACHMENTS_DIR', $confAttachmentsPath);
-} else {
-    // otherwise, build the absolute path
-    $tmp = dirname(__DIR__) . DIRECTORY_SEPARATOR . $confAttachmentsPath;
-
-    // Check that nobody is traversing
-    if (str_starts_with($tmp, dirname(__DIR__))) {
-        define('PMF_ATTACHMENTS_DIR', $tmp);
-    } else {
-        define('PMF_ATTACHMENTS_DIR', false);
-    }
-}
+// Client instances of a multisite installation get their own sub-directory,
+// otherwise all instances would share one blob store keyed by file hash only.
+//
+define('PMF_ATTACHMENTS_DIR', AttachmentDirectoryResolver::resolve(
+    (string) $faqConfig->get('records.attachmentsPath'),
+    dirname(__DIR__),
+    defined('PMF_MULTI_INSTANCE_CONFIG_DIR') ? PMF_MULTI_INSTANCE_CONFIG_DIR : null,
+));
 
 AttachmentFactory::initFromConfiguration($faqConfig);
 

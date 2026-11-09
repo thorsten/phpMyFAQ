@@ -10,6 +10,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - updated third party dependencies (Thorsten)
 - fixed security vulnerabilities (Thorsten)
+- multisite: client instances now store attachments in their own directory `<records.attachmentsPath>/multisite/<hostname>/`, existing client attachment files must be moved there once (Thorsten)
 - fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.11 - 2026-10-21
