@@ -39,8 +39,8 @@ dependencies:
     specifier: 1.15.7
     version: 1.15.7
   vanilla-cookieconsent:
-    specifier: 3.1.0
-    version: 3.1.0
+    specifier: 3.2.1
+    version: 3.2.1
 
 devDependencies:
   '@axe-core/playwright':
@@ -3692,8 +3692,8 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
 
-  /vanilla-cookieconsent@3.1.0:
-    resolution: {integrity: sha512-/McNRtm/3IXzb9dhqMIcbquoU45SzbN2VB+To4jxEPqMmp7uVniP6BhGLjU8MC7ZCDsNQVOp27fhQTM/ruIXAA==}
+  /vanilla-cookieconsent@3.2.1:
+    resolution: {integrity: sha512-M3XXHR7AitvIRLj0kq5wZQqTNmAtINhxy4+IO2Tknm064uPzEgv8WQdp8ttgblspPvvocF8BkLI5qnkB31nVVA==}
     dev: false
 
   /verkit@0.5.0:
