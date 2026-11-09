@@ -26,6 +26,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryTreeRestrictionFilter;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Comments;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\SeoEntity;
@@ -55,6 +56,7 @@ use phpMyFAQ\Twig\Extensions\UserNameTwigExtension;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 use Twig\Extension\AttributeExtension;
@@ -285,11 +287,13 @@ final class FaqController extends AbstractAdministrationController
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
 
-        $this->faq->getFaq($faqId, null, true);
+        // The scope was checked against the route language, so load that row and not the one
+        // matching the admin's UI language (?lang=), which may be a translation out of scope.
+        $this->faq->getFaq($faqId, null, true, $faqLanguage);
         $faqData = $this->faq->faqRecord;
 
         if ($selectedRevisionId !== null && $selectedRevisionId !== (int) $faqData['revision_id']) {
-            $this->faq->getFaq($faqId, $selectedRevisionId, true);
+            $this->faq->getFaq($faqId, $selectedRevisionId, true, $faqLanguage);
             $faqData = $this->faq->faqRecord;
             $faqData['revision_id'] = $selectedRevisionId;
         }
@@ -412,11 +416,17 @@ final class FaqController extends AbstractAdministrationController
         $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
+        // Copying pre-fills the editor with the full source record, including drafts and the
+        // private editor notes, so the caller needs the same right on the source as edit()
+        // demands: FAQ_EDIT in every category of the record and in its language. FAQ_ADD alone
+        // only covers the copy that will be created.
+        $this->userMayReadFaqForEditing(PermissionType::FAQ_EDIT, $category, $faqId, $faqLanguage);
+
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_COPY->value . ':' . $faqId);
 
         $categories = [];
 
-        $this->faq->getFaq($faqId, null, true);
+        $this->faq->getFaq($faqId, null, true, $faqLanguage);
         $faqData = $this->normalizeCommentFlag($this->faq->faqRecord);
         $faqData['title'] = 'Copy of ' . (string) $faqData['title'];
 
@@ -483,11 +493,16 @@ final class FaqController extends AbstractAdministrationController
         $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
+        // A translator restricted to certain categories may only read source records from
+        // those categories. The language is deliberately not checked here: the translate right
+        // is scoped to the target language, which is chosen in the editor, not to the source.
+        $this->userMayReadFaqForEditing(PermissionType::FAQ_TRANSLATE, $category, $faqId, $faqLanguage, false);
+
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_TRANSLATE->value . ':' . $faqId);
 
         $categories = [];
 
-        $this->faq->getFaq($faqId, null, true);
+        $this->faq->getFaq($faqId, null, true, $faqLanguage);
         $faqData = $this->normalizeCommentFlag($this->faq->faqRecord);
         $faqData['title'] = 'Translation of ' . (string) $faqData['title'];
 
@@ -727,5 +742,33 @@ final class FaqController extends AbstractAdministrationController
         $faqData['comment'] = ($faqData['comment'] ?? null) === 'y' ? 'checked' : null;
 
         return $faqData;
+    }
+
+    /**
+     * Ensures the user holds the given right for the source record a page is about to pre-fill
+     * the editor with: the global right, the right in every category of the record and, unless
+     * disabled, the right for the record's language. Faq::getFaq() in admin context returns the
+     * record unmasked (drafts, private notes, author e-mail), so a global right alone would let a
+     * category- or language-restricted user read every FAQ by id.
+     *
+     * @throws UnauthorizedHttpException|ForbiddenException
+     */
+    private function userMayReadFaqForEditing(
+        PermissionType $permissionType,
+        Category $category,
+        int $faqId,
+        string $faqLanguage,
+        bool $checkLanguage = true,
+    ): void {
+        $this->userHasPermission($permissionType);
+
+        $categoryRelation = new Relation($this->configuration, $category);
+        $categories = $categoryRelation->getCategories($faqId, $faqLanguage);
+
+        $this->userHasPermissionForCategories($permissionType, array_keys($categories));
+
+        if ($checkLanguage) {
+            $this->userHasPermissionForLanguage($permissionType, $faqLanguage);
+        }
     }
 }

@@ -462,16 +462,24 @@ class Faq
      * @param int      $faqId FAQ ID
      * @param int|null $faqRevisionId Revision ID
      * @param bool     $isAdmin Must be true if it is called by an admin/author context
+     * @param string|null $faqLanguage Load exactly this translation; null resolves the UI language with a
+     *                                 default-language fallback. Admin pages that already checked the
+     *                                 caller's rights against a specific language must pass it, so the
+     *                                 row shown is the row that was authorized.
      */
-    public function getFaq(int $faqId, ?int $faqRevisionId = null, bool $isAdmin = false): void
-    {
-        $currentLanguage = $this->configuration->getLanguage()->getLanguage();
+    public function getFaq(
+        int $faqId,
+        ?int $faqRevisionId = null,
+        bool $isAdmin = false,
+        ?string $faqLanguage = null,
+    ): void {
+        $currentLanguage = $faqLanguage ?? $this->configuration->getLanguage()->getLanguage();
         $defaultLanguage = $this->configuration->getDefaultLanguage();
 
         /* @mago-expect analysis:mixed-assignment - DB layer query results are untyped by design */
         $result = $this->getFaqResult($faqId, $currentLanguage, $faqRevisionId, $isAdmin);
 
-        if (0 === $this->configuration->getDb()->numRows($result)) {
+        if ($faqLanguage === null && 0 === $this->configuration->getDb()->numRows($result)) {
             /* @mago-expect analysis:mixed-assignment - DB layer query results are untyped by design */
             $result = $this->getFaqResult($faqId, $defaultLanguage, $faqRevisionId, $isAdmin);
         }

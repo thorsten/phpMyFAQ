@@ -380,6 +380,28 @@ class FaqTest extends TestCase
         $this->assertSame('en', $this->faq->faqRecord['lang']);
     }
 
+    public function testGetFaqWithExplicitLanguageIgnoresUiLanguage(): void
+    {
+        $this->seedFaqRecord(id: 5008, solutionId: 7008, lang: 'en', question: 'English Question');
+        $this->seedFaqRecord(id: 5008, solutionId: 7008, lang: 'de', question: 'Deutsche Frage');
+        Language::$language = 'en';
+
+        $this->faq->getFaq(5008, null, true, 'de');
+
+        $this->assertSame('Deutsche Frage', strip_tags((string) $this->faq->faqRecord['title']));
+        $this->assertSame('de', $this->faq->faqRecord['lang']);
+    }
+
+    public function testGetFaqWithExplicitLanguageDoesNotFallBackToDefaultLanguage(): void
+    {
+        $this->seedFaqRecord(id: 5009, solutionId: 7009, lang: 'en', question: 'English Question');
+
+        $this->faq->getFaq(5009, null, true, 'de');
+
+        $this->assertSame(42, $this->faq->faqRecord['solution_id']);
+        $this->assertSame('de', $this->faq->faqRecord['lang']);
+    }
+
     public function testGetFaqBySolutionIdFallsBackWithoutPermissionFilter(): void
     {
         $this->seedFaqRecord(id: 5004, solutionId: 7004, question: 'Fallback question', userId: null);
@@ -1287,14 +1309,14 @@ class FaqTest extends TestCase
         array $categoryOrder,
         string $faqOrderBy,
     ): void {
-        $this->assertSame(
-            $categoryOrder,
-            new \ReflectionMethod(Faq::class, 'normalizeCategoryOrder')->invoke($this->faq, $requested),
-        );
-        $this->assertSame(
-            $faqOrderBy,
-            new \ReflectionMethod(Faq::class, 'normalizeFaqOrderBy')->invoke($this->faq, $requested),
-        );
+        $this->assertSame($categoryOrder, new \ReflectionMethod(Faq::class, 'normalizeCategoryOrder')->invoke(
+            $this->faq,
+            $requested,
+        ));
+        $this->assertSame($faqOrderBy, new \ReflectionMethod(Faq::class, 'normalizeFaqOrderBy')->invoke(
+            $this->faq,
+            $requested,
+        ));
     }
 
     public function testGetFaqsDataByCategoryIdShufflesTheItemsWhenRandomSortIsEnabled(): void
@@ -1465,9 +1487,10 @@ class FaqTest extends TestCase
         }
 
         $files = [];
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($storageRoot, \FilesystemIterator::SKIP_DOTS),
-        );
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(
+            $storageRoot,
+            \FilesystemIterator::SKIP_DOTS,
+        ));
         foreach ($iterator as $file) {
             if ($file->isFile()) {
                 $files[] = $file->getPathname();

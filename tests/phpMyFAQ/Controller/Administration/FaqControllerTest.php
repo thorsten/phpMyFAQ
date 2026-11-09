@@ -329,6 +329,135 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * Regression guard: copy() pre-fills the editor with the unmasked source record (drafts,
+     * private notes, author e-mail). Holding FAQ_ADD is not enough to read it; the caller needs
+     * FAQ_EDIT on the source like edit() demands.
+     *
+     * @throws \Exception
+     */
+    public function testCopyRequiresEditPermissionOnSourceRecord(): void
+    {
+        $request = new Request([], [], ['faqId' => '1', 'faqLanguage' => 'en']);
+
+        $controller = $this->createControllerWithPreparedFaqRecord();
+        $controller->setContainer($this->createAuthenticatedContainer(deniedRight: PermissionType::FAQ_EDIT));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission.');
+
+        $controller->copy($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCopyReturnsForbiddenForSourceInRestrictedCategory(): void
+    {
+        $this->relateFaqToCategory(777, 'en', 666);
+        $request = new Request([], [], ['faqId' => '777', 'faqLanguage' => 'en']);
+
+        $controller = $this->createControllerWithPreparedFaqRecord();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666.');
+
+        $controller->copy($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCopyReturnsForbiddenForSourceInRestrictedLanguage(): void
+    {
+        $request = new Request([], [], ['faqId' => '1', 'faqLanguage' => 'fr']);
+
+        $controller = $this->createControllerWithPreparedFaqRecord();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "fr".');
+
+        $controller->copy($request);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCopyLoadsSourceRecordInRouteLanguage(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = $this->editableFaqRecord(['lang' => 'de']);
+        $faq->method('getNextSolutionId')->willReturn(1001);
+        $faq->expects($this->once())->method('getFaq')->with(1, null, true, 'de');
+
+        $controller = new FaqController(
+            $this->createStub(Comments::class),
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(Seo::class),
+            $this->createStub(CategoryHelper::class),
+            $this->createStub(UserHelper::class),
+            new FaqPermission($this->configuration),
+            $this->createStub(Changelog::class),
+            $this->createStub(Question::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->copy(new Request([], [], ['faqId' => '1', 'faqLanguage' => 'de']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTranslateReturnsForbiddenForSourceInRestrictedCategory(): void
+    {
+        $this->relateFaqToCategory(777, 'en', 666);
+        $request = new Request([], [], ['faqId' => '777', 'faqLanguage' => 'en']);
+
+        $controller = $this->createControllerWithPreparedFaqRecord();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_TRANSLATE" permission for category 666.');
+
+        $controller->translate($request);
+    }
+
+    /**
+     * The translate right is scoped to the target language chosen in the editor, so a source
+     * record in a language the translator may not write is still readable.
+     *
+     * @throws \Exception
+     */
+    public function testTranslateDoesNotCheckSourceLanguage(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = $this->editableFaqRecord(['lang' => 'fr']);
+        $faq->method('getNextSolutionId')->willReturn(1001);
+        $faq->expects($this->once())->method('getFaq')->with(1, null, true, 'fr');
+
+        $controller = new FaqController(
+            $this->createStub(Comments::class),
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(Seo::class),
+            $this->createStub(CategoryHelper::class),
+            $this->createStub(UserHelper::class),
+            new FaqPermission($this->configuration),
+            $this->createStub(Changelog::class),
+            $this->createStub(Question::class),
+        );
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->translate(new Request([], [], ['faqId' => '1', 'faqLanguage' => 'fr']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
      * @throws \Exception
      */
     public function testAnswerRendersInCurrentAnonymousAdminContext(): void
@@ -598,12 +727,12 @@ final class FaqControllerTest extends TestCase
         $faq
             ->expects($this->exactly(2))
             ->method('getFaq')
-            ->willReturnCallback(
-                static function (int $faqId, ?int $revisionId, bool $isAdmin) use (&$loadedRevisions): bool {
-                    $loadedRevisions[] = $revisionId;
-                    return true;
-                },
-            );
+            ->willReturnCallback(static function (int $faqId, ?int $revisionId, bool $isAdmin) use (
+                &$loadedRevisions,
+            ): bool {
+                $loadedRevisions[] = $revisionId;
+                return true;
+            });
 
         $tags = $this->createMock(Tags::class);
         $tags->method('getAllTagsById')->willReturn([]);
@@ -630,6 +759,18 @@ final class FaqControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame([null, 3], $loadedRevisions);
+    }
+
+    private function relateFaqToCategory(int $faqId, string $language, int $categoryId): void
+    {
+        self::assertNotFalse($this->dbHandle->query(sprintf(
+            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+             VALUES (%d, '%s', %d, '%s')",
+            $categoryId,
+            $language,
+            $faqId,
+            $language,
+        )));
     }
 
     /**
