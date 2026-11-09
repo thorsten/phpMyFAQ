@@ -93,7 +93,9 @@ final class CategoryController extends AbstractController
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $result = array_values($category->getAllCategories());
+        // getAllCategories() returns every category row, including inactive and group-restricted
+        // ones. Only expose the categories the requester is allowed to see.
+        $result = array_values($category->getOrderedCategories());
 
         if ($result === []) {
             return $this->json($result, Response::HTTP_NOT_FOUND);

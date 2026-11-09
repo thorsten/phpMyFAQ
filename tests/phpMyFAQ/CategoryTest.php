@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\CategoryEntity;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -13,6 +14,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class CategoryTest extends TestCase
 {
     private Category $category;
+
+    private Configuration $configuration;
 
     /**
      * @throws Exception
@@ -29,6 +32,7 @@ class CategoryTest extends TestCase
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 
+        $this->configuration = $configuration;
         $this->category = new Category($configuration);
     }
 
@@ -142,6 +146,37 @@ class CategoryTest extends TestCase
 
         // Cleanup
         $this->category->delete(1, 'en');
+    }
+
+    public function testIsCategoryVisibleHidesInactiveAndGroupRestrictedCategories(): void
+    {
+        $this->category->create($this->createCategory(9301));
+        $this->category->create($this->createCategory(9302)->setActive(false));
+        $this->category->create($this->createCategory(9303));
+
+        $permission = new Permission($this->configuration);
+        $permission->add(Permission::GROUP, [9301, 9302], [-1]);
+        $permission->add(Permission::GROUP, [9303], [999]);
+
+        // An anonymous visitor only holds the default group -1.
+        $category = new Category($this->configuration, [-1]);
+
+        $this->assertTrue($category->isCategoryVisible(9301));
+        $this->assertFalse($category->isCategoryVisible(9302));
+        $this->assertFalse($category->isCategoryVisible(9303));
+        $this->assertFalse($category->isCategoryVisible(9304));
+
+        // A member of group 999 sees the restricted but not the inactive category.
+        $member = new Category($this->configuration, [999]);
+
+        $this->assertTrue($member->isCategoryVisible(9303));
+        $this->assertFalse($member->isCategoryVisible(9302));
+
+        // Cleanup
+        $permission->delete(Permission::GROUP, [9301, 9302, 9303]);
+        foreach ([9301, 9302, 9303] as $id) {
+            $this->category->delete($id, 'en');
+        }
     }
 
     public function testGetAllCategoryIds(): void

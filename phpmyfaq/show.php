@@ -23,6 +23,7 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -51,6 +52,16 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./show.twig');
 
 if (!is_null($selectedCategoryId)) {
+    // Do not disclose a category the requester may not see. getCategoryData() also returns
+    // inactive and group-restricted categories with their name and description intact.
+    if (!$category->isCategoryVisible($selectedCategoryId)) {
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+
+        $twigTemplate = $twig->loadTemplate('./404.twig');
+
+        return $templateVars;
+    }
+
     $faqSession->userTracking('show_category', $selectedCategoryId);
 
     $categoryData = $category->getCategoryData($selectedCategoryId);
