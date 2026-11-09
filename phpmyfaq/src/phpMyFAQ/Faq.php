@@ -1270,6 +1270,23 @@ class Faq
     }
 
     /**
+     * Returns the solution ID shared by all existing translations of a FAQ,
+     * or null if no translation exists yet.
+     */
+    public function getSolutionIdByFaqId(int $faqId): ?int
+    {
+        $query = sprintf('SELECT solution_id FROM %sfaqdata WHERE id = %d', Database::getTablePrefix(), $faqId);
+
+        $result = $this->configuration->getDb()->query($query);
+
+        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+            return (int) $row->solution_id;
+        }
+
+        return null;
+    }
+
+    /**
      * Returns the solution ID from a given ID and language
      */
     public function getSolutionIdFromId(int $faqId, string $faqLang): int

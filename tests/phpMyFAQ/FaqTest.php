@@ -197,6 +197,29 @@ class FaqTest extends TestCase
         $this->assertGreaterThan(0, $this->faq->getSolutionIdFromId($faqEntity->getId(), $faqEntity->getLanguage()));
     }
 
+    public function testGetSolutionIdByFaqIdReturnsStoredSolutionId(): void
+    {
+        $english = $this->createTrackedFaq($this->getFaqEntity());
+
+        $this->assertSame($english->getSolutionId(), $this->faq->getSolutionIdByFaqId($english->getId()));
+    }
+
+    public function testGetSolutionIdByFaqIdIgnoresLanguage(): void
+    {
+        $english = $this->createTrackedFaq($this->getFaqEntity());
+
+        $german = $this->getFaqEntity();
+        $german->setId($english->getId())->setLanguage('de')->setSolutionId($english->getSolutionId());
+        $this->createTrackedFaq($german);
+
+        $this->assertSame($english->getSolutionId(), $this->faq->getSolutionIdByFaqId($english->getId()));
+    }
+
+    public function testGetSolutionIdByFaqIdReturnsNullForUnknownFaq(): void
+    {
+        $this->assertNull($this->faq->getSolutionIdByFaqId(999999999));
+    }
+
     public function testHasTranslation(): void
     {
         $faqEntity = $this->getFaqEntity();

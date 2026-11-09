@@ -301,7 +301,9 @@ final class FaqController extends AbstractController
 
         // Collect FAQ data
         $faqId = Filter::filterVar($data->faqId, FILTER_VALIDATE_INT);
-        $solutionId = Filter::filterVar($data->solutionId, FILTER_VALIDATE_INT);
+        // Never trust a client-supplied solution ID: it is used as the search index document ID.
+        // Reuse the solution ID of the existing FAQ (or of its other translations) instead.
+        $solutionId = $faq->getSolutionIdByFaqId((int) $faqId) ?? $faq->getNextSolutionId();
         $revisionId = Filter::filterVar($data->revisionId, FILTER_VALIDATE_INT);
         $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
         if (is_array($data->{'categories[]'})) {
