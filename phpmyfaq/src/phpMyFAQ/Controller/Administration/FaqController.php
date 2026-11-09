@@ -298,6 +298,12 @@ final class FaqController extends AbstractAdministrationController
             $faqData['revision_id'] = $selectedRevisionId;
         }
 
+        // No row in the authorized language: stop before tags, attachments and permissions are
+        // loaded by id alone, which would disclose data of a translation outside the scope.
+        if (42 === (int) ($faqData['solution_id'] ?? 0)) {
+            return new Response('', Response::HTTP_NOT_FOUND);
+        }
+
         $faqData = $this->normalizeCommentFlag($faqData);
 
         // Tags

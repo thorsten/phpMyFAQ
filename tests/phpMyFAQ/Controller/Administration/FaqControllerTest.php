@@ -583,6 +583,61 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * Regression guard: the scope checks run against the route language, but tags and
+     * attachments are fetched by id alone. When the FAQ has no row in the route language,
+     * Faq::getFaq() leaves the solution_id 42 placeholder behind; the editor must then answer
+     * 404 instead of rendering the placeholder together with data of other translations.
+     *
+     * @throws \Exception
+     */
+    public function testEditReturnsNotFoundWhenFaqHasNoRowInRouteLanguage(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq
+            ->expects($this->once())
+            ->method('getFaq')
+            ->with(1, null, true, 'de')
+            ->willReturnCallback(static function () use ($faq): void {
+                $faq->faqRecord = [
+                    'id' => 1,
+                    'lang' => 'de',
+                    'solution_id' => 42,
+                    'revision_id' => null,
+                    'status' => 'draft',
+                    'title' => '',
+                    'content' => 'Access denied',
+                    'author' => '',
+                    'email' => '',
+                ];
+            });
+
+        $tags = $this->createMock(Tags::class);
+        $tags->expects($this->never())->method('getAllTagsById');
+
+        $faqPermission = $this->createMock(FaqPermission::class);
+        $faqPermission->expects($this->never())->method('get');
+
+        $controller = new FaqController(
+            $this->createStub(Comments::class),
+            $faq,
+            $tags,
+            $this->createStub(Seo::class),
+            $this->createStub(CategoryHelper::class),
+            $this->createStub(UserHelper::class),
+            $faqPermission,
+            $this->createStub(Changelog::class),
+            $this->createStub(Question::class),
+        );
+
+        $request = new Request([], [], ['faqId' => '1', 'faqLanguage' => 'de']);
+        $controller->setContainer($this->createAuthenticatedContainer());
+        $response = $controller->edit($request);
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertSame('', (string) $response->getContent());
+    }
+
+    /**
      * @throws \Exception
      */
     public function testAnswerPrefillsQuestionNotificationFields(): void
