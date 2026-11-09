@@ -185,6 +185,57 @@ class FaqTest extends TestCase
         $this->assertTrue($result);
     }
 
+    public function testDeleteReturnsFalseForMissingTranslation(): void
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+
+        $this->assertFalse($this->faq->delete($faqEntity->getId(), 'de'));
+        $this->assertTrue($this->faq->hasTranslation($faqEntity->getId(), 'en'));
+    }
+
+    /**
+     * @throws AttachmentException
+     * @throws FileException
+     */
+    public function testDeleteOneTranslationKeepsSharedDataOfOtherTranslation(): void
+    {
+        $english = $this->createTrackedFaq($this->getFaqEntity());
+        $faqId = $english->getId();
+
+        $german = $this->getFaqEntity();
+        $german->setId($faqId)->setLanguage('de')->setQuestion('Frage');
+        $this->faq->create($german);
+
+        $this->grantPublicAccess($english);
+        $this->grantGroupAccess($english, -1);
+        $db = $this->configuration->getDb();
+        $db->query(sprintf('INSERT INTO faqdata_tags (record_id, tagging_id) VALUES (%d, 99999)', $faqId));
+        $db->query(sprintf(
+            "INSERT INTO faqvoting (id, artikel, vote, usr, datum, ip) VALUES (%d, %d, 5, 1, '%s', '127.0.0.1')",
+            $db->nextId('faqvoting', 'id'),
+            $faqId,
+            date('YmdHis'),
+        ));
+
+        $this->assertTrue($this->faq->delete($faqId, 'en'));
+
+        $this->assertFalse($this->faq->hasTranslation($faqId, 'en'));
+        $this->assertTrue($this->faq->hasTranslation($faqId, 'de'));
+        $this->assertSame(1, $this->countRows('faqdata_user', 'record_id', $faqId));
+        $this->assertSame(1, $this->countRows('faqdata_group', 'record_id', $faqId));
+        $this->assertSame(1, $this->countRows('faqdata_tags', 'record_id', $faqId));
+        $this->assertSame(1, $this->countRows('faqvoting', 'artikel', $faqId));
+
+        $this->assertTrue($this->faq->delete($faqId, 'de'));
+
+        $this->assertFalse($this->faq->hasTranslation($faqId, 'de'));
+        $this->assertSame(0, $this->countRows('faqdata_user', 'record_id', $faqId));
+        $this->assertSame(0, $this->countRows('faqdata_group', 'record_id', $faqId));
+        $this->assertSame(0, $this->countRows('faqdata_tags', 'record_id', $faqId));
+        $this->assertSame(0, $this->countRows('faqvoting', 'artikel', $faqId));
+    }
+
     public function testGetSolutionIdFromId(): void
     {
         $faqEntity = $this->getFaqEntity();
@@ -948,6 +999,14 @@ class FaqTest extends TestCase
                 $faqEntity->getId(),
                 $this->configuration->getDb()->escape($faqEntity->getLanguage()),
             ));
+    }
+
+    private function countRows(string $table, string $column, int $value): int
+    {
+        $db = $this->configuration->getDb();
+        $result = $db->query(sprintf('SELECT %s FROM %s WHERE %s = %d', $column, $table, $column, $value));
+
+        return $db->numRows($result);
     }
 
     private function grantPublicAccess(FaqEntity $faqEntity): void

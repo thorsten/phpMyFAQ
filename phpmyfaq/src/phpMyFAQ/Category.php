@@ -282,6 +282,16 @@ class Category
     }
 
     /**
+     * Checks whether the current user may see the given category. Only active categories
+     * the user's groups have access to are loaded into the cache by getOrderedCategories(),
+     * so direct lookups such as getCategoryData() must not be exposed without this check.
+     */
+    public function isCategoryVisible(int $categoryId): bool
+    {
+        return $this->categoryCache->getCategoryName($categoryId) !== [];
+    }
+
+    /**
      * Gets all categories and write them in an array.
      * @return array<int, array<string, mixed>>
      */

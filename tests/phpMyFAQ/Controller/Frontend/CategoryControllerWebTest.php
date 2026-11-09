@@ -9,6 +9,7 @@ use phpMyFAQ\Functional\ControllerWebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
+use Symfony\Component\HttpFoundation\Response;
 
 #[CoversClass(CategoryController::class)]
 #[UsesNamespace('phpMyFAQ')]
@@ -58,7 +59,7 @@ use PHPUnit\Framework\Attributes\UsesNamespace;
 #[UsesClass(\phpMyFAQ\User\UserSession::class)]
 final class CategoryControllerWebTest extends ControllerWebTestCase
 {
-    private function seedCategory(int $id, string $name, int $parentId = 0): void
+    private function seedCategory(int $id, string $name, int $parentId = 0, bool $active = true): void
     {
         $configuration = $this->getConfiguration('public');
         self::assertInstanceOf(Configuration::class, $configuration);
@@ -69,15 +70,16 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
             "INSERT INTO faqcategories
                 (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
              VALUES
-                (%d, 'en', %d, '%s', '%s', 1, -1, 1, '', 1)",
+                (%d, 'en', %d, '%s', '%s', 1, -1, %d, '', 1)",
             $id,
             $parentId,
             $db->escape($name),
             $db->escape($name . ' description'),
+            $active ? 1 : 0,
         ));
     }
 
-    private function seedCategoryPermissions(int $id): void
+    private function seedCategoryPermissions(int $id, int $groupId = -1): void
     {
         $configuration = $this->getConfiguration('public');
         self::assertInstanceOf(Configuration::class, $configuration);
@@ -85,7 +87,7 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         $db = $configuration->getDb();
         $db->query(sprintf('DELETE FROM faqcategory_group WHERE category_id = %d', $id));
         $db->query(sprintf('DELETE FROM faqcategory_user WHERE category_id = %d', $id));
-        $db->query(sprintf('INSERT INTO faqcategory_group (category_id, group_id) VALUES (%d, -1)', $id));
+        $db->query(sprintf('INSERT INTO faqcategory_group (category_id, group_id) VALUES (%d, %d)', $id, $groupId));
         $db->query(sprintf('INSERT INTO faqcategory_user (category_id, user_id) VALUES (%d, -1)', $id));
     }
 
@@ -136,6 +138,7 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
     {
         $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
         $this->seedCategory(801, 'Root Category');
+        $this->seedCategoryPermissions(801);
         $this->seedCategory(802, 'Child Category', 801);
         $this->seedFaqForCategory(9801, 801, 'Root test question');
 
@@ -151,6 +154,7 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
     {
         $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
         $this->seedCategory(811, 'Empty Parent');
+        $this->seedCategoryPermissions(811);
         $this->seedCategory(812, 'Empty Child', 811);
 
         $response = $this->requestPublic('GET', '/category/811/empty-parent.html');
@@ -165,11 +169,49 @@ final class CategoryControllerWebTest extends ControllerWebTestCase
         $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
         $this->seedCategory(821, 'Parent Category');
         $this->seedCategory(822, 'Child Category', 821);
+        $this->seedCategoryPermissions(822);
 
         $response = $this->requestPublic('GET', '/category/822/child-category.html');
 
         self::assertResponseIsSuccessful($response);
         self::assertResponseContains('one category up', $response);
         self::assertResponseContains('/category/821/.html', $response);
+    }
+
+    /**
+     * getCategoryData() returns inactive categories with name and description intact, so the
+     * page must refuse them before it reads the record.
+     */
+    public function testShowCategoryPageHidesInactiveCategory(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+        $this->seedCategory(831, 'INACTIVE_PROBE', active: false);
+        $this->seedCategoryPermissions(831);
+
+        $response = $this->requestPublic('GET', '/category/831/inactive-probe.html');
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertStringNotContainsString('INACTIVE_PROBE', (string) $response->getContent());
+    }
+
+    public function testShowCategoryPageHidesCategoryRestrictedToAnotherGroup(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+        $this->seedCategory(841, 'PRIVATE_PROBE');
+        $this->seedCategoryPermissions(841, groupId: 999);
+
+        $response = $this->requestPublic('GET', '/category/841/private-probe.html');
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertStringNotContainsString('PRIVATE_PROBE', (string) $response->getContent());
+    }
+
+    public function testShowCategoryPageReturnsNotFoundForUnknownCategory(): void
+    {
+        $this->overrideConfigurationValues(['main.enableUserTracking' => false]);
+
+        $response = $this->requestPublic('GET', '/category/851/unknown.html');
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 }

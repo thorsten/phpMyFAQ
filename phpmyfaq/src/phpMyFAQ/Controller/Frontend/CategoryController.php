@@ -61,12 +61,44 @@ class CategoryController extends AbstractFrontController
         $currentGroups = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
 
         $category = $this->initializeCategory($currentGroups);
+
+        // Do not disclose a category the requester may not see. getCategoryData() also returns
+        // inactive and group-restricted categories with their name and description intact.
+        if (!$category->isCategoryVisible($categoryId)) {
+            return $this->renderCategoryNotFound($request);
+        }
+
         $faq = $this->initializeFaq($currentGroups);
         $this->categoryHelper = $this->createCategoryHelper();
 
         $templateVars = $this->renderSpecificCategory($request, $this->userSession, $categoryId, $category, $faq);
 
         return $this->render('show.twig', $templateVars);
+    }
+
+    /**
+     * Renders the regular 404 page for a category that does not exist or that the
+     * requester is not allowed to see. Both cases look the same on purpose.
+     *
+     * @throws Exception
+     */
+    private function renderCategoryNotFound(Request $request): Response
+    {
+        $response = new Response();
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+
+        return $this->render(
+            '404.twig',
+            [
+                ...$this->getHeader($request),
+                'title' => sprintf(
+                    '%s - %s',
+                    Translation::getString(key: 'msgError404'),
+                    $this->configuration->getTitle(),
+                ),
+            ],
+            $response,
+        );
     }
 
     /**

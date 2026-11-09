@@ -799,6 +799,17 @@ class Faq
      */
     public function delete(int $faqId, string $faqLang): bool
     {
+        // A language the record is not translated into must not reach the delete:
+        // once the last matching row is gone, the rows shared by every translation go too.
+        return $this->hasTranslation($faqId, $faqLang) && $this->deleteTranslation($faqId, $faqLang);
+    }
+
+    /**
+     * @throws Attachment\AttachmentException
+     * @throws Attachment\Filesystem\File\FileException
+     */
+    private function deleteTranslation(int $faqId, string $faqLang): bool
+    {
         $solutionId = $this->getSolutionIdFromId($faqId, $faqLang);
 
         $this->faqRepository->deleteByIdAndLanguage($faqId, $faqLang);
