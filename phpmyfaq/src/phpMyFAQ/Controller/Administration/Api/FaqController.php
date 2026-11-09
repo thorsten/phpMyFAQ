@@ -422,7 +422,6 @@ final class FaqController extends AbstractAdministrationApiController
 
         // Collect FAQ data
         $faqId = (int) Filter::filterVar($data->faqId ?? null, FILTER_VALIDATE_INT);
-        $solutionId = (int) Filter::filterVar($data->solutionId ?? null, FILTER_VALIDATE_INT);
         $revisionId = (int) Filter::filterVar($data->revisionId ?? null, FILTER_VALIDATE_INT);
         $question = Filter::filterVar($data->question ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $rawCategories = $data->{'categories[]'} ?? null;
@@ -450,6 +449,12 @@ final class FaqController extends AbstractAdministrationApiController
 
         $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, $categories);
         $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $faqLang);
+
+        // The solution id is the document id in Elasticsearch/OpenSearch. It is resolved from
+        // the stored row, never taken from the request: a client-supplied value would let an
+        // editor overwrite or delete the search document of any FAQ, including FAQs outside the
+        // editor's category and language scope. A translation without a row gets the next id.
+        $solutionId = $this->faq->getSolutionIdFromId($faqId, $faqLang);
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 

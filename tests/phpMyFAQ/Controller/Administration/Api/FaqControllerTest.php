@@ -3476,12 +3476,12 @@ final class FaqControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
     }
 
-    private function createRequestForFaqUpdate(string $csrfToken, ?string $status): Request
+    private function createRequestForFaqUpdate(string $csrfToken, ?string $status, int $solutionId = 1001): Request
     {
         $data = [
             'pmf-csrf-token' => $csrfToken,
             'faqId' => 1,
-            'solutionId' => 1001,
+            'solutionId' => $solutionId,
             'revisionId' => 0,
             'question' => 'Updated FAQ',
             'categories[]' => 1,
@@ -3718,6 +3718,7 @@ final class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->method('hasTranslation')->willReturn(true);
         $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('getSolutionIdFromId')->with(1, 'en')->willReturn(1001);
         $faq->expects($this->once())->method('update')->willReturnArgument(0);
 
         $controller = $this->createControllerWithFaq($faq);
@@ -3750,6 +3751,7 @@ final class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->method('hasTranslation')->willReturn(true);
         $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('getSolutionIdFromId')->with(1, 'en')->willReturn(1001);
         $faq->expects($this->once())->method('update')->willReturnArgument(0);
 
         $controller = $this->createControllerWithFaq($faq);
@@ -3921,6 +3923,7 @@ final class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->method('hasTranslation')->willReturn(true);
         $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('getSolutionIdFromId')->with(1, 'en')->willReturn(1001);
         $faq->expects($this->once())->method('update')->willReturnArgument(0);
 
         $controller = $this->createControllerWithFaq($faq);
@@ -3957,12 +3960,103 @@ final class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->method('hasTranslation')->willReturn(true);
         $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('getSolutionIdFromId')->with(1, 'en')->willReturn(1001);
         $faq->expects($this->once())->method('update')->willReturnArgument(0);
 
         $controller = $this->createControllerWithFaq($faq);
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
         $response = $controller->update($this->createRequestForFaqUpdate($csrfToken, status: 'draft'));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * The solution id is the document id in the search engines. A client-supplied value must be
+     * ignored: with it, an editor could delete the search document of any FAQ, including one
+     * outside the editor's category and language scope, by saving an own draft FAQ.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateIgnoresTheRequestSolutionIdWhenRemovingAnUnpublishedFaqFromOpenSearch(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        $client = $this->enableOpenSearch();
+        $client->expects($this->never())->method('index');
+        $client
+            ->expects($this->once())
+            ->method('delete')
+            ->with(['index' => 'phpmyfaq-test', 'id' => '1001'])
+            ->willReturn(['result' => 'deleted']);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
+        $faq->expects($this->once())->method('getSolutionIdFromId')->with(1, 'en')->willReturn(1001);
+        $faq
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->callback(
+                static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): bool => $faqEntity->getSolutionId() === 1001,
+            ))
+            ->willReturnArgument(0);
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->update(
+            $this->createRequestForFaqUpdate($csrfToken, status: null, solutionId: 1042),
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * Same for the upsert: a client-supplied solution id must not let an editor overwrite
+     * another FAQ's search document, or plant one under an id no FAQ owns.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateIgnoresTheRequestSolutionIdWhenUpsertingAPublishedFaqInElasticsearch(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        $httpClient = $this->enableElasticsearch();
+        $httpClient
+            ->expects($this->once())
+            ->method('sendRequest')
+            ->with($this->callback(static function (\Psr\Http\Message\RequestInterface $request): bool {
+                $body = json_decode((string) $request->getBody(), true);
+
+                return (
+                    $request->getMethod() === 'PUT'
+                    && $request->getUri()->getPath() === '/phpmyfaq-test/_doc/1001'
+                    && $body['id'] === 1
+                );
+            }))
+            ->willReturn($this->elasticsearchResponse(200, ['result' => 'updated']));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTranslation')->willReturn(true);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('getSolutionIdFromId')->with(1, 'en')->willReturn(1001);
+        $faq->expects($this->once())->method('update')->willReturnArgument(0);
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->update(
+            $this->createRequestForFaqUpdate($csrfToken, status: 'published', solutionId: 999999),
+        );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         $this->removeCsrfCookie('pmf-csrf-token');
@@ -4068,6 +4162,7 @@ final class FaqControllerTest extends TestCase
         $faq = $this->createMock(Faq::class);
         $faq->method('hasTranslation')->willReturn(true);
         $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('getSolutionIdFromId')->with(1, 'en')->willReturn(1001);
         $faq->expects($this->once())->method('update')->willReturnArgument(0);
 
         $controller = $this->createControllerWithFaq($faq);

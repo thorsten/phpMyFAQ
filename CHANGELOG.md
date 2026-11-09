@@ -43,6 +43,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added table of contents plugin in WYSIWYG editor (Thorsten)
 - added resizing of uploaded videos in WYSIWYG editor (Thorsten)
 - added embedded videos from allowed media hosts like YouTube and Vimeo in FAQs, news, and custom pages (Thorsten)
+- added a list of the registered passkeys with a remove button to the user control panel (Thorsten)
 - improved audit and activity log with comprehensive security event tracking (Thorsten)
 - improved API errors with formatted RFC 7807 Problem Details JSON responses (Thorsten)
 - changed the REST API documentation to OpenAPI 3.1 and documented the `Accept-Language` and `x-pmf-token` request headers as header parameters (Thorsten)
@@ -63,7 +64,6 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated experimental MCP Server to mcp/sdk (Thorsten)
 - upgraded PDF engine to TCPDF 7 / tc-lib-pdf; PDF fonts are now JSON descriptors in src/fonts (Thorsten)
 - updated third party dependencies (Thorsten)
-- added a list of the registered passkeys with a remove button to the user control panel, an e-mail to the account owner when a passkey is added, and a checkbox for administrators to remove all passkeys of a user (Thorsten)
 - fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.12 - unreleased
