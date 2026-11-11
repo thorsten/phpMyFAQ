@@ -343,7 +343,7 @@ class WebAuthnControllerTest extends TestCase
             'pmf-csrf-token' => $this->createCsrfToken($session, 'webauthn'),
         ]));
 
-        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertSame(['error' => Translation::get('msgNoPermission')], $this->decodePayload($response));
     }
 

@@ -49,6 +49,10 @@ final class WebAuthnController extends AbstractController
 
     private const int PREPARE_LOGIN_LIMIT_INTERVAL = 900;
 
+    private const int PREPARE_LIMIT_PER_IP = 20;
+
+    private const int PREPARE_LIMIT_INTERVAL = 900;
+
     private readonly AuthWebAuthn $authWebAuthn;
 
     private readonly User $user;
@@ -94,27 +98,50 @@ final class WebAuthnController extends AbstractController
 
         $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        $userExists = $this->user->getUserByLogin($username, raiseError: false);
+        // Like prepare-login, this endpoint is reachable anonymously and exempt from the global API
+        // limiter (api.private.*), so it throttles itself per IP against account enumeration.
+        if (!$this->rateLimiter->check(
+            'webauthn:prepare:ip:' . ($request->getClientIp() ?? 'anonymous'),
+            self::PREPARE_LIMIT_PER_IP,
+            self::PREPARE_LIMIT_INTERVAL,
+        )) {
+            $this->logSecurityEvent(AdminLogType::SECURITY_RATE_LIMIT_EXCEEDED, 'webauthn prepare requests');
+            return $this->json(['error' => 'Too many requests. Please retry later.'], Response::HTTP_TOO_MANY_REQUESTS);
+        }
 
-        if (!$userExists && !$this->configuration->get('security.enableRegistration')) {
+        $isLoggedIn = $this->currentUser->isLoggedIn();
+        $registrationEnabled = (bool) $this->configuration->get('security.enableRegistration');
+
+        // An anonymous caller can only sign up, which needs open registration, the CSRF token and
+        // the captcha. All three are checked before the login is looked up, so none of these
+        // answers reveals whether an account with that login exists.
+        if (!$isLoggedIn && !$registrationEnabled) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
-        // Verify the CSRF token on every path, regardless of whether the user exists.
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->session)->verifyToken('webauthn', $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgSessionExpired')], Response::HTTP_UNAUTHORIZED);
         }
 
+        if (!$isLoggedIn && !$this->captchaCodeIsValid($request)) {
+            return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
+        }
+
+        $userExists = $this->user->getUserByLogin($username, raiseError: false);
+
         // The account already exists: only its authenticated owner may (re-)register a passkey.
         // This prevents an unauthenticated attacker from overwriting an existing user's passkeys.
-        if ($userExists && !$this->currentUser->isLoggedIn()) {
+        if ($userExists && !$isLoggedIn) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($userExists && $this->currentUser->getUserId() !== $this->user->getUserId()) {
-            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        // A logged-in caller gets one and the same answer for somebody else's account and for an
+        // unknown login that cannot be registered, so the two cannot be told apart either.
+        $isOwner = $userExists && $this->currentUser->getUserId() === $this->user->getUserId();
+        if ($userExists ? !$isOwner : !$registrationEnabled) {
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
         // The owner's session alone is not proof enough either: a stolen session cookie or a
@@ -131,10 +158,6 @@ final class WebAuthnController extends AbstractController
         }
 
         if (!$userExists) {
-            if (!$this->captchaCodeIsValid($request)) {
-                return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
-            }
-
             // A passwordless sign-up is a registration and must follow the same policy as
             // /api/register: the username doubles as the e-mail address, so the domain whitelist
             // applies to it, and the account starts blocked unless the administrator has turned

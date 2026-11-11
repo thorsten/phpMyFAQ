@@ -15,6 +15,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,11 +37,15 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         $user = $this->createMock(User::class);
         $user->expects($this->once())->method('getUserByLogin')->with('new@example.com', false)->willReturn(false);
 
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
         $controller = new WebAuthnController($this->createStub(AuthWebAuthn::class), $user);
-        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $session);
 
         $request = Request::create('/api/webauthn/prepare', 'POST', content: json_encode([
             'username' => 'new@example.com',
+            'pmf-csrf-token' => $csrfToken,
         ], JSON_THROW_ON_ERROR));
 
         $response = $controller->prepare($request);
@@ -681,9 +686,11 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
     public function testPrepareRejectsExistingUserForUnauthenticatedRequest(): void
     {
         $this->configuration->getAll();
+        // Without a captcha, so the request gets past the sign-up checks to the ownership check.
         $this->overrideConfigurationValues([
             'security.enableWebAuthnSupport' => '1',
             'security.enableRegistration' => '1',
+            'spam.enableCaptchaCode' => 'false',
         ]);
 
         $session = $this->createSession();
@@ -717,7 +724,7 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
 
     /**
      * Regression test: a logged-in user calling prepare for a different existing account
-     * must be rejected.
+     * must be rejected, with the answer an unknown login gets while registration is disabled.
      */
     public function testPrepareRejectsExistingUserForNonOwner(): void
     {
@@ -749,7 +756,7 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
 
         $response = $controller->prepare($request);
 
-        self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
     /**
@@ -1180,7 +1187,8 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
     }
 
     /**
-     * Regression test: a request for an existing account without a valid CSRF token is rejected.
+     * Regression test: a request for an existing account without a valid CSRF token is rejected
+     * before the login is looked up.
      */
     public function testPrepareRejectsExistingUserWithoutCsrfToken(): void
     {
@@ -1191,7 +1199,7 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         ]);
 
         $user = $this->createMock(User::class);
-        $user->expects($this->once())->method('getUserByLogin')->with('admin', false)->willReturn(true);
+        $user->expects($this->never())->method('getUserByLogin');
 
         $authWebAuthn = $this->createMock(AuthWebAuthn::class);
         $authWebAuthn->expects($this->never())->method('storeUserInSession');
@@ -1206,5 +1214,166 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         $response = $controller->prepare($request);
 
         self::assertSame(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * Regression test for account enumeration: every answer an anonymous caller can get before
+     * solving the captcha must be the same for an existing and an unknown login, and the login
+     * must not even be looked up.
+     *
+     * @param array<string, string> $config
+     */
+    #[DataProvider('anonymousPrepareProbes')]
+    public function testPrepareAnswersAnAnonymousCallerTheSameWhetherOrNotTheLoginExists(
+        array $config,
+        bool $withCsrfToken,
+        int $expectedStatus,
+        string $expectedMessageKey,
+    ): void {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['security.enableWebAuthnSupport' => '1', ...$config]);
+
+        $session = $this->createSession();
+        $payload = ['username' => 'admin', 'captcha' => 'wrong'];
+        if ($withCsrfToken) {
+            $payload['pmf-csrf-token'] = $this->createWebAuthnCsrfToken($session);
+        }
+
+        $anonymousUser = $this->createStub(CurrentUser::class);
+        $anonymousUser->method('isLoggedIn')->willReturn(false);
+        $anonymousUser->method('getUserId')->willReturn(-1);
+
+        $responses = [];
+        foreach ([true, false] as $loginExists) {
+            $user = $this->createMock(User::class);
+            $user->expects($this->never())->method('getUserByLogin')->willReturn($loginExists);
+            $user->method('getUserId')->willReturn($loginExists ? 1 : -1);
+            $user->expects($this->never())->method('createUser');
+
+            $controller = new WebAuthnController($this->createStub(AuthWebAuthn::class), $user, null, new RateLimiter());
+            $this->injectControllerState($controller, $anonymousUser, $session);
+
+            $response = $controller->prepare(Request::create(
+                '/api/webauthn/prepare',
+                'POST',
+                content: json_encode($payload, JSON_THROW_ON_ERROR),
+            ));
+            $responses[] = [$response->getStatusCode(), (string) $response->getContent()];
+        }
+
+        self::assertSame($responses[0], $responses[1], 'The response must not depend on whether the login exists.');
+        self::assertSame($expectedStatus, $responses[0][0]);
+        self::assertSame(
+            ['error' => Translation::get($expectedMessageKey)],
+            json_decode($responses[0][1], true, 512, JSON_THROW_ON_ERROR),
+        );
+    }
+
+    /**
+     * @return array<string, array{array<string, string>, bool, int, string}>
+     */
+    public static function anonymousPrepareProbes(): array
+    {
+        return [
+            'registration disabled, no CSRF token' => [
+                ['security.enableRegistration' => '0'],
+                false,
+                Response::HTTP_FORBIDDEN,
+                'msgNoPermission',
+            ],
+            'registration disabled, CSRF token' => [
+                ['security.enableRegistration' => '0'],
+                true,
+                Response::HTTP_FORBIDDEN,
+                'msgNoPermission',
+            ],
+            'registration enabled, no CSRF token' => [
+                ['security.enableRegistration' => '1'],
+                false,
+                Response::HTTP_UNAUTHORIZED,
+                'msgSessionExpired',
+            ],
+            'registration enabled, CSRF token, captcha not solved' => [
+                ['security.enableRegistration' => '1', 'spam.enableCaptchaCode' => 'true'],
+                true,
+                Response::HTTP_BAD_REQUEST,
+                'msgCaptcha',
+            ],
+        ];
+    }
+
+    /**
+     * Regression test for account enumeration: a logged-in caller must not be able to tell
+     * somebody else's account from a login that does not exist and cannot be registered.
+     */
+    public function testPrepareAnswersALoggedInCallerTheSameForAForeignAccountAndAnUnknownLogin(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'security.enableWebAuthnSupport' => '1',
+            'security.enableRegistration' => '0',
+        ]);
+
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $responses = [];
+        foreach ([true, false] as $loginExists) {
+            $user = $this->createMock(User::class);
+            $user->expects($this->once())->method('getUserByLogin')->with('admin', false)->willReturn($loginExists);
+            $user->method('getUserId')->willReturn($loginExists ? 1 : -1);
+            $user->expects($this->never())->method('createUser');
+
+            $controller = new WebAuthnController($this->createStub(AuthWebAuthn::class), $user, null, new RateLimiter());
+            // Authenticated as user id 99, probing a login that is not theirs.
+            $this->injectControllerState($controller, $this->createAuthenticatedUserMock(99), $session);
+
+            $response = $controller->prepare(Request::create('/api/webauthn/prepare', 'POST', content: json_encode([
+                'username' => 'admin',
+                'pmf-csrf-token' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)));
+            $responses[] = [$response->getStatusCode(), (string) $response->getContent()];
+        }
+
+        self::assertSame($responses[0], $responses[1], 'The response must not depend on whether the login exists.');
+        self::assertSame(Response::HTTP_FORBIDDEN, $responses[0][0]);
+    }
+
+    /**
+     * Regression test: prepare is exempt from the global API limiter and reachable anonymously,
+     * so it has to throttle a wordlist of logins itself.
+     */
+    public function testPrepareIsRateLimitedPerClientIp(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'security.enableWebAuthnSupport' => '1',
+            'security.enableRegistration' => '0',
+        ]);
+
+        $anonymousUser = $this->createStub(CurrentUser::class);
+        $anonymousUser->method('isLoggedIn')->willReturn(false);
+
+        $controller = new WebAuthnController(
+            $this->createStub(AuthWebAuthn::class),
+            $this->createStub(User::class),
+            null,
+            new RateLimiter(),
+        );
+        $this->injectControllerState($controller, $anonymousUser, $this->createSession());
+
+        $request = Request::create(
+            '/api/webauthn/prepare',
+            'POST',
+            server: ['REMOTE_ADDR' => '203.0.113.7'],
+            content: json_encode(['username' => 'admin'], JSON_THROW_ON_ERROR),
+        );
+
+        $lastStatus = null;
+        for ($i = 0; $i < 21; ++$i) {
+            $lastStatus = $controller->prepare($request)->getStatusCode();
+        }
+
+        self::assertSame(Response::HTTP_TOO_MANY_REQUESTS, $lastStatus);
     }
 }
