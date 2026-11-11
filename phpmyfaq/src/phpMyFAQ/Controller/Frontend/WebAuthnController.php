@@ -48,6 +48,12 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
     /** Seconds a passkey assertion counts as fresh for adding another passkey. */
     public const int PASSKEY_REAUTH_WINDOW = 300;
 
+    /**
+     * Account id of session state staged for a passwordless sign-up. No account exists at that
+     * point; register() creates it once the ceremony is complete.
+     */
+    public const string PENDING_SIGN_UP_ID = '0';
+
     private readonly AuthWebAuthn $authWebAuthn;
 
     private readonly User $user;
@@ -96,22 +102,21 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
 
         $userExists = $this->user->getUserByLogin($username, raiseError: false);
 
+        $isLoggedIn = $this->currentUser instanceof CurrentUser && $this->currentUser->isLoggedIn();
+
         // Adding a passkey to an existing account is only allowed for the authenticated owner of
         // that account; otherwise an anonymous caller could attach a credential to any account
-        // (e.g. admin) and take it over. A non-existing username is a passwordless sign-up and is
-        // created below.
-        if (
-            $userExists
-            && (
-                !$this->currentUser instanceof CurrentUser
-                || !$this->currentUser->isLoggedIn()
-                || $this->currentUser->getUserId() !== $this->user->getUserId()
-            )
-        ) {
+        // (e.g. admin) and take it over.
+        $isOwner = $userExists && $isLoggedIn && $this->currentUser->getUserId() === $this->user->getUserId();
+
+        // From here on the lookup result must not change the answer for anyone but the owner, or
+        // the endpoint turns into a user oracle. A logged-in caller is refused for every login
+        // that is not their own, existing or not.
+        if (!$isOwner && $isLoggedIn) {
             return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($userExists) {
+        if ($isOwner) {
             // The session alone is not enough. A passkey is a durable, password-independent
             // credential: planted through a hijacked session it would outlive logout, remember-me
             // revocation and even a password reset. The same step-up that guards password
@@ -125,36 +130,31 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
             }
         }
 
-        if (!$userExists) {
-            // A passwordless sign-up is a registration and must follow the same policy as
-            // /api/register: the username doubles as the e-mail address, so the domain whitelist
-            // applies to it, and the account starts blocked unless the administrator has turned
-            // manual activation off.
+        if (!$isOwner) {
+            // An anonymous request is a passwordless sign-up, and it is treated as one whether or
+            // not the login is taken: the same checks, the same challenge, nothing taken from an
+            // existing account and no account created here. register() creates the account after
+            // a completed ceremony and discards the sign-up if the login already belongs to someone.
+            //
+            // A sign-up is a registration and must follow the same policy as /api/register: the
+            // username doubles as the e-mail address, so the domain whitelist applies to it.
             $registrationHelper = new RegistrationHelper($this->configuration);
             if (!$registrationHelper->isDomainAllowed($username)) {
                 return $this->json(['error' => 'The domain is not allowed.'], Response::HTTP_BAD_REQUEST);
             }
 
-            try {
-                $this->user->createUser($username);
-                $this->user->setStatus(status: 'blocked');
-                $this->user->setAuthSource(AuthenticationSourceType::AUTH_WEB_AUTHN->value);
-                $this->user->setUserData([
-                    'display_name' => $username,
-                    'email' => $username,
-                ]);
-
-                $isNowActive =
-                    !$this->configuration->get(item: 'spam.manualActivation')
-                    && $this->user->setStatus(status: 'active');
-            } catch (\Exception $e) {
-                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            if (!$this->user->isValidLogin($username)) {
+                return $this->json(['error' => User::ERROR_USER_LOGINNAME_TOO_SHORT], Response::HTTP_BAD_REQUEST);
             }
-
-            $this->notifyAdminAboutNewAccount($username, $isNowActive);
         }
 
-        $challenge = $this->authWebAuthn->prepareChallengeForRegistration($username, (string) $this->user->getUserId());
+        // The user handle of a sign-up is random: there is no account id yet, and the id of an
+        // existing account must not reach an anonymous caller.
+        $userId = $isOwner ? (string) $this->user->getUserId() : self::PENDING_SIGN_UP_ID;
+        $challenge = $this->authWebAuthn->prepareChallengeForRegistration(
+            $username,
+            $isOwner ? $userId : bin2hex(random_bytes(16)),
+        );
 
         // Seed the ceremony with the keys already on the account. AuthWebAuthn::register() merges
         // the new key into this list; seeded with '' it would return only the new key and
@@ -162,8 +162,8 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
         $webAuthnUser = new WebAuthnUser();
         $webAuthnUser
             ->setName($username)
-            ->setId((string) $this->user->getUserId())
-            ->setWebAuthnKeys($userExists ? $this->user->getWebAuthnKeys() : '')
+            ->setId($userId)
+            ->setWebAuthnKeys($isOwner ? $this->user->getWebAuthnKeys() : '')
             ->setChallenge($challenge['b64challenge'])
             ->setAppId($this->authWebAuthn->getAppId());
 
@@ -312,6 +312,10 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
             return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
+        if ($webAuthnUser->getId() === self::PENDING_SIGN_UP_ID) {
+            return $this->completeSignUp($register, $webAuthnUser);
+        }
+
         try {
             $this->user->getUserByLogin($webAuthnUser->getName());
         } catch (Exception) {
@@ -325,17 +329,13 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
             return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        // Either the authenticated owner is adding a passkey, or this is the passwordless sign-up
-        // that prepare() just created: a WebAuthn-sourced account that has no passkey yet. Any
-        // other account (e.g. a password-based admin) must not get its passkeys replaced.
+        // Only the authenticated owner adds a passkey to an existing account. A sign-up never
+        // gets here: it has no account yet and is handled by completeSignUp() above.
         $isOwner =
             $this->currentUser instanceof CurrentUser
             && $this->currentUser->isLoggedIn()
             && $this->currentUser->getUserId() === $this->user->getUserId();
-        $isFreshSignUp =
-            $this->user->getUserAuthSource() === AuthenticationSourceType::AUTH_WEB_AUTHN->value
-            && in_array($this->user->getWebAuthnKeys(), ['', '0', '[]'], true);
-        if (!$isOwner && !$isFreshSignUp) {
+        if (!$isOwner) {
             return $this->json(['error' => Translation::get(key: 'err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -356,9 +356,7 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
         $this->authWebAuthn->storeUserInSession($webAuthnUser);
 
         if ($this->user->setWebAuthnKeys($webAuthnUser->getWebAuthnKeys())) {
-            if ($isOwner) {
-                $this->notifyOwnerAboutNewPasskey();
-            }
+            $this->notifyOwnerAboutNewPasskey();
 
             return $this->json([
                 'success' => 'ok',
@@ -367,6 +365,81 @@ final class WebAuthnController extends AbstractController implements SkipsAuthen
         }
 
         return $this->json(['error' => 'Cannot set WebAuthn keys'], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Finishes a passwordless sign-up: verifies the ceremony prepare() started and only then
+     * creates the account, following the same policy as /api/register.
+     *
+     * A sign-up for a login or e-mail address that already belongs to an account is silently
+     * discarded. The response is identical to a successful sign-up so that the endpoint cannot be
+     * used as an oracle for account existence, and the existing account is never touched.
+     */
+    private function completeSignUp(string $register, WebAuthnUser $webAuthnUser): JsonResponse
+    {
+        if (!$this->configuration->get(item: 'security.enableRegistration')) {
+            return $this->json(['error' => 'User registration is disabled.'], Response::HTTP_FORBIDDEN);
+        }
+
+        try {
+            $webAuthnKeys = $this->authWebAuthn->register($register, '', $webAuthnUser->getChallenge());
+        } catch (Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Burn the registration challenge so the ceremony cannot be replayed against this session.
+        $webAuthnUser->setChallenge('');
+        $this->authWebAuthn->storeUserInSession($webAuthnUser);
+
+        $username = $webAuthnUser->getName();
+        $success = $this->json([
+            'success' => 'ok',
+            'message' => Translation::get(key: 'msgPasskeyRegistrationSuccess'),
+        ], Response::HTTP_OK);
+
+        try {
+            $this->user->createUser($username);
+        } catch (\Exception $e) {
+            $isTaken = in_array(
+                $e->getMessage(),
+                [User::ERROR_USER_LOGIN_NOT_UNIQUE, User::ERROR_USER_EMAIL_NOT_UNIQUE],
+                strict: true,
+            );
+            if (!$isTaken) {
+                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            }
+
+            $this->configuration
+                ->getLogger()
+                ->info(
+                    message: 'Passkey sign-up discarded: e-mail address or login name already belongs to a registered user.',
+                );
+
+            return $success;
+        }
+
+        try {
+            // The account starts blocked unless the administrator has turned manual activation off.
+            $this->user->setStatus(status: 'blocked');
+            $this->user->setAuthSource(AuthenticationSourceType::AUTH_WEB_AUTHN->value);
+            $this->user->setUserData([
+                'display_name' => $username,
+                'email' => $username,
+            ]);
+
+            if (!$this->user->setWebAuthnKeys($webAuthnKeys)) {
+                return $this->json(['error' => 'Cannot set WebAuthn keys'], Response::HTTP_BAD_REQUEST);
+            }
+
+            $isNowActive =
+                !$this->configuration->get(item: 'spam.manualActivation') && $this->user->setStatus(status: 'active');
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->notifyAdminAboutNewAccount($username, $isNowActive);
+
+        return $success;
     }
 
     /**
