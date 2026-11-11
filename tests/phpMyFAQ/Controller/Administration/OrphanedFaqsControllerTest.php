@@ -128,10 +128,40 @@ final class OrphanedFaqsControllerTest extends TestCase
         );
     }
 
-    private function createControllerContainer(): ContainerInterface
+    /**
+     * An FAQ without a category lies outside every category restriction, so the edit page
+     * rejects it for a category-restricted editor. The listing must not offer its title either.
+     *
+     * @throws \Exception
+     */
+    public function testIndexHidesOrphanedFaqsFromACategoryRestrictedEditor(): void
+    {
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faqdata (id, lang, solution_id, status, sticky, thema, content, author, email, updated)'
+            . " VALUES (93001, 'en', 93001, 'published', 0, 'ORPHAN-MARKER question', 'Answer', 'Tester',"
+            . " 'tester@example.org', '%s')",
+            date('YmdHis'),
+        ));
+
+        $restricted = new OrphanedFaqsController(new AdminFaq($this->configuration));
+        $restricted->setContainer($this->createControllerContainer(editableCategoryIds: [1]));
+        $unrestricted = new OrphanedFaqsController(new AdminFaq($this->configuration));
+        $unrestricted->setContainer($this->createControllerContainer());
+
+        $request = Request::create('https://localhost/admin/orphaned-faqs');
+
+        self::assertStringNotContainsString('ORPHAN-MARKER question', (string) $restricted->index($request)->getContent());
+        self::assertStringContainsString('ORPHAN-MARKER question', (string) $unrestricted->index($request)->getContent());
+    }
+
+    /**
+     * @param list<int>|null $editableCategoryIds the categories FAQ_EDIT is limited to, null for every category
+     */
+    private function createControllerContainer(?array $editableCategoryIds = null): ContainerInterface
     {
         $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
+        $permission->method('getAllowedCategoriesForRight')->willReturn($editableCategoryIds);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;

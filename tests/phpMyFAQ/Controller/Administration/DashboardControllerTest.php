@@ -319,6 +319,41 @@ final class DashboardControllerTest extends TestCase
     }
 
     /**
+     * Regression test: FAQ_EDIT can be limited to categories. An editor restricted to category 1
+     * must not learn the titles of drafts in other categories from the dashboard — the edit page
+     * rejects those with a 403, so the widget must not list them either (CWE-863).
+     *
+     * @throws \Exception
+     */
+    public function testIndexHidesInactiveFaqsOutsideTheEditScopeOfTheUser(): void
+    {
+        $this->insertDraft(92001, 'IN-SCOPE-MARKER draft', categoryId: 1);
+        $this->insertDraft(92002, 'OUT-OF-SCOPE-MARKER draft', categoryId: 2);
+
+        $controller = new DashboardController(
+            $this->createStub(AdminSession::class),
+            new AdminFaq($this->configuration),
+            $this->createStub(Backup::class),
+            new RecentUsers($this->configuration),
+        );
+        $controller->setContainer(
+            $this->createAuthenticatedContainer(
+                grantedPermissions: [PermissionType::FAQ_EDIT],
+                editableCategoryIds: [1],
+            ),
+        );
+
+        $request = new Request();
+        $request->attributes->set('_route', 'admin.dashboard');
+        $content = (string) $controller->index($request)->getContent();
+
+        self::assertStringContainsString('IN-SCOPE-MARKER draft', $content);
+        self::assertStringContainsString('admin/faq/edit/92001/en', $content);
+        self::assertStringNotContainsString('OUT-OF-SCOPE-MARKER draft', $content);
+        self::assertStringNotContainsString('admin/faq/edit/92002/en', $content);
+    }
+
+    /**
      * The FAQ counter links to the FAQ overview, which admin.faqs gates on FAQ_EDIT. The link must
      * be gated on the same right, otherwise a user sees a working link that ends in a 403
      * (GitHub issue #4691).
@@ -445,9 +480,31 @@ final class DashboardControllerTest extends TestCase
     /**
      * @param list<PermissionType>|null $grantedPermissions null grants every right except CONFIGURATION_EDIT
      */
+    private function insertDraft(int $id, string $question, int $categoryId): void
+    {
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faqdata (id, lang, solution_id, status, sticky, thema, content, author, email, updated)'
+            . " VALUES (%d, 'en', %d, 'draft', 0, '%s', 'Answer', 'Tester', 'tester@example.org', '%s')",
+            $id,
+            1000 + $id,
+            $question,
+            date('YmdHis'),
+        ));
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)'
+            . " VALUES (%d, 'en', %d, 'en')",
+            $categoryId,
+            $id,
+        ));
+    }
+
+    /**
+     * @param list<int>|null $editableCategoryIds the categories FAQ_EDIT is limited to, null for every category
+     */
     private function createAuthenticatedContainer(
         bool $allowConfigEdit = false,
         ?array $grantedPermissions = null,
+        ?array $editableCategoryIds = null,
     ): ContainerInterface {
         $grantedRights = $grantedPermissions === null
             ? null
@@ -469,6 +526,8 @@ final class DashboardControllerTest extends TestCase
                     return $right !== PermissionType::CONFIGURATION_EDIT->value || $allowConfigEdit;
                 },
             );
+
+        $permission->method('getAllowedCategoriesForRight')->willReturn($editableCategoryIds);
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;

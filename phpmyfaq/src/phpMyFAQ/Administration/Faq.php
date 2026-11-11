@@ -22,6 +22,7 @@ namespace phpMyFAQ\Administration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\FaqStatus;
+use phpMyFAQ\Faq\EditScope;
 use stdClass;
 
 class Faq
@@ -188,9 +189,9 @@ class Faq
     }
 
     /**
-     * Returns the inactive records with admin URL to edit the FAQ and title.
+     * Returns the inactive records the given scope may edit, with admin URL to edit the FAQ and title.
      */
-    public function getInactiveFaqsData(): array
+    public function getInactiveFaqsData(EditScope $editScope): array
     {
         $language = $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage());
         $query = sprintf(
@@ -205,6 +206,7 @@ class Faq
                 fd.lang = '%s'
             AND
                 fd.status != '%s'
+                %s
             GROUP BY
                 fd.id, fd.lang, fd.thema
             ORDER BY
@@ -212,6 +214,7 @@ class Faq
             Database::getTablePrefix(),
             $language,
             FaqStatus::Published->value,
+            $editScope->toSqlFragment('fd'),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -243,11 +246,11 @@ class Faq
     }
 
     /**
-     * Returns the orphaned records with admin URL to edit the FAQ and title.
+     * Returns the orphaned records the given scope may edit, with admin URL to edit the FAQ and title.
      *
      * @return stdClass[]
      */
-    public function getOrphanedFaqs(): array
+    public function getOrphanedFaqs(EditScope $editScope): array
     {
         $query = sprintf(
             "
@@ -268,6 +271,7 @@ class Faq
                         WHERE
                             record_lang = fd.lang
                     )
+                    %s
                 GROUP BY
                     fd.id, fd.lang, fd.thema
                 ORDER BY
@@ -275,6 +279,7 @@ class Faq
             Database::getTablePrefix(),
             FaqStatus::Published->value,
             Database::getTablePrefix(),
+            $editScope->toSqlFragment('fd'),
         );
 
         $result = $this->configuration->getDb()->query($query);

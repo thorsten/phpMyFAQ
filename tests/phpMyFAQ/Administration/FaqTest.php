@@ -5,7 +5,9 @@ namespace phpMyFAQ\Administration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\FaqStatus;
+use phpMyFAQ\Faq\EditScope;
 use phpMyFAQ\Language;
+use phpMyFAQ\Permission\PermissionInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -34,6 +36,17 @@ class FaqTest extends TestCase
 
         // Create the Faq instance with the mocked configuration
         $this->faq = new Faq($this->mockConfiguration);
+    }
+
+    /**
+     * The edit scope of an editor whose FAQ_EDIT right is not limited to categories or languages.
+     */
+    private function unrestrictedEditScope(): EditScope
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+
+        return EditScope::forUser($permission, 1);
     }
 
     public function testGetAllFaqsByCategoryReturnsEmptyArrayWhenNoResults(): void
@@ -296,7 +309,7 @@ class FaqTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn(false);
 
-        $result = $this->faq->getInactiveFaqsData();
+        $result = $this->faq->getInactiveFaqsData($this->unrestrictedEditScope());
 
         $this->assertEmpty($result);
     }
@@ -318,7 +331,7 @@ class FaqTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
-        $result = $this->faq->getInactiveFaqsData();
+        $result = $this->faq->getInactiveFaqsData($this->unrestrictedEditScope());
 
         $expected = [
             [
@@ -340,7 +353,7 @@ class FaqTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn(false);
 
-        $result = $this->faq->getOrphanedFaqs();
+        $result = $this->faq->getOrphanedFaqs($this->unrestrictedEditScope());
 
         $this->assertEmpty($result);
     }
@@ -362,7 +375,7 @@ class FaqTest extends TestCase
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
-        $result = $this->faq->getOrphanedFaqs();
+        $result = $this->faq->getOrphanedFaqs($this->unrestrictedEditScope());
 
         $this->assertCount(1, $result);
         $this->assertInstanceOf(stdClass::class, $result[0]);
@@ -386,7 +399,7 @@ class FaqTest extends TestCase
             ->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn(false);
 
-        $this->assertSame([], $this->faq->getInactiveFaqsData());
+        $this->assertSame([], $this->faq->getInactiveFaqsData($this->unrestrictedEditScope()));
     }
 
     public function testGetContentHealthStatisticsReturnsZeroCountsWhenQueriesFail(): void

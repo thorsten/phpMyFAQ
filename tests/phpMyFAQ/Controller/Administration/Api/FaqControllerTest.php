@@ -1931,6 +1931,63 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * Regression test: FAQ_EDIT can be limited to categories. The admin search matches the answer
+     * text of drafts, so an editor restricted to category 1 must not get a hit for a draft in
+     * category 2 — otherwise the search tells them which words that draft contains (CWE-863).
+     *
+     * @throws \Exception
+     */
+    public function testSearchDropsDraftsOutsideTheEditScopeOfTheUser(): void
+    {
+        $this->seedFaqRecord(categoryId: 1, faqId: 95001, question: 'IN-SCOPE-MARKER draft');
+        $this->seedFaqRecord(categoryId: 2, faqId: 95002, question: 'OUT-OF-SCOPE-MARKER draft');
+        $this->seedSharedFaqRows(95001);
+        $this->seedSharedFaqRows(95002);
+        $this->dbHandle->query("UPDATE faqdata SET content = 'The salarymarker answer' WHERE id IN (95001, 95002)");
+        $this->seedStoredUserWithUnrestrictedReadRight(42);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'search' => 'salarymarker',
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainerWithAllowedCategories($session, [1]));
+
+        $response = $controller->search($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->removeCsrfCookie('pmf-csrf-token');
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(['IN-SCOPE-MARKER draft'], array_column($payload['success'], 'question'));
+        self::assertStringEndsWith('admin/faq/edit/95001/en', $payload['success'][0]['adminUrl']);
+    }
+
+    /**
+     * The search result review resolves the FAQ read right from the stored account, not from the
+     * permission mock. Without a stored grant every hit is dropped there, and a test about the
+     * edit scope would pass for the wrong reason.
+     */
+    private function seedStoredUserWithUnrestrictedReadRight(int $userId): void
+    {
+        $database = $this->configuration->getDb();
+        $database->query(sprintf(
+            'INSERT INTO faquser (user_id, login, account_status, is_superadmin, auth_source)'
+            . " VALUES (%d, 'scoped-editor', 'active', 0, 'local')",
+            $userId,
+        ));
+        $database->query(sprintf(
+            'INSERT INTO faquser_right (user_id, right_id) SELECT %d, right_id FROM faqright WHERE name = \'%s\'',
+            $userId,
+            PermissionType::FAQS_VIEW->value,
+        ));
+    }
+
+    /**
      * @throws \Exception
      */
     public function testSearchReturnsBadRequestWhenSearchStringIsBlankWithValidCsrf(): void

@@ -25,6 +25,7 @@ use DateTime;
 use Exception;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\FaqStatus;
+use phpMyFAQ\Faq\EditScope;
 use phpMyFAQ\Search\Search\Elasticsearch;
 use phpMyFAQ\Search\Search\OpenSearch;
 use phpMyFAQ\Search\SearchFactory;
@@ -169,11 +170,15 @@ class Search
      * database with a substring match over all languages and includes
      * inactive FAQs, so partially typed words find every FAQ an admin can edit.
      *
+     * Only FAQs within the given edit scope are returned: the search matches the
+     * answer text of unpublished FAQs, so a hit outside the scope would tell a
+     * restricted editor what a draft they may not open contains.
+     *
      * @param string $searchTerm Text to search for
      * @return stdClass[]
      * @throws Exception
      */
-    public function searchForAdmin(string $searchTerm): array
+    public function searchForAdmin(string $searchTerm, EditScope $editScope): array
     {
         $fdTable = Database::getTablePrefix() . 'faqdata AS fd';
         $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
@@ -196,7 +201,36 @@ class Search
             ])
             ->setMatchingColumns(['fd.thema', 'fd.content', 'fd.keywords']);
 
-        return $this->fetchAdminRows($searchDatabase->searchSubstring($searchTerm));
+        return self::keepRowsWithinEditScope(
+            $this->fetchAdminRows($searchDatabase->searchSubstring($searchTerm)),
+            $editScope,
+        );
+    }
+
+    /**
+     * The admin search query joins faqcategoryrelations without restricting it, so the rows of
+     * one FAQ carry all of its categories — enough to decide the scope without another query.
+     *
+     * @param stdClass[] $rows
+     * @return stdClass[]
+     */
+    private static function keepRowsWithinEditScope(array $rows, EditScope $editScope): array
+    {
+        $categoryIdsByFaq = [];
+        foreach ($rows as $row) {
+            $faq = (int) $row->id . '-' . (string) $row->lang;
+            $categoryIdsByFaq[$faq] ??= [];
+
+            // The left join yields a null category for an FAQ without any category.
+            if ($row->category_id !== null) {
+                $categoryIdsByFaq[$faq][] = (int) $row->category_id;
+            }
+        }
+
+        return array_values(array_filter($rows, static fn(stdClass $row): bool => $editScope->allowsFaq(
+            $categoryIdsByFaq[(int) $row->id . '-' . (string) $row->lang],
+            (string) $row->lang,
+        )));
     }
 
     /**

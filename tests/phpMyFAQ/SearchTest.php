@@ -9,6 +9,8 @@ use OpenSearch\Client as OpenSearchClient;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Faq\EditScope;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Plugin\PluginException;
 use phpMyFAQ\Search\Search\Elasticsearch;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -311,11 +313,12 @@ class SearchTest extends TestCase
             }))
             ->willReturn(true);
         $dbHandle->method('numRows')->willReturn(1);
-        $dbHandle->method('fetchAll')->willReturn([(object) ['id' => 1]]);
+        $row = (object) ['id' => 1, 'lang' => 'de', 'category_id' => 1];
+        $dbHandle->method('fetchAll')->willReturn([$row]);
 
         $search = new Search(new Configuration($dbHandle));
 
-        $this->assertEquals([(object) ['id' => 1]], $search->searchForAdmin('reinigung'));
+        $this->assertEquals([$row], $search->searchForAdmin('reinigung', $this->editScope()));
     }
 
     /**
@@ -334,7 +337,111 @@ class SearchTest extends TestCase
 
         $search = new Search(new Configuration($dbHandle));
 
-        $this->assertSame([], $search->searchForAdmin('nothing'));
+        $this->assertSame([], $search->searchForAdmin('nothing', $this->editScope()));
+    }
+
+    /**
+     * FAQ_EDIT can be limited to categories. The admin search matches the answer text of
+     * unpublished FAQs, so without the scope a restricted editor could probe which words
+     * occur in drafts they may not open.
+     *
+     * @throws Exception
+     */
+    public function testSearchForAdminDropsHitsOutsideTheCategoriesOfTheEditScope(): void
+    {
+        $this->insertDraftForAdminSearch(94001, 'en', [1]);
+        $this->insertDraftForAdminSearch(94002, 'en', [2]);
+        // One category outside the scope is enough for the edit page to reject the FAQ.
+        $this->insertDraftForAdminSearch(94003, 'en', [1, 2]);
+        // An FAQ without a category lies outside every category restriction.
+        $this->insertDraftForAdminSearch(94004, 'en', []);
+
+        $hits = $this->search->searchForAdmin('salarymarker', $this->editScope(categories: [1]));
+
+        $this->assertSame([94001], $this->idsOf($hits));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchForAdminDropsHitsOutsideTheLanguagesOfTheEditScope(): void
+    {
+        $this->insertDraftForAdminSearch(94011, 'en', [1]);
+        $this->insertDraftForAdminSearch(94012, 'de', [1]);
+
+        $hits = $this->search->searchForAdmin('salarymarker', $this->editScope(languages: ['en']));
+
+        $this->assertSame([94011], $this->idsOf($hits));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchForAdminFindsEveryFaqForAnUnrestrictedEditor(): void
+    {
+        $this->insertDraftForAdminSearch(94021, 'en', [1]);
+        $this->insertDraftForAdminSearch(94022, 'de', [2]);
+        $this->insertDraftForAdminSearch(94023, 'en', []);
+
+        $hits = $this->search->searchForAdmin('salarymarker', $this->editScope());
+
+        $this->assertSame([94021, 94022, 94023], $this->idsOf($hits));
+    }
+
+    /**
+     * @param array<int>|null    $categories null means every category
+     * @param array<string>|null $languages  null means every language
+     */
+    private function editScope(?array $categories = null, ?array $languages = null): EditScope
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+        $permission->method('getAllowedCategoriesForRight')->willReturn($categories);
+        $permission->method('getAllowedLanguagesForRight')->willReturn($languages);
+
+        return EditScope::forUser($permission, 5);
+    }
+
+    /**
+     * Inserts a draft whose search term occurs in the answer only.
+     *
+     * @param list<int> $categoryIds
+     */
+    private function insertDraftForAdminSearch(int $id, string $language, array $categoryIds): void
+    {
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faqdata (id, lang, solution_id, status, sticky, thema, content, author, email, updated)'
+            . " VALUES (%d, '%s', %d, 'draft', 0, 'Question %d', 'The salarymarker answer', 'Tester',"
+            . " 'tester@example.org', '%s')",
+            $id,
+            $language,
+            1000 + $id,
+            $id,
+            date('YmdHis'),
+        ));
+
+        foreach ($categoryIds as $categoryId) {
+            $this->dbHandle->query(sprintf(
+                'INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)'
+                . " VALUES (%d, '%s', %d, '%s')",
+                $categoryId,
+                $language,
+                $id,
+                $language,
+            ));
+        }
+    }
+
+    /**
+     * @param stdClass[] $hits
+     * @return list<int> the distinct FAQ ids of the hits, sorted
+     */
+    private function idsOf(array $hits): array
+    {
+        $ids = array_values(array_unique(array_map(static fn(stdClass $hit): int => (int) $hit->id, $hits)));
+        sort($ids);
+
+        return $ids;
     }
 
     public function testDeleteSearchTermById(): void

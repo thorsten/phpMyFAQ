@@ -27,6 +27,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Environment;
+use phpMyFAQ\Faq\EditScope;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\System;
@@ -88,7 +89,14 @@ final class DashboardController extends AbstractAdministrationController
             'adminDashboardHeaderVisits' => Translation::get(key: 'ad_stat_report_visits'),
             'hasUserTracking' => $this->configuration->get(item: 'main.enableUserTracking'),
             'adminDashboardHeaderInactiveFaqs' => Translation::get(key: 'ad_record_inactive'),
-            'adminDashboardInactiveFaqs' => $canViewInactiveFaqs ? $this->adminFaq->getInactiveFaqsData() : [],
+            // Holding FAQ_EDIT is not enough: the right can be limited to categories and languages,
+            // and a draft outside that scope must not leak its title here.
+            'adminDashboardInactiveFaqs' => $canViewInactiveFaqs
+                ? $this->adminFaq->getInactiveFaqsData(EditScope::forUser(
+                    $this->currentUser->perm,
+                    $this->currentUser->getUserId(),
+                ))
+                : [],
             'hasPermissionEditConfig' => $canEditConfiguration,
             'showVersion' => $this->configuration->get(item: 'main.enableAutoUpdateHint'),
             'documentationUrl' => System::getDocumentationUrl(),

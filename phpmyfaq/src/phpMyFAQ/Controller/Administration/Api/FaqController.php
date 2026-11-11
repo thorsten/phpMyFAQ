@@ -40,6 +40,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\QuestionHistoryEventType;
 use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\EditScope;
 use phpMyFAQ\Faq\Import;
 use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Filter;
@@ -1012,7 +1013,10 @@ final class FaqController extends AbstractAdministrationApiController
         $searchString = Filter::filterVar($data->search ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (is_string($searchString) && trim($searchString) !== '') {
-            $searchResult = $faqSearch->searchForAdmin(trim($searchString));
+            $searchResult = $faqSearch->searchForAdmin(
+                trim($searchString),
+                EditScope::forUser($this->currentUser->perm, $this->currentUser->getUserId()),
+            );
 
             $searchResultSet->reviewResultSet($searchResult);
 

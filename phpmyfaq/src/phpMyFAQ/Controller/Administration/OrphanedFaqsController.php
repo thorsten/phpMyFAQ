@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Administration\Faq as AdminFaq;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Faq\EditScope;
 use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,7 +55,10 @@ final class OrphanedFaqsController extends AbstractAdministrationController
         return $this->render('@admin/content/orphaned-faqs.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'orphanedFaqs' => $faq->getOrphanedFaqs(),
+            'orphanedFaqs' => $faq->getOrphanedFaqs(EditScope::forUser(
+                $this->currentUser->perm,
+                $this->currentUser->getUserId(),
+            )),
         ]);
     }
 }
