@@ -1197,6 +1197,6 @@ class Faq
 
     public function hasTitleAHash(string $title): bool
     {
-        return (bool) strpos(haystack: $title, needle: '#');
+        return str_contains(haystack: $title, needle: '#');
     }
 }

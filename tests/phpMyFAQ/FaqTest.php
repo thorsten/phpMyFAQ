@@ -121,7 +121,10 @@ class FaqTest extends TestCase
     public function testHasTitleAHash(): void
     {
         $this->assertTrue($this->faq->hasTitleAHash('H#llo World!'));
+        $this->assertTrue($this->faq->hasTitleAHash('#Hallo World!'));
+        $this->assertTrue($this->faq->hasTitleAHash('#'));
         $this->assertFalse($this->faq->hasTitleAHash('Hallo World!'));
+        $this->assertFalse($this->faq->hasTitleAHash(''));
     }
 
     public function testCreate(): void
