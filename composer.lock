@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69107d4c683a5a06afdb2eed334a876d",
+    "content-hash": "160825f9630f33e774d4fe3b5fee3566",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -12090,16 +12090,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "7.2.0",
+            "version": "7.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "59335dfc233a25fefd9b20cd797c059e5cbbd89a"
+                "reference": "0b24dce8431353e3aeb7712b6a16c7ee00b0992a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/59335dfc233a25fefd9b20cd797c059e5cbbd89a",
-                "reference": "59335dfc233a25fefd9b20cd797c059e5cbbd89a",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/0b24dce8431353e3aeb7712b6a16c7ee00b0992a",
+                "reference": "0b24dce8431353e3aeb7712b6a16c7ee00b0992a",
                 "shasum": ""
             },
             "require": {
@@ -12170,7 +12170,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/7.2.0"
+                "source": "https://github.com/zircote/swagger-php/tree/7.3.0"
             },
             "funding": [
                 {
@@ -12178,7 +12178,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-11-04T04:03:43+00:00"
+            "time": "2026-11-05T22:30:41+00:00"
         }
     ],
     "aliases": [],
