@@ -1856,4 +1856,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate सर�
 $LANG_CONF['translation.provider'] = ['select', 'अनुवाद सेवा प्रदाता'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'ऐसे नाइटली बिल्ड स्थापित करने की अनुमति दें जिनका SHA-256 डाइजेस्ट GitHub के विरुद्ध सत्यापित नहीं किया जा सकता (अनुशंसित नहीं)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'अपने खाते में नया Passkey जोड़ने के लिए अपना वर्तमान पासवर्ड दर्ज करें।';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'नया Passkey जोड़ने से पहले आपसे अपने किसी मौजूदा Passkey से पुष्टि करने के लिए कहा जाएगा।';
+$PMF_LANG['msgPasskeysRegistered'] = 'पंजीकृत Passkeys';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'आपके खाते के लिए अभी तक कोई Passkey पंजीकृत नहीं है।';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'पंजीकरण तिथि';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'पंजीकरण तिथि दर्ज किए जाने से पहले पंजीकृत';
+$PMF_LANG['msgPasskeyRevoke'] = 'हटाएँ';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey हटा दिया गया।';
+$PMF_LANG['msgPasskeyUnknown'] = 'यह Passkey आपके खाते के लिए पंजीकृत नहीं है।';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'पासवर्ड-रहित खाते का अंतिम Passkey हटाया नहीं जा सकता।';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] आपके खाते में एक नया Passkey जोड़ा गया';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'आपके खाते में अभी एक नया Passkey जोड़ा गया है। यदि यह आपने किया है, तो किसी कार्रवाई की आवश्यकता नहीं है। यदि नहीं, तो इसे %s पर अपने उपयोगकर्ता नियंत्रण कक्ष में हटाएँ और अपना पासवर्ड बदलें।';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'इस उपयोगकर्ता के सभी Passkeys हटाएँ';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s वर्तमान में अक्षम है। इसे पहले कॉन्फ़िगरेशन में सक्षम करें।';
+$PMF_LANG['msgMultiSelectHint'] = 'एक से अधिक श्रेणी चुनने के लिए Ctrl (macOS पर Cmd) दबाए रखें।';
+$PMF_LANG['msgRefreshCaptcha'] = 'नया captcha कोड लोड करें';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'संस्करण जाँच वर्तमान में उपलब्ध नहीं है।';
+$PMF_LANG['msgFooterLinks'] = 'लिंक';
+$PMF_LANG['msgFooterLegal'] = 'कानूनी जानकारी';
+$PMF_LANG['msgPermalink'] = 'स्थायी लिंक';
+$PMF_LANG['msgNoBookmarks'] = 'आपने अभी तक कोई FAQ बुकमार्क नहीं किया है।';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'फ़ॉन्ट आकार';
+$PMF_LANG['msgFontSizeDecrease'] = 'फ़ॉन्ट आकार छोटा करें';
+$PMF_LANG['msgFontSizeIncrease'] = 'फ़ॉन्ट आकार बड़ा करें';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'पंक्ति %d: इस पंक्ति को प्रकाशित के रूप में आयात करने के लिए "%s" अनुमति नहीं है।';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'हम आपकी कैसे मदद कर सकते हैं?';
+$PMF_LANG['msgHeroSubline'] = 'ज्ञान आधार में खोजें या श्रेणी के अनुसार ब्राउज़ करें।';
+$PMF_LANG['msgDisplaySettings'] = 'प्रदर्शन सेटिंग्स';
+$LANG_CONF['layout.heroImage'] = ['input', 'प्रारंभ पृष्ठ की हीरो छवि', 'बड़ी स्क्रीन पर प्रारंभ पृष्ठ की खोज के बगल में दिखाई जाने वाली छवि का URL या पथ। केवल-टेक्स्ट हीरो के लिए खाली छोड़ें।'];
+
 return $PMF_LANG;

@@ -1864,4 +1864,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate serverio
 $LANG_CONF['translation.provider'] = ['select', 'Vertimo paslaugos teikėjas'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Leisti diegti naktinius leidimus, kurių SHA-256 maišos negalima patikrinti pagal GitHub (nerekomenduojama)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Įveskite savo dabartinį slaptažodį, kad pridėtumėte naują raktą prie savo paskyros.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Prieš pridedant naują raktą, jūsų bus paprašyta patvirtinti vienu iš esamų raktų.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Užregistruoti raktai';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Jūsų paskyroje dar neužregistruotas joks raktas.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'užregistruotas';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'užregistruotas prieš tai, kai pradėta fiksuoti registracijos datą';
+$PMF_LANG['msgPasskeyRevoke'] = 'Pašalinti';
+$PMF_LANG['msgPasskeyRevoked'] = 'Raktas buvo pašalintas.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Šis raktas nėra užregistruotas jūsų paskyroje.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Paskutinio paskyros be slaptažodžio rakto pašalinti negalima.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Prie jūsų paskyros pridėtas naujas raktas';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Prie jūsų paskyros ką tik buvo pridėtas naujas raktas. Jei tai padarėte jūs, nieko daryti nereikia. Jei ne, pašalinkite jį savo vartotojo valdymo skydelyje adresu %s ir pakeiskite slaptažodį.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Pašalinti visus šio vartotojo raktus';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s šiuo metu išjungta. Pirmiausia įjunkite ją konfigūracijoje.';
+$PMF_LANG['msgMultiSelectHint'] = 'Laikykite nuspaustą Ctrl (Cmd sistemoje macOS), kad pasirinktumėte daugiau nei vieną kategoriją.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Įkelti naują captcha kodą';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Versijos tikrinimas šiuo metu nepasiekiamas.';
+$PMF_LANG['msgFooterLinks'] = 'Nuorodos';
+$PMF_LANG['msgFooterLegal'] = 'Teisinė informacija';
+$PMF_LANG['msgPermalink'] = 'Nuolatinė nuoroda';
+$PMF_LANG['msgNoBookmarks'] = 'Dar nepažymėjote jokių DUK įrašų.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Šrifto dydis';
+$PMF_LANG['msgFontSizeDecrease'] = 'Sumažinti šrifto dydį';
+$PMF_LANG['msgFontSizeIncrease'] = 'Padidinti šrifto dydį';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Eilutė %d: nėra teisės "%s" importuoti šią eilutę kaip paskelbtą.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Kaip galime jums padėti?';
+$PMF_LANG['msgHeroSubline'] = 'Ieškokite žinių bazėje arba naršykite pagal kategorijas.';
+$PMF_LANG['msgDisplaySettings'] = 'Rodymo nustatymai';
+$LANG_CONF['layout.heroImage'] = ['input', 'Pradžios puslapio hero paveikslėlis', 'Paveikslėlio, rodomo šalia pradžios puslapio paieškos dideliuose ekranuose, URL arba kelias. Palikite tuščią, jei norite tik tekstinio hero.'];
+
 return $PMF_LANG;

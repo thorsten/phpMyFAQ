@@ -1669,4 +1669,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL של שרת LibreTr
 $LANG_CONF['translation.provider'] = ['select', 'ספק שירות התרגום'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'אפשר התקנת גרסאות nightly שלא ניתן לאמת את תקציר ה-SHA-256 שלהן מול GitHub (לא מומלץ)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'הזן את הסיסמה הנוכחית שלך כדי להוסיף Passkey חדש לחשבונך.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'תתבקש לאשר באמצעות אחד מה-Passkeys הקיימים שלך לפני שיתווסף חדש.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Passkeys רשומים';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'עדיין לא רשום Passkey לחשבונך.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'נרשם בתאריך';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'נרשם לפני שתאריך הרישום החל להישמר';
+$PMF_LANG['msgPasskeyRevoke'] = 'הסר';
+$PMF_LANG['msgPasskeyRevoked'] = 'ה-Passkey הוסר.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Passkey זה אינו רשום לחשבונך.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'לא ניתן להסיר את ה-Passkey האחרון של חשבון ללא סיסמה.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Passkey חדש נוסף לחשבונך';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Passkey חדש נוסף זה עתה לחשבונך. אם זה היית אתה, אין צורך בפעולה נוספת. אם לא, הסר אותו בלוח הבקרה של המשתמש שלך בכתובת %s ושנה את הסיסמה שלך.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'הסר את כל ה-Passkeys של משתמש זה';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s מושבת כעת. הפעל אותו תחילה בהגדרות.';
+$PMF_LANG['msgMultiSelectHint'] = 'החזק Ctrl (Cmd ב-macOS) כדי לבחור יותר מקטגוריה אחת.';
+$PMF_LANG['msgRefreshCaptcha'] = 'טען קוד captcha חדש';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'בדיקת הגרסה אינה זמינה כעת.';
+$PMF_LANG['msgFooterLinks'] = 'קישורים';
+$PMF_LANG['msgFooterLegal'] = 'מידע משפטי';
+$PMF_LANG['msgPermalink'] = 'קישור קבוע';
+$PMF_LANG['msgNoBookmarks'] = 'עדיין לא הוספת שאלות נפוצות לסימניות.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'גודל גופן';
+$PMF_LANG['msgFontSizeDecrease'] = 'הקטן גודל גופן';
+$PMF_LANG['msgFontSizeIncrease'] = 'הגדל גודל גופן';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'שורה %d: אין הרשאת "%s" לייבא שורה זו כמפורסמת.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'כיצד נוכל לעזור לך?';
+$PMF_LANG['msgHeroSubline'] = 'חפש במאגר הידע או עיין לפי קטגוריה.';
+$PMF_LANG['msgDisplaySettings'] = 'הגדרות תצוגה';
+$LANG_CONF['layout.heroImage'] = ['input', 'תמונת hero של דף הבית', 'כתובת URL או נתיב של תמונה המוצגת לצד החיפוש בדף הבית במסכים גדולים. השאירו ריק עבור hero עם טקסט בלבד.'];
+
 return $PMF_LANG;

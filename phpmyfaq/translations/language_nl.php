@@ -689,7 +689,6 @@ $LANG_CONF['security.ipCheck'] = array('checkbox', 'Wilt u dat het IP-adres word
 $LANG_CONF['records.numberOfRecordsPerPage'] = array('input', 'Aantal weergegeven onderwerpen per pagina');
 $LANG_CONF['records.numberOfShownNewsEntries'] = array('input', 'Aantal nieuws artikelen');
 $LANG_CONF['security.bannedIPs'] = array('area', 'Blokkeer deze IP adressen');
-$LANG_CONF['security.ldapSupport'] = array('checkbox', 'LDAP ondersteuning activeren? (standaard: gedeactiveerd)');
 $LANG_CONF['main.referenceURL'] = array('input', 'Basis URL voor link verificatie (bijv.: https://www.voorbeeld.nl/faq)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array('checkbox', 'Uitschakelen zichtbaarheid van nieuwe vragen?');
 $LANG_CONF['security.permLevel'] = array('select', 'Rechten nivo');
@@ -863,7 +862,6 @@ $LANG_CONF['records.allowQuestionsForGuests'] = array('checkbox', 'Laat gasten t
 $LANG_CONF['records.allowNewFaqsForGuests'] = array('checkbox', 'Laat toevoegen van FAQs toe (standaard: geactiveerd)');
 $LANG_CONF['records.hideEmptyCategories'] = array('checkbox', 'Verberg lege categorieën (standaard: gedeactiveerd)');
 $LANG_CONF['search.searchForSolutionId'] = array('checkbox', 'Zoek oplossing ID (standaard: geactiveerd)');
-$LANG_CONF['socialnetworks.disableAll'] = array('checkbox', 'Schakel alle sociale netwerken uit (standaard: gedeactiveerd)');
 $LANG_CONF['seo.metaTagsHome'] = array('select', 'Meta Tags start page');
 $LANG_CONF['seo.metaTagsFaqs'] = array('select', 'Meta Tags FAQs');
 $PMF_LANG['msgMatchingQuestions'] = 'Volgende resultaten benaderden uw vraag:';
@@ -1605,5 +1603,40 @@ $LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'LibreTranslate AP
 $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL van de LibreTranslate-server'];
 $LANG_CONF['translation.provider'] = ['select', 'Aanbieder van de vertaaldienst'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Installatie van nightly builds toestaan waarvan de SHA-256-digest niet tegen GitHub kan worden geverifieerd (niet aanbevolen)'];
+
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Voer uw huidige wachtwoord in om een nieuwe Passkey aan uw account toe te voegen.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'U wordt gevraagd te bevestigen met een van uw bestaande Passkeys voordat een nieuwe wordt toegevoegd.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Geregistreerde Passkeys';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Er is nog geen Passkey geregistreerd voor uw account.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'geregistreerd op';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'geregistreerd voordat de registratiedatum werd vastgelegd';
+$PMF_LANG['msgPasskeyRevoke'] = 'Verwijderen';
+$PMF_LANG['msgPasskeyRevoked'] = 'De Passkey is verwijderd.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Deze Passkey is niet geregistreerd voor uw account.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'De laatste Passkey van een wachtwoordloos account kan niet worden verwijderd.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Er is een nieuwe Passkey aan uw account toegevoegd';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Er is zojuist een nieuwe Passkey aan uw account toegevoegd. Als u dit zelf was, hoeft u niets te doen. Zo niet, verwijder deze dan in uw gebruikerspaneel op %s en wijzig uw wachtwoord.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Alle Passkeys van deze gebruiker verwijderen';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s is momenteel uitgeschakeld. Schakel het eerst in via de configuratie.';
+$PMF_LANG['msgMultiSelectHint'] = 'Houd Ctrl (Cmd op macOS) ingedrukt om meer dan één categorie te selecteren.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Nieuwe captcha-code laden';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'De versiecontrole is momenteel niet beschikbaar.';
+$PMF_LANG['msgFooterLinks'] = 'Links';
+$PMF_LANG['msgFooterLegal'] = 'Juridisch';
+$PMF_LANG['msgPermalink'] = 'Permalink';
+$PMF_LANG['msgNoBookmarks'] = 'U heeft nog geen FAQs als bladwijzer opgeslagen.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Tekengrootte';
+$PMF_LANG['msgFontSizeDecrease'] = 'Tekengrootte verkleinen';
+$PMF_LANG['msgFontSizeIncrease'] = 'Tekengrootte vergroten';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Rij %d: geen "%s"-rechten om deze rij als gepubliceerd te importeren.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Hoe kunnen we u helpen?';
+$PMF_LANG['msgHeroSubline'] = 'Zoek in de kennisbank of blader per categorie.';
+$PMF_LANG['msgDisplaySettings'] = 'Weergave-instellingen';
+$LANG_CONF['layout.heroImage'] = ['input', 'Hero-afbeelding van de startpagina', 'URL of pad van een afbeelding die op grote schermen naast het zoekveld van de startpagina wordt getoond. Laat leeg voor een hero met alleen tekst.'];
 
 return $PMF_LANG;

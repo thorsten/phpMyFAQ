@@ -575,9 +575,6 @@ $PMF_LANG['msgAdvancedSearch'] = 'Búsqueda avanzada';
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Protección contra Spam';
-$LANG_CONF['spam.EnableSafeEmail'] = array("checkbox", "Mostra email de usuario en modo seguro");
-$LANG_CONF['spam.CheckBannedWords'] = array("checkbox", "Habilitar lista palabras censuradas");
-$LANG_CONF['spam.EnableCatpchaCode'] = array("checkbox", "Mostrar gráfico Captcha");
 $PMF_LANG['ad_session_expiring'] = 'La sesión terminará en %d minutos ¿Quieres seguir trabajando?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -1088,7 +1085,6 @@ $PMF_LANG['msgSeeFAQinFrontend'] = 'Ver FAQ en el frontend';
 $PMF_LANG['msgRelatedTags'] = 'Agregar palabra de búsqueda';
 $PMF_LANG['msgPopularTags'] = 'Palabras de búsqueda populares';
 $LANG_CONF['search.enableHighlighting'] = ["checkbox", "Destacar las palabras encontradas"];
-$LANG_CONF['records.allowComentariosPara Invitados'] = ["checkbox", "Permitir comentarios de invitados "];
 $LANG_CONF['records.allowQuestionsForGuests'] = ["checkbox", "Permitir preguntas de invitados "];
 $LANG_CONF['records.allowNewFaqsForGuests'] = ["checkbox", "Permitir nuevas FAQs de invitados "];
 $PMF_LANG['ad_searchterm_del'] = 'Eliminar todas las palabras de búsqueda almacenadas';
@@ -1096,7 +1092,6 @@ $PMF_LANG["ad_searchterm_del_suc"] = 'Eliminación correcta de todos los términ
 $PMF_LANG["ad_searchterm_del_err"] = 'No se pudieron eliminar todos los términos de búsqueda.';
 $LANG_CONF['records.hideEmptyCategories'] = ["checkbox", "Ocultar categorías vacías "];
 $LANG_CONF['search.searchForSolutionId'] = ["checkbox", "Buscar ID de la solución "];
-$LANG_CONF['socialnetworks.disableAll'] = ["checkbox", "Desactivar soporte para redes sociales "];
 
 // añadido v2.9.0-alpha2 - 2014-08-16 por Thorsten
 $PMF_LANG['ad_tag_delete_success'] = "La etiqueta fue eliminada con éxito";
@@ -1109,14 +1104,11 @@ $LANG_CONF['seo.metaTagsPages'] = ["select", "Meta Tags HTML para páginas está
 $LANG_CONF['seo.metaTagsAdmin'] = ["select", "Meta Tags HTML para páginas de admin"];
 $PMF_LANG['msgMatchingQuestions'] = "Los siguientes resultados pueden responder a tu pregunta";
 $PMF_LANG['msgFinishSubmission'] = "Si ninguna de las sugerencias coincide, puedes enviar la pregunta.";
-$LANG_CONF['spam.manualActivación'] = ['checkbox', 'Activar usuarios manualmente'];
 
 // añadido v2.9.0-alpha2 - 2014-10-13 por Christopher Andrews ( Chris--A )
 $PMF_LANG['mailControlCenter'] = 'E-mail';
 $LANG_CONF['mail.remoteSMTP'] = ['checkbox', 'Usar servidor SMTP externo'];
 $LANG_CONF['mail.remoteSMTPServer'] = ['input', 'Servidor SMTP'];
-$LANG_CONF['mail.remoteSMTPNombre de usuario'] = ['input', 'Nombre de usuario SMTP'];
-$LANG_CONF['mail.remoteSMTPContraseña'] = ['password', 'Contraseña SMTP'];
 $LANG_CONF['security.enableRegistration'] = array('checkbox', 'Permitir el registro de visitantes');
 
 // Añadido v2.9.0-alpha3 - 2015-02-08 por Thorsten
@@ -1871,5 +1863,40 @@ $LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'Clave API de Libr
 $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL del servidor LibreTranslate'];
 $LANG_CONF['translation.provider'] = ['select', 'Proveedor del servicio de traducción'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Permitir instalar versiones nightly cuyo resumen SHA-256 no se pueda verificar con GitHub (no recomendado)'];
+
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Introduce tu contraseña actual para añadir un nuevo Passkey a tu cuenta.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Se te pedirá confirmar con uno de tus Passkeys existentes antes de añadir uno nuevo.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Passkeys registrados';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Todavía no hay ningún Passkey registrado para tu cuenta.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'registrado el';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'registrado antes de que se guardara la fecha de registro';
+$PMF_LANG['msgPasskeyRevoke'] = 'Eliminar';
+$PMF_LANG['msgPasskeyRevoked'] = 'El Passkey se ha eliminado.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Este Passkey no está registrado para tu cuenta.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'No se puede eliminar el último Passkey de una cuenta sin contraseña.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Se ha añadido un nuevo Passkey a tu cuenta';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Se acaba de añadir un nuevo Passkey a tu cuenta. Si has sido tú, no es necesario hacer nada. Si no, elimínalo en tu panel de usuario en %s y cambia tu contraseña.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Eliminar todos los Passkeys de este usuario';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s está desactivado actualmente. Actívalo primero en la configuración.';
+$PMF_LANG['msgMultiSelectHint'] = 'Mantén pulsada la tecla Ctrl (Cmd en macOS) para seleccionar más de una categoría.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Cargar un nuevo código captcha';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'La comprobación de versión no está disponible actualmente.';
+$PMF_LANG['msgFooterLinks'] = 'Enlaces';
+$PMF_LANG['msgFooterLegal'] = 'Aviso legal';
+$PMF_LANG['msgPermalink'] = 'Enlace permanente';
+$PMF_LANG['msgNoBookmarks'] = 'Todavía no has añadido ninguna FAQ a tus marcadores.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Tamaño de fuente';
+$PMF_LANG['msgFontSizeDecrease'] = 'Reducir el tamaño de fuente';
+$PMF_LANG['msgFontSizeIncrease'] = 'Aumentar el tamaño de fuente';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Fila %d: sin permiso "%s" para importar esta fila como publicada.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = '¿Cómo podemos ayudarte?';
+$PMF_LANG['msgHeroSubline'] = 'Busca en la base de conocimientos o navega por categorías.';
+$PMF_LANG['msgDisplaySettings'] = 'Ajustes de visualización';
+$LANG_CONF['layout.heroImage'] = ['input', 'Imagen hero de la página de inicio', 'URL o ruta de una imagen que se muestra junto a la búsqueda de la página de inicio en pantallas grandes. Déjelo vacío para un hero solo de texto.'];
 
 return $PMF_LANG;

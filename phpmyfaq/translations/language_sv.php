@@ -422,9 +422,7 @@ $LANG_CONF['main.titleFAQ'] = array("input", "Titel på FAQ");
 $LANG_CONF['main.currentVersion'] = array("print", "FAQ-version");
 $LANG_CONF['main.metaDescription'] = array("input", "Beskrivning av sidan");
 $LANG_CONF['main.metaPublisher'] = array("input", "Namn på ansvarig");
-$LANG_CONF['adminmail'] = array("input", "Emailadress till admin");
 $LANG_CONF['main.contactInformation'] = array("area", "Kontaktinformation");
-$LANG_CONF['attmax'] = array("input", "Maximal storlek på bilagor (max. %sByte)");
 $LANG_CONF['records.disableAttachments'] = array("checkbox", "Länka bilagorna under frågorna?");
 $LANG_CONF['main.enableUserTracking'] = array("checkbox", "Spårning?");
 $LANG_CONF['main.enableAdminLog'] = array("checkbox", "Adminlogg?");
@@ -2060,5 +2058,40 @@ $LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'LibreTranslate AP
 $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate-serverns URL'];
 $LANG_CONF['translation.provider'] = ['select', 'Leverantör av översättningstjänst'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Tillåt installation av nightly builds vars SHA-256-digest inte kan verifieras mot GitHub (rekommenderas inte)'];
+
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Ange ditt nuvarande lösenord för att lägga till en ny Passkey till ditt konto.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Du kommer att bli ombedd att bekräfta med en av dina befintliga Passkeys innan en ny läggs till.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Registrerade Passkeys';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Ingen Passkey är registrerad för ditt konto ännu.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'registrerad den';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'registrerad innan registreringsdatumet började sparas';
+$PMF_LANG['msgPasskeyRevoke'] = 'Ta bort';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkeyn har tagits bort.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Denna Passkey är inte registrerad för ditt konto.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Den sista Passkeyn för ett lösenordsfritt konto kan inte tas bort.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] En ny Passkey har lagts till ditt konto';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'En ny Passkey har just lagts till ditt konto. Om det var du behöver du inte göra något. Om inte, ta bort den i din användarpanel på %s och byt ditt lösenord.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Ta bort alla Passkeys för denna användare';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s är för närvarande inaktiverat. Aktivera det först i konfigurationen.';
+$PMF_LANG['msgMultiSelectHint'] = 'Håll ned Ctrl (Cmd på macOS) för att välja fler än en kategori.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Ladda en ny captcha-kod';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Versionskontrollen är för närvarande inte tillgänglig.';
+$PMF_LANG['msgFooterLinks'] = 'Länkar';
+$PMF_LANG['msgFooterLegal'] = 'Juridisk information';
+$PMF_LANG['msgPermalink'] = 'Permalänk';
+$PMF_LANG['msgNoBookmarks'] = 'Du har inte bokmärkt några FAQ ännu.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Teckenstorlek';
+$PMF_LANG['msgFontSizeDecrease'] = 'Minska teckenstorleken';
+$PMF_LANG['msgFontSizeIncrease'] = 'Öka teckenstorleken';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Rad %d: saknar behörigheten "%s" för att importera raden som publicerad.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Hur kan vi hjälpa dig?';
+$PMF_LANG['msgHeroSubline'] = 'Sök i kunskapsbasen eller bläddra efter kategori.';
+$PMF_LANG['msgDisplaySettings'] = 'Visningsinställningar';
+$LANG_CONF['layout.heroImage'] = ['input', 'Hero-bild på startsidan', 'URL eller sökväg till en bild som visas bredvid sökningen på startsidan på stora skärmar. Lämna tomt för en hero med enbart text.'];
 
 return $PMF_LANG;

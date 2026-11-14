@@ -526,7 +526,6 @@ $LANG_CONF["security.ipCheck"] = ["checkbox", "Check the IP in administration"];
 $LANG_CONF["records.numberOfRecordsPerPage"] = ["input", "Нэг хуудсанд хэдэн сэдвийн нэр харуулах"];
 $LANG_CONF["records.numberOfShownNewsEntries"] = ["input", "Number of news articles"];
 $LANG_CONF['security.bannedIPs'] = ["area", "Ban these IPs"];
-$LANG_CONF["security.ldapSupport"] = ["checkbox", "Enable LDAP support? (үндсэн: идэвхгүй)"];
 $LANG_CONF["main.referenceURL"] = ["input", "URL for link verification (e.g.: https://www.example.org/faq)"];
 $LANG_CONF["records.enableVisibilityQuestions"] = ["checkbox", "Disable visibility of new questions?"];
 $LANG_CONF['security.permLevel'] = ["select", "Зөвшөөрлийн түвшин"];
@@ -964,7 +963,6 @@ $PMF_LANG['msgShowHelp'] = 'Үгнүүдийг таслалаар тусгаар
 $PMF_LANG['msgUpdateFaqDate'] = 'шинэчлэх';
 $PMF_LANG['msgKeepFaqDate'] = 'keep';
 $PMF_LANG['msgEditFaqDate'] = 'засах';
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = ['checkbox', 'Instant Response on startpage (үндсэн: идэвхгүй)'];
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = ['select', 'Хамаарлаар эрэмбэлэх'];
@@ -1878,5 +1876,40 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate серв
 $LANG_CONF['translation.provider'] = ['select', 'Орчуулгын үйлчилгээ үзүүлэгч'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'SHA-256 тоймыг GitHub-аар баталгаажуулах боломжгүй nightly хувилбаруудыг суулгахыг зөвшөөрөх (зөвлөмжгүй)'];
 $LANG_CONF['ldap.ldapSupport'] = ['checkbox', 'LDAP дэмжлэгийг идэвхжүүлэх үү? (үндсэн: идэвхгүй)'];
+
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Бүртгэлдээ шинэ Passkey нэмэхийн тулд одоогийн нууц үгээ оруулна уу.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Шинэ Passkey нэмэхээс өмнө одоо байгаа Passkey-үүдийнхээ аль нэгээр баталгаажуулахыг танаас хүсэх болно.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Бүртгэгдсэн Passkey-үүд';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Таны бүртгэлд одоогоор Passkey бүртгэгдээгүй байна.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'бүртгэгдсэн огноо';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'бүртгэлийн огноог хадгалж эхлэхээс өмнө бүртгэгдсэн';
+$PMF_LANG['msgPasskeyRevoke'] = 'Устгах';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey устгагдлаа.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Энэ Passkey таны бүртгэлд бүртгэгдээгүй байна.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Нууц үггүй бүртгэлийн сүүлчийн Passkey-г устгах боломжгүй.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Таны бүртгэлд шинэ Passkey нэмэгдсэн';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Таны бүртгэлд дөнгөж сая шинэ Passkey нэмэгдсэн. Хэрэв энэ та байсан бол ямар нэг үйлдэл хийх шаардлагагүй. Хэрэв үгүй бол %s хаягаар хэрэглэгчийн удирдлагын самбарт орж түүнийг устгаад нууц үгээ солино уу.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Энэ хэрэглэгчийн бүх Passkey-г устгах';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s одоогоор идэвхгүй байна. Эхлээд тохиргоонд идэвхжүүлнэ үү.';
+$PMF_LANG['msgMultiSelectHint'] = 'Нэгээс олон ангилал сонгохын тулд Ctrl (macOS дээр Cmd) товчийг дарж барина уу.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Шинэ captcha код ачаалах';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Хувилбарын шалгалт одоогоор боломжгүй байна.';
+$PMF_LANG['msgFooterLinks'] = 'Холбоосууд';
+$PMF_LANG['msgFooterLegal'] = 'Хууль эрх зүй';
+$PMF_LANG['msgPermalink'] = 'Байнгын холбоос';
+$PMF_LANG['msgNoBookmarks'] = 'Та одоогоор ямар ч FAQ хавчуурга хийгээгүй байна.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Үсгийн хэмжээ';
+$PMF_LANG['msgFontSizeDecrease'] = 'Үсгийн хэмжээг багасгах';
+$PMF_LANG['msgFontSizeIncrease'] = 'Үсгийн хэмжээг томсгох';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Мөр %d: энэ мөрийг нийтлэгдсэн байдлаар импортлох "%s" эрх байхгүй.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Бид танд хэрхэн туслах вэ?';
+$PMF_LANG['msgHeroSubline'] = 'Мэдлэгийн санд хайх эсвэл ангиллаар үзэх.';
+$PMF_LANG['msgDisplaySettings'] = 'Дэлгэцийн тохиргоо';
+$LANG_CONF['layout.heroImage'] = ['input', 'Эхлэл хуудасны hero зураг', 'Том дэлгэц дээр эхлэл хуудасны хайлтын хажууд харагдах зургийн URL эсвэл зам. Зөвхөн текст бүхий hero-д хоосон орхино уу.'];
 
 return $PMF_LANG;

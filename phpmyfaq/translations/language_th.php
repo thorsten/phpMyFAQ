@@ -1644,4 +1644,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL เซิร์ฟ�
 $LANG_CONF['translation.provider'] = ['select', 'ผู้ให้บริการแปลภาษา'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'อนุญาตให้ติดตั้ง nightly build ที่ไม่สามารถตรวจสอบค่า SHA-256 กับ GitHub ได้ (ไม่แนะนำ)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'ป้อนรหัสผ่านปัจจุบันของคุณเพื่อเพิ่ม Passkey ใหม่ให้กับบัญชีของคุณ';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'คุณจะถูกขอให้ยืนยันด้วย Passkey ที่มีอยู่ของคุณก่อนที่จะเพิ่ม Passkey ใหม่';
+$PMF_LANG['msgPasskeysRegistered'] = 'Passkeys ที่ลงทะเบียนแล้ว';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'ยังไม่มี Passkey ที่ลงทะเบียนสำหรับบัญชีของคุณ';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'ลงทะเบียนเมื่อ';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'ลงทะเบียนก่อนที่จะมีการบันทึกวันที่ลงทะเบียน';
+$PMF_LANG['msgPasskeyRevoke'] = 'ลบ';
+$PMF_LANG['msgPasskeyRevoked'] = 'ลบ Passkey แล้ว';
+$PMF_LANG['msgPasskeyUnknown'] = 'Passkey นี้ไม่ได้ลงทะเบียนสำหรับบัญชีของคุณ';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'ไม่สามารถลบ Passkey สุดท้ายของบัญชีที่ไม่ใช้รหัสผ่านได้';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] มีการเพิ่ม Passkey ใหม่ให้กับบัญชีของคุณ';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'เพิ่งมีการเพิ่ม Passkey ใหม่ให้กับบัญชีของคุณ หากเป็นคุณเอง ไม่ต้องดำเนินการใด ๆ หากไม่ใช่ โปรดลบออกในแผงควบคุมผู้ใช้ของคุณที่ %s และเปลี่ยนรหัสผ่านของคุณ';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'ลบ Passkeys ทั้งหมดของผู้ใช้นี้';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s ถูกปิดใช้งานอยู่ในขณะนี้ โปรดเปิดใช้งานในการกำหนดค่าก่อน';
+$PMF_LANG['msgMultiSelectHint'] = 'กด Ctrl ค้างไว้ (Cmd บน macOS) เพื่อเลือกมากกว่าหนึ่งหมวดหมู่';
+$PMF_LANG['msgRefreshCaptcha'] = 'โหลดรหัส captcha ใหม่';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'การตรวจสอบเวอร์ชันไม่พร้อมใช้งานในขณะนี้';
+$PMF_LANG['msgFooterLinks'] = 'ลิงก์';
+$PMF_LANG['msgFooterLegal'] = 'ข้อมูลทางกฎหมาย';
+$PMF_LANG['msgPermalink'] = 'ลิงก์ถาวร';
+$PMF_LANG['msgNoBookmarks'] = 'คุณยังไม่ได้บุ๊กมาร์ก FAQ ใด ๆ';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'ขนาดตัวอักษร';
+$PMF_LANG['msgFontSizeDecrease'] = 'ลดขนาดตัวอักษร';
+$PMF_LANG['msgFontSizeIncrease'] = 'เพิ่มขนาดตัวอักษร';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'แถว %d: ไม่มีสิทธิ์ "%s" ในการนำเข้าแถวนี้แบบเผยแพร่';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'เราจะช่วยคุณได้อย่างไร?';
+$PMF_LANG['msgHeroSubline'] = 'ค้นหาในฐานความรู้หรือเรียกดูตามหมวดหมู่';
+$PMF_LANG['msgDisplaySettings'] = 'การตั้งค่าการแสดงผล';
+$LANG_CONF['layout.heroImage'] = ['input', 'ภาพฮีโร่ของหน้าแรก', 'URL หรือพาธของภาพที่แสดงข้างช่องค้นหาของหน้าแรกบนหน้าจอขนาดใหญ่ เว้นว่างไว้สำหรับฮีโร่แบบข้อความเท่านั้น'];
+
 return $PMF_LANG;

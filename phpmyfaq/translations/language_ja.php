@@ -430,8 +430,6 @@ $LANG_CONF['records.disableAttachments'] = array('checkbox', 'エントリーの
 $LANG_CONF['main.enableUserTracking'] = array('checkbox', '追跡機能を使用する');
 $LANG_CONF['main.enableAdminLog'] = array('checkbox', '管理ログを使用する');
 $LANG_CONF['security.ipCheck'] = array('checkbox', 'admin.php で UIN のチェック時に IP アドレスを確認するか');
-$LANG_CONF['main.numberOfRecordsPerPage'] = array("input", "ページ毎に表示するトピック数");
-$LANG_CONF['main.numberOfShownNewsEntries'] = array("input", "お知らせの表示数");
 $LANG_CONF['security.bannedIPs'] = array('area', '拒否する IP アドレス');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'LDAP のサポートを有効にしますか? (初期値: 無効)');
 $LANG_CONF['main.referenceURL'] = array('input', 'リンク確認の基準 URL (例: https://www.example.org/faq/)');
@@ -732,7 +730,6 @@ $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'ページ %d バッファを格�
 $PMF_LANG['ad_record_active'] = '有効';
 $PMF_LANG['msgAttachmentInvalid'] = '添付ファイルは無効です、管理者に確認してください';
 $LANG_CONF['search.numberSearchTerms'] = array('input', '一覧に出す検索件数');
-$LANG_CONF['main.orderingPopularFaqs'] = array("select", "トップ FAQ の並び替え方法");
 $PMF_LANG['list_all_users'] = '全ユーザーの一覧';
 $PMF_LANG['msgShowHelp'] = '単語をカンマで区切ってください。';
 $PMF_LANG['msgUpdateFaqDate'] = '更新';
@@ -857,7 +854,6 @@ $PMF_LANG["ad_searchterm_del_suc"] = '検索語句をすべて削除しました
 $PMF_LANG["ad_searchterm_del_err"] = '検索語句を削除できませんでした。';
 $LANG_CONF["records.hideEmptyCategories"] = ["checkbox", "空のカテゴリーを非表示"];
 $LANG_CONF["search.searchForSolutionId"] = ["checkbox", "ソリューションIDで検索"];
-$LANG_CONF["socialnetworks.disableAll"] = ["checkbox", "SNS連携を無効にする"];
 
 // added v2.9.0-alpha2
 $PMF_LANG["ad_tag_delete_success"] = "タグは削除されました。";
@@ -1607,5 +1603,40 @@ $LANG_CONF['ldap.ldap_group_allowed_groups'] = ['input', '許可する AD グル
 $LANG_CONF['ldap.ldap_group_auto_assign'] = ['checkbox', 'AD のメンバーシップに基づいてユーザーを phpMyFAQ グループに自動的に割り当てる'];
 $LANG_CONF['ldap.ldap_group_mapping'] = ['input', 'AD グループと phpMyFAQ グループの JSON マッピング（例：{"Domain Admins": "Administrators"}）'];
 $LANG_CONF['ldap.ldap_use_group_restriction'] = ['checkbox', 'ログインを特定の Active Directory グループに制限する'];
+
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'アカウントに新しいパスキーを追加するには、現在のパスワードを入力してください。';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = '新しいパスキーを追加する前に、既存のパスキーのいずれかで確認を求められます。';
+$PMF_LANG['msgPasskeysRegistered'] = '登録済みのパスキー';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'このアカウントにはまだパスキーが登録されていません。';
+$PMF_LANG['msgPasskeyRegisteredOn'] = '登録日';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = '登録日が記録される前に登録されました';
+$PMF_LANG['msgPasskeyRevoke'] = '削除';
+$PMF_LANG['msgPasskeyRevoked'] = 'パスキーを削除しました。';
+$PMF_LANG['msgPasskeyUnknown'] = 'このパスキーはあなたのアカウントに登録されていません。';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'パスワードなしアカウントの最後のパスキーは削除できません。';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] アカウントに新しいパスキーが追加されました';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'アカウントに新しいパスキーが追加されました。ご自身で追加した場合、対応は不要です。そうでない場合は、%s のユーザーコントロールパネルで削除し、パスワードを変更してください。';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'このユーザーのすべてのパスキーを削除';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s は現在無効です。まず設定で有効にしてください。';
+$PMF_LANG['msgMultiSelectHint'] = '複数のカテゴリーを選択するには、Ctrl（macOS では Cmd）を押しながらクリックしてください。';
+$PMF_LANG['msgRefreshCaptcha'] = '新しい captcha コードを読み込む';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'バージョンチェックは現在利用できません。';
+$PMF_LANG['msgFooterLinks'] = 'リンク';
+$PMF_LANG['msgFooterLegal'] = '法的情報';
+$PMF_LANG['msgPermalink'] = 'パーマリンク';
+$PMF_LANG['msgNoBookmarks'] = 'まだ FAQ をブックマークしていません。';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = '文字サイズ';
+$PMF_LANG['msgFontSizeDecrease'] = '文字サイズを小さくする';
+$PMF_LANG['msgFontSizeIncrease'] = '文字サイズを大きくする';
+$PMF_LANG['msgImportRowNoPublishPermission'] = '行 %d: この行を公開済みとしてインポートするための "%s" 権限がありません。';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'どのようなお困りごとですか？';
+$PMF_LANG['msgHeroSubline'] = 'ナレッジベースを検索するか、カテゴリーから探してください。';
+$PMF_LANG['msgDisplaySettings'] = '表示設定';
+$LANG_CONF['layout.heroImage'] = ['input', 'スタートページのヒーロー画像', '大きな画面でスタートページの検索の横に表示される画像の URL またはパス。テキストのみのヒーローにする場合は空のままにします。'];
 
 return $PMF_LANG;

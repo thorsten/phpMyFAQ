@@ -1854,4 +1854,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate 伺服�
 $LANG_CONF['translation.provider'] = ['select', '翻譯服務提供者'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', '允許安裝無法透過 GitHub 驗證 SHA-256 摘要的 nightly 版本（不建議）'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = '請輸入您目前的密碼，以便為您的帳戶新增 Passkey。';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = '在新增 Passkey 之前，系統會要求您使用現有的其中一個 Passkey 進行確認。';
+$PMF_LANG['msgPasskeysRegistered'] = '已註冊的 Passkeys';
+$PMF_LANG['msgNoPasskeysRegistered'] = '您的帳戶尚未註冊任何 Passkey。';
+$PMF_LANG['msgPasskeyRegisteredOn'] = '註冊於';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = '在開始記錄註冊日期之前註冊';
+$PMF_LANG['msgPasskeyRevoke'] = '移除';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey 已移除。';
+$PMF_LANG['msgPasskeyUnknown'] = '此 Passkey 未在您的帳戶中註冊。';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = '無法移除無密碼帳戶的最後一個 Passkey。';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] 您的帳戶已新增 Passkey';
+$PMF_LANG['msgPasskeyAddedMailBody'] = '您的帳戶剛剛新增了一個 Passkey。如果是您本人操作，則無需採取任何動作。如果不是，請在 %s 的使用者控制面板中將其移除，並變更您的密碼。';
+$PMF_LANG['ad_user_revoke_passkeys'] = '移除此使用者的所有 Passkeys';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s 目前已停用。請先在設定中啟用。';
+$PMF_LANG['msgMultiSelectHint'] = '按住 Ctrl（macOS 上為 Cmd）可選取多個分類。';
+$PMF_LANG['msgRefreshCaptcha'] = '載入新的 captcha 驗證碼';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = '版本檢查目前無法使用。';
+$PMF_LANG['msgFooterLinks'] = '連結';
+$PMF_LANG['msgFooterLegal'] = '法律資訊';
+$PMF_LANG['msgPermalink'] = '永久連結';
+$PMF_LANG['msgNoBookmarks'] = '您尚未將任何 FAQ 加入書籤。';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = '字型大小';
+$PMF_LANG['msgFontSizeDecrease'] = '縮小字型';
+$PMF_LANG['msgFontSizeIncrease'] = '放大字型';
+$PMF_LANG['msgImportRowNoPublishPermission'] = '第 %d 列：沒有 "%s" 權限，無法將此列匯入為已發布狀態。';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = '我們能為您提供什麼協助？';
+$PMF_LANG['msgHeroSubline'] = '搜尋知識庫或依分類瀏覽。';
+$PMF_LANG['msgDisplaySettings'] = '顯示設定';
+$LANG_CONF['layout.heroImage'] = ['input', '首頁主視覺圖片', '在大螢幕上顯示於首頁搜尋框旁的圖片 URL 或路徑。留空則僅顯示文字。'];
+
 return $PMF_LANG;

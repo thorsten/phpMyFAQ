@@ -1851,4 +1851,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate servera 
 $LANG_CONF['translation.provider'] = ['select', 'Tulkošanas pakalpojuma sniedzējs'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Atļaut instalēt nakts būvējumus, kuru SHA-256 jaucējvērtību nevar pārbaudīt pret GitHub (nav ieteicams)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Ievadiet savu pašreizējo paroli, lai pievienotu savam kontam jaunu Passkey.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Pirms jauna Passkey pievienošanas jums tiks lūgts apstiprināt ar vienu no esošajiem Passkeys.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Reģistrētie Passkeys';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Jūsu kontam vēl nav reģistrēts neviens Passkey.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'reģistrēts';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'reģistrēts, pirms tika sākta reģistrācijas datuma fiksēšana';
+$PMF_LANG['msgPasskeyRevoke'] = 'Noņemt';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey tika noņemts.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Šis Passkey nav reģistrēts jūsu kontam.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Konta bez paroles pēdējo Passkey nevar noņemt.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Jūsu kontam pievienots jauns Passkey';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Jūsu kontam tikko tika pievienots jauns Passkey. Ja to izdarījāt jūs, nekas nav jādara. Ja ne, noņemiet to savā lietotāja vadības panelī %s un nomainiet paroli.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Noņemt visus šī lietotāja Passkeys';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s šobrīd ir atspējots. Vispirms iespējojiet to konfigurācijā.';
+$PMF_LANG['msgMultiSelectHint'] = 'Turiet nospiestu Ctrl (Cmd operētājsistēmā macOS), lai atlasītu vairāk nekā vienu kategoriju.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Ielādēt jaunu captcha kodu';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Versijas pārbaude šobrīd nav pieejama.';
+$PMF_LANG['msgFooterLinks'] = 'Saites';
+$PMF_LANG['msgFooterLegal'] = 'Juridiskā informācija';
+$PMF_LANG['msgPermalink'] = 'Pastāvīgā saite';
+$PMF_LANG['msgNoBookmarks'] = 'Jūs vēl neesat pievienojis grāmatzīmēm nevienu FAQ.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Fonta lielums';
+$PMF_LANG['msgFontSizeDecrease'] = 'Samazināt fonta lielumu';
+$PMF_LANG['msgFontSizeIncrease'] = 'Palielināt fonta lielumu';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Rinda %d: nav "%s" atļaujas, lai importētu šo rindu kā publicētu.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Kā mēs varam jums palīdzēt?';
+$PMF_LANG['msgHeroSubline'] = 'Meklējiet zināšanu bāzē vai pārlūkojiet pēc kategorijām.';
+$PMF_LANG['msgDisplaySettings'] = 'Attēlošanas iestatījumi';
+$LANG_CONF['layout.heroImage'] = ['input', 'Sākumlapas hero attēls', 'Attēla URL vai ceļš, kas lielos ekrānos tiek parādīts blakus sākumlapas meklēšanai. Atstājiet tukšu, lai hero būtu tikai ar tekstu.'];
+
 return $PMF_LANG;

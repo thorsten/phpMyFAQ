@@ -1848,4 +1848,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL سرور LibreTrans
 $LANG_CONF['translation.provider'] = ['select', 'ارائه‌دهنده سرویس ترجمه'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'اجازه نصب نسخه‌های nightly که چکیده SHA-256 آن‌ها از طریق GitHub قابل تأیید نیست (توصیه نمی‌شود)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'برای افزودن یک Passkey جدید به حساب خود، رمز عبور فعلی خود را وارد کنید.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'پیش از افزودن Passkey جدید، از شما خواسته می‌شود با یکی از Passkeyهای موجود خود تأیید کنید.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Passkeyهای ثبت‌شده';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'هنوز هیچ Passkey برای حساب شما ثبت نشده است.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'ثبت‌شده در';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'ثبت‌شده پیش از آنکه تاریخ ثبت ذخیره شود';
+$PMF_LANG['msgPasskeyRevoke'] = 'حذف';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey حذف شد.';
+$PMF_LANG['msgPasskeyUnknown'] = 'این Passkey برای حساب شما ثبت نشده است.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'آخرین Passkey یک حساب بدون رمز عبور را نمی‌توان حذف کرد.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] یک Passkey جدید به حساب شما افزوده شد';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'هم‌اکنون یک Passkey جدید به حساب شما افزوده شد. اگر این کار را خودتان انجام داده‌اید، نیازی به اقدامی نیست. در غیر این صورت، آن را در پنل کاربری خود در %s حذف کنید و رمز عبور خود را تغییر دهید.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'حذف همه Passkeyهای این کاربر';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s در حال حاضر غیرفعال است. ابتدا آن را در پیکربندی فعال کنید.';
+$PMF_LANG['msgMultiSelectHint'] = 'برای انتخاب بیش از یک دسته، کلید Ctrl (در macOS کلید Cmd) را نگه دارید.';
+$PMF_LANG['msgRefreshCaptcha'] = 'بارگذاری کد captcha جدید';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'بررسی نسخه در حال حاضر در دسترس نیست.';
+$PMF_LANG['msgFooterLinks'] = 'پیوندها';
+$PMF_LANG['msgFooterLegal'] = 'اطلاعات حقوقی';
+$PMF_LANG['msgPermalink'] = 'پیوند دائمی';
+$PMF_LANG['msgNoBookmarks'] = 'هنوز هیچ پرسش و پاسخی را نشانک نکرده‌اید.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'اندازه قلم';
+$PMF_LANG['msgFontSizeDecrease'] = 'کوچک‌تر کردن قلم';
+$PMF_LANG['msgFontSizeIncrease'] = 'بزرگ‌تر کردن قلم';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'ردیف %d: مجوز "%s" برای وارد کردن این ردیف به‌صورت منتشرشده وجود ندارد.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'چگونه می‌توانیم به شما کمک کنیم؟';
+$PMF_LANG['msgHeroSubline'] = 'در پایگاه دانش جستجو کنید یا بر اساس دسته مرور کنید.';
+$PMF_LANG['msgDisplaySettings'] = 'تنظیمات نمایش';
+$LANG_CONF['layout.heroImage'] = ['input', 'تصویر هیرو صفحه شروع', 'نشانی URL یا مسیر تصویری که در صفحه‌نمایش‌های بزرگ کنار جستجوی صفحه شروع نمایش داده می‌شود. برای هیرو فقط متنی خالی بگذارید.'];
+
 return $PMF_LANG;

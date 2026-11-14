@@ -1853,4 +1853,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate sunucu U
 $LANG_CONF['translation.provider'] = ['select', 'Çeviri hizmeti sağlayıcısı'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'SHA-256 özeti GitHub üzerinden doğrulanamayan nightly sürümlerin kurulmasına izin ver (önerilmez)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Hesabınıza yeni bir Passkey eklemek için mevcut şifrenizi girin.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Yeni bir Passkey eklenmeden önce mevcut Passkey\'lerinizden biriyle onaylamanız istenecektir.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Kayıtlı Passkey\'ler';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Hesabınız için henüz kayıtlı bir Passkey yok.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'kayıt tarihi';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'kayıt tarihi tutulmaya başlanmadan önce kaydedildi';
+$PMF_LANG['msgPasskeyRevoke'] = 'Kaldır';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey kaldırıldı.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Bu Passkey hesabınız için kayıtlı değil.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Şifresiz bir hesabın son Passkey\'i kaldırılamaz.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Hesabınıza yeni bir Passkey eklendi';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Hesabınıza az önce yeni bir Passkey eklendi. Bunu siz yaptıysanız herhangi bir işlem yapmanız gerekmez. Siz yapmadıysanız, %s adresindeki kullanıcı kontrol panelinizden kaldırın ve şifrenizi değiştirin.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Bu kullanıcının tüm Passkey\'lerini kaldır';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s şu anda devre dışı. Önce yapılandırmadan etkinleştirin.';
+$PMF_LANG['msgMultiSelectHint'] = 'Birden fazla kategori seçmek için Ctrl (macOS\'ta Cmd) tuşunu basılı tutun.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Yeni bir captcha kodu yükle';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Sürüm kontrolü şu anda kullanılamıyor.';
+$PMF_LANG['msgFooterLinks'] = 'Bağlantılar';
+$PMF_LANG['msgFooterLegal'] = 'Yasal';
+$PMF_LANG['msgPermalink'] = 'Kalıcı bağlantı';
+$PMF_LANG['msgNoBookmarks'] = 'Henüz hiçbir SSS\'yi yer imlerine eklemediniz.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Yazı tipi boyutu';
+$PMF_LANG['msgFontSizeDecrease'] = 'Yazı tipi boyutunu küçült';
+$PMF_LANG['msgFontSizeIncrease'] = 'Yazı tipi boyutunu büyüt';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Satır %d: bu satırı yayımlanmış olarak içe aktarmak için "%s" izni yok.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Size nasıl yardımcı olabiliriz?';
+$PMF_LANG['msgHeroSubline'] = 'Bilgi tabanında arama yapın veya kategorilere göz atın.';
+$PMF_LANG['msgDisplaySettings'] = 'Görüntüleme ayarları';
+$LANG_CONF['layout.heroImage'] = ['input', 'Başlangıç sayfası hero görseli', 'Büyük ekranlarda başlangıç sayfası aramasının yanında gösterilen görselin URL\'si veya yolu. Yalnızca metin içeren bir hero için boş bırakın.'];
+
 return $PMF_LANG;

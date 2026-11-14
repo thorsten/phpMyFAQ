@@ -1845,4 +1845,40 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL server LibreTransla
 $LANG_CONF['translation.provider'] = ['select', 'Furnizor serviciu de traducere'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Permite instalarea versiunilor nightly al căror hash SHA-256 nu poate fi verificat pe GitHub (nerecomandat)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Introduceți parola actuală pentru a adăuga un nou Passkey la contul dumneavoastră.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Vi se va cere să confirmați cu unul dintre Passkey-urile existente înainte de a fi adăugat unul nou.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Passkey-uri înregistrate';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Niciun Passkey nu este încă înregistrat pentru contul dumneavoastră.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'înregistrat la';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'înregistrat înainte ca data înregistrării să fie salvată';
+$PMF_LANG['msgPasskeyRevoke'] = 'Eliminare';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey-ul a fost eliminat.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Acest Passkey nu este înregistrat pentru contul dumneavoastră.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Ultimul Passkey al unui cont fără parolă nu poate fi eliminat.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Un nou Passkey a fost adăugat la contul dumneavoastră';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Un nou Passkey a fost adăugat chiar acum la contul dumneavoastră. Dacă ați fost dumneavoastră, nu este necesară nicio acțiune. Dacă nu, eliminați-l din panoul de control al utilizatorului la %s și schimbați-vă parola.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Eliminați toate Passkey-urile acestui utilizator';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s este dezactivat în prezent. Activați-l mai întâi în configurare.';
+$PMF_LANG['msgMultiSelectHint'] = 'Țineți apăsat Ctrl (Cmd pe macOS) pentru a selecta mai multe categorii.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Încărcați un nou cod captcha';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Verificarea versiunii nu este disponibilă în prezent.';
+$PMF_LANG['msgFooterLinks'] = 'Linkuri';
+$PMF_LANG['msgFooterLegal'] = 'Informații legale';
+$PMF_LANG['msgPermalink'] = 'Link permanent';
+$PMF_LANG['msgNoBookmarks'] = 'Nu ați adăugat încă niciun FAQ la marcaje.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Dimensiunea fontului';
+$PMF_LANG['msgFontSizeDecrease'] = 'Micșorați dimensiunea fontului';
+$PMF_LANG['msgFontSizeIncrease'] = 'Măriți dimensiunea fontului';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Rândul %d: nu există permisiunea "%s" pentru a importa acest rând ca publicat.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Cum vă putem ajuta?';
+$PMF_LANG['msgHeroSubline'] = 'Căutați în baza de cunoștințe sau răsfoiți după categorie.';
+$PMF_LANG['msgDisplaySettings'] = 'Setări de afișare';
+$LANG_CONF['layout.heroImage'] = ['input', 'Imaginea hero a paginii de start', 'URL-ul sau calea unei imagini afișate lângă căutarea de pe pagina de start pe ecrane mari. Lăsați gol pentru un hero doar cu text.'];
+
+
 return $PMF_LANG;

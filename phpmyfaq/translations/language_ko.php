@@ -1855,4 +1855,39 @@ $LANG_CONF['main.referenceURL'] = ['input', 'FAQ의 URL(예: https://www.example
 $LANG_CONF['records.enableVisibilityQuestions'] = ['checkbox', '새 질문을 표시하지 않으시겠습니까?'];
 $LANG_CONF['security.permLevel'] = ['select', '권한 수준'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = '계정에 새 Passkey를 추가하려면 현재 비밀번호를 입력하세요.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = '새 Passkey를 추가하기 전에 기존 Passkey 중 하나로 확인을 요청받게 됩니다.';
+$PMF_LANG['msgPasskeysRegistered'] = '등록된 Passkeys';
+$PMF_LANG['msgNoPasskeysRegistered'] = '계정에 등록된 Passkey가 아직 없습니다.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = '등록일';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = '등록일이 기록되기 전에 등록됨';
+$PMF_LANG['msgPasskeyRevoke'] = '삭제';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey가 삭제되었습니다.';
+$PMF_LANG['msgPasskeyUnknown'] = '이 Passkey는 계정에 등록되어 있지 않습니다.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = '비밀번호 없는 계정의 마지막 Passkey는 삭제할 수 없습니다.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] 계정에 새 Passkey가 추가되었습니다';
+$PMF_LANG['msgPasskeyAddedMailBody'] = '계정에 새 Passkey가 방금 추가되었습니다. 본인이 추가한 경우 별도의 조치가 필요하지 않습니다. 그렇지 않은 경우 %s 의 사용자 제어판에서 해당 Passkey를 삭제하고 비밀번호를 변경하세요.';
+$PMF_LANG['ad_user_revoke_passkeys'] = '이 사용자의 모든 Passkeys 삭제';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s 기능이 현재 비활성화되어 있습니다. 먼저 설정에서 활성화하세요.';
+$PMF_LANG['msgMultiSelectHint'] = '여러 카테고리를 선택하려면 Ctrl(macOS에서는 Cmd)을 누른 상태로 선택하세요.';
+$PMF_LANG['msgRefreshCaptcha'] = '새 captcha 코드 불러오기';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = '버전 확인을 현재 사용할 수 없습니다.';
+$PMF_LANG['msgFooterLinks'] = '링크';
+$PMF_LANG['msgFooterLegal'] = '법적 고지';
+$PMF_LANG['msgPermalink'] = '고유 링크';
+$PMF_LANG['msgNoBookmarks'] = '아직 북마크한 FAQ가 없습니다.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = '글꼴 크기';
+$PMF_LANG['msgFontSizeDecrease'] = '글꼴 크기 줄이기';
+$PMF_LANG['msgFontSizeIncrease'] = '글꼴 크기 키우기';
+$PMF_LANG['msgImportRowNoPublishPermission'] = '%d행: 이 행을 게시됨 상태로 가져오기 위한 "%s" 권한이 없습니다.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = '무엇을 도와드릴까요?';
+$PMF_LANG['msgHeroSubline'] = '지식 베이스를 검색하거나 카테고리별로 둘러보세요.';
+$PMF_LANG['msgDisplaySettings'] = '표시 설정';
+$LANG_CONF['layout.heroImage'] = ['input', '시작 페이지 히어로 이미지', '큰 화면에서 시작 페이지 검색 옆에 표시되는 이미지의 URL 또는 경로입니다. 텍스트만 있는 히어로를 사용하려면 비워 두세요.'];
+
 return $PMF_LANG;

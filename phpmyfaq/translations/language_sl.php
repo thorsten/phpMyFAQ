@@ -528,7 +528,6 @@ $LANG_CONF['records.maxAttachmentSize'] = array("input", "Največja velikost za 
 $LANG_CONF["records.disableAttachments"] = array("checkbox", "Poveži priloge pod vnosi?");
 $LANG_CONF["main.enableUserTracking"] = array("checkbox", "Uporabi sledenje?");
 $LANG_CONF["main.enableAdminLog"] = array("checkbox", "Uporabi dnevnik administratorja?");
-$LANG_CONF["security.ipChecksecurity.ipCheck"] = array("checkbox", "Želite, da se IP preveri pri preverjanju UIN v admin.php?");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array("input", "Število prikazanih tem na stran");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Število novic");
 $LANG_CONF['security.bannedIPs'] = array("area", "Blokiraj te IP naslove");
@@ -1856,5 +1855,41 @@ $LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'Ključ API LibreT
 $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL strežnika LibreTranslate'];
 $LANG_CONF['translation.provider'] = ['select', 'Ponudnik prevajalske storitve'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Dovoli namestitev nočnih različic (nightly), katerih povzetka SHA-256 ni mogoče preveriti pri GitHub (ni priporočljivo)'];
+
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Vnesite svoje trenutno geslo, da svojemu računu dodate nov ključ (Passkey).';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Pred dodajanjem novega ključa boste morali potrditi z enim od svojih obstoječih ključev (Passkeys).';
+$PMF_LANG['msgPasskeysRegistered'] = 'Registrirani ključi (Passkeys)';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Za vaš račun še ni registriran noben ključ (Passkey).';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'registriran dne';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'registriran, preden se je datum registracije začel beležiti';
+$PMF_LANG['msgPasskeyRevoke'] = 'Odstrani';
+$PMF_LANG['msgPasskeyRevoked'] = 'Ključ je bil odstranjen.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Ta ključ ni registriran za vaš račun.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Zadnjega ključa računa brez gesla ni mogoče odstraniti.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Vašemu računu je bil dodan nov ključ (Passkey)';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Vašemu računu je bil pravkar dodan nov ključ (Passkey). Če ste to storili vi, ukrepanje ni potrebno. Če ne, ga odstranite v svoji uporabniški nadzorni plošči na %s in spremenite geslo.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Odstrani vse ključe (Passkeys) tega uporabnika';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s je trenutno onemogočeno. Najprej ga omogočite v konfiguraciji.';
+$PMF_LANG['msgMultiSelectHint'] = 'Držite Ctrl (Cmd v macOS), da izberete več kot eno kategorijo.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Naloži novo kodo captcha';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Preverjanje različice trenutno ni na voljo.';
+$PMF_LANG['msgFooterLinks'] = 'Povezave';
+$PMF_LANG['msgFooterLegal'] = 'Pravne informacije';
+$PMF_LANG['msgPermalink'] = 'Trajna povezava';
+$PMF_LANG['msgNoBookmarks'] = 'Med zaznamke še niste dodali nobenega FAQ.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Velikost pisave';
+$PMF_LANG['msgFontSizeDecrease'] = 'Pomanjšaj pisavo';
+$PMF_LANG['msgFontSizeIncrease'] = 'Povečaj pisavo';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Vrstica %d: ni dovoljenja "%s" za uvoz te vrstice kot objavljene.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Kako vam lahko pomagamo?';
+$PMF_LANG['msgHeroSubline'] = 'Iščite po bazi znanja ali brskajte po kategorijah.';
+$PMF_LANG['msgDisplaySettings'] = 'Nastavitve prikaza';
+$LANG_CONF['layout.heroImage'] = ['input', 'Hero slika začetne strani', 'URL ali pot do slike, ki se na velikih zaslonih prikaže ob iskanju na začetni strani. Pustite prazno za hero samo z besedilom.'];
+
 
 return $PMF_LANG;
