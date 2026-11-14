@@ -1664,4 +1664,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL διακομιστ�
 $LANG_CONF['translation.provider'] = ['select', 'Πάροχος υπηρεσίας μετάφρασης'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Να επιτρέπεται η εγκατάσταση nightly builds των οποίων το SHA-256 digest δεν μπορεί να επαληθευτεί μέσω GitHub (δεν συνιστάται)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Εισαγάγετε τον τρέχοντα κωδικό πρόσβασής σας για να προσθέσετε ένα νέο Passkey στον λογαριασμό σας.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Θα σας ζητηθεί να επιβεβαιώσετε με ένα από τα υπάρχοντα Passkeys σας πριν προστεθεί ένα νέο.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Καταχωρισμένα Passkeys';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Δεν έχει καταχωριστεί ακόμη κανένα Passkey για τον λογαριασμό σας.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'καταχωρίστηκε στις';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'καταχωρίστηκε πριν αρχίσει η καταγραφή της ημερομηνίας καταχώρισης';
+$PMF_LANG['msgPasskeyRevoke'] = 'Αφαίρεση';
+$PMF_LANG['msgPasskeyRevoked'] = 'Το Passkey αφαιρέθηκε.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Αυτό το Passkey δεν είναι καταχωρισμένο για τον λογαριασμό σας.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Το τελευταίο Passkey ενός λογαριασμού χωρίς κωδικό πρόσβασης δεν μπορεί να αφαιρεθεί.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Ένα νέο Passkey προστέθηκε στον λογαριασμό σας';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Ένα νέο Passkey προστέθηκε μόλις στον λογαριασμό σας. Αν ήσασταν εσείς, δεν απαιτείται καμία ενέργεια. Αν όχι, αφαιρέστε το από τον πίνακα ελέγχου χρήστη στη διεύθυνση %s και αλλάξτε τον κωδικό πρόσβασής σας.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Αφαίρεση όλων των Passkeys αυτού του χρήστη';
+$PMF_LANG['msgAdminFeatureDisabled'] = 'Το %s είναι προς το παρόν απενεργοποιημένο. Ενεργοποιήστε το πρώτα στις ρυθμίσεις.';
+$PMF_LANG['msgMultiSelectHint'] = 'Κρατήστε πατημένο το Ctrl (Cmd σε macOS) για να επιλέξετε περισσότερες από μία κατηγορίες.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Φόρτωση νέου κωδικού captcha';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Ο έλεγχος έκδοσης δεν είναι διαθέσιμος προς το παρόν.';
+$PMF_LANG['msgFooterLinks'] = 'Σύνδεσμοι';
+$PMF_LANG['msgFooterLegal'] = 'Νομικά';
+$PMF_LANG['msgPermalink'] = 'Μόνιμος σύνδεσμος';
+$PMF_LANG['msgNoBookmarks'] = 'Δεν έχετε προσθέσει ακόμη καμία FAQ στους σελιδοδείκτες σας.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Μέγεθος γραμματοσειράς';
+$PMF_LANG['msgFontSizeDecrease'] = 'Μείωση μεγέθους γραμματοσειράς';
+$PMF_LANG['msgFontSizeIncrease'] = 'Αύξηση μεγέθους γραμματοσειράς';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Γραμμή %d: δεν υπάρχει δικαίωμα "%s" για την εισαγωγή αυτής της γραμμής ως δημοσιευμένης.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Πώς μπορούμε να σας βοηθήσουμε;';
+$PMF_LANG['msgHeroSubline'] = 'Αναζητήστε στη βάση γνώσεων ή περιηγηθείτε ανά κατηγορία.';
+$PMF_LANG['msgDisplaySettings'] = 'Ρυθμίσεις εμφάνισης';
+$LANG_CONF['layout.heroImage'] = ['input', 'Εικόνα hero αρχικής σελίδας', 'URL ή διαδρομή εικόνας που εμφανίζεται δίπλα στην αναζήτηση της αρχικής σελίδας σε μεγάλες οθόνες. Αφήστε το κενό για hero μόνο με κείμενο.'];
+
 return $PMF_LANG;

@@ -1636,4 +1636,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate-palvelim
 $LANG_CONF['translation.provider'] = ['select', 'Käännöspalvelun tarjoaja'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Salli sellaisten nightly-koontiversioiden asennus, joiden SHA-256-tiivistettä ei voida tarkistaa GitHubia vasten (ei suositella)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Syötä nykyinen salasanasi lisätäksesi uuden Passkey-avaimen tiliisi.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Sinua pyydetään vahvistamaan jollakin olemassa olevista Passkey-avaimistasi ennen uuden lisäämistä.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Rekisteröidyt Passkey-avaimet';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Tilillesi ei ole vielä rekisteröity Passkey-avainta.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'rekisteröity';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'rekisteröity ennen kuin rekisteröintipäivää alettiin tallentaa';
+$PMF_LANG['msgPasskeyRevoke'] = 'Poista';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey-avain poistettiin.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Tätä Passkey-avainta ei ole rekisteröity tilillesi.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Salasanattoman tilin viimeistä Passkey-avainta ei voi poistaa.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Tiliisi lisättiin uusi Passkey-avain';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Tiliisi lisättiin juuri uusi Passkey-avain. Jos tämä olit sinä, mitään toimenpiteitä ei tarvita. Jos et, poista se käyttäjäpaneelissasi osoitteessa %s ja vaihda salasanasi.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Poista kaikki tämän käyttäjän Passkey-avaimet';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s on tällä hetkellä pois käytöstä. Ota se ensin käyttöön asetuksissa.';
+$PMF_LANG['msgMultiSelectHint'] = 'Pidä Ctrl (macOS: Cmd) painettuna valitaksesi useamman kuin yhden kategorian.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Lataa uusi captcha-koodi';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Versiotarkistus ei ole tällä hetkellä käytettävissä.';
+$PMF_LANG['msgFooterLinks'] = 'Linkit';
+$PMF_LANG['msgFooterLegal'] = 'Oikeudelliset tiedot';
+$PMF_LANG['msgPermalink'] = 'Pysyvä linkki';
+$PMF_LANG['msgNoBookmarks'] = 'Et ole vielä lisännyt kirjanmerkkeihin yhtään FAQ:ta.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Fonttikoko';
+$PMF_LANG['msgFontSizeDecrease'] = 'Pienennä fonttikokoa';
+$PMF_LANG['msgFontSizeIncrease'] = 'Suurenna fonttikokoa';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Rivi %d: ei "%s"-oikeutta tämän rivin tuomiseen julkaistuna.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Kuinka voimme auttaa?';
+$PMF_LANG['msgHeroSubline'] = 'Hae tietämyskannasta tai selaa kategorioittain.';
+$PMF_LANG['msgDisplaySettings'] = 'Näyttöasetukset';
+$LANG_CONF['layout.heroImage'] = ['input', 'Aloitussivun hero-kuva', 'Kuvan URL tai polku, joka näytetään aloitussivun haun vieressä suurilla näytöillä. Jätä tyhjäksi, jos haluat pelkän tekstin.'];
+
 return $PMF_LANG;

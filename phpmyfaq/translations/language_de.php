@@ -2067,4 +2067,14 @@ $PMF_LANG['msgHeroSubline'] = 'Wissensdatenbank durchsuchen oder in den Kategori
 $PMF_LANG['msgDisplaySettings'] = 'Anzeigeeinstellungen';
 $LANG_CONF['layout.heroImage'] = ['input', 'Hero-Bild der Startseite', 'URL oder Pfad eines Bildes, das auf großen Bildschirmen neben der Suche der Startseite erscheint. Leer lassen für einen Hero ohne Bild.'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s ist derzeit deaktiviert. Bitte zuerst in der Konfiguration aktivieren.';
+$PMF_LANG['msgMultiSelectHint'] = 'Strg (Cmd auf macOS) gedrückt halten, um mehrere Kategorien auszuwählen.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Neuen Captcha-Code laden';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Die Versionsprüfung ist derzeit nicht verfügbar.';
+$PMF_LANG['msgFooterLinks'] = 'Links';
+$PMF_LANG['msgFooterLegal'] = 'Rechtliches';
+$PMF_LANG['msgPermalink'] = 'Permalink';
+$PMF_LANG['msgNoBookmarks'] = 'Du hast noch keine FAQs als Lesezeichen gespeichert.';
+
 return $PMF_LANG;

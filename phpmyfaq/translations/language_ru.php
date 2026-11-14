@@ -1844,4 +1844,40 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL сервера Libr
 $LANG_CONF['translation.provider'] = ['select', 'Сервис перевода'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Разрешить установку ночных сборок, SHA-256-хеш которых невозможно проверить через GitHub (не рекомендуется)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Введите текущий пароль, чтобы добавить новый Passkey к вашей учётной записи.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Перед добавлением нового Passkey вам будет предложено подтвердить действие одним из существующих Passkey.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Зарегистрированные Passkeys';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Для вашей учётной записи пока не зарегистрирован ни один Passkey.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'зарегистрирован';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'зарегистрирован до того, как дата регистрации начала сохраняться';
+$PMF_LANG['msgPasskeyRevoke'] = 'Удалить';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey был удалён.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Этот Passkey не зарегистрирован для вашей учётной записи.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Последний Passkey учётной записи без пароля удалить нельзя.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] К вашей учётной записи добавлен новый Passkey';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'К вашей учётной записи только что был добавлен новый Passkey. Если это сделали вы, никаких действий не требуется. Если нет, удалите его в панели управления пользователя по адресу %s и смените пароль.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Удалить все Passkeys этого пользователя';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s в настоящее время отключено. Сначала включите его в конфигурации.';
+$PMF_LANG['msgMultiSelectHint'] = 'Удерживайте Ctrl (Cmd на macOS), чтобы выбрать несколько категорий.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Загрузить новый код captcha';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Проверка версии в настоящее время недоступна.';
+$PMF_LANG['msgFooterLinks'] = 'Ссылки';
+$PMF_LANG['msgFooterLegal'] = 'Правовая информация';
+$PMF_LANG['msgPermalink'] = 'Постоянная ссылка';
+$PMF_LANG['msgNoBookmarks'] = 'Вы ещё не добавили ни одного FAQ в закладки.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Размер шрифта';
+$PMF_LANG['msgFontSizeDecrease'] = 'Уменьшить размер шрифта';
+$PMF_LANG['msgFontSizeIncrease'] = 'Увеличить размер шрифта';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Строка %d: нет права "%s" для импорта этой строки как опубликованной.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Чем мы можем вам помочь?';
+$PMF_LANG['msgHeroSubline'] = 'Ищите в базе знаний или просматривайте по категориям.';
+$PMF_LANG['msgDisplaySettings'] = 'Настройки отображения';
+$LANG_CONF['layout.heroImage'] = ['input', 'Hero-изображение стартовой страницы', 'URL или путь к изображению, отображаемому рядом с поиском на стартовой странице на больших экранах. Оставьте пустым для hero только с текстом.'];
+
+
 return $PMF_LANG;

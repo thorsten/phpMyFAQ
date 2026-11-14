@@ -1846,4 +1846,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate szerver 
 $LANG_CONF['translation.provider'] = ['select', 'Fordítási szolgáltató'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Olyan nightly buildek telepítésének engedélyezése, amelyek SHA-256 kivonata nem ellenőrizhető a GitHubon (nem ajánlott)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Adja meg jelenlegi jelszavát, hogy új Passkey-t adjon hozzá a fiókjához.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Az új Passkey hozzáadása előtt meg kell erősítenie a műveletet egy meglévő Passkey-jével.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Regisztrált Passkey-k';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'A fiókjához még nincs Passkey regisztrálva.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'regisztrálva';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'a regisztráció dátumának rögzítése előtt regisztrálva';
+$PMF_LANG['msgPasskeyRevoke'] = 'Eltávolítás';
+$PMF_LANG['msgPasskeyRevoked'] = 'A Passkey eltávolítva.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Ez a Passkey nincs regisztrálva a fiókjához.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Jelszó nélküli fiók utolsó Passkey-je nem távolítható el.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Új Passkey került a fiókjához';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Épp most új Passkey került a fiókjához. Ha Ön volt, nincs teendője. Ha nem, távolítsa el a felhasználói vezérlőpulton a következő címen: %s, és változtassa meg a jelszavát.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'A felhasználó összes Passkey-jének eltávolítása';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s jelenleg ki van kapcsolva. Először engedélyezze a konfigurációban.';
+$PMF_LANG['msgMultiSelectHint'] = 'Tartsa lenyomva a Ctrl (macOS-en Cmd) billentyűt több kategória kijelöléséhez.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Új captcha kód betöltése';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'A verzióellenőrzés jelenleg nem érhető el.';
+$PMF_LANG['msgFooterLinks'] = 'Hivatkozások';
+$PMF_LANG['msgFooterLegal'] = 'Jogi információk';
+$PMF_LANG['msgPermalink'] = 'Állandó hivatkozás';
+$PMF_LANG['msgNoBookmarks'] = 'Még nem jelölt meg könyvjelzővel egyetlen FAQ-t sem.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Betűméret';
+$PMF_LANG['msgFontSizeDecrease'] = 'Betűméret csökkentése';
+$PMF_LANG['msgFontSizeIncrease'] = 'Betűméret növelése';
+$PMF_LANG['msgImportRowNoPublishPermission'] = '%d. sor: nincs "%s" jogosultság a sor közzétettként történő importálásához.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Miben segíthetünk?';
+$PMF_LANG['msgHeroSubline'] = 'Keressen a tudásbázisban, vagy böngésszen kategóriák szerint.';
+$PMF_LANG['msgDisplaySettings'] = 'Megjelenítési beállítások';
+$LANG_CONF['layout.heroImage'] = ['input', 'Kezdőlap hero képe', 'Nagy képernyőkön a kezdőlap keresője mellett megjelenő kép URL-je vagy elérési útja. Hagyja üresen a csak szöveges heróhoz.'];
+
 return $PMF_LANG;

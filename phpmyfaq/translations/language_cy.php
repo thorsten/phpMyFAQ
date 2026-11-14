@@ -1856,4 +1856,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL gweinydd LibreTrans
 $LANG_CONF['translation.provider'] = ['select', 'Darparwr y gwasanaeth cyfieithu'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Caniatáu gosod adeiladau nightly na ellir gwirio eu crynodeb SHA-256 yn erbyn GitHub (nid argymhellir)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Rhowch eich cyfrinair presennol i ychwanegu Passkey newydd at eich cyfrif.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Gofynnir i chi gadarnhau gydag un o\'ch Passkeys presennol cyn i un newydd gael ei ychwanegu.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Passkeys cofrestredig';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Nid oes Passkey wedi\'i gofrestru ar gyfer eich cyfrif eto.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'cofrestrwyd ar';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'cofrestrwyd cyn i\'r dyddiad cofrestru gael ei gofnodi';
+$PMF_LANG['msgPasskeyRevoke'] = 'Tynnu';
+$PMF_LANG['msgPasskeyRevoked'] = 'Tynnwyd y Passkey.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Nid yw\'r Passkey hwn wedi\'i gofrestru ar gyfer eich cyfrif.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Ni ellir tynnu Passkey olaf cyfrif heb gyfrinair.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Ychwanegwyd Passkey newydd at eich cyfrif';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Mae Passkey newydd newydd gael ei ychwanegu at eich cyfrif. Os chi oedd hwn, nid oes angen gweithredu. Os na, tynnwch ef yn eich panel rheoli defnyddiwr yn %s a newidiwch eich cyfrinair.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Tynnu holl Passkeys y defnyddiwr hwn';
+$PMF_LANG['msgAdminFeatureDisabled'] = 'Mae %s wedi\'i analluogi ar hyn o bryd. Galluogwch ef yn y ffurfweddiad yn gyntaf.';
+$PMF_LANG['msgMultiSelectHint'] = 'Daliwch Ctrl (Cmd ar macOS) i ddewis mwy nag un categori.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Llwytho cod captcha newydd';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Nid yw\'r gwiriad fersiwn ar gael ar hyn o bryd.';
+$PMF_LANG['msgFooterLinks'] = 'Dolenni';
+$PMF_LANG['msgFooterLegal'] = 'Cyfreithiol';
+$PMF_LANG['msgPermalink'] = 'Dolen barhaol';
+$PMF_LANG['msgNoBookmarks'] = 'Nid ydych wedi rhoi nod tudalen ar unrhyw FAQ eto.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Maint y ffont';
+$PMF_LANG['msgFontSizeDecrease'] = 'Lleihau maint y ffont';
+$PMF_LANG['msgFontSizeIncrease'] = 'Cynyddu maint y ffont';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Rhes %d: dim caniatâd "%s" i fewnforio\'r rhes hon fel un gyhoeddedig.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Sut allwn ni eich helpu?';
+$PMF_LANG['msgHeroSubline'] = 'Chwiliwch y sylfaen wybodaeth neu porwch yn ôl categori.';
+$PMF_LANG['msgDisplaySettings'] = 'Gosodiadau arddangos';
+$LANG_CONF['layout.heroImage'] = ['input', 'Delwedd arwr y dudalen gartref', 'URL neu lwybr delwedd a ddangosir wrth ymyl chwiliad y dudalen gartref ar sgriniau mawr. Gadewch yn wag ar gyfer arwr testun yn unig.'];
+
 return $PMF_LANG;

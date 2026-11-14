@@ -849,7 +849,6 @@ $PMF_LANG["ad_searchterm_del_suc"] = 'Todos os termos de buscas foram removidos 
 $PMF_LANG["ad_searchterm_del_err"] = 'Não foi possível remover todos os termos de busca.';
 $LANG_CONF["records.hideEmptyCategories"] = ["checkbox", "Ocultar categorias vazias"];
 $LANG_CONF["search.searchForSolutionId"] = ["checkbox", "Pesquisar por ID da solução"];
-$LANG_CONF["socialnetworks.disableAll"] = ["checkbox", "Desabilitar todas as redes sociais"];
 $PMF_LANG["ad_tag_delete_success"] = 'A tag foi removida com sucesso';
 $PMF_LANG["ad_tag_delete_error"] = 'A tag não foi removida devido a um erro';
 $PMF_LANG["msgSeoCenter"] = 'SEO';
@@ -1524,5 +1523,41 @@ $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Permitir a instala�
 $LANG_CONF['upgrade.dateLastChecked'] = ['print', 'Última verificação de atualizações'];
 $LANG_CONF['upgrade.onlineUpdateEnabled'] = ['checkbox', 'Atualização online habilitada'];
 $LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'Ambiente de lançamento'];
+
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Digite sua senha atual para adicionar uma nova chave de acesso à sua conta.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Você precisará confirmar com uma de suas chaves de acesso existentes antes que uma nova seja adicionada.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Chaves de acesso registradas';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Nenhuma chave de acesso está registrada para sua conta ainda.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'registrada em';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'registrada antes de a data de registro ser gravada';
+$PMF_LANG['msgPasskeyRevoke'] = 'Remover';
+$PMF_LANG['msgPasskeyRevoked'] = 'A chave de acesso foi removida.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Esta chave de acesso não está registrada para sua conta.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'A última chave de acesso de uma conta sem senha não pode ser removida.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Uma nova chave de acesso foi adicionada à sua conta';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Uma nova chave de acesso acabou de ser adicionada à sua conta. Se foi você, nenhuma ação é necessária. Caso contrário, remova-a no seu painel de controle de usuário em %s e altere sua senha.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Remover todas as chaves de acesso deste usuário';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s está desativado no momento. Ative-o primeiro na configuração.';
+$PMF_LANG['msgMultiSelectHint'] = 'Mantenha Ctrl (Cmd no macOS) pressionado para selecionar mais de uma categoria.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Carregar um novo código captcha';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'A verificação de versão está indisponível no momento.';
+$PMF_LANG['msgFooterLinks'] = 'Links';
+$PMF_LANG['msgFooterLegal'] = 'Informações legais';
+$PMF_LANG['msgPermalink'] = 'Link permanente';
+$PMF_LANG['msgNoBookmarks'] = 'Você ainda não adicionou nenhuma FAQ aos favoritos.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Tamanho da fonte';
+$PMF_LANG['msgFontSizeDecrease'] = 'Diminuir tamanho da fonte';
+$PMF_LANG['msgFontSizeIncrease'] = 'Aumentar tamanho da fonte';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Linha %d: sem permissão "%s" para importar esta linha como publicada.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Como podemos ajudar você?';
+$PMF_LANG['msgHeroSubline'] = 'Pesquise na base de conhecimento ou navegue por categoria.';
+$PMF_LANG['msgDisplaySettings'] = 'Configurações de exibição';
+$LANG_CONF['layout.heroImage'] = ['input', 'Imagem hero da página inicial', 'URL ou caminho de uma imagem exibida ao lado da busca da página inicial em telas grandes. Deixe em branco para um hero somente com texto.'];
+
 
 return $PMF_LANG;

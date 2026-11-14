@@ -742,7 +742,6 @@ $PMF_LANG['msgShowHelp'] = 'Prosím oddělte slova čárkou.';
 $PMF_LANG['msgUpdateFaqDate'] = 'vložit datum editace';
 $PMF_LANG['msgKeepFaqDate'] = 'ponechat původní datum';
 $PMF_LANG['msgEditFaqDate'] = 'vložit vlastní datum';
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array('checkbox', 'Okamžitá odpověď na úvodní straně (výchozí: deaktivováno)');
 $LANG_CONF['search.relevance'] = array('select', 'Řadit podle důležitosti');
 $LANG_CONF['search.enableRelevance'] = array("checkbox", "Aktivovat podporu důležitosti (výchozí: vypnuto)");
 $PMF_LANG['searchControlCenter'] = 'Nastavení vyhledávání';
@@ -1628,5 +1627,40 @@ $LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'API klíč LibreT
 $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL serveru LibreTranslate'];
 $LANG_CONF['translation.provider'] = ['select', 'Poskytovatel překladové služby'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Povolit instalaci nightly sestavení, jejichž otisk SHA-256 nelze ověřit vůči GitHub (nedoporučuje se)'];
+
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Zadejte své aktuální heslo pro přidání nového Passkey k vašemu účtu.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Před přidáním nového Passkey budete požádáni o potvrzení jedním ze svých stávajících Passkeys.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Registrované Passkeys';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Pro váš účet zatím není registrován žádný Passkey.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'registrován dne';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'registrován dříve, než se začalo zaznamenávat datum registrace';
+$PMF_LANG['msgPasskeyRevoke'] = 'Odebrat';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey byl odebrán.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Tento Passkey není pro váš účet registrován.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Poslední Passkey účtu bez hesla nelze odebrat.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] K vašemu účtu byl přidán nový Passkey';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'K vašemu účtu byl právě přidán nový Passkey. Pokud jste to byli vy, není potřeba nic dělat. Pokud ne, odeberte ho v uživatelském ovládacím panelu na %s a změňte si heslo.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Odebrat všechny Passkeys tohoto uživatele';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s je momentálně vypnuto. Nejprve to povolte v konfiguraci.';
+$PMF_LANG['msgMultiSelectHint'] = 'Podržte Ctrl (Cmd na macOS) pro výběr více kategorií.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Načíst nový captcha kód';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Kontrola verze je momentálně nedostupná.';
+$PMF_LANG['msgFooterLinks'] = 'Odkazy';
+$PMF_LANG['msgFooterLegal'] = 'Právní informace';
+$PMF_LANG['msgPermalink'] = 'Trvalý odkaz';
+$PMF_LANG['msgNoBookmarks'] = 'Zatím jste si nepřidali žádné FAQ do záložek.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Velikost písma';
+$PMF_LANG['msgFontSizeDecrease'] = 'Zmenšit písmo';
+$PMF_LANG['msgFontSizeIncrease'] = 'Zvětšit písmo';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Řádek %d: chybí oprávnění "%s" pro import tohoto řádku jako zveřejněného.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Jak vám můžeme pomoci?';
+$PMF_LANG['msgHeroSubline'] = 'Prohledejte znalostní bázi nebo procházejte podle kategorií.';
+$PMF_LANG['msgDisplaySettings'] = 'Nastavení zobrazení';
+$LANG_CONF['layout.heroImage'] = ['input', 'Hero obrázek úvodní stránky', 'URL nebo cesta k obrázku zobrazenému vedle vyhledávání na úvodní stránce na velkých obrazovkách. Ponechte prázdné pro hero pouze s textem.'];
 
 return $PMF_LANG;

@@ -432,8 +432,6 @@ $LANG_CONF['records.disableAttachments'] = array('checkbox', 'Colocar links para
 $LANG_CONF['main.enableUserTracking'] = array('checkbox', 'Usar Tracking?');
 $LANG_CONF['main.enableAdminLog'] = array('checkbox', 'Usar o Adminlog?');
 $LANG_CONF['security.ipCheck'] = array('checkbox', 'Conferir o IP no modo de Administração ?');
-$LANG_CONF['main.numberOfRecordsPerPage'] = array('input', 'Número de tópicos mostrados por página');
-$LANG_CONF['main.numberOfShownNewsEntries'] = array('input', 'Número de notícias');
 $LANG_CONF['security.bannedIPs'] = array('area', 'Barrar estes IPs');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'Ativar o suporte para LDAP? (pré-definição: desativado)');
 $LANG_CONF['main.referenceURL'] = array('input', 'URL-base para verificação de links ( ex.: https://www.example.org/faq/ )');
@@ -734,7 +732,6 @@ $PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Ocorreu um erro durante a g
 $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'A gravar a página %d do buffer.';
 $PMF_LANG['ad_record_active'] = 'Ativo';
 $PMF_LANG['msgAttachmentInvalid'] = 'O anexo escolhido não é válido: informe p.f. o Administrador.';
-$LANG_CONF['seach.numberSearchTerms'] = array('input', 'Número de termos de pesquisa listados');
 $LANG_CONF['records.orderingPopularFaqs'] = array('select', 'Ordenação do TOP 10');
 $PMF_LANG['list_all_users'] = 'Listar todos os utilizadores';
 $PMF_LANG['records.orderingPopularFaqs.visits'] = 'Listar as entradas mais visitadas';
@@ -1612,5 +1609,41 @@ $LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'Chave de API do L
 $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL do servidor LibreTranslate'];
 $LANG_CONF['translation.provider'] = ['select', 'Fornecedor do serviço de tradução'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Permitir a instalação de builds nightly cujo hash SHA-256 não pode ser verificado no GitHub (não recomendado)'];
+
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Introduza a sua palavra-passe atual para adicionar um novo Passkey à sua conta.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Ser-lhe-á pedido que confirme com um dos seus Passkeys existentes antes de ser adicionado um novo.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Passkeys registados';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Ainda não há nenhum Passkey registado para a sua conta.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'registado em';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'registado antes de a data de registo ser guardada';
+$PMF_LANG['msgPasskeyRevoke'] = 'Remover';
+$PMF_LANG['msgPasskeyRevoked'] = 'O Passkey foi removido.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Este Passkey não está registado para a sua conta.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'O último Passkey de uma conta sem palavra-passe não pode ser removido.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Foi adicionado um novo Passkey à sua conta';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Foi adicionado agora um novo Passkey à sua conta. Se foi você, não é necessária qualquer ação. Caso contrário, remova-o no seu painel de controlo de utilizador em %s e altere a sua palavra-passe.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Remover todos os Passkeys deste utilizador';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s está atualmente desativado. Ative-o primeiro na configuração.';
+$PMF_LANG['msgMultiSelectHint'] = 'Mantenha premida a tecla Ctrl (Cmd no macOS) para selecionar mais do que uma categoria.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Carregar um novo código captcha';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'A verificação de versão está atualmente indisponível.';
+$PMF_LANG['msgFooterLinks'] = 'Ligações';
+$PMF_LANG['msgFooterLegal'] = 'Informações legais';
+$PMF_LANG['msgPermalink'] = 'Ligação permanente';
+$PMF_LANG['msgNoBookmarks'] = 'Ainda não adicionou nenhuma FAQ aos marcadores.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Tamanho do tipo de letra';
+$PMF_LANG['msgFontSizeDecrease'] = 'Diminuir o tamanho do tipo de letra';
+$PMF_LANG['msgFontSizeIncrease'] = 'Aumentar o tamanho do tipo de letra';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Linha %d: sem permissão "%s" para importar esta linha como publicada.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Como podemos ajudar?';
+$PMF_LANG['msgHeroSubline'] = 'Pesquise na base de conhecimento ou navegue por categoria.';
+$PMF_LANG['msgDisplaySettings'] = 'Definições de apresentação';
+$LANG_CONF['layout.heroImage'] = ['input', 'Imagem hero da página inicial', 'URL ou caminho de uma imagem mostrada ao lado da pesquisa da página inicial em ecrãs grandes. Deixe vazio para um hero apenas com texto.'];
+
 
 return $PMF_LANG;

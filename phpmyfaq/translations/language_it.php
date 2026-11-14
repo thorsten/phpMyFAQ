@@ -830,7 +830,6 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = 'Keywords - Domanda - Ris
 $PMF_LANG['msgLoginUser'] = 'Accedi';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Numero di termini di ricerca inseriti');
 $LANG_CONF['records.orderingPopularFaqs'] = array('select', 'Sorting of the top FAQ');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array('checkbox', 'Risposta Istantanea su pagina iniziale (default: disattivato)');
 $LANG_CONF['search.relevance'] = array('select', 'Ordina per importanza');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'Attivare supporto importanza? (default: disattivo)');
 
@@ -1739,5 +1738,40 @@ $LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'Chiave API di Lib
 $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL del server LibreTranslate'];
 $LANG_CONF['translation.provider'] = ['select', 'Fornitore del servizio di traduzione'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Consentire l\'installazione di build nightly il cui digest SHA-256 non può essere verificato su GitHub (sconsigliato)'];
+
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Inserisci la tua password attuale per aggiungere un nuovo Passkey al tuo account.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Ti verrà chiesto di confermare con uno dei tuoi Passkey esistenti prima che ne venga aggiunto uno nuovo.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Passkey registrati';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Nessun Passkey è ancora registrato per il tuo account.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'registrato il';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'registrato prima che la data di registrazione venisse memorizzata';
+$PMF_LANG['msgPasskeyRevoke'] = 'Rimuovi';
+$PMF_LANG['msgPasskeyRevoked'] = 'Il Passkey è stato rimosso.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Questo Passkey non è registrato per il tuo account.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'L\'ultimo Passkey di un account senza password non può essere rimosso.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Un nuovo Passkey è stato aggiunto al tuo account';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Un nuovo Passkey è stato appena aggiunto al tuo account. Se sei stato tu, non è necessaria alcuna azione. In caso contrario, rimuovilo nel pannello di controllo utente all\'indirizzo %s e cambia la tua password.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Rimuovi tutti i Passkey di questo utente';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s è attualmente disattivato. Attivalo prima nella configurazione.';
+$PMF_LANG['msgMultiSelectHint'] = 'Tieni premuto Ctrl (Cmd su macOS) per selezionare più di una categoria.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Carica un nuovo codice captcha';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Il controllo della versione non è attualmente disponibile.';
+$PMF_LANG['msgFooterLinks'] = 'Link';
+$PMF_LANG['msgFooterLegal'] = 'Note legali';
+$PMF_LANG['msgPermalink'] = 'Permalink';
+$PMF_LANG['msgNoBookmarks'] = 'Non hai ancora aggiunto nessuna FAQ ai segnalibri.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Dimensione del carattere';
+$PMF_LANG['msgFontSizeDecrease'] = 'Riduci la dimensione del carattere';
+$PMF_LANG['msgFontSizeIncrease'] = 'Aumenta la dimensione del carattere';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Riga %d: nessun permesso "%s" per importare questa riga come pubblicata.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Come possiamo aiutarti?';
+$PMF_LANG['msgHeroSubline'] = 'Cerca nella knowledge base o sfoglia per categoria.';
+$PMF_LANG['msgDisplaySettings'] = 'Impostazioni di visualizzazione';
+$LANG_CONF['layout.heroImage'] = ['input', 'Immagine hero della pagina iniziale', 'URL o percorso di un\'immagine mostrata accanto alla ricerca della pagina iniziale su schermi grandi. Lasciare vuoto per un hero solo testo.'];
 
 return $PMF_LANG;

@@ -522,7 +522,6 @@ $PMF_LANG["err_SaveQuestion"] = "Не заповнені обов'язкові �
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = ["select", "Language-File"];
 $LANG_CONF["main.languageDetection"] = ["checkbox", "Увімкнути автоматичне узгодження контенту"];
-$LANG_CONF['main.titleMac F.A.Q.'] = ["input", "Назва Mac F.A.Q."];
 $LANG_CONF['main.currentVersion'] = ["print", "Версія Mac F.A.Q."];
 $LANG_CONF["main.metaDescription"] = ["input", "Опис сторінки"];
 $LANG_CONF["main.metaPublisher"] = ["input", "Ім'я видавця"];
@@ -1860,5 +1859,40 @@ $LANG_CONF['translation.libreTranslateApiKey'] = ['password', 'API-ключ Libr
 $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL сервера LibreTranslate'];
 $LANG_CONF['translation.provider'] = ['select', 'Сервіс перекладу'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Дозволити встановлення нічних збірок, SHA-256-хеш яких неможливо перевірити через GitHub (не рекомендується)'];
+
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Введіть свій поточний пароль, щоб додати новий Passkey до вашого облікового запису.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Перед додаванням нового Passkey вам буде запропоновано підтвердити дію одним із ваших наявних Passkeys.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Зареєстровані Passkeys';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Для вашого облікового запису ще не зареєстровано жодного Passkey.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'зареєстровано';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'зареєстровано до того, як дата реєстрації почала зберігатися';
+$PMF_LANG['msgPasskeyRevoke'] = 'Видалити';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey видалено.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Цей Passkey не зареєстровано для вашого облікового запису.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Останній Passkey облікового запису без пароля не можна видалити.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] До вашого облікового запису додано новий Passkey';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'До вашого облікового запису щойно додано новий Passkey. Якщо це були ви, жодних дій не потрібно. Якщо ні, видаліть його в панелі керування користувача за адресою %s і змініть свій пароль.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Видалити всі Passkeys цього користувача';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s зараз вимкнено. Спочатку увімкніть це в конфігурації.';
+$PMF_LANG['msgMultiSelectHint'] = 'Утримуйте Ctrl (Cmd на macOS), щоб вибрати кілька категорій.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Завантажити новий код captcha';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Перевірка версії зараз недоступна.';
+$PMF_LANG['msgFooterLinks'] = 'Посилання';
+$PMF_LANG['msgFooterLegal'] = 'Правова інформація';
+$PMF_LANG['msgPermalink'] = 'Постійне посилання';
+$PMF_LANG['msgNoBookmarks'] = 'Ви ще не додали жодного FAQ до закладок.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Розмір шрифту';
+$PMF_LANG['msgFontSizeDecrease'] = 'Зменшити розмір шрифту';
+$PMF_LANG['msgFontSizeIncrease'] = 'Збільшити розмір шрифту';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Рядок %d: немає дозволу "%s" для імпорту цього рядка як опублікованого.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Як ми можемо вам допомогти?';
+$PMF_LANG['msgHeroSubline'] = 'Шукайте в базі знань або переглядайте за категоріями.';
+$PMF_LANG['msgDisplaySettings'] = 'Налаштування відображення';
+$LANG_CONF['layout.heroImage'] = ['input', 'Hero-зображення стартової сторінки', 'URL або шлях до зображення, що показується біля пошуку на стартовій сторінці на великих екранах. Залиште порожнім для hero лише з текстом.'];
 
 return $PMF_LANG;

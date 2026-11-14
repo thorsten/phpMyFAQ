@@ -1854,4 +1854,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'عنوان URL لخاد
 $LANG_CONF['translation.provider'] = ['select', 'مزوّد خدمة الترجمة'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'السماح بتثبيت إصدارات nightly التي لا يمكن التحقق من بصمة SHA-256 الخاصة بها عبر GitHub (غير موصى به)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'أدخل كلمة المرور الحالية لإضافة مفتاح مرور جديد إلى حسابك.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'سيُطلب منك التأكيد باستخدام أحد مفاتيح المرور الحالية قبل إضافة مفتاح جديد.';
+$PMF_LANG['msgPasskeysRegistered'] = 'مفاتيح المرور المسجّلة';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'لم يتم تسجيل أي مفتاح مرور لحسابك حتى الآن.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'تم التسجيل في';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'تم التسجيل قبل بدء حفظ تاريخ التسجيل';
+$PMF_LANG['msgPasskeyRevoke'] = 'إزالة';
+$PMF_LANG['msgPasskeyRevoked'] = 'تمت إزالة مفتاح المرور.';
+$PMF_LANG['msgPasskeyUnknown'] = 'مفتاح المرور هذا غير مسجّل لحسابك.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'لا يمكن إزالة آخر مفتاح مرور لحساب بدون كلمة مرور.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] تمت إضافة مفتاح مرور جديد إلى حسابك';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'تمت للتو إضافة مفتاح مرور جديد إلى حسابك. إذا كنت أنت من قام بذلك، فلا يلزم أي إجراء. وإن لم يكن كذلك، فقم بإزالته من لوحة تحكم المستخدم على %s وغيّر كلمة المرور الخاصة بك.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'إزالة جميع مفاتيح المرور لهذا المستخدم';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s معطّل حاليًا. قم بتفعيله في الإعدادات أولًا.';
+$PMF_LANG['msgMultiSelectHint'] = 'اضغط باستمرار على Ctrl (أو Cmd على macOS) لتحديد أكثر من فئة واحدة.';
+$PMF_LANG['msgRefreshCaptcha'] = 'تحميل رمز captcha جديد';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'التحقق من الإصدار غير متاح حاليًا.';
+$PMF_LANG['msgFooterLinks'] = 'روابط';
+$PMF_LANG['msgFooterLegal'] = 'المعلومات القانونية';
+$PMF_LANG['msgPermalink'] = 'رابط دائم';
+$PMF_LANG['msgNoBookmarks'] = 'لم تقم بإضافة أي أسئلة شائعة إلى الإشارات المرجعية حتى الآن.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'حجم الخط';
+$PMF_LANG['msgFontSizeDecrease'] = 'تصغير حجم الخط';
+$PMF_LANG['msgFontSizeIncrease'] = 'تكبير حجم الخط';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'الصف %d: لا توجد صلاحية "%s" لاستيراد هذا الصف كمنشور.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'كيف يمكننا مساعدتك؟';
+$PMF_LANG['msgHeroSubline'] = 'ابحث في قاعدة المعرفة أو تصفّح حسب الفئة.';
+$PMF_LANG['msgDisplaySettings'] = 'إعدادات العرض';
+$LANG_CONF['layout.heroImage'] = ['input', 'صورة البطل للصفحة الرئيسية', 'عنوان URL أو مسار صورة تُعرض بجانب البحث في الصفحة الرئيسية على الشاشات الكبيرة. اتركه فارغًا لعرض نصي فقط.'];
+
 return $PMF_LANG;

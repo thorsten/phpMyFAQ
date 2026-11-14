@@ -1856,4 +1856,40 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL servera LibreTransl
 $LANG_CONF['translation.provider'] = ['select', 'Poskytovateľ prekladovej služby'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Povoliť inštaláciu nightly zostavení, ktorých odtlačok SHA-256 nie je možné overiť voči GitHub (neodporúča sa)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Zadajte svoje aktuálne heslo, aby ste do svojho účtu pridali nový Passkey.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Pred pridaním nového Passkey budete požiadaní o potvrdenie jedným z vašich existujúcich Passkeys.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Registrované Passkeys';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Pre váš účet ešte nie je registrovaný žiadny Passkey.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'registrovaný dňa';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'registrovaný skôr, ako sa začal zaznamenávať dátum registrácie';
+$PMF_LANG['msgPasskeyRevoke'] = 'Odstrániť';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey bol odstránený.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Tento Passkey nie je registrovaný pre váš účet.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Posledný Passkey účtu bez hesla nie je možné odstrániť.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Do vášho účtu bol pridaný nový Passkey';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Do vášho účtu bol práve pridaný nový Passkey. Ak ste to boli vy, nie je potrebná žiadna akcia. Ak nie, odstráňte ho v používateľskom ovládacom paneli na %s a zmeňte si heslo.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Odstrániť všetky Passkeys tohto používateľa';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s je momentálne vypnuté. Najprv ho povoľte v konfigurácii.';
+$PMF_LANG['msgMultiSelectHint'] = 'Podržte Ctrl (Cmd na macOS), ak chcete vybrať viac ako jednu kategóriu.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Načítať nový captcha kód';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Kontrola verzie je momentálne nedostupná.';
+$PMF_LANG['msgFooterLinks'] = 'Odkazy';
+$PMF_LANG['msgFooterLegal'] = 'Právne informácie';
+$PMF_LANG['msgPermalink'] = 'Trvalý odkaz';
+$PMF_LANG['msgNoBookmarks'] = 'Zatiaľ ste si nepridali žiadne FAQ do záložiek.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Veľkosť písma';
+$PMF_LANG['msgFontSizeDecrease'] = 'Zmenšiť písmo';
+$PMF_LANG['msgFontSizeIncrease'] = 'Zväčšiť písmo';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Riadok %d: chýba oprávnenie "%s" na import tohto riadku ako publikovaného.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Ako vám môžeme pomôcť?';
+$PMF_LANG['msgHeroSubline'] = 'Vyhľadávajte v databáze znalostí alebo prechádzajte podľa kategórií.';
+$PMF_LANG['msgDisplaySettings'] = 'Nastavenia zobrazenia';
+$LANG_CONF['layout.heroImage'] = ['input', 'Hero obrázok úvodnej stránky', 'URL alebo cesta k obrázku zobrazenému vedľa vyhľadávania na úvodnej stránke na veľkých obrazovkách. Nechajte prázdne pre hero len s textom.'];
+
+
 return $PMF_LANG;

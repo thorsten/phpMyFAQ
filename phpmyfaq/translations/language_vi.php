@@ -1847,4 +1847,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL máy chủ LibreTra
 $LANG_CONF['translation.provider'] = ['select', 'Nhà cung cấp dịch vụ dịch thuật'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Cho phép cài đặt bản dựng nightly có mã băm SHA-256 không thể xác minh với GitHub (không khuyến nghị)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Nhập mật khẩu hiện tại của bạn để thêm Passkey mới vào tài khoản.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Bạn sẽ được yêu cầu xác nhận bằng một trong các Passkey hiện có trước khi Passkey mới được thêm vào.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Passkey đã đăng ký';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Chưa có Passkey nào được đăng ký cho tài khoản của bạn.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'đăng ký ngày';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'đăng ký trước khi ngày đăng ký được ghi lại';
+$PMF_LANG['msgPasskeyRevoke'] = 'Xóa';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey đã được xóa.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Passkey này chưa được đăng ký cho tài khoản của bạn.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Không thể xóa Passkey cuối cùng của tài khoản không dùng mật khẩu.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Một Passkey mới đã được thêm vào tài khoản của bạn';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Một Passkey mới vừa được thêm vào tài khoản của bạn. Nếu đó là bạn, không cần làm gì thêm. Nếu không, hãy xóa Passkey đó trong bảng điều khiển người dùng tại %s và thay đổi mật khẩu của bạn.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Xóa tất cả Passkey của người dùng này';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s hiện đang bị tắt. Hãy bật tính năng này trong cấu hình trước.';
+$PMF_LANG['msgMultiSelectHint'] = 'Giữ Ctrl (Cmd trên macOS) để chọn nhiều danh mục.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Tải mã captcha mới';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Kiểm tra phiên bản hiện không khả dụng.';
+$PMF_LANG['msgFooterLinks'] = 'Liên kết';
+$PMF_LANG['msgFooterLegal'] = 'Pháp lý';
+$PMF_LANG['msgPermalink'] = 'Liên kết cố định';
+$PMF_LANG['msgNoBookmarks'] = 'Bạn chưa đánh dấu trang FAQ nào.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Cỡ chữ';
+$PMF_LANG['msgFontSizeDecrease'] = 'Giảm cỡ chữ';
+$PMF_LANG['msgFontSizeIncrease'] = 'Tăng cỡ chữ';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Dòng %d: không có quyền "%s" để nhập dòng này ở trạng thái đã xuất bản.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Chúng tôi có thể giúp gì cho bạn?';
+$PMF_LANG['msgHeroSubline'] = 'Tìm kiếm trong cơ sở kiến thức hoặc duyệt theo danh mục.';
+$PMF_LANG['msgDisplaySettings'] = 'Cài đặt hiển thị';
+$LANG_CONF['layout.heroImage'] = ['input', 'Ảnh hero trang chủ', 'URL hoặc đường dẫn của ảnh hiển thị bên cạnh ô tìm kiếm trang chủ trên màn hình lớn. Để trống nếu chỉ muốn hero dạng văn bản.'];
+
 return $PMF_LANG;

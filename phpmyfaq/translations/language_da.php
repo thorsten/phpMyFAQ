@@ -1847,4 +1847,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'LibreTranslate-serveren
 $LANG_CONF['translation.provider'] = ['select', 'Udbyder af oversættelsestjeneste'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Tillad installation af nightly builds, hvis SHA-256-digest ikke kan verificeres mod GitHub (anbefales ikke)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Indtast din nuværende adgangskode for at tilføje en ny Passkey til din konto.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Du bliver bedt om at bekræfte med en af dine eksisterende Passkeys, før en ny tilføjes.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Registrerede Passkeys';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Der er endnu ikke registreret nogen Passkey for din konto.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'registreret den';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'registreret før registreringsdatoen blev gemt';
+$PMF_LANG['msgPasskeyRevoke'] = 'Fjern';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey\'en blev fjernet.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Denne Passkey er ikke registreret for din konto.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Den sidste Passkey på en konto uden adgangskode kan ikke fjernes.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] En ny Passkey blev tilføjet til din konto';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'En ny Passkey er netop blevet tilføjet til din konto. Hvis det var dig, behøver du ikke gøre noget. Hvis ikke, skal du fjerne den i dit brugerkontrolpanel på %s og ændre din adgangskode.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Fjern alle Passkeys for denne bruger';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s er i øjeblikket deaktiveret. Aktivér det først i konfigurationen.';
+$PMF_LANG['msgMultiSelectHint'] = 'Hold Ctrl (Cmd på macOS) nede for at vælge mere end én kategori.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Indlæs en ny captcha-kode';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Versionstjekket er i øjeblikket ikke tilgængeligt.';
+$PMF_LANG['msgFooterLinks'] = 'Links';
+$PMF_LANG['msgFooterLegal'] = 'Juridisk';
+$PMF_LANG['msgPermalink'] = 'Permanent link';
+$PMF_LANG['msgNoBookmarks'] = 'Du har endnu ikke bogmærket nogen FAQ.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Skriftstørrelse';
+$PMF_LANG['msgFontSizeDecrease'] = 'Mindre skrift';
+$PMF_LANG['msgFontSizeIncrease'] = 'Større skrift';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Række %d: ingen "%s"-rettighed til at importere denne række som offentliggjort.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Hvordan kan vi hjælpe dig?';
+$PMF_LANG['msgHeroSubline'] = 'Søg i vidensbasen, eller gennemse efter kategori.';
+$PMF_LANG['msgDisplaySettings'] = 'Visningsindstillinger';
+$LANG_CONF['layout.heroImage'] = ['input', 'Hero-billede på startsiden', 'URL eller sti til et billede, der vises ved siden af søgningen på startsiden på store skærme. Lad feltet være tomt for en hero kun med tekst.'];
+
 return $PMF_LANG;

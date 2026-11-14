@@ -1857,4 +1857,40 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL LibreTranslate serv
 $LANG_CONF['translation.provider'] = ['select', 'Dobavljač usluge prevođenja'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Dozvoli instaliranje nightly verzija čiji se SHA-256 heš ne može proveriti preko GitHub-a (ne preporučuje se)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Unesite svoju trenutnu lozinku da biste svom nalogu dodali novi ključ (Passkey).';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Pre dodavanja novog ključa biće vam zatraženo da potvrdite jednim od svojih postojećih ključeva (Passkeys).';
+$PMF_LANG['msgPasskeysRegistered'] = 'Registrovani ključevi (Passkeys)';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Za vaš nalog još nije registrovan nijedan ključ (Passkey).';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'registrovan dana';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'registrovan pre nego što je datum registracije počeo da se beleži';
+$PMF_LANG['msgPasskeyRevoke'] = 'Ukloni';
+$PMF_LANG['msgPasskeyRevoked'] = 'Ključ je uklonjen.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Ovaj ključ nije registrovan za vaš nalog.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Poslednji ključ naloga bez lozinke ne može se ukloniti.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Vašem nalogu je dodat novi ključ (Passkey)';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Vašem nalogu je upravo dodat novi ključ (Passkey). Ako ste to bili vi, nije potrebna nikakva radnja. Ako niste, uklonite ga u svom korisničkom kontrolnom panelu na %s i promenite lozinku.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Ukloni sve ključeve (Passkeys) ovog korisnika';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s je trenutno onemogućeno. Prvo ga omogućite u konfiguraciji.';
+$PMF_LANG['msgMultiSelectHint'] = 'Držite Ctrl (Cmd na macOS-u) da biste izabrali više od jedne kategorije.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Učitaj novi captcha kod';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Provera verzije trenutno nije dostupna.';
+$PMF_LANG['msgFooterLinks'] = 'Linkovi';
+$PMF_LANG['msgFooterLegal'] = 'Pravne informacije';
+$PMF_LANG['msgPermalink'] = 'Trajni link';
+$PMF_LANG['msgNoBookmarks'] = 'Još niste dodali nijedan FAQ u obeleživače.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Veličina fonta';
+$PMF_LANG['msgFontSizeDecrease'] = 'Smanji veličinu fonta';
+$PMF_LANG['msgFontSizeIncrease'] = 'Povećaj veličinu fonta';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Red %d: nema dozvole "%s" za uvoz ovog reda kao objavljenog.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Kako možemo da vam pomognemo?';
+$PMF_LANG['msgHeroSubline'] = 'Pretražite bazu znanja ili pregledajte po kategorijama.';
+$PMF_LANG['msgDisplaySettings'] = 'Podešavanja prikaza';
+$LANG_CONF['layout.heroImage'] = ['input', 'Hero slika početne stranice', 'URL ili putanja slike koja se na velikim ekranima prikazuje pored pretrage na početnoj stranici. Ostavite prazno za hero samo sa tekstom.'];
+
+
 return $PMF_LANG;

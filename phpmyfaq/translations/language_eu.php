@@ -1855,4 +1855,39 @@ $LANG_CONF['main.referenceURL'] = ['input', 'Zure FAQaren URLa (adib.: https://w
 $LANG_CONF['records.enableVisibilityQuestions'] = ['checkbox', 'Galdera berrien ikusgarritasuna desgaitu?'];
 $LANG_CONF['security.permLevel'] = ['select', 'Baimen-maila'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Sartu zure uneko pasahitza Passkey berri bat zure kontuan gehitzeko.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Berri bat gehitu aurretik, zure Passkey-etako batekin berresteko eskatuko zaizu.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Erregistratutako Passkey-ak';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Oraindik ez dago Passkey-rik erregistratuta zure konturako.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'erregistratze-data:';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'erregistratze-data gordetzen hasi aurretik erregistratua';
+$PMF_LANG['msgPasskeyRevoke'] = 'Kendu';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey-a kendu da.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Passkey hau ez dago zure konturako erregistratuta.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Pasahitzik gabeko kontu baten azken Passkey-a ezin da kendu.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Passkey berri bat gehitu da zure kontuan';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Passkey berri bat gehitu berri da zure kontuan. Zu izan bazara, ez da ezer egin behar. Bestela, kendu ezazu zure erabiltzaile-panelean (%s) eta aldatu zure pasahitza.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Kendu erabiltzaile honen Passkey guztiak';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s desgaituta dago une honetan. Gaitu ezazu lehenik konfigurazioan.';
+$PMF_LANG['msgMultiSelectHint'] = 'Eutsi Ctrl (Cmd macOS-en) kategoria bat baino gehiago hautatzeko.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Kargatu captcha kode berri bat';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Bertsio-egiaztapena ez dago erabilgarri une honetan.';
+$PMF_LANG['msgFooterLinks'] = 'Loturak';
+$PMF_LANG['msgFooterLegal'] = 'Lege-oharra';
+$PMF_LANG['msgPermalink'] = 'Lotura iraunkorra';
+$PMF_LANG['msgNoBookmarks'] = 'Oraindik ez duzu FAQ-rik laster-marketan gorde.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Letra-tamaina';
+$PMF_LANG['msgFontSizeDecrease'] = 'Txikitu letra-tamaina';
+$PMF_LANG['msgFontSizeIncrease'] = 'Handitu letra-tamaina';
+$PMF_LANG['msgImportRowNoPublishPermission'] = '%d. errenkada: ez dago "%s" baimenik errenkada hau argitaratuta inportatzeko.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Nola lagundu diezazukegu?';
+$PMF_LANG['msgHeroSubline'] = 'Bilatu ezagutza-basean edo arakatu kategoriaka.';
+$PMF_LANG['msgDisplaySettings'] = 'Bistaratze-ezarpenak';
+$LANG_CONF['layout.heroImage'] = ['input', 'Hasierako orriaren hero irudia', 'Pantaila handietan hasierako orriko bilaketaren ondoan erakusten den irudiaren URLa edo bidea. Utzi hutsik testu hutseko hero baterako.'];
+
 return $PMF_LANG;

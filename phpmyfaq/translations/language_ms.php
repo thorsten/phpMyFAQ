@@ -1844,4 +1844,39 @@ $LANG_CONF['translation.libreTranslateUrl'] = ['input', 'URL pelayan LibreTransl
 $LANG_CONF['translation.provider'] = ['select', 'Pembekal perkhidmatan terjemahan'];
 $LANG_CONF['upgrade.allowUnverifiedNightly'] = ['checkbox', 'Benarkan pemasangan binaan nightly yang ringkasan SHA-256-nya tidak dapat disahkan dengan GitHub (tidak disyorkan)'];
 
+// added v4.1.9 - 2026-09-29 by Thorsten
+$PMF_LANG['msgPasskeyConfirmWithPassword'] = 'Masukkan kata laluan semasa anda untuk menambah Passkey baharu pada akaun anda.';
+$PMF_LANG['msgPasskeyConfirmWithPasskey'] = 'Anda akan diminta mengesahkan dengan salah satu Passkey sedia ada sebelum Passkey baharu ditambah.';
+$PMF_LANG['msgPasskeysRegistered'] = 'Passkey Berdaftar';
+$PMF_LANG['msgNoPasskeysRegistered'] = 'Belum ada Passkey yang didaftarkan untuk akaun anda.';
+$PMF_LANG['msgPasskeyRegisteredOn'] = 'didaftarkan pada';
+$PMF_LANG['msgPasskeyRegisteredUnknownDate'] = 'didaftarkan sebelum tarikh pendaftaran mula direkodkan';
+$PMF_LANG['msgPasskeyRevoke'] = 'Buang';
+$PMF_LANG['msgPasskeyRevoked'] = 'Passkey telah dibuang.';
+$PMF_LANG['msgPasskeyUnknown'] = 'Passkey ini tidak didaftarkan untuk akaun anda.';
+$PMF_LANG['msgPasskeyCannotRevokeLast'] = 'Passkey terakhir bagi akaun tanpa kata laluan tidak boleh dibuang.';
+$PMF_LANG['msgPasskeyAddedMailSubject'] = '[%sitename%] Passkey baharu telah ditambah pada akaun anda';
+$PMF_LANG['msgPasskeyAddedMailBody'] = 'Passkey baharu baru sahaja ditambah pada akaun anda. Jika ini adalah anda, tiada tindakan diperlukan. Jika tidak, buang Passkey tersebut di panel kawalan pengguna anda di %s dan tukar kata laluan anda.';
+$PMF_LANG['ad_user_revoke_passkeys'] = 'Buang semua Passkey pengguna ini';
+$PMF_LANG['msgAdminFeatureDisabled'] = '%s dilumpuhkan pada masa ini. Aktifkannya dalam konfigurasi terlebih dahulu.';
+$PMF_LANG['msgMultiSelectHint'] = 'Tahan Ctrl (Cmd pada macOS) untuk memilih lebih daripada satu kategori.';
+$PMF_LANG['msgRefreshCaptcha'] = 'Muatkan kod captcha baharu';
+$PMF_LANG['msgDashboardVersionCheckFailed'] = 'Semakan versi tidak tersedia pada masa ini.';
+$PMF_LANG['msgFooterLinks'] = 'Pautan';
+$PMF_LANG['msgFooterLegal'] = 'Perundangan';
+$PMF_LANG['msgPermalink'] = 'Pautan kekal';
+$PMF_LANG['msgNoBookmarks'] = 'Anda belum menanda halaman mana-mana FAQ lagi.';
+
+// added v4.2.0-RC.2 - 2026-11-07 by Thorsten
+$PMF_LANG['msgFontSize'] = 'Saiz fon';
+$PMF_LANG['msgFontSizeDecrease'] = 'Kecilkan saiz fon';
+$PMF_LANG['msgFontSizeIncrease'] = 'Besarkan saiz fon';
+$PMF_LANG['msgImportRowNoPublishPermission'] = 'Baris %d: tiada kebenaran "%s" untuk mengimport baris ini sebagai diterbitkan.';
+
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Bagaimana kami boleh membantu anda?';
+$PMF_LANG['msgHeroSubline'] = 'Cari dalam pangkalan pengetahuan atau layari mengikut kategori.';
+$PMF_LANG['msgDisplaySettings'] = 'Tetapan paparan';
+$LANG_CONF['layout.heroImage'] = ['input', 'Imej hero halaman utama', 'URL atau laluan imej yang dipaparkan di sebelah carian halaman utama pada skrin besar. Biarkan kosong untuk hero teks sahaja.'];
+
 return $PMF_LANG;
