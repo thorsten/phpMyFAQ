@@ -133,6 +133,7 @@ class Startpage
             $image = '' === $row['image'] ? '' : 'content/user/images/' . (string) $row['image'];
 
             $category = [
+                'id' => (int) $row['id'],
                 'url' => $link,
                 'name' => $row['name'],
                 'description' => $row['description'],

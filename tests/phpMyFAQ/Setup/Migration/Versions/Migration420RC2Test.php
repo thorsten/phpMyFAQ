@@ -8,6 +8,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Setup\Migration\MigrationInterface;
+use phpMyFAQ\Setup\Migration\Operations\ConfigAddOperation;
 use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
 use PHPUnit\Framework\TestCase;
 
@@ -68,6 +69,11 @@ class Migration420RC2Test extends TestCase
         $this->assertStringContainsString('password_reset_expires', $description);
     }
 
+    public function testGetDescriptionNamesTheHeroImageConfiguration(): void
+    {
+        $this->assertStringContainsString('layout.heroImage', $this->migration->getDescription());
+    }
+
     public function testUpAddsTheMissingColumns(): void
     {
         $this->configuration->getDb()->query('CREATE TABLE faquser (user_id INTEGER)');
@@ -80,6 +86,23 @@ class Migration420RC2Test extends TestCase
         $this->assertCount(2, $statements);
         $this->assertStringContainsString('password_reset_token', $statements[0]);
         $this->assertStringContainsString('password_reset_expires', $statements[1]);
+    }
+
+    public function testUpAddsTheHeroImageConfiguration(): void
+    {
+        $this->configuration->getDb()->query('CREATE TABLE faquser (user_id INTEGER)');
+
+        $recorder = new OperationRecorder($this->configuration);
+        $this->migration->up($recorder);
+
+        $added = [];
+        foreach ($recorder->getOperations() as $operation) {
+            if ($operation instanceof ConfigAddOperation) {
+                $added[$operation->getKey()] = $operation->getValue();
+            }
+        }
+
+        $this->assertSame(['layout.heroImage' => ''], $added);
     }
 
     public function testUpIsIdempotentWhenTheColumnsExist(): void

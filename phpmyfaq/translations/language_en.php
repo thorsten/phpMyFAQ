@@ -2058,4 +2058,10 @@ $PMF_LANG['msgFontSizeDecrease'] = 'Decrease font size';
 $PMF_LANG['msgFontSizeIncrease'] = 'Increase font size';
 $PMF_LANG['msgImportRowNoPublishPermission'] = 'Row %d: no "%s" permission to import this row as published.';
 
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'How can we help you?';
+$PMF_LANG['msgHeroSubline'] = 'Search the knowledge base or browse by category.';
+$PMF_LANG['msgDisplaySettings'] = 'Display settings';
+$LANG_CONF['layout.heroImage'] = ['input', 'Start page hero image', 'URL or path of an image shown next to the start page search on large screens. Leave empty for a text-only hero.'];
+
 return $PMF_LANG;

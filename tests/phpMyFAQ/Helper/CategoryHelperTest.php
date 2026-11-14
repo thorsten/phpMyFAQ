@@ -346,6 +346,38 @@ class CategoryHelperTest extends TestCase
         $this->assertSame(2, $nodes[0]['children'][0]['id']);
     }
 
+    public function testGetAggregatedFaqNumbersAddsTheFaqsOfSubcategoriesToTheirParents(): void
+    {
+        $this->mockCategory->method('getGroups')->willReturn([-1]);
+        $this->mockCategory
+            ->method('getOrderedCategories')
+            ->willReturn([
+                1 => ['id' => 1, 'parent_id' => 0, 'name' => 'Root', 'description' => '', 'image' => ''],
+                2 => ['id' => 2, 'parent_id' => 1, 'name' => 'Child', 'description' => '', 'image' => ''],
+            ]);
+
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('numRows')->willReturn(2);
+        $database
+            ->method('fetchObject')
+            ->willReturnOnConsecutiveCalls(
+                (object) ['id' => 1, 'parent_id' => 0, 'category_name' => 'Root', 'description' => '', 'number' => 2],
+                (object) ['id' => 2, 'parent_id' => 1, 'category_name' => 'Child', 'description' => '', 'number' => 3],
+                false,
+            );
+        $this->mockConfiguration->method('getDb')->willReturn($database);
+
+        $this->assertSame([1 => 5, 2 => 3], $this->categoryHelper->getAggregatedFaqNumbers());
+    }
+
+    public function testGetAggregatedFaqNumbersReturnsEmptyArrayWhenNoCategories(): void
+    {
+        $this->mockCategory->method('getOrderedCategories')->willReturn([]);
+        $this->mockCategory->method('getGroups')->willReturn([-1]);
+
+        $this->assertSame([], $this->categoryHelper->getAggregatedFaqNumbers());
+    }
+
     public function testGetCategoryTreeDataReturnsEmptyArrayWhenNoCategories(): void
     {
         $this->mockCategory->method('getOrderedCategories')->willReturn([]);

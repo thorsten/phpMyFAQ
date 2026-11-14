@@ -40,6 +40,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added support for generic OpenID Connect providers such as Authentik (Thorsten)
 - added the "Force layout mode" configuration, which renders one mode for all visitors and skips the inline theme script and the theme switcher (Thorsten)
 - added a font size switcher next to the theme switcher to scale the base font size in steps from 80% to 120% (Thorsten)
+- added a redesigned start page with an accent hero, popular tags below the search, an optional hero image (`layout.heroImage`), FAQ counts on the category tiles, and tabs for the FAQ lists (Thorsten)
+- added a display settings menu for the theme and font size switchers and a floating help button linking to the contact page (Thorsten)
 - added table of contents plugin in WYSIWYG editor (Thorsten)
 - added resizing of uploaded videos in WYSIWYG editor (Thorsten)
 - added embedded videos from allowed media hosts like YouTube and Vimeo in FAQs, news, and custom pages (Thorsten)

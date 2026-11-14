@@ -175,6 +175,8 @@ abstract class AbstractFrontController extends AbstractController
                 'name' => Translation::get(key: 'msgQuestion'),
                 'link' => './add-question.html',
                 'active' => 'ask' === $action ? 'active' : '',
+                // Rendered as the one accent button of the navigation, but only while visitors can ask.
+                'highlight' => $this->configuration->get('main.enableAskQuestions') === true,
             ],
             [
                 'name' => Translation::get(key: 'msgOpenQuestions'),

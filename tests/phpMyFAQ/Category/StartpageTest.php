@@ -168,6 +168,7 @@ class StartpageTest extends TestCase
         $result = $this->startpage->getCategories();
 
         $this->assertCount(1, $result);
+        $this->assertSame(1, $result[0]['id']);
         $this->assertEquals('Test Category', $result[0]['name']);
         $this->assertEquals('Test Description', $result[0]['description']);
         $this->assertEquals('content/user/images/test-image.jpg', $result[0]['image']);

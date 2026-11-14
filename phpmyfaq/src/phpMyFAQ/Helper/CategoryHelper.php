@@ -82,6 +82,16 @@ class CategoryHelper extends AbstractHelper
     }
 
     /**
+     * Returns the number of FAQs per category ID, the FAQs of all subcategories included.
+     *
+     * @return array<int, int>
+     */
+    public function getAggregatedFaqNumbers(): array
+    {
+        return $this->gatherCategoryData()[2];
+    }
+
+    /**
      * Returns the category tree as a nested data structure for Twig rendering.
      *
      * @return array<int, array<string, mixed>>

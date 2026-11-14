@@ -45,6 +45,12 @@
   --pmf-shadow-lg: 0 12px 32px rgb(16, 24, 40, 0.12), 0 4px 10px rgb(16, 24, 40, 0.08);
   --pmf-accent-gradient: linear-gradient(135deg, var(--pmf-accent) 0%, var(--pmf-accent-2) 100%);
   --pmf-shadow-accent: 0 8px 24px rgb(8, 60, 131, 0.22);
+
+  // Start page hero: an accent band with light text.
+  --pmf-hero-bg: var(--pmf-accent-gradient);
+  --pmf-hero-text: var(--pmf-text-on-accent);
+  --pmf-hero-ring: rgb(255, 255, 255, 0.4);
+  --pmf-hero-border: transparent;
 }
 
 // Dark theme — softened dark surfaces with elevation steps.
@@ -72,6 +78,10 @@
   // Darker stops than the link accent so white text keeps >= 4.5:1 on both ends.
   --pmf-accent-gradient: linear-gradient(135deg, #2f5fa8 0%, #1f7a78 100%);
   --pmf-shadow-accent: 0 8px 24px rgb(93, 143, 208, 0.3);
+  --pmf-hero-bg: var(--pmf-accent-gradient);
+  --pmf-hero-text: var(--pmf-text-on-accent);
+  --pmf-hero-ring: rgb(255, 255, 255, 0.4);
+  --pmf-hero-border: transparent;
 }
 
 // High-contrast theme — black / white / yellow, strong borders, no shadows.
@@ -95,4 +105,10 @@
   --pmf-shadow-lg: none;
   --pmf-accent-gradient: var(--pmf-accent);
   --pmf-shadow-accent: none;
+
+  // No accent band: the hero stays black with white text and a visible edge.
+  --pmf-hero-bg: var(--pmf-bg);
+  --pmf-hero-text: var(--pmf-text);
+  --pmf-hero-ring: var(--pmf-focus-ring);
+  --pmf-hero-border: var(--pmf-border);
 }

@@ -294,6 +294,14 @@
     }
   }
 
+  // Accent-filled links: the generic link colour above would be yellow on yellow.
+  .pmf-nav-cta,
+  .pmf-help-button {
+    background: var(--bs-primary);
+    color: #000;
+    text-decoration: none;
+  }
+
   // Apply larger sizing only to main content links
   .pmf-content a,
   main a {

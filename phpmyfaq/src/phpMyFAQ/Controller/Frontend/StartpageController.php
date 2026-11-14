@@ -19,11 +19,13 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Category\Startpage;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
 use phpMyFAQ\Tags;
@@ -67,7 +69,7 @@ final class StartpageController extends AbstractFrontController
             ->setUser($currentUser)
             ->setGroups($currentGroups);
 
-        $startPageCategories = $startpage->getCategories();
+        $startPageCategories = $this->withFaqCounts($startpage->getCategories(), $currentUser, $currentGroups);
 
         // Get top ten parameter
         $param = $this->configuration->get('records.orderingPopularFaqs') === 'visits' ? 'visits' : 'voted';
@@ -85,6 +87,9 @@ final class StartpageController extends AbstractFrontController
             'baseHref' => $this->faqSystem->getSystemUri($this->configuration),
             'title' => $this->configuration->getTitle(),
             'pageHeader' => $this->configuration->getTitle(),
+            'msgHeroHeadline' => Translation::get(key: 'msgHeroHeadline'),
+            'msgHeroSubline' => Translation::get(key: 'msgHeroSubline'),
+            'heroImage' => (string) $this->configuration->get('layout.heroImage'),
             'startPageCategories' => (is_countable($startPageCategories) ? count($startPageCategories) : 0) > 0,
             'startPageCategoryDecks' => $startPageCategories,
             'stickyRecordsHeader' => Translation::get(key: 'stickyRecordsHeader'),
@@ -107,5 +112,31 @@ final class StartpageController extends AbstractFrontController
             'msgTags' => Translation::get(key: 'msgPopularTags'),
             'tagsList' => $this->tags->getPopularTags(12),
         ]);
+    }
+
+    /**
+     * Adds the number of FAQs the current user can see in each start page category,
+     * the FAQs of its subcategories included.
+     *
+     * @param array<int, array<string, mixed>> $startPageCategories
+     * @param int[] $groups
+     * @return array<int, array<string, mixed>>
+     */
+    private function withFaqCounts(array $startPageCategories, int $user, array $groups): array
+    {
+        if ($startPageCategories === []) {
+            return [];
+        }
+
+        $categoryHelper = new CategoryHelper();
+        $categoryHelper
+            ->setConfiguration($this->configuration)
+            ->setCategory(new Category($this->configuration, $groups, true, null, $user));
+        $faqNumbers = $categoryHelper->getAggregatedFaqNumbers();
+
+        return array_map(fn(array $startPageCategory): array => [
+            ...$startPageCategory,
+            'faqCountLabel' => $this->plurals->get('plmsgEntries', $faqNumbers[(int) $startPageCategory['id']] ?? 0),
+        ], $startPageCategories);
     }
 }

@@ -26,6 +26,8 @@ use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
  * Password-reset links used to be signed with the user's stored password hash, so anyone who
  * could read that hash could forge a link. The token is now a random secret whose SHA-256 hash
  * and expiry are stored on the user row.
+ *
+ * The start page hero can show an optional image, configured in layout.heroImage.
  */
 readonly class Migration420RC2 extends AbstractMigration
 {
@@ -41,11 +43,15 @@ readonly class Migration420RC2 extends AbstractMigration
 
     public function getDescription(): string
     {
-        return 'Add the password_reset_token and password_reset_expires columns to faquser';
+        return (
+            'Add the password_reset_token and password_reset_expires columns to faquser '
+            . 'and the layout.heroImage configuration'
+        );
     }
 
     /**
-     * Both steps are guarded by a column check so the migration stays safe to re-run.
+     * Both column steps are guarded by a column check so the migration stays safe to re-run;
+     * Configuration::add() skips keys that already exist.
      */
     public function up(OperationRecorder $recorder): void
     {
@@ -62,5 +68,7 @@ readonly class Migration420RC2 extends AbstractMigration
                 'Add password_reset_expires column to faquser',
             );
         }
+
+        $recorder->addConfig('layout.heroImage', '');
     }
 }

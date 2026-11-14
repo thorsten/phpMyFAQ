@@ -89,46 +89,69 @@
     <div class="collapse navbar-collapse" id="pmf-top-navbar">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% if not isMaintenanceMode %}
+          {# A highlighted item is the one accent button and moves to the right-hand side. #}
           {% for item in topNavigation %}
+            {% if not (item['highlight'] ?? false) %}
             <li class="nav-item pmf-nav-link ">
               <a class="pmf-nav-link {{ item['active'] }}" href="{{ item['link'] }}">{{ item['name'] }}</a>
             </li>
+            {% endif %}
           {% endfor %}
         {% endif %}
       </ul>
 
-      <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
-        {% if allowUserLayoutMode %}
-        <li class="nav-item me-2">
-          <div class="btn-group pmf-theme-switcher border" role="group" aria-label="{{ 'msgToggleTheme' | translate }}">
-            <button type="button" class="btn btn-link nav-link py-2 px-2" id="theme-light"
-                    aria-label="Light mode" title="Light mode">
-              <i class="bi bi-sun-fill"></i>
-            </button>
-            <button type="button" class="btn btn-link nav-link py-2 px-2" id="theme-dark"
-                    aria-label="Dark mode" title="Dark mode">
-              <i class="bi bi-moon-stars-fill"></i>
-            </button>
-            <button type="button" class="btn btn-link nav-link py-2 px-2" id="theme-high-contrast"
-                    aria-label="High contrast mode" title="High contrast mode">
-              <i class="bi bi-circle-half"></i>
-            </button>
+      <ul class="navbar-nav flex-row flex-wrap align-items-center ms-md-auto">
+        <li class="nav-item dropdown me-2">
+          <button type="button" class="btn btn-link nav-link pmf-nav-pill-ghost pmf-nav-icon-button"
+                  data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-display="static" aria-expanded="false"
+                  aria-label="{{ 'msgDisplaySettings' | translate }}" title="{{ 'msgDisplaySettings' | translate }}">
+            <i class="bi bi-circle-half" aria-hidden="true"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-end pmf-display-menu">
+            {% if allowUserLayoutMode %}
+            <div class="pmf-display-menu-row">
+              <span class="pmf-display-menu-label" id="pmf-display-menu-theme">{{ 'msgToggleTheme' | translate }}</span>
+              <div class="btn-group pmf-theme-switcher" role="group" aria-labelledby="pmf-display-menu-theme">
+                <button type="button" class="btn btn-link nav-link py-2 px-2" id="theme-light"
+                        aria-label="Light mode" title="Light mode">
+                  <i class="bi bi-sun-fill"></i>
+                </button>
+                <button type="button" class="btn btn-link nav-link py-2 px-2" id="theme-dark"
+                        aria-label="Dark mode" title="Dark mode">
+                  <i class="bi bi-moon-stars-fill"></i>
+                </button>
+                <button type="button" class="btn btn-link nav-link py-2 px-2" id="theme-high-contrast"
+                        aria-label="High contrast mode" title="High contrast mode">
+                  <i class="bi bi-circle-half"></i>
+                </button>
+              </div>
+            </div>
+            {% endif %}
+            <div class="pmf-display-menu-row">
+              <span class="pmf-display-menu-label" id="pmf-display-menu-font-size">{{ 'msgFontSize' | translate }}</span>
+              <div class="btn-group pmf-theme-switcher pmf-font-size-switcher" role="group"
+                   aria-labelledby="pmf-display-menu-font-size">
+                <button type="button" class="btn btn-link nav-link py-2 px-2" id="font-size-decrease"
+                        aria-label="{{ 'msgFontSizeDecrease' | translate }}" title="{{ 'msgFontSizeDecrease' | translate }}">
+                  <i class="bi bi-dash-lg"></i>
+                </button>
+                <button type="button" class="btn btn-link nav-link py-2 px-2" id="font-size-increase"
+                        aria-label="{{ 'msgFontSizeIncrease' | translate }}" title="{{ 'msgFontSizeIncrease' | translate }}">
+                  <i class="bi bi-plus-lg"></i>
+                </button>
+              </div>
+            </div>
           </div>
         </li>
+        {% if not isMaintenanceMode %}
+          {% for item in topNavigation %}
+            {% if item['highlight'] ?? false %}
+            <li class="nav-item me-2">
+              <a class="pmf-nav-cta" href="{{ item['link'] }}"{% if item['active'] %} aria-current="page"{% endif %}>{{ item['name'] }}</a>
+            </li>
+            {% endif %}
+          {% endfor %}
         {% endif %}
-        <li class="nav-item me-2">
-          <div class="btn-group pmf-theme-switcher pmf-font-size-switcher border" role="group"
-               aria-label="{{ 'msgFontSize' | translate }}">
-            <button type="button" class="btn btn-link nav-link py-2 px-2" id="font-size-decrease"
-                    aria-label="{{ 'msgFontSizeDecrease' | translate }}" title="{{ 'msgFontSizeDecrease' | translate }}">
-              <i class="bi bi-dash-lg"></i>
-            </button>
-            <button type="button" class="btn btn-link nav-link py-2 px-2" id="font-size-increase"
-                    aria-label="{{ 'msgFontSizeIncrease' | translate }}" title="{{ 'msgFontSizeIncrease' | translate }}">
-              <i class="bi bi-plus-lg"></i>
-            </button>
-          </div>
-        </li>
         <li class="nav-item dropdown">
           <button type="button" class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle pmf-nav-pill-ghost"
                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
@@ -274,6 +297,14 @@
     </div>
   </div>
 </footer>
+
+<!-- Floating help button -->
+{% if not isMaintenanceMode and not (currentPageUrl matches '/\\/contact\\.html([?#]|$)/') %}
+<a class="pmf-help-button" href="./contact.html">
+  <i class="bi bi-chat-dots" aria-hidden="true"></i>
+  <span class="pmf-help-button-label">{{ 'msgContact' | translate }}</span>
+</a>
+{% endif %}
 
 <!-- Push notification opt-in banner -->
 {% if pushEnabled and isUserLoggedIn %}

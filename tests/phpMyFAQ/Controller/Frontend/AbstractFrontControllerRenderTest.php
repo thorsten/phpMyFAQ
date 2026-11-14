@@ -155,6 +155,48 @@ final class AbstractFrontControllerRenderTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testHeaderHighlightsTheAskQuestionLinkWhileVisitorsCanAsk(): void
+    {
+        $controller = new AbstractFrontControllerRenderTestStub();
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            ['main.enableAskQuestions' => 'true'],
+            false,
+            false,
+        ));
+
+        $header = $controller->fetchHeader(Request::create('https://localhost/index.php?action=index'));
+
+        self::assertSame(
+            ['./add-question.html' => true],
+            array_column($header['topNavigation'], 'highlight', 'link'),
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testHeaderDoesNotHighlightTheAskQuestionLinkWhileQuestionsAreDisabled(): void
+    {
+        $controller = new AbstractFrontControllerRenderTestStub();
+        $controller->setContainer($this->createControllerContainer(
+            new Session(new MockArraySessionStorage()),
+            ['main.enableAskQuestions' => 'false'],
+            false,
+            false,
+        ));
+
+        $header = $controller->fetchHeader(Request::create('https://localhost/index.php?action=index'));
+
+        self::assertSame(
+            ['./add-question.html' => false],
+            array_column($header['topNavigation'], 'highlight', 'link'),
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testHeaderForcesTheConfiguredLayoutMode(): void
     {
         $controller = new AbstractFrontControllerRenderTestStub();

@@ -54,6 +54,105 @@ li.pmf-nav-link {
   }
 }
 
+// Icon-only variant of the ghost pill (display settings toggle).
+.pmf-nav-pill-ghost.pmf-nav-icon-button {
+  padding: 0.35rem 0.6rem !important;
+}
+
+// The one accent button of the navigation.
+.pmf-nav-cta {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  background-color: var(--bs-white);
+  color: var(--bs-pmf-nav);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color var(--pmf-transition);
+
+  &:hover,
+  &:focus-visible {
+    background-color: rgb(255, 255, 255, 0.88);
+    color: var(--bs-pmf-nav);
+  }
+}
+
+// Display settings popover. It keeps the dark navigation background, because
+// the theme and font size switchers inside are styled for a dark bar.
+.pmf-display-menu {
+  min-width: 15rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--bs-pmf-nav);
+  border-color: rgb(255, 255, 255, 0.12);
+  color: var(--bs-white);
+}
+
+// The collapsed navigation would render the popover in the flow of the button
+// row; anchor it to the start edge of its toggle instead.
+@media (max-width: 991.98px) {
+  .navbar-nav .pmf-display-menu[data-bs-popper] {
+    position: absolute;
+    inset-inline: 0 auto;
+  }
+}
+
+.pmf-display-menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  & + & {
+    margin-top: 0.6rem;
+  }
+}
+
+.pmf-display-menu-label {
+  font-size: var(--pmf-font-size-sm);
+}
+
+// Floating help button, fixed to the bottom end corner of every public page.
+.pmf-help-button {
+  position: fixed;
+  inset-block-end: 1.25rem;
+  inset-inline-end: 1.25rem;
+  z-index: 1030;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+  background: var(--pmf-accent-gradient);
+  color: var(--pmf-text-on-accent);
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--pmf-shadow-lg);
+  transition: transform var(--pmf-transition);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pmf-text-on-accent);
+    transform: translateY(-2px);
+  }
+}
+
+// Small screens keep the icon only; the label stays available to screen readers.
+@media (max-width: 575.98px) {
+  .pmf-help-button {
+    padding: 0.8rem;
+  }
+
+  .pmf-help-button-label {
+    @include visually-hidden;
+  }
+}
+
+@media print {
+  .pmf-help-button {
+    display: none;
+  }
+}
+
 .pmf-nav-link-footer {
   @extend .nav-link;
   @extend .px-2;

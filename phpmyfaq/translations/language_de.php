@@ -2061,4 +2061,10 @@ $PMF_LANG['msgFontSizeDecrease'] = 'Schrift verkleinern';
 $PMF_LANG['msgFontSizeIncrease'] = 'Schrift vergrößern';
 $PMF_LANG['msgImportRowNoPublishPermission'] = 'Zeile %d: keine Berechtigung "%s", um diese Zeile als veröffentlicht zu importieren.';
 
+// added v4.2.0-RC.2 - 2026-11-14 by Thorsten
+$PMF_LANG['msgHeroHeadline'] = 'Wie können wir helfen?';
+$PMF_LANG['msgHeroSubline'] = 'Wissensdatenbank durchsuchen oder in den Kategorien stöbern.';
+$PMF_LANG['msgDisplaySettings'] = 'Anzeigeeinstellungen';
+$LANG_CONF['layout.heroImage'] = ['input', 'Hero-Bild der Startseite', 'URL oder Pfad eines Bildes, das auf großen Bildschirmen neben der Suche der Startseite erscheint. Leer lassen für einen Hero ohne Bild.'];
+
 return $PMF_LANG;

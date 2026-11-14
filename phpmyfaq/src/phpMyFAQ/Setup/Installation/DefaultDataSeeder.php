@@ -339,6 +339,7 @@ class DefaultDataSeeder
             'layout.enableCookieConsent' => 'true',
             'layout.contactInformationHTML' => 'false',
             'layout.customCss' => '',
+            'layout.heroImage' => '',
             'push.enableWebPush' => 'false',
             'push.vapidPublicKey' => '',
             'push.vapidPrivateKey' => '',

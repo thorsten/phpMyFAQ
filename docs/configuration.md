@@ -158,6 +158,7 @@ in the admin panel" are set automatically or can only be changed directly in the
 | `layout.enableCookieConsent`    | Activate Cookie Consent | `true` | Enables a cookie consent banner for GDPR/privacy compliance. |
 | `layout.contactInformationHTML` | Contact information as HTML? | `false` | When enabled, the contact information field is rendered as HTML instead of plain text. |
 | `layout.customCss`              | Custom CSS | *(empty)* | Custom CSS rules applied to the frontend. Use CSS only, no HTML or JavaScript. |
+| `layout.heroImage`              | Start page hero image | *(empty)* | URL or path of an image shown next to the start page search on large screens. Leave empty for a text-only hero. |
 
 ### 8.3.2 SEO settings
 
