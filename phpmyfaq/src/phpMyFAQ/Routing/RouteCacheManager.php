@@ -152,7 +152,7 @@ class RouteCacheManager
         $content .= 'use Symfony\Component\Routing\RouteCollection;' . PHP_EOL . PHP_EOL;
         $content .= '$routes = new RouteCollection();' . PHP_EOL . PHP_EOL;
 
-        foreach ($routes as $name => $route) {
+        foreach ($routes->all() as $name => $route) {
             $content .= $this->generateRouteCode($name, $route);
         }
 

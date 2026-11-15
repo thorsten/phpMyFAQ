@@ -187,6 +187,7 @@ abstract class AbstractFrontController extends AbstractController
     }
 
     /**
+     * @return array<string, mixed>
      * @throws \Exception
      */
     private function getUserDropdown(): array

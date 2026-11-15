@@ -38,9 +38,6 @@ class Category
     /** @var array<int, array<array-key, mixed>> */
     public array $categoryName = [];
 
-    /** @var array<int, array<int, array<array-key, mixed>>> */
-    private array $children = [];
-
     private int $user = -1;
 
     /** @var int[] */
@@ -118,7 +115,6 @@ class Category
 
                 $this->categoryName[(int) $row['id']] = $row;
                 $this->categories[(int) $row['id']] = $row;
-                $this->children[(int) $row['parent_id']][(int) $row['id']] = &$this->categoryName[(int) $row['id']];
                 $this->owner[(int) $row['id']] = (int) $row['user_id'];
                 $this->moderators[(int) $row['id']] = (int) $row['group_id'];
 

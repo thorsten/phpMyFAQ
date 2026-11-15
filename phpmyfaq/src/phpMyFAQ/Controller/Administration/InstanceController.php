@@ -193,7 +193,7 @@ final class InstanceController extends AbstractAdministrationController
      */
     private function getBaseTemplateVars(): array
     {
-        $userPermInstanceAdd = $this->currentUser?->perm->hasPermission(
+        $userPermInstanceAdd = $this->currentUser->perm->hasPermission(
             $this->currentUser->getUserId(),
             PermissionType::INSTANCE_ADD->value,
         );

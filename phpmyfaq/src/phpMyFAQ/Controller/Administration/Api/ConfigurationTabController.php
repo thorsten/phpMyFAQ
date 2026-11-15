@@ -725,10 +725,9 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
     private function findInvalidUrlValue(array $configurationData): ?string
     {
         $checks = [
-            ...array_fill_keys(self::OUTBOUND_URL_KEYS, fn(string $url): bool => $this->urlSafetyValidator->isSafeOutboundHttpUrl(
-                $url,
-                allowPrivateNetworks: true,
-            )),
+            ...array_fill_keys(self::OUTBOUND_URL_KEYS, fn(
+                string $url,
+            ): bool => $this->urlSafetyValidator->isSafeOutboundHttpUrl($url, allowPrivateNetworks: true)),
             ...array_fill_keys(self::REDIRECT_URL_KEYS, $this->urlSafetyValidator->isHttpUrl(...)),
             ...array_fill_keys(self::REDIS_DSN_KEYS, $this->urlSafetyValidator->isRedisDsn(...)),
             ...array_fill_keys(self::HOSTNAME_LIST_KEYS, $this->urlSafetyValidator->isHostnameList(...)),

@@ -170,7 +170,7 @@ final class FaqController extends AbstractAdministrationController
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForPublish' => $this->currentUser?->perm->hasPermission(
+            'hasPermissionForPublish' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_PUBLISH->value,
             ),
@@ -241,7 +241,7 @@ final class FaqController extends AbstractAdministrationController
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForPublish' => $this->currentUser?->perm->hasPermission(
+            'hasPermissionForPublish' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_PUBLISH->value,
             ),
@@ -466,7 +466,7 @@ final class FaqController extends AbstractAdministrationController
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForPublish' => $this->currentUser?->perm->hasPermission(
+            'hasPermissionForPublish' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_PUBLISH->value,
             ),
@@ -542,7 +542,7 @@ final class FaqController extends AbstractAdministrationController
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForPublish' => $this->currentUser?->perm->hasPermission(
+            'hasPermissionForPublish' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_PUBLISH->value,
             ),
@@ -624,7 +624,7 @@ final class FaqController extends AbstractAdministrationController
             'restrictedUsers' => false,
             'userSelection' => $this->userHelper->getAllUsersForTemplate(-1, true),
             'changelogs' => [],
-            'hasPermissionForPublish' => $this->currentUser?->perm->hasPermission(
+            'hasPermissionForPublish' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_PUBLISH->value,
             ),
@@ -642,7 +642,7 @@ final class FaqController extends AbstractAdministrationController
     {
         $token = Token::getInstance($this->session);
 
-        $canAddAttachments = $this->currentUser?->perm->hasPermission(
+        $canAddAttachments = $this->currentUser->perm->hasPermission(
             $this->currentUser->getUserId(),
             PermissionType::ATTACHMENT_ADD->value,
         );

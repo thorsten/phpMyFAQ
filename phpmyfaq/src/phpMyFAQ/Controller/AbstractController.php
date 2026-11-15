@@ -397,7 +397,7 @@ abstract class AbstractController
         }
 
         $currentUser = $this->currentUser;
-        if (!$currentUser?->perm->hasPermission($currentUser->getUserId(), $permissionType->value)) {
+        if (!$currentUser->perm->hasPermission($currentUser->getUserId(), $permissionType->value)) {
             throw new ForbiddenException(message: sprintf('User has no "%s" permission.', $permissionType->name));
         }
     }
@@ -470,7 +470,7 @@ abstract class AbstractController
         }
 
         $currentUser = $this->currentUser;
-        if (!$currentUser?->perm->hasPermissionForLanguage(
+        if (!$currentUser->perm->hasPermissionForLanguage(
             $currentUser->getUserId(),
             $permissionType->value,
             $language,

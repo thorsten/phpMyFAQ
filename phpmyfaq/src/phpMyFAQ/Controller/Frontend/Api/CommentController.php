@@ -193,11 +193,6 @@ final class CommentController extends AbstractController
                     $this->notification->sendFaqCommentNotification($this->faq, $commentEntity);
                 }
 
-                if ('news' === $type) {
-                    $newsData = $this->news->get($commentId);
-                    $this->notification->sendNewsCommentNotification($newsData, $commentEntity);
-                }
-
                 return $this->buildSuccessResponse($commentEntity);
             }
 
