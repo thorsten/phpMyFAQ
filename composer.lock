@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "160825f9630f33e774d4fe3b5fee3566",
+    "content-hash": "700cbd20ca442ce1b02075ad03931e28",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -9294,16 +9294,16 @@
         },
         {
             "name": "carthage-software/mago",
-            "version": "1.59.0",
+            "version": "1.60.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carthage-software/mago.git",
-                "reference": "95a25d686a2b584c387326e466d6ead8c885465d"
+                "reference": "4f64a85e4b4c5632eae895a8d8564898ffcaec6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carthage-software/mago/zipball/95a25d686a2b584c387326e466d6ead8c885465d",
-                "reference": "95a25d686a2b584c387326e466d6ead8c885465d",
+                "url": "https://api.github.com/repos/carthage-software/mago/zipball/4f64a85e4b4c5632eae895a8d8564898ffcaec6e",
+                "reference": "4f64a85e4b4c5632eae895a8d8564898ffcaec6e",
                 "shasum": ""
             },
             "require": {
@@ -9311,7 +9311,8 @@
                 "revolt/event-loop": "^1.0.9"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.5"
+                "phpunit/phpunit": "^10.5",
+                "twig/twig": "^3.30"
             },
             "suggest": {
                 "ext-curl": "To show binary download progress"
@@ -9345,7 +9346,7 @@
             ],
             "support": {
                 "issues": "https://github.com/carthage-software/mago/issues",
-                "source": "https://github.com/carthage-software/mago/tree/1.59.0"
+                "source": "https://github.com/carthage-software/mago/tree/1.60.1"
             },
             "funding": [
                 {
@@ -9353,7 +9354,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-25T00:59:15+00:00"
+            "time": "2026-11-15T03:04:38+00:00"
         },
         {
             "name": "doctrine/instantiator",
