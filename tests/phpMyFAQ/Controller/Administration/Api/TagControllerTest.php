@@ -439,6 +439,28 @@ final class TagControllerTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function testSearchUsesTheLastValueWhenTheListStartsWithAComma(): void
+    {
+        $tags = $this->createMock(Tags::class);
+        $tags
+            ->expects($this->once())
+            ->method('getAllTags')
+            ->with('bar', PMF_TAGS_CLOUD_RESULT_SET_SIZE)
+            ->willReturn(['bar', 'barbaz']);
+
+        $controller = $this->createController($tags);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->search(new Request(['search' => ', Bar']));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([['id' => '0', 'name' => 'bar'], ['id' => '1', 'name' => 'barbaz']], $payload);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testSearchReturnsAllTagsWithoutASearchTerm(): void
     {
         $tags = $this->createMock(Tags::class);

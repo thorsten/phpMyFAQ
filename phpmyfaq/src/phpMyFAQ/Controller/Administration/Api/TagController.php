@@ -89,7 +89,7 @@ final class TagController extends AbstractController
 
         $tags = [];
         if (!is_null($autoCompleteValue)) {
-            if (strpos($autoCompleteValue, needle: ',')) {
+            if (str_contains($autoCompleteValue, needle: ',')) {
                 $arrayOfValues = explode(separator: ',', string: $autoCompleteValue);
                 $autoCompleteValue = end($arrayOfValues);
             }
