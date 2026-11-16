@@ -12,8 +12,8 @@ dependencies:
     specifier: 2.11.8
     version: 2.11.8
   autocompleter:
-    specifier: 10.0.0
-    version: 10.0.0
+    specifier: 10.1.0
+    version: 10.1.0
   bootstrap:
     specifier: 5.3.8
     version: 5.3.8(@popperjs/core@2.11.8)
@@ -1755,8 +1755,8 @@ packages:
     resolution: {integrity: sha512-htCUDlxyyCLMgaM3xXg0C0LW2xqfuQ6p05pCEIsXuyQ+a1koYKTuBMzRNwmybfLgvJDMd0r1LTn4+E0Ti6C2AA==}
     dev: true
 
-  /autocompleter@10.0.0:
-    resolution: {integrity: sha512-ZKUvEIU8XpqqkMrZoy+QmAh7Ga8YE3qB8EFJzC05K69S8+dQ3xrN066vJImiIjkwYVG1Oc8eRP4YVDQOquUF9A==}
+  /autocompleter@10.1.0:
+    resolution: {integrity: sha512-Y4YDXucUdyAJtSV5qSxN9nXaZZbKcUc3OP3cSLnk/gu3xxKTt1p7HHCYR/EMYkomD4cw/4wsr1dmk48J6HSNpA==}
     dev: false
 
   /autoprefixer@10.6.2(postcss@8.5.32):
