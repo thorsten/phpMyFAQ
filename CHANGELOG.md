@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.2.0-RC.2 - unreleased
+### phpMyFAQ v4.2.0-RC.2 - 2026-11-16
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
 - added experimental FrankenPHP worker mode in the Docker images (Thorsten)
