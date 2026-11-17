@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.2.0-RC.2 - 2026-11-16
+### phpMyFAQ v4.2.0-RC.3 - unreleased
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
 - added experimental FrankenPHP worker mode in the Docker images (Thorsten)
@@ -51,6 +51,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved support for PDO (Thorsten)
 - improved sticky FAQs administration (Thorsten)
 - improved update process (Thorsten)
+- changed the online update and the update via command line from experimental to stable (Thorsten)
 - improved and hardened multi tenancy support (Thorsten)
 - improved and redesigned searchable admin configuration frontend (Thorsten)
 - improved package size by removing unused dependencies (Thorsten)

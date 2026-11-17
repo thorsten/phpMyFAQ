@@ -330,9 +330,6 @@ The Keycloak integration is experimental.
 
 ### 8.6.1 Online update settings
 
-Note:
-The online update feature is experimental and might not work in all environments.
-
 | Key                             | Label | Default | Description |
 |---------------------------------|-------|---------|-------------|
 | `upgrade.dateLastChecked`       | Last check for updates | *(empty)* | The date when phpMyFAQ last checked for available updates. Set automatically. |

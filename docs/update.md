@@ -83,7 +83,7 @@ URL in your browser:
 
 Click the button of the update script, your version will automatically be updated.
 
-### Online update (Experimental feature)
+### Online update
 
 If you're running phpMyFAQ 4.0 or later, you can use the built-in online update feature. It is disabled by default on
 new installations: enable it first under _Configuration >> Edit Configuration >> Online Update >> Online Update
@@ -101,8 +101,8 @@ Then go to the "phpMyFAQ Upgrade" page in the configuration section and click th
    files into your installation, and in the end, the database is updated
 
 Note:
-The online update feature is experimental and might not work in all environments. Don't use it with the Docker images:
-the files it replaces are part of the image and would be reset when the container is recreated.
+Don't use the online update feature with the Docker images: the files it replaces are part of the image and would
+be reset when the container is recreated.
 
 ### Permission changes in phpMyFAQ 4.2
 

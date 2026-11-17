@@ -799,7 +799,7 @@ We need stop words for the smart answering feature and the related answers. If a
 FAQ, the words will be checked against all FAQs in your database but without the stop words. Stop words are words with a
 very low relevance like the English word _the_.
 
-### 7.6.4 phpMyFAQ Update (Experimental feature)
+### 7.6.4 phpMyFAQ Update
 
 If you're running phpMyFAQ 4.0.0 or later, you can use the built-in automatic upgrade feature. The menu entry
 "phpMyFAQ Upgrade" is only shown if the online update is enabled in the "Online Update" configuration tab.
