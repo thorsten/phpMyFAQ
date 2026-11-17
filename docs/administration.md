@@ -879,7 +879,7 @@ linking rules and group mapping.
 
 ### 7.7.3 Using Microsoft Entra ID
 
-You can use our experimental Microsoft Entra ID support for user authentication as well.
+You can use our Microsoft Entra ID support for user authentication as well.
 App Registrations in Azure are used to integrate applications with Microsoft Azure services,
 allowing them to authenticate and access resources securely.
 Follow these steps to create an App Registration in Microsoft Azure:
