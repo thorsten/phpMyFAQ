@@ -130,7 +130,7 @@ in the admin panel" are set automatically or can only be changed directly in the
 | `security.googleReCaptchaV2SiteKey`         | Google ReCAPTCHA v2 site key | *(empty)* | The site key from your Google reCAPTCHA v2 registration. |
 | `security.googleReCaptchaV2SecretKey`       | Google ReCAPTCHA v2 secret key | *(empty)* | The secret key from your Google reCAPTCHA v2 registration. |
 | `security.loginWithEmailAddress`            | Login only with email address | `false` | When enabled, users must log in using their email address instead of a username. |
-| `security.enableWebAuthnSupport`            | Activate WebAuthn support (Experimental) | `false` | Enables passwordless authentication via WebAuthn (hardware security keys, biometrics). This feature is experimental. |
+| `security.enableWebAuthnSupport`            | Activate WebAuthn support | `false` | Enables passwordless authentication via WebAuthn (hardware security keys, biometrics). |
 | `security.enableAdminSessionTimeoutCounter` | Activate admin session timeout counter | `true` | Displays a countdown timer in the admin panel showing the remaining session time before automatic logout. |
 | `security.salt`                             | *(none)* | *(auto-generated)* | Random salt generated during installation, used for password hashing and signed tokens. Not shown in the admin panel. **Warning:** Do not change it, otherwise existing passwords stop working. |
 

@@ -51,7 +51,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved support for PDO (Thorsten)
 - improved sticky FAQs administration (Thorsten)
 - improved update process (Thorsten)
-- changed the online update, the update via command line, and the Microsoft Entra ID support from experimental to stable (Thorsten)
+- changed the online update, the update via command line, the Microsoft Entra ID support, and the WebAuthn support from experimental to stable (Thorsten)
 - improved and hardened multi tenancy support (Thorsten)
 - improved and redesigned searchable admin configuration frontend (Thorsten)
 - improved package size by removing unused dependencies (Thorsten)

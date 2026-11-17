@@ -1415,7 +1415,7 @@ $PMF_LANG['msgErrorEnterValidMail'] = 'Proszę podać prawidłowy adres e-mail!'
 $PMF_LANG['msgErrorEnterMessage'] = 'Proszę wprowadzić wiadomość!';
 $PMF_LANG['msgLinkCopied'] = 'Link skopiowany do schowka';
 $PMF_LANG['msgDocumentation'] = 'Dokumentacja';
-$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Aktywuj wsparcie WebAuthn (Eksperymentalne)'];
+$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Aktywuj wsparcie WebAuthn'];
 
 // added v4.0.6 - 2025-02-22 by Thorsten
 $PMF_LANG['msgCategoryImageReset'] = 'Zresetuj obraz kategorii';
