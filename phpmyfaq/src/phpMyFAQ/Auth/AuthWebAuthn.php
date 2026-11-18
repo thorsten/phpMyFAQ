@@ -39,6 +39,8 @@ class AuthWebAuthn extends Auth
 
     private const int RS256 = -257;
 
+    private const string DECOY_SECRET_KEY = 'security.webAuthnDecoySecret';
+
     public function __construct(Configuration $configuration)
     {
         parent::__construct($configuration);
@@ -301,13 +303,9 @@ class AuthWebAuthn extends Auth
             // No stored key: answer with a decoy so the response shape does not reveal whether the
             // account exists. The decoy must be stable across requests, like a real credential ID,
             // otherwise comparing two responses tells real accounts apart from decoys. Keying it on
-            // the login plus the installation secret makes it stable per login and unguessable.
-            $allow->id = $this->stringToArray(hash_hmac(
-                'sha256',
-                $login,
-                (string) $this->configuration->get('security.salt'),
-                binary: true,
-            ));
+            // the login plus a random installation secret makes it stable per login and unguessable.
+            // security.salt must not be used here: it is derived from the public reference URL.
+            $allow->id = $this->stringToArray(hash_hmac('sha256', $login, $this->getDecoySecret(), binary: true));
             $allows[] = clone $allow;
         }
 
@@ -444,6 +442,38 @@ class AuthWebAuthn extends Auth
     /**
      * Convert a binary string to an array of uint8's
      */
+    /**
+     * Returns the random secret the decoy credential is keyed on, generating and persisting it on
+     * first use. It has to be random: anything derived from public data lets an attacker compute
+     * the decoy offline and tell it apart from a real credential ID.
+     *
+     * @throws RandomException
+     */
+    private function getDecoySecret(): string
+    {
+        $secret = (string) $this->configuration->get(self::DECOY_SECRET_KEY);
+        if ($secret !== '') {
+            return $secret;
+        }
+
+        $candidate = bin2hex(random_bytes(32));
+
+        try {
+            if (array_key_exists(self::DECOY_SECRET_KEY, $this->configuration->getAll())) {
+                $this->configuration->set(self::DECOY_SECRET_KEY, $candidate);
+            } else {
+                $this->configuration->add(self::DECOY_SECRET_KEY, $candidate);
+            }
+        } catch (\Throwable) {
+            // A concurrent request may have stored the secret first; the stored one is read below.
+        }
+
+        // Always use what the database holds, so concurrent first requests agree on one secret.
+        $stored = (string) ($this->configuration->getAll()[self::DECOY_SECRET_KEY] ?? '');
+
+        return $stored !== '' ? $stored : $candidate;
+    }
+
     private function stringToArray(string $string): array
     {
         return array_map('ord', str_split($string));

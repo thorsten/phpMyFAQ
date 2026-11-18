@@ -307,6 +307,45 @@ class AuthWebAuthnTest extends TestCase
         $this->assertNotSame($resultOne->allowCredentials[0]->id, $resultTwo->allowCredentials[0]->id);
     }
 
+    public function testPrepareForLoginDecoyIsNotDerivableFromPublicSalt(): void
+    {
+        // security.salt is md5(main.referenceURL), i.e. public. A decoy keyed on it can be computed
+        // offline and compared with the response, which turns the endpoint into a passkey oracle.
+        $this->configuration->delete('security.webAuthnDecoySecret');
+        $this->configuration->getAll();
+        $authWebAuthn = new AuthWebAuthn(new Configuration($this->configuration->getDb()));
+        $empty = '';
+
+        $result = $authWebAuthn->prepareForLogin($empty, 'nobody');
+
+        $toBytes = static fn(string $binary): array => array_values(unpack('C*', $binary));
+        $salt = (string) $this->configuration->get('security.salt');
+        $this->assertNotSame(
+            $toBytes(hash_hmac('sha256', 'nobody', $salt, binary: true)),
+            $result->allowCredentials[0]->id,
+        );
+        $this->assertNotSame(
+            $toBytes(hash_hmac('sha256', 'nobody', '', binary: true)),
+            $result->allowCredentials[0]->id,
+        );
+
+        // The decoy is keyed on a random secret that is generated once and persisted.
+        $freshConfiguration = new Configuration($this->configuration->getDb());
+        $secret = (string) $freshConfiguration->get('security.webAuthnDecoySecret');
+        $this->assertMatchesRegularExpression('/^[0-9a-f]{64}$/', $secret);
+        $this->assertSame(
+            $toBytes(hash_hmac('sha256', 'nobody', $secret, binary: true)),
+            $result->allowCredentials[0]->id,
+        );
+
+        // A second instance reuses the persisted secret instead of generating a new one.
+        $other = new AuthWebAuthn($freshConfiguration);
+        $this->assertSame(
+            $result->allowCredentials[0]->id,
+            $other->prepareForLogin($empty, 'nobody')->allowCredentials[0]->id,
+        );
+    }
+
     public function testPrepareForLoginDecoyLeavesStoredKeysUntouched(): void
     {
         $empty = '';
