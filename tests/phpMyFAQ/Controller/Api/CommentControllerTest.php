@@ -8,6 +8,7 @@ use Exception;
 use LogicException;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Faq;
 use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -236,6 +237,57 @@ class CommentControllerTest extends TestCase
 
         $this->assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
         $this->assertSame([], json_decode($response->getContent(), true));
+    }
+
+    /**
+     * Security regression: the public endpoint must not disclose the email
+     * address of a commenter, the frontend only renders it obfuscated.
+     *
+     * @throws Exception
+     */
+    public function testListDoesNotDiscloseCommenterEmail(): void
+    {
+        $request = new Request();
+        $request->attributes->set('recordId', '28');
+
+        $faq = $this->createStub(Faq::class);
+        $faq->method('setUser')->willReturnSelf();
+        $faq->method('setGroups')->willReturnSelf();
+        $faq->method('isFaqAccessibleForUser')->willReturn(true);
+
+        $comment = new Comment()
+            ->setId(9001)
+            ->setRecordId(28)
+            ->setType('faq')
+            ->setUsername('Commenter One')
+            ->setEmail('commenter-sentinel@example.org')
+            ->setComment('A comment')
+            ->setDate('2026-11-17T20:00:00+01:00');
+
+        $comments = $this->createStub(Comments::class);
+        $comments->method('getCommentsDataPaginated')->willReturn([$comment]);
+        $comments->method('countComments')->willReturn(1);
+
+        $controller = new CommentController($comments);
+
+        $realContainer = new ReflectionProperty(AbstractController::class, 'container')->getValue($controller);
+        $this->assertInstanceOf(ContainerInterface::class, $realContainer);
+
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('get')->willReturnCallback(static fn(string $id): mixed => $id === 'phpmyfaq.faq'
+            ? $faq
+            : $realContainer->get($id));
+        $container->method('has')->willReturnCallback(static fn(string $id): bool => $realContainer->has($id));
+        $controller->setContainer($container);
+
+        $response = $controller->list($request);
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertStringNotContainsString('commenter-sentinel@example.org', (string) $response->getContent());
+
+        $data = json_decode((string) $response->getContent(), true);
+        $this->assertSame('Commenter One', $data['data'][0]['username']);
+        $this->assertArrayNotHasKey('email', $data['data'][0]);
     }
 
     /**
