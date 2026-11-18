@@ -133,6 +133,7 @@ in the admin panel" are set automatically or can only be changed directly in the
 | `security.enableWebAuthnSupport`            | Activate WebAuthn support | `false` | Enables passwordless authentication via WebAuthn (hardware security keys, biometrics). |
 | `security.enableAdminSessionTimeoutCounter` | Activate admin session timeout counter | `true` | Displays a countdown timer in the admin panel showing the remaining session time before automatic logout. |
 | `security.salt`                             | *(none)* | *(auto-generated)* | Random salt generated during installation, used for password hashing and signed tokens. Not shown in the admin panel. **Warning:** Do not change it, otherwise existing passwords stop working. |
+| `security.webAuthnDecoySecret`              | *(none)* | *(auto-generated)* | Random secret that keys the placeholder passkey ID returned for logins without a passkey, so the WebAuthn login cannot be used to find out which accounts have one. Not shown in the admin panel. |
 
 ### 8.2.2 Spam protection settings
 

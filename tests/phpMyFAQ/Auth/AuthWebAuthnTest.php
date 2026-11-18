@@ -295,6 +295,80 @@ class AuthWebAuthnTest extends TestCase
     }
 
     /**
+     * Regression test for account enumeration: the decoy credential used to be keyed with
+     * security.salt and the relying party ID. Both are public or derivable (older installers set
+     * the salt to md5 of the public reference URL), so anyone could compute the decoy offline and
+     * tell it apart from a real credential ID.
+     */
+    public function testDecoyCredentialCannotBeComputedFromSaltAndAppId(): void
+    {
+        $noKeys = '';
+        $salt = (string) $this->configuration->get('security.salt');
+
+        $decoy = $this->authWebAuthn->prepareForLogin($noKeys, 'alice')->allowCredentials[0]->id;
+
+        foreach ([$salt . 'example.com', $salt, ''] as $guessableKey) {
+            $guess = array_values(unpack('C*', hash_hmac('sha256', 'alice', $guessableKey, binary: true)));
+            $this->assertNotSame($guess, $decoy);
+        }
+    }
+
+    public function testDecoyCredentialStaysStableAcrossInstances(): void
+    {
+        $noKeys = '';
+        $first = $this->authWebAuthn->prepareForLogin($noKeys, 'alice');
+
+        $otherRequest = new AuthWebAuthn(new Configuration($this->configuration->getDb()));
+        $otherRequest->setAppId('example.com');
+        $second = $otherRequest->prepareForLogin($noKeys, 'alice');
+
+        $this->assertSame($first->allowCredentials[0]->id, $second->allowCredentials[0]->id);
+    }
+
+    public function testDecoyCredentialDiffersBetweenInstallations(): void
+    {
+        $noKeys = '';
+        $first = $this->authWebAuthn->prepareForLogin($noKeys, 'alice');
+
+        $otherInstallation = new AuthWebAuthn($this->createConfigurationWithoutDecoySecret());
+        $otherInstallation->setAppId('example.com');
+        $second = $otherInstallation->prepareForLogin($noKeys, 'alice');
+
+        $this->assertNotSame($first->allowCredentials[0]->id, $second->allowCredentials[0]->id);
+    }
+
+    /**
+     * Installations upgraded from a release without security.webAuthnDecoySecret have no secret
+     * yet. The first request creates one, and every later request has to reuse it.
+     */
+    public function testDecoySecretIsCreatedOnceForUpgradedInstallations(): void
+    {
+        $noKeys = '';
+        $configuration = $this->createConfigurationWithoutDecoySecret();
+
+        $firstRequest = new AuthWebAuthn($configuration);
+        $firstRequest->setAppId('example.com');
+        $first = $firstRequest->prepareForLogin($noKeys, 'alice');
+
+        $secret = new Configuration($configuration->getDb())->get('security.webAuthnDecoySecret');
+        $this->assertMatchesRegularExpression('/^[0-9a-f]{64}$/', (string) $secret);
+
+        $laterRequest = new AuthWebAuthn(new Configuration($configuration->getDb()));
+        $laterRequest->setAppId('example.com');
+        $second = $laterRequest->prepareForLogin($noKeys, 'alice');
+
+        $this->assertSame($first->allowCredentials[0]->id, $second->allowCredentials[0]->id);
+    }
+
+    private function createConfigurationWithoutDecoySecret(): Configuration
+    {
+        $dbHandle = $this->connectToTestDatabaseCopy(new PdoSqlite());
+        new Configuration($dbHandle)->delete('security.webAuthnDecoySecret');
+
+        return new Configuration($dbHandle);
+    }
+
+    /**
      * Regression test for account enumeration: the decoy credential returned for a login without
      * stored keys used to be md5(time()), so it changed every second while a real credential ID
      * stayed the same. It must be stable per login and differ between logins.

@@ -39,6 +39,8 @@ class AuthWebAuthn extends Auth
 
     private const int RS256 = -257;
 
+    private const string DECOY_SECRET_KEY = 'security.webAuthnDecoySecret';
+
     public function __construct(Configuration $configuration)
     {
         parent::__construct($configuration);
@@ -343,8 +345,8 @@ class AuthWebAuthn extends Auth
         if ($userWebAuthn === '' || $userWebAuthn === '0') {
             // Decoy credential for accounts without a passkey and for unknown logins. It has to be
             // stable across requests like a real credential ID, otherwise comparing two responses
-            // tells an unauthenticated caller whether the login exists. It is keyed with the
-            // server salt so it cannot be precomputed and told apart from a real ID.
+            // tells an unauthenticated caller whether the login exists. It is keyed with a random
+            // per-installation secret so it cannot be precomputed and told apart from a real ID.
             $allow->id = $this->stringToArray($this->decoyCredentialId($login));
             $allows[] = clone $allow;
         }
@@ -501,9 +503,32 @@ class AuthWebAuthn extends Auth
      */
     private function decoyCredentialId(string $login): string
     {
-        $salt = (string) $this->configuration->get('security.salt');
+        return hash_hmac(algo: 'sha256', data: $login, key: $this->decoySecret(), binary: true);
+    }
 
-        return hash_hmac(algo: 'sha256', data: $login, key: $salt . $this->appId, binary: true);
+    /**
+     * Random per-installation key for the decoy credential IDs, created on first use.
+     *
+     * security.salt must not be used here: installations set up before 4.2 carry
+     * md5(main.referenceURL) as salt, which anyone can compute from the public URL, and with it
+     * the decoy for any login. The salt cannot be rotated either, stored password hashes depend on it.
+     *
+     * @throws RandomException
+     */
+    private function decoySecret(): string
+    {
+        $secret = (string) $this->configuration->get(self::DECOY_SECRET_KEY);
+        if ($secret !== '') {
+            return $secret;
+        }
+
+        // A concurrent request may have stored its secret first; reading the stored value back
+        // instead of using the generated one keeps the decoy identical across both requests.
+        $generated = bin2hex(random_bytes(32));
+        $this->configuration->add(self::DECOY_SECRET_KEY, $generated);
+        $stored = (string) $this->configuration->get(self::DECOY_SECRET_KEY);
+
+        return $stored !== '' ? $stored : $generated;
     }
 
     /**

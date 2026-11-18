@@ -350,6 +350,7 @@ class DefaultDataSeeder
         $config['main.currentVersion'] = System::getVersion();
         $config['main.currentApiVersion'] = System::getApiVersion();
         $config['main.phpMyFAQToken'] = bin2hex(random_bytes(16));
+        $config['security.webAuthnDecoySecret'] = bin2hex(random_bytes(32));
         $config['spam.enableCaptchaCode'] = extension_loaded('gd') ? 'true' : 'false';
         $config['upgrade.releaseEnvironment'] = System::isDevelopmentVersion()
             ? ReleaseType::DEVELOPMENT->value

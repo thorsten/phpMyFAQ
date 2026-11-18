@@ -104,7 +104,7 @@ class MigrationRegistryTest extends TestCase
         $latestVersion = $this->registry->getLatestVersion();
 
         $this->assertNotNull($latestVersion);
-        $this->assertEquals('4.2.0-RC.2', $latestVersion);
+        $this->assertEquals('4.2.0-RC.3', $latestVersion);
     }
 
     public function testGetPendingMigrationsFromOldVersion(): void
@@ -117,7 +117,7 @@ class MigrationRegistryTest extends TestCase
 
     public function testGetPendingMigrationsFromCurrentVersion(): void
     {
-        $pending = $this->registry->getPendingMigrations('4.2.0-RC.2');
+        $pending = $this->registry->getPendingMigrations('4.2.0-RC.3');
 
         $this->assertEmpty($pending);
     }
@@ -135,6 +135,7 @@ class MigrationRegistryTest extends TestCase
         $this->assertArrayHasKey('4.2.0-beta.3', $pending);
         $this->assertArrayHasKey('4.2.0-RC.1', $pending);
         $this->assertArrayHasKey('4.2.0-RC.2', $pending);
+        $this->assertArrayHasKey('4.2.0-RC.3', $pending);
 
         // Should not include versions before or equal to 4.0.0
         $this->assertArrayNotHasKey('3.2.0-alpha', $pending);
@@ -187,7 +188,7 @@ class MigrationRegistryTest extends TestCase
         $this->assertArrayNotHasKey('9.0.0', $migrations);
         $this->assertArrayNotHasKey('9.0.1', $migrations);
         $this->assertNull($this->registry->getMigration('9.0.1'));
-        $this->assertEquals('4.2.0-RC.2', $this->registry->getLatestVersion());
+        $this->assertEquals('4.2.0-RC.3', $this->registry->getLatestVersion());
     }
 
     public function testRegisterClearsMigrationsCache(): void
