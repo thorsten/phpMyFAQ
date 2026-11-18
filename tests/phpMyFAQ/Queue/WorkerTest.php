@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Queue;
 
 use DateTimeImmutable;
+use InvalidArgumentException;
 use phpMyFAQ\Core\Json;
 use phpMyFAQ\Queue\Message\SendMailMessage;
 use phpMyFAQ\Queue\Transport\DatabaseTransport;
@@ -153,6 +154,85 @@ class WorkerTest extends TestCase
         });
 
         $this->assertTrue($worker->runOnce());
+    }
+
+    public function testRunOnceLogsHandlerExceptionWithMessageClassAndJobId(): void
+    {
+        $logFile = (string) tempnam(sys_get_temp_dir(), 'pmf-worker-log-');
+        $previousErrorLog = ini_set('error_log', $logFile);
+
+        $transport = $this->createStub(DatabaseTransport::class);
+        $transport
+            ->method('reserve')
+            ->willReturn([
+                'id' => 14,
+                'queue' => 'default',
+                'body' => json_encode([
+                    'class' => SendMailMessage::class,
+                    'payload' => [
+                        'recipient' => 'user@example.org',
+                        'subject' => 'Hello',
+                        'body' => 'World',
+                    ],
+                ], JSON_THROW_ON_ERROR),
+                'headers' => ['attempts' => 2],
+            ]);
+
+        $worker = new Worker($transport);
+        $worker->registerHandler(SendMailMessage::class, static function (): void {
+            throw new RuntimeException('SMTP server refused the mail');
+        });
+
+        try {
+            $worker->runOnce();
+            $log = (string) file_get_contents($logFile);
+
+            $this->assertStringContainsString('Queue job 14 (' . SendMailMessage::class . ')', $log);
+            $this->assertStringContainsString('attempt 3 of 3, job discarded', $log);
+            $this->assertStringContainsString('RuntimeException: SMTP server refused the mail', $log);
+        } finally {
+            if ($previousErrorLog !== false) {
+                ini_set('error_log', $previousErrorLog);
+            }
+
+            if (file_exists($logFile)) {
+                unlink($logFile);
+            }
+        }
+    }
+
+    public function testRunStillProcessesJobsWhenReleasingStaleReservationsFails(): void
+    {
+        $logFile = (string) tempnam(sys_get_temp_dir(), 'pmf-worker-log-');
+        $previousErrorLog = ini_set('error_log', $logFile);
+
+        $transport = $this->createStub(DatabaseTransport::class);
+        $transport->method('findStaleReservations')->willThrowException(new RuntimeException('DB connection lost'));
+        $transport->method('reserve')->willReturn(null);
+
+        try {
+            $this->assertSame(0, new Worker($transport)->run());
+            $this->assertStringContainsString(
+                'while releasing stale reservations: DB connection lost',
+                (string) file_get_contents($logFile),
+            );
+        } finally {
+            if ($previousErrorLog !== false) {
+                ini_set('error_log', $previousErrorLog);
+            }
+
+            if (file_exists($logFile)) {
+                unlink($logFile);
+            }
+        }
+    }
+
+    public function testReservationTimeoutMustBePositive(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('at least 1 second, got 0');
+
+        new Worker($this->createStub(DatabaseTransport::class), reservationTimeout: 0);
     }
 
     public function testRunContinuesAfterReserveThrows(): void

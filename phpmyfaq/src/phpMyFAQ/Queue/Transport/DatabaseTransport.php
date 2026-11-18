@@ -93,16 +93,19 @@ readonly class DatabaseTransport
         }
 
         while (true) {
+            // The drivers disagree on the end of a result: null, false or an empty array.
             $row = $db->fetchArray($result);
-            if (!is_array($row)) {
+            if (!is_array($row) || $row === []) {
                 break;
             }
 
             $jobId = (int) $row['id'];
+            // The reservation time comes from the same clock as available_at and as the cutoff in
+            // findStaleReservations(); the database clock may run in another time zone.
             $markDelivered = sprintf(
-                'UPDATE %s SET delivered_at = %s WHERE id = %d AND delivered_at IS NULL',
+                "UPDATE %s SET delivered_at = '%s' WHERE id = %d AND delivered_at IS NULL",
                 $table,
-                $db->now(),
+                $nowValue,
                 $jobId,
             );
 
@@ -161,6 +164,69 @@ readonly class DatabaseTransport
         }
 
         return $db->query($query) !== false;
+    }
+
+    /**
+     * Returns the jobs reserved before the given time that were neither acknowledged nor released,
+     * because the worker that reserved them ended while handling them.
+     *
+     * @return list<array{id: int, queue: string, body: string, headers: array<string, mixed>}>
+     */
+    public function findStaleReservations(DateTimeImmutable $reservedBefore): array
+    {
+        $db = $this->configuration->getDb();
+
+        $query = sprintf(
+            "SELECT id, queue, body, headers FROM %s WHERE delivered_at IS NOT NULL AND delivered_at < '%s' ORDER BY id ASC",
+            Database::getTablePrefix() . 'faqjobs',
+            $db->escape($reservedBefore->format('Y-m-d H:i:s')),
+        );
+
+        $result = $db->query($query);
+        if ($result === false) {
+            throw new RuntimeException('Unable to fetch stale job reservations: ' . $db->error());
+        }
+
+        $jobs = [];
+        while (true) {
+            // The drivers disagree on the end of a result: null, false or an empty array.
+            $row = $db->fetchArray($result);
+            if (!is_array($row) || $row === []) {
+                break;
+            }
+
+            $jobs[] = [
+                'id' => (int) $row['id'],
+                'queue' => (string) $row['queue'],
+                'body' => (string) $row['body'],
+                'headers' => $this->decodeHeaders((string) ($row['headers'] ?? '')),
+            ];
+        }
+
+        return $jobs;
+    }
+
+    /**
+     * Makes a stale reservation available again. The update only applies while the reservation is
+     * still older than the given time, so a job another worker has reserved again in the meantime
+     * is left alone.
+     *
+     * @param array<string, mixed> $headers
+     */
+    public function releaseStaleReservation(int $jobId, DateTimeImmutable $reservedBefore, array $headers): bool
+    {
+        $db = $this->configuration->getDb();
+
+        $query = sprintf(
+            "UPDATE %s SET delivered_at = NULL, available_at = '%s', headers = '%s' WHERE id = %d AND delivered_at < '%s'",
+            Database::getTablePrefix() . 'faqjobs',
+            $db->escape(new DateTimeImmutable()->format('Y-m-d H:i:s')),
+            $db->escape(json_encode($headers, JSON_THROW_ON_ERROR)),
+            $jobId,
+            $db->escape($reservedBefore->format('Y-m-d H:i:s')),
+        );
+
+        return $db->query($query) !== false && $db->affectedRows() === 1;
     }
 
     /**

@@ -976,6 +976,11 @@ php bin/worker.php 0 mail
 
 The worker processes the jobs of all queues unless you pass a queue name as the second argument.
 
+A job that fails is retried, up to three attempts in total, and is then discarded. Every failed attempt is written to
+the PHP error log with the job ID and the message class. If the worker process ends while it handles a job, e.g.,
+because of the memory limit or a stopped container, the job is picked up again by a later worker run 15 minutes after
+it was started, and the interrupted run counts as one of the three attempts.
+
 The task scheduler runs maintenance tasks such as the cleanup of old sessions, the search index optimization, the
 aggregation of statistics, and a data backup:
 
