@@ -44,9 +44,9 @@ class Worker
     }
 
     /**
-     * Runs one available job.
+     * Runs one available job, from the given queue or from any queue if none is given.
      */
-    public function runOnce(string $queue = 'default'): bool
+    public function runOnce(?string $queue = null): bool
     {
         $job = $this->databaseTransport->reserve($queue);
         if ($job === null) {
@@ -83,9 +83,10 @@ class Worker
     }
 
     /**
-     * Runs until the queue is empty or the maximum number of jobs has been processed.
+     * Runs until no job is left or the maximum number of jobs has been processed.
+     * Processes every queue unless a queue name is given.
      */
-    public function run(int $maxJobs = 0, string $queue = 'default'): int
+    public function run(int $maxJobs = 0, ?string $queue = null): int
     {
         $processed = 0;
 
@@ -98,8 +99,8 @@ class Worker
                 ++$processed;
             } catch (Throwable $exception) {
                 error_log(sprintf(
-                    'Queue worker error in run() while processing queue "%s": %s in %s:%d',
-                    $queue,
+                    'Queue worker error in run() while processing %s: %s in %s:%d',
+                    $queue === null ? 'all queues' : sprintf('queue "%s"', $queue),
                     $exception->getMessage(),
                     $exception->getFile(),
                     $exception->getLine(),

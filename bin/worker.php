@@ -25,7 +25,10 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 require __DIR__ . '/../phpmyfaq/src/Bootstrap.php';
 require __DIR__ . '/../phpmyfaq/src/autoload.php';
 
+// Usage: php bin/worker.php [maxJobs] [queue]
+// maxJobs 0 (default) processes all due jobs; without a queue name, every queue is processed.
 $maxJobs = isset($argv[1]) ? max(0, (int) $argv[1]) : 0;
+$queue = isset($argv[2]) && $argv[2] !== '' ? $argv[2] : null;
 
 $container = new ContainerBuilder();
 $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
@@ -33,7 +36,7 @@ $loader->load('../phpmyfaq/src/services.php');
 $container->compile();
 
 $worker = $container->get('phpmyfaq.queue.worker');
-$processed = $worker->run($maxJobs);
+$processed = $worker->run($maxJobs, $queue);
 
 echo sprintf("Processed %d job(s).\n", $processed);
 

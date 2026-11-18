@@ -68,20 +68,22 @@ readonly class DatabaseTransport
     }
 
     /**
+     * Reserves the next due job, from the given queue or from any queue if none is given.
+     *
      * @return array{id: int, queue: string, body: string, headers: array<string, mixed>}|null
      */
-    public function reserve(string $queue = 'default'): ?array
+    public function reserve(?string $queue = null): ?array
     {
         $db = $this->configuration->getDb();
         $table = Database::getTablePrefix() . 'faqjobs';
-        $escapedQueue = $db->escape($queue);
+        $queueFilter = $queue === null ? '' : sprintf("queue = '%s' AND ", $db->escape($queue));
 
         $nowValue = $db->escape(new DateTimeImmutable()->format('Y-m-d H:i:s'));
 
         $query = sprintf(
-            "SELECT id, queue, body, headers FROM %s WHERE queue = '%s' AND delivered_at IS NULL AND available_at <= '%s' ORDER BY available_at ASC, id ASC",
+            "SELECT id, queue, body, headers FROM %s WHERE %sdelivered_at IS NULL AND available_at <= '%s' ORDER BY available_at ASC, id ASC",
             $table,
-            $escapedQueue,
+            $queueFilter,
             $nowValue,
         );
 

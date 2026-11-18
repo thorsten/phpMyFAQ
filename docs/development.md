@@ -335,6 +335,13 @@ Optionally limit processing to a fixed number of jobs:
 php bin/worker.php 10
 ```
 
+The worker processes all queues by default. Pass a queue name as the second argument to restrict it, e.g., to the
+`mail` queue used for email delivery (`0` means no job limit):
+
+```bash
+php bin/worker.php 0 mail
+```
+
 Recurring maintenance tasks (session cleanup, search index optimization, statistics aggregation, and backups) run
 via the task scheduler:
 

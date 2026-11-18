@@ -229,4 +229,45 @@ class WorkerTest extends TestCase
 
         $this->assertTrue($worker->runOnce());
     }
+
+    public function testRunProcessesJobsFromEveryQueueByDefault(): void
+    {
+        $transport = $this->createMock(DatabaseTransport::class);
+        $transport
+            ->expects($this->exactly(2))
+            ->method('reserve')
+            ->with(null)
+            ->willReturnOnConsecutiveCalls(
+                [
+                    'id' => 30,
+                    'queue' => 'mail',
+                    'body' => json_encode([
+                        'class' => SendMailMessage::class,
+                        'payload' => [
+                            'recipient' => 'user@example.org',
+                            'subject' => 'Hello',
+                            'body' => 'World',
+                        ],
+                    ], JSON_THROW_ON_ERROR),
+                    'headers' => [],
+                ],
+                null,
+            );
+        $transport->expects($this->once())->method('acknowledge')->with(30)->willReturn(true);
+
+        $worker = new Worker($transport);
+        $worker->registerHandler(SendMailMessage::class, static function (): void {});
+
+        $this->assertSame(1, $worker->run());
+    }
+
+    public function testRunRestrictsProcessingToTheGivenQueue(): void
+    {
+        $transport = $this->createMock(DatabaseTransport::class);
+        $transport->expects($this->once())->method('reserve')->with('mail')->willReturn(null);
+
+        $worker = new Worker($transport);
+
+        $this->assertSame(0, $worker->run(0, 'mail'));
+    }
 }

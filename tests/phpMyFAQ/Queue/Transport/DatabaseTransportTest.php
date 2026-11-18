@@ -295,4 +295,61 @@ class DatabaseTransportTest extends TestCase
 
         $this->assertTrue($transport->release(13, new DateTimeImmutable('2026-03-09 12:00:00'), ['attempts' => 2]));
     }
+
+    public function testReserveWithoutQueueSelectsJobsFromEveryQueue(): void
+    {
+        Database::setTablePrefix('pmf_');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('now')->willReturn('CURRENT_TIMESTAMP');
+        $db
+            ->method('query')
+            ->willReturnCallback(function (string $query): mixed {
+                if (str_starts_with($query, 'SELECT')) {
+                    $this->assertStringNotContainsString('queue =', $query);
+                }
+
+                return true;
+            });
+        $db->method('affectedRows')->willReturn(1);
+        $db->method('fetchArray')->willReturnOnConsecutiveCalls([
+            'id' => 8,
+            'queue' => 'mail',
+            'body' => 'body-8',
+            'headers' => '',
+        ], false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $transport = new DatabaseTransport($configuration);
+        $job = $transport->reserve();
+
+        $this->assertNotNull($job);
+        $this->assertSame(8, $job['id']);
+        $this->assertSame('mail', $job['queue']);
+    }
+
+    public function testReserveWithQueueSelectsOnlyJobsFromThatQueue(): void
+    {
+        Database::setTablePrefix('pmf_');
+
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('now')->willReturn('CURRENT_TIMESTAMP');
+        $db
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->stringContains("queue = 'mail'"))
+            ->willReturn('result-set');
+        $db->method('fetchArray')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $transport = new DatabaseTransport($configuration);
+
+        $this->assertNull($transport->reserve('mail'));
+    }
 }

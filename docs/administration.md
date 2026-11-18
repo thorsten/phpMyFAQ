@@ -969,7 +969,12 @@ php bin/worker.php
 
 # Process at most 10 jobs
 php bin/worker.php 10
+
+# Process only the jobs of one queue, e.g., queued emails (0 = no job limit)
+php bin/worker.php 0 mail
 ```
+
+The worker processes the jobs of all queues unless you pass a queue name as the second argument.
 
 The task scheduler runs maintenance tasks such as the cleanup of old sessions, the search index optimization, the
 aggregation of statistics, and a data backup:
