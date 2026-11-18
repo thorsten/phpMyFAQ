@@ -49,7 +49,7 @@ class System
     /**
      * Patch level.
      */
-    private const int VERSION_PATCH_LEVEL = 12;
+    private const int VERSION_PATCH_LEVEL = 13;
 
     /**
      * Pre-release version.
