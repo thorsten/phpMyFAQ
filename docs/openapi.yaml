@@ -254,7 +254,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: "\n        [\n            {\n                \"id\": 2,\n                \"recordId\": 142,\n                \"categoryId\": null,\n                \"type\": \"faq\",\n                \"username\": \"phpMyFAQ User\",\n                \"email\": \"user@example.org\",\n                \"comment\": \"Foo! Bar?\",\n                \"date\": \"2019-12-24T12:24:57+0100\",\n                \"helped\": null\n            }\n        ]"
+              example: "\n        [\n            {\n                \"id\": 2,\n                \"recordId\": 142,\n                \"categoryId\": null,\n                \"type\": \"faq\",\n                \"username\": \"phpMyFAQ User\",\n                \"comment\": \"Foo! Bar?\",\n                \"date\": \"2019-12-24T12:24:57+0100\",\n                \"helped\": null\n            }\n        ]"
         '404':
           description: 'If the FAQ has no comments.'
           headers:

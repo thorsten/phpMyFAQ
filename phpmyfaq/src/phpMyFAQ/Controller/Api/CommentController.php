@@ -23,6 +23,7 @@ use Exception;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\User\CurrentUser;
@@ -72,7 +73,6 @@ final class CommentController extends AbstractController
                 "categoryId": null,
                 "type": "faq",
                 "username": "phpMyFAQ User",
-                "email": "user@example.org",
                 "comment": "Foo! Bar?",
                 "date": "2019-12-24T12:24:57+0100",
                 "helped": null
@@ -101,6 +101,22 @@ final class CommentController extends AbstractController
             return $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($result, Response::HTTP_OK);
+        return $this->json(array_map($this->sanitizePublicComment(...), $result), Response::HTTP_OK);
+    }
+
+    /**
+     * Strips the commenter's e-mail address, which must never leave the system through the public API.
+     * The HTML frontend only ever renders it obfuscated via Mail::safeEmail().
+     *
+     * @param Comment|array<string, mixed> $comment
+     * @return array<string, mixed>
+     */
+    private function sanitizePublicComment(Comment|array $comment): array
+    {
+        $record = is_array($comment) ? $comment : get_object_vars($comment);
+
+        unset($record['email']);
+
+        return $record;
     }
 }
