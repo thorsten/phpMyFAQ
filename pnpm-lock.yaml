@@ -15,8 +15,8 @@ dependencies:
     specifier: 10.1.0
     version: 10.1.0
   bootstrap:
-    specifier: 5.3.8
-    version: 5.3.8(@popperjs/core@2.11.8)
+    specifier: 5.3.9
+    version: 5.3.9(@popperjs/core@2.11.8)
   bootstrap-icons:
     specifier: 1.13.2
     version: 1.13.2
@@ -1814,8 +1814,8 @@ packages:
     resolution: {integrity: sha512-fAU1Ly3dH7hwRg+CB8EZ0Vl0fF80zgXHeUVJyfUOKzoURr+TbwISbCW5tKUoQLERaWYG2emTCybcPbD96hdD1A==}
     dev: false
 
-  /bootstrap@5.3.8(@popperjs/core@2.11.8):
-    resolution: {integrity: sha512-HP1SZDqaLDPwsNiqRqi5NcP0SSXciX2s9E+RyqJIIqGo+vJeN5AJVM98CXmW/Wux0nQ5L7jeWUdplCEf0Ee+tg==}
+  /bootstrap@5.3.9(@popperjs/core@2.11.8):
+    resolution: {integrity: sha512-20cU0rcfw8WdxtVbmfU+xT2EjvVTw9Ror/h1Qvd7DXCujRg8OO9mdBCsmTHdJFf3BuadmBNJtgIuUXsBqSkk/w==}
     peerDependencies:
       '@popperjs/core': ^2.11.8
     dependencies:
