@@ -363,11 +363,9 @@ final class CategoryController extends AbstractApiController
 
         // A category-restricted "add category" right only covers children of the allowed
         // categories; root categories (parent 0) stay reserved for unrestricted holders.
-        $this->userHasPermissionForCategories(PermissionType::CATEGORY_ADD, [$parentId]);
-
-        // The new category is stored in the language taken from the request body, so a
-        // language-restricted CATEGORY_ADD right must cover it.
-        $this->userHasPermissionForLanguage(PermissionType::CATEGORY_ADD, $languageCode);
+        // The new category is stored in the language taken from the request body, so the same
+        // grant that covers the parent must cover that language.
+        $this->userHasPermissionForCategoriesInLanguage(PermissionType::CATEGORY_ADD, [$parentId], $languageCode);
 
         $categoryEntity = new CategoryEntity();
         $categoryEntity

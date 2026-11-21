@@ -133,11 +133,9 @@ final class FaqController extends AbstractAdministrationApiController
             ? array_map(static fn(mixed $categoryId): int => (int) $categoryId, $rawCategories)
             : [(int) Filter::filterVar($rawCategories, FILTER_VALIDATE_INT)];
 
-        $this->userHasPermissionForCategories(PermissionType::FAQ_ADD, $categories);
-
         $language = Filter::filterVar($data->lang ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        $this->userHasPermissionForLanguage(PermissionType::FAQ_ADD, $language);
+        $this->userHasPermissionForCategoriesInLanguage(PermissionType::FAQ_ADD, $categories, $language);
 
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
@@ -442,14 +440,16 @@ final class FaqController extends AbstractAdministrationApiController
         $existingLanguages = $faqId > 0 ? $this->configuration->getLanguage()->isLanguageAvailable($faqId) : [];
         $currentCategoryIds = $existingLanguages === [] ? [] : $categoryRelation->getCategoryIdsForAllLanguages($faqId);
         if ($existingLanguages !== []) {
-            $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, $currentCategoryIds);
             foreach (array_unique($existingLanguages) as $existingLanguage) {
-                $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $existingLanguage);
+                $this->userHasPermissionForCategoriesInLanguage(
+                    PermissionType::FAQ_EDIT,
+                    $currentCategoryIds,
+                    $existingLanguage,
+                );
             }
         }
 
-        $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, $categories);
-        $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $faqLang);
+        $this->userHasPermissionForCategoriesInLanguage(PermissionType::FAQ_EDIT, $categories, $faqLang);
 
         // The solution id is the document id in Elasticsearch/OpenSearch. It is resolved from
         // the stored row, never taken from the request: a client-supplied value would let an
@@ -683,8 +683,7 @@ final class FaqController extends AbstractAdministrationApiController
         $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
         $language = Filter::filterVar($request->attributes->get(key: 'language'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, [$categoryId]);
-        $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $language);
+        $this->userHasPermissionForCategoriesInLanguage(PermissionType::FAQ_EDIT, [$categoryId], $language);
 
         $statusFilter = FaqStatus::tryFrom((string) $request->query->get(key: 'status'));
         $onlyNew = Filter::filterVar($request->query->get(key: 'only-new'), FILTER_VALIDATE_BOOLEAN, default: false);
@@ -696,17 +695,10 @@ final class FaqController extends AbstractAdministrationApiController
 
         return $this->json([
             'faqs' => $this->withPublishCapability($faqs, $language),
-            'isAllowedToTranslate' =>
-                $this->currentUser->perm->hasPermissionForCategory(
-                    $this->currentUser->getUserId(),
-                    PermissionType::FAQ_TRANSLATE->value,
-                    $categoryId,
-                )
-                    && $this->currentUser->perm->hasPermissionForLanguage(
-                        $this->currentUser->getUserId(),
-                        PermissionType::FAQ_TRANSLATE->value,
-                        $language,
-                    ),
+            'isAllowedToTranslate' => $this->currentUser
+                ->perm
+                ->getScopeForRight($this->currentUser->getUserId(), PermissionType::FAQ_TRANSLATE->value)
+                ->allowsCategory($categoryId, $language),
         ], Response::HTTP_OK);
     }
 
@@ -757,9 +749,8 @@ final class FaqController extends AbstractAdministrationApiController
                     ? PermissionType::FAQ_PUBLISH
                     : PermissionType::FAQ_EDIT;
 
-                $this->userHasPermissionForLanguage($permission, $faqLanguage);
                 $faqCategoryIds = array_keys($categoryRelation->getCategories($faqId, $faqLanguage));
-                $this->userHasPermissionForCategories($permission, $faqCategoryIds);
+                $this->userHasPermissionForCategoriesInLanguage($permission, $faqCategoryIds, $faqLanguage);
 
                 $categoryIdsByFaq[$faqId] = $faqCategoryIds;
             }
@@ -907,9 +898,10 @@ final class FaqController extends AbstractAdministrationApiController
             $stickyCategory = new Category($this->configuration, [], withPermission: false);
             $stickyCategoryRelation = new Relation($this->configuration, $stickyCategory);
             foreach ($faqIds as $faqId) {
-                $this->userHasPermissionForCategories(
+                $this->userHasPermissionForCategoriesInLanguage(
                     PermissionType::FAQ_EDIT,
                     array_keys($stickyCategoryRelation->getCategories($faqId, $faqLanguage)),
+                    $faqLanguage,
                 );
             }
 
@@ -972,9 +964,10 @@ final class FaqController extends AbstractAdministrationApiController
 
         $deleteCategory = new Category($this->configuration, [], withPermission: false);
         $deleteCategoryRelation = new Relation($this->configuration, $deleteCategory);
-        $this->userHasPermissionForCategories(
+        $this->userHasPermissionForCategoriesInLanguage(
             PermissionType::FAQ_DELETE,
             array_keys($deleteCategoryRelation->getCategories($faqId, $faqLanguage)),
+            $faqLanguage,
         );
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_DELETE->value . ':' . $faqId);
@@ -1170,6 +1163,7 @@ final class FaqController extends AbstractAdministrationApiController
     {
         $currentUser = $this->currentUser;
         $userId = $currentUser->getUserId();
+        $addScope = $currentUser->perm->getScopeForRight($userId, PermissionType::FAQ_ADD->value);
         $messages = [];
         $rowNumber = 0;
 
@@ -1179,22 +1173,24 @@ final class FaqController extends AbstractAdministrationApiController
             $categoryId = (int) Filter::filterVar($record[0] ?? null, FILTER_VALIDATE_INT, default: 0);
             $language = Filter::filterVar($record[4] ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-            if (!$currentUser->perm->hasPermissionForCategory($userId, PermissionType::FAQ_ADD->value, $categoryId)) {
-                $messages[] = sprintf(
-                    Translation::getString(key: 'msgImportRowNoCategoryPermission'),
-                    $rowNumber,
-                    PermissionType::FAQ_ADD->name,
-                    $categoryId,
-                );
-                continue;
-            }
-
-            if (!$currentUser->perm->hasPermissionForLanguage($userId, PermissionType::FAQ_ADD->value, $language)) {
+            // The language is judged first: once it is covered at all, a denial can only come
+            // from the category not being covered in that language.
+            if (!$this->userHoldsRightInLanguage(PermissionType::FAQ_ADD, $language)) {
                 $messages[] = sprintf(
                     Translation::getString(key: 'msgImportRowNoLanguagePermission'),
                     $rowNumber,
                     PermissionType::FAQ_ADD->name,
                     $language,
+                );
+                continue;
+            }
+
+            if ($categoryId <= 0 || !$addScope->allowsCategory($categoryId, $language)) {
+                $messages[] = sprintf(
+                    Translation::getString(key: 'msgImportRowNoCategoryPermission'),
+                    $rowNumber,
+                    PermissionType::FAQ_ADD->name,
+                    $categoryId,
                 );
                 continue;
             }
@@ -1239,11 +1235,14 @@ final class FaqController extends AbstractAdministrationApiController
 
             if (
                 $currentUser->perm->hasPermission($userId, $publishRight)
-                && $currentUser->perm->hasPermissionForLanguage($userId, $publishRight, $language)
+                && $this->userHoldsRightInLanguage(PermissionType::FAQ_PUBLISH, $language)
             ) {
-                // null means unrestricted — the same contract userMayPublishIn() evaluates
-                // per category via hasPermissionForCategory().
-                $allowedCategoryIds = $currentUser->perm->getAllowedCategoriesForRight($userId, $publishRight);
+                // null means unrestricted — the same contract userMayPublishIn() evaluates.
+                // Only the categories covered in this language count.
+                $allowedCategoryIds = $currentUser
+                    ->perm
+                    ->getScopeForRight($userId, $publishRight)
+                    ->categoryIdsIn($language);
             }
         }
 

@@ -164,68 +164,6 @@ class GroupCategoryPermissionRepositoryTest extends TestCase
         $this->assertContains(30, $all[3]);
     }
 
-    public function testCheckUserGroupRightForCategoryWithNoRestrictions(): void
-    {
-        // Set up: create group, add user, grant right
-        $this->dbHandle->query(
-            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (1, 'TestGroup', 'Test', 0)",
-        );
-        $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 1)');
-        $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (1, 1)');
-
-        // No category restrictions -> should have access to any category
-        $this->assertTrue($this->repository->checkUserGroupRightForCategory(1, 1, 99));
-    }
-
-    public function testCheckUserGroupRightForCategoryWithMatchingRestriction(): void
-    {
-        $this->dbHandle->query(
-            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (1, 'TestGroup', 'Test', 0)",
-        );
-        $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 1)');
-        $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (1, 1)');
-
-        // Restrict right 1 to category 10
-        $this->repository->setCategoryRestrictions(1, 1, [10, 20]);
-
-        // Should have access to category 10
-        $this->assertTrue($this->repository->checkUserGroupRightForCategory(1, 1, 10));
-        // Should have access to category 20
-        $this->assertTrue($this->repository->checkUserGroupRightForCategory(1, 1, 20));
-        // Should NOT have access to category 30
-        $this->assertFalse($this->repository->checkUserGroupRightForCategory(1, 1, 30));
-    }
-
-    public function testCheckUserGroupRightForCategoryReturnsFalseForInvalidInput(): void
-    {
-        $this->assertFalse($this->repository->checkUserGroupRightForCategory(0, 1, 1));
-        $this->assertFalse($this->repository->checkUserGroupRightForCategory(1, 0, 1));
-        $this->assertFalse($this->repository->checkUserGroupRightForCategory(1, 1, 0));
-    }
-
-    public function testCheckUserGroupRightForCategoryWithMultipleGroups(): void
-    {
-        // Group 1: restricted to category 10
-        $this->dbHandle->query(
-            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (1, 'Group1', 'Test', 0)",
-        );
-        $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (1, 1)');
-        $this->repository->setCategoryRestrictions(1, 1, [10]);
-
-        // Group 2: unrestricted (no category restrictions)
-        $this->dbHandle->query(
-            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (2, 'Group2', 'Test', 0)",
-        );
-        $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (2, 1)');
-
-        // User in both groups
-        $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 1)');
-        $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 2)');
-
-        // User should have access to any category because Group 2 is unrestricted
-        $this->assertTrue($this->repository->checkUserGroupRightForCategory(1, 1, 99));
-    }
-
     private function initializeDatabaseStatics(Sqlite3 $dbHandle): void
     {
         $databaseReflection = new ReflectionClass(Database::class);

@@ -600,19 +600,10 @@ final class FaqController extends AbstractFrontController
             $this->category->getCategoryIdsFromFaq($faqId),
             static fn(int $id): bool => $id > 0,
         );
-        if ($categoryIds === []) {
-            if ($permission->getAllowedCategoriesForRight($userId, $right) !== null) {
-                return false;
-            }
-        }
-
-        foreach ($categoryIds as $categoryId) {
-            if (!$permission->hasPermissionForCategory($userId, $right, $categoryId)) {
-                return false;
-            }
-        }
-
-        return $permission->hasPermissionForLanguage($userId, $right, $faqLanguage);
+        return (
+            $this->userHoldsRightInLanguage(PermissionType::FAQ_EDIT, $faqLanguage)
+            && $permission->getScopeForRight($userId, $right)->allows($categoryIds, $faqLanguage)
+        );
     }
 
     /**

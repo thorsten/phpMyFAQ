@@ -15,6 +15,8 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -23,6 +25,7 @@ use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\UserData;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -1532,7 +1535,7 @@ final class UserControllerTest extends TestCase
 
         $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission->method('getAllowedLanguagesForRight')->willReturn(['de']);
+        $permission->method('getScopeForRight')->willReturn(RightScope::ofGrants(new RightGrant(languages: ['de'])));
 
         $actingUser = $this->createMock(CurrentUser::class);
         $actingUser->perm = $permission;
@@ -1570,7 +1573,7 @@ final class UserControllerTest extends TestCase
 
         $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission->method('getAllowedLanguagesForRight')->willReturn(['de']);
+        $permission->method('getScopeForRight')->willReturn(RightScope::ofGrants(new RightGrant(languages: ['de'])));
 
         $actingUser = $this->createMock(CurrentUser::class);
         $actingUser->perm = $permission;
@@ -1593,6 +1596,94 @@ final class UserControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * "German only" through one grant and "category 1 only" through another: a direct user
+     * right is never category-restricted, so neither an unrestricted list nor English (held in
+     * category 1 only) may be handed out.
+     *
+     * @param array<string> $languages
+     * @throws \Exception
+     */
+    #[DataProvider('languagesNotHeldInEveryCategoryProvider')]
+    public function testSaveUserLanguageRestrictionsRejectsLanguagesNotHeldInEveryCategory(array $languages): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        $controller = $this->buildController($session, $this->buildSeparatelyGrantedActingUser());
+        $csrf = $this->primeCsrf($session, 'update-user-language-restrictions');
+
+        $response = $controller->saveUserLanguageRestrictions($this->jsonRequest([
+            'csrfToken' => $csrf,
+            'userId' => 1,
+            'rightId' => 1,
+            'languages' => $languages,
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * @return array<string, array{array<string>}>
+     */
+    public static function languagesNotHeldInEveryCategoryProvider(): array
+    {
+        return [
+            'unrestricted' => [[]],
+            'held in one category only' => [['en']],
+            'held together with one that is not' => [['de', 'en']],
+        ];
+    }
+
+    /**
+     * The German grant is not category-restricted, so German may be handed out.
+     *
+     * @throws \Exception
+     */
+    public function testSaveUserLanguageRestrictionsAcceptsLanguageHeldInEveryCategory(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser();
+
+        $session = new Session(new MockArraySessionStorage());
+
+        $controller = $this->buildController($session, $this->buildSeparatelyGrantedActingUser());
+        $csrf = $this->primeCsrf($session, 'update-user-language-restrictions');
+
+        $response = $controller->saveUserLanguageRestrictions($this->jsonRequest([
+            'csrfToken' => $csrf,
+            'userId' => $managedUserId,
+            'rightId' => 1,
+            'languages' => ['de'],
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+    }
+
+    /**
+     * A non-SuperAdmin holding every right through two separate grants: one limited to German,
+     * one limited to category 1.
+     */
+    private function buildSeparatelyGrantedActingUser(): CurrentUser
+    {
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+        $permission
+            ->method('getScopeForRight')
+            ->willReturn(RightScope::ofGrants(new RightGrant(languages: ['de']), new RightGrant([1])));
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $permission;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        return $actingUser;
     }
 
     /**
@@ -1933,9 +2024,12 @@ final class UserControllerTest extends TestCase
         $this->grantUserRight($managedUserId, 1);
 
         $session = new Session(new MockArraySessionStorage());
-        $actingUser = $this->buildActingUserWithRights(userId: 5, heldRightIds: [1]);
+        $actingUser = $this->buildActingUserWithRights(
+            userId: 5,
+            heldRightIds: [1],
+            heldScope: RightScope::ofGrants(new RightGrant([1])),
+        );
         self::assertInstanceOf(MockObject::class, $actingUser->perm);
-        $actingUser->perm->method('getAllowedCategoriesForRight')->willReturn([1]);
         $controller = $this->buildController($session, $actingUser);
         $csrf = $this->primeCsrf($session, 'update-user-data');
 
@@ -2022,9 +2116,13 @@ final class UserControllerTest extends TestCase
      * given right IDs.
      *
      * @param array<int> $heldRightIds
+     * @param RightScope|null $heldScope the scope the given rights are held in, null for an unrestricted one
      */
-    private function buildActingUserWithRights(int $userId, array $heldRightIds): CurrentUser
-    {
+    private function buildActingUserWithRights(
+        int $userId,
+        array $heldRightIds,
+        ?RightScope $heldScope = null,
+    ): CurrentUser {
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->method('hasPermission')
@@ -2034,6 +2132,19 @@ final class UserControllerTest extends TestCase
                     && ($right === PermissionType::USER_EDIT->value || in_array($right, $heldRightIds, true))
                 ),
             );
+        $permission
+            ->method('getScopeForRight')
+            ->willReturnCallback(static function (int $actingUserId, mixed $right) use (
+                $userId,
+                $heldRightIds,
+                $heldScope,
+            ): RightScope {
+                if ($actingUserId !== $userId || !in_array($right, $heldRightIds, true)) {
+                    return RightScope::none();
+                }
+
+                return $heldScope ?? RightScope::unrestricted();
+            });
 
         $actingUser = $this->createMock(CurrentUser::class);
         $actingUser->perm = $permission;
@@ -2199,8 +2310,7 @@ final class UserControllerTest extends TestCase
 
         $perm = $this->createMock(PermissionInterface::class);
         $perm->method('hasPermission')->willReturn(true);
-        $perm->method('getAllowedLanguagesForRight')->willReturn(null);
-        $perm->method('getAllowedCategoriesForRight')->willReturn([5]);
+        $perm->method('getScopeForRight')->willReturn(RightScope::ofGrants(new RightGrant([5])));
         $perm->expects($this->never())->method('refuseAllUserRights');
         $perm->expects($this->never())->method('grantUserRight');
 
@@ -2236,8 +2346,8 @@ final class UserControllerTest extends TestCase
         $userEdit = $this->rightId(PermissionType::USER_EDIT);
 
         $permission = new BasicPermission($this->configuration);
-        self::assertTrue($permission->hasPermissionForLanguage(1, $faqAdd, 'en'));
-        self::assertFalse($permission->hasPermissionForLanguage(1, $faqAdd, 'de'));
+        self::assertTrue($permission->getScopeForRight(1, $faqAdd)->allowsLanguageInAnyCategory('en'));
+        self::assertFalse($permission->getScopeForRight(1, $faqAdd)->allowsLanguageInAnyCategory('de'));
 
         $session = new Session(new MockArraySessionStorage());
         $controller = $this->buildController($session, $this->buildScopedActingUser($permission));
@@ -2250,9 +2360,9 @@ final class UserControllerTest extends TestCase
         ]));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertTrue($permission->hasPermissionForLanguage(1, $faqAdd, 'en'));
-        self::assertFalse($permission->hasPermissionForLanguage(1, $faqAdd, 'de'));
-        self::assertSame(['en'], $permission->getAllowedLanguagesForRight(1, $faqAdd));
+        self::assertTrue($permission->getScopeForRight(1, $faqAdd)->allowsLanguageInAnyCategory('en'));
+        self::assertFalse($permission->getScopeForRight(1, $faqAdd)->allowsLanguageInAnyCategory('de'));
+        self::assertSame(['en'], $permission->getScopeForRight(1, $faqAdd)->languagesInAnyCategory());
     }
 
     /**
@@ -2299,8 +2409,8 @@ final class UserControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         $permission = new BasicPermission($this->configuration);
-        self::assertSame(['de'], $permission->getAllowedLanguagesForRight($managedUserId, $faqAdd));
-        self::assertFalse($permission->hasPermissionForLanguage($managedUserId, $faqAdd, 'en'));
+        self::assertSame(['de'], $permission->getScopeForRight($managedUserId, $faqAdd)->languagesInAnyCategory());
+        self::assertFalse($permission->getScopeForRight($managedUserId, $faqAdd)->allowsLanguageInAnyCategory('en'));
         // The dropped right takes its restriction rows with it.
         self::assertSame([$faqAdd => ['de']], $permission->getAllUserLanguageRestrictions($managedUserId));
     }
@@ -2334,11 +2444,11 @@ final class UserControllerTest extends TestCase
         ]));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        $languages = $permission->getAllowedLanguagesForRight($managedUserId, $faqAdd);
+        $languages = $permission->getScopeForRight($managedUserId, $faqAdd)->languagesInAnyCategory();
         self::assertIsArray($languages);
         sort($languages);
         self::assertSame(['de', 'en'], $languages);
-        self::assertFalse($permission->hasPermissionForLanguage($managedUserId, $faqAdd, 'fr'));
+        self::assertFalse($permission->getScopeForRight($managedUserId, $faqAdd)->allowsLanguageInAnyCategory('fr'));
     }
 
     /**
@@ -2377,7 +2487,7 @@ final class UserControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         // 'fr' is outside the acting user's scope and is dropped; 'de' is kept.
-        self::assertSame(['de'], $permission->getAllowedLanguagesForRight($managedUserId, $faqAdd));
+        self::assertSame(['de'], $permission->getScopeForRight($managedUserId, $faqAdd)->languagesInAnyCategory());
     }
 
     /**

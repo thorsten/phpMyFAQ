@@ -84,6 +84,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(GroupCategoryPermissionRepository::class)]
 #[UsesClass(LanguagePermissionRepository::class)]
 #[UsesClass(PluginDiscovery::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightGrant::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightScope::class)]
 final class UserCreateOperationTest extends TestCase
 {
     private string $databaseFile;

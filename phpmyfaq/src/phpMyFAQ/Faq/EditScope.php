@@ -23,6 +23,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightScope;
 
 /**
  * Answers which FAQs a requester may edit, for the admin listings that show FAQs across
@@ -33,19 +34,14 @@ use phpMyFAQ\Permission\PermissionInterface;
  * may not open, so every such listing narrows its rows with this scope.
  *
  * The scope follows the rules the edit page enforces through
- * AbstractController::userHasPermissionForCategories(): a category-restricted editor may edit
+ * AbstractController::userHasPermissionForCategoriesInLanguage(): a category-restricted editor may edit
  * an FAQ only if every one of its categories is permitted, and never an FAQ without a category.
  * That is stricter than ReadScope, which admits an FAQ as soon as one category is permitted.
  */
 final readonly class EditScope
 {
-    /**
-     * @param array<int>|null    $categoryIds null means every category
-     * @param array<string>|null $languages   null means every language
-     */
     private function __construct(
-        private ?array $categoryIds,
-        private ?array $languages,
+        private RightScope $scope,
     ) {
     }
 
@@ -54,13 +50,10 @@ final readonly class EditScope
         $right = PermissionType::FAQ_EDIT->value;
 
         if (!$permission->hasPermission($userId, $right)) {
-            return new self([], []);
+            return new self(RightScope::none());
         }
 
-        return new self(
-            $permission->getAllowedCategoriesForRight($userId, $right),
-            $permission->getAllowedLanguagesForRight($userId, $right),
-        );
+        return new self($permission->getScopeForRight($userId, $right));
     }
 
     /**
@@ -70,15 +63,7 @@ final readonly class EditScope
      */
     public function allowsFaq(array $categoryIds, string $language): bool
     {
-        if ($this->languages !== null && !in_array($language, $this->languages, strict: true)) {
-            return false;
-        }
-
-        if ($this->categoryIds === null) {
-            return true;
-        }
-
-        return $categoryIds !== [] && array_diff($categoryIds, $this->categoryIds) === [];
+        return $this->scope->allows($categoryIds, $language);
     }
 
     /**
@@ -87,52 +72,76 @@ final readonly class EditScope
      * Returns an empty string for superadmins and every user holding an unscoped grant, so the
      * common query stays exactly as it was.
      *
+     * Category and language are evaluated per grant: a category counts as permitted only
+     * through a grant that also covers the language of the FAQ.
+     *
      * @param string $faqAlias the alias the query gives the faqdata table
      */
     public function toSqlFragment(string $faqAlias = 'fd'): string
     {
-        // No right at all, or a scope that resolves to nothing: match no rows rather than
-        // silently falling through to an unfiltered result.
-        if ($this->categoryIds === [] || $this->languages === []) {
+        if ($this->scope->isUnrestricted()) {
+            return '';
+        }
+
+        // Grants without category restriction admit every FAQ in their languages, with or
+        // without a category.
+        $alternatives = [];
+        // Category-restricted grants each permit their categories, in their languages only.
+        $permittedCategories = [];
+
+        foreach ($this->scope->grants() as $grant) {
+            $language = $grant->languages === null
+                ? null
+                : sprintf('%s.lang IN (%s)', $faqAlias, $this->quotedLanguageList($grant->languages));
+
+            if ($grant->categoryIds === null) {
+                $alternatives[] = (string) $language;
+                continue;
+            }
+
+            $category = sprintf('pmfes.category_id IN (%s)', implode(', ', $grant->categoryIds));
+            $permittedCategories[] = $language === null ? $category : sprintf('(%s AND %s)', $language, $category);
+        }
+
+        if ($permittedCategories !== []) {
+            // Two sub-queries rather than a join condition: the FAQ needs at least one
+            // category, and none of its categories may lie outside the scope. A join would
+            // also fan one FAQ out into several rows.
+            $categoryRelation = sprintf(
+                'SELECT 1 FROM %sfaqcategoryrelations pmfes'
+                . ' WHERE pmfes.record_id = %s.id AND pmfes.record_lang = %s.lang',
+                Database::getTablePrefix(),
+                $faqAlias,
+                $faqAlias,
+            );
+
+            $alternatives[] = sprintf(
+                '(EXISTS (%s) AND NOT EXISTS (%s AND NOT (%s)))',
+                $categoryRelation,
+                $categoryRelation,
+                implode(' OR ', $permittedCategories),
+            );
+        }
+
+        // No right at all: match no rows rather than silently falling through to an
+        // unfiltered result.
+        if ($alternatives === []) {
             return ' AND 1 = 0';
         }
 
-        $fragment = '';
-
-        if ($this->languages !== null) {
-            $fragment .= sprintf(' AND %s.lang IN (%s)', $faqAlias, $this->quotedLanguageList());
-        }
-
-        if ($this->categoryIds === null) {
-            return $fragment;
-        }
-
-        // Two sub-queries rather than a join condition: the FAQ needs at least one category,
-        // and none of its categories may lie outside the scope. A join would also fan one FAQ
-        // out into several rows.
-        $categoryRelation = sprintf(
-            'SELECT 1 FROM %sfaqcategoryrelations pmfes WHERE pmfes.record_id = %s.id AND pmfes.record_lang = %s.lang',
-            Database::getTablePrefix(),
-            $faqAlias,
-            $faqAlias,
-        );
-
-        return sprintf(
-            '%s AND EXISTS (%s) AND NOT EXISTS (%s AND pmfes.category_id NOT IN (%s))',
-            $fragment,
-            $categoryRelation,
-            $categoryRelation,
-            implode(', ', array_map(intval(...), $this->categoryIds)),
-        );
+        return sprintf(' AND (%s)', implode(' OR ', $alternatives));
     }
 
-    private function quotedLanguageList(): string
+    /**
+     * @param list<string> $languages
+     */
+    private function quotedLanguageList(array $languages): string
     {
         $database = Configuration::getConfigurationInstance()->getDb();
 
         return implode(', ', array_map(static fn(string $language): string => sprintf(
             "'%s'",
             $database->escape($language),
-        ), $this->languages ?? []));
+        ), $languages));
     }
 }

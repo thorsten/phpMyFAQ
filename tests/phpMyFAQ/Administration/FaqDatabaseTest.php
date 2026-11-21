@@ -10,6 +10,8 @@ use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq\EditScope;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -36,14 +38,20 @@ final class FaqDatabaseTest extends TestCase
         $this->faq = new Faq($this->configuration);
     }
 
-    private function insertFaq(int $id, FaqStatus $status, string $updated, ?int $categoryId = null): void
-    {
+    private function insertFaq(
+        int $id,
+        FaqStatus $status,
+        string $updated,
+        ?int $categoryId = null,
+        string $language = 'en',
+    ): void {
         $db = $this->configuration->getDb();
         $db->query(sprintf(
             "INSERT INTO %sfaqdata (id, lang, solution_id, status, sticky, thema, content, author, email, updated)"
-            . " VALUES (%d, 'en', %d, '%s', 0, 'Question %d', 'Answer', 'Tester', 'tester@example.org', '%s')",
+            . " VALUES (%d, '%s', %d, '%s', 0, 'Question %d', 'Answer', 'Tester', 'tester@example.org', '%s')",
             Database::getTablePrefix(),
             $id,
+            $language,
             1000 + $id,
             $status->value,
             $id,
@@ -56,10 +64,12 @@ final class FaqDatabaseTest extends TestCase
 
         $db->query(sprintf(
             "INSERT INTO %sfaqcategoryrelations (category_id, category_lang, record_id, record_lang)"
-            . " VALUES (%d, 'en', %d, 'en')",
+            . " VALUES (%d, '%s', %d, '%s')",
             Database::getTablePrefix(),
             $categoryId,
+            $language,
             $id,
+            $language,
         ));
     }
 
@@ -186,6 +196,32 @@ final class FaqDatabaseTest extends TestCase
         $this->assertSame([], $this->faq->getInactiveFaqsData($this->editScope(languages: ['de'])));
     }
 
+    /**
+     * "German only" through one grant and "category 1 only" through another do not add up to
+     * "category 2 in English": a draft is listed only if a single grant covers both its
+     * categories and its language.
+     */
+    public function testInactiveFaqsDoNotMergeTheRestrictionsOfSeparateGrants(): void
+    {
+        $scope = $this->editScopeOf(RightScope::ofGrants(new RightGrant(languages: ['de']), new RightGrant([1])));
+        $this->insertFaq(90036, FaqStatus::Draft, date('YmdHis'), 1);
+        $this->insertFaq(90037, FaqStatus::Draft, date('YmdHis'), 2);
+        $this->insertFaq(90038, FaqStatus::Draft, date('YmdHis'));
+        $this->insertFaq(90039, FaqStatus::Draft, date('YmdHis'), 2, 'de');
+
+        $this->useLanguage('en');
+        $english = array_column($this->faq->getInactiveFaqsData($scope), 'question');
+
+        $this->assertContains('Question 90036', $english);
+        $this->assertNotContains('Question 90037', $english);
+        $this->assertNotContains('Question 90038', $english);
+
+        $this->useLanguage('de');
+        $german = array_column($this->faq->getInactiveFaqsData($scope), 'question');
+
+        $this->assertContains('Question 90039', $german);
+    }
+
     public function testInactiveFaqsAreAllListedForAnUnrestrictedEditor(): void
     {
         $this->useLanguage('en');
@@ -222,6 +258,22 @@ final class FaqDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * Only the grant without category restriction reaches an FAQ without a category, and that
+     * grant is limited to German.
+     */
+    public function testOrphanedFaqsDoNotMergeTheRestrictionsOfSeparateGrants(): void
+    {
+        $scope = $this->editScopeOf(RightScope::ofGrants(new RightGrant(languages: ['de']), new RightGrant([1])));
+        $this->insertFaq(90043, FaqStatus::Published, date('YmdHis'));
+        $this->insertFaq(90044, FaqStatus::Published, date('YmdHis'), null, 'de');
+
+        $questions = array_column($this->faq->getOrphanedFaqs($scope), 'question');
+
+        $this->assertNotContains('Question 90043', $questions);
+        $this->assertContains('Question 90044', $questions);
+    }
+
     public function testOrphanedFaqsAreAllListedForAnUnrestrictedEditor(): void
     {
         $this->insertFaq(90042, FaqStatus::Published, date('YmdHis'));
@@ -245,10 +297,18 @@ final class FaqDatabaseTest extends TestCase
      */
     private function editScope(?array $categories = null, ?array $languages = null): EditScope
     {
+        return $this->editScopeOf(
+            $categories === null && $languages === null
+                ? RightScope::unrestricted()
+                : RightScope::ofGrants(new RightGrant($categories, $languages)),
+        );
+    }
+
+    private function editScopeOf(RightScope $rightScope): EditScope
+    {
         $permission = $this->createStub(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission->method('getAllowedCategoriesForRight')->willReturn($categories);
-        $permission->method('getAllowedLanguagesForRight')->willReturn($languages);
+        $permission->method('getScopeForRight')->willReturn($rightScope);
 
         return EditScope::forUser($permission, 5);
     }

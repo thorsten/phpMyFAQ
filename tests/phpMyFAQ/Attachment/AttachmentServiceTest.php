@@ -595,24 +595,11 @@ final class AttachmentServiceTest extends TestCase
                 return [];
             }
 
-            public function hasPermissionForCategory(int $userId, mixed $right, int $categoryId): bool
+            public function getScopeForRight(int $userId, mixed $right): \phpMyFAQ\Permission\RightScope
             {
-                return $this->hasPermission($userId, $right);
-            }
-
-            public function getAllowedCategoriesForRight(int $userId, mixed $right): ?array
-            {
-                return null;
-            }
-
-            public function hasPermissionForLanguage(int $userId, mixed $right, string $language): bool
-            {
-                return $this->hasPermission($userId, $right);
-            }
-
-            public function getAllowedLanguagesForRight(int $userId, mixed $right): ?array
-            {
-                return null;
+                return $this->hasPermission($userId, $right)
+                    ? \phpMyFAQ\Permission\RightScope::unrestricted()
+                    : \phpMyFAQ\Permission\RightScope::none();
             }
 
             public function getAllUserRights(int $userId): array

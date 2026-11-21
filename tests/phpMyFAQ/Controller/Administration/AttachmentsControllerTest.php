@@ -13,6 +13,8 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -218,7 +220,7 @@ final class AttachmentsControllerTest extends TestCase
     {
         $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
+        $permission->method('getScopeForRight')->willReturn($this->scopeOfCategories($allowedCategories));
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -277,5 +279,21 @@ final class AttachmentsControllerTest extends TestCase
         }
 
         return $items;
+    }
+
+    /**
+     * @param list<int>|null $categoryIds null for every category, an empty list for no grant at all
+     */
+    private function scopeOfCategories(?array $categoryIds): RightScope
+    {
+        if ($categoryIds === null) {
+            return RightScope::unrestricted();
+        }
+
+        if ($categoryIds === []) {
+            return RightScope::none();
+        }
+
+        return RightScope::ofGrants(new RightGrant($categoryIds));
     }
 }

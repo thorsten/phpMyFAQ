@@ -198,46 +198,46 @@ class BasicPermissionTest extends TestCase
         $this->assertSame([], $this->basicPermission->getUserLanguageRestrictions(2, 1));
     }
 
-    public function testHasPermissionForCategoryDelegatesToGlobalCheck(): void
+    public function testScopeAllowsCategoryDelegatesToGlobalCheck(): void
     {
         // Right 1 granted to user 1 in the fixture DB => category is irrelevant in basic mode
         $this->assertSame(
             $this->basicPermission->hasPermission(1, 1),
-            $this->basicPermission->hasPermissionForCategory(1, 1, 99),
+            $this->basicPermission->getScopeForRight(1, 1)->allowsCategoryInAnyLanguage(99),
         );
     }
 
-    public function testHasPermissionForCategoryDeniesWithoutGlobalRight(): void
+    public function testScopeAllowsCategoryDeniesWithoutGlobalRight(): void
     {
-        $this->assertFalse($this->basicPermission->hasPermissionForCategory(0, 999, 1));
+        $this->assertFalse($this->basicPermission->getScopeForRight(0, 999)->allowsCategoryInAnyLanguage(1));
     }
 
-    public function testGetAllowedCategoriesForRightIsAlwaysUnrestricted(): void
+    public function testScopeCategoryIdsIsAlwaysUnrestricted(): void
     {
-        $this->assertNull($this->basicPermission->getAllowedCategoriesForRight(1, 1));
+        $this->assertNull($this->basicPermission->getScopeForRight(1, 1)->categoryIdsInAnyLanguage());
     }
 
-    public function testHasPermissionForLanguageWithNoRestrictionIsUnrestricted(): void
+    public function testScopeAllowsLanguageWithNoRestrictionIsUnrestricted(): void
     {
         // Right 1 granted to user 1 in the fixture DB, no language restriction set
-        $this->assertTrue($this->basicPermission->hasPermissionForLanguage(1, 1, 'en'));
-        $this->assertTrue($this->basicPermission->hasPermissionForLanguage(1, 1, 'de'));
+        $this->assertTrue($this->basicPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('en'));
+        $this->assertTrue($this->basicPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('de'));
     }
 
-    public function testHasPermissionForLanguageDeniesWithoutGlobalRight(): void
+    public function testScopeAllowsLanguageDeniesWithoutGlobalRight(): void
     {
-        $this->assertFalse($this->basicPermission->hasPermissionForLanguage(0, 999, 'en'));
+        $this->assertFalse($this->basicPermission->getScopeForRight(0, 999)->allowsLanguageInAnyCategory('en'));
     }
 
-    public function testHasPermissionForLanguageDeniesOtherLanguageWhenRestricted(): void
+    public function testScopeAllowsLanguageDeniesOtherLanguageWhenRestricted(): void
     {
         // Fixture user 1 is a superadmin and would bypass every restriction, so
         // demote them for the duration of this restriction-behaviour test.
         $this->dbHandle->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->dbHandle->query("INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')");
 
-        $this->assertTrue($this->basicPermission->hasPermissionForLanguage(1, 1, 'de'));
-        $this->assertFalse($this->basicPermission->hasPermissionForLanguage(1, 1, 'en'));
+        $this->assertTrue($this->basicPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('de'));
+        $this->assertFalse($this->basicPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('en'));
 
         // Cleanup
         $this->dbHandle->query('DELETE FROM faquser_right_language WHERE user_id = 1 AND right_id = 1');
@@ -248,12 +248,12 @@ class BasicPermissionTest extends TestCase
      * A superadmin holds every right implicitly, without a faquser_right row.
      * Looking up direct-grant language restrictions must not deny them.
      */
-    public function testHasPermissionForLanguageAllowsSuperAdminWithoutDirectGrant(): void
+    public function testScopeAllowsLanguageAllowsSuperAdminWithoutDirectGrant(): void
     {
         $this->dbHandle->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
 
-        $this->assertTrue($this->basicPermission->hasPermissionForLanguage(1, 1, 'en'));
-        $this->assertNull($this->basicPermission->getAllowedLanguagesForRight(1, 1));
+        $this->assertTrue($this->basicPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('en'));
+        $this->assertNull($this->basicPermission->getScopeForRight(1, 1)->languagesInAnyCategory());
 
         // Cleanup
         $this->dbHandle->query('INSERT INTO faquser_right (user_id, right_id) VALUES (1, 1)');
@@ -262,28 +262,28 @@ class BasicPermissionTest extends TestCase
     /**
      * A superadmin must not be language-restricted even when restriction rows exist.
      */
-    public function testHasPermissionForLanguageIgnoresRestrictionsForSuperAdmin(): void
+    public function testScopeAllowsLanguageIgnoresRestrictionsForSuperAdmin(): void
     {
         $this->dbHandle->query("INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')");
 
-        $this->assertTrue($this->basicPermission->hasPermissionForLanguage(1, 1, 'en'));
-        $this->assertNull($this->basicPermission->getAllowedLanguagesForRight(1, 1));
+        $this->assertTrue($this->basicPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('en'));
+        $this->assertNull($this->basicPermission->getScopeForRight(1, 1)->languagesInAnyCategory());
 
         // Cleanup
         $this->dbHandle->query('DELETE FROM faquser_right_language WHERE user_id = 1 AND right_id = 1');
     }
 
-    public function testGetAllowedLanguagesForRightReturnsNullWhenUnrestricted(): void
+    public function testScopeLanguagesReturnsNullWhenUnrestricted(): void
     {
-        $this->assertNull($this->basicPermission->getAllowedLanguagesForRight(1, 1));
+        $this->assertNull($this->basicPermission->getScopeForRight(1, 1)->languagesInAnyCategory());
     }
 
-    public function testGetAllowedLanguagesForRightReturnsRestrictedSet(): void
+    public function testScopeLanguagesReturnsRestrictedSet(): void
     {
         $this->dbHandle->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->dbHandle->query("INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')");
 
-        $allowed = $this->basicPermission->getAllowedLanguagesForRight(1, 1);
+        $allowed = $this->basicPermission->getScopeForRight(1, 1)->languagesInAnyCategory();
         $this->assertSame(['de'], $allowed);
 
         // Cleanup
@@ -291,9 +291,45 @@ class BasicPermissionTest extends TestCase
         $this->dbHandle->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
     }
 
-    public function testGetAllowedLanguagesForRightReturnsEmptyArrayWithoutRight(): void
+    public function testScopeLanguagesReturnsEmptyArrayWithoutRight(): void
     {
-        $this->assertSame([], $this->basicPermission->getAllowedLanguagesForRight(0, 999));
+        $this->assertSame([], $this->basicPermission->getScopeForRight(0, 999)->languagesInAnyCategory());
+    }
+
+    public function testScopeIsEmptyWithoutRight(): void
+    {
+        $this->assertTrue($this->basicPermission->getScopeForRight(0, 999)->isEmpty());
+    }
+
+    public function testScopeOfSuperAdminIsUnrestricted(): void
+    {
+        $this->assertTrue($this->basicPermission->getScopeForRight(1, 1)->isUnrestricted());
+    }
+
+    public function testScopeOfUnrestrictedDirectGrantIsUnrestricted(): void
+    {
+        $this->dbHandle->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+
+        $this->assertTrue($this->basicPermission->getScopeForRight(1, 1)->isUnrestricted());
+
+        // Cleanup
+        $this->dbHandle->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
+    }
+
+    public function testScopeOfLanguageRestrictedDirectGrantCoversEveryCategoryInThatLanguage(): void
+    {
+        $this->dbHandle->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->dbHandle->query("INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')");
+
+        $scope = $this->basicPermission->getScopeForRight(1, 1);
+
+        $this->assertTrue($scope->allows([1, 2], 'de'));
+        $this->assertTrue($scope->allows([], 'de'));
+        $this->assertFalse($scope->allows([1], 'en'));
+
+        // Cleanup
+        $this->dbHandle->query('DELETE FROM faquser_right_language WHERE user_id = 1 AND right_id = 1');
+        $this->dbHandle->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
     }
 
     public function testGrantUserRightRejectsUnknownRight(): void
@@ -341,13 +377,13 @@ class BasicPermissionTest extends TestCase
         $this->dbHandle->query('DELETE FROM faquser_right_language WHERE user_id = 1 AND right_id = 1');
     }
 
-    public function testHasPermissionForLanguageResolvesPermissionTypeToRightId(): void
+    public function testScopeAllowsLanguageResolvesPermissionTypeToRightId(): void
     {
         $this->dbHandle->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->dbHandle->query("INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, 1, 'de')");
 
-        $this->assertTrue($this->basicPermission->hasPermissionForLanguage(1, PermissionType::USER_ADD, 'de'));
-        $this->assertFalse($this->basicPermission->hasPermissionForLanguage(1, PermissionType::USER_ADD, 'en'));
+        $this->assertTrue($this->basicPermission->getScopeForRight(1, PermissionType::USER_ADD)->allowsLanguageInAnyCategory('de'));
+        $this->assertFalse($this->basicPermission->getScopeForRight(1, PermissionType::USER_ADD)->allowsLanguageInAnyCategory('en'));
 
         // Cleanup
         $this->dbHandle->query('DELETE FROM faquser_right_language WHERE user_id = 1 AND right_id = 1');

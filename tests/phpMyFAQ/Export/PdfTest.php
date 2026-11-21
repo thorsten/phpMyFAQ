@@ -104,6 +104,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(GroupCategoryPermissionRepository::class)]
 #[UsesClass(LanguagePermissionRepository::class)]
 #[UsesClass(PluginDiscovery::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightGrant::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightScope::class)]
 #[AllowMockObjectsWithoutExpectations]
 final class PdfTest extends TestCase
 {

@@ -488,46 +488,6 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     }
 
     /**
-     * Returns true if the user has the specified right for the given category,
-     * taking into account group-level category restrictions.
-     *
-     * If the user's group has no category restrictions for a right, the right
-     * applies globally. If restrictions exist, the right only applies to
-     * the specified categories.
-     *
-     * @param int   $userId     User ID
-     * @param mixed $right      Right ID, name, or PermissionType enum
-     * @param int   $categoryId Category ID
-     * @param CurrentUser|null $currentUser Optional pre-loaded user to avoid repeated instantiation
-     * @throws Exception
-     */
-    public function hasPermissionForCategory(
-        int $userId,
-        mixed $right,
-        int $categoryId,
-        ?CurrentUser $currentUser = null,
-    ): bool {
-        if ($currentUser === null) {
-            $currentUser = new CurrentUser($this->configuration);
-            $currentUser->getUserById($userId);
-        }
-
-        if ($currentUser->isSuperAdmin()) {
-            return true;
-        }
-
-        $rightId = $this->resolveRightId($right);
-
-        // Check direct user right (always global, no category restriction)
-        if ($this->checkUserRight($userId, $rightId)) {
-            return true;
-        }
-
-        // Check group right with category restrictions
-        return $this->categoryPermissionRepository->checkUserGroupRightForCategory($userId, $rightId, $categoryId);
-    }
-
-    /**
      * Returns the category IDs that a group's right is restricted to.
      * An empty array means the right is unrestricted (applies globally).
      *
@@ -564,93 +524,6 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     }
 
     /**
-     * Returns the category IDs in which the user may exercise the right.
-     * Null means unrestricted: superadmins, direct user-rights, and group
-     * grants without category restrictions always apply globally. An empty
-     * array means the user cannot exercise the right in any category.
-     *
-     * @param int   $userId User ID
-     * @param mixed $right  Right ID, right name, or PermissionType value
-     * @return array<int>|null
-     * @throws Exception
-     */
-    #[\Override]
-    public function getAllowedCategoriesForRight(int $userId, mixed $right): ?array
-    {
-        $currentUser = new CurrentUser($this->configuration);
-        $currentUser->getUserById($userId);
-
-        if ($currentUser->isSuperAdmin()) {
-            return null;
-        }
-
-        $rightId = $this->resolveRightId($right);
-
-        if ($this->checkUserRight($userId, $rightId)) {
-            return null;
-        }
-
-        $allowedCategories = [];
-        foreach ($this->getUserGroups($userId) as $groupId) {
-            if (!in_array($rightId, $this->getGroupRights($groupId), strict: true)) {
-                continue;
-            }
-
-            $restrictions = $this->categoryPermissionRepository->getCategoryRestrictions($groupId, $rightId);
-            if ($restrictions === []) {
-                return null;
-            }
-
-            $allowedCategories = [...$allowedCategories, ...$restrictions];
-        }
-
-        return array_values(array_unique($allowedCategories));
-    }
-
-    /**
-     * Returns true if the user has the specified right for the given language,
-     * taking into account both the user's own direct language restriction and
-     * group-level language restrictions. Unlike category restrictions, a
-     * direct user-right grant CAN be language-restricted.
-     *
-     * The right is usable for a language if either the user's own grant is
-     * unrestricted or matches the language, OR any qualifying group's grant
-     * is unrestricted or matches the language (union of all grants).
-     *
-     * @param int    $userId      User ID
-     * @param mixed  $right       Right ID, name, or PermissionType enum
-     * @param string $language    Language code (e.g. 'en', 'de')
-     * @param CurrentUser|null $currentUser Optional pre-loaded user to avoid repeated instantiation
-     * @throws Exception
-     */
-    public function hasPermissionForLanguage(
-        int $userId,
-        mixed $right,
-        string $language,
-        ?CurrentUser $currentUser = null,
-    ): bool {
-        if ($currentUser === null) {
-            $currentUser = new CurrentUser($this->configuration);
-            $currentUser->getUserById($userId);
-        }
-
-        if ($currentUser->isSuperAdmin()) {
-            return true;
-        }
-
-        $rightId = $this->resolveRightId($right);
-
-        if (
-            $this->checkUserRight($userId, $rightId)
-            && $this->languageRepository->checkUserRightForLanguage($userId, $rightId, $language)
-        ) {
-            return true;
-        }
-
-        return $this->languageRepository->checkUserGroupRightForLanguage($userId, $rightId, $language);
-    }
-
-    /**
      * Returns the language codes that a group's right is restricted to.
      * An empty array means the right is unrestricted (applies globally).
      *
@@ -682,39 +555,30 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     }
 
     /**
-     * Returns the language codes in which the user may exercise the right:
-     * the union of the user's own direct grant (if any) and every group
-     * grant that also holds the right. Null means unrestricted (superadmin,
-     * or any single grant is itself unrestricted). An empty array means the
-     * user does not hold the right through any grant at all.
+     * Returns one grant for the user's direct right, which is never category-restricted, and
+     * one for every group of the user that holds the right, each with the restrictions of that
+     * grant only.
      *
-     * @param int   $userId User ID
-     * @param mixed $right  Right ID, right name, or PermissionType value
-     * @return array<string>|null
      * @throws Exception
      */
     #[\Override]
-    public function getAllowedLanguagesForRight(int $userId, mixed $right): ?array
+    public function getScopeForRight(int $userId, mixed $right): RightScope
     {
         $currentUser = new CurrentUser($this->configuration);
         $currentUser->getUserById($userId);
 
         if ($currentUser->isSuperAdmin()) {
-            return null;
+            return RightScope::unrestricted();
         }
 
         $rightId = $this->resolveRightId($right);
-        $allowedLanguages = [];
-        $hasAnyGrant = false;
+        $grants = [];
 
         if ($this->checkUserRight($userId, $rightId)) {
-            $hasAnyGrant = true;
-            $userRestrictions = $this->languageRepository->getUserLanguageRestrictions($userId, $rightId);
-            if ($userRestrictions === []) {
-                return null;
-            }
-
-            $allowedLanguages = [...$allowedLanguages, ...$userRestrictions];
+            $grants[] = RightGrant::fromRestrictions(
+                [],
+                $this->languageRepository->getUserLanguageRestrictions($userId, $rightId),
+            );
         }
 
         foreach ($this->getUserGroups($userId) as $groupId) {
@@ -722,16 +586,13 @@ class MediumPermission extends BasicPermission implements PermissionInterface
                 continue;
             }
 
-            $hasAnyGrant = true;
-            $groupRestrictions = $this->languageRepository->getLanguageRestrictions($groupId, $rightId);
-            if ($groupRestrictions === []) {
-                return null;
-            }
-
-            $allowedLanguages = [...$allowedLanguages, ...$groupRestrictions];
+            $grants[] = RightGrant::fromRestrictions(
+                $this->categoryPermissionRepository->getCategoryRestrictions($groupId, $rightId),
+                $this->languageRepository->getLanguageRestrictions($groupId, $rightId),
+            );
         }
 
-        return $hasAnyGrant ? array_values(array_unique($allowedLanguages)) : [];
+        return RightScope::ofGrants(...$grants);
     }
 
     /**

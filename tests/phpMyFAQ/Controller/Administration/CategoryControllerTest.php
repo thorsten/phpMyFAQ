@@ -19,6 +19,8 @@ use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -382,7 +384,9 @@ final class CategoryControllerTest extends TestCase
             $this->createStub(Seo::class),
             $this->createStub(UserHelper::class),
         );
-        $controller->setContainer($this->createAuthenticatedContainer());
+        // The edit right is limited to category 1, the request targets category 666.
+        $scope = RightScope::ofGrants(new RightGrant([1]));
+        $controller->setContainer($this->createAuthenticatedContext(scope: $scope)['container']);
 
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "CATEGORY_EDIT" permission for category 666.');
@@ -521,7 +525,9 @@ final class CategoryControllerTest extends TestCase
     public function testUpdateIsForbiddenForALanguageTheUserMayNotEdit(): void
     {
         $this->insertTestCategory();
-        $context = $this->createAuthenticatedContext();
+        // The right is limited to English and German, the request is for French.
+        $scope = RightScope::ofGrants(new RightGrant(languages: ['en', 'de']));
+        $context = $this->createAuthenticatedContext(scope: $scope);
 
         $controller = new CategoryController(
             new AdminCategory($this->configuration),
@@ -586,7 +592,9 @@ final class CategoryControllerTest extends TestCase
 
     public function testCreateIsForbiddenForALanguageTheUserMayNotAdd(): void
     {
-        $context = $this->createAuthenticatedContext();
+        // The right is limited to English and German, the request is for French.
+        $scope = RightScope::ofGrants(new RightGrant(languages: ['en', 'de']));
+        $context = $this->createAuthenticatedContext(scope: $scope);
 
         $controller = new CategoryController(
             new AdminCategory($this->configuration),
@@ -769,26 +777,14 @@ final class CategoryControllerTest extends TestCase
     }
 
     /**
+     * @param RightScope|null $scope the scope every right is granted in, null for an unrestricted one
      * @return array{container: ContainerInterface, session: Session}
      */
-    private function createAuthenticatedContext(string $groupsOptions = ''): array
+    private function createAuthenticatedContext(string $groupsOptions = '', ?RightScope $scope = null): array
     {
         $permission = $this->createMock(MediumPermission::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission
-            ->method('hasPermissionForCategory')
-            ->willReturnCallback(
-                // sentinel forbidden category for tests
-                static fn(int $userId, mixed $right, int $categoryId): bool => $categoryId !== 666,
-            );
-        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
-        $permission
-            ->method('hasPermissionForLanguage')
-            ->willReturnCallback(
-                // sentinel forbidden language for tests
-                static fn(int $userId, mixed $right, string $language): bool => $language !== 'fr',
-            );
-        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+        $permission->method('getScopeForRight')->willReturn($scope ?? RightScope::unrestricted());
         $permission->method('getAllGroupsOptions')->willReturn($groupsOptions);
 
         $currentUser = $this->createMock(CurrentUser::class);

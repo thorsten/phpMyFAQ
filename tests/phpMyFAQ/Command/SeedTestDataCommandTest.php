@@ -76,6 +76,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[UsesClass(FilesystemConfigurationCache::class)]
 #[UsesClass(PdoSqlite::class)]
 #[UsesClass(PluginDiscovery::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightGrant::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightScope::class)]
 #[AllowMockObjectsWithoutExpectations]
 class SeedTestDataCommandTest extends TestCase
 {

@@ -14,6 +14,8 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -137,6 +139,7 @@ final class GroupControllerTest extends TestCase
                     true,
                 ),
             );
+        $permission->method('getScopeForRight')->willReturn(RightScope::unrestricted());
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -727,6 +730,9 @@ final class GroupControllerTest extends TestCase
         $csrfToken = Token::getInstance($session)->getTokenString('save-category-restrictions');
         $this->setCsrfCookie('save-category-restrictions', $csrfToken);
 
+        // The group's right applies to German only, the one language the acting user holds.
+        new MediumPermission($this->configuration)->setLanguageRestrictions(self::TEST_GROUP_ID, 1, ['de']);
+
         $controller = new GroupController();
         $controller->setContainer($this->createRestrictedContainer($session, ['de'], [1, 2]));
 
@@ -760,6 +766,9 @@ final class GroupControllerTest extends TestCase
         $csrfToken = Token::getInstance($session)->getTokenString('save-category-restrictions');
         $this->setCsrfCookie('save-category-restrictions', $csrfToken);
 
+        // The group's right applies to German only, the one language the acting user holds.
+        new MediumPermission($this->configuration)->setLanguageRestrictions(self::TEST_GROUP_ID, 1, ['de']);
+
         $controller = new GroupController();
         $controller->setContainer($this->createRestrictedContainer($session, ['de'], [1, 2]));
 
@@ -790,6 +799,9 @@ final class GroupControllerTest extends TestCase
         $csrfToken = Token::getInstance($session)->getTokenString('save-category-restrictions');
         $this->setCsrfCookie('save-category-restrictions', $csrfToken);
 
+        // The group's right applies to German only, the one language the acting user holds.
+        new MediumPermission($this->configuration)->setLanguageRestrictions(self::TEST_GROUP_ID, 1, ['de']);
+
         $controller = new GroupController();
         $controller->setContainer($this->createRestrictedContainer($session, ['de'], [1, 2]));
 
@@ -809,9 +821,186 @@ final class GroupControllerTest extends TestCase
     }
 
     /**
+     * "German only" through one grant and "category 1 only" through another must not add up
+     * to a right for every category: with the group's right applying to every language, an
+     * empty category list would make it unrestricted.
+     *
+     * @throws \Exception
+     */
+    public function testSaveCategoryRestrictionsRejectsEmptyListFromSeparatelyGrantedNonSuperAdmin(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+        $permission = new MediumPermission($this->configuration);
+        self::assertSame([], $permission->getLanguageRestrictions(self::TEST_GROUP_ID, 1));
+
+        $response = $this->saveCategoryRestrictionsAsSeparatelyGrantedUser([]);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * Category 2 is held in German only, so it must not be handed out for an English group right.
+     *
+     * @throws \Exception
+     */
+    public function testSaveCategoryRestrictionsRejectsCategoryHeldInAnotherLanguageOnly(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+        $permission = new MediumPermission($this->configuration);
+        $permission->setLanguageRestrictions(self::TEST_GROUP_ID, 1, ['en']);
+
+        $response = $this->saveCategoryRestrictionsAsSeparatelyGrantedUser([2]);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+        self::assertSame([], $permission->getCategoryRestrictions(self::TEST_GROUP_ID, 1));
+    }
+
+    /**
+     * The category-1 grant is not language-restricted, so category 1 may be handed out for an
+     * English group right.
+     *
+     * @throws \Exception
+     */
+    public function testSaveCategoryRestrictionsAcceptsCombinationCoveredByOneGrant(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+        $permission = new MediumPermission($this->configuration);
+        $permission->setLanguageRestrictions(self::TEST_GROUP_ID, 1, ['en']);
+
+        $response = $this->saveCategoryRestrictionsAsSeparatelyGrantedUser([1]);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        self::assertEquals([1], $permission->getCategoryRestrictions(self::TEST_GROUP_ID, 1));
+    }
+
+    /**
+     * With the group's right applying to every category, an empty language list would make it
+     * unrestricted, which neither of the acting user's grants covers.
+     *
+     * @throws \Exception
+     */
+    public function testSaveLanguageRestrictionsRejectsEmptyListFromSeparatelyGrantedNonSuperAdmin(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+        $permission = new MediumPermission($this->configuration);
+        self::assertSame([], $permission->getCategoryRestrictions(self::TEST_GROUP_ID, 1));
+
+        $response = $this->saveLanguageRestrictionsAsSeparatelyGrantedUser([]);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+    }
+
+    /**
+     * English is held in category 1 only, so it must not be handed out for a group right that
+     * applies to every category.
+     *
+     * @throws \Exception
+     */
+    public function testSaveLanguageRestrictionsRejectsLanguageHeldInAnotherCategoryOnly(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+        $permission = new MediumPermission($this->configuration);
+
+        $response = $this->saveLanguageRestrictionsAsSeparatelyGrantedUser(['en']);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+        self::assertSame([], $permission->getLanguageRestrictions(self::TEST_GROUP_ID, 1));
+    }
+
+    /**
+     * The German grant is not category-restricted, so German may be handed out for a group
+     * right that applies to every category.
+     *
+     * @throws \Exception
+     */
+    public function testSaveLanguageRestrictionsAcceptsCombinationCoveredByOneGrant(): void
+    {
+        $this->seedCurrentUserSession();
+        $this->seedGroupFixtures();
+        $permission = new MediumPermission($this->configuration);
+        self::assertSame([], $permission->getCategoryRestrictions(self::TEST_GROUP_ID, 1));
+
+        $response = $this->saveLanguageRestrictionsAsSeparatelyGrantedUser(['de']);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($payload['success']);
+        self::assertSame(['de'], $permission->getLanguageRestrictions(self::TEST_GROUP_ID, 1));
+    }
+
+    /**
+     * @param array<int> $categoryIds
+     * @throws \Exception
+     */
+    private function saveCategoryRestrictionsAsSeparatelyGrantedUser(array $categoryIds): Response
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('save-category-restrictions');
+        $this->setCsrfCookie('save-category-restrictions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createSeparatelyGrantedContainer($session));
+
+        try {
+            return $controller->saveCategoryRestrictions(
+                new Request(content: json_encode([
+                    'groupId' => self::TEST_GROUP_ID,
+                    'rightId' => 1,
+                    'categoryIds' => $categoryIds,
+                    'csrfToken' => $csrfToken,
+                ], JSON_THROW_ON_ERROR)),
+            );
+        } finally {
+            $this->removeCsrfCookie('save-category-restrictions');
+        }
+    }
+
+    /**
+     * @param array<string> $languages
+     * @throws \Exception
+     */
+    private function saveLanguageRestrictionsAsSeparatelyGrantedUser(array $languages): Response
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('save-language-restrictions');
+        $this->setCsrfCookie('save-language-restrictions', $csrfToken);
+
+        $controller = new GroupController();
+        $controller->setContainer($this->createSeparatelyGrantedContainer($session));
+
+        try {
+            return $controller->saveLanguageRestrictions(
+                new Request(content: json_encode([
+                    'groupId' => self::TEST_GROUP_ID,
+                    'rightId' => 1,
+                    'languages' => $languages,
+                    'csrfToken' => $csrfToken,
+                ], JSON_THROW_ON_ERROR)),
+            );
+        } finally {
+            $this->removeCsrfCookie('save-language-restrictions');
+        }
+    }
+
+    /**
      * Builds a container whose acting user holds the group-permission gate but is a
      * non-SuperAdmin restricted to $allowedLanguages (and, if given, $allowedCategories)
-     * for every right.
+     * for every right, through one single grant.
      *
      * @param array<string>  $allowedLanguages
      * @param array<int>|null $allowedCategories null means unrestricted
@@ -823,9 +1012,31 @@ final class GroupControllerTest extends TestCase
     ): ContainerInterface {
         $permission = $this->createStub(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission->method('getAllowedLanguagesForRight')->willReturn($allowedLanguages);
-        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
+        $permission
+            ->method('getScopeForRight')
+            ->willReturn(RightScope::ofGrants(new RightGrant($allowedCategories, $allowedLanguages)));
 
+        return $this->createNonSuperAdminContainer($session, $permission);
+    }
+
+    /**
+     * Builds a container whose acting user holds the group-permission gate but is a
+     * non-SuperAdmin holding every right through two separate grants: one limited to German,
+     * one limited to category 1.
+     */
+    private function createSeparatelyGrantedContainer(Session $session): ContainerInterface
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('hasPermission')->willReturn(true);
+        $permission
+            ->method('getScopeForRight')
+            ->willReturn(RightScope::ofGrants(new RightGrant(languages: ['de']), new RightGrant([1])));
+
+        return $this->createNonSuperAdminContainer($session, $permission);
+    }
+
+    private function createNonSuperAdminContainer(Session $session, PermissionInterface $permission): ContainerInterface
+    {
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
@@ -1354,7 +1565,7 @@ final class GroupControllerTest extends TestCase
         ));
 
         $permission = new MediumPermission($this->configuration);
-        self::assertFalse($permission->hasPermissionForLanguage(1, $faqEdit, 'de'));
+        self::assertFalse($permission->getScopeForRight(1, $faqEdit)->allowsLanguageInAnyCategory('de'));
 
         $session = new Session(new MockArraySessionStorage());
         $controller = new GroupController();
@@ -1388,9 +1599,9 @@ final class GroupControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         $this->removeCsrfCookie('update-group-members');
 
-        self::assertTrue($permission->hasPermissionForLanguage(1, $faqEdit, 'en'));
-        self::assertFalse($permission->hasPermissionForLanguage(1, $faqEdit, 'de'));
-        self::assertSame(['en'], $permission->getAllowedLanguagesForRight(1, $faqEdit));
+        self::assertTrue($permission->getScopeForRight(1, $faqEdit)->allowsLanguageInAnyCategory('en'));
+        self::assertFalse($permission->getScopeForRight(1, $faqEdit)->allowsLanguageInAnyCategory('de'));
+        self::assertSame(['en'], $permission->getScopeForRight(1, $faqEdit)->languagesInAnyCategory());
     }
 
     /**
@@ -1439,6 +1650,59 @@ final class GroupControllerTest extends TestCase
     }
 
     /**
+     * A group grant carries one set of languages and one set of categories. An acting user who
+     * holds the right directly for German and via a group for category 7 holds neither
+     * "category 7 in every language" nor "every category", so nothing can be handed out.
+     *
+     * @throws \Exception
+     */
+    public function testUpdatePermissionsRejectsRightHeldThroughSeparatelyScopedGrants(): void
+    {
+        $this->seedScopedGroupAdministrator();
+        $faqEdit = $this->rightId(PermissionType::FAQ_EDIT);
+        $this->dbHandle->query(sprintf('INSERT INTO faquser_right (user_id, right_id) VALUES (1, %d)', $faqEdit));
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (1, %d, 'de')",
+            $faqEdit,
+        ));
+        $this->dbHandle->query(
+            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (4243, 'News', '', 0)",
+        );
+        $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 4243)');
+        $this->dbHandle->query(sprintf('INSERT INTO faqgroup_right (group_id, right_id) VALUES (4243, %d)', $faqEdit));
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faqgroup_right_category (group_id, right_id, category_id) VALUES (4243, %d, 7)',
+            $faqEdit,
+        ));
+
+        $permission = new MediumPermission($this->configuration);
+        self::assertEquals(
+            RightScope::ofGrants(new RightGrant(languages: ['de']), new RightGrant([7])),
+            $permission->getScopeForRight(1, $faqEdit),
+        );
+
+        $session = new Session(new MockArraySessionStorage());
+        $controller = new GroupController();
+        $controller->setContainer($this->createScopedContainer($session, $permission));
+
+        $csrfToken = Token::getInstance($session)->getTokenString('update-group-permissions');
+        $this->setCsrfCookie('update-group-permissions', $csrfToken);
+        $response = $controller->updatePermissions(
+            new Request(content: json_encode([
+                'groupId' => self::TEST_GROUP_ID,
+                'rightIds' => [$faqEdit],
+                'csrfToken' => $csrfToken,
+            ], JSON_THROW_ON_ERROR)),
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->removeCsrfCookie('update-group-permissions');
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertStringContainsString('separate grants', $payload['error']);
+        self::assertSame([], $permission->getGroupRights(self::TEST_GROUP_ID));
+    }
+
+    /**
      * Category scope can only come from a group grant, so the acting user holds the right via
      * another group restricted to one category and must not widen it via a fresh group.
      *
@@ -1459,7 +1723,7 @@ final class GroupControllerTest extends TestCase
         ));
 
         $permission = new MediumPermission($this->configuration);
-        self::assertFalse($permission->hasPermissionForCategory(1, $faqEdit, 8));
+        self::assertFalse($permission->getScopeForRight(1, $faqEdit)->allowsCategoryInAnyLanguage(8));
 
         $session = new Session(new MockArraySessionStorage());
         $controller = new GroupController();
@@ -1490,8 +1754,8 @@ final class GroupControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         $this->removeCsrfCookie('update-group-members');
 
-        self::assertTrue($permission->hasPermissionForCategory(1, $faqEdit, 7));
-        self::assertFalse($permission->hasPermissionForCategory(1, $faqEdit, 8));
+        self::assertTrue($permission->getScopeForRight(1, $faqEdit)->allowsCategoryInAnyLanguage(7));
+        self::assertFalse($permission->getScopeForRight(1, $faqEdit)->allowsCategoryInAnyLanguage(8));
     }
 
     /**
@@ -1534,7 +1798,7 @@ final class GroupControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertSame('Cannot manage a group whose rights you do not hold.', $payload['error']);
-        self::assertFalse($permission->hasPermissionForLanguage(1, $faqEdit, 'de'));
+        self::assertFalse($permission->getScopeForRight(1, $faqEdit)->allowsLanguageInAnyCategory('de'));
         $this->removeCsrfCookie('update-group-members');
     }
 

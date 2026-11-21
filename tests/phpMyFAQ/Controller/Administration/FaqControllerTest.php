@@ -21,6 +21,8 @@ use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Question;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Strings;
@@ -240,7 +242,9 @@ final class FaqControllerTest extends TestCase
         $request->attributes->set('categoryLanguage', 'en');
 
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        // The add right is limited to category 1, the request targets category 666.
+        $scope = RightScope::ofGrants(new RightGrant([1]));
+        $controller->setContainer($this->createAuthenticatedContainer(scope: $scope));
 
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 666.');
@@ -357,10 +361,12 @@ final class FaqControllerTest extends TestCase
         $request = new Request([], [], ['faqId' => '777', 'faqLanguage' => 'en']);
 
         $controller = $this->createControllerWithPreparedFaqRecord();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        // The edit right is limited to category 1, the source lies in category 666.
+        $scope = RightScope::ofGrants(new RightGrant([1]));
+        $controller->setContainer($this->createAuthenticatedContainer(scope: $scope));
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666.');
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666 in language "en".');
 
         $controller->copy($request);
     }
@@ -373,7 +379,9 @@ final class FaqControllerTest extends TestCase
         $request = new Request([], [], ['faqId' => '1', 'faqLanguage' => 'fr']);
 
         $controller = $this->createControllerWithPreparedFaqRecord();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        // The edit right is limited to English and German, the source is French.
+        $scope = RightScope::ofGrants(new RightGrant(languages: ['en', 'de']));
+        $controller->setContainer($this->createAuthenticatedContainer(scope: $scope));
 
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "fr".');
@@ -418,7 +426,9 @@ final class FaqControllerTest extends TestCase
         $request = new Request([], [], ['faqId' => '777', 'faqLanguage' => 'en']);
 
         $controller = $this->createControllerWithPreparedFaqRecord();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        // The translate right is limited to category 1, the source lies in category 666.
+        $scope = RightScope::ofGrants(new RightGrant([1]));
+        $controller->setContainer($this->createAuthenticatedContainer(scope: $scope));
 
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_TRANSLATE" permission for category 666.');
@@ -574,7 +584,9 @@ final class FaqControllerTest extends TestCase
         );
 
         $request = new Request([], [], ['faqId' => '1', 'faqLanguage' => 'fr']);
-        $controller->setContainer($this->createAuthenticatedContainer());
+        // The edit right is limited to English and German, the record is French.
+        $scope = RightScope::ofGrants(new RightGrant(languages: ['en', 'de']));
+        $controller->setContainer($this->createAuthenticatedContainer(scope: $scope));
 
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "fr".');
@@ -880,10 +892,12 @@ final class FaqControllerTest extends TestCase
 
     /**
      * @param list<PermissionType>|null $grantedRights null grants every right except $deniedRight
+     * @param RightScope|null $scope the scope every right is granted in, null for an unrestricted one
      */
     private function createAuthenticatedContainer(
         ?PermissionType $deniedRight = null,
         ?array $grantedRights = null,
+        ?RightScope $scope = null,
     ): ContainerInterface {
         $grantedValues = $grantedRights === null
             ? null
@@ -899,20 +913,7 @@ final class FaqControllerTest extends TestCase
 
                 return $deniedRight === null || $right !== $deniedRight && $right !== $deniedRight->value;
             });
-        $permission
-            ->method('hasPermissionForCategory')
-            ->willReturnCallback(
-                // sentinel forbidden category for tests
-                static fn(int $userId, mixed $right, int $categoryId): bool => $categoryId !== 666,
-            );
-        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
-        $permission
-            ->method('hasPermissionForLanguage')
-            ->willReturnCallback(
-                // sentinel forbidden language for tests
-                static fn(int $userId, mixed $right, string $language): bool => $language !== 'fr',
-            );
-        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+        $permission->method('getScopeForRight')->willReturn($scope ?? RightScope::unrestricted());
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;

@@ -17,6 +17,8 @@ use phpMyFAQ\Faq\MetaData as FaqMetaData;
 use phpMyFAQ\Faq\Statistics as FaqStatistics;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\BasicPermission;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\TestDatabaseTrait;
@@ -106,10 +108,7 @@ class FaqControllerTest extends TestCase
     {
         $permission = $this->createMock(BasicPermission::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission->method('hasPermissionForCategory')->willReturn(true);
-        $permission->method('hasPermissionForLanguage')->willReturn(true);
-        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
-        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+        $permission->method('getScopeForRight')->willReturn(RightScope::unrestricted());
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -135,25 +134,8 @@ class FaqControllerTest extends TestCase
         $permission = $this->createMock(BasicPermission::class);
         $permission->method('hasPermission')->willReturn(true);
         $permission
-            ->method('hasPermissionForCategory')
-            ->willReturnCallback(
-                static fn(int $userId, mixed $right, int $categoryId): bool => in_array(
-                    $categoryId,
-                    $allowedCategoryIds,
-                    true,
-                ),
-            );
-        $permission
-            ->method('hasPermissionForLanguage')
-            ->willReturnCallback(
-                static fn(int $userId, mixed $right, string $language): bool => in_array(
-                    $language,
-                    $allowedLanguages,
-                    true,
-                ),
-            );
-        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategoryIds);
-        $permission->method('getAllowedLanguagesForRight')->willReturn($allowedLanguages);
+            ->method('getScopeForRight')
+            ->willReturn(RightScope::ofGrants(new RightGrant($allowedCategoryIds, $allowedLanguages)));
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -1940,7 +1922,7 @@ class FaqControllerTest extends TestCase
         $this->authorizeScopedUser($controller, allowedCategoryIds: [5], allowedLanguages: ['en']);
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 9.');
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 9 in language "en".');
 
         $controller->update($this->createUpdateRequest(['is-active' => true]));
     }
@@ -2006,7 +1988,7 @@ class FaqControllerTest extends TestCase
         $this->authorizeScopedUser($controller, allowedCategoryIds: [5], allowedLanguages: ['en']);
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 9.');
+        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 9 in language "en".');
 
         $controller->create($this->createCreateRequest(['category-id' => 9]));
     }
@@ -2053,7 +2035,7 @@ class FaqControllerTest extends TestCase
         $this->authorizeScopedUser($controller, allowedCategoryIds: [5], allowedLanguages: ['en']);
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 9.');
+        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 9 in language "en".');
 
         $controller->create($this->createCreateRequest(['category-id' => 5, 'category-name' => 'Other Team']));
     }
@@ -2218,10 +2200,7 @@ class FaqControllerTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('hasPermission')
             ->willReturnCallback(static fn(int $userId, mixed $right): bool => true);
-        $permission->method('hasPermissionForCategory')->willReturn(true);
-        $permission->method('hasPermissionForLanguage')->willReturn(true);
-        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
-        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+        $permission->method('getScopeForRight')->willReturn(RightScope::unrestricted());
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
@@ -2254,10 +2233,7 @@ class FaqControllerTest extends TestCase
             ->willReturnCallback(
                 static fn(int $userId, mixed $right): bool => $right !== PermissionType::FAQ_PUBLISH->value,
             );
-        $permission->method('hasPermissionForCategory')->willReturn(true);
-        $permission->method('hasPermissionForLanguage')->willReturn(true);
-        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
-        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+        $permission->method('getScopeForRight')->willReturn(RightScope::unrestricted());
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);

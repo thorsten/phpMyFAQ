@@ -92,10 +92,11 @@ final class AttachmentsController extends AbstractAdministrationController
     }
 
     /**
-     * Keeps only the attachments whose FAQ lies entirely within the categories the user's
-     * delete right is restricted to, so the overview offers no attachment the API would
+     * Keeps only the attachments whose FAQ lies entirely within the categories and the language
+     * the user's delete right covers, so the overview offers no attachment the API would
      * then reject with a 403. Mirrors the empty-list policy of
-     * userHasPermissionForCategories(): an uncategorized FAQ is hidden from restricted users.
+     * userHasPermissionForCategoriesInLanguage(): an uncategorized FAQ is hidden from
+     * category-restricted users.
      *
      * @param list<array<string, mixed>|\stdClass> $crumbs
      * @return list<array<string, mixed>|\stdClass>
@@ -103,16 +104,16 @@ final class AttachmentsController extends AbstractAdministrationController
      */
     private function restrictToAllowedCategories(array $crumbs): array
     {
-        $allowedCategoryIds = $this->currentUser->perm->getAllowedCategoriesForRight(
+        $scope = $this->currentUser->perm->getScopeForRight(
             $this->currentUser->getUserId(),
             PermissionType::ATTACHMENT_DELETE->value,
         );
 
-        if ($allowedCategoryIds === null) {
+        if ($scope->isUnrestricted()) {
             return $crumbs;
         }
 
-        if ($allowedCategoryIds === [] || $crumbs === []) {
+        if ($scope->isEmpty() || $crumbs === []) {
             return [];
         }
 
@@ -134,13 +135,12 @@ final class AttachmentsController extends AbstractAdministrationController
 
         return array_values(array_filter($crumbs, static function (array|\stdClass $crumb) use (
             $categoryIdsByRecord,
-            $allowedCategoryIds,
+            $scope,
         ): bool {
             /** @var array<string, mixed>|\stdClass $crumb */
             [$language, $recordId] = self::faqOfCrumb($crumb);
-            $faqCategoryIds = $categoryIdsByRecord[$language][$recordId] ?? [];
 
-            return $faqCategoryIds !== [] && array_diff($faqCategoryIds, $allowedCategoryIds) === [];
+            return $scope->allows($categoryIdsByRecord[$language][$recordId] ?? [], $language);
         }));
     }
 

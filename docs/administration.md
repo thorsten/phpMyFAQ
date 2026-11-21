@@ -76,7 +76,8 @@ Groups can be restricted per right to a set of categories (Admin → Groups → 
 - A group restricted to categories X and Y cannot add, edit, translate, approve, or delete FAQs in other categories, and
   the admin UI only shows the allowed categories.
 - **Direct user rights always remain global** — category restrictions only apply to rights granted through groups. Grant
-  rights via groups if you want category-level control.
+  rights via groups if you want category-level control. A direct right that is language-restricted (see 7.1.4) is
+  global only in its own languages.
 - Restrictions match exact categories; they are not inherited by subcategories.
 - **Basic permission mode has no groups**, so category restrictions do not apply there; every right is global.
 - CSV import is vetted row by row against the `add_faq` right before anything is stored: each row's target category and
@@ -98,14 +99,19 @@ restrictions). The rules are deliberately different from category restrictions:
   and the admin UI only offers the allowed languages.
 - **Basic permission mode has no groups but still enforces per-user language restrictions** directly (unlike category
   restrictions, which are a no-op in Basic mode).
-- When a user has both a direct grant and a group grant for the same right, the right applies to the **union** of both
-  grants' allowed languages; either grant being unrestricted makes the right globally usable for that user.
+- When a user has several grants for the same right (a direct grant and one or more group grants), each grant applies
+  on its own, with its own categories and languages. A grant without any restriction makes the right globally usable
+  for that user.
 - Restrictions match exact language codes; there is no fallback or inheritance between language variants.
 - Translating a FAQ into a new language is checked against the **target** language (the language being created), not
   the source language being read.
 - A blocked action returns HTTP 403 with a message naming the missing right and the language.
-- Category and language restrictions combine with **AND** semantics: an action must be permitted by both the category
-  and the language rules to succeed.
+- Category and language restrictions combine with **AND** semantics **within one grant**: an action succeeds only if a
+  single grant permits both the category and the language. Restrictions of different grants are never mixed. Example:
+  a direct grant limited to `de` plus a group grant limited to category 1 allows every category in `de` and category 1
+  in every language, but not category 2 in `en`.
+- The same rule applies when passing a right on: an administrator can only assign a right to a user or group in a
+  scope that one of their own grants covers.
 
 ### 7.1.5 Read, write and publish rights
 

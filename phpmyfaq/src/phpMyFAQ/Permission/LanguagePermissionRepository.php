@@ -147,47 +147,6 @@ readonly class LanguagePermissionRepository
     }
 
     /**
-     * Returns true if the user's own direct right grant permits the given language:
-     * either the grant is unrestricted, or the language is explicitly listed.
-     */
-    public function checkUserRightForLanguage(int $userId, int $rightId, string $language): bool
-    {
-        if ($userId <= 0 || $rightId <= 0 || !Language::isASupportedLanguage($language)) {
-            return false;
-        }
-
-        $escapedLanguage = $this->configuration->getDb()->escape($language);
-
-        $select = sprintf(
-            "
-            SELECT 1 FROM %sfaquser_right fur
-            WHERE fur.user_id = %d AND fur.right_id = %d
-            AND (
-                NOT EXISTS (
-                    SELECT 1 FROM %sfaquser_right_language furl
-                    WHERE furl.user_id = fur.user_id AND furl.right_id = fur.right_id
-                )
-                OR EXISTS (
-                    SELECT 1 FROM %sfaquser_right_language furl
-                    WHERE furl.user_id = fur.user_id
-                      AND furl.right_id = fur.right_id
-                      AND furl.language = '%s'
-                )
-            )",
-            Database::getTablePrefix(),
-            $userId,
-            $rightId,
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $escapedLanguage,
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-
-        return $res !== false && $this->configuration->getDb()->numRows($res) > 0;
-    }
-
-    /**
      * Returns the language codes that a group's right is restricted to.
      * An empty array means the right is unrestricted (applies to all languages).
      *
@@ -301,57 +260,6 @@ readonly class LanguagePermissionRepository
         );
 
         return (bool) $this->configuration->getDb()->query($delete);
-    }
-
-    /**
-     * Checks if a user has a specific right for a given language via group membership.
-     * Returns true if the user belongs to a group that either:
-     * - Has no language restrictions for this right (global), OR
-     * - Has the specific language in its restrictions.
-     */
-    public function checkUserGroupRightForLanguage(int $userId, int $rightId, string $language): bool
-    {
-        if ($userId <= 0 || $rightId <= 0 || !Language::isASupportedLanguage($language)) {
-            return false;
-        }
-
-        $escapedLanguage = $this->configuration->getDb()->escape($language);
-
-        $select = sprintf(
-            "
-            SELECT
-                fgr.group_id
-            FROM
-                %sfaqgroup_right fgr
-            INNER JOIN
-                %sfaquser_group fug ON fgr.group_id = fug.group_id
-            WHERE
-                fug.user_id = %d AND
-                fgr.right_id = %d AND
-                (
-                    NOT EXISTS (
-                        SELECT 1 FROM %sfaqgroup_right_language fgrl
-                        WHERE fgrl.group_id = fgr.group_id AND fgrl.right_id = fgr.right_id
-                    )
-                    OR EXISTS (
-                        SELECT 1 FROM %sfaqgroup_right_language fgrl
-                        WHERE fgrl.group_id = fgr.group_id
-                          AND fgrl.right_id = fgr.right_id
-                          AND fgrl.language = '%s'
-                    )
-                )",
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $userId,
-            $rightId,
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $escapedLanguage,
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-
-        return $res !== false && $this->configuration->getDb()->numRows($res) > 0;
     }
 
     /**

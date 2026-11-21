@@ -50,6 +50,8 @@ use ReflectionClass;
 #[UsesClass(\phpMyFAQ\Translation::class)]
 #[UsesClass(\phpMyFAQ\User::class)]
 #[UsesClass(\phpMyFAQ\User\UserData::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightGrant::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightScope::class)]
 #[UsesTrait(\phpMyFAQ\ConfigurationMethodsTrait::class)]
 class PermissionBackfillOperationTest extends TestCase
 {

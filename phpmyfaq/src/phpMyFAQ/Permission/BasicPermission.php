@@ -304,77 +304,26 @@ class BasicPermission implements PermissionInterface
     }
 
     /**
-     * Basic mode has no groups and therefore no category restrictions:
-     * the check is identical to the global permission check.
+     * Basic mode knows a single grant per right: the direct one, which is never
+     * category-restricted but may be limited to languages.
      */
-    public function hasPermissionForCategory(int $userId, mixed $right, int $categoryId): bool
-    {
-        return $this->hasPermission($userId, $right);
-    }
-
-    /**
-     * Basic mode has no groups and therefore no category restrictions.
-     */
-    public function getAllowedCategoriesForRight(int $userId, mixed $right): ?array
-    {
-        return null;
-    }
-
-    /**
-     * Basic mode has no groups, but a user's direct right grant can still be
-     * restricted to specific language(s).
-     */
-    public function hasPermissionForLanguage(int $userId, mixed $right, string $language): bool
+    public function getScopeForRight(int $userId, mixed $right): RightScope
     {
         if (!$this->hasPermission($userId, $right)) {
-            return false;
+            return RightScope::none();
         }
 
         // Superadmins hold every right implicitly, without a faquser_right row.
-        // Querying the direct-grant restrictions would find no row and deny them,
-        // so bypass here exactly as hasPermission() and MediumPermission do.
-        if ($this->isSuperAdmin($userId)) {
-            return true;
-        }
-
-        $rightId = $this->resolveRightId($right);
-
-        return $this->languageRepository->checkUserRightForLanguage($userId, $rightId, $language);
-    }
-
-    /**
-     * Returns the language codes the user's direct right grant is restricted
-     * to, null if unrestricted, or an empty array if the user does not own
-     * the right at all.
-     */
-    public function getAllowedLanguagesForRight(int $userId, mixed $right): ?array
-    {
-        if (!$this->hasPermission($userId, $right)) {
-            return [];
-        }
-
-        // Superadmins are never language-restricted, see hasPermissionForLanguage().
-        if ($this->isSuperAdmin($userId)) {
-            return null;
-        }
-
-        $rightId = $this->resolveRightId($right);
-        $restrictions = $this->languageRepository->getUserLanguageRestrictions($userId, $rightId);
-
-        return $restrictions === [] ? null : $restrictions;
-    }
-
-    /**
-     * Returns true if the given user is a superadmin.
-     *
-     * @throws Exception
-     */
-    private function isSuperAdmin(int $userId): bool
-    {
         $currentUser = new CurrentUser($this->configuration);
         $currentUser->getUserById($userId);
+        if ($currentUser->isSuperAdmin()) {
+            return RightScope::unrestricted();
+        }
 
-        return $currentUser->isSuperAdmin();
+        return RightScope::ofGrants(RightGrant::fromRestrictions(
+            [],
+            $this->languageRepository->getUserLanguageRestrictions($userId, $this->resolveRightId($right)),
+        ));
     }
 
     /**

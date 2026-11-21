@@ -205,62 +205,6 @@ readonly class GroupCategoryPermissionRepository
     }
 
     /**
-     * Checks if a user has a specific right for a given category via group membership.
-     * Returns true if:
-     * - The user's group has the right with no category restrictions (global), OR
-     * - The user's group has the right restricted to categories that include the given category.
-     *
-     * @param int $userId User ID
-     * @param int $rightId Right ID
-     * @param int $categoryId Category ID
-     */
-    public function checkUserGroupRightForCategory(int $userId, int $rightId, int $categoryId): bool
-    {
-        if ($userId <= 0 || $rightId <= 0 || $categoryId <= 0) {
-            return false;
-        }
-
-        // Check if user has the right via any group that either:
-        // 1. Has no category restrictions for this right (global), OR
-        // 2. Has the specific category in its restrictions
-        $select = sprintf(
-            '
-            SELECT
-                fgr.group_id
-            FROM
-                %sfaqgroup_right fgr
-            INNER JOIN
-                %sfaquser_group fug ON fgr.group_id = fug.group_id
-            WHERE
-                fug.user_id = %d AND
-                fgr.right_id = %d AND
-                (
-                    NOT EXISTS (
-                        SELECT 1 FROM %sfaqgroup_right_category fgrc
-                        WHERE fgrc.group_id = fgr.group_id AND fgrc.right_id = fgr.right_id
-                    )
-                    OR EXISTS (
-                        SELECT 1 FROM %sfaqgroup_right_category fgrc
-                        WHERE fgrc.group_id = fgr.group_id
-                          AND fgrc.right_id = fgr.right_id
-                          AND fgrc.category_id = %d
-                    )
-                )',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $userId,
-            $rightId,
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $categoryId,
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-
-        return $this->configuration->getDb()->numRows($res) > 0;
-    }
-
-    /**
      * Returns the statement that opens a transaction on the current driver.
      * SQL Server treats a bare `BEGIN` as a statement block, not a transaction,
      * so the DELETE/INSERT pair would run unscoped there.

@@ -10,6 +10,8 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
@@ -20,6 +22,8 @@ use ReflectionProperty;
 #[UsesClass(Configuration::class)]
 #[UsesClass(Database::class)]
 #[UsesClass(Sqlite3::class)]
+#[UsesClass(RightGrant::class)]
+#[UsesClass(RightScope::class)]
 #[UsesTrait(ConfigurationMethodsTrait::class)]
 class ReadScopeTest extends TestCase
 {
@@ -81,8 +85,7 @@ class ReadScopeTest extends TestCase
 
         self::assertTrue($scope->isUnrestricted());
         self::assertSame('', $scope->toSqlFragment());
-        self::assertTrue($scope->allowsCategory(42));
-        self::assertTrue($scope->allowsLanguage('de'));
+        self::assertTrue($scope->allows(42, 'de'));
     }
 
     /**
@@ -103,26 +106,21 @@ class ReadScopeTest extends TestCase
 
         self::assertFalse($scope->isUnrestricted());
         self::assertSame(' AND 1 = 0', $scope->toSqlFragment());
-        self::assertFalse($scope->allowsCategory(1));
-        self::assertFalse($scope->allowsLanguage('en'));
+        self::assertFalse($scope->allows(1, 'en'));
     }
 
     /**
-     * An empty allowed list means "holds the right nowhere", which is not the same as the null
-     * that means "unrestricted". Rendering nothing for it would silently grant full access.
+     * A scope without any grant means "holds the right nowhere", which is not the same as an
+     * unrestricted grant. Rendering nothing for it would silently grant full access.
      */
-    public function testEmptyCategoryListMatchesNoRows(): void
+    public function testRightWithoutAnyGrantMatchesNoRows(): void
     {
-        $scope = ReadScope::forUser($this->permission(hasRight: true, categories: []), 5);
+        $scope = ReadScope::forUser($this->permissionWithScope(RightScope::none()), 5);
 
+        self::assertFalse($scope->isUnrestricted());
         self::assertSame(' AND 1 = 0', $scope->toSqlFragment());
-    }
-
-    public function testEmptyLanguageListMatchesNoRows(): void
-    {
-        $scope = ReadScope::forUser($this->permission(hasRight: true, languages: []), 5);
-
-        self::assertSame(' AND 1 = 0', $scope->toSqlFragment());
+        self::assertSame(' AND 1 = 0', $scope->toCategoryRelationConstraint('fcr'));
+        self::assertFalse($scope->allows(1, 'en'));
     }
 
     public function testCategoryRestrictionRendersAnExistsSubQuery(): void
@@ -163,10 +161,50 @@ class ReadScopeTest extends TestCase
         self::assertStringContainsString("fd.lang IN ('de')", $fragment);
         self::assertStringContainsString('pmfrs.category_id IN (2)', $fragment);
         self::assertFalse($scope->isUnrestricted());
-        self::assertTrue($scope->allowsCategory(2));
-        self::assertFalse($scope->allowsCategory(3));
-        self::assertTrue($scope->allowsLanguage('de'));
-        self::assertFalse($scope->allowsLanguage('en'));
+        self::assertTrue($scope->allows(2, 'de'));
+        self::assertFalse($scope->allows(3, 'de'));
+        self::assertFalse($scope->allows(2, 'en'));
+        self::assertFalse($scope->allows(3, 'en'));
+    }
+
+    /**
+     * "German only" through one grant and "category 1 only" through another do not add up to
+     * "category 2 in English": each grant pairs its own categories with its own languages.
+     */
+    public function testRestrictionsOfSeparateGrantsAreNotMerged(): void
+    {
+        $scope = ReadScope::forUser($this->permissionWithScope($this->germanOrCategoryOne()), 5);
+
+        self::assertFalse($scope->isUnrestricted());
+        self::assertFalse($scope->allows(2, 'en'));
+        self::assertTrue($scope->allows(2, 'de'));
+        self::assertTrue($scope->allows(1, 'en'));
+    }
+
+    public function testSeparateGrantsRenderOneAlternativeEach(): void
+    {
+        $scope = ReadScope::forUser($this->permissionWithScope($this->germanOrCategoryOne()), 5);
+
+        self::assertSame(
+            " AND ((fd.lang IN ('de')) OR (EXISTS (SELECT 1 FROM faqcategoryrelations pmfrs"
+            . ' WHERE pmfrs.record_id = fd.id AND pmfrs.record_lang = fd.lang'
+            . ' AND pmfrs.category_id IN (1))))',
+            $scope->toSqlFragment(),
+        );
+        self::assertSame(
+            " AND ((fd.lang IN ('de')) OR (fcr.category_id IN (1)))",
+            $scope->toSqlFragment('fd', 'fcr'),
+        );
+    }
+
+    public function testCategoryRelationConstraintPairsEachCategoryWithTheLanguagesOfItsGrant(): void
+    {
+        $scope = ReadScope::forUser($this->permissionWithScope($this->germanOrCategoryOne()), 5);
+
+        self::assertSame(
+            " AND ((fcr.record_lang IN ('de')) OR (fcr.category_id IN (1)))",
+            $scope->toCategoryRelationConstraint('fcr'),
+        );
     }
 
     /**
@@ -204,7 +242,7 @@ class ReadScopeTest extends TestCase
     {
         $scope = ReadScope::forUser($this->permission(hasRight: true, categories: [7]), 5);
 
-        self::assertSame(' AND rel.category_id IN (7)', $scope->toCategoryRelationConstraint('rel'));
+        self::assertSame(' AND ((rel.category_id IN (7)))', $scope->toCategoryRelationConstraint('rel'));
     }
 
     /**
@@ -217,15 +255,18 @@ class ReadScopeTest extends TestCase
             ->method('hasPermission')
             ->with(5, PermissionType::FAQS_VIEW->value)
             ->willReturn(true);
-        $permission->expects($this->once())->method('getAllowedCategoriesForRight')->willReturn(null);
-        $permission->expects($this->once())->method('getAllowedLanguagesForRight')->willReturn(null);
+        $permission
+            ->expects($this->once())
+            ->method('getScopeForRight')
+            ->with(5, PermissionType::FAQS_VIEW->value)
+            ->willReturn(RightScope::unrestricted());
 
         $scope = ReadScope::forUser($permission, 5);
 
         // Rendering repeatedly must not go back to the permission layer.
         $scope->toSqlFragment();
         $scope->toSqlFragment();
-        $scope->allowsCategory(1);
+        $scope->allows(1, 'en');
     }
 
     /**
@@ -237,11 +278,28 @@ class ReadScopeTest extends TestCase
         ?array $categories = null,
         ?array $languages = null,
     ): PermissionInterface {
+        return $this->permissionWithScope(
+            $categories === null && $languages === null
+                ? RightScope::unrestricted()
+                : RightScope::ofGrants(new RightGrant($categories, $languages)),
+            $hasRight,
+        );
+    }
+
+    private function permissionWithScope(RightScope $scope, bool $hasRight = true): PermissionInterface
+    {
         $permission = $this->createStub(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn($hasRight);
-        $permission->method('getAllowedCategoriesForRight')->willReturn($categories);
-        $permission->method('getAllowedLanguagesForRight')->willReturn($languages);
+        $permission->method('getScopeForRight')->willReturn($scope);
 
         return $permission;
+    }
+
+    /**
+     * A direct grant for German only next to a group grant for category 1 only.
+     */
+    private function germanOrCategoryOne(): RightScope
+    {
+        return RightScope::ofGrants(new RightGrant(languages: ['de']), new RightGrant([1]));
     }
 }

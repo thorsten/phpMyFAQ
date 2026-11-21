@@ -19,6 +19,8 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Push\WebPushService;
 use phpMyFAQ\Question;
 use phpMyFAQ\Question\QuestionHistoryRepository;
@@ -213,14 +215,26 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * A user whose rights are restricted to category 1, so the sentinel category 666 lies outside
+     * of every grant.
+     */
+    private function createAuthenticatedContainerRestrictedToCategoryOne(?Session $session = null): ContainerInterface
+    {
+        return $this->createAuthenticatedContainerWithAllowedCategories($session, [1]);
+    }
+
+    /**
      * @param int[]|null $allowedCategories null = unrestricted, int[] = category-restricted
      * @param PermissionInterface|null $permission pre-built permission mock, e.g. a MediumPermission
      *                                             mock when group membership matters
+     * @param bool $isSuperAdmin superadmins are the only users an unsupported language code is
+     *                           not refused for at the permission check
      */
     private function createAuthenticatedContainerWithAllowedCategories(
         ?Session $session,
         ?array $allowedCategories,
         ?PermissionInterface $permission = null,
+        bool $isSuperAdmin = false,
     ): ContainerInterface {
         $permission ??= $this->createMock(PermissionInterface::class);
         $permission
@@ -239,52 +253,34 @@ final class FaqControllerTest extends TestCase
                     true,
                 ),
             );
+        // Every language except the sentinel forbidden language 'fr'; the scope can only say so
+        // as the list of languages the tests work in.
         $permission
-            ->method('hasPermissionForCategory')
-            ->willReturnCallback(
-                static fn(int $userId, mixed $right, int $categoryId): bool => (
-                    $userId === 42
-                    && in_array(
-                        $right,
-                        [
-                            PermissionType::FAQ_ADD->value,
-                            PermissionType::FAQ_EDIT->value,
-                            PermissionType::FAQ_DELETE->value,
-                            PermissionType::FAQ_PUBLISH->value,
-                            PermissionType::FAQ_TRANSLATE->value,
-                        ],
-                        true,
-                    )
-                    && $categoryId !== 666 // sentinel forbidden category for tests
+            ->method('getScopeForRight')
+            ->willReturnCallback(static fn(int $userId, mixed $right): RightScope => match (true) {
+                $userId !== 42,
+                !in_array(
+                    $right,
+                    [
+                        PermissionType::FAQ_ADD->value,
+                        PermissionType::FAQ_EDIT->value,
+                        PermissionType::FAQ_DELETE->value,
+                        PermissionType::FAQ_PUBLISH->value,
+                        PermissionType::FAQ_TRANSLATE->value,
+                    ],
+                    true,
                 ),
-            );
-        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
-        $permission
-            ->method('hasPermissionForLanguage')
-            ->willReturnCallback(
-                static fn(int $userId, mixed $right, string $language): bool => (
-                    $userId === 42
-                    && in_array(
-                        $right,
-                        [
-                            PermissionType::FAQ_ADD->value,
-                            PermissionType::FAQ_EDIT->value,
-                            PermissionType::FAQ_DELETE->value,
-                            PermissionType::FAQ_PUBLISH->value,
-                            PermissionType::FAQ_TRANSLATE->value,
-                        ],
-                        true,
-                    )
-                    && $language !== 'fr' // sentinel forbidden language for tests
-                ),
-            );
-        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+                    => RightScope::none(),
+                $isSuperAdmin => RightScope::unrestricted(),
+                default => RightScope::ofGrants(new RightGrant($allowedCategories, ['en', 'de'])),
+            });
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(42);
         $currentUser->method('getLogin')->willReturn('admin');
+        $currentUser->method('isSuperAdmin')->willReturn($isSuperAdmin);
 
         $session ??= new Session(new MockArraySessionStorage());
         $adminLog = $this->createStub(AdminLog::class);
@@ -589,10 +585,10 @@ final class FaqControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $controller->setContainer($this->createAuthenticatedContainerRestrictedToCategoryOne($session));
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 666.');
+        $this->expectExceptionMessage('User has no "FAQ_ADD" permission for category 666 in language "en".');
         $controller->create($request);
     }
 
@@ -1890,8 +1886,14 @@ final class FaqControllerTest extends TestCase
             'checked' => true,
         ], JSON_THROW_ON_ERROR));
 
+        // Anyone but a superadmin is refused at the language permission check already, so only a
+        // superadmin reaches the language validation this test is about.
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $controller->setContainer($this->createAuthenticatedContainerWithAllowedCategories(
+            $session,
+            null,
+            isSuperAdmin: true,
+        ));
 
         $response = $controller->sticky($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
@@ -2315,7 +2317,7 @@ final class FaqControllerTest extends TestCase
 
         $request = new Request([], ['csrf' => $csrfToken], [], [], ['file' => $uploadedFile]);
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $controller->setContainer($this->createAuthenticatedContainerRestrictedToCategoryOne($session));
 
         $response = $controller->import($request);
         $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
@@ -2449,10 +2451,10 @@ final class FaqControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $controller->setContainer($this->createAuthenticatedContainerRestrictedToCategoryOne($session));
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666.');
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666 in language "en".');
         $controller->update($request);
     }
 
@@ -2522,10 +2524,10 @@ final class FaqControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $controller->setContainer($this->createAuthenticatedContainerRestrictedToCategoryOne($session));
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666.');
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666 in language "de".');
         $controller->update($request);
     }
 
@@ -2575,7 +2577,7 @@ final class FaqControllerTest extends TestCase
         $controller->setContainer($this->createAuthenticatedContainerWithAllowedCategories($session, [1]));
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for uncategorized content.');
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for uncategorized content in language "en".');
         $controller->update($request);
     }
 
@@ -2628,10 +2630,10 @@ final class FaqControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $controller->setContainer($this->createAuthenticatedContainerRestrictedToCategoryOne($session));
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_DELETE" permission for category 666.');
+        $this->expectExceptionMessage('User has no "FAQ_DELETE" permission for category 666 in language "en".');
         $controller->delete($request);
     }
 
@@ -2679,10 +2681,10 @@ final class FaqControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $controller->setContainer($this->createAuthenticatedContainerRestrictedToCategoryOne($session));
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission for category 666.');
+        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission for category 666 in language "en".');
         $controller->status($request);
     }
 
@@ -2797,13 +2799,16 @@ final class FaqControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $controller->setContainer($this->createAuthenticatedContainerRestrictedToCategoryOne($session));
 
         try {
             $controller->status($request);
             self::fail('Expected a ForbiddenException for the restricted second FAQ.');
         } catch (ForbiddenException $exception) {
-            self::assertSame('User has no "FAQ_EDIT" permission for category 666.', $exception->getMessage());
+            self::assertSame(
+                'User has no "FAQ_EDIT" permission for category 666 in language "en".',
+                $exception->getMessage(),
+            );
         } finally {
             $this->removeCsrfCookie('pmf-csrf-token');
         }
@@ -2834,10 +2839,53 @@ final class FaqControllerTest extends TestCase
         ], JSON_THROW_ON_ERROR));
 
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $controller->setContainer($this->createAuthenticatedContainerRestrictedToCategoryOne($session));
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666.');
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666 in language "en".');
+        $controller->sticky($request);
+    }
+
+    /**
+     * Two grants must not be combined: "German only" from one grant and "category 1 only" from
+     * another do not add up to category 2 in English, although each restriction on its own
+     * (the category union and the language union) would let the request through.
+     *
+     * @throws \Exception
+     */
+    public function testStickyReturnsForbiddenWhenCategoryAndLanguageComeFromDifferentGrants(): void
+    {
+        $this->seedFaqRecord(categoryId: 2);
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'csrf' => $csrfToken,
+            'faqIds' => [1],
+            'faqLanguage' => 'en',
+            'checked' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        // Stubbed before the helper adds its own scope, so this one answers.
+        $permission = $this->createMock(PermissionInterface::class);
+        $permission
+            ->method('getScopeForRight')
+            ->willReturn(RightScope::ofGrants(new RightGrant(languages: ['de']), new RightGrant([1])));
+
+        $adminFaq = $this->createMock(FaqAdministration::class);
+        $adminFaq->expects($this->never())->method('updateRecordFlag');
+
+        $controller = $this->createControllerWithAdminFaq($adminFaq);
+        $controller->setContainer($this->createAuthenticatedContainerWithAllowedCategories(
+            $session,
+            null,
+            $permission,
+        ));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 2 in language "en".');
         $controller->sticky($request);
     }
 
@@ -2873,10 +2921,10 @@ final class FaqControllerTest extends TestCase
     public function testListByCategoryReturnsForbiddenForRestrictedCategory(): void
     {
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer());
+        $controller->setContainer($this->createAuthenticatedContainerRestrictedToCategoryOne());
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666.');
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 666 in language "en".');
         $controller->listByCategory(new Request([], [], ['categoryId' => 666, 'language' => 'en']));
     }
 
@@ -2904,16 +2952,14 @@ final class FaqControllerTest extends TestCase
     {
         $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission->method('hasPermissionForCategory')->willReturn(true);
-        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
-        $permission
-            ->method('hasPermissionForLanguage')
-            ->willReturnCallback(
-                static fn(int $userId, mixed $right, string $language): bool => (
-                    $right !== PermissionType::FAQ_TRANSLATE->value
-                ),
-            );
-        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+        $permission->method('getScopeForRight')->willReturnCallback(static fn(
+            int $userId,
+            mixed $right,
+        ): RightScope => (
+            $right === PermissionType::FAQ_TRANSLATE->value
+                ? RightScope::ofGrants(new RightGrant(languages: ['de']))
+                : RightScope::unrestricted()
+        ));
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -2985,12 +3031,14 @@ final class FaqControllerTest extends TestCase
         $controller->setContainer($this->createAuthenticatedContainerWithAllowedCategories($session, [10]));
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "FAQ_DELETE" permission for uncategorized content.');
+        $this->expectExceptionMessage(
+            'User has no "FAQ_DELETE" permission for uncategorized content in language "en".',
+        );
         $controller->delete($request);
     }
 
     /**
-     * An unrestricted user (getAllowedCategoriesForRight returns null) must
+     * An unrestricted user (a scope without category restriction) must
      * succeed when deleting an orphaned FAQ — the guard passes on empty lists
      * only when the right is not category-restricted.
      *
@@ -3467,20 +3515,12 @@ final class FaqControllerTest extends TestCase
             ->willReturnCallback(
                 static fn(int $userId, mixed $right): bool => $userId === 42 && in_array($right, $writeRights, true),
             );
-        $permission
-            ->method('hasPermissionForCategory')
-            ->willReturnCallback(
-                static fn(int $userId, mixed $right, int $categoryId): bool => $userId === 42
-                && in_array($right, $writeRights, true),
-            );
-        $permission
-            ->method('hasPermissionForLanguage')
-            ->willReturnCallback(
-                static fn(int $userId, mixed $right, string $language): bool => $userId === 42
-                && in_array($right, $writeRights, true),
-            );
-        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
-        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+        $permission->method('getScopeForRight')->willReturnCallback(static fn(
+            int $userId,
+            mixed $right,
+        ): RightScope => $userId === 42 && in_array($right, $writeRights, true)
+            ? RightScope::unrestricted()
+            : RightScope::none());
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -4066,9 +4106,7 @@ final class FaqControllerTest extends TestCase
         $controller = $this->createControllerWithFaq($faq);
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->update(
-            $this->createRequestForFaqUpdate($csrfToken, status: null, solutionId: 1042),
-        );
+        $response = $controller->update($this->createRequestForFaqUpdate($csrfToken, status: null, solutionId: 1042));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         $this->removeCsrfCookie('pmf-csrf-token');
@@ -4111,9 +4149,11 @@ final class FaqControllerTest extends TestCase
         $controller = $this->createControllerWithFaq($faq);
         $controller->setContainer($this->createAuthenticatedContainer($session));
 
-        $response = $controller->update(
-            $this->createRequestForFaqUpdate($csrfToken, status: 'published', solutionId: 999999),
-        );
+        $response = $controller->update($this->createRequestForFaqUpdate(
+            $csrfToken,
+            status: 'published',
+            solutionId: 999999,
+        ));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         $this->removeCsrfCookie('pmf-csrf-token');

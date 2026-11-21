@@ -185,7 +185,7 @@ class SearchResultSet
             );
         }
 
-        return $readScope->allowsLanguage($language) && $readScope->allowsCategory($categoryId);
+        return $readScope->allows($categoryId, $language);
     }
 
     /**
@@ -257,9 +257,7 @@ class SearchResultSet
                 continue;
             }
 
-            if (
-                $readScope->allowsLanguage((string) $row->lang) && $readScope->allowsCategory((int) $row->category_id)
-            ) {
+            if ($readScope->allows((int) $row->category_id, (string) $row->lang)) {
                 return true;
             }
         }

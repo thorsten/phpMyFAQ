@@ -229,11 +229,12 @@ final class GroupController extends AbstractAdministrationApiController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        // A non-SuperAdmin may only scope a group's right to a non-empty subset of the
-        // categories they hold that right in themselves. Group rights are inherited by every
-        // member, so without this an administrator could grant the group category access they
-        // do not possess (privilege escalation), including via an empty "unrestricted" list.
-        if (!$this->mayAssignCategories($rightId, $categoryIds)) {
+        // A non-SuperAdmin may only scope a group's right to categories they hold that right in
+        // themselves, for the languages the group's right applies to. Group rights are inherited
+        // by every member, so without this an administrator could grant the group category
+        // access they do not possess (privilege escalation), including via an empty
+        // "unrestricted" list.
+        if (!$this->mayAssignScope($rightId, $categoryIds, $permission->getLanguageRestrictions($groupId, $rightId))) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
@@ -325,11 +326,11 @@ final class GroupController extends AbstractAdministrationApiController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        // A non-SuperAdmin may only scope a group's right to a non-empty subset of the
-        // languages they hold themselves. Group rights are inherited by every member, so
-        // without this an administrator could grant the group language access they do not
-        // possess (privilege escalation), including via an empty "unrestricted" list.
-        if (!$this->mayAssignLanguages($rightId, $languages)) {
+        // A non-SuperAdmin may only scope a group's right to languages they hold themselves, for
+        // the categories the group's right applies to. Group rights are inherited by every
+        // member, so without this an administrator could grant the group language access they
+        // do not possess (privilege escalation), including via an empty "unrestricted" list.
+        if (!$this->mayAssignScope($rightId, $permission->getCategoryRestrictions($groupId, $rightId), $languages)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
@@ -562,10 +563,32 @@ final class GroupController extends AbstractAdministrationApiController
                     return $this->json(['error' => 'Cannot grant a right you do not hold.'], Response::HTTP_FORBIDDEN);
                 }
 
-                $ownScopes[$rightId] = [
-                    $this->currentUser->perm->getAllowedLanguagesForRight($actingUserId, $rightId),
-                    $this->currentUser->perm->getAllowedCategoriesForRight($actingUserId, $rightId),
-                ];
+                $ownLanguages = $this->currentUser
+                    ->perm
+                    ->getScopeForRight($actingUserId, $rightId)
+                    ->languagesInAnyCategory();
+                $ownCategories = $this->currentUser
+                    ->perm
+                    ->getScopeForRight($actingUserId, $rightId)
+                    ->categoryIdsInAnyLanguage();
+
+                // A group grant carries one set of languages and one set of categories. Every
+                // language and category the acting user holds is only safe to hand out together
+                // if they hold each combination; holding them through separate grants (one
+                // limited by language, another by category) must not merge into a wider grant.
+                if (!$this->currentUser->perm->getScopeForRight($actingUserId, $rightId)->covers(
+                    $ownCategories,
+                    $ownLanguages,
+                )) {
+                    return $this->json([
+                        'error' => sprintf(
+                            'Cannot grant right %d: you hold it in different scopes through separate grants.',
+                            $rightId,
+                        ),
+                    ], Response::HTTP_FORBIDDEN);
+                }
+
+                $ownScopes[$rightId] = [$ownLanguages, $ownCategories];
             }
         }
 

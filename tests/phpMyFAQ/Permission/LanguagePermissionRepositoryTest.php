@@ -187,30 +187,6 @@ class LanguagePermissionRepositoryTest extends TestCase
         $this->assertFalse($this->repository->deleteAllForUser(0));
     }
 
-    public function testCheckUserRightForLanguageWithNoRestrictions(): void
-    {
-        $this->dbHandle->query('INSERT INTO faquser_right (user_id, right_id) VALUES (1, 1)');
-
-        $this->assertTrue($this->repository->checkUserRightForLanguage(1, 1, 'en'));
-        $this->assertTrue($this->repository->checkUserRightForLanguage(1, 1, 'de'));
-    }
-
-    public function testCheckUserRightForLanguageWithMatchingRestriction(): void
-    {
-        $this->repository->setUserLanguageRestrictions(1, 1, ['de', 'fr']);
-
-        $this->assertTrue($this->repository->checkUserRightForLanguage(1, 1, 'de'));
-        $this->assertTrue($this->repository->checkUserRightForLanguage(1, 1, 'fr'));
-        $this->assertFalse($this->repository->checkUserRightForLanguage(1, 1, 'en'));
-    }
-
-    public function testCheckUserRightForLanguageReturnsFalseForInvalidInput(): void
-    {
-        $this->assertFalse($this->repository->checkUserRightForLanguage(0, 1, 'en'));
-        $this->assertFalse($this->repository->checkUserRightForLanguage(1, 0, 'en'));
-        $this->assertFalse($this->repository->checkUserRightForLanguage(1, 1, 'not-a-language'));
-    }
-
     public function testGetLanguageRestrictionsReturnsEmptyForInvalidInput(): void
     {
         $this->assertEmpty($this->repository->getLanguageRestrictions(0, 1));
@@ -281,63 +257,6 @@ class LanguagePermissionRepositoryTest extends TestCase
         $this->assertContains('en', $all[1]);
         $this->assertContains('de', $all[1]);
         $this->assertContains('fr', $all[3]);
-    }
-
-    public function testCheckUserGroupRightForLanguageWithNoRestrictions(): void
-    {
-        $this->dbHandle->query(
-            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (1, 'TestGroup', 'Test', 0)",
-        );
-        $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 1)');
-        $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (1, 1)');
-
-        // No language restrictions -> should have access to any language
-        $this->assertTrue($this->repository->checkUserGroupRightForLanguage(1, 1, 'en'));
-    }
-
-    public function testCheckUserGroupRightForLanguageWithMatchingRestriction(): void
-    {
-        $this->dbHandle->query(
-            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (1, 'TestGroup', 'Test', 0)",
-        );
-        $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 1)');
-        $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (1, 1)');
-
-        $this->repository->setLanguageRestrictions(1, 1, ['de', 'fr']);
-
-        $this->assertTrue($this->repository->checkUserGroupRightForLanguage(1, 1, 'de'));
-        $this->assertTrue($this->repository->checkUserGroupRightForLanguage(1, 1, 'fr'));
-        $this->assertFalse($this->repository->checkUserGroupRightForLanguage(1, 1, 'en'));
-    }
-
-    public function testCheckUserGroupRightForLanguageReturnsFalseForInvalidInput(): void
-    {
-        $this->assertFalse($this->repository->checkUserGroupRightForLanguage(0, 1, 'en'));
-        $this->assertFalse($this->repository->checkUserGroupRightForLanguage(1, 0, 'en'));
-        $this->assertFalse($this->repository->checkUserGroupRightForLanguage(1, 1, 'not-a-language'));
-    }
-
-    public function testCheckUserGroupRightForLanguageWithMultipleGroups(): void
-    {
-        // Group 1: restricted to 'de'
-        $this->dbHandle->query(
-            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (1, 'Group1', 'Test', 0)",
-        );
-        $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (1, 1)');
-        $this->repository->setLanguageRestrictions(1, 1, ['de']);
-
-        // Group 2: unrestricted (no language restrictions)
-        $this->dbHandle->query(
-            "INSERT INTO faqgroup (group_id, name, description, auto_join) VALUES (2, 'Group2', 'Test', 0)",
-        );
-        $this->dbHandle->query('INSERT INTO faqgroup_right (group_id, right_id) VALUES (2, 1)');
-
-        // User in both groups
-        $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 1)');
-        $this->dbHandle->query('INSERT INTO faquser_group (user_id, group_id) VALUES (1, 2)');
-
-        // User should have access to any language because Group 2 is unrestricted
-        $this->assertTrue($this->repository->checkUserGroupRightForLanguage(1, 1, 'en'));
     }
 
     private function initializeDatabaseStatics(Sqlite3 $dbHandle): void

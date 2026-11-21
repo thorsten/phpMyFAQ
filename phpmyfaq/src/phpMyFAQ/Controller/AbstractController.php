@@ -37,6 +37,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Form\FormsServiceProvider;
 use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Http\SecurityEventLogger;
+use phpMyFAQ\Language;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
@@ -403,13 +404,14 @@ abstract class AbstractController
     }
 
     /**
-     * Ensures the user owns the permission in every given category.
-     * Direct user-rights remain global; in basic permission mode this is
-     * identical to userHasPermission().
+     * Ensures the user owns the permission in every given category, in at least one language.
+     * Use this only where no language is involved; with a language, call
+     * userHasPermissionForCategoriesInLanguage() instead. Direct user-rights remain global; in
+     * basic permission mode this is identical to userHasPermission().
      *
      * Empty-list policy: when $categoryIds resolves to an empty list after
      * filtering (e.g. an orphaned FAQ with no category relations), only users
-     * whose right is unrestricted (getAllowedCategoriesForRight() returns null)
+     * holding a grant without category restriction
      * may proceed. A category-restricted user is denied with a ForbiddenException,
      * because there is no category membership to verify against and allowing
      * unrestricted access would defeat the restriction.
@@ -423,30 +425,18 @@ abstract class AbstractController
             throw new UnauthorizedHttpException(challenge: 'User is not authenticated.');
         }
 
-        $currentUser = $this->currentUser;
+        $scope = $this->currentUser->perm->getScopeForRight($this->currentUser->getUserId(), $permissionType->value);
         $categoryIds = array_filter(array_unique($categoryIds), static fn(int $id): bool => $id > 0);
 
-        if ($categoryIds === []) {
-            $allowed = $currentUser->perm->getAllowedCategoriesForRight(
-                $currentUser->getUserId(),
-                $permissionType->value,
-            );
-            if ($allowed !== null) {
-                throw new ForbiddenException(message: sprintf(
-                    'User has no "%s" permission for uncategorized content.',
-                    $permissionType->name,
-                ));
-            }
-
-            return;
+        if ($categoryIds === [] && $scope->categoryIdsInAnyLanguage() !== null) {
+            throw new ForbiddenException(message: sprintf(
+                'User has no "%s" permission for uncategorized content.',
+                $permissionType->name,
+            ));
         }
 
         foreach ($categoryIds as $categoryId) {
-            if (!$currentUser->perm->hasPermissionForCategory(
-                $currentUser->getUserId(),
-                $permissionType->value,
-                $categoryId,
-            )) {
+            if (!$scope->allowsCategoryInAnyLanguage($categoryId)) {
                 throw new ForbiddenException(message: sprintf(
                     'User has no "%s" permission for category %d.',
                     $permissionType->name,
@@ -469,17 +459,84 @@ abstract class AbstractController
             throw new UnauthorizedHttpException(challenge: 'User is not authenticated.');
         }
 
-        $currentUser = $this->currentUser;
-        if (!$currentUser->perm->hasPermissionForLanguage(
-            $currentUser->getUserId(),
-            $permissionType->value,
-            $language,
-        )) {
+        if (!$this->userHoldsRightInLanguage($permissionType, $language)) {
             throw new ForbiddenException(message: sprintf(
                 'User has no "%s" permission for language "%s".',
                 $permissionType->name,
                 $language,
             ));
+        }
+    }
+
+    /**
+     * Whether the user's right covers the language in at least one category. Language codes
+     * that are not supported are covered for nobody but superadmins, so a made-up code cannot
+     * pass as "unrestricted".
+     *
+     * This does not authorize an action in a category: check category and language together
+     * with userHasPermissionForCategoriesInLanguage() for that.
+     */
+    protected function userHoldsRightInLanguage(PermissionType $permissionType, string $language): bool
+    {
+        $currentUser = $this->currentUser;
+
+        if (!$currentUser->isSuperAdmin() && !Language::isASupportedLanguage($language)) {
+            return false;
+        }
+
+        return $currentUser
+            ->perm
+            ->getScopeForRight($currentUser->getUserId(), $permissionType->value)
+            ->allowsLanguageInAnyCategory($language);
+    }
+
+    /**
+     * Ensures the user owns the permission in every given category for the given language.
+     *
+     * Use this instead of userHasPermissionForCategories() followed by
+     * userHasPermissionForLanguage() whenever both are known: those two each look across all of
+     * the user's grants, so together they would accept a category from one grant and a language
+     * from another. Here a single grant has to cover both.
+     *
+     * Follows the empty-list policy of userHasPermissionForCategories(): content without a
+     * category is covered only by a grant that is not category-restricted.
+     *
+     * @param int[] $categoryIds
+     * @throws UnauthorizedHttpException|ForbiddenException
+     */
+    protected function userHasPermissionForCategoriesInLanguage(
+        PermissionType $permissionType,
+        array $categoryIds,
+        string $language,
+    ): void {
+        if (!$this->currentUser->isLoggedIn()) {
+            throw new UnauthorizedHttpException(challenge: 'User is not authenticated.');
+        }
+
+        // The language on its own first: it also rejects language codes that are not supported.
+        $this->userHasPermissionForLanguage($permissionType, $language);
+
+        $scope = $this->currentUser->perm->getScopeForRight($this->currentUser->getUserId(), $permissionType->value);
+
+        $categoryIds = array_filter(array_unique($categoryIds), static fn(int $id): bool => $id > 0);
+
+        if ($categoryIds === [] && !$scope->allowsUncategorized($language)) {
+            throw new ForbiddenException(message: sprintf(
+                'User has no "%s" permission for uncategorized content in language "%s".',
+                $permissionType->name,
+                $language,
+            ));
+        }
+
+        foreach ($categoryIds as $categoryId) {
+            if (!$scope->allowsCategory($categoryId, $language)) {
+                throw new ForbiddenException(message: sprintf(
+                    'User has no "%s" permission for category %d in language "%s".',
+                    $permissionType->name,
+                    $categoryId,
+                    $language,
+                ));
+            }
         }
     }
 
@@ -496,8 +553,7 @@ abstract class AbstractController
     protected function userMayPublish(array $categoryIds, string $language): void
     {
         $this->userHasPermission(PermissionType::FAQ_PUBLISH);
-        $this->userHasPermissionForCategories(PermissionType::FAQ_PUBLISH, $categoryIds);
-        $this->userHasPermissionForLanguage(PermissionType::FAQ_PUBLISH, $language);
+        $this->userHasPermissionForCategoriesInLanguage(PermissionType::FAQ_PUBLISH, $categoryIds, $language);
     }
 
     /**
@@ -525,23 +581,13 @@ abstract class AbstractController
             return false;
         }
 
-        if (!$currentUser->perm->hasPermissionForLanguage($userId, $right, $language)) {
+        if (!$this->userHoldsRightInLanguage(PermissionType::FAQ_PUBLISH, $language)) {
             return false;
         }
 
         $categoryIds = array_filter(array_unique($categoryIds), static fn(int $id): bool => $id > 0);
 
-        if ($categoryIds === []) {
-            return $currentUser->perm->getAllowedCategoriesForRight($userId, $right) === null;
-        }
-
-        foreach ($categoryIds as $categoryId) {
-            if (!$currentUser->perm->hasPermissionForCategory($userId, $right, $categoryId)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $currentUser->perm->getScopeForRight($userId, $right)->allows($categoryIds, $language);
     }
 
     /**

@@ -7,6 +7,8 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Faq\ReadScope;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -95,10 +97,21 @@ class SearchResultSetTest extends TestCase
      */
     private function makeRestrictedScope(?array $categoryIds, ?array $languages): ReadScope
     {
+        return $this->makeScopeOf(
+            $categoryIds === null && $languages === null
+                ? RightScope::unrestricted()
+                : RightScope::ofGrants(new RightGrant($categoryIds, $languages)),
+        );
+    }
+
+    /**
+     * A scope granting FAQS_VIEW through the given grants.
+     */
+    private function makeScopeOf(RightScope $rightScope): ReadScope
+    {
         $permission = $this->createMock(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission->method('getAllowedCategoriesForRight')->willReturn($categoryIds);
-        $permission->method('getAllowedLanguagesForRight')->willReturn($languages);
+        $permission->method('getScopeForRight')->willReturn($rightScope);
 
         return ReadScope::forUser($permission, 1);
     }
@@ -298,6 +311,43 @@ class SearchResultSetTest extends TestCase
         $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1, $scope);
 
         $searchResultSet->reviewResultSet([$this->makeResult(1, ['lang' => 'en', 'category_id' => 9])]);
+
+        $this->assertSame([], $searchResultSet->getResultSet());
+    }
+
+    /**
+     * "German only" through one grant and "category 3 only" through another do not add up to
+     * "category 9 in English": a hit must lie within a single grant.
+     */
+    public function testReviewResultSetDoesNotMergeTheRestrictionsOfSeparateGrants(): void
+    {
+        $scope = $this->makeScopeOf(RightScope::ofGrants(new RightGrant(languages: ['de']), new RightGrant([3])));
+        $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1, $scope);
+
+        $searchResultSet->reviewResultSet([
+            $this->makeResult(1, ['lang' => 'en', 'category_id' => 9]),
+            $this->makeResult(2, ['lang' => 'de', 'category_id' => 9]),
+            $this->makeResult(3, ['lang' => 'en', 'category_id' => 3]),
+        ]);
+
+        $this->assertSame([2, 3], array_map(
+            static fn(stdClass $result): int => (int) $result->id,
+            array_values($searchResultSet->getResultSet()),
+        ));
+    }
+
+    public function testReviewResultSetDoesNotMergeSeparateGrantsForIncompleteHit(): void
+    {
+        $scope = $this->makeScopeOf(RightScope::ofGrants(new RightGrant(languages: ['de']), new RightGrant([3])));
+        $storedRow = new stdClass();
+        $storedRow->id = 1;
+        $storedRow->lang = 'en';
+        $storedRow->category_id = 9;
+
+        $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1, $scope, [$storedRow]);
+
+        // The hit carries neither language nor category; its only stored row is category 9 in English.
+        $searchResultSet->reviewResultSet([$this->makeResult(1)]);
 
         $this->assertSame([], $searchResultSet->getResultSet());
     }

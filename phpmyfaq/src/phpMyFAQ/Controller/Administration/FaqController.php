@@ -282,8 +282,11 @@ final class FaqController extends AbstractAdministrationController
 
         $categories = $categoryRelation->getCategories($faqId, $faqLanguage);
 
-        $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, array_keys($categories));
-        $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $faqLanguage);
+        $this->userHasPermissionForCategoriesInLanguage(
+            PermissionType::FAQ_EDIT,
+            array_keys($categories),
+            $faqLanguage,
+        );
 
         $this->adminLog->log($this->currentUser, AdminLogType::FAQ_EDIT->value . ':' . $faqId);
 
@@ -706,10 +709,13 @@ final class FaqController extends AbstractAdministrationController
      */
     private function getFilteredCategoryTree(Category $category, PermissionType $permissionType): array
     {
-        return CategoryTreeRestrictionFilter::filter($category->getCategoryTree(), $this->currentUser->perm->getAllowedCategoriesForRight(
-            $this->currentUser->getUserId(),
-            $permissionType->value,
-        ));
+        return CategoryTreeRestrictionFilter::filter(
+            $category->getCategoryTree(),
+            $this->currentUser
+                ->perm
+                ->getScopeForRight($this->currentUser->getUserId(), $permissionType->value)
+                ->categoryIdsInAnyLanguage(),
+        );
     }
 
     /**
@@ -719,10 +725,10 @@ final class FaqController extends AbstractAdministrationController
      */
     private function getFilteredLanguageOptions(string $selected, PermissionType $permissionType): string
     {
-        $allowed = $this->currentUser->perm->getAllowedLanguagesForRight(
-            $this->currentUser->getUserId(),
-            $permissionType->value,
-        );
+        $allowed = $this->currentUser
+            ->perm
+            ->getScopeForRight($this->currentUser->getUserId(), $permissionType->value)
+            ->languagesInAnyCategory();
 
         $excludedLanguages = LanguageRestrictionFilter::excludedLanguages(
             LanguageHelper::getAvailableLanguages(),
@@ -771,10 +777,12 @@ final class FaqController extends AbstractAdministrationController
         $categoryRelation = new Relation($this->configuration, $category);
         $categories = $categoryRelation->getCategories($faqId, $faqLanguage);
 
-        $this->userHasPermissionForCategories($permissionType, array_keys($categories));
-
         if ($checkLanguage) {
-            $this->userHasPermissionForLanguage($permissionType, $faqLanguage);
+            $this->userHasPermissionForCategoriesInLanguage($permissionType, array_keys($categories), $faqLanguage);
+
+            return;
         }
+
+        $this->userHasPermissionForCategories($permissionType, array_keys($categories));
     }
 }

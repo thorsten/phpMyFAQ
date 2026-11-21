@@ -124,49 +124,15 @@ interface PermissionInterface
     public function getUserGroups(int $userId): array;
 
     /**
-     * Returns true if the user owns the right within the given category.
-     * Permission modes without group support have no category restrictions,
-     * so this behaves exactly like hasPermission(). Direct user-rights are
-     * always global and are never limited by category restrictions.
+     * Returns the scope the user holds the right in, one entry per grant.
      *
-     * @param int   $userId     User ID
-     * @param mixed $right      Right ID, right name, or PermissionType value
-     * @param int   $categoryId Category ID
-     */
-    public function hasPermissionForCategory(int $userId, mixed $right, int $categoryId): bool;
-
-    /**
-     * Returns the category IDs in which the user may exercise the right,
-     * null if the right is unrestricted (applies to all categories), or an
-     * empty array if the user cannot exercise the right in any category.
+     * A right reaches a user through a direct grant and through groups, and every grant has its
+     * own category and language restriction. The scope keeps them paired, so a category from
+     * one grant is never accepted together with a language from another. This is the only way
+     * to ask where a right applies.
      *
      * @param int   $userId User ID
      * @param mixed $right  Right ID, right name, or PermissionType value
-     * @return array<int>|null
      */
-    public function getAllowedCategoriesForRight(int $userId, mixed $right): ?array;
-
-    /**
-     * Returns true if the user owns the right for the given language.
-     * Unlike category restrictions, language restrictions apply to both
-     * direct user-rights and group-rights: Basic mode has no groups but can
-     * still restrict a user's right to specific language(s) via a direct
-     * grant.
-     *
-     * @param int    $userId   User ID
-     * @param mixed  $right    Right ID, right name, or PermissionType value
-     * @param string $language Language code (e.g. 'en', 'de')
-     */
-    public function hasPermissionForLanguage(int $userId, mixed $right, string $language): bool;
-
-    /**
-     * Returns the language codes in which the user may exercise the right,
-     * null if the right is unrestricted (applies to all languages), or an
-     * empty array if the user cannot exercise the right in any language.
-     *
-     * @param int   $userId User ID
-     * @param mixed $right  Right ID, right name, or PermissionType value
-     * @return array<string>|null
-     */
-    public function getAllowedLanguagesForRight(int $userId, mixed $right): ?array;
+    public function getScopeForRight(int $userId, mixed $right): RightScope;
 }

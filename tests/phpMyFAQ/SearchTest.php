@@ -11,6 +11,8 @@ use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Faq\EditScope;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Plugin\PluginException;
 use phpMyFAQ\Search\Search\Elasticsearch;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -375,6 +377,29 @@ class SearchTest extends TestCase
     }
 
     /**
+     * "German only" through one grant and "category 1 only" through another do not add up to
+     * "category 2 in English": a draft must lie within a single grant.
+     *
+     * @throws Exception
+     */
+    public function testSearchForAdminDoesNotMergeTheRestrictionsOfSeparateGrants(): void
+    {
+        $this->insertDraftForAdminSearch(94031, 'en', [1]);
+        $this->insertDraftForAdminSearch(94032, 'en', [2]);
+        $this->insertDraftForAdminSearch(94033, 'de', [2]);
+        $this->insertDraftForAdminSearch(94034, 'en', [1, 2]);
+        $this->insertDraftForAdminSearch(94035, 'en', []);
+        $this->insertDraftForAdminSearch(94036, 'de', []);
+
+        $hits = $this->search->searchForAdmin('salarymarker', $this->editScopeOf(RightScope::ofGrants(
+            new RightGrant(languages: ['de']),
+            new RightGrant([1]),
+        )));
+
+        $this->assertSame([94031, 94033, 94036], $this->idsOf($hits));
+    }
+
+    /**
      * @throws Exception
      */
     public function testSearchForAdminFindsEveryFaqForAnUnrestrictedEditor(): void
@@ -394,10 +419,18 @@ class SearchTest extends TestCase
      */
     private function editScope(?array $categories = null, ?array $languages = null): EditScope
     {
+        return $this->editScopeOf(
+            $categories === null && $languages === null
+                ? RightScope::unrestricted()
+                : RightScope::ofGrants(new RightGrant($categories, $languages)),
+        );
+    }
+
+    private function editScopeOf(RightScope $rightScope): EditScope
+    {
         $permission = $this->createStub(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission->method('getAllowedCategoriesForRight')->willReturn($categories);
-        $permission->method('getAllowedLanguagesForRight')->willReturn($languages);
+        $permission->method('getScopeForRight')->willReturn($rightScope);
 
         return EditScope::forUser($permission, 5);
     }

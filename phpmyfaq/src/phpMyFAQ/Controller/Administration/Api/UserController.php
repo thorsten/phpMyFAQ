@@ -681,36 +681,11 @@ final class UserController extends AbstractAdministrationApiController
             $user->perm->getAllUserRights($userId),
             static fn(mixed $rightId): bool => (
                 $actingPermission->hasPermission($actingUserId, (int) $rightId)
-                && self::scopeCovers(
-                    $actingPermission->getAllowedLanguagesForRight($actingUserId, (int) $rightId),
-                    $user->perm->getAllowedLanguagesForRight($userId, (int) $rightId),
-                )
-                && self::scopeCovers(
-                    $actingPermission->getAllowedCategoriesForRight($actingUserId, (int) $rightId),
-                    $user->perm->getAllowedCategoriesForRight($userId, (int) $rightId),
-                )
+                && $actingPermission
+                    ->getScopeForRight($actingUserId, (int) $rightId)
+                    ->coversScope($user->perm->getScopeForRight($userId, (int) $rightId))
             ),
         );
-    }
-
-    /**
-     * Whether a scope includes every language or category of another one. Null means
-     * unrestricted, which only an unrestricted scope covers.
-     *
-     * @param array<int|string>|null $scope
-     * @param array<int|string>|null $otherScope
-     */
-    private static function scopeCovers(?array $scope, ?array $otherScope): bool
-    {
-        if ($scope === null) {
-            return true;
-        }
-
-        if ($otherScope === null) {
-            return false;
-        }
-
-        return array_diff($otherScope, $scope) === [];
     }
 
     /**
@@ -767,17 +742,16 @@ final class UserController extends AbstractAdministrationApiController
                     return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
                 }
 
-                // Fail closed: an empty scope means the right is not held in any language.
-                $ownScope = $this->currentUser->perm->getAllowedLanguagesForRight($actingUserId, (int) $userRight);
+                // A direct user right is never category-restricted, so it may only be re-granted
+                // for the languages the acting user holds it in across every category. A right
+                // held only for some categories (through a category-restricted group) does not
+                // count, or it would become global. null means unrestricted; an empty list
+                // fails closed: the right is not held globally in any language.
+                $ownScope = $this->currentUser
+                    ->perm
+                    ->getScopeForRight($actingUserId, (int) $userRight)
+                    ->languagesInEveryCategory();
                 if ($ownScope === []) {
-                    return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
-                }
-
-                // A direct user right is never category-restricted. A right the acting user holds
-                // only for some categories (through a category-restricted group) must therefore
-                // not be re-granted as a direct right at all, or it would become global.
-                // null means unrestricted; an empty array fails closed like the language scope.
-                if ($this->currentUser->perm->getAllowedCategoriesForRight($actingUserId, (int) $userRight) !== null) {
                     return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
                 }
 
@@ -948,7 +922,7 @@ final class UserController extends AbstractAdministrationApiController
         // of the languages they hold themselves for this right. This prevents an administrator
         // with the delegable USER_EDIT right from granting language access they do not possess
         // (privilege escalation), including via an empty "unrestricted" list.
-        if (!$this->mayAssignLanguages($rightId, $languages)) {
+        if (!$this->mayAssignScope($rightId, [], $languages)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 

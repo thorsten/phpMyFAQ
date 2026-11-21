@@ -19,6 +19,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Permission\BasicPermission;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -807,8 +808,9 @@ final class FaqControllerTest extends TestCase
     {
         $permission = $this->createMock(BasicPermission::class);
         $permission->method('hasPermission')->willReturn($canAddFaq);
-        $permission->method('hasPermissionForCategory')->willReturn($inEditScope);
-        $permission->method('hasPermissionForLanguage')->willReturn($inEditScope);
+        $permission
+            ->method('getScopeForRight')
+            ->willReturn($inEditScope ? RightScope::unrestricted() : RightScope::none());
         $permission->expects($this->atLeastOnce())->method('getUserGroups')->with($userId)->willReturn([-1]);
 
         $currentUser = $this->createMock(CurrentUser::class);

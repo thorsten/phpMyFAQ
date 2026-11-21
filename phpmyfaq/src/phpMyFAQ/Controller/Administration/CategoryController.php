@@ -78,10 +78,10 @@ final class CategoryController extends AbstractAdministrationController
 
         $categoryInfo = $category->getAllCategories();
 
-        $allowedCategories = $this->currentUser->perm->getAllowedCategoriesForRight(
-            $currentUserId,
-            PermissionType::CATEGORY_EDIT->value,
-        );
+        $allowedCategories = $this->currentUser
+            ->perm
+            ->getScopeForRight($currentUserId, PermissionType::CATEGORY_EDIT->value)
+            ->categoryIdsInAnyLanguage();
         if ($allowedCategories !== null) {
             $categoryInfo = array_filter(
                 $categoryInfo,
@@ -230,13 +230,13 @@ final class CategoryController extends AbstractAdministrationController
 
         $parentId = (int) Filter::filterVar($request->request->get(key: 'parent_id'), FILTER_VALIDATE_INT);
 
-        $this->userHasPermissionForCategories(PermissionType::CATEGORY_ADD, [$parentId]);
-
-        $categoryId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
         $categoryLang = Filter::filterVar($request->request->get(key: 'lang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        // A language-restricted CATEGORY_ADD right must not create a category in another language.
-        $this->userHasPermissionForLanguage(PermissionType::CATEGORY_ADD, $categoryLang);
+        // A language-restricted CATEGORY_ADD right must not create a category in another
+        // language, and the grant covering the parent has to be the one covering the language.
+        $this->userHasPermissionForCategoriesInLanguage(PermissionType::CATEGORY_ADD, [$parentId], $categoryLang);
+
+        $categoryId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
 
         $uploadedFile = $request->files->get('image') ?? [];
         if ($uploadedFile instanceof UploadedFile) {
@@ -495,10 +495,13 @@ final class CategoryController extends AbstractAdministrationController
         $categoryLanguageService = new CategoryLanguageService();
         $languages = $categoryLanguageService->getLanguagesInUse($this->configuration); // [code => name]
 
-        $categoryTree = CategoryTreeRestrictionFilter::filter($category->getCategoryTree(), $this->currentUser->perm->getAllowedCategoriesForRight(
-            $this->currentUser->getUserId(),
-            PermissionType::CATEGORY_EDIT->value,
-        ));
+        $categoryTree = CategoryTreeRestrictionFilter::filter(
+            $category->getCategoryTree(),
+            $this->currentUser
+                ->perm
+                ->getScopeForRight($this->currentUser->getUserId(), PermissionType::CATEGORY_EDIT->value)
+                ->categoryIdsInAnyLanguage(),
+        );
 
         $translations = [];
         foreach ($categoryTree as $cat) {
@@ -623,14 +626,12 @@ final class CategoryController extends AbstractAdministrationController
         $parentId = (int) Filter::filterVar($request->request->get(key: 'parent_id'), FILTER_VALIDATE_INT);
         $categoryId = (int) Filter::filterVar($request->request->get(key: 'id'), FILTER_VALIDATE_INT);
 
-        $this->userHasPermissionForCategories(PermissionType::CATEGORY_EDIT, [$categoryId]);
-
         $categoryLang = Filter::filterVar($request->request->get(key: 'catlang'), FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         // The update writes the faqcategories row selected by id *and* lang, so the submitted
         // language decides which translation changes. Without this check an editor whose
         // CATEGORY_EDIT right is restricted to one language could edit any other translation.
-        $this->userHasPermissionForLanguage(PermissionType::CATEGORY_EDIT, $categoryLang);
+        $this->userHasPermissionForCategoriesInLanguage(PermissionType::CATEGORY_EDIT, [$categoryId], $categoryLang);
 
         $existingImage = Filter::filterVar(
             $request->request->get(key: 'existing_image'),

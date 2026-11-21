@@ -96,6 +96,8 @@ use phpMyFAQ\User\UserSession;
 #[UsesClass(CurrentUser::class)]
 #[UsesClass(UserData::class)]
 #[UsesClass(UserSession::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightGrant::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightScope::class)]
 class SitemapTest extends TestCase
 {
     use TestDatabaseTrait;

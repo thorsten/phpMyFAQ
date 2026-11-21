@@ -67,6 +67,8 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 #[UsesClass(CategoryPermissionContext::class)]
 #[UsesClass(CategoryRepository::class)]
 #[UsesClass(CategoryPermissionService::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightGrant::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightScope::class)]
 class NotificationTest extends TestCase
 {
     private Configuration&MockObject $configuration;

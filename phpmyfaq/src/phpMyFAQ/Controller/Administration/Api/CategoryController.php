@@ -65,11 +65,9 @@ final class CategoryController extends AbstractAdministrationApiController
         $categoryId = (int) ($data->categoryId ?? 0);
         $categoryLang = (string) ($data->language ?? '');
 
-        $this->userHasPermissionForCategories(PermissionType::CATEGORY_DELETE, [$categoryId]);
-
         // The delete removes the translation selected by id and lang, so the submitted language
-        // must be one the user may delete in.
-        $this->userHasPermissionForLanguage(PermissionType::CATEGORY_DELETE, $categoryLang);
+        // must be one the user may delete this category in.
+        $this->userHasPermissionForCategoriesInLanguage(PermissionType::CATEGORY_DELETE, [$categoryId], $categoryLang);
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
@@ -167,10 +165,10 @@ final class CategoryController extends AbstractAdministrationApiController
 
         // Reordering persists the entire submitted tree (all categories), so a
         // per-category check is not enough: the right must be unrestricted.
-        $allowedCategories = $this->currentUser->perm->getAllowedCategoriesForRight(
-            $this->currentUser->getUserId(),
-            PermissionType::CATEGORY_EDIT->value,
-        );
+        $allowedCategories = $this->currentUser
+            ->perm
+            ->getScopeForRight($this->currentUser->getUserId(), PermissionType::CATEGORY_EDIT->value)
+            ->categoryIdsInAnyLanguage();
         if ($allowedCategories !== null) {
             throw new ForbiddenException(message: sprintf(
                 'User has no "%s" permission to reorder the category tree.',

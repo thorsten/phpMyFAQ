@@ -14,6 +14,8 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\BasicPermission;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Strings;
 use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
@@ -90,21 +92,17 @@ class CategoryControllerTest extends TestCase
      * Injects a logged-in CurrentUser with all permissions into the controller so
      * that the userHasPermission() authorization check passes.
      *
+     * @param RightScope|null $scope the scope every right is granted in, null for an unrestricted one
      * @throws MockException
      */
-    private function authorizeCurrentUser(AbstractController $controller, int $userId = -1): void
-    {
+    private function authorizeCurrentUser(
+        AbstractController $controller,
+        int $userId = -1,
+        ?RightScope $scope = null,
+    ): void {
         $permission = $this->createMock(BasicPermission::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission->method('hasPermissionForCategory')->willReturn(true);
-        $permission->method('getAllowedCategoriesForRight')->willReturn(null);
-        $permission
-            ->method('hasPermissionForLanguage')
-            ->willReturnCallback(
-                // sentinel forbidden language for tests
-                static fn(int $userId, mixed $right, string $language): bool => $language !== 'fr',
-            );
-        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+        $permission->method('getScopeForRight')->willReturn($scope ?? RightScope::unrestricted());
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -124,23 +122,7 @@ class CategoryControllerTest extends TestCase
     {
         $permission = $this->createMock(BasicPermission::class);
         $permission->method('hasPermission')->willReturn(true);
-        $permission
-            ->method('hasPermissionForCategory')
-            ->willReturnCallback(
-                static fn(int $userId, mixed $right, int $categoryId): bool => in_array(
-                    $categoryId,
-                    $allowedCategoryIds,
-                    true,
-                ),
-            );
-        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategoryIds);
-        $permission
-            ->method('hasPermissionForLanguage')
-            ->willReturnCallback(
-                // sentinel forbidden language for tests
-                static fn(int $userId, mixed $right, string $language): bool => $language !== 'fr',
-            );
-        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
+        $permission->method('getScopeForRight')->willReturn(RightScope::ofGrants(new RightGrant($allowedCategoryIds)));
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -398,7 +380,8 @@ class CategoryControllerTest extends TestCase
         });
         $controller->setCategoryPermissionFactory(static fn(): CategoryPermission => $permission);
         $controller->setOrderFactory(static fn(): Order => $order);
-        $this->authorizeCurrentUser($controller);
+        // The add right is limited to English and German, the request is for French.
+        $this->authorizeCurrentUser($controller, scope: RightScope::ofGrants(new RightGrant(languages: ['en', 'de'])));
 
         $this->expectException(ForbiddenException::class);
         $controller->create($request);
@@ -525,7 +508,7 @@ class CategoryControllerTest extends TestCase
         $this->authorizeCategoryRestrictedUser($controller, [5]);
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "CATEGORY_ADD" permission for category 9.');
+        $this->expectExceptionMessage('User has no "CATEGORY_ADD" permission for category 9 in language "en".');
 
         $controller->create($this->createCategoryRequest(['parent-id' => 9]));
     }
@@ -546,7 +529,9 @@ class CategoryControllerTest extends TestCase
         $this->authorizeCategoryRestrictedUser($controller, [5]);
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "CATEGORY_ADD" permission for uncategorized content.');
+        $this->expectExceptionMessage(
+            'User has no "CATEGORY_ADD" permission for uncategorized content in language "en".',
+        );
 
         $controller->create($this->createCategoryRequest(['parent-id' => 0]));
     }
@@ -568,7 +553,7 @@ class CategoryControllerTest extends TestCase
         $this->authorizeCategoryRestrictedUser($controller, [5]);
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "CATEGORY_ADD" permission for category 9.');
+        $this->expectExceptionMessage('User has no "CATEGORY_ADD" permission for category 9 in language "en".');
 
         $controller->create($this->createCategoryRequest(['parent-id' => 5, 'parent-category-name' => 'Other Team']));
     }

@@ -17,6 +17,8 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -527,7 +529,7 @@ final class DashboardControllerTest extends TestCase
                 },
             );
 
-        $permission->method('getAllowedCategoriesForRight')->willReturn($editableCategoryIds);
+        $permission->method('getScopeForRight')->willReturn($this->scopeOfCategories($editableCategoryIds));
 
         $currentUser = $this->createStub(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -642,5 +644,21 @@ final class DashboardControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('id="phpmyfaq-latest-version"', (string) $response->getContent());
+    }
+
+    /**
+     * @param list<int>|null $categoryIds null for every category, an empty list for no grant at all
+     */
+    private function scopeOfCategories(?array $categoryIds): RightScope
+    {
+        if ($categoryIds === null) {
+            return RightScope::unrestricted();
+        }
+
+        if ($categoryIds === []) {
+            return RightScope::none();
+        }
+
+        return RightScope::ofGrants(new RightGrant($categoryIds));
     }
 }

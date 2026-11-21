@@ -488,14 +488,14 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->grantGroupRight(1, 1);
         $this->mediumPermission->setLanguageRestrictions(1, 1, ['de']);
 
-        $this->assertFalse($this->mediumPermission->hasPermissionForLanguage(1, 1, 'fr'));
+        $this->assertFalse($this->mediumPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('fr'));
 
         $this->assertTrue($this->mediumPermission->refuseAllGroupRights(1));
         $this->assertSame([], $this->mediumPermission->getLanguageRestrictions(1, 1));
 
         // Re-granting the right must not resurrect the stale 'de'-only scope.
         $this->mediumPermission->grantGroupRight(1, 1);
-        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 1, 'fr'));
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('fr'));
 
         $this->mediumPermission->deleteGroup(1);
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
@@ -547,7 +547,7 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testHasPermissionForCategoryWithUnrestrictedGroupRight(): void
+    public function testScopeAllowsCategoryWithUnrestrictedGroupRight(): void
     {
         $groupData = [
             'name' => 'TestGroup',
@@ -559,7 +559,7 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->grantGroupRight(1, 1);
 
         // No category restrictions -> should have access to any category
-        $this->assertTrue($this->mediumPermission->hasPermissionForCategory(1, 1, 99));
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 1)->allowsCategoryInAnyLanguage(99));
 
         // Cleanup
         $this->mediumPermission->deleteGroup(1);
@@ -568,7 +568,7 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testHasPermissionForCategoryWithRestrictedGroupRight(): void
+    public function testScopeAllowsCategoryWithRestrictedGroupRight(): void
     {
         // Make user 1 non-superadmin and remove direct user right so only group right applies
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
@@ -587,9 +587,9 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->setCategoryRestrictions(1, 1, [10]);
 
         // Should have access to category 10
-        $this->assertTrue($this->mediumPermission->hasPermissionForCategory(1, 1, 10));
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 1)->allowsCategoryInAnyLanguage(10));
         // Should NOT have access to category 20
-        $this->assertFalse($this->mediumPermission->hasPermissionForCategory(1, 1, 20));
+        $this->assertFalse($this->mediumPermission->getScopeForRight(1, 1)->allowsCategoryInAnyLanguage(20));
 
         // Cleanup
         $this->mediumPermission->deleteGroup(1);
@@ -656,7 +656,7 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testGetAllowedCategoriesForRightReturnsNullForUnrestrictedGroupRight(): void
+    public function testScopeCategoryIdsReturnsNullForUnrestrictedGroupRight(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
@@ -665,7 +665,7 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->addToGroup(1, 1);
         $this->mediumPermission->grantGroupRight(1, 1);
 
-        $this->assertNull($this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+        $this->assertNull($this->mediumPermission->getScopeForRight(1, 1)->categoryIdsInAnyLanguage());
 
         $this->mediumPermission->deleteGroup(1);
     }
@@ -673,7 +673,7 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testGetAllowedCategoriesForRightReturnsRestrictedCategories(): void
+    public function testScopeCategoryIdsReturnsRestrictedCategories(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
@@ -683,7 +683,7 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->grantGroupRight(1, 1);
         $this->mediumPermission->setCategoryRestrictions(1, 1, [10, 20]);
 
-        $this->assertSame([10, 20], $this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+        $this->assertSame([10, 20], $this->mediumPermission->getScopeForRight(1, 1)->categoryIdsInAnyLanguage());
 
         $this->mediumPermission->deleteGroup(1);
     }
@@ -691,18 +691,18 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testGetAllowedCategoriesForRightReturnsNullForDirectUserRight(): void
+    public function testScopeCategoryIdsReturnsNullForDirectUserRight(): void
     {
         // Fixture user 1 owns right 1 directly (faquser_right) => global, restrictions ignored
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
 
-        $this->assertNull($this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+        $this->assertNull($this->mediumPermission->getScopeForRight(1, 1)->categoryIdsInAnyLanguage());
     }
 
     /**
      * @throws Exception
      */
-    public function testGetAllowedCategoriesForRightReturnsUnionAcrossGroups(): void
+    public function testScopeCategoryIdsReturnsUnionAcrossGroups(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
@@ -716,7 +716,7 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->setCategoryRestrictions(1, 1, [10, 20]);
         $this->mediumPermission->setCategoryRestrictions(2, 1, [20, 30]);
 
-        $this->assertSame([10, 20, 30], $this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+        $this->assertSame([10, 20, 30], $this->mediumPermission->getScopeForRight(1, 1)->categoryIdsInAnyLanguage());
 
         $this->mediumPermission->deleteGroup(1);
         $this->mediumPermission->deleteGroup(2);
@@ -725,22 +725,22 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testGetAllowedCategoriesForRightReturnsEmptyArrayWithoutAnyGrant(): void
+    public function testScopeCategoryIdsReturnsEmptyArrayWithoutAnyGrant(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
 
-        $this->assertSame([], $this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+        $this->assertSame([], $this->mediumPermission->getScopeForRight(1, 1)->categoryIdsInAnyLanguage());
     }
 
     /**
-     * Pins that getAllowedCategoriesForRight() and hasPermissionForCategory()
+     * Pins that categoryIdsInAnyLanguage() and allowsCategoryInAnyLanguage()
      * agree for every category: a category is in the allowed set (or the set
      * is null) exactly when the per-category check grants it.
      *
      * @throws Exception
      */
-    public function testGetAllowedCategoriesForRightMatchesPerCategoryChecks(): void
+    public function testScopeCategoryIdsMatchesPerCategoryChecks(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
@@ -761,7 +761,7 @@ class MediumPermissionTest extends TestCase
 
         // One group unrestricted: the right applies globally
         $this->mediumPermission->setCategoryRestrictions(2, 1, []);
-        $this->assertNull($this->mediumPermission->getAllowedCategoriesForRight(1, 1));
+        $this->assertNull($this->mediumPermission->getScopeForRight(1, 1)->categoryIdsInAnyLanguage());
         $this->assertConsistentWithPerCategoryChecks(1, 1, $categories);
 
         $this->mediumPermission->deleteGroup(1);
@@ -774,11 +774,11 @@ class MediumPermissionTest extends TestCase
      */
     private function assertConsistentWithPerCategoryChecks(int $userId, int $rightId, array $categories): void
     {
-        $allowed = $this->mediumPermission->getAllowedCategoriesForRight($userId, $rightId);
+        $allowed = $this->mediumPermission->getScopeForRight($userId, $rightId)->categoryIdsInAnyLanguage();
         foreach ($categories as $categoryId) {
             $this->assertSame(
                 $allowed === null || in_array($categoryId, $allowed, strict: true),
-                $this->mediumPermission->hasPermissionForCategory($userId, $rightId, $categoryId),
+                $this->mediumPermission->getScopeForRight($userId, $rightId)->allowsCategoryInAnyLanguage($categoryId),
                 sprintf('Mismatch for category %d (allowed: %s)', $categoryId, json_encode($allowed)),
             );
         }
@@ -787,7 +787,7 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testHasPermissionForLanguageWithUnrestrictedGroupRight(): void
+    public function testScopeAllowsLanguageWithUnrestrictedGroupRight(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
@@ -797,7 +797,7 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->grantGroupRight(1, 1);
 
         // No language restrictions -> should have access to any language
-        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 1, 'en'));
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('en'));
 
         $this->mediumPermission->deleteGroup(1);
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
@@ -807,7 +807,7 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testHasPermissionForLanguageWithRestrictedGroupRight(): void
+    public function testScopeAllowsLanguageWithRestrictedGroupRight(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
@@ -817,8 +817,8 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->grantGroupRight(1, 1);
         $this->mediumPermission->setLanguageRestrictions(1, 1, ['de']);
 
-        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 1, 'de'));
-        $this->assertFalse($this->mediumPermission->hasPermissionForLanguage(1, 1, 'en'));
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('de'));
+        $this->assertFalse($this->mediumPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('en'));
 
         $this->mediumPermission->deleteGroup(1);
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
@@ -828,14 +828,14 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testHasPermissionForLanguageWithRestrictedDirectUserGrantOnly(): void
+    public function testScopeAllowsLanguageWithRestrictedDirectUserGrantOnly(): void
     {
         // Fixture user 1 owns right 1 directly; restrict it to 'de' only, no groups involved
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->mediumPermission->setUserLanguageRestrictions(1, 1, ['de']);
 
-        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 1, 'de'));
-        $this->assertFalse($this->mediumPermission->hasPermissionForLanguage(1, 1, 'en'));
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('de'));
+        $this->assertFalse($this->mediumPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('en'));
 
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
         $this->mediumPermission->setUserLanguageRestrictions(1, 1, []);
@@ -844,7 +844,7 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testHasPermissionForLanguageCombinesUserAndGroupGrantsAsUnion(): void
+    public function testScopeAllowsLanguageCombinesUserAndGroupGrantsAsUnion(): void
     {
         // Fixture user 1 owns right 1 directly, restricted to 'de'
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
@@ -857,9 +857,9 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->setLanguageRestrictions(1, 1, ['fr']);
 
         // Union of both grants: 'de' (direct) and 'fr' (group) both pass, 'es' fails
-        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 1, 'de'));
-        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 1, 'fr'));
-        $this->assertFalse($this->mediumPermission->hasPermissionForLanguage(1, 1, 'es'));
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('de'));
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('fr'));
+        $this->assertFalse($this->mediumPermission->getScopeForRight(1, 1)->allowsLanguageInAnyCategory('es'));
 
         $this->mediumPermission->deleteGroup(1);
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
@@ -936,7 +936,7 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testGetAllowedLanguagesForRightReturnsNullForUnrestrictedGroupRight(): void
+    public function testScopeLanguagesReturnsNullForUnrestrictedGroupRight(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
@@ -945,7 +945,7 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->addToGroup(1, 1);
         $this->mediumPermission->grantGroupRight(1, 1);
 
-        $this->assertNull($this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+        $this->assertNull($this->mediumPermission->getScopeForRight(1, 1)->languagesInAnyCategory());
 
         $this->mediumPermission->deleteGroup(1);
     }
@@ -953,7 +953,7 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testGetAllowedLanguagesForRightReturnsRestrictedLanguages(): void
+    public function testScopeLanguagesReturnsRestrictedLanguages(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
@@ -963,7 +963,7 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->grantGroupRight(1, 1);
         $this->mediumPermission->setLanguageRestrictions(1, 1, ['en', 'de']);
 
-        $this->assertEqualsCanonicalizing(['en', 'de'], $this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+        $this->assertEqualsCanonicalizing(['en', 'de'], $this->mediumPermission->getScopeForRight(1, 1)->languagesInAnyCategory());
 
         $this->mediumPermission->deleteGroup(1);
     }
@@ -971,18 +971,18 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testGetAllowedLanguagesForRightReturnsNullForUnrestrictedDirectUserRight(): void
+    public function testScopeLanguagesReturnsNullForUnrestrictedDirectUserRight(): void
     {
         // Fixture user 1 owns right 1 directly (faquser_right), unrestricted => global
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
 
-        $this->assertNull($this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+        $this->assertNull($this->mediumPermission->getScopeForRight(1, 1)->languagesInAnyCategory());
     }
 
     /**
      * @throws Exception
      */
-    public function testGetAllowedLanguagesForRightReturnsUnionAcrossUserAndGroups(): void
+    public function testScopeLanguagesReturnsUnionAcrossUserAndGroups(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->mediumPermission->setUserLanguageRestrictions(1, 1, ['de']);
@@ -992,7 +992,7 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->grantGroupRight(1, 1);
         $this->mediumPermission->setLanguageRestrictions(1, 1, ['fr']);
 
-        $this->assertEqualsCanonicalizing(['de', 'fr'], $this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+        $this->assertEqualsCanonicalizing(['de', 'fr'], $this->mediumPermission->getScopeForRight(1, 1)->languagesInAnyCategory());
 
         $this->mediumPermission->deleteGroup(1);
         $this->mediumPermission->setUserLanguageRestrictions(1, 1, []);
@@ -1001,22 +1001,22 @@ class MediumPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testGetAllowedLanguagesForRightReturnsEmptyArrayWithoutAnyGrant(): void
+    public function testScopeLanguagesReturnsEmptyArrayWithoutAnyGrant(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
 
-        $this->assertSame([], $this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+        $this->assertSame([], $this->mediumPermission->getScopeForRight(1, 1)->languagesInAnyCategory());
     }
 
     /**
-     * Pins that getAllowedLanguagesForRight() and hasPermissionForLanguage()
+     * Pins that languagesInAnyCategory() and allowsLanguageInAnyCategory()
      * agree for every language: a language is in the allowed set (or the set
      * is null) exactly when the per-language check grants it.
      *
      * @throws Exception
      */
-    public function testGetAllowedLanguagesForRightMatchesPerLanguageChecks(): void
+    public function testScopeLanguagesMatchesPerLanguageChecks(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
         $this->mediumPermission->setUserLanguageRestrictions(1, 1, ['en', 'de']);
@@ -1033,7 +1033,7 @@ class MediumPermissionTest extends TestCase
 
         // Group grant becomes unrestricted: the right applies globally
         $this->mediumPermission->setLanguageRestrictions(1, 1, []);
-        $this->assertNull($this->mediumPermission->getAllowedLanguagesForRight(1, 1));
+        $this->assertNull($this->mediumPermission->getScopeForRight(1, 1)->languagesInAnyCategory());
         $this->assertConsistentWithPerLanguageChecks(1, 1, $languages);
 
         $this->mediumPermission->deleteGroup(1);
@@ -1046,11 +1046,11 @@ class MediumPermissionTest extends TestCase
      */
     private function assertConsistentWithPerLanguageChecks(int $userId, int $rightId, array $languages): void
     {
-        $allowed = $this->mediumPermission->getAllowedLanguagesForRight($userId, $rightId);
+        $allowed = $this->mediumPermission->getScopeForRight($userId, $rightId)->languagesInAnyCategory();
         foreach ($languages as $language) {
             $this->assertSame(
                 $allowed === null || in_array($language, $allowed, strict: true),
-                $this->mediumPermission->hasPermissionForLanguage($userId, $rightId, $language),
+                $this->mediumPermission->getScopeForRight($userId, $rightId)->allowsLanguageInAnyCategory($language),
                 sprintf('Mismatch for language %s (allowed: %s)', $language, json_encode($allowed)),
             );
         }
@@ -1163,12 +1163,12 @@ class MediumPermissionTest extends TestCase
         $this->assertFalse($this->mediumPermission->addToGroup(1, 999));
     }
 
-    public function testHasPermissionForCategoryGrantsThroughDirectUserRight(): void
+    public function testScopeAllowsCategoryGrantsThroughDirectUserRight(): void
     {
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
 
-        $this->assertTrue($this->mediumPermission->hasPermissionForCategory(1, 1, 10));
-        $this->assertFalse($this->mediumPermission->hasPermissionForCategory(1, 999, 10));
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 1)->allowsCategoryInAnyLanguage(10));
+        $this->assertFalse($this->mediumPermission->getScopeForRight(1, 999)->allowsCategoryInAnyLanguage(10));
 
         // Cleanup
         $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 1 WHERE user_id = 1');
@@ -1179,9 +1179,115 @@ class MediumPermissionTest extends TestCase
      */
     public function testSuperAdminBypassesCategoryAndLanguageRestrictions(): void
     {
-        $this->assertNull($this->mediumPermission->getAllowedCategoriesForRight(1, 999));
-        $this->assertNull($this->mediumPermission->getAllowedLanguagesForRight(1, 999));
-        $this->assertTrue($this->mediumPermission->hasPermissionForLanguage(1, 999, 'en'));
+        $this->assertNull($this->mediumPermission->getScopeForRight(1, 999)->categoryIdsInAnyLanguage());
+        $this->assertNull($this->mediumPermission->getScopeForRight(1, 999)->languagesInAnyCategory());
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 999)->allowsLanguageInAnyCategory('en'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testScopeKeepsTheRestrictionsOfEachGrantApart(): void
+    {
+        $this->grantGermanDirectlyAndCategoryOneThroughGroup();
+
+        $scope = $this->mediumPermission->getScopeForRight(1, 1);
+
+        // Neither the direct "German" grant nor the "category 1" group grant covers
+        // category 2 in English.
+        $this->assertFalse($scope->allows([2], 'en'));
+        $this->assertFalse($scope->allows([], 'en'));
+        $this->assertFalse($scope->isUnrestricted());
+
+        $this->assertTrue($scope->allows([2], 'de'));
+        $this->assertTrue($scope->allows([], 'de'));
+        $this->assertTrue($scope->allows([1], 'en'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testScopeOfSeparateGrantsDoesNotCoverAnUnrestrictedGrant(): void
+    {
+        $this->grantGermanDirectlyAndCategoryOneThroughGroup();
+
+        $scope = $this->mediumPermission->getScopeForRight(1, 1);
+
+        $this->assertFalse($scope->covers(null, null));
+        $this->assertFalse($scope->covers([2], ['en']));
+        $this->assertTrue($scope->covers(null, ['de']));
+        $this->assertTrue($scope->covers([1], null));
+        $this->assertSame(['de'], $scope->languagesInEveryCategory());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testScopeCombinesCategoryAndLanguageRestrictionOfOneGroup(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->mediumPermission->setCategoryRestrictions(1, 1, [1]);
+        $this->mediumPermission->setLanguageRestrictions(1, 1, ['de']);
+
+        $scope = $this->mediumPermission->getScopeForRight(1, 1);
+
+        $this->assertTrue($scope->allows([1], 'de'));
+        $this->assertFalse($scope->allows([1], 'en'));
+        $this->assertFalse($scope->allows([2], 'de'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testScopeIsEmptyWithoutAnyGrant(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 1)->isEmpty());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testScopeIgnoresGroupsThatDoNotHoldTheRight(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->configuration->getDb()->query('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = 1');
+
+        $this->mediumPermission->addGroup(['name' => 'TestGroup', 'description' => 'Test', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 2);
+
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 1)->isEmpty());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testScopeOfSuperAdminIsUnrestricted(): void
+    {
+        $this->assertTrue($this->mediumPermission->getScopeForRight(1, 999)->isUnrestricted());
+    }
+
+    /**
+     * The setup from the advisory: user 1 holds right 1 directly for German only, and through
+     * a group for category 1 only.
+     */
+    private function grantGermanDirectlyAndCategoryOneThroughGroup(): void
+    {
+        $this->configuration->getDb()->query('UPDATE faquser SET is_superadmin = 0 WHERE user_id = 1');
+        $this->mediumPermission->setUserLanguageRestrictions(1, 1, ['de']);
+
+        $this->mediumPermission->addGroup(['name' => 'cat1-editors', 'description' => '', 'auto_join' => false]);
+        $this->mediumPermission->addToGroup(1, 1);
+        $this->mediumPermission->grantGroupRight(1, 1);
+        $this->mediumPermission->setCategoryRestrictions(1, 1, [1]);
     }
 
     private function injectMediumRepository(MediumPermissionRepository $repository): void

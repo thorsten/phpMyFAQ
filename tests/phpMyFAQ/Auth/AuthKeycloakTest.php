@@ -48,6 +48,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Permission::class)]
 #[UsesClass(User::class)]
 #[UsesClass(UserData::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightGrant::class)]
+#[UsesClass(\phpMyFAQ\Permission\RightScope::class)]
 final class AuthKeycloakTest extends TestCase
 {
     public function testCheckCredentialsReturnsTrueForExistingLinkedUser(): void

@@ -23,6 +23,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\User\CurrentUser;
 
 /**
@@ -40,20 +42,16 @@ use phpMyFAQ\User\CurrentUser;
 final readonly class ReadScope
 {
     /**
-     * @param array<int>|null    $categoryIds null means every category
-     * @param array<string>|null $languages   null means every language
+     * @param RightScope|null $scope null means the right is not enforced for this requester
      */
     private function __construct(
-        private bool $enforced,
-        private bool $granted,
-        private ?array $categoryIds,
-        private ?array $languages,
+        private ?RightScope $scope,
     ) {
     }
 
     public static function unrestricted(): self
     {
-        return new self(false, true, null, null);
+        return new self(null);
     }
 
     /**
@@ -64,15 +62,10 @@ final readonly class ReadScope
         $right = PermissionType::FAQS_VIEW->value;
 
         if (!$permission->hasPermission($userId, $right)) {
-            return new self(true, false, [], []);
+            return new self(RightScope::none());
         }
 
-        return new self(
-            true,
-            true,
-            $permission->getAllowedCategoriesForRight($userId, $right),
-            $permission->getAllowedLanguagesForRight($userId, $right),
-        );
+        return new self($permission->getScopeForRight($userId, $right));
     }
 
     /**
@@ -99,33 +92,16 @@ final readonly class ReadScope
 
     public function isUnrestricted(): bool
     {
-        return !$this->enforced || $this->granted && $this->categoryIds === null && $this->languages === null;
+        return $this->scope === null || $this->scope->isUnrestricted();
     }
 
-    public function allowsCategory(int $categoryId): bool
+    /**
+     * Whether an FAQ in the given category and language may be read. Both are judged against
+     * the same grant: a category permitted in one language is not permitted in another.
+     */
+    public function allows(int $categoryId, string $language): bool
     {
-        if (!$this->enforced) {
-            return true;
-        }
-
-        if (!$this->granted) {
-            return false;
-        }
-
-        return $this->categoryIds === null || in_array($categoryId, $this->categoryIds, strict: true);
-    }
-
-    public function allowsLanguage(string $language): bool
-    {
-        if (!$this->enforced) {
-            return true;
-        }
-
-        if (!$this->granted) {
-            return false;
-        }
-
-        return $this->languages === null || in_array($language, $this->languages, strict: true);
+        return $this->scope === null || $this->scope->allowsCategory($categoryId, $language);
     }
 
     /**
@@ -141,78 +117,123 @@ final readonly class ReadScope
      */
     public function toSqlFragment(string $faqAlias = 'fd', ?string $categoryRelationAlias = null): string
     {
-        if (!$this->enforced) {
+        if ($this->scope === null || $this->scope->isUnrestricted()) {
             return '';
         }
 
-        // No right at all, or a scope that resolves to nothing: match no rows rather than
-        // silently falling through to an unfiltered result.
-        if (!$this->granted || $this->categoryIds === [] || $this->languages === []) {
+        // One alternative per grant, so a category is only ever paired with the languages of
+        // the grant that permits it.
+        $alternatives = [];
+        foreach ($this->scope->grants() as $grant) {
+            $conditions = [];
+
+            if ($grant->languages !== null) {
+                $conditions[] = sprintf('%s.lang IN (%s)', $faqAlias, $this->quotedLanguageList($grant->languages));
+            }
+
+            if ($grant->categoryIds !== null) {
+                $conditions[] = $this->categoryCondition($grant->categoryIds, $faqAlias, $categoryRelationAlias);
+            }
+
+            $alternatives[] = sprintf('(%s)', implode(' AND ', $conditions));
+        }
+
+        // No right at all: match no rows rather than silently falling through to an
+        // unfiltered result.
+        if ($alternatives === []) {
             return ' AND 1 = 0';
         }
 
-        $fragment = '';
-
-        if ($this->languages !== null) {
-            $fragment .= sprintf(' AND %s.lang IN (%s)', $faqAlias, $this->quotedLanguageList());
-        }
-
-        if ($this->categoryIds === null) {
-            return $fragment;
-        }
-
-        // A query that joins faqcategoryrelations itself must constrain that alias directly:
-        // the EXISTS predicate admits the FAQ as soon as one permitted category exists, so the
-        // join could still project a denied category id next to it.
-        if ($categoryRelationAlias !== null) {
-            return $fragment . $this->toCategoryRelationConstraint($categoryRelationAlias);
-        }
-
-        // An EXISTS sub-query rather than a join condition: not every FAQ query carries a
-        // faqcategoryrelations alias in its outer query, and a join would fan one FAQ out
-        // into several rows and break LIMIT and COUNT.
-        return sprintf(
-            '%s AND EXISTS (SELECT 1 FROM %sfaqcategoryrelations pmfrs'
-            . ' WHERE pmfrs.record_id = %s.id AND pmfrs.record_lang = %s.lang'
-            . ' AND pmfrs.category_id IN (%s))',
-            $fragment,
-            Database::getTablePrefix(),
-            $faqAlias,
-            $faqAlias,
-            $this->categoryIdList(),
-        );
+        return sprintf(' AND (%s)', implode(' OR ', $alternatives));
     }
 
     /**
      * Constrains a faqcategoryrelations alias to the scoped categories, for queries that
      * project or aggregate a category id themselves — an outer join as well as a sub-query
      * computing something like MIN(category_id) must not surface a denied category.
+     *
+     * The relation row carries the language of its FAQ, so each grant constrains the category
+     * together with its own languages.
      */
     public function toCategoryRelationConstraint(string $categoryRelationAlias): string
     {
-        if (!$this->enforced || $this->categoryIds === null) {
+        if ($this->scope === null || $this->scope->isUnrestricted()) {
             return '';
         }
 
-        if (!$this->granted || $this->categoryIds === []) {
+        $grants = $this->scope->grants();
+        if ($grants === []) {
             return ' AND 1 = 0';
         }
 
-        return sprintf(' AND %s.category_id IN (%s)', $categoryRelationAlias, $this->categoryIdList());
+        // Without any category restriction there is no category to hide; the languages are
+        // constrained on the FAQ itself by toSqlFragment().
+        if (array_all($grants, static fn(RightGrant $grant): bool => $grant->categoryIds === null)) {
+            return '';
+        }
+
+        $alternatives = [];
+        foreach ($grants as $grant) {
+            $conditions = [];
+
+            if ($grant->languages !== null) {
+                $conditions[] = sprintf(
+                    '%s.record_lang IN (%s)',
+                    $categoryRelationAlias,
+                    $this->quotedLanguageList($grant->languages),
+                );
+            }
+
+            if ($grant->categoryIds !== null) {
+                $conditions[] = sprintf(
+                    '%s.category_id IN (%s)',
+                    $categoryRelationAlias,
+                    implode(', ', $grant->categoryIds),
+                );
+            }
+
+            $alternatives[] = sprintf('(%s)', implode(' AND ', $conditions));
+        }
+
+        return sprintf(' AND (%s)', implode(' OR ', $alternatives));
     }
 
-    private function categoryIdList(): string
+    /**
+     * @param list<int> $categoryIds
+     */
+    private function categoryCondition(array $categoryIds, string $faqAlias, ?string $categoryRelationAlias): string
     {
-        return implode(', ', array_map(intval(...), $this->categoryIds ?? []));
+        // A query that joins faqcategoryrelations itself must constrain that alias directly:
+        // the EXISTS predicate admits the FAQ as soon as one permitted category exists, so the
+        // join could still project a denied category id next to it.
+        if ($categoryRelationAlias !== null) {
+            return sprintf('%s.category_id IN (%s)', $categoryRelationAlias, implode(', ', $categoryIds));
+        }
+
+        // An EXISTS sub-query rather than a join condition: not every FAQ query carries a
+        // faqcategoryrelations alias in its outer query, and a join would fan one FAQ out
+        // into several rows and break LIMIT and COUNT.
+        return sprintf(
+            'EXISTS (SELECT 1 FROM %sfaqcategoryrelations pmfrs'
+            . ' WHERE pmfrs.record_id = %s.id AND pmfrs.record_lang = %s.lang'
+            . ' AND pmfrs.category_id IN (%s))',
+            Database::getTablePrefix(),
+            $faqAlias,
+            $faqAlias,
+            implode(', ', $categoryIds),
+        );
     }
 
-    private function quotedLanguageList(): string
+    /**
+     * @param list<string> $languages
+     */
+    private function quotedLanguageList(array $languages): string
     {
         $database = Configuration::getConfigurationInstance()->getDb();
 
         return implode(', ', array_map(static fn(string $language): string => sprintf(
             "'%s'",
             $database->escape($language),
-        ), $this->languages ?? []));
+        ), $languages));
     }
 }

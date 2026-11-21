@@ -249,10 +249,10 @@ final class AttachmentController extends AbstractAdministrationApiController
             new Category($this->configuration, [], withPermission: false),
         );
 
-        $this->userHasPermissionForCategories(
+        $this->userHasPermissionForCategoriesInLanguage(
             $permissionType,
             array_keys($categoryRelation->getCategories($faqId, $faqLanguage)),
+            $faqLanguage,
         );
-        $this->userHasPermissionForLanguage($permissionType, $faqLanguage);
     }
 }

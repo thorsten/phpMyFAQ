@@ -6,6 +6,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Administration\SkipsAuthenticationCheck;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -106,6 +108,14 @@ class AbstractControllerTest extends TestCase
             public function userHasPermissionForLanguagePublic(PermissionType $permissionType, string $lang): void
             {
                 $this->userHasPermissionForLanguage($permissionType, $lang);
+            }
+
+            public function userHasPermissionForCategoriesInLanguagePublic(
+                PermissionType $permissionType,
+                array $ids,
+                string $lang,
+            ): void {
+                $this->userHasPermissionForCategoriesInLanguage($permissionType, $ids, $lang);
             }
 
             public function userMayPublishInPublic(array $categoryIds, string $language): bool
@@ -721,7 +731,9 @@ class AbstractControllerTest extends TestCase
         $this->currentUserMock->method('isLoggedIn')->willReturn(true);
         $this->currentUserMock->method('getUserId')->willReturn(1);
         $this->permissionMock->method('hasPermission')->willReturn(true);
-        $this->permissionMock->method('hasPermissionForLanguage')->willReturn(false);
+        $this->permissionMock
+            ->method('getScopeForRight')
+            ->willReturn(RightScope::ofGrants(new RightGrant(languages: ['de'])));
 
         $this->assertFalse($this->abstractController->userMayPublishInPublic([1], 'en'));
     }
@@ -731,10 +743,173 @@ class AbstractControllerTest extends TestCase
         $this->currentUserMock->method('isLoggedIn')->willReturn(true);
         $this->currentUserMock->method('getUserId')->willReturn(1);
         $this->permissionMock->method('hasPermission')->willReturn(true);
-        $this->permissionMock->method('hasPermissionForLanguage')->willReturn(true);
-        $this->permissionMock->method('hasPermissionForCategory')->willReturn(false);
+        $this->permissionMock->method('getScopeForRight')->willReturn(RightScope::ofGrants(new RightGrant([1])));
 
         $this->assertFalse($this->abstractController->userMayPublishInPublic([1, 2], 'en'));
+    }
+
+    public function testUserMayPublishInReturnsTrueWithinScope(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
+        $this->currentUserMock->method('getUserId')->willReturn(1);
+        $this->permissionMock->method('hasPermission')->willReturn(true);
+        $this->permissionMock->method('getScopeForRight')->willReturn(RightScope::ofGrants(new RightGrant([1, 2])));
+
+        $this->assertTrue($this->abstractController->userMayPublishInPublic([1, 2], 'en'));
+    }
+
+    public function testUserMayPublishInDoesNotMergeRestrictionsOfSeparateGrants(): void
+    {
+        $this->actAsUserHoldingGermanEverywhereAndCategoryOne();
+        $this->permissionMock->method('hasPermission')->willReturn(true);
+
+        $this->assertFalse($this->abstractController->userMayPublishInPublic([2], 'en'));
+        $this->assertFalse($this->abstractController->userMayPublishInPublic([], 'en'));
+        $this->assertTrue($this->abstractController->userMayPublishInPublic([2], 'de'));
+        $this->assertTrue($this->abstractController->userMayPublishInPublic([1], 'en'));
+    }
+
+    public function testCategoriesInLanguageRequiresAuthentication(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(false);
+
+        $this->expectException(UnauthorizedHttpException::class);
+
+        $this->abstractController->userHasPermissionForCategoriesInLanguagePublic(PermissionType::FAQ_EDIT, [1], 'en');
+    }
+
+    public function testCategoriesInLanguageDeniesLanguageWithoutAnyGrant(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
+        $this->currentUserMock->method('getUserId')->willReturn(1);
+        $this->permissionMock
+            ->method('getScopeForRight')
+            ->willReturn(RightScope::ofGrants(new RightGrant(languages: ['de'])));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "en".');
+
+        $this->abstractController->userHasPermissionForCategoriesInLanguagePublic(PermissionType::FAQ_EDIT, [1], 'en');
+    }
+
+    public function testLanguageCheckDeniesUnsupportedLanguageCodeEvenForAnUnrestrictedRight(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
+        $this->currentUserMock->method('getUserId')->willReturn(1);
+        $this->currentUserMock->method('isSuperAdmin')->willReturn(false);
+        $this->permissionMock->method('getScopeForRight')->willReturn(RightScope::unrestricted());
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "not-a-language".');
+
+        $this->abstractController->userHasPermissionForLanguagePublic(PermissionType::FAQ_EDIT, 'not-a-language');
+    }
+
+    public function testLanguageCheckAllowsLanguageCoveredByAnyGrant(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
+        $this->currentUserMock->method('getUserId')->willReturn(1);
+        $this->permissionMock
+            ->method('getScopeForRight')
+            ->willReturn(RightScope::ofGrants(new RightGrant([1], ['de'])));
+
+        $this->abstractController->userHasPermissionForLanguagePublic(PermissionType::FAQ_EDIT, 'de');
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for language "en".');
+
+        $this->abstractController->userHasPermissionForLanguagePublic(PermissionType::FAQ_EDIT, 'en');
+    }
+
+    public function testCategoryCheckAllowsCategoryCoveredByAnyGrant(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
+        $this->currentUserMock->method('getUserId')->willReturn(1);
+        $this->permissionMock
+            ->method('getScopeForRight')
+            ->willReturn(RightScope::ofGrants(new RightGrant([1], ['de'])));
+
+        $this->abstractController->userHasPermissionForCategoriesPublic(PermissionType::FAQ_EDIT, [1]);
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 2.');
+
+        $this->abstractController->userHasPermissionForCategoriesPublic(PermissionType::FAQ_EDIT, [1, 2]);
+    }
+
+    public function testCategoryCheckDeniesUncategorizedContentToCategoryRestrictedUser(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
+        $this->currentUserMock->method('getUserId')->willReturn(1);
+        $this->permissionMock->method('getScopeForRight')->willReturn(RightScope::ofGrants(new RightGrant([1])));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for uncategorized content.');
+
+        $this->abstractController->userHasPermissionForCategoriesPublic(PermissionType::FAQ_EDIT, []);
+    }
+
+    public function testCategoryCheckAllowsUncategorizedContentWithAGrantWithoutCategoryRestriction(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
+        $this->currentUserMock->method('getUserId')->willReturn(1);
+        $this->permissionMock
+            ->method('getScopeForRight')
+            ->willReturn(RightScope::ofGrants(new RightGrant(languages: ['de'])));
+
+        $this->abstractController->userHasPermissionForCategoriesPublic(PermissionType::FAQ_EDIT, [0]);
+
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * The advisory scenario: both per-dimension checks pass, each through another grant, but no
+     * single grant covers category 2 in English.
+     */
+    public function testCategoriesInLanguageDoesNotMergeRestrictionsOfSeparateGrants(): void
+    {
+        $this->actAsUserHoldingGermanEverywhereAndCategoryOne();
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for category 2 in language "en".');
+
+        $this->abstractController->userHasPermissionForCategoriesInLanguagePublic(PermissionType::FAQ_EDIT, [2], 'en');
+    }
+
+    public function testCategoriesInLanguageDeniesUncategorizedContentOutsideTheLanguageOfTheGlobalGrant(): void
+    {
+        $this->actAsUserHoldingGermanEverywhereAndCategoryOne();
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage(
+            'User has no "FAQ_EDIT" permission for uncategorized content in language "en".',
+        );
+
+        $this->abstractController->userHasPermissionForCategoriesInLanguagePublic(PermissionType::FAQ_EDIT, [0], 'en');
+    }
+
+    public function testCategoriesInLanguageAllowsWhatASingleGrantCovers(): void
+    {
+        $this->actAsUserHoldingGermanEverywhereAndCategoryOne();
+
+        $this->abstractController->userHasPermissionForCategoriesInLanguagePublic(PermissionType::FAQ_EDIT, [2], 'de');
+        $this->abstractController->userHasPermissionForCategoriesInLanguagePublic(PermissionType::FAQ_EDIT, [], 'de');
+        $this->abstractController->userHasPermissionForCategoriesInLanguagePublic(PermissionType::FAQ_EDIT, [1], 'en');
+
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * German in every category through one grant, category 1 in every language through
+     * another. Looked at one dimension at a time, every category and every language is covered.
+     */
+    private function actAsUserHoldingGermanEverywhereAndCategoryOne(): void
+    {
+        $this->currentUserMock->method('isLoggedIn')->willReturn(true);
+        $this->currentUserMock->method('getUserId')->willReturn(1);
+        $this->permissionMock
+            ->method('getScopeForRight')
+            ->willReturn(RightScope::ofGrants(new RightGrant(languages: ['de']), new RightGrant([1])));
     }
 
     public function testUserMayReturnsFalseWhenNotLoggedIn(): void

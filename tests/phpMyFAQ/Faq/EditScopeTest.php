@@ -8,6 +8,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesNamespace;
@@ -62,8 +64,11 @@ final class EditScopeTest extends TestCase
         $right = PermissionType::FAQ_EDIT->value;
         $permission = $this->createMock(PermissionInterface::class);
         $permission->expects(self::once())->method('hasPermission')->with(5, $right)->willReturn(true);
-        $permission->expects(self::once())->method('getAllowedCategoriesForRight')->with(5, $right);
-        $permission->expects(self::once())->method('getAllowedLanguagesForRight')->with(5, $right);
+        $permission
+            ->expects(self::once())
+            ->method('getScopeForRight')
+            ->with(5, $right)
+            ->willReturn(RightScope::unrestricted());
 
         EditScope::forUser($permission, 5);
     }
@@ -77,23 +82,17 @@ final class EditScopeTest extends TestCase
     }
 
     /**
-     * An empty allowed list means "holds the right nowhere", which is not the same as the null
-     * that means "unrestricted". Rendering nothing for it would silently grant full access.
+     * A scope without any grant means "holds the right nowhere", which is not the same as an
+     * unrestricted grant. Rendering nothing for it would silently grant full access.
      */
-    public function testEmptyCategoryListMatchesNoFaq(): void
+    public function testRightWithoutAnyGrantMatchesNoFaq(): void
     {
-        $scope = EditScope::forUser($this->permission(hasRight: true, categories: []), 5);
+        $scope = EditScope::forUser($this->permissionWithScope(RightScope::none()), 5);
 
+        self::assertSame(' AND 1 = 0', $scope->toSqlFragment());
         self::assertSame([], $this->faqIdsWithin($scope));
         self::assertFalse($scope->allowsFaq([1], 'en'));
-    }
-
-    public function testEmptyLanguageListMatchesNoFaq(): void
-    {
-        $scope = EditScope::forUser($this->permission(hasRight: true, languages: []), 5);
-
-        self::assertSame([], $this->faqIdsWithin($scope));
-        self::assertFalse($scope->allowsFaq([1], 'en'));
+        self::assertFalse($scope->allowsFaq([], 'en'));
     }
 
     /**
@@ -152,6 +151,59 @@ final class EditScopeTest extends TestCase
     }
 
     /**
+     * "German only" through one grant and "category 1 only" through another do not add up to
+     * "category 2 in English": each grant pairs its own categories with its own languages.
+     */
+    public function testRestrictionsOfSeparateGrantsAreNotMergedOutsideOfSql(): void
+    {
+        $scope = EditScope::forUser($this->permissionWithScope($this->germanOrCategoryOne()), 5);
+
+        self::assertFalse($scope->allowsFaq([2], 'en'));
+        self::assertTrue($scope->allowsFaq([2], 'de'));
+        self::assertTrue($scope->allowsFaq([1], 'en'));
+        self::assertFalse($scope->allowsFaq([1, 2], 'en'));
+        self::assertFalse($scope->allowsFaq([], 'en'));
+        self::assertTrue($scope->allowsFaq([], 'de'));
+    }
+
+    public function testRestrictionsOfSeparateGrantsAreNotMergedInSql(): void
+    {
+        $germanInCategoryTwo = 91006;
+        $germanUncategorized = 91007;
+        $this->insertFaq($germanInCategoryTwo, 'de', [2]);
+        $this->insertFaq($germanUncategorized, 'de', []);
+
+        $scope = EditScope::forUser($this->permissionWithScope($this->germanOrCategoryOne()), 5);
+
+        self::assertSame(
+            [self::IN_SCOPE, self::OTHER_LANGUAGE, $germanInCategoryTwo, $germanUncategorized],
+            $this->faqIdsWithin($scope),
+        );
+    }
+
+    public function testSeparateGrantsRenderOneAlternativeEach(): void
+    {
+        $scope = EditScope::forUser($this->permissionWithScope($this->germanOrCategoryOne()), 5);
+
+        self::assertSame(
+            " AND (fd.lang IN ('de') OR (EXISTS (SELECT 1 FROM faqcategoryrelations pmfes"
+            . ' WHERE pmfes.record_id = fd.id AND pmfes.record_lang = fd.lang)'
+            . ' AND NOT EXISTS (SELECT 1 FROM faqcategoryrelations pmfes'
+            . ' WHERE pmfes.record_id = fd.id AND pmfes.record_lang = fd.lang'
+            . ' AND NOT (pmfes.category_id IN (1)))))',
+            $scope->toSqlFragment(),
+        );
+    }
+
+    /**
+     * A direct grant for German only next to a group grant for category 1 only.
+     */
+    private function germanOrCategoryOne(): RightScope
+    {
+        return RightScope::ofGrants(new RightGrant(languages: ['de']), new RightGrant([1]));
+    }
+
+    /**
      * @param array<int>|null    $categories
      * @param array<string>|null $languages
      */
@@ -160,10 +212,19 @@ final class EditScopeTest extends TestCase
         ?array $categories = null,
         ?array $languages = null,
     ): PermissionInterface {
+        return $this->permissionWithScope(
+            $categories === null && $languages === null
+                ? RightScope::unrestricted()
+                : RightScope::ofGrants(new RightGrant($categories, $languages)),
+            $hasRight,
+        );
+    }
+
+    private function permissionWithScope(RightScope $scope, bool $hasRight = true): PermissionInterface
+    {
         $permission = $this->createStub(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn($hasRight);
-        $permission->method('getAllowedCategoriesForRight')->willReturn($categories);
-        $permission->method('getAllowedLanguagesForRight')->willReturn($languages);
+        $permission->method('getScopeForRight')->willReturn($scope);
 
         return $permission;
     }

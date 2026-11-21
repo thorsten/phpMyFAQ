@@ -8,6 +8,7 @@ use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Faq\EditScope;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightScope;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -45,6 +46,7 @@ class FaqTest extends TestCase
     {
         $permission = $this->createStub(PermissionInterface::class);
         $permission->method('hasPermission')->willReturn(true);
+        $permission->method('getScopeForRight')->willReturn(RightScope::unrestricted());
 
         return EditScope::forUser($permission, 1);
     }

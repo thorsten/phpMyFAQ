@@ -44,47 +44,29 @@ abstract class AbstractAdministrationApiController extends AbstractController
     }
 
     /**
-     * Returns true if the acting user may scope the given right to exactly the
-     * given languages.
+     * Returns true if the acting user may hand out the given right restricted to exactly the
+     * given categories and languages.
      *
-     * An empty restriction set means "unrestricted", so writing one is a
-     * privilege *grant*, not a narrowing. A non-SuperAdmin whose own set for the
-     * right is restricted may therefore only write a non-empty subset of that
-     * set — never an empty list, and never a language they do not hold
-     * themselves. SuperAdmins and acting users whose own right is unrestricted
-     * (`getAllowedLanguagesForRight()` returns null) are unaffected.
+     * An empty restriction list means "unrestricted", so writing one is a privilege *grant*,
+     * not a narrowing. A non-SuperAdmin may therefore only hand out a scope they hold
+     * themselves, and they hold it only where one of their own grants covers the category
+     * and the language together: holding "German" through one grant and "category 1" through
+     * another does not allow handing out "category 2 in English", nor an unrestricted right.
      *
-     * @param array<string> $languages
+     * @param array<int>    $categoryIds empty means every category
+     * @param array<string> $languages   empty means every language
      * @throws \phpMyFAQ\Core\Exception
      */
-    protected function mayAssignLanguages(int $rightId, array $languages): bool
+    protected function mayAssignScope(int $rightId, array $categoryIds, array $languages): bool
     {
         if ($this->currentUser->isSuperAdmin()) {
             return true;
         }
 
-        $allowedLanguages = $this->currentUser->perm->getAllowedLanguagesForRight(
-            $this->currentUser->getUserId(),
-            $rightId,
-        );
-
-        if ($allowedLanguages === null) {
-            return true;
-        }
-
-        // Clearing the restrictions would widen the right to every language,
-        // including ones the acting user does not hold.
-        if ($languages === []) {
-            return false;
-        }
-
-        foreach ($languages as $language) {
-            if (!in_array($language, $allowedLanguages, strict: true)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->currentUser
+            ->perm
+            ->getScopeForRight($this->currentUser->getUserId(), $rightId)
+            ->covers($categoryIds === [] ? null : $categoryIds, $languages === [] ? null : $languages);
     }
 
     /**
@@ -101,9 +83,10 @@ abstract class AbstractAdministrationApiController extends AbstractController
             return false;
         }
 
-        return (
-            $this->mayAssignLanguages($rightId, $permission->getLanguageRestrictions($groupId, $rightId))
-            && $this->mayAssignCategories($rightId, $permission->getCategoryRestrictions($groupId, $rightId))
+        return $this->mayAssignScope(
+            $rightId,
+            $permission->getCategoryRestrictions($groupId, $rightId),
+            $permission->getLanguageRestrictions($groupId, $rightId),
         );
     }
 
@@ -174,43 +157,5 @@ abstract class AbstractAdministrationApiController extends AbstractController
         }
 
         return true;
-    }
-
-    /**
-     * Whether the acting user may scope the given right to exactly these categories.
-     * SuperAdmins and users holding the right without category restriction may assign
-     * anything; everyone else only a non-empty subset of their own allowed categories.
-     *
-     * @param array<int> $categoryIds
-     * @throws \phpMyFAQ\Core\Exception
-     */
-    protected function mayAssignCategories(int $rightId, array $categoryIds): bool
-    {
-        if ($this->currentUser->isSuperAdmin()) {
-            return true;
-        }
-
-        $allowedCategories = $this->currentUser->perm->getAllowedCategoriesForRight(
-            $this->currentUser->getUserId(),
-            $rightId,
-        );
-
-        if ($allowedCategories === null) {
-            return true;
-        }
-
-        // Clearing the restrictions would widen the right to every category,
-        // including ones the acting user does not hold.
-        if ($categoryIds === []) {
-            return false;
-        }
-
-        $allowedCategories = array_map(intval(...), $allowedCategories);
-
-        return array_all($categoryIds, static fn(int $categoryId): bool => in_array(
-            $categoryId,
-            $allowedCategories,
-            strict: true,
-        ));
     }
 }

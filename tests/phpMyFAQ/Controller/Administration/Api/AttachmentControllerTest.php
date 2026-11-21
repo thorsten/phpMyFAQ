@@ -15,6 +15,8 @@ use phpMyFAQ\Enums\AttachmentStorageType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -192,6 +194,10 @@ final class AttachmentControllerTest extends TestCase
             define('phpMyFAQ\\Attachment\\PMF_ATTACHMENTS_DIR', sys_get_temp_dir() . '/');
         }
 
+        // The attachment has to exist: its language is part of the permission check, and an
+        // attachment without one is refused for everyone but superadmins.
+        $this->seedAttachment(1, 1, 'en');
+
         $container = $this->createAuthenticatedContainer();
         $session = $container->get('session');
         self::assertInstanceOf(Session::class, $session);
@@ -251,6 +257,10 @@ final class AttachmentControllerTest extends TestCase
      */
     public function testDeleteReturnsSuccessWithValidCsrf(): void
     {
+        // The attachment has to exist: its language is part of the permission check, and an
+        // attachment without one is refused for everyone but superadmins.
+        $this->seedAttachment(1, 1, 'en');
+
         $container = $this->createAuthenticatedContainer();
         $session = $container->get('session');
         self::assertInstanceOf(Session::class, $session);
@@ -842,7 +852,7 @@ final class AttachmentControllerTest extends TestCase
 
     /**
      * @param int[]|null $allowedCategories null grants an unrestricted right; a list restricts the
-     *                                      attachment rights to those categories, with 666 always denied
+     *                                      attachment rights to those categories, which leaves 666 denied
      */
     private function createAuthenticatedContainer(?array $allowedCategories = null): ContainerInterface
     {
@@ -859,21 +869,13 @@ final class AttachmentControllerTest extends TestCase
                 && in_array($right, $attachmentRights, true),
             );
         $permission
-            ->method('hasPermissionForCategory')
+            ->method('getScopeForRight')
             ->willReturnCallback(
-                static fn(int $userId, mixed $right, int $categoryId): bool => (
-                    $userId === 42
-                    && in_array($right, $attachmentRights, true)
-                    && $categoryId !== 666 // sentinel forbidden category for tests
-                    && ($allowedCategories === null || in_array($categoryId, $allowedCategories, true))
-                ),
-            );
-        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
-        $permission
-            ->method('hasPermissionForLanguage')
-            ->willReturnCallback(
-                static fn(int $userId, mixed $right, string $language): bool => $userId === 42
-                && in_array($right, $attachmentRights, true),
+                static fn(int $userId, mixed $right): RightScope => match (true) {
+                    $userId !== 42, !in_array($right, $attachmentRights, true) => RightScope::none(),
+                    $allowedCategories === null => RightScope::unrestricted(),
+                    default => RightScope::ofGrants(new RightGrant($allowedCategories)),
+                },
             );
 
         $currentUser = $this->createMock(CurrentUser::class);

@@ -754,8 +754,7 @@ final class FaqController extends AbstractApiController
 
         // The global right can be limited to categories and languages; the scope is part of
         // the right, so it has to hold for the category and language the FAQ is created in.
-        $this->userHasPermissionForCategories(PermissionType::FAQ_ADD, [(int) $categoryId]);
-        $this->userHasPermissionForLanguage(PermissionType::FAQ_ADD, $languageCode);
+        $this->userHasPermissionForCategoriesInLanguage(PermissionType::FAQ_ADD, [(int) $categoryId], $languageCode);
 
         if ($this->faq->hasTitleAHash($question)) {
             $result = [
@@ -942,8 +941,11 @@ final class FaqController extends AbstractApiController
         // only tells whether the requester may see the FAQ; the scope decides whether the right
         // applies to the categories and language the FAQ lives in.
         $faqCategories = new CategoryRelation($this->configuration, $category)->getCategories($faqId, $languageCode);
-        $this->userHasPermissionForCategories(PermissionType::FAQ_EDIT, array_keys($faqCategories));
-        $this->userHasPermissionForLanguage(PermissionType::FAQ_EDIT, $languageCode);
+        $this->userHasPermissionForCategoriesInLanguage(
+            PermissionType::FAQ_EDIT,
+            array_keys($faqCategories),
+            $languageCode,
+        );
 
         if ($this->faq->hasTitleAHash($question)) {
             $result = [

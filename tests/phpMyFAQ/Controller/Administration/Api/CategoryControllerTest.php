@@ -15,6 +15,8 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Permission\RightGrant;
+use phpMyFAQ\Permission\RightScope;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -140,7 +142,16 @@ final class CategoryControllerTest extends TestCase
     }
 
     /**
-     * @param array<int>|null $allowedCategories Return value for getAllowedCategoriesForRight (null = unrestricted)
+     * A user whose rights are restricted to category 1, so the sentinel category 666 lies outside
+     * of every grant.
+     */
+    private function createAuthenticatedContainerRestrictedToCategoryOne(?Session $session = null): ContainerInterface
+    {
+        return $this->createAuthenticatedContainerWithAllowedCategories($session, [1]);
+    }
+
+    /**
+     * @param array<int>|null $allowedCategories categories the rights are restricted to (null = unrestricted)
      */
     private function createAuthenticatedContainerWithAllowedCategories(
         ?Session $session,
@@ -161,29 +172,25 @@ final class CategoryControllerTest extends TestCase
                     true,
                 ),
             );
+        // Every language except the sentinel forbidden language 'fr'; the scope can only say so
+        // as the list of languages the tests work in.
         $permission
-            ->method('hasPermissionForCategory')
+            ->method('getScopeForRight')
             ->willReturnCallback(
-                static fn(int $userId, mixed $right, int $categoryId): bool => $userId === 42
-                && in_array(
-                    $right,
-                    [
-                        PermissionType::CATEGORY_ADD->value,
-                        PermissionType::CATEGORY_DELETE->value,
-                        PermissionType::CATEGORY_EDIT->value,
-                    ],
-                    true,
-                )
-                && $categoryId !== 666, // sentinel forbidden category for tests
+                static fn(int $userId, mixed $right): RightScope => match (true) {
+                    $userId !== 42,
+                    !in_array(
+                        $right,
+                        [
+                            PermissionType::CATEGORY_ADD->value,
+                            PermissionType::CATEGORY_DELETE->value,
+                            PermissionType::CATEGORY_EDIT->value,
+                        ],
+                        true,
+                    ) => RightScope::none(),
+                    default => RightScope::ofGrants(new RightGrant($allowedCategories, ['en', 'de'])),
+                },
             );
-        $permission->method('getAllowedCategoriesForRight')->willReturn($allowedCategories);
-        $permission
-            ->method('hasPermissionForLanguage')
-            ->willReturnCallback(
-                // sentinel forbidden language for tests
-                static fn(int $userId, mixed $right, string $language): bool => $language !== 'fr',
-            );
-        $permission->method('getAllowedLanguagesForRight')->willReturn(null);
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -550,10 +557,10 @@ final class CategoryControllerTest extends TestCase
         $this->setCsrfCookie('category', $csrfToken);
 
         $controller = $this->createController();
-        $controller->setContainer($this->createAuthenticatedContainer($session));
+        $controller->setContainer($this->createAuthenticatedContainerRestrictedToCategoryOne($session));
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('User has no "CATEGORY_DELETE" permission for category 666.');
+        $this->expectExceptionMessage('User has no "CATEGORY_DELETE" permission for category 666 in language "en".');
 
         $controller->delete(new Request([], [], [], [], [], [], json_encode([
             'csrfToken' => $csrfToken,
