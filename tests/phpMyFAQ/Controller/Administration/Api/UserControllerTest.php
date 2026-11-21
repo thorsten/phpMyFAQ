@@ -574,7 +574,10 @@ final class UserControllerTest extends TestCase
         $response = $controller->editUser($request);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        $result = $this->dbHandle->query(sprintf('SELECT webauthnkeys FROM faquser WHERE user_id = %d', $managedUserId));
+        $result = $this->dbHandle->query(sprintf(
+            'SELECT webauthnkeys FROM faquser WHERE user_id = %d',
+            $managedUserId,
+        ));
         self::assertSame('', (string) $this->dbHandle->fetchArray($result)['webauthnkeys']);
     }
 
@@ -1815,6 +1818,186 @@ final class UserControllerTest extends TestCase
             $managedUserId,
         )));
         self::assertSame(1, (int) $row->count);
+    }
+
+    /**
+     * Holding a right for some languages only is not holding it: a language-scoped USER_EDIT
+     * holder must not be able to repoint the e-mail address or reset the 2FA of a user who
+     * holds the same right unrestricted (account takeover into the wider scope).
+     *
+     * @throws \Exception
+     */
+    public function testEditUserCannotEditUserHoldingARightInAWiderLanguageScope(): void
+    {
+        $this->seedCurrentUserSession();
+        $faqAdd = $this->seedScopedUserAdministrator(['en']);
+        $managedUserId = $this->seedManagedUser(login: 'unrestricted-editor', twoFactorEnabled: 1);
+        $this->grantUserRight($managedUserId, $faqAdd);
+
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildScopedActingUser(new BasicPermission($this->configuration));
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-data');
+
+        $response = $controller->editUser($this->jsonRequest([
+            'userId' => $managedUserId,
+            'csrfToken' => $csrf,
+            'display_name' => 'Taken over',
+            'email' => 'attacker@example.com',
+            'user_status' => 'active',
+            'overwrite_twofactor' => true,
+            'revoke_passkeys' => true,
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+
+        $row = $this->dbHandle->fetchObject($this->dbHandle->query(sprintf(
+            'SELECT email, twofactor_enabled FROM faquserdata WHERE user_id = %d',
+            $managedUserId,
+        )));
+        self::assertSame('unrestricted-editor@example.com', $row->email);
+        self::assertSame(1, (int) $row->twofactor_enabled);
+    }
+
+    /**
+     * A target restricted to languages the acting user does not hold is out of scope as well.
+     *
+     * @throws \Exception
+     */
+    public function testEditUserCannotEditUserHoldingARightInADisjointLanguageScope(): void
+    {
+        $this->seedCurrentUserSession();
+        $faqAdd = $this->seedScopedUserAdministrator(['en']);
+        $managedUserId = $this->seedManagedUser(login: 'german-editor');
+        $this->grantUserRight($managedUserId, $faqAdd);
+        $this->restrictUserRightToLanguage($managedUserId, $faqAdd, 'de');
+
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildScopedActingUser(new BasicPermission($this->configuration));
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-data');
+
+        $response = $controller->editUser($this->jsonRequest([
+            'userId' => $managedUserId,
+            'csrfToken' => $csrf,
+            'display_name' => 'Taken over',
+            'email' => 'attacker@example.com',
+            'user_status' => 'active',
+        ]));
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    /**
+     * A target whose scope lies within the acting user's own scope stays editable.
+     *
+     * @throws \Exception
+     */
+    public function testEditUserCanEditUserHoldingARightWithinTheirLanguageScope(): void
+    {
+        $this->seedCurrentUserSession();
+        $faqAdd = $this->seedScopedUserAdministrator(['en', 'de']);
+        $managedUserId = $this->seedManagedUser(login: 'english-editor');
+        $this->grantUserRight($managedUserId, $faqAdd);
+        $this->restrictUserRightToLanguage($managedUserId, $faqAdd, 'en');
+
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildScopedActingUser(new BasicPermission($this->configuration));
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-data');
+
+        $response = $controller->editUser($this->jsonRequest([
+            'userId' => $managedUserId,
+            'csrfToken' => $csrf,
+            'display_name' => 'English Editor',
+            'email' => 'english-editor@example.com',
+            'user_status' => 'active',
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
+    /**
+     * A right held only for some categories (through a category-restricted group) does not
+     * cover a user holding it as a direct, and therefore unrestricted, right.
+     *
+     * @throws \Exception
+     */
+    public function testEditUserCannotEditUserHoldingARightInAWiderCategoryScope(): void
+    {
+        $managedUserId = $this->seedManagedUser(login: 'all-categories-editor', twoFactorEnabled: 1);
+        $this->grantUserRight($managedUserId, 1);
+
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUserWithRights(userId: 5, heldRightIds: [1]);
+        self::assertInstanceOf(MockObject::class, $actingUser->perm);
+        $actingUser->perm->method('getAllowedCategoriesForRight')->willReturn([1]);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-data');
+
+        $response = $controller->editUser($this->jsonRequest([
+            'userId' => $managedUserId,
+            'csrfToken' => $csrf,
+            'display_name' => 'Taken over',
+            'email' => 'attacker@example.com',
+            'user_status' => 'active',
+            'overwrite_twofactor' => true,
+        ]));
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+        $row = $this->dbHandle->fetchObject($this->dbHandle->query(sprintf(
+            'SELECT email, twofactor_enabled FROM faquserdata WHERE user_id = %d',
+            $managedUserId,
+        )));
+        self::assertSame('all-categories-editor@example.com', $row->email);
+        self::assertSame(1, (int) $row->twofactor_enabled);
+    }
+
+    /**
+     * Deleting destroys the target's rights in their full scope, so the scope rule applies too.
+     *
+     * @throws \Exception
+     */
+    public function testDeleteUserCannotDeleteUserHoldingARightInAWiderLanguageScope(): void
+    {
+        $this->seedCurrentUserSession();
+        $faqAdd = $this->seedScopedUserAdministrator(['en']);
+        $this->grantUserRight(1, $this->rightId(PermissionType::USER_DELETE));
+        $managedUserId = $this->seedManagedUser(login: 'unrestricted-delete-target');
+        $this->grantUserRight($managedUserId, $faqAdd);
+
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildScopedActingUser(new BasicPermission($this->configuration));
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'delete-user');
+
+        $response = $controller->deleteUser($this->jsonRequest([
+            'userId' => $managedUserId,
+            'csrfToken' => $csrf,
+        ]));
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+        $row = $this->dbHandle->fetchObject($this->dbHandle->query(sprintf(
+            'SELECT COUNT(*) AS count FROM faquser WHERE user_id = %d',
+            $managedUserId,
+        )));
+        self::assertSame(1, (int) $row->count);
+    }
+
+    private function restrictUserRightToLanguage(int $userId, int $rightId, string $language): void
+    {
+        self::assertNotFalse($this->dbHandle->query(sprintf(
+            "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (%d, %d, '%s')",
+            $userId,
+            $rightId,
+            $this->dbHandle->escape($language),
+        )));
     }
 
     /**

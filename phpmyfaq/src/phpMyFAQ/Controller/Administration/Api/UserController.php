@@ -413,7 +413,10 @@ final class UserController extends AbstractAdministrationApiController
         // applies here as well: a non-SuperAdmin holding the delegable USER_DELETE right must not
         // be able to remove a more privileged administrator. Blocking SuperAdmin and protected
         // targets alone leaves every other, more privileged account reachable.
-        if (!$this->currentUser->isSuperAdmin() && !$this->actingUserHoldsAllRightsOf($currentUser)) {
+        //
+        // The scope counts too: a right the acting user holds only for some categories or
+        // languages does not cover an account holding it in a wider scope.
+        if (!$this->currentUser->isSuperAdmin() && !$this->actingUserHoldsAllRightsInScopeOf($currentUser)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
@@ -579,7 +582,11 @@ final class UserController extends AbstractAdministrationApiController
         // A non-SuperAdmin may only edit users whose rights they hold themselves. Overwriting the
         // e-mail address or resetting two-factor authentication of a more privileged administrator
         // would otherwise let a USER_EDIT holder take over that account (privilege escalation).
-        if (!$actingIsSuperAdmin && !$this->actingUserHoldsAllRightsOf($user)) {
+        //
+        // Holding a right is not enough: the takeover hands over the target's rights in the
+        // target's scope, so a right the acting user holds only for some categories or languages
+        // does not cover a target holding it in a wider scope.
+        if (!$actingIsSuperAdmin && !$this->actingUserHoldsAllRightsInScopeOf($user)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
         }
 
@@ -654,6 +661,56 @@ final class UserController extends AbstractAdministrationApiController
             $user->perm->getAllUserRights($user->getUserId()),
             fn(mixed $rightId): bool => $this->currentUser->perm->hasPermission($actingUserId, (int) $rightId),
         );
+    }
+
+    /**
+     * Whether the acting user holds every right the target user holds, in at least the language
+     * and category scope the target holds it in. Taking over or deleting an account acts on its
+     * rights in their full scope, so a right held only for some categories or languages does not
+     * cover a target holding it unrestricted, or in a category or language the acting user lacks.
+     *
+     * @throws Exception
+     */
+    private function actingUserHoldsAllRightsInScopeOf(User $user): bool
+    {
+        $actingUserId = $this->currentUser->getUserId();
+        $actingPermission = $this->currentUser->perm;
+        $userId = $user->getUserId();
+
+        return array_all(
+            $user->perm->getAllUserRights($userId),
+            static fn(mixed $rightId): bool => (
+                $actingPermission->hasPermission($actingUserId, (int) $rightId)
+                && self::scopeCovers(
+                    $actingPermission->getAllowedLanguagesForRight($actingUserId, (int) $rightId),
+                    $user->perm->getAllowedLanguagesForRight($userId, (int) $rightId),
+                )
+                && self::scopeCovers(
+                    $actingPermission->getAllowedCategoriesForRight($actingUserId, (int) $rightId),
+                    $user->perm->getAllowedCategoriesForRight($userId, (int) $rightId),
+                )
+            ),
+        );
+    }
+
+    /**
+     * Whether a scope includes every language or category of another one. Null means
+     * unrestricted, which only an unrestricted scope covers.
+     *
+     * @param array<int|string>|null $scope
+     * @param array<int|string>|null $otherScope
+     */
+    private static function scopeCovers(?array $scope, ?array $otherScope): bool
+    {
+        if ($scope === null) {
+            return true;
+        }
+
+        if ($otherScope === null) {
+            return false;
+        }
+
+        return array_diff($otherScope, $scope) === [];
     }
 
     /**
