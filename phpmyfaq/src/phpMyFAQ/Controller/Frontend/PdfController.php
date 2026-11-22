@@ -84,7 +84,8 @@ final class PdfController extends AbstractFrontController
 
         $pdf = new Pdf($this->faq, $category, $this->configuration);
 
-        $this->faq->getFaq($faqId);
+        // The link names a translation: without it the UI language would decide which one is exported.
+        $this->faq->getFaq($faqId, faqLanguage: $faqLanguage !== '' ? $faqLanguage : null);
 
         if (!$this->faq->isFaqRecordVisible()) {
             return new Response('', Response::HTTP_NOT_FOUND);

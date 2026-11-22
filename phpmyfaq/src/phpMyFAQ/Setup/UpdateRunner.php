@@ -371,12 +371,15 @@ final class UpdateRunner
         $upgrade = $this->createUpgrade();
         $pathToPackage = $upgrade->downloadPackage($this->version);
 
-        if (!$upgrade->isNightly()) {
-            $result = $upgrade->verifyPackage($pathToPackage, $this->version);
-            if (!$result) {
-                $symfonyStyle->error(message: Translation::getString(key: 'verificationFailure'));
-                return Command::FAILURE;
-            }
+        // A nightly without a published digest is refused unless upgrade.allowUnverifiedNightly
+        // is enabled, exactly as in the web updater
+        $verified = $upgrade->isNightly()
+            ? $upgrade->verifyNightlyPackage($pathToPackage)
+            : $upgrade->verifyPackage($pathToPackage, $this->version);
+
+        if (!$verified) {
+            $symfonyStyle->error(message: Translation::getString(key: 'verificationFailure'));
+            return Command::FAILURE;
         }
 
         $this->configuration->set(key: 'upgrade.lastDownloadedPackage', value: urlencode($pathToPackage));

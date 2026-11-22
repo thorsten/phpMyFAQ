@@ -30,6 +30,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -44,6 +45,8 @@ final class OidcAuthenticationControllerTest extends TestCase
     use TestDatabaseTrait;
 
     private const string ISSUER = 'https://auth.example.test';
+
+    private const string DISCOVERY_DOCUMENT = '{"issuer":"https://auth.example.test","authorization_endpoint":"https://auth.example.test/auth","token_endpoint":"https://auth.example.test/token","userinfo_endpoint":"https://auth.example.test/userinfo","jwks_uri":"https://auth.example.test/jwks","end_session_endpoint":"https://auth.example.test/logout"}';
 
     private Configuration $configuration;
     private OpenSSLAsymmetricKey $privateKey;
@@ -386,7 +389,11 @@ final class OidcAuthenticationControllerTest extends TestCase
         $oidcSession->setAuthorizationState('state-123', 'nonce-456', 'verifier-789');
 
         $resolverUser = $this->createMock(User::class);
-        $resolverUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'subject-123')->willReturn(55);
+        $resolverUser
+            ->expects($this->once())
+            ->method('getUserIdByOidcIdentity')
+            ->with(self::ISSUER, 'subject-123')
+            ->willReturn(55);
         $resolverUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
         $resolverUser->expects($this->once())->method('getLogin')->willReturn('linked-user');
         $resolverUser->expects($this->once())->method('getUserByLogin')->with('linked-user', false)->willReturn(true);
@@ -576,7 +583,11 @@ final class OidcAuthenticationControllerTest extends TestCase
         $this->expectNoLogin($currentUser);
 
         $authUser = $this->createMock(User::class);
-        $authUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'subject-123')->willReturn(55);
+        $authUser
+            ->expects($this->once())
+            ->method('getUserIdByOidcIdentity')
+            ->with(self::ISSUER, 'subject-123')
+            ->willReturn(55);
         $authUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
         $authUser->expects($this->once())->method('getLogin')->willReturn('john');
         $authUser->expects($this->once())->method('getUserByLogin')->with('john', false)->willReturn(true);
@@ -632,14 +643,21 @@ final class OidcAuthenticationControllerTest extends TestCase
         $this->expectNoLogin($currentUser);
 
         $authUser = $this->createMock(User::class);
-        $authUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'subject-123')->willReturn(55);
+        $authUser
+            ->expects($this->once())
+            ->method('getUserIdByOidcIdentity')
+            ->with(self::ISSUER, 'subject-123')
+            ->willReturn(55);
         $authUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
         $authUser->expects($this->once())->method('getLogin')->willReturn('john');
         $authUser->expects($this->once())->method('getUserByLogin')->with('john', false)->willReturn(true);
         $authUser
             ->expects($this->exactly(2))
             ->method('getUserData')
-            ->willReturnMap([['oidc_sub', 'subject-123'], ['oidc_iss', 'https://old-provider.example.test']]);
+            ->willReturnMap([
+                ['oidc_sub', 'subject-123'],
+                ['oidc_iss', 'https://old-provider.example.test'],
+            ]);
         $authUser->expects($this->never())->method('createUser');
 
         $controller = $this->createController(
@@ -685,7 +703,11 @@ final class OidcAuthenticationControllerTest extends TestCase
         $this->expectNoLogin($currentUser);
 
         $authUser = $this->createMock(User::class);
-        $authUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'attacker-subject')->willReturn(0);
+        $authUser
+            ->expects($this->once())
+            ->method('getUserIdByOidcIdentity')
+            ->with(self::ISSUER, 'attacker-subject')
+            ->willReturn(0);
         $authUser->expects($this->never())->method('getUserIdByEmail');
         $authUser->expects($this->once())->method('getUserByLogin')->with('admin', false)->willReturn(true);
         $authUser->expects($this->never())->method('createUser');
@@ -734,7 +756,11 @@ final class OidcAuthenticationControllerTest extends TestCase
         $this->expectNoLogin($currentUser);
 
         $authUser = $this->createMock(User::class);
-        $authUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'attacker-subject')->willReturn(0);
+        $authUser
+            ->expects($this->once())
+            ->method('getUserIdByOidcIdentity')
+            ->with(self::ISSUER, 'attacker-subject')
+            ->willReturn(0);
         $authUser->expects($this->once())->method('getUserByLogin')->with('attacker', false)->willReturn(false);
         $authUser->expects($this->once())->method('getUserIdByEmail')->with('admin@example.com')->willReturn(1);
         $authUser->expects($this->never())->method('getUserById');
@@ -992,6 +1018,141 @@ final class OidcAuthenticationControllerTest extends TestCase
         $this->assertSame('', $oidcSession->getAuthorizationState()['state']);
     }
 
+    /**
+     * The session cookie is SameSite=Strict, so a provider on another site sends the browser
+     * back without it: the callback runs in a new, empty session and has to find the state,
+     * the nonce and the PKCE verifier in the lax fallback cookie set by authorize().
+     */
+    public function testCallbackLogsInFromTheFallbackCookieWhenTheSessionWasNotSent(): void
+    {
+        $authorizeResponse = $this->createController([new MockResponse(self::DISCOVERY_DOCUMENT)])->authorize();
+
+        $cookies = $authorizeResponse->headers->getCookies();
+        $this->assertCount(1, $cookies);
+        $cookie = $cookies[0];
+        $this->assertSame('pmf-oidc-oidc-authorization', $cookie->getName());
+        $this->assertSame(Cookie::SAMESITE_LAX, $cookie->getSameSite());
+        $this->assertTrue($cookie->isHttpOnly());
+        $this->assertTrue($cookie->isSecure());
+
+        parse_str((string) parse_url((string) $authorizeResponse->headers->get('Location'), PHP_URL_QUERY), $query);
+
+        $idToken = $this->signToken([
+            'iss' => self::ISSUER,
+            'sub' => 'subject-123',
+            'aud' => ['phpmyfaq'],
+            'azp' => 'phpmyfaq',
+            'nonce' => $query['nonce'],
+            'iat' => time(),
+            'exp' => time() + 300,
+        ]);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('getUserByLogin')->willReturn(true);
+        $currentUser
+            ->method('getUserData')
+            ->willReturnMap([['oidc_sub', 'subject-123'], ['oidc_iss', self::ISSUER], ['twofactor_enabled', 0]]);
+        $currentUser->expects($this->once())->method('setLoggedIn')->with(true);
+        $currentUser->expects($this->once())->method('saveToSession');
+
+        $resolverUser = $this->createLinkedResolverUser();
+
+        $oidcSession = new OidcSession($this->createStartedSession(), 'oidc');
+        $controller = $this->createController(
+            $this->createSuccessfulProviderResponses(
+                $idToken,
+                '{"sub":"subject-123","preferred_username":"linked-user"}',
+            ),
+            $oidcSession,
+            static fn(): CurrentUser => $currentUser,
+            static fn(): User => $resolverUser,
+        );
+
+        $response = $controller->callback(new Request(query: [
+            'code' => 'test-code',
+            'state' => $query['state'],
+        ], cookies: [$cookie->getName() => (string) $cookie->getValue()]));
+
+        $this->assertSame($idToken, $oidcSession->getIdToken());
+        $cleared = $response->headers->getCookies();
+        $this->assertCount(1, $cleared);
+        $this->assertSame('pmf-oidc-oidc-authorization', $cleared[0]->getName());
+        $this->assertTrue($cleared[0]->isCleared());
+    }
+
+    public function testCallbackRejectsAStateThatDoesNotMatchTheFallbackCookie(): void
+    {
+        $authorizeResponse = $this->createController([new MockResponse(self::DISCOVERY_DOCUMENT)])->authorize();
+        $cookie = $authorizeResponse->headers->getCookies()[0];
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $this->expectNoLogin($currentUser);
+
+        // No provider response is queued: a token request would fail the test.
+        $controller = $this->createController(
+            [],
+            new OidcSession($this->createStartedSession(), 'oidc'),
+            static fn(): CurrentUser => $currentUser,
+        );
+
+        $response = $controller->callback(new Request(query: [
+            'code' => 'test-code',
+            'state' => 'forged-state',
+        ], cookies: [$cookie->getName() => (string) $cookie->getValue()]));
+
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $this->assertTrue($response->headers->getCookies()[0]->isCleared());
+    }
+
+    public function testCallbackEnforcesTheNonceFromTheFallbackCookie(): void
+    {
+        $authorizeResponse = $this->createController([new MockResponse(self::DISCOVERY_DOCUMENT)])->authorize();
+        $cookie = $authorizeResponse->headers->getCookies()[0];
+        parse_str((string) parse_url((string) $authorizeResponse->headers->get('Location'), PHP_URL_QUERY), $query);
+
+        $idToken = $this->signToken([
+            'iss' => self::ISSUER,
+            'sub' => 'subject-123',
+            'aud' => ['phpmyfaq'],
+            'azp' => 'phpmyfaq',
+            'nonce' => 'nonce-of-another-login',
+            'iat' => time(),
+            'exp' => time() + 300,
+        ]);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $this->expectNoLogin($currentUser);
+
+        $controller = $this->createController(
+            $this->createSuccessfulProviderResponses($idToken, '{"sub":"subject-123"}'),
+            new OidcSession($this->createStartedSession(), 'oidc'),
+            static fn(): CurrentUser => $currentUser,
+        );
+
+        $response = $controller->callback(new Request(query: [
+            'code' => 'test-code',
+            'state' => $query['state'],
+        ], cookies: [$cookie->getName() => (string) $cookie->getValue()]));
+
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+    }
+
+    public function testCallbackWithoutSessionStateAndWithoutFallbackCookieIsRejected(): void
+    {
+        $currentUser = $this->createMock(CurrentUser::class);
+        $this->expectNoLogin($currentUser);
+
+        $controller = $this->createController(
+            [],
+            new OidcSession($this->createStartedSession(), 'oidc'),
+            static fn(): CurrentUser => $currentUser,
+        );
+
+        $response = $controller->callback(new Request(query: ['code' => 'test-code', 'state' => '']));
+
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+    }
+
     private function expectNoLogin(CurrentUser&MockObject $currentUser): void
     {
         $currentUser->expects($this->never())->method('setUserData');
@@ -1032,15 +1193,15 @@ final class OidcAuthenticationControllerTest extends TestCase
     private function createLinkedResolverUser(): User&MockObject
     {
         $resolverUser = $this->createMock(User::class);
-        $resolverUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'subject-123')->willReturn(55);
+        $resolverUser
+            ->expects($this->once())
+            ->method('getUserIdByOidcIdentity')
+            ->with(self::ISSUER, 'subject-123')
+            ->willReturn(55);
         $resolverUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
         $resolverUser->expects($this->once())->method('getLogin')->willReturn('linked-user');
         // AuthOidc::isValidLogin()/checkCredentials() re-resolve the account and its subject.
-        $resolverUser
-            ->expects($this->once())
-            ->method('getUserByLogin')
-            ->with('linked-user', false)
-            ->willReturn(true);
+        $resolverUser->expects($this->once())->method('getUserByLogin')->with('linked-user', false)->willReturn(true);
         $resolverUser
             ->expects($this->exactly(2))
             ->method('getUserData')
@@ -1156,7 +1317,10 @@ final class OidcAuthenticationControllerTest extends TestCase
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
-        $this->assertNull($session->get('pmf-oidc-oidc-state'), 'No authorization state is stored when discovery fails.');
+        $this->assertNull(
+            $session->get('pmf-oidc-oidc-state'),
+            'No authorization state is stored when discovery fails.',
+        );
     }
 
     public function testLogoutClearsTheLocalSessionWhenDiscoveryFails(): void
@@ -1330,7 +1494,11 @@ final class OidcAuthenticationControllerTest extends TestCase
         $this->expectNoLogin($currentUser);
 
         $authUser = $this->createMock(User::class);
-        $authUser->expects($this->once())->method('getUserIdByOidcIdentity')->with(self::ISSUER, 'subject-123')->willReturn(55);
+        $authUser
+            ->expects($this->once())
+            ->method('getUserIdByOidcIdentity')
+            ->with(self::ISSUER, 'subject-123')
+            ->willReturn(55);
         $authUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
         $authUser->expects($this->once())->method('getLogin')->willReturn(' ');
         $authUser->expects($this->once())->method('getUserByLogin')->with(' ', false)->willReturn(true);

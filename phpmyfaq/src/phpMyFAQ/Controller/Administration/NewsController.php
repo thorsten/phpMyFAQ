@@ -78,6 +78,7 @@ final class NewsController extends AbstractAdministrationController
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
         return $this->render('@admin/content/news.add.twig', [
+            'csrfTokenEditor' => Token::getInstance($this->session)->getTokenString('pmf-csrf-token'),
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
@@ -103,6 +104,7 @@ final class NewsController extends AbstractAdministrationController
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
         return $this->render('@admin/content/news.edit.twig', [
+            'csrfTokenEditor' => Token::getInstance($this->session)->getTokenString('pmf-csrf-token'),
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),

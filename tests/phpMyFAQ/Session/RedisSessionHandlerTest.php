@@ -145,6 +145,18 @@ class RedisSessionHandlerTest extends TestCase
         }
     }
 
+    public function testValidateConnectionAcceptsServerDemandingAuthentication(): void
+    {
+        [$process, $port] = $this->startFakeRedisServer("-NOAUTH Authentication required.\r\n");
+
+        try {
+            RedisSessionHandler::validateConnection(sprintf('tcp://127.0.0.1:%d?auth=secret', $port));
+            $this->addToAssertionCount(1);
+        } finally {
+            proc_close($process);
+        }
+    }
+
     public function testValidateConnectionRejectsServerNotAnsweringPong(): void
     {
         [$process, $port] = $this->startFakeRedisServer("-ERR unknown command\r\n");

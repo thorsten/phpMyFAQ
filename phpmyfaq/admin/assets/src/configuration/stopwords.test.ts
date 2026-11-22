@@ -237,6 +237,55 @@ describe('StopWords Functions', () => {
       expect(errorAlert.innerText).toBe('Save failed');
     });
 
+    it('should show the server error instead of the success styling when the save is refused', async () => {
+      setupBasicDom();
+
+      (fetchByLanguage as Mock).mockResolvedValue([{ id: 1, lang: 'en', stopword: 'the' }]);
+      (postStopWord as Mock).mockResolvedValue({ error: 'Stop word already exists' });
+
+      handleStopWords();
+
+      const selector = document.getElementById('pmf-stop-words-language-selector') as HTMLSelectElement;
+      selector.value = 'en';
+      selector.dispatchEvent(new Event('change'));
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      const input = document.getElementById('stopword_1_en') as HTMLInputElement;
+      input.dispatchEvent(new Event('focus'));
+      input.value = 'a';
+      input.dispatchEvent(new Event('blur'));
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect((document.querySelector('.alert-danger') as HTMLElement).innerText).toBe('Stop word already exists');
+      expect(input.style.borderColor).toBe('');
+    });
+
+    it('should give a new stop word the id the server assigned', async () => {
+      setupBasicDom();
+
+      (fetchByLanguage as Mock).mockResolvedValue([{ id: -1, lang: 'en', stopword: '' }]);
+      (postStopWord as Mock).mockResolvedValue({ added: 42 });
+
+      handleStopWords();
+
+      const selector = document.getElementById('pmf-stop-words-language-selector') as HTMLSelectElement;
+      selector.value = 'en';
+      selector.dispatchEvent(new Event('change'));
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      const input = document.getElementById('stopword_-1_en') as HTMLInputElement;
+      input.dispatchEvent(new Event('focus'));
+      input.value = 'new';
+      input.dispatchEvent(new Event('blur'));
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(input.id).toBe('stopword_42_en');
+    });
+
     it('should not save when value has not changed', async () => {
       setupBasicDom();
 
@@ -313,6 +362,31 @@ describe('StopWords Functions', () => {
       await new Promise((resolve) => setTimeout(resolve, 10));
 
       expect(removeStopWord).toHaveBeenCalledWith('test-csrf-token', 1, 'en');
+      expect(document.getElementById('stopword_1_en')).toBeNull();
+    });
+
+    it('should keep the stop word and show the server error when the deletion is refused', async () => {
+      setupBasicDom();
+
+      (fetchByLanguage as Mock).mockResolvedValue([{ id: 1, lang: 'en', stopword: 'the' }]);
+      (removeStopWord as Mock).mockResolvedValue({ error: 'No permission' });
+
+      handleStopWords();
+
+      const selector = document.getElementById('pmf-stop-words-language-selector') as HTMLSelectElement;
+      selector.value = 'en';
+      selector.dispatchEvent(new Event('change'));
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      const input = document.getElementById('stopword_1_en') as HTMLInputElement;
+      input.value = '';
+      input.dispatchEvent(new KeyboardEvent('keydown', { keyCode: 13 }));
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(document.getElementById('stopword_1_en')).not.toBeNull();
+      expect((document.querySelector('.alert-danger') as HTMLElement).innerText).toBe('No permission');
     });
 
     it('should blur input on Enter when input has a value', async () => {

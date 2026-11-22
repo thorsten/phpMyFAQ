@@ -263,6 +263,21 @@ final class PdfControllerTest extends TestCase
      * Seeds a guest-readable FAQ. Defaults describe a published record; individual
      * tests override whatever makes their record non-public.
      */
+    /**
+     * The route names the translation to export; the UI language (English here) must not
+     * decide which one is rendered.
+     *
+     * @throws \Exception
+     */
+    public function testIndexReturnsNotFoundForATranslationThatDoesNotExist(): void
+    {
+        $this->seedFaqRow(faqId: 1);
+
+        $response = $this->requestPdf(faqId: 1, faqLanguage: 'de');
+
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
     private function seedFaqRow(
         int $faqId,
         string $status = 'published',
@@ -296,7 +311,7 @@ final class PdfControllerTest extends TestCase
         ));
     }
 
-    private function requestPdf(int $faqId, int $categoryId = 1): Response
+    private function requestPdf(int $faqId, int $categoryId = 1, string $faqLanguage = 'en'): Response
     {
         $configuration = Configuration::getConfigurationInstance();
         $controller = new PdfController(new Faq($configuration), new Tags($configuration));
@@ -308,7 +323,7 @@ final class PdfControllerTest extends TestCase
                 [
                     'categoryId' => (string) $categoryId,
                     'faqId' => (string) $faqId,
-                    'faqLanguage' => 'en',
+                    'faqLanguage' => $faqLanguage,
                 ],
             ),
         );

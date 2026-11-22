@@ -31,7 +31,7 @@ describe('saveVoting', () => {
       json: () => Promise.resolve({ error: 'Something went wrong' }),
     });
 
-    await expect(saveVoting('42', 'en', 3, 'test-csrf-token')).rejects.toThrow('HTTP 400');
+    await expect(saveVoting('42', 'en', 3, 'test-csrf-token')).rejects.toThrow('Something went wrong');
   });
 
   test('throws on network failure', async () => {

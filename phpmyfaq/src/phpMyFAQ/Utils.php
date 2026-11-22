@@ -127,114 +127,40 @@ class Utils
      */
     public static function setHighlightedString(string $string, string $highlight): string
     {
-        $attributes = [
-            'href',
-            'src',
-            'title',
-            'alt',
-            'class',
-            'style',
-            'id',
-            'name',
-            'face',
-            'size',
-            'dir',
-            'rel',
-            'rev',
-            'role',
-            'onmouseenter',
-            'onmouseleave',
-            'onafterprint',
-            'onbeforeprint',
-            'onbeforeunload',
-            'onhashchange',
-            'onmessage',
-            'onoffline',
-            'ononline',
-            'onpopstate',
-            'onpagehide',
-            'onpageshow',
-            'onresize',
-            'onunload',
-            'ondevicemotion',
-            'ondeviceorientation',
-            'onabort',
-            'onblur',
-            'oncanplay',
-            'oncanplaythrough',
-            'onchange',
-            'onclick',
-            'oncontextmenu',
-            'ondblclick',
-            'ondrag',
-            'ondragend',
-            'ondragenter',
-            'ondragleave',
-            'ondragover',
-            'ondragstart',
-            'ondrop',
-            'ondurationchange',
-            'onemptied',
-            'onended',
-            'onerror',
-            'onfocus',
-            'oninput',
-            'oninvalid',
-            'onkeydown',
-            'onkeypress',
-            'onkeyup',
-            'onload',
-            'onloadeddata',
-            'onloadedmetadata',
-            'onloadstart',
-            'onmousedown',
-            'onmousemove',
-            'onmouseout',
-            'onmouseover',
-            'onmouseup',
-            'onmozfullscreenchange',
-            'onmozfullscreenerror',
-            'onpause',
-            'onplay',
-            'onplaying',
-            'onprogress',
-            'onratechange',
-            'onreset',
-            'onscroll',
-            'onseeked',
-            'onseeking',
-            'onselect',
-            'onshow',
-            'onstalled',
-            'onsubmit',
-            'onsuspend',
-            'ontimeupdate',
-            'onvolumechange',
-            'onwaiting',
-            'oncopy',
-            'oncut',
-            'onpaste',
-            'onbeforescriptexecute',
-            'onafterscriptexecute',
-        ];
+        if ($highlight === '') {
+            return $string;
+        }
 
-        $highlighted = Strings::preg_replace_callback(
-            '/('
-            . $highlight
-            . '="[^"]*")|'
-            . '(('
-            . implode(separator: '|', array: $attributes)
-            . ')="[^"]*'
-            . $highlight
-            . '[^"]*")|'
-            . '('
-            . $highlight
-            . ')/mis',
-            ['phpMyFAQ\Utils', 'highlightNoLinks'],
+        // Only text is highlighted. Tags with their attribute values and character references
+        // are delimiters and pass unchanged, so "strong" cannot break a <strong> tag and "amp"
+        // cannot break an &amp; reference.
+        $parts = preg_split(
+            '/(<[^>]*>|&(?:[a-z][a-z0-9]*|#[0-9]+|#x[0-9a-f]+);)/i',
             $string,
+            -1,
+            PREG_SPLIT_DELIM_CAPTURE,
         );
+        if ($parts === false) {
+            return $string;
+        }
 
-        return is_string($highlighted) ? $highlighted : $string;
+        $output = '';
+        foreach ($parts as $index => $part) {
+            // With one capture group the delimiters sit at the odd positions.
+            if (($index % 2) === 1) {
+                $output .= $part;
+                continue;
+            }
+
+            $highlighted = Strings::preg_replace(
+                pattern: '/(' . $highlight . ')/mis',
+                replacement: '<mark class="pmf-highlighted-string">$1</mark>',
+                subject: $part,
+            );
+            $output .= is_string($highlighted) ? $highlighted : $part;
+        }
+
+        return $output;
     }
 
     /**

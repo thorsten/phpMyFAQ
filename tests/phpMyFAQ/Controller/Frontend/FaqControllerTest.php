@@ -456,7 +456,10 @@ final class FaqControllerTest extends TestCase
             \Symfony\Component\HttpFoundation\Response::HTTP_MOVED_PERMANENTLY,
             $response->getStatusCode(),
         );
-        self::assertSame('/content/1/1/en/unreleased-product-name.html', $response->headers->get('Location'));
+        self::assertSame(
+            $this->configuration->getDefaultUrl() . 'content/1/1/en/unreleased-product-name.html',
+            $response->headers->get('Location'),
+        );
     }
 
     public function testContentRedirectResolvesTheCategoryAndSlug(): void
@@ -479,7 +482,10 @@ final class FaqControllerTest extends TestCase
             \Symfony\Component\HttpFoundation\Response::HTTP_MOVED_PERMANENTLY,
             $response->getStatusCode(),
         );
-        self::assertSame('/content/1/1/en/unreleased-product-name.html', $response->headers->get('Location'));
+        self::assertSame(
+            $this->configuration->getDefaultUrl() . 'content/1/1/en/unreleased-product-name.html',
+            $response->headers->get('Location'),
+        );
     }
 
     public function testAddRendersTheFormForUsersAllowedToAddFaqs(): void

@@ -587,7 +587,7 @@ class PgsqlTest extends TestCase
         $this->assertSame(['faqdata' => '4', 'faqcategories' => '9'], $status);
     }
 
-    public function testNextIdReturnsSequenceValuePlusZeroCasting(): void
+    public function testNextIdFollowsTheHighestExistingIdWithoutUsingASequence(): void
     {
         $GLOBALS['pmfPgsqlTestState']['query_result'] = true;
         $GLOBALS['pmfPgsqlTestState']['result_status'] = 0;
@@ -595,11 +595,20 @@ class PgsqlTest extends TestCase
 
         $nextId = $this->pgsql->nextId('faqdata', 'id');
 
-        $this->assertSame(18, $nextId);
-        $this->assertStringContainsString(
-            "SELECT nextval('faqdata_id_seq')",
+        $this->assertSame(19, $nextId);
+        $this->assertSame(
+            'SELECT MAX(id) AS current_id FROM faqdata',
             (string) $GLOBALS['pmfPgsqlTestState']['last_query'],
         );
+    }
+
+    public function testNextIdStartsAtOneForAnEmptyTable(): void
+    {
+        $GLOBALS['pmfPgsqlTestState']['query_result'] = true;
+        $GLOBALS['pmfPgsqlTestState']['result_status'] = 0;
+        $GLOBALS['pmfPgsqlTestState']['fetch_row_rows'] = [[null]];
+
+        $this->assertSame(1, $this->pgsql->nextId('faqjobs', 'id'));
     }
 
     public function testClientAndServerVersionUsePgVersion(): void

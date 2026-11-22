@@ -43,6 +43,7 @@ import {
   handleElasticsearch,
   handleCheckForUpdates,
   handleLdap,
+  handleOAuth2,
   handleSaveConfiguration,
   handleFormEdit,
   handleFormTranslations,
@@ -93,7 +94,7 @@ import {
   handleFleschReadingEase,
   handleDeleteFaqModal,
 } from './content';
-import { handleUserList, handleUsers } from './user';
+import { handleApiKeys, handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
 import { handleLoginForm, handlePasswordStrength, handlePasswordToggle } from '../../../assets/src/utils';
 import { handleSessionTimeout, initializeTooltips, sidebarToggle } from './utils';
@@ -155,6 +156,7 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   // User → User Management
   await handleUsers();
   handleUserList();
+  await handleApiKeys();
 
   // Group → Group Management
   await handleGroups();
@@ -231,6 +233,9 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
 
   // Configuration → Stop Words
   handleStopWords();
+
+  // Configuration → OAuth 2.0 clients and scopes
+  handleOAuth2();
 
   // Configuration → Online Update
   handleCheckForUpdates();

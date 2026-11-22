@@ -103,6 +103,9 @@ final class FaqControllerRedirectTest extends TestCase
     {
         $this->seedFaqRecord(7, 42, 4242, 'en', 'Test Question');
 
+        // A subdirectory installation: a root-absolute redirect would leave it.
+        $this->configuration->set('main.referenceURL', 'https://localhost/faq/');
+
         $controller = $this->createController();
         $request = Request::create('/solution_id_4242.html', 'GET');
         $request->attributes->set('solutionId', '4242');
@@ -110,7 +113,10 @@ final class FaqControllerRedirectTest extends TestCase
         $response = $controller->solution($request);
 
         self::assertSame(Response::HTTP_MOVED_PERMANENTLY, $response->getStatusCode());
-        self::assertSame('/content/7/42/en/test-question.html', $response->headers->get('Location'));
+        self::assertSame(
+            'https://localhost/faq/content/7/42/en/test-question.html',
+            $response->headers->get('Location'),
+        );
     }
 
     public function testContentRedirectsToCanonicalFaqUrl(): void
@@ -125,12 +131,15 @@ final class FaqControllerRedirectTest extends TestCase
         $response = $controller->contentRedirect($request);
 
         self::assertSame(Response::HTTP_MOVED_PERMANENTLY, $response->getStatusCode());
-        self::assertSame('/content/7/42/en/test-question.html', $response->headers->get('Location'));
+        self::assertSame('https://localhost/content/7/42/en/test-question.html', $response->headers->get('Location'));
     }
 
     public function testSolutionReturnsNotFoundForUnpublishedFaq(): void
     {
         $this->seedFaqRecord(7, 42, 4242, 'en', 'Secret Draft', status: 'draft');
+
+        // A subdirectory installation: a root-absolute redirect would leave it.
+        $this->configuration->set('main.referenceURL', 'https://localhost/faq/');
 
         $controller = $this->createController();
         $request = Request::create('/solution_id_4242.html', 'GET');

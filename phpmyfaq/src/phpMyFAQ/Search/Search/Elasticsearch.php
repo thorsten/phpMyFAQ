@@ -165,6 +165,15 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
             ],
         ];
 
+        // An empty language means "all languages"; otherwise FAQs and pages are limited to it.
+        if ($this->getLanguage() !== '') {
+            $searchParams['body']['query']['bool']['filter'] = [
+                'term' => [
+                    'lang' => $this->getLanguage(),
+                ],
+            ];
+        }
+
         $this->resultSet = $this->mapHits($searchParams);
 
         return $this->resultSet;

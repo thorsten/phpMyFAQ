@@ -48,6 +48,11 @@ class GoogleRecaptcha implements CaptchaInterface
             return true;
         }
 
+        // No widget is rendered while the captcha is switched off, so there is no token to verify.
+        if (true !== $this->configuration->get(item: 'spam.enableCaptchaCode')) {
+            return true;
+        }
+
         try {
             $response = $this->httpClient->request('POST', self::VERIFY_URL, [
                 'body' => [

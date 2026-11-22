@@ -27,12 +27,16 @@ export const handleDeleteBookmarks = (): void => {
         const bookmarkId = target.getAttribute('data-pmf-bookmark-id') as string;
         const csrfToken = target.getAttribute('data-pmf-csrf') as string;
         const bookmarkToDelete = document.getElementById(`delete-bookmark-${bookmarkId}`) as HTMLElement | null;
-        const response = await deleteBookmark(bookmarkId, csrfToken);
-        if (response.success) {
-          pushNotification(response.success);
-          bookmarkToDelete?.remove();
-        } else {
-          pushErrorNotification(response.error ?? 'Unknown error');
+        try {
+          const response = await deleteBookmark(bookmarkId, csrfToken);
+          if (response.success) {
+            pushNotification(response.success);
+            bookmarkToDelete?.remove();
+          } else {
+            pushErrorNotification(response.error ?? 'Unknown error');
+          }
+        } catch (error) {
+          pushErrorNotification((error as Error).message);
         }
       });
     });
@@ -45,17 +49,21 @@ export const handleRemoveAllBookmarks = (): void => {
   if (removeAllBookmarksButton) {
     removeAllBookmarksButton.addEventListener('click', async (event: Event) => {
       event.preventDefault();
-      const target = event.target as HTMLElement;
-      const csrfToken = target.getAttribute('data-pmf-csrf') as string;
+      // The button wraps an icon: a click on it must still read the token from the button.
+      const csrfToken = removeAllBookmarksButton.getAttribute('data-pmf-csrf') as string;
       const bookmarksToDelete = document.getElementById('bookmarkAccordion') as HTMLElement | null;
 
-      const response = await deleteAllBookmarks(csrfToken);
+      try {
+        const response = await deleteAllBookmarks(csrfToken);
 
-      if (response.success) {
-        pushNotification(response.success);
-        bookmarksToDelete?.remove();
-      } else {
-        pushErrorNotification(response.error ?? 'Unknown error');
+        if (response.success) {
+          pushNotification(response.success);
+          bookmarksToDelete?.remove();
+        } else {
+          pushErrorNotification(response.error ?? 'Unknown error');
+        }
+      } catch (error) {
+        pushErrorNotification((error as Error).message);
       }
     });
   }

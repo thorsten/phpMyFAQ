@@ -39,9 +39,6 @@ class PluginManager
     /** @var PluginConfigurationInterface[] */
     private array $config = [];
 
-    /** @var string[] */
-    private array $loadedPlugins = [];
-
     /** @var array<string, array{plugin: PluginInterface, reason: string}> */
     private array $incompatiblePlugins = [];
 
@@ -108,19 +105,9 @@ class PluginManager
             $this->registerPlugin($fullClassName);
         }
 
-        foreach ($this->plugins as $plugin) {
-            if (!$this->areDependenciesMet($plugin)) {
-                $missingDeps = $this->getMissingDependencies($plugin);
-                $this->incompatiblePlugins[$plugin->getName()] = [
-                    'plugin' => $plugin,
-                    'reason' => sprintf('Missing dependencies: %s', implode(', ', $missingDeps)),
-                ];
-                // Remove plugin from the plugins array since it's incompatible
-                unset($this->plugins[$plugin->getName()]);
-                continue;
-            }
+        $this->rejectPluginsWithMissingDependencies();
 
-            $this->loadedPlugins[] = $plugin->getName();
+        foreach ($this->plugins as $plugin) {
             $plugin->registerEvents($this->eventDispatcher);
             $pluginConfig = $plugin->getConfig();
             if ($pluginConfig instanceof PluginConfigurationInterface) {
@@ -153,6 +140,34 @@ class PluginManager
                 $this->registerPluginScripts($plugin->getName(), $scripts);
             }
         }
+    }
+
+    /**
+     * Dependencies are checked against every registered plugin, not against the plugins that
+     * happen to come earlier in the directory listing. Rejecting a plugin can leave another one
+     * without its dependency, so the check repeats until no plugin is rejected anymore.
+     */
+    private function rejectPluginsWithMissingDependencies(): void
+    {
+        do {
+            $rejected = false;
+            foreach ($this->plugins as $plugin) {
+                if ($this->areDependenciesMet($plugin)) {
+                    continue;
+                }
+
+                $this->incompatiblePlugins[$plugin->getName()] = [
+                    'plugin' => $plugin,
+                    'reason' => sprintf('Missing dependencies: %s', implode(
+                        ', ',
+                        $this->getMissingDependencies($plugin),
+                    )),
+                ];
+                // Remove plugin from the plugins array since it's incompatible
+                unset($this->plugins[$plugin->getName()]);
+                $rejected = true;
+            }
+        } while ($rejected);
     }
 
     /**
@@ -207,7 +222,7 @@ class PluginManager
         }
 
         foreach ($plugin->getDependencies() as $dependency) {
-            if (in_array($dependency, $this->loadedPlugins, strict: true)) {
+            if (array_key_exists($dependency, $this->plugins)) {
                 continue;
             }
 
@@ -348,7 +363,7 @@ class PluginManager
     {
         $missingDeps = [];
         foreach ($plugin->getDependencies() as $dependency) {
-            if (in_array($dependency, $this->loadedPlugins, strict: true)) {
+            if (array_key_exists($dependency, $this->plugins)) {
                 continue;
             }
 

@@ -155,4 +155,41 @@ final class ReportRepositoryTest extends TestCase
         $this->assertCount(2, $rows);
         $this->assertEqualsCanonicalizing(['A', 'B'], array_column($rows, 'category_name'));
     }
+
+    public function testLastAuthorComesFromTheNewestChangelogEntryOfTheFaq(): void
+    {
+        $this->insertFaq(7, 'en', 'Changed', 'Alice');
+        $this->insertFaq(8, 'en', 'Untouched', 'Alice');
+
+        $prefix = Database::getTablePrefix();
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO %sfaquserdata (user_id, display_name, email) VALUES (901, 'First Editor', 'first@example.org')",
+            $prefix,
+        ));
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO %sfaquserdata (user_id, display_name, email) VALUES (902, 'Last Editor', 'last@example.org')",
+            $prefix,
+        ));
+
+        // The changelog id 8 is the id of another FAQ: only the FAQ reference "beitrag" may join
+        foreach ([[8, 7, 901], [9, 7, 902]] as [$changeId, $faqId, $userId]) {
+            $this->dbHandle->query(sprintf(
+                "INSERT INTO %sfaqchanges (id, beitrag, lang, revision_id, usr, datum, what) VALUES (%d, %d, 'en', 0, %d, %d, 'edit')",
+                $prefix,
+                $changeId,
+                $faqId,
+                $userId,
+                time(),
+            ));
+        }
+
+        $rows = $this->repository->fetchAllReportData();
+
+        $lastAuthors = [];
+        foreach ($rows as $row) {
+            $lastAuthors[(int) $row->id] = $row->last_author;
+        }
+
+        $this->assertSame([7 => 'Last Editor', 8 => null], $lastAuthors);
+    }
 }

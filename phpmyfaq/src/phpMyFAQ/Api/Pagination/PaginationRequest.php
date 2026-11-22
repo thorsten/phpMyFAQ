@@ -135,6 +135,8 @@ class PaginationRequest
             $perPage ??= $limit ?? $defaultPerPage;
             $perPage = self::validateLimit($perPage, $maxPerPage);
             $limit = $perPage;
+            // The offset of a huge page number would overflow to float and no longer fit the int offset
+            $page = min($page, intdiv(PHP_INT_MAX, $perPage));
             // Calculate offset from page
             $offset = ($page - 1) * $perPage;
         }

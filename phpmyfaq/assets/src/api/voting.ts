@@ -14,6 +14,7 @@
  */
 
 import { ApiResponse } from '../interfaces';
+import { parseJsonResponse } from './response';
 
 export const saveVoting = async (
   votingId: string,
@@ -37,9 +38,5 @@ export const saveVoting = async (
     referrerPolicy: 'no-referrer',
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return await response.json();
+  return await parseJsonResponse(response);
 };

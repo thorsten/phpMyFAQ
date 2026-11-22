@@ -1,0 +1,222 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="pmf-admin-page-header">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-shield-lock"></i>
+      {{ 'ad_menu_oauth2' | translate }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <button type="button" class="btn btn-outline-success" id="pmf-oauth2-client-add">
+        <i aria-hidden="true" class="bi bi-plus"></i> {{ 'msgOAuth2ClientAdd' | translate }}
+      </button>
+    </div>
+  </div>
+
+  {% if not isOAuth2Enabled %}
+    <div class="alert alert-warning" role="alert">{{ 'msgOAuth2Disabled' | translate }}</div>
+  {% endif %}
+
+  <div id="pmf-oauth2"
+       data-csrf-save-client="{{ csrfTokenSaveClient }}"
+       data-csrf-delete-client="{{ csrfTokenDeleteClient }}"
+       data-csrf-save-scopes="{{ csrfTokenSaveScopes }}"
+       data-msg-add="{{ 'msgOAuth2ClientAdd' | translate }}"
+       data-msg-edit="{{ 'msgOAuth2ClientEdit' | translate }}"
+       data-msg-confirm-delete="{{ 'msgOAuth2ClientConfirmDelete' | translate }}"
+       data-msg-error="{{ 'msgOAuth2Error' | translate }}">
+
+    <h2 class="h4">{{ 'msgOAuth2Clients' | translate }}</h2>
+    <p>{{ 'msgOAuth2ClientsDescription' | translate }}</p>
+
+    {% if clients is empty %}
+      <p class="text-body-secondary">{{ 'msgOAuth2ClientsEmpty' | translate }}</p>
+    {% else %}
+      <div class="table-responsive">
+        <table class="table border shadow align-middle">
+          <thead>
+          <tr>
+            <th scope="col">{{ 'msgOAuth2ClientName' | translate }}</th>
+            <th scope="col">{{ 'msgOAuth2ClientId' | translate }}</th>
+            <th scope="col">{{ 'msgOAuth2ClientType' | translate }}</th>
+            <th scope="col">{{ 'msgOAuth2ClientGrants' | translate }}</th>
+            <th scope="col">{{ 'msgOAuth2ClientRedirectUri' | translate }}</th>
+            <th scope="col" class="text-end">{{ 'msgApiKeyActions' | translate }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for client in clients %}
+            <tr>
+              <td>{{ client.name }}</td>
+              <td><code>{{ client.id }}</code></td>
+              <td>
+                {{ (client.confidential ? 'msgOAuth2ClientConfidential' : 'msgOAuth2ClientPublic') | translate }}
+              </td>
+              <td>
+                {% for grant in client.grants %}
+                  <span class="badge text-bg-secondary">{{ grant }}</span>
+                {% endfor %}
+              </td>
+              <td class="text-break">{{ client.redirectUri }}</td>
+              <td class="text-end text-nowrap">
+                <button type="button" class="btn btn-sm btn-info pmf-oauth2-client-edit"
+                        data-client-id="{{ client.id }}"
+                        data-client-name="{{ client.name }}"
+                        data-client-redirect-uri="{{ client.redirectUri }}"
+                        data-client-grants="{{ client.grants | join(',') }}"
+                        data-client-confidential="{{ client.confidential ? '1' : '0' }}"
+                        aria-label="{{ 'msgOAuth2ClientEdit' | translate }}: {{ client.name }}"
+                        title="{{ 'msgOAuth2ClientEdit' | translate }}">
+                  <i aria-hidden="true" class="bi bi-pencil"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger pmf-oauth2-client-delete"
+                        data-client-id="{{ client.id }}"
+                        aria-label="{{ 'msgOAuth2ClientDelete' | translate }}: {{ client.name }}"
+                        title="{{ 'msgOAuth2ClientDelete' | translate }}">
+                  <i aria-hidden="true" class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+
+    <h2 class="h4 mt-4">{{ 'msgOAuth2Scopes' | translate }}</h2>
+    <p>{{ 'msgOAuth2ScopesDescription' | translate }}</p>
+
+    <form id="pmf-oauth2-scopes-form">
+      <div class="table-responsive">
+        <table class="table border shadow align-middle">
+          <thead>
+          <tr>
+            <th scope="col">{{ 'msgOAuth2ScopeEnabled' | translate }}</th>
+            <th scope="col">{{ 'msgOAuth2Scope' | translate }}</th>
+            <th scope="col">{{ 'msgOAuth2ScopeDescription' | translate }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for scope in scopes %}
+            <tr class="pmf-oauth2-scope" data-scope="{{ scope.id }}">
+              <td>
+                <input class="form-check-input pmf-oauth2-scope-enabled" type="checkbox"
+                       id="pmf-oauth2-scope-{{ loop.index }}" {% if scope.enabled %}checked{% endif %}>
+              </td>
+              <td>
+                <label for="pmf-oauth2-scope-{{ loop.index }}"><code>{{ scope.id }}</code></label>
+                {% if not scope.known %}
+                  <span class="badge text-bg-warning">{{ 'msgOAuth2ScopeUnused' | translate }}</span>
+                {% endif %}
+              </td>
+              <td>
+                <input class="form-control pmf-oauth2-scope-description" type="text" maxlength="255"
+                       value="{{ scope.description }}"
+                       aria-label="{{ 'msgOAuth2ScopeDescription' | translate }}: {{ scope.id }}">
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="text-end">
+        <button type="submit" class="btn btn-primary">{{ 'ad_gen_save' | translate }}</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal fade" id="pmf-modal-oauth2-client" tabindex="-1"
+       aria-labelledby="pmf-modal-oauth2-client-title" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="pmf-oauth2-client-form" novalidate>
+          <div class="modal-header">
+            <h2 class="modal-title h5" id="pmf-modal-oauth2-client-title">{{ 'msgOAuth2ClientAdd' | translate }}</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="{{ 'ad_gen_cancel' | translate }}"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="pmf-oauth2-client-id" value="">
+            <div class="mb-3">
+              <label class="form-label" for="pmf-oauth2-client-name">{{ 'msgOAuth2ClientName' | translate }}</label>
+              <input class="form-control" type="text" id="pmf-oauth2-client-name" maxlength="255" required>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="pmf-oauth2-client-confidential" checked
+                     aria-describedby="pmf-oauth2-client-confidential-help">
+              <label class="form-check-label" for="pmf-oauth2-client-confidential">
+                {{ 'msgOAuth2ClientConfidential' | translate }}
+              </label>
+              <div class="form-text" id="pmf-oauth2-client-confidential-help">
+                {{ 'msgOAuth2ClientConfidentialHelp' | translate }}
+              </div>
+            </div>
+            <fieldset class="mb-3">
+              <legend class="form-label fs-6">{{ 'msgOAuth2ClientGrants' | translate }}</legend>
+              {% for grant in grantTypes %}
+                <div class="form-check">
+                  <input class="form-check-input pmf-oauth2-client-grant" type="checkbox" value="{{ grant }}"
+                         id="pmf-oauth2-client-grant-{{ loop.index }}">
+                  <label class="form-check-label" for="pmf-oauth2-client-grant-{{ loop.index }}">
+                    <code>{{ grant }}</code>
+                  </label>
+                </div>
+              {% endfor %}
+              <div class="form-text">{{ 'msgOAuth2ClientGrantsHelp' | translate }}</div>
+            </fieldset>
+            <div class="mb-3">
+              <label class="form-label" for="pmf-oauth2-client-redirect-uri">
+                {{ 'msgOAuth2ClientRedirectUri' | translate }}
+              </label>
+              <input class="form-control" type="url" id="pmf-oauth2-client-redirect-uri"
+                     placeholder="https://client.example.org/callback"
+                     aria-describedby="pmf-oauth2-client-redirect-uri-help">
+              <div class="form-text" id="pmf-oauth2-client-redirect-uri-help">
+                {{ 'msgOAuth2ClientRedirectUriHelp' | translate }}
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              {{ 'ad_gen_cancel' | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary">{{ 'ad_gen_save' | translate }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="pmf-modal-oauth2-client-created" tabindex="-1"
+       aria-labelledby="pmf-modal-oauth2-client-created-title" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="pmf-modal-oauth2-client-created-title">
+            {{ 'msgOAuth2ClientCreated' | translate }}
+          </h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="{{ 'msgApiKeyClose' | translate }}"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label" for="pmf-oauth2-created-client-id">{{ 'msgOAuth2ClientId' | translate }}</label>
+            <input class="form-control font-monospace" type="text" id="pmf-oauth2-created-client-id" readonly>
+          </div>
+          <div id="pmf-oauth2-created-secret">
+            <div class="alert alert-warning" role="alert">{{ 'msgOAuth2ClientSecretCopyNow' | translate }}</div>
+            <label class="form-label" for="pmf-oauth2-created-client-secret">
+              {{ 'msgOAuth2ClientSecret' | translate }}
+            </label>
+            <input class="form-control font-monospace" type="text" id="pmf-oauth2-created-client-secret" readonly>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            {{ 'msgApiKeyClose' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

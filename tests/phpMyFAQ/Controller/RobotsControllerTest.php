@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Controller;
 
+use phpMyFAQ\Setup\Installation\DefaultDataSeeder;
 use phpMyFAQ\Strings;
 use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
@@ -54,6 +55,8 @@ class RobotsControllerTest extends TestCase
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals('text/plain', $response->headers->get('Content-Type'));
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals('User-agent: *\nDisallow: /admin/\nSitemap: /sitemap.xml', $response->getContent());
+        // The seeded text carries real line breaks; the former single-quoted value served one line.
+        $this->assertSame(DefaultDataSeeder::ROBOTS_TEXT, $response->getContent());
+        $this->assertStringContainsString("\nDisallow: /admin/\n", (string) $response->getContent());
     }
 }

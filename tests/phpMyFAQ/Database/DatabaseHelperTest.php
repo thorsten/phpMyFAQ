@@ -120,4 +120,39 @@ class DatabaseHelperTest extends TestCase
             $queries,
         );
     }
+
+    public function testBuildInsertQueriesQuotesNumericStringsThatWouldNotRoundTrip(): void
+    {
+        $rows = [
+            [
+                'id' => 7,
+                'ratio' => 1.5,
+                'count' => '42',
+                'negative' => '-3',
+                'login' => '00123',
+                'token' => '123456789012345678901234567890',
+                'exponent' => '1e5',
+                'decimal' => '1.50',
+                'padded' => ' 5',
+            ],
+            [],
+        ];
+        $driver = $this->createStub(DatabaseDriver::class);
+        $driver->method('query')->willReturn(true);
+        $driver->method('fetchArray')->willReturnCallback(static function () use (&$rows): array {
+            return array_shift($rows) ?? [];
+        });
+        $driver->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($driver);
+
+        $queries = new DatabaseHelper($configuration)->buildInsertQueries('SELECT * FROM faqtest', 'faqtest');
+
+        $this->assertSame(
+            'INSERT INTO faqtest (id,ratio,count,negative,login,token,exponent,decimal,padded) '
+            . "VALUES (7,1.5,42,-3,'00123','123456789012345678901234567890','1e5','1.50',' 5');",
+            $queries[1],
+        );
+    }
 }

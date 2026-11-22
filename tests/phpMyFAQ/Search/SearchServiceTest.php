@@ -501,6 +501,51 @@ class SearchServiceTest extends TestCase
         $this->assertIsArray($result['searchResults']);
     }
 
+    /**
+     * A custom page hit carries a page ID. It must neither be looked up as a FAQ nor be
+     * dropped because no FAQ with that ID exists.
+     *
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function testProcessSearchKeepsCustomPageHitsWithoutLookingThemUpAsFaqs(): void
+    {
+        $searchService = new SearchService($this->configuration, $this->currentUser, $this->currentGroups);
+
+        $page = new \stdClass();
+        $page->id = 2;
+        $page->lang = 'en';
+        $page->content_type = 'page';
+
+        $faqSearch = $this->createMock(Search::class);
+        $faqSearch->method('search')->willReturn([$page]);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('getFaqResult');
+
+        $searchResultSet = $this->createMock(SearchResultSet::class);
+        $searchResultSet
+            ->expects($this->once())
+            ->method('reviewResultSet')
+            ->with($this->callback(static fn(array $results): bool => $results === [$page]));
+        $searchResultSet->method('getNumberOfResults')->willReturn(1);
+
+        $reflection = new \ReflectionClass($searchService);
+        $reflection->getProperty('faqSearch')->setValue($searchService, $faqSearch);
+        $reflection->getProperty('faq')->setValue($searchService, $faq);
+        $reflection->getProperty('searchResultSet')->setValue($searchService, $searchResultSet);
+
+        $result = $searchService->processSearch(
+            inputSearchTerm: 'phpmyfaq',
+            inputTag: '',
+            inputCategory: 0,
+            allLanguages: false,
+            page: 1,
+        );
+
+        $this->assertSame(1, $result['numberOfSearchResults']);
+    }
+
     public function testProcessSearchFallsBackToTheRawResultsWhenFormattingThemFails(): void
     {
         $searchService = new SearchService($this->configuration, $this->currentUser, $this->currentGroups);

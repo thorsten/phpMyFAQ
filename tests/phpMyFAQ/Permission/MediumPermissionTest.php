@@ -295,6 +295,34 @@ class MediumPermissionTest extends TestCase
     }
 
     /**
+     * The options are printed unescaped by the templates, and a group created from LDAP takes
+     * its name straight from the directory.
+     *
+     * @throws Exception
+     */
+    public function testGetAllGroupsOptionsEscapesTheGroupName(): void
+    {
+        $this->mediumPermission->addGroup([
+            'name' => '</option><script>alert(1)</script>',
+            'description' => 'TestDescription',
+            'auto_join' => false,
+        ]);
+        $this->mediumPermission->addToGroup(1, 1);
+
+        $user = new CurrentUser($this->configuration);
+        $user->getUserById(1);
+
+        try {
+            $this->assertSame('<option value="1" >&lt;/option&gt;&lt;script&gt;alert(1)&lt;/script&gt;</option>', $this->mediumPermission->getAllGroupsOptions(
+                [],
+                $user,
+            ));
+        } finally {
+            $this->mediumPermission->deleteGroup(1);
+        }
+    }
+
+    /**
      * @throws Exception
      */
     public function testGetAllGroups(): void
@@ -963,7 +991,10 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->grantGroupRight(1, 1);
         $this->mediumPermission->setLanguageRestrictions(1, 1, ['en', 'de']);
 
-        $this->assertEqualsCanonicalizing(['en', 'de'], $this->mediumPermission->getScopeForRight(1, 1)->languagesInAnyCategory());
+        $this->assertEqualsCanonicalizing(
+            ['en', 'de'],
+            $this->mediumPermission->getScopeForRight(1, 1)->languagesInAnyCategory(),
+        );
 
         $this->mediumPermission->deleteGroup(1);
     }
@@ -992,7 +1023,10 @@ class MediumPermissionTest extends TestCase
         $this->mediumPermission->grantGroupRight(1, 1);
         $this->mediumPermission->setLanguageRestrictions(1, 1, ['fr']);
 
-        $this->assertEqualsCanonicalizing(['de', 'fr'], $this->mediumPermission->getScopeForRight(1, 1)->languagesInAnyCategory());
+        $this->assertEqualsCanonicalizing(
+            ['de', 'fr'],
+            $this->mediumPermission->getScopeForRight(1, 1)->languagesInAnyCategory(),
+        );
 
         $this->mediumPermission->deleteGroup(1);
         $this->mediumPermission->setUserLanguageRestrictions(1, 1, []);

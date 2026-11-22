@@ -833,6 +833,23 @@ describe('handleAttachmentUploads', () => {
       consoleErrorSpy.mockRestore();
     });
 
+    it('should report a refused upload instead of failing on the missing attachment list', async () => {
+      handleAttachmentUploads();
+
+      mockUploadAttachments.mockResolvedValue({ error: 'The file is too large.' });
+
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      mockFileUploadButton.dispatchEvent(new Event('click'));
+
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith('An error occurred:', new Error('The file is too large.'));
+      expect(mockAttachmentModal.style.display).toBe('block');
+
+      consoleErrorSpy.mockRestore();
+    });
+
     it('should handle network error gracefully', async () => {
       handleAttachmentUploads();
 

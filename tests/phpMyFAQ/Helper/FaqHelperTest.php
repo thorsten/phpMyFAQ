@@ -139,7 +139,7 @@ class FaqHelperTest extends TestCase
         $configuration->method('getLanguage')->willReturn($language);
 
         $faqHelper = new FaqHelper($configuration);
-        $content = 'See <a href="http://example.org/index.php?action=artikel&cat=42&id=123">this link</a>';
+        $content = 'See <a href="http://localhost/index.php?action=artikel&cat=42&id=123">this link</a>';
 
         $this->assertSame('See <a href="https://localhost:443/content/42/123/en/how-can-i-create-an-account.html">this link</a>', $faqHelper->convertOldInternalLinks(
             'How can I create an account?',
@@ -354,19 +354,19 @@ class FaqHelperTest extends TestCase
         $question2 = 'Software installation guide';
 
         // Test case 1: URL with "artikel" and without language parameter
-        $content1 = 'See <a href="http://example.org/index.php?action=artikel&cat=42&id=123">this link</a>';
+        $content1 = 'See <a href="http://localhost/index.php?action=artikel&cat=42&id=123">this link</a>';
         $expected1 = 'See <a href="https://localhost:443/content/42/123/en/how-can-i-create-an-account.html">this link</a>';
 
         // Test case 2: URL with "artikel" and with language parameter
-        $content2 = '<p>See <a href="https://example.com/index.php?action=artikel&cat=10&id=99&artlang=en">this link</a></p>';
+        $content2 = '<p>See <a href="http://localhost/index.php?action=artikel&cat=10&id=99&artlang=en">this link</a></p>';
         $expected2 = '<p>See <a href="https://localhost:443/content/10/99/en/how-can-i-create-an-account.html">this link</a></p>';
 
         // Test case 3: URL with "faq" instead of "artikel"
-        $content3 = 'More information: <a href="http://example.net/index.php?action=faq&cat=7&id=42">Click here</a>';
+        $content3 = 'More information: <a href="http://localhost/index.php?action=faq&cat=7&id=42">Click here</a>';
         $expected3 = 'More information: <a href="https://localhost:443/content/7/42/en/how-can-i-create-an-account.html">Click here</a>';
 
         // Test case 4: URL with "faq" and language parameter
-        $content4 = 'FAQ: <a href="https://example.org/index.php?action=faq&cat=5&id=12&artlang=fr">In French</a>';
+        $content4 = 'FAQ: <a href="http://localhost/index.php?action=faq&cat=5&id=12&artlang=fr">In French</a>';
         $expected4 = 'FAQ: <a href="https://localhost:443/content/5/12/fr/how-can-i-create-an-account.html">In French</a>';
 
         // Test case 5: No change if pattern doesn't match
@@ -376,8 +376,8 @@ class FaqHelperTest extends TestCase
         // Test case 6: Multiple links in one text
         $content6 =
             'Here are two links: '
-            . '<a href="http://example.org/index.php?action=artikel&cat=1&id=42">Link 1</a> and '
-            . '<a href="http://example.org/index.php?action=faq&cat=2&id=43&artlang=en">Link 2</a>';
+            . '<a href="http://localhost/index.php?action=artikel&cat=1&id=42">Link 1</a> and '
+            . '<a href="http://localhost/index.php?action=faq&cat=2&id=43&artlang=en">Link 2</a>';
         $expected6 =
             'Here are two links: '
             . '<a href="https://localhost:443/content/1/42/en/how-can-i-create-an-account.html">Link 1</a> and '
@@ -385,7 +385,7 @@ class FaqHelperTest extends TestCase
 
         // Test case 7: Test with special characters in question
         $question3 = 'How to install PHP 8.1? (Quick & Easy)';
-        $content7 = '<a href="http://example.org/index.php?action=artikel&cat=3&id=55">PHP Installation</a>';
+        $content7 = '<a href="http://localhost/index.php?action=artikel&cat=3&id=55">PHP Installation</a>';
         $expected7 = '<a href="https://localhost:443/content/3/55/en/how-to-install-php-81-quick-&-easy.html">PHP Installation</a>';
 
         // Run tests
@@ -412,7 +412,7 @@ class FaqHelperTest extends TestCase
     {
         $question = 'How can I create an account?';
 
-        $content = 'See <a href="http://example.org/index.php?action&#61;faq&amp;cat&#61;7&amp;id&#61;42">this link</a>';
+        $content = 'See <a href="http://localhost/index.php?action&#61;faq&amp;cat&#61;7&amp;id&#61;42">this link</a>';
         $expected = 'See <a href="https://localhost:443/content/7/42/en/how-can-i-create-an-account.html">this link</a>';
 
         $this->assertEquals($expected, $this->faqHelper->convertOldInternalLinks($question, $content));
@@ -430,7 +430,7 @@ class FaqHelperTest extends TestCase
 
         $content =
             '&lt;img src=x onerror=alert(document.domain)&gt; '
-            . 'See also <a href="http://example.org/index.php?action&#61;faq&amp;cat&#61;1&amp;id&#61;1">link</a>';
+            . 'See also <a href="http://localhost/index.php?action&#61;faq&amp;cat&#61;1&amp;id&#61;1">link</a>';
 
         $result = $this->faqHelper->convertOldInternalLinks($question, $content);
 
@@ -442,5 +442,81 @@ class FaqHelperTest extends TestCase
             'https://localhost:443/content/1/1/en/how-can-i-create-an-account.html',
             $result,
         );
+    }
+
+    public function testConvertOldInternalLinksLeavesLinksToOtherSitesUntouched(): void
+    {
+        $question = 'How can I create an account?';
+
+        $foreignLinks = [
+            '<a href="https://example.org/index.php?action=faq&cat=7&id=42&artlang=en">other phpMyFAQ</a>',
+            '<a href="http://example.org/index.php?action&#61;artikel&amp;cat&#61;7&amp;id&#61;42">encoded</a>',
+            '<a href="https://localhost.example.org/index.php?action=faq&cat=7&id=42">look-alike host</a>',
+            '<a href="https://localhost:8443/index.php?action=faq&cat=7&id=42">other port</a>',
+            '<a href="https://localhost/other/index.php?action=faq&cat=7&id=42">other base path</a>',
+            '<a href="/other/index.php?action=faq&cat=7&id=42">other absolute path</a>',
+            '<a href="//example.org/index.php?action=faq&cat=7&id=42">protocol-relative</a>',
+        ];
+
+        foreach ($foreignLinks as $foreignLink) {
+            $this->assertSame($foreignLink, $this->faqHelper->convertOldInternalLinks($question, $foreignLink));
+        }
+    }
+
+    public function testConvertOldInternalLinksConvertsLinksToThisInstallation(): void
+    {
+        $question = 'How can I create an account?';
+        $expected = '<a href="https://localhost:443/content/7/42/en/how-can-i-create-an-account.html">link</a>';
+
+        $ownLinks = [
+            '<a href="https://localhost:443/index.php?action=faq&cat=7&id=42">link</a>',
+            '<a href="http://localhost/index.php?action=faq&cat=7&id=42">link</a>',
+            '<a href="HTTPS://LOCALHOST/index.php?action=faq&cat=7&id=42">link</a>',
+            '<a href="index.php?action=faq&cat=7&id=42">link</a>',
+            '<a href="./index.php?action=faq&cat=7&id=42">link</a>',
+            '<a href="/index.php?action=faq&cat=7&id=42">link</a>',
+            "<a href='index.php?action&#61;faq&amp;cat&#61;7&amp;id&#61;42'>link</a>",
+        ];
+
+        foreach ($ownLinks as $ownLink) {
+            $this->assertSame(
+                str_contains($ownLink, "href='") ? str_replace('"', "'", $expected) : $expected,
+                $this->faqHelper->convertOldInternalLinks($question, $ownLink),
+            );
+        }
+    }
+
+    public function testConvertOldInternalLinksMatchesTheBasePathOfTheInstallation(): void
+    {
+        $language = $this->createStub(Language::class);
+        $language->method('getLanguage')->willReturn('en');
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDefaultUrl')->willReturn('https://www.example.org/faq/');
+        $configuration->method('getLanguage')->willReturn($language);
+
+        $faqHelper = new FaqHelper($configuration);
+        $question = 'How can I create an account?';
+        $converted = 'https://www.example.org/faq/content/7/42/en/how-can-i-create-an-account.html';
+
+        $this->assertSame($converted, $faqHelper->convertOldInternalLinks(
+            $question,
+            'http://www.example.org/faq/index.php?action=faq&cat=7&id=42',
+        ));
+        $this->assertSame('<a href="' . $converted . '">x</a>', $faqHelper->convertOldInternalLinks(
+            $question,
+            '<a href="/faq/index.php?action=faq&cat=7&id=42">x</a>',
+        ));
+
+        $untouched = [
+            'http://www.example.org/index.php?action=faq&cat=7&id=42',
+            'http://www.example.org/faq/old/index.php?action=faq&cat=7&id=42',
+            '<a href="/index.php?action=faq&cat=7&id=42">x</a>',
+            'Plain text index.php?action=faq&cat=7&id=42 is not a link',
+        ];
+
+        foreach ($untouched as $content) {
+            $this->assertSame($content, $faqHelper->convertOldInternalLinks($question, $content));
+        }
     }
 }

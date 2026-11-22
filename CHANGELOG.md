@@ -30,7 +30,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added LDAP configuration frontend (Thorsten)
 - added phpMyFAQ recent news widget to the admin dashboard (Thorsten)
 - added experimental support for Keycloak (Thorsten)
-- added experimental support for API key authentication via OAuth2 (Thorsten)
+- added experimental support for API keys and OAuth2 access tokens as bearer credentials for the question, category, and FAQ write endpoints of the REST API (Thorsten)
+- added administration pages for API keys, OAuth2 clients and OAuth2 scopes (Thorsten)
 - added experimental per-tenant quota enforcement and API request rate limits (Thorsten)
 - added SBOM (Software Bill of Materials) generation (Thorsten)
 - added granular permission model with category- and language-scoped permissions and separate read, write and publish permissions for FAQs (Thorsten)
@@ -66,6 +67,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated experimental MCP Server to mcp/sdk (Thorsten)
 - upgraded PDF engine to TCPDF 7 / tc-lib-pdf; PDF fonts are now JSON descriptors in src/fonts (Thorsten)
 - updated third party dependencies (Thorsten)
+- fixed the publication window of FAQs being reset on every save in the administration (Thorsten)
 - fixed bugs (Thorsten)
 
 ### phpMyFAQ v4.1.12 - unreleased

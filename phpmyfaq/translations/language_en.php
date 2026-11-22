@@ -1197,7 +1197,7 @@ $LANG_CONF['ldap.ldap_dynamic_login_attribute'] = [
 $LANG_CONF['ldap.ldap_use_group_restriction'] = ['checkbox', 'Restrict login to specific Active Directory groups'];
 $LANG_CONF['ldap.ldap_group_allowed_groups'] = [
     'input',
-    'Comma-separated list of allowed AD groups (partial matches supported)',
+    'Comma-separated list of allowed AD groups (exact group name, e.g. Domain Admins, or CN=Domain Admins)',
 ];
 $LANG_CONF['ldap.ldap_group_auto_assign'] = [
     'checkbox',
@@ -1683,7 +1683,10 @@ $LANG_CONF['main.accessibilityStatementURL'] = [
     'URL for Accessibility Statement',
     'use "page:slug" for custom page or full URL for external',
 ];
-$LANG_CONF['api.onlyActiveFaqs'] = ['checkbox', 'API returns only active FAQs'];
+$LANG_CONF['api.onlyActiveFaqs'] = [
+    'checkbox',
+    'API returns only active FAQs (if disabled, inactive FAQs are only returned to clients with a valid API token)',
+];
 $LANG_CONF['api.onlyActiveCategories'] = ['checkbox', 'API returns only active categories'];
 $LANG_CONF['api.onlyPublicQuestions'] = ['checkbox', 'API returns only public questions'];
 $LANG_CONF['api.ignoreOrphanedFaqs'] = ['checkbox', 'API ignores orphaned FAQs'];
@@ -1968,6 +1971,9 @@ $PMF_LANG['msgStatusReview'] = 'In review';
 $PMF_LANG['msgStatusPublished'] = 'Published';
 $PMF_LANG['msgStatusFilterAll'] = 'All statuses';
 $PMF_LANG['msgInvalidFaqStatus'] = 'Invalid or missing status value.';
+$PMF_LANG['msgInvalidFaqDate'] = 'The date of the FAQ is not a valid date.';
+$PMF_LANG['msgInvalidFaqDateRange'] = 'The end of the publication period must not be before its start.';
+$PMF_LANG['msgInvalidFaqCategory'] = 'The selected category does not exist.';
 
 // added v4.2.0-alpha.2 - 2026-08-15 by Thorsten Rinne - question metadata tracking
 $PMF_LANG['msgQuestionReopened'] = 'The question was reopened.';
@@ -2025,6 +2031,9 @@ $LANG_CONF['oidc.logoutRedirectUrl'] = ['input', 'Logout redirect URL', 'URL to 
 
 // added v4.2.0-alpha.2 - 2026-09-13 by Thorsten Rinne - security hardening
 $PMF_LANG['ad_category_restrictions_no_category'] = 'No valid category ID provided.';
+$PMF_LANG['ad_permission_scope_exceeded'] = 'This permission is held in a wider language or category scope than your own. You can only change permissions within your own scope.';
+$PMF_LANG['ad_category_restrictions_kept'] = 'The permission "%s" keeps its category restrictions (%s). Removing them would make the permission unrestricted, which exceeds your own scope. Ask an administrator with an unrestricted scope to remove them.';
+$PMF_LANG['ad_language_restrictions_kept'] = 'The permission "%s" keeps its language restrictions (%s). Removing them would make the permission unrestricted, which exceeds your own scope. Ask an administrator with an unrestricted scope to remove them.';
 $PMF_LANG['msgPushInvalidEndpoint'] = 'The push subscription endpoint must be a public HTTPS URL.';
 $PMF_LANG['msgApiKeyUnknownScope'] = 'Unknown API key scope: %s';
 $PMF_LANG['msgApiKeyScopeNotHeld'] = 'You do not hold the permission required for the API key scope: %s';
@@ -2063,5 +2072,72 @@ $PMF_LANG['msgHeroHeadline'] = 'How can we help you?';
 $PMF_LANG['msgHeroSubline'] = 'Search the knowledge base or browse by category.';
 $PMF_LANG['msgDisplaySettings'] = 'Display settings';
 $LANG_CONF['layout.heroImage'] = ['input', 'Start page hero image', 'URL or path of an image shown next to the start page search on large screens. Leave empty for a text-only hero.'];
+
+// added v4.2.0-RC.3 - 2026-11-22 by Thorsten
+$PMF_LANG['ad_menu_api_keys'] = 'API keys';
+$PMF_LANG['ad_menu_oauth2'] = 'OAuth 2.0 clients';
+$PMF_LANG['msgApiKeyAdd'] = 'Add API key';
+$PMF_LANG['msgApiKeyEdit'] = 'Edit API key';
+$PMF_LANG['msgApiKeyDelete'] = 'Delete API key';
+$PMF_LANG['msgApiKeyConfirmDelete'] = 'Delete this API key? Applications that use it lose access at once.';
+$PMF_LANG['msgApiKeySaved'] = 'API key saved.';
+$PMF_LANG['msgApiKeyDeleted'] = 'API key deleted.';
+$PMF_LANG['msgApiKeyNever'] = 'Never';
+$PMF_LANG['msgApiKeyError'] = 'The request failed. Please try again.';
+$PMF_LANG['msgApiKeysDescription'] = 'API keys authenticate REST API requests as you: send one as "Authorization: Bearer <key>". A key can only do what its scopes and your own permissions allow.';
+$PMF_LANG['msgApiKeyName'] = 'Name';
+$PMF_LANG['msgApiKeyScopes'] = 'Scopes';
+$PMF_LANG['msgApiKeyExpires'] = 'Expires';
+$PMF_LANG['msgApiKeyLastUsed'] = 'Last used';
+$PMF_LANG['msgApiKeyActions'] = 'Actions';
+$PMF_LANG['msgApiKeysEmpty'] = 'You have no API keys yet.';
+$PMF_LANG['msgApiKeyScopesHelp'] = 'Only scopes whose permission you hold are offered.';
+$PMF_LANG['msgApiKeyExpiresHelp'] = 'Leave empty for a key that does not expire.';
+$PMF_LANG['msgApiKeyCreated'] = 'API key created';
+$PMF_LANG['msgApiKeyCopyNow'] = 'Copy the key now. Only its hash is stored, so it cannot be shown again.';
+$PMF_LANG['msgApiKeyValue'] = 'API key';
+$PMF_LANG['msgApiKeyClose'] = 'Close';
+$PMF_LANG['msgOAuth2ClientAdd'] = 'Add client';
+$PMF_LANG['msgOAuth2ClientEdit'] = 'Edit client';
+$PMF_LANG['msgOAuth2ClientDelete'] = 'Delete client';
+$PMF_LANG['msgOAuth2ClientConfirmDelete'] = 'Delete this client? Its access tokens, refresh tokens and authorization codes stop working at once.';
+$PMF_LANG['msgOAuth2Error'] = 'The request failed. Please try again.';
+$PMF_LANG['msgOAuth2Disabled'] = 'The OAuth 2.0 authorization server is disabled. Clients cannot obtain tokens until "Enable OAuth 2.0 authorization server" is switched on in the configuration.';
+$PMF_LANG['msgOAuth2Clients'] = 'Clients';
+$PMF_LANG['msgOAuth2ClientsDescription'] = 'Applications that may request access tokens from the OAuth 2.0 authorization server.';
+$PMF_LANG['msgOAuth2ClientsEmpty'] = 'No clients registered yet.';
+$PMF_LANG['msgOAuth2ClientName'] = 'Name';
+$PMF_LANG['msgOAuth2ClientId'] = 'Client ID';
+$PMF_LANG['msgOAuth2ClientType'] = 'Type';
+$PMF_LANG['msgOAuth2ClientGrants'] = 'Grant types';
+$PMF_LANG['msgOAuth2ClientRedirectUri'] = 'Redirect URI';
+$PMF_LANG['msgOAuth2ClientConfidential'] = 'Confidential client';
+$PMF_LANG['msgOAuth2ClientPublic'] = 'Public client';
+$PMF_LANG['msgOAuth2ClientConfidentialHelp'] = 'A server-side application that can keep a secret. Untick for browser or mobile applications. This cannot be changed later.';
+$PMF_LANG['msgOAuth2ClientGrantsHelp'] = 'authorization_code issues tokens on behalf of a user; only those tokens can use the API endpoints that require a scope. client_credentials needs a confidential client.';
+$PMF_LANG['msgOAuth2ClientRedirectUriHelp'] = 'Required for authorization_code. The authorization server only redirects to exactly this URI.';
+$PMF_LANG['msgOAuth2ClientCreated'] = 'Client registered';
+$PMF_LANG['msgOAuth2ClientSecretCopyNow'] = 'Copy the client secret now. Only its hash is stored, so it cannot be shown again.';
+$PMF_LANG['msgOAuth2ClientSecret'] = 'Client secret';
+$PMF_LANG['msgOAuth2Scopes'] = 'Scopes';
+$PMF_LANG['msgOAuth2ScopesDescription'] = 'Scopes clients may request. A token still cannot do more than the user it was issued for.';
+$PMF_LANG['msgOAuth2ScopeEnabled'] = 'Enabled';
+$PMF_LANG['msgOAuth2Scope'] = 'Scope';
+$PMF_LANG['msgOAuth2ScopeDescription'] = 'Description';
+$PMF_LANG['msgOAuth2ScopeUnused'] = 'not used by phpMyFAQ';
+$PMF_LANG['msgOAuth2ClientNameInvalid'] = 'The client name is required and may have up to 255 characters.';
+$PMF_LANG['msgOAuth2ClientGrantRequired'] = 'Select at least one grant type.';
+$PMF_LANG['msgOAuth2ClientGrantUnknown'] = 'Unknown grant type.';
+$PMF_LANG['msgOAuth2ClientCredentialsNeedSecret'] = 'The client_credentials grant needs a confidential client.';
+$PMF_LANG['msgOAuth2ClientRedirectUriRequired'] = 'The authorization_code grant needs a redirect URI.';
+$PMF_LANG['msgOAuth2ClientRedirectUriInvalid'] = 'The redirect URI must be an absolute URI.';
+$PMF_LANG['msgOAuth2ClientSaveFailed'] = 'The client could not be saved.';
+$PMF_LANG['msgOAuth2ClientNotFound'] = 'Client not found.';
+$PMF_LANG['msgOAuth2ClientSaved'] = 'Client saved.';
+$PMF_LANG['msgOAuth2ClientDeleteFailed'] = 'The client could not be deleted.';
+$PMF_LANG['msgOAuth2ClientDeleted'] = 'Client deleted.';
+$PMF_LANG['msgOAuth2ScopeUnknown'] = 'Unknown scope: %s';
+$PMF_LANG['msgOAuth2ScopesSaveFailed'] = 'The scopes could not be saved.';
+$PMF_LANG['msgOAuth2ScopesSaved'] = 'Scopes saved.';
 
 return $PMF_LANG;

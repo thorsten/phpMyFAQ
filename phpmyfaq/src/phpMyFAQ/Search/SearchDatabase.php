@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Search;
 
+use InvalidArgumentException;
 use phpMyFAQ\Strings;
 
 /**
@@ -74,6 +75,11 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     protected array $conditions = [];
 
     /**
+     * Table alias of the FAQ table whose publication window restricts the search, if any.
+     */
+    private ?string $publicationWindowAlias = null;
+
+    /**
      * Flag if a database supports search relevance.
      */
     protected bool $relevanceSupport = false;
@@ -85,6 +91,13 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      */
     public function search(string $searchTerm): mixed
     {
+        // The numeric lookup compares exactly one column (the solution ID). With several
+        // matching columns "WHERE a, b = 5" is no valid SQL, so a numeric term is searched
+        // as text in them instead.
+        if (count($this->matchingColumns) !== 1) {
+            return $this->searchSubstring($searchTerm);
+        }
+
         $query = sprintf(
             '
             SELECT
@@ -92,13 +105,15 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
             FROM 
                 %s %s %s
             WHERE
-                %s = %s',
+                %s = %d
+                %s',
             $this->getResultColumns(),
             $this->getTable(),
             $this->getJoinedTable(),
             $this->getJoinedColumns(),
             $this->getMatchingColumns(),
-            $searchTerm,
+            (int) $searchTerm,
+            $this->getConditions(),
         );
 
         $this->resultSet = $this->configuration->getDb()->query($query);
@@ -267,7 +282,43 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
             };
         }
 
-        return $conditions;
+        return $conditions . $this->getPublicationWindowCondition();
+    }
+
+    /**
+     * Restricts the search to FAQs that are inside their publication window right now: a
+     * published FAQ whose start date lies in the future or whose end date has passed is not
+     * visible to readers and must not be found either.
+     *
+     * @param string $faqAlias Alias the query gives the faqdata table
+     */
+    public function restrictToPublicationWindow(string $faqAlias): SearchDatabase
+    {
+        if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $faqAlias)) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid table alias "%s" for the publication window.',
+                $faqAlias,
+            ));
+        }
+
+        $this->publicationWindowAlias = $faqAlias;
+
+        return $this;
+    }
+
+    private function getPublicationWindowCondition(): string
+    {
+        if ($this->publicationWindowAlias === null) {
+            return '';
+        }
+
+        $now = date(format: 'YmdHis');
+
+        return sprintf(
+            " AND %1\$s.date_start <= '%2\$s' AND %1\$s.date_end >= '%2\$s'",
+            $this->publicationWindowAlias,
+            $now,
+        );
     }
 
     /**

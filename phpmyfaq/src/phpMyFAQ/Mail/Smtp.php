@@ -23,6 +23,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
 /**
@@ -52,10 +53,14 @@ class Smtp implements MailUserAgentInterface
     }
 
     /**
+     * Unlike the built-in agent, which sends a prepared MIME body, the message is composed here.
+     *
      * @param array<string, int|string|null> $headers
+     * @param string $body Plain text: the whole message, or the alternative of an HTML message
+     * @param string $htmlBody HTML message, empty for a plain text mail that is sent as text/plain only
      * @throws TransportExceptionInterface
      */
-    public function send(string $recipients, array $headers, string $body): int
+    public function send(string $recipients, array $headers, string $body, string $htmlBody = ''): int
     {
         $sender = '';
         if (
@@ -67,28 +72,65 @@ class Smtp implements MailUserAgentInterface
             unset($headers['Return-Path']);
         }
 
-        $email = new Email()
-            ->from($sender === '' ? $this->user : $sender)
-            ->to(...$this->splitAddresses($recipients))
-            ->subject((string) ($headers['Subject'] ?? ''))
-            ->text($body)
-            ->html($body);
-
-        if (array_key_exists('CC', $headers) || array_key_exists('Cc', $headers)) {
-            $email->cc(...$this->splitAddresses((string) ($headers['CC'] ?? $headers['Cc'] ?? '')));
+        $from = (string) ($headers['From'] ?? '');
+        if ($from === '') {
+            $from = $sender === '' ? $this->user : $sender;
         }
 
-        if (array_key_exists('Bcc', $headers)) {
-            $email->bcc(...$this->splitAddresses((string) $headers['Bcc']));
+        $email = new Email()
+            ->from($this->createAddress($from))
+            ->to(...$this->createAddresses($recipients))
+            ->subject((string) ($headers['Subject'] ?? ''))
+            ->text($body);
+
+        if ($htmlBody !== '') {
+            $email->html($htmlBody);
+        }
+
+        if ($sender !== '') {
+            $email->returnPath($sender);
+        }
+
+        if (array_key_exists('CC', $headers) || array_key_exists('Cc', $headers)) {
+            $email->cc(...$this->createAddresses((string) ($headers['CC'] ?? $headers['Cc'] ?? '')));
+        }
+
+        if (array_key_exists('BCC', $headers) || array_key_exists('Bcc', $headers)) {
+            $email->bcc(...$this->createAddresses((string) ($headers['BCC'] ?? $headers['Bcc'] ?? '')));
         }
 
         if (array_key_exists('Reply-To', $headers)) {
-            $email->replyTo((string) $headers['Reply-To']);
+            $email->replyTo($this->createAddress((string) $headers['Reply-To']));
         }
 
         $this->mailer->send($email);
 
         return 1;
+    }
+
+    /**
+     * @return Address[]
+     */
+    private function createAddresses(string $addresses): array
+    {
+        return array_values(array_map($this->createAddress(...), $this->splitAddresses($addresses)));
+    }
+
+    /**
+     * Mail prepares mailboxes as header text, with the display name quoted or RFC 2047 encoded.
+     * Symfony Mime encodes the display name itself, so it has to get the decoded name.
+     */
+    private function createAddress(string $mailbox): Address
+    {
+        $address = Address::create($mailbox);
+        $name = $address->getName();
+        if ($name === '') {
+            return $address;
+        }
+
+        $decodedName = iconv_mime_decode($name, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, encoding: 'UTF-8');
+
+        return new Address($address->getAddress(), $decodedName === false ? $name : $decodedName);
     }
 
     /**

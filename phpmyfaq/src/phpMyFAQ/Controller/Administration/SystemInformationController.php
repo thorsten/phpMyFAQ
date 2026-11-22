@@ -69,11 +69,15 @@ final class SystemInformationController extends AbstractAdministrationController
 
         $openSearchInformation = 'n/a';
         if ((bool) $this->configuration->get(item: 'search.enableOpenSearch')) {
-            $openSearchFullInformation = $this->configuration->getOpenSearch()->info();
-            $openSearchVersion = $openSearchFullInformation['version'] ?? null;
-            $openSearchInformation = is_array($openSearchVersion)
-                ? (string) ($openSearchVersion['number'] ?? 'n/a')
-                : 'n/a';
+            try {
+                $openSearchFullInformation = $this->configuration->getOpenSearch()->info();
+                $openSearchVersion = $openSearchFullInformation['version'] ?? null;
+                $openSearchInformation = is_array($openSearchVersion)
+                    ? (string) ($openSearchVersion['number'] ?? 'n/a')
+                    : 'n/a';
+            } catch (\Throwable $throwable) {
+                $this->configuration->getLogger()->error('Error while fetching OpenSearch information', [$throwable->getMessage()]);
+            }
         }
 
         $redisInformation = 'n/a';

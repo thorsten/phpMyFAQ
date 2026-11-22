@@ -11,6 +11,7 @@ To install it, you will need a web server that meets the following requirements:
 - memory_limit = 128M (the more the better)
 - at least one database extension, see the database requirements below (PDO is preferred)
 - cURL support
+- DOM support
 - FileInfo support
 - Filter support
 - GD support
@@ -746,6 +747,10 @@ a new one per request. phpMyFAQ 4.2 ships the worker script `phpmyfaq/frankenphp
 request-scoped state of phpMyFAQ before every request and runs the front controller the request path maps to (the
 rewrite rules of the Caddyfile are mirrored in PHP), so a worker-mode Caddyfile needs no rewrite rules for the front
 controllers.
+
+Worker mode is not supported with multisite installations. phpMyFAQ selects the instance of a request through PHP
+constants, and a constant keeps its first value for the lifetime of a worker process. The worker script therefore
+answers every request with HTTP 503 and logs the reason as long as `phpmyfaq/multisite/` contains instance directories.
 
 In the Docker images, set `FRANKENPHP_WORKER_MODE=true`. In your own Caddyfile, add the worker to the `php_server`
 directive:

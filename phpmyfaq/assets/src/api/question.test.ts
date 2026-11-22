@@ -43,6 +43,6 @@ describe('createQuestion function', (): void => {
     const data = Object.keys({ comment: 'Test comment' }) as unknown as FormData;
 
     // Assertions
-    await expect(createQuestion(data)).rejects.toThrow('HTTP 400');
+    await expect(createQuestion(data)).rejects.toThrow('Something went wrong');
   });
 });

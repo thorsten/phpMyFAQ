@@ -105,6 +105,15 @@ final readonly class TrackingDataRedactor
         return $base . $this->redactQueryString($query) . $fragment;
     }
 
+    /**
+     * Makes a value safe for a single field of the tracking file, which separates fields
+     * with ";" and entries with a line break.
+     */
+    public function flattenField(string $value): string
+    {
+        return str_replace(search: [';', "\r", "\n"], replace: [',', ' ', ' '], subject: $value);
+    }
+
     private function isSensitive(string $name): bool
     {
         return in_array(strtolower(urldecode($name)), self::SENSITIVE_PARAMETERS, strict: true);

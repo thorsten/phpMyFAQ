@@ -7,7 +7,9 @@ namespace phpMyFAQ\Setup\Installation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\PostgresDialect;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\SqliteDialect;
+use phpMyFAQ\Setup\Migration\QueryBuilder\IndexName;
 use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -47,6 +49,56 @@ final class SchemaInstallerDatabaseTest extends TestCase
         $row = $db->fetchArray($db->query("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table'"));
 
         return (int) ($row['n'] ?? 0);
+    }
+
+    /**
+     * SQLite, like PostgreSQL, keeps the index names of all tables in one namespace. The test
+     * database already holds an installation without a table prefix, so a second and a third
+     * installation in the same file only succeed when their index names carry the prefix.
+     */
+    public function testInstallationsWithDifferentTablePrefixesShareOneDatabase(): void
+    {
+        $installer = new SchemaInstaller($this->configuration, new SqliteDialect());
+
+        $this->assertTrue($installer->createTables('one_'));
+        $this->assertTrue($installer->createTables('two_'));
+        $this->assertSame('', Database::getTablePrefix());
+
+        $db = $this->configuration->getDb();
+        $indexes = [];
+        $result = $db->query("SELECT name, tbl_name FROM sqlite_master WHERE type = 'index' AND name LIKE 'idx_%'");
+        foreach ($db->fetchAll($result) ?? [] as $row) {
+            $indexes[(string) $row->name] = (string) $row->tbl_name;
+        }
+
+        $this->assertSame('faqadminlog', $indexes['idx_hash'] ?? null);
+        $this->assertSame('one_faqadminlog', $indexes['idx_hash_one_'] ?? null);
+        $this->assertSame('two_faqadminlog', $indexes['idx_hash_two_'] ?? null);
+        $this->assertSame('two_faquserdata', $indexes['idx_faquserdata_oidc_identity_two_'] ?? null);
+
+        $unique = $db->fetchObject($db->query(
+            "SELECT sql FROM sqlite_master WHERE type = 'index' AND name = 'idx_push_endpoint_hash_two_'",
+        ));
+        $this->assertStringStartsWith('CREATE UNIQUE INDEX', (string) $unique->sql);
+    }
+
+    /**
+     * PostgreSQL cuts identifiers off after 63 bytes. The installer accepts table prefixes of up
+     * to 32 characters, and no index name of the schema may get longer than that with one.
+     */
+    public function testEveryIndexNameFitsThePostgreSqlIdentifierLimitWithTheLongestTablePrefix(): void
+    {
+        $longestPrefix = str_repeat('p', 32);
+
+        foreach (new DatabaseSchema(new PostgresDialect())->getAllTables() as $tableBuilder) {
+            foreach (array_keys($tableBuilder->getIndexes()) as $indexName) {
+                $this->assertLessThanOrEqual(
+                    63,
+                    strlen(IndexName::forTablePrefix($indexName, 'pgsql', $longestPrefix)),
+                    $indexName,
+                );
+            }
+        }
     }
 
     public function testDropTablesRemovesEveryTableAndCreateMissingTablesBringsThemBack(): void
@@ -136,11 +188,13 @@ final class SchemaInstallerDatabaseTest extends TestCase
         yield 'pdo_mysql' => ['pdo_mysql', 'SHOW COLUMNS FROM faquser'];
         yield 'pgsql' => [
             'pgsql',
-            'SELECT column_name AS "Field" FROM information_schema.columns WHERE table_name = \'faquser\'',
+            'SELECT column_name AS "Field" FROM information_schema.columns '
+                . "WHERE table_schema = current_schema() AND table_name = 'faquser'",
         ];
         yield 'pdo_pgsql' => [
             'pdo_pgsql',
-            'SELECT column_name AS "Field" FROM information_schema.columns WHERE table_name = \'faquser\'',
+            'SELECT column_name AS "Field" FROM information_schema.columns '
+                . "WHERE table_schema = current_schema() AND table_name = 'faquser'",
         ];
         yield 'sqlsrv' => ['sqlsrv', "SELECT name AS Field FROM sys.columns WHERE object_id = OBJECT_ID('faquser')"];
         yield 'pdo_sqlsrv' => [

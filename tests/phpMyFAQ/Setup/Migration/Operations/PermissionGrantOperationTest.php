@@ -123,13 +123,26 @@ class PermissionGrantOperationTest extends TestCase
         $this->assertSame(1, (int) $row['c']);
     }
 
-    public function testExecuteFailsForAnAlreadyExistingRight(): void
+    /**
+     * An update that was interrupted after the right was created has to pass this operation
+     * when it is started again; a grant that was revoked since then stays revoked.
+     */
+    public function testExecuteSucceedsForAnAlreadyExistingRightAndLeavesItsGrantsAlone(): void
     {
         $configuration = $this->connectToDatabaseCopy();
+        $rightId = $this->rightId(PermissionType::FAQS_VIEW->value);
+        $this->dbHandle->query(sprintf('DELETE FROM faquser_right WHERE user_id = 1 AND right_id = %d', $rightId));
 
         $operation = new PermissionGrantOperation($configuration, PermissionType::FAQS_VIEW->value, 'View FAQs');
 
-        $this->assertFalse($operation->execute());
+        $this->assertTrue($operation->execute());
+        $this->assertSame($rightId, $this->rightId(PermissionType::FAQS_VIEW->value));
+
+        $result = $this->dbHandle->query(
+            sprintf('SELECT COUNT(*) AS c FROM faquser_right WHERE user_id = 1 AND right_id = %d', $rightId),
+        );
+        $row = $this->dbHandle->fetchArray($result);
+        $this->assertSame(0, (int) $row['c']);
     }
 
     public function testExecuteFailsWhenTheDatabaseIsUnavailable(): void

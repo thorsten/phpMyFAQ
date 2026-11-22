@@ -219,4 +219,50 @@ class CommentsRepositoryTest extends TestCase
 
         Database::setTablePrefix('');
     }
+
+    /**
+     * SQL Server knows no LIMIT clause: the page is passed to the driver, which renders it.
+     */
+    public function testFetchPaginatedPassesThePageToTheDriver(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db
+            ->expects($this->once())
+            ->method('query')
+            ->with(
+                $this->logicalAnd(
+                    $this->logicalNot($this->stringContains('LIMIT')),
+                    $this->matchesRegularExpression('/ORDER BY\s+datum DESC\s*$/'),
+                ),
+                20,
+                10,
+            )
+            ->willReturn(true);
+        $db->method('fetchAll')->willReturn([]);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $repository = new CommentsRepository($configuration);
+
+        $this->assertSame([], $repository->fetchPaginated(1, CommentType::FAQ, 10, 20, 'datum', 'DESC'));
+    }
+
+    public function testFetchPaginatedReturnsOnlyTheRequestedPage(): void
+    {
+        foreach ([9101, 9102, 9103] as $commentId) {
+            $this->dbHandle->query(sprintf(
+                "INSERT INTO %sfaqcomments (id_comment, id, type, usr, email, comment, datum)
+                 VALUES (%d, 9100, 'faq', 'User', 'user@example.com', 'Comment', '1700000000')",
+                Database::getTablePrefix(),
+                $commentId,
+            ));
+        }
+
+        $page = $this->repository->fetchPaginated(9100, CommentType::FAQ, 2, 1);
+
+        $this->assertSame([9102, 9103], array_map(static fn(object $row): int => (int) $row->id_comment, $page));
+        $this->assertSame([], $this->repository->fetchPaginated(9100, CommentType::FAQ, 0, 0));
+    }
 }

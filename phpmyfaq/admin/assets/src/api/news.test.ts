@@ -127,13 +127,13 @@ describe('News API', () => {
       );
 
       const id = '123';
-      const status = 'active';
+      const status = true;
       const csrfToken = 'csrfToken';
       const result = await activateNews(id, status, csrfToken);
 
       expect(result).toEqual(mockResponse);
       expect(global.fetch).toHaveBeenCalledWith('api/news/activate', {
-        method: 'POST',
+        method: 'PUT',
         cache: 'no-cache',
         headers: {
           'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ describe('News API', () => {
       global.fetch = vi.fn(() => Promise.reject(mockError));
 
       const id = '123';
-      const status = 'active';
+      const status = true;
       const csrfToken = 'csrfToken';
 
       await expect(activateNews(id, status, csrfToken)).rejects.toThrow(mockError);

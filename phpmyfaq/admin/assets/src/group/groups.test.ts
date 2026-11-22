@@ -11,6 +11,7 @@ import {
   fetchGroupLanguageRestrictions,
   fetchGroupRights,
   fetchLanguagesForRestrictions,
+  saveGroupCategoryRestrictions,
   saveGroupLanguageRestrictions,
   updateGroup,
   updateGroupMembers,
@@ -111,6 +112,7 @@ const mockDefaultApis = (): void => {
   (fetchGroupCategoryRestrictions as Mock).mockResolvedValue({});
   (fetchLanguagesForRestrictions as Mock).mockResolvedValue([]);
   (fetchGroupLanguageRestrictions as Mock).mockResolvedValue({});
+  (saveGroupCategoryRestrictions as Mock).mockResolvedValue({ ok: true } as Response);
   (saveGroupLanguageRestrictions as Mock).mockResolvedValue({ ok: true } as Response);
   (updateGroup as Mock).mockResolvedValue({ success: 'saved' });
   (updateGroupMembers as Mock).mockResolvedValue({ success: 'saved' });
@@ -120,6 +122,37 @@ const mockDefaultApis = (): void => {
 
 const selectFirstGroup = async (): Promise<void> => {
   (document.querySelector('.pmf-group-item') as HTMLButtonElement).click();
+  await flushPromises();
+};
+
+const selectRestrictionValues = (containerId: string, rightId: string, values: string[]): void => {
+  const select = document.querySelector<HTMLSelectElement>(`#${containerId} select[data-right-id="${rightId}"]`);
+  [...(select as HTMLSelectElement).options].forEach((option: HTMLOptionElement): void => {
+    option.selected = values.includes(option.value);
+  });
+};
+
+// Rights 1 and 3 are ticked, right 5 is not. Right 1 carries a restriction, right 3 none.
+const setupRestrictions = async (): Promise<void> => {
+  setupFullDom();
+  mockDefaultApis();
+  (fetchCategoriesForRestrictions as Mock).mockResolvedValue([
+    { id: 1, name: 'Root', parent_id: 0, level: 0 },
+    { id: 2, name: 'Child', parent_id: 1, level: 1 },
+  ]);
+  (fetchGroupCategoryRestrictions as Mock).mockResolvedValue({ '1': [2] });
+  (fetchLanguagesForRestrictions as Mock).mockResolvedValue([
+    { code: 'en', label: 'English' },
+    { code: 'de', label: 'Deutsch' },
+  ]);
+  (fetchGroupLanguageRestrictions as Mock).mockResolvedValue({ '1': ['de'] });
+
+  await handleGroups();
+  await selectFirstGroup();
+};
+
+const clickAndFlush = async (buttonId: string): Promise<void> => {
+  (document.getElementById(buttonId) as HTMLButtonElement).click();
   await flushPromises();
 };
 
@@ -396,11 +429,128 @@ describe('handleGroups', () => {
     expect(languageSelect?.id).toBe('group-language-restriction-1');
     expect(languageLabel?.htmlFor).toBe('group-language-restriction-1');
 
+    selectRestrictionValues('languageRestrictionsBody', '1', ['en', 'de']);
+    selectRestrictionValues('languageRestrictionsBody', '3', ['en']);
     (document.getElementById('saveLanguageRestrictions') as HTMLButtonElement).click();
     await flushPromises();
 
-    expect(saveGroupLanguageRestrictions).toHaveBeenCalledWith('1', '1', ['de'], 'csrf-language-restrictions');
-    expect(saveGroupLanguageRestrictions).toHaveBeenCalledWith('1', '3', [], 'csrf-language-restrictions');
+    expect(saveGroupLanguageRestrictions).toHaveBeenCalledWith('1', '1', ['en', 'de'], 'csrf-language-restrictions');
+    expect(saveGroupLanguageRestrictions).toHaveBeenCalledWith('1', '3', ['en'], 'csrf-language-restrictions');
     expect(pushNotification).toHaveBeenCalledWith('Language restrictions saved.');
+  });
+
+  it('should submit only the rights whose language restriction changed', async () => {
+    await setupRestrictions();
+
+    selectRestrictionValues('languageRestrictionsBody', '1', ['en']);
+    await clickAndFlush('saveLanguageRestrictions');
+
+    // Right 3 is ticked with an untouched empty list and right 5 is not ticked: neither is submitted.
+    expect(saveGroupLanguageRestrictions).toHaveBeenCalledTimes(1);
+    expect(saveGroupLanguageRestrictions).toHaveBeenCalledWith('1', '1', ['en'], 'csrf-language-restrictions');
+    expect(pushNotification).toHaveBeenCalledWith('Language restrictions saved.');
+    expect(pushErrorNotification).not.toHaveBeenCalled();
+  });
+
+  it('should submit a language restriction the administrator emptied', async () => {
+    await setupRestrictions();
+
+    selectRestrictionValues('languageRestrictionsBody', '1', []);
+    await clickAndFlush('saveLanguageRestrictions');
+
+    expect(saveGroupLanguageRestrictions).toHaveBeenCalledTimes(1);
+    expect(saveGroupLanguageRestrictions).toHaveBeenCalledWith('1', '1', [], 'csrf-language-restrictions');
+  });
+
+  it('should not call the endpoint when no language restriction changed', async () => {
+    await setupRestrictions();
+
+    await clickAndFlush('saveLanguageRestrictions');
+
+    expect(saveGroupLanguageRestrictions).not.toHaveBeenCalled();
+    expect(pushNotification).toHaveBeenCalledWith('Language restrictions saved.');
+    expect(pushErrorNotification).not.toHaveBeenCalled();
+  });
+
+  it('should not resend a saved language restriction on the next save', async () => {
+    await setupRestrictions();
+
+    selectRestrictionValues('languageRestrictionsBody', '1', ['en']);
+    await clickAndFlush('saveLanguageRestrictions');
+    await clickAndFlush('saveLanguageRestrictions');
+
+    expect(saveGroupLanguageRestrictions).toHaveBeenCalledTimes(1);
+  });
+
+  it('should show the reason the server gives for a refused language restriction', async () => {
+    await setupRestrictions();
+    (saveGroupLanguageRestrictions as Mock).mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({ error: 'The permission "Add users" keeps its language restrictions (Deutsch).' }),
+    } as Response);
+
+    selectRestrictionValues('languageRestrictionsBody', '1', ['en']);
+    await clickAndFlush('saveLanguageRestrictions');
+
+    expect(pushErrorNotification).toHaveBeenCalledTimes(1);
+    expect(pushErrorNotification).toHaveBeenCalledWith(
+      'The permission "Add users" keeps its language restrictions (Deutsch).'
+    );
+  });
+
+  it('should resend a language restriction whose save was refused', async () => {
+    await setupRestrictions();
+    (saveGroupLanguageRestrictions as Mock).mockResolvedValueOnce({ ok: false } as Response);
+
+    selectRestrictionValues('languageRestrictionsBody', '1', ['en']);
+    await clickAndFlush('saveLanguageRestrictions');
+    expect(pushErrorNotification).toHaveBeenCalledTimes(1);
+
+    await clickAndFlush('saveLanguageRestrictions');
+
+    expect(saveGroupLanguageRestrictions).toHaveBeenCalledTimes(2);
+    expect(saveGroupLanguageRestrictions).toHaveBeenLastCalledWith('1', '1', ['en'], 'csrf-language-restrictions');
+  });
+
+  it('should submit only the rights whose category restriction changed', async () => {
+    await setupRestrictions();
+
+    selectRestrictionValues('categoryRestrictionsBody', '1', ['1']);
+    await clickAndFlush('saveCategoryRestrictions');
+
+    expect(saveGroupCategoryRestrictions).toHaveBeenCalledTimes(1);
+    expect(saveGroupCategoryRestrictions).toHaveBeenCalledWith('1', '1', [1], 'csrf-restrictions');
+    expect(pushNotification).toHaveBeenCalledWith('Restrictions saved.');
+    expect(pushErrorNotification).not.toHaveBeenCalled();
+  });
+
+  it('should submit a category restriction the administrator emptied', async () => {
+    await setupRestrictions();
+
+    selectRestrictionValues('categoryRestrictionsBody', '1', []);
+    await clickAndFlush('saveCategoryRestrictions');
+
+    expect(saveGroupCategoryRestrictions).toHaveBeenCalledTimes(1);
+    expect(saveGroupCategoryRestrictions).toHaveBeenCalledWith('1', '1', [], 'csrf-restrictions');
+  });
+
+  it('should not call the endpoint when no category restriction changed', async () => {
+    await setupRestrictions();
+
+    await clickAndFlush('saveCategoryRestrictions');
+
+    expect(saveGroupCategoryRestrictions).not.toHaveBeenCalled();
+    expect(pushNotification).toHaveBeenCalledWith('Restrictions saved.');
+    expect(pushErrorNotification).not.toHaveBeenCalled();
+  });
+
+  it('should not resend a saved category restriction on the next save', async () => {
+    await setupRestrictions();
+
+    selectRestrictionValues('categoryRestrictionsBody', '1', ['1']);
+    await clickAndFlush('saveCategoryRestrictions');
+    await clickAndFlush('saveCategoryRestrictions');
+
+    expect(saveGroupCategoryRestrictions).toHaveBeenCalledTimes(1);
   });
 });

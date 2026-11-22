@@ -400,6 +400,38 @@ class SitemapTest extends TestCase
         $this->assertEmpty($faqs);
     }
 
+    /**
+     * A published FAQ is only listed inside its publication window: neither the letter index
+     * nor the letter page may show a scheduled or an expired FAQ.
+     */
+    public function testSitemapSkipsFaqsOutsideTheirPublicationWindow(): void
+    {
+        $this->insertTestFaq(self::FAQ_ID + 500, 'Xylophone visible', 'Answer', self::CAT_ID);
+        $this->insertTestFaq(self::FAQ_ID + 501, 'Xylophone scheduled', 'Answer', self::CAT_ID);
+        $this->insertTestFaq(self::FAQ_ID + 502, 'Xylophone expired', 'Answer', self::CAT_ID);
+        $this->insertTestFaq(self::FAQ_ID + 503, 'Yacht scheduled', 'Answer', self::CAT_ID);
+        $this->db->query(sprintf(
+            "UPDATE faqdata SET date_start = '29990101000000' WHERE id IN (%d, %d)",
+            self::FAQ_ID + 501,
+            self::FAQ_ID + 503,
+        ));
+        $this->db->query(sprintf("UPDATE faqdata SET date_end = '20000101000000' WHERE id = %d", self::FAQ_ID + 502));
+
+        $sitemap = $this->createSitemapBasic();
+
+        $letters = array_column($sitemap->getAllFirstLetters(), 'letter');
+        $this->assertContains('X', $letters);
+        $this->assertNotContains('Y', $letters);
+        $this->assertSame(['Xylophone visible'], array_column($sitemap->getFaqsFromLetter('X'), 'question'));
+        $this->assertSame([], $sitemap->getFaqsFromLetter('Y'));
+
+        $this->db->query(sprintf(
+            'DELETE FROM faqdata WHERE id BETWEEN %d AND %d',
+            self::FAQ_ID + 500,
+            self::FAQ_ID + 503,
+        ));
+    }
+
     private function insertTestFaq(int $faqId, string $thema, string $content, int $categoryId): void
     {
         $this->db->query(sprintf(

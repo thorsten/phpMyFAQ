@@ -33,6 +33,7 @@ use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Visits;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -99,6 +100,22 @@ final class FaqControllerTest extends TestCase
         $language = new Language($this->configuration, new Session(new MockArraySessionStorage()));
         $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
+
+        // create() and update() reject categories that do not exist; category 1 is the one the
+        // requests of this test case file their FAQs in.
+        $this->seedCategory();
+    }
+
+    private function seedCategory(int $categoryId = 1, string $language = 'en'): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "INSERT OR IGNORE INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (%d, '%s', 0, 'Seeded Category', '', 1, -1, 1, '', 0)",
+                $categoryId,
+                $language,
+            ));
     }
 
     protected function tearDown(): void
@@ -307,14 +324,7 @@ final class FaqControllerTest extends TestCase
         string $language = 'en',
         string $question = 'Seeded FAQ',
     ): void {
-        $this->configuration
-            ->getDb()
-            ->query(sprintf(
-                "INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
-             VALUES (%d, '%s', 0, 'Seeded Category', '', 1, -1, 1, '', 0)",
-                $categoryId,
-                $language,
-            ));
+        $this->seedCategory($categoryId, $language);
         $this->configuration
             ->getDb()
             ->query(sprintf(
@@ -1046,6 +1056,7 @@ final class FaqControllerTest extends TestCase
         $faq->expects($this->once())->method('create')->willReturn($faqEntity);
 
         $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('get')->with(55)->willReturn($this->openQuestionRow(55));
         $question->expects($this->once())->method('delete')->with(55);
         $question->expects($this->never())->method('updateQuestionAnswer');
 
@@ -1129,6 +1140,7 @@ final class FaqControllerTest extends TestCase
         $faq->expects($this->once())->method('create')->willReturn($faqEntity);
 
         $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('get')->with(56)->willReturn($this->openQuestionRow(56));
         $question->expects($this->never())->method('delete');
         $question->expects($this->once())->method('updateQuestionAnswer')->with(56, 322, 1);
 
@@ -1468,6 +1480,68 @@ final class FaqControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
         self::assertSame(1, $this->countFaqRevisions(1, 'en'));
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * A malformed manual date used to throw after the revision and the admin log entry had
+     * been written. It is rejected before any write.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateRejectsAMalformedManualDateBeforeWritingAnything(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        self::assertTrue($this->configuration->set('records.enableAutoRevisions', 'true'));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'faqId' => 1,
+                'solutionId' => 1001,
+                'revisionId' => 0,
+                'question' => 'Updated FAQ',
+                'categories[]' => 1,
+                'lang' => 'en',
+                'tags' => '',
+                'status' => 'published',
+                'sticky' => 'no',
+                'answer' => 'Updated answer',
+                'keywords' => 'updated',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'userpermission' => 'restricted',
+                'restricted_users' => [],
+                'grouppermission' => 'restricted',
+                'restricted_groups' => [],
+                'changed' => 'Updated',
+                'date' => 'not a date at all',
+                'notes' => 'Updated notes',
+                'revision' => 'yes',
+                'recordDateHandling' => 'manualDate',
+                'serpTitle' => 'Updated title',
+                'serpDescription' => 'Updated description',
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('getStatus')->willReturn(FaqStatus::Draft);
+        $faq->expects($this->never())->method('update');
+        $faq->expects($this->never())->method('create');
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->update($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgInvalidFaqDate'), $payload['error']);
+        self::assertSame(0, $this->countFaqRevisions(1, 'en'));
         $this->removeCsrfCookie('pmf-csrf-token');
     }
 
@@ -3636,6 +3710,126 @@ final class FaqControllerTest extends TestCase
     }
 
     /**
+     * The row Question::get() returns for an open question.
+     *
+     * @return array<string, int|string>
+     */
+    private function openQuestionRow(int $questionId): array
+    {
+        return [
+            'id' => $questionId,
+            'lang' => 'en',
+            'username' => 'Asker',
+            'email' => 'asker@example.com',
+            'category_id' => 1,
+            'question' => 'An open question',
+            'created' => '20260101120000',
+            'is_visible' => 'Y',
+        ];
+    }
+
+    /**
+     * The open question id used to be trusted as sent: any id closed that question and mailed
+     * the "question answered" notice to the address given in the request. An id no question
+     * is stored under must close nothing and notify nobody.
+     *
+     * @throws \Exception
+     */
+    public function testCreateNeitherClosesNorNotifiesForAnOpenQuestionThatDoesNotExist(): void
+    {
+        self::assertTrue($this->configuration->set('security.permLevel', 'basic'));
+        self::assertTrue($this->configuration->set('records.enableDeleteQuestion', true));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faqEntity = new \phpMyFAQ\Entity\FaqEntity()
+            ->setId(655)
+            ->setLanguage('en')
+            ->setSolutionId(1655)
+            ->setStatus(FaqStatus::Published)
+            ->setSticky(false)
+            ->setQuestion('Answered FAQ')
+            ->setAnswer('Answered answer')
+            ->setKeywords('answered')
+            ->setAuthor('Author')
+            ->setEmail('author@example.com')
+            ->setComment(true)
+            ->setCreatedDate(new \DateTime())
+            ->setNotes('');
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('create')->willReturn($faqEntity);
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('get')->with(999)->willReturn([]);
+        $question->expects($this->never())->method('delete');
+        $question->expects($this->never())->method('updateQuestionAnswer');
+
+        $questionHistory = $this->createMock(QuestionHistoryRepository::class);
+        $questionHistory->expects($this->never())->method('add');
+
+        $notification = $this->createMock(Notification::class);
+        $notification->expects($this->never())->method('sendOpenQuestionAnswered');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'data' => [
+                'pmf-csrf-token' => $csrfToken,
+                'question' => 'Answered FAQ',
+                'categories[]' => 1,
+                'lang' => 'en',
+                'tags' => '',
+                'status' => 'published',
+                'sticky' => 'no',
+                'answer' => 'Answered answer',
+                'keywords' => 'answered',
+                'author' => 'Author',
+                'email' => 'author@example.com',
+                'comment' => 'y',
+                'userpermission' => 'restricted',
+                'restricted_users' => [],
+                'grouppermission' => 'restricted',
+                'restricted_groups' => [],
+                'changed' => 'Initial import',
+                'notes' => '',
+                'serpTitle' => '',
+                'serpDescription' => '',
+                'openQuestionId' => 999,
+                'notifyEmail' => 'victim@example.org',
+                'notifyUser' => 'Victim',
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $controller = $this->createControllerWithDependencies(
+            faq: $faq,
+            notification: $notification,
+            question: $question,
+            questionHistory: $questionHistory,
+        );
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($request);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * The permissions of a FAQ are requested by id; the route lost its placeholder when the
+     * routes moved to attributes, so the handler could never receive one.
+     */
+    public function testListPermissionsRouteCarriesTheFaqId(): void
+    {
+        $attributes = new \ReflectionMethod(FaqController::class, 'listPermissions')->getAttributes(
+            \Symfony\Component\Routing\Attribute\Route::class,
+        );
+
+        self::assertCount(1, $attributes);
+        self::assertSame('faq/permissions/{faqId}', $attributes[0]->newInstance()->path);
+    }
+
+    /**
      * Failing history recording and failing notifications are logged, never surfaced: the FAQ
      * has already been created at that point.
      *
@@ -3669,6 +3863,7 @@ final class FaqControllerTest extends TestCase
         $faq->expects($this->once())->method('create')->willReturn($faqEntity);
 
         $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('get')->with(56)->willReturn($this->openQuestionRow(56));
         $question->expects($this->once())->method('updateQuestionAnswer')->with(56, 654, 1);
 
         $questionHistory = $this->createMock(QuestionHistoryRepository::class);
@@ -3688,33 +3883,45 @@ final class FaqControllerTest extends TestCase
             ->method('sendNewFaqAdded')
             ->willThrowException(new \phpMyFAQ\Core\Exception('mail server still down'));
 
-        $request = new Request([], [], [], [], [], [], json_encode([
-            'data' => [
-                'pmf-csrf-token' => $csrfToken,
-                'question' => 'Answered FAQ',
-                'categories[]' => 1,
-                'lang' => 'en',
-                'tags' => '',
-                'status' => 'published',
-                'sticky' => 'no',
-                'answer' => 'Answered answer',
-                'keywords' => 'answered',
-                'author' => 'Author',
-                'email' => 'author@example.com',
-                'comment' => 'y',
-                'userpermission' => 'restricted',
-                'restricted_users' => [],
-                'grouppermission' => 'restricted',
-                'restricted_groups' => [],
-                'changed' => 'Initial import',
-                'notes' => '',
-                'serpTitle' => '',
-                'serpDescription' => '',
-                'openQuestionId' => 56,
-                'notifyEmail' => 'asker@example.com',
-                'notifyUser' => 'Asker',
-            ],
-        ], JSON_THROW_ON_ERROR));
+        $request = new Request(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            json_encode(
+                [
+                    'data' => [
+                        'pmf-csrf-token' => $csrfToken,
+                        'question' => 'Answered FAQ',
+                        'categories[]' => 1,
+                        'lang' => 'en',
+                        'tags' => '',
+                        'status' => 'published',
+                        'sticky' => 'no',
+                        'answer' => 'Answered answer',
+                        'keywords' => 'answered',
+                        'author' => 'Author',
+                        'email' => 'author@example.com',
+                        'comment' => 'y',
+                        'userpermission' => 'restricted',
+                        'restricted_users' => [],
+                        'grouppermission' => 'restricted',
+                        'restricted_groups' => [],
+                        'changed' => 'Initial import',
+                        'notes' => '',
+                        'serpTitle' => '',
+                        'serpDescription' => '',
+                        'openQuestionId' => 56,
+                        // Recipient and name come from the stored question, never from the request.
+                        'notifyEmail' => 'someone-else@example.org',
+                        'notifyUser' => 'Someone Else',
+                    ],
+                ],
+                JSON_THROW_ON_ERROR,
+            ),
+        );
 
         $controller = $this->createControllerWithDependencies(
             faq: $faq,
@@ -4483,5 +4690,407 @@ final class FaqControllerTest extends TestCase
         self::assertSame(Translation::get('ad_entry_savedsuc'), $payload['success']);
         self::assertStringContainsString('"id":1', $payload['data']);
         $this->removeCsrfCookie('pmf-csrf-token');
+    }
+
+    /**
+     * @param array<string, mixed> $fields fields to add to, or replace in, the "data" object
+     */
+    private function withDataFields(Request $request, array $fields): Request
+    {
+        $body = json_decode((string) $request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $body['data'] = [...$body['data'], ...$fields];
+
+        return new Request([], [], [], [], [], [], json_encode($body, JSON_THROW_ON_ERROR));
+    }
+
+    private function storePublicationWindow(int $faqId, string $dateStart, string $dateEnd): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "UPDATE faqdata SET date_start = '%s', date_end = '%s' WHERE id = %d",
+                $dateStart,
+                $dateEnd,
+                $faqId,
+            ));
+    }
+
+    /**
+     * @return array{0: string, 1: string} the stored date_start and date_end
+     */
+    private function storedPublicationWindow(int $faqId): array
+    {
+        $database = $this->configuration->getDb();
+        $row = $database->fetchObject($database->query(sprintf(
+            'SELECT date_start, date_end FROM faqdata WHERE id = %d',
+            $faqId,
+        )));
+        self::assertIsObject($row);
+
+        return [(string) $row->date_start, (string) $row->date_end];
+    }
+
+    private function storedQuestion(int $faqId): string
+    {
+        $database = $this->configuration->getDb();
+        $row = $database->fetchObject($database->query(sprintf('SELECT thema FROM faqdata WHERE id = %d', $faqId)));
+        self::assertIsObject($row);
+
+        return (string) $row->thema;
+    }
+
+    /**
+     * Runs update() against the real FAQ storage, so the test sees what ends up in faqdata.
+     *
+     * @param array<string, mixed> $fields
+     */
+    private function updateSeededFaq(array $fields, bool $mayPublish = true): Response
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->withDataFields($this->createRequestForFaqUpdate($csrfToken, status: null), $fields);
+
+        $controller = $this->createControllerWithFaq(new Faq($this->configuration));
+        $controller->setContainer(
+            $mayPublish
+                ? $this->createAuthenticatedContainer($session)
+                : $this->createContainerWithoutPublishPermission($session),
+        );
+
+        try {
+            return $controller->update($request);
+        } finally {
+            $this->removeCsrfCookie('pmf-csrf-token');
+        }
+    }
+
+    /**
+     * The security-relevant case: every save used to write "from now on, until 9999" over the
+     * stored window, so an expired or a scheduled FAQ went public as soon as anyone saved it.
+     * A request that carries no window, here from an editor who may not publish, keeps it.
+     */
+    public function testUpdateKeepsTheStoredPublicationWindowWhenTheRequestCarriesNone(): void
+    {
+        $this->seedFaqRecord(question: 'Expired FAQ');
+        $this->storePublicationWindow(1, '20000101000000', '20001231235959');
+
+        $response = $this->updateSeededFaq([], mayPublish: false);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('Updated FAQ', $this->storedQuestion(1));
+        self::assertSame(['20000101000000', '20001231235959'], $this->storedPublicationWindow(1));
+    }
+
+    public function testUpdateKeepsAScheduledFaqScheduledWhenTheRequestCarriesNoWindow(): void
+    {
+        $this->seedFaqRecord(question: 'Scheduled FAQ');
+        $this->storePublicationWindow(1, '29990101000000', '99991231235959');
+
+        $response = $this->updateSeededFaq([]);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(['29990101000000', '99991231235959'], $this->storedPublicationWindow(1));
+    }
+
+    public function testUpdatePersistsTheSubmittedPublicationWindow(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+
+        $response = $this->updateSeededFaq(['dateStart' => '2999-01-02T03:04', 'dateEnd' => '2999-12-31T23:59:59']);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(['29990102030400', '29991231235959'], $this->storedPublicationWindow(1));
+    }
+
+    public function testUpdateStoresNoLimitForEmptyWindowFields(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        $this->storePublicationWindow(1, '20000101000000', '20001231235959');
+
+        $response = $this->updateSeededFaq(['dateStart' => '', 'dateEnd' => '']);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(['00000000000000', '99991231235959'], $this->storedPublicationWindow(1));
+    }
+
+    /**
+     * @return array<string, array{0: array<string, mixed>, 1: string}>
+     */
+    public static function rejectedPublicationWindows(): array
+    {
+        return [
+            'start is no date' => [['dateStart' => 'soon', 'dateEnd' => ''], 'msgInvalidFaqDate'],
+            'end is no date' => [['dateStart' => '', 'dateEnd' => '2999-02-30T00:00'], 'msgInvalidFaqDate'],
+            'end is not a string' => [['dateStart' => '', 'dateEnd' => ['2999-01-01T00:00']], 'msgInvalidFaqDate'],
+            'end before start' => [
+                ['dateStart' => '2999-01-02T00:00', 'dateEnd' => '2999-01-01T00:00'],
+                'msgInvalidFaqDateRange',
+            ],
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $fields
+     */
+    #[DataProvider('rejectedPublicationWindows')]
+    public function testUpdateRejectsAnInvalidPublicationWindowBeforeWritingAnything(
+        array $fields,
+        string $translationKey,
+    ): void {
+        $this->seedFaqRecord(question: 'Original FAQ');
+        $this->storePublicationWindow(1, '20000101000000', '20001231235959');
+
+        $response = $this->updateSeededFaq([...$fields, 'revision' => 'yes']);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get($translationKey), $payload['error']);
+        self::assertSame('Original FAQ', $this->storedQuestion(1));
+        self::assertSame(['20000101000000', '20001231235959'], $this->storedPublicationWindow(1));
+        self::assertSame(0, $this->countFaqRevisions(1, 'en'));
+    }
+
+    /**
+     * The window decides when a published FAQ is public, so it is part of the publish right:
+     * an editor without it must not be able to put an expired FAQ back online.
+     */
+    public function testUpdateReturnsForbiddenWhenSettingTheWindowWithoutPublishPermission(): void
+    {
+        $this->seedFaqRecord(question: 'Expired FAQ');
+        $this->storePublicationWindow(1, '20000101000000', '20001231235959');
+
+        try {
+            $this->updateSeededFaq(['dateStart' => '', 'dateEnd' => ''], mayPublish: false);
+            self::fail('Expected the window change to be forbidden.');
+        } catch (ForbiddenException $exception) {
+            self::assertSame('User has no "FAQ_PUBLISH" permission.', $exception->getMessage());
+        }
+
+        self::assertSame('Expired FAQ', $this->storedQuestion(1));
+        self::assertSame(['20000101000000', '20001231235959'], $this->storedPublicationWindow(1));
+    }
+
+    public function testUpdateRejectsACategoryThatDoesNotExist(): void
+    {
+        $this->seedFaqRecord(question: 'Original FAQ');
+
+        $response = $this->updateSeededFaq(['categories[]' => [1, 4711]]);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgInvalidFaqCategory'), $payload['error']);
+        self::assertSame('Original FAQ', $this->storedQuestion(1));
+    }
+
+    /**
+     * Runs create() with a Faq double that records the entity it is asked to store.
+     *
+     * @param array<string, mixed> $fields
+     * @return array{0: Response, 1: ?\phpMyFAQ\Entity\FaqEntity}
+     */
+    private function createFaqAndCaptureEntity(
+        array $fields,
+        string $status = 'draft',
+        ?WebPushService $webPushService = null,
+    ): array {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->withDataFields($this->createRequestForNewFaq($csrfToken, $status), $fields);
+
+        $stored = null;
+        $faq = $this->createStub(Faq::class);
+        $faq->method('create')->willReturnCallback(static function (\phpMyFAQ\Entity\FaqEntity $faqEntity) use (
+            &$stored,
+        ): \phpMyFAQ\Entity\FaqEntity {
+            $stored = $faqEntity;
+
+            return $faqEntity->setId(123)->setSolutionId(1123);
+        });
+
+        $controller = $this->createControllerWithDependencies(faq: $faq, webPushService: $webPushService);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        try {
+            return [$controller->create($request), $stored];
+        } finally {
+            $this->removeCsrfCookie('pmf-csrf-token');
+        }
+    }
+
+    public function testCreateStoresTheSubmittedPublicationWindow(): void
+    {
+        [$response, $stored] = $this->createFaqAndCaptureEntity([
+            'dateStart' => '2999-01-02T03:04',
+            'dateEnd' => '',
+        ]);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertInstanceOf(\phpMyFAQ\Entity\FaqEntity::class, $stored);
+        self::assertSame('29990102030400', $stored->getPublicationWindow()?->storedStart());
+        self::assertSame('99991231235959', $stored->getPublicationWindow()?->storedEnd());
+    }
+
+    public function testCreateLeavesTheWindowUndecidedWhenTheRequestCarriesNone(): void
+    {
+        [$response, $stored] = $this->createFaqAndCaptureEntity([]);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertInstanceOf(\phpMyFAQ\Entity\FaqEntity::class, $stored);
+        self::assertNull($stored->getPublicationWindow());
+    }
+
+    /**
+     * @param array<string, mixed> $fields
+     */
+    #[DataProvider('rejectedPublicationWindows')]
+    public function testCreateRejectsAnInvalidPublicationWindow(array $fields, string $translationKey): void
+    {
+        [$response, $stored] = $this->createFaqAndCaptureEntity($fields);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get($translationKey), $payload['error']);
+        self::assertNull($stored, 'Nothing may be stored for a rejected request.');
+    }
+
+    public function testCreateReturnsForbiddenWhenSettingTheWindowWithoutPublishPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $request = $this->withDataFields($this->createRequestForNewFaq($csrfToken, status: 'draft'), [
+            'dateStart' => '',
+            'dateEnd' => '2999-01-01T00:00',
+        ]);
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('create');
+
+        $controller = $this->createControllerWithFaq($faq);
+        $controller->setContainer($this->createContainerWithoutPublishPermission($session));
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('User has no "FAQ_PUBLISH" permission.');
+
+        try {
+            $controller->create($request);
+        } finally {
+            $this->removeCsrfCookie('pmf-csrf-token');
+        }
+    }
+
+    /**
+     * The push carries the question; a published FAQ that only goes public later, or that has
+     * already expired, must not be announced.
+     */
+    public function testCreateDoesNotPushAPublishedFaqOutsideItsPublicationWindow(): void
+    {
+        self::assertTrue($this->configuration->set('security.permLevel', 'basic'));
+
+        $webPushService = $this->createMock(WebPushService::class);
+        $webPushService->expects($this->never())->method('sendToAll');
+        $webPushService->expects($this->never())->method('sendToUsers');
+
+        [$response] = $this->createFaqAndCaptureEntity(
+            ['dateStart' => '2999-01-01T00:00', 'dateEnd' => ''],
+            status: 'published',
+            webPushService: $webPushService,
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testCreatePushesAPublishedFaqInsideItsPublicationWindow(): void
+    {
+        self::assertTrue($this->configuration->set('security.permLevel', 'basic'));
+
+        $webPushService = $this->createMock(WebPushService::class);
+        $webPushService->expects($this->once())->method('sendToAll');
+
+        [$response] = $this->createFaqAndCaptureEntity(
+            ['dateStart' => '2000-01-01T00:00', 'dateEnd' => '2999-01-01T00:00'],
+            status: 'published',
+            webPushService: $webPushService,
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testCreateRejectsACategoryThatDoesNotExist(): void
+    {
+        [$response, $stored] = $this->createFaqAndCaptureEntity(['categories[]' => [1, 4711]]);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('msgInvalidFaqCategory'), $payload['error']);
+        self::assertNull($stored, 'Nothing may be stored for a rejected request.');
+    }
+
+    /**
+     * A category that only exists in another language than the FAQ is a valid target: the
+     * category tree falls back to the translation that exists.
+     */
+    public function testCreateAcceptsACategoryThatExistsInAnotherLanguage(): void
+    {
+        $this->seedCategory(categoryId: 7, language: 'de');
+
+        [$response, $stored] = $this->createFaqAndCaptureEntity(['categories[]' => [7]]);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertInstanceOf(\phpMyFAQ\Entity\FaqEntity::class, $stored);
+    }
+
+    /**
+     * The history is read by the language of the question. An open question answered by an FAQ
+     * written in another language used to get its "answered" event filed under the language of
+     * the FAQ, where the history of the question never showed it.
+     *
+     * @throws \Exception
+     */
+    public function testCreateRecordsTheAnsweredEventInTheLanguageOfTheQuestion(): void
+    {
+        self::assertTrue($this->configuration->set('security.permLevel', 'basic'));
+        self::assertTrue($this->configuration->set('records.enableDeleteQuestion', false));
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('pmf-csrf-token');
+        $this->setCsrfCookie('pmf-csrf-token', $csrfToken);
+
+        $faq = $this->createStub(Faq::class);
+        $faq
+            ->method('create')
+            ->willReturnCallback(
+                static fn(\phpMyFAQ\Entity\FaqEntity $faqEntity): \phpMyFAQ\Entity\FaqEntity => $faqEntity->setId(321),
+            );
+
+        $question = $this->createMock(Question::class);
+        $question->expects($this->once())->method('get')->with(55)->willReturn($this->openQuestionRow(55));
+        $question->expects($this->once())->method('updateQuestionAnswer')->with(55, 321, 1);
+
+        $questionHistory = new QuestionHistoryRepository($this->configuration);
+
+        $request = $this->withDataFields($this->createRequestForNewFaq($csrfToken, status: 'draft'), [
+            'lang' => 'de',
+            'openQuestionId' => 55,
+        ]);
+
+        $controller = $this->createControllerWithDependencies(
+            faq: $faq,
+            question: $question,
+            questionHistory: $questionHistory,
+        );
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->create($request);
+        $this->removeCsrfCookie('pmf-csrf-token');
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertCount(1, $questionHistory->getByQuestion(55, 'en'));
+        self::assertCount(0, $questionHistory->getByQuestion(55, 'de'));
     }
 }

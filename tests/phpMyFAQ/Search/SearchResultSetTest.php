@@ -254,6 +254,44 @@ class SearchResultSetTest extends TestCase
         $this->assertSame(2, $searchResultSet->getNumberOfResults());
     }
 
+    /**
+     * Custom page IDs come from another table: a page is kept whatever ACL a FAQ with the
+     * same ID has, and a FAQ with the same ID is not treated as its duplicate.
+     */
+    public function testReviewResultSetKeepsCustomPagesApartFromFaqsWithTheSameId(): void
+    {
+        // Every FAQ lookup answers "restricted to user 5", the current user is 1.
+        $restricted = $this->makeReviewableResultSet('basic', [5], 1);
+        $restricted->reviewResultSet([
+            $this->makeResult(1),
+            $this->makeResult(1, ['content_type' => 'page', 'lang' => 'en', 'slug' => 'imprint']),
+        ]);
+
+        $this->assertSame(['imprint'], array_column($restricted->getResultSet(), 'slug'));
+
+        $public = $this->makeReviewableResultSet('basic', [-1], 1);
+        $public->reviewResultSet([
+            $this->makeResult(1, ['content_type' => 'page', 'lang' => 'en', 'slug' => 'imprint']),
+            $this->makeResult(1, ['content_type' => 'page', 'lang' => 'en', 'slug' => 'imprint']),
+            $this->makeResult(1, ['content_type' => 'page', 'lang' => 'de', 'slug' => 'impressum']),
+            $this->makeResult(1, ['question' => 'FAQ']),
+        ]);
+
+        $this->assertCount(3, $public->getResultSet());
+        $this->assertSame(3, $public->getNumberOfResults());
+    }
+
+    public function testReviewResultSetKeepsCustomPagesUnderARestrictedReadScope(): void
+    {
+        $searchResultSet = $this->makeReviewableResultSet(readScope: $this->makeRestrictedScope([3], ['en']));
+
+        $searchResultSet->reviewResultSet([
+            $this->makeResult(1, ['content_type' => 'page', 'lang' => 'en', 'category_id' => 0, 'slug' => 'imprint']),
+        ]);
+
+        $this->assertCount(1, $searchResultSet->getResultSet());
+    }
+
     public function testReviewResultSetAssignsScoreWhenMissing(): void
     {
         $searchResultSet = $this->makeReviewableResultSet('basic', [-1], 1);

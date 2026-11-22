@@ -319,6 +319,42 @@ class SearchHelperTest extends TestCase
         $this->assertStringContainsString('<span title=', $firstResult->renderedScore);
     }
 
+    /**
+     * The FAQ page quotes the highlight parameter for its own regular expression, so the link
+     * has to carry the plain term, not one that is already quoted.
+     */
+    public function testGetSearchResultLinksCarryTheUnquotedHighlightTerm(): void
+    {
+        $this->searchHelper->setSearchTerm('e-mail');
+
+        $this->configurationMock
+            ->method('get')
+            ->willReturnMap([
+                ['records.numberOfRecordsPerPage', 10],
+                ['search.enableHighlighting',      true],
+            ]);
+        $this->configurationMock->method('getDefaultUrl')->willReturn('https://example.com/');
+
+        $mockResult = new stdClass();
+        $mockResult->id = 123;
+        $mockResult->lang = 'en';
+        $mockResult->category_id = 1;
+        $mockResult->question = 'How do I change my e-mail address?';
+        $mockResult->answer = 'Open your profile.';
+        $mockResult->score = 0.85;
+
+        $this->searchResultSetMock->method('getNumberOfResults')->willReturn(1);
+        $this->searchResultSetMock->method('getResultSet')->willReturn([$mockResult]);
+        $this->categoryMock->method('getCategoriesFromFaq')->willReturn([1 => ['id' => 1, 'name' => 'Account']]);
+        $this->categoryMock->method('getPath')->willReturn('Account');
+
+        $result = $this->searchHelper->getSearchResult($this->searchResultSetMock, 1);
+
+        $this->assertStringContainsString('?highlight=e-mail', $result[0]->url);
+        $this->assertStringNotContainsString('%5C', $result[0]->url);
+        $this->assertStringContainsString('<mark class="pmf-highlighted-string">e-mail</mark>', $result[0]->question);
+    }
+
     public function testGetSearchResultRendersCustomPagesWithoutACategoryPath(): void
     {
         $this->searchHelper->setSearchTerm('privacy policy');

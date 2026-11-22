@@ -545,6 +545,39 @@ final class NewsControllerTest extends TestCase
     }
 
     /**
+     * Regression: (bool) 'false' is true in PHP, so a client sending the status as a string
+     * could never deactivate a news entry.
+     *
+     * @throws \Exception
+     */
+    public function testActivateTreatsStringFalseAsDeactivation(): void
+    {
+        $this->dbHandle->query(
+            "INSERT INTO faqnews (id, lang, active, author_name, author_email, comment, datum, header, artikel, link, linktitel, target)
+             VALUES (103, 'en', 'y', 'Tester', 'tester@example.com', 'y', '20260308120000', 'Header', 'Content', '', '', '')",
+        );
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'activate-news');
+
+        $controller = new NewsController();
+        $controller->setContainer($container);
+
+        $response = $controller->activate(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $token,
+            'id' => 103,
+            'status' => 'false',
+        ], JSON_THROW_ON_ERROR)));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        $row = $this->dbHandle->fetchObject($this->dbHandle->query('SELECT active FROM faqnews WHERE id = 103'));
+        self::assertSame('n', $row->active);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testActivateReturnsBadRequestForNonNumericNewsId(): void

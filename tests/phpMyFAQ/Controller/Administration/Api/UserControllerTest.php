@@ -12,6 +12,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\PermissionInterface;
@@ -1304,6 +1305,7 @@ final class UserControllerTest extends TestCase
     public function testUpdateUserRightsReturnsSuccessWithValidCsrf(): void
     {
         $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser(login: 'rights-target');
 
         $container = $this->createAuthenticatedContainer();
         $session = $container->get('session');
@@ -1312,7 +1314,7 @@ final class UserControllerTest extends TestCase
 
         $request = new Request([], [], [], [], [], [], json_encode([
             'csrfToken' => $token,
-            'userId' => 2,
+            'userId' => $managedUserId,
             'userRights' => [1, 2],
         ], JSON_THROW_ON_ERROR));
 
@@ -1324,6 +1326,7 @@ final class UserControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
+        self::assertSame([1, 2], $this->userRightIds($managedUserId));
     }
 
     /**
@@ -1639,6 +1642,49 @@ final class UserControllerTest extends TestCase
     }
 
     /**
+     * Unticking a right keeps its restrictions and the panel then submits an empty list for it.
+     * The refusal has to say what stays stored instead of a bare "not authorized".
+     *
+     * @throws \Exception
+     */
+    public function testSaveUserLanguageRestrictionsNamesTheStoredRestrictionsThatMayNotBeCleared(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser();
+
+        $managedUser = new User($this->configuration);
+        self::assertTrue($managedUser->getUserById($managedUserId));
+        self::assertInstanceOf(BasicPermission::class, $managedUser->perm);
+        self::assertFalse($managedUser->perm->checkUserRight($managedUserId, 3));
+        $managedUser->perm->setUserLanguageRestrictions($managedUserId, 3, ['de']);
+
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->buildController($session, $this->buildSeparatelyGrantedActingUser());
+        $csrf = $this->primeCsrf($session, 'update-user-language-restrictions');
+
+        $response = $controller->saveUserLanguageRestrictions($this->jsonRequest([
+            'csrfToken' => $csrf,
+            'userId' => $managedUserId,
+            'rightId' => 3,
+            'languages' => [],
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $rightName = Translation::get('permission::' . $managedUser->perm->getRightData(3)['name']);
+        self::assertIsString($rightName);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(
+            sprintf(Translation::get('ad_language_restrictions_kept'), $rightName, 'Deutsch'),
+            $payload['error'],
+        );
+        self::assertSame(
+            ['de'],
+            $managedUser->perm->getUserLanguageRestrictions($managedUserId, 3),
+        );
+    }
+
+    /**
      * The German grant is not category-restricted, so German may be handed out.
      *
      * @throws \Exception
@@ -1863,6 +1909,83 @@ final class UserControllerTest extends TestCase
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
         self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
         self::assertSame([1], $this->userRightIds($managedUserId));
+    }
+
+    /**
+     * A blocked account used to stay unloaded here, so the SuperAdmin guard and the
+     * "holds all rights of the target" guard both judged an empty user and let a
+     * USER_EDIT holder strip the rights of a blocked SuperAdmin.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateUserRightsCannotStripRightsOfBlockedSuperAdmin(): void
+    {
+        $managedUserId = $this->seedManagedUser(login: 'blocked-superadmin', status: 'blocked', isSuperAdmin: 1);
+        $this->grantUserRight($managedUserId, 1);
+
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUserWithRights(userId: 5, heldRightIds: [1]);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'userId' => $managedUserId,
+            'userRights' => [],
+            'csrfToken' => $csrf,
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('msgNoPermission'), $payload['error']);
+        self::assertSame([1], $this->userRightIds($managedUserId));
+    }
+
+    /**
+     * The same holds for a blocked administrator who is no SuperAdmin but holds rights
+     * the acting user lacks.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateUserRightsCannotStripRightsOfBlockedUserHoldingRightsTheyLack(): void
+    {
+        $managedUserId = $this->seedManagedUser(login: 'blocked-rights-admin', status: 'blocked');
+        $this->grantUserRight($managedUserId, 1);
+
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUserWithRights(userId: 5, heldRightIds: []);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'userId' => $managedUserId,
+            'userRights' => [],
+            'csrfToken' => $csrf,
+        ]));
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame([1], $this->userRightIds($managedUserId));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUpdateUserRightsReturnsBadRequestForUnknownUser(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildActingUserWithRights(userId: 5, heldRightIds: [1]);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'userId' => 987654,
+            'userRights' => [1],
+            'csrfToken' => $csrf,
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_user_error_noId'), $payload['error']);
+        self::assertSame([], $this->userRightIds(987654));
     }
 
     /**
@@ -2306,6 +2429,11 @@ final class UserControllerTest extends TestCase
      */
     public function testUpdateRightsNonSuperAdminCannotRegrantCategoryRestrictedRight(): void
     {
+        // Whether a submitted right is granted or merely kept depends on the rights the target
+        // holds, so the target has to exist: this one holds no right, and 42 would be new.
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser();
+
         $session = new Session(new MockArraySessionStorage());
 
         $perm = $this->createMock(PermissionInterface::class);
@@ -2324,12 +2452,13 @@ final class UserControllerTest extends TestCase
         $csrf = $this->primeCsrf($session, 'update-user-rights');
 
         $response = $controller->updateUserRights($this->jsonRequest([
-            'userId' => 5,
+            'userId' => $managedUserId,
             'csrfToken' => $csrf,
             'userRights' => [42],
         ]));
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame([], new BasicPermission($this->configuration)->getUserRights($managedUserId));
     }
 
     /**
@@ -2417,11 +2546,12 @@ final class UserControllerTest extends TestCase
 
     /**
      * A non-SuperAdmin restricted to some languages re-saving the rights of a user who holds a
-     * right unrestricted must leave that right in their own scope, never unrestricted.
+     * right unrestricted must leave that right as it is: a right the target keeps is not granted
+     * again, and narrowing it would take it away in languages the acting user has no say in.
      *
      * @throws \Exception
      */
-    public function testUpdateRightsNarrowsUnrestrictedTargetRightToNonSuperAdminScope(): void
+    public function testUpdateRightsKeepsUnrestrictedTargetRightOutsideNonSuperAdminScope(): void
     {
         $this->seedCurrentUserSession();
         $faqAdd = $this->seedScopedUserAdministrator(['en', 'de']);
@@ -2444,19 +2574,18 @@ final class UserControllerTest extends TestCase
         ]));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        $languages = $permission->getScopeForRight($managedUserId, $faqAdd)->languagesInAnyCategory();
-        self::assertIsArray($languages);
-        sort($languages);
-        self::assertSame(['de', 'en'], $languages);
-        self::assertFalse($permission->getScopeForRight($managedUserId, $faqAdd)->allowsLanguageInAnyCategory('fr'));
+        self::assertSame([$faqAdd], $permission->getUserRights($managedUserId));
+        self::assertTrue($permission->getScopeForRight($managedUserId, $faqAdd)->isUnrestricted());
+        self::assertSame([], $permission->getUserLanguageRestrictions($managedUserId, $faqAdd));
     }
 
     /**
-     * A target restriction narrower than the acting user's own scope is kept as it is.
+     * A target restriction is kept as it is, including the part outside the acting user's
+     * own scope.
      *
      * @throws \Exception
      */
-    public function testUpdateRightsKeepsNarrowerTargetRestrictionWithinNonSuperAdminScope(): void
+    public function testUpdateRightsKeepsTargetRestrictionReachingOutsideNonSuperAdminScope(): void
     {
         $this->seedCurrentUserSession();
         $faqAdd = $this->seedScopedUserAdministrator(['en', 'de']);
@@ -2486,8 +2615,246 @@ final class UserControllerTest extends TestCase
         ]));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        // 'fr' is outside the acting user's scope and is dropped; 'de' is kept.
-        self::assertSame(['de'], $permission->getScopeForRight($managedUserId, $faqAdd)->languagesInAnyCategory());
+        // 'fr' is outside the acting user's scope and stays; 'en', which they hold, is not added.
+        self::assertEqualsCanonicalizing(
+            ['de', 'fr'],
+            $permission->getScopeForRight($managedUserId, $faqAdd)->languagesInAnyCategory(),
+        );
+    }
+
+    /**
+     * Nobody revokes what they could not grant: taking a right away from a user who holds it in
+     * a wider scope than the acting user is refused, and nothing is written.
+     *
+     * @param array<string> $targetLanguages
+     * @throws \Exception
+     */
+    #[DataProvider('languageScopesWiderThanEnglishAndGerman')]
+    public function testUpdateRightsRejectsRevokingRightHeldInAWiderScope(array $targetLanguages): void
+    {
+        $this->seedCurrentUserSession();
+        $faqAdd = $this->seedScopedUserAdministrator(['en', 'de']);
+        $managedUserId = $this->seedManagedUserHoldingRight($faqAdd, $targetLanguages);
+
+        $permission = new BasicPermission($this->configuration);
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->buildController($session, $this->buildScopedActingUser($permission));
+        $csrf = $this->primeCsrf($session, 'update-user-rights');
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'csrfToken' => $csrf,
+            'userId' => $managedUserId,
+            'userRights' => [],
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame(Translation::get('ad_permission_scope_exceeded'), $payload['error']);
+        self::assertSame([$faqAdd], $permission->getUserRights($managedUserId));
+        self::assertEqualsCanonicalizing($targetLanguages, $permission->getUserLanguageRestrictions(
+            $managedUserId,
+            $faqAdd,
+        ));
+    }
+
+    /**
+     * @return array<string, array{array<string>}>
+     */
+    public static function languageScopesWiderThanEnglishAndGerman(): array
+    {
+        return [
+            'every language' => [[]],
+            'a language the acting user lacks' => [['de', 'fr']],
+        ];
+    }
+
+    /**
+     * A right the target holds within the acting user's scope can be taken away, and a right
+     * the target did not hold is granted in the acting user's own scope.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateRightsRevokesAndGrantsWithinNonSuperAdminScope(): void
+    {
+        $this->seedCurrentUserSession();
+        $faqAdd = $this->seedScopedUserAdministrator(['en', 'de']);
+        $managedUserId = $this->seedManagedUserHoldingRight($faqAdd, ['de']);
+
+        $permission = new BasicPermission($this->configuration);
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->buildController($session, $this->buildScopedActingUser($permission));
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'csrfToken' => $this->primeCsrf($session, 'update-user-rights'),
+            'userId' => $managedUserId,
+            'userRights' => [],
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([], $permission->getUserRights($managedUserId));
+
+        $response = $controller->updateUserRights($this->jsonRequest([
+            'csrfToken' => $this->primeCsrf($session, 'update-user-rights'),
+            'userId' => $managedUserId,
+            'userRights' => [$faqAdd],
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([$faqAdd], $permission->getUserRights($managedUserId));
+        self::assertEqualsCanonicalizing(
+            ['de', 'en'],
+            $permission->getUserLanguageRestrictions($managedUserId, $faqAdd),
+        );
+    }
+
+    /**
+     * The restrictions panel submits the full list of every right. For a right the target holds,
+     * only what the save adds or takes away is judged: an unchanged list goes through even where
+     * it exceeds the acting user's scope, and so does a change within that scope.
+     *
+     * @param array<string> $heldLanguages
+     * @param array<string> $submittedLanguages
+     * @throws \Exception
+     */
+    #[DataProvider('languageChangesWithinEnglishAndGerman')]
+    public function testSaveUserLanguageRestrictionsAcceptsChangeWithinNonSuperAdminScope(
+        array $heldLanguages,
+        array $submittedLanguages,
+    ): void {
+        $this->seedCurrentUserSession();
+        $faqAdd = $this->seedScopedUserAdministrator(['en', 'de']);
+        $managedUserId = $this->seedManagedUserHoldingRight($faqAdd, $heldLanguages);
+
+        $permission = new BasicPermission($this->configuration);
+        $response = $this->saveLanguageRestrictionsAsScopedAdministrator(
+            $permission,
+            $managedUserId,
+            $faqAdd,
+            $submittedLanguages,
+        );
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertEqualsCanonicalizing($submittedLanguages, $permission->getUserLanguageRestrictions(
+            $managedUserId,
+            $faqAdd,
+        ));
+    }
+
+    /**
+     * @return array<string, array{array<string>, array<string>}>
+     */
+    public static function languageChangesWithinEnglishAndGerman(): array
+    {
+        return [
+            'unrestricted, submitted back unchanged' => [[], []],
+            'wider list, submitted back unchanged' => [['de', 'fr'], ['fr', 'de']],
+            'own language swapped, foreign one kept' => [['de', 'fr'], ['en', 'fr']],
+            'own language removed, foreign one kept' => [['de', 'fr'], ['fr']],
+            'narrowed within own scope' => [['de', 'en'], ['en']],
+        ];
+    }
+
+    /**
+     * Narrowing a right the target holds in a wider scope, removing a language the acting user
+     * lacks, or widening the right beyond their own scope is refused, and nothing is written.
+     *
+     * @param array<string> $heldLanguages
+     * @param array<string> $submittedLanguages
+     * @throws \Exception
+     */
+    #[DataProvider('languageChangesOutsideEnglishAndGerman')]
+    public function testSaveUserLanguageRestrictionsRejectsChangeOutsideNonSuperAdminScope(
+        array $heldLanguages,
+        array $submittedLanguages,
+    ): void {
+        $this->seedCurrentUserSession();
+        $faqAdd = $this->seedScopedUserAdministrator(['en', 'de']);
+        $managedUserId = $this->seedManagedUserHoldingRight($faqAdd, $heldLanguages);
+
+        $permission = new BasicPermission($this->configuration);
+        $response = $this->saveLanguageRestrictionsAsScopedAdministrator(
+            $permission,
+            $managedUserId,
+            $faqAdd,
+            $submittedLanguages,
+        );
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        // Clearing a stored restriction is refused with a message that names what stays stored
+        $expectedError = $submittedLanguages === [] && $heldLanguages !== []
+            ? sprintf(
+                Translation::get('ad_language_restrictions_kept'),
+                Translation::get('permission::' . $permission->getRightData($faqAdd)['name']),
+                'Deutsch',
+            )
+            : Translation::get('ad_permission_scope_exceeded');
+
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertSame($expectedError, $payload['error']);
+        self::assertEqualsCanonicalizing($heldLanguages, $permission->getUserLanguageRestrictions(
+            $managedUserId,
+            $faqAdd,
+        ));
+    }
+
+    /**
+     * @return array<string, array{array<string>, array<string>}>
+     */
+    public static function languageChangesOutsideEnglishAndGerman(): array
+    {
+        return [
+            'unrestricted narrowed to own scope' => [[], ['de', 'en']],
+            'foreign language removed' => [['de', 'fr'], ['de']],
+            'foreign language added' => [['de'], ['de', 'fr']],
+            'restricted widened to every language' => [['de'], []],
+        ];
+    }
+
+    /**
+     * Creates a managed user holding the right directly, restricted to the given languages
+     * (none meaning every language), and returns the user id.
+     *
+     * @param array<string> $languages
+     */
+    private function seedManagedUserHoldingRight(int $rightId, array $languages): int
+    {
+        $managedUserId = $this->seedManagedUser();
+        $this->dbHandle->query(sprintf(
+            'INSERT INTO faquser_right (user_id, right_id) VALUES (%d, %d)',
+            $managedUserId,
+            $rightId,
+        ));
+        foreach ($languages as $language) {
+            $this->dbHandle->query(sprintf(
+                "INSERT INTO faquser_right_language (user_id, right_id, language) VALUES (%d, %d, '%s')",
+                $managedUserId,
+                $rightId,
+                $language,
+            ));
+        }
+
+        return $managedUserId;
+    }
+
+    /**
+     * @param array<string> $languages
+     * @throws \Exception
+     */
+    private function saveLanguageRestrictionsAsScopedAdministrator(
+        BasicPermission $permission,
+        int $userId,
+        int $rightId,
+        array $languages,
+    ): Response {
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->buildController($session, $this->buildScopedActingUser($permission));
+
+        return $controller->saveUserLanguageRestrictions($this->jsonRequest([
+            'csrfToken' => $this->primeCsrf($session, 'update-user-language-restrictions'),
+            'userId' => $userId,
+            'rightId' => $rightId,
+            'languages' => $languages,
+        ]));
     }
 
     /**
@@ -3205,5 +3572,166 @@ final class UserControllerTest extends TestCase
         $query = $this->findUserEnumerationQuery($executed);
         $this->assertStringNotContainsString('is_superadmin', $query);
         $this->assertStringNotContainsString('protected', $query);
+    }
+
+    /**
+     * What both login forms do with the typed password before they verify it.
+     */
+    private function loginAccepts(string $login, string $typedPassword): bool
+    {
+        $password = Filter::filterVar($typedPassword, FILTER_SANITIZE_SPECIAL_CHARS, '');
+
+        try {
+            return new AuthDatabase($this->configuration)->checkCredentials($login, $password);
+        } catch (AuthException) {
+            return false;
+        }
+    }
+
+    /**
+     * The login forms sanitise the typed password before verifying it. A password set here used
+     * to be stored as typed, so one containing a quote or a tag-like part could never log in.
+     *
+     * @throws \Exception
+     */
+    public function testOverwritePasswordStoresAPasswordWithQuotesAndTagsSoThatItLogsIn(): void
+    {
+        $typedPassword = 'Pa\'ss"<b>word</b>123';
+
+        $this->seedCurrentUserSession();
+        $targetUserId = $this->seedManagedUser('quoted-password-target');
+        self::assertNotFalse($this->dbHandle->query(
+            "INSERT INTO faquserlogin (login, pass, domain) VALUES ('quoted-password-target', 'old-hash', '')",
+        ));
+
+        $container = $this->createSelfServiceContainer('current-password-123');
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'overwrite-password');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->overwritePassword($this->jsonRequest([
+            'userId' => $targetUserId,
+            'csrf' => $token,
+            'newPassword' => $typedPassword,
+            'passwordRepeat' => $typedPassword,
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertTrue($this->loginAccepts('quoted-password-target', $typedPassword));
+        self::assertFalse($this->loginAccepts('quoted-password-target', 'Password123'));
+    }
+
+    /**
+     * The stored hash is the one of the sanitised password, so the current password of the
+     * step-up check has to be sanitised the same way before it is verified.
+     *
+     * @throws \Exception
+     */
+    public function testOverwritePasswordVerifiesACurrentPasswordWithQuotesAndTagsAsLoginDoes(): void
+    {
+        $typedCurrentPassword = 'Cur\'rent"<b>pass</b>123';
+
+        $this->seedCurrentUserSession();
+
+        $container = $this->createSelfServiceContainer(Filter::filterVar(
+            $typedCurrentPassword,
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            '',
+        ));
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'overwrite-password');
+
+        $currentUser = $container->get('phpmyfaq.user.current_user');
+        self::assertInstanceOf(MockObject::class, $currentUser);
+        $currentUser->expects($this->once())->method('stepUpSuccess')->willReturn(true);
+        $currentUser->expects($this->never())->method('stepUpFailure');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->overwritePassword($this->jsonRequest([
+            'userId' => 1,
+            'csrf' => $token,
+            'currentPassword' => $typedCurrentPassword,
+            'newPassword' => 'updatedPassword123',
+            'passwordRepeat' => 'updatedPassword123',
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * The confirmation used to be length-checked only, so a mistyped password was stored.
+     *
+     * @throws \Exception
+     */
+    public function testAddUserRejectsAPasswordConfirmationThatDoesNotMatch(): void
+    {
+        $this->seedCurrentUserSession();
+
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-user');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->addUser($this->jsonRequest([
+            'csrf' => $token,
+            'userName' => 'mistyped-password-user',
+            'realName' => 'Mistyped Password',
+            'email' => 'mistyped@example.com',
+            'automaticPassword' => false,
+            'password' => 'firstPassword123',
+            'passwordConfirm' => 'otherPassword123',
+            'isSuperAdmin' => false,
+        ]));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame([Translation::get('msgPasswordsMustBeEqual')], $payload);
+
+        $result = $this->dbHandle->query("SELECT user_id FROM faquser WHERE login = 'mistyped-password-user'");
+        self::assertSame(0, $this->dbHandle->numRows($result));
+    }
+
+    /**
+     * Narrowing or widening the languages of a right changes what the user may do, so it has
+     * to leave a trace in the admin log like every other permission change.
+     *
+     * @throws \Exception
+     */
+    public function testSaveUserLanguageRestrictionsWritesAnAdminLogEntry(): void
+    {
+        $this->seedCurrentUserSession();
+        $managedUserId = $this->seedManagedUser();
+
+        $adminLog = $this->createMock(AdminLog::class);
+        $adminLog
+            ->expects($this->once())
+            ->method('log')
+            ->with($this->anything(), 'user-change-permissions (languages):' . $managedUserId . ':1');
+
+        $container = $this->createAuthenticatedContainerWithAdminLog($adminLog);
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'update-user-language-restrictions');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $response = $controller->saveUserLanguageRestrictions($this->jsonRequest([
+            'csrfToken' => $token,
+            'userId' => $managedUserId,
+            'rightId' => 1,
+            'languages' => ['en'],
+        ]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 }

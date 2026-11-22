@@ -110,6 +110,55 @@ describe('handleUserVoting', () => {
     expect(pushNotification).toHaveBeenCalledWith('Thanks for your vote!');
   });
 
+  it('should take the star from the submitter when the browser does not focus the clicked button', async () => {
+    document.body.innerHTML = `
+      <form class="pmf-voting-form">
+        <button class="pmf-voting-star star" data-star="1" type="submit">★</button>
+        <button class="pmf-voting-star star" data-star="2" type="submit">★<span>2 Stars</span></button>
+        <input type="hidden" id="voting-id" value="42" />
+        <input type="hidden" id="voting-language" value="en" />
+        <input type="hidden" id="csrf-token-voting" value="test-csrf-token" />
+      </form>
+    `;
+
+    vi.mocked(saveVoting).mockResolvedValue({ success: 'Thanks for your vote!' });
+
+    handleUserVoting();
+
+    // Safari leaves the focus on <body> when a button is clicked.
+    const star2 = document.querySelectorAll('.pmf-voting-star')[1] as HTMLButtonElement;
+    expect(document.activeElement).toBe(document.body);
+
+    const form = document.querySelector('.pmf-voting-form') as HTMLFormElement;
+    form.dispatchEvent(new SubmitEvent('submit', { submitter: star2, cancelable: true }));
+
+    await vi.waitFor(() => {
+      expect(saveVoting).toHaveBeenCalledWith('42', 'en', 2, 'test-csrf-token');
+    });
+
+    expect(star2.getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('should not send a vote when no star submitted the form', async () => {
+    document.body.innerHTML = `
+      <form class="pmf-voting-form">
+        <button class="pmf-voting-star star" data-star="1" type="submit">★</button>
+        <input type="hidden" id="voting-id" value="42" />
+        <input type="hidden" id="voting-language" value="en" />
+        <input type="hidden" id="csrf-token-voting" value="test-csrf-token" />
+      </form>
+    `;
+
+    handleUserVoting();
+
+    const form = document.querySelector('.pmf-voting-form') as HTMLFormElement;
+    form.dispatchEvent(new Event('submit'));
+
+    await Promise.resolve();
+
+    expect(saveVoting).not.toHaveBeenCalled();
+  });
+
   it('should show error notification on error response', async () => {
     document.body.innerHTML = `
       <form class="pmf-voting-form">
@@ -149,7 +198,7 @@ describe('handleUserVoting', () => {
       </form>
     `;
 
-    vi.mocked(saveVoting).mockRejectedValue(new Error('HTTP 500'));
+    vi.mocked(saveVoting).mockRejectedValue(new Error('You already voted for this FAQ'));
 
     handleUserVoting();
 
@@ -163,7 +212,7 @@ describe('handleUserVoting', () => {
       expect(saveVoting).toHaveBeenCalledWith('42', 'en', 1, 'test-csrf-token');
     });
 
-    expect(pushErrorNotification).toHaveBeenCalledWith('An unexpected error occurred.');
+    expect(pushErrorNotification).toHaveBeenCalledWith('You already voted for this FAQ');
   });
 
   it('should update star selection on submit', async () => {

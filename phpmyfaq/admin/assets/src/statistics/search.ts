@@ -25,7 +25,7 @@ export const handleTruncateSearchTerms = (): void => {
     buttonTruncateSearchTerms.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
 
-      const target = event.target as HTMLElement;
+      const target = event.currentTarget as HTMLElement;
       const csrf = target.getAttribute('data-pmf-csrf-token');
 
       if (!csrf) {

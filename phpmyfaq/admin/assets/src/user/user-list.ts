@@ -13,7 +13,7 @@
  * @since     2022-03-23
  */
 
-import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { activateUser, deleteUser } from '../api';
 import { Modal } from 'bootstrap';
 import { wireAddUserModal } from './add-user';
@@ -53,17 +53,13 @@ export const handleUserList = (): void => {
         const response = await activateUser(userId, csrfToken);
 
         if (typeof response.success === 'string') {
-          const icon = document.querySelector(`.icon_user_id_${userId}`) as HTMLElement;
-          icon.classList.remove('bi-ban');
-          icon.classList.add('bi-check-circle-o');
-          const button = document.getElementById(`btn_activate_user_id_${userId}`) as HTMLElement;
-          button.remove();
+          // Same classes as user-list.twig renders for a blocked and an active user.
+          const icon = document.querySelector(`.icon_user_id_${userId}`) as HTMLElement | null;
+          icon?.classList.remove('bi-person-fill-slash', 'text-danger');
+          icon?.classList.add('bi-person-fill-check', 'text-success');
+          document.getElementById(`btn_activate_user_id_${userId}`)?.remove();
         } else {
-          const message = document.getElementById('pmf-user-message') as HTMLElement;
-          message.insertAdjacentElement(
-            'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
-          );
+          pushErrorNotification(response.error ?? 'An error occurred');
         }
       });
     });

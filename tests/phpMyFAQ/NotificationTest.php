@@ -60,6 +60,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 #[UsesClass(LanguagePermissionRepository::class)]
 #[UsesClass(Mail::class)]
 #[UsesClass(Builtin::class)]
+#[UsesClass(\phpMyFAQ\Mail\MailContent::class)]
 #[UsesClass(UserData::class)]
 #[UsesClass(Utils::class)]
 #[UsesClass(Category::class)]
@@ -274,7 +275,7 @@ class NotificationTest extends TestCase
         $comment = new Comment();
         $comment->setUsername('John');
         $comment->setEmail('john@example.com');
-        $comment->setComment('Great news article!');
+        $comment->setComment("Great news article!\nSecond line");
 
         $newsData = [
             'id' => 1,
@@ -290,6 +291,9 @@ class NotificationTest extends TestCase
         $this->notification->sendNewsCommentNotification($newsData, $comment);
 
         $this->assertStringContainsString('New comment for "Test News"', $this->mail->subject);
+        // The message is built from HTML, so it has to be declared as HTML
+        $this->assertSame('text/html', $this->mail->contentType);
+        $this->assertStringContainsString("<br><br>Great news article!<br />\nSecond line", $this->mail->message);
     }
 
     public function testSendNewsCommentNotificationWithEmptyAuthorEmail(): void
@@ -326,7 +330,7 @@ class NotificationTest extends TestCase
         $comment = new Comment();
         $comment->setUsername('Commenter');
         $comment->setEmail('commenter@example.com');
-        $comment->setComment('This is a test comment on the FAQ.');
+        $comment->setComment("This is a test comment on the FAQ.\nSecond line");
 
         $this->mail->expects($this->once())->method('setReplyTo')->with('commenter@example.com', 'Commenter');
         $this->mail->expects($this->once())->method('addTo')->with('faqauthor@example.com');
@@ -335,6 +339,12 @@ class NotificationTest extends TestCase
         $this->notification->sendFaqCommentNotification($faq, $comment);
 
         $this->assertStringContainsString('New comment for "Test FAQ Title"', $this->mail->subject);
+        // The message is built from HTML, so it has to be declared as HTML
+        $this->assertSame('text/html', $this->mail->contentType);
+        $this->assertStringContainsString(
+            "<br>This is a test comment on the FAQ.<br />\nSecond line",
+            $this->mail->message,
+        );
     }
 
     public function testSendFaqCommentNotificationUsesAdminEmailWhenFaqEmailEmpty(): void
@@ -385,6 +395,38 @@ class NotificationTest extends TestCase
         $this->mail->expects($this->once())->method('addTo')->with('faqauthor@example.com');
         $this->mail->expects($this->once())->method('addCc')->with('owner@example.com');
         $this->mail->expects($this->once())->method('send');
+
+        $notification = $this->createNotificationWithFactories($category, $user);
+        $notification->sendFaqCommentNotification($faq, $comment);
+    }
+
+    public function testSendFaqCommentNotificationCopiesACategoryOwnerUsingTheAdminAddress(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->faqRecord = [
+            'id' => 11,
+            'email' => 'faqauthor@example.com',
+            'title' => 'Test FAQ Title',
+            'lang' => 'en',
+        ];
+
+        $comment = new Comment();
+        $comment->setUsername('Commenter');
+        $comment->setEmail('commenter@example.com');
+        $comment->setComment('This is a test comment on the FAQ.');
+
+        $category = $this->createMock(Category::class);
+        $category->method('getCategoryIdFromFaq')->willReturn(5);
+        $category->method('getCategoryIdsFromFaq')->willReturn([5]);
+        $category->method('getOwner')->willReturn(1);
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserById')->willReturn(true);
+        $user->method('getUserData')->willReturn('admin@example.com');
+
+        // The FAQ author is the recipient, so the main admin address has not received anything yet
+        $this->mail->expects($this->once())->method('addTo')->with('faqauthor@example.com');
+        $this->mail->expects($this->once())->method('addCc')->with('admin@example.com');
 
         $notification = $this->createNotificationWithFactories($category, $user);
         $notification->sendFaqCommentNotification($faq, $comment);
@@ -474,7 +516,7 @@ class NotificationTest extends TestCase
         $questionEntity->setUsername('Jane');
         $questionEntity->setEmail('jane@example.com');
         $questionEntity->setCategoryId(5);
-        $questionEntity->setQuestion('How do I reset my password?');
+        $questionEntity->setQuestion("How do I reset my password?\nSecond line");
 
         $categories = [5 => ['name' => 'User Account']];
 
@@ -489,6 +531,10 @@ class NotificationTest extends TestCase
 
         $notification = $this->createNotificationWithFactories($this->category, $user);
         $notification->sendQuestionSuccessMail($questionEntity, $categories);
+
+        // The message is built from HTML, so it has to be declared as HTML
+        $this->assertSame('text/html', $this->mail->contentType);
+        $this->assertStringContainsString("How do I reset my password?<br />\nSecond line", $this->mail->message);
     }
 
     public function testSendQuestionSuccessMailLogsLookupException(): void

@@ -87,4 +87,11 @@ class TrackingDataRedactorTest extends TestCase
             $redactor->redactUrl('https://example.org/page?token=secret#section'),
         );
     }
+
+    public function testFlattensAValueIntoOneFieldOfOneLine(): void
+    {
+        $redactor = new TrackingDataRedactor();
+
+        $this->assertSame('a,b c  d', $redactor->flattenField("a;b\nc\r\nd"));
+    }
 }

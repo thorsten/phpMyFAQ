@@ -7,6 +7,7 @@ namespace phpMyFAQ\News\Test;
 use DateTime;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\NewsMessage;
 use phpMyFAQ\News\NewsRepository;
@@ -249,5 +250,44 @@ class NewsRepositoryTest extends TestCase
         $dbTypeProperty = $databaseReflection->getProperty('dbType');
         $dbTypeProperty->setValue(null, 'sqlite3');
         Database::setTablePrefix('');
+    }
+
+    /**
+     * SQL Server knows no LIMIT clause: the row limit is passed to the driver, which renders it.
+     */
+    public function testNewsQueriesPassTheRowLimitToTheDriver(): void
+    {
+        $calls = [];
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('query')->willReturnCallback(static function (
+            string $query,
+            int $offset = 0,
+            int $rowcount = 0,
+        ) use (&$calls): bool {
+            $calls[] = [$query, $offset, $rowcount];
+
+            return true;
+        });
+        $db->method('fetchObject')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+        $repository = new NewsRepository($configuration);
+
+        iterator_to_array($repository->getLatest('en', true, 5));
+        iterator_to_array($repository->getLatest('en'));
+        iterator_to_array($repository->getLatestPaginated('en', true, 10, 20, 'header', 'ASC'));
+        iterator_to_array($repository->getLatest('en', true, 0));
+        iterator_to_array($repository->getLatestPaginated('en', true, 0));
+
+        $this->assertCount(3, $calls);
+        foreach ($calls as [$query]) {
+            $this->assertStringNotContainsString('LIMIT', $query);
+        }
+        $this->assertSame([0, 5], [$calls[0][1], $calls[0][2]]);
+        $this->assertSame([0, 0], [$calls[1][1], $calls[1][2]]);
+        $this->assertStringEndsWith('ORDER BY header ASC', $calls[2][0]);
+        $this->assertSame([20, 10], [$calls[2][1], $calls[2][2]]);
     }
 }

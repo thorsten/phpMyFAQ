@@ -22,6 +22,8 @@ namespace phpMyFAQ\Setup\Migration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Setup\Migration\Operations\OperationRecorder;
+use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\PostgresDialect;
+use phpMyFAQ\Setup\Migration\QueryBuilder\IndexName;
 
 /* @mago-expect lint:too-many-methods - provides the full migration-recording toolkit to subclasses */
 abstract readonly class AbstractMigration implements MigrationInterface
@@ -44,6 +46,17 @@ abstract readonly class AbstractMigration implements MigrationInterface
     public function getDependencies(): array
     {
         return [];
+    }
+
+    /**
+     * Whether this migration was added to the registry after a release with a higher version
+     * had already shipped. Installations that were past its version by then never select it
+     * by version, so the update runs a back-port whenever the tracker does not list it. A
+     * back-port therefore has to be a no-op on installations that do not need it.
+     */
+    public function isBackport(): bool
+    {
+        return false;
     }
 
     /**
@@ -161,6 +174,15 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
+     * Returns the name an index carries in this installation: with the table prefix where the
+     * database shares index names between tables, unchanged everywhere else.
+     */
+    protected function indexName(string $indexName): string
+    {
+        return IndexName::forTablePrefix($indexName, $this->dbType, $this->tablePrefix);
+    }
+
+    /**
      * Helper to create an index.
      *
      * @param string|string[] $columns
@@ -168,6 +190,7 @@ abstract readonly class AbstractMigration implements MigrationInterface
     protected function createIndex(string $table, string $indexName, string|array $columns): string
     {
         $tableName = $this->table($table);
+        $indexName = $this->indexName($indexName);
         $columnList = is_array($columns) ? implode(', ', $columns) : $columns;
 
         if ($this->isSqlServer()) {
@@ -204,6 +227,7 @@ abstract readonly class AbstractMigration implements MigrationInterface
     protected function createUniqueIndex(string $table, string $indexName, string|array $columns): string
     {
         $tableName = $this->table($table);
+        $indexName = $this->indexName($indexName);
         $columns = (array) $columns;
         $columnList = implode(', ', $columns);
 
@@ -240,7 +264,7 @@ abstract readonly class AbstractMigration implements MigrationInterface
         $db = $this->configuration->getDb();
         $tableName = $this->table($table);
         $escapedTableName = $db->escape($tableName);
-        $escapedIndexName = $db->escape($indexName);
+        $escapedIndexName = $db->escape($this->indexName($indexName));
 
         if ($this->isMySql()) {
             return sprintf(
@@ -254,9 +278,9 @@ abstract readonly class AbstractMigration implements MigrationInterface
         if ($this->isPostgreSql()) {
             return sprintf(
                 'SELECT COUNT(*) as idx_count FROM pg_indexes '
-                . "WHERE schemaname = 'public' AND tablename = '%s' AND indexname = '%s'",
-                $escapedTableName,
-                $escapedIndexName,
+                . "WHERE schemaname = current_schema() AND tablename = '%s' AND indexname = '%s'",
+                PostgresDialect::catalogName($escapedTableName),
+                PostgresDialect::catalogName($escapedIndexName),
             );
         }
 
@@ -281,6 +305,17 @@ abstract readonly class AbstractMigration implements MigrationInterface
     }
 
     /**
+     * Whether the index already exists, so that a schema step stays safe to re-run.
+     */
+    protected function hasIndex(string $table, string $indexName): bool
+    {
+        $db = $this->configuration->getDb();
+        $row = $db->fetchObject($db->query($this->indexExists($table, $indexName)));
+
+        return $row instanceof \stdClass && (int) $row->idx_count > 0;
+    }
+
+    /**
      * Whether the column already exists, so that a schema step stays safe to re-run.
      */
     protected function columnExists(string $table, string $column): bool
@@ -290,8 +325,9 @@ abstract readonly class AbstractMigration implements MigrationInterface
         $query = match (true) {
             $this->isMySql() => sprintf("SHOW COLUMNS FROM %s LIKE '%s'", $tableName, $column),
             $this->isPostgreSql() => sprintf(
-                "SELECT column_name FROM information_schema.columns WHERE table_name = '%s' AND column_name = '%s'",
-                $tableName,
+                'SELECT column_name FROM information_schema.columns '
+                . "WHERE table_schema = current_schema() AND table_name = '%s' AND column_name = '%s'",
+                PostgresDialect::catalogName($tableName),
                 $column,
             ),
             $this->isSqlite() => sprintf(

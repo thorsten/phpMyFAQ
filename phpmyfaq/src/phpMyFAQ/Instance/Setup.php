@@ -184,22 +184,22 @@ $DB[\'server\'] = \''
     public function createLdapFile(array $data, string $folder = '/content/core/config'): int|bool
     {
         return file_put_contents(
-            $this->rootDir . $folder . '/config/ldap.php',
+            $this->rootDir . $folder . '/ldap.php',
             '<?php
 $PMF_LDAP[\'ldap_server\'] = \''
-            . (string) ($data['ldapServer'] ?? '')
+            . $this->escapeForSingleQuotedPhpString((string) ($data['ldapServer'] ?? ''))
             . "';\n"
             . "\$PMF_LDAP['ldap_port'] = '"
-            . (string) ($data['ldapPort'] ?? '')
+            . $this->escapeForSingleQuotedPhpString((string) ($data['ldapPort'] ?? ''))
             . "';\n"
             . "\$PMF_LDAP['ldap_user'] = '"
-            . (string) ($data['ldapUser'] ?? '')
+            . $this->escapeForSingleQuotedPhpString((string) ($data['ldapUser'] ?? ''))
             . "';\n"
             . "\$PMF_LDAP['ldap_password'] = '"
-            . (string) ($data['ldapPassword'] ?? '')
+            . $this->escapeForSingleQuotedPhpString((string) ($data['ldapPassword'] ?? ''))
             . "';\n"
             . "\$PMF_LDAP['ldap_base'] = '"
-            . (string) ($data['ldapBase'] ?? '')
+            . $this->escapeForSingleQuotedPhpString((string) ($data['ldapBase'] ?? ''))
             . "';",
             LOCK_EX,
         );
@@ -214,16 +214,13 @@ $PMF_LDAP[\'ldap_server\'] = \''
     public function createElasticsearchFile(array $data, string $folder = '/content/core/config'): int|bool
     {
         return file_put_contents(
-            $this->rootDir . $folder . '/config/elasticsearch.php',
+            $this->rootDir . $folder . '/elasticsearch.php',
             '<?php
-$PMF_ES[\'hosts\'] = [\''
-            . implode("'], ['", array_map(
-                static fn(mixed $host): string => (string) $host,
-                is_array($data['hosts'] ?? null) ? $data['hosts'] : [],
-            ))
-            . "'];\n"
+$PMF_ES[\'hosts\'] = ['
+            . $this->buildQuotedPhpList(is_array($data['hosts'] ?? null) ? $data['hosts'] : [])
+            . "];\n"
             . "\$PMF_ES['index'] = '"
-            . (string) ($data['index'] ?? '')
+            . $this->escapeForSingleQuotedPhpString((string) ($data['index'] ?? ''))
             . "';\n",
             LOCK_EX,
         );
@@ -238,18 +235,28 @@ $PMF_ES[\'hosts\'] = [\''
     public function createOpenSearchFile(array $data, string $folder = '/content/core/config'): int|bool
     {
         return file_put_contents(
-            $this->rootDir . $folder . '/config/opensearch.php',
+            $this->rootDir . $folder . '/opensearch.php',
             '<?php
-$PMF_OS[\'hosts\'] = [\''
-            . implode("'], ['", array_map(
-                static fn(mixed $host): string => (string) $host,
-                is_array($data['hosts'] ?? null) ? $data['hosts'] : [],
-            ))
-            . "'];\n"
+$PMF_OS[\'hosts\'] = ['
+            . $this->buildQuotedPhpList(is_array($data['hosts'] ?? null) ? $data['hosts'] : [])
+            . "];\n"
             . "\$PMF_OS['index'] = '"
-            . (string) ($data['index'] ?? '')
+            . $this->escapeForSingleQuotedPhpString((string) ($data['index'] ?? ''))
             . "';\n",
             LOCK_EX,
         );
+    }
+
+    /**
+     * Returns the values as the comma-separated, single-quoted items of a PHP array literal.
+     *
+     * @param array<array-key, mixed> $values
+     */
+    private function buildQuotedPhpList(array $values): string
+    {
+        return implode(', ', array_map(
+            fn(mixed $value): string => "'" . $this->escapeForSingleQuotedPhpString((string) $value) . "'",
+            $values,
+        ));
     }
 }

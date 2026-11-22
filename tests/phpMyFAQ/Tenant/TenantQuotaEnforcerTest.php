@@ -86,7 +86,7 @@ class TenantQuotaEnforcerTest extends TestCase
         $db
             ->expects($this->once())
             ->method('query')
-            ->with('SELECT COUNT(1) AS amount FROM pmf_faquser')
+            ->with('SELECT COUNT(1) AS amount FROM pmf_faquser WHERE user_id > 0')
             ->willReturn(false);
         $db->expects($this->once())->method('error')->willReturn('db failed');
 

@@ -654,6 +654,23 @@ class FaqTest extends TestCase
         $this->assertSame(Translation::get(key: 'err_expiredArticle'), $this->faq->faqRecords[1]['content']);
     }
 
+    public function testGetAllFaqsReplacesTheContentOfAFaqThatIsNotPublishedYet(): void
+    {
+        $this->seedFaqRecord(
+            id: 5016,
+            solutionId: 7016,
+            categoryId: 114,
+            question: 'Scheduled FAQ',
+            answer: 'Not to be read before its start date',
+        );
+        $this->configuration->getDb()->query("UPDATE faqdata SET date_start = '29990101000000' WHERE id = 5016");
+
+        $this->faq->getAllFaqs(Faq::SORTING_TYPE_FAQID, ['fd.id' => ['5016']], 'ASC');
+
+        $this->assertCount(1, $this->faq->faqRecords);
+        $this->assertSame(Translation::get(key: 'err_inactiveArticle'), $this->faq->faqRecords[0]['content']);
+    }
+
     public function testGetAllFaqsLoadsOnePageWhileCountAllFaqsReportsTheTotal(): void
     {
         $this->seedFaqRecord(id: 5016, solutionId: 7016, categoryId: 114, question: 'Charlie');

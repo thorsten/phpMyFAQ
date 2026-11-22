@@ -105,16 +105,13 @@ class File extends AbstractAttachment implements AttachmentInterface
         }
 
         clearstatcache();
-        $attachmentDir = dirname($this->buildFilePath());
 
-        $attachmentsRoot = (string) PMF_ATTACHMENTS_DIR;
+        // Encrypted files bypass the storage abstraction and live directly below the attachments directory.
+        if ($this->encrypted) {
+            return is_file($this->buildFilePath());
+        }
 
-        return (
-            file_exists($attachmentsRoot)
-            && is_dir($attachmentsRoot)
-            && file_exists($attachmentDir)
-            && is_dir($attachmentDir)
-        );
+        return $this->existsInStorage() || is_file($this->buildFilePath());
     }
 
     /**
@@ -168,6 +165,9 @@ class File extends AbstractAttachment implements AttachmentInterface
      */
     protected function storeFile(string $filePath): bool
     {
+        // The duplicate check below compares virtual hashes, and a new attachment has none yet.
+        $this->mkVirtualHash();
+
         // Doing this check, we're sure not to unnecessarily
         // overwrite existing unencrypted file duplicates.
         if ($this->linkedRecords()) {
@@ -231,7 +231,7 @@ class File extends AbstractAttachment implements AttachmentInterface
         // Won't delete the file if there are still some records hanging on it
         $hasLinkedRecords = $this->linkedRecords();
         if (!$hasLinkedRecords && $this->encrypted) {
-            $success = $this->getFile()->delete();
+            $success = $this->deleteEncryptedFile();
         }
 
         if (!$hasLinkedRecords && !$this->encrypted) {
@@ -240,6 +240,8 @@ class File extends AbstractAttachment implements AttachmentInterface
             } catch (StorageException $storageException) {
                 throw new AttachmentException($storageException->getMessage(), 0, $storageException);
             }
+
+            $success = $this->deleteLegacyFile();
         }
 
         $this->deleteMeta();
@@ -256,6 +258,11 @@ class File extends AbstractAttachment implements AttachmentInterface
     {
         if (!$this->encrypted) {
             try {
+                $legacyFilePath = $this->legacyOnlyFilePath();
+                if ($legacyFilePath !== null) {
+                    return $this->readLegacyFile($legacyFilePath);
+                }
+
                 return $this->getStorage()->get($this->buildStoragePath());
             } catch (StorageException $storageException) {
                 throw new AttachmentException($storageException->getMessage(), 0, $storageException);
@@ -330,6 +337,89 @@ class File extends AbstractAttachment implements AttachmentInterface
         $this->storage = new StorageFactory($configuration)->create();
 
         return $this->storage;
+    }
+
+    /**
+     * phpMyFAQ 4.1 and earlier stored plain attachments directly below the attachments directory,
+     * 4.2 stores them below "<tenant id>/attachments" through the storage abstraction. Existing
+     * files are not moved during the update, so they are still read from and deleted at the old
+     * location.
+     *
+     * @throws AttachmentException
+     */
+    private function legacyFilePath(): ?string
+    {
+        if ($this->usesCloudStorage()) {
+            return null;
+        }
+
+        clearstatcache();
+        $legacyFilePath = $this->buildFilePath();
+
+        return is_file($legacyFilePath) ? $legacyFilePath : null;
+    }
+
+    /**
+     * Returns the pre-4.2 location of a plain attachment that has no file in the current layout.
+     *
+     * @throws AttachmentException|StorageException
+     */
+    private function legacyOnlyFilePath(): ?string
+    {
+        $legacyFilePath = $this->legacyFilePath();
+        if ($legacyFilePath === null || $this->getStorage()->exists($this->buildStoragePath())) {
+            return null;
+        }
+
+        return $legacyFilePath;
+    }
+
+    /**
+     * @throws AttachmentException
+     */
+    private function readLegacyFile(string $legacyFilePath): string
+    {
+        $contents = file_get_contents($legacyFilePath);
+        if ($contents === false) {
+            throw new AttachmentException('Unable to read the attachment file: ' . $legacyFilePath);
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Encrypted files bypass the storage abstraction and live directly below the attachments directory.
+     *
+     * @throws AttachmentException
+     */
+    private function deleteEncryptedFile(): bool
+    {
+        $filePath = $this->buildFilePath();
+
+        return !is_file($filePath) || unlink($filePath);
+    }
+
+    /**
+     * @throws AttachmentException
+     */
+    private function deleteLegacyFile(): bool
+    {
+        $legacyFilePath = $this->legacyFilePath();
+
+        return $legacyFilePath === null || unlink($legacyFilePath);
+    }
+
+    /**
+     * @throws AttachmentException
+     */
+    private function existsInStorage(): bool
+    {
+        try {
+            return $this->getStorage()->exists($this->buildStoragePath());
+        } catch (StorageException|\LogicException) {
+            // No usable storage (not configured, or no configuration bootstrapped): nothing is stored there.
+            return false;
+        }
     }
 
     private function usesCloudStorage(): bool

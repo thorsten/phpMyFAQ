@@ -22,7 +22,7 @@ export const handleClearRatings = (): void => {
   if (buttonClearRatings) {
     buttonClearRatings.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
-      const target = event.target as HTMLElement;
+      const target = event.currentTarget as HTMLElement;
       const csrf = target.getAttribute('data-pmf-csrf');
 
       if (!csrf) {

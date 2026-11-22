@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
 import { handleAddPage, handleEditPage, handlePages, handleTranslatePage } from './pages';
 import { addPage, deletePage, updatePage, activatePage } from '../api';
-import { pushNotification } from '../../../../assets/src/utils';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
 vi.mock('../api');
 vi.mock('./editor', () => ({
@@ -202,6 +202,82 @@ describe('Pages Functions', () => {
 
       expect(updatePage).toHaveBeenCalled();
       expect(pushNotification).toHaveBeenCalledWith('Page updated successfully');
+    });
+  });
+
+  describe('failed requests', () => {
+    const hrefSetter = vi.fn();
+    const reload = vi.fn();
+    const originalLocation = window.location;
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+      hrefSetter.mockClear();
+      reload.mockClear();
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        value: {
+          reload,
+          get href(): string {
+            return 'http://localhost/admin/page/edit/42';
+          },
+          set href(value: string) {
+            hrefSetter(value);
+          },
+        },
+      });
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+      Object.defineProperty(window, 'location', { configurable: true, value: originalLocation });
+    });
+
+    it('should show the error and stay on the edit form when the update is refused', async () => {
+      setupEditPageDom();
+      (updatePage as Mock).mockResolvedValue({ error: 'Slug already exists' });
+
+      handleEditPage();
+      (document.getElementById('pmf-submit-page') as HTMLButtonElement).click();
+      await vi.advanceTimersByTimeAsync(5000);
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('Slug already exists');
+      expect(hrefSetter).not.toHaveBeenCalled();
+    });
+
+    it('should redirect to the list after a successful update', async () => {
+      setupEditPageDom();
+      (updatePage as Mock).mockResolvedValue({ success: 'Page updated successfully' });
+
+      handleEditPage();
+      (document.getElementById('pmf-submit-page') as HTMLButtonElement).click();
+      await vi.advanceTimersByTimeAsync(5000);
+
+      expect(hrefSetter).toHaveBeenCalledWith('./pages');
+    });
+
+    it('should show the error and stay on the translation form when adding is refused', async () => {
+      setupTranslatePageDom();
+      (addPage as Mock).mockResolvedValue({ error: 'Slug already exists' });
+
+      handleTranslatePage();
+      (document.getElementById('pmf-submit-page') as HTMLButtonElement).click();
+      await vi.advanceTimersByTimeAsync(5000);
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('Slug already exists');
+      expect(hrefSetter).not.toHaveBeenCalled();
+    });
+
+    it('should show the error and not reload when the deletion is refused', async () => {
+      setupPagesListDom();
+      (deletePage as Mock).mockResolvedValue({ error: 'No permission' });
+
+      handlePages();
+      (document.getElementById('pmf-delete-page-action') as HTMLButtonElement).click();
+      await vi.advanceTimersByTimeAsync(5000);
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('No permission');
+      expect(reload).not.toHaveBeenCalled();
     });
   });
 

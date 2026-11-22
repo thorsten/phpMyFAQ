@@ -217,7 +217,7 @@ describe('News Functions', () => {
 
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      expect(activateNews).toHaveBeenCalledWith('42', String(checkbox.checked), 'activate-csrf');
+      expect(activateNews).toHaveBeenCalledWith('42', checkbox.checked, 'activate-csrf');
       expect(pushNotification).toHaveBeenCalledWith('News activated');
     });
 

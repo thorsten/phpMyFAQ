@@ -154,7 +154,7 @@ final class NewsController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'ad_news_updatefail')], Response::HTTP_BAD_REQUEST);
         }
 
-        $status = (bool) Filter::filterVar($data->status ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $status = Filter::filterVar($data->status ?? false, FILTER_VALIDATE_BOOLEAN, default: false);
 
         if ($status) {
             $news->activate($newsId);

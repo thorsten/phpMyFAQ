@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { handleTags } from './tags';
 import { deleteTag } from '../api';
-import { pushNotification } from '../../../../assets/src/utils';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { fetchJson } from '../api/fetch-wrapper';
 
 vi.mock('../api');
@@ -120,10 +120,24 @@ describe('handleTags', () => {
       expect(row).toBeNull();
     });
 
-    it('should log error on failure', async () => {
+    it('should read the tag id from the button when its icon is clicked', async () => {
       setupDeleteDom();
+      (document.querySelector('.btn-delete') as HTMLButtonElement).innerHTML = '<i class="bi bi-trash"></i> Delete';
 
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      (deleteTag as Mock).mockResolvedValue({ success: 'Tag deleted successfully' });
+
+      handleTags();
+
+      (document.querySelector('.btn-delete i') as HTMLElement).click();
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(deleteTag).toHaveBeenCalledWith('1', 'test-csrf');
+      expect(document.getElementById('pmf-row-tag-id-1')).toBeNull();
+    });
+
+    it('should show the error on failure', async () => {
+      setupDeleteDom();
 
       (deleteTag as Mock).mockResolvedValue({ error: 'Tag deletion failed' });
 
@@ -135,13 +149,11 @@ describe('handleTags', () => {
       await new Promise((resolve) => setTimeout(resolve, 10));
 
       expect(deleteTag).toHaveBeenCalledWith('1', 'test-csrf');
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Network response was not ok:', 'Tag deletion failed');
+      expect(pushErrorNotification).toHaveBeenCalledWith('Tag deletion failed');
 
       // Row should still be present
       const row = document.getElementById('pmf-row-tag-id-1');
       expect(row).not.toBeNull();
-
-      consoleErrorSpy.mockRestore();
     });
   });
 
@@ -205,6 +217,41 @@ describe('handleTags', () => {
 
       const inputAfter = document.querySelector('input[id="tag-id-1"]');
       expect(inputAfter).toBeNull();
+    });
+
+    it('should keep the input and show the server error when the rename is refused', async () => {
+      setupFormDom();
+
+      (fetchJson as Mock).mockResolvedValue({ error: 'An error occurred.' });
+
+      handleTags();
+
+      (document.querySelector('input[id="tag-id-1"]') as HTMLInputElement).focus();
+      (document.getElementById('tag-form') as HTMLFormElement).dispatchEvent(new Event('submit'));
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(document.querySelector('input[id="tag-id-1"]')).not.toBeNull();
+      expect((document.querySelector('.alert.alert-danger') as HTMLElement).innerText).toBe('An error occurred.');
+    });
+
+    it('should render a renamed tag as text, not as HTML', async () => {
+      setupFormDom();
+      const input = document.querySelector('input[id="tag-id-1"]') as HTMLInputElement;
+      input.value = '<img src=x onerror=alert(1)>';
+
+      (fetchJson as Mock).mockResolvedValue({ updated: 'Saved' });
+
+      handleTags();
+
+      input.focus();
+      (document.getElementById('tag-form') as HTMLFormElement).dispatchEvent(new Event('submit'));
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      const span = document.querySelector('span[id="tag-id-1"]') as HTMLSpanElement;
+      expect(span.querySelector('img')).toBeNull();
+      expect(span.textContent).toContain('<img src=x onerror=alert(1)>');
     });
 
     it('should show error alert on failure', async () => {

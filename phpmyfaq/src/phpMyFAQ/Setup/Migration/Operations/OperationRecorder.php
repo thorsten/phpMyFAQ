@@ -114,7 +114,8 @@ class OperationRecorder
     }
 
     /**
-     * Records a permission grant operation.
+     * Records a permission grant operation. A right that already exists is left as it is,
+     * so the operation is safe to re-run.
      */
     public function grantPermission(string $name, string $description, int $userId = 1): self
     {
@@ -137,7 +138,7 @@ class OperationRecorder
     /**
      * Records a permission backfill operation.
      *
-     * Unlike grantPermission(), this succeeds on an already existing right and reaches every
+     * Unlike grantPermission(), this also grants an already existing right and reaches every
      * matching user and group, so an existing-but-unenforced right can start being enforced
      * without revoking access from anybody.
      */

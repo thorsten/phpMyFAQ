@@ -111,7 +111,12 @@ trait ConfigurationMethodsTrait
         $this->logger->pushHandler(
             new StreamHandler(PMF_LOG_DIR, Environment::isDebugMode() ? Level::Debug : Level::Warning),
         );
-        $this->logger->pushHandler(new BrowserConsoleHandler());
+
+        // The browser console handler writes log records into the HTML response, so it is
+        // a debugging aid only: in production it would disclose them to every visitor.
+        if (Environment::isDebugMode()) {
+            $this->logger->pushHandler(new BrowserConsoleHandler());
+        }
     }
 
     public function getLogger(): Logger

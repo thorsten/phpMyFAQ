@@ -283,7 +283,38 @@ class DeepLTranslationProviderTest extends TestCase
         $provider = new DeepLTranslationProvider($this->configuration, $httpClient);
 
         $this->assertSame('ok', $provider->translate('Hello', 'pt', 'zh', false));
-        $this->assertStringContainsString('source_lang=PT-BR', $requestBodies[0]);
+        // DeepL rejects regional variants as source language
+        $this->assertStringContainsString('source_lang=PT&', $requestBodies[0]);
         $this->assertStringContainsString('target_lang=ZH', $requestBodies[0]);
+    }
+
+    public function testSourceLanguageIsSentWithoutRegionalVariant(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['translation.deeplApiKey',     'test-api-key'],
+                ['translation.deeplUseFreeApi', true],
+            ]);
+
+        $requestParameters = [];
+        $httpClient = new MockHttpClient(function (string $method, string $url, array $options) use (
+            &$requestParameters,
+        ) {
+            $parameters = [];
+            parse_str((string) $options['body'], $parameters);
+            $requestParameters[] = $parameters;
+
+            return new MockResponse(json_encode(['translations' => [['text' => 'ok']]]));
+        });
+        $provider = new DeepLTranslationProvider($this->configuration, $httpClient);
+
+        $provider->translate('Hello', 'en', 'pt', false);
+        $provider->translateBatch(['Hello', 'World'], 'en', 'de');
+
+        $this->assertSame('EN', $requestParameters[0]['source_lang']);
+        $this->assertSame('PT-BR', $requestParameters[0]['target_lang']);
+        $this->assertSame('EN', $requestParameters[1]['source_lang']);
+        $this->assertSame('DE', $requestParameters[1]['target_lang']);
     }
 }

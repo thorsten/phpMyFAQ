@@ -204,7 +204,8 @@ final class FaqController extends AbstractFrontController
 
         // Redirect to the canonical FAQ URL
         $url = sprintf(
-            '/content/%d/%d/%s/%s.html',
+            '%scontent/%d/%d/%s/%s.html',
+            $this->configuration->getDefaultUrl(),
             (int) $faqData['category_id'],
             (int) $faqData['id'],
             (string) $faqData['lang'],
@@ -258,7 +259,14 @@ final class FaqController extends AbstractFrontController
         $slug = TitleSlugifier::slug((string) $row->thema);
 
         // Redirect to the canonical FAQ URL
-        $url = sprintf('/content/%d/%d/%s/%s.html', $categoryId, $faqId, $faqLang, $slug);
+        $url = sprintf(
+            '%scontent/%d/%d/%s/%s.html',
+            $this->configuration->getDefaultUrl(),
+            $categoryId,
+            $faqId,
+            $faqLang,
+            $slug,
+        );
 
         return new RedirectResponse($url, Response::HTTP_MOVED_PERMANENTLY);
     }

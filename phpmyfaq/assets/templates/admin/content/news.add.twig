@@ -15,6 +15,7 @@
             data-pmf-editor-language="en"
             data-pmf-default-url="{{ defaultUrl }}">
         <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken_saveNews }}" />
+        <input type="hidden" id="pmf-editor-csrf-token" value="{{ csrfTokenEditor | default('') }}">
 
         <div class="row mb-2">
           <label class="col-3 col-form-label" for="newsheader">

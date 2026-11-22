@@ -59,7 +59,7 @@ final class MediaBrowserController extends AbstractController
         $action = Filter::filterVar($data->action ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($action === 'fileRemove') {
-            if (!Token::getInstance($this->session)->verifyToken('media-browser', (string) ($data->csrfToken ?? ''))) {
+            if (!Token::getInstance($this->session)->verifyToken('pmf-csrf-token', (string) ($data->csrfToken ?? ''))) {
                 return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 

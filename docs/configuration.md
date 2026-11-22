@@ -20,7 +20,7 @@ in the admin panel" are set automatically or can only be changed directly in the
 | `main.administrationMail`          | Email address of the Admin | *(set during install)* | The administrator's email address, used as the sender/recipient for system notifications. The installer uses the email address of the first administrator account. |
 | `main.contactInformation`          | Contact information | *(empty)* | Free-text contact information displayed on the contact page. |
 | `main.enableAdminLog`              | Use admin log? | `true` | Enables logging of administrative actions for auditing purposes. |
-| `main.enableUserTracking`          | Enable user tracking | `true` | Tracks user visits and page views for statistics. |
+| `main.enableUserTracking`          | Enable user tracking | `true` | Tracks user visits and page views for statistics. Visitors that are not on the bot ignore list get the cookie `pmf-sid` (HttpOnly, SameSite=Lax, Secure on HTTPS, renewed for one hour with every tracked page view), which holds the number of their visitor session so that all page views of one visit are counted as one session. The cookie is set whether or not the cookie consent banner is enabled; disable user tracking if you must not set it. |
 | `main.metaDescription`             | Description | `phpMyFAQ should be the answer for all questions in life` | The HTML meta description used on the FAQ pages. |
 | `main.metaPublisher`               | Name of the Publisher | *(set during install)* | The publisher name used in HTML meta tags. The installer uses the real name of the first administrator account. |
 | `main.titleFAQ`                    | Title of your FAQ | `phpMyFAQ Codename Palaimon` | The main title displayed in the FAQ header and browser title bar. |
@@ -217,7 +217,7 @@ in the admin panel" are set automatically or can only be changed directly in the
 |----------------------------|-------|---------|-------------|
 | `api.enableAccess`         | REST API enabled | `true` | Enables the REST API for external integrations and third-party applications. |
 | `api.apiClientToken`       | API Client Token | *(auto-generated)* | Token that clients must send in the `x-pmf-token` HTTP header for write requests to the REST API (e.g. creating FAQs, categories, or questions). A random token is generated during installation; if the token is empty, these requests are rejected. |
-| `api.onlyActiveFaqs`       | API returns only active FAQs | `true` | When enabled, the API only returns FAQ entries that have been activated. |
+| `api.onlyActiveFaqs`       | API returns only active FAQs | `true` | When enabled, the API only returns FAQs that readers can see: published and inside their publication window. When disabled, `GET /api/v4.0/faqs` additionally returns drafts, scheduled and expired FAQs, but only to a caller that sends a valid `x-pmf-token` header or a bearer credential (API key or OAuth2 access token) with the `faq.read` scope. Anonymous callers always get only the FAQs readers can see. |
 | `api.onlyActiveCategories` | API returns only active categories | `true` | When enabled, the API only returns categories that are active. |
 | `api.onlyPublicQuestions`  | API returns only public questions | `true` | When enabled, the API only returns questions that are marked as public. |
 | `api.ignoreOrphanedFaqs`   | API ignores orphaned FAQs | `true` | When enabled, the API excludes FAQ entries that are not assigned to any category. |
@@ -228,6 +228,17 @@ in the admin panel" are set automatically or can only be changed directly in the
 
 Note:
 OAuth 2.0 authentication for the REST API is experimental and disabled by default.
+
+What works in phpMyFAQ 4.2: the write endpoints for questions, categories and FAQs accept
+`Authorization: Bearer <API key or OAuth2 access token>` when the credential carries the matching scope
+(`question.write`, `category.write`, `faq.write`); the request then runs with the permissions of the credential's owner.
+What does not work yet: backup and registration still require `x-pmf-token`, read scopes are not enforced (except `faq.read`, which unlocks unpublished FAQs in `GET /api/v4.0/faqs` when
+`api.onlyActiveFaqs` is disabled), bearer
+credentials are not accepted in login-only mode, and access tokens issued with the `client_credentials` grant belong to
+no user, so the endpoints that require a scope refuse them.
+
+API keys are managed under "Users → API keys", OAuth2 clients and scopes under "Configuration → OAuth 2.0 clients"; see
+the [administration documentation](administration.md#716-api-keys).
 
 | Key                      | Label | Default | Description |
 |--------------------------|-------|---------|-------------|
@@ -296,7 +307,7 @@ The Keycloak integration is experimental.
 | `ldap.ldap_use_dynamic_login`                 | Enable LDAP dynamic user binding | `false` | When enabled, the user's own credentials are used to bind to LDAP instead of a service account. |
 | `ldap.ldap_dynamic_login_attribute`           | LDAP attribute for dynamic user binding | `uid` | The LDAP attribute used to construct the bind DN for dynamic login. Use `uid` for Active Directory. |
 | `ldap.ldap_use_group_restriction`             | Restrict login to specific Active Directory groups | `false` | When enabled, only users belonging to specific AD groups can log in. |
-| `ldap.ldap_group_allowed_groups`              | Comma-separated list of allowed AD groups | *(empty)* | The AD groups allowed to log in. Partial matches are supported. |
+| `ldap.ldap_group_allowed_groups`              | Comma-separated list of allowed AD groups | *(empty)* | The AD groups allowed to log in, by exact group name (e.g. `Domain Admins`), `CN=Domain Admins`, or the full distinguished name. Names are matched exactly, not by substring. |
 | `ldap.ldap_group_auto_assign`                 | Automatically assign users to phpMyFAQ groups based on AD membership | `false` | When enabled, users are automatically added to phpMyFAQ groups that match their AD group membership. |
 | `ldap.ldap_group_mapping`                     | JSON mapping of AD groups to phpMyFAQ groups | *(empty)* | A JSON object mapping AD group names to phpMyFAQ group names, e.g. `{"Domain Admins": "Administrators"}`. |
 

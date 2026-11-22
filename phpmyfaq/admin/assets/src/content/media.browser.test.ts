@@ -44,6 +44,24 @@ describe('handleFileFilter', () => {
       expect(fileDivs[2].style.display).toBe('none');
     });
 
+    it('should treat the filter as plain text, not as a regular expression', () => {
+      document.body.innerHTML = `
+        <input id="filter" type="text" />
+        <div class="mce-file">photo (1).png</div>
+        <div class="mce-file">photo.png</div>
+      `;
+
+      handleFileFilter();
+
+      const filterInput = document.getElementById('filter') as HTMLInputElement;
+      filterInput.value = '(1';
+      expect(() => filterInput.dispatchEvent(new Event('keyup'))).not.toThrow();
+
+      const fileDivs = document.querySelectorAll('div.mce-file') as NodeListOf<HTMLElement>;
+      expect(fileDivs[0].style.display).toBe('block');
+      expect(fileDivs[1].style.display).toBe('none');
+    });
+
     it('should show all file divs when filter input is empty', () => {
       document.body.innerHTML = `
         <input id="filter" type="text" />

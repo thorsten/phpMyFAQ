@@ -90,7 +90,7 @@ describe('Admin Log Functions', () => {
 
       await flushPromises();
 
-      expect(mockFetch).toHaveBeenCalledWith('/admin/api/statistics/admin-log/export', {
+      expect(mockFetch).toHaveBeenCalledWith('./api/statistics/admin-log/export', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -356,7 +356,7 @@ describe('Admin Log Functions', () => {
 
       const resultContainer = document.getElementById('pmf-admin-log-verification-result') as HTMLDivElement;
       expect(resultContainer.className).toBe('alert alert-warning');
-      expect(resultContainer.textContent).toBe('Fehler bei der Verifikation');
+      expect(resultContainer.textContent).toBe('Verification failed');
     });
 
     it('should show error when csrf is missing', async () => {
@@ -409,7 +409,7 @@ describe('Admin Log Functions', () => {
 
       expect(button.disabled).toBe(false);
       expect(button.innerHTML).toContain('bi-shield-check');
-      expect(button.innerHTML).toContain('Integrität prüfen');
+      expect(button.textContent?.trim()).toBe('Verify');
     });
 
     it('should re-enable button even after fetch failure', async () => {
@@ -431,7 +431,7 @@ describe('Admin Log Functions', () => {
 
       expect(button.disabled).toBe(false);
       expect(button.innerHTML).toContain('bi-shield-check');
-      expect(button.innerHTML).toContain('Integrität prüfen');
+      expect(button.textContent?.trim()).toBe('Verify');
     });
 
     it('should call fetch with correct URL and headers', async () => {
@@ -473,6 +473,22 @@ describe('Admin Log Functions', () => {
 
       expect(deleteAdminLog).not.toHaveBeenCalled();
       expect(pushErrorNotification).not.toHaveBeenCalled();
+    });
+
+    it('should read the CSRF token from the button when its icon is clicked', async () => {
+      document.body.innerHTML = `
+        <button id="pmf-delete-admin-log" data-pmf-csrf="test-csrf"><i class="bi bi-trash"></i> Delete</button>
+      `;
+
+      (deleteAdminLog as Mock).mockResolvedValue({ success: 'Admin log deleted' });
+
+      handleDeleteAdminLog();
+
+      (document.querySelector('#pmf-delete-admin-log i') as HTMLElement).click();
+
+      await flushPromises();
+
+      expect(deleteAdminLog).toHaveBeenCalledWith('test-csrf');
     });
 
     it('should show error when csrf is missing', async () => {

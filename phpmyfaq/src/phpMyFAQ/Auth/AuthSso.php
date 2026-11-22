@@ -128,10 +128,19 @@ class AuthSso extends Auth implements AuthDriverInterface
     }
 
     /**
+     * Kerberos, NTLM and SAML modules only set REMOTE_USER; HTTP Basic sets PHP_AUTH_USER as
+     * well. Either one marks a request the web server may have authenticated. The identity
+     * itself is verified by checkCredentials(), which trusts REMOTE_USER only: PHP fills
+     * PHP_AUTH_USER from a client-sent header even when the web server enforces nothing.
+     *
      * @inheritDoc
      */
     public function isValidLogin(string $login, ?array $optionalData = null): int
     {
+        if ($this->request->server->get('REMOTE_USER') !== null) {
+            return 1;
+        }
+
         return $this->request->server->get('PHP_AUTH_USER') !== null ? 1 : 0;
     }
 

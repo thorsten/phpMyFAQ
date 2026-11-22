@@ -25,6 +25,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Entity\QuestionHistoryEntity;
+use phpMyFAQ\Enums\ApiKeyScope;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\QuestionHistoryEventType;
 use phpMyFAQ\Filter;
@@ -99,7 +100,7 @@ final class QuestionController extends AbstractApiController
     #[Route(path: 'v4.0/question', name: 'api.question.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
-        $this->hasValidToken();
+        $this->hasValidTokenOrBearerCredential($request, ApiKeyScope::QUESTION_WRITE);
         $this->userHasPermission(PermissionType::QUESTION_ADD);
 
         $data = $this->decodeJsonObject($request, JSON_THROW_ON_ERROR);

@@ -587,6 +587,7 @@ final class CategoryController extends AbstractAdministrationController
             'groupPermission' => $groupPermission[0] ?? -1,
             'userPermission' => $userPermission[0] ?? -1,
             'csrfInputToken' => Token::getInstance($this->session)->getTokenInput(page: 'update-category'),
+            'csrfTokenTranslate' => Token::getInstance($this->session)->getTokenString('translate'),
             'categoryNameLabel' => Translation::get(key: 'categoryNameLabel'),
             'ad_categ_lang' => Translation::get(key: 'ad_categ_lang'),
             'languagesToTranslate' => $toTranslate,

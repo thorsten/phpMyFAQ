@@ -114,8 +114,8 @@ class RatingRepositoryTest extends TestCase
         // Check updated values
         $result = $this->repository->fetchByRecordId(1);
         $this->assertNotNull($result);
-        // SQLite performs integer division, so (3 + 2) / 2 = 2
-        $this->assertEquals(2, $result->voting);
+        // The average keeps its decimals on every database: (3 + 2) / 2 = 2.5
+        $this->assertEquals(2.5, $result->voting);
         $this->assertEquals(2, $result->usr);
     }
 

@@ -278,6 +278,9 @@ class SearchHelper extends AbstractHelper
                     replace: '',
                     subject: $this->searchTerm,
                 );
+                // The FAQ page quotes the highlight parameter itself; a term quoted here already
+                // would be quoted twice there and never match ("e-mail" became "e\\\-mail").
+                $highlightParameter = $searchTerm;
                 $searchTerm = preg_quote($searchTerm, delimiter: '/');
                 $searchItems = explode(' ', $searchTerm);
 
@@ -303,7 +306,7 @@ class SearchHelper extends AbstractHelper
                     (int) $resultSet->id,
                     (string) $resultSet->lang,
                     TitleSlugifier::slug((string) $resultSet->question),
-                    urlencode($searchTerm),
+                    urlencode($highlightParameter),
                 );
 
                 $oLink = new Link($currentUrl, $this->configuration);

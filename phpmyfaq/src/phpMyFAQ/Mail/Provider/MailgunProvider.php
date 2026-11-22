@@ -46,10 +46,12 @@ final readonly class MailgunProvider implements MailProviderInterface
 
     /**
      * @param array<string, int|string|null> $headers
+     * @param string $body Plain text part
+     * @param string $htmlBody HTML part, empty for a plain text mail
      * @throws Exception
      * @throws TransportExceptionInterface
      */
-    public function send(string $recipients, array $headers, string $body): int
+    public function send(string $recipients, array $headers, string $body, string $htmlBody = ''): int
     {
         $apiKey = (string) ($this->configuration->get('mail.mailgunApiKey') ?? '');
         if ($apiKey === '') {
@@ -74,15 +76,35 @@ final readonly class MailgunProvider implements MailProviderInterface
         $region = strtolower((string) ($this->configuration->get('mail.mailgunRegion') ?? 'us'));
         $baseUrl = $region === 'eu' ? 'https://api.eu.mailgun.net' : 'https://api.mailgun.net';
 
+        $fields = [
+            'from' => $fromAddress,
+            'to' => implode(',', $toAddresses),
+            'subject' => $headers['Subject'] ?? '',
+            'text' => $body,
+        ];
+
+        if ($htmlBody !== '') {
+            $fields['html'] = $htmlBody;
+        }
+
+        $ccAddresses = $this->parseRecipients((string) ($headers['CC'] ?? $headers['Cc'] ?? ''));
+        if ($ccAddresses !== []) {
+            $fields['cc'] = implode(',', $ccAddresses);
+        }
+
+        $bccAddresses = $this->parseRecipients((string) ($headers['BCC'] ?? $headers['Bcc'] ?? ''));
+        if ($bccAddresses !== []) {
+            $fields['bcc'] = implode(',', $bccAddresses);
+        }
+
+        $replyToAddress = $this->extractEmailAddress((string) ($headers['Reply-To'] ?? ''));
+        if ($replyToAddress !== '') {
+            $fields['h:Reply-To'] = $replyToAddress;
+        }
+
         $response = $this->httpClient->request('POST', $baseUrl . '/v3/' . $domain . '/messages', [
             'auth_basic' => ['api', $apiKey],
-            'body' => [
-                'from' => $fromAddress,
-                'to' => implode(',', $toAddresses),
-                'subject' => $headers['Subject'] ?? '',
-                'text' => $body,
-                'html' => $body,
-            ],
+            'body' => $fields,
         ]);
 
         $statusCode = $response->getStatusCode();

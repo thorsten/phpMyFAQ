@@ -11,6 +11,7 @@
   <div class="col-lg-12">
     <form id="pmf-edit-page-form" action="#" method="post" accept-charset="utf-8">
       <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken_updatePage }}" />
+      <input type="hidden" id="pmf-editor-csrf-token" value="{{ csrfTokenEditor | default('') }}">
       <input type="hidden" name="pageId" id="pageId" value="{{ pageId }}" />
 
       <ul class="nav nav-tabs" id="pageTabsNav" role="tablist">

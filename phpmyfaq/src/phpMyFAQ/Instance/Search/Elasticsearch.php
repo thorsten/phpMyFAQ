@@ -20,12 +20,14 @@ declare(strict_types=1);
 namespace phpMyFAQ\Instance\Search;
 
 use Elastic\Elasticsearch\Client;
+use Elastic\Elasticsearch\Exception\AuthenticationException;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\MissingParameterException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Elastic\Elasticsearch\Response\Elasticsearch as ElasticsearchResponse;
 use Elastic\Transport\Exception\NoNodeAvailableException;
 use Http\Promise\Promise;
+use phpMyFAQ\Bootstrap\SearchClientFactory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Core\Exception;
@@ -50,13 +52,30 @@ class Elasticsearch
 
     /**
      * Elasticsearch constructor.
+     *
+     * @param Client|null $client Client to use instead of the one of the Configuration
      */
     public function __construct(
         protected Configuration $configuration,
+        ?Client $client = null,
     ) {
-        $this->client = $configuration->getElasticsearch();
+        $this->client = $client ?? $configuration->getElasticsearch();
         $this->elasticsearchConfiguration = $configuration->getElasticsearchConfig();
         $this->mappings = $this->buildMappings();
+    }
+
+    /**
+     * Returns an instance for the index operations of the admin panel (create, import, drop): its
+     * client has no web response timeout, so a large bulk import is not cut off.
+     *
+     * @throws AuthenticationException
+     */
+    public function withLongRunningClient(): self
+    {
+        return new self(
+            $this->configuration,
+            SearchClientFactory::buildLongRunningElasticsearchClient($this->elasticsearchConfiguration),
+        );
     }
 
     /**
@@ -69,7 +88,9 @@ class Elasticsearch
         try {
             $this->client->indices()->create($this->getParams());
             return $this->putMapping();
-        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
+        } catch (
+            ClientResponseException|MissingParameterException|NoNodeAvailableException|ServerResponseException $e
+        ) {
             throw new Exception($e->getMessage());
         }
     }
@@ -249,7 +270,7 @@ class Elasticsearch
     {
         try {
             return $this->client->indices()->getMapping();
-        } catch (ClientResponseException|ServerResponseException $e) {
+        } catch (ClientResponseException|NoNodeAvailableException|ServerResponseException $e) {
             throw new Exception($e->getMessage());
         }
     }
@@ -280,7 +301,9 @@ class Elasticsearch
                 ->delete([
                     'index' => $this->elasticsearchConfiguration->getIndex(),
                 ]))->asObject();
-        } catch (ClientResponseException|MissingParameterException|ServerResponseException $exception) {
+        } catch (
+            ClientResponseException|MissingParameterException|NoNodeAvailableException|ServerResponseException $exception
+        ) {
             throw new Exception($exception->getMessage());
         }
     }
@@ -353,7 +376,7 @@ class Elasticsearch
             if (($i % 1000) === 0) {
                 try {
                     $responses = $this->client->bulk($params);
-                } catch (ClientResponseException|ServerResponseException $e) {
+                } catch (ClientResponseException|NoNodeAvailableException|ServerResponseException $e) {
                     return ['error' => $e->getMessage()];
                 }
 
@@ -373,7 +396,7 @@ class Elasticsearch
         // Send the last batch if it exists
         try {
             $responses = $this->unwrapResponse($this->client->bulk($params));
-        } catch (ClientResponseException|ServerResponseException $e) {
+        } catch (ClientResponseException|NoNodeAvailableException|ServerResponseException $e) {
             return ['error' => $e->getMessage()];
         }
 
@@ -445,7 +468,7 @@ class Elasticsearch
     {
         try {
             return $this->unwrapResponse($this->client->ping())->asBool();
-        } catch (ClientResponseException|ServerResponseException $e) {
+        } catch (ClientResponseException|NoNodeAvailableException|ServerResponseException $e) {
             $this->configuration->getLogger()->error('Elasticsearch ping failed.', [$e->getMessage()]);
             return false;
         }
@@ -482,7 +505,9 @@ class Elasticsearch
 
         try {
             return $this->unwrapResponse($this->client->index($params))->asObject();
-        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
+        } catch (
+            ClientResponseException|MissingParameterException|NoNodeAvailableException|ServerResponseException $e
+        ) {
             $this->configuration->getLogger()->error('Index custom page error.', [$e->getMessage()]);
             return null;
         }
@@ -520,7 +545,9 @@ class Elasticsearch
 
         try {
             return $this->unwrapResponse($this->client->update($params))->asArray();
-        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
+        } catch (
+            ClientResponseException|MissingParameterException|NoNodeAvailableException|ServerResponseException $e
+        ) {
             // If document doesn't exist, try to create it
             if (str_contains($e->getMessage(), 'document_missing_exception')) {
                 $result = $this->indexCustomPage($page);
@@ -545,7 +572,9 @@ class Elasticsearch
 
         try {
             return $this->unwrapResponse($this->client->delete($params))->asArray();
-        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
+        } catch (
+            ClientResponseException|MissingParameterException|NoNodeAvailableException|ServerResponseException $e
+        ) {
             return ['error' => $e->getMessage()];
         }
     }
@@ -588,7 +617,7 @@ class Elasticsearch
             if (($i % 1000) === 0) {
                 try {
                     $responses = $this->client->bulk($params);
-                } catch (ClientResponseException|ServerResponseException $e) {
+                } catch (ClientResponseException|NoNodeAvailableException|ServerResponseException $e) {
                     return ['error' => $e->getMessage()];
                 }
 
@@ -604,7 +633,7 @@ class Elasticsearch
         if ($params['body'] !== []) {
             try {
                 $responses = $this->unwrapResponse($this->client->bulk($params));
-            } catch (ClientResponseException|ServerResponseException $e) {
+            } catch (ClientResponseException|NoNodeAvailableException|ServerResponseException $e) {
                 return ['error' => $e->getMessage()];
             }
         }

@@ -146,6 +146,20 @@ Reading FAQs, changing them, and deciding that a change goes public are three in
   option. That is a site-wide setting about anonymous submissions rather than a right exercised by the submitter, so it
   is deliberately not gated on `faq_publish`.
 
+### 7.1.6 API keys
+
+On the "API keys" page, every user with the `Edit users` right manages their own API keys for the REST API. A key is
+sent as `Authorization: Bearer <key>` and the request then runs as the owner of the key.
+
+- **Scopes** limit what a key may be used for. Only the scopes whose permission you hold yourself are offered, and a
+  key never allows more than your own permissions do.
+- **Expires** is optional. A key with an expiry date is valid until the end of that day.
+- The key is shown **once**, right after it was created. phpMyFAQ stores only a hash of it, so a lost key has to be
+  replaced by a new one.
+
+Deleting a key takes effect at once. See [OAuth 2.0 settings](configuration.md#852-oauth-20-settings-experimental-feature)
+for the endpoints that accept API keys.
+
 ## 7.2 Content
 
 ### 7.2.1 Category Administration
@@ -592,6 +606,11 @@ visitors use your FAQ and make the necessary adjustments to your categories, con
 The admin log allows you to track any actions taken by users in the admin area of phpMyFAQ. If you feel you have an
 intruder in the system, you can find out for sure by checking the admin log.
 
+Every entry carries a hash of its content and of the entry before it. "Verify integrity" recalculates this chain and
+reports entries that were changed or removed afterwards. Deleting the entries older than 30 days keeps the chain
+intact: phpMyFAQ remembers where the deleted part ended, so entries that go missing from the start of the log are
+reported as well.
+
 ### 7.3.4 Search statistics
 
 On the search statistics page, you'll get a report about which keywords and how often your users are searching. This
@@ -859,6 +878,26 @@ input field, you can define whether it is active and whether it is required, and
 The "Plugins" page lists the installed plugins with their name, version, author, and description. Plugins that are
 incompatible with your phpMyFAQ version are listed separately, together with the reason. See [Plugins](plugins.md) for
 details on writing and installing plugins.
+
+### 7.6.11 OAuth 2.0 clients and scopes
+
+This page is available once "Enable OAuth 2.0 authorization server" is switched on in the main configuration. It
+manages what the experimental OAuth 2.0 authorization server of the REST API works with.
+
+**Clients** are the applications that may request access tokens:
+
+- A **confidential client** is a server-side application that can keep a secret. Its client secret is shown once,
+  right after the client was registered; phpMyFAQ stores only a hash. Browser and mobile applications are registered as
+  public clients without a secret. The type cannot be changed later.
+- **Grant types**: `authorization_code` issues tokens on behalf of a user and needs the redirect URI of the client;
+  `client_credentials` needs a confidential client. Tokens of the `client_credentials` grant belong to no user and are
+  refused by the API endpoints that require a scope.
+- Deleting a client also removes its access tokens, refresh tokens and authorization codes, so they stop working at
+  once.
+
+**Scopes** lists the scopes the REST API checks. Only enabled scopes can be requested by a client; the description is
+optional. A token never allows more than the permissions of the user it was issued for. Disabling a scope does not
+revoke tokens that already carry it; they keep it until they expire.
 
 ## 7.7 Using external identity providers
 

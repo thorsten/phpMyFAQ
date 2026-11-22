@@ -163,20 +163,74 @@ final class UpdateRunnerTasksTest extends TestCase
         );
     }
 
-    public function testDownloadPackageStoresANightlyWithoutVerification(): void
+    public function testDownloadPackageAcceptsANightlyWithAMatchingDigest(): void
     {
         $this->configuration->set('upgrade.releaseEnvironment', 'nightly');
-        $httpClient = new MockHttpClient([new MockResponse('nightly package bytes')]);
+        $package = 'nightly package bytes';
+        $release = ['assets' => [[
+            'name' => sprintf('phpMyFAQ-nightly-%s.zip', date('Y-m-d')),
+            'digest' => 'sha256:' . hash('sha256', $package),
+        ]]];
+        $httpClient = new MockHttpClient([
+            new MockResponse($package),
+            new MockResponse(json_encode($release, JSON_THROW_ON_ERROR)),
+        ]);
         $runner = $this->runner($httpClient);
         $this->setProperty($runner, 'version', '4.0.0');
 
         $result = $this->invokeTask('taskDownloadPackage', $runner);
 
         $this->assertSame(Command::SUCCESS, $result);
-        $this->assertSame(1, $httpClient->getRequestsCount());
+        $this->assertSame(2, $httpClient->getRequestsCount());
         $storedPackage = urldecode((string) $this->configuration->get('upgrade.lastDownloadedPackage'));
         $this->assertStringStartsWith($this->upgradeDirectory . '/phpMyFAQ-nightly-', $storedPackage);
-        $this->assertSame('nightly package bytes', file_get_contents($storedPackage));
+        $this->assertSame($package, file_get_contents($storedPackage));
+    }
+
+    public function testDownloadPackageRejectsANightlyWithAWrongDigest(): void
+    {
+        $this->configuration->set('upgrade.releaseEnvironment', 'nightly');
+        $release = ['assets' => [[
+            'name' => sprintf('phpMyFAQ-nightly-%s.zip', date('Y-m-d')),
+            'digest' => 'sha256:' . str_repeat('0', 64),
+        ]]];
+        $httpClient = new MockHttpClient([
+            new MockResponse('tampered nightly bytes'),
+            new MockResponse(json_encode($release, JSON_THROW_ON_ERROR)),
+        ]);
+        $runner = $this->runner($httpClient);
+        $this->setProperty($runner, 'version', '4.0.0');
+
+        $result = $this->invokeTask('taskDownloadPackage', $runner);
+
+        $this->assertSame(Command::FAILURE, $result);
+        $this->assertEmpty($this->configuration->get('upgrade.lastDownloadedPackage'));
+    }
+
+    public function testDownloadPackageRejectsANightlyWithoutADigestUnlessAllowed(): void
+    {
+        $this->configuration->set('upgrade.releaseEnvironment', 'nightly');
+        $this->configuration->set('upgrade.allowUnverifiedNightly', 'false');
+        $refused = new MockHttpClient([
+            new MockResponse('nightly package bytes'),
+            new MockResponse(json_encode(['assets' => []], JSON_THROW_ON_ERROR)),
+        ]);
+        $runner = $this->runner($refused);
+        $this->setProperty($runner, 'version', '4.0.0');
+
+        $this->assertSame(Command::FAILURE, $this->invokeTask('taskDownloadPackage', $runner));
+        $this->assertEmpty($this->configuration->get('upgrade.lastDownloadedPackage'));
+
+        $this->configuration->set('upgrade.allowUnverifiedNightly', 'true');
+        $allowed = new MockHttpClient([
+            new MockResponse('nightly package bytes'),
+            new MockResponse(json_encode(['assets' => []], JSON_THROW_ON_ERROR)),
+        ]);
+        $runner = $this->runner($allowed);
+        $this->setProperty($runner, 'version', '4.0.0');
+
+        $this->assertSame(Command::SUCCESS, $this->invokeTask('taskDownloadPackage', $runner));
+        $this->assertNotEmpty($this->configuration->get('upgrade.lastDownloadedPackage'));
     }
 
     public function testDownloadPackageAcceptsAReleaseWithMatchingChecksums(): void

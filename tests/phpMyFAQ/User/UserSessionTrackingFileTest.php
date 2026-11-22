@@ -91,6 +91,45 @@ final class UserSessionTrackingFileTest extends TestCase
         $this->assertStringNotContainsString('55;view;99', (string) file_get_contents($trackingFile));
     }
 
+    public function testUserTrackingKeepsEveryEntryOnOneLineWithEightFields(): void
+    {
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('nextId')->willReturn(55);
+        $database->method('query')->willReturn(true);
+
+        $request = Request::create(
+            '/search.html',
+            'GET',
+            [],
+            [],
+            [],
+            [
+                'REMOTE_ADDR' => '203.0.113.5',
+                'HTTP_USER_AGENT' => 'Mozilla/5.0%0A99;forged;agent',
+                'REQUEST_TIME' => 2000,
+                'SCRIPT_NAME' => '/index.php',
+            ],
+        );
+
+        $session = new UserSession(
+            $this->createConfiguration($database),
+            $request,
+            fn(Configuration $configuration): Network => $this->createNetwork(),
+            null,
+            $this->trackingDirectory,
+        );
+
+        $session->userTracking('fulltext_search', "term;one\r\n99;forged;line");
+
+        $lines = file($this->trackingDirectory . '/tracking' . date('dmY'), FILE_IGNORE_NEW_LINES);
+        $this->assertIsArray($lines);
+        $this->assertCount(1, $lines);
+        $this->assertSame(
+            '55;fulltext_search;term,one  99,forged,line;203.0.113.0;;;Mozilla/5.0 99,forged,agent;2000;',
+            $lines[0],
+        );
+    }
+
     private function createConfiguration(DatabaseDriver $database): Configuration
     {
         $items = [

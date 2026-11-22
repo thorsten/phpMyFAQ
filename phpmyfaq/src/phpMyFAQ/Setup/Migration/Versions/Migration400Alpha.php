@@ -159,15 +159,19 @@ readonly class Migration400Alpha extends AbstractMigration
         }
 
         if (!$this->isMySql() && !$this->isPostgreSql()) {
+            // T-SQL has no COLUMN keyword in ALTER TABLE ... ADD
+            $addColumn = $this->isSqlServer() ? 'ADD' : 'ADD COLUMN';
+
             $recorder->addSql(
-                sprintf('ALTER TABLE %sfaqdata ADD COLUMN sticky_order integer DEFAULT NULL', $this->tablePrefix),
+                sprintf('ALTER TABLE %sfaqdata %s sticky_order integer DEFAULT NULL', $this->tablePrefix, $addColumn),
                 'Add sticky_order column to faqdata',
             );
 
             $recorder->addSql(
                 sprintf(
-                    'ALTER TABLE %sfaqdata_revisions ADD COLUMN sticky_order integer DEFAULT NULL',
+                    'ALTER TABLE %sfaqdata_revisions %s sticky_order integer DEFAULT NULL',
                     $this->tablePrefix,
+                    $addColumn,
                 ),
                 'Add sticky_order column to faqdata_revisions',
             );
@@ -199,10 +203,7 @@ readonly class Migration400Alpha extends AbstractMigration
 
         if (!$this->isMySql() && $this->isSqlServer()) {
             $recorder->addSql(
-                sprintf(
-                    'ALTER TABLE %sfaqcategory_order ADD COLUMN parent_id INTEGER DEFAULT NULL',
-                    $this->tablePrefix,
-                ),
+                sprintf('ALTER TABLE %sfaqcategory_order ADD parent_id INTEGER DEFAULT NULL', $this->tablePrefix),
                 'Add parent_id column to faqcategory_order (SQL Server)',
             );
         }

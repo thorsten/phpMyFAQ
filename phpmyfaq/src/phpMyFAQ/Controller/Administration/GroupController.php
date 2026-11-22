@@ -92,8 +92,8 @@ final class GroupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::GROUP_ADD);
 
-        $csrfToken = $request->attributes->get('csrf');
-        if (!Token::getInstance($this->session)->verifyToken('add-group', is_string($csrfToken) ? $csrfToken : null)) {
+        $csrfToken = $request->request->get('pmf-csrf-token');
+        if (!Token::getInstance($this->session)->verifyToken('add-group', is_string($csrfToken) ? $csrfToken : '')) {
             throw new UnauthorizedHttpException('Invalid CSRF token');
         }
 
@@ -104,9 +104,12 @@ final class GroupController extends AbstractAdministrationController
         );
         $groupAutoJoin = Filter::filterVar($request->request->get('group_auto_join'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        // check group name
-        if ($groupName === '') {
-            $message = Translation::get(key: 'ad_group_error_noName');
+        // A group without a name must not be created
+        if (trim((string) $groupName) === '') {
+            return $this->renderGroupPage($request, sprintf(
+                '<div class="alert alert-danger">%s</div>',
+                Translation::getString('ad_group_error_noName'),
+            ));
         }
 
         $groupData = [
@@ -126,7 +129,20 @@ final class GroupController extends AbstractAdministrationController
             $message = sprintf('<div class="alert alert-success">%s</div>', Translation::getString('ad_group_suc'));
         }
 
+        return $this->renderGroupPage($request, $message);
+    }
+
+    /**
+     * Renders the group overview with the outcome of a create request.
+     *
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     */
+    private function renderGroupPage(Request $request, string $message): Response
+    {
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
+
         return $this->render('@admin/user/group.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),

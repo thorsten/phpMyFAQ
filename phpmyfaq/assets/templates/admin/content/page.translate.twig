@@ -26,6 +26,7 @@
   <div class="col-lg-12">
     <form id="pmf-translate-page-form" action="#" method="post" accept-charset="utf-8">
       <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken_savePage }}" />
+      <input type="hidden" id="pmf-editor-csrf-token" value="{{ csrfTokenEditor | default('') }}">
       <input type="hidden" name="pmf-csrf-token-translate" id="pmf-csrf-token-translate" value="{{ csrfTokenTranslate }}" />
       <input type="hidden" name="pageId" id="pageId" value="{{ pageId }}" />
       <input type="hidden" name="originalLang" id="originalLang" value="{{ originalLanguage }}" />

@@ -56,11 +56,9 @@ class TagsHelper extends AbstractHelper
      */
     public function renderSearchTag(int $tagId, string $tagName): string
     {
-        $currentIds = array_map(static fn(int $taggingId): string => (string) $taggingId, $this->getTaggingIds());
-        $taggingIds = str_replace((string) $tagId, replace: '', subject: $currentIds);
-        $taggingIds = str_replace(' ', replace: '', subject: $taggingIds);
-        $taggingIds = str_replace(',,', replace: ',', subject: $taggingIds);
-        $taggingIds = trim(implode(separator: ',', array: $taggingIds), characters: ',');
+        // Whole IDs are compared: removing tag 1 must leave tag 12 alone.
+        $remainingIds = array_filter($this->getTaggingIds(), static fn(int $taggingId): bool => $taggingId !== $tagId);
+        $taggingIds = implode(separator: ',', array: $remainingIds);
 
         return $taggingIds !== ''
             ? sprintf(
@@ -72,7 +70,7 @@ class TagsHelper extends AbstractHelper
             : sprintf(
                 '<a class="btn btn-outline-primary m-1" href="./search.html?search=%s">%s '
                 . '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ',
-                Strings::htmlentities($tagName),
+                urlencode($tagName),
                 Strings::htmlentities($tagName),
             );
     }

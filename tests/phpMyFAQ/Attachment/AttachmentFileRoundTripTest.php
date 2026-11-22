@@ -8,8 +8,11 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\TestDatabaseTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 use ReflectionProperty;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -156,7 +159,9 @@ final class AttachmentFileRoundTripTest extends TestCase
         // Encrypted files live below the attachments root (the temp dir when none is configured)
         // in directories named after the virtual hash; remember the top one for the cleanup.
         $virtualHash = (string) new ReflectionProperty(AbstractAttachment::class, 'virtualHash')->getValue($attachment);
-        $attachmentsRoot = defined('PMF_ATTACHMENTS_DIR') ? (string) constant('PMF_ATTACHMENTS_DIR') : sys_get_temp_dir();
+        $attachmentsRoot = defined('PMF_ATTACHMENTS_DIR')
+            ? (string) constant('PMF_ATTACHMENTS_DIR')
+            : sys_get_temp_dir();
         $this->encryptedDirectory = rtrim($attachmentsRoot, '/') . '/' . substr($virtualHash, 0, 5);
         $this->assertDirectoryExists($this->encryptedDirectory);
         $this->assertSame([], $this->storedFiles(), 'Encrypted files bypass the storage abstraction.');
@@ -172,8 +177,33 @@ final class AttachmentFileRoundTripTest extends TestCase
         $this->assertTrue($reloaded->isEncrypted());
         $this->assertSame('attachment payload', $reloaded->get());
 
+        $encryptedFile = (string) new ReflectionMethod(File::class, 'buildFilePath')->invoke($reloaded);
+        $this->assertFileExists($encryptedFile);
+
+        // No upload is in progress when an attachment is deleted through the API.
+        $this->assertArrayNotHasKey('userfile', $_FILES);
         $this->assertTrue($reloaded->delete());
+        $this->assertFileDoesNotExist($encryptedFile);
         $this->assertSame(0, $this->metaRowCount($attachmentId));
+    }
+
+    public function testAnOrphanedRowWithoutVirtualHashDoesNotKeepNewFilesFromBeingStored(): void
+    {
+        AttachmentFactory::init('', false);
+
+        $db = $this->configuration->getDb();
+        $db->query(sprintf(
+            "INSERT INTO %sfaqattachment (id, record_id, record_lang, real_hash, virtual_hash, filename, filesize, encrypted, mime_type) VALUES (9999, 99, 'en', '', '', 'orphan.txt', 0, 0, '')",
+            Database::getTablePrefix(),
+        ));
+
+        $attachment = AttachmentFactory::create();
+        $attachment->setRecordId(1);
+        $attachment->setRecordLang('en');
+
+        $this->assertTrue($attachment->save($this->sourceFile, 'manual.txt'));
+        $this->assertCount(1, $this->storedFiles(), 'The file must be stored, not only reported as stored.');
+        $this->assertSame('attachment payload', $attachment->get());
     }
 
     public function testASecondSaveOfTheSameContentReusesTheStoredFile(): void
@@ -199,5 +229,113 @@ final class AttachmentFileRoundTripTest extends TestCase
 
         $this->assertTrue($second->delete());
         $this->assertSame([], $this->storedFiles());
+    }
+
+    /**
+     * Uses a private attachments directory as the storage root, like an installation without a
+     * configured "storage.filesystem.root". The constant is only defined by the application
+     * bootstrap, so tests calling this run in their own process.
+     */
+    private function useDefaultAttachmentsDirectory(): void
+    {
+        $this->assertFalse(defined('PMF_ATTACHMENTS_DIR'));
+        define('PMF_ATTACHMENTS_DIR', $this->storageRoot);
+        $this->configuration->set('storage.filesystem.root', '');
+    }
+
+    /**
+     * Moves the stored file of a plain attachment to where phpMyFAQ 4.1 kept it: directly below
+     * the attachments directory, without the "<tenant id>/attachments" prefix of the storage layer.
+     */
+    private function moveToLegacyLocation(File $attachment): string
+    {
+        $storedFiles = $this->storedFiles();
+        $this->assertCount(1, $storedFiles);
+        $this->assertStringContainsString('/0/attachments/', $storedFiles[0]);
+
+        $legacyPath = str_replace('/0/attachments/', '/', $storedFiles[0]);
+        $this->assertSame($legacyPath, new ReflectionMethod(File::class, 'buildFilePath')->invoke($attachment));
+
+        $filesystem = new Filesystem();
+        $filesystem->mkdir(dirname($legacyPath));
+        $filesystem->rename($storedFiles[0], $legacyPath);
+
+        return $legacyPath;
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testPlainAttachmentStoredByAnOlderVersionIsStillReadAndDeleted(): void
+    {
+        $this->useDefaultAttachmentsDirectory();
+        AttachmentFactory::init('', false);
+        $payload = 'attachment payload';
+
+        $attachment = AttachmentFactory::create();
+        $this->assertInstanceOf(File::class, $attachment);
+        $attachment->setRecordId(1);
+        $attachment->setRecordLang('en');
+        $this->assertTrue($attachment->save($this->sourceFile, 'manual.txt'));
+        $legacyPath = $this->moveToLegacyLocation($attachment);
+
+        $reloaded = AttachmentFactory::create($attachment->getId());
+        $this->assertTrue($reloaded->isStorageOk());
+        $this->assertSame($payload, $reloaded->get());
+
+        ob_start();
+        $reloaded->rawOut();
+        $this->assertSame($payload, ob_get_clean());
+
+        $this->assertTrue($reloaded->delete());
+        $this->assertFileDoesNotExist($legacyPath);
+        $this->assertSame(0, $this->metaRowCount($attachment->getId()));
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testASaveOfContentStoredByAnOlderVersionReusesTheLegacyFile(): void
+    {
+        $this->useDefaultAttachmentsDirectory();
+        AttachmentFactory::init('', false);
+        $payload = 'attachment payload';
+
+        $first = AttachmentFactory::create();
+        $this->assertInstanceOf(File::class, $first);
+        $first->setRecordId(1);
+        $first->setRecordLang('en');
+        $this->assertTrue($first->save($this->sourceFile, 'manual.txt'));
+        $legacyPath = $this->moveToLegacyLocation($first);
+
+        $second = AttachmentFactory::create();
+        $second->setRecordId(2);
+        $second->setRecordLang('en');
+        $this->assertTrue($second->save($this->sourceFile, 'manual.txt'));
+        $this->assertSame($payload, $second->get());
+
+        // Deleting one record keeps the legacy file for the other one.
+        $this->assertTrue($first->delete());
+        $this->assertFileExists($legacyPath);
+        $this->assertSame($payload, $second->get());
+
+        $this->assertTrue($second->delete());
+        $this->assertFileDoesNotExist($legacyPath);
+    }
+
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testStorageIsOkForAPlainAttachmentInTheCurrentLayoutOnly(): void
+    {
+        $this->useDefaultAttachmentsDirectory();
+        AttachmentFactory::init('', false);
+
+        $attachment = AttachmentFactory::create();
+        $attachment->setRecordId(1);
+        $attachment->setRecordLang('en');
+        $this->assertTrue($attachment->save($this->sourceFile, 'manual.txt'));
+
+        $this->assertTrue($attachment->isStorageOk());
+
+        new Filesystem()->remove($this->storedFiles());
+        $this->assertFalse($attachment->isStorageOk());
     }
 }

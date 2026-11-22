@@ -59,9 +59,9 @@ export const updateNews = async (data: Record<string, unknown> = {}): Promise<Ap
   });
 };
 
-export const activateNews = async (id: string, status: string, csrfToken: string): Promise<ApiResponse> => {
+export const activateNews = async (id: string, status: boolean, csrfToken: string): Promise<ApiResponse> => {
   return await fetchJson<ApiResponse>('api/news/activate', {
-    method: 'POST',
+    method: 'PUT',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json',

@@ -14,7 +14,7 @@
  */
 
 import { deleteAdminLog } from '../api';
-import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { escape, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
 export const handleExportAdminLog = (): void => {
   const buttonExportAdminLog = document.getElementById('pmf-export-admin-log') as HTMLButtonElement | null;
@@ -31,7 +31,7 @@ export const handleExportAdminLog = (): void => {
       }
 
       try {
-        const response = await fetch('/admin/api/statistics/admin-log/export', {
+        const response = await fetch('./api/statistics/admin-log/export', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -78,8 +78,11 @@ export const handleVerifyAdminLog = async (): Promise<void> => {
   verifyButton.addEventListener('click', async (event: Event) => {
     event.preventDefault();
 
+    // The label is rendered by the template in the admin's language; it is restored as it was.
+    const buttonLabel = verifyButton.innerHTML;
+
     verifyButton.disabled = true;
-    verifyButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Checking...';
+    verifyButton.innerHTML = '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Checking...';
 
     resultContainer.classList.add('d-none');
 
@@ -107,25 +110,25 @@ export const handleVerifyAdminLog = async (): Promise<void> => {
           <p class="mb-0">${data.verification.verified} of ${data.verification.total} entries successfully checked.</p>
         `;
       } else if (data.success && !data.verification.valid) {
-        const errors = data.verification.errors.map((err: string) => `<li>${err}</li>`).join('');
+        const errors = data.verification.errors.map((err: string) => `<li>${escape(err)}</li>`).join('');
         resultContainer.className = 'alert alert-danger';
         resultContainer.innerHTML = `
           <i class="bi bi-exclamation-triangle-fill"></i>
-          <strong>⚠️ Manipulation erkannt!</strong>
-          <p>${data.verification.verified} verifiziert, ${data.verification.failed} fehlgeschlagen</p>
+          <strong>Manipulation detected!</strong>
+          <p>${data.verification.verified} verified, ${data.verification.failed} failed</p>
           <ul>${errors}</ul>
         `;
       } else {
         resultContainer.className = 'alert alert-warning';
-        resultContainer.textContent = data.error || 'Fehler bei der Verifikation';
+        resultContainer.textContent = data.error || 'Verification failed';
       }
     } catch (error) {
       resultContainer.classList.remove('d-none');
       resultContainer.className = 'alert alert-danger';
-      resultContainer.textContent = `Fehler: ${error instanceof Error ? error.message : 'Netzwerkfehler'}`;
+      resultContainer.textContent = `Error: ${error instanceof Error ? error.message : 'Network error'}`;
     } finally {
       verifyButton.disabled = false;
-      verifyButton.innerHTML = '<i class="bi bi-shield-check"></i> Integrität prüfen';
+      verifyButton.innerHTML = buttonLabel;
     }
   });
 };
@@ -136,7 +139,7 @@ export const handleDeleteAdminLog = (): void => {
   if (buttonDeleteAdminLog) {
     buttonDeleteAdminLog.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
-      const target = event.target as HTMLElement;
+      const target = event.currentTarget as HTMLElement;
       const csrf = target.getAttribute('data-pmf-csrf');
 
       if (!csrf) {

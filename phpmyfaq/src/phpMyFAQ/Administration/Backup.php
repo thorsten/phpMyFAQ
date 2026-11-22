@@ -28,6 +28,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
+use phpMyFAQ\Database\Mysqli;
+use phpMyFAQ\Database\PdoMysql;
 use phpMyFAQ\Enums\BackupType;
 use phpMyFAQ\Strings;
 use RecursiveDirectoryIterator;
@@ -42,6 +44,17 @@ use ZipArchive;
  */
 readonly class Backup
 {
+    /**
+     * Tables left out of the data backup: queued jobs would run a second time after a restore,
+     * and restored OAuth tokens and authorization codes would revive revoked or expired access.
+     */
+    private const array TRANSIENT_TABLES = [
+        'faqjobs',
+        'faqoauth_access_tokens',
+        'faqoauth_auth_codes',
+        'faqoauth_refresh_tokens',
+    ];
+
     private BackupRepository $backupRepository;
 
     /**
@@ -152,6 +165,15 @@ readonly class Backup
         return $backup;
     }
 
+    private function holdsTransientData(string $table): bool
+    {
+        return in_array(
+            $table,
+            array_map(static fn(string $name): string => Database::getTablePrefix() . $name, self::TRANSIENT_TABLES),
+            strict: true,
+        );
+    }
+
     /**
      * @throws \Exception
      */
@@ -168,6 +190,10 @@ readonly class Backup
                     }
 
                     if (Database::getTablePrefix() . 'faqsessions' === trim($table)) {
+                        continue;
+                    }
+
+                    if ($this->holdsTransientData(trim($table))) {
                         continue;
                     }
 
@@ -312,44 +338,40 @@ readonly class Backup
 
         $tablePrefix = '';
         $currentQuery = '';
+        $inString = false;
+        $backslashEscapes = $this->usesBackslashEscapes();
+        $backupPrefixPattern = '-- pmftableprefix:';
 
         while (true) {
-            $line = fgets($handle, length: 65_536);
+            // Whole lines: a chunk border could split a '' or \' pair
+            $line = fgets($handle);
             if ($line === false) {
                 break;
             }
 
-            $trimmedLine = trim($line);
-            $backupPrefixPattern = '-- pmftableprefix:';
-            $backupPrefixPatternLength = Strings::strlen($backupPrefixPattern);
+            // Comments and blank lines are only what they look like outside a string literal:
+            // a stored text may well contain an empty line or one starting with "--" or "#".
+            if (!$inString) {
+                $trimmedLine = trim($line);
 
-            if (
-                Strings::substr(string: $trimmedLine, start: 0, length: $backupPrefixPatternLength)
-                === $backupPrefixPattern
-            ) {
-                $tablePrefix = trim(Strings::substr($trimmedLine, $backupPrefixPatternLength));
+                if (str_starts_with($trimmedLine, $backupPrefixPattern)) {
+                    $tablePrefix = trim(substr($trimmedLine, strlen($backupPrefixPattern)));
 
-                continue;
-            }
+                    continue;
+                }
 
-            // Skip comment lines (-- or # at start of line)
-            if (
-                Strings::substr(string: $trimmedLine, start: 0, length: 2) === '--'
-                || Strings::substr(string: $trimmedLine, start: 0, length: 1) === '#'
-            ) {
-                continue;
-            }
-
-            // Skip empty lines
-            if ($trimmedLine === '') {
-                continue;
+                // Skip comment lines (-- or # at start of line) and empty lines
+                if ($trimmedLine === '' || str_starts_with($trimmedLine, '--') || str_starts_with($trimmedLine, '#')) {
+                    continue;
+                }
             }
 
             // Accumulate lines to handle multi-line SQL statements
             $currentQuery .= $line;
+            $inString = $this->endsInsideStringLiteral($line, $inString, $backslashEscapes);
 
-            // Check if statement is complete (ends with ; and quotes are balanced)
-            if ($this->isCompleteStatement($currentQuery)) {
+            // The statement is complete when it ends with ; outside a string literal
+            if (!$inString && str_ends_with(rtrim($currentQuery), ';')) {
                 $queries[] = trim(rtrim(trim($currentQuery), characters: ';'));
                 $currentQuery = '';
             }
@@ -419,22 +441,35 @@ readonly class Backup
     }
 
     /**
-     * Checks if a SQL statement is complete (ends with semicolon outside of string literals).
+     * Only MySQL and MariaDB escape with backslashes (see the escape() methods of the drivers that
+     * DatabaseHelper::buildInsertQueries() uses). Everywhere else a backslash is plain data, so a
+     * value ending in one is followed by the quote that closes the string literal.
      */
-    private function isCompleteStatement(string $query): bool
+    private function usesBackslashEscapes(): bool
     {
-        $trimmed = rtrim($query);
-        if (!str_ends_with($trimmed, ';')) {
-            return false;
-        }
+        $databaseDriver = $this->configuration->getDb();
 
-        // Count unescaped single quotes to determine if we're inside a string literal
-        // We need to account for escaped quotes: \' and '' (SQL escape)
-        $inString = false;
-        $length = strlen($trimmed);
+        return $databaseDriver instanceof Mysqli || $databaseDriver instanceof PdoMysql;
+    }
 
-        for ($i = 0; $i < $length; $i++) {
-            $char = $trimmed[$i];
+    /**
+     * Follows the string literals of one line of SQL and tells whether the line ends inside one.
+     *
+     * @param bool $inString Whether the line starts inside a string literal
+     */
+    private function endsInsideStringLiteral(string $line, bool $inString, bool $backslashEscapes): bool
+    {
+        $length = strlen($line);
+
+        for ($i = 0; $i < $length; ++$i) {
+            $char = $line[$i];
+
+            // A backslash escapes the next character, whatever it is: two backslashes are one
+            // backslash and leave a following quote alone, backslash-quote does not end the string.
+            if ($inString && $backslashEscapes && $char === '\\') {
+                ++$i;
+                continue;
+            }
 
             if ($char !== "'") {
                 continue;
@@ -445,23 +480,15 @@ readonly class Backup
                 continue;
             }
 
-            // Inside a string - check for escaped quotes
             // Double single quote escape ('')
-            if (($i + 1) < $length && $trimmed[$i + 1] === "'") {
-                $i++;
+            if (($i + 1) < $length && $line[$i + 1] === "'") {
+                ++$i;
                 continue;
             }
 
-            // Backslash escape (\')
-            if ($i > 0 && $trimmed[$i - 1] === '\\') {
-                continue;
-            }
-
-            // End of string literal
             $inString = false;
         }
 
-        // Statement is complete if we're not inside a string literal
-        return !$inString;
+        return $inString;
     }
 }

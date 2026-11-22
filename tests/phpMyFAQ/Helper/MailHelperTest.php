@@ -7,6 +7,7 @@ namespace phpMyFAQ\Helper;
 use Monolog\Logger;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Mail;
+use phpMyFAQ\Mail\MailContent;
 use phpMyFAQ\Queue\DatabaseMessageBus;
 use phpMyFAQ\Queue\Message\SendMailMessage;
 use phpMyFAQ\Queue\Transport\DatabaseTransport;
@@ -23,6 +24,7 @@ use ReflectionProperty;
 #[AllowMockObjectsWithoutExpectations]
 #[CoversClass(MailHelper::class)]
 #[UsesClass(Mail::class)]
+#[UsesClass(MailContent::class)]
 #[UsesClass(DatabaseMessageBus::class)]
 #[UsesClass(SendMailMessage::class)]
 #[UsesClass(Translation::class)]
@@ -49,6 +51,15 @@ final class MailHelperTest extends TestCase
                         is_array($decoded)
                         && ($decoded['class'] ?? null) === SendMailMessage::class
                         && ($decoded['payload']['recipient'] ?? null) === 'new.user@example.com'
+                        && str_contains(
+                            (string) $decoded['payload']['metadata']['envelope']['html'],
+                            '<a href="https://localhost/">Check it out here</a>',
+                        )
+                        && str_contains(
+                            (string) $decoded['payload']['metadata']['envelope']['text'],
+                            "Login name: new-user\nPassword: secret-password\n\nCheck it out here (https://localhost/)",
+                        )
+                        && !str_contains((string) $decoded['payload']['metadata']['envelope']['text'], '<')
                     );
                 }),
                 $this->isArray(),
@@ -101,6 +112,7 @@ final class MailHelperTest extends TestCase
         $this->assertStringContainsString('secret-password', $mail->message);
         $this->assertStringContainsString('https://localhost/', $mail->message);
         $this->assertSame('[phpMyFAQ] Registration: new user', $mail->subject);
+        $this->assertSame('text/html', $mail->contentType);
     }
 
     private function readProperty(object $object, string $property): mixed

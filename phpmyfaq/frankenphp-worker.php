@@ -25,18 +25,34 @@
 declare(strict_types=1);
 
 use phpMyFAQ\Bootstrap\FrontControllerResolver;
+use phpMyFAQ\Bootstrap\MultisiteInstances;
 use phpMyFAQ\Bootstrap\WorkerState;
 
 // Requested directly (e.g. through Apache, or via Caddy outside worker mode): nothing to serve.
 if (PHP_SAPI !== 'frankenphp' || !function_exists('frankenphp_handle_request')) {
     http_response_code(404);
-    exit;
+    exit();
 }
 
 require __DIR__ . '/src/constants.php';
 require __DIR__ . '/src/libs/autoload.php';
 
-$handler = static function (): void {
+// Worker mode is not supported with multisite: the instance of a request is selected through constants,
+// which keep the value of the first request for the lifetime of this process.
+$servesMultisiteInstances = new MultisiteInstances(__DIR__ . '/multisite')->exist();
+if ($servesMultisiteInstances) {
+    error_log(
+        'phpMyFAQ: FrankenPHP worker mode is not supported with multisite instances. Disable worker '
+        . 'mode (FRANKENPHP_WORKER_MODE=false) or remove the instance directories from phpmyfaq/multisite.',
+    );
+}
+
+$handler = static function () use ($servesMultisiteInstances): void {
+    if ($servesMultisiteInstances) {
+        http_response_code(503);
+        return;
+    }
+
     WorkerState::reset();
 
     try {

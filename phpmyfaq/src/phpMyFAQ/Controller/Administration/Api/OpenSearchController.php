@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use JsonException;
+use OpenSearch\Exception\HttpException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\CustomPage;
@@ -28,6 +29,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\OpenSearch;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,7 +58,7 @@ final class OpenSearchController extends AbstractController
         }
 
         try {
-            $this->openSearch->createIndex();
+            $this->openSearch->withLongRunningClient()->createIndex();
             return $this->json([
                 'success' => Translation::get('msgAdminOpenSearchCreateIndex_success'),
             ], Response::HTTP_OK);
@@ -78,7 +80,7 @@ final class OpenSearchController extends AbstractController
         }
 
         try {
-            $this->openSearch->dropIndex();
+            $this->openSearch->withLongRunningClient()->dropIndex();
             return $this->json([
                 'success' => Translation::get('msgAdminOpenSearchDropIndex_success'),
             ], Response::HTTP_OK);
@@ -101,8 +103,11 @@ final class OpenSearchController extends AbstractController
 
         $this->faq->getAllFaqs();
 
+        // A large import takes longer than the web timeout of the search client allows
+        $openSearch = $this->openSearch->withLongRunningClient();
+
         // Index FAQs
-        $bulkIndexResult = $this->openSearch->bulkIndex($this->faq->faqRecords);
+        $bulkIndexResult = $openSearch->bulkIndex($this->faq->faqRecords);
         if (!array_key_exists('success', $bulkIndexResult)) {
             return $this->json(['error' => $bulkIndexResult], Response::HTTP_BAD_REQUEST);
         }
@@ -110,7 +115,7 @@ final class OpenSearchController extends AbstractController
         // Index custom pages
         $pages = $this->customPage->getAllPages();
 
-        $bulkIndexPagesResult = $this->openSearch->bulkIndexCustomPages($pages);
+        $bulkIndexPagesResult = $openSearch->bulkIndexCustomPages($pages);
         if (!array_key_exists('success', $bulkIndexPagesResult)) {
             return $this->json([
                 'error' => 'FAQs indexed but custom pages failed: ' . (string) json_encode($bulkIndexPagesResult),
@@ -132,10 +137,14 @@ final class OpenSearchController extends AbstractController
 
         $indexName = $openSearchConfiguration->getIndex();
 
-        return $this->json([
-            'index' => $indexName,
-            'stats' => $this->configuration->getOpenSearch()->indices()->stats(['index' => $indexName]),
-        ], Response::HTTP_OK);
+        try {
+            return $this->json([
+                'index' => $indexName,
+                'stats' => $this->configuration->getOpenSearch()->indices()->stats(['index' => $indexName]),
+            ], Response::HTTP_OK);
+        } catch (HttpException|ClientExceptionInterface $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**

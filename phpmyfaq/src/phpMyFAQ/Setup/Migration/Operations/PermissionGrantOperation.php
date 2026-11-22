@@ -61,6 +61,13 @@ readonly class PermissionGrantOperation implements OperationInterface
     {
         try {
             $user = new User($this->configuration);
+
+            // The right exists when an interrupted update is started again. Whatever was
+            // granted or revoked since then is left alone.
+            if ($user->perm->getRightId($this->permissionName) > 0) {
+                return true;
+            }
+
             $rightData = [
                 'name' => $this->permissionName,
                 'description' => $this->permissionDescription,

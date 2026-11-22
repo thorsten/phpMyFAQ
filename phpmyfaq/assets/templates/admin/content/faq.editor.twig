@@ -105,8 +105,6 @@
                 <input type="hidden" name="revisionId" id="revisionId" value="{{ faqRevisionId }}">
                 <input type="hidden" name="faqId" id="faqId" value="{{ faqData['id'] }}">
                 <input type="hidden" name="openQuestionId" id="openQuestionId" value="{{ openQuestionId }}">
-                <input type="hidden" name="notifyUser" id="notifyUser" value="{{ notifyUser }}">
-                <input type="hidden" name="notifyEmail" id="notifyEmail" value="{{ notifyEmail }}">
                 <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken }}">
                 {% if not editExistingFaq %}
                   {# Hidden fields for translation source content #}
@@ -204,6 +202,8 @@
                   {# Translation button for FAQ translation mode #}
                   <div class="row mt-3">
                     <div class="col-lg-12">
+                      <input type="hidden" name="pmf-csrf-token-translate" id="pmf-csrf-token-translate"
+                             value="{{ csrfTokenTranslate | default('') }}">
                       <button type="button" class="btn btn-info" id="btn-translate-faq-ai">
                         <i class="bi bi-translate"></i> {{ 'msgTranslateWithAI' | translate }}
                       </button>
@@ -621,6 +621,24 @@
               </p>
             {% endif %}
           </fieldset>
+
+          {% if hasPermissionForPublish %}
+            {# The window decides when a published FAQ is public, so it belongs to the publish right.
+               Without the fields nothing is submitted and saving keeps the stored window. #}
+            <fieldset class="form-group border-top mb-2">
+              <legend class="h5 my-2">
+                {{ 'ad_record_expiration_window' | translate }}
+              </legend>
+              <label class="form-label mb-0" for="dateStart">{{ 'ad_news_from' | translate }}</label>
+              <input type="datetime-local" name="dateStart" id="dateStart" step="1" class="form-control mb-2"
+                     value="{{ publicationStart }}">
+              <label class="form-label mb-0" for="dateEnd">{{ 'ad_news_to' | translate }}</label>
+              <input type="datetime-local" name="dateEnd" id="dateEnd" step="1" class="form-control"
+                     value="{{ publicationEnd }}">
+              <div class="invalid-feedback d-none" id="date-range-invalid-feedback" tabindex="-1"
+                   data-pmf-validation-feedback>{{ 'msgInvalidFaqDateRange' | translate }}</div>
+            </fieldset>
+          {% endif %}
 
           {% if editExistingFaq and canBeNewRevision %}
             <div class="form-group border-top mb-2">

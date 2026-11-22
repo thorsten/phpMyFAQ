@@ -15,6 +15,7 @@
 
 import { Jodit } from 'jodit';
 import { fetchFaqsByAutocomplete } from '../../api';
+import { getEditorCsrfToken } from '../../content/editor.token';
 import phpmyfaq from './phpmyfaq.svg.js';
 
 interface FaqAutocompleteResult {
@@ -23,7 +24,8 @@ interface FaqAutocompleteResult {
 }
 
 interface FaqAutocompleteResponse {
-  success: FaqAutocompleteResult[];
+  success?: FaqAutocompleteResult[];
+  error?: string;
 }
 
 Jodit.modules.Icon.set('phpmyfaq', phpmyfaq);
@@ -79,7 +81,7 @@ Jodit.plugins.add('phpMyFAQ', (editor: Jodit): void => {
 
     const searchInput = document.getElementById('pmf-search-internal-links') as HTMLInputElement;
     const resultsContainer = document.getElementById('pmf-search-results') as HTMLDivElement;
-    const csrfToken = (document.getElementById('pmf-csrf-token') as HTMLInputElement).value;
+    const csrfToken = getEditorCsrfToken();
     const selectLink = document.getElementById('select-faq-button') as HTMLButtonElement;
 
     searchInput.addEventListener('keyup', async (): Promise<void> => {
@@ -89,6 +91,11 @@ Jodit.plugins.add('phpMyFAQ', (editor: Jodit): void => {
           const response = (await fetchFaqsByAutocomplete(query, csrfToken)) as FaqAutocompleteResponse;
 
           resultsContainer.replaceChildren();
+          if (!Array.isArray(response.success)) {
+            resultsContainer.textContent = response.error ?? '';
+            return;
+          }
+
           response.success.forEach((result: FaqAutocompleteResult) => {
             resultsContainer.append(buildResultOption(result), document.createElement('br'));
           });

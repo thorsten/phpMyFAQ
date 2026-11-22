@@ -110,6 +110,18 @@ final class ElasticsearchControllerTest extends TestCase
         );
     }
 
+    /**
+     * The index operations run on the long-running instance: let it be the mock itself, so the
+     * expectations of a test cover both.
+     */
+    private function createSearchInstanceMock(): Elasticsearch&\PHPUnit\Framework\MockObject\MockObject
+    {
+        $searchInstance = $this->createMock(Elasticsearch::class);
+        $searchInstance->method('withLongRunningClient')->willReturnSelf();
+
+        return $searchInstance;
+    }
+
     private function createControllerWithElasticsearch(Elasticsearch $elasticsearch): ElasticsearchController
     {
         return new ElasticsearchController(
@@ -310,7 +322,7 @@ final class ElasticsearchControllerTest extends TestCase
      */
     public function testHealthcheckReturnsUnavailableWhenElasticsearchIsDown(): void
     {
-        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch = $this->createSearchInstanceMock();
         $elasticsearch->expects($this->once())->method('isAvailable')->willReturn(false);
 
         $controller = $this->createControllerWithElasticsearch($elasticsearch);
@@ -329,7 +341,7 @@ final class ElasticsearchControllerTest extends TestCase
      */
     public function testCreateReturnsSuccessForAuthenticatedUser(): void
     {
-        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch = $this->createSearchInstanceMock();
         $elasticsearch->expects($this->once())->method('createIndex');
 
         $controller = $this->createControllerWithDependencies(
@@ -351,7 +363,7 @@ final class ElasticsearchControllerTest extends TestCase
      */
     public function testCreateReturnsConflictWhenIndexCreationFails(): void
     {
-        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch = $this->createSearchInstanceMock();
         $elasticsearch->expects($this->once())->method('createIndex')->willThrowException(new Exception('boom'));
 
         $controller = $this->createControllerWithDependencies(
@@ -375,7 +387,7 @@ final class ElasticsearchControllerTest extends TestCase
      */
     public function testDropReturnsSuccessForAuthenticatedUser(): void
     {
-        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch = $this->createSearchInstanceMock();
         $elasticsearch->expects($this->once())->method('dropIndex');
 
         $controller = $this->createControllerWithDependencies(
@@ -397,7 +409,7 @@ final class ElasticsearchControllerTest extends TestCase
      */
     public function testDropReturnsConflictWhenIndexDeletionFails(): void
     {
-        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch = $this->createSearchInstanceMock();
         $elasticsearch->expects($this->once())->method('dropIndex')->willThrowException(new Exception('boom'));
 
         $controller = $this->createControllerWithDependencies(
@@ -421,7 +433,7 @@ final class ElasticsearchControllerTest extends TestCase
      */
     public function testHealthcheckReturnsOkWhenElasticsearchIsAvailable(): void
     {
-        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch = $this->createSearchInstanceMock();
         $elasticsearch->expects($this->once())->method('isAvailable')->willReturn(true);
 
         $controller = $this->createControllerWithElasticsearch($elasticsearch);
@@ -440,7 +452,7 @@ final class ElasticsearchControllerTest extends TestCase
      */
     public function testImportReturnsBadRequestWhenFaqBulkIndexFails(): void
     {
-        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch = $this->createSearchInstanceMock();
         $elasticsearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['failure' => 'boom']);
 
         $faq = $this->createMock(Faq::class);
@@ -468,7 +480,7 @@ final class ElasticsearchControllerTest extends TestCase
      */
     public function testImportReturnsBadRequestWhenCustomPageBulkIndexFails(): void
     {
-        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch = $this->createSearchInstanceMock();
         $elasticsearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['success' => true]);
         $elasticsearch
             ->expects($this->once())
@@ -503,7 +515,7 @@ final class ElasticsearchControllerTest extends TestCase
      */
     public function testImportReturnsSuccessWhenFaqsAndCustomPagesAreIndexed(): void
     {
-        $elasticsearch = $this->createMock(Elasticsearch::class);
+        $elasticsearch = $this->createSearchInstanceMock();
         $elasticsearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['success' => true]);
         $elasticsearch
             ->expects($this->once())
@@ -539,7 +551,7 @@ final class ElasticsearchControllerTest extends TestCase
     #[DataProvider('stateChangingActions')]
     public function testStateChangingActionRequiresConfigurationEdit(string $action, string $serviceMethod): void
     {
-        $searchInstance = $this->createMock(Elasticsearch::class);
+        $searchInstance = $this->createSearchInstanceMock();
         $searchInstance->expects($this->never())->method($serviceMethod);
 
         $controller = $this->createControllerWithElasticsearch($searchInstance);
@@ -555,7 +567,7 @@ final class ElasticsearchControllerTest extends TestCase
     #[DataProvider('stateChangingActions')]
     public function testStateChangingActionRejectsRequestWithoutCsrfToken(string $action, string $serviceMethod): void
     {
-        $searchInstance = $this->createMock(Elasticsearch::class);
+        $searchInstance = $this->createSearchInstanceMock();
         $searchInstance->expects($this->never())->method($serviceMethod);
 
         $faq = $this->createMock(Faq::class);
@@ -580,7 +592,7 @@ final class ElasticsearchControllerTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
         $this->primeCsrf($session, 'elasticsearch');
 
-        $searchInstance = $this->createMock(Elasticsearch::class);
+        $searchInstance = $this->createSearchInstanceMock();
         $searchInstance->expects($this->never())->method($serviceMethod);
 
         $faq = $this->createMock(Faq::class);
@@ -603,7 +615,7 @@ final class ElasticsearchControllerTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
         $otherPageToken = $this->primeCsrf($session, 'update-package');
 
-        $searchInstance = $this->createMock(Elasticsearch::class);
+        $searchInstance = $this->createSearchInstanceMock();
         $searchInstance->expects($this->never())->method($serviceMethod);
 
         $controller = $this->createControllerWithElasticsearch($searchInstance);
@@ -618,10 +630,16 @@ final class ElasticsearchControllerTest extends TestCase
      * Registers an Elasticsearch client whose transport talks to a mocked PSR-18 HTTP client
      * (the client class is final).
      */
-    private function registerElasticsearchClient(\GuzzleHttp\Psr7\Response $response): \Psr\Http\Client\ClientInterface&\PHPUnit\Framework\MockObject\MockObject
-    {
+    private function registerElasticsearchClient(
+        \GuzzleHttp\Psr7\Response|\Psr\Http\Client\ClientExceptionInterface $response,
+    ): \Psr\Http\Client\ClientInterface&\PHPUnit\Framework\MockObject\MockObject {
         $httpClient = $this->createMock(\Psr\Http\Client\ClientInterface::class);
-        $httpClient->expects($this->once())->method('sendRequest')->willReturn($response);
+        $sendRequest = $httpClient->expects($this->once())->method('sendRequest');
+        if ($response instanceof \Psr\Http\Client\ClientExceptionInterface) {
+            $sendRequest->willThrowException($response);
+        } else {
+            $sendRequest->willReturn($response);
+        }
         $nodePool = $this->createStub(\Elastic\Transport\NodePool\NodePoolInterface::class);
         $nodePool->method('nextNode')->willReturn(new \Elastic\Transport\NodePool\Node('http://localhost:9200'));
 
@@ -693,5 +711,115 @@ final class ElasticsearchControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertStringContainsString('no such index', $payload['error']);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatisticsReturnsBadRequestWhenTheClusterIsDown(): void
+    {
+        $this->registerElasticsearchClient(
+            new \GuzzleHttp\Exception\ConnectException(
+                'Connection refused',
+                new \GuzzleHttp\Psr7\Request('GET', 'http://localhost:9200/phpmyfaq-test/_stats'),
+            ),
+        );
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->statistics();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertIsString($payload['error']);
+        self::assertNotSame('', $payload['error']);
+    }
+
+    /**
+     * A large bulk import takes longer than the web timeout of the search client allows.
+     *
+     * @throws \Exception
+     */
+    #[DataProvider('stateChangingActions')]
+    public function testStateChangingActionRunsOnTheLongRunningClient(string $action, string $serviceMethod): void
+    {
+        $longRunningInstance = $this->createMock(Elasticsearch::class);
+        $longRunningInstance->expects($this->once())->method($serviceMethod);
+        $longRunningInstance->expects($this->never())->method('withLongRunningClient');
+
+        $webInstance = $this->createMock(Elasticsearch::class);
+        $webInstance
+            ->expects($this->once())
+            ->method('withLongRunningClient')
+            ->willReturn($longRunningInstance);
+        $webInstance->expects($this->never())->method($serviceMethod);
+
+        $controller = $this->createControllerWithElasticsearch($webInstance);
+        $session = new Session(new MockArraySessionStorage());
+        $csrf = $this->primeCsrf($session, 'elasticsearch');
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $controller->{$action}($this->jsonRequest(['csrf' => $csrf]));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportIndexesTheCustomPagesOnTheLongRunningClient(): void
+    {
+        $longRunningInstance = $this->createMock(Elasticsearch::class);
+        $longRunningInstance->method('bulkIndex')->willReturn(['success' => true]);
+        $longRunningInstance
+            ->expects($this->once())
+            ->method('bulkIndexCustomPages')
+            ->willReturn(['success' => true]);
+
+        $webInstance = $this->createMock(Elasticsearch::class);
+        $webInstance
+            ->expects($this->once())
+            ->method('withLongRunningClient')
+            ->willReturn($longRunningInstance);
+        $webInstance->expects($this->never())->method('bulkIndexCustomPages');
+
+        $controller = $this->createControllerWithElasticsearch($webInstance);
+        $session = new Session(new MockArraySessionStorage());
+        $csrf = $this->primeCsrf($session, 'elasticsearch');
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->import($this->jsonRequest(['csrf' => $csrf]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatisticsKeepsTheWebClient(): void
+    {
+        $this->registerElasticsearchClient($this->elasticsearchResponse(200, ['indices' => []]));
+
+        $searchInstance = $this->createMock(Elasticsearch::class);
+        $searchInstance->expects($this->never())->method('withLongRunningClient');
+
+        $controller = $this->createControllerWithElasticsearch($searchInstance);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        self::assertSame(Response::HTTP_OK, $controller->statistics()->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testHealthcheckKeepsTheWebClient(): void
+    {
+        $searchInstance = $this->createMock(Elasticsearch::class);
+        $searchInstance->expects($this->never())->method('withLongRunningClient');
+        $searchInstance->expects($this->once())->method('isAvailable')->willReturn(true);
+
+        $controller = $this->createControllerWithElasticsearch($searchInstance);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        self::assertSame(Response::HTTP_OK, $controller->healthcheck()->getStatusCode());
     }
 }

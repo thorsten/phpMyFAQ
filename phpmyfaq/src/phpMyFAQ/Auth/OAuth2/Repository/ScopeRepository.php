@@ -55,6 +55,65 @@ final class ScopeRepository extends AbstractRepository implements ScopeRepositor
         return $scope;
     }
 
+    /**
+     * The scopes a client may request, with their descriptions.
+     *
+     * @return array<string, string>
+     */
+    public function all(): array
+    {
+        $result = $this->db()->query(sprintf(
+            'SELECT scope_id, description FROM %s ORDER BY scope_id',
+            $this->table('faqoauth_scopes'),
+        ));
+
+        if ($result === false) {
+            return [];
+        }
+
+        $scopes = [];
+        while (true) {
+            $row = $this->db()->fetchObject($result);
+            if (!is_object($row)) {
+                break;
+            }
+
+            $scopes[(string) $row->scope_id] = (string) ($row->description ?? '');
+        }
+
+        return $scopes;
+    }
+
+    /**
+     * Makes the scope requestable, or changes the description of one that already is.
+     */
+    public function enable(string $identifier, string $description): bool
+    {
+        if (!$this->disable($identifier)) {
+            return false;
+        }
+
+        $result = $this->db()->queryPrepared(
+            sprintf('INSERT INTO %s (scope_id, description) VALUES (?, ?)', $this->table('faqoauth_scopes')),
+            [$identifier, $description],
+        );
+
+        return $result !== false && $result !== null;
+    }
+
+    /**
+     * Tokens issued before keep the scope until they expire; new ones cannot request it.
+     */
+    public function disable(string $identifier): bool
+    {
+        $result = $this->db()->queryPrepared(
+            sprintf('DELETE FROM %s WHERE scope_id = ?', $this->table('faqoauth_scopes')),
+            [$identifier],
+        );
+
+        return $result !== false && $result !== null;
+    }
+
     public function finalizeScopes(
         array $scopes,
         string $grantType,

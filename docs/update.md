@@ -127,6 +127,98 @@ drafts — so public visibility does not change. Transitions into or out of the 
 right described above; moving between draft and review only needs the edit rights. See section 7.2.3 of the
 administration documentation for how the workflow behaves in the FAQ editor and overview.
 
+### Changes to review when updating to phpMyFAQ 4.2
+
+**Publication window of FAQs (security).** Since phpMyFAQ 4.0, saving an FAQ in the administration discarded its start
+and end date: the record was stored as "valid from now, never expires", so a scheduled or an expired FAQ became publicly
+visible as soon as anyone saved it. phpMyFAQ 4.0 and 4.1 are affected as well. The FAQ editor has the publication window
+fields again, an empty field means no limit, and saves that do not carry a window leave the stored one untouched.
+Setting the window requires the `Publish FAQs` right. Windows that were overwritten before the update cannot be restored
+automatically: review the FAQs that were meant to be scheduled or to expire and set their window again. Scheduled and
+expired FAQs are also hidden from the search, the sitemap, tags, tag search and the FAQ counters of the categories.
+
+**REST API.**
+
+- `GET /api/v4.0/backup/{type}` requires the `x-pmf-token` header.
+- With `api.onlyActiveFaqs` disabled, `GET /api/v4.0/faqs` lists FAQs that are not published or outside their
+  publication window only for requests with a valid API credential. Anonymous requests get the visible FAQs.
+  A list that a credential widened this way is sent with `Cache-Control: private, no-store`.
+- Several administration API routes changed their HTTP method to the one the route declares (`PUT`, `DELETE`). Custom
+  scripts that call the administration API with `POST` have to be adjusted.
+
+**Passwords.** Passwords set through the administration ("overwrite password"), a password reset link or
+`phpmyfaq:install` in an earlier 4.2 pre-release that contain `'`, `"` or `<...>` have to be reset once. The user control
+panel no longer trims passwords: leading and trailing blanks are part of the password, as they always were at login.
+
+**Permissions.** Administrators whose own rights are limited to certain languages or categories can no longer reduce a
+wider grant. Rights that stay granted keep their language and category restrictions, and removing a right, language or
+category outside the administrator's own scope is rejected. Saving a group no longer rewrites the category restrictions
+of its rights.
+
+**Login-only mode.** With `security.enableLoginOnly`, guests can reach the OAuth2 endpoints, the captcha image and the
+contact form submission. If `security.enableRegistration` is enabled, the registration page and its endpoints are
+reachable too; disable registration if a login-only installation must not accept sign-ups.
+
+**LDAP.** A group restriction is enforced with an exact match of the group, and a restriction with an empty group list
+refuses every LDAP login.
+
+**Passkeys.** phpMyFAQ tracks the signature counter of an authenticator and refuses a login when the counter does not
+increase. The browser origin has to match `main.referenceURL` including the port.
+
+**Visitor session cookie.** With `main.enableUserTracking` enabled, phpMyFAQ sets the `pmf-sid` cookie again (HttpOnly,
+SameSite=Lax, Secure on HTTPS, one hour, renewed on each tracked page view). Since 4.0 the cookie was missing and every
+tracked page view was counted as a new session, so the session statistics of that time are inflated. Add `pmf-sid` to
+your cookie policy or disable user tracking. The cookie is scoped to the host and path of `main.referenceURL`.
+
+**E-mail.**
+
+- Every transport sends a plain-text mail as `text/plain` and an HTML mail as `multipart/alternative` with a plain-text
+  alternative. Custom code that puts HTML into `Mail::$message` has to set `$mail->contentType = 'text/html'`.
+- Custom mail providers implementing `phpMyFAQ\Mail\MailProviderInterface` have to add the fourth parameter:
+  `send(string $recipients, array $headers, string $body, string $htmlBody = '')`.
+- Empty the mail queue before updating if you use SMTP or an API provider.
+- Installations created with 4.2.0-alpha to 4.2.0-beta.3 have `mail.useQueue` enabled and send no e-mail without a
+  running queue worker. Start the worker or disable `mail.useQueue`.
+
+**Search engines.** Web requests no longer wait for Elasticsearch or OpenSearch during start-up; `SEARCH_WAIT_TIMEOUT`
+applies to command-line processes only. Web requests use a 2-second connect timeout and wait 5 seconds for an answer
+(`SEARCH_REQUEST_TIMEOUT`); the search falls back to the database when the engine does not answer. Creating, importing
+and dropping the index in the administration are not limited by `SEARCH_REQUEST_TIMEOUT`.
+
+**Uploads.** SVG uploads have to be well-formed XML and are stored re-serialised without comments and processing
+instructions. The PHP DOM extension is required.
+
+**Attachments and backups.** Attachments stored before 4.2 are read from their former location. Backups contain the
+tables added in 4.2, except the job queue and the OAuth2 token tables.
+
+**Microsoft Entra ID.** Accounts created before 4.2 are linked to their Entra ID object on the first login.
+
+**Databases.**
+
+- PostgreSQL and SQLite: installations with a table prefix name their indexes `<index>_<prefix>`. The update creates them
+  and removes the indexes with the former shared name. If several installations share one schema or file, update the
+  prefixed ones first.
+- Where a unique index cannot be created because of duplicate values, the update logs a warning and keeps the existing
+  index.
+- PostgreSQL: table prefixes with uppercase letters are recognised by the table, column and index checks of the update.
+- SQL Server: phpMyFAQ sets `SET DATEFORMAT ymd` on every connection.
+- Installations that already ran a 4.2.0-RC.3 nightly run the RC.3 update step once more.
+
+**Other changes.**
+
+- Old-style links (`index.php?action=faq&cat=...&id=...`) in answers are only converted when they point to this
+  installation. After a move to another domain, links with the former domain are no longer rewritten.
+- The tenant quota for users no longer counts the anonymous user.
+- Admin log: deleting entries older than 30 days stores the hash of the newest deleted entry, and the integrity check
+  reports a log whose oldest entry does not continue from it. A log that was last pruned before the update is checked
+  from its first entry on until it is pruned again.
+- API keys, OAuth2 clients and OAuth2 scopes have their own administration pages ("Users → API keys" and
+  "Configuration → OAuth 2.0 clients"); they no longer have to be created through the administration API or in the
+  database.
+- FrankenPHP worker mode is not supported with multisite; the worker answers HTTP 503 while `phpmyfaq/multisite/` contains
+  instance directories.
+- The nginx example configuration has a new location that sandboxes SVG files; compare it with your configuration.
+
 ## Modifying templates for phpMyFAQ 4.2
 
 The templates are written in [Twig](https://twig.symfony.com/) and are located in the directory

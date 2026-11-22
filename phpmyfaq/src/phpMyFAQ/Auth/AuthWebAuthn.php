@@ -22,6 +22,8 @@ namespace phpMyFAQ\Auth;
 use CBOR\CBOREncoder;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\WebAuthn\PublicKeyConverter;
+use phpMyFAQ\Auth\WebAuthn\RelyingPartyOrigin;
+use phpMyFAQ\Auth\WebAuthn\SignatureCounter;
 use phpMyFAQ\Auth\WebAuthn\WebAuthnUser;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
@@ -40,6 +42,18 @@ class AuthWebAuthn extends Auth
     private const int RS256 = -257;
 
     private const string DECOY_SECRET_KEY = 'security.webAuthnDecoySecret';
+
+    /** Shortest DER encoding of an ECDSA signature: a sequence of two one-byte integers. */
+    private const int MINIMUM_SIGNATURE_LENGTH = 8;
+
+    /** Authenticator data flag: the user was present (touched the authenticator). */
+    private const int FLAG_USER_PRESENT = 0x01;
+
+    /** Authenticator data flag: attested credential data (credential ID and public key) is included. */
+    private const int FLAG_ATTESTED_CREDENTIAL_DATA = 0x40;
+
+    /** Authenticator data is the RP ID hash (32 bytes), the flags (1 byte) and the signature counter (4 bytes). */
+    private const int AUTHENTICATOR_DATA_MINIMUM_LENGTH = 37;
 
     public function __construct(Configuration $configuration)
     {
@@ -200,9 +214,7 @@ class AuthWebAuthn extends Auth
         }
 
         $clientOrigin = is_string($clientDataObject->origin ?? null) ? $clientDataObject->origin : '';
-        $origin = parse_url($clientOrigin);
-        $originHost = is_array($origin) ? $origin['host'] ?? null : null;
-        if ($originHost !== $this->appId) {
+        if (!$this->relyingPartyOrigin()->matches($clientOrigin)) {
             throw new Exception(sprintf("Origin mismatch for '%s'", $clientOrigin));
         }
 
@@ -240,7 +252,10 @@ class AuthWebAuthn extends Auth
             throw new Exception('Cannot decode key as RP ID hash does not match');
         }
 
-        if (($flags & 0x41) === 0) {
+        // Both are required: a registration without user presence is not a ceremony the user
+        // took part in, and without attested credential data there is no key to read below.
+        $requiredFlags = self::FLAG_USER_PRESENT | self::FLAG_ATTESTED_CREDENTIAL_DATA;
+        if (($flags & $requiredFlags) !== $requiredFlags) {
             throw new Exception('Cannot decode key as flags are not correct');
         }
 
@@ -271,6 +286,8 @@ class AuthWebAuthn extends Auth
         $publicKey->id = $info->rawId;
         // Lets the owner tell the passkeys apart when listing them.
         $publicKey->created = time();
+        // Baseline for the cloned-authenticator check in authenticate().
+        $publicKey->counter = SignatureCounter::fromAuthenticatorData($byteString)->value;
 
         if ($userWebAuthn === '' || $userWebAuthn === '0') {
             return (string) json_encode([$publicKey]);
@@ -289,6 +306,7 @@ class AuthWebAuthn extends Auth
             }
 
             $key->key = $publicKey->key;
+            $key->counter = $publicKey->counter;
             $found = true;
             break;
         }
@@ -427,9 +445,7 @@ class AuthWebAuthn extends Auth
         $userWebAuthn = (string) json_encode($storedKeys);
 
         $clientOrigin = is_string($clientDataObject->origin ?? null) ? $clientDataObject->origin : '';
-        $origin = parse_url($clientOrigin);
-        $originHost = is_array($origin) ? $origin['host'] ?? null : null;
-        if ($originHost !== $this->appId) {
+        if (!$this->relyingPartyOrigin()->matches($clientOrigin)) {
             throw new Exception(sprintf("Origin mismatch for '%s'", $clientOrigin));
         }
 
@@ -439,6 +455,9 @@ class AuthWebAuthn extends Auth
         }
 
         $authDataString = $this->byteString($response->authenticatorData ?? null);
+        if (strlen($authDataString) < self::AUTHENTICATOR_DATA_MINIMUM_LENGTH) {
+            throw new Exception('Cannot decode key response for authenticator data');
+        }
 
         $rpIdHash = substr(string: $authDataString, offset: 0, length: 32);
         $flags = ord(substr(string: $authDataString, offset: 32, length: 1));
@@ -449,7 +468,7 @@ class AuthWebAuthn extends Auth
             throw new Exception('Cannot decode key response for RP ID hash');
         }
 
-        if (($flags & 0x1) !== 0x1) {
+        if (($flags & self::FLAG_USER_PRESENT) !== self::FLAG_USER_PRESENT) {
             throw new Exception('Cannot decode key response (2c)');
         }
 
@@ -457,7 +476,11 @@ class AuthWebAuthn extends Auth
 
         /** @var mixed $signatureBytes */
         $signatureBytes = $response->signature ?? null;
-        if (!is_array($signatureBytes) || count($signatureBytes) < 70) {
+        // Only reject what cannot be a signature at all. An ES256 signature is a DER sequence
+        // of two integers whose length varies (usually 70 to 72 bytes, less whenever r or s
+        // starts with zero bytes); eight bytes is the smallest such structure. Whether the
+        // signature is valid is for openssl_verify() to decide.
+        if (!is_array($signatureBytes) || count($signatureBytes) < self::MINIMUM_SIGNATURE_LENGTH) {
             throw new Exception('Cannot decode key response (3)');
         }
 
@@ -475,6 +498,11 @@ class AuthWebAuthn extends Auth
         }
 
         if ($verificationResult === 1) {
+            // Only a counter covered by a valid signature is compared and stored; the caller
+            // persists $userWebAuthn, which now carries it.
+            $this->advanceSignatureCounter($key, SignatureCounter::fromAuthenticatorData($authDataString));
+            $userWebAuthn = (string) json_encode($storedKeys);
+
             return true;
         }
 
@@ -529,6 +557,31 @@ class AuthWebAuthn extends Auth
         $stored = (string) $this->configuration->get(self::DECOY_SECRET_KEY);
 
         return $stored !== '' ? $stored : $generated;
+    }
+
+    private function relyingPartyOrigin(): RelyingPartyOrigin
+    {
+        return new RelyingPartyOrigin($this->appId, $this->configuration->getDefaultUrl());
+    }
+
+    /**
+     * Keys stored before the counter was tracked carry none and start from zero.
+     *
+     * @throws Exception
+     */
+    private function advanceSignatureCounter(stdClass $key, SignatureCounter $received): void
+    {
+        $storedCounter = is_int($key->counter ?? null) ? $key->counter : 0;
+
+        if (!$received->follows($storedCounter)) {
+            throw new Exception(sprintf(
+                'Signature counter did not increase (stored %d, received %d): the passkey may have been cloned',
+                $storedCounter,
+                $received->value,
+            ));
+        }
+
+        $key->counter = $received->value;
     }
 
     /**

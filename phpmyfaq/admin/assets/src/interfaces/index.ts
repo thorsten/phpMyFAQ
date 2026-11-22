@@ -1,3 +1,4 @@
+export * from './apiKey';
 export * from './apiResponse';
 export * from './attachment';
 export * from './categoryTranslations';
@@ -8,6 +9,7 @@ export * from './Group';
 export * from './instance';
 export * from './mediaBrowserApiResponse';
 export * from './Member';
+export * from './oauth2';
 export * from './responseData';
 export * from './stopWord';
 export * from './tagResponse';

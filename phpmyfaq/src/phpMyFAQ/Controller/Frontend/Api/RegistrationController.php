@@ -62,10 +62,6 @@ final class RegistrationController extends AbstractController
             throw new Exception('Missing or empty email');
         }
 
-        if (property_exists($data, 'isVisible')) {
-            throw new Exception('isVisible parameter not allowed');
-        }
-
         $fullName = trim(strip_tags((string) $data->realname));
         $userName = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterEmail($data->email));
@@ -76,7 +72,8 @@ final class RegistrationController extends AbstractController
 
         $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        $isVisible = (bool) Filter::filterVar($data->isVisible ?? false, FILTER_SANITIZE_SPECIAL_CHARS);
+        // The serialized registration form sends "on" for the ticked checkbox and omits it otherwise
+        $isVisible = Filter::filterVar($data->isVisible ?? false, FILTER_VALIDATE_BOOLEAN, default: false) === true;
 
         if (!$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);

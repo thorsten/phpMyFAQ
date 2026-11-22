@@ -138,4 +138,24 @@ class DefaultDataSeederTest extends TestCase
         $this->assertContains(1, $formIds);
         $this->assertContains(2, $formIds);
     }
+
+    /**
+     * A robots.txt needs real line breaks, and a new installation gets the text an updated
+     * one received from the 4.1.0-alpha migration.
+     */
+    public function testRobotsTextHasRealLineBreaksAndMatchesTheMigration(): void
+    {
+        $robotsText = new DefaultDataSeeder()->getMainConfig()['seo.contentRobotsText'];
+
+        $this->assertStringNotContainsString('\n', $robotsText);
+        $this->assertStringContainsString("User-agent: *\nDisallow: /admin/\n\nSitemap: /sitemap.xml", $robotsText);
+
+        $configuration = $this->createStub(\phpMyFAQ\Configuration::class);
+        $recorder = new \phpMyFAQ\Setup\Migration\Operations\OperationRecorder($configuration);
+        new \phpMyFAQ\Setup\Migration\Versions\Migration410Alpha($configuration)->up($recorder);
+        $operations = array_values($recorder->getOperationsByType('config_add'));
+
+        $this->assertSame('seo.contentRobotsText', $operations[0]->getKey());
+        $this->assertSame($operations[0]->getValue(), $robotsText);
+    }
 }

@@ -45,10 +45,14 @@ describe('handleSessionsFilter', () => {
   it('should set form action and submit on click', async () => {
     const submitSpy = vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(() => {});
 
-    const timestamp = Math.floor(new Date('2024-06-15T12:00:00Z').getTime() / 1000);
+    // 23:30 UTC on June 15th is already June 16th on a server in Europe/Berlin
+    const timestamp = Math.floor(new Date('2024-06-15T23:30:00Z').getTime() / 1000);
     document.body.innerHTML = `
       <form id="pmf-admin-form-session" action="">
-        <input id="day" type="hidden" value="${timestamp}" />
+        <select id="day">
+          <option value="1" data-day="2024-06-14">2024-06-14 10:00</option>
+          <option value="${timestamp}" data-day="2024-06-16" selected>2024-06-16 01:30</option>
+        </select>
       </form>
       <button id="pmf-admin-session-day">Filter</button>
     `;
@@ -61,7 +65,7 @@ describe('handleSessionsFilter', () => {
     await flushPromises();
 
     const form = document.getElementById('pmf-admin-form-session') as HTMLFormElement;
-    expect(form.action).toContain('/statistics/sessions/2024-06-15');
+    expect(form.action).toContain('/statistics/sessions/2024-06-16');
     expect(submitSpy).toHaveBeenCalled();
 
     submitSpy.mockRestore();
@@ -293,6 +297,22 @@ describe('handleClearVisits', () => {
 
     expect(clearVisits).toHaveBeenCalledWith('csrf-token-123');
     expect(pushNotification).toHaveBeenCalledWith('Visits cleared successfully');
+  });
+
+  it('should read the CSRF token from the button when its icon is clicked', async () => {
+    document.body.innerHTML = `
+      <button id="pmf-admin-clear-visits" data-pmf-csrf="csrf-token-123"><i class="bi bi-trash"></i> Clear</button>
+    `;
+
+    (clearVisits as Mock).mockResolvedValue({ success: 'Visits cleared successfully' });
+
+    handleClearVisits();
+
+    (document.querySelector('#pmf-admin-clear-visits i') as HTMLElement).click();
+
+    await flushPromises();
+
+    expect(clearVisits).toHaveBeenCalledWith('csrf-token-123');
   });
 
   it('should show error on error response', async () => {

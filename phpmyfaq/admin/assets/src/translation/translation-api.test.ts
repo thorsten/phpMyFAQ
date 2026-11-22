@@ -56,7 +56,7 @@ describe('TranslationApi', () => {
       const result = await api.translate(request);
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('/admin/api/translation/translate', {
+      expect(global.fetch).toHaveBeenCalledWith('./api/translation/translate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ describe('TranslationApi', () => {
       const result = await api.translate(request);
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('/admin/api/translation/translate', {
+      expect(global.fetch).toHaveBeenCalledWith('./api/translation/translate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

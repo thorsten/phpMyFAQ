@@ -79,14 +79,7 @@ describe('handleStatistics', () => {
       }),
     });
 
-    const row = document.getElementById('row-search-id-123') as HTMLElement;
-    expect(row).not.toBeNull();
-
-    // Simulate click and transitionend events
-    row.click();
-    expect(row.style.opacity).toBe('0');
-
-    row.dispatchEvent(new Event('transitionend'));
+    // The row disappears as soon as the server confirmed the deletion, without a further click.
     expect(document.getElementById('row-search-id-123')).toBeNull();
   });
 

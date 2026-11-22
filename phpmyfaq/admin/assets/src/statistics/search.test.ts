@@ -95,6 +95,24 @@ describe('handleTruncateSearchTerms', () => {
     expect(document.getElementById('pmf-table-search-terms')).toBeNull();
   });
 
+  it('should read the CSRF token from the button when its icon is clicked', async () => {
+    document.body.innerHTML = `
+      <button id="pmf-button-truncate-search-terms" data-pmf-csrf-token="test-csrf"><i class="bi bi-trash"></i>Truncate</button>
+      <table id="pmf-table-search-terms"></table>
+    `;
+
+    (global.confirm as ReturnType<typeof vi.fn>).mockReturnValue(true);
+    (truncateSearchTerms as ReturnType<typeof vi.fn>).mockResolvedValue({ success: 'Search terms truncated' });
+
+    handleTruncateSearchTerms();
+
+    (document.querySelector('#pmf-button-truncate-search-terms i') as HTMLElement).click();
+
+    await flushPromises();
+
+    expect(truncateSearchTerms).toHaveBeenCalledWith('test-csrf');
+  });
+
   it('should show error on error response', async () => {
     document.body.innerHTML = `
       <button id="pmf-button-truncate-search-terms" data-pmf-csrf-token="test-csrf">Truncate</button>

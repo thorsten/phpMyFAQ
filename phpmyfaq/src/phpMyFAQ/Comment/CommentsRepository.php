@@ -82,6 +82,10 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
         $sortField = in_array($sortField, $allowedSortFields, strict: true) ? $sortField : 'id_comment';
         $sortOrder = strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC';
 
+        if ($limit < 1) {
+            return [];
+        }
+
         $sql = <<<SQL
                 SELECT
                     id_comment, id, usr, email, comment, datum
@@ -93,7 +97,6 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
                     id = %d
                 ORDER BY
                     %s %s
-                LIMIT %d OFFSET %d
             SQL;
 
         $query = sprintf(
@@ -103,11 +106,10 @@ readonly class CommentsRepository implements CommentsRepositoryInterface
             $referenceId,
             $sortField,
             $sortOrder,
-            $limit,
-            $offset,
         );
 
-        $result = $this->coreConfiguration->getDb()->query($query);
+        // The row limit is rendered by the database driver in its own dialect: SQL Server knows no LIMIT.
+        $result = $this->coreConfiguration->getDb()->query($query, $offset, $limit);
         $rows = $this->coreConfiguration->getDb()->fetchAll($result);
         return is_array($rows) ? $rows : [];
     }

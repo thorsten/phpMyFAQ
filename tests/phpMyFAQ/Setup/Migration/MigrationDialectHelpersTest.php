@@ -43,12 +43,12 @@ final class MigrationDialectHelpersTest extends TestCase
     /**
      * A migration that only exposes the protected helpers under test.
      */
-    private function migration(string $dbType): object
+    private function migration(string $dbType, ?DatabaseDriver $driver = null, string $tablePrefix = 'pmf_'): object
     {
         new ReflectionProperty(Database::class, 'dbType')->setValue(null, $dbType);
-        Database::setTablePrefix('pmf_');
+        Database::setTablePrefix($tablePrefix);
 
-        $driver = $this->createStub(DatabaseDriver::class);
+        $driver ??= $this->createStub(DatabaseDriver::class);
         $driver->method('escape')->willReturnArgument(0);
         $configuration = $this->createStub(Configuration::class);
         $configuration->method('getDb')->willReturn($driver);
@@ -71,6 +71,16 @@ final class MigrationDialectHelpersTest extends TestCase
             public function indexQuery(string $table, string $index): string
             {
                 return $this->indexExists($table, $index);
+            }
+
+            public function indexIsPresent(string $table, string $index): bool
+            {
+                return $this->hasIndex($table, $index);
+            }
+
+            public function columnIsPresent(string $table, string $column): bool
+            {
+                return $this->columnExists($table, $column);
             }
 
             public function timestamp(bool $withDefault): string
@@ -113,6 +123,137 @@ final class MigrationDialectHelpersTest extends TestCase
         $this->assertStringStartsWith('SELECT COUNT(*) as idx_count FROM ' . $catalog, $query);
         $this->assertStringContainsString('pmf_faqdata', $query);
         $this->assertStringContainsString('idx_faqdata_lang', $query);
+    }
+
+    /**
+     * A PostgreSQL database can hold the tables of several installations in separate schemas;
+     * the catalog checks must only see the schema the connection works in.
+     */
+    public function testPostgresCatalogChecksAreLimitedToTheCurrentSchema(): void
+    {
+        $queries = [];
+        $driver = $this->createStub(DatabaseDriver::class);
+        $driver->method('query')->willReturnCallback(static function (string $query) use (&$queries): bool {
+            $queries[] = $query;
+            return true;
+        });
+        $migration = $this->migration('pdo_pgsql', $driver);
+
+        $this->assertStringContainsString(
+            "WHERE schemaname = current_schema() AND tablename = 'pmf_faqdata'",
+            $migration->indexQuery('faqdata', 'idx_faqdata_lang'),
+        );
+
+        $migration->columnIsPresent('faquser', 'remember_me_expires');
+        $this->assertSame(
+            'SELECT column_name FROM information_schema.columns '
+            . "WHERE table_schema = current_schema() AND table_name = 'pmf_faquser' "
+            . "AND column_name = 'remember_me_expires'",
+            $queries[0],
+        );
+    }
+
+    /**
+     * phpMyFAQ writes table and index names without quotes, so PostgreSQL stores them in lower
+     * case. PostgreSQL was not available to run against: the test checks the catalog queries.
+     */
+    #[DataProvider('postgresDrivers')]
+    public function testPostgresCatalogChecksLookUpTheLowerCaseNameOfAMixedCasePrefix(string $dbType): void
+    {
+        $queries = [];
+        $driver = $this->createStub(DatabaseDriver::class);
+        $driver->method('query')->willReturnCallback(static function (string $query) use (&$queries): bool {
+            $queries[] = $query;
+            return true;
+        });
+        $migration = $this->migration($dbType, $driver, 'PMF_');
+
+        $this->assertSame(
+            'SELECT COUNT(*) as idx_count FROM pg_indexes '
+            . "WHERE schemaname = current_schema() AND tablename = 'pmf_faqdata' "
+            . "AND indexname = 'idx_faqdata_lang_pmf_'",
+            $migration->indexQuery('faqdata', 'idx_faqdata_lang'),
+        );
+
+        $migration->columnIsPresent('faquser', 'remember_me_expires');
+        $this->assertSame(
+            'SELECT column_name FROM information_schema.columns '
+            . "WHERE table_schema = current_schema() AND table_name = 'pmf_faquser' "
+            . "AND column_name = 'remember_me_expires'",
+            $queries[0],
+        );
+    }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function postgresDrivers(): iterable
+    {
+        yield 'pgsql' => ['pgsql'];
+        yield 'pdo_pgsql' => ['pdo_pgsql'];
+    }
+
+    /**
+     * How the other databases compare names depends on the server, the collation or the
+     * database itself: their catalog queries keep the prefix as it was configured.
+     */
+    #[DataProvider('databasesThatKeepTheConfiguredPrefix')]
+    public function testOtherDatabasesLookUpAMixedCasePrefixAsConfigured(
+        string $dbType,
+        string $indexName,
+        string $columnQuery,
+    ): void {
+        $queries = [];
+        $driver = $this->createStub(DatabaseDriver::class);
+        $driver->method('query')->willReturnCallback(static function (string $query) use (&$queries): bool {
+            $queries[] = $query;
+            return true;
+        });
+        $migration = $this->migration($dbType, $driver, 'PMF_');
+
+        $indexQuery = $migration->indexQuery('faqdata', 'idx_faqdata_lang');
+        $this->assertStringContainsString("'PMF_faqdata'", $indexQuery);
+        $this->assertStringContainsString("'" . $indexName . "'", $indexQuery);
+        $this->assertStringNotContainsString('pmf_', $indexQuery);
+
+        $migration->columnIsPresent('faquser', 'remember_me_expires');
+        $this->assertSame($columnQuery, $queries[0]);
+    }
+
+    /**
+     * @return iterable<string, array{string, string, string}>
+     */
+    public static function databasesThatKeepTheConfiguredPrefix(): iterable
+    {
+        yield 'pdo_mysql' => [
+            'pdo_mysql',
+            'idx_faqdata_lang',
+            "SHOW COLUMNS FROM PMF_faquser LIKE 'remember_me_expires'",
+        ];
+        yield 'pdo_sqlite' => [
+            'pdo_sqlite',
+            'idx_faqdata_lang_PMF_',
+            "SELECT name FROM pragma_table_info('PMF_faquser') WHERE name = 'remember_me_expires'",
+        ];
+        yield 'pdo_sqlsrv' => [
+            'pdo_sqlsrv',
+            'idx_faqdata_lang',
+            "SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('PMF_faquser') AND name = 'remember_me_expires'",
+        ];
+    }
+
+    public function testHasIndexReadsTheCountOfTheCatalogQuery(): void
+    {
+        $rows = [(object) ['idx_count' => '1'], (object) ['idx_count' => 0], false];
+        $driver = $this->createStub(DatabaseDriver::class);
+        $driver->method('fetchObject')->willReturnCallback(static function () use (&$rows): mixed {
+            return array_shift($rows);
+        });
+        $migration = $this->migration('pdo_mysql', $driver);
+
+        $this->assertTrue($migration->indexIsPresent('faqadminlog', 'idx_hash'));
+        $this->assertFalse($migration->indexIsPresent('faqadminlog', 'idx_hash'));
+        $this->assertFalse($migration->indexIsPresent('faqadminlog', 'idx_hash'));
     }
 
     public function testIndexExistenceQueryRejectsAnUnknownDatabaseType(): void

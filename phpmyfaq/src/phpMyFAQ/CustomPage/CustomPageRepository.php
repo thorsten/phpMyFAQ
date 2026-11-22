@@ -91,19 +91,22 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
             $sortOrder = 'DESC';
         }
 
+        if ($limit < 1) {
+            return;
+        }
+
         $whereActive = $activeOnly ? "AND active = 'y'" : '';
         $query = sprintf(
-            "SELECT * FROM %sfaqcustompages WHERE lang = '%s' %s ORDER BY %s %s LIMIT %d OFFSET %d",
+            "SELECT * FROM %sfaqcustompages WHERE lang = '%s' %s ORDER BY %s %s",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($language),
             $whereActive,
             $sortField,
             $sortOrder,
-            $limit,
-            $offset,
         );
 
-        $result = $this->configuration->getDb()->query($query);
+        // The row limit is rendered by the database driver in its own dialect: SQL Server knows no LIMIT.
+        $result = $this->configuration->getDb()->query($query, $offset, $limit);
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
             if (!$row instanceof \stdClass) {
@@ -143,18 +146,21 @@ final readonly class CustomPageRepository implements CustomPageRepositoryInterfa
             $sortOrder = 'DESC';
         }
 
+        if ($limit < 1) {
+            return;
+        }
+
         $whereActive = $activeOnly ? "WHERE active = 'y'" : '';
         $query = sprintf(
-            'SELECT * FROM %sfaqcustompages %s ORDER BY %s %s LIMIT %d OFFSET %d',
+            'SELECT * FROM %sfaqcustompages %s ORDER BY %s %s',
             Database::getTablePrefix(),
             $whereActive,
             $sortField,
             $sortOrder,
-            $limit,
-            $offset,
         );
 
-        $result = $this->configuration->getDb()->query($query);
+        // The row limit is rendered by the database driver in its own dialect: SQL Server knows no LIMIT.
+        $result = $this->configuration->getDb()->query($query, $offset, $limit);
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
             if (!$row instanceof \stdClass) {

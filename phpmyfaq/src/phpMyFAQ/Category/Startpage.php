@@ -107,7 +107,7 @@ class Startpage
                 fc.show_home = 1
                 %s
             GROUP BY
-                fc.id, fc.lang, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image, 
+                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image, 
                 fc.show_home, fco.position
             ORDER BY
                 fco.position, fc.id ASC

@@ -163,6 +163,8 @@ export const handleDeleteFaqModal = (): void => {
     let currentFaqId: string = '';
     let currentFaqLanguage: string = '';
     let currentToken: string = '';
+    const deleteErrorMessage: string =
+      confirmDeleteFaqButton.getAttribute('data-pmf-msg-delete-error') ?? 'Error deleting FAQ';
 
     document.addEventListener('click', (event: Event): void => {
       const target = event.target as HTMLElement;
@@ -191,10 +193,12 @@ export const handleDeleteFaqModal = (): void => {
             faqTableRow.remove();
           }
           pushNotification(result.success);
+        } else {
+          pushErrorNotification(result.error ?? deleteErrorMessage);
         }
       } catch (error) {
         console.error(error);
-        pushErrorNotification('Fehler beim Löschen der FAQ');
+        pushErrorNotification(deleteErrorMessage);
       }
 
       deleteFaqModal.hide();

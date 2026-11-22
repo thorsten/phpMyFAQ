@@ -31,11 +31,15 @@ readonly class RatingRepository implements RatingRepositoryInterface
     ) {
     }
 
+    /**
+     * vote and usr are integer columns: without the factor PostgreSQL, SQLite and SQL Server
+     * divide them as integers and cut the decimals off the average.
+     */
     public function fetchByRecordId(int $id): ?\stdClass
     {
         $sql = <<<SQL
                 SELECT
-                    (vote/usr) as voting,
+                    (vote * 1.0 / usr) as voting,
                     usr
                 FROM
                     %sfaqvoting

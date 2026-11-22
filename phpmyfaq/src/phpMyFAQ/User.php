@@ -914,7 +914,7 @@ class User
             $subject = '[%sitename%] Login name / activation';
             $displayName = $this->getUserData('display_name');
             $message = sprintf(
-                'Name: %s<br>Login name: %s<br>New password: %s',
+                "Name: %s\nLogin name: %s\nNew password: %s",
                 is_string($displayName) ? $displayName : '',
                 $this->getLogin(),
                 $newPassword,

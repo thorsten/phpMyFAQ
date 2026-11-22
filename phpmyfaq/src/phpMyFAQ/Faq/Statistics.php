@@ -374,7 +374,7 @@ class Statistics
 
         $query = $this->buildStatisticsQuery(
             selectList: 'fd.id AS id, fd.lang AS lang, fd.thema AS thema, fd.updated AS updated, '
-            . '(fv.vote/fv.usr) AS avg, fv.usr AS user',
+            . '(fv.vote * 1.0 / fv.usr) AS avg, fv.usr AS user',
             sourceTable: 'faqvoting',
             joinCondition: 'fd.id = fv.artikel',
             language: $language,

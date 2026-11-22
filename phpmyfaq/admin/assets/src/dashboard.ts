@@ -558,24 +558,30 @@ export const handleVerificationModal = async (): Promise<void> => {
       await Translator.loadTranslations(language);
       if (spinner && updates && version) {
         spinner.classList.remove('d-none');
-        updates.innerText = Translator.translate('msgFetchingHashes');
-        const remoteHashes = (await getRemoteHashes(version)) as Record<string, string>;
-        updates.innerText = Translator.translate('msgCheckHashes');
-        const issues = await verifyHashes(remoteHashes);
+        try {
+          updates.innerText = Translator.translate('msgFetchingHashes');
+          const remoteHashes = (await getRemoteHashes(version)) as Record<string, string>;
+          updates.innerText = Translator.translate('msgCheckHashes');
+          const issues = await verifyHashes(remoteHashes);
 
-        if (typeof issues !== 'object') {
-          console.error('Invalid JSON data provided.');
+          if (typeof issues !== 'object' || issues === null) {
+            throw new Error('Invalid JSON data provided.');
+          }
+
+          const ul = document.createElement('ul') as HTMLUListElement;
+          for (const [filename, hashValue] of Object.entries(issues)) {
+            const li = document.createElement('li') as HTMLLIElement;
+            li.textContent = `${Translator.translate('msgAttachmentsFilename')}: ${filename}, Hash: ${hashValue}`;
+            ul.appendChild(li);
+          }
+
+          updates.appendChild(ul);
+        } catch (error) {
+          // api.phpmyfaq.de may be unreachable: say so instead of spinning forever.
+          updates.innerText = error instanceof Error ? error.message : String(error);
+        } finally {
+          spinner.classList.add('d-none');
         }
-
-        const ul = document.createElement('ul') as HTMLUListElement;
-        for (const [filename, hashValue] of Object.entries(issues)) {
-          const li = document.createElement('li') as HTMLLIElement;
-          li.textContent = `${Translator.translate('msgAttachmentsFilename')}: ${filename}, Hash: ${hashValue}`;
-          ul.appendChild(li);
-        }
-
-        updates.appendChild(ul);
-        spinner.classList.add('d-none');
       }
     });
   }

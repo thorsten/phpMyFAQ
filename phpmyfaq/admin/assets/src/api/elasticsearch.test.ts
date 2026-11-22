@@ -33,6 +33,30 @@ describe('Elasticsearch API', () => {
       });
     });
 
+    it('should send DELETE for the drop action, as the route only accepts DELETE', async () => {
+      const mockResponse = { success: 'Index dropped' };
+      globalThis.fetch = vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockResponse),
+        } as Response)
+      );
+
+      const result = await fetchElasticsearchAction('drop', 'csrf-token');
+
+      expect(result).toEqual(mockResponse);
+      expect(globalThis.fetch).toHaveBeenCalledWith('./api/elasticsearch/drop', {
+        method: 'DELETE',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify({ csrf: 'csrf-token' }),
+      });
+    });
+
     it('should throw an error if fetch fails', async () => {
       const mockError = new Error('Fetch failed');
       globalThis.fetch = vi.fn(() => Promise.reject(mockError));

@@ -34,6 +34,11 @@ readonly class Migration4111 extends AbstractMigration
         return ['4.1.9'];
     }
 
+    public function isBackport(): bool
+    {
+        return true;
+    }
+
     public function getDescription(): string
     {
         return 'Drop the legacy UNIQUE index "session" on faquser.session_id for installations created before v3.x';

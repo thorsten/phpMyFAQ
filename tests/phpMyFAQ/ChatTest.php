@@ -407,6 +407,26 @@ class ChatTest extends TestCase
         $this->assertFalse($conversation[1]->isRead());
     }
 
+    public function testGetConversationReturnsTheNewestMessagesOldestFirst(): void
+    {
+        $this->seedChatUser(511, 'chat-user-511', 'First User', 'first511@example.com');
+        $this->seedChatUser(512, 'chat-user-512', 'Second User', 'second512@example.com');
+        $this->seedChatMessage(40, 511, 512, 'One', 1, '2026-02-05 10:00:00');
+        $this->seedChatMessage(41, 512, 511, 'Two', 1, '2026-02-05 10:01:00');
+        $this->seedChatMessage(42, 511, 512, 'Three', 1, '2026-02-05 10:02:00');
+        $this->seedChatMessage(43, 512, 511, 'Four', 0, '2026-02-05 10:03:00');
+
+        $chat = new Chat($this->configuration);
+
+        $messageIds = static fn(array $messages): array => array_map(
+            static fn(ChatMessage $message): int => $message->getId(),
+            $messages,
+        );
+
+        $this->assertSame([42, 43], $messageIds($chat->getConversation(511, 512, 2)));
+        $this->assertSame([40, 41], $messageIds($chat->getConversation(511, 512, 2, 2)));
+    }
+
     public function testGetConversationListReturnsEmptyArrayWhenThePartnerQueryFails(): void
     {
         $database = $this->createStub(Database\DatabaseDriver::class);

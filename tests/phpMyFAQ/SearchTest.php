@@ -240,6 +240,112 @@ class SearchTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testSearchFallsBackToDatabaseWhenElasticsearchCannotBeReached(): void
+    {
+        $language = $this->createMock(Language::class);
+        $language->method('getLanguage')->willReturn('en');
+
+        $logger = $this->createMock(\Monolog\Logger::class);
+        $logger
+            ->expects($this->exactly(2))
+            ->method('error')
+            ->with($this->stringStartsWith('Elasticsearch search failed, falling back to database search: '));
+
+        $config = $this->createElasticsearchConfigurationMock($this->createUnreachableHttpClient(), $language);
+        $config
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'search.enableElasticsearch' => true,
+                default => null,
+            });
+        $config->method('hasElasticsearch')->willReturn(true);
+        $config->method('getLogger')->willReturn($logger);
+
+        $category = $this->createMock(Category::class);
+        $category->method('getAllCategoryIds')->willReturn([1]);
+
+        $search = $this
+            ->getMockBuilder(Search::class)
+            ->setConstructorArgs([$config])
+            ->onlyMethods(['searchDatabase'])
+            ->getMock();
+        $search->setCategory($category);
+        $search
+            ->expects($this->exactly(2))
+            ->method('searchDatabase')
+            ->willReturnMap([['down', true, ['from database']], ['down', false, ['completed by database']]]);
+
+        $this->assertSame(['from database'], $search->search('down'));
+        $this->assertSame(['completed by database'], $search->autoComplete('down'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchFallsBackToDatabaseWhenOpenSearchCannotBeReached(): void
+    {
+        $language = $this->createMock(Language::class);
+        $language->method('getLanguage')->willReturn('en');
+
+        $client = $this
+            ->getMockBuilder(OpenSearchClient::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['search'])
+            ->getMock();
+        $client
+            ->expects($this->exactly(2))
+            ->method('search')
+            ->willThrowException(new \RuntimeException('Idle timeout reached for "http://localhost:9200/".'));
+
+        $logger = $this->createMock(\Monolog\Logger::class);
+        $logger
+            ->expects($this->exactly(2))
+            ->method('error')
+            ->with($this->stringStartsWith('OpenSearch search failed, falling back to database search: '));
+
+        $openSearchConfigFile = tempnam(sys_get_temp_dir(), 'pmf-opensearch-');
+        file_put_contents(
+            $openSearchConfigFile,
+            "<?php\n\$PMF_OS = ['hosts' => ['http://localhost:9200'], 'index' => 'faq-index'];\n",
+        );
+        $openSearchConfiguration = new OpenSearchConfiguration($openSearchConfigFile);
+        unlink($openSearchConfigFile);
+
+        $config = $this->createMock(Configuration::class);
+        $config
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'search.enableOpenSearch' => true,
+                default => null,
+            });
+        $config->method('getLanguage')->willReturn($language);
+        $config->method('hasOpenSearch')->willReturn(true);
+        $config->method('getOpenSearch')->willReturn($client);
+        $config->method('getOpenSearchConfig')->willReturn($openSearchConfiguration);
+        $config->method('getDb')->willReturn($this->dbHandle);
+        $config->method('getLogger')->willReturn($logger);
+
+        $category = $this->createMock(Category::class);
+        $category->method('getAllCategoryIds')->willReturn([1]);
+
+        $search = $this
+            ->getMockBuilder(Search::class)
+            ->setConstructorArgs([$config])
+            ->onlyMethods(['searchDatabase'])
+            ->getMock();
+        $search->setCategory($category);
+        $search
+            ->expects($this->exactly(2))
+            ->method('searchDatabase')
+            ->willReturnMap([['down', true, ['from database']], ['down', false, ['completed by database']]]);
+
+        $this->assertSame(['from database'], $search->search('down'));
+        $this->assertSame(['completed by database'], $search->autoComplete('down'));
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testAutoCompleteFallsBackToDatabaseWhenElasticsearchClientIsMissing(): void
     {
         $this->setConfigValue('search.enableElasticsearch', 'true');
@@ -644,6 +750,8 @@ class SearchTest extends TestCase
         $config->method('hasOpenSearch')->willReturn(true);
         $config->method('getOpenSearch')->willReturn($client);
         $config->method('getOpenSearchConfig')->willReturn(new OpenSearchConfiguration($openSearchConfigFile));
+        $config->method('getDb')->willReturn($this->dbHandle);
+        $this->insertFaqForEngineHit(42);
 
         $search = new Search($config);
         $search->setCategory($category);
@@ -711,6 +819,8 @@ class SearchTest extends TestCase
         $config->method('getLanguage')->willReturn($language);
         $config->method('getOpenSearch')->willReturn($client);
         $config->method('getOpenSearchConfig')->willReturn(new OpenSearchConfiguration($openSearchConfigFile));
+        $config->method('getDb')->willReturn($this->dbHandle);
+        $this->insertFaqForEngineHit(84);
 
         $search = new Search($config);
         $search->setCategory($category);
@@ -1048,6 +1158,65 @@ class SearchTest extends TestCase
     }
 
     /**
+     * The solution-ID lookup has to honour the same conditions as the full-text search:
+     * a draft must not become readable just because its solution ID is known.
+     *
+     * @throws Exception
+     */
+    public function testSearchBySolutionIdDoesNotReturnADraftFaq(): void
+    {
+        $this->setConfigValue('search.searchForSolutionId', 'true');
+        foreach ([
+            [2, 1002, 'draft'],
+            [3, 1003, 'published'],
+        ] as [$id, $solutionId, $status]) {
+            $this->dbHandle->query(sprintf(
+                "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content,
+                    author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
+                VALUES (%d, 'en', %d, 0, '%s', 0, '', 'Question %d', 'Answer', 'author',
+                    'author@example.com', 'n', '20260101000000', '00000000000000', '99991231235959',
+                    '2026-01-01 00:00:00', '', 0)",
+                $id,
+                $solutionId,
+                $status,
+                $solutionId,
+            ));
+            $this->dbHandle->query(sprintf("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+                VALUES (1, 'en', %d, 'en')", $id));
+        }
+
+        $this->assertSame([], $this->search->search('1002'));
+
+        $published = $this->search->search('1003');
+        $this->assertCount(1, $published);
+        $this->assertSame(1003, (int) $published[0]->solution_id);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchBySolutionIdHonoursTheSelectedCategory(): void
+    {
+        $this->setConfigValue('search.searchForSolutionId', 'true');
+        $this->dbHandle->query("INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author,
+                email, comment, updated, date_start, date_end, created, notes, sticky_order)
+            VALUES (4, 'en', 1004, 0, 'published', 0, '', 'Category question', 'Answer', 'author',
+                'author@example.com', 'n', '20260101000000', '00000000000000', '99991231235959',
+                '2026-01-01 00:00:00', '', 0)");
+        $this->dbHandle->query("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+            VALUES (7, 'en', 4, 'en')");
+        $category = $this->createStub(Category::class);
+        $category->method('getChildNodes')->willReturn([]);
+        $this->search->setCategory($category);
+
+        $this->search->setCategoryId(8);
+        $this->assertSame([], $this->search->search('1004'));
+
+        $this->search->setCategoryId(7);
+        $this->assertCount(1, $this->search->search('1004'));
+    }
+
+    /**
      * @throws Exception
      */
     public function testSearchElasticsearchUsesCategoryAndLanguageFilters(): void
@@ -1079,6 +1248,7 @@ class SearchTest extends TestCase
         ]);
 
         $config = $this->createElasticsearchConfigurationMock($httpClient, $language);
+        $this->insertFaqForEngineHit(84);
 
         $search = new Search($config);
         $search->setCategory($category);
@@ -1131,6 +1301,7 @@ class SearchTest extends TestCase
                 default => null,
             });
         $config->method('hasElasticsearch')->willReturn(true);
+        $this->insertFaqForEngineHit(42);
 
         $search = new Search($config);
         $search->setCategory($category);
@@ -1173,6 +1344,25 @@ class SearchTest extends TestCase
         };
     }
 
+    /**
+     * An HTTP client as the search engine client sees it while the cluster is down.
+     */
+    private function createUnreachableHttpClient(): ClientInterface
+    {
+        return new class implements ClientInterface {
+            public function sendRequest(RequestInterface $request): ResponseInterface
+            {
+                throw new class('Connection refused') extends \RuntimeException implements
+                    \Psr\Http\Client\NetworkExceptionInterface {
+                    public function getRequest(): RequestInterface
+                    {
+                        throw new \LogicException('Not needed.');
+                    }
+                };
+            }
+        };
+    }
+
     private function createElasticsearchConfigurationMock(
         ClientInterface $httpClient,
         Language $language,
@@ -1194,7 +1384,171 @@ class SearchTest extends TestCase
         $config->method('getLanguage')->willReturn($language);
         $config->method('getElasticsearch')->willReturn($client);
         $config->method('getElasticsearchConfig')->willReturn($elasticsearchConfiguration);
+        $config->method('getDb')->willReturn($this->dbHandle);
 
         return $config;
+    }
+
+    private function insertFaqForEngineHit(
+        int $id,
+        string $status = 'published',
+        string $dateStart = '00000000000000',
+        string $dateEnd = '99991231235959',
+    ): void {
+        $this->dbHandle->query(sprintf(
+            "INSERT INTO faqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content,
+                author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
+            VALUES (%d, 'en', %d, 0, '%s', 0, '', 'Question %d', 'Answer', 'author',
+                'author@example.com', 'n', '20260101000000', '%s', '%s', '2026-01-01 00:00:00', '', 0)",
+            $id,
+            $id + 1000,
+            $status,
+            $id,
+            $dateStart,
+            $dateEnd,
+        ));
+        $this->dbHandle->query(sprintf("INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang)
+            VALUES (1, 'en', %d, 'en')", $id));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function engineHit(int $id, string $contentType = 'faq'): array
+    {
+        return [
+            '_source' => [
+                'id' => $id,
+                'lang' => 'en',
+                'question' => 'hit ' . $id,
+                'answer' => 'answer',
+                'keywords' => '',
+                'category_id' => $contentType === 'faq' ? 1 : 0,
+                'content_type' => $contentType,
+                'slug' => 'slug-' . $id,
+            ],
+            '_score' => 1.0,
+        ];
+    }
+
+    /**
+     * The index knows neither status nor publication dates, so hits are checked against the
+     * database: scheduled, expired, unpublished and deleted FAQs are dropped, pages are kept.
+     *
+     * @throws Exception
+     */
+    public function testSearchElasticsearchDropsFaqHitsThatAreNotVisibleRightNow(): void
+    {
+        $language = $this->createMock(Language::class);
+        $language->method('getLanguage')->willReturn('en');
+        $category = $this->createStub(Category::class);
+        $category->method('getAllCategoryIds')->willReturn([1]);
+
+        $this->insertFaqForEngineHit(701);
+        $this->insertFaqForEngineHit(702, dateStart: '29990101000000');
+        $this->insertFaqForEngineHit(703, dateEnd: '20000101000000');
+        $this->insertFaqForEngineHit(704, status: 'draft');
+
+        $httpClient = $this->createElasticsearchHttpClient([
+            'hits' => [
+                'hits' => [
+                    $this->engineHit(701),
+                    $this->engineHit(702),
+                    $this->engineHit(703),
+                    $this->engineHit(704),
+                    $this->engineHit(705),
+                    $this->engineHit(702, 'page'),
+                ],
+            ],
+        ]);
+        $config = $this->createElasticsearchConfigurationMock($httpClient, $language);
+        $config
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'search.enableElasticsearch' => true,
+                default => null,
+            });
+        $config->method('hasElasticsearch')->willReturn(true);
+
+        $search = new Search($config);
+        $search->setCategory($category);
+
+        $this->assertSame(['hit 701', 'hit 702'], array_column($search->searchElasticsearch('hit'), 'question'));
+        $this->assertSame(['hit 701', 'hit 702'], array_column($search->autoComplete('hit'), 'question'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchOpenSearchDropsFaqHitsThatAreNotVisibleRightNow(): void
+    {
+        $language = $this->createMock(Language::class);
+        $language->method('getLanguage')->willReturn('en');
+        $category = $this->createStub(Category::class);
+        $category->method('getAllCategoryIds')->willReturn([1]);
+
+        $this->insertFaqForEngineHit(711);
+        $this->insertFaqForEngineHit(712, dateStart: '29990101000000');
+        $this->insertFaqForEngineHit(713, dateEnd: '20000101000000');
+
+        $client = $this
+            ->getMockBuilder(OpenSearchClient::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['search'])
+            ->getMock();
+        $client
+            ->method('search')
+            ->willReturn([
+                'hits' => [
+                    'hits' => [
+                        $this->engineHit(711),
+                        $this->engineHit(712),
+                        $this->engineHit(713),
+                        $this->engineHit(713, 'page'),
+                    ],
+                ],
+            ]);
+
+        $openSearchConfigFile = tempnam(sys_get_temp_dir(), 'pmf-opensearch-');
+        file_put_contents(
+            $openSearchConfigFile,
+            "<?php\n\$PMF_OS = ['hosts' => ['http://localhost:9200'], 'index' => 'faq-index'];\n",
+        );
+        $config = $this->createMock(Configuration::class);
+        $config
+            ->method('get')
+            ->willReturnCallback(static fn(string $item): mixed => match ($item) {
+                'search.enableOpenSearch' => true,
+                default => null,
+            });
+        $config->method('getLanguage')->willReturn($language);
+        $config->method('hasOpenSearch')->willReturn(true);
+        $config->method('getOpenSearch')->willReturn($client);
+        $config->method('getOpenSearchConfig')->willReturn(new OpenSearchConfiguration($openSearchConfigFile));
+        $config->method('getDb')->willReturn($this->dbHandle);
+        unlink($openSearchConfigFile);
+
+        $search = new Search($config);
+        $search->setCategory($category);
+
+        $this->assertSame(['hit 711', 'hit 713'], array_column($search->searchOpenSearch('hit'), 'question'));
+        $this->assertSame(['hit 711', 'hit 713'], array_column($search->autoComplete('hit'), 'question'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchDatabaseSkipsFaqsOutsideTheirPublicationWindow(): void
+    {
+        $this->setConfigValue('search.enableElasticsearch', 'false');
+        $this->setConfigValue('search.enableOpenSearch', 'false');
+        $this->insertFaqForEngineHit(721);
+        $this->insertFaqForEngineHit(722, dateStart: '29990101000000');
+        $this->insertFaqForEngineHit(723, dateEnd: '20000101000000');
+        $this->dbHandle->query("UPDATE faqdata SET thema = 'Windowsearch ' || id WHERE id IN (721, 722, 723)");
+
+        $questions = array_column($this->search->search('Windowsearch'), 'question');
+
+        $this->assertSame(['Windowsearch 721'], $questions);
     }
 }

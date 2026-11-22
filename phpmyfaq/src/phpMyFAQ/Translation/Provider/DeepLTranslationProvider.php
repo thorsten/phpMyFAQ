@@ -73,7 +73,7 @@ class DeepLTranslationProvider extends AbstractTranslationProvider
                 ],
                 'body' => [
                     'text' => $text,
-                    'source_lang' => $this->mapLanguageCode($sourceLang),
+                    'source_lang' => $this->mapSourceLanguageCode($sourceLang),
                     'target_lang' => $this->mapLanguageCode($targetLang),
                 ],
             ]);
@@ -107,7 +107,7 @@ class DeepLTranslationProvider extends AbstractTranslationProvider
                 ],
                 'body' => [
                     'text' => $texts,
-                    'source_lang' => $this->mapLanguageCode($sourceLang),
+                    'source_lang' => $this->mapSourceLanguageCode($sourceLang),
                     'target_lang' => $this->mapLanguageCode($targetLang),
                 ],
             ]);
@@ -205,5 +205,14 @@ class DeepLTranslationProvider extends AbstractTranslationProvider
             'zh' => 'ZH',
             default => strtoupper($pmfLangCode),
         };
+    }
+
+    /**
+     * DeepL accepts regional variants (EN-US, PT-BR) only as target language; the source language
+     * is the base language (EN, PT).
+     */
+    private function mapSourceLanguageCode(string $pmfLangCode): string
+    {
+        return strtoupper(preg_split('/[-_]/', $pmfLangCode)[0] ?? $pmfLangCode);
     }
 }

@@ -62,7 +62,7 @@ readonly class RatingStatistics
                         fd.lang AS lang,
                         fcr.category_id AS category_id,
                         CAST(fd.thema as char(2000)) AS question,
-                        (fv.vote / fv.usr) AS num,
+                        (fv.vote * 1.0 / fv.usr) AS num,
                         fv.usr AS usr
                     FROM
                         %sfaqvoting fv,
@@ -90,7 +90,7 @@ readonly class RatingStatistics
                         fd.lang AS lang,
                         fcr.category_id AS category_id,
                         fd.thema AS question,
-                        (fv.vote / fv.usr) AS num,
+                        (fv.vote * 1.0 / fv.usr) AS num,
                         fv.usr AS usr
                     FROM
                         %sfaqvoting fv,

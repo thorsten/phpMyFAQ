@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Administration;
 
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
@@ -347,21 +348,27 @@ class AdminMenuBuilder
     }
 
     /**
-     * Checks if the current user can access the content.
+     * Checks if the current user can access the content: super admins and users holding at least
+     * one administrative right. The right to read FAQs is granted to every registered user and
+     * opens nothing in the administration, so it does not count.
      */
     public function canAccessContent(CurrentUser $currentUser): bool
     {
-        return (
-            $currentUser->isLoggedIn()
-            && (
-                (
-                    is_countable($currentUser->perm->getAllUserRights($currentUser->getUserId()))
-                        ? count($currentUser->perm->getAllUserRights($currentUser->getUserId()))
-                        : 0
-                )
-                || $currentUser->isSuperAdmin()
-            )
+        if (!$currentUser->isLoggedIn()) {
+            return false;
+        }
+
+        if ($currentUser->isSuperAdmin()) {
+            return true;
+        }
+
+        $readOnlyRightId = $currentUser->perm->getRightId(PermissionType::FAQS_VIEW->value);
+        $administrativeRights = array_filter(
+            $currentUser->perm->getAllUserRights($currentUser->getUserId()),
+            static fn(mixed $rightId): bool => (int) $rightId !== $readOnlyRightId,
         );
+
+        return $administrativeRights !== [];
     }
 
     private static function generateOption(string $current, string $value, string $label): string

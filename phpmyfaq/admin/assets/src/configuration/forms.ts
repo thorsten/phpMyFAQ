@@ -21,7 +21,7 @@ import {
   fetchEditTranslation,
   fetchSetInputAsRequired,
 } from '../api';
-import { pushNotification } from '../../../../assets/src/utils';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
 export const handleFormEdit = (): void => {
   const forms = document.getElementById('forms') as HTMLElement;
@@ -37,7 +37,9 @@ export const handleFormEdit = (): void => {
         if (typeof response.success === 'string') {
           pushNotification(response.success);
         } else {
-          console.error(response.error);
+          // Nothing was saved: the checkbox goes back to what the server still has.
+          element.checked = !checked;
+          pushErrorNotification(response.error ?? 'Unknown error');
         }
       });
     });
@@ -53,7 +55,8 @@ export const handleFormEdit = (): void => {
         if (typeof response.success === 'string') {
           pushNotification(response.success);
         } else {
-          console.error(response.error);
+          element.checked = !checked;
+          pushErrorNotification(response.error ?? 'Unknown error');
         }
       });
     });
@@ -114,11 +117,11 @@ export const handleFormTranslations = (): void => {
           const csrf = element.getAttribute('data-pmf-csrf') as string;
           const formId = element.getAttribute('data-pmf-formId') as string;
           const inputId = element.getAttribute('data-pmf-inputId') as string;
-          const response = await fetchEditTranslation(csrf, formId, inputId, lang, input.value);
+          const response = await fetchEditTranslation(csrf, formId, inputId, input.value, lang);
           if (typeof response.success === 'string') {
             pushNotification(response.success);
           } else {
-            console.error(response.error);
+            pushErrorNotification(response.error ?? 'Unknown error');
           }
         }
       });
@@ -142,7 +145,7 @@ export const handleFormTranslations = (): void => {
             document.getElementById('languageSelect')?.appendChild(option);
           }
         } else {
-          console.error(response.error);
+          pushErrorNotification(response.error ?? 'Unknown error');
         }
       });
     });
@@ -164,7 +167,7 @@ export const handleFormTranslations = (): void => {
             window.location.reload();
           }, 3000);
         } else {
-          console.error(response.error);
+          pushErrorNotification(response.error ?? 'Unknown error');
         }
       });
     }

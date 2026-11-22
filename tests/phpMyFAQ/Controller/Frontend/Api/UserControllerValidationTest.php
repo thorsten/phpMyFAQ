@@ -486,14 +486,14 @@ final class UserControllerValidationTest extends ApiControllerTestCase
             ->with([
                 'display_name' => 'Jane Doe',
                 'is_visible' => 1,
-                'email' => '',
                 'twofactor_enabled' => 0,
             ])
             ->willReturn(true);
 
         $this->injectControllerState($controller, $currentUser, $session);
 
-        // An invalid submitted address filters to '' upstream; it must not trip the step-up.
+        // An invalid submitted address is not written at all, so the stored one stays; it must
+        // not trip the step-up either.
         $response = $controller->updateData($this->createProfileUpdateRequest($csrfToken, 'not-an-email'));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -1046,7 +1046,7 @@ final class UserControllerValidationTest extends ApiControllerTestCase
             'name' => 'Test User',
             'loginname' => 'testuser',
             'email' => 'test@example.com',
-            'question' => 'Please remove my account.',
+            'question' => "Please remove my account.\nThank you.",
             'pmf-csrf-token' => $csrfToken,
         ], JSON_THROW_ON_ERROR));
 
@@ -1055,6 +1055,9 @@ final class UserControllerValidationTest extends ApiControllerTestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(Translation::get('msgMailContact'), $payload['success']);
+        // The message is built with HTML line breaks, so it has to be declared as HTML
+        self::assertSame('text/html', $mailer->contentType);
+        self::assertStringContainsString("<br><br>Please remove my account.<br />\nThank you.", $mailer->message);
     }
 
     public function testRequestUserRemovalThrowsExceptionForInvalidJson(): void

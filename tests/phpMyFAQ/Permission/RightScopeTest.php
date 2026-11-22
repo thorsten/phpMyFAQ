@@ -125,8 +125,10 @@ final class RightScopeTest extends TestCase
         self::assertNull(self::germanEverywherePlusCategoryOne()->languagesInAnyCategory());
         self::assertSame(
             ['de', 'en'],
-            RightScope::ofGrants(new RightGrant([1], ['de']), new RightGrant(languages: ['de', 'en']))
-                ->languagesInAnyCategory(),
+            RightScope::ofGrants(
+                new RightGrant([1], ['de']),
+                new RightGrant(languages: ['de', 'en']),
+            )->languagesInAnyCategory(),
         );
     }
 
@@ -147,9 +149,7 @@ final class RightScopeTest extends TestCase
     {
         self::assertSame(['de'], self::germanEverywherePlusCategoryOne()->languagesInEveryCategory());
         self::assertSame([], RightScope::ofGrants(new RightGrant([1]))->languagesInEveryCategory());
-        self::assertNull(
-            RightScope::ofGrants(new RightGrant([1]), new RightGrant())->languagesInEveryCategory(),
-        );
+        self::assertNull(RightScope::ofGrants(new RightGrant([1]), new RightGrant())->languagesInEveryCategory());
     }
 
     public function testSeparateGrantsDoNotCoverAnUnrestrictedGrant(): void
@@ -197,5 +197,63 @@ final class RightScopeTest extends TestCase
         self::assertFalse($scope->coversScope(RightScope::ofGrants(new RightGrant([2], ['en']))));
         self::assertFalse($scope->coversScope(RightScope::unrestricted()));
         self::assertTrue(RightScope::unrestricted()->coversScope($scope));
+    }
+
+    public function testCoversChangeAcceptsAnUnchangedGrantOutsideTheScope(): void
+    {
+        $scope = RightScope::ofGrants(new RightGrant([1, 2], ['de']));
+
+        self::assertTrue($scope->coversChange(new RightGrant(), new RightGrant()));
+        self::assertTrue($scope->coversChange(new RightGrant([1, 5], ['fr']), new RightGrant([5, 1], ['fr'])));
+        self::assertTrue(RightScope::none()->coversChange(new RightGrant([9]), new RightGrant([9])));
+    }
+
+    public function testCoversChangeJudgesOnlyTheCategoriesAddedAndRemoved(): void
+    {
+        $scope = RightScope::ofGrants(new RightGrant([1, 2], ['de']));
+        $held = new RightGrant([1, 5], ['de']);
+
+        // Category 5 lies outside the scope: it may stay, but not go, and none may join it.
+        self::assertTrue($scope->coversChange($held, new RightGrant([2, 5], ['de'])));
+        self::assertTrue($scope->coversChange($held, new RightGrant([5], ['de'])));
+        self::assertFalse($scope->coversChange($held, new RightGrant([1], ['de'])));
+        self::assertFalse($scope->coversChange($held, new RightGrant([1, 5, 6], ['de'])));
+        // The categories are held in German only.
+        self::assertFalse($scope->coversChange(new RightGrant([1, 5], ['en']), new RightGrant([2, 5], ['en'])));
+    }
+
+    public function testCoversChangeJudgesOnlyTheLanguagesAddedAndRemoved(): void
+    {
+        $scope = RightScope::ofGrants(new RightGrant(languages: ['de', 'en']));
+        $held = new RightGrant(languages: ['de', 'fr']);
+
+        self::assertTrue($scope->coversChange($held, new RightGrant(languages: ['en', 'fr'])));
+        self::assertFalse($scope->coversChange($held, new RightGrant(languages: ['de'])));
+        self::assertFalse($scope->coversChange($held, new RightGrant(languages: ['de', 'fr', 'es'])));
+    }
+
+    public function testCoversChangeToOrFromUnrestrictedNeedsTheWholeDimension(): void
+    {
+        $restricted = RightScope::ofGrants(new RightGrant([1, 2], ['de']));
+        $everyCategoryInGerman = RightScope::ofGrants(new RightGrant(languages: ['de']));
+
+        // Narrowing "every category" takes away categories that cannot be listed.
+        self::assertFalse($restricted->coversChange(new RightGrant(languages: ['de']), new RightGrant([1], ['de'])));
+        self::assertFalse($restricted->coversChange(new RightGrant([1], ['de']), new RightGrant(languages: ['de'])));
+        self::assertTrue($everyCategoryInGerman->coversChange(
+            new RightGrant(languages: ['de']),
+            new RightGrant([1], ['de']),
+        ));
+        self::assertFalse($everyCategoryInGerman->coversChange(new RightGrant(), new RightGrant(languages: ['de'])));
+        self::assertTrue(RightScope::unrestricted()->coversChange(new RightGrant(), new RightGrant([1], ['de'])));
+    }
+
+    public function testCoversChangeInBothDimensionsNeedsBothGrantsCovered(): void
+    {
+        $scope = RightScope::ofGrants(new RightGrant([1, 2], ['de', 'en']));
+
+        self::assertTrue($scope->coversChange(new RightGrant([1], ['de']), new RightGrant([2], ['en'])));
+        self::assertFalse($scope->coversChange(new RightGrant([1], ['de']), new RightGrant([3], ['en'])));
+        self::assertFalse($scope->coversChange(new RightGrant([1], ['fr']), new RightGrant([2], ['en'])));
     }
 }

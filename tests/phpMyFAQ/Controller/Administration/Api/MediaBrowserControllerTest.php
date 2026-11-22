@@ -170,7 +170,7 @@ final class MediaBrowserControllerTest extends TestCase
         Token::resetInstanceForTests();
         $csrfToken = md5(base64_encode(random_bytes(32)));
         $tokenObj = Token::getInstance($session);
-        $tokenPage = 'media-browser';
+        $tokenPage = 'pmf-csrf-token';
         $sessionKey = sprintf('%s.%s', Token::PMF_SESSION_NAME, $tokenPage);
 
         // Use reflection to create a Token object for session storage
@@ -289,7 +289,7 @@ final class MediaBrowserControllerTest extends TestCase
 
         Token::resetInstanceForTests();
         $csrfToken = md5(base64_encode(random_bytes(32)));
-        $tokenPage = 'media-browser';
+        $tokenPage = 'pmf-csrf-token';
         $tokenReflection = new \ReflectionClass(Token::class);
         $storedToken = $tokenReflection->newInstanceWithoutConstructor();
         $storedToken->setPage($tokenPage);

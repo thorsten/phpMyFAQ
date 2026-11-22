@@ -180,6 +180,44 @@ describe('phpMyFAQ Jodit Plugin', () => {
       expect(resultsContainer.innerHTML).toContain('value="/faq/1"');
     });
 
+    it('should search with the editor token when the page keeps its form token in #pmf-csrf-token', async () => {
+      injectDialogHtml();
+      document.body.insertAdjacentHTML(
+        'beforeend',
+        '<input type="hidden" id="pmf-editor-csrf-token" value="editor-token" />'
+      );
+
+      (fetchFaqsByAutocomplete as Mock).mockResolvedValue({ success: [] });
+
+      commandFn();
+
+      const searchInput = document.getElementById('pmf-search-internal-links') as HTMLInputElement;
+      searchInput.value = 'test';
+      searchInput.dispatchEvent(new Event('keyup'));
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(fetchFaqsByAutocomplete).toHaveBeenCalledWith('test', 'editor-token');
+    });
+
+    it('should show the error of a refused search instead of failing on the missing result list', async () => {
+      injectDialogHtml();
+
+      (fetchFaqsByAutocomplete as Mock).mockResolvedValue({ error: 'No permission' });
+
+      commandFn();
+
+      const searchInput = document.getElementById('pmf-search-internal-links') as HTMLInputElement;
+      searchInput.value = 'test';
+      searchInput.dispatchEvent(new Event('keyup'));
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      const resultsContainer = document.getElementById('pmf-search-results') as HTMLDivElement;
+      expect(resultsContainer.textContent).toBe('No permission');
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
     it('should clear results when search query is empty', async () => {
       injectDialogHtml();
 

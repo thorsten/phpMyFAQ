@@ -72,6 +72,7 @@ class SearchClientFactoryTest extends TestCase
             'ELASTICSEARCH_BASE_URI' => $_ENV['ELASTICSEARCH_BASE_URI'] ?? null,
             'OPENSEARCH_BASE_URI' => $_ENV['OPENSEARCH_BASE_URI'] ?? null,
             'SEARCH_WAIT_TIMEOUT' => $_ENV['SEARCH_WAIT_TIMEOUT'] ?? null,
+            'SEARCH_REQUEST_TIMEOUT' => $_ENV['SEARCH_REQUEST_TIMEOUT'] ?? null,
         ];
     }
 
@@ -165,7 +166,7 @@ class SearchClientFactoryTest extends TestCase
         $httpClient = new MockHttpClient([$response]);
         $configuration = $this->createConfiguration();
 
-        SearchClientFactory::configureElasticsearch($configuration, $configDir, $httpClient);
+        SearchClientFactory::configureElasticsearch($configuration, $configDir, $httpClient, waitForCluster: true);
 
         $this->assertSame(['http://localhost:9200'], $configuration->getElasticsearchConfig()->getHosts());
         $this->assertSame('pmf', $configuration->getElasticsearchConfig()->getIndex());
@@ -188,6 +189,7 @@ class SearchClientFactoryTest extends TestCase
             $configDir,
             $httpClient,
             static fn() => throw new AuthenticationException('denied'),
+            waitForCluster: true,
         );
 
         $reflection = new ReflectionClass($configuration);
@@ -208,12 +210,138 @@ class SearchClientFactoryTest extends TestCase
         $httpClient = new MockHttpClient([$response]);
         $configuration = $this->createConfiguration();
 
-        SearchClientFactory::configureOpenSearch($configuration, $configDir, $httpClient);
+        SearchClientFactory::configureOpenSearch($configuration, $configDir, $httpClient, waitForCluster: true);
 
         $this->assertSame(['http://localhost:9201'], $configuration->getOpenSearchConfig()->getHosts());
         $this->assertSame('pmf', $configuration->getOpenSearchConfig()->getIndex());
         $this->assertInstanceOf(\OpenSearch\Client::class, $configuration->getOpenSearch());
         $this->assertSame(1, $httpClient->getRequestsCount());
+    }
+
+    public function testWebRequestsConfigureTheClientsWithoutContactingTheCluster(): void
+    {
+        $_ENV['SEARCH_WAIT_TIMEOUT'] = '15';
+        $httpClient = new MockHttpClient(static function (): never {
+            throw new \LogicException('A web request must not ask for the cluster health.');
+        });
+        $configuration = $this->createConfiguration();
+
+        $start = microtime(true);
+        SearchClientFactory::configureElasticsearch(
+            $configuration,
+            $this->createSearchConfigDirectory('elasticsearch'),
+            $httpClient,
+        );
+        SearchClientFactory::configureOpenSearch(
+            $configuration,
+            $this->createSearchConfigDirectory('opensearch'),
+            $httpClient,
+        );
+
+        $this->assertSame(0, $httpClient->getRequestsCount());
+        $this->assertLessThan(1.0, microtime(true) - $start);
+        $this->assertInstanceOf(\Elastic\Elasticsearch\Client::class, $configuration->getElasticsearch());
+        $this->assertInstanceOf(\OpenSearch\Client::class, $configuration->getOpenSearch());
+    }
+
+    public function testWebHttpClientOptionsUseShortTimeouts(): void
+    {
+        unset($_ENV['SEARCH_REQUEST_TIMEOUT']);
+        $this->assertSame(['max_connect_duration' => 2, 'timeout' => 5], SearchClientFactory::webHttpClientOptions());
+
+        $_ENV['SEARCH_REQUEST_TIMEOUT'] = '30';
+        $this->assertSame(['max_connect_duration' => 2, 'timeout' => 30], SearchClientFactory::webHttpClientOptions());
+
+        $_ENV['SEARCH_REQUEST_TIMEOUT'] = '0';
+        $this->assertSame(['max_connect_duration' => 2, 'timeout' => 5], SearchClientFactory::webHttpClientOptions());
+    }
+
+    public function testWebClientsGiveUpOnAClusterThatDoesNotAnswer(): void
+    {
+        // Accepts connections, but never answers: the worst case for a web request
+        $server = stream_socket_server('tcp://127.0.0.1:0');
+        $this->assertIsResource($server);
+        $baseUri = 'http://' . stream_socket_get_name($server, false);
+
+        $_ENV['SEARCH_REQUEST_TIMEOUT'] = '1';
+        $_ENV['ELASTICSEARCH_BASE_URI'] = $baseUri;
+        $_ENV['OPENSEARCH_BASE_URI'] = $baseUri;
+        $configuration = $this->createConfiguration();
+        SearchClientFactory::configureElasticsearch(
+            $configuration,
+            $this->createSearchConfigDirectory('elasticsearch'),
+        );
+        SearchClientFactory::configureOpenSearch($configuration, $this->createSearchConfigDirectory('opensearch'));
+
+        try {
+            foreach ([
+                'Elasticsearch' => static fn(): mixed => $configuration->getElasticsearch()->search(['index' => 'pmf']),
+                'OpenSearch' => static fn(): mixed => $configuration->getOpenSearch()->search(['index' => 'pmf']),
+            ] as $engine => $search) {
+                $start = microtime(true);
+                try {
+                    $search();
+                    $this->fail($engine . ' answered although the cluster is silent.');
+                } catch (\Throwable $throwable) {
+                    $this->assertNotInstanceOf(\PHPUnit\Framework\AssertionFailedError::class, $throwable);
+                }
+
+                $this->assertLessThan(5.0, microtime(true) - $start, $engine . ' must give up after the timeout.');
+            }
+        } finally {
+            fclose($server);
+        }
+    }
+
+    public function testLongRunningHttpClientOptionsLimitOnlyTheConnection(): void
+    {
+        $_ENV['SEARCH_REQUEST_TIMEOUT'] = '1';
+
+        $this->assertSame(['max_connect_duration' => 2], SearchClientFactory::longRunningHttpClientOptions());
+    }
+
+    public function testLongRunningClientsOutlastTheWebRequestTimeout(): void
+    {
+        // Accepts connections, but never answers: only PHP's own socket timeout ends the request
+        $server = stream_socket_server('tcp://127.0.0.1:0');
+        $this->assertIsResource($server);
+        $baseUri = 'http://' . stream_socket_get_name($server, false);
+
+        $_ENV['SEARCH_REQUEST_TIMEOUT'] = '1';
+        $_ENV['ELASTICSEARCH_BASE_URI'] = $baseUri;
+        $_ENV['OPENSEARCH_BASE_URI'] = $baseUri;
+        $socketTimeout = ini_set('default_socket_timeout', '2');
+
+        try {
+            $elasticsearch = SearchClientFactory::buildLongRunningElasticsearchClient(new ElasticsearchConfiguration(
+                $this->createSearchConfigDirectory('elasticsearch') . '/elasticsearch.php',
+            ));
+            $openSearch = SearchClientFactory::buildLongRunningOpenSearchClient(new OpenSearchConfiguration(
+                $this->createSearchConfigDirectory('opensearch') . '/opensearch.php',
+            ));
+
+            foreach ([
+                'Elasticsearch' => static fn(): mixed => $elasticsearch->bulk(['body' => [['index' => []]]]),
+                'OpenSearch' => static fn(): mixed => $openSearch->bulk(['body' => [['index' => []]]]),
+            ] as $engine => $bulk) {
+                $start = microtime(true);
+                try {
+                    $bulk();
+                    $this->fail($engine . ' answered although the cluster is silent.');
+                } catch (\Throwable $throwable) {
+                    $this->assertNotInstanceOf(\PHPUnit\Framework\AssertionFailedError::class, $throwable);
+                }
+
+                $this->assertGreaterThan(
+                    1.5,
+                    microtime(true) - $start,
+                    $engine . ' must not give up after SEARCH_REQUEST_TIMEOUT.',
+                );
+            }
+        } finally {
+            ini_set('default_socket_timeout', (string) $socketTimeout);
+            fclose($server);
+        }
     }
 
     public function testWaitForHealthyDefaultClientVerifiesPeers(): void

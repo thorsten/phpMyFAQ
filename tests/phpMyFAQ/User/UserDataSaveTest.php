@@ -32,6 +32,8 @@ final class UserDataSaveTest extends TestCase
     {
         $db = $this->configuration->getDb();
         foreach (['keycloak_sub', 'entra_oid'] as $column) {
+            // SQLite refuses to drop a column that still carries an index.
+            $this->assertNotFalse($db->query(sprintf('DROP INDEX IF EXISTS idx_faquserdata_%s', $column)));
             $this->assertNotFalse($db->query(sprintf(
                 'ALTER TABLE %sfaquserdata DROP COLUMN %s',
                 Database::getTablePrefix(),

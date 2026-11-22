@@ -119,7 +119,7 @@ describe('handleAddFaq', () => {
     expect(errorAlert?.innerText).toBe('Something went wrong');
   });
 
-  it('should show unexpected error message when createFaq rejects', async () => {
+  it('should show the message of the error when createFaq rejects', async () => {
     document.body.innerHTML = `
       <form id="pmf-add-faq-form" class="needs-validation">
         <textarea name="question">Test</textarea>
@@ -129,7 +129,7 @@ describe('handleAddFaq', () => {
       <div id="pmf-add-faq-response"></div>
     `;
 
-    vi.mocked(createFaq).mockRejectedValue(new Error('HTTP 500'));
+    vi.mocked(createFaq).mockRejectedValue(new Error('Please enter the captcha code'));
 
     handleAddFaq();
 
@@ -145,7 +145,7 @@ describe('handleAddFaq', () => {
 
     const errorAlert = document.querySelector('.alert-danger') as HTMLElement | null;
     expect(errorAlert).not.toBeNull();
-    expect(errorAlert?.innerText).toBe('An unexpected error occurred.');
+    expect(errorAlert?.innerText).toBe('Please enter the captcha code');
   });
 });
 
@@ -304,6 +304,27 @@ describe('handleShowFaq', () => {
     });
 
     expect(pushErrorNotification).toHaveBeenCalledWith('Failed to delete');
+  });
+
+  it('should show the server message when the bookmark request is refused', async () => {
+    document.body.innerHTML = `
+      <a id="pmf-bookmark-toggle" href="#"
+         data-pmf-csrf="token123"
+         data-pmf-id="42"
+         data-pmf-action="add">
+        Add Bookmark
+      </a>
+    `;
+
+    vi.mocked(createBookmark).mockRejectedValue(new Error('You are not allowed to do this'));
+
+    handleShowFaq();
+
+    (document.getElementById('pmf-bookmark-toggle') as HTMLElement).click();
+
+    await vi.waitFor(() => {
+      expect(pushErrorNotification).toHaveBeenCalledWith('You are not allowed to do this');
+    });
   });
 
   it('should show "Unknown error" when error field is missing on failed bookmark', async () => {

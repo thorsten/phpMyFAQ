@@ -201,6 +201,45 @@ class WorkerTest extends TestCase
         }
     }
 
+    public function testRunOnceLogsAJobThatCannotBeRemovedAfterItFinished(): void
+    {
+        $logFile = (string) tempnam(sys_get_temp_dir(), 'pmf-worker-log-');
+        $previousErrorLog = ini_set('error_log', $logFile);
+
+        $transport = $this->createStub(DatabaseTransport::class);
+        $transport
+            ->method('reserve')
+            ->willReturn([
+                'id' => 21,
+                'queue' => 'default',
+                'body' => json_encode([
+                    'class' => SendMailMessage::class,
+                    'payload' => ['recipient' => 'user@example.org', 'subject' => 'Hello', 'body' => 'World'],
+                ], JSON_THROW_ON_ERROR),
+                'headers' => [],
+            ]);
+        $transport->method('acknowledge')->willReturn(false);
+
+        $worker = new Worker($transport);
+        $worker->registerHandler(SendMailMessage::class, static function (): void {});
+
+        try {
+            $this->assertTrue($worker->runOnce());
+            $this->assertStringContainsString(
+                'Queue job 21 could not be removed from the queue after it finished',
+                (string) file_get_contents($logFile),
+            );
+        } finally {
+            if ($previousErrorLog !== false) {
+                ini_set('error_log', $previousErrorLog);
+            }
+
+            if (file_exists($logFile)) {
+                unlink($logFile);
+            }
+        }
+    }
+
     public function testRunStillProcessesJobsWhenReleasingStaleReservationsFails(): void
     {
         $logFile = (string) tempnam(sys_get_temp_dir(), 'pmf-worker-log-');

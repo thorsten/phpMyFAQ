@@ -113,7 +113,7 @@ final class CustomPageControllerTest extends TestCase
 
         $response = $controller->show(new Request([], [], ['slug' => '']));
 
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
         self::assertStringContainsString('404', (string) $response->getContent());
     }
 

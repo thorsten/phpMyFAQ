@@ -225,6 +225,7 @@ const selectUser = async (userId: string): Promise<void> => {
     }
     console.error('Failed to load language restrictions:', error);
     currentLanguageRestrictions = {};
+    loadedLanguageRestrictions = {};
     const container = document.getElementById('userLanguageRestrictionsBody');
     if (container) {
       container.innerHTML = '';
@@ -487,6 +488,21 @@ const wirePasswordOverwrite = (): void => {
 
 let cachedLanguages: LanguageItem[] = [];
 let currentLanguageRestrictions: LanguageRestrictions = {};
+// The restrictions as the server stores them, the baseline a save is compared with.
+let loadedLanguageRestrictions: LanguageRestrictions = {};
+
+// A restriction list is a set: the order of its entries carries no meaning.
+const isSameRestriction = (
+  loaded: ReadonlyArray<string | number>,
+  submitted: ReadonlyArray<string | number>
+): boolean => {
+  const loadedValues = new Set(loaded.map(String));
+  const submittedValues = new Set(submitted.map(String));
+  return (
+    loadedValues.size === submittedValues.size &&
+    [...submittedValues].every((value: string): boolean => loadedValues.has(value))
+  );
+};
 
 const loadUserLanguageRestrictions = async (userId: string): Promise<void> => {
   const container = document.getElementById('userLanguageRestrictionsBody');
@@ -499,6 +515,7 @@ const loadUserLanguageRestrictions = async (userId: string): Promise<void> => {
   }
 
   currentLanguageRestrictions = await fetchUserLanguageRestrictions(userId);
+  loadedLanguageRestrictions = { ...currentLanguageRestrictions };
 
   renderUserLanguageRestrictions(container);
 };
@@ -589,7 +606,10 @@ export const handleUserLanguageRestrictionsSave = async (): Promise<void> => {
   const csrfToken = detail.dataset.csrfLanguageRestrictions || '';
 
   // Collect every right ID from the permission checkboxes so unticked
-  // permissions also get their stored restrictions cleared.
+  // permissions also get their stored restrictions cleared. Only the rights
+  // whose list differs from the loaded one are submitted: the server judges
+  // every submitted right against the acting user's own scope, so resending
+  // an untouched list would fail the save for a restricted administrator.
   const rightIds = new Set<string>();
   document
     .querySelectorAll<HTMLInputElement>('#pmf-user-permission-list input[type=checkbox].permission')
@@ -599,7 +619,10 @@ export const handleUserLanguageRestrictionsSave = async (): Promise<void> => {
       }
     });
 
-  let failed = false;
+  const userId = selectedUserId;
+  const loadedRestrictions = loadedLanguageRestrictions;
+
+  const errors = new Set<string>();
   for (const rightId of rightIds) {
     const select = container.querySelector<HTMLSelectElement>(`select[data-right-id="${rightId}"]`);
     const selectedLanguageCodes = select
@@ -608,14 +631,21 @@ export const handleUserLanguageRestrictionsSave = async (): Promise<void> => {
           .map((option: HTMLOptionElement): string => option.value)
       : [];
 
-    const response = await saveUserLanguageRestrictions(selectedUserId, rightId, selectedLanguageCodes, csrfToken);
-    if (!response.success) {
-      failed = true;
+    if (isSameRestriction(loadedRestrictions[rightId] ?? [], selectedLanguageCodes)) {
+      continue;
     }
+
+    const response = await saveUserLanguageRestrictions(userId, rightId, selectedLanguageCodes, csrfToken);
+    if (!response.success) {
+      // The server says why it refused a right, e.g. restrictions the acting user may not remove
+      errors.add(response.error || container.dataset.msgSaveFailed || 'Failed to save language restrictions.');
+      continue;
+    }
+    loadedRestrictions[rightId] = selectedLanguageCodes;
   }
 
-  if (failed) {
-    pushErrorNotification(container.dataset.msgSaveFailed || 'Failed to save language restrictions.');
+  if (errors.size > 0) {
+    errors.forEach((error: string): void => pushErrorNotification(error));
   } else {
     pushNotification(container.dataset.msgSaved || 'Language restrictions saved.');
   }

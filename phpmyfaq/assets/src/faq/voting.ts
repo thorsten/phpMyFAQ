@@ -40,8 +40,11 @@ export const handleUserVoting = (): void => {
       async (event: Event) => {
         event.preventDefault();
 
-        const selectedButton = document.activeElement as HTMLElement | null;
-        if (!selectedButton) {
+        // Safari does not focus a button on click, so the clicked star is the submitter, not the active element.
+        const submitter = (event as SubmitEvent).submitter ?? document.activeElement;
+        const selectedButton =
+          submitter instanceof HTMLElement ? submitter.closest<HTMLElement>('.pmf-voting-star') : null;
+        if (!selectedButton || !votingForm.contains(selectedButton)) {
           return;
         }
 
@@ -82,8 +85,8 @@ export const handleUserVoting = (): void => {
           if (response.error) {
             pushErrorNotification(response.error);
           }
-        } catch {
-          pushErrorNotification('An unexpected error occurred.');
+        } catch (error) {
+          pushErrorNotification((error as Error).message);
         }
       },
       false

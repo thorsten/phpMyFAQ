@@ -284,6 +284,13 @@ class SystemTest extends TestCase
         $this->assertEquals([], $result);
     }
 
+    public function testTheDomExtensionIsRequiredBecauseTheSvgSanitizerParsesUploadsWithIt(): void
+    {
+        $requiredExtensions = new ReflectionProperty(System::class, 'requiredExtensions')->getValue(new System());
+
+        $this->assertContains('dom', $requiredExtensions);
+    }
+
     public function testGetSystemUriWithHttpUrl(): void
     {
         $configuration = $this->createStub(Configuration::class);

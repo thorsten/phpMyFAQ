@@ -22,7 +22,10 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use Override;
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Permission\PermissionInterface;
+use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -67,6 +70,41 @@ abstract class AbstractAdministrationApiController extends AbstractController
             ->perm
             ->getScopeForRight($this->currentUser->getUserId(), $rightId)
             ->covers($categoryIds === [] ? null : $categoryIds, $languages === [] ? null : $languages);
+    }
+
+    /**
+     * The refusal for an empty restriction list the acting user may not write while the right
+     * still has restrictions stored: an empty list means "unrestricted". Unticking a right keeps
+     * its restrictions, so the restriction panels submit exactly that for it. The message names
+     * the right and what stays stored.
+     *
+     * @param array<string> $storedRestrictions Names of the categories or languages that stay
+     */
+    protected function storedRestrictionsStay(
+        string $messageKey,
+        PermissionInterface $permission,
+        int $rightId,
+        array $storedRestrictions,
+    ): JsonResponse {
+        $rightName = (string) ($permission->getRightData($rightId)['name'] ?? '');
+        $translationKey = 'permission::' . $rightName;
+
+        return $this->json([
+            'error' => sprintf(
+                Translation::getString($messageKey),
+                Translation::has($translationKey) ? Translation::getString($translationKey) : $rightName,
+                implode(', ', $storedRestrictions),
+            ),
+        ], Response::HTTP_FORBIDDEN);
+    }
+
+    /**
+     * @param array<string> $languageCodes
+     * @return array<string>
+     */
+    protected function languageNames(array $languageCodes): array
+    {
+        return array_map(static fn(string $code): string => LanguageCodes::get($code) ?? $code, $languageCodes);
     }
 
     /**

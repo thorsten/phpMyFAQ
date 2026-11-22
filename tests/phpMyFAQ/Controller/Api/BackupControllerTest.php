@@ -86,12 +86,23 @@ class BackupControllerTest extends TestCase
         $dbTypeProperty = $databaseReflection->getProperty('dbType');
         $dbTypeProperty->setValue(null, '');
         @unlink($this->databasePath);
+        unset($_SERVER['HTTP_X_PMF_TOKEN']);
 
         parent::tearDown();
     }
 
-    private function createAuthenticatedContainer(): ContainerInterface
+    private function createAuthenticatedContainer(bool $withApiToken = true): ContainerInterface
     {
+        $this->configuration->getAll();
+        $configProperty = new \ReflectionProperty(Configuration::class, 'config');
+        $config = $configProperty->getValue($this->configuration);
+        $config['api.apiClientToken'] = 'test-token';
+        $configProperty->setValue($this->configuration, $config);
+
+        if ($withApiToken) {
+            $_SERVER['HTTP_X_PMF_TOKEN'] = 'test-token';
+        }
+
         $permission = $this->createStub(PermissionInterface::class);
         $permission
             ->method('hasPermission')
@@ -191,6 +202,22 @@ class BackupControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame('Invalid backup type.', (string) $response->getContent());
+    }
+
+    /**
+     * The endpoint documents "x-pmf-token" as required, like every other authenticated
+     * v4.0 endpoint: the BACKUP right alone must not be enough.
+     */
+    public function testDownloadRejectsAPermittedUserWithoutTheApiClientToken(): void
+    {
+        $request = new Request();
+        $request->attributes->set('type', 'data');
+
+        $controller = new BackupController();
+        $controller->setContainer($this->createAuthenticatedContainer(withApiToken: false));
+
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException::class);
+        $controller->download($request);
     }
 
     public function testDownloadReturnsBackupDataWhenAuthenticated(): void

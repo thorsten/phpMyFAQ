@@ -256,6 +256,8 @@ describe('handleSaveComment', () => {
       expect(consoleSpy).toHaveBeenCalled();
     });
 
+    expect(pushErrorNotification).toHaveBeenCalledWith('Network error');
+
     consoleSpy.mockRestore();
   });
 

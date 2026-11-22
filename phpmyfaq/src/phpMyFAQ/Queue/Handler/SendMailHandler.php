@@ -22,7 +22,9 @@ namespace phpMyFAQ\Queue\Handler;
 use Closure;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Mail;
+use phpMyFAQ\Mail\MailContent;
 use phpMyFAQ\Queue\Message\SendMailMessage;
+use RuntimeException;
 
 final readonly class SendMailHandler
 {
@@ -54,7 +56,15 @@ final readonly class SendMailHandler
                 $headers[(string) $headerName] = is_int($headerValue) || is_string($headerValue) ? $headerValue : null;
             }
 
-            $mail->sendPreparedEnvelope($envelope['recipients'], $headers, $envelope['body']);
+            $this->failUnlessSent(
+                $mail->sendPreparedEnvelope(
+                    $envelope['recipients'],
+                    $headers,
+                    $envelope['body'],
+                    $this->contentOf($envelope),
+                ),
+                $message,
+            );
 
             return;
         }
@@ -62,6 +72,43 @@ final readonly class SendMailHandler
         $mail->addTo($message->recipient);
         $mail->subject = $message->subject;
         $mail->message = $message->body;
-        $mail->send(forceSynchronousDelivery: true);
+        $this->failUnlessSent($mail->send(forceSynchronousDelivery: true), $message);
+    }
+
+    /**
+     * The parts of the body. Without them (a job queued before the parts were stored) the mail
+     * layer falls back to the prepared body.
+     *
+     * @param array<array-key, mixed> $envelope
+     */
+    private function contentOf(array $envelope): ?MailContent
+    {
+        if (
+            !array_key_exists('text', $envelope)
+            || !array_key_exists('html', $envelope)
+            || !is_string($envelope['text'])
+            || !is_string($envelope['html'])
+        ) {
+            return null;
+        }
+
+        return MailContent::html($envelope['html'], $envelope['text']);
+    }
+
+    /**
+     * A mail agent reports a failed delivery by returning 0 (e.g. PHP's mail() returned false).
+     * Throwing hands the job to the retry logic of the worker instead of acknowledging it.
+     */
+    private function failUnlessSent(int $sentMails, SendMailMessage $message): void
+    {
+        if ($sentMails > 0) {
+            return;
+        }
+
+        throw new RuntimeException(sprintf(
+            'The mail agent did not accept the mail "%s" for %s.',
+            $message->subject,
+            $message->recipient,
+        ));
     }
 }

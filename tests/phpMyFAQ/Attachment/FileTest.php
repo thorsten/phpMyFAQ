@@ -287,8 +287,14 @@ class FileTest extends TestCase
 
     public function testIsStorageOkReturnsFalseWhenDirMissing(): void
     {
+        // Only the storage type is configured: the storage root falls back to the attachments directory.
         $mockConfig = $this->createMock(Configuration::class);
-        $mockConfig->method('get')->willReturn('filesystem');
+        $mockConfig
+            ->method('get')
+            ->willReturnCallback(static fn(string $key) => match ($key) {
+                'storage.type' => 'filesystem',
+                default => null,
+            });
 
         $configRef = new ReflectionClass(Configuration::class);
         $configProp = $configRef->getProperty('configuration');
@@ -507,7 +513,12 @@ class FileTest extends TestCase
         @mkdir(dirname($path), 0777, true);
         file_put_contents($path, 'vanilla');
 
-        $file = $this->file->testGetFile();
+        try {
+            $file = $this->file->testGetFile();
+        } finally {
+            // Plain attachments fall back to this pre-4.2 location; do not leave the file to other tests.
+            unlink($path);
+        }
 
         self::assertInstanceOf(VanillaFile::class, $file);
     }
@@ -793,7 +804,9 @@ class FileTest extends TestCase
     {
         $storage = $this->createMock(StorageInterface::class);
         $storage->expects($this->never())->method('put');
-        new ReflectionClass(File::class)->getProperty('storage')->setValue($this->file, $storage);
+        new ReflectionClass(File::class)
+            ->getProperty('storage')
+            ->setValue($this->file, $storage);
 
         $reflection = new ReflectionClass($this->file);
         $reflection->getProperty('encrypted')->setValue($this->file, false);

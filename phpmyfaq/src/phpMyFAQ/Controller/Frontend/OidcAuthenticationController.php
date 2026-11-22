@@ -94,13 +94,23 @@ final class OidcAuthenticationController extends AbstractFrontController
 
             $this->oidcSession->setAuthorizationState($state, $nonce, $verifier);
 
-            return new RedirectResponse($this->oidcClient->buildAuthorizationUrl(
+            $response = new RedirectResponse($this->oidcClient->buildAuthorizationUrl(
                 $providerConfig,
                 $discoveryDocument,
                 $state,
                 $nonce,
                 $challenge,
             ));
+            // The session cookie is SameSite=Strict and therefore absent on the redirect back
+            // from a provider on another site, so the state also travels in a lax cookie.
+            $response->headers->setCookie($this->oidcSession->createFallbackCookie(
+                $state,
+                $nonce,
+                $verifier,
+                $this->configuration->getDefaultUrl(),
+            ));
+
+            return $response;
         } catch (Exception $exception) {
             $this->configuration
                 ->getLogger()
@@ -148,6 +158,18 @@ final class OidcAuthenticationController extends AbstractFrontController
     #[Route(path: '/auth/oidc/callback', name: 'public.oidc.callback', methods: ['GET'])]
     public function callback(Request $request): Response
     {
+        $response = $this->completeLogin($request);
+        // The state is good for one callback only, whatever its outcome.
+        $this->oidcSession->expireFallbackCookie($response, $this->configuration->getDefaultUrl());
+
+        return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function completeLogin(Request $request): Response
+    {
         try {
             $providerConfig = $this->providerConfigFactory->create();
         } catch (InvalidArgumentException $exception) {
@@ -171,7 +193,7 @@ final class OidcAuthenticationController extends AbstractFrontController
         }
 
         $redirect = new RedirectResponse($this->configuration->getDefaultUrl());
-        $authorizationState = $this->oidcSession->getAuthorizationState();
+        $authorizationState = $this->oidcSession->getAuthorizationState($request);
 
         if (
             $code === ''

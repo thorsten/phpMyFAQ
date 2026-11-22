@@ -35,6 +35,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class BuiltinCaptcha implements CaptchaInterface
 {
+    private const int MAX_GENERATION_ATTEMPTS = 10;
+
     public int $captchaLength = 6;
 
     private bool $userIsLoggedIn = false;
@@ -274,16 +276,24 @@ class BuiltinCaptcha implements CaptchaInterface
     {
         $this->garbageCollector();
 
-        // Create the captcha code
-        for ($i = 1; $i <= $capLength; ++$i) {
-            $this->code .= $this->letters[random_int(min: 0, max: 34)];
+        // A code that is already stored is replaced by a new one; a lookup that keeps failing
+        // (e.g. a missing table) must end the attempts instead of recursing forever.
+        for ($attempt = 1; $attempt <= self::MAX_GENERATION_ATTEMPTS; ++$attempt) {
+            // Create the captcha code
+            $this->code = '';
+            for ($i = 1; $i <= $capLength; ++$i) {
+                $this->code .= $this->letters[random_int(min: 0, max: 34)];
+            }
+
+            if ($this->saveCaptcha()) {
+                return $this->code;
+            }
         }
 
-        if (!$this->saveCaptcha()) {
-            return $this->generateCaptchaCode($capLength);
-        }
-
-        return $this->code;
+        throw new Exception(sprintf(
+            'The captcha code could not be stored after %d attempts.',
+            self::MAX_GENERATION_ATTEMPTS,
+        ));
     }
 
     /**

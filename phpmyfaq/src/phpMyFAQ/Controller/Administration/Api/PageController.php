@@ -436,7 +436,7 @@ final class PageController extends AbstractAdministrationApiController
         }
 
         $pageId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
-        $status = (bool) Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS);
+        $status = Filter::filterVar($data->status, FILTER_VALIDATE_BOOLEAN, default: false);
 
         if ($pageId === null) {
             return $this->json(['error' => Translation::get(key: 'ad_page_updatefail')], Response::HTTP_BAD_REQUEST);

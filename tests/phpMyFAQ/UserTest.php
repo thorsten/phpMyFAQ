@@ -963,7 +963,15 @@ class UserTest extends TestCase
         $user->expects($this->once())->method('changePassword')->with('Abcd2345')->willReturn(true);
         $user->expects($this->once())->method('getUserData')->with('display_name')->willReturn('Blocked User');
         $user->method('getLogin')->willReturn('blocked-user');
-        $user->expects($this->once())->method('mailUser')->willReturn(1);
+        // mailUser() sends plain text, so the message must not carry markup
+        $user
+            ->expects($this->once())
+            ->method('mailUser')
+            ->with(
+                '[%sitename%] Login name / activation',
+                "Name: Blocked User\nLogin name: blocked-user\nNew password: Abcd2345",
+            )
+            ->willReturn(1);
         $user->expects($this->once())->method('setStatus')->with('active')->willReturn(true);
 
         $this->assertTrue($user->activateUser());

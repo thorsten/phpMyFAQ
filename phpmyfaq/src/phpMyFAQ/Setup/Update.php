@@ -229,11 +229,7 @@ class Update extends AbstractSetup
             $this->migrationTracker->ensureTableExists();
         }
 
-        // Get pending migrations based on a version, plus already-applied
-        // migrations that were amended after this installation executed them
-        $pendingMigrations = $this->migrationRegistry->getPendingMigrations($this->version);
-        $pendingMigrations += $this->getAmendedAppliedMigrations();
-        uksort($pendingMigrations, callback: 'version_compare');
+        $pendingMigrations = $this->selectPendingMigrations();
 
         // Set dry-run mode
         $this->migrationExecutor->setDryRun($this->dryRun);
@@ -284,24 +280,38 @@ class Update extends AbstractSetup
     }
 
     /**
+     * Returns the migrations this update has to execute, in version order: everything newer
+     * than the installed version, already-applied migrations that were amended after this
+     * installation executed them, and back-ported migrations it never executed.
+     *
+     * @return array<string, MigrationInterface>
+     */
+    private function selectPendingMigrations(): array
+    {
+        $appliedChecksums = $this->migrationTracker->getAppliedChecksums();
+
+        $pendingMigrations = $this->migrationRegistry->getPendingMigrations($this->version);
+        $pendingMigrations += $this->getAmendedAppliedMigrations($appliedChecksums);
+        $pendingMigrations += $this->migrationRegistry->getMissedBackports(
+            $this->version,
+            array_keys($appliedChecksums),
+        );
+        uksort($pendingMigrations, callback: 'version_compare');
+
+        return $pendingMigrations;
+    }
+
+    /**
      * Returns already-applied migrations whose registered definition changed after this
      * installation executed them — e.g. a migration of an unreleased version that was
      * amended later. Re-running keeps such installations in sync; migration operations
      * are required to be re-run safe.
      *
+     * @param array<string, string|null> $appliedChecksums
      * @return array<string, MigrationInterface>
      */
-    private function getAmendedAppliedMigrations(): array
+    private function getAmendedAppliedMigrations(array $appliedChecksums): array
     {
-        if (!$this->migrationTracker->tableExists()) {
-            return [];
-        }
-
-        $appliedChecksums = [];
-        foreach ($this->migrationTracker->getAppliedMigrations() as $appliedMigration) {
-            $appliedChecksums[$appliedMigration['version']] = $appliedMigration['checksum'];
-        }
-
         $amendedMigrations = [];
         foreach ($this->migrationRegistry->getMigrations() as $version => $migration) {
             if (!array_key_exists($version, $appliedChecksums)) {
@@ -405,8 +415,7 @@ class Update extends AbstractSetup
      */
     public function getDryRunResults(): array
     {
-        $pendingMigrations = $this->migrationRegistry->getPendingMigrations($this->version);
-        return $this->migrationExecutor->generateDryRunReport($pendingMigrations);
+        return $this->migrationExecutor->generateDryRunReport($this->selectPendingMigrations());
     }
 
     /**
@@ -414,8 +423,7 @@ class Update extends AbstractSetup
      */
     public function getFormattedDryRunReport(): string
     {
-        $pendingMigrations = $this->migrationRegistry->getPendingMigrations($this->version);
-        $report = $this->migrationExecutor->generateDryRunReport($pendingMigrations);
+        $report = $this->migrationExecutor->generateDryRunReport($this->selectPendingMigrations());
         return $this->migrationExecutor->formatDryRunReport($report);
     }
 
@@ -447,10 +455,19 @@ class Update extends AbstractSetup
         }
     }
 
+    /**
+     * The version is read from the System.php on disk: when the files were replaced earlier in
+     * this process, the loaded System class still reports the version from before the update,
+     * and storing that one would make the next request run the migrations again.
+     */
     private function updateVersion(): void
     {
-        $this->configuration->update(['main.currentApiVersion' => System::getApiVersion()]);
-        $this->configuration->update(['main.currentVersion' => System::getVersion()]);
+        $installedCode = new SystemFileVersion((string) new \ReflectionClass(System::class)->getFileName());
+
+        $this->configuration->update([
+            'main.currentApiVersion' => $installedCode->apiVersion() ?? System::getApiVersion(),
+        ]);
+        $this->configuration->update(['main.currentVersion' => $installedCode->version() ?? System::getVersion()]);
     }
 
     /**
@@ -476,7 +493,9 @@ class Update extends AbstractSetup
                 $previousHash = null;
 
                 foreach ($entries as $entity) {
+                    // An entry hashed by an interrupted run is the predecessor of the next one
                     if ($entity->getHash() !== null) {
+                        $previousHash = $entity->getHash();
                         continue;
                     }
 

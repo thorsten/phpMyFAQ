@@ -22,6 +22,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Mail\Builtin;
+use phpMyFAQ\Mail\MailContent;
 use phpMyFAQ\Mail\MailProviderInterface;
 use phpMyFAQ\Mail\Provider\MailgunProvider;
 use phpMyFAQ\Mail\Provider\SendGridProvider;
@@ -55,6 +56,11 @@ class Mail
     public array $attachments = [];
 
     /**
+     * A display name that needs no encoding inside a quoted string.
+     */
+    private const string PLAIN_DISPLAY_NAME = '/^[A-Za-z0-9 !#$%&\'*+\/^_`{|}~.-]*$/';
+
+    /**
      * Body of the e-mail.
      */
     public string $body = '';
@@ -75,7 +81,8 @@ class Mail
     public string $contentDisposition = 'inline';
 
     /**
-     * Content type.
+     * Content type of the message: "text/plain" or "text/html". An HTML message is sent as
+     * multipart/alternative together with a plain text part.
      */
     public string $contentType = 'text/plain';
 
@@ -99,12 +106,13 @@ class Mail
     public array $headers = [];
 
     /**
-     * Message of the e-mail: HTML text allowed.
+     * Message of the e-mail: plain text, or HTML if the content type is "text/html".
      */
     public string $message = '';
 
     /**
-     * Alternate message of the e-mail: only plain text allowed.
+     * Alternate message of an HTML e-mail: only plain text allowed. Setting it marks the message
+     * as HTML; without it, the plain text part is rendered from the HTML message.
      */
     public string $messageAlt = '';
 
@@ -321,13 +329,15 @@ class Mail
             // Remove CR and LF characters to prevent header injection
             $name = str_replace(search: ["\n", "\r"], replace: '', subject: $name);
 
-            // Encode any special characters in the displayed name
-            $encodedName = iconv_mime_encode($targetAlias, $name);
-            $name = $encodedName === false ? $name : $encodedName;
-
-            // Wrap the displayed name in quotes (to fix problems with commas etc.),
-            // and escape any existing quotes
-            $name = '"' . str_replace(search: '"', replace: '\"', subject: $name) . '"';
+            // A quoted string carries plain ASCII names; anything else (non-ASCII characters, quotes,
+            // commas, ...) becomes RFC 2047 encoded words. iconv_mime_encode() returns the whole
+            // header line, so the leading field name is stripped again.
+            $headerLine = preg_match(self::PLAIN_DISPLAY_NAME, $name) === 1
+                ? false
+                : iconv_mime_encode($targetAlias, $name, ['input-charset' => 'UTF-8', 'output-charset' => 'UTF-8']);
+            $name = $headerLine === false
+                ? '"' . addcslashes($name, characters: '"\\') . '"'
+                : substr($headerLine, strlen($targetAlias) + 2);
         }
 
         // Add the email address into the target array
@@ -405,8 +415,18 @@ class Mail
             throw new Exception(message: 'You need at least to set one recipient among TO, CC and BCC!');
         }
 
-        // Has any alternative message been provided?
-        if ($this->messageAlt !== '' && $this->messageAlt !== '0') {
+        // Decide what is sent: a plain text message, or an HTML message with its plain text alternative
+        $hasAlternative = $this->messageAlt !== '' && $this->messageAlt !== '0';
+        $content = $hasAlternative || $this->contentType === 'text/html'
+            ? MailContent::html(
+                $this->message,
+                $hasAlternative ? Utils::resolveMarkers($this->messageAlt, $this->configuration) : '',
+            )
+            : MailContent::plainText($this->message);
+        $declaredContentType = $this->contentType;
+
+        // An HTML message always travels with its plain text alternative
+        if ($content->isHtml()) {
             $this->contentType = 'multipart/alternative';
         }
 
@@ -446,33 +466,51 @@ class Mail
         $this->createHeaders();
 
         // Prepare the body
-        $this->createBody();
+        $this->createBody($content);
+
+        // The wire content type is derived again on every send, the declared one belongs to the caller
+        $this->contentType = $declaredContentType;
 
         if (
             !$forceSynchronousDelivery
             && $this->isQueueDeliveryEnabled()
-            && $this->enqueueForDelivery($recipients, $this->headers, $this->body)
+            && $this->enqueueForDelivery($recipients, $this->headers, $this->body, $content)
         ) {
             return count($this->to) + count($this->cc) + count($this->bcc);
         }
 
-        return $this->sendPreparedEnvelope($recipients, $this->headers, $this->body);
+        return $this->sendPreparedEnvelope($recipients, $this->headers, $this->body, $content);
     }
 
     /**
+     * Sends a prepared mail. The built-in agent sends the MIME body as it is, every other transport
+     * builds its own message from the content parts, so all of them deliver the same parts.
+     *
      * @param array<string, int|string|null> $headers
+     * @param string $body MIME body matching the Content-Type header
+     * @param MailContent|null $content Parts of the body, null for an envelope prepared without them
      * @throws Exception|TransportExceptionInterface
      */
-    public function sendPreparedEnvelope(string $recipients, array $headers, string $body): int
-    {
+    public function sendPreparedEnvelope(
+        string $recipients,
+        array $headers,
+        string $body,
+        ?MailContent $content = null,
+    ): int {
         $provider = $this->configuration->getMailProvider();
+        $content ??= MailContent::fromPreparedBody((string) ($headers['Content-Type'] ?? ''), $body);
 
         return match ($provider) {
-            'smtp' => $this->sendViaSmtpAgent($recipients, $headers, $body),
-            'sendgrid' => $this->createProvider('sendgrid')->send($recipients, $headers, $body),
-            'ses' => $this->createProvider('ses')->send($recipients, $headers, $body),
-            'mailgun' => $this->createProvider('mailgun')->send($recipients, $headers, $body),
-            default => $this->sendViaSmtpAgent($recipients, $headers, $body),
+            'smtp' => $this->sendViaSmtpAgent($recipients, $headers, $body, $content),
+            'sendgrid' => $this->createProvider('sendgrid')->send(
+                $recipients,
+                $headers,
+                $content->text,
+                $content->html,
+            ),
+            'ses' => $this->createProvider('ses')->send($recipients, $headers, $content->text, $content->html),
+            'mailgun' => $this->createProvider('mailgun')->send($recipients, $headers, $content->text, $content->html),
+            default => $this->sendViaSmtpAgent($recipients, $headers, $body, $content),
         };
     }
 
@@ -518,13 +556,23 @@ class Mail
         }
 
         // CC
+        $ccs = [];
         foreach ($this->cc as $address => $name) {
-            $this->headers['CC'] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
+            $ccs[] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
+        }
+
+        if ($ccs !== []) {
+            $this->headers['CC'] = implode(separator: ',', array: $ccs);
         }
 
         // BCC
+        $bccs = [];
         foreach ($this->bcc as $address => $name) {
-            $this->headers['BCC'] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
+            $bccs[] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
+        }
+
+        if ($bccs !== []) {
+            $this->headers['BCC'] = implode(separator: ',', array: $bccs);
         }
 
         // Message-Id
@@ -605,7 +653,7 @@ class Mail
     /**
      * Create the body of the email.
      */
-    private function createBody(): void
+    private function createBody(MailContent $content): void
     {
         $lines = [];
         $mainBoundary = $this->boundary;
@@ -627,29 +675,29 @@ class Mail
         }
 
         if (str_contains($this->contentType, needle: 'multipart')) {
-            // At least we have messageAlt and message
-            if ($this->messageAlt !== '' && $this->messageAlt !== '0') {
-                // 1/2. messageAlt, supposed as plain text
-                $lines[] = '--' . $this->boundary;
-                $lines[] = 'Content-Type: text/plain; charset="' . $this->charset . '"';
-                $lines[] = 'Content-Transfer-Encoding: ' . $this->contentTransferEncoding;
-                $lines[] = '';
-                $lines[] = self::wrapLines(Utils::resolveMarkers($this->messageAlt, $this->configuration));
-                $lines[] = '';
-            }
-
-            // 2/2. message, supposed as, potentially, HTML
+            // 1/2. the plain text: the whole message, or the alternative of an HTML message
             $lines[] = '--' . $this->boundary;
-            $lines[] = 'Content-Type: text/html; charset="' . $this->charset . '"';
+            $lines[] = 'Content-Type: text/plain; charset="' . $this->charset . '"';
             $lines[] = 'Content-Transfer-Encoding: ' . $this->contentTransferEncoding;
             $lines[] = '';
-            $lines[] = self::wrapLines($this->message);
+            $lines[] = self::wrapLines($content->text);
+
+            if ($content->isHtml()) {
+                // 2/2. the HTML message
+                $lines[] = '';
+                $lines[] = '--' . $this->boundary;
+                $lines[] = 'Content-Type: text/html; charset="' . $this->charset . '"';
+                $lines[] = 'Content-Transfer-Encoding: ' . $this->contentTransferEncoding;
+                $lines[] = '';
+                $lines[] = self::wrapLines($content->html);
+            }
+
             // Close the boundary delimiter
             $lines[] = '--' . $this->boundary . '--';
         }
 
         if (!str_contains($this->contentType, needle: 'multipart')) {
-            $lines[] = self::wrapLines($this->message);
+            $lines[] = self::wrapLines($content->text);
         }
 
         if (in_array($this->contentType, ['multipart/mixed', 'multipart/related'], strict: true)) {
@@ -747,11 +795,16 @@ class Mail
      * @param array<string, int|string|null> $headers
      * @throws Exception|TransportExceptionInterface
      */
-    private function sendViaSmtpAgent(string $recipients, array $headers, string $body): int
-    {
+    private function sendViaSmtpAgent(
+        string $recipients,
+        array $headers,
+        string $body,
+        ?MailContent $content = null,
+    ): int {
         $mua = self::getMUA($this->agent);
+        $content ??= MailContent::fromPreparedBody((string) ($headers['Content-Type'] ?? ''), $body);
 
-        if (method_exists($mua, method: 'setAuthConfig')) {
+        if ($mua instanceof Smtp) {
             $mua->setAuthConfig(
                 (string) $this->configuration->get(item: 'mail.remoteSMTPServer'),
                 (string) $this->configuration->get(item: 'mail.remoteSMTPUsername'),
@@ -759,19 +812,26 @@ class Mail
                 (int) $this->configuration->get(item: 'mail.remoteSMTPPort'),
                 true === $this->configuration->get(item: 'mail.remoteSMTPDisableTLSPeerVerification'),
             );
+
+            return $mua->send($recipients, $headers, $content->text, $content->html);
         }
 
-        return match ($this->agent) {
-            'smtp', 'built-in' => $mua->send($recipients, $headers, $body),
-            default => throw new Exception('<strong>Mail Class</strong>: ' . $this->agent . ' has no implementation!'),
-        };
+        if ($this->agent !== 'built-in') {
+            throw new Exception('<strong>Mail Class</strong>: ' . $this->agent . ' has no implementation!');
+        }
+
+        return $mua->send($recipients, $headers, $body);
     }
 
     /**
      * @param array<string, int|string|null> $headers
      */
-    private function enqueueForDelivery(string $recipients, array $headers, string $body): bool
-    {
+    private function enqueueForDelivery(
+        string $recipients,
+        array $headers,
+        string $body,
+        ?MailContent $content = null,
+    ): bool {
         try {
             $container = $this->configuration->getServiceContainer();
             if (!$container instanceof \Psr\Container\ContainerInterface) {
@@ -801,6 +861,9 @@ class Mail
                         'recipients' => $recipients,
                         'headers' => $headers,
                         'body' => $body,
+                        ...(
+                            $content instanceof MailContent ? ['text' => $content->text, 'html' => $content->html] : []
+                        ),
                     ],
                 ],
             );

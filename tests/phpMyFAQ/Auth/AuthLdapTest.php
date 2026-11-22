@@ -11,6 +11,7 @@ use phpMyFAQ\Ldap as LdapCore;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -52,7 +53,7 @@ class AuthLdapTest extends TestCase
         $this->ldapGroupConfig = [
             'auto_assign' => false,
             'group_mapping' => [],
-            'use_group_restriction' => 'false',
+            'use_group_restriction' => false,
             'allowed_groups' => [],
         ];
         $this->configuration->method('getLdapGroupConfig')->willReturnCallback(fn(): array => $this->ldapGroupConfig);
@@ -122,7 +123,7 @@ class AuthLdapTest extends TestCase
         $this->ldapGroupConfig = [
             'auto_assign' => true,
             'group_mapping' => [],
-            'use_group_restriction' => 'false',
+            'use_group_restriction' => false,
             'allowed_groups' => [],
         ];
         $this->configValues['security.permLevel'] = 'medium';
@@ -154,6 +155,36 @@ class AuthLdapTest extends TestCase
             ->method('createUser')
             ->with('alice', '', '')
             ->willThrowException(new \Exception('cannot create ldap user'));
+        // No account was created or loaded: the user object still points at the anonymous
+        // account (user ID -1), which must stay untouched.
+        $user->method('getUserId')->willReturn(-1);
+        $user->method('getStatus')->willReturn('');
+        $user->expects($this->never())->method('setStatus');
+        $user->expects($this->never())->method('setAuthSource');
+        $user->expects($this->never())->method('setUserData');
+
+        $this->logger->expects($this->once())->method('info')->with('cannot create ldap user');
+        $this->logger->expects($this->once())->method('warning')->with($this->stringContains('"alice"'));
+
+        $permission = $this->createMock(MediumPermission::class);
+        $permission->expects($this->never())->method('addToGroup');
+        $this->ldapGroupConfig['auto_assign'] = true;
+        $this->configValues['security.permLevel'] = 'medium';
+
+        $auth = $this->createAuthLdap(fn(): User => $user, fn(): MediumPermission => $permission);
+
+        $this->assertFalse($auth->create('alice', 'secret'));
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testCreateUpdatesAnAlreadyExistingLocalAccount(): void
+    {
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willThrowException(new \Exception(User::ERROR_USER_LOGIN_NOT_UNIQUE));
+        $user->method('getUserId')->willReturn(42);
+        $user->method('getStatus')->willReturn('active');
         $user->expects($this->once())->method('setStatus')->with('active');
         $user->expects($this->once())->method('setAuthSource')->with(AuthenticationSourceType::AUTH_LDAP->value);
         $user
@@ -166,11 +197,46 @@ class AuthLdapTest extends TestCase
 
         $this->ldapCore->method('getCompleteName')->willReturn(false);
         $this->ldapCore->method('getMail')->willReturn(false);
-        $this->logger->expects($this->once())->method('info')->with('cannot create ldap user');
 
         $auth = $this->createAuthLdap(fn(): User => $user);
 
         $this->assertFalse($auth->create('alice', 'secret'));
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testCreateNamesAGroupAfterItsLeadingRdnOnly(): void
+    {
+        $user = $this->createMock(User::class);
+        $user->method('createUser')->willReturn(true);
+        $user->method('getUserId')->willReturn(7);
+
+        $this->ldapGroupConfig['auto_assign'] = true;
+        $this->configValues['security.permLevel'] = 'medium';
+
+        $this->ldapCore->method('getCompleteName')->willReturn('Alice');
+        $this->ldapCore->method('getMail')->willReturn('alice@example.com');
+        $this->ldapCore
+            ->method('getGroupMemberships')
+            ->willReturn([
+                'OU=Staff,CN=Users,DC=example,DC=com',
+                'cn=Editors,CN=Users,DC=example,DC=com',
+            ]);
+
+        $groupNames = [];
+        $permission = $this->createMock(MediumPermission::class);
+        $permission
+            ->method('findOrCreateGroupByName')
+            ->willReturnCallback(static function (string $name) use (&$groupNames): int {
+                $groupNames[] = $name;
+                return 10;
+            });
+
+        $auth = $this->createAuthLdap(fn(): User => $user, fn(): MediumPermission => $permission);
+
+        $this->assertTrue($auth->create('alice', 'secret'));
+        $this->assertSame(['OU=Staff,CN=Users,DC=example,DC=com', 'Editors'], $groupNames);
     }
 
     /**
@@ -185,7 +251,7 @@ class AuthLdapTest extends TestCase
         $this->ldapGroupConfig = [
             'auto_assign' => true,
             'group_mapping' => ['AdminGroup' => 'Administrators'],
-            'use_group_restriction' => 'false',
+            'use_group_restriction' => false,
             'allowed_groups' => [],
         ];
         $this->configValues['security.permLevel'] = 'medium';
@@ -280,7 +346,7 @@ class AuthLdapTest extends TestCase
         $this->ldapGroupConfig = [
             'auto_assign' => false,
             'group_mapping' => [],
-            'use_group_restriction' => 'true',
+            'use_group_restriction' => true,
             'allowed_groups' => ['CN=Admins'],
         ];
 
@@ -294,6 +360,37 @@ class AuthLdapTest extends TestCase
             ]);
 
         $auth = $this->createAuthLdap();
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('User is not a member of any allowed LDAP/Active Directory groups');
+
+        $auth->checkCredentials('alice', 'secret', ['domain' => 'EXAMPLE']);
+    }
+
+    /**
+     * An enabled restriction without a configured group must not let everybody in.
+     *
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testCheckCredentialsDeniesEveryoneWhenTheRestrictionHasNoAllowedGroups(): void
+    {
+        $this->configValues['ldap.ldap_use_domain_prefix'] = true;
+        $this->ldapGroupConfig['use_group_restriction'] = true;
+        $this->ldapGroupConfig['allowed_groups'] = [];
+
+        $this->ldapCore->method('bind')->willReturn(true);
+        $this->ldapCore->method('getGroupMemberships')->willReturn(['CN=Editors,CN=Users,DC=example,DC=com']);
+        $this->logger
+            ->expects($this->once())
+            ->method('warning')
+            ->with($this->stringContains('ldap.ldap_group_allowed_groups is empty'));
+
+        $auth = $this
+            ->getMockBuilder(AuthLdap::class)
+            ->setConstructorArgs([$this->configuration, $this->ldapCore])
+            ->onlyMethods(['create'])
+            ->getMock();
+        $auth->expects($this->never())->method('create');
 
         $this->expectException(AuthException::class);
         $this->expectExceptionMessage('User is not a member of any allowed LDAP/Active Directory groups');
@@ -475,7 +572,7 @@ class AuthLdapTest extends TestCase
         $this->ldapGroupConfig = [
             'auto_assign' => false,
             'group_mapping' => [],
-            'use_group_restriction' => 'true',
+            'use_group_restriction' => true,
             'allowed_groups' => ['CN=Admins'],
         ];
 
@@ -499,7 +596,7 @@ class AuthLdapTest extends TestCase
         $this->ldapGroupConfig = [
             'auto_assign' => false,
             'group_mapping' => [],
-            'use_group_restriction' => 'true',
+            'use_group_restriction' => true,
             'allowed_groups' => ['CN=Editors', ' CN=Admins '],
         ];
 
@@ -518,6 +615,170 @@ class AuthLdapTest extends TestCase
         $auth->expects($this->once())->method('create')->with('alice', 'secret')->willReturn(true);
 
         $this->assertTrue($auth->checkCredentials('alice', 'secret', ['domain' => 'EXAMPLE']));
+    }
+
+    /**
+     * @return array<string, array{0: list<string>, 1: list<string>}>
+     */
+    public static function groupsThatMustNotMatchProvider(): array
+    {
+        return [
+            'name is only a suffix of the group name' => [
+                ['Admins'],
+                ['CN=Not-Admins,CN=Users,DC=example,DC=com'],
+            ],
+            'RDN is only a prefix of the group RDN' => [
+                ['CN=Admin'],
+                ['CN=Admins,CN=Users,DC=example,DC=com'],
+            ],
+            'name only matches a parent container' => [
+                ['Users'],
+                ['CN=Editors,CN=Users,DC=example,DC=com'],
+            ],
+            'name only matches a domain component' => [
+                ['example'],
+                ['CN=Editors,CN=Users,DC=example,DC=com'],
+            ],
+            'empty entry from a trailing comma' => [
+                ['Admins', ' '],
+                ['CN=Editors,CN=Users,DC=example,DC=com'],
+            ],
+        ];
+    }
+
+    /**
+     * @param list<string> $allowedGroups
+     * @param list<string> $userGroups
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    #[DataProvider('groupsThatMustNotMatchProvider')]
+    public function testCheckCredentialsDeniesGroupsThatOnlyPartiallyMatch(
+        array $allowedGroups,
+        array $userGroups,
+    ): void {
+        $this->ldapGroupConfig = [
+            'auto_assign' => false,
+            'group_mapping' => [],
+            'use_group_restriction' => true,
+            'allowed_groups' => $allowedGroups,
+        ];
+
+        $this->ldapCore->method('bind')->willReturn(true);
+        $this->ldapCore->method('getDn')->willReturn('uid=alice,dc=example,dc=com');
+        $this->ldapCore->method('getGroupMemberships')->willReturn($userGroups);
+
+        $auth = $this
+            ->getMockBuilder(AuthLdap::class)
+            ->setConstructorArgs([$this->configuration, $this->ldapCore])
+            ->onlyMethods(['create'])
+            ->getMock();
+        $auth->expects($this->never())->method('create');
+
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('User is not a member of any allowed LDAP/Active Directory groups');
+
+        $auth->checkCredentials('alice', 'secret');
+    }
+
+    /**
+     * @return array<string, array{0: list<string>}>
+     */
+    public static function allowedGroupFormsProvider(): array
+    {
+        return [
+            'group name' => [['Admins']],
+            'group name in another case' => [['admins']],
+            'leading RDN' => [['CN=Admins']],
+            'full DN' => [['CN=Admins,CN=Users,DC=example,DC=com']],
+            'full DN split at its commas by the configuration' => [
+                ['CN=Admins', 'CN=Users', 'DC=example', 'DC=com'],
+            ],
+        ];
+    }
+
+    /**
+     * @param list<string> $allowedGroups
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    #[DataProvider('allowedGroupFormsProvider')]
+    public function testCheckCredentialsAcceptsEveryInputFormOfAnAllowedGroup(array $allowedGroups): void
+    {
+        $this->ldapGroupConfig = [
+            'auto_assign' => false,
+            'group_mapping' => [],
+            'use_group_restriction' => true,
+            'allowed_groups' => $allowedGroups,
+        ];
+
+        $this->ldapCore->method('bind')->willReturn(true);
+        $this->ldapCore->method('getDn')->willReturn('uid=alice,dc=example,dc=com');
+        $this->ldapCore
+            ->method('getGroupMemberships')
+            ->willReturn(['CN=Editors,OU=Staff,DC=example,DC=com', 'CN=Admins,CN=Users,DC=example,DC=com']);
+
+        $auth = $this
+            ->getMockBuilder(AuthLdap::class)
+            ->setConstructorArgs([$this->configuration, $this->ldapCore])
+            ->onlyMethods(['create'])
+            ->getMock();
+        $auth->expects($this->once())->method('create')->with('alice', 'secret')->willReturn(true);
+
+        $this->assertTrue($auth->checkCredentials('alice', 'secret'));
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testCheckCredentialsMatchesAFullDnRegardlessOfSpacesAroundItsSeparators(): void
+    {
+        $this->ldapGroupConfig = [
+            'auto_assign' => false,
+            'group_mapping' => [],
+            'use_group_restriction' => true,
+            'allowed_groups' => ['CN=Admins,OU=Groups,DC=example,DC=com'],
+        ];
+
+        $this->ldapCore->method('bind')->willReturn(true);
+        $this->ldapCore->method('getDn')->willReturn('uid=alice,dc=example,dc=com');
+        $this->ldapCore->method('getGroupMemberships')->willReturn(['cn=Admins, ou=Groups, dc=example, dc=com']);
+
+        $auth = $this
+            ->getMockBuilder(AuthLdap::class)
+            ->setConstructorArgs([$this->configuration, $this->ldapCore])
+            ->onlyMethods(['create'])
+            ->getMock();
+        $auth->expects($this->once())->method('create')->with('alice', 'secret')->willReturn(true);
+
+        $this->assertTrue($auth->checkCredentials('alice', 'secret'));
+    }
+
+    /**
+     * The restriction flag arrives as a boolean: Configuration::get() converts the stored
+     * 'true'. A disabled restriction must not consult the directory for groups at all.
+     *
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    public function testCheckCredentialsSkipsTheGroupCheckWhenTheRestrictionIsDisabled(): void
+    {
+        $this->ldapGroupConfig = [
+            'auto_assign' => false,
+            'group_mapping' => [],
+            'use_group_restriction' => false,
+            'allowed_groups' => ['Admins'],
+        ];
+
+        $this->ldapCore->method('bind')->willReturn(true);
+        $this->ldapCore->method('getDn')->willReturn('uid=alice,dc=example,dc=com');
+        $this->ldapCore->expects($this->never())->method('getGroupMemberships');
+
+        $auth = $this
+            ->getMockBuilder(AuthLdap::class)
+            ->setConstructorArgs([$this->configuration, $this->ldapCore])
+            ->onlyMethods(['create'])
+            ->getMock();
+        $auth->expects($this->once())->method('create')->with('alice', 'secret')->willReturn(true);
+
+        $this->assertTrue($auth->checkCredentials('alice', 'secret'));
     }
 
     /**

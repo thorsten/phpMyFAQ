@@ -11,6 +11,10 @@ if (!defined(__NAMESPACE__ . '\SQLSRV_FETCH_ASSOC')) {
     define(__NAMESPACE__ . '\SQLSRV_FETCH_ASSOC', 2);
 }
 
+if (!defined(__NAMESPACE__ . '\SQLSRV_FETCH_NUMERIC')) {
+    define(__NAMESPACE__ . '\SQLSRV_FETCH_NUMERIC', 1);
+}
+
 if (!defined(__NAMESPACE__ . '\SQLSRV_CURSOR_KEYSET')) {
     define(__NAMESPACE__ . '\SQLSRV_CURSOR_KEYSET', 1);
 }
@@ -30,7 +34,10 @@ function sqlsrv_errors(): ?array
 
 function sqlsrv_fetch_array(mixed $result, int $fetchType): mixed
 {
-    return array_shift($GLOBALS['pmfSqlsrvTestState']['fetch_array_rows']);
+    $row = array_shift($GLOBALS['pmfSqlsrvTestState']['fetch_array_rows']);
+
+    // Like the extension: a numeric fetch is indexed by position, an associative one by name
+    return is_array($row) && $fetchType === SQLSRV_FETCH_NUMERIC ? array_values($row) : $row;
 }
 
 function sqlsrv_fetch_object(mixed $result): mixed
@@ -530,6 +537,18 @@ class SqlsrvTest extends TestCase
         $this->assertSame('faqdb', $GLOBALS['pmfSqlsrvTestState']['connection_info']['Database']);
     }
 
+    /**
+     * SQL Server reads '2026-11-22 10:00:00' for a DATETIME column as year-day-month when the
+     * login language uses the dmy date format, unless the session sets ymd.
+     */
+    public function testConnectMakesDatetimeLiteralsIndependentOfTheLoginLanguage(): void
+    {
+        $this->sqlsrv->connect('localhost', 'alice', 'secret', 'faqdb', 1433);
+
+        $this->assertSame('SET DATEFORMAT ymd', $GLOBALS['pmfSqlsrvTestState']['last_query']);
+        $this->assertSame([], $GLOBALS['pmfSqlsrvTestState']['last_query_options']);
+    }
+
     public function testQueryAffectedRowsAndErrorUseSqlsrvShims(): void
     {
         $this->setConnectionProperty($this->createFakeResource());
@@ -578,9 +597,36 @@ class SqlsrvTest extends TestCase
 
     public function testFetchRowReturnsFirstColumnFromArrayShim(): void
     {
-        $GLOBALS['pmfSqlsrvTestState']['fetch_array_rows'] = [[0 => 'first-column', 'name' => 'faqdata']];
+        $GLOBALS['pmfSqlsrvTestState']['fetch_array_rows'] = [['auth_source' => 'local', 'name' => 'faqdata'], false];
 
-        $this->assertSame('first-column', $this->sqlsrv->fetchRow($this->createFakeResource()));
+        $result = $this->createFakeResource();
+
+        $this->assertSame('local', $this->sqlsrv->fetchRow($result));
+        $this->assertNull($this->sqlsrv->fetchRow($result));
+    }
+
+    public function testOnlyStatementsWithAResultSetUseTheKeysetCursor(): void
+    {
+        $this->setConnectionProperty($this->createFakeResource());
+        $GLOBALS['pmfSqlsrvTestState']['query_result'] = 'sqlsrv-result';
+
+        $this->sqlsrv->query('SELECT id FROM faqjobs');
+        $this->assertSame(['Scrollable' => SQLSRV_CURSOR_KEYSET], $GLOBALS['pmfSqlsrvTestState']['last_query_options']);
+
+        foreach ([
+            "UPDATE faqjobs SET delivered_at = '2026-01-01' WHERE id = 1 AND delivered_at IS NULL",
+            "  insert into faqjobs (queue) VALUES ('default')",
+            'DELETE FROM faqjobs WHERE id = 1',
+        ] as $statement) {
+            $this->sqlsrv->query($statement);
+            $this->assertSame([], $GLOBALS['pmfSqlsrvTestState']['last_query_options'], $statement);
+        }
+
+        $this->sqlsrv->queryPrepared('UPDATE faqjobs SET delivered_at = ? WHERE id = ?', ['2026-01-01', 1]);
+        $this->assertSame([], $GLOBALS['pmfSqlsrvTestState']['last_query_options']);
+
+        $this->sqlsrv->queryPrepared('SELECT id FROM faqjobs WHERE id = ?', [1]);
+        $this->assertSame(['Scrollable' => SQLSRV_CURSOR_KEYSET], $GLOBALS['pmfSqlsrvTestState']['last_query_options']);
     }
 
     public function testGetTableStatusBuildsRowsByTableName(): void

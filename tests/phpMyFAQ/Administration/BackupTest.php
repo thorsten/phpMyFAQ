@@ -282,6 +282,33 @@ class BackupTest extends TestCase
     }
 
     /**
+     * Queued jobs would run again after a restore, and restored OAuth tokens and authorization
+     * codes would revive revoked or expired access. Clients and scopes are configuration and stay.
+     *
+     * @throws \Exception
+     */
+    public function testGetBackupTableNamesForDataBackupLeavesOutJobsAndOauthTokens(): void
+    {
+        $this->mockDb
+            ->method('getTableNames')
+            ->willReturn([
+                'faqapi_keys',
+                'faqjobs',
+                'faqoauth_access_tokens',
+                'faqoauth_auth_codes',
+                'faqoauth_clients',
+                'faqoauth_refresh_tokens',
+                'faqoauth_scopes',
+                'faquser_right_language',
+            ]);
+
+        $this->assertSame(
+            'faqapi_keys faqoauth_clients faqoauth_scopes faquser_right_language ',
+            $this->backup->getBackupTableNames(BackupType::BACKUP_TYPE_DATA),
+        );
+    }
+
+    /**
      * @throws \Exception
      */
     public function testGetBackupTableNamesForLogsBackup(): void
@@ -860,8 +887,13 @@ class BackupTest extends TestCase
 
         file_put_contents($backupFile, $content);
 
+        // Only MySQL and MariaDB escape with backslashes
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($this->createStub(\phpMyFAQ\Database\Mysqli::class));
+        $backup = new Backup($configuration, $this->mockDatabaseHelper);
+
         try {
-            $result = $this->backup->parseBackupFile($backupFile, '4.0.0');
+            $result = $backup->parseBackupFile($backupFile, '4.0.0');
         } finally {
             unlink($backupFile);
         }
@@ -869,5 +901,78 @@ class BackupTest extends TestCase
         $this->assertCount(3, $result->queries);
         $this->assertSame("INSERT INTO faqconfig VALUES (1, 'it\\'s; escaped')", $result->queries[1]);
         $this->assertSame("INSERT INTO faqconfig VALUES (2, 'plain')", $result->queries[2]);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function parseBackupContent(Backup $backup, string $content): array
+    {
+        $backupFile = (string) tempnam(sys_get_temp_dir(), 'pmf-backup-');
+        file_put_contents($backupFile, $content);
+
+        try {
+            return $backup->parseBackupFile($backupFile, '4.0.0')->queries;
+        } finally {
+            unlink($backupFile);
+        }
+    }
+
+    public function testParseBackupFileKeepsCommentLikeAndBlankLinesInsideAStringLiteral(): void
+    {
+        $insert = "INSERT INTO faqdata VALUES (1, 'First line\n\n# Heading\n-- not a comment\n   \nlast; line')";
+
+        $queries = $this->parseBackupContent(
+            $this->backup,
+            "-- pmf4.0: faqdata\n-- pmftableprefix: \n"
+            . $insert
+            . ";\n# a comment\n\nINSERT INTO faqdata VALUES (2, 'plain');\n",
+        );
+
+        $this->assertSame(['DELETE FROM faqdata', $insert, "INSERT INTO faqdata VALUES (2, 'plain')"], $queries);
+    }
+
+    public function testParseBackupFileTreatsATrailingBackslashAsDataOutsideMySql(): void
+    {
+        // PostgreSQL, SQLite and SQL Server only double the quote: the backslash is the last character
+        $queries = $this->parseBackupContent(
+            $this->backup,
+            "-- pmf4.0: faqconfig\n-- pmftableprefix: \n"
+            . "INSERT INTO faqconfig VALUES (1, 'C:\\temp\\');\n"
+            . "INSERT INTO faqconfig VALUES (2, 'plain');\n",
+        );
+
+        $this->assertSame(
+            [
+                'DELETE FROM faqconfig',
+                "INSERT INTO faqconfig VALUES (1, 'C:\\temp\\')",
+                "INSERT INTO faqconfig VALUES (2, 'plain')",
+            ],
+            $queries,
+        );
+    }
+
+    public function testParseBackupFileCountsConsecutiveBackslashesOnMySql(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($this->createStub(\phpMyFAQ\Database\PdoMysql::class));
+        $backup = new Backup($configuration, $this->mockDatabaseHelper);
+
+        // An escaped backslash in front of the closing quote, and an escaped quote after one
+        $queries = $this->parseBackupContent(
+            $backup,
+            "-- pmf4.0: faqconfig\n-- pmftableprefix: \n"
+            . "INSERT INTO faqconfig VALUES (1, 'C:\\\\temp\\\\');\n"
+            . "INSERT INTO faqconfig VALUES (2, 'a\\\\\\'; b');\n",
+        );
+
+        $this->assertSame(
+            [
+                'DELETE FROM faqconfig',
+                "INSERT INTO faqconfig VALUES (1, 'C:\\\\temp\\\\')",
+                "INSERT INTO faqconfig VALUES (2, 'a\\\\\\'; b')",
+            ],
+            $queries,
+        );
     }
 }

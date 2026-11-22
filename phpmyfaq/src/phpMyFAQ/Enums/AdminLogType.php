@@ -124,6 +124,10 @@ enum AdminLogType: string
     case API_KEY_CREATED = 'api-key-created';
     case API_KEY_REVOKED = 'api-key-revoked';
     case API_UNAUTHORIZED_ACCESS = 'api-unauthorized-access';
+    case OAUTH2_CLIENT_CREATED = 'oauth2-client-created';
+    case OAUTH2_CLIENT_UPDATED = 'oauth2-client-updated';
+    case OAUTH2_CLIENT_DELETED = 'oauth2-client-deleted';
+    case OAUTH2_SCOPES_UPDATED = 'oauth2-scopes-updated';
 
     // System Security
     case SYSTEM_MAINTENANCE_MODE_ENABLED = 'system-maintenance-mode-enabled';

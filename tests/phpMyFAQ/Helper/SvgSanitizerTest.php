@@ -381,10 +381,10 @@ class SvgSanitizerTest extends TestCase
         $this->assertStringEqualsFile($filePath, '<script><svg xmlns="http://www.w3.org/2000/svg"></svg></script>');
     }
 
-    public function testSanitizeReturnsFalseWhenDeeplyEncodedPayloadSurvivesTheCleanup(): void
+    public function testSanitizeKeepsDeeplyEncodedPayloadAsInertText(): void
     {
-        // Twelve entity layers exceed the decoder's ten passes, so the cleanup never sees the
-        // script tag - the final re-check must still catch it and fail closed.
+        // Twelve entity layers exceed the decoder's ten passes. The sanitizer no longer writes
+        // entity-decoded text back, so the payload keeps every layer and stays character data.
         $payload = '<script>alert(1)</script>';
         for ($layer = 0; $layer < 12; ++$layer) {
             $payload = htmlspecialchars($payload, ENT_QUOTES, 'UTF-8');
@@ -393,7 +393,9 @@ class SvgSanitizerTest extends TestCase
         $filePath = $this->testDir . '/deeply-encoded.svg';
         file_put_contents($filePath, '<svg xmlns="http://www.w3.org/2000/svg"><text>' . $payload . '</text></svg>');
 
-        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+        $this->assertStringContainsString('<text>' . $payload . '</text>', (string) file_get_contents($filePath));
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
     }
 
     private function createUnreadableSvgFile(): string
@@ -1505,7 +1507,7 @@ class SvgSanitizerTest extends TestCase
         $this->assertStringContainsString('circle', $sanitizedContent);
     }
 
-    public function testSanitizeRemovesEntityEncodedEventHandlers(): void
+    public function testSanitizeRejectsEntityEncodedAttributeName(): void
     {
         // Entity-encoded onload via &#111;&#110;&#108;&#111;&#97;&#100;
         $maliciousSvg = <<<'SVG'
@@ -1517,12 +1519,9 @@ class SvgSanitizerTest extends TestCase
         $filePath = $this->testDir . '/sanitize_entity_onload.svg';
         file_put_contents($filePath, $maliciousSvg);
 
-        $this->assertTrue($this->sanitizer->sanitize($filePath));
-
-        $sanitizedContent = file_get_contents($filePath);
-        $this->assertStringNotContainsString('onload', $sanitizedContent);
-        $this->assertStringNotContainsString('alert', $sanitizedContent);
-        $this->assertStringContainsString('circle', $sanitizedContent);
+        // Not well-formed XML: rejected, and the file is left as it is for the caller to delete
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertStringEqualsFile($filePath, $maliciousSvg);
     }
 
     public function testSanitizeRemovesIframeElements(): void
@@ -2026,7 +2025,7 @@ class SvgSanitizerTest extends TestCase
         $this->assertStringContainsString('<svg', $sanitizedContent);
     }
 
-    public function testSanitizeDoesNotReassembleScriptTagSplitByProcessingInstruction(): void
+    public function testSanitizeRejectsScriptTagSplitByProcessingInstruction(): void
     {
         $maliciousSvg =
             '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">'
@@ -2036,16 +2035,12 @@ class SvgSanitizerTest extends TestCase
         file_put_contents($filePath, $maliciousSvg);
 
         $this->assertFalse($this->sanitizer->isSafe($filePath));
-        $this->assertTrue($this->sanitizer->sanitize($filePath));
-
-        $sanitizedContent = file_get_contents($filePath);
-        $this->assertStringNotContainsStringIgnoringCase('<script', $sanitizedContent);
-        $this->assertStringNotContainsString('alert', $sanitizedContent);
-        $this->assertStringContainsString('<svg', $sanitizedContent);
-        $this->assertTrue($this->sanitizer->isSafe($filePath));
+        // Not well-formed XML: rejected, and the file is left as it is for the caller to delete
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertStringEqualsFile($filePath, $maliciousSvg);
     }
 
-    public function testSanitizeDoesNotReassembleScriptTagSplitByEntityDeclaration(): void
+    public function testSanitizeRejectsScriptTagSplitByEntityDeclaration(): void
     {
         $maliciousSvg =
             '<svg xmlns="http://www.w3.org/2000/svg">'
@@ -2055,15 +2050,12 @@ class SvgSanitizerTest extends TestCase
         file_put_contents($filePath, $maliciousSvg);
 
         $this->assertFalse($this->sanitizer->isSafe($filePath));
-        $this->assertTrue($this->sanitizer->sanitize($filePath));
-
-        $sanitizedContent = file_get_contents($filePath);
-        $this->assertStringNotContainsStringIgnoringCase('<script', $sanitizedContent);
-        $this->assertStringNotContainsString('alert', $sanitizedContent);
-        $this->assertTrue($this->sanitizer->isSafe($filePath));
+        // Not well-formed XML: rejected, and the file is left as it is for the caller to delete
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertStringEqualsFile($filePath, $maliciousSvg);
     }
 
-    public function testSanitizeDoesNotReassembleAnimateElementSplitByScriptTag(): void
+    public function testSanitizeRejectsAnimateElementSplitByScriptTag(): void
     {
         $maliciousSvg =
             '<svg xmlns="http://www.w3.org/2000/svg"><a><anim<script></script>ate '
@@ -2073,16 +2065,12 @@ class SvgSanitizerTest extends TestCase
         file_put_contents($filePath, $maliciousSvg);
 
         $this->assertFalse($this->sanitizer->isSafe($filePath));
-        $this->assertTrue($this->sanitizer->sanitize($filePath));
-
-        $sanitizedContent = file_get_contents($filePath);
-        $this->assertStringNotContainsStringIgnoringCase('<animate', $sanitizedContent);
-        $this->assertStringNotContainsString('javascript', $sanitizedContent);
-        $this->assertStringContainsString('circle', $sanitizedContent);
-        $this->assertTrue($this->sanitizer->isSafe($filePath));
+        // Not well-formed XML: rejected, and the file is left as it is for the caller to delete
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertStringEqualsFile($filePath, $maliciousSvg);
     }
 
-    public function testSanitizeDoesNotReassembleEventHandlerSplitByProcessingInstruction(): void
+    public function testSanitizeRejectsEventHandlerSplitByProcessingInstruction(): void
     {
         $maliciousSvg = '<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10" onl<?php?>oad="alert(1)"/></svg>';
 
@@ -2090,16 +2078,12 @@ class SvgSanitizerTest extends TestCase
         file_put_contents($filePath, $maliciousSvg);
 
         $this->assertFalse($this->sanitizer->isSafe($filePath));
-        $this->assertTrue($this->sanitizer->sanitize($filePath));
-
-        $sanitizedContent = file_get_contents($filePath);
-        $this->assertStringNotContainsStringIgnoringCase('onload', $sanitizedContent);
-        $this->assertStringNotContainsString('alert', $sanitizedContent);
-        $this->assertStringContainsString('<rect', $sanitizedContent);
-        $this->assertTrue($this->sanitizer->isSafe($filePath));
+        // Not well-formed XML: rejected, and the file is left as it is for the caller to delete
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertStringEqualsFile($filePath, $maliciousSvg);
     }
 
-    public function testSanitizedOutputAlwaysPassesIsSafe(): void
+    public function testSanitizeRejectsSplitTagPayloads(): void
     {
         $payloads = [
             '<svg xmlns="http://www.w3.org/2000/svg"><scr<?php?>ipt>alert(1)</scr<?php?>ipt></svg>',
@@ -2113,9 +2097,9 @@ class SvgSanitizerTest extends TestCase
             $filePath = $this->testDir . '/fixed_point_' . $index . '.svg';
             file_put_contents($filePath, $payload);
 
-            if ($this->sanitizer->sanitize($filePath)) {
-                $this->assertTrue($this->sanitizer->isSafe($filePath), 'Payload ' . $index . ' survived sanitization');
-            }
+            // Every payload splits a tag or an attribute value, which is not well-formed XML
+            $this->assertFalse($this->sanitizer->sanitize($filePath), 'Payload ' . $index . ' was not rejected');
+            $this->assertStringEqualsFile($filePath, $payload);
         }
     }
 
@@ -2183,20 +2167,16 @@ class SvgSanitizerTest extends TestCase
         $this->assertFalse($this->sanitizer->isSafe($filePath));
     }
 
-    public function testSanitizeRemovesSlashSeparatedEventHandler(): void
+    public function testSanitizeRejectsSlashSeparatedEventHandler(): void
     {
         $maliciousSvg = '<svg xmlns="http://www.w3.org/2000/svg"/onload="alert(1)"><circle r="1"/></svg>';
 
         $filePath = $this->testDir . '/slash_separated_onload_sanitize.svg';
         file_put_contents($filePath, $maliciousSvg);
 
-        $this->assertTrue($this->sanitizer->sanitize($filePath));
-
-        $sanitizedContent = file_get_contents($filePath);
-        $this->assertStringNotContainsStringIgnoringCase('onload', $sanitizedContent);
-        $this->assertStringNotContainsString('alert', $sanitizedContent);
-        $this->assertStringContainsString('circle', $sanitizedContent);
-        $this->assertTrue($this->sanitizer->isSafe($filePath));
+        // Not well-formed XML: rejected, and the file is left as it is for the caller to delete
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertStringEqualsFile($filePath, $maliciousSvg);
     }
 
     /**
@@ -2250,10 +2230,6 @@ class SvgSanitizerTest extends TestCase
                 '<svg xmlns="http://www.w3.org/2000/svg" xmlns:é="http://www.w3.org/2000/svg">'
                     . '<é:script>alert(1)</é:script></svg>',
             ],
-            'entity encoded non-ascii prefix script' => [
-                '<svg xmlns="http://www.w3.org/2000/svg" xmlns:x&#233;="http://www.w3.org/2000/svg">'
-                    . '<x&#233;:script>alert(1)</x&#233;:script></svg>',
-            ],
             'non-ascii prefix foreignObject' => [
                 '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xé="http://www.w3.org/1999/xhtml">'
                     . '<xé:foreignObject><body xmlns="http://www.w3.org/1999/xhtml" onload="alert(1)"/>'
@@ -2295,7 +2271,26 @@ class SvgSanitizerTest extends TestCase
         $this->assertTrue($this->sanitizer->isSafe($filePath));
     }
 
-    public function testSanitizeRemovesPrefixedScriptWithCloseTagUsingDifferentPrefixCase(): void
+    /**
+     * A character reference inside a name is not well-formed XML, so this was moved out of
+     * namespacePrefixedDangerousElementProvider: it is rejected, not sanitized.
+     */
+    public function testSanitizeRejectsEntityEncodedNonAsciiPrefixScript(): void
+    {
+        $maliciousSvg =
+            '<svg xmlns="http://www.w3.org/2000/svg" xmlns:x&#233;="http://www.w3.org/2000/svg">'
+            . '<x&#233;:script>alert(1)</x&#233;:script></svg>';
+
+        $filePath = $this->testDir . '/prefixed_entity_encoded.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+        $this->assertNotEmpty($this->sanitizer->detectIssues($maliciousSvg));
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertStringEqualsFile($filePath, $maliciousSvg);
+    }
+
+    public function testSanitizeRejectsPrefixedScriptWithCloseTagUsingDifferentPrefixCase(): void
     {
         $maliciousSvg =
             '<svg xmlns="http://www.w3.org/2000/svg" xmlns:x="http://www.w3.org/2000/svg">'
@@ -2304,11 +2299,161 @@ class SvgSanitizerTest extends TestCase
         $filePath = $this->testDir . '/prefixed_case.svg';
         file_put_contents($filePath, $maliciousSvg);
 
+        // Not well-formed XML: rejected, and the file is left as it is for the caller to delete
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertStringEqualsFile($filePath, $maliciousSvg);
+    }
+
+    public function testAnIso2022JpSvgHidingAScriptTagBehindEscapeSequencesIsRejected(): void
+    {
+        // A browser decoding ISO-2022-JP consumes ESC ( B, so it sees <script>
+        $svg =
+            '<?xml version="1.0" encoding="ISO-2022-JP"?>'
+            . '<svg xmlns="http://www.w3.org/2000/svg"><scr'
+            . "\x1b(B"
+            . 'ipt>alert(1)</scr'
+            . "\x1b(B"
+            . 'ipt></svg>';
+
+        $filePath = $this->testDir . '/iso2022.svg';
+        file_put_contents($filePath, $svg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertSame($svg, file_get_contents($filePath), 'A rejected file is not rewritten.');
+        $this->assertNotSame([], $this->sanitizer->detectIssues($svg));
+    }
+
+    public function testSvgDeclaringANonUtf8EncodingIsRejected(): void
+    {
+        $svg = "<?xml version='1.0' encoding = 'utf-16'?><svg xmlns=\"http://www.w3.org/2000/svg\"/>";
+        $filePath = $this->testDir . '/declared.svg';
+        file_put_contents($filePath, $svg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+    }
+
+    public function testSvgWithEscapeOrNulBytesIsRejectedWithoutAnEncodingDeclaration(): void
+    {
+        foreach (["\x1b", "\x00"] as $byte) {
+            $filePath = $this->testDir . '/control.svg';
+            file_put_contents($filePath, '<svg xmlns="http://www.w3.org/2000/svg"><scr' . $byte . 'ipt/></svg>');
+
+            $this->assertFalse($this->sanitizer->isSafe($filePath));
+            $this->assertFalse($this->sanitizer->sanitize($filePath));
+        }
+    }
+
+    public function testUtf8DeclarationIsAcceptedInAnyCase(): void
+    {
+        $filePath = $this->testDir . '/utf8.svg';
+        file_put_contents(
+            $filePath,
+            '<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg"><text>ä</text></svg>',
+        );
+
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testSanitizeKeepsAmpersandsEscapedInTheWrittenFile(): void
+    {
+        $filePath = $this->testDir . '/ampersand.svg';
+        file_put_contents(
+            $filePath,
+            '<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script><text>Q &amp; A &#38; more</text></svg>',
+        );
+
         $this->assertTrue($this->sanitizer->sanitize($filePath));
 
-        $sanitizedContent = file_get_contents($filePath);
-        $this->assertStringNotContainsStringIgnoringCase('script', $sanitizedContent);
+        $written = (string) file_get_contents($filePath);
+        $this->assertStringContainsString('<text>Q &amp; A &amp; more</text>', $written);
+        $this->assertNotFalse(simplexml_load_string($written), 'The sanitized file has to stay well-formed XML.');
+    }
+
+    public function testIsSafeReturnsFalseForMalformedXmlWithoutDangerousPatterns(): void
+    {
+        $malformedSvg = '<svg xmlns="http://www.w3.org/2000/svg"><g><circle r="1"></svg>';
+
+        $filePath = $this->testDir . '/malformed_harmless.svg';
+        file_put_contents($filePath, $malformedSvg);
+
+        $this->assertFalse($this->sanitizer->isSafe($filePath));
+        $this->assertTrue($this->sanitizer->shouldReject($filePath));
+        $this->assertContains('Not well-formed XML', $this->sanitizer->detectIssues($malformedSvg));
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertStringEqualsFile($filePath, $malformedSvg);
+    }
+
+    public function testSanitizeRejectsUndeclaredEntityReference(): void
+    {
+        $malformedSvg = '<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"><text>a&nbsp;b</text></svg>';
+
+        $filePath = $this->testDir . '/undeclared_entity.svg';
+        file_put_contents($filePath, $malformedSvg);
+
+        $this->assertFalse($this->sanitizer->sanitize($filePath));
+        $this->assertStringEqualsFile($filePath, $malformedSvg);
+    }
+
+    public function testSanitizeWritesWellFormedXmlSerialisedFromTheParsedDocument(): void
+    {
+        $maliciousSvg =
+            '<svg xmlns="http://www.w3.org/2000/svg" onload="alert(\'XSS\')">'
+            . '<!-- note --><?target data?>'
+            . '<text font-family=\'A &amp; B\'>1 &lt; 2 &amp; 3</text>'
+            . '<circle r="1" onclick="alert(\'click\')"/></svg>';
+
+        $filePath = $this->testDir . '/serialised.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+
+        $sanitizedContent = (string) file_get_contents($filePath);
+        $document = new \DOMDocument();
+        $this->assertTrue($document->loadXML($sanitizedContent, LIBXML_NONET));
+        $this->assertSame('svg', $document->documentElement?->localName);
+        $this->assertStringContainsString('<text font-family="A &amp; B">1 &lt; 2 &amp; 3</text>', $sanitizedContent);
+        $this->assertStringContainsString('<circle r="1"/>', $sanitizedContent);
         $this->assertStringNotContainsString('alert', $sanitizedContent);
-        $this->assertStringContainsString('circle', $sanitizedContent);
+        $this->assertStringNotContainsString('note', $sanitizedContent);
+        $this->assertStringNotContainsString('target', $sanitizedContent);
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
+    }
+
+    public function testSanitizeDoesNotLoadExternalEntities(): void
+    {
+        $secretPath = $this->testDir . '/secret.txt';
+        file_put_contents($secretPath, 'TOP-SECRET-CONTENT');
+
+        $maliciousSvg =
+            '<?xml version="1.0"?><!DOCTYPE svg [<!ENTITY xxe SYSTEM "file://'
+            . $secretPath
+            . '">]><svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"><text>&xxe;</text></svg>';
+
+        $filePath = $this->testDir . '/external_entity.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->sanitizer->sanitize($filePath);
+
+        $this->assertStringNotContainsString('TOP-SECRET-CONTENT', (string) file_get_contents($filePath));
+    }
+
+    public function testSanitizeExpandsDeclaredEntityIntoRemovableMarkup(): void
+    {
+        $maliciousSvg =
+            '<?xml version="1.0"?><!DOCTYPE svg [<!ENTITY payload "<script>alert(1)</script>">]>'
+            . '<svg xmlns="http://www.w3.org/2000/svg"><g>&payload;</g><circle r="1"/></svg>';
+
+        $filePath = $this->testDir . '/entity_markup.svg';
+        file_put_contents($filePath, $maliciousSvg);
+
+        $this->assertTrue($this->sanitizer->sanitize($filePath));
+
+        $sanitizedContent = (string) file_get_contents($filePath);
+        $this->assertStringNotContainsString('script', $sanitizedContent);
+        $this->assertStringNotContainsString('DOCTYPE', $sanitizedContent);
+        $this->assertStringContainsString('<circle r="1"/>', $sanitizedContent);
+        $this->assertTrue($this->sanitizer->isSafe($filePath));
     }
 }

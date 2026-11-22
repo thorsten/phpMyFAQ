@@ -21,6 +21,7 @@ namespace phpMyFAQ\Setup\Migration\QueryBuilder\Dialect;
 
 use phpMyFAQ\Setup\Migration\QueryBuilder\DialectInterface;
 
+/* @mago-expect lint:too-many-methods - one method per SQL construct that differs between the databases */
 class SqlServerDialect implements DialectInterface
 {
     public function getType(): string
@@ -139,6 +140,43 @@ class SqlServerDialect implements DialectInterface
             );
         }
         return "CREATE INDEX {$indexName} ON {$tableName} ({$columnList})";
+    }
+
+    /**
+     * SQL Server treats NULLs as equal in a unique index, so the index is filtered to the
+     * rows that carry a value in every nullable column.
+     *
+     * @param string[] $columns
+     * @param string[] $nullableColumns
+     */
+    public function createUniqueIndex(
+        string $indexName,
+        string $tableName,
+        array $columns,
+        array $nullableColumns = [],
+        bool $ifNotExists = false,
+    ): string {
+        $columnList = implode(', ', $columns);
+        $statement = "CREATE UNIQUE INDEX {$indexName} ON {$tableName} ({$columnList})";
+
+        if ($nullableColumns !== []) {
+            $statement .=
+                ' WHERE '
+                . implode(' AND ', array_map(
+                    static fn(string $column): string => "{$column} IS NOT NULL",
+                    $nullableColumns,
+                ));
+        }
+
+        if ($ifNotExists) {
+            return (
+                "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = '{$indexName}'"
+                . " AND object_id = OBJECT_ID(N'{$tableName}')) "
+                . $statement
+            );
+        }
+
+        return $statement;
     }
 
     public function dropIndex(string $indexName, string $tableName): string

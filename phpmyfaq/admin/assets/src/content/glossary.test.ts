@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { handleDeleteGlossary, handleAddGlossary, onOpenUpdateGlossaryModal, handleUpdateGlossary } from './glossary';
 import { createGlossary, deleteGlossary, getGlossary, updateGlossary } from '../api';
-import { pushNotification } from '../../../../assets/src/utils';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
 vi.mock('../api');
 vi.mock('../../../../assets/src/utils', async (importOriginal) => {
@@ -9,6 +9,7 @@ vi.mock('../../../../assets/src/utils', async (importOriginal) => {
   return {
     ...actual,
     pushNotification: vi.fn(),
+    pushErrorNotification: vi.fn(),
   };
 });
 vi.mock('bootstrap', () => {
@@ -25,6 +26,9 @@ vi.mock('bootstrap', () => {
     ),
   };
 });
+
+const reload = vi.fn();
+Object.defineProperty(window, 'location', { configurable: true, value: { reload } });
 
 const flushPromises = async (): Promise<void> => {
   await new Promise((resolve) => setTimeout(resolve, 10));
@@ -87,7 +91,7 @@ describe('Glossary Functions', () => {
       expect(() => handleAddGlossary()).not.toThrow();
     });
 
-    it('should create glossary, close modal, append row, and notify', async () => {
+    it('should create glossary, close modal, notify and reload the list', async () => {
       document.body.innerHTML = `
         <div id="addGlossaryModal"></div>
         <button id="pmf-admin-glossary-add">Add</button>
@@ -121,18 +125,71 @@ describe('Glossary Functions', () => {
       expect(itemInput.value).toBe('');
       expect(definitionInput.value).toBe('');
 
-      // New row should be appended to the table
+      // The server renders the new row: a row built in the browser would have no id and no delete token.
       const tableBody = document.querySelector('#pmf-admin-glossary-table tbody') as HTMLElement;
-      const rows = tableBody.querySelectorAll('tr');
-      expect(rows.length).toBe(1);
-
-      const editButton = rows[0].querySelector('[data-bs-target="#updateGlossaryModal"]') as HTMLButtonElement;
-      expect(editButton.getAttribute('data-pmf-glossary-id')).toBe('API');
-      expect(editButton.querySelector('.bi-pencil')).not.toBeNull();
-      const deleteButton = rows[0].querySelector('.pmf-admin-delete-glossary') as HTMLButtonElement;
-      expect(deleteButton.getAttribute('data-pmf-glossary-language')).toBe('en');
+      expect(tableBody.querySelectorAll('tr').length).toBe(0);
+      await vi.waitFor(() => expect(reload).toHaveBeenCalled(), { timeout: 3000 });
 
       expect(pushNotification).toHaveBeenCalledWith('Glossary item created');
+    });
+  });
+
+  describe('refused requests', () => {
+    it('should show the error and not reload when creating is refused', async () => {
+      document.body.innerHTML = `
+        <button id="pmf-admin-glossary-add">Add</button>
+        <input id="language" value="en" />
+        <input id="item" value="API" />
+        <input id="definition" value="Application Programming Interface" />
+        <input id="pmf-csrf-token" value="csrf-xyz" />
+      `;
+
+      (createGlossary as Mock).mockResolvedValue({ error: 'No permission' });
+
+      handleAddGlossary();
+      (document.getElementById('pmf-admin-glossary-add') as HTMLButtonElement).click();
+      await flushPromises();
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('No permission');
+      expect((document.getElementById('item') as HTMLInputElement).value).toBe('API');
+      expect(reload).not.toHaveBeenCalled();
+    });
+
+    it('should keep the row and show the error when deleting is refused', async () => {
+      document.body.innerHTML = `
+        <table><tbody><tr id="glossary-row-1"><td>
+          <button class="pmf-admin-delete-glossary" data-pmf-glossary-id="7" data-pmf-csrf-token="csrf-abc"
+                  data-pmf-glossary-language="en">Delete</button>
+        </td></tr></tbody></table>
+      `;
+
+      (deleteGlossary as Mock).mockResolvedValue({ error: 'No permission' });
+
+      handleDeleteGlossary();
+      (document.querySelector('.pmf-admin-delete-glossary') as HTMLButtonElement).click();
+      await flushPromises();
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('No permission');
+      expect(document.getElementById('glossary-row-1')).not.toBeNull();
+    });
+
+    it('should show the error when updating is refused', async () => {
+      document.body.innerHTML = `
+        <button id="pmf-admin-glossary-update">Update</button>
+        <input id="update-id" value="7" />
+        <input id="update-language" value="en" />
+        <input id="update-item" value="API" />
+        <input id="update-definition" value="Definition" />
+        <input id="update-csrf-token" value="csrf-upd" />
+      `;
+
+      (updateGlossary as Mock).mockResolvedValue({ error: 'No permission' });
+
+      handleUpdateGlossary();
+      (document.getElementById('pmf-admin-glossary-update') as HTMLButtonElement).click();
+      await flushPromises();
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('No permission');
     });
   });
 

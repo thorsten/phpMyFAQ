@@ -77,6 +77,38 @@ final class AdminMenuBuilderPermissionTest extends TestCase
         return $loaded;
     }
 
+    /**
+     * @param int[] $rightIds
+     */
+    private function createCurrentUser(bool $loggedIn, bool $superAdmin, array $rightIds): CurrentUser
+    {
+        $permission = $this->createStub(PermissionInterface::class);
+        $permission->method('getRightId')->willReturnMap([['view_faqs', 7]]);
+        $permission->method('getAllUserRights')->willReturn($rightIds);
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn($loggedIn);
+        $currentUser->method('isSuperAdmin')->willReturn($superAdmin);
+        $currentUser->method('getUserId')->willReturn(42);
+        $currentUser->perm = $permission;
+
+        return $currentUser;
+    }
+
+    public function testTheRightToReadFaqsAloneDoesNotOpenTheAdministration(): void
+    {
+        // Every registered user holds view_faqs (right id 7 here)
+        $this->assertFalse($this->menuBuilder->canAccessContent($this->createCurrentUser(true, false, [7])));
+        $this->assertFalse($this->menuBuilder->canAccessContent($this->createCurrentUser(true, false, [])));
+    }
+
+    public function testAnAdministrativeRightOpensTheAdministration(): void
+    {
+        $this->assertTrue($this->menuBuilder->canAccessContent($this->createCurrentUser(true, false, [7, 12])));
+        $this->assertTrue($this->menuBuilder->canAccessContent($this->createCurrentUser(true, true, [])));
+        $this->assertFalse($this->menuBuilder->canAccessContent($this->createCurrentUser(false, true, [7, 12])));
+    }
+
     public function testSuperAdminMayUseEveryMenuEntry(): void
     {
         $admin = new User($this->configuration);

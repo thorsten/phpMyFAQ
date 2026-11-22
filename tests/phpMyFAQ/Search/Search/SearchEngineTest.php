@@ -404,6 +404,68 @@ class SearchEngineTest extends TestCase
         $this->assertSame('valid', $results[0]->question);
     }
 
+    public function testElasticsearchSearchFiltersByLanguageOnlyWhenOneIsSet(): void
+    {
+        $client = new class {
+            public array $calls = [];
+
+            public function search(array $params): object
+            {
+                $this->calls[] = $params;
+
+                return new class {
+                    public function asArray(): array
+                    {
+                        return ['hits' => ['hits' => []]];
+                    }
+                };
+            }
+        };
+
+        $search = new Elasticsearch(
+            $this->createStub(Configuration::class),
+            $client,
+            $this->createElasticsearchConfiguration('faq-index'),
+        );
+
+        $search->search('phpmyfaq');
+        $search->setLanguage('de');
+        $search->search('phpmyfaq');
+
+        $this->assertArrayNotHasKey('filter', $client->calls[0]['body']['query']['bool']);
+        $this->assertSame(['term' => ['lang' => 'de']], $client->calls[1]['body']['query']['bool']['filter']);
+    }
+
+    public function testOpenSearchSearchFiltersByLanguageOnlyWhenOneIsSet(): void
+    {
+        $calls = [];
+        $client = $this
+            ->getMockBuilder(OpenSearchClient::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['search'])
+            ->getMock();
+        $client
+            ->method('search')
+            ->willReturnCallback(static function (array $params) use (&$calls): array {
+                $calls[] = $params;
+
+                return ['hits' => ['hits' => []]];
+            });
+
+        $search = new OpenSearch(
+            $this->createStub(Configuration::class),
+            $client,
+            $this->createOpenSearchConfiguration('faq-index'),
+        );
+
+        $search->search('phpmyfaq');
+        $search->setLanguage('de');
+        $search->search('phpmyfaq');
+
+        $this->assertArrayNotHasKey('filter', $calls[0]['body']['query']['bool']);
+        $this->assertSame(['term' => ['lang' => 'de']], $calls[1]['body']['query']['bool']['filter']);
+    }
+
     private function createElasticsearchConfiguration(string $index): ElasticsearchConfiguration
     {
         $configuration = $this->createMock(ElasticsearchConfiguration::class);

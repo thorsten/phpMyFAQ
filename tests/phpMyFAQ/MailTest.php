@@ -6,6 +6,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\BuiltinTestState;
+use phpMyFAQ\Mail\MailContent;
 use phpMyFAQ\Mail\Provider\MailgunProvider;
 use phpMyFAQ\Mail\Provider\SendGridProvider;
 use phpMyFAQ\Mail\Provider\SesProvider;
@@ -329,6 +330,154 @@ class MailTest extends TestCase
         $this->assertSame('<Undisclosed-Recipient:;>', $mail->capturedRecipients);
         $this->assertStringContainsString('Blind Copy', (string) $mail->capturedHeaders['BCC']);
         $this->assertStringContainsString('CC only body', $mail->capturedBody);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendKeepsEveryCcAndBccAddressInTheHeaders(): void
+    {
+        $mail = $this->createCapturingMail($this->configuration, 5);
+        $mail->subject = 'Copies subject';
+        $mail->message = 'Copies body';
+        $mail->setFrom('admin@example.com', 'Admin User');
+        $mail->addTo('user@example.com', 'User Name');
+        $mail->addCc('first-copy@example.com', 'First Copy');
+        $mail->addCc('second-copy@example.com');
+
+        $bccProperty = new \ReflectionProperty(Mail::class, 'bcc');
+        $bccProperty->setValue($mail, [
+            'first-blind@example.com' => 'First Blind',
+            'second-blind@example.com' => null,
+        ]);
+
+        $this->assertSame(5, $mail->send(true));
+        $copies = explode(',', (string) $mail->capturedHeaders['CC']);
+        $this->assertCount(2, $copies);
+        $this->assertStringEndsWith(' <first-copy@example.com>', $copies[0]);
+        $this->assertSame('<second-copy@example.com>', $copies[1]);
+        $this->assertSame(
+            'First Blind <first-blind@example.com>,<second-blind@example.com>',
+            $mail->capturedHeaders['BCC'],
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendEncodesDisplayNamesWithoutTheHeaderFieldName(): void
+    {
+        $mail = $this->createCapturingMail($this->configuration, 1);
+        $mail->setFrom('faq@example.com', 'My FAQ');
+        $mail->addTo('juergen@example.com', 'Jürgen Müller');
+        $mail->addCc('copy@example.com', 'Rinne, Thorsten');
+        $mail->subject = 'Subject';
+        $mail->message = 'Body';
+
+        $mail->send(true);
+
+        $this->assertSame('"My FAQ" <faq@example.com>', $mail->capturedHeaders['From']);
+        $this->assertStringNotContainsString('To:', $mail->capturedRecipients);
+        $this->assertStringEndsWith(' <juergen@example.com>', $mail->capturedRecipients);
+        $this->assertSame('Jürgen Müller', iconv_mime_decode(
+            substr($mail->capturedRecipients, 0, -strlen(' <juergen@example.com>')),
+            0,
+            'UTF-8',
+        ));
+
+        $cc = (string) $mail->capturedHeaders['CC'];
+        $this->assertStringNotContainsString('CC:', $cc);
+        $this->assertSame(0, substr_count($cc, ','), 'A comma in a name must not split the address list.');
+        $this->assertSame('Rinne, Thorsten', iconv_mime_decode(
+            substr($cc, 0, -strlen(' <copy@example.com>')),
+            0,
+            'UTF-8',
+        ));
+    }
+
+    public function testSendDeliversPlainTextMessageAsTextPlainOnly(): void
+    {
+        $mail = $this->createCapturingMail($this->configuration, 1);
+        $mail->addTo('user@example.com');
+        $mail->subject = 'Subject';
+        $mail->message = "First line\nSecond line";
+
+        $mail->send(true);
+
+        $this->assertStringStartsWith('text/plain;', (string) $mail->capturedHeaders['Content-Type']);
+        $this->assertSame("First line\r\nSecond line\r\n", $mail->capturedBody);
+        $this->assertInstanceOf(MailContent::class, $mail->capturedContent);
+        $this->assertFalse($mail->capturedContent->isHtml());
+        $this->assertSame("First line\nSecond line", $mail->capturedContent->text);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendDeliversHtmlMessageWithMarkupFreeTextAlternative(): void
+    {
+        $mail = $this->createCapturingMail($this->configuration, 1);
+        $mail->addTo('user@example.com');
+        $mail->subject = 'Subject';
+        $mail->message = '<p>Hello <strong>World</strong></p><p>Name: A &amp; B<br>See <a href="https://example.com/x">here</a></p>';
+        $mail->contentType = 'text/html';
+
+        $mail->send(true);
+
+        $expectedText = "Hello World\n\nName: A & B\nSee here (https://example.com/x)";
+        $this->assertStringStartsWith('multipart/alternative;', (string) $mail->capturedHeaders['Content-Type']);
+        $this->assertSame('text/html', $mail->contentType, 'The declared content type survives the send.');
+        $this->assertInstanceOf(MailContent::class, $mail->capturedContent);
+        $this->assertSame($expectedText, $mail->capturedContent->text);
+        $this->assertSame($mail->message, $mail->capturedContent->html);
+
+        $parts = explode('--' . $mail->boundary, $mail->capturedBody);
+        $this->assertCount(4, $parts);
+        $this->assertStringContainsString('Content-Type: text/plain; charset="utf-8"', $parts[1]);
+        $this->assertStringContainsString(str_replace("\n", "\r\n", $expectedText), $parts[1]);
+        $this->assertStringNotContainsString('<', $parts[1]);
+        $this->assertStringContainsString('Content-Type: text/html; charset="utf-8"', $parts[2]);
+        $this->assertStringContainsString('<strong>World</strong>', $parts[2]);
+
+        // A second send must not treat the message differently
+        $mail->send(true);
+        $this->assertStringStartsWith('multipart/alternative;', (string) $mail->capturedHeaders['Content-Type']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendPrefersTheTextAlternativeOfTheCaller(): void
+    {
+        $mail = $this->createCapturingMail($this->configuration, 1);
+        $mail->addTo('user@example.com');
+        $mail->subject = 'Subject';
+        $mail->message = '<p>HTML body</p>';
+        $mail->messageAlt = 'Hand-written text';
+
+        $mail->send(true);
+
+        $this->assertStringStartsWith('multipart/alternative;', (string) $mail->capturedHeaders['Content-Type']);
+        $this->assertInstanceOf(MailContent::class, $mail->capturedContent);
+        $this->assertSame('Hand-written text', $mail->capturedContent->text);
+        $this->assertSame('<p>HTML body</p>', $mail->capturedContent->html);
+        $this->assertStringNotContainsString('HTML body' . "\r\n\r\n--", $mail->capturedBody);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendOmitsCcAndBccHeadersWithoutCopyRecipients(): void
+    {
+        $mail = $this->createCapturingMail($this->configuration, 1);
+        $mail->subject = 'No copies subject';
+        $mail->message = 'No copies body';
+        $mail->setFrom('admin@example.com', 'Admin User');
+        $mail->addTo('user@example.com', 'User Name');
+
+        $this->assertSame(1, $mail->send(true));
+        $this->assertArrayNotHasKey('CC', $mail->capturedHeaders);
+        $this->assertArrayNotHasKey('BCC', $mail->capturedHeaders);
     }
 
     /**
@@ -709,6 +858,8 @@ class MailTest extends TestCase
                         is_array($decoded)
                         && ($decoded['class'] ?? null) === SendMailMessage::class
                         && isset($decoded['payload']['metadata']['envelope'])
+                        && ($decoded['payload']['metadata']['envelope']['text'] ?? null) === 'Queued message'
+                        && ($decoded['payload']['metadata']['envelope']['html'] ?? null) === ''
                     );
                 }),
                 $this->isArray(),
@@ -917,8 +1068,12 @@ class MailTest extends TestCase
         $configuration->method('getLogger')->willReturn($this->createStub(\Monolog\Logger::class));
 
         $mail = new class($configuration) extends Mail {
-            public function sendPreparedEnvelope(string $recipients, array $headers, string $body): int
-            {
+            public function sendPreparedEnvelope(
+                string $recipients,
+                array $headers,
+                string $body,
+                ?MailContent $content = null,
+            ): int {
                 return 7;
             }
         };
@@ -937,6 +1092,7 @@ class MailTest extends TestCase
             /** @var array<string, string|int> */
             public array $capturedHeaders = [];
             public string $capturedBody = '';
+            public ?MailContent $capturedContent = null;
 
             public function __construct(
                 Configuration $configuration,
@@ -945,11 +1101,16 @@ class MailTest extends TestCase
                 parent::__construct($configuration);
             }
 
-            public function sendPreparedEnvelope(string $recipients, array $headers, string $body): int
-            {
+            public function sendPreparedEnvelope(
+                string $recipients,
+                array $headers,
+                string $body,
+                ?MailContent $content = null,
+            ): int {
                 $this->capturedRecipients = $recipients;
                 $this->capturedHeaders = $headers;
                 $this->capturedBody = $body;
+                $this->capturedContent = $content;
 
                 return $this->returnValue;
             }

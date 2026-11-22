@@ -75,15 +75,45 @@ class GoogleRecaptchaTest extends TestCase
         $this->assertSame(0, $httpClient->getRequestsCount());
     }
 
+    public function testCheckCaptchaCodeSkipsHttpRequestWhenCaptchaIsDisabled(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['spam.enableCaptchaCode',              false],
+                ['security.googleReCaptchaV2SecretKey', 'test-secret'],
+            ]);
+        $httpClient = new MockHttpClient(static function (): never {
+            self::fail('No HTTP request must be made when the captcha is disabled.');
+        });
+        $googleRecaptcha = new GoogleRecaptcha($this->configuration, $httpClient);
+
+        $this->assertTrue($googleRecaptcha->checkCaptchaCode(''));
+        $this->assertSame(0, $httpClient->getRequestsCount());
+    }
+
+    private function enableCaptcha(): void
+    {
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['spam.enableCaptchaCode',              true],
+                ['security.googleReCaptchaV2SecretKey', 'test-secret'],
+            ]);
+    }
+
     public function testCheckCaptchaCodeSendsSecretAndResponseToGoogle(): void
     {
-        $this->configuration->expects($this->once())->method('get')
-            ->with('security.googleReCaptchaV2SecretKey')->willReturn('test-secret');
+        $this->enableCaptcha();
 
         $captured = [];
-        $httpClient = new MockHttpClient(static function (string $method, string $url, array $options) use (&$captured) {
+        $httpClient = new MockHttpClient(static function (string $method, string $url, array $options) use (
+            &$captured,
+        ) {
             $captured = ['method' => $method, 'url' => $url, 'body' => $options['body']];
-            return new MockResponse(json_encode(['success' => true]), ['response_headers' => ['content-type' => 'application/json']]);
+            return new MockResponse(json_encode(['success' => true]), ['response_headers' => [
+                'content-type' => 'application/json',
+            ]]);
         });
         $googleRecaptcha = new GoogleRecaptcha($this->configuration, $httpClient);
         $googleRecaptcha->setUserIsLoggedIn(false);
@@ -96,7 +126,7 @@ class GoogleRecaptchaTest extends TestCase
 
     public function testCheckCaptchaCodeReturnsFalseWhenGoogleRejects(): void
     {
-        $this->configuration->method('get')->willReturn('test-secret');
+        $this->enableCaptcha();
         $httpClient = new MockHttpClient(new MockResponse(
             json_encode(['success' => false, 'error-codes' => ['invalid-input-response']]),
             ['response_headers' => ['content-type' => 'application/json']],
@@ -109,7 +139,7 @@ class GoogleRecaptchaTest extends TestCase
 
     public function testCheckCaptchaCodeReturnsFalseOnHttpError(): void
     {
-        $this->configuration->method('get')->willReturn('test-secret');
+        $this->enableCaptcha();
         $httpClient = new MockHttpClient(new MockResponse('Internal Server Error', ['http_code' => 500]));
         $googleRecaptcha = new GoogleRecaptcha($this->configuration, $httpClient);
         $googleRecaptcha->setUserIsLoggedIn(false);
@@ -119,8 +149,10 @@ class GoogleRecaptchaTest extends TestCase
 
     public function testCheckCaptchaCodeReturnsFalseOnInvalidJson(): void
     {
-        $this->configuration->method('get')->willReturn('test-secret');
-        $httpClient = new MockHttpClient(new MockResponse('not json', ['response_headers' => ['content-type' => 'application/json']]));
+        $this->enableCaptcha();
+        $httpClient = new MockHttpClient(new MockResponse('not json', ['response_headers' => [
+            'content-type' => 'application/json',
+        ]]));
         $googleRecaptcha = new GoogleRecaptcha($this->configuration, $httpClient);
         $googleRecaptcha->setUserIsLoggedIn(false);
 
@@ -129,7 +161,7 @@ class GoogleRecaptchaTest extends TestCase
 
     public function testCheckCaptchaCodeReturnsFalseWhenSuccessKeyMissing(): void
     {
-        $this->configuration->method('get')->willReturn('test-secret');
+        $this->enableCaptcha();
         $httpClient = new MockHttpClient(new MockResponse(
             json_encode(['challenge_ts' => '2026-01-01T00:00:00Z']),
             ['response_headers' => ['content-type' => 'application/json']],

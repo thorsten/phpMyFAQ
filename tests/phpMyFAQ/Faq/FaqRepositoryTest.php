@@ -281,9 +281,70 @@ class FaqRepositoryTest extends TestCase
         $this->assertSame(7120, (int) $row->solution_id);
     }
 
+    /**
+     * A FAQ without any ACL row is found through the fallback query, which is limited to one
+     * row by the driver instead of a LIMIT clause SQL Server would reject.
+     */
+    public function testFetchRowBySolutionIdFallsBackToFaqWithoutAclRows(): void
+    {
+        $this->seedFaqRecord(id: 5027, solutionId: 7125, question: 'No ACL rows');
+        $database = $this->configuration->getDb();
+        $database->query(sprintf('DELETE FROM %sfaqdata_user WHERE record_id = 5027', Database::getTablePrefix()));
+        $sqlLogOffset = strlen($database->log());
+
+        $row = $this->faqRepository->fetchRowBySolutionId(7125, -1, [-1], false);
+
+        $this->assertIsObject($row);
+        $this->assertSame(5027, (int) $row->id);
+        $this->assertStringNotContainsStringIgnoringCase('LIMIT', substr($database->log(), $sqlLogOffset));
+    }
+
     public function testFetchRowBySolutionIdReturnsNullWhenMissing(): void
     {
         $this->assertNull($this->faqRepository->fetchRowBySolutionId(999993, -1, [-1], false));
+    }
+
+    /**
+     * A group-restricted FAQ must stay hidden on the solution-ID path: the requester has to
+     * hold one of the record's groups, exactly like on the record-ID path.
+     */
+    public function testFetchRowBySolutionIdDeniesGroupRestrictedFaqToAnonymousRequester(): void
+    {
+        $this->seedFaqRecord(id: 5023, solutionId: 7121, question: 'Group only', userId: 4711);
+        $this->seedGroupPermissions(5023, [42]);
+
+        $this->assertNull($this->faqRepository->fetchRowBySolutionId(7121, -1, [-1], true));
+    }
+
+    public function testFetchRowBySolutionIdDeniesGroupRestrictedFaqToMemberOfAnotherGroup(): void
+    {
+        $this->seedFaqRecord(id: 5024, solutionId: 7122, question: 'Group only', userId: 4711);
+        $this->seedGroupPermissions(5024, [42]);
+
+        $this->assertNull($this->faqRepository->fetchRowBySolutionId(7122, 12, [-1, 43], true));
+    }
+
+    public function testFetchRowBySolutionIdReturnsGroupRestrictedFaqToGroupMember(): void
+    {
+        $this->seedFaqRecord(id: 5025, solutionId: 7123, question: 'Group only', userId: 4711);
+        $this->seedGroupPermissions(5025, [42]);
+
+        $row = $this->faqRepository->fetchRowBySolutionId(7123, 12, [-1, 42], true);
+
+        $this->assertIsObject($row);
+        $this->assertSame(5025, (int) $row->id);
+        $this->assertSame(42, (int) $row->group_id);
+    }
+
+    public function testFetchRowBySolutionIdReturnsPublicGroupFaqToAnonymousRequester(): void
+    {
+        $this->seedFaqRecord(id: 5026, solutionId: 7124, question: 'Public group');
+        $this->seedGroupPermissions(5026, [-1]);
+
+        $row = $this->faqRepository->fetchRowBySolutionId(7124, -1, [-1], true);
+
+        $this->assertIsObject($row);
+        $this->assertSame(5026, (int) $row->id);
     }
 
     public function testFetchAvailableFaqsByCategoryIdReturnsActiveRows(): void
@@ -331,6 +392,79 @@ class FaqRepositoryTest extends TestCase
         $ids = array_map(static fn(object $row): int => (int) $row->id, $rows);
         $this->assertContains(5040, $ids);
         $this->assertNotContains(5041, $ids);
+    }
+
+    public function testFetchStickyFaqsSkipsFaqsOutsideTheirPublicationWindow(): void
+    {
+        $this->seedFaqRecord(id: 5048, solutionId: 7301, question: 'Visible sticky', sticky: 1);
+        $this->seedFaqRecord(id: 5049, solutionId: 7302, question: 'Scheduled sticky', sticky: 1);
+        $this->seedFaqRecord(id: 5050, solutionId: 7303, question: 'Expired sticky', sticky: 1);
+        $this->setPublicationWindow(5049, '29990101000000', '99991231235959');
+        $this->setPublicationWindow(5050, '00000000000000', '20000101000000');
+
+        $rows = $this->faqRepository->fetchStickyFaqs(-1, [-1], false);
+
+        $ids = array_map(static fn(object $row): int => (int) $row->id, $rows);
+        $this->assertContains(5048, $ids);
+        $this->assertNotContains(5049, $ids);
+        $this->assertNotContains(5050, $ids);
+    }
+
+    public function testFetchAllFaqsLimitedToPublishedSkipsFaqsOutsideTheirPublicationWindow(): void
+    {
+        $this->seedFaqRecord(id: 5051, solutionId: 7304, question: 'Visible');
+        $this->seedFaqRecord(id: 5052, solutionId: 7305, question: 'Scheduled');
+        $this->seedFaqRecord(id: 5053, solutionId: 7306, question: 'Expired');
+        $this->setPublicationWindow(5052, '29990101000000', '99991231235959');
+        $this->setPublicationWindow(5053, '00000000000000', '20000101000000');
+        $condition = ['fd.id' => ['5051', '5052', '5053'], 'fd.status' => FaqStatus::Published->value];
+
+        $rows = $this->faqRepository->fetchAllFaqs($condition, 'ORDER BY fd.id ASC', -1, [-1], false);
+
+        $this->assertSame([5051], array_map(static fn(object $row): int => (int) $row->id, $rows));
+        $this->assertSame(1, $this->faqRepository->countAllFaqs($condition, -1, [-1], false));
+    }
+
+    public function testFetchAllFaqsWithoutStatusConditionKeepsScheduledAndExpiredFaqs(): void
+    {
+        $this->seedFaqRecord(id: 5054, solutionId: 7307, question: 'Scheduled');
+        $this->seedFaqRecord(id: 5055, solutionId: 7308, question: 'Expired');
+        $this->setPublicationWindow(5054, '29990101000000', '99991231235959');
+        $this->setPublicationWindow(5055, '00000000000000', '20000101000000');
+        $condition = ['fd.id' => ['5054', '5055']];
+
+        $rows = $this->faqRepository->fetchAllFaqs($condition, 'ORDER BY fd.id ASC', -1, [-1], false);
+
+        $this->assertSame([5054, 5055], array_map(static fn(object $row): int => (int) $row->id, $rows));
+        $this->assertSame(2, $this->faqRepository->countAllFaqs($condition, -1, [-1], false));
+    }
+
+    /**
+     * @return array{0: string, 1: string} the stored date_start and date_end
+     */
+    private function fetchPublicationWindow(int $id): array
+    {
+        $database = $this->configuration->getDb();
+        $row = $database->fetchObject($database->query(sprintf(
+            'SELECT date_start, date_end FROM %sfaqdata WHERE id = %d',
+            Database::getTablePrefix(),
+            $id,
+        )));
+
+        return [(string) $row->date_start, (string) $row->date_end];
+    }
+
+    private function setPublicationWindow(int $id, string $dateStart, string $dateEnd): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "UPDATE %sfaqdata SET date_start = '%s', date_end = '%s' WHERE id = %d",
+                Database::getTablePrefix(),
+                $dateStart,
+                $dateEnd,
+                $id,
+            ));
     }
 
     public function testFetchAllFaqsReturnsRows(): void
@@ -404,6 +538,64 @@ class FaqRepositoryTest extends TestCase
         $this->assertSame('After', $this->faqRepository->fetchQuestion(5051, 'en'));
     }
 
+    public function testInsertStoresAnUnlimitedPublicationWindowByDefault(): void
+    {
+        $this->faqRepository->insert($this->makeFaqEntity(5054, 7440, 'No window'));
+
+        $this->assertSame(['00000000000000', '99991231235959'], $this->fetchPublicationWindow(5054));
+    }
+
+    public function testInsertStoresTheSubmittedPublicationWindow(): void
+    {
+        $faqEntity = $this->makeFaqEntity(5055, 7450, 'Scheduled')->setPublicationWindow(
+            PublicationWindow::fromInput('2999-01-02T03:04', '2999-12-31T23:59:59'),
+        );
+        $this->faqRepository->insert($faqEntity);
+
+        $this->assertSame(['29990102030400', '29991231235959'], $this->fetchPublicationWindow(5055));
+    }
+
+    /**
+     * Every save used to write "from now on, until 9999" over the stored window, which put a
+     * scheduled or an expired FAQ back online as soon as anyone saved it.
+     */
+    public function testUpdateWithoutPublicationWindowKeepsTheStoredOne(): void
+    {
+        $faqEntity = $this->makeFaqEntity(5056, 7460, 'Expired');
+        $this->faqRepository->insert($faqEntity);
+        $this->setPublicationWindow(5056, '20000101000000', '20001231235959');
+
+        $faqEntity->setQuestion('Expired, edited');
+        $this->faqRepository->update($faqEntity);
+
+        $this->assertSame('Expired, edited', $this->faqRepository->fetchQuestion(5056, 'en'));
+        $this->assertSame(['20000101000000', '20001231235959'], $this->fetchPublicationWindow(5056));
+    }
+
+    public function testUpdateStoresTheSubmittedPublicationWindow(): void
+    {
+        $faqEntity = $this->makeFaqEntity(5057, 7470, 'Rescheduled');
+        $this->faqRepository->insert($faqEntity);
+        $this->setPublicationWindow(5057, '20000101000000', '20001231235959');
+
+        $faqEntity->setPublicationWindow(PublicationWindow::fromInput('2999-01-02T03:04', ''));
+        $this->faqRepository->update($faqEntity);
+
+        $this->assertSame(['29990102030400', '99991231235959'], $this->fetchPublicationWindow(5057));
+    }
+
+    public function testUpdateWithAnUnlimitedPublicationWindowClearsTheStoredOne(): void
+    {
+        $faqEntity = $this->makeFaqEntity(5058, 7480, 'Unlimited again');
+        $this->faqRepository->insert($faqEntity);
+        $this->setPublicationWindow(5058, '20000101000000', '20001231235959');
+
+        $faqEntity->setPublicationWindow(PublicationWindow::unlimited());
+        $this->faqRepository->update($faqEntity);
+
+        $this->assertSame(['00000000000000', '99991231235959'], $this->fetchPublicationWindow(5058));
+    }
+
     public function testInsertPersistsStatusAndGetStatusReturnsIt(): void
     {
         $faqEntity = $this->makeFaqEntity(5053, 7430, 'Review Question')->setStatus(FaqStatus::Review);
@@ -465,6 +657,32 @@ class FaqRepositoryTest extends TestCase
         $this->assertSame(0, $this->countSharedRows('faqbookmarks', 'faqid', 5055));
         $this->assertSame(0, $this->countSharedRows('faqcomments', 'id', 5055));
         $this->assertSame(0, $this->countSharedRows('faqvoting', 'artikel', 5055));
+    }
+
+    /**
+     * faqcomments.id holds the record id of a FAQ or of a news entry; deleting FAQ #n must
+     * not take the comments on news #n with it.
+     */
+    public function testDeleteByIdAndLanguageKeepsNewsCommentsSharingTheRecordId(): void
+    {
+        $this->seedFaqRecord(id: 5056, solutionId: 7460, question: 'Only English', lang: 'en');
+        $this->seedSharedFaqRows(5056);
+        $database = $this->configuration->getDb();
+        $database->query(sprintf(
+            "INSERT INTO %sfaqcomments (id_comment, id, type, usr, email, comment, datum)
+             VALUES (995056, 5056, 'news', 'Commenter', 'commenter@example.com', 'News comment', '1700000000')",
+            Database::getTablePrefix(),
+        ));
+
+        $this->faqRepository->deleteByIdAndLanguage(5056, 'en');
+
+        $result = $database->query(sprintf(
+            'SELECT type FROM %sfaqcomments WHERE id = 5056',
+            Database::getTablePrefix(),
+        ));
+        $remaining = $database->fetchAll($result);
+        $this->assertCount(1, $remaining);
+        $this->assertSame('news', $remaining[0]->type);
     }
 
     public function testQueryRenderableFaqsByCategoryIdReturnsResult(): void

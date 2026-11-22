@@ -43,7 +43,7 @@ describe('updateUserControlPanelData', () => {
 
     const data = Object.keys({ name: 'John Doe' }) as unknown as FormData;
 
-    await expect(updateUserControlPanelData(data)).rejects.toThrow('HTTP 400');
+    await expect(updateUserControlPanelData(data)).rejects.toThrow('Something went wrong');
   });
 });
 
@@ -81,7 +81,7 @@ describe('updateUserPassword', () => {
 
     const data = Object.keys({ password: 'weak' }) as unknown as FormData;
 
-    await expect(updateUserPassword(data)).rejects.toThrow('HTTP 400');
+    await expect(updateUserPassword(data)).rejects.toThrow('Something went wrong');
   });
 });
 
@@ -119,7 +119,7 @@ describe('resetUserPassword', () => {
 
     const data = Object.keys({ email: 'invalid' }) as unknown as FormData;
 
-    await expect(resetUserPassword(data)).rejects.toThrow('HTTP 400');
+    await expect(resetUserPassword(data)).rejects.toThrow('Something went wrong');
   });
 });
 
@@ -157,7 +157,7 @@ describe('requestUserRemoval', () => {
 
     const data = Object.keys({ userId: '1' }) as unknown as FormData;
 
-    await expect(requestUserRemoval(data)).rejects.toThrow('HTTP 400');
+    await expect(requestUserRemoval(data)).rejects.toThrow('Something went wrong');
   });
 });
 
@@ -191,7 +191,7 @@ describe('removeTwofactorConfig', () => {
       json: () => Promise.resolve({ error: 'Something went wrong' }),
     });
 
-    await expect(removeTwofactorConfig('bad-token', '123456')).rejects.toThrow('HTTP 400');
+    await expect(removeTwofactorConfig('bad-token', '123456')).rejects.toThrow('Something went wrong');
   });
 });
 

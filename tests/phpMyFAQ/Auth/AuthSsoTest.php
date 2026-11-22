@@ -218,9 +218,30 @@ class AuthSsoTest extends TestCase
         unset($_SERVER['PHP_AUTH_USER']);
     }
 
-    public function testIsValidLoginWithoutPhpAuthUser(): void
+    public function testIsValidLoginWithRemoteUserOnly(): void
     {
         unset($_SERVER['PHP_AUTH_USER']);
+        $_SERVER['REMOTE_USER'] = 'EXAMPLE\\testuser';
+
+        $authSso = new AuthSso($this->configurationMock);
+
+        $this->assertSame(1, $authSso->isValidLogin('testuser'));
+    }
+
+    public function testCheckCredentialsDoesNotTrustPhpAuthUser(): void
+    {
+        unset($_SERVER['REMOTE_USER']);
+        $_SERVER['PHP_AUTH_USER'] = 'testuser';
+
+        $authSso = new AuthSso($this->configurationMock);
+
+        $this->expectException(AuthException::class);
+        $authSso->checkCredentials('testuser', '');
+    }
+
+    public function testIsValidLoginWithoutPhpAuthUser(): void
+    {
+        unset($_SERVER['PHP_AUTH_USER'], $_SERVER['REMOTE_USER']);
 
         $authSso = new AuthSso($this->configurationMock);
         $result = $authSso->isValidLogin('testuser');

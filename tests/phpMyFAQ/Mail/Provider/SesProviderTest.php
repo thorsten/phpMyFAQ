@@ -78,6 +78,61 @@ class SesProviderTest extends TestCase
         $this->assertSame(['first@example.com', 'second@example.com'], $command['Destination']['ToAddresses']);
     }
 
+    public function testSendDeliversTextOnlyForPlainMailAndBothPartsForHtmlMail(): void
+    {
+        $handler = new MockHandler([new Result(['MessageId' => 'abc']), new Result(['MessageId' => 'def'])]);
+        $credential = 'test-credential';
+        $sesClient = new SesClient([
+            'version' => 'latest',
+            'region' => 'eu-central-1',
+            'credentials' => ['key' => $credential, 'secret' => $credential],
+            'handler' => $handler,
+        ]);
+
+        $provider = new SesProvider($this->createStub(Configuration::class), $sesClient);
+        $headers = ['From' => 'sender@example.com', 'Subject' => 'Test'];
+
+        $provider->send('user@example.com', $headers, 'Plain body');
+        $plainBody = $handler->getLastCommand()['Message']['Body'];
+        $this->assertSame(['Text' => ['Data' => 'Plain body', 'Charset' => 'UTF-8']], $plainBody);
+
+        $provider->send('user@example.com', $headers, 'Text part', '<p>HTML part</p>');
+        $htmlBody = $handler->getLastCommand()['Message']['Body'];
+        $this->assertSame('Text part', $htmlBody['Text']['Data']);
+        $this->assertSame('<p>HTML part</p>', $htmlBody['Html']['Data']);
+    }
+
+    public function testSendMapsCopyRecipientsAndReplyTo(): void
+    {
+        $handler = new MockHandler([new Result(['MessageId' => 'abc'])]);
+        $credential = 'test-credential';
+        $sesClient = new SesClient([
+            'version' => 'latest',
+            'region' => 'eu-central-1',
+            'credentials' => ['key' => $credential, 'secret' => $credential],
+            'handler' => $handler,
+        ]);
+
+        $provider = new SesProvider($this->createStub(Configuration::class), $sesClient);
+
+        $provider->send(
+            'first@example.com',
+            [
+                'From' => 'Sender <sender@example.com>',
+                'Subject' => 'Test',
+                'CC' => '"Copy" <copy@example.com>,<second-copy@example.com>',
+                'BCC' => '<blind@example.com>',
+                'Reply-To' => '"Asker" <asker@example.com>',
+            ],
+            'Body',
+        );
+
+        $command = $handler->getLastCommand();
+        $this->assertSame(['copy@example.com', 'second-copy@example.com'], $command['Destination']['CcAddresses']);
+        $this->assertSame(['blind@example.com'], $command['Destination']['BccAddresses']);
+        $this->assertSame(['asker@example.com'], $command['ReplyToAddresses']);
+    }
+
     public function testGetSesClientBuildsClientFromConfiguredCredentials(): void
     {
         $configuration = $this->createStub(Configuration::class);

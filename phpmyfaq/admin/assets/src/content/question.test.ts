@@ -101,7 +101,7 @@ describe('Question Functions', () => {
       global.fetch = vi.fn(() =>
         Promise.resolve({
           ok: false,
-          json: () => Promise.resolve(errorMessage),
+          json: () => Promise.resolve({ error: errorMessage }),
         } as unknown as Response)
       );
 
@@ -116,6 +116,27 @@ describe('Question Functions', () => {
       const errorAlert = responseMessageEl.querySelector('div') as HTMLElement;
       expect(errorAlert).not.toBeNull();
       expect(errorAlert.innerText).toBe(errorMessage);
+    });
+
+    it('should show the failure when the request itself fails', async () => {
+      document.body.innerHTML = `
+        <div id="returnMessage"></div>
+        <form id="phpmyfaq-open-questions">
+          <input type="checkbox" name="questions[]" value="1" checked />
+        </form>
+        <button id="pmf-delete-questions">Delete</button>
+      `;
+
+      global.fetch = vi.fn(() => Promise.reject(new TypeError('Failed to fetch')));
+
+      handleOpenQuestions();
+
+      (document.getElementById('pmf-delete-questions') as HTMLButtonElement).click();
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      const errorAlert = document.querySelector('#returnMessage div') as HTMLElement;
+      expect(errorAlert.innerText).toBe('Failed to fetch');
     });
   });
 

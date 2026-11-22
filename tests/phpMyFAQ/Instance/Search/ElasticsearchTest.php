@@ -7,6 +7,7 @@ namespace phpMyFAQ\Instance\Search;
 use Elastic\Elasticsearch\Client;
 use Elastic\Elasticsearch\Endpoints\Indices;
 use Elastic\Elasticsearch\Response\Elasticsearch as ElasticsearchResponse;
+use Elastic\Transport\Exception\NoNodeAvailableException;
 use Elastic\Transport\NodePool\Node;
 use Elastic\Transport\NodePool\NodePoolInterface;
 use Elastic\Transport\Transport;
@@ -493,6 +494,113 @@ class ElasticsearchTest extends TestCase
         $this->assertStringContainsString('Exceeded maximum number of retries', $result['error']);
     }
 
+    public function testIsAvailableReturnsFalseWhenNoNodeIsAvailable(): void
+    {
+        $this->configMock->method('getLogger')->willReturn($this->createStub(Logger::class));
+        $this->httpClientMock->method('sendRequest')->willThrowException($this->networkException());
+
+        $this->assertFalse($this->elasticsearch->isAvailable());
+    }
+
+    public function testCreateIndexThrowsTheProjectExceptionWhenNoNodeIsAvailable(): void
+    {
+        $this->indicesMock
+            ->method('create')
+            ->willThrowException(new NoNodeAvailableException('Exceeded maximum number of retries (0)'));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Exceeded maximum number of retries');
+        $this->elasticsearch->createIndex();
+    }
+
+    public function testGetMappingThrowsTheProjectExceptionWhenNoNodeIsAvailable(): void
+    {
+        $this->indicesMock
+            ->method('getMapping')
+            ->willThrowException(new NoNodeAvailableException('Exceeded maximum number of retries (0)'));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Exceeded maximum number of retries');
+        $this->elasticsearch->getMapping();
+    }
+
+    public function testDropIndexThrowsTheProjectExceptionWhenNoNodeIsAvailable(): void
+    {
+        $this->indicesMock
+            ->method('delete')
+            ->willThrowException(new NoNodeAvailableException('Exceeded maximum number of retries (0)'));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Exceeded maximum number of retries');
+        $this->elasticsearch->dropIndex();
+    }
+
+    public function testBulkIndexReturnsErrorWhenNoNodeIsAvailable(): void
+    {
+        $this->httpClientMock->method('sendRequest')->willThrowException($this->networkException());
+
+        $result = $this->elasticsearch->bulkIndex([
+            ['status' => 'published', 'solution_id' => '1', 'id' => '1', 'lang' => 'en', 'title' => 'FAQ'],
+        ]);
+
+        $this->assertArrayHasKey('error', $result);
+        $this->assertStringContainsString('Exceeded maximum number of retries', $result['error']);
+    }
+
+    public function testBulkIndexCustomPagesReturnsErrorWhenNoNodeIsAvailable(): void
+    {
+        $this->httpClientMock->method('sendRequest')->willThrowException($this->networkException());
+
+        $result = $this->elasticsearch->bulkIndexCustomPages([$this->customPage()]);
+
+        $this->assertArrayHasKey('error', $result);
+        $this->assertStringContainsString('Exceeded maximum number of retries', $result['error']);
+    }
+
+    public function testIndexCustomPageReturnsNullWhenNoNodeIsAvailable(): void
+    {
+        $this->configMock->method('getLogger')->willReturn($this->createStub(Logger::class));
+        $this->httpClientMock->method('sendRequest')->willThrowException($this->networkException());
+
+        $this->assertNull($this->elasticsearch->indexCustomPage($this->customPage()));
+    }
+
+    public function testUpdateCustomPageReturnsErrorWhenNoNodeIsAvailable(): void
+    {
+        $this->configMock->method('getLogger')->willReturn($this->createStub(Logger::class));
+        $this->httpClientMock->method('sendRequest')->willThrowException($this->networkException());
+
+        $result = $this->elasticsearch->updateCustomPage($this->customPage());
+
+        $this->assertArrayHasKey('error', $result);
+        $this->assertStringContainsString('Exceeded maximum number of retries', $result['error']);
+    }
+
+    public function testDeleteCustomPageReturnsErrorWhenNoNodeIsAvailable(): void
+    {
+        $this->httpClientMock->method('sendRequest')->willThrowException($this->networkException());
+
+        $result = $this->elasticsearch->deleteCustomPage(5, 'en');
+
+        $this->assertArrayHasKey('error', $result);
+        $this->assertStringContainsString('Exceeded maximum number of retries', $result['error']);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function customPage(): array
+    {
+        return [
+            'id' => 5,
+            'lang' => 'en',
+            'page_title' => 'Imprint',
+            'content' => '<p>Text</p>',
+            'slug' => 'imprint',
+            'active' => 'y',
+        ];
+    }
+
     /**
      * @return array<string, int|string|null>
      */
@@ -511,7 +619,7 @@ class ElasticsearchTest extends TestCase
 
     private function networkException(): NetworkExceptionInterface
     {
-        return new class ('Connection refused') extends \RuntimeException implements NetworkExceptionInterface {
+        return new class('Connection refused') extends \RuntimeException implements NetworkExceptionInterface {
             public function getRequest(): RequestInterface
             {
                 return new \GuzzleHttp\Psr7\Request('PUT', '/phpmyfaq_test/_doc/42');
@@ -914,9 +1022,33 @@ class ElasticsearchTest extends TestCase
 
         $ref = new ReflectionClass(Elasticsearch::class);
         $this->assertSame($client, $ref->getProperty('client')->getValue($elasticsearch));
-        $this->assertSame($this->esConfigMock, $ref->getProperty('elasticsearchConfiguration')->getValue($elasticsearch));
+        $this->assertSame(
+            $this->esConfigMock,
+            $ref->getProperty('elasticsearchConfiguration')->getValue($elasticsearch),
+        );
         $mappings = $ref->getProperty('mappings')->getValue($elasticsearch);
         $this->assertArrayHasKey('question', $mappings['properties']);
         $this->assertArrayHasKey('categories', $mappings['properties']);
+    }
+
+    public function testWithLongRunningClientReturnsAnInstanceWithItsOwnClient(): void
+    {
+        $webClient = new ReflectionClass(Client::class)->newInstanceWithoutConstructor();
+        $this->esConfigMock->method('getHosts')->willReturn(['http://localhost:9200']);
+        $this->esConfigMock->method('isPeerVerificationEnabled')->willReturn(true);
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getElasticsearch')->willReturn($webClient);
+        $configuration->method('getElasticsearchConfig')->willReturn($this->esConfigMock);
+        $configuration->method('getDefaultLanguage')->willReturn('en');
+        $elasticsearch = new Elasticsearch($configuration);
+
+        $longRunning = $elasticsearch->withLongRunningClient();
+
+        $ref = new ReflectionClass(Elasticsearch::class);
+        $this->assertNotSame($elasticsearch, $longRunning);
+        $this->assertSame($webClient, $ref->getProperty('client')->getValue($elasticsearch));
+        $this->assertInstanceOf(Client::class, $ref->getProperty('client')->getValue($longRunning));
+        $this->assertNotSame($webClient, $ref->getProperty('client')->getValue($longRunning));
+        $this->assertSame($configuration, $ref->getProperty('configuration')->getValue($longRunning));
     }
 }

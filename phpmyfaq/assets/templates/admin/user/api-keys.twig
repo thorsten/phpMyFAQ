@@ -1,0 +1,116 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="pmf-admin-page-header">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-key"></i>
+      {{ 'ad_menu_api_keys' | translate }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <button type="button" class="btn btn-outline-success" id="pmf-api-key-add">
+        <i aria-hidden="true" class="bi bi-plus"></i> {{ 'msgApiKeyAdd' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div id="pmf-api-keys"
+       data-csrf-create="{{ csrfTokenCreate }}"
+       data-csrf-update="{{ csrfTokenUpdate }}"
+       data-csrf-delete="{{ csrfTokenDelete }}"
+       data-msg-add="{{ 'msgApiKeyAdd' | translate }}"
+       data-msg-edit="{{ 'msgApiKeyEdit' | translate }}"
+       data-msg-delete="{{ 'msgApiKeyDelete' | translate }}"
+       data-msg-confirm-delete="{{ 'msgApiKeyConfirmDelete' | translate }}"
+       data-msg-saved="{{ 'msgApiKeySaved' | translate }}"
+       data-msg-deleted="{{ 'msgApiKeyDeleted' | translate }}"
+       data-msg-never="{{ 'msgApiKeyNever' | translate }}"
+       data-msg-error="{{ 'msgApiKeyError' | translate }}">
+    <p>{{ 'msgApiKeysDescription' | translate }}</p>
+
+    <div class="table-responsive">
+      <table class="table border shadow align-middle">
+        <thead>
+        <tr>
+          <th scope="col">{{ 'msgApiKeyName' | translate }}</th>
+          <th scope="col">{{ 'msgApiKeyScopes' | translate }}</th>
+          <th scope="col">{{ 'msgApiKeyExpires' | translate }}</th>
+          <th scope="col">{{ 'msgApiKeyLastUsed' | translate }}</th>
+          <th scope="col" class="text-end">{{ 'msgApiKeyActions' | translate }}</th>
+        </tr>
+        </thead>
+        <tbody id="pmf-api-keys-list"></tbody>
+      </table>
+    </div>
+    <p id="pmf-api-keys-empty" class="text-body-secondary d-none">{{ 'msgApiKeysEmpty' | translate }}</p>
+  </div>
+
+  <div class="modal fade" id="pmf-modal-api-key" tabindex="-1" aria-labelledby="pmf-modal-api-key-title"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="pmf-api-key-form" novalidate>
+          <div class="modal-header">
+            <h2 class="modal-title h5" id="pmf-modal-api-key-title">{{ 'msgApiKeyAdd' | translate }}</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="{{ 'ad_gen_cancel' | translate }}"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="pmf-api-key-id" value="">
+            <div class="mb-3">
+              <label class="form-label" for="pmf-api-key-name">{{ 'msgApiKeyName' | translate }}</label>
+              <input class="form-control" type="text" id="pmf-api-key-name" maxlength="255" required>
+            </div>
+            <fieldset class="mb-3">
+              <legend class="form-label fs-6">{{ 'msgApiKeyScopes' | translate }}</legend>
+              {% for scope in grantableScopes %}
+                <div class="form-check">
+                  <input class="form-check-input pmf-api-key-scope" type="checkbox" value="{{ scope }}"
+                         id="pmf-api-key-scope-{{ loop.index }}">
+                  <label class="form-check-label" for="pmf-api-key-scope-{{ loop.index }}">
+                    <code>{{ scope }}</code>
+                  </label>
+                </div>
+              {% endfor %}
+              <div class="form-text">{{ 'msgApiKeyScopesHelp' | translate }}</div>
+            </fieldset>
+            <div class="mb-3">
+              <label class="form-label" for="pmf-api-key-expires">{{ 'msgApiKeyExpires' | translate }}</label>
+              <input class="form-control" type="date" id="pmf-api-key-expires"
+                     aria-describedby="pmf-api-key-expires-help">
+              <div class="form-text" id="pmf-api-key-expires-help">{{ 'msgApiKeyExpiresHelp' | translate }}</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              {{ 'ad_gen_cancel' | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary">{{ 'ad_gen_save' | translate }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="pmf-modal-api-key-created" tabindex="-1"
+       aria-labelledby="pmf-modal-api-key-created-title" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="pmf-modal-api-key-created-title">{{ 'msgApiKeyCreated' | translate }}</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="{{ 'msgApiKeyClose' | translate }}"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-warning" role="alert">{{ 'msgApiKeyCopyNow' | translate }}</div>
+          <label class="form-label" for="pmf-api-key-value">{{ 'msgApiKeyValue' | translate }}</label>
+          <input class="form-control font-monospace" type="text" id="pmf-api-key-value" readonly>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            {{ 'msgApiKeyClose' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -84,7 +84,17 @@ final class OlderMigrationsDialectsTest extends TestCase
         } elseif (in_array($dbType, ['sqlsrv', 'pdo_sqlsrv'], true)) {
             $this->assertStringContainsString('CREATE TABLE pmf_faqbookmarks (userid INTEGER', $joined);
             $this->assertStringNotContainsString('IF NOT EXISTS pmf_faqbookmarks', $joined);
-            $this->assertStringContainsString('ADD COLUMN sticky_order integer DEFAULT NULL', $joined);
+            // T-SQL has no COLUMN keyword in ALTER TABLE ... ADD
+            $this->assertStringContainsString('ALTER TABLE pmf_faqdata ADD sticky_order integer DEFAULT NULL', $joined);
+            $this->assertStringContainsString(
+                'ALTER TABLE pmf_faqdata_revisions ADD sticky_order integer DEFAULT NULL',
+                $joined,
+            );
+            $this->assertStringContainsString(
+                'ALTER TABLE pmf_faqcategory_order ADD parent_id INTEGER DEFAULT NULL',
+                $joined,
+            );
+            $this->assertStringNotContainsString('ADD COLUMN', $joined);
         } else {
             $this->assertStringContainsString('CREATE TABLE IF NOT EXISTS pmf_faqbookmarks (userid INTEGER', $joined);
             $this->assertStringContainsString('ADD COLUMN sticky_order integer DEFAULT NULL', $joined);

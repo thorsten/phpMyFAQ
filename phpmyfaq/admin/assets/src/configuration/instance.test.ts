@@ -206,6 +206,11 @@ describe('handleInstances - Delete Instance API Calls', () => {
       expect(window.confirm).toHaveBeenCalledWith('Are you sure?');
       expect(api.deleteInstance).toHaveBeenCalledWith('test-token', '123');
     });
+
+    // The row disappears as soon as the server confirmed the deletion, without a further click.
+    await vi.waitFor(() => {
+      expect(document.getElementById('row-instance-123')).toBeNull();
+    });
   });
 
   it('should not call deleteInstance API when user cancels', async () => {

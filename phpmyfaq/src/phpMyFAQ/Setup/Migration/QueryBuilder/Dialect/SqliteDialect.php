@@ -22,6 +22,7 @@ namespace phpMyFAQ\Setup\Migration\QueryBuilder\Dialect;
 use phpMyFAQ\Setup\Migration\QueryBuilder\DialectInterface;
 use RuntimeException;
 
+/* @mago-expect lint:too-many-methods - one method per SQL construct that differs between the databases */
 class SqliteDialect implements DialectInterface
 {
     public function getType(): string
@@ -131,6 +132,22 @@ class SqliteDialect implements DialectInterface
         $columnList = implode(', ', $columns);
         $exists = $ifNotExists ? 'IF NOT EXISTS ' : '';
         return "CREATE INDEX {$exists}{$indexName} ON {$tableName} ({$columnList})";
+    }
+
+    /**
+     * @param string[] $columns
+     * @param string[] $nullableColumns
+     */
+    public function createUniqueIndex(
+        string $indexName,
+        string $tableName,
+        array $columns,
+        array $nullableColumns = [],
+        bool $ifNotExists = false,
+    ): string {
+        $columnList = implode(', ', $columns);
+        $exists = $ifNotExists ? 'IF NOT EXISTS ' : '';
+        return "CREATE UNIQUE INDEX {$exists}{$indexName} ON {$tableName} ({$columnList})";
     }
 
     public function dropIndex(string $indexName, string $tableName): string

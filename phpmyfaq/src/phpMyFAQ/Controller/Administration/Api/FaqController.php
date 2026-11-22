@@ -42,7 +42,9 @@ use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\EditScope;
 use phpMyFAQ\Faq\Import;
+use phpMyFAQ\Faq\InvalidPublicationWindowException;
 use phpMyFAQ\Faq\Permission as FaqPermission;
+use phpMyFAQ\Faq\PublicationWindow;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\SearchHelper;
@@ -137,6 +139,10 @@ final class FaqController extends AbstractAdministrationApiController
 
         $this->userHasPermissionForCategoriesInLanguage(PermissionType::FAQ_ADD, $categories, $language);
 
+        if (!$this->categoriesExist($categories)) {
+            return $this->json(['error' => Translation::get(key: 'msgInvalidFaqCategory')], Response::HTTP_BAD_REQUEST);
+        }
+
         $tags = Filter::filterVar($data->tags ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         // An absent status field means a new draft; a present but unsupported value is a
@@ -173,6 +179,15 @@ final class FaqController extends AbstractAdministrationApiController
         $serpTitle = Filter::filterVar($data->serpTitle ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
         $serpDescription = Filter::filterVar($data->serpDescription ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
+        // The publication window is parsed before anything is written or logged.
+        try {
+            $publicationWindow = $this->resolvePublicationWindow($data, $categories, $language);
+        } catch (InvalidPublicationWindowException $exception) {
+            return $this->json([
+                'error' => Translation::get(key: $exception->translationKey),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         // Permissions
         $permissions = $faqPermission->createPermissionArray($request);
 
@@ -199,6 +214,10 @@ final class FaqController extends AbstractAdministrationApiController
             ->setComment($comment === 'y')
             ->setCreatedDate(new DateTime())
             ->setNotes(Filter::removeAttributes($notes));
+
+        if ($publicationWindow instanceof PublicationWindow) {
+            $faqData->setPublicationWindow($publicationWindow);
+        }
 
         // Add a new record and get that ID
         $faqData = $this->faq->create($faqData);
@@ -238,13 +257,18 @@ final class FaqController extends AbstractAdministrationApiController
                 ->setDescription($serpDescription);
             $this->seo->create($seoEntity);
 
-            // Open question answered
+            // Open question answered. The question is loaded by its id: closing it and notifying
+            // its author must never rely on the request, which could name any question, any
+            // recipient and any address.
             $openQuestionId = (int) Filter::filterVar($data->openQuestionId ?? null, FILTER_VALIDATE_INT);
-            if (0 !== $openQuestionId) {
+            $openQuestion = $openQuestionId > 0 ? $this->question->get($openQuestionId) : [];
+            if ($openQuestion !== []) {
                 try {
                     $this->questionHistory->add(new QuestionHistoryEntity(
                         questionId: $openQuestionId,
-                        questionLanguage: $faqData->getLanguage(),
+                        // The history belongs to the question, which keeps its own language
+                        // when it is answered by an FAQ written in another one.
+                        questionLanguage: (string) ($openQuestion['lang'] ?? $faqData->getLanguage()),
                         eventType: QuestionHistoryEventType::Answered,
                         userId: $this->currentUser->getUserId(),
                         username: $this->currentUser->getLogin(),
@@ -278,9 +302,11 @@ final class FaqController extends AbstractAdministrationApiController
 
                 // notify the user who added the question
                 try {
-                    $notifyEmail = Filter::filterVar($data->notifyEmail ?? '', FILTER_SANITIZE_EMAIL, '');
-                    $notifyUser = Filter::filterVar($data->notifyUser ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-                    $this->notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
+                    $this->notification->sendOpenQuestionAnswered(
+                        (string) ($openQuestion['email'] ?? ''),
+                        (string) ($openQuestion['username'] ?? ''),
+                        $oLink->toString(),
+                    );
                 } catch (Exception|TransportExceptionInterface $e) {
                     $this->configuration
                         ->getLogger()
@@ -341,8 +367,12 @@ final class FaqController extends AbstractAdministrationApiController
             // the public FAQ URL, which is more useful for end-users.
             // The payload carries the question and the slug, so it must honour the
             // user/group restrictions stored above: a restricted FAQ is pushed only to
-            // the permitted users, never broadcast to every subscriber.
-            if ($faqData->getStatus() === FaqStatus::Published) {
+            // the permitted users, never broadcast to every subscriber. An FAQ that is scheduled
+            // for later or already expired is not public yet, so nothing is pushed for it.
+            if (
+                $faqData->getStatus() === FaqStatus::Published
+                && ($publicationWindow ?? PublicationWindow::unlimited())->isOpenAt(new DateTime())
+            ) {
                 try {
                     $faqUrl = sprintf(
                         '%scontent/%d/%d/%s/%s.html',
@@ -451,6 +481,10 @@ final class FaqController extends AbstractAdministrationApiController
 
         $this->userHasPermissionForCategoriesInLanguage(PermissionType::FAQ_EDIT, $categories, $faqLang);
 
+        if (!$this->categoriesExist($categories)) {
+            return $this->json(['error' => Translation::get(key: 'msgInvalidFaqCategory')], Response::HTTP_BAD_REQUEST);
+        }
+
         // The solution id is the document id in Elasticsearch/OpenSearch. It is resolved from
         // the stored row, never taken from the request: a client-supplied value would let an
         // editor overwrite or delete the search document of any FAQ, including FAQs outside the
@@ -502,6 +536,31 @@ final class FaqController extends AbstractAdministrationApiController
             return $this->json(['error' => Translation::get(key: 'msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
         }
 
+        // A manual date is parsed before anything is written: a malformed value must not leave
+        // a revision and an admin log entry behind.
+        $manualDate = null;
+        if ($recordDateHandling === 'manualDate') {
+            try {
+                $manualDate = new DateTime($date);
+            } catch (Exception) {
+                return $this->json(['error' => Translation::get(key: 'msgInvalidFaqDate')], Response::HTTP_BAD_REQUEST);
+            }
+        }
+
+        // The same holds for the publication window. A request without the two window fields
+        // keeps the stored window, see resolvePublicationWindow().
+        try {
+            $publicationWindow = $this->resolvePublicationWindow(
+                $data,
+                [...$categories, ...$currentCategoryIds],
+                $faqLang,
+            );
+        } catch (InvalidPublicationWindowException $exception) {
+            return $this->json([
+                'error' => Translation::get(key: $exception->translationKey),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         // Permissions
         $permissions = $faqPermission->createPermissionArray($request);
 
@@ -544,12 +603,19 @@ final class FaqController extends AbstractAdministrationApiController
             ->setComment($comment === 'y')
             ->setNotes(Filter::removeAttributes($notes));
 
+        if ($publicationWindow instanceof PublicationWindow) {
+            $faqData->setPublicationWindow($publicationWindow);
+        }
+
         switch ($recordDateHandling) {
             case 'updateDate':
                 $faqData->setUpdatedDate(new DateTime());
                 break;
             case 'manualDate':
-                $faqData->setUpdatedDate(new DateTime($date));
+                if ($manualDate instanceof DateTime) {
+                    $faqData->setUpdatedDate($manualDate);
+                }
+
                 break;
             case 'keepDate':
                 break;
@@ -655,9 +721,76 @@ final class FaqController extends AbstractAdministrationApiController
     }
 
     /**
+     * Reads the publication window the editor submitted in "dateStart" and "dateEnd".
+     *
+     * The two fields are a pair: an empty or missing one leaves that side of the window open.
+     * A request that carries neither does not decide about the window at all, so null is
+     * returned and an update keeps the window that is stored.
+     *
+     * The window decides when a published FAQ is public, so setting it is part of the publish
+     * right, exactly like the status: the editor omits both fields for users without that
+     * right, and a request that sends them anyway is rejected rather than silently ignored.
+     *
+     * @param int[] $categoryIds the FAQ's current and submitted categories
+     * @throws InvalidPublicationWindowException|ForbiddenException|Exception
+     */
+    private function resolvePublicationWindow(
+        stdClass $data,
+        array $categoryIds,
+        string $faqLanguage,
+    ): ?PublicationWindow {
+        if (!property_exists($data, 'dateStart') && !property_exists($data, 'dateEnd')) {
+            return null;
+        }
+
+        if (!$this->userMayPublishIn($categoryIds, $faqLanguage)) {
+            throw new ForbiddenException(message: sprintf(
+                'User has no "%s" permission.',
+                PermissionType::FAQ_PUBLISH->name,
+            ));
+        }
+
+        return PublicationWindow::fromInput(
+            $this->toPublicationDateInput($data->dateStart ?? ''),
+            $this->toPublicationDateInput($data->dateEnd ?? ''),
+        );
+    }
+
+    /**
+     * @throws InvalidPublicationWindowException
+     */
+    private function toPublicationDateInput(mixed $value): string
+    {
+        if (!is_string($value)) {
+            throw InvalidPublicationWindowException::invalidDate(get_debug_type($value));
+        }
+
+        return $value;
+    }
+
+    /**
+     * Whether every submitted category exists in at least one language. Ids below 1 stand for
+     * "no category" and are left to the scope check, which decides about uncategorized FAQs.
+     *
+     * @param int[] $categoryIds
+     */
+    private function categoriesExist(array $categoryIds): bool
+    {
+        $language = $this->configuration->getLanguage();
+
+        foreach (array_unique($categoryIds) as $categoryId) {
+            if ($categoryId > 0 && $language->isLanguageAvailable($categoryId, table: 'faqcategories') === []) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @throws Exception
      */
-    #[Route(path: 'faq/permissions', name: 'admin.api.faq.permissions', methods: ['GET'])]
+    #[Route(path: 'faq/permissions/{faqId}', name: 'admin.api.faq.permissions', methods: ['GET'])]
     public function listPermissions(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);

@@ -14,6 +14,7 @@
  */
 
 import { BookmarkResponse } from '../interfaces';
+import { parseJsonResponse } from './response';
 
 export const createBookmark = async (faqId: string, csrf: string): Promise<BookmarkResponse> => {
   const response: Response = await fetch(`api/bookmark/create`, {
@@ -30,11 +31,7 @@ export const createBookmark = async (faqId: string, csrf: string): Promise<Bookm
     referrerPolicy: 'no-referrer',
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return await response.json();
+  return await parseJsonResponse(response);
 };
 
 export const deleteBookmark = async (faqId: string, csrf: string): Promise<BookmarkResponse> => {
@@ -52,11 +49,7 @@ export const deleteBookmark = async (faqId: string, csrf: string): Promise<Bookm
     referrerPolicy: 'no-referrer',
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return await response.json();
+  return await parseJsonResponse(response);
 };
 
 export const deleteAllBookmarks = async (csrf: string): Promise<BookmarkResponse> => {
@@ -73,9 +66,5 @@ export const deleteAllBookmarks = async (csrf: string): Promise<BookmarkResponse
     referrerPolicy: 'no-referrer',
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return await response.json();
+  return await parseJsonResponse(response);
 };

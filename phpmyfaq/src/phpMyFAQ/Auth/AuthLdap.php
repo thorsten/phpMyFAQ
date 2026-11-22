@@ -114,6 +114,16 @@ class AuthLdap extends Auth implements AuthDriverInterface
             ));
         }
 
+        // Without a created or already existing account there is nothing to update: an unloaded
+        // user still carries the ID of the anonymous account, which must never be touched.
+        if (!$result && $user->getUserId() < 1) {
+            $this->configuration
+                ->getLogger()
+                ->warning(sprintf('LDAP login "%s" has no local account and none could be created.', $login));
+
+            return false;
+        }
+
         $user->setStatus('active');
         $user->setAuthSource(AuthenticationSourceType::AUTH_LDAP->value);
 
@@ -184,13 +194,50 @@ class AuthLdap extends Auth implements AuthDriverInterface
      */
     private function extractGroupNameFromDn(string $dn): string
     {
-        // Extract CN from DN, e.g., "CN=Domain Users,CN=Users,DC=example,DC=com" -> "Domain Users"
+        // Extract CN from DN, e.g., "CN=Domain Users,CN=Users,DC=example,DC=com" -> "Domain Users".
+        // Only the leading RDN names the group; a later "CN=" component is one of its containers.
         $matches = [];
-        if (preg_match('/CN=([^,]+)/i', $dn, $matches)) {
+        if (preg_match('/^\s*CN=([^,]+)/i', $dn, $matches)) {
             return $matches[1];
         }
 
         return $dn;
+    }
+
+    /**
+     * Whether a group DN is one of the allowed groups. An allowed group is matched exactly and
+     * case-insensitively against the group's name ("Admins"), its leading RDN ("CN=Admins")
+     * or its full DN; a substring match would let "Admins" admit members of "Not-Admins".
+     *
+     * @param array<array-key, mixed> $allowedGroups
+     */
+    private function isAllowedGroup(string $groupDn, array $allowedGroups): bool
+    {
+        // The allowed groups arrive without spaces around the DN separators; compare like with like.
+        $groupDnParts = preg_split('/(?<!\\\\),/', $groupDn);
+        if ($groupDnParts !== false) {
+            $groupDn = implode(',', array_map(trim(...), $groupDnParts));
+        }
+
+        $leadingRdn = $groupDn;
+        $matches = [];
+        if (preg_match('/^(?:[^,\\\\]|\\\\.)+/', $groupDn, $matches)) {
+            $leadingRdn = $matches[0];
+        }
+
+        $acceptedForms = [mb_strtolower(trim($groupDn)), mb_strtolower(trim($leadingRdn))];
+        if (stripos($leadingRdn, needle: 'CN=') === 0) {
+            $acceptedForms[] = mb_strtolower(trim(substr($leadingRdn, offset: 3)));
+        }
+
+        foreach ($allowedGroups as $allowedGroup) {
+            $allowedGroup = mb_strtolower(trim((string) $allowedGroup));
+            if ($allowedGroup !== '' && in_array($allowedGroup, $acceptedForms, strict: true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -262,7 +309,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         // Check AD group membership restrictions if enabled
         $ldapGroupConfig = $this->configuration->getLdapGroupConfig();
-        if ($ldapGroupConfig['use_group_restriction'] === 'true') {
+        if (true === ($ldapGroupConfig['use_group_restriction'] ?? false)) {
             $userGroups = $this->ldapCore->getGroupMemberships($login);
             if ($userGroups === false) {
                 throw new AuthException('Unable to retrieve user group memberships');
@@ -270,22 +317,22 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
             $allowedGroupsRaw = $ldapGroupConfig['allowed_groups'] ?? [];
             $allowedGroups = is_array($allowedGroupsRaw) ? $allowedGroupsRaw : [];
-            if ($allowedGroups !== []) {
-                $hasAllowedGroup = false;
-                foreach ($userGroups as $userGroup) {
-                    foreach ($allowedGroups as $allowedGroup) {
-                        if (!str_contains($userGroup, trim((string) $allowedGroup))) {
-                            continue;
-                        }
+            // An enabled restriction without any allowed group admits nobody rather than everybody.
+            if ($allowedGroups === []) {
+                $this->configuration
+                    ->getLogger()
+                    ->warning('LDAP login denied: ldap.ldap_use_group_restriction is enabled, '
+                    . 'but ldap.ldap_group_allowed_groups is empty.');
+                throw new AuthException('User is not a member of any allowed LDAP/Active Directory groups');
+            }
 
-                        $hasAllowedGroup = true;
-                        break 2;
-                    }
-                }
+            $hasAllowedGroup = array_any($userGroups, fn(string $userGroup): bool => $this->isAllowedGroup(
+                $userGroup,
+                $allowedGroups,
+            ));
 
-                if (!$hasAllowedGroup) {
-                    throw new AuthException('User is not a member of any allowed LDAP/Active Directory groups');
-                }
+            if (!$hasAllowedGroup) {
+                throw new AuthException('User is not a member of any allowed LDAP/Active Directory groups');
             }
         }
 

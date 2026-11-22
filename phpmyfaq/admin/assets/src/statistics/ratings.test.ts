@@ -71,6 +71,22 @@ describe('handleClearRatings', () => {
     expect(pushErrorNotification).not.toHaveBeenCalled();
   });
 
+  it('should read the CSRF token from the button when its icon is clicked', async () => {
+    document.body.innerHTML = `
+      <button id="pmf-admin-clear-ratings" data-pmf-csrf="test-csrf-token"><i class="bi bi-trash"></i> Clear</button>
+    `;
+
+    (clearRatings as ReturnType<typeof vi.fn>).mockResolvedValue({ success: 'Ratings cleared successfully' });
+
+    handleClearRatings();
+
+    (document.querySelector('#pmf-admin-clear-ratings i') as HTMLElement).click();
+
+    await flushPromises();
+
+    expect(clearRatings).toHaveBeenCalledWith('test-csrf-token');
+  });
+
   it('should show error on error response', async () => {
     document.body.innerHTML = `
       <button id="pmf-admin-clear-ratings" data-pmf-csrf="test-csrf-token">Clear Ratings</button>

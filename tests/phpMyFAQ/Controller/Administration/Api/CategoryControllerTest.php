@@ -176,21 +176,20 @@ final class CategoryControllerTest extends TestCase
         // as the list of languages the tests work in.
         $permission
             ->method('getScopeForRight')
-            ->willReturnCallback(
-                static fn(int $userId, mixed $right): RightScope => match (true) {
-                    $userId !== 42,
-                    !in_array(
-                        $right,
-                        [
-                            PermissionType::CATEGORY_ADD->value,
-                            PermissionType::CATEGORY_DELETE->value,
-                            PermissionType::CATEGORY_EDIT->value,
-                        ],
-                        true,
-                    ) => RightScope::none(),
-                    default => RightScope::ofGrants(new RightGrant($allowedCategories, ['en', 'de'])),
-                },
-            );
+            ->willReturnCallback(static fn(int $userId, mixed $right): RightScope => match (true) {
+                $userId !== 42,
+                !in_array(
+                    $right,
+                    [
+                        PermissionType::CATEGORY_ADD->value,
+                        PermissionType::CATEGORY_DELETE->value,
+                        PermissionType::CATEGORY_EDIT->value,
+                    ],
+                    true,
+                ),
+                    => RightScope::none(),
+                default => RightScope::ofGrants(new RightGrant($allowedCategories, ['en', 'de'])),
+            });
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->perm = $permission;
@@ -469,6 +468,45 @@ final class CategoryControllerTest extends TestCase
     }
 
     /**
+     * Position, permissions and image belong to the category, not to one translation. Deleting
+     * one of several translations used to drop the order row, so the category lost its place.
+     *
+     * @throws \Exception
+     */
+    public function testDeleteKeepsOrderPermissionsAndImageWhileAnotherTranslationRemains(): void
+    {
+        $this->configuration->getDb()->query("INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (98, 'en', 0, 'Keep Me', '', 1, -1, 1, '', 0)");
+        $this->configuration->getDb()->query("INSERT INTO faqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (98, 'de', 0, 'Behalte mich', '', 1, -1, 1, '', 0)");
+
+        $session = new Session(new MockArraySessionStorage());
+        $csrfToken = Token::getInstance($session)->getTokenString('category');
+        $this->setCsrfCookie('category', $csrfToken);
+
+        $categoryImage = $this->createMock(Image::class);
+        $categoryImage->expects($this->never())->method('delete');
+
+        $categoryOrder = $this->createMock(Order::class);
+        $categoryOrder->expects($this->never())->method('remove');
+
+        $categoryPermission = $this->createMock(Permission::class);
+        $categoryPermission->expects($this->never())->method('delete');
+
+        $controller = $this->createControllerWithDependencies($categoryImage, $categoryOrder, $categoryPermission);
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
+            'csrfToken' => $csrfToken,
+            'categoryId' => 98,
+            'language' => 'de',
+        ], JSON_THROW_ON_ERROR)));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->removeCsrfCookie('category');
+    }
+
+    /**
      * The delete removes the faqcategories row selected by id and lang, so a CATEGORY_DELETE
      * right restricted to one language must not reach another language's translation.
      *
@@ -509,7 +547,7 @@ final class CategoryControllerTest extends TestCase
         }
 
         self::assertInstanceOf(ForbiddenException::class, $thrown);
-        $result = $this->configuration->getDb()->query("SELECT COUNT(*) AS total FROM faqcategories WHERE id = 99");
+        $result = $this->configuration->getDb()->query('SELECT COUNT(*) AS total FROM faqcategories WHERE id = 99');
         self::assertSame(2, (int) $this->configuration->getDb()->fetchObject($result)->total);
         $this->removeCsrfCookie('category');
     }

@@ -37,6 +37,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Form\FormsServiceProvider;
 use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Http\SecurityEventLogger;
+use phpMyFAQ\Kernel;
 use phpMyFAQ\Language;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -295,38 +296,95 @@ abstract class AbstractController
             return;
         }
 
+        if ($this->isRegistrationPath($pathInfo) && $this->configuration->get(item: 'security.enableRegistration')) {
+            return;
+        }
+
         throw new UnauthorizedHttpException(challenge: 'You are not allowed to view this content.');
     }
 
+    /**
+     * The path is relative to the front controller that handles the request: the REST API
+     * is served by api/index.php, so its paths carry no "/api" prefix here. Which list
+     * applies is therefore decided by the Kernel's routing context, not by the path.
+     *
+     * An API endpoint is listed exactly when the flow it belongs to is: the OAuth2 endpoints
+     * are how a client authenticates in the first place, the captcha image is part of the
+     * forms a guest may use, and the contact endpoint is what the contact page submits to.
+     */
     private function isPublicAuthenticationPath(string $pathInfo): bool
     {
-        $publicAuthenticationPaths = [
-            '/login',
-            '/authenticate',
-            '/forgot-password',
-            '/token',
-            '/check',
-            '/contact.html',
-            '/imprint.html',
-            '/privacy.html',
-            '/terms.html',
-            '/accessibility.html',
-            '/auth/azure/authorize',
-            '/auth/azure/callback',
-            '/auth/azure/callback.php',
-            '/auth/keycloak/authorize',
-            '/auth/keycloak/callback',
-            '/auth/keycloak/logout',
-            '/auth/oidc/authorize',
-            '/auth/oidc/callback',
-            '/auth/oidc/logout',
-            '/services/azure/callback',
-            '/services/azure/callback.php',
-            '/api/webauthn/prepare-login',
-            '/api/webauthn/login',
-        ];
+        $publicAuthenticationPaths = match ($this->routingContext()) {
+            'public' => [
+                '/login',
+                '/authenticate',
+                '/forgot-password',
+                '/user/reset-password',
+                '/token',
+                '/check',
+                '/contact.html',
+                '/imprint.html',
+                '/privacy.html',
+                '/terms.html',
+                '/accessibility.html',
+                '/auth/azure/authorize',
+                '/auth/azure/callback',
+                '/auth/azure/callback.php',
+                '/auth/azure/logout',
+                '/auth/keycloak/authorize',
+                '/auth/keycloak/callback',
+                '/auth/keycloak/logout',
+                '/auth/oidc/authorize',
+                '/auth/oidc/callback',
+                '/auth/oidc/logout',
+                '/services/azure/callback',
+                '/services/azure/callback.php',
+                '/services/azure/logout',
+                '/.well-known/oauth-authorization-server',
+            ],
+            'api' => [
+                '/webauthn/prepare-login',
+                '/webauthn/login',
+                '/v4.0/login',
+                '/oauth/token',
+                '/oauth/authorize',
+                '/captcha',
+                '/contact',
+            ],
+            default => [],
+        };
 
         return in_array($pathInfo, $publicAuthenticationPaths, strict: true);
+    }
+
+    /**
+     * The registration page and the endpoints it submits to, including the passkey sign-up.
+     * They are open to guests in "login only" mode only while registration is enabled: an
+     * instance that lets people register has to let them reach the form before they can log in.
+     */
+    private function isRegistrationPath(string $pathInfo): bool
+    {
+        $registrationPaths = [
+            'public' => ['/user/register'],
+            'api' => ['/register', '/v4.0/register', '/webauthn/prepare', '/webauthn/register'],
+        ];
+
+        return in_array($pathInfo, $registrationPaths[$this->routingContext()] ?? [], strict: true);
+    }
+
+    /**
+     * Without a booted Kernel (CLI scripts, tests) the request is treated as a frontend request.
+     */
+    private function routingContext(): string
+    {
+        /* @mago-expect lint:no-isset - typed property may be uninitialized */
+        if (!isset($this->container) || !$this->container->has(id: 'kernel')) {
+            return 'public';
+        }
+
+        $kernel = $this->container->get(id: 'kernel', invalidBehavior: ContainerInterface::NULL_ON_INVALID_REFERENCE);
+
+        return $kernel instanceof Kernel ? $kernel->getRoutingContext() : 'public';
     }
 
     /**

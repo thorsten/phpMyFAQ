@@ -314,9 +314,9 @@ class PdoMysqlTest extends TestCase
     {
         $tableNames = $this->pdoMysql->getTableNames('pmf_');
 
-        $this->assertCount(43, $tableNames);
-        $this->assertSame('pmf_faqadminlog', $tableNames[0]);
-        $this->assertSame('pmf_faqvoting', $tableNames[42]);
+        $this->assertCount(56, $tableNames);
+        $this->assertSame('pmf_faqadmindashboard', $tableNames[0]);
+        $this->assertSame('pmf_faqvoting', $tableNames[55]);
         $this->assertSame($tableNames, $this->pdoMysql->tableNames);
     }
 

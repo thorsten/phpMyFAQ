@@ -15,6 +15,7 @@
 
 import { serialize } from '../utils';
 import { ApiResponse } from '../interfaces';
+import { parseJsonResponse } from './response';
 
 export const send = async (data: FormData): Promise<ApiResponse> => {
   const response: Response = await fetch('api/contact', {
@@ -28,9 +29,5 @@ export const send = async (data: FormData): Promise<ApiResponse> => {
     referrerPolicy: 'no-referrer',
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return await response.json();
+  return await parseJsonResponse(response);
 };

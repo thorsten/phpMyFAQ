@@ -863,6 +863,67 @@ class AuthWebAuthnTest extends TestCase
     }
 
     /**
+     * The DER encoding of an ES256 signature shrinks whenever r or s starts with a zero byte, so
+     * about one valid signature in a hundred is shorter than 70 bytes.
+     */
+    public function testAuthenticateAcceptsAValidEs256SignatureShorterThanSeventyBytes(): void
+    {
+        $privateKey = openssl_pkey_new(['curve_name' => 'prime256v1', 'private_key_type' => OPENSSL_KEYTYPE_EC]);
+        self::assertInstanceOf(\OpenSSLAsymmetricKey::class, $privateKey);
+
+        $details = openssl_pkey_get_details($privateKey);
+        self::assertIsArray($details);
+
+        $userWebAuthn = (string) json_encode([
+            (object) [
+                'id' => [1, 2, 3],
+                'key' => $details['key'],
+            ],
+        ]);
+
+        $this->authWebAuthn->prepareForLogin($userWebAuthn);
+        $pendingChallenge = json_decode($userWebAuthn)[0]->challenge;
+
+        // ECDSA signatures are randomised: sign again until a short encoding comes up.
+        $info = null;
+        for ($attempt = 0; $attempt < 50_000; ++$attempt) {
+            $candidate = $this->createSignedAssertion($privateKey, $pendingChallenge);
+            if (count($candidate->response->signature) < 70) {
+                $info = $candidate;
+                break;
+            }
+        }
+
+        self::assertInstanceOf(\stdClass::class, $info, 'No short ES256 signature was produced.');
+        self::assertTrue($this->authWebAuthn->authenticate($info, $userWebAuthn));
+    }
+
+    public function testAuthenticateThrowsWhenTheSignatureIsTooShortToBeOne(): void
+    {
+        $privateKey = openssl_pkey_new(['curve_name' => 'prime256v1', 'private_key_type' => OPENSSL_KEYTYPE_EC]);
+        self::assertInstanceOf(\OpenSSLAsymmetricKey::class, $privateKey);
+
+        $details = openssl_pkey_get_details($privateKey);
+        self::assertIsArray($details);
+
+        $userWebAuthn = (string) json_encode([
+            (object) [
+                'id' => [1, 2, 3],
+                'key' => $details['key'],
+            ],
+        ]);
+
+        $this->authWebAuthn->prepareForLogin($userWebAuthn);
+        $info = $this->createSignedAssertion($privateKey, json_decode($userWebAuthn)[0]->challenge);
+        $info->response->signature = [0x30, 0x05, 0x02, 0x01, 0x01, 0x02, 0x00];
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot decode key response (3)');
+
+        $this->authWebAuthn->authenticate($info, $userWebAuthn);
+    }
+
+    /**
      * Builds an assertion signed the way an authenticator signs one: over the authenticator data
      * followed by the hash of the clientDataJSON.
      */
@@ -970,7 +1031,7 @@ class AuthWebAuthnTest extends TestCase
      * Builds a registration payload like createSignedRegistrationInfo(), but lets a test bend
      * single fields of the attestation to reach the guard clauses behind the happy path.
      *
-     * @param array{fmt?: string|null, rpId?: string, flags?: int, rawId?: list<int>, authData?: mixed} $options
+     * @param array{fmt?: string|null, rpId?: string, flags?: int, rawId?: list<int>, authData?: mixed, counter?: int, origin?: string} $options
      * @return array{0: string, 1: string}
      */
     private function createAttestationInfo(array $options = []): array
@@ -990,7 +1051,7 @@ class AuthWebAuthnTest extends TestCase
         $authData =
             hash('sha256', $options['rpId'] ?? 'example.com', true)
             . chr($options['flags'] ?? 0x45)
-            . "\x00\x00\x00\x00"
+            . pack('N', $options['counter'] ?? 0)
             . str_repeat("\x00", 16)
             . pack('n', strlen($credId))
             . $credId
@@ -1015,7 +1076,7 @@ class AuthWebAuthnTest extends TestCase
                 'attestationObject' => array_values(unpack('C*', $attestationObject)),
                 'clientDataJSON' => (object) [
                     'challenge' => 'issued-challenge',
-                    'origin' => 'https://example.com',
+                    'origin' => $options['origin'] ?? 'https://example.com',
                     'type' => 'webauthn.create',
                 ],
             ],
@@ -1052,6 +1113,18 @@ class AuthWebAuthnTest extends TestCase
             'Cannot decode key as RP ID hash does not match',
         ];
         yield 'user not present' => [['flags' => 0x00], 'Cannot decode key as flags are not correct'];
+        yield 'attested data without user presence' => [
+            ['flags' => 0x40],
+            'Cannot decode key as flags are not correct',
+        ];
+        yield 'user present without attested data' => [
+            ['flags' => 0x01],
+            'Cannot decode key as flags are not correct',
+        ];
+        yield 'origin on another port' => [
+            ['origin' => 'https://example.com:8443'],
+            "Origin mismatch for 'https://example.com:8443'",
+        ];
         yield 'credential id differs from rawId' => [['rawId' => [9, 9, 9]], 'Cannot decode key for credId'];
     }
 
@@ -1246,13 +1319,15 @@ class AuthWebAuthnTest extends TestCase
         string $challenge,
         string $rpId = 'example.com',
         int $flags = 0x01,
+        int $counter = 1,
+        string $origin = 'https://example.com',
     ): \stdClass {
         $clientDataJson = (string) json_encode([
             'challenge' => $challenge,
-            'origin' => 'https://example.com',
+            'origin' => $origin,
             'type' => 'webauthn.get',
         ]);
-        $authenticatorData = hash('sha256', $rpId, true) . chr($flags) . "\0\0\0\1";
+        $authenticatorData = hash('sha256', $rpId, true) . chr($flags) . pack('N', $counter);
 
         $signature = '';
         openssl_sign(
@@ -1368,5 +1443,229 @@ class AuthWebAuthnTest extends TestCase
         $this->expectExceptionMessage('Cannot decode key response because of');
 
         $this->authWebAuthn->authenticate($this->createSignedAssertionFor($privateKey, $challenge), $userWebAuthn);
+    }
+
+    public function testRegisterStoresTheSignatureCounterOfTheAttestation(): void
+    {
+        [$info] = $this->createAttestationInfo(['counter' => 7]);
+
+        $keys = json_decode($this->authWebAuthn->register($info, '', 'issued-challenge'));
+
+        self::assertSame(7, $keys[0]->counter);
+    }
+
+    public function testRegisterResetsTheCounterOfAnAlreadyKnownCredential(): void
+    {
+        [$info, $credId] = $this->createAttestationInfo(['counter' => 3]);
+        $existing = (string) json_encode([
+            (object) ['id' => array_values(unpack('C*', $credId)), 'key' => 'old key', 'counter' => 90],
+        ]);
+
+        $keys = json_decode($this->authWebAuthn->register($info, $existing, 'issued-challenge'));
+
+        self::assertCount(1, $keys);
+        self::assertSame(3, $keys[0]->counter);
+    }
+
+    public function testRegisterAcceptsTheOriginWithItsDefaultPortSpelledOut(): void
+    {
+        [$info] = $this->createAttestationInfo(['origin' => 'https://example.com:443']);
+
+        self::assertCount(1, json_decode($this->authWebAuthn->register($info, '', 'issued-challenge')));
+    }
+
+    public function testRegisterRejectsAnOriginDowngradedToHttp(): void
+    {
+        $this->configuration->set('main.referenceURL', 'https://example.com/');
+        [$info] = $this->createAttestationInfo(['origin' => 'http://example.com']);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Origin mismatch for 'http://example.com'");
+
+        $this->authWebAuthn->register($info, '', 'issued-challenge');
+    }
+
+    public function testAuthenticateStoresTheSignatureCounter(): void
+    {
+        [$privateKey, $userWebAuthn, $challenge] = $this->prepareStoredRsaKey();
+
+        self::assertTrue($this->authWebAuthn->authenticate(
+            $this->createSignedAssertionFor($privateKey, $challenge, counter: 41),
+            $userWebAuthn,
+        ));
+
+        self::assertSame(41, json_decode($userWebAuthn)[1]->counter);
+    }
+
+    public function testAuthenticateAcceptsAHigherCounterOnTheNextLogin(): void
+    {
+        [$privateKey, $userWebAuthn] = $this->prepareStoredRsaKey();
+        $userWebAuthn = $this->withStoredCounter($userWebAuthn, 41);
+
+        self::assertTrue($this->authWebAuthn->authenticate(
+            $this->createSignedAssertionFor($privateKey, $this->issueChallenge($userWebAuthn), counter: 42),
+            $userWebAuthn,
+        ));
+        self::assertSame(42, json_decode($userWebAuthn)[1]->counter);
+    }
+
+    /**
+     * @return iterable<string, array{int, int}>
+     */
+    public static function staleCounterProvider(): iterable
+    {
+        yield 'counter stands still' => [41, 41];
+        yield 'counter goes back' => [41, 7];
+        yield 'counter resets to zero' => [41, 0];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('staleCounterProvider')]
+    public function testAuthenticateRejectsACounterThatDidNotIncrease(int $storedCounter, int $receivedCounter): void
+    {
+        [$privateKey, $userWebAuthn] = $this->prepareStoredRsaKey();
+        $userWebAuthn = $this->withStoredCounter($userWebAuthn, $storedCounter);
+        $assertion = $this->createSignedAssertionFor(
+            $privateKey,
+            $this->issueChallenge($userWebAuthn),
+            counter: $receivedCounter,
+        );
+
+        try {
+            $this->authWebAuthn->authenticate($assertion, $userWebAuthn);
+            self::fail('A cloned authenticator was accepted.');
+        } catch (Exception $exception) {
+            self::assertStringContainsString('Signature counter did not increase', $exception->getMessage());
+        }
+
+        // The rejected counter must not replace the stored one.
+        self::assertSame($storedCounter, json_decode($userWebAuthn)[1]->counter);
+    }
+
+    /**
+     * Synced passkeys do not count: they report zero on every assertion.
+     */
+    public function testAuthenticateAcceptsAnAuthenticatorThatNeverCounts(): void
+    {
+        [$privateKey, $userWebAuthn] = $this->prepareStoredRsaKey();
+        $userWebAuthn = $this->withStoredCounter($userWebAuthn, 0);
+
+        foreach (['first login', 'second login'] as $login) {
+            self::assertTrue(
+                $this->authWebAuthn->authenticate(
+                    $this->createSignedAssertionFor($privateKey, $this->issueChallenge($userWebAuthn), counter: 0),
+                    $userWebAuthn,
+                ),
+                $login,
+            );
+        }
+
+        self::assertSame(0, json_decode($userWebAuthn)[1]->counter);
+    }
+
+    /**
+     * Keys registered before the counter was tracked carry none; the first login sets the baseline.
+     */
+    public function testAuthenticateStartsCountingForAKeyStoredWithoutACounter(): void
+    {
+        [$privateKey, $userWebAuthn, $challenge] = $this->prepareStoredRsaKey();
+        self::assertObjectNotHasProperty('counter', json_decode($userWebAuthn)[1]);
+
+        self::assertTrue($this->authWebAuthn->authenticate(
+            $this->createSignedAssertionFor($privateKey, $challenge, counter: 500),
+            $userWebAuthn,
+        ));
+        self::assertSame(500, json_decode($userWebAuthn)[1]->counter);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Signature counter did not increase (stored 500, received 500)');
+
+        $this->authWebAuthn->authenticate(
+            $this->createSignedAssertionFor($privateKey, $this->issueChallenge($userWebAuthn), counter: 500),
+            $userWebAuthn,
+        );
+    }
+
+    /**
+     * A counter nobody signed must neither be stored nor trip the clone detection.
+     */
+    public function testAuthenticateIgnoresTheCounterOfAnAssertionWithAnInvalidSignature(): void
+    {
+        [, $userWebAuthn] = $this->prepareStoredRsaKey();
+        $userWebAuthn = $this->withStoredCounter($userWebAuthn, 41);
+        $otherKey = openssl_pkey_new(['private_key_bits' => 2048, 'private_key_type' => OPENSSL_KEYTYPE_RSA]);
+        self::assertInstanceOf(\OpenSSLAsymmetricKey::class, $otherKey);
+
+        self::assertFalse($this->authWebAuthn->authenticate(
+            $this->createSignedAssertionFor($otherKey, $this->issueChallenge($userWebAuthn), counter: 9000),
+            $userWebAuthn,
+        ));
+        self::assertSame(41, json_decode($userWebAuthn)[1]->counter);
+    }
+
+    public function testAuthenticateRejectsTruncatedAuthenticatorData(): void
+    {
+        [$privateKey, $userWebAuthn, $challenge] = $this->prepareStoredRsaKey();
+        $assertion = $this->createSignedAssertionFor($privateKey, $challenge);
+        $assertion->response->authenticatorData = array_slice($assertion->response->authenticatorData, 0, 36);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot decode key response for authenticator data');
+
+        $this->authWebAuthn->authenticate($assertion, $userWebAuthn);
+    }
+
+    /**
+     * @return iterable<string, array{string, string, bool}>
+     */
+    public static function originProvider(): iterable
+    {
+        yield 'the configured origin' => ['https://example.com/', 'https://example.com', true];
+        yield 'default port spelled out' => ['https://example.com/', 'https://example.com:443', true];
+        yield 'another port on the same host' => ['https://example.com/', 'https://example.com:8443', false];
+        yield 'downgraded to http' => ['https://example.com/', 'http://example.com', false];
+        yield 'another host' => ['https://example.com/', 'https://evil.example', false];
+        yield 'a subdomain' => ['https://example.com/', 'https://faq.example.com', false];
+        yield 'no origin' => ['https://example.com/', '', false];
+        yield 'configured port matches' => ['https://example.com:8443/faq/', 'https://example.com:8443', true];
+        yield 'configured port missing' => ['https://example.com:8443/faq/', 'https://example.com', false];
+        yield 'https behind a proxy configured as http' => ['http://example.com/', 'https://example.com', true];
+        yield 'http as configured' => ['http://example.com/', 'http://example.com', true];
+        yield 'http on another port' => ['http://example.com/', 'http://example.com:8080', false];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('originProvider')]
+    public function testAuthenticateAcceptsOnlyTheOriginOfTheInstallation(
+        string $referenceUrl,
+        string $origin,
+        bool $accepted,
+    ): void {
+        $this->configuration->set('main.referenceURL', $referenceUrl);
+        [$privateKey, $userWebAuthn, $challenge] = $this->prepareStoredRsaKey();
+        $assertion = $this->createSignedAssertionFor($privateKey, $challenge, origin: $origin);
+
+        if (!$accepted) {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage(sprintf("Origin mismatch for '%s'", $origin));
+        }
+
+        self::assertTrue($this->authWebAuthn->authenticate($assertion, $userWebAuthn));
+    }
+
+    private function withStoredCounter(string $userWebAuthn, int $counter): string
+    {
+        $keys = json_decode($userWebAuthn);
+        $keys[1]->counter = $counter;
+
+        return (string) json_encode($keys);
+    }
+
+    /**
+     * Starts another login for the keys of prepareStoredRsaKey() and returns its challenge.
+     */
+    private function issueChallenge(string &$userWebAuthn): string
+    {
+        $this->authWebAuthn->prepareForLogin($userWebAuthn);
+
+        return (string) json_decode($userWebAuthn)[1]->challenge;
     }
 }

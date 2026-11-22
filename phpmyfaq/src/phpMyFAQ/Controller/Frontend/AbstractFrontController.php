@@ -278,6 +278,9 @@ abstract class AbstractFrontController extends AbstractController
                 $pageUrl = $this->configuration->getDefaultUrl() . 'page/' . $page->getSlug() . '.html';
                 return new RedirectResponse($pageUrl);
             }
+
+            // A missing or inactive page is no redirect target: "page:slug" is not a URL
+            $url = '';
         }
 
         // Default behavior: redirect to external URL

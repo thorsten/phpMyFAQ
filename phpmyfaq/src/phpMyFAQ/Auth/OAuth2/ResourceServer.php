@@ -60,6 +60,36 @@ final class ResourceServer
             return ($this->tokenValidator)($request);
         }
 
+        return $this->validatedAccessToken($request)['userId'] ?? null;
+    }
+
+    /**
+     * Authenticates a bearer token for an endpoint that requires a scope: returns the ID of the
+     * user the token was issued for, or null when the token is not valid, expired, revoked,
+     * issued without a user (client credentials) or does not carry the scope.
+     */
+    public function authenticateForScope(Request $request, string $scope): ?int
+    {
+        $authorizationHeader = trim((string) $request->headers->get('Authorization', default: ''));
+        if (!str_starts_with($authorizationHeader, 'Bearer ')) {
+            return null;
+        }
+
+        $accessToken = $this->validatedAccessToken($request);
+        if ($accessToken === null || !in_array($scope, $accessToken['scopes'], strict: true)) {
+            return null;
+        }
+
+        return $accessToken['userId'];
+    }
+
+    /**
+     * Signature, expiry and revocation are checked by the league server.
+     *
+     * @return array{userId: int, scopes: list<string>}|null
+     */
+    private function validatedAccessToken(Request $request): ?array
+    {
         if (!class_exists(\League\OAuth2\Server\ResourceServer::class)) {
             return null;
         }
@@ -80,16 +110,22 @@ final class ResourceServer
                 new CryptKey($publicKeyPath),
             );
             $validatedRequest = $server->validateAuthenticatedRequest($psrRequest);
+            /** @var mixed $userId */
             $userId = $validatedRequest->getAttribute('oauth_user_id');
-
-            if ($userId === null || $userId === '') {
-                return null;
-            }
-
-            return (int) $userId;
+            /** @var mixed $scopes */
+            $scopes = $validatedRequest->getAttribute('oauth_scopes');
         } catch (\Throwable) {
             return null;
         }
+
+        if (!is_scalar($userId) || (string) $userId === '') {
+            return null;
+        }
+
+        return [
+            'userId' => (int) $userId,
+            'scopes' => is_array($scopes) ? array_values(array_filter($scopes, is_string(...))) : [],
+        ];
     }
 
     private function isEnabled(): bool

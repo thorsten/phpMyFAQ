@@ -146,6 +146,11 @@ export const handleAttachmentUploads = (): void => {
 
       try {
         const response = await uploadAttachments(formData);
+        if (!Array.isArray(response)) {
+          // A refused upload answers with `{ error }` instead of the list of attachments.
+          throw new Error((response as { error?: string } | null)?.error ?? 'Attachment upload failed.');
+        }
+
         const uploadedMessage = fileUploadButton?.getAttribute('data-pmf-msg-uploaded') ?? 'Attachments uploaded.';
         pushNotification(uploadedMessage);
         const modal = document.getElementById('attachmentModal') as HTMLElement | null;

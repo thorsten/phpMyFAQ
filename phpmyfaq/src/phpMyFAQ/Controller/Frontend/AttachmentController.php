@@ -80,11 +80,7 @@ final class AttachmentController extends AbstractFrontController
             && $attachment->getRecordId() > 0
             && $attachmentService->canDownloadAttachment($attachment)
         ) {
-            $this->createDownloadResponse($attachment)->send();
-            return $this->render('attachment.twig', [
-                ...$this->getHeader($request),
-                'attachmentErrors' => $attachmentErrors,
-            ]);
+            return $this->createDownloadResponse($attachment);
         }
         $attachmentErrors[] = $attachmentService->getGenericErrorMessage();
 

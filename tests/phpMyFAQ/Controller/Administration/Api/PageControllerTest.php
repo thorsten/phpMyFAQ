@@ -1009,8 +1009,9 @@ final class PageControllerTest extends TestCase
             'csrfToken' => $token,
             'pageTitle' => 'HTML Page',
             'slug' => $slug,
-            'content' => '<h2 id="toc-intro">Intro</h2><p><img src="https://localhost/content/user/images/1_a.png" width="300"></p>'
-                . '<p><iframe width="400" height="345" src="https://www.youtube.com/embed/abc" frameborder="0" allowfullscreen></iframe></p><iframe src="https://evil.example.com/x"></iframe>',
+            'content' =>
+                '<h2 id="toc-intro">Intro</h2><p><img src="https://localhost/content/user/images/1_a.png" width="300"></p>'
+                    . '<p><iframe width="400" height="345" src="https://www.youtube.com/embed/abc" frameborder="0" allowfullscreen></iframe></p><iframe src="https://evil.example.com/x"></iframe>',
             'authorName' => 'Test Author',
             'authorEmail' => 'test@example.com',
             'active' => true,
@@ -1020,7 +1021,7 @@ final class PageControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(
             '<h2 id="toc-intro">Intro</h2><p><img src="https://localhost/content/user/images/1_a.png" width="300" /></p>'
-                . '<p><iframe width="400" height="345" src="https://www.youtube.com/embed/abc" allowfullscreen></iframe></p><iframe></iframe>',
+            . '<p><iframe width="400" height="345" src="https://www.youtube.com/embed/abc" allowfullscreen></iframe></p><iframe></iframe>',
             $this->getStoredPageContent($slug),
         );
     }
@@ -1339,6 +1340,38 @@ final class PageControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertSame(Translation::get('ad_page_updatefail'), $payload['error']);
+    }
+
+    /**
+     * The status used to be cast to bool after sanitising, so the string "false" activated the
+     * page.
+     *
+     * @throws \Exception
+     */
+    public function testActivateDeactivatesThePageForTheStringFalse(): void
+    {
+        $pageId = $this->createPageViaController('unit-test-string-false-' . bin2hex(random_bytes(4)));
+
+        $controller = $this->createController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $controller->setContainer($container);
+
+        foreach (['true' => 'y', 'false' => 'n'] as $status => $expected) {
+            $response = $controller->activate(new Request([], [], [], [], [], [], json_encode([
+                'csrfToken' => $this->createValidCsrfToken($session, 'activate-page'),
+                'id' => $pageId,
+                'status' => $status,
+            ], JSON_THROW_ON_ERROR)));
+
+            self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+            $result = $this->configuration
+                ->getDb()
+                ->query(sprintf('SELECT active FROM faqcustompages WHERE id = %d', $pageId));
+            self::assertSame($expected, $this->configuration->getDb()->fetchArray($result)['active']);
+        }
     }
 
     /**

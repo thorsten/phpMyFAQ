@@ -1,3 +1,4 @@
+export * from './api-keys';
 export * from './attachment';
 export * from './category';
 export * from './configuration';
@@ -12,6 +13,7 @@ export * from './ldap';
 export * from './markdown';
 export * from './media-browser';
 export * from './news';
+export * from './oauth2';
 export * from './opensearch';
 export * from './push';
 export * from './page';

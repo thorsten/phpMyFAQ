@@ -103,7 +103,7 @@ export const handleNews = (): void => {
       item.addEventListener('click', async () => {
         const response = await activateNews(
           item.getAttribute('data-pmf-id') as string,
-          String(item.checked),
+          item.checked,
           item.getAttribute('data-pmf-csrf-token') as string
         );
 

@@ -88,6 +88,29 @@ class StartpageTest extends TestCase
         $this->assertEquals([], $result);
     }
 
+    /**
+     * SQL Server rejects a selected column that is neither aggregated nor grouped.
+     */
+    public function testGetCategoriesGroupsByEverySelectedCategoryColumn(): void
+    {
+        $this->startpage->setUser(1)->setGroups([1])->setLanguage('en');
+        $this->databaseMock->method('escape')->willReturnArgument(0);
+        $this->databaseMock
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->callback(static function (string $query): bool {
+                preg_match_all('/^\s*(f\w+\.\w+) AS \w+,?\s*$/m', $query, $selected);
+                preg_match('/GROUP BY(.*)ORDER BY/s', $query, $groupBy);
+                $grouped = array_map(trim(...), explode(',', $groupBy[1] ?? ''));
+
+                return count($selected[1]) === 11 && array_diff($selected[1], $grouped) === [];
+            }))
+            ->willReturn('query_result');
+        $this->databaseMock->method('fetchArray')->willReturn(false);
+
+        $this->assertSame([], $this->startpage->getCategories());
+    }
+
     public function testGetCategoriesWithValidLanguage(): void
     {
         Database::setTablePrefix('test_');

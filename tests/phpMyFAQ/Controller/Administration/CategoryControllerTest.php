@@ -321,6 +321,11 @@ final class CategoryControllerTest extends TestCase
 
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // The translation endpoint verifies the "translate" token, which the page has to carry.
+        self::assertMatchesRegularExpression(
+            '/id="pmf-csrf-token-translate"\s+value="[^"]+"/',
+            (string) $response->getContent(),
+        );
     }
 
     /**

@@ -35,7 +35,7 @@ final class ContactControllerDirectTest extends ApiControllerTestCase
         $request = Request::create('/api/contact', 'POST', content: json_encode([
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'question' => 'How can I reach support?',
+            'question' => "How can I reach support?\nSecond line",
             'captcha' => 'ignored-for-logged-in-user',
         ], JSON_THROW_ON_ERROR));
 
@@ -44,6 +44,12 @@ final class ContactControllerDirectTest extends ApiControllerTestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertArrayHasKey('success', $payload);
+        // The message is built with HTML line breaks, so it has to be declared as HTML
+        self::assertSame('text/html', $mailer->contentType);
+        self::assertStringContainsString(
+            "test@example.com<br><br>How can I reach support?<br />\nSecond line",
+            $mailer->message,
+        );
     }
 
     public function testCreateReturnsBadRequestWhenStopWordCheckFails(): void

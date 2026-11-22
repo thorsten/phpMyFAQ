@@ -79,6 +79,11 @@ class Sqlsrv implements DatabaseDriver
             die();
         }
 
+        // A DATETIME literal like '2026-11-22 10:00:00' is read as year-day-month under a
+        // login language with the dmy date format; ymd makes it language-independent
+        $sessionDateFormat = 'SET DATEFORMAT ymd';
+        sqlsrv_query($this->conn, $sessionDateFormat);
+
         return true;
     }
 
@@ -113,9 +118,14 @@ class Sqlsrv implements DatabaseDriver
      */
     public function fetchRow(mixed $result): mixed
     {
-        $row = $this->fetchArray($result);
+        if (!is_resource($result)) {
+            return null;
+        }
 
-        return $row[0] ?? null;
+        // An associative row has no index 0, so the first column needs a numeric fetch
+        $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_NUMERIC);
+
+        return is_array($row) ? $row[0] ?? null : null;
     }
 
     /**
@@ -250,13 +260,11 @@ class Sqlsrv implements DatabaseDriver
             return false;
         }
 
-        $options = ['Scrollable' => SQLSRV_CURSOR_KEYSET];
-
         if (0 < $rowcount) {
             $query .= sprintf(' OFFSET %d ROWS FETCH NEXT %d ROWS ONLY', $offset, $rowcount);
         }
 
-        $result = sqlsrv_query($this->conn, $query, [], $options);
+        $result = sqlsrv_query($this->conn, $query, [], $this->cursorOptions($query));
 
         if (!$result) {
             $this->sqlLog .= $this->error();
@@ -280,7 +288,7 @@ class Sqlsrv implements DatabaseDriver
             return false;
         }
 
-        $result = sqlsrv_query($this->conn, $query, $params, ['Scrollable' => SQLSRV_CURSOR_KEYSET]);
+        $result = sqlsrv_query($this->conn, $query, $params, $this->cursorOptions($query));
 
         if (!$result) {
             $this->sqlLog .= $this->error();
@@ -289,6 +297,22 @@ class Sqlsrv implements DatabaseDriver
         $this->lastResult = $result;
 
         return $result;
+    }
+
+    /**
+     * The keyset cursor is what makes numRows() work on a result set. A data-modifying
+     * statement has none, and runs with the driver's default cursor so that
+     * affectedRows() reports its row count.
+     *
+     * @return array<string, string>
+     */
+    private function cursorOptions(string $query): array
+    {
+        if (preg_match('/^\s*(?:INSERT|UPDATE|DELETE)\b/i', $query) === 1) {
+            return [];
+        }
+
+        return ['Scrollable' => SQLSRV_CURSOR_KEYSET];
     }
 
     /**
@@ -372,7 +396,9 @@ class Sqlsrv implements DatabaseDriver
     public function getTableNames(string $prefix = ''): array
     {
         return $this->tableNames = [
+            $prefix . 'faqadmindashboard',
             $prefix . 'faqadminlog',
+            $prefix . 'faqapi_keys',
             $prefix . 'faqattachment',
             $prefix . 'faqattachment_file',
             $prefix . 'faqbackup',
@@ -398,10 +424,20 @@ class Sqlsrv implements DatabaseDriver
             $prefix . 'faqglossary',
             $prefix . 'faqgroup',
             $prefix . 'faqgroup_right',
+            $prefix . 'faqgroup_right_category',
+            $prefix . 'faqgroup_right_language',
             $prefix . 'faqinstances',
             $prefix . 'faqinstances_config',
+            $prefix . 'faqjobs',
             $prefix . 'faqnews',
+            $prefix . 'faqoauth_access_tokens',
+            $prefix . 'faqoauth_auth_codes',
+            $prefix . 'faqoauth_clients',
+            $prefix . 'faqoauth_refresh_tokens',
+            $prefix . 'faqoauth_scopes',
+            $prefix . 'faqpush_subscriptions',
             $prefix . 'faqquestions',
+            $prefix . 'faqquestion_history',
             $prefix . 'faqright',
             $prefix . 'faqsearches',
             $prefix . 'faqseo',
@@ -413,6 +449,7 @@ class Sqlsrv implements DatabaseDriver
             $prefix . 'faquserlogin',
             $prefix . 'faquser_group',
             $prefix . 'faquser_right',
+            $prefix . 'faquser_right_language',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
         ];

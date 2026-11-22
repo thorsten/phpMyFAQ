@@ -15,6 +15,7 @@
 
 import { serialize } from '../utils';
 import { ApiResponse } from '../interfaces';
+import { parseJsonResponse } from './response';
 
 export const updateUserControlPanelData = async (data: FormData): Promise<ApiResponse> => {
   const response: Response = await fetch('api/user/data/update', {
@@ -28,11 +29,7 @@ export const updateUserControlPanelData = async (data: FormData): Promise<ApiRes
     referrerPolicy: 'no-referrer',
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return await response.json();
+  return await parseJsonResponse(response);
 };
 
 export const updateUserPassword = async (data: FormData): Promise<ApiResponse> => {
@@ -47,11 +44,7 @@ export const updateUserPassword = async (data: FormData): Promise<ApiResponse> =
     referrerPolicy: 'no-referrer',
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return await response.json();
+  return await parseJsonResponse(response);
 };
 
 export const resetUserPassword = async (data: FormData): Promise<ApiResponse> => {
@@ -66,11 +59,7 @@ export const resetUserPassword = async (data: FormData): Promise<ApiResponse> =>
     referrerPolicy: 'no-referrer',
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return await response.json();
+  return await parseJsonResponse(response);
 };
 
 export const requestUserRemoval = async (data: FormData): Promise<ApiResponse> => {
@@ -85,11 +74,7 @@ export const requestUserRemoval = async (data: FormData): Promise<ApiResponse> =
     referrerPolicy: 'no-referrer',
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return await response.json();
+  return await parseJsonResponse(response);
 };
 
 export const revokePasskey = async (csrfToken: string, id: string): Promise<ApiResponse> => {
@@ -126,9 +111,5 @@ export const removeTwofactorConfig = async (csrfToken: string, code: string): Pr
     referrerPolicy: 'no-referrer',
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return await response.json();
+  return await parseJsonResponse(response);
 };

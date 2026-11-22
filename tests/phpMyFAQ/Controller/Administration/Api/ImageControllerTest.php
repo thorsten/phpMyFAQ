@@ -550,4 +550,38 @@ final class ImageControllerTest extends TestCase
         self::assertSame([], $payload['data']['files']);
         self::assertEmpty(glob($uploadDir . '*_evil.svg'));
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function testUploadDeletesAnSvgThatIsNotWellFormedXml(): void
+    {
+        $uploadDir = PMF_CONTENT_DIR . '/user/images/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0o755, true);
+        }
+
+        $controller = new ImageController();
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'pmf-csrf-token');
+        $controller->setContainer($container);
+
+        // Nothing in it matches a dangerous pattern, but a lenient parser decides what it means.
+        $tmpFile = tempnam(sys_get_temp_dir(), 'pmf-test-svg-');
+        self::assertNotFalse($tmpFile);
+        file_put_contents($tmpFile, '<svg xmlns="http://www.w3.org/2000/svg"><g><circle r="1"></svg>');
+        $file = new UploadedFile($tmpFile, 'malformed.svg', 'image/svg+xml', null, true);
+
+        $request = new Request(['csrf' => $token]);
+        $request->files->set('files', [$file]);
+
+        $response = $controller->upload($request);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame([], $payload['data']['files']);
+        self::assertEmpty(glob($uploadDir . '*_malformed.svg'));
+    }
 }

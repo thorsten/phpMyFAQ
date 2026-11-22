@@ -115,7 +115,6 @@ final class ConfigurationTabController extends AbstractAdministrationApiControll
                 'useSslForLogins' => Request::createFromGlobals()->isSecure(),
                 'useSslOnly' => Request::createFromGlobals()->isSecure(),
                 'ssoSupport' => Request::createFromGlobals()->server->get(key: 'REMOTE_USER'),
-                'buttonTes',
             ],
             'themeCsrfToken' => Token::getInstance($this->session)->getTokenString('theme-manager'),
             'activeTheme' => (string) $this->configuration->get('layout.templateSet'),

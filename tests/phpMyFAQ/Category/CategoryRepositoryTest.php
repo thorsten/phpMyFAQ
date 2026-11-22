@@ -76,11 +76,17 @@ class CategoryRepositoryTest extends TestCase
         $db
             ->expects($this->once())
             ->method('query')
-            ->with(self::callback(static function (string $query): bool {
-                self::assertStringContainsString('ORDER BY fc.id ASC LIMIT 25 OFFSET 0', $query);
-                self::assertStringNotContainsString('DROP', $query);
-                return true;
-            }))
+            ->with(
+                self::callback(static function (string $query): bool {
+                    // The page is passed to the driver; SQL Server knows no LIMIT clause.
+                    self::assertStringEndsWith('ORDER BY fc.id ASC', $query);
+                    self::assertStringNotContainsString('LIMIT', $query);
+                    self::assertStringNotContainsString('DROP', $query);
+                    return true;
+                }),
+                0,
+                25,
+            )
             ->willReturn(true);
         $db->method('fetchArray')->willReturn(false);
 
@@ -228,5 +234,32 @@ class CategoryRepositoryTest extends TestCase
         $configuration->method('getDb')->willReturn($db);
 
         return $configuration;
+    }
+
+    public function testFindCategoriesPaginatedPassesThePageToTheDriver(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db
+            ->expects($this->once())
+            ->method('query')
+            ->with(self::logicalNot(self::stringContains('LIMIT')), 20, 10)
+            ->willReturn(true);
+        $db->method('fetchArray')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        self::assertSame([], new CategoryRepository($configuration)->findCategoriesPaginated(limit: 10, offset: 20));
+    }
+
+    public function testFindCategoriesPaginatedReturnsNothingForAnEmptyPage(): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->expects($this->never())->method('query');
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        self::assertSame([], new CategoryRepository($configuration)->findCategoriesPaginated(limit: 0));
     }
 }

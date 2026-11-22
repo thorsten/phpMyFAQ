@@ -42,6 +42,10 @@ final readonly class NewsRepository implements NewsRepositoryInterface
      */
     public function getLatest(string $language, bool $active = true, ?int $limit = null): iterable
     {
+        if ($limit !== null && $limit < 1) {
+            return;
+        }
+
         $whereActive = $active ? "AND active = 'y'" : '';
         $query = sprintf(
             "SELECT * FROM %sfaqnews WHERE lang = '%s' %s ORDER BY datum DESC",
@@ -49,11 +53,8 @@ final readonly class NewsRepository implements NewsRepositoryInterface
             $this->configuration->getDb()->escape($language),
             $whereActive,
         );
-        if ($limit !== null) {
-            $query .= sprintf(' LIMIT %d', $limit);
-        }
-
-        $result = $this->configuration->getDb()->query($query);
+        // The row limit is rendered by the database driver in its own dialect: SQL Server knows no LIMIT.
+        $result = $this->configuration->getDb()->query($query, offset: 0, rowcount: $limit ?? 0);
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
             if ($row === false || $row === null) {
@@ -93,19 +94,22 @@ final readonly class NewsRepository implements NewsRepositoryInterface
         // must be allowlisted too — never trust a caller-supplied value here.
         $sortOrder = strtoupper($sortOrder) === 'ASC' ? 'ASC' : 'DESC';
 
+        if ($limit < 1) {
+            return;
+        }
+
         $whereActive = $active ? "AND active = 'y'" : '';
         $query = sprintf(
-            "SELECT * FROM %sfaqnews WHERE lang = '%s' %s ORDER BY %s %s LIMIT %d OFFSET %d",
+            "SELECT * FROM %sfaqnews WHERE lang = '%s' %s ORDER BY %s %s",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($language),
             $whereActive,
             $sortField,
             $sortOrder,
-            $limit,
-            $offset,
         );
 
-        $result = $this->configuration->getDb()->query($query);
+        // The row limit is rendered by the database driver in its own dialect: SQL Server knows no LIMIT.
+        $result = $this->configuration->getDb()->query($query, $offset, $limit);
         while (true) {
             $row = $this->configuration->getDb()->fetchObject($result);
             if ($row === false || $row === null) {

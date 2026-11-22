@@ -43,6 +43,6 @@ describe('register function', () => {
     const data = Object.keys({ comment: 'Test comment' }) as unknown as FormData;
 
     // Assertions
-    await expect(register(data)).rejects.toThrow('HTTP 400');
+    await expect(register(data)).rejects.toThrow('Something went wrong');
   });
 });

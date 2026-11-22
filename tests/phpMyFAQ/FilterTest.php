@@ -90,6 +90,13 @@ class FilterTest extends TestCase
         $this->assertNull($result);
     }
 
+    public function testFilterVarReturnsTheDefaultForAnArray(): void
+    {
+        $this->assertSame('', Filter::filterVar(['x'], FILTER_SANITIZE_SPECIAL_CHARS, ''));
+        $this->assertNull(Filter::filterVar(['x'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $this->assertSame(0, Filter::filterVar(['1'], FILTER_VALIDATE_INT, 0));
+    }
+
     public function testFilterArray(): void
     {
         $testArray = [

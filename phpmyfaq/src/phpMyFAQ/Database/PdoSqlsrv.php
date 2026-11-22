@@ -87,6 +87,9 @@ class PdoSqlsrv implements DatabaseDriver
         try {
             $this->pdo = new PDO($dsn, $user, $password);
             $this->pdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // A DATETIME literal like '2026-11-22 10:00:00' is read as year-day-month under a
+            // login language with the dmy date format; ymd makes it language-independent
+            $this->pdo()->exec('SET DATEFORMAT ymd');
         } catch (PDOException $pdoException) {
             throw new Exception($pdoException->getMessage());
         }
@@ -209,7 +212,12 @@ class PdoSqlsrv implements DatabaseDriver
     {
         $status = [];
         foreach ($this->getTableNames($prefix) as $table) {
-            $status[$table] = $this->getOne('SELECT count(*) FROM ' . $table);
+            try {
+                $status[$table] = $this->getOne('SELECT count(*) FROM ' . $table);
+            } catch (PDOException) {
+                // A table that a newer release introduced does not exist before the update has run
+                continue;
+            }
         }
 
         return $status;
@@ -227,7 +235,9 @@ class PdoSqlsrv implements DatabaseDriver
     public function getTableNames(string $prefix = ''): array
     {
         return $this->tableNames = [
+            $prefix . 'faqadmindashboard',
             $prefix . 'faqadminlog',
+            $prefix . 'faqapi_keys',
             $prefix . 'faqattachment',
             $prefix . 'faqattachment_file',
             $prefix . 'faqbackup',
@@ -253,10 +263,20 @@ class PdoSqlsrv implements DatabaseDriver
             $prefix . 'faqglossary',
             $prefix . 'faqgroup',
             $prefix . 'faqgroup_right',
+            $prefix . 'faqgroup_right_category',
+            $prefix . 'faqgroup_right_language',
             $prefix . 'faqinstances',
             $prefix . 'faqinstances_config',
+            $prefix . 'faqjobs',
             $prefix . 'faqnews',
+            $prefix . 'faqoauth_access_tokens',
+            $prefix . 'faqoauth_auth_codes',
+            $prefix . 'faqoauth_clients',
+            $prefix . 'faqoauth_refresh_tokens',
+            $prefix . 'faqoauth_scopes',
+            $prefix . 'faqpush_subscriptions',
             $prefix . 'faqquestions',
+            $prefix . 'faqquestion_history',
             $prefix . 'faqright',
             $prefix . 'faqsearches',
             $prefix . 'faqseo',
@@ -268,6 +288,7 @@ class PdoSqlsrv implements DatabaseDriver
             $prefix . 'faquserlogin',
             $prefix . 'faquser_group',
             $prefix . 'faquser_right',
+            $prefix . 'faquser_right_language',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
         ];
@@ -333,7 +354,14 @@ class PdoSqlsrv implements DatabaseDriver
         }
 
         try {
-            $result = $this->pdo()->query($query);
+            // PDO::query() takes no cursor options, so a result set is prepared and executed
+            $cursorOptions = $this->cursorOptions($query);
+            $result = $cursorOptions === []
+                ? $this->pdo()->query($query)
+                : $this->pdo()->prepare($query, $cursorOptions);
+            if ($cursorOptions !== [] && $result instanceof PDOStatement && !$result->execute()) {
+                $result = false;
+            }
         } catch (PDOException $pdoException) {
             throw new Exception($pdoException->getMessage());
         }
@@ -362,7 +390,7 @@ class PdoSqlsrv implements DatabaseDriver
         }
 
         try {
-            $statement = $this->pdo()->prepare($query);
+            $statement = $this->pdo()->prepare($query, $this->cursorOptions($query));
             if ($statement === false) {
                 throw new Exception('Cannot prepare query: ' . $query);
             }
@@ -375,6 +403,23 @@ class PdoSqlsrv implements DatabaseDriver
         $this->lastStatement = $statement;
 
         return $statement;
+    }
+
+    /**
+     * With the driver's default forward-only cursor PDOStatement::rowCount() reports -1 for a
+     * result set, so numRows() needs a scrollable cursor, which pdo_sqlsrv opens as a static
+     * one. Every other statement keeps the default cursor, with which rowCount() is the number
+     * of rows it changed.
+     *
+     * @return array<int, int>
+     */
+    private function cursorOptions(string $query): array
+    {
+        if (preg_match('/^[\s(]*(?:SELECT|WITH)\b/i', $query) !== 1) {
+            return [];
+        }
+
+        return [PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL];
     }
 
     /**

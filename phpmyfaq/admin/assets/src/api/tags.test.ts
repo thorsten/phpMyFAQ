@@ -34,6 +34,17 @@ describe('Tags API', () => {
       });
     });
 
+    it('should URL-encode the search string', async () => {
+      globalThis.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve([]) } as Response));
+
+      await fetchTags('C++ & C#');
+
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        './api/content/tags?search=C%2B%2B%20%26%20C%23',
+        expect.any(Object)
+      );
+    });
+
     it('should throw an error if fetch fails', async () => {
       const mockError = new Error('Fetch failed');
       globalThis.fetch = vi.fn(() => Promise.reject(mockError));

@@ -255,13 +255,14 @@ class ReportTest extends TestCase
         $mockResult2->last_author = 'Hans Mueller';
 
         $this->mockDb->method('query')->willReturn(true);
-        $this->mockDb->method('fetchObject')->willReturn($mockResult1, $mockResult2, false);
+        // The German FAQ has two changelog entries, so it comes back twice
+        $this->mockDb->method('fetchObject')->willReturn($mockResult1, $mockResult2, clone $mockResult2, false);
 
         $result = $this->report->getReportingData();
 
         $this->assertCount(1, $result); // Only one entry (latest translation overwrites)
-        // Corrected expectation - the logic increments before assignment, so it starts at 0
-        $this->assertEquals(0, $result[1]['faq_translations']);
+        // One translation besides the first language; repeated rows of a language do not count
+        $this->assertEquals(1, $result[1]['faq_translations']);
         $this->assertEquals('de', $result[1]['faq_language']); // Should be the last language processed
     }
 

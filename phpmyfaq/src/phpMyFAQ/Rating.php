@@ -57,12 +57,14 @@ readonly class Rating
         $row = $this->ratingRepository->fetchByRecordId($id);
 
         if ($row !== null) {
+            $average = round(num: is_numeric($row->voting) ? (float) $row->voting : 0.0, precision: 2);
+
             return sprintf(
                 ' <span data-rating="%s">%s</span> ('
                 . $this->plurals->get(key: 'plmsgVotes', number: (int) $row->usr)
                 . ')',
-                round(num: (int) $row->voting, precision: 2),
-                round(num: (int) $row->voting, precision: 2),
+                $average,
+                $average,
             );
         }
 

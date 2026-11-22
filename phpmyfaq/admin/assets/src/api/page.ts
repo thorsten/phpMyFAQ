@@ -65,7 +65,7 @@ export const updatePage = async (data: Record<string, unknown> = {}): Promise<Ap
 
 export const activatePage = async (id: string, status: boolean, csrfToken: string): Promise<ApiResponse> => {
   return await fetchJson<ApiResponse>('api/page/activate', {
-    method: 'POST',
+    method: 'PUT',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json',

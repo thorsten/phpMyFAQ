@@ -45,6 +45,7 @@ vi.mock('./configuration', () => ({
   handleElasticsearch: vi.fn(async () => trackCall('handleElasticsearch')),
   handleCheckForUpdates: vi.fn(() => trackCall('handleCheckForUpdates')),
   handleLdap: vi.fn(async () => trackCall('handleLdap')),
+  handleOAuth2: vi.fn(() => trackCall('handleOAuth2')),
   handleSaveConfiguration: vi.fn(async () => trackCall('handleSaveConfiguration')),
   handleFormEdit: vi.fn(() => trackCall('handleFormEdit')),
   handleFormTranslations: vi.fn(() => trackCall('handleFormTranslations')),
@@ -100,6 +101,7 @@ vi.mock('./content', () => ({
 
 // Mock user
 vi.mock('./user', () => ({
+  handleApiKeys: vi.fn(async () => trackCall('handleApiKeys')),
   handleUserList: vi.fn(() => trackCall('handleUserList')),
   handleUsers: vi.fn(async () => trackCall('handleUsers')),
 }));
@@ -171,6 +173,7 @@ describe('admin index.ts', () => {
     // Users & Groups
     expect(calls).toContain('handleUsers');
     expect(calls).toContain('handleUserList');
+    expect(calls).toContain('handleApiKeys');
     expect(calls).toContain('handleGroups');
 
     // Categories
@@ -235,6 +238,7 @@ describe('admin index.ts', () => {
     expect(calls).toContain('handleCheckForUpdates');
     expect(calls).toContain('handleElasticsearch');
     expect(calls).toContain('handleLdap');
+    expect(calls).toContain('handleOAuth2');
     expect(calls).toContain('handleOpenSearch');
 
     // Import

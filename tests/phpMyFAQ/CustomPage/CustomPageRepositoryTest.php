@@ -7,6 +7,7 @@ namespace phpMyFAQ\CustomPage\Test;
 use DateTime;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\CustomPage\CustomPageRepository;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\CustomPageEntity;
 use phpMyFAQ\Strings;
@@ -475,5 +476,42 @@ class CustomPageRepositoryTest extends TestCase
             ->setCreated(new DateTime());
 
         return $page;
+    }
+
+    /**
+     * SQL Server knows no LIMIT clause: the page is passed to the driver, which renders it.
+     */
+    public function testPaginatedQueriesPassThePageToTheDriver(): void
+    {
+        $calls = [];
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('query')->willReturnCallback(static function (
+            string $query,
+            int $offset = 0,
+            int $rowcount = 0,
+        ) use (&$calls): bool {
+            $calls[] = [$query, $offset, $rowcount];
+
+            return true;
+        });
+        $db->method('fetchObject')->willReturn(false);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+        $repository = new CustomPageRepository($configuration);
+
+        iterator_to_array($repository->getAllPaginated('en', true, 10, 20, 'slug', 'ASC'));
+        iterator_to_array($repository->getAllLanguagesPaginated(false, 5, 15, 'id', 'DESC'));
+        iterator_to_array($repository->getAllPaginated('en', true, 0, 0, 'slug', 'ASC'));
+        iterator_to_array($repository->getAllLanguagesPaginated(false, 0, 0, 'id', 'DESC'));
+
+        $this->assertCount(2, $calls);
+        $this->assertStringEndsWith('ORDER BY slug ASC', $calls[0][0]);
+        $this->assertStringNotContainsString('LIMIT', $calls[0][0]);
+        $this->assertSame([20, 10], [$calls[0][1], $calls[0][2]]);
+        $this->assertStringEndsWith('ORDER BY id DESC', $calls[1][0]);
+        $this->assertStringNotContainsString('LIMIT', $calls[1][0]);
+        $this->assertSame([15, 5], [$calls[1][1], $calls[1][2]]);
     }
 }

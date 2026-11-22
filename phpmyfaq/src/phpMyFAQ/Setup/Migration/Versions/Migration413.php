@@ -34,6 +34,11 @@ readonly class Migration413 extends AbstractMigration
         return ['4.1.0-alpha.3'];
     }
 
+    public function isBackport(): bool
+    {
+        return true;
+    }
+
     public function getDescription(): string
     {
         return 'Seed a random API client token for installations with an empty one';

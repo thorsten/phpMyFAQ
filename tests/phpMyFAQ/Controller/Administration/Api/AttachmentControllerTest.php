@@ -1160,11 +1160,11 @@ final class AttachmentControllerTest extends TestCase
         $storageRoot = dirname($lockedDirectory);
         self::assertTrue(mkdir($fileDirectory, 0o777, true));
         self::assertNotFalse(file_put_contents($filePath, 'cipher text'));
-        // rmdir() on the file directory fails because its parent is not writable.
-        self::assertTrue(chmod($lockedDirectory, 0o555));
+        // unlink() fails because the directory holding the file is not writable.
+        self::assertTrue(chmod($fileDirectory, 0o555));
         $_FILES['userfile'] = ['tmp_name' => sys_get_temp_dir() . '/pmf-unrelated-upload'];
 
-        // rmdir() emits a warning for the failed removal; PHPUnit would otherwise fail the test.
+        // unlink() emits a warning for the failed removal; PHPUnit would otherwise fail the test.
         set_error_handler(static fn(): bool => true);
         try {
             $response = $controller->delete(new Request([], [], [], [], [], [], json_encode([
@@ -1174,7 +1174,7 @@ final class AttachmentControllerTest extends TestCase
         } finally {
             restore_error_handler();
             unset($_FILES['userfile']);
-            chmod($lockedDirectory, 0o755);
+            chmod($fileDirectory, 0o755);
             new Filesystem()->remove($storageRoot);
             AttachmentFactory::init('', false, AttachmentStorageType::FILESYSTEM->value);
         }

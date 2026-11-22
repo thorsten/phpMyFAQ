@@ -139,6 +139,41 @@ describe('faqs.editor.validation', () => {
       expect(validateFaqEditor()).toEqual([]);
     });
 
+    it('should report a publication window that ends before it starts', () => {
+      document.body.innerHTML = `
+        <input id="question" value="Question" />
+        <textarea id="editor">Answer</textarea>
+        <input type="datetime-local" id="dateStart" value="2026-03-05T10:00" />
+        <input type="datetime-local" id="dateEnd" value="2026-03-04T10:00" />
+      `;
+
+      expect(validateFaqEditor()).toEqual([
+        { fieldId: 'dateEnd', tabHref: '', feedbackId: 'date-range-invalid-feedback' },
+      ]);
+    });
+
+    it('should accept an open, a one-sided, and an ordered publication window', () => {
+      const windows: [string, string][] = [
+        ['', ''],
+        ['2026-03-05T10:00', ''],
+        ['', '2026-03-04T10:00'],
+        ['2026-03-04T10:00', '2026-03-05T10:00'],
+        // The same moment, once with and once without seconds: not "end before start".
+        ['2026-03-04T10:00:00', '2026-03-04T10:00'],
+      ];
+
+      for (const [start, end] of windows) {
+        document.body.innerHTML = `
+          <input id="question" value="Question" />
+          <textarea id="editor">Answer</textarea>
+          <input type="datetime-local" id="dateStart" value="${start}" />
+          <input type="datetime-local" id="dateEnd" value="${end}" />
+        `;
+
+        expect(validateFaqEditor()).toEqual([]);
+      }
+    });
+
     it('should return no errors for a valid form', () => {
       document.body.innerHTML = `
         <input id="question" value="What is phpMyFAQ?" />
@@ -228,6 +263,19 @@ describe('faqs.editor.validation', () => {
       ]);
 
       expect(document.activeElement?.id).toBe('answer-invalid-feedback');
+    });
+
+    it('should focus a sidebar field that belongs to no tab', () => {
+      document.body.innerHTML = `
+        <a data-bs-toggle="tab" href="#tab-question-answer"></a>
+        <input type="datetime-local" id="dateEnd" />
+        <div id="date-range-invalid-feedback" tabindex="-1"></div>
+      `;
+
+      showFirstValidationError([{ fieldId: 'dateEnd', tabHref: '', feedbackId: 'date-range-invalid-feedback' }]);
+
+      expect(tabShow).not.toHaveBeenCalled();
+      expect(document.activeElement).toBe(document.getElementById('dateEnd'));
     });
 
     it('should do nothing without errors', () => {

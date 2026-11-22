@@ -315,21 +315,21 @@ export const handleSaveConfiguration = async (): Promise<void> => {
 };
 
 export const handleSMTPPasswordToggle = async (): Promise<void> => {
-  const passwordField = document.getElementsByName('edit[mail.remoteSMTPPassword]') as NodeListOf<HTMLInputElement>;
-  const toggleHTML =
-    '<span class="input-group-text" id="SMTPtogglePassword"><i class="bi bi-eye-slash" id="SMTPtogglePassword_icon"></i></span>';
+  const passwordField = document.getElementsByName('edit[mail.remoteSMTPPassword]')[0] as HTMLInputElement;
   const containerDiv = document.createElement('div');
   containerDiv.classList.add('input-group');
-  containerDiv.innerHTML = `
-        <input class="form-control" type="password" autocomplete="off" name="edit[mail.remoteSMTPPassword]" value="" data-pmf-toggle="SMTPtogglePassword">
-        ${toggleHTML}
-    `;
-  passwordField[0].insertAdjacentElement('afterend', containerDiv);
-  passwordField[0].remove();
+  // Wrap the server-rendered input instead of replacing it, so the stored password is kept.
+  passwordField.insertAdjacentElement('beforebegin', containerDiv);
+  containerDiv.append(passwordField);
+  passwordField.setAttribute('data-pmf-toggle', 'SMTPtogglePassword');
+  passwordField.insertAdjacentHTML(
+    'afterend',
+    '<span class="input-group-text" id="SMTPtogglePassword"><i class="bi bi-eye-slash" id="SMTPtogglePassword_icon"></i></span>'
+  );
   const toggle = document.getElementById('SMTPtogglePassword') as HTMLElement;
   toggle.addEventListener('click', () => {
-    const type = passwordField[0].getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordField[0].setAttribute('type', type);
+    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordField.setAttribute('type', type);
     const icon = document.getElementById('SMTPtogglePassword_icon') as HTMLElement;
     icon.classList.toggle('bi-eye');
     icon.classList.toggle('bi-eye-slash');

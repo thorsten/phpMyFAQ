@@ -10,12 +10,14 @@ use phpMyFAQ\Auth\WebAuthn\WebAuthnUser;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Http\RateLimiter;
+use phpMyFAQ\Mail\BuiltinTestState;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
@@ -128,6 +130,38 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame('def', $payload['challenge']['b64challenge']);
         self::assertSame(['blocked', 'active'], $statuses);
+    }
+
+    /**
+     * Runs in its own process, so the mail() double of BuiltinTest is in place before the
+     * built-in mail agent resolves the function for the first time.
+     */
+    #[RunInSeparateProcess]
+    public function testAdminNotificationAboutANewPasskeyAccountIsDeclaredAsHtml(): void
+    {
+        require_once PMF_TEST_DIR . '/phpMyFAQ/Mail/BuiltinTest.php';
+        BuiltinTestState::reset();
+
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'main.administrationMail' => 'admin@example.com',
+            'mail.remoteSMTP' => 'false',
+            'mail.useQueue' => 'false',
+        ]);
+
+        $controller = new WebAuthnController($this->createStub(AuthWebAuthn::class), $this->createStub(User::class));
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $this->createSession());
+
+        new \ReflectionMethod($controller, 'notifyAdminAboutNewAccount')->invoke($controller, 'new@example.com', true);
+
+        self::assertCount(1, BuiltinTestState::$mailCalls);
+        $mail = BuiltinTestState::$mailCalls[0];
+        self::assertStringContainsString('Content-Type: multipart/alternative;', (string) $mail['headers']);
+        self::assertStringContainsString(
+            "A new user has been registered via passkey:\r\n\r\nLogin name: new@example.com\r\n\r\n",
+            $mail['body'],
+        );
+        self::assertStringContainsString('registered via passkey:<br><br>Login name:', $mail['body']);
     }
 
     public function testPrepareLoginReturnsChallengeForExistingUser(): void
@@ -849,6 +883,42 @@ final class WebAuthnControllerDirectTest extends ApiControllerTestCase
         $response = $controller->prepare($this->prepareRequest($csrfToken, ['current-password' => 'wrong']));
 
         self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    /**
+     * The step-up has to see the password the way the login sees it: sanitised, not trimmed.
+     */
+    public function testPrepareVerifiesTheCurrentPasswordWithItsBlanks(): void
+    {
+        $this->enableWebAuthn();
+        $session = $this->createSession();
+        $csrfToken = $this->createWebAuthnCsrfToken($session);
+
+        $authDriver = $this->createMock(AuthDatabase::class);
+        $authDriver
+            ->expects($this->once())
+            ->method('checkCredentials')
+            ->with('owner@example.com', ' correct horse ')
+            ->willReturn(true);
+
+        $currentUser = $this->createStub(CurrentUser::class);
+        $currentUser->method('isLoggedIn')->willReturn(true);
+        $currentUser->method('getUserId')->willReturn(42);
+        $currentUser->method('getLogin')->willReturn('owner@example.com');
+        $currentUser->method('getAuthContainer')->willReturn([$authDriver]);
+        $currentUser->method('isStepUpLockedOut')->willReturn(false);
+
+        $authWebAuthn = $this->createStub(AuthWebAuthn::class);
+        $authWebAuthn
+            ->method('prepareChallengeForRegistration')
+            ->willReturn(['publicKey' => ['challenge' => 'abc'], 'b64challenge' => 'def']);
+
+        $controller = new WebAuthnController($authWebAuthn, $this->createPasswordAccount(42));
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        $response = $controller->prepare($this->prepareRequest($csrfToken, ['current-password' => ' correct horse ']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     public function testPrepareRefusesTheStepUpWhileTheAccountIsLockedOut(): void

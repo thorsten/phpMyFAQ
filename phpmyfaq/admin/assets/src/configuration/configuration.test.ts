@@ -78,6 +78,27 @@ describe('Configuration Functions', () => {
       const passwordField = document.querySelector('input[name="edit[mail.remoteSMTPPassword]"]');
       expect(passwordField?.getAttribute('type')).toBe('text');
     });
+    it('should keep the stored SMTP password when adding the toggle', async () => {
+      document.body.innerHTML = `
+        <div class="col-6">
+          <input class="form-control" type="password" autocomplete="off" name="edit[mail.remoteSMTPPassword]"
+                 value="stored-secret" data-pmf-toggle="instances_password_toggle">
+        </div>
+      `;
+
+      await handleSMTPPasswordToggle();
+
+      const passwordFields = document.querySelectorAll<HTMLInputElement>('input[name="edit[mail.remoteSMTPPassword]"]');
+      expect(passwordFields).toHaveLength(1);
+      expect(passwordFields[0].value).toBe('stored-secret');
+      expect(passwordFields[0].parentElement?.classList.contains('input-group')).toBe(true);
+      expect(passwordFields[0].nextElementSibling?.id).toBe('SMTPtogglePassword');
+
+      document.getElementById('SMTPtogglePassword')?.click();
+
+      expect(passwordFields[0].getAttribute('type')).toBe('text');
+      expect(passwordFields[0].value).toBe('stored-secret');
+    });
   });
 
   describe('handleTranslation', () => {

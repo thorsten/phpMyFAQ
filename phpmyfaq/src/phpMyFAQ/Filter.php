@@ -91,6 +91,12 @@ class Filter
      */
     public static function filterVar(mixed $variable, int $filter, mixed $default = null): mixed
     {
+        // FILTER_CALLBACK walks into arrays and would hand an array to callers that were
+        // promised a string; every other filter already rejects an array.
+        if (is_array($variable)) {
+            return $default;
+        }
+
         $return = $filter === FILTER_SANITIZE_SPECIAL_CHARS
             ? filter_var($variable, FILTER_CALLBACK, ['options' => new Filter()->filterSanitizeString(...)])
             : filter_var($variable, $filter);

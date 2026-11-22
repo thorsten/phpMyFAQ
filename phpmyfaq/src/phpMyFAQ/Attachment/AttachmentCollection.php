@@ -59,7 +59,7 @@ class AttachmentCollection
             JOIN
                 %s fd
             ON
-                fa.record_id = fd.id
+                fa.record_id = fd.id AND fa.record_lang = fd.lang
             GROUP BY
                 fa.id,fa.record_id,fa.record_lang,fa.filename,fa.filesize,fa.mime_type,fd.thema',
             Database::getTablePrefix() . 'faqattachment',

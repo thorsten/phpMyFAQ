@@ -76,7 +76,6 @@ paths:
               - filename
               - mime_type
               - filesize
-              - created
         - name: order
           in: query
           description: 'Sort order'
@@ -713,12 +712,18 @@ paths:
     get:
       tags:
         - 'Public Endpoints'
-      description: 'This endpoint returns paginated FAQs for the given language provided by "Accept-Language".'
+      description: 'This endpoint returns paginated FAQs for the given language provided by "Accept-Language". Anonymous callers only get the FAQs a reader can see: published and inside their publication window. If the configuration setting "api.onlyActiveFaqs" is disabled, a caller that sends a valid "x-pmf-token" header or a bearer credential (API key or OAuth2 access token) with the "faq.read" scope also gets drafts, scheduled and expired FAQs. A missing or invalid credential is not rejected, the list is filtered instead.'
       operationId: getAll
       parameters:
         - name: Accept-Language
           in: header
           description: 'The language code for the FAQ.'
+          schema:
+            type: string
+        - name: x-pmf-token
+          in: header
+          description: 'phpMyFAQ client API Token, generated in admin backend. Only needed to list FAQs that are not visible to readers while "api.onlyActiveFaqs" is disabled.'
+          required: false
           schema:
             type: string
         - name: page
@@ -889,7 +894,7 @@ paths:
                 stored: false
                 error: 'It is not allowed, that the question title contains a hash.'
         '409':
-          description: 'If the parent category name cannot be mapped.'
+          description: 'If the category name cannot be mapped or the category ID does not exist.'
           content:
             application/json:
               schema: {}

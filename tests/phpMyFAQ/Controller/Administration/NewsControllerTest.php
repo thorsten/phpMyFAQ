@@ -136,6 +136,11 @@ final class NewsControllerTest extends TestCase
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString('Test User', (string) $response->getContent());
         self::assertStringContainsString('test@example.com', (string) $response->getContent());
+        // The editor's image upload and file browser verify the page token, not the form's own token.
+        self::assertMatchesRegularExpression(
+            '/id="pmf-editor-csrf-token" value="[^"]+"/',
+            (string) $response->getContent(),
+        );
     }
 
     /**
@@ -167,6 +172,11 @@ final class NewsControllerTest extends TestCase
         $response = $controller->edit(new Request([], [], ['newsId' => '7']));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // The editor's image upload and file browser verify the page token, not the form's own token.
+        self::assertMatchesRegularExpression(
+            '/id="pmf-editor-csrf-token" value="[^"]+"/',
+            (string) $response->getContent(),
+        );
         self::assertStringContainsString('Unit Test News', (string) $response->getContent());
         self::assertStringContainsString('Author Name', (string) $response->getContent());
         self::assertStringContainsString('author@example.com', (string) $response->getContent());

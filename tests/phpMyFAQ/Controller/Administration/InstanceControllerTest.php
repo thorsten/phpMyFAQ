@@ -141,6 +141,7 @@ final class InstanceControllerTest extends TestCase
         $client = new TestInstanceClient($this->configuration);
         TestInstanceClient::$moveClientFolderCalls = [];
         TestInstanceClient::$deleteClientFolderCalls = [];
+        TestInstanceClient::$updateCalls = 0;
         $client->currentInstance = (object) ['url' => 'https://old.example.com'];
         $client->updateReturnValue = true;
 
@@ -153,18 +154,13 @@ final class InstanceControllerTest extends TestCase
         $controller->setContainer($container);
 
         $response = $controller->update(
-            new Request(
-                [],
-                [
-                    'pmf-csrf-token' => $token,
-                ],
-                [
-                    'id' => '1',
-                    'url' => 'https://new.example.com',
-                    'instance' => 'demo',
-                    'comment' => 'Demo moved',
-                ],
-            ),
+            new Request([], [
+                'pmf-csrf-token' => $token,
+                'id' => '1',
+                'url' => 'https://new.example.com',
+                'instance' => 'demo',
+                'comment' => 'Demo moved',
+            ]),
         );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -174,6 +170,7 @@ final class InstanceControllerTest extends TestCase
             TestInstanceClient::$moveClientFolderCalls,
         );
         self::assertSame(['https://old.example.com'], TestInstanceClient::$deleteClientFolderCalls);
+        self::assertSame(1, TestInstanceClient::$updateCalls);
     }
 
     /**
@@ -190,6 +187,7 @@ final class InstanceControllerTest extends TestCase
         $client = new TestInstanceClient($this->configuration);
         TestInstanceClient::$moveClientFolderCalls = [];
         TestInstanceClient::$deleteClientFolderCalls = [];
+        TestInstanceClient::$updateCalls = 0;
         $client->currentInstance = (object) ['url' => 'https://old.example.com'];
         $client->updateReturnValue = false;
 
@@ -202,22 +200,18 @@ final class InstanceControllerTest extends TestCase
         $controller->setContainer($container);
 
         $response = $controller->update(
-            new Request(
-                [],
-                [
-                    'pmf-csrf-token' => $token,
-                ],
-                [
-                    'id' => '1',
-                    'url' => 'https://stable.example.com',
-                    'instance' => 'demo',
-                    'comment' => 'Broken demo',
-                ],
-            ),
+            new Request([], [
+                'pmf-csrf-token' => $token,
+                'id' => '1',
+                'url' => 'https://stable.example.com',
+                'instance' => 'demo',
+                'comment' => 'Broken demo',
+            ]),
         );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringNotContainsString('alert-success', (string) $response->getContent());
+        self::assertSame(1, TestInstanceClient::$updateCalls);
     }
 
     /**
@@ -233,7 +227,7 @@ final class InstanceControllerTest extends TestCase
 
         $this->expectException(UnauthorizedHttpException::class);
 
-        $controller->update(new Request([], ['pmf-csrf-token' => 'forged'], ['id' => '1']));
+        $controller->update(new Request([], ['pmf-csrf-token' => 'forged', 'id' => '1']));
     }
 
     /**
@@ -259,11 +253,13 @@ final class InstanceControllerTest extends TestCase
         $controller->setContainer($container);
 
         $response = $controller->update(
-            new Request(
-                [],
-                ['pmf-csrf-token' => $token],
-                ['id' => '1', 'url' => 'not a url', 'instance' => 'demo', 'comment' => 'Broken'],
-            ),
+            new Request([], [
+                'pmf-csrf-token' => $token,
+                'id' => '1',
+                'url' => 'not a url',
+                'instance' => 'demo',
+                'comment' => 'Broken',
+            ]),
         );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -296,11 +292,13 @@ final class InstanceControllerTest extends TestCase
         $controller->setContainer($container);
 
         $response = $controller->update(
-            new Request(
-                [],
-                ['pmf-csrf-token' => $token],
-                ['id' => '1', 'url' => 'https://new.example.com', 'instance' => 'demo', 'comment' => 'Demo'],
-            ),
+            new Request([], [
+                'pmf-csrf-token' => $token,
+                'id' => '1',
+                'url' => 'https://new.example.com',
+                'instance' => 'demo',
+                'comment' => 'Demo',
+            ]),
         );
 
         // The database error is logged, but a successful update still wins the rendered result.
@@ -390,6 +388,8 @@ final class TestInstanceClient extends Client
 {
     public \stdClass $currentInstance;
     public bool $updateReturnValue = true;
+    /** Static because the controller works on clones of the injected client. */
+    public static int $updateCalls = 0;
     /** @var array<int, array{0:string,1:string}> */
     public static array $moveClientFolderCalls = [];
     /** @var string[] */
@@ -404,6 +404,8 @@ final class TestInstanceClient extends Client
 
     public function update(int $id, InstanceEntity $instanceEntity): bool
     {
+        ++self::$updateCalls;
+
         return $this->updateReturnValue;
     }
 

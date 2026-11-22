@@ -205,7 +205,7 @@ class CommentControllerTest extends TestCase
      * @throws Exception
      * @throws \JsonException
      */
-    public function testCreateWithNewsTypeThrowsException(): void
+    public function testCreateWithNewsTypeAndInvalidCsrfTokenThrowsException(): void
     {
         $requestData = json_encode([
             'type' => 'news',
@@ -220,6 +220,7 @@ class CommentControllerTest extends TestCase
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid CSRF token');
         $controller->create($request);
     }
 

@@ -63,7 +63,7 @@ readonly class ReportRepository
             LEFT JOIN
                 %sfaqchanges as fc
             ON
-                (fd.id = fc.id AND fd.lang = fc.lang)
+                (fd.id = fc.beitrag AND fd.lang = fc.lang)
             LEFT JOIN
                 %sfaquserdata as u
             ON
@@ -73,8 +73,7 @@ readonly class ReportRepository
             ON
                 (c.id = fcr.category_id AND c.lang = fcr.record_lang)
             ORDER BY
-                fd.id
-            ASC',
+                fd.id ASC, fd.lang ASC, fc.id ASC',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),

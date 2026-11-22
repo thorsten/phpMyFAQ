@@ -33,6 +33,14 @@ describe('fetchAutoCompleteData', (): void => {
     });
   });
 
+  test('should URL-encode the search string', async (): Promise<void> => {
+    fetchMocker.mockResponseOnce(JSON.stringify([]));
+
+    await fetchAutoCompleteData('C++ & C#');
+
+    expect(fetch).toHaveBeenCalledWith('api/autocomplete?search=C%2B%2B%20%26%20C%23', expect.any(Object));
+  });
+
   test('should throw an error when the response is not successful', async (): Promise<void> => {
     fetchMocker.mockResponseOnce(null, { status: 500 });
 

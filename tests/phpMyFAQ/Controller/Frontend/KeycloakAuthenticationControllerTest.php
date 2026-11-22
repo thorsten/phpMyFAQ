@@ -29,6 +29,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -257,7 +258,10 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $currentUser
             ->expects($this->exactly(2))
             ->method('getUserData')
-            ->willReturnMap([['keycloak_sub', '123'], ['twofactor_enabled', 0]]);
+            ->willReturnMap([
+                ['keycloak_sub',      '123'],
+                ['twofactor_enabled', 0],
+            ]);
         $currentUser->expects($this->never())->method('setUserData');
         $currentUser->expects($this->once())->method('setLoggedIn')->with(true);
         $currentUser->expects($this->once())->method('setAuthSource')->with('keycloak');
@@ -349,7 +353,10 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $currentUser
             ->expects($this->exactly(2))
             ->method('getUserData')
-            ->willReturnMap([['keycloak_sub', 'subject-123'], ['twofactor_enabled', 0]]);
+            ->willReturnMap([
+                ['keycloak_sub',      'subject-123'],
+                ['twofactor_enabled', 0],
+            ]);
         $currentUser->expects($this->once())->method('setLoggedIn')->with(true);
         $currentUser->expects($this->once())->method('setAuthSource')->with('keycloak');
         $currentUser->expects($this->once())->method('updateSessionId')->with(true);
@@ -409,7 +416,10 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $currentUser
             ->expects($this->exactly(2))
             ->method('getUserData')
-            ->willReturnMap([['keycloak_sub', 'subject-123'], ['twofactor_enabled', 1]]);
+            ->willReturnMap([
+                ['keycloak_sub',      'subject-123'],
+                ['twofactor_enabled', 1],
+            ]);
         $currentUser->expects($this->once())->method('isTwoFactorLockedOut')->willReturn(false);
         $currentUser->expects($this->once())->method('setAuthSource')->with('keycloak');
         $currentUser->expects($this->once())->method('setTokenData');
@@ -470,7 +480,10 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $currentUser
             ->expects($this->exactly(2))
             ->method('getUserData')
-            ->willReturnMap([['keycloak_sub', 'subject-123'], ['twofactor_enabled', 1]]);
+            ->willReturnMap([
+                ['keycloak_sub',      'subject-123'],
+                ['twofactor_enabled', 1],
+            ]);
         $currentUser->expects($this->once())->method('isTwoFactorLockedOut')->willReturn(true);
         $currentUser->expects($this->never())->method('setLoggedIn');
         $currentUser->expects($this->never())->method('saveToSession');
@@ -885,6 +898,96 @@ final class KeycloakAuthenticationControllerTest extends TestCase
     /**
      * @param list<MockResponse> $responses
      */
+    /**
+     * A Keycloak on another site sends the browser back without the SameSite=Strict session
+     * cookie; the state then comes from the lax fallback cookie set by authorize().
+     */
+    public function testCallbackReadsTheStateFromTheFallbackCookieWhenTheSessionWasNotSent(): void
+    {
+        $discoveryDocument = '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}';
+        $authorizeResponse = $this->createController([new MockResponse($discoveryDocument)])->authorize();
+
+        $cookies = $authorizeResponse->headers->getCookies();
+        $this->assertCount(1, $cookies);
+        $cookie = $cookies[0];
+        $this->assertSame('pmf-oidc-keycloak-authorization', $cookie->getName());
+        $this->assertSame(Cookie::SAMESITE_LAX, $cookie->getSameSite());
+        $this->assertTrue($cookie->isHttpOnly());
+        $this->assertTrue($cookie->isSecure());
+
+        parse_str((string) parse_url((string) $authorizeResponse->headers->get('Location'), PHP_URL_QUERY), $query);
+
+        // The state matches, so the code is exchanged with the verifier from the cookie; the ID
+        // token carries the nonce of another login and must still be refused.
+        $tokenRequestBody = '';
+        $idToken = $this->signToken([
+            'iss' => 'https://sso.example.test/realms/phpmyfaq',
+            'sub' => 'subject-123',
+            'aud' => ['phpmyfaq'],
+            'azp' => 'phpmyfaq',
+            'nonce' => 'nonce-of-another-login',
+            'iat' => time(),
+            'exp' => time() + 300,
+        ]);
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $this->expectNoLogin($currentUser);
+
+        $controller = $this->createController(
+            [
+                new MockResponse($discoveryDocument),
+                static function (string $method, string $url, array $options) use (&$tokenRequestBody, $idToken) {
+                    $tokenRequestBody = (string) ($options['body'] ?? '');
+
+                    return new MockResponse('{"access_token":"access","id_token":"' . $idToken . '"}');
+                },
+                new MockResponse(json_encode(['keys' => [$this->jwk]], JSON_THROW_ON_ERROR)),
+            ],
+            new OidcSession($this->createStartedSession(), 'keycloak'),
+            static fn(): CurrentUser => $currentUser,
+        );
+
+        $response = $controller->callback(new Request(query: [
+            'code' => 'test-code',
+            'state' => $query['state'],
+        ], cookies: [$cookie->getName() => (string) $cookie->getValue()]));
+
+        $carried = json_decode((string) base64_decode(strtr((string) $cookie->getValue(), '-_', '+/')), true);
+        parse_str($tokenRequestBody, $tokenRequest);
+        $this->assertNotSame('', $carried['verifier']);
+        $this->assertSame($carried['verifier'], $tokenRequest['code_verifier'] ?? null);
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $cleared = $response->headers->getCookies();
+        $this->assertCount(1, $cleared);
+        $this->assertTrue($cleared[0]->isCleared());
+    }
+
+    public function testCallbackRejectsAStateThatDoesNotMatchTheFallbackCookie(): void
+    {
+        $discoveryDocument = '{"issuer":"https://sso.example.test/realms/phpmyfaq","authorization_endpoint":"https://sso.example.test/auth","token_endpoint":"https://sso.example.test/token","userinfo_endpoint":"https://sso.example.test/userinfo","jwks_uri":"https://sso.example.test/jwks","end_session_endpoint":"https://sso.example.test/logout"}';
+        $cookie = $this
+            ->createController([new MockResponse($discoveryDocument)])
+            ->authorize()
+            ->headers->getCookies()[0];
+
+        $currentUser = $this->createMock(CurrentUser::class);
+        $this->expectNoLogin($currentUser);
+
+        $controller = $this->createController(
+            [],
+            new OidcSession($this->createStartedSession(), 'keycloak'),
+            static fn(): CurrentUser => $currentUser,
+        );
+
+        $response = $controller->callback(new Request(query: [
+            'code' => 'test-code',
+            'state' => 'forged-state',
+        ], cookies: [$cookie->getName() => (string) $cookie->getValue()]));
+
+        $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
+        $this->assertTrue($response->headers->getCookies()[0]->isCleared());
+    }
+
     private function expectNoLogin(CurrentUser&MockObject $currentUser): void
     {
         $currentUser->expects($this->never())->method('setUserData');
@@ -929,11 +1032,7 @@ final class KeycloakAuthenticationControllerTest extends TestCase
         $resolverUser->expects($this->once())->method('getUserById')->with(55)->willReturn(true);
         $resolverUser->expects($this->once())->method('getLogin')->willReturn('linked-user');
         // AuthKeycloak::isValidLogin()/checkCredentials() re-resolve the account and its subject.
-        $resolverUser
-            ->expects($this->once())
-            ->method('getUserByLogin')
-            ->with('linked-user', false)
-            ->willReturn(true);
+        $resolverUser->expects($this->once())->method('getUserByLogin')->with('linked-user', false)->willReturn(true);
         $resolverUser->expects($this->once())->method('getUserData')->with('keycloak_sub')->willReturn('subject-123');
 
         return $resolverUser;
@@ -1043,7 +1142,10 @@ final class KeycloakAuthenticationControllerTest extends TestCase
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame($this->configuration->getDefaultUrl(), $response->headers->get('Location'));
-        $this->assertNull($session->get('pmf-oidc-keycloak-state'), 'No authorization state is stored when discovery fails.');
+        $this->assertNull(
+            $session->get('pmf-oidc-keycloak-state'),
+            'No authorization state is stored when discovery fails.',
+        );
     }
 
     public function testLogoutClearsTheLocalSessionWhenDiscoveryFails(): void

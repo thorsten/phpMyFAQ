@@ -330,12 +330,15 @@ class Pgsql implements DatabaseDriver
     /**
      * Returns the next ID of a table.
      *
+     * The ID columns are plain integers without a sequence since phpMyFAQ 4.2, so the next ID is
+     * derived from the highest existing one, as in the PDO driver.
+     *
      * @param string $table the name of the table
      * @param string $column    the name of the ID column
      */
     public function nextId(string $table, string $column): int
     {
-        return (int) $this->getOne("SELECT nextval('" . $table . '_' . $column . "_seq') as current_id;");
+        return (int) $this->getOne(sprintf('SELECT MAX(%s) AS current_id FROM %s', $column, $table)) + 1;
     }
 
     /**
@@ -372,7 +375,9 @@ class Pgsql implements DatabaseDriver
     public function getTableNames(string $prefix = ''): array
     {
         return $this->tableNames = [
+            $prefix . 'faqadmindashboard',
             $prefix . 'faqadminlog',
+            $prefix . 'faqapi_keys',
             $prefix . 'faqattachment',
             $prefix . 'faqattachment_file',
             $prefix . 'faqbackup',
@@ -398,10 +403,20 @@ class Pgsql implements DatabaseDriver
             $prefix . 'faqglossary',
             $prefix . 'faqgroup',
             $prefix . 'faqgroup_right',
+            $prefix . 'faqgroup_right_category',
+            $prefix . 'faqgroup_right_language',
             $prefix . 'faqinstances',
             $prefix . 'faqinstances_config',
+            $prefix . 'faqjobs',
             $prefix . 'faqnews',
+            $prefix . 'faqoauth_access_tokens',
+            $prefix . 'faqoauth_auth_codes',
+            $prefix . 'faqoauth_clients',
+            $prefix . 'faqoauth_refresh_tokens',
+            $prefix . 'faqoauth_scopes',
+            $prefix . 'faqpush_subscriptions',
             $prefix . 'faqquestions',
+            $prefix . 'faqquestion_history',
             $prefix . 'faqright',
             $prefix . 'faqsearches',
             $prefix . 'faqseo',
@@ -413,6 +428,7 @@ class Pgsql implements DatabaseDriver
             $prefix . 'faquserlogin',
             $prefix . 'faquser_group',
             $prefix . 'faquser_right',
+            $prefix . 'faquser_right_language',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
         ];

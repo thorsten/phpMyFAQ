@@ -210,6 +210,10 @@ class CategoryRepository implements CategoryRepositoryInterface
     ): array {
         $categories = [];
 
+        if ($limit < 1) {
+            return $categories;
+        }
+
         // Whitelist validation for the sort field
         $allowedSortFields = ['id', 'name', 'parent_id', 'active'];
         if (!in_array($sortField, $allowedSortFields, strict: true)) {
@@ -245,14 +249,13 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
 
         $query .= sprintf(
-            ' GROUP BY fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.show_home, fc.image ORDER BY fc.%s %s LIMIT %d OFFSET %d',
+            ' GROUP BY fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.show_home, fc.image ORDER BY fc.%s %s',
             $sortField,
             $sortOrder,
-            $limit,
-            $offset,
         );
 
-        $result = $this->configuration->getDb()->query($query);
+        // The row limit is rendered by the database driver in its own dialect: SQL Server knows no LIMIT.
+        $result = $this->configuration->getDb()->query($query, $offset, $limit);
 
         if ($result) {
             while (true) {

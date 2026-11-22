@@ -26,7 +26,11 @@ use phpMyFAQ\Api\Pagination\PaginationMetadata;
 use phpMyFAQ\Api\Pagination\PaginationRequest;
 use phpMyFAQ\Api\Response\ApiResponse;
 use phpMyFAQ\Api\Sorting\SortRequest;
+use phpMyFAQ\Auth\ApiKeyAuthenticator;
+use phpMyFAQ\Auth\OAuth2\ResourceServer;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Enums\ApiKeyScope;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,6 +60,93 @@ abstract class AbstractApiController extends AbstractController
         if (!$this->isApiEnabled()) {
             throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
+    }
+
+    /**
+     * Authorises a request to a write endpoint. Either the client proves it is a trusted
+     * integration with the installation-wide "x-pmf-token" (and acts as the user of its session),
+     * or it sends a personal credential as "Authorization: Bearer ...": an API key or an OAuth2
+     * access token that carries the scope of the endpoint. The request then runs as the owner of
+     * that credential, so the permission checks that follow apply to the owner as they would in
+     * a session. Nothing is written to the session.
+     *
+     * @throws UnauthorizedHttpException|Exception
+     */
+    protected function hasValidTokenOrBearerCredential(Request $request, ApiKeyScope $scope): void
+    {
+        $owner = $this->bearerCredentialOwner($request, $scope);
+        if ($owner instanceof CurrentUser) {
+            $this->currentUser = $owner;
+
+            return;
+        }
+
+        if ($this->sendsBearerCredential($request) && !$request->headers->has('x-pmf-token')) {
+            throw new UnauthorizedHttpException(challenge: 'Bearer', message: sprintf(
+                'The bearer credential is invalid, expired, revoked or lacks the "%s" scope.',
+                $scope->value,
+            ));
+        }
+
+        $this->hasValidToken();
+    }
+
+    /**
+     * Whether the request carries a credential the write endpoints accept: the installation-wide
+     * "x-pmf-token" or a bearer credential with the scope. Read endpoints use it to decide how
+     * much a caller may see; unlike hasValidTokenOrBearerCredential() it rejects nobody and
+     * leaves the acting user untouched.
+     *
+     * @throws Exception
+     */
+    protected function sendsValidApiCredential(Request $request, ApiKeyScope $scope): bool
+    {
+        if ($this->bearerCredentialOwner($request, $scope) instanceof CurrentUser) {
+            return true;
+        }
+
+        try {
+            $this->hasValidToken();
+        } catch (UnauthorizedHttpException) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * The active account a valid API key or OAuth2 access token with the scope belongs to.
+     * A credential outlives neither its owner nor the owner's activation: blocked and deleted
+     * accounts are not loaded.
+     */
+    private function bearerCredentialOwner(Request $request, ApiKeyScope $scope): ?CurrentUser
+    {
+        if (!$this->sendsBearerCredential($request)) {
+            return null;
+        }
+
+        $apiKeyAuthenticator = new ApiKeyAuthenticator($this->configuration);
+        $ownerId = $apiKeyAuthenticator->authenticate($request, [$scope->value])
+            ? $apiKeyAuthenticator->getAuthenticatedUserId()
+            : new ResourceServer($this->configuration)->authenticateForScope($request, $scope->value);
+
+        if ($ownerId === null || $ownerId <= 0) {
+            return null;
+        }
+
+        $owner = new CurrentUser($this->configuration);
+        if (!$owner->getUserById($ownerId)) {
+            return null;
+        }
+
+        $owner->setLoggedIn(loggedIn: true);
+
+        return $owner;
+    }
+
+    private function sendsBearerCredential(Request $request): bool
+    {
+        return str_starts_with(trim((string) $request->headers->get('Authorization', default: '')), 'Bearer ');
     }
 
     /**

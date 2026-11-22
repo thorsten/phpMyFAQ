@@ -84,7 +84,7 @@ final class AttachmentController extends AbstractApiController
         description: 'Field to sort by',
         in: 'query',
         required: false,
-        schema: new OA\Schema(type: 'string', enum: ['id', 'filename', 'mime_type', 'filesize', 'created']),
+        schema: new OA\Schema(type: 'string', enum: ['id', 'filename', 'mime_type', 'filesize']),
     )]
     #[OA\Parameter(
         name: 'order',
@@ -152,7 +152,7 @@ final class AttachmentController extends AbstractApiController
         $pagination = $this->getPaginationRequest($request);
         $sort = $this->getSortRequest(
             $request,
-            allowedFields: ['id', 'filename', 'mime_type', 'filesize', 'created'],
+            allowedFields: ['id', 'filename', 'mime_type', 'filesize'],
             defaultField: 'id',
             defaultOrder: 'asc',
         );

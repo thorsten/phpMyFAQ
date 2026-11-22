@@ -30,6 +30,7 @@ use phpMyFAQ\Search\Search\Elasticsearch;
 use phpMyFAQ\Search\Search\OpenSearch;
 use phpMyFAQ\Search\SearchFactory;
 use stdClass;
+use Throwable;
 
 /**
  * Class Search
@@ -90,11 +91,27 @@ class Search
         }
 
         if (true === $this->configuration->get(item: 'search.enableElasticsearch') && $this->hasElasticsearchClient()) {
-            return $this->searchElasticsearch($searchTerm, $allLanguages);
+            try {
+                return $this->searchElasticsearch($searchTerm, $allLanguages);
+            } catch (Throwable $throwable) {
+                // An engine that cannot be reached or does not answer in time must not take the search down
+                $this->configuration
+                    ->getLogger()
+                    ->error(
+                        'Elasticsearch search failed, falling back to database search: ' . $throwable->getMessage(),
+                    );
+            }
         }
 
         if (true === $this->configuration->get(item: 'search.enableOpenSearch') && $this->hasOpenSearchClient()) {
-            return $this->searchOpenSearch($searchTerm, $allLanguages);
+            try {
+                return $this->searchOpenSearch($searchTerm, $allLanguages);
+            } catch (Throwable $throwable) {
+                // An engine that cannot be reached or does not answer in time must not take the search down
+                $this->configuration
+                    ->getLogger()
+                    ->error('OpenSearch search failed, falling back to database search: ' . $throwable->getMessage());
+            }
         }
 
         return $this->searchDatabase($searchTerm, $allLanguages);
@@ -117,7 +134,16 @@ class Search
             $elasticsearch->setLanguage($this->configuration->getLanguage()->getLanguage());
 
             // Elasticsearch autoComplete now includes custom pages from the index
-            return $elasticsearch->autoComplete($searchTerm);
+            try {
+                return $this->keepVisibleFaqHits($elasticsearch->autoComplete($searchTerm));
+            } catch (Throwable $throwable) {
+                // An engine that cannot be reached or does not answer in time must not take the search down
+                $this->configuration
+                    ->getLogger()
+                    ->error(
+                        'Elasticsearch search failed, falling back to database search: ' . $throwable->getMessage(),
+                    );
+            }
         }
 
         if (true === $this->configuration->get(item: 'search.enableOpenSearch') && $this->hasOpenSearchClient()) {
@@ -128,7 +154,14 @@ class Search
             $opensearch->setLanguage($this->configuration->getLanguage()->getLanguage());
 
             // OpenSearch autoComplete will include custom pages once indexed
-            return $opensearch->autoComplete($searchTerm);
+            try {
+                return $this->keepVisibleFaqHits($opensearch->autoComplete($searchTerm));
+            } catch (Throwable $throwable) {
+                // An engine that cannot be reached or does not answer in time must not take the search down
+                $this->configuration
+                    ->getLogger()
+                    ->error('OpenSearch search failed, falling back to database search: ' . $throwable->getMessage());
+            }
         }
 
         return $this->searchDatabase($searchTerm, false);
@@ -294,7 +327,8 @@ class Search
                 'fd.id = ' . $fcrTable . '.record_id',
                 'fd.lang = ' . $fcrTable . '.record_lang',
             ])
-            ->setConditions($condition);
+            ->setConditions($condition)
+            ->restrictToPublicationWindow('fd');
 
         if (is_numeric($searchTerm)) {
             $searchDatabase->setMatchingColumns(['fd.solution_id']);
@@ -446,7 +480,7 @@ class Search
         }
 
         // Elasticsearch search now includes custom pages in the index
-        return $elasticsearch->search($searchTerm);
+        return $this->keepVisibleFaqHits($elasticsearch->search($searchTerm));
     }
 
     /**
@@ -470,7 +504,61 @@ class Search
         }
 
         // OpenSearch search now includes custom pages in the index
-        return $opensearch->search($searchTerm);
+        return $this->keepVisibleFaqHits($opensearch->search($searchTerm));
+    }
+
+    /**
+     * The search engine index holds neither the status nor the publication window of a FAQ and
+     * is only updated when a FAQ is saved, so a hit may be a FAQ that is scheduled, expired or
+     * no longer published. Only FAQ hits the database reports as visible right now are kept;
+     * custom page hits pass unchanged.
+     *
+     * @param stdClass[] $hits
+     * @return stdClass[]
+     */
+    private function keepVisibleFaqHits(array $hits): array
+    {
+        $faqIds = [];
+        foreach ($hits as $hit) {
+            if (self::isCustomPageHit($hit)) {
+                continue;
+            }
+
+            $faqIds[(int) $hit->id] = true;
+        }
+
+        if ($faqIds === []) {
+            return $hits;
+        }
+
+        $now = date(format: 'YmdHis');
+        $db = $this->configuration->getDb();
+        $result = $db->query(sprintf(
+            "SELECT id, lang FROM %sfaqdata WHERE id IN (%s) AND status = '%s' AND date_start <= '%s' AND date_end >= '%s'",
+            Database::getTablePrefix(),
+            implode(', ', array_keys($faqIds)),
+            FaqStatus::Published->value,
+            $now,
+            $now,
+        ));
+
+        $visibleFaqs = [];
+        foreach ($db->fetchAll($result) ?? [] as $row) {
+            $visibleFaqs[(int) $row->id . '-' . (string) $row->lang] = true;
+        }
+
+        return array_values(array_filter(
+            $hits,
+            static fn(stdClass $hit): bool => (
+                self::isCustomPageHit($hit)
+                || array_key_exists((int) $hit->id . '-' . (string) $hit->lang, $visibleFaqs)
+            ),
+        ));
+    }
+
+    private static function isCustomPageHit(stdClass $hit): bool
+    {
+        return ($hit->content_type ?? null) === 'page';
     }
 
     /**

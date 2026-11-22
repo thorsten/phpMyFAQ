@@ -32,11 +32,10 @@ use Throwable;
 /**
  * Grants an existing or newly created right to many users and groups at once.
  *
- * PermissionGrantOperation cannot do this: it grants to exactly one user, and it reports
- * failure when the right already exists, because BasicPermission::addRight() returns 0 for a
- * duplicate name. A backfill has to succeed on a right that is already present and has to reach
- * every account, so that turning an existing-but-unenforced right into an enforced one does not
- * revoke access from anybody.
+ * PermissionGrantOperation cannot do this: it grants to exactly one user, and it leaves a
+ * right that already exists untouched. A backfill has to grant a right that is already present
+ * and has to reach every account, so that turning an existing-but-unenforced right into an
+ * enforced one does not revoke access from anybody.
  *
  * With $mirrorFrom set, the right is granted to exactly those users and groups that hold the
  * source right, optionally carrying its category and language restrictions across, so a scoped

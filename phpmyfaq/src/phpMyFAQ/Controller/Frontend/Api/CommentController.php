@@ -108,10 +108,6 @@ final class CommentController extends AbstractController
 
         $type = Filter::filterVar($data->type ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
 
-        if ($type === 'news') {
-            throw new Exception('News comments not supported');
-        }
-
         $faqId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT, default: 0);
         $newsId = Filter::filterVar($data->newsId ?? null, FILTER_VALIDATE_INT);
         $username = Filter::filterVar($data->user, FILTER_SANITIZE_SPECIAL_CHARS, '');

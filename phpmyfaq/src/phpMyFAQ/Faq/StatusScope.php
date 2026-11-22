@@ -28,12 +28,25 @@ use phpMyFAQ\Enums\FaqStatus;
  * status. Centralising the condition keeps the visibility rule one decision instead
  * of a string repeated per query, the same pattern ReadScope established for the
  * read right.
+ *
+ * A reader's view is narrower than "published": a published FAQ is only public inside its
+ * publication window (see PublicationWindow), so visibleToReaders() adds that condition.
  */
 final readonly class StatusScope
 {
     private function __construct(
         private ?FaqStatus $status,
+        private bool $insidePublicationWindow = false,
     ) {
+    }
+
+    /**
+     * Published and inside the publication window right now: what a reader may see. Use this
+     * for every public list, count or lookup.
+     */
+    public static function visibleToReaders(): self
+    {
+        return new self(FaqStatus::Published, insidePublicationWindow: true);
     }
 
     public static function publishedOnly(): self
@@ -52,6 +65,17 @@ final readonly class StatusScope
             return '';
         }
 
-        return sprintf(" AND %s.status = '%s'", $faqAlias, $this->status->value);
+        $statusCondition = sprintf(" AND %s.status = '%s'", $faqAlias, $this->status->value);
+        if (!$this->insidePublicationWindow) {
+            return $statusCondition;
+        }
+
+        // The window columns hold 14-character "YmdHis" strings, so a string comparison orders them.
+        return sprintf(
+            "%1\$s AND %2\$s.date_start <= '%3\$s' AND %2\$s.date_end >= '%3\$s'",
+            $statusCondition,
+            $faqAlias,
+            date(format: 'YmdHis'),
+        );
     }
 }

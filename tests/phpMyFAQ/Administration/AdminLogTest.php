@@ -232,30 +232,102 @@ class AdminLogTest extends TestCase
         $this->assertStringContainsString('Chain broken', $result['errors'][0]);
     }
 
-    public function testVerifyChainIntegrityRejectsFirstEntryWithPreviousHash(): void
+    public function testVerifyChainIntegrityAcceptsAPrunedLog(): void
+    {
+        $this->configuration->set('main.enableAdminLog', true);
+
+        // Two entries older than 30 days, two recent ones
+        $_SERVER['REQUEST_TIME'] = $this->now - (40 * 86_400);
+        $this->adminLog->log(new User($this->configuration), 'old one');
+        $this->adminLog->log(new User($this->configuration), 'old two');
+        $_SERVER['REQUEST_TIME'] = $this->now;
+        $this->adminLog->log(new User($this->configuration), 'recent one');
+        $this->adminLog->log(new User($this->configuration), 'recent two');
+
+        $this->assertTrue($this->adminLog->delete());
+
+        $entries = array_values($this->adminLog->getAll());
+        $this->assertCount(2, $entries);
+        $this->assertNotNull($entries[0]->getPreviousHash(), 'The oldest survivor points to a pruned entry.');
+
+        $result = new AdminLog($this->configuration)->verifyChainIntegrity();
+
+        $this->assertSame(['valid' => true, 'errors' => [], 'total' => 2, 'verified' => 2], $result);
+    }
+
+    public function testVerifyChainIntegrityDetectsEntriesRemovedFromTheStartOfAPrunedLog(): void
+    {
+        $_SERVER['REQUEST_TIME'] = $this->now - (40 * 86_400);
+        $this->adminLog->log(new User($this->configuration), 'old');
+        $_SERVER['REQUEST_TIME'] = $this->now;
+        $this->adminLog->log(new User($this->configuration), 'recent one');
+        $this->adminLog->log(new User($this->configuration), 'recent two');
+        $this->adminLog->log(new User($this->configuration), 'recent three');
+
+        $this->assertTrue($this->adminLog->delete());
+
+        $entries = array_values($this->adminLog->getAll());
+        $this->configuration
+            ->getDb()
+            ->query(sprintf('DELETE FROM faqadminlog WHERE id = %d', $entries[0]->getId()));
+
+        // Pruning again must not adopt the shortened log as the new start of the chain
+        $this->assertTrue($this->adminLog->delete());
+
+        $result = new AdminLog($this->configuration)->verifyChainIntegrity();
+
+        $this->assertFalse($result['valid']);
+        $this->assertCount(1, $result['errors']);
+        $this->assertStringContainsString(
+            sprintf('Log ID %d: Chain broken - entries before it were removed', $entries[1]->getId()),
+            $result['errors'][0],
+        );
+        $this->assertSame(1, $result['verified']);
+    }
+
+    public function testALogPrunedEmptyContinuesItsChainAtTheAnchor(): void
+    {
+        $_SERVER['REQUEST_TIME'] = $this->now - (40 * 86_400);
+        $this->adminLog->log(new User($this->configuration), 'old one');
+        $this->adminLog->log(new User($this->configuration), 'old two');
+        $newestPrunedHash = array_values($this->adminLog->getAll())[1]->getHash();
+
+        $_SERVER['REQUEST_TIME'] = $this->now;
+        $this->assertTrue($this->adminLog->delete());
+        $this->assertSame(0, $this->adminLog->getNumberOfEntries());
+
+        $this->adminLog->log(new User($this->configuration), 'recent');
+
+        $entries = array_values($this->adminLog->getAll());
+        $this->assertSame($newestPrunedHash, $entries[0]->getPreviousHash());
+        $this->assertSame(
+            ['valid' => true, 'errors' => [], 'total' => 1, 'verified' => 1],
+            new AdminLog($this->configuration)->verifyChainIntegrity(),
+        );
+    }
+
+    public function testVerifyChainIntegrityReportsATamperedEntryOnlyOnce(): void
     {
         $_SERVER['REQUEST_TIME'] = $this->now;
+        $this->configuration->set('main.enableAdminLog', true);
+
         $this->adminLog->log(new User($this->configuration), 'first');
+        $this->adminLog->log(new User($this->configuration), 'second');
+        $this->adminLog->log(new User($this->configuration), 'third');
 
-        $firstEntry = array_values($this->adminLog->getAll())[0];
-        $bogusPreviousHash = str_repeat('a', 64);
-
-        // Give the first entry a previous hash and recalculate its own hash so verifyIntegrity() still passes
-        $firstEntry->setPreviousHash($bogusPreviousHash);
-        $this->configuration->getDb()->query(sprintf(
-            "UPDATE faqadminlog SET previous_hash = '%s', hash = '%s' WHERE id = %d",
-            $bogusPreviousHash,
-            $firstEntry->calculateHash(),
-            $firstEntry->getId(),
-        ));
+        $secondEntry = array_values($this->adminLog->getAll())[1];
+        $this->configuration
+            ->getDb()
+            ->query(sprintf("UPDATE faqadminlog SET text = 'tampered' WHERE id = %d", $secondEntry->getId()));
 
         $result = new AdminLog($this->configuration)->verifyChainIntegrity();
 
         $this->assertFalse($result['valid']);
         $this->assertSame(
-            [sprintf('Log ID %d: First entry should have null previous hash', $firstEntry->getId())],
+            [sprintf('Log ID %d: Hash verification failed - data has been tampered', $secondEntry->getId())],
             $result['errors'],
         );
+        $this->assertSame(2, $result['verified']);
     }
 
     public function testCalculateHash(): void

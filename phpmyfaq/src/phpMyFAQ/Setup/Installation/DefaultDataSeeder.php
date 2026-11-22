@@ -30,6 +30,51 @@ use phpMyFAQ\System;
 class DefaultDataSeeder
 {
     /**
+     * The robots.txt of a new installation, the same text the 4.1.0-alpha migration stores.
+     */
+    public const string ROBOTS_TEXT = <<<'EOT'
+        User-agent: Amazonbot
+        User-agent: anthropic-ai
+        User-agent: Applebot-Extended
+        User-agent: Bytespider
+        User-agent: CCBot
+        User-agent: ChatGPT-User
+        User-agent: ClaudeBot
+        User-agent: Claude-Web
+        User-agent: cohere-ai
+        User-agent: Diffbot
+        User-agent: FacebookBot
+        User-agent: facebookexternalhit
+        User-agent: FriendlyCrawler
+        User-agent: Google-Extended
+        User-agent: GoogleOther
+        User-agent: GoogleOther-Image
+        User-agent: GoogleOther-Video
+        User-agent: GPTBot
+        User-agent: ICC-Crawler
+        User-agent: ImagesiftBot
+        User-agent: img2dataset
+        User-agent: Meta-ExternalAgent
+        User-agent: OAI-SearchBot
+        User-agent: omgili
+        User-agent: omgilibot
+        User-agent: PerplexityBot
+        User-agent: PetalBot
+        User-agent: Scrapy
+        User-agent: Timpibot
+        User-agent: VelenPublicWebCrawler
+        User-agent: YouBot
+        User-agent: Meta-ExternalFetcher
+        User-agent: Applebot
+        Disallow: /
+
+        User-agent: *
+        Disallow: /admin/
+
+        Sitemap: /sitemap.xml
+        EOT;
+
+    /**
      * Configuration array.
      *
      * @var array<string, string|null>
@@ -246,7 +291,7 @@ class DefaultDataSeeder
             'seo.metaTagsCategories' => 'index, follow',
             'seo.metaTagsPages' => 'index, follow',
             'seo.metaTagsAdmin' => 'noindex, nofollow',
-            'seo.contentRobotsText' => 'User-agent: *\nDisallow: /admin/\nSitemap: /sitemap.xml',
+            'seo.contentRobotsText' => self::ROBOTS_TEXT,
             'seo.contentLlmsText' =>
                 "# phpMyFAQ LLMs.txt\n\n"
                     . "This file provides information about the AI/LLM training data availability for this FAQ system.\n\n"

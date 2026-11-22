@@ -93,6 +93,7 @@ class System
      */
     private array $requiredExtensions = [
         'curl',
+        'dom',
         'fileinfo',
         'filter',
         'gd',

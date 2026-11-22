@@ -134,10 +134,12 @@ final class QuestionController extends AbstractController
         $email = Filter::filterVar($email, FILTER_SANITIZE_SPECIAL_CHARS, '');
 
         $selectedCategory = ($data->category ?? null) !== null
-            ? Filter::filterVar($data->category, FILTER_VALIDATE_INT)
+            ? Filter::filterVar($data->category, FILTER_VALIDATE_INT, default: false)
             : false;
 
-        if (($data->category ?? null) !== null && $data->category !== '') {
+        // The form always submits its category select: accept a category that exists, reject anything else
+        $categoryProvided = ($data->category ?? null) !== null && $data->category !== '';
+        if ($categoryProvided && (!is_int($selectedCategory) || !array_key_exists($selectedCategory, $categories))) {
             throw new Exception('Category validation failed');
         }
 

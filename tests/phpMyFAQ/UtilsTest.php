@@ -212,6 +212,52 @@ class UtilsTest extends TestCase
         );
     }
 
+    public function testSetHighlightedStringMarksEveryOccurrenceInText(): void
+    {
+        $this->assertSame('The <mark class="pmf-highlighted-string">FAQ</mark> of php'
+        . 'My<mark class="pmf-highlighted-string">FAQ</mark>', Utils::setHighlightedString(
+            'The FAQ of phpMyFAQ',
+            'faq',
+        ));
+    }
+
+    public function testSetHighlightedStringLeavesTagsAndAttributeValuesUntouched(): void
+    {
+        $html =
+            '<p class="strong"><strong title="strong words">A strong answer</strong></p>'
+            . '<a href="https://example.com/strong">link</a><img src="strong.png" alt="strong">';
+
+        $this->assertSame('<p class="strong"><strong title="strong words">A '
+        . '<mark class="pmf-highlighted-string">strong</mark> answer</strong></p>'
+        . '<a href="https://example.com/strong">link</a><img src="strong.png" alt="strong">', Utils::setHighlightedString(
+            $html,
+            'strong',
+        ));
+    }
+
+    public function testSetHighlightedStringLeavesCharacterReferencesUntouched(): void
+    {
+        $this->assertSame('R&amp;D uses an <mark class="pmf-highlighted-string">amp</mark>lifier &#38; &#x26; more', Utils::setHighlightedString(
+            'R&amp;D uses an amplifier &#38; &#x26; more',
+            'amp',
+        ));
+    }
+
+    public function testSetHighlightedStringCanHighlightASecondTermAfterTheFirst(): void
+    {
+        $once = Utils::setHighlightedString('privacy mark', 'privacy');
+
+        $this->assertSame('<mark class="pmf-highlighted-string">privacy</mark> <mark class="pmf-highlighted-string">mark</mark>', Utils::setHighlightedString(
+            $once,
+            'mark',
+        ));
+    }
+
+    public function testSetHighlightedStringReturnsTheStringForAnEmptyTerm(): void
+    {
+        $this->assertSame('<b>text</b>', Utils::setHighlightedString('<b>text</b>', ''));
+    }
+
     public function testIsForbiddenElementDetectsHtmlElementNames(): void
     {
         $this->assertTrue(Utils::isForbiddenElement('img'));

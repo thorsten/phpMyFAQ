@@ -23,8 +23,10 @@ export const handleSessionsFilter = (): void => {
     button.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       const form = document.getElementById('pmf-admin-form-session') as HTMLFormElement;
-      const timestamp = (document.getElementById('day') as HTMLInputElement).value;
-      const day = new Date(Number(timestamp) * 1000).toISOString().split('T')[0];
+      // The server names the day in its own time zone, the one the view is rendered in;
+      // deriving it from the timestamp here would use UTC or the time zone of the browser.
+      const selector = document.getElementById('day') as HTMLSelectElement;
+      const day = selector.selectedOptions[0]?.dataset.day ?? '';
       form.action = `./statistics/sessions/${day}`;
       form.submit();
     });
@@ -96,7 +98,7 @@ export const handleClearVisits = (): void => {
   if (buttonClearVisits) {
     buttonClearVisits.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
-      const target = event.target as HTMLElement;
+      const target = event.currentTarget as HTMLElement;
       const csrf = target.getAttribute('data-pmf-csrf');
 
       if (!csrf) {

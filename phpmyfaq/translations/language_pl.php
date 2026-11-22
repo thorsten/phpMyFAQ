@@ -1500,7 +1500,7 @@ $PMF_LANG['msgNoteManualUpdate'] = 'Nadal możesz użyć ręcznego <a href="../u
 
 // Additional LDAP configuration
 $LANG_CONF['ldap.ldap_use_group_restriction'] = ['checkbox', 'Ogranicz logowanie do określonych grup Active Directory'];
-$LANG_CONF['ldap.ldap_group_allowed_groups'] = ['input', 'Lista dozwolonych grup AD oddzielonych przecinkami (obsługiwane częściowe dopasowania)'];
+$LANG_CONF['ldap.ldap_group_allowed_groups'] = ['input', 'Lista dozwolonych grup AD oddzielonych przecinkami (dokładna nazwa grupy, np. Domain Admins, lub CN=Domain Admins)'];
 $LANG_CONF['ldap.ldap_group_auto_assign'] = ['checkbox', 'Automatycznie przypisuj użytkowników do grup phpMyFAQ na podstawie członkostwa w AD'];
 $LANG_CONF['ldap.ldap_group_mapping'] = ['input', 'Mapowanie JSON grup AD na grupy phpMyFAQ, np. {"Domain Admins": "Administrators"}'];
 $LANG_CONF['mail.noReplySenderAddress'] = ['input', 'Adres do odpowiedzi dla e-maili'];
@@ -1667,6 +1667,7 @@ $PMF_LANG['ad_group_search_users'] = 'Wyszukaj użytkowników do dodania…';
 $PMF_LANG['ad_group_select_group'] = 'Wybierz grupę z listy, aby wyświetlić i edytować jej ustawienia.';
 $PMF_LANG['ad_language_restrictions_no_language'] = 'Nie podano obsługiwanego kodu języka.';
 $PMF_LANG['ad_layout_force_mode_none'] = 'Nie wymuszaj trybu układu';
+$PMF_LANG['ad_permission_scope_exceeded'] = 'To uprawnienie obowiązuje w szerszym zakresie języków lub kategorii niż Twój własny. Możesz zmieniać uprawnienia tylko w ramach własnego zakresu.';
 $PMF_LANG['ad_sess_count'] = 'Zarejestrowane sesje';
 $PMF_LANG['ad_sess_no_sessions'] = 'Tego dnia nie zarejestrowano żadnych sesji.';
 $PMF_LANG['ad_sess_view'] = 'Pokaż';
@@ -1702,6 +1703,9 @@ $PMF_LANG['msgExpandAll'] = 'Rozwiń wszystko';
 $PMF_LANG['msgImportRowNoCategoryPermission'] = 'Wiersz %d: brak uprawnienia „%s” dla kategorii %d.';
 $PMF_LANG['msgImportRowNoLanguagePermission'] = 'Wiersz %d: brak uprawnienia „%s” dla języka „%s”.';
 $PMF_LANG['msgInvalidConfigurationUrl'] = 'Wartość „%s” nie jest prawidłowym lub dozwolonym adresem URL.';
+$PMF_LANG['msgInvalidFaqCategory'] = 'Wybrana kategoria nie istnieje.';
+$PMF_LANG['msgInvalidFaqDate'] = 'Data FAQ nie jest prawidłową datą.';
+$PMF_LANG['msgInvalidFaqDateRange'] = 'Koniec okresu publikacji nie może przypadać przed jego początkiem.';
 $PMF_LANG['msgInvalidFaqStatus'] = 'Nieprawidłowa lub brakująca wartość statusu.';
 $PMF_LANG['msgInvalidVersionNumber'] = 'Żądany numer wersji jest nieprawidłowy.';
 $PMF_LANG['msgLoading'] = 'Ładowanie';

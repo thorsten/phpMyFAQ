@@ -111,9 +111,7 @@ export const handleInstances = (): void => {
             const response = await deleteInstance(csrf, instanceId);
 
             if (response.deleted) {
-              const row = document.getElementById(`row-instance-${response.deleted}`) as HTMLElement;
-              row.addEventListener('click', (): string => (row.style.opacity = '0'));
-              row.addEventListener('transitionend', (): void => row.remove());
+              document.getElementById(`row-instance-${response.deleted}`)?.remove();
             } else {
               console.error('Failed to delete instance');
               const table = document.querySelector('.table') as HTMLElement;

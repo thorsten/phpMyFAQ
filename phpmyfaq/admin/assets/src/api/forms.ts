@@ -24,7 +24,7 @@ export const fetchActivateInput = async (
   checked: boolean
 ): Promise<ApiResponse> => {
   return await fetchJson<ApiResponse>('api/forms/activate', {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -44,7 +44,7 @@ export const fetchSetInputAsRequired = async (
   checked: boolean
 ): Promise<ApiResponse> => {
   return await fetchJson<ApiResponse>('api/forms/required', {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -65,7 +65,7 @@ export const fetchEditTranslation = async (
   lang: string
 ): Promise<ApiResponse> => {
   return await fetchJson<ApiResponse>('api/forms/translation-edit', {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -86,7 +86,7 @@ export const fetchDeleteTranslation = async (
   lang: string
 ): Promise<ApiResponse> => {
   return await fetchJson<ApiResponse>('api/forms/translation-delete', {
-    method: 'POST',
+    method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },

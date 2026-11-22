@@ -46,10 +46,12 @@ final readonly class SendGridProvider implements MailProviderInterface
 
     /**
      * @param array<string, int|string|null> $headers
+     * @param string $body Plain text part
+     * @param string $htmlBody HTML part, empty for a plain text mail
      * @throws Exception
      * @throws TransportExceptionInterface
      */
-    public function send(string $recipients, array $headers, string $body): int
+    public function send(string $recipients, array $headers, string $body, string $htmlBody = ''): int
     {
         $apiKey = (string) ($this->configuration->get('mail.sendgridApiKey') ?? '');
         if ($apiKey === '') {
@@ -66,21 +68,47 @@ final readonly class SendGridProvider implements MailProviderInterface
             throw new Exception('No valid recipients for SendGrid provider.');
         }
 
+        // SendGrid rejects an address that appears more than once in a personalization
+        $ccAddresses = array_values(array_diff(
+            $this->parseRecipients((string) ($headers['CC'] ?? $headers['Cc'] ?? '')),
+            $toAddresses,
+        ));
+        $bccAddresses = array_values(array_diff(
+            $this->parseRecipients((string) ($headers['BCC'] ?? $headers['Bcc'] ?? '')),
+            $toAddresses,
+            $ccAddresses,
+        ));
+        $toEmailObject = static fn(string $address): array => ['email' => $address];
+
+        $personalization = [
+            'to' => array_map($toEmailObject, $toAddresses),
+            'subject' => $headers['Subject'] ?? '',
+        ];
+        if ($ccAddresses !== []) {
+            $personalization['cc'] = array_map($toEmailObject, $ccAddresses);
+        }
+
+        if ($bccAddresses !== []) {
+            $personalization['bcc'] = array_map($toEmailObject, $bccAddresses);
+        }
+
+        $content = [['type' => 'text/plain', 'value' => $body]];
+        if ($htmlBody !== '') {
+            $content[] = ['type' => 'text/html', 'value' => $htmlBody];
+        }
+
         $payload = [
-            'personalizations' => [
-                [
-                    'to' => array_map(static fn(string $address): array => ['email' => $address], $toAddresses),
-                    'subject' => $headers['Subject'] ?? '',
-                ],
-            ],
+            'personalizations' => [$personalization],
             'from' => [
                 'email' => $fromAddress,
             ],
-            'content' => [
-                ['type' => 'text/plain', 'value' => $body],
-                ['type' => 'text/html', 'value' => $body],
-            ],
+            'content' => $content,
         ];
+
+        $replyToAddress = $this->extractEmailAddress((string) ($headers['Reply-To'] ?? ''));
+        if ($replyToAddress !== '') {
+            $payload['reply_to'] = ['email' => $replyToAddress];
+        }
 
         $response = $this->httpClient->request('POST', 'https://api.sendgrid.com/v3/mail/send', [
             'headers' => [

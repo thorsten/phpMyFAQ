@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -72,6 +73,11 @@ readonly class ApiExceptionListener
                 Response::HTTP_BAD_REQUEST,
                 'The request could not be understood or was missing required parameters.',
             ],
+            // Any other HTTP exception carries its own status, e.g. 405 for a wrong method
+            $throwable instanceof HttpExceptionInterface => [
+                $throwable->getStatusCode(),
+                Response::$statusTexts[$throwable->getStatusCode()] ?? 'HTTP error',
+            ],
             default => [
                 Response::HTTP_INTERNAL_SERVER_ERROR,
                 'An unexpected error occurred while processing your request.',
@@ -90,6 +96,12 @@ readonly class ApiExceptionListener
         $this->logDeniedRequest($request, $throwable, $status);
 
         $response = $this->createProblemDetailsResponse($request, $status, $throwable, $defaultDetail);
+
+        // A 405 has to advertise the allowed methods (Allow), a 429 its Retry-After
+        if ($throwable instanceof HttpExceptionInterface && !$throwable instanceof UnauthorizedHttpException) {
+            $response->headers->add($throwable->getHeaders());
+        }
+
         $event->setResponse($response);
     }
 

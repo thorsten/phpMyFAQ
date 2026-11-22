@@ -6,12 +6,15 @@ use Monolog\Logger;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Mail;
+use phpMyFAQ\Mail\BuiltinTestState;
 use phpMyFAQ\Strings;
+use phpMyFAQ\TestDatabaseTrait;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\UserData;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -19,6 +22,8 @@ use ReflectionClass;
 #[AllowMockObjectsWithoutExpectations]
 class RegistrationHelperTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     private RegistrationHelper $registrationHelper;
     private Configuration $configurationMock;
     private User $userMock;
@@ -133,6 +138,46 @@ class RegistrationHelperTest extends TestCase
             $result,
         );
         $this->assertArrayNotHasKey('error', $result);
+    }
+
+    /**
+     * Runs in its own process, so the mail() double of BuiltinTest is in place before the
+     * built-in mail agent resolves the function for the first time.
+     */
+    #[RunInSeparateProcess]
+    public function testCreateUserDeclaresTheAdminNotificationAsHtml(): void
+    {
+        require_once PMF_TEST_DIR . '/phpMyFAQ/Mail/BuiltinTest.php';
+        BuiltinTestState::reset();
+        $this->setUpTranslations();
+
+        $configuration = $this->createTestConfiguration();
+        $configuration->getAll();
+        $settings = new \ReflectionProperty(Configuration::class, 'config');
+        $settings->setValue($configuration, [
+            ...$settings->getValue($configuration),
+            'main.administrationMail' => 'admin@example.com',
+            'mail.remoteSMTP' => 'false',
+            'mail.useQueue' => 'false',
+            'spam.manualActivation' => 'true',
+        ]);
+
+        $result = new RegistrationHelper($configuration)->createUser(
+            'html-mail-user',
+            'Html Mail User',
+            'html-mail-user@example.com',
+            true,
+        );
+
+        $this->assertTrue($result['registered']);
+        $this->assertCount(1, BuiltinTestState::$mailCalls);
+        $mail = BuiltinTestState::$mailCalls[0];
+        $this->assertStringContainsString('Content-Type: multipart/alternative;', (string) $mail['headers']);
+        $this->assertStringContainsString(
+            "A new user has been registered:\r\n\r\nName: Html Mail User\r\nLogin name: html-mail-user\r\n\r\n",
+            $mail['body'],
+        );
+        $this->assertStringContainsString('<br><br>Name: Html Mail User<br>', $mail['body']);
     }
 
     private function setUpTranslations(): void

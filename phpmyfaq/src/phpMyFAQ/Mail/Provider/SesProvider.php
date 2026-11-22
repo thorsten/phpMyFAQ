@@ -38,9 +38,11 @@ final class SesProvider implements MailProviderInterface
 
     /**
      * @param array<string, int|string|null> $headers
+     * @param string $body Plain text part
+     * @param string $htmlBody HTML part, empty for a plain text mail
      * @throws Exception
      */
-    public function send(string $recipients, array $headers, string $body): int
+    public function send(string $recipients, array $headers, string $body, string $htmlBody = ''): int
     {
         $source = $this->extractEmailAddress((string) ($headers['From'] ?? ''));
         if ($source === '') {
@@ -52,27 +54,36 @@ final class SesProvider implements MailProviderInterface
             throw new Exception('No valid recipients for SES provider.');
         }
 
+        $destination = ['ToAddresses' => $toAddresses];
+
+        $ccAddresses = $this->parseRecipients((string) ($headers['CC'] ?? $headers['Cc'] ?? ''));
+        if ($ccAddresses !== []) {
+            $destination['CcAddresses'] = $ccAddresses;
+        }
+
+        $bccAddresses = $this->parseRecipients((string) ($headers['BCC'] ?? $headers['Bcc'] ?? ''));
+        if ($bccAddresses !== []) {
+            $destination['BccAddresses'] = $bccAddresses;
+        }
+
+        $replyToAddress = $this->extractEmailAddress((string) ($headers['Reply-To'] ?? ''));
+
+        $messageBody = ['Text' => ['Data' => $body, 'Charset' => 'UTF-8']];
+        if ($htmlBody !== '') {
+            $messageBody['Html'] = ['Data' => $htmlBody, 'Charset' => 'UTF-8'];
+        }
+
         try {
             $this->getSesClient()->sendEmail([
                 'Source' => $source,
-                'Destination' => [
-                    'ToAddresses' => $toAddresses,
-                ],
+                'Destination' => $destination,
+                ...($replyToAddress === '' ? [] : ['ReplyToAddresses' => [$replyToAddress]]),
                 'Message' => [
                     'Subject' => [
                         'Data' => (string) ($headers['Subject'] ?? ''),
                         'Charset' => 'UTF-8',
                     ],
-                    'Body' => [
-                        'Text' => [
-                            'Data' => $body,
-                            'Charset' => 'UTF-8',
-                        ],
-                        'Html' => [
-                            'Data' => $body,
-                            'Charset' => 'UTF-8',
-                        ],
-                    ],
+                    'Body' => $messageBody,
                 ],
             ]);
         } catch (Throwable $throwable) {

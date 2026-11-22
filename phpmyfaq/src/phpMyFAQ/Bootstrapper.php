@@ -111,17 +111,29 @@ class Bootstrapper
 
             $configDir = (string) PMF_CONFIG_DIR;
 
+            // Only the command line waits for the search cluster to come up. A web request never
+            // contacts it during bootstrap, or a search outage would stall every page.
+            $waitForSearchCluster = PHP_SAPI === 'cli';
+
             // 15. Elasticsearch
             if (
                 (bool) $this->config()->get('search.enableElasticsearch')
                 && file_exists($configDir . '/elasticsearch.php')
             ) {
-                SearchClientFactory::configureElasticsearch($this->config(), $configDir);
+                SearchClientFactory::configureElasticsearch(
+                    $this->config(),
+                    $configDir,
+                    waitForCluster: $waitForSearchCluster,
+                );
             }
 
             // 16. OpenSearch
             if ((bool) $this->config()->get('search.enableOpenSearch') && file_exists($configDir . '/opensearch.php')) {
-                SearchClientFactory::configureOpenSearch($this->config(), $configDir);
+                SearchClientFactory::configureOpenSearch(
+                    $this->config(),
+                    $configDir,
+                    waitForCluster: $waitForSearchCluster,
+                );
             }
 
             // 17. Attachments directory

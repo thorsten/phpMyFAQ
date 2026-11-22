@@ -2,9 +2,11 @@
 
 namespace phpMyFAQ\Setup\Migration\QueryBuilder;
 
+use phpMyFAQ\Database;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\MysqlDialect;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\PostgresDialect;
 use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\SqliteDialect;
+use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\SqlServerDialect;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
@@ -409,5 +411,138 @@ class TableBuilderTest extends TestCase
             ['ALTER TABLE faqcounter ADD COLUMN hits INTEGER NOT NULL DEFAULT 0'],
             $builder->buildAddColumnStatements([]),
         );
+    }
+
+    /**
+     * PostgreSQL and SQLite keep index names in one namespace per schema or database file: two
+     * installations that differ only in their table prefix must not ask for the same name.
+     */
+    public function testBuildIndexStatementsNameTheIndexAfterTheTablePrefixWhereIndexNamesAreShared(): void
+    {
+        $previousPrefix = Database::getTablePrefix();
+        Database::setTablePrefix('pmf_');
+
+        try {
+            foreach ([new PostgresDialect(), new SqliteDialect()] as $dialect) {
+                $builder = new TableBuilder($dialect)
+                    ->table('test')
+                    ->varchar('slug', 255, false)
+                    ->integer('owner')
+                    ->uniqueIndex('idx_slug', 'slug')
+                    ->index('idx_owner', 'owner');
+
+                $this->assertSame(
+                    [
+                        'CREATE UNIQUE INDEX idx_slug_pmf_ ON pmf_test (slug)',
+                        'CREATE INDEX idx_owner_pmf_ ON pmf_test (owner)',
+                    ],
+                    $builder->buildIndexStatements(),
+                    $dialect->getType(),
+                );
+                $this->assertSame(['idx_slug', 'idx_owner'], array_keys($builder->getIndexes()));
+            }
+
+            $sqlServer = new TableBuilder(new SqlServerDialect())
+                ->table('test')
+                ->integer('owner')
+                ->index('idx_owner', 'owner');
+            $mysql = new TableBuilder(new MysqlDialect())
+                ->table('test')
+                ->integer('owner')
+                ->index('idx_owner', 'owner');
+        } finally {
+            Database::setTablePrefix($previousPrefix);
+        }
+
+        $this->assertSame(['CREATE INDEX idx_owner ON pmf_test (owner)'], $sqlServer->buildIndexStatements());
+        $this->assertStringContainsString('INDEX idx_owner (owner)', $mysql->build());
+    }
+
+    public function testBuildIndexStatementsKeepTheIndexNameOfATableWithoutPrefix(): void
+    {
+        $previousPrefix = Database::getTablePrefix();
+        Database::setTablePrefix('pmf_');
+
+        try {
+            $builder = new TableBuilder(new PostgresDialect())
+                ->table('test', false)
+                ->integer('owner')
+                ->index('idx_owner', 'owner');
+        } finally {
+            Database::setTablePrefix($previousPrefix);
+        }
+
+        $this->assertSame(['CREATE INDEX idx_owner ON test (owner)'], $builder->buildIndexStatements());
+    }
+
+    public function testBuildIndexStatementsHonoursTheUniqueFlag(): void
+    {
+        foreach ([new PostgresDialect(), new SqliteDialect()] as $dialect) {
+            $statements = new TableBuilder($dialect)
+                ->table('test', false)
+                ->varchar('slug', 255)
+                ->integer('owner')
+                ->uniqueIndex('idx_slug', 'slug')
+                ->index('idx_owner', 'owner')
+                ->buildIndexStatements();
+
+            $this->assertSame(
+                ['CREATE UNIQUE INDEX idx_slug ON test (slug)', 'CREATE INDEX idx_owner ON test (owner)'],
+                $statements,
+                $dialect->getType(),
+            );
+        }
+    }
+
+    /**
+     * SQL Server treats NULLs as equal in a unique index, so only the nullable columns of the
+     * index are filtered: several rows without a value must stay possible.
+     */
+    public function testBuildIndexStatementsFiltersNullableColumnsOnSqlServer(): void
+    {
+        $statements = new TableBuilder(new \phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\SqlServerDialect())
+            ->table('test', false)
+            ->varchar('api_key', 64, false)
+            ->varchar('oidc_iss', 255)
+            ->varchar('oidc_sub', 255)
+            ->uniqueIndex('idx_key', 'api_key')
+            ->uniqueIndex('idx_identity', ['oidc_iss', 'oidc_sub'])
+            ->buildIndexStatements();
+
+        $this->assertSame(
+            [
+                'CREATE UNIQUE INDEX idx_key ON test (api_key)',
+                'CREATE UNIQUE INDEX idx_identity ON test (oidc_iss, oidc_sub) '
+                    . 'WHERE oidc_iss IS NOT NULL AND oidc_sub IS NOT NULL',
+            ],
+            $statements,
+        );
+    }
+
+    public function testUniqueIndexIfNotExistsFollowsTheDialect(): void
+    {
+        $this->assertSame('CREATE UNIQUE INDEX IF NOT EXISTS idx_slug ON test (slug)', new PostgresDialect()->createUniqueIndex(
+            'idx_slug',
+            'test',
+            ['slug'],
+            [],
+            true,
+        ));
+        $this->assertSame("IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_slug' AND object_id = OBJECT_ID(N'test')) "
+        . 'CREATE UNIQUE INDEX idx_slug ON test (slug) WHERE slug IS NOT NULL', new \phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\SqlServerDialect()->createUniqueIndex(
+            'idx_slug',
+            'test',
+            ['slug'],
+            ['slug'],
+            true,
+        ));
+        $this->assertSame('CREATE UNIQUE INDEX idx_slug ON test (slug)', new MysqlDialect()->createUniqueIndex(
+            'idx_slug',
+            'test',
+            ['slug'],
+        ));
+
+        $this->expectException(\RuntimeException::class);
+        new MysqlDialect()->createUniqueIndex('idx_slug', 'test', ['slug'], [], true);
     }
 }

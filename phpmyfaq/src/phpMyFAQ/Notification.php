@@ -236,7 +236,7 @@ readonly class Notification
             Translation::getString(key: 'ad_news_link_url'),
             $urlToContent,
             Translation::getString(key: 'msgYourComment'),
-            strip_tags(wordwrap($comment->getComment(), width: 72)),
+            nl2br(strip_tags(wordwrap($comment->getComment(), width: 72))),
         );
 
         $send = [];
@@ -245,7 +245,6 @@ readonly class Notification
         $this->mail->addTo($emailTo);
 
         $send[$emailTo] = 1;
-        $send[$this->configuration->getAdminEmail()] = 1;
 
         // Let the category owner of a FAQ get a copy of the message
         $category = $this->createCategory();
@@ -267,6 +266,7 @@ readonly class Notification
 
         $this->mail->subject = $this->configuration->getTitle() . ': New comment for "' . $title . '"';
         $this->mail->message = $commentMail;
+        $this->mail->contentType = 'text/html';
 
         $this->mail->send();
     }
@@ -311,7 +311,7 @@ readonly class Notification
             $title,
             Translation::getString(key: 'ad_news_link_url'),
             $urlToContent,
-            strip_tags(wordwrap($comment->getComment(), width: 72)),
+            nl2br(strip_tags(wordwrap($comment->getComment(), width: 72))),
         );
 
         $this->mail->setReplyTo($comment->getEmail(), $comment->getUsername());
@@ -321,6 +321,7 @@ readonly class Notification
 
         $this->mail->subject = $this->configuration->getTitle() . ': New comment for "' . $title . '"';
         $this->mail->message = $commentMail;
+        $this->mail->contentType = 'text/html';
 
         $this->mail->send();
     }
@@ -366,7 +367,7 @@ readonly class Notification
             Translation::getString(key: 'msgCategory'),
             (string) ($categories[$questionEntity->getCategoryId()]['name'] ?? ''),
             Translation::getString(key: 'msgAskYourQuestion'),
-            wordwrap($questionEntity->getQuestion(), width: 72),
+            nl2br(wordwrap($questionEntity->getQuestion(), width: 72)),
             $this->configuration->getDefaultUrl() . 'admin/',
         );
 
@@ -395,6 +396,7 @@ readonly class Notification
 
             $this->mail->subject = $this->configuration->getTitle() . ': New Question was added.';
             $this->mail->message = $questionMail;
+            $this->mail->contentType = 'text/html';
             $this->mail->send();
         } catch (Exception|TransportExceptionInterface $exception) {
             $this->configuration->getLogger()->error('Error sending mail: ' . $exception->getMessage());

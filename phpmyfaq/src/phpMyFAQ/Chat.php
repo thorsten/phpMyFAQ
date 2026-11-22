@@ -75,7 +75,8 @@ readonly class Chat
     }
 
     /**
-     * Retrieves the conversation between two users.
+     * Retrieves the newest messages of the conversation between two users, oldest first.
+     * The offset skips that many of the newest messages to page back in time.
      *
      * @return ChatMessage[]
      */
@@ -86,18 +87,16 @@ readonly class Chat
              FROM %sfaqchat_messages
              WHERE (sender_id = %d AND recipient_id = %d)
                 OR (sender_id = %d AND recipient_id = %d)
-             ORDER BY created_at ASC
-             LIMIT %d OFFSET %d',
+             ORDER BY created_at DESC, id DESC',
             Database::getTablePrefix(),
             $userId1,
             $userId2,
             $userId2,
             $userId1,
-            $limit,
-            $offset,
         );
 
-        $result = $this->configuration->getDb()->query($query);
+        // The drivers add their own paging clause; a raw LIMIT is invalid on SQL Server
+        $result = $this->configuration->getDb()->query($query, $offset, $limit);
         $messages = [];
 
         while (true) {
@@ -109,7 +108,7 @@ readonly class Chat
             $messages[] = $this->mapRowToEntity($row);
         }
 
-        return $messages;
+        return array_reverse($messages);
     }
 
     /**
@@ -179,14 +178,14 @@ readonly class Chat
                 'SELECT message, created_at FROM %sfaqchat_messages
                  WHERE (sender_id = %d AND recipient_id = %d)
                     OR (sender_id = %d AND recipient_id = %d)
-                 ORDER BY created_at DESC LIMIT 1',
+                 ORDER BY created_at DESC',
                 $prefix,
                 $userId,
                 $partnerId,
                 $partnerId,
                 $userId,
             );
-            $lastMsgResult = $this->configuration->getDb()->query($lastMsgQuery);
+            $lastMsgResult = $this->configuration->getDb()->query($lastMsgQuery, offset: 0, rowcount: 1);
             $lastMsg = $this->configuration->getDb()->fetchObject($lastMsgResult);
 
             // Get unread count
@@ -313,15 +312,15 @@ readonly class Chat
                AND u.user_id > 0
                AND LOWER(ud.display_name) LIKE '%%%s%%' ESCAPE '|'
                AND u.account_status = 'active'
-             LIMIT %d",
+             ORDER BY ud.display_name ASC, u.user_id ASC",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $excludeUserId,
             $escapedTerm,
-            $limit,
         );
 
-        $result = $this->configuration->getDb()->query($query);
+        // SQL Server pages with OFFSET ... FETCH, which needs the ORDER BY above
+        $result = $this->configuration->getDb()->query($query, offset: 0, rowcount: $limit);
         $users = [];
 
         while (true) {

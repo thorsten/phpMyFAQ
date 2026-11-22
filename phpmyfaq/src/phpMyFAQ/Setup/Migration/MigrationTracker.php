@@ -21,6 +21,7 @@ namespace phpMyFAQ\Setup\Migration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Setup\Migration\QueryBuilder\Dialect\PostgresDialect;
 
 class MigrationTracker
 {
@@ -179,6 +180,26 @@ class MigrationTracker
     }
 
     /**
+     * Returns the checksum every applied migration was recorded with, keyed by version.
+     * Empty for an installation that never ran a tracked update.
+     *
+     * @return array<string, string|null>
+     */
+    public function getAppliedChecksums(): array
+    {
+        if (!$this->tableExists()) {
+            return [];
+        }
+
+        $appliedChecksums = [];
+        foreach ($this->getAppliedMigrations() as $appliedMigration) {
+            $appliedChecksums[$appliedMigration['version']] = $appliedMigration['checksum'];
+        }
+
+        return $appliedChecksums;
+    }
+
+    /**
      * Returns the list of applied versions.
      *
      * @return string[]
@@ -218,7 +239,10 @@ class MigrationTracker
 
         $query = match ($dbType) {
             'mysqli', 'pdo_mysql' => "SHOW TABLES LIKE '{$tableName}'",
-            'pgsql', 'pdo_pgsql' => "SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '{$tableName}'",
+            'pgsql', 'pdo_pgsql' => 'SELECT tablename FROM pg_catalog.pg_tables '
+                . "WHERE schemaname = current_schema() AND tablename = '"
+                . PostgresDialect::catalogName($tableName)
+                . "'",
             'sqlite3', 'pdo_sqlite' => "SELECT name FROM sqlite_master WHERE type='table' AND name='{$tableName}'",
             'sqlsrv', 'pdo_sqlsrv' => "SELECT * FROM sysobjects WHERE name='{$tableName}' AND xtype='U'",
             default => throw new \RuntimeException("Unsupported database type: {$dbType}"),

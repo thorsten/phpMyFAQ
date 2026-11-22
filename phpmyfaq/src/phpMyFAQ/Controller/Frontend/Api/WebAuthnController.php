@@ -219,12 +219,12 @@ final class WebAuthnController extends AbstractController
     private function verifyAccountOwnership(\stdClass $data): ?JsonResponse
     {
         if ($this->user->getUserAuthSource() !== AuthenticationSourceType::AUTH_WEB_AUTHN->value) {
-            // Sanitised the same way the UCP sanitises a password before storing it, so the
-            // comparison sees the same bytes the password change saw.
-            $currentPassword = trim((string) Filter::filterVar(
+            // Sanitised the same way the login form sanitises a password, and not trimmed, so
+            // the comparison sees the same bytes a login sees.
+            $currentPassword = (string) Filter::filterVar(
                 $data->{'current-password'} ?? null,
                 FILTER_SANITIZE_SPECIAL_CHARS,
-            ));
+            );
 
             return $this->verifyCurrentPassword($currentPassword);
         }
@@ -291,6 +291,7 @@ final class WebAuthnController extends AbstractController
                 $adminMessage,
                 $this->configuration->getDefaultUrl() . '/admin/',
             );
+            $mail->contentType = 'text/html';
             $mail->send();
         } catch (\Throwable $throwable) {
             $this->configuration

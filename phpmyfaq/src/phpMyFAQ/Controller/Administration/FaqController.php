@@ -37,6 +37,7 @@ use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Faq\Permission as FaqPermission;
+use phpMyFAQ\Faq\PublicationWindow;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -155,8 +156,8 @@ final class FaqController extends AbstractAdministrationController
             'faqRevisionId' => 0,
             'faqData' => $faqData,
             'openQuestionId' => 0,
-            'notifyUser' => '',
-            'notifyEmail' => '',
+            'publicationStart' => '',
+            'publicationEnd' => '',
             'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categories,
             'languageOptions' => $this->getFilteredLanguageOptions($faqData['lang'], PermissionType::FAQ_ADD),
@@ -226,8 +227,8 @@ final class FaqController extends AbstractAdministrationController
             'faqRevisionId' => 0,
             'faqData' => $faqData,
             'openQuestionId' => 0,
-            'notifyUser' => '',
-            'notifyEmail' => '',
+            'publicationStart' => '',
+            'publicationEnd' => '',
             'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categoryId,
             'languageOptions' => $this->getFilteredLanguageOptions($faqData['lang'], PermissionType::FAQ_ADD),
@@ -378,8 +379,7 @@ final class FaqController extends AbstractAdministrationController
             'faqData' => $faqData,
             'faqUrl' => $faqUrl,
             'openQuestionId' => 0,
-            'notifyUser' => '',
-            'notifyEmail' => '',
+            ...$this->getPublicationWindowInputs($faqData),
             'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_EDIT),
             'selectedCategories' => $categories,
             'languageOptions' => $this->getFilteredLanguageOptions($faqLanguage, PermissionType::FAQ_EDIT),
@@ -454,8 +454,7 @@ final class FaqController extends AbstractAdministrationController
             'faqRevisionId' => 0,
             'faqData' => $faqData,
             'openQuestionId' => 0,
-            'notifyUser' => '',
-            'notifyEmail' => '',
+            ...$this->getPublicationWindowInputs($faqData),
             'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categories,
             'languageOptions' => $this->getFilteredLanguageOptions($faqLanguage, PermissionType::FAQ_ADD),
@@ -530,8 +529,7 @@ final class FaqController extends AbstractAdministrationController
             'faqRevisionId' => 0,
             'faqData' => $faqData,
             'openQuestionId' => 0,
-            'notifyUser' => '',
-            'notifyEmail' => '',
+            ...$this->getPublicationWindowInputs($faqData),
             'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categories,
             'languageOptions' => $this->getFilteredLanguageOptions($faqLanguage, PermissionType::FAQ_ADD),
@@ -611,9 +609,9 @@ final class FaqController extends AbstractAdministrationController
             'faqLang' => $faqLanguage,
             'faqRevisionId' => 0,
             'faqData' => $faqData,
-            'openQuestionId' => 0,
-            'notifyUser' => $questionData['username'] ?? $this->currentUser->getUserData('display_name'),
-            'notifyEmail' => $questionData['email'] ?? $this->currentUser->getUserData('email'),
+            'openQuestionId' => $questionId,
+            'publicationStart' => '',
+            'publicationEnd' => '',
             'categoryTree' => $this->getFilteredCategoryTree($category, PermissionType::FAQ_ADD),
             'selectedCategories' => $categories,
             'languageOptions' => $this->getFilteredLanguageOptions($faqLanguage, PermissionType::FAQ_ADD),
@@ -662,6 +660,7 @@ final class FaqController extends AbstractAdministrationController
 
         return [
             'csrfToken' => $token->getTokenString('pmf-csrf-token'),
+            'csrfTokenTranslate' => $token->getTokenString('translate'),
             'csrfTokenDeleteAttachment' => $token->getTokenString('delete-attachment'),
             'csrfTokenUploadAttachment' => $token->getTokenString('upload-attachment'),
             'isEditorEnabled' => $this->configuration->get(item: 'main.enableWysiwygEditor'),
@@ -736,6 +735,26 @@ final class FaqController extends AbstractAdministrationController
         );
 
         return LanguageHelper::renderSelectLanguage($selected, false, $excludedLanguages, 'lang');
+    }
+
+    /**
+     * The stored publication window as the values of the two datetime-local inputs of the
+     * editor; an open side of the window is an empty input.
+     *
+     * @param array<string, mixed> $faqData
+     * @return array{publicationStart: string, publicationEnd: string}
+     */
+    private function getPublicationWindowInputs(array $faqData): array
+    {
+        $publicationWindow = PublicationWindow::fromStorage(
+            (string) ($faqData['dateStart'] ?? ''),
+            (string) ($faqData['dateEnd'] ?? ''),
+        );
+
+        return [
+            'publicationStart' => $publicationWindow->start()?->format('Y-m-d\TH:i:s') ?? '',
+            'publicationEnd' => $publicationWindow->end()?->format('Y-m-d\TH:i:s') ?? '',
+        ];
     }
 
     /**

@@ -45,7 +45,13 @@ class UserSession
     /** @var string Name of the session GET parameter */
     final public const string KEY_NAME_SESSION_ID = 'sid';
 
+    /** @var int Lifetime of the visitor session cookie in seconds, renewed with every tracked request */
+    private const int SESSION_ID_COOKIE_LIFETIME = 3600;
+
     private ?int $currentSessionId = null;
+
+    /** @var int|null Visitor session resolved for this request, so several tracked actions share one session */
+    private ?int $trackedSessionId = null;
 
     private ?CurrentUser $currentUser = null;
 
@@ -144,19 +150,6 @@ class UserSession
         $request = $this->getRequest();
         $bots = 0;
         $banned = false;
-        $this->currentSessionId = Filter::filterVar(
-            $request->query->get(self::KEY_NAME_SESSION_ID),
-            FILTER_VALIDATE_INT,
-        );
-        $cookieId = Filter::filterVar($request->query->get(self::COOKIE_NAME_SESSION_ID), FILTER_VALIDATE_INT);
-
-        if (!is_null($cookieId)) {
-            $this->setCurrentSessionId($cookieId);
-        }
-
-        if ($action === SessionActionType::OLD_SESSION->value) {
-            $this->setCurrentSessionId(0);
-        }
 
         $userAgent = (string) $request->headers->get('user-agent');
         foreach ($this->getBotIgnoreList() as $bot) {
@@ -195,26 +188,12 @@ class UserSession
         }
 
         if (0 === $bots && false === $banned) {
-            if ($this->currentSessionId === null) {
-                $this->currentSessionId = $this->configuration->getDb()->nextId(
-                    Database::getTablePrefix() . 'faqsessions',
-                    'sid',
-                );
-                // Check: force the session cookie to contains the current $sid
-                if ($cookieId !== null && $cookieId !== $this->getCurrentSessionId()) {
-                    self::setCookie(self::COOKIE_NAME_SESSION_ID, $this->getCurrentSessionId());
-                }
+            if ($action === SessionActionType::OLD_SESSION->value) {
+                $this->setCurrentSessionId(0);
+            }
 
-                $query = sprintf(
-                    "INSERT INTO %sfaqsessions (sid, user_id, ip, time) VALUES (%d, %d, '%s', %d)",
-                    Database::getTablePrefix(),
-                    $this->getCurrentSessionId(),
-                    $this->currentUser instanceof CurrentUser ? $this->currentUser->getUserId() : 0,
-                    $remoteAddress,
-                    (int) $request->server->get('REQUEST_TIME'),
-                );
-
-                $this->configuration->getDb()->query($query);
+            if ($action !== SessionActionType::OLD_SESSION->value) {
+                $this->resumeOrStartSession($request, $remoteAddress);
             }
 
             $redactor = new TrackingDataRedactor();
@@ -222,29 +201,19 @@ class UserSession
             $data =
                 (string) $this->getCurrentSessionId()
                 . ';'
-                . str_replace(search: ';', replace: ',', subject: $action)
+                . $redactor->flattenField($action)
                 . ';'
-                . (string) $data
+                . $redactor->flattenField((string) $data)
                 . ';'
                 . $remoteAddress
                 . ';'
-                . str_replace(
-                    search: ';',
-                    replace: ',',
-                    subject: $redactor->redactQueryString((string) ($request->server->get('QUERY_STRING') ?? '')),
-                )
+                . $redactor->flattenField($redactor->redactQueryString(
+                    (string) ($request->server->get('QUERY_STRING') ?? ''),
+                ))
                 . ';'
-                . str_replace(
-                    search: ';',
-                    replace: ',',
-                    subject: $redactor->redactUrl((string) ($request->server->get('HTTP_REFERER') ?? '')),
-                )
+                . $redactor->flattenField($redactor->redactUrl((string) ($request->server->get('HTTP_REFERER') ?? '')))
                 . ';'
-                . str_replace(
-                    search: ';',
-                    replace: ',',
-                    subject: urldecode(string: (string) $request->server->get('HTTP_USER_AGENT')),
-                )
+                . $redactor->flattenField(urldecode(string: (string) $request->server->get('HTTP_USER_AGENT')))
                 . ';'
                 . (int) $request->server->get('REQUEST_TIME')
                 . ";\n";
@@ -261,6 +230,90 @@ class UserSession
 
             file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
         }
+    }
+
+    /**
+     * Resolves the visitor session of this request: the session named by the "pmf-sid" cookie (or the legacy
+     * "sid" query parameter) is resumed when checkSessionId() accepts it, otherwise a new session is started.
+     * The cookie is renewed either way, so the next request of this visitor resumes the same session.
+     */
+    private function resumeOrStartSession(Request $request, string $remoteAddress): void
+    {
+        if ($this->trackedSessionId !== null) {
+            $this->currentSessionId = $this->trackedSessionId;
+            return;
+        }
+
+        $this->currentSessionId = null;
+        // all() instead of get(): a cookie sent as an array must not turn the page view into a "400 Bad Request"
+        $knownSessionId = Filter::filterVar(
+            $request->cookies->all()[self::COOKIE_NAME_SESSION_ID] ?? null,
+            FILTER_VALIDATE_INT,
+        ) ?? Filter::filterVar($request->query->get(self::KEY_NAME_SESSION_ID), FILTER_VALIDATE_INT);
+
+        if (is_int($knownSessionId)) {
+            // Sets the current session ID to the known one, or to 0 when it is unknown, expired or from another IP
+            $this->checkSessionId($knownSessionId, $remoteAddress);
+        }
+
+        $resumedSessionId = $this->getCurrentSessionId();
+        if ($resumedSessionId === null || $resumedSessionId === 0) {
+            $this->startSession($request, $remoteAddress);
+        }
+
+        $this->trackedSessionId = $this->currentSessionId;
+        $this->sendSessionIdCookie($request);
+    }
+
+    private function startSession(Request $request, string $remoteAddress): void
+    {
+        $this->currentSessionId = $this->configuration->getDb()->nextId(
+            Database::getTablePrefix() . 'faqsessions',
+            column: 'sid',
+        );
+
+        $query = sprintf(
+            "INSERT INTO %sfaqsessions (sid, user_id, ip, time) VALUES (%d, %d, '%s', %d)",
+            Database::getTablePrefix(),
+            $this->currentSessionId,
+            $this->currentUser instanceof CurrentUser ? $this->currentUser->getUserId() : 0,
+            $remoteAddress,
+            (int) $request->server->get('REQUEST_TIME'),
+        );
+
+        $this->configuration->getDb()->query($query);
+    }
+
+    /**
+     * Hands the visitor session ID to the browser. The path is the one of the FAQ itself rather than the one of
+     * the running script, so the pages and the public API under /api share one cookie. SameSite is "lax": with
+     * "strict" a visitor following a link from another site would arrive without the cookie and be counted twice.
+     */
+    private function sendSessionIdCookie(Request $request): void
+    {
+        $defaultUrl = $this->configuration->getDefaultUrl();
+        $path = rtrim((string) parse_url($defaultUrl, PHP_URL_PATH), characters: '/');
+
+        $options = [
+            'expires' => (int) $request->server->get('REQUEST_TIME') + self::SESSION_ID_COOKIE_LIFETIME,
+            'path' => $path === '' ? '/' : $path,
+            'domain' => (string) parse_url($defaultUrl, PHP_URL_HOST),
+            'secure' => $request->isSecure(),
+            'httponly' => true,
+            'samesite' => 'lax',
+        ];
+
+        if ($this->cookieSetter instanceof Closure) {
+            ($this->cookieSetter)(self::COOKIE_NAME_SESSION_ID, (string) $this->currentSessionId, $options);
+            return;
+        }
+
+        // The page views are still counted when the cookie cannot be sent, e.g. on the command line
+        if (headers_sent()) {
+            return;
+        }
+
+        setcookie(self::COOKIE_NAME_SESSION_ID, (string) $this->currentSessionId, $options);
     }
 
     /**

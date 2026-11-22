@@ -72,8 +72,9 @@ final class AbstractFrontControllerTest extends TestCase
 
         $response = $controller->redirectStaticPage('main.imprintURL');
 
-        self::assertInstanceOf(RedirectResponse::class, $response);
-        self::assertSame('page:hidden-page', $response->getTargetUrl());
+        // "page:hidden-page" is a reference, not a URL: no redirect to it
+        self::assertNotInstanceOf(RedirectResponse::class, $response);
+        self::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
     private function createDatabaseConfiguration(): Configuration
@@ -156,6 +157,7 @@ final class AbstractFrontControllerTest extends TestCase
     ): ContainerInterface {
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('isLoggedIn')->willReturn(false);
+        $currentUser->perm = $this->createStub(\phpMyFAQ\Permission\PermissionInterface::class);
 
         $session = $this->createStub(FlashBagAwareSessionInterface::class);
 

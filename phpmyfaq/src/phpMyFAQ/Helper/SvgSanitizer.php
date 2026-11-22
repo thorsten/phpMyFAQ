@@ -1,17 +1,22 @@
 <?php
 
 /**
- * SVG Sanitizer (Regex-based) to prevent XSS attacks
- * Alternative implementation without ext-dom dependency
+ * SVG Sanitizer to prevent XSS attacks
+ *
+ * Only well-formed XML is accepted: a lenient parser can recover active
+ * content from a malformed file that the patterns below do not recognise.
+ * Dangerous nodes are removed from the parsed document and the sanitized
+ * file is serialised from that document, never from the uploaded string.
+ * The patterns then verify the serialised result, so anything the removal
+ * missed makes the sanitizer reject the file instead of storing it.
  *
  * Decodes all HTML/XML entities before pattern matching to prevent
  * encoding-based bypasses (e.g., &#106;&#97;&#118;&#97;... → javascript:).
  * Custom entities declared in a DOCTYPE internal subset
  * (<!ENTITY j "javascript">) are expanded as well, and the declaring
  * DOCTYPE is rejected, so &j;:alert() cannot slip past the patterns.
- * Removal runs until the output stops changing and the result is verified
- * again, so a tag split around a token that is itself removed
- * (<scr<?php?>ipt>) cannot be reassembled by the sanitizer.
+ * A tag split around a token that would itself be removed
+ * (<scr<?php?>ipt>) is not well-formed XML and is rejected.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -28,6 +33,12 @@
 declare(strict_types=1);
 
 namespace phpMyFAQ\Helper;
+
+use DOMAttr;
+use DOMDocument;
+use DOMElement;
+use DOMNode;
+use DOMXPath;
 
 class SvgSanitizer
 {
@@ -101,6 +112,20 @@ class SvgSanitizer
     ];
 
     /**
+     * DOCTYPE internal subsets and entity declarations, removed after the
+     * declared entities have been expanded.
+     */
+    private const array ENTITY_DECLARATION_PATTERNS = [
+        '/<!DOCTYPE\b[^\[>]*\[.*?\]\s*>/is',
+        '/<!ENTITY\b[^>]*>/i',
+    ];
+
+    /**
+     * Style attribute content that can run code or load external resources.
+     */
+    private const string DANGEROUS_STYLE = '/expression\s*\(|javascript\s*:|vbscript\s*:|@import|behavior\s*:|-moz-binding\s*:/i';
+
+    /**
      * Dangerous element tags to strip completely.
      * Includes animate, set, and use which can execute JavaScript in SVG context.
      */
@@ -145,11 +170,25 @@ class SvgSanitizer
             return false;
         }
 
-        // Remove dangerous patterns
-        $sanitized = $this->removeDangerousContent($content);
+        if ($this->hasUnsupportedEncoding($content)) {
+            return false;
+        }
 
-        // Verify we still have valid SVG
-        if (!str_contains($sanitized, '<svg')) {
+        $document = $this->parseWellFormedXml($content);
+        if (!$document instanceof DOMDocument) {
+            return false;
+        }
+
+        $document = $this->withoutEntityDeclarations($document, $content);
+        if (!$document instanceof DOMDocument) {
+            return false;
+        }
+
+        $this->removeDangerousNodes($document);
+
+        // Store what the XML parser read, never the uploaded string
+        $sanitized = $document->saveXML();
+        if (!is_string($sanitized) || !str_contains($sanitized, '<svg')) {
             return false;
         }
 
@@ -158,6 +197,155 @@ class SvgSanitizer
         }
 
         return file_put_contents($filePath, $sanitized) !== false;
+    }
+
+    /**
+     * Browsers resolve <!ENTITY j "javascript"> into &j;:alert(). The parser does not substitute
+     * entities, so the declared ones are expanded once in the source, the declaring DOCTYPE is
+     * dropped and the result has to parse again. Returns null when it does not.
+     */
+    private function withoutEntityDeclarations(DOMDocument $document, string $content): ?DOMDocument
+    {
+        $internalSubset = $document->doctype?->internalSubset;
+        if ($internalSubset === null || $internalSubset === '') {
+            return $document;
+        }
+
+        $expanded = preg_replace(
+            self::ENTITY_DECLARATION_PATTERNS,
+            replacement: '',
+            subject: $this->expandCustomEntities($content),
+        );
+
+        return $this->parseWellFormedXml($expanded ?? '');
+    }
+
+    /**
+     * Removes dangerous elements, attributes, processing instructions, comments and text from
+     * the parsed document.
+     */
+    private function removeDangerousNodes(DOMDocument $document): void
+    {
+        $xpath = new DOMXPath($document);
+
+        $nodes = $xpath->query('//processing-instruction() | //comment() | //text() | //*');
+        if ($nodes === false) {
+            return;
+        }
+
+        foreach (iterator_to_array($nodes, preserve_keys: false) as $node) {
+            if ($node instanceof DOMElement) {
+                $this->removeDangerousAttributes($node);
+            }
+
+            if (!$this->isDangerousNode($node)) {
+                continue;
+            }
+
+            $node->parentNode?->removeChild($node);
+        }
+    }
+
+    private function isDangerousNode(DOMNode $node): bool
+    {
+        if ($node instanceof DOMElement) {
+            return array_any(
+                self::DANGEROUS_ELEMENTS,
+                static fn(string $element): bool => strcasecmp($element, self::localName($node->nodeName)) === 0,
+            );
+        }
+
+        if ($node->nodeType === XML_PI_NODE || $node->nodeType === XML_COMMENT_NODE) {
+            return true;
+        }
+
+        // Text and CDATA sections: markup in them is inert for an XML parser, but not once the
+        // image is inlined into HTML.
+        return $this->containsDangerousContent($this->decodeAllEntities((string) $node->nodeValue));
+    }
+
+    private function removeDangerousAttributes(DOMElement $element): void
+    {
+        foreach (iterator_to_array($element->attributes ?? [], preserve_keys: false) as $attribute) {
+            if (!$this->isDangerousAttribute($attribute)) {
+                continue;
+            }
+
+            $element->removeAttributeNode($attribute);
+        }
+    }
+
+    private function isDangerousAttribute(DOMAttr $attribute): bool
+    {
+        $name = strtolower(self::localName($attribute->nodeName));
+
+        if (str_starts_with($name, 'on')) {
+            return true;
+        }
+
+        // The parser has resolved one level of references; decode the rest like the patterns do
+        $value = $this->decodeAllEntities($attribute->value);
+
+        if ($name === 'style') {
+            return preg_match(self::DANGEROUS_STYLE, $value) === 1;
+        }
+
+        if ($name !== 'href' && $name !== 'src') {
+            return false;
+        }
+
+        // Browsers ignore whitespace and control characters in front of and inside the scheme
+        $url = preg_replace('/[\x00-\x20\x7f]/', replacement: '', subject: $value) ?? '';
+
+        return preg_match('/^(?:javascript|vbscript|data):/i', $url) === 1;
+    }
+
+    /**
+     * Element or attribute name without its namespace prefix.
+     */
+    private static function localName(string $qualifiedName): string
+    {
+        $separator = strrpos($qualifiedName, needle: ':');
+
+        return $separator === false ? $qualifiedName : substr($qualifiedName, $separator + 1);
+    }
+
+    /**
+     * Parses the content as XML without network access, external DTD loading or entity
+     * substitution. Returns null when the content is not well-formed.
+     */
+    private function parseWellFormedXml(string $content): ?DOMDocument
+    {
+        if ($content === '') {
+            return null;
+        }
+
+        $document = new DOMDocument();
+        $previousErrorHandling = libxml_use_internal_errors(use_errors: true);
+        $isWellFormed = $document->loadXML($content, LIBXML_NONET);
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousErrorHandling);
+
+        return $isWellFormed ? $document : null;
+    }
+
+    /**
+     * The patterns match bytes, so they only see what the browser sees while the browser decodes
+     * the file as UTF-8. Another declared encoding, or the escape sequences of stateful encodings
+     * such as ISO-2022-JP, can hide a tag from them ("<scr" ESC "(B" "ipt>").
+     */
+    private function hasUnsupportedEncoding(string $content): bool
+    {
+        if (preg_match('/[\x00\x1b]/', $content) === 1) {
+            return true;
+        }
+
+        $matches = [];
+        if (preg_match('/<\?xml\b[^>]*?\bencoding\s*=\s*["\']([^"\']*)["\']/i', $content, $matches) !== 1) {
+            return false;
+        }
+
+        return !in_array(strtolower(trim($matches[1])), ['utf-8', 'utf8'], strict: true);
     }
 
     /**
@@ -179,6 +367,14 @@ class SvgSanitizer
 
         // Reject non-SVG content
         if (!str_contains($content, '<svg')) {
+            return false;
+        }
+
+        if ($this->hasUnsupportedEncoding($content)) {
+            return false;
+        }
+
+        if (!$this->parseWellFormedXml($content) instanceof DOMDocument) {
             return false;
         }
 
@@ -224,6 +420,14 @@ class SvgSanitizer
     public function detectIssues(string $content): array
     {
         $issues = [];
+
+        if ($this->hasUnsupportedEncoding($content)) {
+            $issues[] = 'Unsupported encoding: only UTF-8 without escape sequences or NUL bytes is accepted';
+        }
+
+        if (!$this->parseWellFormedXml($content) instanceof DOMDocument) {
+            $issues[] = 'Not well-formed XML';
+        }
 
         $decoded = $this->decodeAllEntities($content);
 
@@ -354,78 +558,5 @@ class SvgSanitizer
         }
 
         return strtr($content, $replacements);
-    }
-
-    /**
-     * Removes dangerous content from SVG string
-     *
-     * @param string $content SVG content
-     * @return string Sanitized content
-     */
-    private function removeDangerousContent(string $content): string
-    {
-        // First: decode all entities so encoded payloads become plaintext
-        $sanitized = $this->decodeAllEntities($content);
-
-        // preg_replace never re-examines the text it has just produced, so a
-        // single pass reassembles split tags: removing a processing instruction
-        // between "scr" and "ipt" yields <script>. Repeat until nothing changes.
-        $previous = '';
-        $maxIterations = 10;
-
-        while ($sanitized !== $previous && $maxIterations-- > 0) {
-            $previous = $sanitized;
-            $sanitized = $this->removeDangerousContentOnce($sanitized);
-        }
-
-        // Normalize whitespace (optional, for cleaner output)
-        $sanitized = preg_replace('/\s+/', replacement: ' ', subject: $sanitized) ?? '';
-
-        // Fail closed: a regex failure must never leak unsanitized SVG content
-        return preg_replace('/>\s+</', replacement: '><', subject: $sanitized) ?? '';
-    }
-
-    /**
-     * Applies every removal rule exactly once to already entity-decoded content.
-     */
-    private function removeDangerousContentOnce(string $content): string
-    {
-        $sanitized = $content;
-
-        // Remove dangerous element tags with their content
-        foreach (self::DANGEROUS_ELEMENTS as $element) {
-            $name = self::elementName($element);
-
-            // Remove opening and closing tags with content
-            $sanitized =
-                preg_replace('/<' . $name . '\b[^>]*>.*?<\/' . $name . '>/is', replacement: '', subject: $sanitized)
-                ?? '';
-
-            // Remove self-closing tags
-            $sanitized = preg_replace('/<' . $name . '\b[^>]*\/>/is', replacement: '', subject: $sanitized) ?? '';
-
-            // Remove unclosed tags
-            $sanitized = preg_replace('/<' . $name . '\b[^>]*>/is', replacement: '', subject: $sanitized) ?? '';
-        }
-
-        // Remove dangerous patterns using regex
-        foreach (self::DANGEROUS_PATTERNS as $pattern) {
-            $sanitized = preg_replace($pattern, replacement: '', subject: $sanitized) ?? '';
-        }
-
-        // Additional cleanup for remaining event handlers
-        $sanitized = preg_replace('/[\s\/]+on\w+\s*=\s*[^\s>]+/i', replacement: '', subject: $sanitized) ?? '';
-
-        // Clean up any remaining dangerous URIs in attributes
-        $sanitized =
-            preg_replace(
-                '/(href|xlink:href|src)\s*=\s*(["\'])[\s]*(javascript|vbscript|data)\s*:[^\2]*?\2/i',
-                replacement: '',
-                subject: $sanitized,
-            ) ?? '';
-
-        // Remove CDATA sections with script content. Fail closed: a regex
-        // failure must never leak unsanitized SVG content.
-        return preg_replace('/<!\[CDATA\[.*?<script.*?\]\]>/is', replacement: '', subject: $sanitized) ?? '';
     }
 }

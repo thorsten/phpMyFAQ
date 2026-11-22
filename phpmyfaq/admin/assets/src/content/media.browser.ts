@@ -19,9 +19,10 @@ export const handleFileFilter = (): void => {
 
   if (filterInput) {
     filterInput.addEventListener('keyup', (event) => {
-      const filter = (event.target as HTMLInputElement).value;
+      // Plain substring match: the input is a file name, not a pattern ("(" would not even compile).
+      const filter = (event.target as HTMLInputElement).value.toLowerCase();
       fileDivs.forEach((fileDiv) => {
-        if (fileDiv.textContent && fileDiv.textContent.search(new RegExp(filter, 'i')) < 0) {
+        if (fileDiv.textContent && !fileDiv.textContent.toLowerCase().includes(filter)) {
           (fileDiv as HTMLElement).style.display = 'none';
         } else {
           (fileDiv as HTMLElement).style.display = 'block';

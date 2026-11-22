@@ -68,7 +68,7 @@ vi.mock('../../../../assets/src/utils', async (importOriginal) => {
 
 import { handleUserList } from './user-list';
 import { addUser } from '../api';
-import { addElement, pushNotification, pushErrorNotification } from '../../../../assets/src/utils';
+import { pushNotification, pushErrorNotification } from '../../../../assets/src/utils';
 import { Modal } from 'bootstrap';
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
@@ -91,8 +91,7 @@ describe('handleUserList', () => {
 
     document.body.innerHTML = `
       <button class="btn-activate-user" id="btn_activate_user_id_42" data-csrf-token="csrf123" data-user-id="42">Activate</button>
-      <i class="icon_user_id_42 bi-ban"></i>
-      <div id="pmf-user-message"></div>
+      <i class="fa bi-person-fill-slash text-danger icon_user_id_42"></i>
     `;
 
     handleUserList();
@@ -104,17 +103,16 @@ describe('handleUserList', () => {
 
     expect(activateUser).toHaveBeenCalledWith('42', 'csrf123');
     const icon = document.querySelector('.icon_user_id_42') as HTMLElement;
-    expect(icon.classList.contains('bi-ban')).toBe(false);
-    expect(icon.classList.contains('bi-check-circle-o')).toBe(true);
+    // The classes user-list.twig renders for an active user
+    expect(icon.className).toBe('fa icon_user_id_42 bi-person-fill-check text-success');
     expect(document.getElementById('btn_activate_user_id_42')).toBeNull();
   });
 
-  it('should show error alert when activateUser returns error', async () => {
+  it('should show an error notification when activateUser returns error', async () => {
     (activateUser as Mock).mockResolvedValue({ error: 'Activation failed' });
 
     document.body.innerHTML = `
       <button class="btn-activate-user" data-csrf-token="csrf123" data-user-id="42">Activate</button>
-      <div id="pmf-user-message"></div>
     `;
 
     handleUserList();
@@ -124,10 +122,8 @@ describe('handleUserList', () => {
 
     await flushPromises();
 
-    expect(addElement).toHaveBeenCalledWith('div', {
-      classList: 'alert alert-danger',
-      innerText: 'Activation failed',
-    });
+    // The user list has no #pmf-user-message element to attach an alert to.
+    expect(pushErrorNotification).toHaveBeenCalledWith('Activation failed');
   });
 
   it('should return early when data attributes are missing on activate button', async () => {

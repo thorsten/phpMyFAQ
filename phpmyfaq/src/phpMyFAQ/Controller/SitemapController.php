@@ -87,7 +87,10 @@ final class SitemapController extends AbstractController
     {
         // Fallback to plain XML if zlib extension is not available
         if (!extension_loaded('zlib')) {
-            return new RedirectResponse('/sitemap.xml', Response::HTTP_MOVED_PERMANENTLY);
+            return new RedirectResponse(
+                $this->configuration->getDefaultUrl() . 'sitemap.xml',
+                Response::HTTP_MOVED_PERMANENTLY,
+            );
         }
 
         $xml = $this->sitemapXmlService->generateXml();

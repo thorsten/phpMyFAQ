@@ -144,6 +144,10 @@ class CurrentUser extends User
     {
         $request = Request::createFromGlobals();
 
+        // What the user typed decides the error message once the login has failed; $login
+        // itself is replaced by the account's login name below.
+        $enteredLogin = $login;
+
         // Check if the login is an email address and convert it to a username if needed
         if (
             true === $this->configuration->get(item: 'security.loginWithEmailAddress')
@@ -152,14 +156,6 @@ class CurrentUser extends User
             $userId = $this->getUserIdByEmail($login);
             $this->getUserById($userId);
             $login = $this->getLogin();
-        }
-
-        // First check for brute force attack. An unknown login leaves the user-ID at
-        // its -1 default, which is the guest account, so the lockout bookkeeping is
-        // skipped entirely rather than being applied to the wrong row.
-        $userExists = $this->getUserByLogin($login);
-        if ($userExists && $this->isFailedLastLoginAttempt()) {
-            throw new UserException(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
         }
 
         // Extract domain if LDAP is active and ldap_use_domain_prefix is true
@@ -182,6 +178,17 @@ class CurrentUser extends User
         ) {
             $ssoLogin = strtok($login, token: chr(64) . '\\');
             $login = $ssoLogin === false ? $login : $ssoLogin;
+        }
+
+        // Check for a brute force attack on the login the credentials are verified for, so
+        // only once the domain prefix and the SSO realm are stripped: a lookup of the raw
+        // "DOMAIN\login" finds no account and would skip the lockout for the real one.
+        // An unknown login leaves the user-ID at its -1 default, which is the guest account,
+        // so the lockout bookkeeping is skipped entirely rather than being applied to the
+        // wrong row.
+        $userExists = $this->getUserByLogin($login);
+        if ($userExists && $this->isFailedLastLoginAttempt()) {
+            throw new UserException(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
         }
 
         // Attempt to authenticate a user by login and password
@@ -259,7 +266,7 @@ class CurrentUser extends User
 
         if (
             true === $this->configuration->get(item: 'security.loginWithEmailAddress')
-            && !is_string(Filter::filterVar($login, FILTER_VALIDATE_EMAIL))
+            && !is_string(Filter::filterVar($enteredLogin, FILTER_VALIDATE_EMAIL))
         ) {
             throw new UserException(parent::ERROR_USER_INCORRECT_LOGIN);
         }
@@ -591,10 +598,11 @@ class CurrentUser extends User
         // at rest so a database read cannot yield a usable cookie.
         $rememberMeToken = bin2hex(random_bytes(32));
         $this->setRememberMe(hash('sha256', $rememberMeToken));
+        // setCookie() takes a lifetime in seconds and adds the request time itself.
         $this->userSession->setCookie(
             UserSession::COOKIE_NAME_REMEMBER_ME,
             $rememberMeToken,
-            time() + self::PMF_REMEMBER_ME_EXPIRED_TIME,
+            self::PMF_REMEMBER_ME_EXPIRED_TIME,
         );
     }
 

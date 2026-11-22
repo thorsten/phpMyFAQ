@@ -52,6 +52,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 #[UsesClass(\phpMyFAQ\Faq::class)]
 #[UsesClass(\phpMyFAQ\Faq\FaqRepository::class)]
 #[UsesClass(\phpMyFAQ\Faq\Permission::class)]
+#[UsesClass(\phpMyFAQ\Faq\PublicationWindow::class)]
 #[UsesClass(\phpMyFAQ\Faq\ReadScope::class)]
 #[UsesClass(\phpMyFAQ\Faq\StatusScope::class)]
 #[UsesClass(\phpMyFAQ\Filter::class)]

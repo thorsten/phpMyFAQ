@@ -50,7 +50,7 @@ final class CustomPageControllerWebTest extends ControllerWebTestCase
 
         $response = $this->requestPublic('GET', '/page/page-2.html');
 
-        self::assertContains($response->getStatusCode(), [200, 404]);
+        self::assertSame(404, $response->getStatusCode());
         self::assertResponseContains('404', $response);
     }
 }

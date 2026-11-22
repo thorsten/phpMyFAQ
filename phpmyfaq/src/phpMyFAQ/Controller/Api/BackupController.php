@@ -93,6 +93,7 @@ final class BackupController extends AbstractController
     #[Route(path: 'v4.0/backup/{type}', name: 'api.backup', methods: ['GET'])]
     public function download(Request $request): Response
     {
+        $this->hasValidToken();
         $this->userHasPermission(PermissionType::BACKUP);
 
         $type = Filter::filterVar($request->attributes->get(key: 'type'), FILTER_SANITIZE_SPECIAL_CHARS);

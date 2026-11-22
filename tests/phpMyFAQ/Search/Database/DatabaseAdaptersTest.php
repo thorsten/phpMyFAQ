@@ -77,8 +77,53 @@ class DatabaseAdaptersTest extends TestCase
         $db
             ->expects($this->once())
             ->method('query')
-            ->with($this->callback(static fn(string $query): bool => str_contains($query, '= 42')))
+            ->with($this->callback(
+                static fn(string $query): bool => (
+                    str_contains($query, '= 42')
+                    && str_contains($query, "AND fd.active = 'yes'")
+                    && str_contains($query, 'AND fcr.category_id IN (1, 2)')
+                ),
+            ))
             ->willReturn('numeric-result');
+        $db->method('escape')->willReturnArgument(0);
+
+        $configuration = $this->createConfiguration($db, [
+            'search.searchForSolutionId' => true,
+            'search.enableRelevance' => true,
+            'search.relevance' => 'thema,content,keywords',
+        ]);
+
+        $adapter = new $adapterClass($configuration);
+        $this->configureAdapter($adapter);
+        $adapter->setMatchingColumns(['fd.solution_id']);
+
+        $this->assertSame('numeric-result', $adapter->search('42'));
+    }
+
+    /**
+     * "WHERE fd.thema, fd.content, fd.keywords = 42" is no valid SQL: with several matching
+     * columns a numeric term is searched as text.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('adapterClassesProvider')]
+    public function testAdaptersSearchNumericTermsAsTextInSeveralMatchingColumns(string $adapterClass): void
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->callback(
+                static fn(string $query): bool => (
+                    !str_contains($query, '= 42')
+                    && str_contains(
+                        $query,
+                        "(fd.thema LIKE '%42%' ESCAPE '|' OR fd.content LIKE '%42%' ESCAPE '|'"
+                        . " OR fd.keywords LIKE '%42%' ESCAPE '|')",
+                    )
+                    && str_contains($query, "AND fd.active = 'yes'")
+                ),
+            ))
+            ->willReturn('text-result');
+        $db->method('escape')->willReturnArgument(0);
 
         $configuration = $this->createConfiguration($db, [
             'search.searchForSolutionId' => true,
@@ -89,7 +134,79 @@ class DatabaseAdaptersTest extends TestCase
         $adapter = new $adapterClass($configuration);
         $this->configureAdapter($adapter);
 
-        $this->assertSame('numeric-result', $adapter->search('42'));
+        $this->assertSame('text-result', $adapter->search('42'));
+    }
+
+    public function testConditionsIncludeThePublicationWindowWhenRestricted(): void
+    {
+        $db = $this->createStub(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $adapter = new SearchDatabase($this->createConfiguration($db, []));
+        $adapter->setConditions(['fd.status' => 'published']);
+
+        $this->assertSame(" AND fd.status = 'published'", $adapter->getConditions());
+
+        $adapter->restrictToPublicationWindow('fd');
+
+        $this->assertMatchesRegularExpression(
+            "/^ AND fd\.status = 'published' AND fd\.date_start <= '(\d{14})' AND fd\.date_end >= '\\1'$/",
+            $adapter->getConditions(),
+        );
+    }
+
+    public function testPublicationWindowRejectsAnInvalidTableAlias(): void
+    {
+        $adapter = new SearchDatabase($this->createConfiguration($this->createStub(DatabaseDriver::class), []));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $adapter->restrictToPublicationWindow('fd; DROP TABLE faqdata');
+    }
+
+    /**
+     * With relevance enabled the match is an OR of the full-text and the ILIKE match; without
+     * the enclosing parentheses the AND conditions would only constrain the ILIKE branch.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('pgsqlAdaptersProvider')]
+    public function testPgsqlAdaptersWrapTheWholeMatchSoConditionsApplyToFullTextHits(string $adapterClass): void
+    {
+        $queries = [];
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('query')->willReturnCallback(static function (string $query) use (&$queries): string {
+            $queries[] = (string) preg_replace('/\s+/', ' ', $query);
+
+            return 'pgsql-result';
+        });
+
+        foreach ([true, false] as $enableRelevance) {
+            $adapter = new $adapterClass($this->createConfiguration($db, [
+                'search.searchForSolutionId' => false,
+                'search.enableRelevance' => $enableRelevance,
+                'search.relevance' => 'thema',
+            ]));
+            $this->configureAdapter($adapter);
+            $adapter->search('thorsten');
+        }
+
+        $columns = "fd.thema || ' ' || fd.content || ' ' || fd.keywords";
+        $tsVector =
+            "to_tsvector(coalesce(fd.thema,'')) || to_tsvector(coalesce(fd.content,''))"
+            . " || to_tsvector(coalesce(fd.keywords,''))";
+        $conditions = " AND fd.active = 'yes' AND fcr.category_id IN (1, 2)";
+
+        $this->assertStringContainsString(
+            'WHERE ((('
+            . $tsVector
+            . ') @@ query) OR ('
+            . $columns
+            . ") ILIKE ('%thorsten%') ESCAPE '|')"
+            . $conditions,
+            $queries[0],
+        );
+        $this->assertStringContainsString(
+            'WHERE ((' . $columns . ") ILIKE ('%thorsten%') ESCAPE '|')" . $conditions,
+            $queries[1],
+        );
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('likeAdaptersProvider')]

@@ -98,7 +98,26 @@ readonly class Migration320Alpha extends AbstractMigration
             ), 'Add 2FA columns to faquserdata');
         }
 
-        if (!$this->isSqlite() && !$this->isPostgreSql()) {
+        // T-SQL takes a single ADD followed by a comma-separated column list
+        if ($this->isSqlServer()) {
+            $recorder->addSql(sprintf(
+                'ALTER TABLE %sfaquser
+                    ADD refresh_token TEXT NULL DEFAULT NULL,
+                    access_token TEXT NULL DEFAULT NULL,
+                    code_verifier VARCHAR(255) NULL DEFAULT NULL,
+                    jwt TEXT NULL DEFAULT NULL',
+                $this->tablePrefix,
+            ), 'Add OAuth token columns to faquser');
+
+            $recorder->addSql(sprintf(
+                'ALTER TABLE %sfaquserdata
+                    ADD twofactor_enabled INT NULL DEFAULT 0,
+                    secret VARCHAR(128) NULL DEFAULT NULL',
+                $this->tablePrefix,
+            ), 'Add 2FA columns to faquserdata');
+        }
+
+        if ($this->isMySql()) {
             $recorder->addSql(sprintf(
                 'ALTER TABLE %sfaquser
                     ADD refresh_token TEXT NULL DEFAULT NULL,
@@ -144,7 +163,7 @@ readonly class Migration320Alpha extends AbstractMigration
         $recorder->addConfig('main.enableNotifications', true);
 
         // Update options
-        $recorder->renameConfig('security.loginWithEmailAddress', 'security.loginWithEmailAddress');
+        $recorder->renameConfig('main.loginWithEmailAddress', 'security.loginWithEmailAddress');
 
         // Handle permLevel migration - note: actual update requires reading current value
         // This is handled by the configuration update operation

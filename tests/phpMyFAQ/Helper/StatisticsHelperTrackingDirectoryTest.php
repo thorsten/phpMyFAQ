@@ -86,14 +86,14 @@ final class StatisticsHelperTrackingDirectoryTest extends TestCase
         $statistics = $this->helper->getTrackingFilesStatistics();
 
         $this->assertSame(4, $statistics->numberOfDays, 'Every entry of the directory is counted');
-        $this->assertSame((int) gmmktime(0, 0, 0, 1, 5, 2024), $statistics->firstDate);
-        $this->assertSame((int) gmmktime(0, 0, 0, 2, 20, 2024), $statistics->lastDate);
+        $this->assertSame((int) mktime(0, 0, 0, 1, 5, 2024), $statistics->firstDate);
+        $this->assertSame((int) mktime(0, 0, 0, 2, 20, 2024), $statistics->lastDate);
 
         $this->assertEqualsCanonicalizing(
             [
-                (int) gmmktime(0, 0, 0, 1, 5, 2024),
-                (int) gmmktime(0, 0, 0, 1, 10, 2024),
-                (int) gmmktime(0, 0, 0, 2, 20, 2024),
+                (int) mktime(0, 0, 0, 1, 5, 2024),
+                (int) mktime(0, 0, 0, 1, 10, 2024),
+                (int) mktime(0, 0, 0, 2, 20, 2024),
             ],
             $this->helper->getAllTrackingDates(),
         );
@@ -101,8 +101,8 @@ final class StatisticsHelperTrackingDirectoryTest extends TestCase
 
     public function testFirstAndLastTrackingDatesComeFromTheFilesThemselves(): void
     {
-        $first = (int) gmmktime(0, 0, 0, 1, 5, 2024);
-        $last = (int) gmmktime(0, 0, 0, 2, 20, 2024);
+        $first = (int) mktime(0, 0, 0, 1, 5, 2024);
+        $last = (int) mktime(0, 0, 0, 2, 20, 2024);
         $this->writeTrackingFile(date('dmY', $first), 1704412800);
         $this->writeTrackingFile(date('dmY', $last), 1708387200);
 
@@ -110,14 +110,14 @@ final class StatisticsHelperTrackingDirectoryTest extends TestCase
         $this->assertSame(date('Y-m-d H:i', 1708387200), substr($this->helper->getLastTrackingDate($last), 0, 16));
         $this->assertSame(
             Translation::getString('ad_sess_noentry'),
-            $this->helper->getFirstTrackingDate((int) gmmktime(0, 0, 0, 3, 1, 2024)),
+            $this->helper->getFirstTrackingDate((int) mktime(0, 0, 0, 3, 1, 2024)),
         );
     }
 
     public function testATrackingFileThatCannotBeOpenedYieldsNoEntry(): void
     {
-        $first = (int) gmmktime(0, 0, 0, 1, 5, 2024);
-        $last = (int) gmmktime(0, 0, 0, 2, 20, 2024);
+        $first = (int) mktime(0, 0, 0, 1, 5, 2024);
+        $last = (int) mktime(0, 0, 0, 2, 20, 2024);
         $firstFile = $this->writeTrackingFile(date('dmY', $first), 1704412800);
         $lastFile = $this->writeTrackingFile(date('dmY', $last), 1708387200);
         chmod($firstFile, 0o000);
@@ -144,7 +144,7 @@ final class StatisticsHelperTrackingDirectoryTest extends TestCase
         $this->session
             ->expects($this->once())
             ->method('deleteSessions')
-            ->with((int) gmmktime(0, 0, 0, 1, 5, 2024), (int) gmmktime(23, 59, 59, 1, 10, 2024))
+            ->with((int) mktime(0, 0, 0, 1, 5, 2024), (int) mktime(23, 59, 59, 1, 10, 2024))
             ->willReturn(true);
 
         $this->assertTrue($this->helper->deleteTrackingFiles('012024'));

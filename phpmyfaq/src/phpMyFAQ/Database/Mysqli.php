@@ -81,12 +81,11 @@ class Mysqli implements DatabaseDriver
         ?int $port = null,
     ): ?bool {
         try {
-            // Connect to MySQL via network by default.
-            $connection = new \mysqli($host, $user, $password, null, $port);
-            if (str_starts_with($host, '/')) {
-                // Connect to MySQL via socket
-                $connection = new \mysqli(null, $user, $password, null, $port, $host);
-            }
+            // A host starting with "/" is the path to a socket; connecting to it over the
+            // network first would throw before the socket is ever tried.
+            $connection = str_starts_with($host, '/')
+                ? new \mysqli(null, $user, $password, null, $port, $host)
+                : new \mysqli($host, $user, $password, null, $port);
         } catch (mysqli_sql_exception $mysqlisqlexception) {
             throw new Exception($mysqlisqlexception->getMessage());
         }
@@ -219,7 +218,12 @@ class Mysqli implements DatabaseDriver
     {
         $status = [];
         foreach ($this->getTableNames($prefix) as $table) {
-            $status[$table] = $this->getOne('SELECT count(*) FROM ' . $table);
+            try {
+                $status[$table] = $this->getOne('SELECT count(*) FROM ' . $table);
+            } catch (mysqli_sql_exception) {
+                // A table that a newer release introduced does not exist before the update has run
+                continue;
+            }
         }
 
         return $status;
@@ -237,7 +241,9 @@ class Mysqli implements DatabaseDriver
     public function getTableNames(string $prefix = ''): array
     {
         return $this->tableNames = [
+            $prefix . 'faqadmindashboard',
             $prefix . 'faqadminlog',
+            $prefix . 'faqapi_keys',
             $prefix . 'faqattachment',
             $prefix . 'faqattachment_file',
             $prefix . 'faqbackup',
@@ -263,10 +269,20 @@ class Mysqli implements DatabaseDriver
             $prefix . 'faqglossary',
             $prefix . 'faqgroup',
             $prefix . 'faqgroup_right',
+            $prefix . 'faqgroup_right_category',
+            $prefix . 'faqgroup_right_language',
             $prefix . 'faqinstances',
             $prefix . 'faqinstances_config',
+            $prefix . 'faqjobs',
             $prefix . 'faqnews',
+            $prefix . 'faqoauth_access_tokens',
+            $prefix . 'faqoauth_auth_codes',
+            $prefix . 'faqoauth_clients',
+            $prefix . 'faqoauth_refresh_tokens',
+            $prefix . 'faqoauth_scopes',
+            $prefix . 'faqpush_subscriptions',
             $prefix . 'faqquestions',
+            $prefix . 'faqquestion_history',
             $prefix . 'faqright',
             $prefix . 'faqsearches',
             $prefix . 'faqseo',
@@ -278,6 +294,7 @@ class Mysqli implements DatabaseDriver
             $prefix . 'faquserlogin',
             $prefix . 'faquser_group',
             $prefix . 'faquser_right',
+            $prefix . 'faquser_right_language',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting',
         ];

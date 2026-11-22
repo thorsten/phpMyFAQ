@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Elastic\Elasticsearch\Response\Elasticsearch as ElasticsearchResponse;
+use Elastic\Transport\Exception\NoNodeAvailableException;
 use JsonException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
@@ -59,7 +60,7 @@ final class ElasticsearchController extends AbstractController
         }
 
         try {
-            $this->elasticsearch->createIndex();
+            $this->elasticsearch->withLongRunningClient()->createIndex();
             return $this->json([
                 'success' => Translation::get('msgAdminElasticsearchCreateIndex_success'),
             ], Response::HTTP_OK);
@@ -81,7 +82,7 @@ final class ElasticsearchController extends AbstractController
         }
 
         try {
-            $this->elasticsearch->dropIndex();
+            $this->elasticsearch->withLongRunningClient()->dropIndex();
             return $this->json([
                 'success' => Translation::get('msgAdminElasticsearchDropIndex_success'),
             ], Response::HTTP_OK);
@@ -104,8 +105,11 @@ final class ElasticsearchController extends AbstractController
 
         $this->faq->getAllFaqs();
 
+        // A large import takes longer than the web timeout of the search client allows
+        $elasticsearch = $this->elasticsearch->withLongRunningClient();
+
         // Index FAQs
-        $bulkIndexResult = $this->elasticsearch->bulkIndex($this->faq->faqRecords);
+        $bulkIndexResult = $elasticsearch->bulkIndex($this->faq->faqRecords);
         if (!array_key_exists('success', $bulkIndexResult)) {
             return $this->json(['error' => $bulkIndexResult], Response::HTTP_BAD_REQUEST);
         }
@@ -113,7 +117,7 @@ final class ElasticsearchController extends AbstractController
         // Index custom pages
         $pages = $this->customPage->getAllPages();
 
-        $bulkIndexPagesResult = $this->elasticsearch->bulkIndexCustomPages($pages);
+        $bulkIndexPagesResult = $elasticsearch->bulkIndexCustomPages($pages);
         if (!array_key_exists('success', $bulkIndexPagesResult)) {
             return $this->json([
                 'error' => 'FAQs indexed but custom pages failed: ' . (string) json_encode($bulkIndexPagesResult),
@@ -144,7 +148,7 @@ final class ElasticsearchController extends AbstractController
                 'index' => $indexName,
                 'stats' => $statsResponse->asArray(),
             ], Response::HTTP_OK);
-        } catch (ClientResponseException|ServerResponseException $e) {
+        } catch (ClientResponseException|NoNodeAvailableException|ServerResponseException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }

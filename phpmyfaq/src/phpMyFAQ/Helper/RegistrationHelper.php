@@ -121,6 +121,7 @@ class RegistrationHelper extends AbstractHelper
             $this->configuration,
         );
         $mail->message = $text;
+        $mail->contentType = 'text/html';
         $mail->send();
         unset($mail);
 

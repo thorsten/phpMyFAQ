@@ -25,6 +25,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Entity\CategoryEntity;
+use phpMyFAQ\Enums\ApiKeyScope;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
@@ -298,7 +299,7 @@ final class CategoryController extends AbstractApiController
     #[Route(path: 'v4.0/category', name: 'api.category.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
-        $this->hasValidToken();
+        $this->hasValidTokenOrBearerCredential($request, ApiKeyScope::CATEGORY_WRITE);
         $this->userHasPermission(PermissionType::CATEGORY_ADD);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);

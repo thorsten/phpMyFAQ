@@ -16,6 +16,28 @@
 import { addElement, pushErrorNotification, serialize } from '../../../../assets/src/utils';
 import { reopenQuestion, toggleQuestionVisibility } from '../api';
 
+/**
+ * A refused deletion answers with `{ error: '<message>' }`; a failed request has no response at all.
+ */
+const readDeleteError = async (error: Error): Promise<string> => {
+  const response = (error.cause as { response?: Response } | undefined)?.response;
+  if (!response) {
+    return error.message;
+  }
+
+  try {
+    const body: unknown = await response.json();
+    if (typeof body === 'string') {
+      return body;
+    }
+
+    const message = (body as { error?: unknown } | null)?.error;
+    return typeof message === 'string' ? message : error.message;
+  } catch {
+    return error.message;
+  }
+};
+
 export const handleOpenQuestions = (): void => {
   const deleteButton = document.getElementById('pmf-delete-questions') as HTMLButtonElement | null;
 
@@ -57,9 +79,10 @@ export const handleOpenQuestions = (): void => {
             responseMessage.append(addElement('div', { classList: 'alert alert-danger', innerText: response.error }));
           }
         })
-        .catch(async (error) => {
-          const errorMessage = await error.cause.response.json();
-          responseMessage.append(addElement('div', { classList: 'alert alert-danger', innerText: errorMessage }));
+        .catch(async (error: Error) => {
+          responseMessage.append(
+            addElement('div', { classList: 'alert alert-danger', innerText: await readDeleteError(error) })
+          );
         });
     });
   }

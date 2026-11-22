@@ -47,6 +47,9 @@ final class TitleSlugifier
         '<',
         '>',
         '%',
+        // A "#" starts the URL fragment and browsers turn "\\" into "/": both break the generated URL
+        '#',
+        '\\',
     ];
 
     private const array UMLAUTS = [

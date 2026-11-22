@@ -141,6 +141,36 @@ describe('Editor', () => {
       expect(editorElement.id).toBe('editor');
     });
 
+    it('should send the editor token, not the form token of the page, to the image upload and the file browser', () => {
+      document.body.innerHTML = `
+        <div id="editor"></div>
+        <input id="pmf-csrf-token" value="update-news-token" />
+        <input id="pmf-editor-csrf-token" value="editor-token" />
+      `;
+
+      renderEditor();
+
+      const options = vi.mocked(Jodit.make).mock.calls[0][1] as {
+        uploader: { url: string };
+        filebrowser: { ajax: { data: { csrfToken: string } } };
+      };
+      expect(options.uploader.url).toBe('./api/content/images?csrf=editor-token');
+      expect(options.filebrowser.ajax.data.csrfToken).toBe('editor-token');
+    });
+
+    it('should fall back to the form token when the page has no separate editor token', () => {
+      document.body.innerHTML = `
+        <div id="editor"></div>
+        <input id="pmf-csrf-token" value="test-csrf-token" />
+        <input id="pmf-editor-csrf-token" value="" />
+      `;
+
+      renderEditor();
+
+      const options = vi.mocked(Jodit.make).mock.calls[0][1] as { uploader: { url: string } };
+      expect(options.uploader.url).toBe('./api/content/images?csrf=test-csrf-token');
+    });
+
     it('should enable the table of contents plugin and button', () => {
       document.body.innerHTML = `
         <div id="editor"></div>
@@ -216,6 +246,39 @@ describe('Editor', () => {
       const callArgs = vi.mocked(Jodit.make).mock.calls[0];
       const contentElement = callArgs[0] as HTMLTextAreaElement;
       expect(contentElement.id).toBe('content');
+    });
+
+    it('should upload images to the existing image route with the editor token', () => {
+      document.body.innerHTML = `
+        <input id="pmf-csrf-token" value="save-page-token" />
+        <input id="pmf-editor-csrf-token" value="editor-token" />
+        <div class="mb-3">
+          <textarea id="content"></textarea>
+        </div>
+      `;
+
+      renderPageEditor();
+
+      const options = vi.mocked(Jodit.make).mock.calls[0][1] as {
+        uploader: {
+          url: string;
+          isSuccess: (response: unknown) => boolean;
+          process: (response: unknown) => { files: string[]; isImages: boolean[]; baseurl: string };
+          defaultHandlerSuccess?: unknown;
+        };
+      };
+      expect(options.uploader.url).toBe('./api/content/images?csrf=editor-token');
+
+      // Jodit's default success handler inserts what process() returns.
+      const response = { success: true, data: { files: ['https://faq.example/a.png'], isImages: [true] } };
+      expect(options.uploader.isSuccess(response)).toBe(true);
+      expect(options.uploader.process(response)).toEqual({
+        files: ['https://faq.example/a.png'],
+        isImages: [true],
+        baseurl: '',
+        path: '',
+      });
+      expect(options.uploader.defaultHandlerSuccess).toBeUndefined();
     });
 
     it('should enable the table of contents plugin and button', () => {

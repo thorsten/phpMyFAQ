@@ -43,47 +43,40 @@ readonly class Migration420Alpha extends AbstractMigration
     /* @mago-expect lint:halstead - one migration step per schema change across four SQL dialects */
     public function up(OperationRecorder $recorder): void
     {
-        // Add hash columns to faqadminlog
-        if ($this->isMySql()) {
-            $recorder->addSql(
-                sprintf('ALTER TABLE %sfaqadminlog ADD COLUMN hash VARCHAR(64) AFTER text', $this->tablePrefix),
-                'Add hash column to faqadminlog (MySQL)',
-            );
+        // Add hash columns to faqadminlog. Every step is guarded, so an update that was
+        // interrupted after this migration can be started again.
+        $addColumn = $this->isSqlServer() ? 'ADD' : 'ADD COLUMN';
 
+        if (!$this->columnExists('faqadminlog', 'hash')) {
             $recorder->addSql(
                 sprintf(
-                    'ALTER TABLE %sfaqadminlog ADD COLUMN previous_hash VARCHAR(64) AFTER hash',
+                    'ALTER TABLE %sfaqadminlog %s hash VARCHAR(64)%s',
                     $this->tablePrefix,
+                    $addColumn,
+                    $this->isMySql() ? ' AFTER text' : '',
                 ),
-                'Add previous_hash column to faqadminlog (MySQL)',
-            );
-        }
-
-        if (!$this->isMySql() && $this->isSqlServer()) {
-            $recorder->addSql(
-                sprintf('ALTER TABLE %sfaqadminlog ADD hash VARCHAR(64)', $this->tablePrefix),
-                'Add hash column to faqadminlog (SQL Server)',
-            );
-
-            $recorder->addSql(
-                sprintf('ALTER TABLE %sfaqadminlog ADD previous_hash VARCHAR(64)', $this->tablePrefix),
-                'Add previous_hash column to faqadminlog (SQL Server)',
-            );
-        }
-
-        if (!$this->isMySql() && !$this->isSqlServer()) {
-            $recorder->addSql(
-                sprintf('ALTER TABLE %sfaqadminlog ADD COLUMN hash VARCHAR(64)', $this->tablePrefix),
                 'Add hash column to faqadminlog',
             );
+        }
 
+        if (!$this->columnExists('faqadminlog', 'previous_hash')) {
             $recorder->addSql(
-                sprintf('ALTER TABLE %sfaqadminlog ADD COLUMN previous_hash VARCHAR(64)', $this->tablePrefix),
+                sprintf(
+                    'ALTER TABLE %sfaqadminlog %s previous_hash VARCHAR(64)%s',
+                    $this->tablePrefix,
+                    $addColumn,
+                    $this->isMySql() ? ' AFTER hash' : '',
+                ),
                 'Add previous_hash column to faqadminlog',
             );
         }
 
-        $recorder->addSql($this->createIndex('faqadminlog', 'idx_hash', 'hash'), 'Create hash index on faqadminlog');
+        if (!$this->hasIndex('faqadminlog', 'idx_hash')) {
+            $recorder->addSql(
+                $this->createIndex('faqadminlog', 'idx_hash', 'hash'),
+                'Create hash index on faqadminlog',
+            );
+        }
 
         // Create custom pages table
         if ($this->isMySql()) {
@@ -132,7 +125,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_custompages_slug ON %sfaqcustompages (slug, lang)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqcustompages (slug, lang)',
+                    $this->indexName(indexName: 'idx_custompages_slug'),
                     $this->tablePrefix,
                 ),
                 'Create slug index on custom pages (PostgreSQL)',
@@ -159,7 +153,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_custompages_slug ON %sfaqcustompages (slug, lang)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqcustompages (slug, lang)',
+                    $this->indexName(indexName: 'idx_custompages_slug'),
                     $this->tablePrefix,
                 ),
                 'Create slug index on custom pages (SQLite)',
@@ -223,15 +218,19 @@ readonly class Migration420Alpha extends AbstractMigration
         // Add durable Keycloak subject storage to user data
         $columnType = $this->isSqlServer() ? 'NVARCHAR(255) NULL' : 'VARCHAR(255) NULL';
 
-        $recorder->addSql(
-            $this->addColumn('faquserdata', 'keycloak_sub', $columnType),
-            'Add keycloak_sub column to faquserdata',
-        );
+        if (!$this->columnExists('faquserdata', 'keycloak_sub')) {
+            $recorder->addSql(
+                $this->addColumn('faquserdata', 'keycloak_sub', $columnType),
+                'Add keycloak_sub column to faquserdata',
+            );
+        }
 
-        $recorder->addSql(
-            $this->createUniqueIndex('faquserdata', 'idx_faquserdata_keycloak_sub', 'keycloak_sub'),
-            'Create unique keycloak_sub index on faquserdata',
-        );
+        if (!$this->hasIndex('faquserdata', 'idx_faquserdata_keycloak_sub')) {
+            $recorder->addSql(
+                $this->createUniqueIndex('faquserdata', 'idx_faquserdata_keycloak_sub', 'keycloak_sub'),
+                'Create unique keycloak_sub index on faquserdata',
+            );
+        }
         $recorder->addConfig('api.rateLimit.interval', '3600');
         $recorder->addConfig('queue.transport', 'database');
         $recorder->addConfig('session.handler', 'files');
@@ -308,7 +307,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_chat_sender ON %sfaqchat_messages (sender_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqchat_messages (sender_id)',
+                    $this->indexName(indexName: 'idx_chat_sender'),
                     $this->tablePrefix,
                 ),
                 'Create sender index on chat messages (PostgreSQL)',
@@ -316,7 +316,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_chat_recipient ON %sfaqchat_messages (recipient_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqchat_messages (recipient_id)',
+                    $this->indexName(indexName: 'idx_chat_recipient'),
                     $this->tablePrefix,
                 ),
                 'Create recipient index on chat messages (PostgreSQL)',
@@ -324,7 +325,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_chat_conversation ON %sfaqchat_messages (sender_id, recipient_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqchat_messages (sender_id, recipient_id)',
+                    $this->indexName(indexName: 'idx_chat_conversation'),
                     $this->tablePrefix,
                 ),
                 'Create conversation index on chat messages (PostgreSQL)',
@@ -332,7 +334,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_chat_created ON %sfaqchat_messages (created_at)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqchat_messages (created_at)',
+                    $this->indexName(indexName: 'idx_chat_created'),
                     $this->tablePrefix,
                 ),
                 'Create created_at index on chat messages (PostgreSQL)',
@@ -351,7 +354,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_chat_sender ON %sfaqchat_messages (sender_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqchat_messages (sender_id)',
+                    $this->indexName(indexName: 'idx_chat_sender'),
                     $this->tablePrefix,
                 ),
                 'Create sender index on chat messages (SQLite)',
@@ -359,7 +363,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_chat_recipient ON %sfaqchat_messages (recipient_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqchat_messages (recipient_id)',
+                    $this->indexName(indexName: 'idx_chat_recipient'),
                     $this->tablePrefix,
                 ),
                 'Create recipient index on chat messages (SQLite)',
@@ -367,7 +372,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_chat_conversation ON %sfaqchat_messages (sender_id, recipient_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqchat_messages (sender_id, recipient_id)',
+                    $this->indexName(indexName: 'idx_chat_conversation'),
                     $this->tablePrefix,
                 ),
                 'Create conversation index on chat messages (SQLite)',
@@ -375,7 +381,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_chat_created ON %sfaqchat_messages (created_at)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqchat_messages (created_at)',
+                    $this->indexName(indexName: 'idx_chat_created'),
                     $this->tablePrefix,
                 ),
                 'Create created_at index on chat messages (SQLite)',
@@ -484,7 +491,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_push_user_id ON %sfaqpush_subscriptions (user_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqpush_subscriptions (user_id)',
+                    $this->indexName(indexName: 'idx_push_user_id'),
                     $this->tablePrefix,
                 ),
                 'Create user_id index on push subscriptions (PostgreSQL)',
@@ -492,7 +500,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE UNIQUE INDEX IF NOT EXISTS idx_push_endpoint_hash ON %sfaqpush_subscriptions (endpoint_hash)',
+                    'CREATE UNIQUE INDEX IF NOT EXISTS %s ON %sfaqpush_subscriptions (endpoint_hash)',
+                    $this->indexName(indexName: 'idx_push_endpoint_hash'),
                     $this->tablePrefix,
                 ),
                 'Create endpoint_hash unique index on push subscriptions (PostgreSQL)',
@@ -516,7 +525,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_push_user_id ON %sfaqpush_subscriptions (user_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqpush_subscriptions (user_id)',
+                    $this->indexName(indexName: 'idx_push_user_id'),
                     $this->tablePrefix,
                 ),
                 'Create user_id index on push subscriptions (SQLite)',
@@ -524,7 +534,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE UNIQUE INDEX IF NOT EXISTS idx_push_endpoint_hash ON %sfaqpush_subscriptions (endpoint_hash)',
+                    'CREATE UNIQUE INDEX IF NOT EXISTS %s ON %sfaqpush_subscriptions (endpoint_hash)',
+                    $this->indexName(indexName: 'idx_push_endpoint_hash'),
                     $this->tablePrefix,
                 ),
                 'Create endpoint_hash unique index on push subscriptions (SQLite)',
@@ -614,7 +625,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_faqjobs_queue_available ON %sfaqjobs (queue, available_at)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqjobs (queue, available_at)',
+                    $this->indexName(indexName: 'idx_faqjobs_queue_available'),
                     $this->tablePrefix,
                 ),
                 'Create queue/available index on queue jobs (PostgreSQL)',
@@ -622,7 +634,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_faqjobs_delivered_at ON %sfaqjobs (delivered_at)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqjobs (delivered_at)',
+                    $this->indexName(indexName: 'idx_faqjobs_delivered_at'),
                     $this->tablePrefix,
                 ),
                 'Create delivered_at index on queue jobs (PostgreSQL)',
@@ -642,7 +655,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_faqjobs_queue_available ON %sfaqjobs (queue, available_at)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqjobs (queue, available_at)',
+                    $this->indexName(indexName: 'idx_faqjobs_queue_available'),
                     $this->tablePrefix,
                 ),
                 'Create queue/available index on queue jobs (SQLite)',
@@ -650,7 +664,8 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_faqjobs_delivered_at ON %sfaqjobs (delivered_at)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqjobs (delivered_at)',
+                    $this->indexName(indexName: 'idx_faqjobs_delivered_at'),
                     $this->tablePrefix,
                 ),
                 'Create delivered_at index on queue jobs (SQLite)',
@@ -735,14 +750,19 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE UNIQUE INDEX IF NOT EXISTS idx_api_key_unique ON %sfaqapi_keys (api_key)',
+                    'CREATE UNIQUE INDEX IF NOT EXISTS %s ON %sfaqapi_keys (api_key)',
+                    $this->indexName(indexName: 'idx_api_key_unique'),
                     $this->tablePrefix,
                 ),
                 'Create api_key unique index on API keys (PostgreSQL)',
             );
 
             $recorder->addSql(
-                sprintf('CREATE INDEX IF NOT EXISTS idx_api_key_user ON %sfaqapi_keys (user_id)', $this->tablePrefix),
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqapi_keys (user_id)',
+                    $this->indexName(indexName: 'idx_api_key_user'),
+                    $this->tablePrefix,
+                ),
                 'Create user_id index on API keys (PostgreSQL)',
             );
         }
@@ -762,14 +782,19 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE UNIQUE INDEX IF NOT EXISTS idx_api_key_unique ON %sfaqapi_keys (api_key)',
+                    'CREATE UNIQUE INDEX IF NOT EXISTS %s ON %sfaqapi_keys (api_key)',
+                    $this->indexName(indexName: 'idx_api_key_unique'),
                     $this->tablePrefix,
                 ),
                 'Create api_key unique index on API keys (SQLite)',
             );
 
             $recorder->addSql(
-                sprintf('CREATE INDEX IF NOT EXISTS idx_api_key_user ON %sfaqapi_keys (user_id)', $this->tablePrefix),
+                sprintf(
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqapi_keys (user_id)',
+                    $this->indexName(indexName: 'idx_api_key_user'),
+                    $this->tablePrefix,
+                ),
                 'Create user_id index on API keys (SQLite)',
             );
         }
@@ -962,14 +987,16 @@ readonly class Migration420Alpha extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_oauth_access_client ON %sfaqoauth_access_tokens (client_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqoauth_access_tokens (client_id)',
+                    $this->indexName(indexName: 'idx_oauth_access_client'),
                     $this->tablePrefix,
                 ),
                 'Create OAuth2 access client index (PostgreSQL)',
             );
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_oauth_access_user ON %sfaqoauth_access_tokens (user_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqoauth_access_tokens (user_id)',
+                    $this->indexName(indexName: 'idx_oauth_access_user'),
                     $this->tablePrefix,
                 ),
                 'Create OAuth2 access user index (PostgreSQL)',
@@ -988,7 +1015,8 @@ readonly class Migration420Alpha extends AbstractMigration
             ), 'Create OAuth2 refresh tokens table (PostgreSQL)');
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_oauth_refresh_access ON %sfaqoauth_refresh_tokens (access_token_identifier)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqoauth_refresh_tokens (access_token_identifier)',
+                    $this->indexName(indexName: 'idx_oauth_refresh_access'),
                     $this->tablePrefix,
                 ),
                 'Create OAuth2 refresh index (PostgreSQL)',
@@ -1010,14 +1038,16 @@ readonly class Migration420Alpha extends AbstractMigration
             ), 'Create OAuth2 auth codes table (PostgreSQL)');
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_oauth_code_client ON %sfaqoauth_auth_codes (client_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqoauth_auth_codes (client_id)',
+                    $this->indexName(indexName: 'idx_oauth_code_client'),
                     $this->tablePrefix,
                 ),
                 'Create OAuth2 auth code client index (PostgreSQL)',
             );
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_oauth_code_user ON %sfaqoauth_auth_codes (user_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqoauth_auth_codes (user_id)',
+                    $this->indexName(indexName: 'idx_oauth_code_user'),
                     $this->tablePrefix,
                 ),
                 'Create OAuth2 auth code user index (PostgreSQL)',
@@ -1058,14 +1088,16 @@ readonly class Migration420Alpha extends AbstractMigration
             ), 'Create OAuth2 access tokens table (SQLite)');
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_oauth_access_client ON %sfaqoauth_access_tokens (client_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqoauth_access_tokens (client_id)',
+                    $this->indexName(indexName: 'idx_oauth_access_client'),
                     $this->tablePrefix,
                 ),
                 'Create OAuth2 access client index (SQLite)',
             );
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_oauth_access_user ON %sfaqoauth_access_tokens (user_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqoauth_access_tokens (user_id)',
+                    $this->indexName(indexName: 'idx_oauth_access_user'),
                     $this->tablePrefix,
                 ),
                 'Create OAuth2 access user index (SQLite)',
@@ -1084,7 +1116,8 @@ readonly class Migration420Alpha extends AbstractMigration
             ), 'Create OAuth2 refresh tokens table (SQLite)');
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_oauth_refresh_access ON %sfaqoauth_refresh_tokens (access_token_identifier)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqoauth_refresh_tokens (access_token_identifier)',
+                    $this->indexName(indexName: 'idx_oauth_refresh_access'),
                     $this->tablePrefix,
                 ),
                 'Create OAuth2 refresh index (SQLite)',
@@ -1106,14 +1139,16 @@ readonly class Migration420Alpha extends AbstractMigration
             ), 'Create OAuth2 auth codes table (SQLite)');
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_oauth_code_client ON %sfaqoauth_auth_codes (client_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqoauth_auth_codes (client_id)',
+                    $this->indexName(indexName: 'idx_oauth_code_client'),
                     $this->tablePrefix,
                 ),
                 'Create OAuth2 auth code client index (SQLite)',
             );
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_oauth_code_user ON %sfaqoauth_auth_codes (user_id)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqoauth_auth_codes (user_id)',
+                    $this->indexName(indexName: 'idx_oauth_code_user'),
                     $this->tablePrefix,
                 ),
                 'Create OAuth2 auth code user index (SQLite)',

@@ -112,6 +112,7 @@ class Sitemap
         }
 
         $letters = [];
+        $now = date(format: 'YmdHis');
 
         $query = sprintf(
             "
@@ -132,6 +133,10 @@ class Sitemap
             AND
                 fd.status = '%s'
             AND
+                fd.date_start <= '%s'
+            AND
+                fd.date_end >= '%s'
+            AND
                 %s
             ORDER BY
                 letters",
@@ -141,6 +146,8 @@ class Sitemap
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             FaqStatus::Published->value,
+            $now,
+            $now,
             $permPart . $this->readScopeFragment(),
         );
 
@@ -196,6 +203,7 @@ class Sitemap
         $letter = Strings::strtoupper($this->configuration->getDb()->escape(Strings::substr($letter, 0, 1)));
 
         $faqs = [];
+        $now = date(format: 'YmdHis');
 
         $query = sprintf(
             "
@@ -225,6 +233,10 @@ class Sitemap
                     AND
                         fd.status = '%s'
                     AND
+                        fd.date_start <= '%s'
+                    AND
+                        fd.date_end >= '%s'
+                    AND
                         %s",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
@@ -233,6 +245,8 @@ class Sitemap
             $this->configuration->getDb()->escape($letter),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             FaqStatus::Published->value,
+            $now,
+            $now,
             $permPart . $this->readScopeFragment(),
         );
 

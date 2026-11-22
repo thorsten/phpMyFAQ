@@ -3,6 +3,8 @@
 namespace phpMyFAQ\Configuration;
 
 use Elastic\Elasticsearch\ClientBuilder;
+use Monolog\Handler\BrowserConsoleHandler;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use phpMyFAQ\ConfigurationMethodsTrait;
 use phpMyFAQ\Database\DatabaseDriver;
@@ -96,6 +98,46 @@ class ConfigurationMethodsTraitTest extends TestCase
         $this->subject->setLogger();
         $this->assertInstanceOf(Logger::class, $this->subject->getLogger());
         $this->assertSame('phpmyfaq', $this->subject->getLogger()->getName());
+    }
+
+    public function testSetLoggerDoesNotLogToTheBrowserConsoleOutsideDebugMode(): void
+    {
+        $debugMode = new \ReflectionProperty(Environment::class, 'debugMode');
+        $previous = $debugMode->getValue();
+        $debugMode->setValue(null, false);
+
+        try {
+            $this->subject->setLogger();
+            $handlers = $this->subject->getLogger()->getHandlers();
+        } finally {
+            $debugMode->setValue(null, $previous);
+        }
+
+        $this->assertCount(1, $handlers);
+        $this->assertInstanceOf(StreamHandler::class, $handlers[0]);
+        $this->assertSame(
+            [],
+            array_filter($handlers, static fn(object $handler): bool => $handler instanceof BrowserConsoleHandler),
+        );
+    }
+
+    public function testSetLoggerLogsToTheBrowserConsoleInDebugMode(): void
+    {
+        $debugMode = new \ReflectionProperty(Environment::class, 'debugMode');
+        $previous = $debugMode->getValue();
+        $debugMode->setValue(null, true);
+
+        try {
+            $this->subject->setLogger();
+            $handlers = $this->subject->getLogger()->getHandlers();
+        } finally {
+            $debugMode->setValue(null, $previous);
+        }
+
+        $this->assertCount(1, array_filter(
+            $handlers,
+            static fn(object $handler): bool => $handler instanceof BrowserConsoleHandler,
+        ));
     }
 
     public function testGetLoggerReturnsLogger(): void

@@ -122,7 +122,8 @@ class DatabaseSchema
             ->varchar('hash', 64)
             ->varchar('previous_hash', 64)
             ->varchar('ip', 64, false)
-            ->primaryKey('id');
+            ->primaryKey('id')
+            ->index('idx_hash', 'hash');
     }
 
     public function attachment(): TableBuilder
@@ -734,6 +735,8 @@ class DatabaseSchema
             ->smallInteger('twofactor_enabled', true, 0)
             ->varchar('secret', 128)
             ->integer('twofactor_last_slice')
+            ->uniqueIndex('idx_faquserdata_keycloak_sub', 'keycloak_sub')
+            ->uniqueIndex('idx_faquserdata_entra_oid', 'entra_oid')
             ->uniqueIndex('idx_faquserdata_oidc_identity', ['oidc_iss', 'oidc_sub']);
     }
 

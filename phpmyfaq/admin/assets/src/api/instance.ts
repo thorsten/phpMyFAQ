@@ -25,7 +25,7 @@ export const addInstance = async (
   admin: string,
   password: string
 ): Promise<InstanceResponse> => {
-  return await fetchJson<InstanceResponse>(`./api/faq/search`, {
+  return await fetchJson<InstanceResponse>(`./api/instance/add`, {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',

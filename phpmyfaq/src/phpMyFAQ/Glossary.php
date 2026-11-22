@@ -72,16 +72,47 @@ class Glossary
             $quotedItem = preg_quote($item['item'], delimiter: '/');
             $pattern = '/(^|\W)(' . $quotedItem . ')(\W|$)/';
 
-            $replaced = Strings::preg_replace_callback(
-                pattern: $pattern,
-                callback: $this->setTooltip(...),
-                subject: $content,
-                limit: 1,
-            );
-            $content = is_string($replaced) ? $replaced : $content;
+            $content = $this->insertTooltipIntoFirstMatchingText($content, $pattern);
         }
 
         return $content;
+    }
+
+    /**
+     * Replaces the first occurrence of the pattern in the text of the content. Tags pass
+     * unchanged: an item that also occurs in a tag name or an attribute value, such as "API"
+     * in href="/API/docs", must not get markup inserted there.
+     */
+    private function insertTooltipIntoFirstMatchingText(string $content, string $pattern): string
+    {
+        $parts = preg_split('/(<[^>]*>)/', $content, -1, PREG_SPLIT_DELIM_CAPTURE);
+        if ($parts === false) {
+            return $content;
+        }
+
+        foreach ($parts as $index => $part) {
+            // With one capture group the tags sit at the odd positions.
+            if (($index % 2) === 1 || $part === '') {
+                continue;
+            }
+
+            $count = 0;
+            $replaced = Strings::preg_replace_callback(
+                $pattern,
+                $this->setTooltip(...),
+                $part,
+                limit: 1,
+                count: $count,
+            );
+            if (!is_string($replaced) || $count === 0) {
+                continue;
+            }
+
+            $parts[$index] = $replaced;
+            break;
+        }
+
+        return implode(separator: '', array: $parts);
     }
 
     /**

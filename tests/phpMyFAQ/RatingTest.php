@@ -89,6 +89,36 @@ class RatingTest extends TestCase
         $this->assertEquals(' <span data-rating="5">5</span> (1 Vote)', $this->rating->get(1));
     }
 
+    /**
+     * vote and usr are integer columns: SQLite, PostgreSQL and SQL Server divide them as
+     * integers unless the query asks for a decimal result.
+     */
+    public function testGetReturnsTheDecimalAverageStoredInTheDatabase(): void
+    {
+        $votingData = new Vote();
+        $votingData->setFaqId(1)->setVote(5)->setIp('127.0.0.1');
+        $this->rating->create($votingData);
+
+        $votingData = new Vote();
+        $votingData->setFaqId(1)->setVote(4)->setIp('127.0.0.2');
+        $this->rating->update($votingData);
+
+        $this->assertSame(' <span data-rating="4.5">4.5</span> (2 Votes)', $this->rating->get(1));
+    }
+
+    public function testGetKeepsTheDecimalsOfTheAverage(): void
+    {
+        $repository = $this->createStub(\phpMyFAQ\Search\Rating\RatingRepository::class);
+        $repository->method('fetchByRecordId')->willReturn((object) ['voting' => '4.6667', 'usr' => 3]);
+
+        // Rating is readonly: its properties can only be set on an instance built without the constructor
+        $rating = new \ReflectionClass(Rating::class)->newInstanceWithoutConstructor();
+        new \ReflectionProperty(Rating::class, 'ratingRepository')->setValue($rating, $repository);
+        new \ReflectionProperty(Rating::class, 'plurals')->setValue($rating, new \phpMyFAQ\Language\Plurals());
+
+        $this->assertSame(' <span data-rating="4.67">4.67</span> (3 Votes)', $rating->get(1));
+    }
+
     public function testCheck(): void
     {
         $votingData = new Vote();

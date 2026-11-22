@@ -200,6 +200,30 @@ class GlossaryTest extends TestCase
         }
     }
 
+    public function testInsertItemsIntoContentReplacesInTextOnly(): void
+    {
+        $glossary = $this->createPartialMock(Glossary::class, ['fetchAll']);
+        $glossary
+            ->method('fetchAll')
+            ->willReturn([
+                ['item' => 'API', 'definition' => 'Application Programming Interface'],
+                // Occurs in the tooltip markup of the item before and in a tag name.
+                ['item' => 'Interface', 'definition' => 'A boundary'],
+                ['item' => 'abbr', 'definition' => 'An abbreviation'],
+            ]);
+
+        $abbr =
+            '<abbr data-bs-toggle="tooltip" data-bs-placement="bottom" '
+            . 'title="Application Programming Interface" class="initialism">API</abbr>';
+
+        $this->assertSame(
+            '<p><a href="https://example.com/API/docs" title="The API docs">Docs</a> of the <b>' . $abbr . '</b>.</p>',
+            $glossary->insertItemsIntoContent(
+                '<p><a href="https://example.com/API/docs" title="The API docs">Docs</a> of the <b>API</b>.</p>',
+            ),
+        );
+    }
+
     public function testCacheInvalidationOnCreateUpdateDelete(): void
     {
         $this->glossary->create('cItem', 'cDef');

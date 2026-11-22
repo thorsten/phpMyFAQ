@@ -167,6 +167,12 @@ class AdditionalMigrationVersionsTest extends TestCase
         $postgresRecorder = new OperationRecorder($this->createStub(Configuration::class));
         new Migration409($this->createStub(Configuration::class))->up($postgresRecorder);
         $this->assertCount(4, $postgresRecorder->getSqlQueries());
+        // setval() rejects 0, so an empty table must not end up as setval(seq, 0): the next
+        // value is MAX(id) + 1, handed out as it is ("is_called" false).
+        $this->assertSame(
+            "SELECT setval('pmf_faqseo_id_seq', COALESCE(MAX(id), 0) + 1, false) FROM pmf_faqseo",
+            $postgresRecorder->getSqlQueries()[2],
+        );
 
         $this->setDatabaseState('sqlite3', 'pmf_');
 
@@ -248,6 +254,56 @@ class AdditionalMigrationVersionsTest extends TestCase
                 'DROP COLUMN must be guarded with IF EXISTS: ' . $query,
             );
         }
+    }
+
+    public function testMigration320AlphaMovesTheLoginWithEmailAddressSettingToItsNewKey(): void
+    {
+        $this->setDatabaseState('sqlite3');
+
+        $recorder = new OperationRecorder($this->createStub(Configuration::class));
+        new Migration320Alpha($this->createStub(Configuration::class))->up($recorder);
+
+        $renames = array_values($recorder->getOperationsByType('config_rename'));
+        $this->assertCount(1, $renames);
+        $this->assertSame('main.loginWithEmailAddress', $renames[0]->getOldKey());
+        $this->assertSame('security.loginWithEmailAddress', $renames[0]->getNewKey());
+    }
+
+    /**
+     * T-SQL takes one ADD with a comma-separated column list; "ADD a ..., ADD b ..." is MySQL.
+     */
+    public function testMigration320AlphaAddsColumnsInTheSyntaxOfTheDatabase(): void
+    {
+        $this->setDatabaseState('pdo_sqlsrv', 'pmf_');
+        $recorder = new OperationRecorder($this->createStub(Configuration::class));
+        new Migration320Alpha($this->createStub(Configuration::class))->up($recorder);
+        $sqlServer = array_map(
+            static fn(string $query): string => (string) preg_replace('/\s+/', ' ', $query),
+            $recorder->getSqlQueries(),
+        );
+
+        $this->assertContains(
+            'ALTER TABLE pmf_faquser ADD refresh_token TEXT NULL DEFAULT NULL, access_token TEXT NULL DEFAULT NULL, '
+            . 'code_verifier VARCHAR(255) NULL DEFAULT NULL, jwt TEXT NULL DEFAULT NULL',
+            $sqlServer,
+        );
+        $this->assertContains(
+            'ALTER TABLE pmf_faquserdata ADD twofactor_enabled INT NULL DEFAULT 0, secret VARCHAR(128) NULL DEFAULT NULL',
+            $sqlServer,
+        );
+
+        $this->setDatabaseState('pdo_mysql', 'pmf_');
+        $recorder = new OperationRecorder($this->createStub(Configuration::class));
+        new Migration320Alpha($this->createStub(Configuration::class))->up($recorder);
+        $mysql = array_map(
+            static fn(string $query): string => (string) preg_replace('/\s+/', ' ', $query),
+            $recorder->getSqlQueries(),
+        );
+
+        $this->assertContains(
+            'ALTER TABLE pmf_faquserdata ADD twofactor_enabled INT NULL DEFAULT 0, ADD secret VARCHAR(128) NULL DEFAULT NULL',
+            $mysql,
+        );
     }
 
     private function setDatabaseState(string $type, string $tablePrefix = ''): void

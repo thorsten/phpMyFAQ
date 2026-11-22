@@ -89,7 +89,7 @@ final class ContactController extends AbstractController
                 $author,
                 Translation::getString(key: 'msgNewContentMail'),
                 $email,
-                $question,
+                nl2br($question),
             );
 
             try {
@@ -100,6 +100,7 @@ final class ContactController extends AbstractController
                     configuration: $this->configuration,
                 );
                 $this->mailer->message = $question;
+                $this->mailer->contentType = 'text/html';
                 $this->mailer->send();
 
                 return $this->json(['success' => Translation::get(key: 'msgMailContact')], Response::HTTP_OK);

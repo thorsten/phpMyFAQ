@@ -451,9 +451,9 @@ class StatisticsHelperTest extends TestCase
 
         $result = $helper->renderDaySelector();
 
-        $this->assertStringContainsString('<option value="1705276800" selected>', $result);
+        $this->assertStringContainsString('<option value="1705276800" data-day="2024-01-15" selected>', $result);
         $this->assertStringContainsString('formatted-2024-01-15 01:00', $result);
-        $this->assertStringContainsString('<option value="1705363200">', $result);
+        $this->assertStringContainsString('<option value="1705363200" data-day="2024-01-16">', $result);
     }
 
     private function createTrackingFile(int $timestamp, array $rows): string

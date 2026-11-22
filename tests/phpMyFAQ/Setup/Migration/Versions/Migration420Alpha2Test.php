@@ -316,4 +316,40 @@ class Migration420Alpha2Test extends TestCase
             Database::factory('pdo_sqlite');
         }
     }
+
+    public function testUpBackfillsTheReadRightUntilThePublishRightExists(): void
+    {
+        $this->configuration->getDb()->query('CREATE TABLE faqright (right_id INTEGER, name VARCHAR(50))');
+
+        $this->assertSame(['view_faqs', 'faq_publish'], $this->recordedBackfills());
+    }
+
+    /**
+     * faq_publish is created by this migration right after the read backfill. Once it exists
+     * the backfill has run, and a re-run must not hand view_faqs back to accounts an
+     * administrator revoked it from since.
+     */
+    public function testUpDoesNotBackfillTheReadRightAgainOnceThePublishRightExists(): void
+    {
+        $db = $this->configuration->getDb();
+        $db->query('CREATE TABLE faqright (right_id INTEGER, name VARCHAR(50))');
+        $db->query("INSERT INTO faqright (right_id, name) VALUES (1, 'view_faqs')");
+        $db->query("INSERT INTO faqright (right_id, name) VALUES (2, 'faq_publish')");
+
+        $this->assertSame(['faq_publish'], $this->recordedBackfills());
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function recordedBackfills(): array
+    {
+        $recorder = new OperationRecorder($this->configuration);
+        $this->migration->up($recorder);
+
+        return array_values(array_map(
+            static fn($operation): string => $operation->getPermissionName(),
+            $recorder->getOperationsByType('permission_backfill'),
+        ));
+    }
 }

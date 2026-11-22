@@ -69,6 +69,25 @@ describe('bookmarks handlers', () => {
       expect(document.getElementById('delete-bookmark-42')).not.toBeNull();
     });
 
+    it('shows the server message when the bookmark deletion is refused', async () => {
+      document.body.innerHTML = `
+        <div id="delete-bookmark-42">bookmark</div>
+        <button class="pmf-delete-bookmark" data-pmf-bookmark-id="42" data-pmf-csrf="csrf-1">Delete</button>
+      `;
+
+      vi.mocked(deleteBookmark).mockRejectedValue(new Error('You are not allowed to do this'));
+
+      handleDeleteBookmarks();
+
+      (document.querySelector('.pmf-delete-bookmark') as HTMLButtonElement).click();
+
+      await vi.waitFor(() => {
+        expect(pushErrorNotification).toHaveBeenCalledWith('You are not allowed to do this');
+      });
+
+      expect(document.getElementById('delete-bookmark-42')).not.toBeNull();
+    });
+
     it('falls back to a generic error when the bookmark deletion error is missing', async () => {
       document.body.innerHTML = `
         <button class="pmf-delete-bookmark" data-pmf-bookmark-id="42" data-pmf-csrf="csrf-1">Delete</button>
@@ -115,6 +134,42 @@ describe('bookmarks handlers', () => {
 
       expect(pushNotification).toHaveBeenCalledWith('All bookmarks removed');
       expect(document.getElementById('bookmarkAccordion')).toBeNull();
+    });
+
+    it('reads the CSRF token from the button when its icon is clicked', async () => {
+      document.body.innerHTML = `
+        <div id="bookmarkAccordion">all bookmarks</div>
+        <button id="pmf-bookmarks-delete-all" data-pmf-csrf="csrf-2"><i class="bi bi-trash"></i> Delete all</button>
+      `;
+
+      vi.mocked(deleteAllBookmarks).mockResolvedValue({ success: 'All bookmarks removed' });
+
+      handleRemoveAllBookmarks();
+
+      (document.querySelector('#pmf-bookmarks-delete-all i') as HTMLElement).click();
+
+      await vi.waitFor(() => {
+        expect(deleteAllBookmarks).toHaveBeenCalledWith('csrf-2');
+      });
+    });
+
+    it('shows the server message when removing all bookmarks is refused', async () => {
+      document.body.innerHTML = `
+        <div id="bookmarkAccordion">all bookmarks</div>
+        <button id="pmf-bookmarks-delete-all" data-pmf-csrf="csrf-2">Delete all</button>
+      `;
+
+      vi.mocked(deleteAllBookmarks).mockRejectedValue(new Error('You are not allowed to do this'));
+
+      handleRemoveAllBookmarks();
+
+      (document.getElementById('pmf-bookmarks-delete-all') as HTMLButtonElement).click();
+
+      await vi.waitFor(() => {
+        expect(pushErrorNotification).toHaveBeenCalledWith('You are not allowed to do this');
+      });
+
+      expect(document.getElementById('bookmarkAccordion')).not.toBeNull();
     });
 
     it('shows the API error when removing all bookmarks fails', async () => {

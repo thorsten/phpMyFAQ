@@ -120,10 +120,74 @@ readonly class LdapSettings
 
         return [
             'use_group_restriction' => $this->coreConfiguration->get(item: 'ldap.ldap_use_group_restriction'),
-            'allowed_groups' => $allowedGroups ? explode(separator: ',', string: (string) $allowedGroups) : [],
+            'allowed_groups' => $allowedGroups ? $this->parseAllowedGroups((string) $allowedGroups) : [],
             'auto_assign' => $this->coreConfiguration->get(item: 'ldap.ldap_group_auto_assign'),
             'group_mapping' => $groupMapping ? json_decode((string) $groupMapping, associative: true) : [],
         ];
+    }
+
+    /**
+     * Splits the comma-separated list of allowed groups without tearing distinguished names apart.
+     *
+     * A DN contains commas itself ("CN=Admins,OU=Groups,DC=example,DC=com"). Consecutive
+     * "attribute=value" entries are therefore read as one DN, which ends with its domain
+     * components. Entries without domain components stay separate, so "CN=Admins, CN=Editors"
+     * are two groups. An escaped comma ("\,") never separates.
+     *
+     * @return list<string>
+     */
+    private function parseAllowedGroups(string $allowedGroups): array
+    {
+        $entries = preg_split('/(?<!\\\\),/', $allowedGroups);
+        if ($entries === false) {
+            return [];
+        }
+
+        $groups = [];
+        $dnParts = [];
+        $dnHasDomainComponent = false;
+
+        foreach ($entries as $entry) {
+            $entry = trim($entry);
+            if ($entry === '') {
+                continue;
+            }
+
+            if (preg_match('/^[a-z][a-z0-9-]*\s*=/i', $entry) !== 1) {
+                $groups = [...$groups, ...$this->closeDistinguishedName($dnParts, $dnHasDomainComponent), $entry];
+                $dnParts = [];
+                $dnHasDomainComponent = false;
+                continue;
+            }
+
+            $isDomainComponent = preg_match('/^dc\s*=/i', $entry) === 1;
+            if ($dnHasDomainComponent && !$isDomainComponent) {
+                $groups = [...$groups, ...$this->closeDistinguishedName($dnParts, true)];
+                $dnParts = [];
+                $dnHasDomainComponent = false;
+            }
+
+            $dnParts[] = $entry;
+            $dnHasDomainComponent = $dnHasDomainComponent || $isDomainComponent;
+        }
+
+        return [...$groups, ...$this->closeDistinguishedName($dnParts, $dnHasDomainComponent)];
+    }
+
+    /**
+     * Collected "attribute=value" entries form one DN when they end with domain components;
+     * without any they are separate groups given by their leading RDN.
+     *
+     * @param list<string> $dnParts
+     * @return list<string>
+     */
+    private function closeDistinguishedName(array $dnParts, bool $hasDomainComponent): array
+    {
+        if ($dnParts === [] || !$hasDomainComponent) {
+            return $dnParts;
+        }
+
+        return [implode(',', $dnParts)];
     }
 
     public function isActive(): bool

@@ -218,7 +218,7 @@ class SetupTest extends TestCase
 
     public function testCreateLdapFile(): void
     {
-        mkdir($this->tmpRootDir . '/content/core/config/config', 0777, true);
+        mkdir($this->tmpRootDir . '/content/core/config', 0777, true);
         $this->setup->setRootDir($this->tmpRootDir);
 
         $data = [
@@ -229,9 +229,10 @@ class SetupTest extends TestCase
             'ldapBase' => 'dc=example,dc=com',
         ];
 
-        $result = $this->setup->createLdapFile($data, '/content/core');
+        $result = $this->setup->createLdapFile($data);
         $this->assertIsInt($result);
 
+        // The application reads the file from its config directory, next to database.php.
         $content = file_get_contents($this->tmpRootDir . '/content/core/config/ldap.php');
         $this->assertStringContainsString("\$PMF_LDAP['ldap_server'] = 'ldap.example.com'", $content);
         $this->assertStringContainsString("\$PMF_LDAP['ldap_port'] = '389'", $content);
@@ -240,43 +241,72 @@ class SetupTest extends TestCase
         $this->assertStringContainsString("\$PMF_LDAP['ldap_base'] = 'dc=example,dc=com'", $content);
     }
 
+    public function testCreateLdapFileKeepsQuotesAndBackslashesInValues(): void
+    {
+        mkdir($this->tmpRootDir . '/content/core/config', 0777, true);
+        $this->setup->setRootDir($this->tmpRootDir);
+
+        $data = [
+            'ldapServer' => 'ldap.example.com',
+            'ldapPort' => '389',
+            'ldapUser' => 'EXAMPLE\\o\'brien',
+            'ldapPassword' => "it's a \\ secret\\",
+            'ldapBase' => "ou=O'Neill,dc=example,dc=com",
+        ];
+
+        $this->assertIsInt($this->setup->createLdapFile($data));
+
+        $PMF_LDAP = [];
+        include $this->tmpRootDir . '/content/core/config/ldap.php';
+
+        $this->assertSame(
+            [
+                'ldap_server' => 'ldap.example.com',
+                'ldap_port' => '389',
+                'ldap_user' => $data['ldapUser'],
+                'ldap_password' => $data['ldapPassword'],
+                'ldap_base' => $data['ldapBase'],
+            ],
+            $PMF_LDAP,
+        );
+    }
+
     public function testCreateElasticsearchFile(): void
     {
-        mkdir($this->tmpRootDir . '/content/core/config/config', 0777, true);
+        mkdir($this->tmpRootDir . '/content/core/config', 0777, true);
         $this->setup->setRootDir($this->tmpRootDir);
 
         $data = [
             'hosts' => ['localhost:9200', 'localhost:9201'],
-            'index' => 'phpmyfaq',
+            'index' => "phpmyfaq's",
         ];
 
-        $result = $this->setup->createElasticsearchFile($data, '/content/core');
+        $result = $this->setup->createElasticsearchFile($data);
         $this->assertIsInt($result);
 
-        $content = file_get_contents($this->tmpRootDir . '/content/core/config/elasticsearch.php');
-        $this->assertStringContainsString("\$PMF_ES['hosts']", $content);
-        $this->assertStringContainsString('localhost:9200', $content);
-        $this->assertStringContainsString('localhost:9201', $content);
-        $this->assertStringContainsString("\$PMF_ES['index'] = 'phpmyfaq'", $content);
+        $PMF_ES = [];
+        include $this->tmpRootDir . '/content/core/config/elasticsearch.php';
+
+        $this->assertSame(['hosts' => ['localhost:9200', 'localhost:9201'], 'index' => "phpmyfaq's"], $PMF_ES);
     }
 
     public function testCreateOpenSearchFile(): void
     {
-        mkdir($this->tmpRootDir . '/content/core/config/config', 0777, true);
+        mkdir($this->tmpRootDir . '/content/core/config', 0777, true);
         $this->setup->setRootDir($this->tmpRootDir);
 
         $data = [
-            'hosts' => ['localhost:9200'],
+            'hosts' => ['localhost:9200', "host'two:9201"],
             'index' => 'phpmyfaq_os',
         ];
 
-        $result = $this->setup->createOpenSearchFile($data, '/content/core');
+        $result = $this->setup->createOpenSearchFile($data);
         $this->assertIsInt($result);
 
-        $content = file_get_contents($this->tmpRootDir . '/content/core/config/opensearch.php');
-        $this->assertStringContainsString("\$PMF_OS['hosts']", $content);
-        $this->assertStringContainsString('localhost:9200', $content);
-        $this->assertStringContainsString("\$PMF_OS['index'] = 'phpmyfaq_os'", $content);
+        $PMF_OS = [];
+        include $this->tmpRootDir . '/content/core/config/opensearch.php';
+
+        $this->assertSame(['hosts' => ['localhost:9200', "host'two:9201"], 'index' => 'phpmyfaq_os'], $PMF_OS);
     }
 
     public function testCheckDirsReportsADirThatCannotBeCreated(): void

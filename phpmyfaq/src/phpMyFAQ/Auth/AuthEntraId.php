@@ -139,7 +139,8 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     /**
      * Accepts the login when an account is linked to the object identifier of the
      * signed-in identity, or creates one when the login is still free. A login that
-     * exists but is not linked is refused.
+     * exists but is not linked is refused, unless Entra ID provisioned it before
+     * accounts were linked: that account is linked on its first login.
      *
      * @inheritDoc
      * @throws Exception
@@ -167,7 +168,13 @@ class AuthEntraId extends Auth implements AuthDriverInterface
             return false;
         }
 
+        $existingUser = null;
         $linkedUser = $this->findLinkedUser($objectId);
+        if (!$linkedUser instanceof User) {
+            $existingUser = $this->findUser($login);
+            $linkedUser = $this->linkAccountProvisionedBeforeLinking($existingUser, $objectId);
+        }
+
         if ($linkedUser instanceof User) {
             if ($linkedUser->getStatus() === 'blocked') {
                 $this->configuration
@@ -184,7 +191,7 @@ class AuthEntraId extends Auth implements AuthDriverInterface
             return true;
         }
 
-        if ($this->findUser($login) instanceof User) {
+        if ($existingUser instanceof User) {
             $this->configuration
                 ->getLogger()
                 ->warning(sprintf(
@@ -371,6 +378,40 @@ class AuthEntraId extends Auth implements AuthDriverInterface
         }
 
         return $user->getUserById($userId, allowBlockedUsers: true) ? $user : null;
+    }
+
+    /**
+     * Accounts provisioned by Entra ID before phpMyFAQ 4.2 carry the Entra ID authentication
+     * source but no object identifier. Such an account is linked to the identity that signs in
+     * with its login for the first time. Accounts of any other authentication source, and
+     * accounts already linked to another object identifier, are never claimed.
+     */
+    private function linkAccountProvisionedBeforeLinking(?User $user, string $objectId): ?User
+    {
+        if (!$user instanceof User) {
+            return null;
+        }
+
+        if ($user->getUserAuthSource() !== AuthenticationSourceType::AUTH_AZURE->value) {
+            return null;
+        }
+
+        if (trim((string) $user->getUserData('entra_oid')) !== '') {
+            return null;
+        }
+
+        if ($user->getStatus() === 'blocked') {
+            return null;
+        }
+
+        if (!$user->setUserData(['entra_oid' => $objectId])) {
+            $this->configuration
+                ->getLogger()
+                ->error(sprintf('Entra ID account link could not be stored for user #%d.', $user->getUserId()));
+            return null;
+        }
+
+        return $user;
     }
 
     /**

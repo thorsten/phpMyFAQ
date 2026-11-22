@@ -124,7 +124,10 @@ export const handleStickyFaqs = (): void => {
     }
 
     try {
-      await removeStickyFaq(faqId, categoryId, csrfToken, lang);
+      const response = await removeStickyFaq(faqId, categoryId, csrfToken, lang);
+      if (response?.error) {
+        throw new Error(response.error);
+      }
 
       const row = btn.closest('.list-group-item') as HTMLElement | null;
 
@@ -168,6 +171,10 @@ const saveStatus = async (currentOrder: string[], container: HTMLElement): Promi
 
   try {
     const response = await updateStickyFaqsOrder(currentOrder, csrf);
+    if (response?.error) {
+      throw new Error(response.error);
+    }
+
     pushNotification(response?.success || 'Order updated');
   } catch (error) {
     if (error instanceof Error) {

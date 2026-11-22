@@ -80,6 +80,7 @@ readonly class Date
 
     /**
      * Returns the start-of-day timestamp of a tracking filename (trackingDDMMYYYY).
+     * The files are named after the local date, so the day is a local day as well.
      */
     public function getTrackingFileDateStart(string $file): int
     {
@@ -88,14 +89,7 @@ readonly class Date
             $month = Strings::substr($file, start: 10, length: 2);
             $year = Strings::substr($file, start: 12, length: 4);
 
-            return (int) gmmktime(
-                hour: 0,
-                minute: 0,
-                second: 0,
-                month: (int) $month,
-                day: (int) $day,
-                year: (int) $year,
-            );
+            return (int) mktime(hour: 0, minute: 0, second: 0, month: (int) $month, day: (int) $day, year: (int) $year);
         }
 
         return -1;
@@ -111,7 +105,7 @@ readonly class Date
             $month = Strings::substr($file, start: 10, length: 2);
             $year = Strings::substr($file, start: 12, length: 4);
 
-            return (int) gmmktime(
+            return (int) mktime(
                 hour: 23,
                 minute: 59,
                 second: 59,

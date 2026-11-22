@@ -147,7 +147,7 @@ final class GroupControllerTest extends TestCase
         $controller = $this->createController();
         $controller->setContainer($this->createAuthenticatedContainer());
 
-        $request = new Request([], [], ['csrf' => 'invalid-token'], [], [], [], '');
+        $request = new Request([], ['pmf-csrf-token' => 'invalid-token']);
 
         $this->expectException(UnauthorizedHttpException::class);
         $controller->create($request);
@@ -167,11 +167,12 @@ final class GroupControllerTest extends TestCase
         $controller->setContainer($container);
 
         $response = $controller->create(
-            new Request(
-                [],
-                ['group_name' => 'Unit Test Group', 'group_description' => 'Test', 'group_auto_join' => 'n'],
-                ['csrf' => $token],
-            ),
+            new Request([], [
+                'group_name' => 'Unit Test Group',
+                'group_description' => 'Test',
+                'group_auto_join' => 'n',
+                'pmf-csrf-token' => $token,
+            ]),
         );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
@@ -187,15 +188,20 @@ final class GroupControllerTest extends TestCase
         self::assertInstanceOf(Session::class, $session);
         $token = $this->createValidCsrfToken($session, 'add-group');
 
-        $groupData = ['group_name' => 'Duplicate Group', 'group_description' => 'Test', 'group_auto_join' => 'n'];
+        $groupData = [
+            'group_name' => 'Duplicate Group',
+            'group_description' => 'Test',
+            'group_auto_join' => 'n',
+            'pmf-csrf-token' => $token,
+        ];
 
         $firstController = $this->createController();
         $firstController->setContainer($container);
-        $firstController->create(new Request([], $groupData, ['csrf' => $token]));
+        $firstController->create(new Request([], $groupData));
 
         $controller = $this->createController();
         $controller->setContainer($container);
-        $response = $controller->create(new Request([], $groupData, ['csrf' => $token]));
+        $response = $controller->create(new Request([], $groupData));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertStringContainsString(
@@ -218,17 +224,44 @@ final class GroupControllerTest extends TestCase
         $controller->setContainer($container);
 
         $response = $controller->create(
-            new Request(
-                [],
-                ['group_name' => '', 'group_description' => 'Test', 'group_auto_join' => 'n'],
-                [
-                    'csrf' => $token,
-                ],
-            ),
+            new Request([], [
+                'group_name' => '',
+                'group_description' => 'Test',
+                'group_auto_join' => 'n',
+                'pmf-csrf-token' => $token,
+            ]),
         );
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringNotContainsString(Translation::get('ad_adus_dberr'), (string) $response->getContent());
+        self::assertStringContainsString(
+            '<div class="alert alert-danger">' . Translation::get('ad_group_error_noName') . '</div>',
+            (string) $response->getContent(),
+        );
+
+        // The check used to be dead: the message was overwritten and a nameless group created.
+        $result = $this->dbHandle->query("SELECT group_id FROM faqgroup WHERE name = ''");
+        self::assertSame(0, $this->dbHandle->numRows($result));
+    }
+
+    /**
+     * The token is posted as the form field "pmf-csrf-token". It used to be read from a route
+     * attribute that does not exist, so verification only worked through the fallback to the
+     * PHP globals inside Token::verifyToken().
+     *
+     * @throws \Exception
+     */
+    public function testCreateRejectsATokenThatIsNotPostedWithTheForm(): void
+    {
+        $container = $this->createAuthenticatedContainer();
+        $session = $container->get('session');
+        self::assertInstanceOf(Session::class, $session);
+        $token = $this->createValidCsrfToken($session, 'add-group');
+
+        $controller = $this->createController();
+        $controller->setContainer($container);
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $controller->create(new Request([], ['group_name' => 'Unit Test Group'], ['csrf' => $token]));
     }
 
     /**

@@ -22,6 +22,7 @@ namespace phpMyFAQ\Permission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 
 /**
@@ -264,7 +265,9 @@ class MediumPermission extends BasicPermission implements PermissionInterface
                 '<option value="%d" %s>%s</option>',
                 $allGroup,
                 in_array($allGroup, $groups, strict: true) || ($groups[0] ?? null) === -1 ? 'selected' : '',
-                $this->getGroupName($allGroup),
+                // Templates print these options unescaped, and a group created from a directory
+                // carries whatever name the directory holds. Entities already stored are kept.
+                Strings::htmlspecialchars($this->getGroupName($allGroup), ENT_QUOTES | ENT_HTML5),
             );
         }
 

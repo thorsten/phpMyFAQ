@@ -143,8 +143,10 @@ class InstallationInputValidator
             throw new Exception('Installation Error: Please add a database username.');
         }
 
+        // A connection secret is passed to the database server as typed: sanitizing it would
+        // turn a correct password containing quotes or angle brackets into a wrong one
         $dbSetup['dbPassword'] = $setup === null || !array_key_exists('dbPassword', $setup)
-            ? Filter::filterInput(INPUT_POST, 'sql_password', FILTER_SANITIZE_SPECIAL_CHARS, '')
+            ? Filter::filterInput(INPUT_POST, 'sql_password', FILTER_UNSAFE_RAW, '')
             : $setup['dbPassword'];
         if (is_null($dbSetup['dbPassword']) && !System::isSqlite($dbSetup['dbType'])) {
             $dbSetup['dbPassword'] = '';
@@ -203,7 +205,8 @@ class InstallationInputValidator
         }
 
         $ldapSetup['ldapUser'] = Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_SANITIZE_SPECIAL_CHARS);
-        $ldapSetup['ldapPassword'] = Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_SPECIAL_CHARS);
+        // The bind password is a connection secret as well and is read as typed
+        $ldapSetup['ldapPassword'] = Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_UNSAFE_RAW);
 
         return $ldapSetup;
     }

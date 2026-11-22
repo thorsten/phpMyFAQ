@@ -17,6 +17,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Mail;
+use phpMyFAQ\Mail\MailContent;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Queue\Message\ExportMessage;
 use phpMyFAQ\Queue\Message\IndexFaqMessage;
@@ -52,7 +53,8 @@ class HandlersTest extends TestCase
         $mail
             ->expects($this->once())
             ->method('sendPreparedEnvelope')
-            ->with('alice@example.org', ['X-Test' => '1'], 'Body');
+            ->with('alice@example.org', ['X-Test' => '1'], 'Body')
+            ->willReturn(1);
 
         $handler = new SendMailHandler($configuration, static fn(): Mail => $mail);
         $handler(new SendMailMessage('unused@example.org', 'Ignored', 'Ignored', [
@@ -64,18 +66,80 @@ class HandlersTest extends TestCase
         ]));
     }
 
+    public function testSendMailHandlerHandsTheQueuedPartsOfTheBodyToTheMailLayer(): void
+    {
+        $contents = new \ArrayObject();
+        $mail = $this->createMock(Mail::class);
+        $mail
+            ->expects($this->exactly(3))
+            ->method('sendPreparedEnvelope')
+            ->willReturnCallback(static function (
+                string $recipients,
+                array $headers,
+                string $body,
+                ?MailContent $content = null,
+            ) use ($contents): int {
+                $contents->append($content);
+
+                return 1;
+            });
+
+        $handler = new SendMailHandler($this->createStub(Configuration::class), static fn(): Mail => $mail);
+        $envelope = ['recipients' => 'alice@example.org', 'headers' => [], 'body' => 'MIME body'];
+        $handler(new SendMailMessage('alice@example.org', 'Subject', 'Body', [
+            'envelope' => [...$envelope, 'text' => 'Text part', 'html' => '<p>HTML part</p>'],
+        ]));
+        $handler(new SendMailMessage('alice@example.org', 'Subject', 'Body', [
+            'envelope' => [...$envelope, 'text' => 'Plain <text>', 'html' => ''],
+        ]));
+        $handler(new SendMailMessage('alice@example.org', 'Subject', 'Body', ['envelope' => $envelope]));
+
+        $this->assertInstanceOf(MailContent::class, $contents[0]);
+        $this->assertSame('Text part', $contents[0]->text);
+        $this->assertSame('<p>HTML part</p>', $contents[0]->html);
+        $this->assertInstanceOf(MailContent::class, $contents[1]);
+        $this->assertFalse($contents[1]->isHtml());
+        $this->assertSame('Plain <text>', $contents[1]->text);
+        $this->assertNull($contents[2], 'An envelope queued without parts is left to the mail layer.');
+    }
+
     public function testSendMailHandlerSendsRegularMailWhenNoPreparedEnvelopeExists(): void
     {
         $configuration = $this->createStub(Configuration::class);
         $mail = $this->createMock(Mail::class);
         $mail->expects($this->once())->method('addTo')->with('bob@example.org');
-        $mail->expects($this->once())->method('send')->with(true);
+        $mail->expects($this->once())->method('send')->with(true)->willReturn(1);
 
         $handler = new SendMailHandler($configuration, static fn(): Mail => $mail);
         $handler(new SendMailMessage('bob@example.org', 'Subject', 'Message'));
 
         $this->assertSame('Subject', $mail->subject);
         $this->assertSame('Message', $mail->message);
+    }
+
+    public function testSendMailHandlerThrowsWhenThePreparedEnvelopeIsNotSent(): void
+    {
+        $mail = $this->createStub(Mail::class);
+        $mail->method('sendPreparedEnvelope')->willReturn(0);
+
+        $handler = new SendMailHandler($this->createStub(Configuration::class), static fn(): Mail => $mail);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The mail agent did not accept the mail "Subject" for alice@example.org.');
+        $handler(new SendMailMessage('alice@example.org', 'Subject', 'Body', [
+            'envelope' => ['recipients' => 'alice@example.org', 'headers' => [], 'body' => 'Body'],
+        ]));
+    }
+
+    public function testSendMailHandlerThrowsWhenTheRegularMailIsNotSent(): void
+    {
+        $mail = $this->createStub(Mail::class);
+        $mail->method('send')->willReturn(0);
+
+        $handler = new SendMailHandler($this->createStub(Configuration::class), static fn(): Mail => $mail);
+
+        $this->expectException(RuntimeException::class);
+        $handler(new SendMailMessage('bob@example.org', 'Subject', 'Message'));
     }
 
     public function testIndexFaqHandlerThrowsWhenElasticsearchNotConfigured(): void

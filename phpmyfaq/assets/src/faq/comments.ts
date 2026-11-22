@@ -70,7 +70,7 @@ export const handleSaveComment = (): void => {
           form.reset();
         } catch (error: unknown) {
           console.error('Error: ', error);
-          pushErrorNotification(String(error));
+          pushErrorNotification(error instanceof Error ? error.message : String(error));
         }
       }
     });

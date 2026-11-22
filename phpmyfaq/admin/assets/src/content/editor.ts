@@ -50,6 +50,7 @@ import '../plugins/show-blocks/show-blocks.js';
 import '../plugins/table-of-contents/table-of-contents.js';
 import '../plugins/video-resize/video-resize.js';
 import hljs from 'highlight.js/lib/common';
+import { getEditorCsrfToken } from './editor.token';
 
 interface UploaderResponse {
   error?: string;
@@ -63,6 +64,31 @@ interface UploaderResponse {
 }
 
 let joditEditorInstance: Jodit | null = null;
+
+/**
+ * Upload settings shared by both editors. Jodit hands the result of `process` to its
+ * default success handler, which inserts the files; the messages array is the
+ * controller's error channel.
+ */
+const buildImageUploader = () => ({
+  url: './api/content/images?csrf=' + encodeURIComponent(getEditorCsrfToken()),
+  format: 'json',
+  isSuccess: (response: UploaderResponse) => {
+    return !response.error && response.success === true;
+  },
+  getMessage: (response: UploaderResponse) => {
+    return response.msg || (response.data?.messages ? response.data.messages.join(', ') : '');
+  },
+  process: (response: UploaderResponse) => {
+    // Extract file URLs from the response for Jodit to insert
+    return {
+      files: response.data?.files || [],
+      isImages: response.data?.isImages || [],
+      baseurl: '',
+      path: '',
+    };
+  },
+});
 
 export const getJoditEditor = () => joditEditorInstance;
 
@@ -252,31 +278,13 @@ export const renderEditor = () => {
     ],
     events: {},
     textIcons: false,
-    uploader: {
-      url: './api/content/images?csrf=' + (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
-      format: 'json',
-      isSuccess: (response: UploaderResponse) => {
-        return !response.error && response.success === true;
-      },
-      getMessage: (response: UploaderResponse) => {
-        return response.msg || (response.data?.messages ? response.data.messages.join(', ') : '');
-      },
-      process: (response: UploaderResponse) => {
-        // Extract file URLs from the response for Jodit to insert
-        return {
-          files: response.data?.files || [],
-          isImages: response.data?.isImages || [],
-          baseurl: '',
-          path: '',
-        };
-      },
-    },
+    uploader: buildImageUploader(),
     filebrowser: {
       ajax: {
         url: './api/media-browser',
         contentType: 'application/json; charset=UTF-8',
         data: {
-          csrfToken: (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
+          csrfToken: getEditorCsrfToken(),
         },
       },
       createNewFolder: false,
@@ -533,48 +541,7 @@ export const renderPageEditor = () => {
     placeholder: '',
     showPlaceholder: true,
     popup: {},
-    uploader: {
-      url: './api/image/upload',
-      format: 'json',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-      },
-      prepareData: function (formData: FormData) {
-        return formData;
-      },
-      isSuccess: function (response: UploaderResponse): boolean {
-        return response.success === true;
-      },
-      getMessage: function (response: UploaderResponse): string {
-        return response.msg || '';
-      },
-      process: function (response: UploaderResponse): {
-        files: string[];
-        error?: string;
-        msg?: string;
-      } {
-        return {
-          files: response.data?.files || [],
-          error: response.error,
-          msg: response.msg,
-        };
-      },
-      error: function (error: Error): void {
-        console.error('Upload error:', error);
-      },
-      defaultHandlerSuccess: function (response: UploaderResponse): void {
-        if (response.data?.files) {
-          response.data.files.forEach((filename: string, index: number) => {
-            const isImage = response.data?.isImages?.[index] ?? false;
-            if (isImage) {
-              joditEditor.selection.insertImage(filename, null, 300);
-            } else {
-              joditEditor.selection.insertHTML(`<a href="${filename}">${filename}</a>`);
-            }
-          });
-        }
-      },
-    },
+    uploader: buildImageUploader(),
   });
 
   // Syntax highlighting for code blocks

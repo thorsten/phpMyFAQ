@@ -22,8 +22,10 @@ namespace phpMyFAQ\Instance\Search;
 use Exception;
 use OpenSearch\Client;
 use OpenSearch\Exception\HttpException;
+use phpMyFAQ\Bootstrap\SearchClientFactory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
+use phpMyFAQ\Core\Exception as CoreException;
 use phpMyFAQ\Enums\FaqStatus;
 use Psr\Http\Client\ClientExceptionInterface;
 
@@ -46,12 +48,14 @@ readonly class OpenSearch
     /**
      * Constructor.
      *
+     * @param Client|null $client Client to use instead of the one of the Configuration
      * @throws Exception
      */
     public function __construct(
         private Configuration $configuration,
+        ?Client $client = null,
     ) {
-        $this->client = $this->configuration->getOpenSearch();
+        $this->client = $client ?? $this->configuration->getOpenSearch();
         $this->openSearchConfiguration = $this->configuration->getOpenSearchConfig();
 
         $this->mappings = [
@@ -79,19 +83,37 @@ readonly class OpenSearch
     }
 
     /**
+     * Returns an instance for the index operations of the admin panel (create, import, drop): its
+     * client has no web response timeout, so a large bulk import is not cut off.
+     *
+     * @throws Exception
+     */
+    public function withLongRunningClient(): self
+    {
+        return new self(
+            $this->configuration,
+            SearchClientFactory::buildLongRunningOpenSearchClient($this->openSearchConfiguration),
+        );
+    }
+
+    /**
      * Creates the OpenSearch index.
      *
      * @throws Exception
      */
     public function createIndex(): bool
     {
-        $result = $this->client->indices()->exists(['index' => $this->openSearchConfiguration->getIndex()]);
+        try {
+            $result = $this->client->indices()->exists(['index' => $this->openSearchConfiguration->getIndex()]);
 
-        if (!$result) {
-            $this->client->indices()->create($this->getParams());
+            if (!$result) {
+                $this->client->indices()->create($this->getParams());
+            }
+
+            return $this->putMapping();
+        } catch (HttpException|ClientExceptionInterface $e) {
+            throw new CoreException($e->getMessage());
         }
-
-        return $this->putMapping();
     }
 
     /**
@@ -226,7 +248,11 @@ readonly class OpenSearch
      */
     public function dropIndex(): array
     {
-        return $this->client->indices()->delete(['index' => $this->openSearchConfiguration->getIndex()]);
+        try {
+            return $this->client->indices()->delete(['index' => $this->openSearchConfiguration->getIndex()]);
+        } catch (HttpException|ClientExceptionInterface $e) {
+            throw new CoreException($e->getMessage());
+        }
     }
 
     /**
@@ -292,7 +318,11 @@ readonly class OpenSearch
             ];
 
             if (($i % 1000) === 0) {
-                $responses = $this->client->bulk($params);
+                try {
+                    $responses = $this->client->bulk($params);
+                } catch (HttpException|ClientExceptionInterface $e) {
+                    return ['error' => $e->getMessage()];
+                }
 
                 $params = ['body' => []];
                 unset($responses);
@@ -308,7 +338,11 @@ readonly class OpenSearch
         }
 
         // Send the last batch if it exists
-        return ['success' => $this->client->bulk($params)];
+        try {
+            return ['success' => $this->client->bulk($params)];
+        } catch (HttpException|ClientExceptionInterface $e) {
+            return ['error' => $e->getMessage()];
+        }
     }
 
     /**
@@ -508,7 +542,12 @@ readonly class OpenSearch
             ];
 
             if (($i % 1000) === 0) {
-                $responses = $this->client->bulk($params);
+                try {
+                    $responses = $this->client->bulk($params);
+                } catch (HttpException|ClientExceptionInterface $e) {
+                    return ['error' => $e->getMessage()];
+                }
+
                 $params = ['body' => []];
                 unset($responses);
             }
@@ -519,7 +558,11 @@ readonly class OpenSearch
         // Send the last batch if it exists
         $responses = null;
         if ($params['body'] !== []) {
-            $responses = $this->client->bulk($params);
+            try {
+                $responses = $this->client->bulk($params);
+            } catch (HttpException|ClientExceptionInterface $e) {
+                return ['error' => $e->getMessage()];
+            }
         }
 
         if ($responses !== null) {

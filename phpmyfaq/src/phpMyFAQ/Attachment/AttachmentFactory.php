@@ -152,7 +152,7 @@ class AttachmentFactory
      * @param int $recordId ID of the record
      * @param int $limit Number of items to fetch
      * @param int $offset Starting offset
-     * @param string $sortField Field to sort by (id, filename, mime_type, filesize, created)
+     * @param string $sortField Field to sort by (id, filename, mime_type, filesize)
      * @param string $sortOrder Sort order (ASC or DESC)
      *
      * @throws AttachmentException
@@ -169,7 +169,7 @@ class AttachmentFactory
         $files = [];
 
         // Validate sort field to prevent SQL injection
-        $allowedSortFields = ['id', 'filename', 'mime_type', 'filesize', 'created'];
+        $allowedSortFields = ['id', 'filename', 'mime_type', 'filesize'];
         if (!in_array($sortField, $allowedSortFields, strict: true)) {
             $sortField = 'id';
         }
@@ -178,17 +178,16 @@ class AttachmentFactory
         $sortOrder = strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC';
 
         $sql = sprintf(
-            "SELECT id FROM %sfaqattachment WHERE record_id = %d AND record_lang = '%s' ORDER BY %s %s LIMIT %d OFFSET %d",
+            "SELECT id FROM %sfaqattachment WHERE record_id = %d AND record_lang = '%s' ORDER BY %s %s",
             Database::getTablePrefix(),
             $recordId,
             $configuration->getDb()->escape(Language::$language),
             $sortField,
             $sortOrder,
-            $limit,
-            $offset,
         );
 
-        $result = $configuration->getDb()->fetchAll($configuration->getDb()->query($sql));
+        // The drivers add their own paging clause; a raw LIMIT is invalid on SQL Server
+        $result = $configuration->getDb()->fetchAll($configuration->getDb()->query($sql, $offset, $limit));
 
         if ($result !== null && $result !== []) {
             foreach ($result as $item) {

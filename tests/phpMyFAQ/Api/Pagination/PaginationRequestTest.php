@@ -225,4 +225,15 @@ class PaginationRequestTest extends TestCase
             );
         }
     }
+
+    public function testFromRequestClampsAPageWhoseOffsetWouldOverflow(): void
+    {
+        $request = new Request(['page' => (string) PHP_INT_MAX, 'per_page' => '25']);
+
+        $pagination = PaginationRequest::fromRequest($request);
+
+        $this->assertSame(intdiv(PHP_INT_MAX, 25), $pagination->page);
+        $this->assertSame((intdiv(PHP_INT_MAX, 25) - 1) * 25, $pagination->offset);
+        $this->assertSame(25, $pagination->limit);
+    }
 }

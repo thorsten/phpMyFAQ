@@ -138,6 +138,11 @@ final class PageControllerTest extends TestCase
         $response = $controller->add(new Request());
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // The editor's image upload and file browser verify the page token, not the form's own token.
+        self::assertMatchesRegularExpression(
+            '/id="pmf-editor-csrf-token" value="[^"]+"/',
+            (string) $response->getContent(),
+        );
         self::assertStringContainsString('Test User', (string) $response->getContent());
         self::assertStringContainsString('test@example.com', (string) $response->getContent());
     }
@@ -195,6 +200,11 @@ final class PageControllerTest extends TestCase
         $response = $controller->translate(new Request([], [], ['pageId' => '7']));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // The editor's image upload and file browser verify the page token, not the form's own token.
+        self::assertMatchesRegularExpression(
+            '/id="pmf-editor-csrf-token" value="[^"]+"/',
+            (string) $response->getContent(),
+        );
         self::assertStringContainsString('Unit Test Page', (string) $response->getContent());
         self::assertStringContainsString('Deutsch', (string) $response->getContent());
     }
@@ -229,6 +239,11 @@ final class PageControllerTest extends TestCase
         $response = $controller->edit(new Request([], [], ['pageId' => '7']));
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // The editor's image upload and file browser verify the page token, not the form's own token.
+        self::assertMatchesRegularExpression(
+            '/id="pmf-editor-csrf-token" value="[^"]+"/',
+            (string) $response->getContent(),
+        );
         self::assertStringContainsString('unit-test-page', (string) $response->getContent());
         self::assertStringContainsString('meta title', (string) $response->getContent());
         self::assertStringContainsString('Author Name', (string) $response->getContent());

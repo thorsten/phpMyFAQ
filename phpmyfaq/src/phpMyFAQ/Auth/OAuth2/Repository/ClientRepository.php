@@ -21,6 +21,7 @@ namespace phpMyFAQ\Auth\OAuth2\Repository;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
+use phpMyFAQ\Auth\OAuth2\ClientRegistration;
 use phpMyFAQ\Auth\OAuth2\Entity\ClientEntity;
 
 final class ClientRepository extends AbstractRepository implements ClientRepositoryInterface
@@ -41,18 +42,133 @@ final class ClientRepository extends AbstractRepository implements ClientReposit
         }
 
         $row = $this->db()->fetchObject($result);
-        if (!is_object($row)) {
-            return null;
+
+        return is_object($row) ? $this->toEntity($row) : null;
+    }
+
+    /**
+     * Every registered client, ordered by name.
+     *
+     * @return list<ClientEntity>
+     */
+    public function all(): array
+    {
+        $result = $this->db()->query(sprintf(
+            'SELECT client_id, client_secret, name, redirect_uri, grants, is_confidential FROM %s ORDER BY name',
+            $this->table('faqoauth_clients'),
+        ));
+
+        if ($result === false) {
+            return [];
         }
 
-        $clientIdentifier = (string) $row->client_id;
+        $clients = [];
+        while (true) {
+            $row = $this->db()->fetchObject($result);
+            if (!is_object($row)) {
+                break;
+            }
+
+            $client = $this->toEntity($row);
+            if ($client instanceof ClientEntity) {
+                $clients[] = $client;
+            }
+        }
+
+        return $clients;
+    }
+
+    /**
+     * @param string|null $secretHash password_hash() of the secret, null for a public client
+     * @param int $userId The administrator who registers the client
+     */
+    public function register(
+        string $clientIdentifier,
+        ClientRegistration $registration,
+        #[\SensitiveParameter]
+        ?string $secretHash,
+        int $userId,
+    ): bool {
+        $result = $this->db()->queryPrepared(
+            sprintf(
+                'INSERT INTO %s (client_id, client_secret, name, redirect_uri, grants, is_confidential, user_id, created)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, %s)',
+                $this->table('faqoauth_clients'),
+                $this->db()->now(),
+            ),
+            [
+                $clientIdentifier,
+                $secretHash,
+                $registration->name,
+                $registration->redirectUri,
+                implode(',', $registration->grantValues()),
+                $registration->confidential ? 1 : 0,
+                $userId,
+            ],
+        );
+
+        return $result !== false && $result !== null;
+    }
+
+    /**
+     * Changes the name, the redirect URI and the grants. Whether a client is confidential is
+     * decided when it is registered: its secret is created then and shown only once.
+     */
+    public function update(string $clientIdentifier, ClientRegistration $registration): bool
+    {
+        $result = $this->db()->queryPrepared(
+            sprintf(
+                'UPDATE %s SET name = ?, redirect_uri = ?, grants = ? WHERE client_id = ?',
+                $this->table('faqoauth_clients'),
+            ),
+            [
+                $registration->name,
+                $registration->redirectUri,
+                implode(',', $registration->grantValues()),
+                $clientIdentifier,
+            ],
+        );
+
+        return $result !== false && $result !== null;
+    }
+
+    /**
+     * Removes the client together with everything issued to it. An access token without a
+     * stored row counts as revoked, so the tokens of the client stop working at once.
+     */
+    public function delete(string $clientIdentifier): bool
+    {
+        $statements = [
+            sprintf(
+                'DELETE FROM %s WHERE access_token_identifier IN (SELECT identifier FROM %s WHERE client_id = ?)',
+                $this->table('faqoauth_refresh_tokens'),
+                $this->table('faqoauth_access_tokens'),
+            ),
+            sprintf('DELETE FROM %s WHERE client_id = ?', $this->table('faqoauth_access_tokens')),
+            sprintf('DELETE FROM %s WHERE client_id = ?', $this->table('faqoauth_auth_codes')),
+            sprintf('DELETE FROM %s WHERE client_id = ?', $this->table('faqoauth_clients')),
+        ];
+
+        foreach ($statements as $statement) {
+            $result = $this->db()->queryPrepared($statement, [$clientIdentifier]);
+            if ($result === false || $result === null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function toEntity(object $row): ?ClientEntity
+    {
+        $clientIdentifier = (string) ($row->client_id ?? '');
         if ($clientIdentifier === '') {
             return null;
         }
 
         $entity = new ClientEntity();
         $entity->setIdentifier($clientIdentifier);
-        $entity->secret = $row->client_secret !== null ? (string) $row->client_secret : null;
+        $entity->secret = ($row->client_secret ?? null) !== null ? (string) $row->client_secret : null;
         $entity->setName((string) ($row->name ?? $row->client_id));
         $entity->setRedirectUri((string) ($row->redirect_uri ?? ''));
         $entity->setConfidential((int) ($row->is_confidential ?? 1) === 1);

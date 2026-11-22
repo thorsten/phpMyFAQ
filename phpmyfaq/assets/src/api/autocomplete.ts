@@ -16,7 +16,7 @@
 import { AutocompleteSearchResponse } from '../interfaces';
 
 export const fetchAutoCompleteData = async (searchString: string): Promise<AutocompleteSearchResponse> => {
-  const response: Response = await fetch(`api/autocomplete?search=${searchString}`, {
+  const response: Response = await fetch(`api/autocomplete?search=${encodeURIComponent(searchString)}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {

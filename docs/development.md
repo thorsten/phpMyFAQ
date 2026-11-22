@@ -62,7 +62,8 @@ The most important variables are:
 | `TWIG_CACHE_ENABLED`      | Caches compiled Twig templates                                              | `true`              |
 | `ELASTICSEARCH_BASE_URI`  | Base URI of the Elasticsearch server                                        | `http://127.0.0.1:9200` |
 | `OPENSEARCH_BASE_URI`     | Base URI of the OpenSearch server                                           | `http://127.0.0.1:9201` |
-| `SEARCH_WAIT_TIMEOUT`     | Seconds to wait for the search engine to become available                  | `15`                |
+| `SEARCH_WAIT_TIMEOUT`     | Seconds a command line process (console command, queue worker) waits for the search engine to become available; web requests never wait | `15` |
+| `SEARCH_REQUEST_TIMEOUT`  | Seconds a web request waits for an answer of the search engine before the search falls back to the database (connecting is limited to 2 seconds); creating, importing and dropping the index in the admin panel are not limited by it | `5` |
 
 The cache directories can be overridden with `ROUTING_CACHE_DIR`, `CONTAINER_CACHE_DIR`, and `TWIG_CACHE_DIR` (absolute
 paths). All caches are disabled automatically in debug mode and on development versions. See `phpmyfaq/.env.example`

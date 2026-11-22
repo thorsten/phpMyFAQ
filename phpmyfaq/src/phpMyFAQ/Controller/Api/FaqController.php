@@ -25,6 +25,7 @@ use OpenApi\Spec as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Relation as CategoryRelation;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\ApiKeyScope;
 use phpMyFAQ\Enums\FaqStatus;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
@@ -473,12 +474,24 @@ final class FaqController extends AbstractApiController
     #[OA\Operation\Get(
         path: '/api/v4.0/faqs',
         operationId: 'getAll',
-        description: 'This endpoint returns paginated FAQs for the given language provided by "Accept-Language".',
+        description: 'This endpoint returns paginated FAQs for the given language provided by "Accept-Language". '
+        . 'Anonymous callers only get the FAQs a reader can see: published and inside their publication window. '
+        . 'If the configuration setting "api.onlyActiveFaqs" is disabled, a caller that sends a valid "x-pmf-token" '
+        . 'header or a bearer credential (API key or OAuth2 access token) with the "faq.read" scope also gets '
+        . 'drafts, scheduled and expired FAQs. A missing or invalid credential is not rejected, the list is '
+        . 'filtered instead.',
         tags: ['Public Endpoints'],
     )]
     #[OA\Parameter\Header(
         name: 'Accept-Language',
         description: 'The language code for the FAQ.',
+        schema: new OA\Schema(type: 'string'),
+    )]
+    #[OA\Parameter\Header(
+        name: 'x-pmf-token',
+        description: 'phpMyFAQ client API Token, generated in admin backend. Only needed to list FAQs that are not '
+        . 'visible to readers while "api.onlyActiveFaqs" is disabled.',
+        required: false,
         schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Parameter(
@@ -579,7 +592,11 @@ final class FaqController extends AbstractApiController
                 defaultOrder: 'asc',
             );
 
-            $onlyActive = (bool) $this->configuration->get('api.onlyActiveFaqs');
+            // FAQs a reader cannot see (not published, or outside their publication window) are
+            // only listed for a caller the write endpoints would accept, never anonymously.
+            $onlyActive =
+                (bool) $this->configuration->get('api.onlyActiveFaqs')
+                || !$this->sendsValidApiCredential($request, ApiKeyScope::FAQ_READ);
             $ignoreOrphanedFaqs = (bool) $this->configuration->get('api.ignoreOrphanedFaqs');
 
             $condition = [
@@ -601,13 +618,20 @@ final class FaqController extends AbstractApiController
 
             $publicRecords = array_map($this->toPublicRecord(...), array_values($this->faq->faqRecords));
 
-            return $this->paginatedResponse(
+            $response = $this->paginatedResponse(
                 $request,
                 data: $publicRecords,
                 total: $this->faq->countAllFaqs($condition),
                 pagination: $pagination,
                 options: new PaginatedResponseOptions(sort: $sort),
             );
+
+            // A list widened by a credential must not end up in a shared or browser cache
+            if (!$onlyActive) {
+                $response->headers->set(key: 'Cache-Control', values: 'private, no-store');
+            }
+
+            return $response;
         });
     }
 
@@ -696,7 +720,7 @@ final class FaqController extends AbstractApiController
     )]
     #[OA\Response(
         response: 409,
-        description: 'If the parent category name cannot be mapped.',
+        description: 'If the category name cannot be mapped or the category ID does not exist.',
         content: new OA\MediaType\Json(example: [
             'stored' => false,
             'error' => 'The given category name was not found',
@@ -706,7 +730,7 @@ final class FaqController extends AbstractApiController
     #[Route(path: 'v4.0/faq/create', name: 'api.faq.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
-        $this->hasValidToken();
+        $this->hasValidTokenOrBearerCredential($request, ApiKeyScope::FAQ_WRITE);
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -752,9 +776,40 @@ final class FaqController extends AbstractApiController
             $categoryId = $categoryIdFound;
         }
 
+        if (!Language::isASupportedLanguage($languageCode)) {
+            return $this->json([
+                'stored' => false,
+                'error' => 'The given language is not supported.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!is_int($categoryId) || $categoryId < 1) {
+            return $this->json([
+                'stored' => false,
+                'error' => 'A category ID or a category name is required.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (trim($question) === '') {
+            return $this->json([
+                'stored' => false,
+                'error' => 'The question must not be empty.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         // The global right can be limited to categories and languages; the scope is part of
         // the right, so it has to hold for the category and language the FAQ is created in.
-        $this->userHasPermissionForCategoriesInLanguage(PermissionType::FAQ_ADD, [(int) $categoryId], $languageCode);
+        $this->userHasPermissionForCategoriesInLanguage(PermissionType::FAQ_ADD, [$categoryId], $languageCode);
+
+        // Checked after the scope, so a caller limited to some categories cannot probe which
+        // other category ids exist. An FAQ in a category that does not exist would be stored
+        // but reachable from no category page.
+        if ($this->configuration->getLanguage()->isLanguageAvailable($categoryId, table: 'faqcategories') === []) {
+            return $this->json([
+                'stored' => false,
+                'error' => 'The given category ID was not found.',
+            ], Response::HTTP_CONFLICT);
+        }
 
         if ($this->faq->hasTitleAHash($question)) {
             $result = [
@@ -892,7 +947,7 @@ final class FaqController extends AbstractApiController
     #[Route(path: 'v4.0/faq/update', name: 'api.faq.update', methods: ['PUT'])]
     public function update(Request $request): JsonResponse
     {
-        $this->hasValidToken();
+        $this->hasValidTokenOrBearerCredential($request, ApiKeyScope::FAQ_WRITE);
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -973,10 +1028,17 @@ final class FaqController extends AbstractApiController
             $this->userMayPublish(array_keys($faqCategories), $languageCode);
         }
 
+        // The update writes the editorial columns of the record, so the ones this endpoint does
+        // not accept have to be carried over from the stored record instead of being reset.
+        // The publication window is not among them: an entity without a window leaves the
+        // stored date_start / date_end untouched.
+        $this->faq->getFaq($faqId, faqRevisionId: null, isAdmin: true, faqLanguage: $languageCode);
+        $storedRecord = $this->faq->faqRecord;
+
         $faqEntity = new FaqEntity();
         $faqEntity
             ->setId($faqId)
-            ->setRevisionId(revisionId: 0)
+            ->setRevisionId((int) ($storedRecord['revision_id'] ?? 0))
             ->setLanguage($languageCode)
             ->setQuestion($question)
             ->setAnswer($answer)
@@ -985,8 +1047,8 @@ final class FaqController extends AbstractApiController
             ->setEmail($email)
             ->setStatus($status)
             ->setSticky($isSticky)
-            ->setComment(comment: false)
-            ->setNotes(notes: '');
+            ->setComment(($storedRecord['comment'] ?? '') === 'y')
+            ->setNotes((string) ($storedRecord['notes'] ?? ''));
 
         $this->faq->update($faqEntity);
 

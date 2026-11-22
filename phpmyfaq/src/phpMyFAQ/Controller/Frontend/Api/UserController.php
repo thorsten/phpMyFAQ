@@ -66,12 +66,15 @@ final class UserController extends AbstractController
         $userName = trim(strip_tags((string) ($data->name ?? '')));
         $email = Filter::filterEmail($data->email ?? null);
         $isVisible = Filter::filterVar($data->{'is_visible'} ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
-        $password = trim((string) Filter::filterVar($data->faqpassword ?? null, FILTER_SANITIZE_SPECIAL_CHARS));
-        $confirm = trim((string) Filter::filterVar($data->faqpassword_confirm ?? null, FILTER_SANITIZE_SPECIAL_CHARS));
-        $currentPassword = trim((string) Filter::filterVar(
+        // The login form verifies the sanitised form of the typed password and nothing else, so
+        // the passwords are sanitised the same way here and not trimmed: a password stored
+        // without the blanks the user typed around it could never be entered at the login again.
+        $password = (string) Filter::filterVar($data->faqpassword ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
+        $confirm = (string) Filter::filterVar($data->faqpassword_confirm ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
+        $currentPassword = (string) Filter::filterVar(
             $data->faqpassword_current ?? null,
             FILTER_SANITIZE_SPECIAL_CHARS,
-        ));
+        );
         $twoFactorEnabled = Filter::filterVar($data->twofactor_enabled ?? 'off', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $isExternalIdentityUser = in_array($this->currentUser->getUserAuthSource(), ['azure', 'oidc'], strict: true);
@@ -143,8 +146,12 @@ final class UserController extends AbstractController
                 'is_visible' => $isVisible === 'on' ? 1 : 0,
             ];
             if (!$isWebAuthnUser) {
-                $userData['email'] = $newEmail;
                 $userData['twofactor_enabled'] = $twoFactorFlag;
+            }
+
+            // An invalid or missing address must not clear the stored one
+            if (!$isWebAuthnUser && $newEmail !== '') {
+                $userData['email'] = $newEmail;
             }
 
             $success = $this->currentUser->setUserData($userData);
@@ -306,7 +313,7 @@ final class UserController extends AbstractController
                 $author,
                 Translation::getString(key: 'msgNewContentMail'),
                 $email,
-                $question,
+                nl2br($question),
             );
 
             try {
@@ -314,6 +321,7 @@ final class UserController extends AbstractController
                 $this->mailer->addTo($this->configuration->getAdminEmail());
                 $this->mailer->subject = $this->configuration->getTitle() . ': Remove User Request';
                 $this->mailer->message = $question;
+                $this->mailer->contentType = 'text/html';
                 $this->mailer->send();
 
                 return $this->json(['success' => Translation::get(key: 'msgMailContact')], Response::HTTP_OK);

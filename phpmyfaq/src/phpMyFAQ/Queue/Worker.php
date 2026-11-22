@@ -78,7 +78,7 @@ class Worker
             }
 
             $handler($message);
-            $this->databaseTransport->acknowledge($jobId);
+            $this->acknowledge($jobId);
 
             return true;
         } catch (Throwable $throwable) {
@@ -99,7 +99,7 @@ class Worker
             );
 
             if ($attempts >= self::MAX_RETRIES) {
-                $this->databaseTransport->acknowledge($jobId);
+                $this->acknowledge($jobId);
                 return true;
             }
 
@@ -137,7 +137,7 @@ class Worker
             );
 
             if ($attempts >= self::MAX_RETRIES) {
-                $this->databaseTransport->acknowledge($job['id']);
+                $this->acknowledge($job['id']);
                 continue;
             }
 
@@ -185,6 +185,22 @@ class Worker
         }
 
         return $processed;
+    }
+
+    /**
+     * Removes a finished job. A job that cannot be removed stays reserved and runs again once its
+     * reservation is stale, so the failure is logged.
+     */
+    private function acknowledge(int $jobId): void
+    {
+        if ($this->databaseTransport->acknowledge($jobId)) {
+            return;
+        }
+
+        error_log(sprintf(
+            'Queue job %d could not be removed from the queue after it finished; it will run again once its reservation is stale.',
+            $jobId,
+        ));
     }
 
     private function logFailedAttempt(int $jobId, string $body, int $attempts, string $reason): void

@@ -168,6 +168,11 @@ abstract class AbstractAdministrationController extends AbstractController
             'ad_menu_passwd',
             'password/change',
         );
+        $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
+            restrictions: PermissionType::USER_EDIT->value,
+            caption: 'ad_menu_api_keys',
+            route: 'user/api-keys',
+        );
 
         $secLevelEntries['content'] = $adminHelper->addMenuEntry(
             'addcateg+editcateg+delcateg',
@@ -256,7 +261,7 @@ abstract class AbstractAdministrationController extends AbstractController
         );
 
         $secLevelEntries['backup'] = $adminHelper->addMenuEntry(
-            PermissionType::CONFIGURATION_EDIT->value,
+            PermissionType::BACKUP->value,
             'ad_menu_backup',
             'backup',
         );
@@ -314,6 +319,14 @@ abstract class AbstractAdministrationController extends AbstractController
             );
         }
 
+        if ($this->configuration->get(item: 'oauth2.enable')) {
+            $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
+                restrictions: PermissionType::CONFIGURATION_EDIT->value,
+                caption: 'ad_menu_oauth2',
+                route: 'oauth2',
+            );
+        }
+
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
             PermissionType::CONFIGURATION_EDIT->value,
             'ad_system_info',
@@ -336,6 +349,7 @@ abstract class AbstractAdministrationController extends AbstractController
         $configurationPage = false;
 
         switch ($request->attributes->get('_route')) {
+            case 'admin.user.api-keys':
             case 'admin.group':
             case 'admin.group.add':
             case 'admin.group.create':
@@ -397,6 +411,7 @@ abstract class AbstractAdministrationController extends AbstractController
             case 'admin.configuration':
             case 'admin.elasticsearch':
             case 'admin.ldap':
+            case 'admin.oauth2':
             case 'admin.opensearch':
             case 'admin.forms':
             case 'admin.instance.edit':

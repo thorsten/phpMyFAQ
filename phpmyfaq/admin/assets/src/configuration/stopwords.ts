@@ -19,6 +19,12 @@ import { fetchByLanguage, postStopWord, removeStopWord } from '../api';
 
 const maxCols = 4;
 
+interface SavedStopWord {
+  added?: number;
+  updated?: number;
+  error?: string;
+}
+
 export const handleStopWords = (): void => {
   const stopWordsLanguageSelector = document.getElementById('pmf-stop-words-language-selector') as HTMLSelectElement;
   const addStopWordInput = document.getElementById('pmf-stop-words-add-input') as HTMLButtonElement;
@@ -148,7 +154,16 @@ const saveStopWord = async (elementId: string): Promise<void> => {
 
   if (element.getAttribute('data-old-value') !== element.value) {
     try {
-      await postStopWord(csrfToken, element.value, info.id, info.lang);
+      const response: SavedStopWord = await postStopWord(csrfToken, element.value, info.id, info.lang);
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      // A new stop word gets its id from the server; without it the next edit would add it again.
+      if (response.added !== undefined) {
+        element.id = buildStopWordInputElementId(response.added, info.lang);
+      }
+
       element.style.borderColor = '#198754';
       element.style.backgroundImage =
         "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e\")";
@@ -181,9 +196,12 @@ const deleteStopWord = async (elementId: string): Promise<void> => {
   const csrfToken: string = (document.getElementById('pmf-csrf-token') as HTMLInputElement).value;
 
   try {
-    await removeStopWord(csrfToken, info.id, info.lang);
-    element.addEventListener('click', () => (element.style.opacity = '0'));
-    element.addEventListener('transitionend', () => element.remove());
+    const response = await removeStopWord(csrfToken, info.id, info.lang);
+    if (response.error) {
+      throw new Error(response.error);
+    }
+
+    element.remove();
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Error deleting stop word';
     const table = document.querySelector('.table') as HTMLElement;

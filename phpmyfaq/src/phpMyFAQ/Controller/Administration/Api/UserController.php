@@ -32,6 +32,7 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Permission;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Permission\RightGrant;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -294,9 +295,23 @@ final class UserController extends AbstractAdministrationApiController
 
         $userId = (int) Filter::filterVar($data->userId ?? null, FILTER_VALIDATE_INT);
         $csrfToken = Filter::filterVar($data->csrf ?? '', FILTER_SANITIZE_SPECIAL_CHARS, '');
-        $newPassword = is_string($data->newPassword ?? null) ? $data->newPassword : '';
-        $retypedPassword = is_string($data->passwordRepeat ?? null) ? $data->passwordRepeat : '';
-        $currentPassword = is_string($data->currentPassword ?? null) ? $data->currentPassword : '';
+        // The login form verifies the sanitised form of the typed password, so the passwords
+        // have to be stored and checked in that same form here.
+        $newPassword = Filter::filterVar(
+            is_string($data->newPassword ?? null) ? $data->newPassword : '',
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            default: '',
+        );
+        $retypedPassword = Filter::filterVar(
+            is_string($data->passwordRepeat ?? null) ? $data->passwordRepeat : '',
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            default: '',
+        );
+        $currentPassword = Filter::filterVar(
+            is_string($data->currentPassword ?? null) ? $data->currentPassword : '',
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            default: '',
+        );
 
         if (!Token::getInstance($this->session)->verifyToken(page: 'overwrite-password', requestToken: $csrfToken)) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
@@ -493,6 +508,10 @@ final class UserController extends AbstractAdministrationApiController
 
         if (!$automaticPassword && (strlen($userPassword) <= 7 || strlen($userPasswordConfirm) <= 7)) {
             $errorMessage[] = Translation::get(key: 'ad_passwd_fail');
+        }
+
+        if (!$automaticPassword && !hash_equals($userPassword, $userPasswordConfirm)) {
+            $errorMessage[] = Translation::get(key: 'msgPasswordsMustBeEqual');
         }
 
         if ($automaticPassword) {
@@ -746,21 +765,21 @@ final class UserController extends AbstractAdministrationApiController
                 // for the languages the acting user holds it in across every category. A right
                 // held only for some categories (through a category-restricted group) does not
                 // count, or it would become global. null means unrestricted; an empty list
-                // fails closed: the right is not held globally in any language.
-                $ownScope = $this->currentUser
+                // means the right is not held globally in any language and cannot be handed
+                // out, which is decided below, once the target's current rights are known.
+                $ownScopes[(int) $userRight] = $this->currentUser
                     ->perm
                     ->getScopeForRight($actingUserId, (int) $userRight)
                     ->languagesInEveryCategory();
-                if ($ownScope === []) {
-                    return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
-                }
-
-                $ownScopes[(int) $userRight] = $ownScope;
             }
         }
 
+        // A blocked account has to load as well: left unloaded, the guards below would judge
+        // an empty user and pass, while the writes further down hit the real account.
         $user = new User($this->configuration);
-        $user->getUserById($userId);
+        if (!$user->getUserById($userId, allowBlockedUsers: true)) {
+            return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
+        }
 
         // Defense in depth: a non-SuperAdmin must never be able to alter a SuperAdmin or
         // protected account.
@@ -782,16 +801,42 @@ final class UserController extends AbstractAdministrationApiController
         $existingScopes = $user->perm instanceof BasicPermission
             ? $user->perm->getAllUserLanguageRestrictions($userId)
             : [];
+        $heldRights = $user->perm->getUserRights($userId);
+
+        // The acting user may only grant and revoke within their own scope. A right the target
+        // already holds is left exactly as it is, so only the rights this save adds or takes
+        // away are judged: a new right needs a scope it can be handed out in, and a right is
+        // only taken away from a target holding it in no wider scope than the acting user.
+        if (!$actingIsSuperAdmin) {
+            foreach (array_diff($userRights, $heldRights) as $grantedRight) {
+                if ($ownScopes[(int) $grantedRight] === []) {
+                    return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+                }
+            }
+
+            foreach (array_diff($heldRights, $userRights) as $revokedRight) {
+                $heldLanguages = $existingScopes[(int) $revokedRight] ?? [];
+                if (!$this->mayAssignScope((int) $revokedRight, [], $heldLanguages)) {
+                    return $this->json([
+                        'error' => Translation::get(key: 'ad_permission_scope_exceeded'),
+                    ], Response::HTTP_FORBIDDEN);
+                }
+            }
+        }
 
         if (!$user->perm->refuseAllUserRights($userId)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_mysqlerr')], Response::HTTP_BAD_REQUEST);
         }
 
         foreach ($userRights as $userRight) {
-            $languages = $this->languageScopeForRegrant(
-                $existingScopes[(int) $userRight] ?? [],
-                $ownScopes[(int) $userRight] ?? null,
-            );
+            // A right the target keeps stays in the scope it is held in, even where that
+            // exceeds the acting user's own scope: nothing about it was changed.
+            $languages = in_array((int) $userRight, $heldRights, strict: true)
+                ? $existingScopes[(int) $userRight] ?? []
+                : $this->languageScopeForRegrant(
+                    $existingScopes[(int) $userRight] ?? [],
+                    $ownScopes[(int) $userRight] ?? null,
+                );
 
             // Restrict first, grant second: if restricting fails, the right stays ungranted (fail closed).
             if (
@@ -832,11 +877,12 @@ final class UserController extends AbstractAdministrationApiController
     }
 
     /**
-     * Returns the languages a re-granted right must be restricted to, an empty array meaning
-     * unrestricted. The target keeps its existing restriction. A non-SuperAdmin whose own grant
-     * is restricted (a non-null scope) can only leave the right within that scope: the existing
-     * restriction is narrowed to the languages they hold, and an unrestricted or disjoint
-     * restriction becomes exactly their own scope, which they could assign explicitly anyway.
+     * Returns the languages a newly granted right must be restricted to, an empty array meaning
+     * unrestricted. Restriction rows stored ahead of the grant are kept. A non-SuperAdmin whose
+     * own grant is restricted (a non-null scope) can only hand the right out within that scope:
+     * the stored restriction is narrowed to the languages they hold, and an unrestricted or
+     * disjoint restriction becomes exactly their own scope, which they could assign explicitly
+     * anyway. A right the target already holds never passes through here.
      *
      * @param array<string> $existingLanguages
      * @param array<string>|null $ownLanguages
@@ -922,12 +968,33 @@ final class UserController extends AbstractAdministrationApiController
         // of the languages they hold themselves for this right. This prevents an administrator
         // with the delegable USER_EDIT right from granting language access they do not possess
         // (privilege escalation), including via an empty "unrestricted" list.
-        if (!$this->mayAssignScope($rightId, [], $languages)) {
-            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        //
+        // A user who already holds the right is judged by what the save changes instead: the
+        // languages added and removed must lie within the acting user's scope, and the rest of
+        // the target's restriction, which may exceed that scope, is submitted back unchanged.
+        $user = new User($this->configuration);
+        $targetExists = $user->getUserById($userId);
+        $targetHoldsRight = $targetExists && $user->perm->checkUserRight($userId, $rightId);
+
+        $storedLanguages = $targetExists && $user->perm instanceof BasicPermission
+            ? $user->perm->getUserLanguageRestrictions($userId, $rightId)
+            : [];
+        $clearsStoredRestrictions = $languages === [] && $storedLanguages !== [];
+
+        if (!$targetHoldsRight && !$this->mayAssignScope($rightId, [], $languages)) {
+            return (
+                $clearsStoredRestrictions
+                    ? $this->storedRestrictionsStay(
+                        'ad_language_restrictions_kept',
+                        $user->perm,
+                        $rightId,
+                        $this->languageNames($storedLanguages),
+                    )
+                    : $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN)
+            );
         }
 
-        $user = new User($this->configuration);
-        if (!$user->getUserById($userId)) {
+        if (!$targetExists) {
             return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         }
 
@@ -941,10 +1008,54 @@ final class UserController extends AbstractAdministrationApiController
             return $this->json(['error' => 'Language restrictions are not enabled.'], Response::HTTP_BAD_REQUEST);
         }
 
+        if ($targetHoldsRight && !$this->mayChangeLanguageScope($rightId, $storedLanguages, $languages)) {
+            return (
+                $clearsStoredRestrictions
+                    ? $this->storedRestrictionsStay(
+                        'ad_language_restrictions_kept',
+                        $user->perm,
+                        $rightId,
+                        $this->languageNames($storedLanguages),
+                    )
+                    : $this->json([
+                        'error' => Translation::get(key: 'ad_permission_scope_exceeded'),
+                    ], Response::HTTP_FORBIDDEN)
+            );
+        }
+
         if (!$user->perm->setUserLanguageRestrictions($userId, $rightId, $languages)) {
             return $this->json(['error' => Translation::get(key: 'ad_msg_mysqlerr')], Response::HTTP_BAD_REQUEST);
         }
 
+        $this->adminLog->log(
+            $this->currentUser,
+            AdminLogType::USER_CHANGE_PERMISSIONS->value . ' (languages):' . $userId . ':' . $rightId,
+        );
+
         return $this->json(['success' => true], Response::HTTP_OK);
+    }
+
+    /**
+     * Whether the acting user may change a direct user right's language restriction from one
+     * list to the other, an empty list meaning every language. A direct right is never
+     * category-restricted, so the languages added and removed must be held in every category.
+     *
+     * @param array<string> $heldLanguages
+     * @param array<string> $languages
+     * @throws Exception
+     */
+    private function mayChangeLanguageScope(int $rightId, array $heldLanguages, array $languages): bool
+    {
+        if ($this->currentUser->isSuperAdmin()) {
+            return true;
+        }
+
+        return $this->currentUser
+            ->perm
+            ->getScopeForRight($this->currentUser->getUserId(), $rightId)
+            ->coversChange(
+                RightGrant::fromRestrictions([], $heldLanguages),
+                RightGrant::fromRestrictions([], $languages),
+            );
     }
 }

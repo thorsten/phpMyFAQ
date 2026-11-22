@@ -111,7 +111,7 @@ class SchemaInstallerTest extends TestCase
     {
         return [
             'mysql' => ['pdo_mysql', 'SHOW TABLES LIKE'],
-            'postgres' => ['pdo_pgsql', 'FROM pg_catalog.pg_tables'],
+            'postgres' => ['pdo_pgsql', 'FROM pg_catalog.pg_tables WHERE schemaname = current_schema() AND tablename'],
             'sqlserver' => ['pdo_sqlsrv', 'FROM sysobjects'],
         ];
     }
@@ -148,6 +148,55 @@ class SchemaInstallerTest extends TestCase
         $this->assertStringContainsString($expectedCatalogQueryFragment, $queries[0]);
         // every table exists in the catalog, so nothing is created
         $this->assertSame([], $installer->collectedSql);
+    }
+
+    /**
+     * The tables are created without quoted names, so PostgreSQL stores the names of an
+     * installation with the prefix PMF_ in lower case. PostgreSQL was not available to run
+     * against: the test checks the catalog queries the installer sends.
+     */
+    public function testPostgresCatalogQueriesLookUpTheLowerCaseNameOfAMixedCasePrefix(): void
+    {
+        $queries = [];
+        $db = $this->createStub(DatabaseDriver::class);
+        $db->method('query')->willReturnCallback(static function (string $sql) use (&$queries): bool {
+            $queries[] = $sql;
+
+            return true;
+        });
+        $db->method('numRows')->willReturn(1);
+        $db->method('fetchAll')->willReturn([]);
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+
+        $dbTypeProperty = new ReflectionClass(Database::class)->getProperty('dbType');
+        $previousType = $dbTypeProperty->getValue();
+        $previousPrefix = Database::getTablePrefix();
+        $dbTypeProperty->setValue(null, 'pdo_pgsql');
+        Database::setTablePrefix('PMF_');
+
+        try {
+            $installer = new SchemaInstaller($configuration, new PostgresDialect());
+            $installer->dryRun = true;
+            $installer->addMissingColumns();
+        } finally {
+            $dbTypeProperty->setValue(null, $previousType);
+            Database::setTablePrefix($previousPrefix);
+        }
+
+        $this->assertContains(
+            'SELECT tablename FROM pg_catalog.pg_tables '
+            . "WHERE schemaname = current_schema() AND tablename = 'pmf_faqconfig'",
+            $queries,
+        );
+        $this->assertContains(
+            'SELECT column_name AS "Field" FROM information_schema.columns '
+            . "WHERE table_schema = current_schema() AND table_name = 'pmf_faqconfig'",
+            $queries,
+        );
+        $this->assertStringNotContainsString("'PMF_", implode("\n", $queries));
+        // the statements themselves keep the prefix as configured: PostgreSQL folds it
+        $this->assertStringContainsString('ALTER TABLE PMF_', implode("\n", $installer->collectedSql));
     }
 
     public function testMysqlDryRunContainsInnodb(): void

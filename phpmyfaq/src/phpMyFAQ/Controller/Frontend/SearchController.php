@@ -55,7 +55,12 @@ final class SearchController extends AbstractFrontController
         $tagId = Filter::filterVar($request->attributes->get('tagId'), FILTER_VALIDATE_INT, 0);
         $page = Filter::filterVar($request->attributes->get('page'), FILTER_VALIDATE_INT, 1);
 
-        return new RedirectResponse(sprintf('/search.html?tagging_id=%d&seite=%d', $tagId, $page));
+        return new RedirectResponse(sprintf(
+            '%ssearch.html?tagging_id=%d&seite=%d',
+            $this->configuration->getDefaultUrl(),
+            $tagId,
+            $page,
+        ));
     }
 
     /**
@@ -68,7 +73,11 @@ final class SearchController extends AbstractFrontController
     {
         $tagId = Filter::filterVar($request->attributes->get('tagId'), FILTER_VALIDATE_INT, 0);
 
-        return new RedirectResponse(sprintf('/search.html?tagging_id=%d', $tagId));
+        return new RedirectResponse(sprintf(
+            '%ssearch.html?tagging_id=%d',
+            $this->configuration->getDefaultUrl(),
+            $tagId,
+        ));
     }
 
     /**

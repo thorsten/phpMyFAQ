@@ -140,15 +140,42 @@ readonly class AdminLogRepository
     }
 
     /**
+     * Returns the hash of the newest entry deleteOlderThan() would remove for the same timestamp.
+     *
+     * @return string|null Hash of that entry or null if no entry is older
+     */
+    public function getLastHashOlderThan(int $timestamp): ?string
+    {
+        $query = sprintf(
+            'SELECT hash FROM %sfaqadminlog WHERE time < %d ORDER BY id DESC',
+            Database::getTablePrefix(),
+            $timestamp,
+        );
+
+        $result = $this->configuration->getDb()->query($query, offset: 0, rowcount: 1);
+        if ($result === false) {
+            return null;
+        }
+
+        $row = $this->configuration->getDb()->fetchObject($result);
+        if (!$row instanceof \stdClass || (string) ($row->hash ?? '') === '') {
+            return null;
+        }
+
+        return (string) $row->hash;
+    }
+
+    /**
      * Returns the hash of the most recent log entry for chain linking.
      *
      * @return string|null Hash of the last entry or null if no entries exist
      */
     public function getLastHash(): ?string
     {
-        $query = sprintf('SELECT hash FROM %sfaqadminlog ORDER BY id DESC LIMIT 1', Database::getTablePrefix());
+        $query = sprintf('SELECT hash FROM %sfaqadminlog ORDER BY id DESC', Database::getTablePrefix());
 
-        $result = $this->configuration->getDb()->query($query);
+        // The drivers add their own paging clause; a raw LIMIT is invalid on SQL Server
+        $result = $this->configuration->getDb()->query($query, offset: 0, rowcount: 1);
 
         if ($result !== false) {
             $row = $this->configuration->getDb()->fetchObject($result);

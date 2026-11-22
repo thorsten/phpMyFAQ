@@ -190,4 +190,53 @@ class DatabaseSchemaTest extends TestCase
         $sql = $schema->faqforms()->build();
         $this->assertStringNotContainsString('PRIMARY KEY', $sql);
     }
+
+    /**
+     * A fresh installation has to end up with the indexes the migrations create for an
+     * updated one.
+     */
+    #[DataProvider('dialectProvider')]
+    public function testIdentityAndKeyIndexesAreUnique(DialectInterface $dialect): void
+    {
+        $schema = new DatabaseSchema($dialect);
+        $isMysql = $dialect instanceof MysqlDialect;
+
+        $expectations = [
+            'idx_faquserdata_keycloak_sub' => $schema->faquserdata(),
+            'idx_faquserdata_entra_oid' => $schema->faquserdata(),
+            'idx_faquserdata_oidc_identity' => $schema->faquserdata(),
+            'idx_api_key_unique' => $schema->faqapiKeys(),
+            'idx_push_endpoint_hash' => $schema->faqpushSubscriptions(),
+        ];
+
+        foreach ($expectations as $indexName => $table) {
+            $sql = $isMysql ? $table->build() : implode("\n", $table->buildIndexStatements());
+            $this->assertMatchesRegularExpression(
+                $isMysql ? '/UNIQUE INDEX ' . $indexName . ' \\(/' : '/CREATE UNIQUE INDEX ' . $indexName . ' ON /',
+                $sql,
+                $indexName,
+            );
+        }
+
+        if ($dialect instanceof SqlServerDialect) {
+            $this->assertContains(
+                'CREATE UNIQUE INDEX idx_faquserdata_keycloak_sub ON faquserdata (keycloak_sub) '
+                . 'WHERE keycloak_sub IS NOT NULL',
+                $schema->faquserdata()->buildIndexStatements(),
+            );
+            $this->assertContains(
+                'CREATE UNIQUE INDEX idx_api_key_unique ON faqapi_keys (api_key)',
+                $schema->faqapiKeys()->buildIndexStatements(),
+            );
+        }
+    }
+
+    #[DataProvider('dialectProvider')]
+    public function testAdminLogHasHashIndex(DialectInterface $dialect): void
+    {
+        $table = new DatabaseSchema($dialect)->adminLog();
+        $sql = $dialect instanceof MysqlDialect ? $table->build() : implode("\n", $table->buildIndexStatements());
+
+        $this->assertMatchesRegularExpression('/INDEX idx_hash (ON faqadminlog )?\\(hash\\)/', $sql);
+    }
 }

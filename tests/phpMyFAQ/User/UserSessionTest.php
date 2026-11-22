@@ -351,9 +351,15 @@ class UserSessionTest extends TestCase
 
     public function testUserTrackingKeepsTheCookieSessionAndUsesTheForwardedAddress(): void
     {
+        $queries = [];
         $db = $this->createMock(DatabaseDriver::class);
         $db->expects($this->never())->method('nextId');
-        $db->expects($this->never())->method('query');
+        $db->method('escape')->willReturnArgument(0);
+        $db->method('numRows')->willReturn(1);
+        $db->method('query')->willReturnCallback(static function (string $query) use (&$queries): string {
+            $queries[] = $query;
+            return 'result';
+        });
 
         $configuration = $this->createConfiguration($db, [
             'main.enableUserTracking' => true,
@@ -362,8 +368,8 @@ class UserSessionTest extends TestCase
         $request = Request::create(
             '/index.php',
             'GET',
-            [UserSession::COOKIE_NAME_SESSION_ID => 22],
             [],
+            [UserSession::COOKIE_NAME_SESSION_ID => '22'],
             [],
             [
                 'REMOTE_ADDR' => '127.0.0.1',
@@ -391,6 +397,9 @@ class UserSessionTest extends TestCase
         $session->userTracking('view', 99);
 
         $this->assertSame(22, $session->getCurrentSessionId());
+        $this->assertCount(2, $queries);
+        $this->assertStringContainsString("WHERE sid = 22 AND ip = '203.0.113.0' AND time > ", $queries[0]);
+        $this->assertStringStartsWith('UPDATE faqsessions SET time = 2000, user_id = 0 WHERE sid = 22', $queries[1]);
         $files = glob($this->trackingDirectory . '/tracking*');
         $this->assertCount(1, $files);
         $this->assertStringContainsString('22;view;99;203.0.113.0;', (string) file_get_contents($files[0]));

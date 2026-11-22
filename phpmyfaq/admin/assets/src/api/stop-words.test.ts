@@ -25,6 +25,17 @@ describe('Stop Words API', () => {
     expect(result).toEqual(mockResponse);
   });
 
+  it('fetchByLanguage should URL-encode the language', async () => {
+    vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue([]);
+
+    await fetchByLanguage('en&x=1');
+
+    expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith(
+      './api/stopwords?language=en%26x%3D1',
+      expect.any(Object)
+    );
+  });
+
   it('postStopWord should post a new stop word', async () => {
     const mockResponse = { success: true };
     vi.spyOn(fetchWrapperModule, 'fetchJson').mockResolvedValue(mockResponse);

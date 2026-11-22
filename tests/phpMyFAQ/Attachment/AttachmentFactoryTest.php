@@ -352,11 +352,13 @@ class AttachmentFactoryTest extends TestCase
         $queryCalls = 0;
         $this->mockDb
             ->method('query')
-            ->willReturnCallback(function (string $query) use (&$queryCalls) {
+            ->willReturnCallback(function (string $query, int $offset = 0, int $rowcount = 0) use (&$queryCalls) {
                 ++$queryCalls;
 
                 if ($queryCalls === 1) {
-                    TestCase::assertStringContainsString('ORDER BY filename DESC LIMIT 10 OFFSET 5', $query);
+                    // Paging goes through the driver: a raw LIMIT clause is invalid on SQL Server
+                    TestCase::assertStringEndsWith('ORDER BY filename DESC', $query);
+                    TestCase::assertSame([5, 10], [$offset, $rowcount]);
                 } else {
                     TestCase::assertStringContainsString('WHERE', $query);
                     TestCase::assertStringContainsString('id = 17', $query);
@@ -409,8 +411,9 @@ class AttachmentFactoryTest extends TestCase
         $this->mockDb
             ->expects($this->once())
             ->method('query')
-            ->willReturnCallback(function (string $query) {
-                $this->assertStringContainsString('ORDER BY id ASC LIMIT 3 OFFSET 1', $query);
+            ->willReturnCallback(function (string $query, int $offset = 0, int $rowcount = 0) {
+                $this->assertStringEndsWith('ORDER BY id ASC', $query);
+                $this->assertSame([1, 3], [$offset, $rowcount]);
 
                 return true;
             });
@@ -426,6 +429,24 @@ class AttachmentFactoryTest extends TestCase
         );
 
         $this->assertSame([], $attachments);
+    }
+
+    public function testFetchByRecordIdPaginatedDoesNotSortByAColumnTheTableDoesNotHave(): void
+    {
+        $this->setStorageType(AttachmentStorageType::FILESYSTEM->value);
+
+        $this->mockDb->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $this->mockDb
+            ->expects($this->once())
+            ->method('query')
+            ->willReturnCallback(function (string $query) {
+                $this->assertStringEndsWith('ORDER BY id DESC', $query);
+
+                return true;
+            });
+        $this->mockDb->method('fetchAll')->willReturn([]);
+
+        AttachmentFactory::fetchByRecordIdPaginated($this->mockConfiguration, 123, 3, 0, 'created', 'DESC');
     }
 
     public function testCountByRecordIdReturnsCountFromDatabase(): void

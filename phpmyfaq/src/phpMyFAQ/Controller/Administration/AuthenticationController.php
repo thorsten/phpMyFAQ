@@ -53,7 +53,7 @@ final class AuthenticationController extends AbstractAdministrationController im
         $password = Filter::filterVar(
             $request->request->get(key: 'faqpassword'),
             FILTER_SANITIZE_SPECIAL_CHARS,
-            FILTER_FLAG_NO_ENCODE_QUOTES,
+            default: '',
         );
         $rememberMe = Filter::filterVar($request->request->get(key: 'faqrememberme'), FILTER_VALIDATE_BOOLEAN);
 

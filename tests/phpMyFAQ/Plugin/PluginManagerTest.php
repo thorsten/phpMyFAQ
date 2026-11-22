@@ -667,10 +667,43 @@ class PluginManagerTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function testDependencyChecksIgnoreAlreadyLoadedPlugins(): void
+    public function testLoadPluginsAcceptsADependencyThatIsDiscoveredLater(): void
+    {
+        $alpha = $this->createPluginWithDependencies('Alpha', ['Zeta']);
+        $zeta = $this->createPluginWithDependencies('Zeta', []);
+        $orphan = $this->createPluginWithDependencies('Orphan', ['Missing']);
+        $transitive = $this->createPluginWithDependencies('Transitive', ['Orphan']);
+
+        $pluginsProperty = new ReflectionClass(PluginManager::class)->getProperty('plugins');
+        $pluginsProperty->setValue($this->pluginManager, [
+            'Alpha' => $alpha,
+            'Transitive' => $transitive,
+            'Orphan' => $orphan,
+            'Zeta' => $zeta,
+        ]);
+
+        $this->pluginManager->loadPlugins();
+
+        $plugins = $this->pluginManager->getPlugins();
+        $this->assertArrayHasKey('Alpha', $plugins);
+        $this->assertArrayHasKey('Zeta', $plugins);
+
+        $incompatible = $this->pluginManager->getIncompatiblePlugins();
+        $this->assertArrayNotHasKey('Alpha', $incompatible);
+        $this->assertSame('Missing dependencies: Missing', $incompatible['Orphan']['reason']);
+        $this->assertSame('Missing dependencies: Orphan', $incompatible['Transitive']['reason']);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testDependencyChecksUseTheRegisteredPlugins(): void
     {
         $reflection = new ReflectionClass(PluginManager::class);
-        $reflection->getProperty('loadedPlugins')->setValue($this->pluginManager, ['mockPlugin']);
+        $reflection->getProperty('plugins')->setValue(
+            $this->pluginManager,
+            ['mockPlugin' => $this->createPluginWithDependencies('mockPlugin', [])],
+        );
 
         $areDependenciesMet = $reflection->getMethod('areDependenciesMet');
         $getMissingDependencies = $reflection->getMethod('getMissingDependencies');

@@ -10,6 +10,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\Plugin\PluginManager;
@@ -38,6 +39,9 @@ final class AbstractAdministrationControllerTest extends TestCase
     private Sqlite3 $dbHandle;
     private string $databasePath;
     private ?Configuration $previousConfiguration = null;
+
+    /** @var array<string, string> the permission each menu entry was requested with, by route */
+    private array $menuPermissions = [];
 
     /**
      * @throws Exception
@@ -268,6 +272,22 @@ final class AbstractAdministrationControllerTest extends TestCase
     }
 
     /**
+     * The backup page requires the BACKUP right. The menu entry used to be shown to holders of
+     * CONFIGURATION_EDIT instead, who got a 403, and hidden from those who may back up.
+     *
+     * @throws \Exception
+     */
+    public function testHeaderGatesTheBackupEntryOnTheBackupRight(): void
+    {
+        $controller = new AbstractAdministrationControllerTestStub();
+        $controller->setContainer($this->createControllerContainer());
+
+        $controller->fetchHeader(new Request(attributes: ['_route' => 'admin.backup']));
+
+        self::assertSame(PermissionType::BACKUP->value, $this->menuPermissions['backup']);
+    }
+
+    /**
      * @throws \Exception
      */
     public function testHeaderMarksConfigurationPage(): void
@@ -333,9 +353,11 @@ final class AbstractAdministrationControllerTest extends TestCase
         $adminHelper->method('canAccessContent')->willReturn(true);
         $adminHelper
             ->method('addMenuEntry')
-            ->willReturnCallback(
-                static fn(string $permissionName, string $label, string $route): string => '[' . $route . ']',
-            );
+            ->willReturnCallback(function (string $permissionName, string $label, string $route): string {
+                $this->menuPermissions[$route] = $permissionName;
+
+                return '[' . $route . ']';
+            });
 
         $container = $this->createStub(ContainerInterface::class);
         $container

@@ -442,8 +442,8 @@ readonly class Migration420Alpha2 extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_faqquestion_history ON %sfaqquestion_history '
-                    . '(question_id, question_lang)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqquestion_history ' . '(question_id, question_lang)',
+                    $this->indexName(indexName: 'idx_faqquestion_history'),
                     $this->tablePrefix,
                 ),
                 'Create faqquestion_history index (PostgreSQL)',
@@ -468,8 +468,8 @@ readonly class Migration420Alpha2 extends AbstractMigration
 
             $recorder->addSql(
                 sprintf(
-                    'CREATE INDEX IF NOT EXISTS idx_faqquestion_history ON %sfaqquestion_history '
-                    . '(question_id, question_lang)',
+                    'CREATE INDEX IF NOT EXISTS %s ON %sfaqquestion_history ' . '(question_id, question_lang)',
+                    $this->indexName(indexName: 'idx_faqquestion_history'),
                     $this->tablePrefix,
                 ),
                 'Create faqquestion_history index (SQLite)',
@@ -525,15 +525,21 @@ readonly class Migration420Alpha2 extends AbstractMigration
      *
      * The read backfill runs first: if the update dies between the two operations, everybody can
      * still read, which is the more forgiving half-applied state.
+     *
+     * faq_publish is created by the second operation and seeded by every installer that already
+     * enforces the read gate, so its presence marks the read backfill as done. Re-running this
+     * migration then no longer hands view_faqs back to accounts it was revoked from since.
      */
     private function separateReadAndPublishRights(OperationRecorder $recorder): void
     {
-        $recorder->backfillPermission(
-            PermissionType::FAQS_VIEW->value,
-            'Right to view FAQs',
-            grantToAllUsers: true,
-            grantToAllGroups: true,
-        );
+        if (!$this->rightExists(PermissionType::FAQ_PUBLISH->value)) {
+            $recorder->backfillPermission(
+                PermissionType::FAQS_VIEW->value,
+                'Right to view FAQs',
+                grantToAllUsers: true,
+                grantToAllGroups: true,
+            );
+        }
 
         $recorder->backfillPermission(
             PermissionType::FAQ_PUBLISH->value,
@@ -541,5 +547,21 @@ readonly class Migration420Alpha2 extends AbstractMigration
             mirrorFrom: 'approverec',
             mirrorRestrictions: true,
         );
+    }
+
+    /**
+     * Record-time check, like columnExists(): the operations of a run are recorded before the
+     * first of them is executed.
+     */
+    private function rightExists(string $name): bool
+    {
+        $db = $this->configuration->getDb();
+        $result = $db->query(sprintf(
+            "SELECT right_id FROM %sfaqright WHERE name = '%s'",
+            $this->tablePrefix,
+            $db->escape($name),
+        ));
+
+        return $db->fetchObject($result) instanceof \stdClass;
     }
 }

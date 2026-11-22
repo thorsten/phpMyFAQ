@@ -520,8 +520,10 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
+    // Public: bin/worker.php fetches it from a compiled container, which removes private services
     $services
         ->set('phpmyfaq.queue.worker', Worker::class)
+        ->public()
         ->args([
             service('phpmyfaq.queue.transport.database'),
         ])
@@ -538,12 +540,16 @@ return static function (ContainerConfigurator $container): void {
             service('phpmyfaq.queue.handler.export'),
         ]);
 
-    $services->set('phpmyfaq.scheduler.task-scheduler', TaskScheduler::class)->args([
-        service('phpmyfaq.configuration'),
-        service('phpmyfaq.admin.session'),
-        service('phpmyfaq.admin.backup'),
-        service('phpmyfaq.faq.statistics'),
-    ]);
+    // Public: bin/scheduler.php fetches it from a compiled container, which removes private services
+    $services
+        ->set('phpmyfaq.scheduler.task-scheduler', TaskScheduler::class)
+        ->public()
+        ->args([
+            service('phpmyfaq.configuration'),
+            service('phpmyfaq.admin.session'),
+            service('phpmyfaq.admin.backup'),
+            service('phpmyfaq.faq.statistics'),
+        ]);
 
     $services->set('phpmyfaq.helper.category-helper', CategoryHelper::class);
 
@@ -551,7 +557,7 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
-    $services->set('phpmyfaq.helper.question', QuestionHelper::class)->args([
+    $services->set('phpmyfaq.helper.question', QuestionHelper::class)->call('setConfiguration', [
         service('phpmyfaq.configuration'),
     ]);
 
@@ -611,7 +617,6 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.custom-page', CustomPage::class)->args([
         service('phpmyfaq.configuration'),
         service('phpmyfaq.custom-page-repository'),
-        service('phpmyfaq.seo-repository'),
     ]);
 
     $services->set('phpmyfaq.push.subscription-repository', PushSubscriptionRepository::class)->args([

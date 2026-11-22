@@ -209,6 +209,11 @@ final class FaqControllerTest extends TestCase
 
         self::assertInstanceOf(Response::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // The translation endpoint verifies the "translate" token, which the page has to carry.
+        self::assertMatchesRegularExpression(
+            '/id="pmf-csrf-token-translate"\s+value="[^"]+"/',
+            (string) $response->getContent(),
+        );
     }
 
     /**
@@ -652,7 +657,7 @@ final class FaqControllerTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testAnswerPrefillsQuestionNotificationFields(): void
+    public function testAnswerPrefillsTheQuestionAndCarriesOnlyItsId(): void
     {
         $faq = $this->createMock(Faq::class);
         $faq->method('getNextSolutionId')->willReturn(1001);
@@ -661,7 +666,7 @@ final class FaqControllerTest extends TestCase
         $question
             ->expects($this->once())
             ->method('get')
-            ->with(1)
+            ->with(7)
             ->willReturn([
                 'question' => 'How do I reset my password?',
                 'username' => 'Jane Doe',
@@ -681,18 +686,144 @@ final class FaqControllerTest extends TestCase
             $question,
         );
 
-        $request = new Request([], [], ['questionId' => '1', 'faqLanguage' => 'en']);
+        $request = new Request([], [], ['questionId' => '7', 'faqLanguage' => 'en']);
         $controller->setContainer($this->createAuthenticatedContainer());
         $response = $controller->answer($request);
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringContainsString('How do I reset my password?', (string) $response->getContent());
         self::assertStringContainsString(
-            'name="notifyUser" id="notifyUser" value="Jane Doe"',
+            'name="openQuestionId" id="openQuestionId" value="7"',
             (string) $response->getContent(),
         );
-        self::assertStringContainsString(
-            'name="notifyEmail" id="notifyEmail" value="jane@example.com"',
+        self::assertStringContainsString('How do I reset my password?', (string) $response->getContent());
+        // The asker is notified from the stored question, which the create endpoint loads by
+        // its id. The form used to carry the name and the address in two hidden fields that
+        // nothing read; they must not come back.
+        self::assertStringNotContainsString('notifyUser', (string) $response->getContent());
+        self::assertStringNotContainsString('notifyEmail', (string) $response->getContent());
+        self::assertStringNotContainsString('jane@example.com', (string) $response->getContent());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testEditPrefillsTheStoredPublicationWindow(): void
+    {
+        $controller = $this->createControllerForEdit($this->editableFaqRecord([
+            'dateStart' => '20260304050607',
+            'dateEnd' => '20270809101112',
+        ]));
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->edit(new Request([], [], ['faqId' => '1', 'faqLanguage' => 'en']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertMatchesRegularExpression(
+            '/name="dateStart" id="dateStart"[^>]*value="2026-03-04T05:06:07"/s',
+            (string) $response->getContent(),
+        );
+        self::assertMatchesRegularExpression(
+            '/name="dateEnd" id="dateEnd"[^>]*value="2027-08-09T10:11:12"/s',
+            (string) $response->getContent(),
+        );
+    }
+
+    /**
+     * The two sentinels mean "no limit" and are shown as empty inputs, never as a date.
+     *
+     * @throws \Exception
+     */
+    public function testEditShowsAnUnlimitedPublicationWindowAsEmptyInputs(): void
+    {
+        $controller = $this->createControllerForEdit($this->editableFaqRecord([
+            'dateStart' => '00000000000000',
+            'dateEnd' => '99991231235959',
+        ]));
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->edit(new Request([], [], ['faqId' => '1', 'faqLanguage' => 'en']));
+
+        self::assertMatchesRegularExpression(
+            '/name="dateStart" id="dateStart"[^>]*value=""/s',
+            (string) $response->getContent(),
+        );
+        self::assertMatchesRegularExpression(
+            '/name="dateEnd" id="dateEnd"[^>]*value=""/s',
+            (string) $response->getContent(),
+        );
+    }
+
+    /**
+     * The window is part of the publish right. Without the inputs nothing is submitted, and
+     * the update endpoint then keeps the stored window.
+     *
+     * @throws \Exception
+     */
+    public function testEditOmitsThePublicationWindowWithoutPublishPermission(): void
+    {
+        $controller = $this->createControllerForEdit($this->editableFaqRecord([
+            'dateStart' => '20260304050607',
+            'dateEnd' => '20270809101112',
+        ]));
+        $controller->setContainer($this->createAuthenticatedContainer(deniedRight: PermissionType::FAQ_PUBLISH));
+
+        $response = $controller->edit(new Request([], [], ['faqId' => '1', 'faqLanguage' => 'en']));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertStringNotContainsString('name="dateStart"', (string) $response->getContent());
+        self::assertStringNotContainsString('name="dateEnd"', (string) $response->getContent());
+    }
+
+    /**
+     * A copy or a translation of a scheduled or an expired FAQ starts with the window of its
+     * source, so saving it does not publish what the source keeps back.
+     *
+     * @throws \Exception
+     */
+    public function testCopyAndTranslatePrefillThePublicationWindowOfTheSource(): void
+    {
+        $this->relateFaqToCategory(1, 'en', 1);
+
+        foreach (['copy', 'translate'] as $action) {
+            $controller = $this->createControllerForEdit($this->editableFaqRecord([
+                'dateStart' => '00000000000000',
+                'dateEnd' => '20270809101112',
+            ]));
+            $controller->setContainer($this->createAuthenticatedContainer());
+
+            $response = $controller->{$action}(new Request([], [], ['faqId' => '1', 'faqLanguage' => 'en']));
+
+            self::assertSame(Response::HTTP_OK, $response->getStatusCode(), $action);
+            self::assertMatchesRegularExpression(
+                '/name="dateStart" id="dateStart"[^>]*value=""/s',
+                (string) $response->getContent(),
+                $action,
+            );
+            self::assertMatchesRegularExpression(
+                '/name="dateEnd" id="dateEnd"[^>]*value="2027-08-09T10:11:12"/s',
+                (string) $response->getContent(),
+                $action,
+            );
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testAddOffersAnEmptyPublicationWindow(): void
+    {
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->add(new Request());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertMatchesRegularExpression(
+            '/name="dateStart" id="dateStart"[^>]*value=""/s',
+            (string) $response->getContent(),
+        );
+        self::assertMatchesRegularExpression(
+            '/name="dateEnd" id="dateEnd"[^>]*value=""/s',
             (string) $response->getContent(),
         );
     }

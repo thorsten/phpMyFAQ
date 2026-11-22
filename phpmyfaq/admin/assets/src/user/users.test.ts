@@ -156,6 +156,32 @@ const selectFirstUser = async (): Promise<void> => {
   await flushPromises();
 };
 
+const selectRestrictionValues = (containerId: string, rightId: string, values: string[]): void => {
+  const select = document.querySelector<HTMLSelectElement>(`#${containerId} select[data-right-id="${rightId}"]`);
+  [...(select as HTMLSelectElement).options].forEach((option: HTMLOptionElement): void => {
+    option.selected = values.includes(option.value);
+  });
+};
+
+const setupLanguageRestrictions = async (): Promise<void> => {
+  setupFullDom();
+  mockDefaultApis();
+  (fetchUserRights as Mock).mockResolvedValue(['1', '3']);
+  (fetchLanguagesForRestrictions as Mock).mockResolvedValue([
+    { code: 'en', label: 'English' },
+    { code: 'de', label: 'Deutsch' },
+  ]);
+  (fetchUserLanguageRestrictions as Mock).mockResolvedValue({ '1': ['de'] });
+
+  await handleUsers();
+  await selectFirstUser();
+};
+
+const saveLanguageRestrictions = async (): Promise<void> => {
+  (document.getElementById('pmf-user-language-restrictions-save') as HTMLButtonElement).click();
+  await flushPromises();
+};
+
 describe('handleUsers', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -457,11 +483,70 @@ describe('handleUsers', () => {
     expect(languageSelect?.id).toBe('user-language-restriction-1');
     expect(languageLabel?.htmlFor).toBe('user-language-restriction-1');
 
+    selectRestrictionValues('userLanguageRestrictionsBody', '1', ['en', 'de']);
     (document.getElementById('pmf-user-language-restrictions-save') as HTMLButtonElement).click();
     await flushPromises();
 
-    expect(saveUserLanguageRestrictions).toHaveBeenCalledWith('10', '1', ['de'], 'csrf-language-restrictions');
+    expect(saveUserLanguageRestrictions).toHaveBeenCalledWith('10', '1', ['en', 'de'], 'csrf-language-restrictions');
     expect(pushNotification).toHaveBeenCalledWith('Language restrictions saved.');
+  });
+
+  it('should submit only the rights whose language restriction changed', async () => {
+    await setupLanguageRestrictions();
+
+    selectRestrictionValues('userLanguageRestrictionsBody', '1', ['en']);
+    await saveLanguageRestrictions();
+
+    // Right 3 is ticked with an untouched empty list: it must not be submitted.
+    expect(saveUserLanguageRestrictions).toHaveBeenCalledTimes(1);
+    expect(saveUserLanguageRestrictions).toHaveBeenCalledWith('10', '1', ['en'], 'csrf-language-restrictions');
+    expect(pushNotification).toHaveBeenCalledWith('Language restrictions saved.');
+    expect(pushErrorNotification).not.toHaveBeenCalled();
+  });
+
+  it('should submit a language restriction the administrator emptied', async () => {
+    await setupLanguageRestrictions();
+
+    selectRestrictionValues('userLanguageRestrictionsBody', '1', []);
+    await saveLanguageRestrictions();
+
+    expect(saveUserLanguageRestrictions).toHaveBeenCalledTimes(1);
+    expect(saveUserLanguageRestrictions).toHaveBeenCalledWith('10', '1', [], 'csrf-language-restrictions');
+  });
+
+  it('should not call the endpoint when no language restriction changed', async () => {
+    await setupLanguageRestrictions();
+
+    await saveLanguageRestrictions();
+
+    expect(saveUserLanguageRestrictions).not.toHaveBeenCalled();
+    expect(pushNotification).toHaveBeenCalledWith('Language restrictions saved.');
+    expect(pushErrorNotification).not.toHaveBeenCalled();
+  });
+
+  it('should not resend a saved language restriction on the next save', async () => {
+    await setupLanguageRestrictions();
+
+    selectRestrictionValues('userLanguageRestrictionsBody', '1', ['en']);
+    await saveLanguageRestrictions();
+    await saveLanguageRestrictions();
+
+    expect(saveUserLanguageRestrictions).toHaveBeenCalledTimes(1);
+  });
+
+  it('should resend a language restriction whose save was refused', async () => {
+    await setupLanguageRestrictions();
+    (saveUserLanguageRestrictions as Mock).mockResolvedValueOnce({ error: 'No permission' });
+
+    selectRestrictionValues('userLanguageRestrictionsBody', '1', ['en']);
+    await saveLanguageRestrictions();
+    expect(pushErrorNotification).toHaveBeenCalledTimes(1);
+    expect(pushErrorNotification).toHaveBeenCalledWith('No permission');
+
+    await saveLanguageRestrictions();
+
+    expect(saveUserLanguageRestrictions).toHaveBeenCalledTimes(2);
+    expect(saveUserLanguageRestrictions).toHaveBeenLastCalledWith('10', '1', ['en'], 'csrf-language-restrictions');
   });
 
   it('should filter the permission list by label', async () => {

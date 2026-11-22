@@ -524,4 +524,22 @@ class PdoSqliteTest extends TestCase
 
         $this->pdoSqlite->queryPrepared('SELECT * FROM missing WHERE id = ?', [1]);
     }
+
+    /**
+     * Code that is newer than the database lists tables the pending update still has to
+     * create; the dashboard must not fail on them.
+     */
+    public function testGetTableStatusSkipsTablesThatDoNotExistYet(): void
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->exec('CREATE TABLE faqdata (id INTEGER PRIMARY KEY)');
+        $pdo->exec('INSERT INTO faqdata (id) VALUES (1), (2)');
+        $pdo->exec('CREATE TABLE faquser (user_id INTEGER PRIMARY KEY)');
+        $this->setPdo($pdo);
+
+        $status = $this->pdoSqlite->getTableStatus();
+
+        $this->assertSame(['faqdata' => '2', 'faquser' => '0'], $status);
+    }
 }

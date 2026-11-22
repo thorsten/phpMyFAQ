@@ -49,6 +49,28 @@ class TagsHelperTest extends TestCase
         $this->assertEquals($expectedOutput, $result);
     }
 
+    public function testRenderSearchTagRemovesOnlyTheWholeTagId(): void
+    {
+        $this->tagsHelper->setTaggingIds([1, 12, 21]);
+
+        $this->assertStringContainsString('href="./search.html?tagging_id=12,21"', $this->tagsHelper->renderSearchTag(
+            1,
+            'tag1',
+        ));
+        $this->assertStringContainsString('href="./search.html?tagging_id=1,21"', $this->tagsHelper->renderSearchTag(
+            12,
+            'tag12',
+        ));
+    }
+
+    public function testRenderSearchTagUrlEncodesTheNameOfTheLastTag(): void
+    {
+        $this->tagsHelper->setTaggingIds([1]);
+
+        $this->assertSame('<a class="btn btn-outline-primary m-1" href="./search.html?search=C%26A+B">C&amp;A B '
+        . '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ', $this->tagsHelper->renderSearchTag(1, 'C&A B'));
+    }
+
     public function testGetTaggingIds()
     {
         $taggingIds = [1, 2, 3];

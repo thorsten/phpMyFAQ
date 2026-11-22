@@ -1210,7 +1210,7 @@ $LANG_CONF['ldap.ldap_use_group_restriction'] = [
 $LANG_CONF['ldap.ldap_group_allowed_groups'] = [
     'input',
     'Komma-getrennte Liste der zulässigen AD-Gruppen',
-    'Teilübereinstimmungen werden unterstützt',
+    'Exakter Gruppenname, z. B. Domain Admins, oder CN=Domain Admins',
 ];
 $LANG_CONF['ldap.ldap_group_auto_assign'] = [
     'checkbox',
@@ -1687,7 +1687,10 @@ $LANG_CONF['main.accessibilityStatementURL'] = [
     'URL für die Barrierefreiheitserklärung',
     'Verwenden Sie "page:slug" für eigene Seiten oder vollständige URL für externe Seiten',
 ];
-$LANG_CONF['api.onlyActiveFaqs'] = ['checkbox', 'Nur aktive FAQs werden von der API zurückgegeben'];
+$LANG_CONF['api.onlyActiveFaqs'] = [
+    'checkbox',
+    'Nur aktive FAQs werden von der API zurückgegeben (wenn deaktiviert, erhalten nur Clients mit gültigem API-Token auch inaktive FAQs)',
+];
 $LANG_CONF['api.onlyActiveCategories'] = ['checkbox', 'Nur aktive Kategorien werden von der API zurückgegeben'];
 $LANG_CONF['api.onlyPublicQuestions'] = ['checkbox', 'Nur öffentliche Fragen werden von der API zurückgegeben'];
 $LANG_CONF['api.ignoreOrphanedFaqs'] = ['checkbox', 'Verwaiste FAQs werden von der API ignoriert'];
@@ -1924,6 +1927,9 @@ $PMF_LANG['msgStatusReview'] = 'In Prüfung';
 $PMF_LANG['msgStatusPublished'] = 'Veröffentlicht';
 $PMF_LANG['msgStatusFilterAll'] = 'Alle Status';
 $PMF_LANG['msgInvalidFaqStatus'] = 'Ungültiger oder fehlender Statuswert.';
+$PMF_LANG['msgInvalidFaqDate'] = 'Das Datum der FAQ ist kein gültiges Datum.';
+$PMF_LANG['msgInvalidFaqDateRange'] = 'Das Ende des Veröffentlichungszeitraums darf nicht vor dessen Beginn liegen.';
+$PMF_LANG['msgInvalidFaqCategory'] = 'Die ausgewählte Kategorie existiert nicht.';
 $PMF_LANG['msgTwofactorLockedOut'] = 'Zu viele falsche Codes. Bitte versuchen Sie es später erneut.';
 
 // added v4.1.9 - 2026-09-29 by Thorsten
@@ -1932,6 +1938,9 @@ $PMF_LANG['msgMailFaqUpdatedSubject'] = 'FAQ-Beitrag aktualisiert';
 $PMF_LANG['msgMailCheckUpdated'] = 'Ein FAQ-Beitrag wurde aktualisiert. Sie können diesen hier oder im Adminbereich überprüfen.';
 $PMF_LANG['ad_att_custom_name'] = 'Eigener Dateiname (optional)';
 $PMF_LANG['ad_category_restrictions_no_category'] = 'Keine gültige Kategorie-ID angegeben.';
+$PMF_LANG['ad_permission_scope_exceeded'] = 'Diese Berechtigung gilt für mehr Sprachen oder Kategorien als Ihre eigene. Sie können Berechtigungen nur innerhalb Ihres eigenen Geltungsbereichs ändern.';
+$PMF_LANG['ad_category_restrictions_kept'] = 'Die Berechtigung „%s“ behält ihre Kategorie-Einschränkungen (%s). Sie zu entfernen würde die Berechtigung uneingeschränkt machen, was über Ihren eigenen Geltungsbereich hinausgeht. Bitten Sie einen Administrator mit uneingeschränktem Geltungsbereich, sie zu entfernen.';
+$PMF_LANG['ad_language_restrictions_kept'] = 'Die Berechtigung „%s“ behält ihre Sprach-Einschränkungen (%s). Sie zu entfernen würde die Berechtigung uneingeschränkt machen, was über Ihren eigenen Geltungsbereich hinausgeht. Bitten Sie einen Administrator mit uneingeschränktem Geltungsbereich, sie zu entfernen.';
 $PMF_LANG['ad_group_category_restrictions'] = 'Kategorie-Einschränkungen';
 $PMF_LANG['ad_group_category_restrictions_help'] = 'Wählen Sie eine Gruppe aus, um die Kategorie-Einschränkungen ihrer Berechtigungen zu verwalten.';
 $PMF_LANG['ad_group_category_restrictions_select'] = 'Wählen Sie Kategorien aus, auf die diese Berechtigung eingeschränkt wird. Leer lassen für uneingeschränkten Zugriff.';
@@ -2076,5 +2085,72 @@ $PMF_LANG['msgFooterLinks'] = 'Links';
 $PMF_LANG['msgFooterLegal'] = 'Rechtliches';
 $PMF_LANG['msgPermalink'] = 'Permalink';
 $PMF_LANG['msgNoBookmarks'] = 'Du hast noch keine FAQs als Lesezeichen gespeichert.';
+
+// added v4.2.0-RC.3 - 2026-11-22 by Thorsten
+$PMF_LANG['ad_menu_api_keys'] = 'API-Schlüssel';
+$PMF_LANG['ad_menu_oauth2'] = 'OAuth-2.0-Clients';
+$PMF_LANG['msgApiKeyAdd'] = 'API-Schlüssel hinzufügen';
+$PMF_LANG['msgApiKeyEdit'] = 'API-Schlüssel bearbeiten';
+$PMF_LANG['msgApiKeyDelete'] = 'API-Schlüssel löschen';
+$PMF_LANG['msgApiKeyConfirmDelete'] = 'Diesen API-Schlüssel löschen? Anwendungen, die ihn verwenden, verlieren sofort den Zugriff.';
+$PMF_LANG['msgApiKeySaved'] = 'API-Schlüssel gespeichert.';
+$PMF_LANG['msgApiKeyDeleted'] = 'API-Schlüssel gelöscht.';
+$PMF_LANG['msgApiKeyNever'] = 'Nie';
+$PMF_LANG['msgApiKeyError'] = 'Die Anfrage ist fehlgeschlagen. Bitte versuchen Sie es erneut.';
+$PMF_LANG['msgApiKeysDescription'] = 'API-Schlüssel authentifizieren Anfragen an die REST-API in Ihrem Namen: Senden Sie einen als "Authorization: Bearer <Schlüssel>". Ein Schlüssel kann nur, was seine Scopes und Ihre eigenen Berechtigungen erlauben.';
+$PMF_LANG['msgApiKeyName'] = 'Name';
+$PMF_LANG['msgApiKeyScopes'] = 'Scopes';
+$PMF_LANG['msgApiKeyExpires'] = 'Läuft ab';
+$PMF_LANG['msgApiKeyLastUsed'] = 'Zuletzt verwendet';
+$PMF_LANG['msgApiKeyActions'] = 'Aktionen';
+$PMF_LANG['msgApiKeysEmpty'] = 'Sie haben noch keine API-Schlüssel.';
+$PMF_LANG['msgApiKeyScopesHelp'] = 'Es werden nur Scopes angeboten, deren Berechtigung Sie selbst besitzen.';
+$PMF_LANG['msgApiKeyExpiresHelp'] = 'Leer lassen für einen Schlüssel, der nicht abläuft.';
+$PMF_LANG['msgApiKeyCreated'] = 'API-Schlüssel erstellt';
+$PMF_LANG['msgApiKeyCopyNow'] = 'Kopieren Sie den Schlüssel jetzt. Gespeichert wird nur sein Hash, er kann daher nicht erneut angezeigt werden.';
+$PMF_LANG['msgApiKeyValue'] = 'API-Schlüssel';
+$PMF_LANG['msgApiKeyClose'] = 'Schließen';
+$PMF_LANG['msgOAuth2ClientAdd'] = 'Client hinzufügen';
+$PMF_LANG['msgOAuth2ClientEdit'] = 'Client bearbeiten';
+$PMF_LANG['msgOAuth2ClientDelete'] = 'Client löschen';
+$PMF_LANG['msgOAuth2ClientConfirmDelete'] = 'Diesen Client löschen? Seine Access-Tokens, Refresh-Tokens und Autorisierungscodes werden sofort ungültig.';
+$PMF_LANG['msgOAuth2Error'] = 'Die Anfrage ist fehlgeschlagen. Bitte versuchen Sie es erneut.';
+$PMF_LANG['msgOAuth2Disabled'] = 'Der OAuth-2.0-Autorisierungsserver ist deaktiviert. Clients erhalten erst Tokens, wenn "OAuth-2.0-Autorisierungsserver aktivieren" in der Konfiguration eingeschaltet ist.';
+$PMF_LANG['msgOAuth2Clients'] = 'Clients';
+$PMF_LANG['msgOAuth2ClientsDescription'] = 'Anwendungen, die Access-Tokens beim OAuth-2.0-Autorisierungsserver anfordern dürfen.';
+$PMF_LANG['msgOAuth2ClientsEmpty'] = 'Es sind noch keine Clients registriert.';
+$PMF_LANG['msgOAuth2ClientName'] = 'Name';
+$PMF_LANG['msgOAuth2ClientId'] = 'Client-ID';
+$PMF_LANG['msgOAuth2ClientType'] = 'Typ';
+$PMF_LANG['msgOAuth2ClientGrants'] = 'Grant-Typen';
+$PMF_LANG['msgOAuth2ClientRedirectUri'] = 'Redirect-URI';
+$PMF_LANG['msgOAuth2ClientConfidential'] = 'Vertraulicher Client';
+$PMF_LANG['msgOAuth2ClientPublic'] = 'Öffentlicher Client';
+$PMF_LANG['msgOAuth2ClientConfidentialHelp'] = 'Eine serverseitige Anwendung, die ein Secret geheim halten kann. Für Browser- oder Mobilanwendungen abwählen. Dies kann später nicht geändert werden.';
+$PMF_LANG['msgOAuth2ClientGrantsHelp'] = 'authorization_code stellt Tokens im Namen eines Benutzers aus; nur diese Tokens können die API-Endpunkte nutzen, die einen Scope verlangen. client_credentials erfordert einen vertraulichen Client.';
+$PMF_LANG['msgOAuth2ClientRedirectUriHelp'] = 'Erforderlich für authorization_code. Der Autorisierungsserver leitet nur an genau diese URI weiter.';
+$PMF_LANG['msgOAuth2ClientCreated'] = 'Client registriert';
+$PMF_LANG['msgOAuth2ClientSecretCopyNow'] = 'Kopieren Sie das Client-Secret jetzt. Gespeichert wird nur sein Hash, es kann daher nicht erneut angezeigt werden.';
+$PMF_LANG['msgOAuth2ClientSecret'] = 'Client-Secret';
+$PMF_LANG['msgOAuth2Scopes'] = 'Scopes';
+$PMF_LANG['msgOAuth2ScopesDescription'] = 'Scopes, die Clients anfordern dürfen. Ein Token kann dennoch nie mehr als der Benutzer, für den es ausgestellt wurde.';
+$PMF_LANG['msgOAuth2ScopeEnabled'] = 'Aktiv';
+$PMF_LANG['msgOAuth2Scope'] = 'Scope';
+$PMF_LANG['msgOAuth2ScopeDescription'] = 'Beschreibung';
+$PMF_LANG['msgOAuth2ScopeUnused'] = 'von phpMyFAQ nicht verwendet';
+$PMF_LANG['msgOAuth2ClientNameInvalid'] = 'Der Client-Name ist erforderlich und darf höchstens 255 Zeichen lang sein.';
+$PMF_LANG['msgOAuth2ClientGrantRequired'] = 'Wählen Sie mindestens einen Grant-Typ.';
+$PMF_LANG['msgOAuth2ClientGrantUnknown'] = 'Unbekannter Grant-Typ.';
+$PMF_LANG['msgOAuth2ClientCredentialsNeedSecret'] = 'Der Grant-Typ client_credentials erfordert einen vertraulichen Client.';
+$PMF_LANG['msgOAuth2ClientRedirectUriRequired'] = 'Der Grant-Typ authorization_code erfordert eine Redirect-URI.';
+$PMF_LANG['msgOAuth2ClientRedirectUriInvalid'] = 'Die Redirect-URI muss eine absolute URI sein.';
+$PMF_LANG['msgOAuth2ClientSaveFailed'] = 'Der Client konnte nicht gespeichert werden.';
+$PMF_LANG['msgOAuth2ClientNotFound'] = 'Client nicht gefunden.';
+$PMF_LANG['msgOAuth2ClientSaved'] = 'Client gespeichert.';
+$PMF_LANG['msgOAuth2ClientDeleteFailed'] = 'Der Client konnte nicht gelöscht werden.';
+$PMF_LANG['msgOAuth2ClientDeleted'] = 'Client gelöscht.';
+$PMF_LANG['msgOAuth2ScopeUnknown'] = 'Unbekannter Scope: %s';
+$PMF_LANG['msgOAuth2ScopesSaveFailed'] = 'Die Scopes konnten nicht gespeichert werden.';
+$PMF_LANG['msgOAuth2ScopesSaved'] = 'Scopes gespeichert.';
 
 return $PMF_LANG;

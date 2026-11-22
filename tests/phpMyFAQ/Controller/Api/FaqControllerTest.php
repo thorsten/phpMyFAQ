@@ -62,6 +62,23 @@ class FaqControllerTest extends TestCase
         $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
+
+        // create() rejects a category that does not exist; category 1 is the one the valid
+        // create requests of this test case file their FAQs in.
+        $this->seedCategory(1);
+    }
+
+    private function seedCategory(int $categoryId): void
+    {
+        $this->configuration
+            ->getDb()
+            ->query(sprintf(
+                "INSERT OR IGNORE INTO %sfaqcategories (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
+             VALUES (%d, 'en', 0, 'Seeded Category %d', '', 1, -1, 1, '', 0)",
+                Database::getTablePrefix(),
+                $categoryId,
+                $categoryId,
+            ));
     }
 
     protected function tearDown(): void
@@ -2040,6 +2057,53 @@ class FaqControllerTest extends TestCase
         $controller->create($this->createCreateRequest(['category-id' => 5, 'category-name' => 'Other Team']));
     }
 
+    /**
+     * A category id nobody checked ended up in faqcategoryrelations all the same: the FAQ was
+     * stored, but reachable from no category page.
+     *
+     * @throws \JsonException|\Exception
+     */
+    public function testCreateReturnsConflictAndStoresNothingWhenTheCategoryDoesNotExist(): void
+    {
+        $this->authenticateApiToken();
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('hasTitleAHash')->willReturn(false);
+        $faq->expects($this->never())->method('create');
+
+        $controller = $this->createFaqControllerWith($faq);
+        $this->authorizeCurrentUser($controller);
+
+        $response = $controller->create($this->createCreateRequest(['category-id' => 4711]));
+
+        $this->assertSame(409, $response->getStatusCode());
+        $this->assertSame(
+            ['stored' => false, 'error' => 'The given category ID was not found.'],
+            json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR),
+        );
+    }
+
+    /**
+     * The scope is checked first: a caller limited to some categories learns that the request
+     * is out of scope, not whether the category id exists.
+     *
+     * @throws \JsonException|\Exception
+     */
+    public function testCreateDoesNotRevealWhetherACategoryOutsideTheScopeExists(): void
+    {
+        $this->authenticateApiToken();
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('create');
+
+        $controller = $this->createFaqControllerWith($faq);
+        $this->authorizeScopedUser($controller, allowedCategoryIds: [5], allowedLanguages: ['en']);
+
+        $this->expectException(ForbiddenException::class);
+
+        $controller->create($this->createCreateRequest(['category-id' => 4711]));
+    }
+
     private function createCreateRequest(array $overrides = []): Request
     {
         return new Request(
@@ -2128,6 +2192,7 @@ class FaqControllerTest extends TestCase
     public function testCreateReturnsBadRequestWhenNoFaqIdIsAssigned(): void
     {
         $this->authenticateApiToken();
+        $this->seedCategory(5);
 
         $faq = $this->createMock(Faq::class);
         $faq->method('hasTitleAHash')->willReturn(false);
@@ -2271,5 +2336,390 @@ class FaqControllerTest extends TestCase
         $response = $this->createFaqControllerWith($faq)->list(new Request(['sort' => $field]));
 
         $this->assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     *
+     * @throws \JsonException|\Exception
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('incompleteCreatePayloadProvider')]
+    public function testCreateReturnsBadRequestAndStoresNothingWhenPayloadIsIncomplete(
+        array $payload,
+        string $expectedError,
+    ): void {
+        $this->authenticateApiToken();
+
+        $request = new Request([], [], [], [], [], [], json_encode($payload, JSON_THROW_ON_ERROR));
+
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('create');
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
+        );
+
+        $this->authorizeCurrentUser($controller);
+
+        $response = $controller->create($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(
+            ['stored' => false, 'error' => $expectedError],
+            json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR),
+        );
+    }
+
+    /**
+     * @return array<string, array{0: array<string, mixed>, 1: string}>
+     */
+    public static function incompleteCreatePayloadProvider(): array
+    {
+        $payload = [
+            'language' => 'en',
+            'category-id' => 1,
+            'question' => 'Created via API?',
+            'answer' => 'Yes.',
+            'keywords' => '',
+            'author' => 'API Author',
+            'email' => 'api@example.com',
+            'is-active' => false,
+            'is-sticky' => false,
+        ];
+
+        return [
+            'no language' => [
+                array_diff_key($payload, ['language' => true]),
+                'The given language is not supported.',
+            ],
+            'unknown language' => [['language' => 'xx'] + $payload, 'The given language is not supported.'],
+            'no category' => [
+                array_diff_key($payload, ['category-id' => true]),
+                'A category ID or a category name is required.',
+            ],
+            'category zero' => [['category-id' => 0] + $payload, 'A category ID or a category name is required.'],
+            'no question' => [array_diff_key($payload, ['question' => true]), 'The question must not be empty.'],
+            'blank question' => [['question' => '   '] + $payload, 'The question must not be empty.'],
+        ];
+    }
+
+    /**
+     * FaqRepository::update() writes every column, so the columns the endpoint does not
+     * accept must come from the stored record.
+     *
+     * @throws \JsonException|\Exception
+     */
+    public function testUpdateKeepsTheStoredColumnsTheEndpointDoesNotAccept(): void
+    {
+        $this->authenticateApiToken();
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'faq-id' => 7,
+            'language' => 'en',
+            'category-id' => 1,
+            'question' => 'Updated via API?',
+            'answer' => 'Still yes.',
+            'keywords' => 'update, faq',
+            'author' => 'API Updater',
+            'email' => 'update@example.com',
+            'is-active' => true,
+            'is-sticky' => false,
+        ], JSON_THROW_ON_ERROR));
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('isFaqEditableForUser')->willReturn(true);
+        $faq->method('hasTitleAHash')->willReturn(false);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->expects($this->once())->method('getFaq')->with(7, null, true, 'en');
+        $faq->faqRecord = [
+            'revision_id' => 4,
+            'comment' => 'y',
+            'notes' => 'Internal note',
+            'dateStart' => '20250102030405',
+            'dateEnd' => '20301231235959',
+        ];
+        $faq
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->callback(static function (FaqEntity $entity): bool {
+                return (
+                    $entity->getRevisionId() === 4
+                    && $entity->isComment() === true
+                    && $entity->getNotes() === 'Internal note'
+                    // No window on the entity: the repository leaves date_start / date_end alone.
+                    && $entity->getPublicationWindow() === null
+                );
+            }))
+            ->willReturn(new FaqEntity()->setId(7));
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
+        );
+
+        $this->authorizeCurrentUser($controller);
+
+        $this->assertSame(200, $controller->update($request)->getStatusCode());
+    }
+
+    /**
+     * The endpoint accepts no publication window, so it must not decide about one: an entity
+     * with a window would overwrite the stored date_start / date_end, and the "no start"
+     * sentinel "00000000000000" used to come back as the moment of the update.
+     *
+     * @throws \JsonException|\Exception
+     */
+    public function testUpdateDoesNotDecideAboutThePublicationWindow(): void
+    {
+        $this->authenticateApiToken();
+
+        $request = new Request([], [], [], [], [], [], json_encode([
+            'faq-id' => 7,
+            'language' => 'en',
+            'question' => 'Updated via API?',
+            'answer' => 'Still yes.',
+            'is-active' => true,
+        ], JSON_THROW_ON_ERROR));
+
+        $faq = $this->createMock(Faq::class);
+        $faq->method('isFaqEditableForUser')->willReturn(true);
+        $faq->method('hasTitleAHash')->willReturn(false);
+        $faq->method('getStatus')->willReturn(FaqStatus::Published);
+        $faq->faqRecord = ['dateStart' => '00000000000000', 'dateEnd' => '99991231235959'];
+        $faq
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->callback(static function (FaqEntity $entity): bool {
+                return $entity->getPublicationWindow() === null;
+            }))
+            ->willReturn(new FaqEntity()->setId(7));
+
+        $controller = new FaqController(
+            $faq,
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
+        );
+
+        $this->authorizeCurrentUser($controller);
+
+        $this->assertSame(200, $controller->update($request)->getStatusCode());
+    }
+
+    private const int LISTED_PUBLISHED_FAQ = 9101;
+    private const int LISTED_DRAFT_FAQ = 9102;
+    private const int LISTED_SCHEDULED_FAQ = 9103;
+    private const int LISTED_EXPIRED_FAQ = 9104;
+
+    /**
+     * One FAQ a reader can see and three a reader cannot: a draft, a published FAQ whose
+     * publication window has not opened yet and one whose window has closed.
+     */
+    private function seedFaqsOfEveryVisibility(): void
+    {
+        $this->seedListedFaq(self::LISTED_PUBLISHED_FAQ, FaqStatus::Published, '00000000000000', '99991231235959');
+        $this->seedListedFaq(self::LISTED_DRAFT_FAQ, FaqStatus::Draft, '00000000000000', '99991231235959');
+        $this->seedListedFaq(self::LISTED_SCHEDULED_FAQ, FaqStatus::Published, '99990101000000', '99991231235959');
+        $this->seedListedFaq(self::LISTED_EXPIRED_FAQ, FaqStatus::Published, '00000000000000', '20200101000000');
+    }
+
+    private function seedListedFaq(int $faqId, FaqStatus $status, string $dateStart, string $dateEnd): void
+    {
+        $db = $this->configuration->getDb();
+        $prefix = Database::getTablePrefix();
+
+        $db->query(sprintf(
+            "INSERT INTO %sfaqdata (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email, comment, updated, date_start, date_end, created, notes, sticky_order)
+             VALUES (%d, 'en', %d, 0, '%s', 0, '', 'Question %d', 'Answer %d', 'Author', 'author@example.com', 'y', '20260301010101', '%s', '%s', '2026-03-01 01:01:01', '', 0)",
+            $prefix,
+            $faqId,
+            $faqId,
+            $status->value,
+            $faqId,
+            $faqId,
+            $dateStart,
+            $dateEnd,
+        ));
+        $db->query(sprintf('INSERT INTO %sfaqdata_user (record_id, user_id) VALUES (%d, -1)', $prefix, $faqId));
+        $db->query(sprintf('INSERT INTO %sfaqdata_group (record_id, group_id) VALUES (%d, -1)', $prefix, $faqId));
+        $this->relateFaqToCategory($faqId, 'en', 1);
+    }
+
+    /**
+     * Forces the setting and the installation-wide API token in one step: forceConfigurationValue()
+     * reloads the stored configuration first, so a second call would undo the first.
+     */
+    private function forceOnlyActiveFaqsAndApiToken(bool $onlyActiveFaqs): void
+    {
+        $this->configuration->getAll();
+        $property = new \ReflectionProperty(Configuration::class, 'config');
+        $config = $property->getValue($this->configuration);
+        $config['api.onlyActiveFaqs'] = $onlyActiveFaqs;
+        $config['api.apiClientToken'] = 'test-token';
+        $property->setValue($this->configuration, $config);
+    }
+
+    /**
+     * The seeded FAQs GET /faqs lists, in ascending order.
+     *
+     * @return int[]
+     * @throws Exception
+     */
+    private function listedSeededFaqIds(?Request $request = null): array
+    {
+        $controller = new FaqController(
+            new Faq($this->configuration),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
+        );
+
+        $response = $controller->list($request ?? new Request(['per_page' => 100]));
+        $payload = json_decode((string) $response->getContent(), true);
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $seeded = [
+            self::LISTED_PUBLISHED_FAQ,
+            self::LISTED_DRAFT_FAQ,
+            self::LISTED_SCHEDULED_FAQ,
+            self::LISTED_EXPIRED_FAQ,
+        ];
+        $listed = array_map(intval(...), array_column($payload['data'], 'id'));
+
+        return array_values(array_intersect($seeded, $listed));
+    }
+
+    /**
+     * Security regression: switching "api.onlyActiveFaqs" off must not hand drafts, scheduled
+     * and expired FAQs to everybody. An anonymous caller keeps the reader's view.
+     *
+     * @throws Exception
+     */
+    public function testListHidesFaqsInvisibleToReadersFromAnonymousCallersWhenInactiveFaqsAreAllowed(): void
+    {
+        $this->forceOnlyActiveFaqsAndApiToken(onlyActiveFaqs: false);
+        $this->seedFaqsOfEveryVisibility();
+
+        $this->assertSame([self::LISTED_PUBLISHED_FAQ], $this->listedSeededFaqIds());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testListIncludesFaqsInvisibleToReadersForAValidApiTokenWhenInactiveFaqsAreAllowed(): void
+    {
+        $this->forceOnlyActiveFaqsAndApiToken(onlyActiveFaqs: false);
+        $_SERVER['HTTP_X_PMF_TOKEN'] = 'test-token';
+        $this->seedFaqsOfEveryVisibility();
+
+        $this->assertSame(
+            [
+                self::LISTED_PUBLISHED_FAQ,
+                self::LISTED_DRAFT_FAQ,
+                self::LISTED_SCHEDULED_FAQ,
+                self::LISTED_EXPIRED_FAQ,
+            ],
+            $this->listedSeededFaqIds(),
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testListForbidsCachingAListWidenedByACredential(): void
+    {
+        $this->forceOnlyActiveFaqsAndApiToken(onlyActiveFaqs: false);
+        $_SERVER['HTTP_X_PMF_TOKEN'] = 'test-token';
+        $this->seedFaqsOfEveryVisibility();
+
+        $cacheControl = $this->listCacheControl();
+
+        $this->assertStringContainsString('private', $cacheControl);
+        $this->assertStringContainsString('no-store', $cacheControl);
+        $this->assertStringNotContainsString('public', $cacheControl);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testListStaysPubliclyCacheableForAnonymousCallers(): void
+    {
+        $this->forceOnlyActiveFaqsAndApiToken(onlyActiveFaqs: false);
+        $this->seedFaqsOfEveryVisibility();
+
+        $cacheControl = $this->listCacheControl();
+
+        $this->assertStringContainsString('public', $cacheControl);
+        $this->assertStringNotContainsString('no-store', $cacheControl);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function listCacheControl(): string
+    {
+        $controller = new FaqController(
+            new Faq($this->configuration),
+            $this->createStub(Tags::class),
+            $this->createStub(FaqStatistics::class),
+            $this->createStub(FaqMetaData::class),
+            $this->configuration->getLanguage(),
+        );
+
+        return (string) $controller->list(new Request(['per_page' => 100]))->headers->get('Cache-Control');
+    }
+
+    /**
+     * An invalid token is not rejected with 401 on this read endpoint: the caller is treated
+     * as anonymous.
+     *
+     * @throws Exception
+     */
+    public function testListHidesFaqsInvisibleToReadersFromAnInvalidApiTokenWhenInactiveFaqsAreAllowed(): void
+    {
+        $this->forceOnlyActiveFaqsAndApiToken(onlyActiveFaqs: false);
+        $_SERVER['HTTP_X_PMF_TOKEN'] = 'wrong-token';
+        $this->seedFaqsOfEveryVisibility();
+
+        $this->assertSame([self::LISTED_PUBLISHED_FAQ], $this->listedSeededFaqIds());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testListHidesFaqsInvisibleToReadersFromAnInvalidBearerCredentialWhenInactiveFaqsAreAllowed(): void
+    {
+        $this->forceOnlyActiveFaqsAndApiToken(onlyActiveFaqs: false);
+        $this->seedFaqsOfEveryVisibility();
+
+        $request = new Request(['per_page' => 100]);
+        $request->headers->set('Authorization', 'Bearer not-a-credential');
+
+        $this->assertSame([self::LISTED_PUBLISHED_FAQ], $this->listedSeededFaqIds($request));
+    }
+
+    /**
+     * A credential does not override the setting: with "api.onlyActiveFaqs" on, nobody gets
+     * more than a reader.
+     *
+     * @throws Exception
+     */
+    public function testListHidesFaqsInvisibleToReadersFromAValidApiTokenWhenOnlyActiveFaqsAreEnabled(): void
+    {
+        $this->forceOnlyActiveFaqsAndApiToken(onlyActiveFaqs: true);
+        $_SERVER['HTTP_X_PMF_TOKEN'] = 'test-token';
+        $this->seedFaqsOfEveryVisibility();
+
+        $this->assertSame([self::LISTED_PUBLISHED_FAQ], $this->listedSeededFaqIds());
     }
 }

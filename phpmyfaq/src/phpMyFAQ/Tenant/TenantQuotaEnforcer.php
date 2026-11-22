@@ -52,7 +52,14 @@ final readonly class TenantQuotaEnforcer
 
     public function assertCanCreateUser(): void
     {
-        $this->assertCountWithinLimit($this->tenantContext->getQuotas()->getMaxUsers(), 'faquser', 'maxUsers', 'users');
+        // The anonymous account (user ID -1) is part of every installation and is not a user.
+        $this->assertCountWithinLimit(
+            $this->tenantContext->getQuotas()->getMaxUsers(),
+            'faquser',
+            'maxUsers',
+            'users',
+            condition: 'user_id > 0',
+        );
     }
 
     public function assertCanStoreAttachment(int $newAttachmentSizeBytes): void
@@ -77,13 +84,22 @@ final readonly class TenantQuotaEnforcer
         }
     }
 
-    private function assertCountWithinLimit(?int $limit, string $table, string $quotaKey, string $resourceName): void
-    {
+    private function assertCountWithinLimit(
+        ?int $limit,
+        string $table,
+        string $quotaKey,
+        string $resourceName,
+        string $condition = '',
+    ): void {
         if ($limit === null) {
             return;
         }
 
         $query = sprintf('SELECT COUNT(1) AS amount FROM %s%s', $this->tenantContext->getTablePrefix(), $table);
+        if ($condition !== '') {
+            $query .= ' WHERE ' . $condition;
+        }
+
         $result = $this->databaseDriver->query($query);
 
         if (!$result) {

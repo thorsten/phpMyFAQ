@@ -179,6 +179,23 @@ class ApiExceptionListenerTest extends TestCase
         $this->assertEquals('Bad Request', $content['title']);
     }
 
+    public function testKeepsStatusAndHeadersOfOtherHttpExceptions(): void
+    {
+        $request = Request::create('/api/v4.0/faq/create');
+        $exception = new \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException(['POST']);
+        $event = $this->createEvent($request, $exception);
+
+        $this->listener->onKernelException($event);
+
+        $response = $event->getResponse();
+        $content = json_decode((string) $response->getContent(), true);
+        $this->assertSame(405, $response->getStatusCode());
+        $this->assertSame('POST', $response->headers->get('Allow'));
+        $this->assertSame(405, $content['status']);
+        $this->assertSame('Method Not Allowed', $content['detail']);
+        $this->assertSame('application/problem+json', $response->headers->get('Content-Type'));
+    }
+
     public function testHandlesGenericException(): void
     {
         $request = Request::create('/api/v3.2/error');

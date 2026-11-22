@@ -193,7 +193,9 @@ class SchemaInstaller implements DriverInterface
         $query = match (Database::getType()) {
             'mysqli', 'pdo_mysql' => "SHOW COLUMNS FROM {$tableName}",
             'pgsql', 'pdo_pgsql' => 'SELECT column_name AS "Field" FROM information_schema.columns '
-                . "WHERE table_name = '{$tableName}'",
+                . "WHERE table_schema = current_schema() AND table_name = '"
+                . PostgresDialect::catalogName($tableName)
+                . "'",
             'sqlite3', 'pdo_sqlite' => "SELECT name AS Field FROM pragma_table_info('{$tableName}')",
             'sqlsrv',
             'pdo_sqlsrv',
@@ -220,7 +222,10 @@ class SchemaInstaller implements DriverInterface
     {
         $query = match (Database::getType()) {
             'mysqli', 'pdo_mysql' => "SHOW TABLES LIKE '{$tableName}'",
-            'pgsql', 'pdo_pgsql' => "SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = '{$tableName}'",
+            'pgsql', 'pdo_pgsql' => 'SELECT tablename FROM pg_catalog.pg_tables '
+                . "WHERE schemaname = current_schema() AND tablename = '"
+                . PostgresDialect::catalogName($tableName)
+                . "'",
             'sqlite3', 'pdo_sqlite' => "SELECT name FROM sqlite_master WHERE type='table' AND name='{$tableName}'",
             'sqlsrv', 'pdo_sqlsrv' => "SELECT * FROM sysobjects WHERE name='{$tableName}' AND xtype='U'",
             default => throw new \RuntimeException('Unsupported database type: ' . Database::getType()),

@@ -21,8 +21,19 @@ namespace phpMyFAQ\Setup\Migration\QueryBuilder\Dialect;
 
 use phpMyFAQ\Setup\Migration\QueryBuilder\DialectInterface;
 
+/* @mago-expect lint:too-many-methods - one method per SQL construct that differs between the databases */
 class PostgresDialect implements DialectInterface
 {
+    /**
+     * Returns the name under which the catalog stores a table or an index. phpMyFAQ writes
+     * identifiers without quotes, and PostgreSQL folds those to lower case: a table created as
+     * PMF_faqdata is listed as pmf_faqdata. A catalog lookup has to compare against that name.
+     */
+    public static function catalogName(string $identifier): string
+    {
+        return strtolower($identifier);
+    }
+
     public function getType(): string
     {
         return 'pgsql';
@@ -128,6 +139,22 @@ class PostgresDialect implements DialectInterface
         $columnList = implode(', ', $columns);
         $exists = $ifNotExists ? 'IF NOT EXISTS ' : '';
         return "CREATE INDEX {$exists}{$indexName} ON {$tableName} ({$columnList})";
+    }
+
+    /**
+     * @param string[] $columns
+     * @param string[] $nullableColumns
+     */
+    public function createUniqueIndex(
+        string $indexName,
+        string $tableName,
+        array $columns,
+        array $nullableColumns = [],
+        bool $ifNotExists = false,
+    ): string {
+        $columnList = implode(', ', $columns);
+        $exists = $ifNotExists ? 'IF NOT EXISTS ' : '';
+        return "CREATE UNIQUE INDEX {$exists}{$indexName} ON {$tableName} ({$columnList})";
     }
 
     public function dropIndex(string $indexName, string $tableName): string

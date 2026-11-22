@@ -60,9 +60,11 @@ readonly class Migration409 extends AbstractMigration
                 'Set default for faqseo.id using sequence (PostgreSQL)',
             );
 
+            // "is_called" false makes the next nextval() return the given value itself, so an
+            // empty table starts at 1 - setval() rejects 0, which is below the sequence minimum
             $recorder->addSql(
                 sprintf(
-                    "SELECT setval('%s', COALESCE((SELECT MAX(id) FROM %sfaqseo), 0))",
+                    "SELECT setval('%s', COALESCE(MAX(id), 0) + 1, false) FROM %sfaqseo",
                     $sequenceName,
                     $this->tablePrefix,
                 ),

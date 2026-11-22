@@ -25,6 +25,7 @@ namespace phpMyFAQ\Setup;
 use Composer\Autoload\ClassLoader;
 use Elastic\Elasticsearch\ClientBuilder;
 use OpenSearch\SymfonyClientFactory;
+use phpMyFAQ\Bootstrap\SearchClientFactory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
@@ -228,23 +229,19 @@ class InstallationRunner
             throw new Exception('Installation Error: Setup cannot write to ./content/core/config/database.php.');
         }
 
-        if ($input->ldapEnabled && $input->ldapSetup !== [] && !$instanceSetup->createLdapFile($input->ldapSetup, '')) {
+        if ($input->ldapEnabled && $input->ldapSetup !== [] && !$instanceSetup->createLdapFile($input->ldapSetup)) {
             Installer::cleanFailedInstallationFiles();
             throw new Exception('LDAP Installation Error: Setup cannot write to ./content/core/config/ldap.php.');
         }
 
-        if (
-            $input->esEnabled
-            && $input->esSetup !== []
-            && !$instanceSetup->createElasticsearchFile($input->esSetup, '')
-        ) {
+        if ($input->esEnabled && $input->esSetup !== [] && !$instanceSetup->createElasticsearchFile($input->esSetup)) {
             Installer::cleanFailedInstallationFiles();
             throw new Exception(
                 'Elasticsearch Installation Error: Setup cannot write to ./content/core/config/elasticsearch.php.',
             );
         }
 
-        if ($input->osEnabled && $input->osSetup !== [] && !$instanceSetup->createOpenSearchFile($input->osSetup, '')) {
+        if ($input->osEnabled && $input->osSetup !== [] && !$instanceSetup->createOpenSearchFile($input->osSetup)) {
             Installer::cleanFailedInstallationFiles();
             throw new Exception(
                 'OpenSearch Installation Error: Setup cannot write to ./content/core/config/opensearch.php.',
@@ -456,7 +453,13 @@ class InstallationRunner
             . '/content/core/config/elasticsearch.php');
             $this->configuration()->setElasticsearchConfig($elasticsearchConfiguration);
 
-            $esClient = ClientBuilder::create()->setHosts($elasticsearchConfiguration->getHosts())->build();
+            // Like the index operations of the admin panel: gives up quickly on an unreachable
+            // cluster, but does not cut off a slow answer.
+            $esClient = SearchClientFactory::buildElasticsearchClient(
+                $elasticsearchConfiguration->getHosts()[0],
+                $elasticsearchConfiguration,
+                SearchClientFactory::longRunningHttpClientOptions(),
+            );
             $this->configuration()->setElasticsearch($esClient);
 
             $elasticsearch = new Elasticsearch($this->configuration());
@@ -468,10 +471,10 @@ class InstallationRunner
             . '/content/core/config/opensearch.php');
             $this->configuration()->setOpenSearchConfig($openSearchConfiguration);
 
-            $osClient = new SymfonyClientFactory()->create($this->buildOpenSearchClientOptions(
-                $openSearchConfiguration->getHosts()[0],
-                $input->osSetup,
-            ));
+            $osClient = new SymfonyClientFactory()->create(
+                $this->buildOpenSearchClientOptions($openSearchConfiguration->getHosts()[0], $input->osSetup)
+                + SearchClientFactory::longRunningHttpClientOptions(),
+            );
             $this->configuration()->setOpenSearch($osClient);
 
             $openSearch = new OpenSearch($this->configuration());

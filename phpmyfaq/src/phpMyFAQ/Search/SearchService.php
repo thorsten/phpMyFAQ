@@ -302,6 +302,12 @@ final class SearchService
         }
 
         foreach ($searchResults as $faqKey => $faqValue) {
+            // A custom page hit carries a page ID, not a FAQ ID: looking it up as a FAQ would
+            // drop the page or tie it to an unrelated FAQ.
+            if (($faqValue->content_type ?? null) === 'page') {
+                continue;
+            }
+
             // Database drivers differ in column typing: mysqli returns strings,
             // SQLite returns ints. Cast so the strict int type hint on
             // getFaqResult() does not break full-text search on MySQL/MariaDB.

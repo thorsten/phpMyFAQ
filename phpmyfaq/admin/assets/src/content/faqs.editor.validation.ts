@@ -84,6 +84,16 @@ export const validateFaqEditor = (): ValidationError[] => {
     });
   }
 
+  // The publication window sits in the sidebar, outside of every tab, hence no tab to open.
+  // The server rejects an inverted window as well; this only saves the round trip.
+  const dateStart = document.getElementById('dateStart') as HTMLInputElement | null;
+  const dateEnd = document.getElementById('dateEnd') as HTMLInputElement | null;
+  if (dateStart && dateEnd && dateStart.value !== '' && dateEnd.value !== '') {
+    if (Date.parse(dateEnd.value) < Date.parse(dateStart.value)) {
+      errors.push({ fieldId: 'dateEnd', tabHref: '', feedbackId: 'date-range-invalid-feedback' });
+    }
+  }
+
   return errors;
 };
 

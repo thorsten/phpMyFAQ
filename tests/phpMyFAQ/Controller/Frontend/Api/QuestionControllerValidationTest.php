@@ -19,6 +19,7 @@ use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -212,10 +213,24 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
         ], JSON_THROW_ON_ERROR)));
     }
 
-    public function testCreateThrowsExceptionWhenCategoryParameterIsProvided(): void
+    /**
+     * @return array<string, array{mixed}>
+     */
+    public static function invalidCategoryProvider(): array
+    {
+        return [
+            'not an integer' => ['abc'],
+            'unknown category' => [4711],
+            'unknown category sent as string' => ['4711'],
+        ];
+    }
+
+    #[DataProvider('invalidCategoryProvider')]
+    public function testCreateThrowsExceptionWhenCategoryIsInvalid(mixed $invalidCategory): void
     {
         $this->configuration->getAll();
         $this->overrideConfigurationValues(['main.enableAskQuestions' => '1']);
+        $this->seedCategory();
 
         $controller = $this->createController();
         [$session, $csrfToken] = $this->createValidCsrfSession();
@@ -230,8 +245,88 @@ final class QuestionControllerValidationTest extends ApiControllerTestCase
             'email' => 'test@example.com',
             'lang' => 'en',
             'question' => 'How does this work?',
-            'category' => 1,
+            'category' => $invalidCategory,
         ], JSON_THROW_ON_ERROR)));
+    }
+
+    /**
+     * The ask form serializes its category select, so the handler receives the ID as a string.
+     */
+    public function testCreateStoresQuestionInTheSelectedCategory(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'main.enableSmartAnswering' => '0',
+            'main.enableAskQuestions' => '1',
+        ]);
+        $this->seedCategory(1);
+        $this->seedCategory(7);
+
+        $stopWords = $this->createStub(StopWords::class);
+        $stopWords->method('checkBannedWord')->willReturn(true);
+
+        $question = $this->createMock(Question::class);
+        $question
+            ->expects($this->once())
+            ->method('add')
+            ->with($this->callback(static fn($entity): bool => $entity->getCategoryId() === 7));
+
+        $controller = $this->createController(stopWords: $stopWords, question: $question);
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $session);
+
+        $response = $controller->create(Request::create('/api/question/create', 'POST', content: json_encode([
+            'pmf-csrf-token' => $csrfToken,
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'lang' => 'en',
+            'question' => 'How does this work?',
+            'category' => '7',
+            'captcha' => 'ignored-for-logged-in-user',
+        ], JSON_THROW_ON_ERROR)));
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertArrayHasKey('success', $payload);
+    }
+
+    /**
+     * An empty category select means "no category chosen": the question goes to the first
+     * category like a request without the field, never to the non-existent category 0.
+     */
+    public function testCreateStoresQuestionInAnExistingCategoryWhenTheCategoryIsEmpty(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues([
+            'main.enableSmartAnswering' => '0',
+            'main.enableAskQuestions' => '1',
+        ]);
+        $this->seedCategory(7);
+
+        $stopWords = $this->createStub(StopWords::class);
+        $stopWords->method('checkBannedWord')->willReturn(true);
+
+        $question = $this->createMock(Question::class);
+        $question
+            ->expects($this->once())
+            ->method('add')
+            ->with($this->callback(static fn($entity): bool => $entity->getCategoryId() > 0));
+
+        $controller = $this->createController(stopWords: $stopWords, question: $question);
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $session);
+
+        $response = $controller->create(Request::create('/api/question/create', 'POST', content: json_encode([
+            'pmf-csrf-token' => $csrfToken,
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'lang' => 'en',
+            'question' => 'How does this work?',
+            'category' => '',
+            'captcha' => 'ignored-for-logged-in-user',
+        ], JSON_THROW_ON_ERROR)));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     public function testCreateThrowsExceptionWhenSaveParameterIsProvided(): void

@@ -34,6 +34,43 @@ class ResourceServerTest extends TestCase
         $this->assertNull($server->authenticate(new Request()));
     }
 
+    public function testAuthenticateForScopeReturnsNullWithoutBearerHeader(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->expects($this->never())->method('get');
+        $server = new ResourceServer($configuration);
+
+        $request = new Request(server: ['HTTP_AUTHORIZATION' => 'Basic dXNlcjpwYXNz']);
+
+        $this->assertNull($server->authenticateForScope($request, 'faq.write'));
+    }
+
+    public function testAuthenticateForScopeReturnsNullWhenOauth2IsDisabled(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->expects($this->once())->method('get')->with('oauth2.enable')->willReturn('false');
+        $server = new ResourceServer($configuration);
+
+        $request = new Request(server: ['HTTP_AUTHORIZATION' => 'Bearer oauth-access-token']);
+
+        $this->assertNull($server->authenticateForScope($request, 'faq.write'));
+    }
+
+    /**
+     * The injectable validator knows nothing about scopes, so it must not vouch for one.
+     */
+    public function testAuthenticateForScopeDoesNotTrustTheScopelessValidator(): void
+    {
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('get')->willReturn('false');
+        $server = new ResourceServer($configuration);
+        $server->setTokenValidator(static fn(Request $request): ?int => 123);
+
+        $request = new Request(server: ['HTTP_AUTHORIZATION' => 'Bearer oauth-access-token']);
+
+        $this->assertNull($server->authenticateForScope($request, 'faq.write'));
+    }
+
     public function testAuthenticateUsesConfiguredValidator(): void
     {
         $configuration = $this->createMock(Configuration::class);

@@ -153,7 +153,7 @@ class Relation
         }
 
         $query .=
-            StatusScope::publishedOnly()->toSqlFragment('fd')
+            StatusScope::visibleToReaders()->toSqlFragment('fd')
             . ' GROUP BY fcr.category_id, fc.parent_id, fc.name, fc.description';
 
         $result = $this->configuration->getDb()->query($query);
@@ -211,7 +211,7 @@ class Relation
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 (int) ($this->groups[0] ?? -1),
-                $onlyActive ? StatusScope::publishedOnly()->toSqlFragment('fd') : '',
+                $onlyActive ? StatusScope::visibleToReaders()->toSqlFragment('fd') : '',
             );
         }
 
@@ -236,7 +236,7 @@ class Relation
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
-                $onlyActive ? StatusScope::publishedOnly()->toSqlFragment('fd') : '',
+                $onlyActive ? StatusScope::visibleToReaders()->toSqlFragment('fd') : '',
             );
         }
 
@@ -463,7 +463,7 @@ class Relation
         foreach ($categories as $category) {
             // Skip insert if the relation already exists to avoid UNIQUE constraint violation (SQLite warning)
             $existsQuery = sprintf(
-                "SELECT 1 FROM %sfaqcategoryrelations WHERE category_id = %d AND category_lang = '%s' AND record_id = %d AND record_lang = '%s' LIMIT 1",
+                "SELECT 1 FROM %sfaqcategoryrelations WHERE category_id = %d AND category_lang = '%s' AND record_id = %d AND record_lang = '%s'",
                 $prefix,
                 (int) $category,
                 $escapedLang,

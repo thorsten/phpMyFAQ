@@ -102,8 +102,28 @@ class SearchResultSet
             }
         }
 
+        $reviewedPages = [];
+
         foreach ($this->rawResultSet as $result) {
             $permission = false;
+
+            // A custom page is no FAQ: its ID lives in another table, so it has neither a FAQ
+            // record ACL nor a category, and must not be deduplicated against FAQ IDs.
+            if (self::isCustomPage($result)) {
+                $pageKey = (int) $result->id . '-' . (string) ($result->lang ?? '');
+                if (array_key_exists($pageKey, $reviewedPages)) {
+                    continue;
+                }
+
+                $reviewedPages[$pageKey] = true;
+
+                if (($result->score ?? null) === null) {
+                    $result->score = $this->getScore($result);
+                }
+
+                $this->reviewedResultSet[] = $result;
+                continue;
+            }
 
             if (!$this->isWithinReadScope($readScope, $result, $storedRowsByFaq)) {
                 continue;
@@ -201,6 +221,10 @@ class SearchResultSet
         $faqIds = [];
 
         foreach ($results as $result) {
+            if (self::isCustomPage($result)) {
+                continue;
+            }
+
             if ($this->hitLanguage($result) !== null && $this->hitCategoryId($result) !== null) {
                 continue;
             }
@@ -263,6 +287,11 @@ class SearchResultSet
         }
 
         return false;
+    }
+
+    private static function isCustomPage(stdClass $result): bool
+    {
+        return ($result->content_type ?? null) === 'page';
     }
 
     private function hitLanguage(stdClass $result): ?string

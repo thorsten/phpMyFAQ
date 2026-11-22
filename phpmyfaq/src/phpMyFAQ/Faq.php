@@ -973,8 +973,10 @@ class Faq
             $content = (string) $row->content;
             $published = FaqStatus::Published->value === $row->status;
             $expired = date(format: 'YmdHis') > (string) $row->date_end;
+            // A published FAQ whose start date lies in the future is not readable yet either.
+            $scheduled = date(format: 'YmdHis') < (string) $row->date_start;
 
-            if (!$published) {
+            if (!$published || $scheduled) {
                 $content = Translation::getString(key: 'err_inactiveArticle');
             }
 

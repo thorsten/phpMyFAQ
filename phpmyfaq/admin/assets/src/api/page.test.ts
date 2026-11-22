@@ -167,7 +167,7 @@ describe('Page API', () => {
 
       expect(result).toEqual(mockResponse);
       expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/page/activate', {
-        method: 'POST',
+        method: 'PUT',
         cache: 'no-cache',
         headers: {
           'Content-Type': 'application/json',
@@ -194,7 +194,7 @@ describe('Page API', () => {
 
       expect(result).toEqual(mockResponse);
       expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/page/activate', {
-        method: 'POST',
+        method: 'PUT',
         cache: 'no-cache',
         headers: {
           'Content-Type': 'application/json',

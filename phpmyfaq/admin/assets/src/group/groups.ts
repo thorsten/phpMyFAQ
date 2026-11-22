@@ -138,6 +138,7 @@ const selectGroup = async (groupId: string): Promise<void> => {
     }
     console.error('Failed to load category restrictions:', error);
     currentRestrictions = {};
+    loadedRestrictions = {};
     const container = document.getElementById('categoryRestrictionsBody');
     if (container) {
       container.innerHTML = '';
@@ -158,6 +159,7 @@ const selectGroup = async (groupId: string): Promise<void> => {
     }
     console.error('Failed to load language restrictions:', error);
     currentLanguageRestrictions = {};
+    loadedLanguageRestrictions = {};
     const container = document.getElementById('languageRestrictionsBody');
     if (container) {
       container.innerHTML = '';
@@ -491,6 +493,31 @@ const wireDeleteModal = (): void => {
 
 let cachedCategories: CategoryItem[] = [];
 let currentRestrictions: CategoryRestrictions = {};
+// The restrictions as the server stores them, the baseline a save is compared with.
+let loadedRestrictions: CategoryRestrictions = {};
+
+// The server says why it refused a right, e.g. restrictions the acting user may not remove.
+const restrictionSaveError = async (response: Response, fallback: string): Promise<string> => {
+  try {
+    const body = (await response.json()) as { error?: string };
+    return body.error || fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+// A restriction list is a set: the order of its entries carries no meaning.
+const isSameRestriction = (
+  loaded: ReadonlyArray<string | number>,
+  submitted: ReadonlyArray<string | number>
+): boolean => {
+  const loadedValues = new Set(loaded.map(String));
+  const submittedValues = new Set(submitted.map(String));
+  return (
+    loadedValues.size === submittedValues.size &&
+    [...submittedValues].every((value: string): boolean => loadedValues.has(value))
+  );
+};
 
 const loadCategoryRestrictions = async (groupId: string): Promise<void> => {
   const container = document.getElementById('categoryRestrictionsBody');
@@ -503,6 +530,7 @@ const loadCategoryRestrictions = async (groupId: string): Promise<void> => {
   }
 
   currentRestrictions = await fetchGroupCategoryRestrictions(groupId);
+  loadedRestrictions = { ...currentRestrictions };
 
   renderCategoryRestrictions(container);
 };
@@ -591,7 +619,10 @@ export const handleCategoryRestrictionsSave = async (): Promise<void> => {
   const csrfToken = container.dataset.csrfToken || '';
 
   // Collect every right ID from the permission checkboxes so unticked
-  // permissions also get their stored restrictions cleared.
+  // permissions also get their stored restrictions cleared. Only the rights
+  // whose list differs from the loaded one are submitted: the server judges
+  // every submitted right against the acting user's own scope, so resending
+  // an untouched list would fail the save for a restricted administrator.
   const rightIds = new Set<string>();
   document
     .querySelectorAll<HTMLInputElement>('#pmf-permission-list input[type=checkbox].permission')
@@ -601,7 +632,10 @@ export const handleCategoryRestrictionsSave = async (): Promise<void> => {
       }
     });
 
-  let failed = false;
+  const groupId = selectedGroupId;
+  const loaded = loadedRestrictions;
+
+  const errors = new Set<string>();
   for (const rightId of rightIds) {
     const select = container.querySelector<HTMLSelectElement>(`select[data-right-id="${rightId}"]`);
     const selectedCategoryIds = select
@@ -610,14 +644,21 @@ export const handleCategoryRestrictionsSave = async (): Promise<void> => {
           .map((option: HTMLOptionElement): number => parseInt(option.value))
       : [];
 
-    const response = await saveGroupCategoryRestrictions(selectedGroupId, rightId, selectedCategoryIds, csrfToken);
-    if (!response.ok) {
-      failed = true;
+    if (isSameRestriction(loaded[rightId] ?? [], selectedCategoryIds)) {
+      continue;
     }
+
+    const response = await saveGroupCategoryRestrictions(groupId, rightId, selectedCategoryIds, csrfToken);
+    if (!response.ok) {
+      const fallback = container.dataset.msgSaveFailed || 'Failed to save category restrictions.';
+      errors.add(await restrictionSaveError(response, fallback));
+      continue;
+    }
+    loaded[rightId] = selectedCategoryIds;
   }
 
-  if (failed) {
-    pushErrorNotification(container.dataset.msgSaveFailed || 'Failed to save category restrictions.');
+  if (errors.size > 0) {
+    errors.forEach((error: string): void => pushErrorNotification(error));
   } else {
     pushNotification(container.dataset.msgSaved || 'Category restrictions saved.');
   }
@@ -625,6 +666,8 @@ export const handleCategoryRestrictionsSave = async (): Promise<void> => {
 
 let cachedLanguages: LanguageItem[] = [];
 let currentLanguageRestrictions: LanguageRestrictions = {};
+// The restrictions as the server stores them, the baseline a save is compared with.
+let loadedLanguageRestrictions: LanguageRestrictions = {};
 
 const loadLanguageRestrictions = async (groupId: string): Promise<void> => {
   const container = document.getElementById('languageRestrictionsBody');
@@ -637,6 +680,7 @@ const loadLanguageRestrictions = async (groupId: string): Promise<void> => {
   }
 
   currentLanguageRestrictions = await fetchGroupLanguageRestrictions(groupId);
+  loadedLanguageRestrictions = { ...currentLanguageRestrictions };
 
   renderLanguageRestrictions(container);
 };
@@ -726,7 +770,10 @@ export const handleLanguageRestrictionsSave = async (): Promise<void> => {
   const csrfToken = container.dataset.csrfToken || '';
 
   // Collect every right ID from the permission checkboxes so unticked
-  // permissions also get their stored restrictions cleared.
+  // permissions also get their stored restrictions cleared. Only the rights
+  // whose list differs from the loaded one are submitted: the server judges
+  // every submitted right against the acting user's own scope, so resending
+  // an untouched list would fail the save for a restricted administrator.
   const rightIds = new Set<string>();
   document
     .querySelectorAll<HTMLInputElement>('#pmf-permission-list input[type=checkbox].permission')
@@ -736,7 +783,10 @@ export const handleLanguageRestrictionsSave = async (): Promise<void> => {
       }
     });
 
-  let failed = false;
+  const groupId = selectedGroupId;
+  const loaded = loadedLanguageRestrictions;
+
+  const errors = new Set<string>();
   for (const rightId of rightIds) {
     const select = container.querySelector<HTMLSelectElement>(`select[data-right-id="${rightId}"]`);
     const selectedLanguageCodes = select
@@ -745,14 +795,21 @@ export const handleLanguageRestrictionsSave = async (): Promise<void> => {
           .map((option: HTMLOptionElement): string => option.value)
       : [];
 
-    const response = await saveGroupLanguageRestrictions(selectedGroupId, rightId, selectedLanguageCodes, csrfToken);
-    if (!response.ok) {
-      failed = true;
+    if (isSameRestriction(loaded[rightId] ?? [], selectedLanguageCodes)) {
+      continue;
     }
+
+    const response = await saveGroupLanguageRestrictions(groupId, rightId, selectedLanguageCodes, csrfToken);
+    if (!response.ok) {
+      const fallback = container.dataset.msgSaveFailed || 'Failed to save language restrictions.';
+      errors.add(await restrictionSaveError(response, fallback));
+      continue;
+    }
+    loaded[rightId] = selectedLanguageCodes;
   }
 
-  if (failed) {
-    pushErrorNotification(container.dataset.msgSaveFailed || 'Failed to save language restrictions.');
+  if (errors.size > 0) {
+    errors.forEach((error: string): void => pushErrorNotification(error));
   } else {
     pushNotification(container.dataset.msgSaved || 'Language restrictions saved.');
   }

@@ -189,7 +189,7 @@ final class AuthenticationController extends AbstractFrontController
         $password = Filter::filterVar(
             $request->request->get('faqpassword'),
             FILTER_SANITIZE_SPECIAL_CHARS,
-            FILTER_FLAG_NO_ENCODE_QUOTES,
+            default: '',
         );
         $rememberMe = Filter::filterVar($request->request->get('faqrememberme'), FILTER_VALIDATE_BOOLEAN);
 

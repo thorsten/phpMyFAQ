@@ -111,11 +111,7 @@ final class FormController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(
-        path: 'admin/api/forms/translation-delete',
-        name: 'admin.api.forms.translation-delete',
-        methods: ['DELETE'],
-    )]
+    #[Route(path: 'forms/translation-delete', name: 'admin.api.forms.translation-delete', methods: ['DELETE'])]
     public function deleteTranslation(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);

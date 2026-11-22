@@ -6,9 +6,9 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Administration\SkipsAuthenticationCheck;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\RightGrant;
 use phpMyFAQ\Permission\RightScope;
-use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -518,6 +518,201 @@ class AbstractControllerTest extends TestCase
         ];
     }
 
+    #[DataProvider('publicAuthenticationPathsProvider')]
+    public function testIsSecuredSucceedsOnPublicAuthenticationPath(
+        string $routingContext,
+        string $scriptName,
+        string $requestUri,
+    ): void {
+        $this->currentUserMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->configurationMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('security.enableLoginOnly')
+            ->willReturn(true);
+
+        $this->runIsSecuredInRoutingContext($routingContext, $scriptName, $requestUri);
+        $this->assertTrue(true);
+    }
+
+    /**
+     * The REST API is served by api/index.php, so production requests carry the base
+     * URL "/api" and a path info without it.
+     *
+     * @return array<string, array{0: string, 1: string, 2: string}>
+     */
+    public static function publicAuthenticationPathsProvider(): array
+    {
+        return [
+            'passkey login options' => ['api', '/api/index.php', '/api/webauthn/prepare-login'],
+            'passkey login' => ['api', '/api/index.php', '/api/webauthn/login'],
+            'REST API login' => ['api', '/api/index.php', '/api/v4.0/login'],
+            'passkey login in a subdirectory' => ['api', '/faq/api/index.php', '/faq/api/webauthn/login'],
+            'mailed password reset link' => ['public', '/index.php', '/user/reset-password?u=1&exp=2&sig=3'],
+            'Entra ID logout' => ['public', '/index.php', '/auth/azure/logout'],
+            'legacy Entra ID logout' => ['public', '/index.php', '/services/azure/logout'],
+            'login in a subdirectory' => ['public', '/faq/index.php', '/faq/login'],
+            'OAuth2 token endpoint' => ['api', '/api/index.php', '/api/oauth/token'],
+            'OAuth2 authorization endpoint' => ['api', '/api/index.php', '/api/oauth/authorize?client_id=1'],
+            'OAuth2 server metadata' => ['public', '/index.php', '/.well-known/oauth-authorization-server'],
+            'captcha image' => ['api', '/api/index.php', '/api/captcha?gen=img&ck=1'],
+            'contact form submission' => ['api', '/api/index.php', '/api/contact'],
+            'contact form submission in a subdirectory' => ['api', '/faq/api/index.php', '/faq/api/contact'],
+        ];
+    }
+
+    #[DataProvider('protectedPathsProvider')]
+    public function testIsSecuredRejectsPathOutsideTheAllowlistOfItsRoutingContext(
+        string $routingContext,
+        string $scriptName,
+        string $requestUri,
+    ): void {
+        $this->currentUserMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->configurationMock
+            ->expects($this->once())
+            ->method('get')
+            ->with('security.enableLoginOnly')
+            ->willReturn(true);
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $this->runIsSecuredInRoutingContext($routingContext, $scriptName, $requestUri);
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string, 2: string}>
+     */
+    public static function protectedPathsProvider(): array
+    {
+        return [
+            'API path without a public entry' => ['api', '/api/index.php', '/api/v4.0/faqs'],
+            'frontend-only path on the API' => ['api', '/api/index.php', '/api/login'],
+            'API-only path on the frontend' => ['public', '/index.php', '/webauthn/login'],
+            'admin API' => ['admin-api', '/admin/api/index.php', '/admin/api/login'],
+            'API path next to the OAuth2 endpoints' => ['api', '/api/index.php', '/api/oauth/clients'],
+            'passkey removal' => ['api', '/api/index.php', '/api/webauthn/revoke'],
+            'question submission' => ['api', '/api/index.php', '/api/question'],
+            'REST API registration lookalike' => ['api', '/api/index.php', '/api/v4.0/register/1'],
+            'captcha path on the frontend' => ['public', '/index.php', '/captcha'],
+            'contact endpoint on the frontend' => ['public', '/index.php', '/contact'],
+            'OAuth2 token path on the frontend' => ['public', '/index.php', '/oauth/token'],
+            'contact page on the API' => ['api', '/api/index.php', '/api/contact.html'],
+            'user control panel' => ['public', '/index.php', '/user/ucp'],
+            'OAuth2 token path on the admin API' => ['admin-api', '/admin/api/index.php', '/admin/api/oauth/token'],
+        ];
+    }
+
+    /**
+     * An instance that lets people register has to let them reach the registration form and
+     * the endpoints it submits to before they can log in.
+     */
+    #[DataProvider('registrationPathsProvider')]
+    public function testIsSecuredSucceedsOnRegistrationPathWhileRegistrationIsEnabled(
+        string $routingContext,
+        string $scriptName,
+        string $requestUri,
+    ): void {
+        $this->currentUserMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->configurationMock
+            ->method('get')
+            ->willReturnMap([
+                ['security.enableLoginOnly',    true],
+                ['security.enableRegistration', true],
+            ]);
+
+        $this->runIsSecuredInRoutingContext($routingContext, $scriptName, $requestUri);
+        $this->assertTrue(true);
+    }
+
+    #[DataProvider('registrationPathsProvider')]
+    public function testIsSecuredRejectsRegistrationPathWhileRegistrationIsDisabled(
+        string $routingContext,
+        string $scriptName,
+        string $requestUri,
+    ): void {
+        $this->currentUserMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->configurationMock
+            ->method('get')
+            ->willReturnMap([
+                ['security.enableLoginOnly',    true],
+                ['security.enableRegistration', false],
+            ]);
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $this->runIsSecuredInRoutingContext($routingContext, $scriptName, $requestUri);
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string, 2: string}>
+     */
+    public static function registrationPathsProvider(): array
+    {
+        return [
+            'registration page' => ['public', '/index.php', '/user/register'],
+            'registration page in a subdirectory' => ['public', '/faq/index.php', '/faq/user/register'],
+            'registration form submission' => ['api', '/api/index.php', '/api/register'],
+            'REST API registration' => ['api', '/api/index.php', '/api/v4.0/register'],
+            'passkey sign-up options' => ['api', '/api/index.php', '/api/webauthn/prepare'],
+            'passkey sign-up' => ['api', '/api/index.php', '/api/webauthn/register'],
+        ];
+    }
+
+    /**
+     * Enabled registration opens the registration paths of the routing context only, and
+     * nothing else.
+     */
+    #[DataProvider('pathsEnabledRegistrationDoesNotOpenProvider')]
+    public function testIsSecuredRejectsOtherPathsWhileRegistrationIsEnabled(
+        string $routingContext,
+        string $scriptName,
+        string $requestUri,
+    ): void {
+        $this->currentUserMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->configurationMock
+            ->method('get')
+            ->willReturnMap([
+                ['security.enableLoginOnly',    true],
+                ['security.enableRegistration', true],
+            ]);
+
+        $this->expectException(UnauthorizedHttpException::class);
+        $this->runIsSecuredInRoutingContext($routingContext, $scriptName, $requestUri);
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string, 2: string}>
+     */
+    public static function pathsEnabledRegistrationDoesNotOpenProvider(): array
+    {
+        return [
+            'registration page path on the API' => ['api', '/api/index.php', '/api/user/register'],
+            'registration endpoint on the frontend' => ['public', '/index.php', '/register'],
+            'registration endpoint on the admin API' => ['admin-api', '/admin/api/index.php', '/admin/api/register'],
+            'REST API path' => ['api', '/api/index.php', '/api/v4.0/faqs'],
+            'start page' => ['public', '/index.php', '/'],
+        ];
+    }
+
+    private function runIsSecuredInRoutingContext(string $routingContext, string $scriptName, string $requestUri): void
+    {
+        $container = new \Symfony\Component\DependencyInjection\Container();
+        $container->set('kernel', new \phpMyFAQ\Kernel(routingContext: $routingContext));
+        new \ReflectionProperty(AbstractController::class, 'container')->setValue(
+            $this->abstractController,
+            $container,
+        );
+
+        $serverBackup = $_SERVER;
+        $_SERVER['REQUEST_URI'] = $requestUri;
+        $_SERVER['SCRIPT_NAME'] = $scriptName;
+        $_SERVER['SCRIPT_FILENAME'] = '/var/www/html' . $scriptName;
+
+        try {
+            $this->abstractController->isSecuredPublic();
+        } finally {
+            $_SERVER = $serverBackup;
+        }
+    }
+
     public function testSetContainerReEvaluatesIsSecuredWhenContainerChanges(): void
     {
         $controller = new class() extends AbstractController {
@@ -594,8 +789,7 @@ class AbstractControllerTest extends TestCase
         \phpMyFAQ\Container\ContainerRegistry::set($sharedContainer);
 
         try {
-            $controller = new class extends AbstractController {
-            };
+            $controller = new class extends AbstractController {};
 
             $reflectionProperty = new \ReflectionProperty(AbstractController::class, 'container');
             $this->assertSame($sharedContainer, $reflectionProperty->getValue($controller));
@@ -685,6 +879,7 @@ class AbstractControllerTest extends TestCase
 
         $this->abstractController->captchaCodeIsValidPublic($request);
     }
+
     public function testCaptchaCodeIsValidUsesTheRecaptchaResponseWhenGoogleRecaptchaIsEnabled(): void
     {
         $this->configurationMock
@@ -881,9 +1076,7 @@ class AbstractControllerTest extends TestCase
         $this->actAsUserHoldingGermanEverywhereAndCategoryOne();
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage(
-            'User has no "FAQ_EDIT" permission for uncategorized content in language "en".',
-        );
+        $this->expectExceptionMessage('User has no "FAQ_EDIT" permission for uncategorized content in language "en".');
 
         $this->abstractController->userHasPermissionForCategoriesInLanguagePublic(PermissionType::FAQ_EDIT, [0], 'en');
     }
@@ -974,7 +1167,6 @@ class AbstractControllerTest extends TestCase
             'session' => ['session', 'Session service not found in container.'],
         ];
     }
-
 
     public function testJsonWithComplexData(): void
     {

@@ -5,6 +5,7 @@ namespace phpMyFAQ\Setup;
 use phpMyFAQ\System;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 
 #[AllowMockObjectsWithoutExpectations]
 class InstallationRunnerTest extends TestCase
@@ -133,5 +134,48 @@ class InstallationRunnerTest extends TestCase
         $this->assertFalse($options['verify_peer']);
         $this->assertSame('/tmp/ca.pem', $options['cafile']);
         $this->assertSame('/tmp/certs', $options['capath']);
+    }
+
+    public function testConfigFilesAreWrittenToTheConfigDirectoryTheApplicationReads(): void
+    {
+        $rootDir = sys_get_temp_dir() . '/pmf-installation-runner-' . bin2hex(random_bytes(6));
+        $configDir = $rootDir . '/content/core/config';
+        mkdir($configDir, 0o777, true);
+
+        $input = new InstallationInput(
+            dbSetup: ['dbType' => 'sqlite3', 'dbServer' => $rootDir . '/faq.db'],
+            ldapSetup: ['ldapServer' => 'ldap.example.com', 'ldapPort' => 389, 'ldapPassword' => "it's secret"],
+            esSetup: ['hosts' => ['es1:9200', 'es2:9200'], 'index' => 'faq'],
+            osSetup: ['hosts' => ['os1:9200', 'os2:9200'], 'index' => 'faq'],
+            loginName: 'admin',
+            password: 'password1234',
+            language: 'en',
+            realname: 'Admin',
+            email: 'admin@example.com',
+            permLevel: 'basic',
+            rootDir: $rootDir,
+            ldapEnabled: true,
+            esEnabled: true,
+            osEnabled: true,
+        );
+
+        try {
+            $runner = new InstallationRunner($this->createStub(System::class));
+            new \ReflectionMethod(InstallationRunner::class, 'stepCreateConfigFiles')->invoke($runner, $input);
+
+            $PMF_LDAP = [];
+            $PMF_ES = [];
+            $PMF_OS = [];
+            $this->assertFileExists($configDir . '/database.php');
+            include $configDir . '/ldap.php';
+            include $configDir . '/elasticsearch.php';
+            include $configDir . '/opensearch.php';
+
+            $this->assertSame("it's secret", $PMF_LDAP['ldap_password']);
+            $this->assertSame(['es1:9200', 'es2:9200'], $PMF_ES['hosts']);
+            $this->assertSame(['os1:9200', 'os2:9200'], $PMF_OS['hosts']);
+        } finally {
+            new Filesystem()->remove($rootDir);
+        }
     }
 }

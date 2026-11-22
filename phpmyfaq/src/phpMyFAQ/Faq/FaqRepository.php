@@ -22,6 +22,7 @@ namespace phpMyFAQ\Faq;
 use DateTime;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\FaqStatus;
 
@@ -635,11 +636,8 @@ final class FaqRepository implements FaqRepositoryInterface
                 fd.*, COALESCE(fdg.group_id, -1) AS group_id, fdu.user_id
             FROM
                 %sfaqdata fd
-            LEFT JOIN (
-                SELECT record_id, group_id FROM %sfaqdata_group fdg WHERE fdg.group_id <> -1
-                UNION ALL
-                SELECT fd.id AS record_id, -1 AS group_id FROM %sfaqdata fd WHERE fd.solution_id = %d
-            ) AS fdg
+            LEFT JOIN
+                %sfaqdata_group fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
@@ -651,8 +649,6 @@ final class FaqRepository implements FaqRepositoryInterface
                 %s',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $solutionId,
             Database::getTablePrefix(),
             $solutionId,
             $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope(),
@@ -669,8 +665,9 @@ final class FaqRepository implements FaqRepositoryInterface
                 LEFT JOIN %1$sfaqdata_group fdg ON fd.id = fdg.record_id
                 WHERE fd.solution_id = %2$d
                 AND (fdu.user_id IS NOT NULL OR fdg.group_id IS NOT NULL)
-                LIMIT 1', Database::getTablePrefix(), $solutionId);
-            $restrictionResult = $this->configuration->getDb()->query($restrictionQuery);
+                ORDER BY fd.id', Database::getTablePrefix(), $solutionId);
+            // The driver renders the row limit in its own dialect; SQL Server knows no LIMIT.
+            $restrictionResult = $this->configuration->getDb()->query($restrictionQuery, offset: 0, rowcount: 1);
             $hasRestriction =
                 $restrictionResult !== false
                 && $restrictionResult !== null
@@ -680,12 +677,12 @@ final class FaqRepository implements FaqRepositoryInterface
                 // The fallback deliberately ignores the record ACL for FAQs that carry none, but
                 // it must still honour the read scope, or it would become a way around it.
                 $fallbackQuery = sprintf(
-                    'SELECT * FROM %sfaqdata fd WHERE fd.solution_id = %d %s LIMIT 1',
+                    'SELECT * FROM %sfaqdata fd WHERE fd.solution_id = %d %s ORDER BY fd.id',
                     Database::getTablePrefix(),
                     $solutionId,
                     $queryHelper->queryReadScope(),
                 );
-                $fallbackResult = $this->configuration->getDb()->query($fallbackQuery);
+                $fallbackResult = $this->configuration->getDb()->query($fallbackQuery, offset: 0, rowcount: 1);
                 $row = $this->configuration->getDb()->fetchObject($fallbackResult);
             }
         }
@@ -841,6 +838,7 @@ final class FaqRepository implements FaqRepositoryInterface
      */
     public function fetchStickyFaqs(int $userId, array $groups, bool $groupSupport): array
     {
+        $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($userId, $groups, $this->readScope);
         $query = sprintf(
             "
@@ -878,10 +876,14 @@ final class FaqRepository implements FaqRepositoryInterface
             AND
                 fd.status = '%s'
             AND
+                fd.date_start <= '%s'
+            AND
+                fd.date_end >= '%s'
+            AND
                 fd.sticky = 1
             %s
             GROUP BY
-                fd.id, fd.lang, fd.thema, fcr.category_id, fv.visits
+                fd.id, fd.lang, fd.thema, fd.sticky_order, fcr.category_id, fv.visits
             ORDER BY
                 fv.visits DESC",
             Database::getTablePrefix(),
@@ -891,6 +893,8 @@ final class FaqRepository implements FaqRepositoryInterface
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             FaqStatus::Published->value,
+            $now,
+            $now,
             $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
 
@@ -994,18 +998,22 @@ final class FaqRepository implements FaqRepositoryInterface
             ON
                 fd.id = fdu.record_id
             %s
+            %s
             %s',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->buildConditionWhereClause($condition),
+            $this->buildPublicationWindowClause($condition),
             $queryHelper->queryPermission($groupSupport) . $queryHelper->queryReadScope('fd', 'fcr'),
         );
     }
 
     public function insert(FaqEntity $faqEntity): void
     {
+        $publicationWindow = $faqEntity->getPublicationWindow() ?? PublicationWindow::unlimited();
+
         $query = sprintf(
             "INSERT INTO %sfaqdata
             (id, lang, solution_id, revision_id, status, sticky, keywords, thema, content, author, email,
@@ -1026,8 +1034,8 @@ final class FaqRepository implements FaqRepositoryInterface
             $this->configuration->getDb()->escape($faqEntity->getEmail()),
             $faqEntity->isComment() ? 'y' : 'n',
             date(format: 'YmdHis'),
-            '00000000000000',
-            '99991231235959',
+            $publicationWindow->storedStart(),
+            $publicationWindow->storedEnd(),
             date(format: 'Y-m-d H:i:s'),
             $this->configuration->getDb()->escape($faqEntity->getNotes()),
         );
@@ -1048,8 +1056,6 @@ final class FaqRepository implements FaqRepositoryInterface
             author = '%s',
             email = '%s',
             comment = '%s',
-            date_start = '%s',
-            date_end = '%s',
             notes = '%s'",
             Database::getTablePrefix(),
             $faqEntity->getRevisionId(),
@@ -1061,10 +1067,20 @@ final class FaqRepository implements FaqRepositoryInterface
             $this->configuration->getDb()->escape($faqEntity->getAuthor()),
             $this->configuration->getDb()->escape($faqEntity->getEmail()),
             $faqEntity->isComment() ? 'y' : 'n',
-            $faqEntity->getValidFrom()->format('YmdHis'),
-            $faqEntity->getValidTo()->format('YmdHis'),
             $this->configuration->getDb()->escape($faqEntity->getNotes()),
         );
+
+        // The publication window is written only when the caller decided about it. A writer
+        // that does not know the window must never reset it: that would put a scheduled or
+        // an expired FAQ back online.
+        $publicationWindow = $faqEntity->getPublicationWindow();
+        if ($publicationWindow instanceof PublicationWindow) {
+            $query .= sprintf(
+                ", date_start = '%s', date_end = '%s'",
+                $publicationWindow->storedStart(),
+                $publicationWindow->storedEnd(),
+            );
+        }
 
         // Conditionally add the updated field
         $updatedDate = $faqEntity->getUpdatedDate();
@@ -1146,7 +1162,13 @@ final class FaqRepository implements FaqRepositoryInterface
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
             ),
-            sprintf('DELETE FROM %sfaqcomments WHERE id = %d', Database::getTablePrefix(), $faqId),
+            // faqcomments.id is the record id of a FAQ or of a news entry, told apart by type.
+            sprintf(
+                "DELETE FROM %sfaqcomments WHERE id = %d AND type = '%s'",
+                Database::getTablePrefix(),
+                $faqId,
+                CommentType::FAQ,
+            ),
             sprintf('DELETE FROM %sfaqvoting WHERE artikel = %d', Database::getTablePrefix(), $faqId),
         ];
 
@@ -1367,6 +1389,25 @@ final class FaqRepository implements FaqRepositoryInterface
         }
 
         return $where;
+    }
+
+    /**
+     * A caller that asks getAllFaqs() for published FAQs only wants what a reader can see, and a
+     * published FAQ is only visible inside its publication window. Callers that list every
+     * status (administration, search index import) pass no status condition and keep seeing
+     * scheduled and expired FAQs.
+     *
+     * @param array<string, mixed>|null $condition
+     */
+    private function buildPublicationWindowClause(?array $condition): string
+    {
+        if (($condition['fd.status'] ?? $condition['status'] ?? null) !== FaqStatus::Published->value) {
+            return '';
+        }
+
+        $now = date(format: 'YmdHis');
+
+        return sprintf("AND fd.date_start <= '%s' AND fd.date_end >= '%s'", $now, $now);
     }
 
     /**

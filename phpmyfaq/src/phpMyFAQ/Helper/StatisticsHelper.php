@@ -269,7 +269,12 @@ readonly class StatisticsHelper
         }
 
         foreach ($trackingDates as $trackingDate) {
-            $renderedHtml .= sprintf('<option value="%d"', $trackingDate);
+            // data-day names the day in the time zone of the server for the URL of the day view
+            $renderedHtml .= sprintf(
+                '<option value="%d" data-day="%s"',
+                $trackingDate,
+                date(format: 'Y-m-d', timestamp: (int) $trackingDate),
+            );
             if (
                 date(format: 'Y-m-d', timestamp: (int) $trackingDate) === date(
                     format: 'Y-m-d',

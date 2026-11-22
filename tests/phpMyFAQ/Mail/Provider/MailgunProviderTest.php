@@ -93,6 +93,87 @@ class MailgunProviderTest extends TestCase
         $this->assertSame(2, $result);
     }
 
+    public function testSendPostsTextOnlyForPlainMailAndBothPartsForHtmlMail(): void
+    {
+        $response = $this->createStub(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(200);
+
+        $bodies = new \ArrayObject();
+        $httpClient = $this->createStub(HttpClientInterface::class);
+        $httpClient
+            ->method('request')
+            ->willReturnCallback(static function (string $method, string $url, array $options) use (
+                $bodies,
+                $response,
+            ): ResponseInterface {
+                $bodies->append($options['body']);
+
+                return $response;
+            });
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('get')->willReturnCallback(static fn(string $key): string => $key
+            === 'mail.mailgunRegion'
+                ? 'us'
+                : 'configured');
+
+        $provider = new MailgunProvider($configuration, $httpClient);
+        $headers = ['From' => 'sender@example.com', 'Subject' => 'Test'];
+        $provider->send('user@example.com', $headers, 'Plain body');
+        $provider->send('user@example.com', $headers, 'Text part', '<p>HTML part</p>');
+
+        $this->assertSame('Plain body', $bodies[0]['text']);
+        $this->assertArrayNotHasKey('html', $bodies[0]);
+        $this->assertSame('Text part', $bodies[1]['text']);
+        $this->assertSame('<p>HTML part</p>', $bodies[1]['html']);
+    }
+
+    public function testSendMapsCopyRecipientsAndReplyTo(): void
+    {
+        $response = $this->createStub(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(200);
+
+        $httpClient = $this->createMock(HttpClientInterface::class);
+        $httpClient
+            ->expects($this->once())
+            ->method('request')
+            ->with(
+                'POST',
+                'https://api.mailgun.net/v3/mg.example.com/messages',
+                $this->callback(
+                    static fn(array $options): bool => (
+                        $options['body']['cc'] === 'copy@example.com,second-copy@example.com'
+                        && $options['body']['bcc'] === 'blind@example.com'
+                        && $options['body']['h:Reply-To'] === 'asker@example.com'
+                    ),
+                ),
+            )
+            ->willReturn($response);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration
+            ->method('get')
+            ->willReturnCallback(static fn(string $key): mixed => match ($key) {
+                'mail.mailgunApiKey' => 'secret-key',
+                'mail.mailgunDomain' => 'mg.example.com',
+                default => null,
+            });
+
+        $provider = new MailgunProvider($configuration, $httpClient);
+
+        $provider->send(
+            'first@example.com',
+            [
+                'From' => 'Sender <sender@example.com>',
+                'Subject' => 'Test',
+                'CC' => '"Copy" <copy@example.com>,<second-copy@example.com>',
+                'BCC' => '<blind@example.com>',
+                'Reply-To' => '"Asker" <asker@example.com>',
+            ],
+            'Body',
+        );
+    }
+
     public function testSendUsesEuEndpointForEuRegion(): void
     {
         $response = $this->createStub(ResponseInterface::class);

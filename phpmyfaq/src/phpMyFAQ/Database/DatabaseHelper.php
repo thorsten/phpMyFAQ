@@ -110,8 +110,9 @@ readonly class DatabaseHelper
                 }
 
                 $columns[] = $key;
-                if ('rights' !== $key && is_numeric($val)) {
-                    $values[] = $val;
+                $bareNumber = 'rights' === $key ? null : self::bareNumber($val);
+                if ($bareNumber !== null) {
+                    $values[] = $bareNumber;
                     continue;
                 }
 
@@ -132,5 +133,20 @@ readonly class DatabaseHelper
         }
 
         return $queries;
+    }
+
+    /**
+     * Returns the value as a bare SQL number, or null when it has to be written as a quoted
+     * string. Only a value that reads back exactly as it was written qualifies: digits stored
+     * in a text column - a login "00123", a long numeric token, "1e5" - would come back as
+     * 123, a rounded float or 100000.
+     */
+    private static function bareNumber(mixed $value): ?string
+    {
+        if (is_int($value) || is_float($value)) {
+            return (string) $value;
+        }
+
+        return is_string($value) && (string) (int) $value === $value ? $value : null;
     }
 }

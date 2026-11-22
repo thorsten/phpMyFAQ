@@ -144,8 +144,7 @@ class ReadingTimePlugin implements PluginInterface
         $showIcon = $this->config->showIcon;
 
         $icon = $showIcon ? '<i class="bi bi-clock"></i> ' : '';
-        $pluralSuffix = $minutes === 1 ? '' : 'n';
 
-        return sprintf('%s ~ %d min %s', $icon, $minutes, $pluralSuffix);
+        return sprintf('%s ~ %d min', $icon, $minutes);
     }
 }

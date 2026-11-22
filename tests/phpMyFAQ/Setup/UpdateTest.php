@@ -6,6 +6,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Setup\Migration\MigrationRegistry;
 use phpMyFAQ\Setup\Migration\MigrationTracker;
 use phpMyFAQ\Setup\Migration\Versions\Migration420Beta3;
 use phpMyFAQ\System;
@@ -233,7 +234,10 @@ class UpdateTest extends TestCase
         $update->dryRun = true;
         $update->applyUpdates();
 
-        $this->assertSame([], $update->dryRunQueries);
+        $this->assertNotContains('4.2.0-beta.3', array_map(
+            static fn($result): string => $result->getVersion(),
+            $update->migrationResults,
+        ));
     }
 
     public function testApplyUpdatesWithDryRunForAlpha3(): void
@@ -428,6 +432,166 @@ class UpdateTest extends TestCase
 
         $entries = array_values(new \phpMyFAQ\Administration\AdminLogRepository(new Configuration($this->dbHandle))->getAll());
         $this->assertNull($entries[0]->getHash());
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function dryRunVersions(Configuration $configuration, string $installedVersion): array
+    {
+        $update = new Update(new System(), $configuration);
+        $update->version = $installedVersion;
+        $update->dryRun = true;
+        $this->assertTrue($update->applyUpdates());
+
+        return array_map(static fn($result): string => $result->getVersion(), $update->migrationResults);
+    }
+
+    public function testPlainUpgradeFromAnOlderReleaseSelectsMigrationsByVersionOnly(): void
+    {
+        $this->dbHandle->query('DROP TABLE IF EXISTS faqmigrations');
+        $configuration = new Configuration($this->dbHandle);
+        $registry = new MigrationRegistry($configuration);
+
+        $this->assertSame(
+            array_keys($registry->getPendingMigrations('4.1.2')),
+            $this->dryRunVersions($configuration, '4.1.2'),
+        );
+
+        // 4.1.11 applied the back-ported steps with its own updater: nothing below 4.2 runs
+        $fromLatest41 = $this->dryRunVersions($configuration, '4.1.11');
+        $this->assertSame(array_keys($registry->getPendingMigrations('4.1.11')), $fromLatest41);
+        $this->assertSame('4.2.0-alpha', $fromLatest41[0]);
+
+        // An empty tracking table is the same state: no tracked update has run yet
+        new MigrationTracker($configuration)->ensureTableExists();
+        $this->assertSame($fromLatest41, $this->dryRunVersions($configuration, '4.1.11'));
+    }
+
+    /**
+     * 4.1.3, 4.1.8, 4.1.9 and 4.1.11 entered the registry after 4.2.0-alpha.2 was released. An
+     * installation that went from 4.1.2 to that pre-release is past their versions and has
+     * never executed them.
+     */
+    public function testPreReleaseInstallationGetsTheBackPortedMigrationsItMissed(): void
+    {
+        $this->dbHandle->query('DROP TABLE IF EXISTS faqmigrations');
+        $configuration = new Configuration($this->dbHandle);
+        $registry = new MigrationRegistry($configuration);
+        $tracker = new MigrationTracker($configuration);
+        $tracker->ensureTableExists();
+        foreach (['4.2.0-alpha', '4.2.0-alpha.2'] as $version) {
+            $migration = $registry->getMigration($version);
+            $tracker->recordMigration($version, 1, $migration->getChecksum(), $migration->getDescription());
+        }
+
+        $versions = $this->dryRunVersions($configuration, '4.2.0-alpha.2');
+
+        $this->assertSame(
+            ['4.1.3', '4.1.8', '4.1.9', '4.1.11', ...array_keys($registry->getPendingMigrations('4.2.0-alpha.2'))],
+            $versions,
+        );
+
+        // A back-port the installation did execute is not selected again
+        $migration = $registry->getMigration('4.1.8');
+        $tracker->recordMigration('4.1.8', 1, $migration->getChecksum(), $migration->getDescription());
+        $this->assertNotContains('4.1.8', $this->dryRunVersions($configuration, '4.2.0-alpha.2'));
+    }
+
+    public function testFullyMigratedInstallationRunsNothing(): void
+    {
+        // Start from a pre-release installation that misses the back-ports and update it for real
+        $this->dbHandle->query('DROP TABLE IF EXISTS faqmigrations');
+        $configuration = new Configuration($this->dbHandle);
+        $configuration->set('main.currentVersion', '4.2.0-alpha.2');
+        $registry = new MigrationRegistry($configuration);
+        $tracker = new MigrationTracker($configuration);
+        $tracker->ensureTableExists();
+        foreach (['4.2.0-alpha', '4.2.0-alpha.2'] as $version) {
+            $migration = $registry->getMigration($version);
+            $tracker->recordMigration($version, 1, $migration->getChecksum(), $migration->getDescription());
+        }
+
+        $update = new Update(new System(), $configuration);
+        $update->version = '4.2.0-alpha.2';
+        $this->assertTrue($update->applyUpdates());
+
+        $applied = $tracker->getAppliedVersions();
+        foreach (['4.1.3', '4.1.8', '4.1.9', '4.1.11', '4.2.0-RC.3'] as $version) {
+            $this->assertContains($version, $applied);
+        }
+
+        $reloaded = new Configuration($this->dbHandle);
+        $storedVersion = (string) $reloaded->get('main.currentVersion');
+        $this->assertSame(System::getVersion(), $storedVersion);
+        $this->assertSame(System::getApiVersion(), (string) $reloaded->get('main.currentApiVersion'));
+
+        $this->assertSame([], $this->dryRunVersions($reloaded, $storedVersion));
+    }
+
+    /**
+     * An installation that comes from 4.1.11 has no tracking record: its first update selects by
+     * version only. From then on the tracker lists the 4.2 migrations but not the back-ports,
+     * which the 4.1 updater applied without recording them. The next update therefore selects
+     * them once; they find nothing to do, are recorded, and are never selected again.
+     */
+    public function testBackPortsRunOnceAsNoOpsAfterAnUpgradeFromTheLatest41Release(): void
+    {
+        $this->dbHandle->query('DROP TABLE IF EXISTS faqmigrations');
+        $configuration = new Configuration($this->dbHandle);
+        $configuration->set('main.currentVersion', '4.1.11');
+
+        $update = new Update(new System(), $configuration);
+        $update->version = '4.1.11';
+        $this->assertTrue($update->applyUpdates());
+
+        $tracker = new MigrationTracker($configuration);
+        $this->assertNotContains('4.1.11', $tracker->getAppliedVersions());
+
+        $reloaded = new Configuration($this->dbHandle);
+        $storedVersion = (string) $reloaded->get('main.currentVersion');
+        $this->assertSame(['4.1.3', '4.1.8', '4.1.9', '4.1.11'], $this->dryRunVersions($reloaded, $storedVersion));
+
+        $apiClientToken = (string) $reloaded->get('api.apiClientToken');
+        $secondUpdate = new Update(new System(), $reloaded);
+        $secondUpdate->version = $storedVersion;
+        $this->assertTrue($secondUpdate->applyUpdates());
+
+        $operationTypes = [];
+        foreach ($secondUpdate->migrationResults as $result) {
+            foreach ($result->getOperationResults() as $operationResult) {
+                $operationTypes[] = $operationResult['operation']->getType();
+            }
+        }
+
+        // SQLite has nothing to widen for 4.1.9; the only step left is the guarded permission rename
+        $this->assertSame(['permission_rename'], $operationTypes);
+
+        $afterSecondUpdate = new Configuration($this->dbHandle);
+        $this->assertSame($apiClientToken, (string) $afterSecondUpdate->get('api.apiClientToken'));
+        $this->assertSame([], $this->dryRunVersions($afterSecondUpdate, $storedVersion));
+    }
+
+    /**
+     * A run that was interrupted has hashed the first entries already. The resumed run must
+     * chain the next entry to the last of them instead of starting a new chain.
+     */
+    public function testMigrateAdminLogHashesContinuesTheChainOfAnInterruptedRun(): void
+    {
+        $this->dbHandle->query('DELETE FROM faqadminlog');
+        $this->dbHandle->query("INSERT INTO faqadminlog (id, time, usr, ip, text) VALUES (1, 1700000000, 1, '127.0.0.1', 'first')");
+        $this->dbHandle->query("INSERT INTO faqadminlog (id, time, usr, ip, text) VALUES (2, 1700000001, 1, '127.0.0.1', 'second')");
+        $this->dbHandle->query("INSERT INTO faqadminlog (id, time, usr, ip, text) VALUES (3, 1700000002, 1, '127.0.0.1', 'third')");
+
+        $this->update->version = '4.1.9';
+        new \ReflectionMethod(Update::class, 'migrateAdminLogHashes')->invoke($this->update);
+        $this->dbHandle->query('UPDATE faqadminlog SET hash = NULL, previous_hash = NULL WHERE id = 3');
+
+        new \ReflectionMethod(Update::class, 'migrateAdminLogHashes')->invoke($this->update);
+
+        $entries = array_values(new \phpMyFAQ\Administration\AdminLogRepository(new Configuration($this->dbHandle))->getAll());
+        $this->assertSame($entries[1]->getHash(), $entries[2]->getPreviousHash());
+        $this->assertTrue($entries[2]->verifyIntegrity());
     }
 
     public function testSetDryRun(): void

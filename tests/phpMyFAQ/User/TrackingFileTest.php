@@ -93,6 +93,42 @@ final class TrackingFileTest extends TestCase
         $this->assertStringNotContainsString('41;view;99', (string) file_get_contents($trackingFile));
     }
 
+    public function testLogKeepsEveryEntryOnOneLineWithEightFields(): void
+    {
+        $request = Request::create(
+            '/search.html',
+            'GET',
+            [],
+            [],
+            [],
+            [
+                'REMOTE_ADDR' => '203.0.113.99',
+                'HTTP_USER_AGENT' => 'Unit/1.0%0A99;forged;agent',
+                'REQUEST_TIME' => 1234567890,
+            ],
+        );
+        $database = $this->createStub(DatabaseDriver::class);
+        $database->method('nextId')->willReturn(41);
+        $database->method('query')->willReturn('result');
+        $configuration = $this->createConfiguration($database);
+
+        $tracking = Tracking::getInstance(
+            $configuration,
+            $request,
+            new UserSession($configuration, $request, null, null, $this->trackingDirectory),
+            null,
+            $this->trackingDirectory,
+        );
+
+        $this->assertTrue($tracking->log('fulltext_search', "term;one\r\n99;forged;line"));
+
+        $lines = file($this->trackingDirectory . '/tracking' . date('dmY'), FILE_IGNORE_NEW_LINES);
+        $this->assertIsArray($lines);
+        $this->assertCount(1, $lines);
+        $this->assertStringStartsWith('41;fulltext_search;term,one  99,forged,line;', $lines[0]);
+        $this->assertStringEndsWith(';;;Unit/1.0 99,forged,agent;1234567890;', $lines[0]);
+    }
+
     private function createConfiguration(DatabaseDriver $database): Configuration
     {
         $items = [

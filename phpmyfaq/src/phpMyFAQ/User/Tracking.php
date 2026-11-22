@@ -201,29 +201,21 @@ class Tracking
         $data =
             (string) $this->userSession->getCurrentSessionId()
             . ';'
-            . str_replace(search: ';', replace: ',', subject: $action)
+            . $redactor->flattenField($action)
             . ';'
-            . (string) $data
+            . $redactor->flattenField((string) $data)
             . ';'
             . $remoteAddress
             . ';'
-            . str_replace(
-                search: ';',
-                replace: ',',
-                subject: $redactor->redactQueryString((string) ($this->request->server->get('QUERY_STRING') ?? '')),
-            )
+            . $redactor->flattenField($redactor->redactQueryString(
+                (string) ($this->request->server->get('QUERY_STRING') ?? ''),
+            ))
             . ';'
-            . str_replace(
-                search: ';',
-                replace: ',',
-                subject: $redactor->redactUrl((string) ($this->request->server->get('HTTP_REFERER') ?? '')),
-            )
+            . $redactor->flattenField($redactor->redactUrl(
+                (string) ($this->request->server->get('HTTP_REFERER') ?? ''),
+            ))
             . ';'
-            . str_replace(
-                search: ';',
-                replace: ',',
-                subject: urldecode((string) $this->request->server->get('HTTP_USER_AGENT')),
-            )
+            . $redactor->flattenField(urldecode((string) $this->request->server->get('HTTP_USER_AGENT')))
             . ';'
             . (int) $this->request->server->get('REQUEST_TIME')
             . ";\n";

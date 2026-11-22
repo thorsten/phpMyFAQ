@@ -264,6 +264,56 @@ final readonly class RightScope
         ));
     }
 
+    /**
+     * Whether replacing one grant by another changes only what this scope covers. What the
+     * grant holds outside this scope has to survive the change, so a category or language that
+     * is not covered must neither be added nor taken away. A grant that changes in categories
+     * and languages at once is covered only if both the old and the new grant are.
+     */
+    public function coversChange(RightGrant $from, RightGrant $to): bool
+    {
+        $sameCategories = self::isSameRestriction($from->categoryIds, $to->categoryIds);
+        $sameLanguages = self::isSameRestriction($from->languages, $to->languages);
+
+        return match (true) {
+            $sameCategories && $sameLanguages => true,
+            $sameLanguages => $this->covers(self::changedEntries($from->categoryIds, $to->categoryIds), $to->languages),
+            $sameCategories => $this->covers($to->categoryIds, self::changedEntries($from->languages, $to->languages)),
+            default => $this->coversScope(self::ofGrants($from, $to)),
+        };
+    }
+
+    /**
+     * @param array<int|string>|null $from
+     * @param array<int|string>|null $to
+     */
+    private static function isSameRestriction(?array $from, ?array $to): bool
+    {
+        if ($from === null || $to === null) {
+            return $from === $to;
+        }
+
+        return array_diff($from, $to) === [] && array_diff($to, $from) === [];
+    }
+
+    /**
+     * The entries a change of restriction adds or removes. Null means the change cannot be
+     * listed, because one side is unrestricted: it then affects every entry.
+     *
+     * @template T of int|string
+     * @param array<T>|null $from
+     * @param array<T>|null $to
+     * @return list<T>|null
+     */
+    private static function changedEntries(?array $from, ?array $to): ?array
+    {
+        if ($from === null || $to === null) {
+            return null;
+        }
+
+        return array_values([...array_diff($from, $to), ...array_diff($to, $from)]);
+    }
+
     private function coversCell(?int $categoryId, ?string $language): bool
     {
         return array_any(

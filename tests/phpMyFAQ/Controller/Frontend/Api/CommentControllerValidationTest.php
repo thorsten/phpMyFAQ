@@ -157,23 +157,122 @@ final class CommentControllerValidationTest extends ApiControllerTestCase
         ], JSON_THROW_ON_ERROR)));
     }
 
-    public function testCreateThrowsExceptionWhenNewsTypeIsRequested(): void
+    /**
+     * The news page posts its comment form with type=news and the news ID in newsId.
+     */
+    public function testCreateStoresCommentForNewsThatAllowsComments(): void
     {
-        $controller = $this->createController();
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('isFaqAccessibleForUser');
+        $faq->expects($this->once())->method('isActive')->with(5, 'en', 'news')->willReturn(true);
+
+        $comments = $this->createMock(Comments::class);
+        $comments->expects($this->once())->method('isCommentAllowed')->with(5, 'en', 'news')->willReturn(true);
+        $comments
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->callback(
+                static fn($comment): bool => (
+                    $comment->getRecordId() === 5
+                    && $comment->getType() === 'news'
+                    && $comment->getUsername() === 'Test User'
+                    && $comment->getComment() === 'Test comment'
+                ),
+            ))
+            ->willReturn(true);
+
+        $notification = $this->createMock(Notification::class);
+        $notification->expects($this->never())->method('sendFaqCommentNotification');
+
+        $response = $this->createNewsComment($faq, $comments, $notification);
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame(Translation::get('msgCommentThanks'), $payload['success']);
+        self::assertSame('Test User', $payload['commentData']['username']);
+    }
+
+    public function testCreateRejectsCommentForNewsThatDoesNotAllowComments(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->never())->method('isActive');
+
+        $comments = $this->createMock(Comments::class);
+        $comments->expects($this->once())->method('isCommentAllowed')->with(5, 'en', 'news')->willReturn(false);
+        $comments->expects($this->never())->method('create');
+
+        $response = $this->createNewsComment($faq, $comments, $this->createStub(Notification::class));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    public function testCreateRejectsCommentForInactiveNews(): void
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->expects($this->once())->method('isActive')->with(5, 'en', 'news')->willReturn(false);
+
+        $comments = $this->createMock(Comments::class);
+        $comments->expects($this->once())->method('isCommentAllowed')->with(5, 'en', 'news')->willReturn(true);
+        $comments->expects($this->never())->method('create');
+
+        $response = $this->createNewsComment($faq, $comments, $this->createStub(Notification::class));
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    public function testCreateReturnsForbiddenForNewsCommentWhenCommentsAreNotAllowed(): void
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['records.allowCommentsForGuests' => '0']);
+
+        $comments = $this->createMock(Comments::class);
+        $comments->expects($this->never())->method('create');
+
+        $controller = $this->createController(comments: $comments);
         [$session, $csrfToken] = $this->createValidCsrfSession();
-        $this->injectControllerState($controller, $this->createAuthenticatedUserMock(), $session);
+        $currentUser = $this->createAuthenticatedUserMock();
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => false]);
+        $this->injectControllerState($controller, $currentUser, $session);
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('News comments not supported');
+        $response = $controller->create($this->createNewsCommentRequest($csrfToken));
 
-        $controller->create(Request::create('/api/comment/create', 'POST', content: json_encode([
+        self::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    private function createNewsComment(Faq $faq, Comments $comments, Notification $notification): Response
+    {
+        $this->configuration->getAll();
+        $this->overrideConfigurationValues(['main.enableCommentEditor' => '0']);
+
+        $stopWords = $this->createStub(StopWords::class);
+        $stopWords->method('checkBannedWord')->willReturn(true);
+
+        $controller = $this->createController(
+            faq: $faq,
+            comments: $comments,
+            stopWords: $stopWords,
+            notification: $notification,
+        );
+        [$session, $csrfToken] = $this->createValidCsrfSession();
+        $currentUser = $this->createAuthenticatedUserMock();
+        $currentUser->perm = $this->createConfiguredStub(PermissionInterface::class, ['hasPermission' => true]);
+        $this->injectControllerState($controller, $currentUser, $session);
+
+        return $controller->create($this->createNewsCommentRequest($csrfToken));
+    }
+
+    private function createNewsCommentRequest(string $csrfToken): Request
+    {
+        return Request::create('/api/comment/create', 'POST', content: json_encode([
             'pmf-csrf-token' => $csrfToken,
             'type' => 'news',
-            'newsId' => 1,
+            'newsId' => '5',
+            'lang' => 'en',
             'user' => 'Test User',
             'mail' => 'test@example.com',
             'comment_text' => 'Test comment',
-        ], JSON_THROW_ON_ERROR)));
+            'captcha' => 'ignored-for-logged-in-user',
+        ], JSON_THROW_ON_ERROR));
     }
 
     public function testCreateThrowsExceptionWhenEmailIsInvalid(): void

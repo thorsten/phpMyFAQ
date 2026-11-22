@@ -141,6 +141,13 @@ class PostgresDialectTest extends TestCase
         $this->assertFalse($this->dialect->supportsCombinedAlter());
     }
 
+    public function testCatalogNameIsTheLowerCaseNameOfAnUnquotedIdentifier(): void
+    {
+        $this->assertSame('pmf_faqdata', PostgresDialect::catalogName('PMF_faqdata'));
+        $this->assertSame('idx_hash_pmf_', PostgresDialect::catalogName('idx_hash_PMF_'));
+        $this->assertSame('pmf_faqdata', PostgresDialect::catalogName('pmf_faqdata'));
+    }
+
     public function testQuoteIdentifier(): void
     {
         $this->assertEquals('"column_name"', $this->dialect->quoteIdentifier('column_name'));

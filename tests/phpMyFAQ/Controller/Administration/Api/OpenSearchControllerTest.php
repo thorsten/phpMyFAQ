@@ -110,6 +110,18 @@ final class OpenSearchControllerTest extends TestCase
         );
     }
 
+    /**
+     * The index operations run on the long-running instance: let it be the mock itself, so the
+     * expectations of a test cover both.
+     */
+    private function createSearchInstanceMock(): OpenSearch&\PHPUnit\Framework\MockObject\MockObject
+    {
+        $searchInstance = $this->createMock(OpenSearch::class);
+        $searchInstance->method('withLongRunningClient')->willReturnSelf();
+
+        return $searchInstance;
+    }
+
     private function createControllerWithOpenSearch(OpenSearch $openSearch): OpenSearchController
     {
         return new OpenSearchController(
@@ -310,7 +322,7 @@ final class OpenSearchControllerTest extends TestCase
      */
     public function testHealthcheckReturnsUnavailableWhenOpenSearchIsDown(): void
     {
-        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch = $this->createSearchInstanceMock();
         $openSearch->expects($this->once())->method('isAvailable')->willReturn(false);
 
         $controller = $this->createControllerWithOpenSearch($openSearch);
@@ -329,7 +341,7 @@ final class OpenSearchControllerTest extends TestCase
      */
     public function testCreateReturnsSuccessForAuthenticatedUser(): void
     {
-        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch = $this->createSearchInstanceMock();
         $openSearch->expects($this->once())->method('createIndex');
 
         $controller = $this->createControllerWithDependencies(
@@ -351,7 +363,7 @@ final class OpenSearchControllerTest extends TestCase
      */
     public function testCreateReturnsConflictWhenIndexCreationFails(): void
     {
-        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch = $this->createSearchInstanceMock();
         $openSearch->expects($this->once())->method('createIndex')->willThrowException(new Exception('boom'));
 
         $controller = $this->createControllerWithDependencies(
@@ -375,7 +387,7 @@ final class OpenSearchControllerTest extends TestCase
      */
     public function testDropReturnsSuccessForAuthenticatedUser(): void
     {
-        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch = $this->createSearchInstanceMock();
         $openSearch->expects($this->once())->method('dropIndex');
 
         $controller = $this->createControllerWithDependencies(
@@ -397,7 +409,7 @@ final class OpenSearchControllerTest extends TestCase
      */
     public function testDropReturnsConflictWhenIndexDeletionFails(): void
     {
-        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch = $this->createSearchInstanceMock();
         $openSearch->expects($this->once())->method('dropIndex')->willThrowException(new Exception('boom'));
 
         $controller = $this->createControllerWithDependencies(
@@ -421,7 +433,7 @@ final class OpenSearchControllerTest extends TestCase
      */
     public function testHealthcheckReturnsOkWhenOpenSearchIsAvailable(): void
     {
-        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch = $this->createSearchInstanceMock();
         $openSearch->expects($this->once())->method('isAvailable')->willReturn(true);
 
         $controller = $this->createControllerWithOpenSearch($openSearch);
@@ -440,7 +452,7 @@ final class OpenSearchControllerTest extends TestCase
      */
     public function testImportReturnsBadRequestWhenFaqBulkIndexFails(): void
     {
-        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch = $this->createSearchInstanceMock();
         $openSearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['failure' => 'boom']);
 
         $faq = $this->createMock(Faq::class);
@@ -464,7 +476,7 @@ final class OpenSearchControllerTest extends TestCase
      */
     public function testImportReturnsBadRequestWhenCustomPageBulkIndexFails(): void
     {
-        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch = $this->createSearchInstanceMock();
         $openSearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['success' => true]);
         $openSearch
             ->expects($this->once())
@@ -499,7 +511,7 @@ final class OpenSearchControllerTest extends TestCase
      */
     public function testImportReturnsSuccessWhenFaqsAndCustomPagesAreIndexed(): void
     {
-        $openSearch = $this->createMock(OpenSearch::class);
+        $openSearch = $this->createSearchInstanceMock();
         $openSearch->expects($this->once())->method('bulkIndex')->with([])->willReturn(['success' => true]);
         $openSearch
             ->expects($this->once())
@@ -535,7 +547,7 @@ final class OpenSearchControllerTest extends TestCase
     #[DataProvider('stateChangingActions')]
     public function testStateChangingActionRequiresConfigurationEdit(string $action, string $serviceMethod): void
     {
-        $searchInstance = $this->createMock(OpenSearch::class);
+        $searchInstance = $this->createSearchInstanceMock();
         $searchInstance->expects($this->never())->method($serviceMethod);
 
         $controller = $this->createControllerWithOpenSearch($searchInstance);
@@ -551,7 +563,7 @@ final class OpenSearchControllerTest extends TestCase
     #[DataProvider('stateChangingActions')]
     public function testStateChangingActionRejectsRequestWithoutCsrfToken(string $action, string $serviceMethod): void
     {
-        $searchInstance = $this->createMock(OpenSearch::class);
+        $searchInstance = $this->createSearchInstanceMock();
         $searchInstance->expects($this->never())->method($serviceMethod);
 
         $faq = $this->createMock(Faq::class);
@@ -576,7 +588,7 @@ final class OpenSearchControllerTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
         $this->primeCsrf($session, 'opensearch');
 
-        $searchInstance = $this->createMock(OpenSearch::class);
+        $searchInstance = $this->createSearchInstanceMock();
         $searchInstance->expects($this->never())->method($serviceMethod);
 
         $faq = $this->createMock(Faq::class);
@@ -599,7 +611,7 @@ final class OpenSearchControllerTest extends TestCase
         $session = new Session(new MockArraySessionStorage());
         $otherPageToken = $this->primeCsrf($session, 'update-package');
 
-        $searchInstance = $this->createMock(OpenSearch::class);
+        $searchInstance = $this->createSearchInstanceMock();
         $searchInstance->expects($this->never())->method($serviceMethod);
 
         $controller = $this->createControllerWithOpenSearch($searchInstance);
@@ -634,5 +646,139 @@ final class OpenSearchControllerTest extends TestCase
 
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
         self::assertSame(['index' => 'phpmyfaq-test', 'stats' => $stats], $payload);
+    }
+
+    /**
+     * @return iterable<string, array{\Throwable}>
+     */
+    public static function unavailableOpenSearchProvider(): iterable
+    {
+        yield 'index is missing' => [new \OpenSearch\Exception\NotFoundHttpException('no such index [phpmyfaq-test]')];
+        yield 'cluster is down' => [
+            new \GuzzleHttp\Exception\ConnectException(
+                'Connection refused',
+                new \GuzzleHttp\Psr7\Request('GET', 'http://localhost:9200/phpmyfaq-test/_stats'),
+            ),
+        ];
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[DataProvider('unavailableOpenSearchProvider')]
+    public function testStatisticsReturnsBadRequestWhenOpenSearchFails(\Throwable $failure): void
+    {
+        $indices = $this->createMock(\OpenSearch\Namespaces\IndicesNamespace::class);
+        $indices->expects($this->once())->method('stats')->willThrowException($failure);
+        $client = $this->createStub(\OpenSearch\Client::class);
+        $client->method('indices')->willReturn($indices);
+
+        $openSearchConfiguration = $this->createStub(\phpMyFAQ\Configuration\OpenSearchConfiguration::class);
+        $openSearchConfiguration->method('getIndex')->willReturn('phpmyfaq-test');
+        $this->configuration->setOpenSearch($client);
+        $this->configuration->setOpenSearchConfig($openSearchConfiguration);
+
+        $controller = $this->createController();
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        $response = $controller->statistics();
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        self::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertSame($failure->getMessage(), $payload['error']);
+    }
+
+    /**
+     * A large bulk import takes longer than the web timeout of the search client allows.
+     *
+     * @throws \Exception
+     */
+    #[DataProvider('stateChangingActions')]
+    public function testStateChangingActionRunsOnTheLongRunningClient(string $action, string $serviceMethod): void
+    {
+        $longRunningInstance = $this->createMock(OpenSearch::class);
+        $longRunningInstance->expects($this->once())->method($serviceMethod);
+        $longRunningInstance->expects($this->never())->method('withLongRunningClient');
+
+        $webInstance = $this->createMock(OpenSearch::class);
+        $webInstance
+            ->expects($this->once())
+            ->method('withLongRunningClient')
+            ->willReturn($longRunningInstance);
+        $webInstance->expects($this->never())->method($serviceMethod);
+
+        $controller = $this->createControllerWithOpenSearch($webInstance);
+        $session = new Session(new MockArraySessionStorage());
+        $csrf = $this->primeCsrf($session, 'opensearch');
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $controller->{$action}($this->jsonRequest(['csrf' => $csrf]));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testImportIndexesTheCustomPagesOnTheLongRunningClient(): void
+    {
+        $longRunningInstance = $this->createMock(OpenSearch::class);
+        $longRunningInstance->method('bulkIndex')->willReturn(['success' => true]);
+        $longRunningInstance
+            ->expects($this->once())
+            ->method('bulkIndexCustomPages')
+            ->willReturn(['success' => true]);
+
+        $webInstance = $this->createMock(OpenSearch::class);
+        $webInstance
+            ->expects($this->once())
+            ->method('withLongRunningClient')
+            ->willReturn($longRunningInstance);
+        $webInstance->expects($this->never())->method('bulkIndexCustomPages');
+
+        $controller = $this->createControllerWithOpenSearch($webInstance);
+        $session = new Session(new MockArraySessionStorage());
+        $csrf = $this->primeCsrf($session, 'opensearch');
+        $controller->setContainer($this->createAuthenticatedContainer($session));
+
+        $response = $controller->import($this->jsonRequest(['csrf' => $csrf]));
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStatisticsKeepsTheWebClient(): void
+    {
+        $indices = $this->createMock(\OpenSearch\Namespaces\IndicesNamespace::class);
+        $indices->expects($this->once())->method('stats')->willReturn(['indices' => []]);
+        $client = $this->createStub(\OpenSearch\Client::class);
+        $client->method('indices')->willReturn($indices);
+        $openSearchConfiguration = $this->createStub(\phpMyFAQ\Configuration\OpenSearchConfiguration::class);
+        $openSearchConfiguration->method('getIndex')->willReturn('phpmyfaq-test');
+        $this->configuration->setOpenSearch($client);
+        $this->configuration->setOpenSearchConfig($openSearchConfiguration);
+
+        $searchInstance = $this->createMock(OpenSearch::class);
+        $searchInstance->expects($this->never())->method('withLongRunningClient');
+
+        $controller = $this->createControllerWithOpenSearch($searchInstance);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        self::assertSame(Response::HTTP_OK, $controller->statistics()->getStatusCode());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testHealthcheckKeepsTheWebClient(): void
+    {
+        $searchInstance = $this->createMock(OpenSearch::class);
+        $searchInstance->expects($this->never())->method('withLongRunningClient');
+        $searchInstance->expects($this->once())->method('isAvailable')->willReturn(true);
+
+        $controller = $this->createControllerWithOpenSearch($searchInstance);
+        $controller->setContainer($this->createAuthenticatedContainer());
+
+        self::assertSame(Response::HTTP_OK, $controller->healthcheck()->getStatusCode());
     }
 }

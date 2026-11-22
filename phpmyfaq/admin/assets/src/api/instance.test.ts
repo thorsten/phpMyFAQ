@@ -26,7 +26,7 @@ describe('Instance API', () => {
       const result = await addInstance(csrf, url, instance, comment, email, admin, password);
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('./api/faq/search', {
+      expect(global.fetch).toHaveBeenCalledWith('./api/instance/add', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',

@@ -560,6 +560,11 @@ class RelationTest extends TestCase
         )));
         $this->assertCount(1, $inserts);
         $this->assertStringContainsString("VALUES (2, 'en', 42, 'en')", $inserts[0]);
+
+        // The existence check runs on every FAQ save and must be valid on SQL Server too.
+        foreach ($queries as $query) {
+            $this->assertStringNotContainsString('LIMIT', $query);
+        }
     }
 
     public function testGetAggregatedFaqNumbersReusesTotalsOfAlreadyProcessedChildren(): void

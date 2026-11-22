@@ -190,10 +190,14 @@ class UserControllerTest extends TestCase
     public function testUpdateDataIgnoresPasswordFieldsForOidcUser(): void
     {
         $currentUser = $this->createCurrentUserWithAuthSource('oidc');
-        $currentUser->expects(self::once())->method('setUserData')->with([
-            'is_visible' => 1,
-            'twofactor_enabled' => 0,
-        ])->willReturn(true);
+        $currentUser
+            ->expects(self::once())
+            ->method('setUserData')
+            ->with([
+                'is_visible' => 1,
+                'twofactor_enabled' => 0,
+            ])
+            ->willReturn(true);
         $currentUser->expects(self::never())->method('getAuthContainer');
         $currentUser->expects(self::never())->method('revokePersistentLogins');
 
@@ -246,16 +250,52 @@ class UserControllerTest extends TestCase
     public function testUpdateDataKeepsLocalProfileHandlingForKeycloakUser(): void
     {
         $currentUser = $this->createCurrentUserWithAuthSource('keycloak');
-        $currentUser->expects(self::once())->method('setUserData')->with([
-            'display_name' => 'Test User',
-            'is_visible' => 1,
-            'email' => '',
-            'twofactor_enabled' => 0,
-        ])->willReturn(true);
+        $currentUser
+            ->expects(self::once())
+            ->method('setUserData')
+            ->with([
+                'display_name' => 'Test User',
+                'is_visible' => 1,
+                'twofactor_enabled' => 0,
+            ])
+            ->willReturn(true);
 
         $response = $this->runProfileUpdate($currentUser, []);
 
         self::assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * An address that fails validation used to be written back as an empty string, which
+     * removed the stored address and with it the target of the password reset mail.
+     *
+     * @throws \Exception
+     */
+    #[DataProvider('unusableEmailProvider')]
+    public function testUpdateDataKeepsTheStoredEmailWhenTheSubmittedOneIsUnusable(mixed $email): void
+    {
+        $currentUser = $this->createCurrentUserWithAuthSource('local');
+        $currentUser
+            ->expects(self::once())
+            ->method('setUserData')
+            ->with(self::callback(static fn(array $data): bool => !array_key_exists('email', $data)))
+            ->willReturn(true);
+
+        $response = $this->runProfileUpdate($currentUser, ['email' => $email]);
+
+        self::assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * @return array<string, array{0: mixed}>
+     */
+    public static function unusableEmailProvider(): array
+    {
+        return [
+            'invalid address' => ['not-an-email'],
+            'empty address' => [''],
+            'no string' => [['a@example.org']],
+        ];
     }
 
     /**
@@ -268,7 +308,11 @@ class UserControllerTest extends TestCase
     public function testUpdateDataRevokesPersistentLoginsAfterAPasswordChange(): void
     {
         $driver = $this->createMock(AuthDatabase::class);
-        $driver->expects(self::atLeastOnce())->method('checkCredentials')->with('jdoe', 'correct-current')->willReturn(true);
+        $driver
+            ->expects(self::atLeastOnce())
+            ->method('checkCredentials')
+            ->with('jdoe', 'correct-current')
+            ->willReturn(true);
         $driver->method('disableReadOnly')->willReturn(false);
         $driver->expects(self::once())->method('update')->with('jdoe', 'NewPass123!')->willReturn(true);
 
@@ -289,12 +333,71 @@ class UserControllerTest extends TestCase
     }
 
     /**
+     * The login form verifies the typed password without trimming it, so the control panel has
+     * to store and verify exactly what was typed, blanks included. A trimmed copy could never be
+     * entered at the login again.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateDataKeepsBlanksAroundThePasswords(): void
+    {
+        $driver = $this->createMock(AuthDatabase::class);
+        $driver
+            ->expects(self::atLeastOnce())
+            ->method('checkCredentials')
+            ->with('jdoe', ' current with blanks ')
+            ->willReturn(true);
+        $driver->method('disableReadOnly')->willReturn(false);
+        $driver->expects(self::once())->method('update')->with('jdoe', '  NewPass123!  ')->willReturn(true);
+
+        $currentUser = $this->createCurrentUserWithAuthSource('local');
+        $currentUser->method('getLogin')->willReturn('jdoe');
+        $currentUser->method('getAuthContainer')->willReturn([$driver]);
+        $currentUser->method('setUserData')->willReturn(true);
+
+        $response = $this->runProfileUpdate($currentUser, [
+            'faqpassword_current' => ' current with blanks ',
+            'faqpassword' => '  NewPass123!  ',
+            'faqpassword_confirm' => '  NewPass123!  ',
+        ]);
+
+        self::assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * The blanks are part of the password, so a confirmation that differs only in them is a typo.
+     *
+     * @throws \Exception
+     */
+    public function testUpdateDataRejectsAConfirmationThatDiffersOnlyInBlanks(): void
+    {
+        $driver = $this->createMock(AuthDatabase::class);
+        $driver->expects(self::never())->method('update');
+
+        $currentUser = $this->createCurrentUserWithAuthSource('local');
+        $currentUser->method('getLogin')->willReturn('jdoe');
+        $currentUser->method('getAuthContainer')->willReturn([$driver]);
+
+        $response = $this->runProfileUpdate($currentUser, [
+            'faqpassword_current' => 'correct-current',
+            'faqpassword' => 'NewPass123! ',
+            'faqpassword_confirm' => 'NewPass123!',
+        ]);
+
+        self::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+    }
+
+    /**
      * @throws \Exception
      */
     public function testUpdateDataDoesNotRevokePersistentLoginsWhenThePasswordChangeFails(): void
     {
         $driver = $this->createMock(AuthDatabase::class);
-        $driver->expects(self::atLeastOnce())->method('checkCredentials')->with('jdoe', 'correct-current')->willReturn(true);
+        $driver
+            ->expects(self::atLeastOnce())
+            ->method('checkCredentials')
+            ->with('jdoe', 'correct-current')
+            ->willReturn(true);
         $driver->method('disableReadOnly')->willReturn(false);
         $driver->method('update')->willReturn(false);
         $driver->method('getErrors')->willReturn('driver error');
@@ -333,8 +436,10 @@ class UserControllerTest extends TestCase
      * @param array<string, string> $extraFields
      * @throws \Exception
      */
-    private function runProfileUpdate(CurrentUser $currentUser, array $extraFields): \Symfony\Component\HttpFoundation\JsonResponse
-    {
+    private function runProfileUpdate(
+        CurrentUser $currentUser,
+        array $extraFields,
+    ): \Symfony\Component\HttpFoundation\JsonResponse {
         $session = new Session(new MockArraySessionStorage());
         $session->start();
         Token::resetInstanceForTests();
@@ -342,12 +447,14 @@ class UserControllerTest extends TestCase
         $_COOKIE['pmf-csrf-token-' . substr(md5('ucp'), 0, 10)] = $token;
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(fn(string $id): mixed => match ($id) {
-            'phpmyfaq.configuration' => $this->configuration,
-            'phpmyfaq.user.current_user' => $currentUser,
-            'session' => $session,
-            default => null,
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(fn(string $id): mixed => match ($id) {
+                'phpmyfaq.configuration' => $this->configuration,
+                'phpmyfaq.user.current_user' => $currentUser,
+                'session' => $session,
+                default => null,
+            });
 
         $controller = $this->createController();
         $controller->setContainer($container);
@@ -385,9 +492,10 @@ class UserControllerTest extends TestCase
         $currentUser->perm = $this->createStub(PermissionInterface::class);
         $currentUser->method('isLoggedIn')->willReturn(true);
         $currentUser->method('getUserId')->willReturn(1);
-        $currentUser
-            ->method('getUserData')
-            ->willReturnCallback(static fn(string $field): mixed => $field === 'display_name' ? "\xB1\x31" : '');
+        $currentUser->method('getUserData')->willReturnCallback(static fn(string $field): mixed => $field
+            === 'display_name'
+                ? "\xB1\x31"
+                : '');
         [$controller, $token] = $this->createAuthenticatedController($currentUser, 'export-userdata');
 
         $response = $controller->exportUserData(new Request([], ['pmf-csrf-token' => $token, 'userid' => '1']));
@@ -429,12 +537,14 @@ class UserControllerTest extends TestCase
         $_COOKIE['pmf-csrf-token-' . substr(md5($tokenPage), 0, 10)] = $token;
 
         $container = $this->createStub(ContainerInterface::class);
-        $container->method('get')->willReturnCallback(fn(string $id): mixed => match ($id) {
-            'phpmyfaq.configuration' => $this->configuration,
-            'phpmyfaq.user.current_user' => $currentUser,
-            'session' => $session,
-            default => null,
-        });
+        $container
+            ->method('get')
+            ->willReturnCallback(fn(string $id): mixed => match ($id) {
+                'phpmyfaq.configuration' => $this->configuration,
+                'phpmyfaq.user.current_user' => $currentUser,
+                'session' => $session,
+                default => null,
+            });
 
         $controller = $this->createController();
         $controller->setContainer($container);

@@ -20,6 +20,7 @@ namespace phpMyFAQ\Entity;
 
 use DateTime;
 use phpMyFAQ\Enums\FaqStatus;
+use phpMyFAQ\Faq\PublicationWindow;
 
 /**
  * Class FaqEntity
@@ -55,9 +56,7 @@ class FaqEntity
 
     private ?string $notes = null;
 
-    private ?DateTime $validFrom = null;
-
-    private ?DateTime $validTo = null;
+    private ?PublicationWindow $publicationWindow = null;
 
     private ?DateTime $createdDate = null;
 
@@ -206,33 +205,18 @@ class FaqEntity
         return $this;
     }
 
-    public function getValidFrom(): DateTime
+    /**
+     * The publication window to store, or null when the writer does not decide about it:
+     * an update then leaves the stored window untouched and an insert stores an unlimited one.
+     */
+    public function getPublicationWindow(): ?PublicationWindow
     {
-        if ($this->validFrom instanceof DateTime) {
-            return $this->validFrom;
-        }
-
-        return $this->validFrom = new DateTime();
+        return $this->publicationWindow;
     }
 
-    public function setValidFrom(DateTime $validFrom): FaqEntity
+    public function setPublicationWindow(PublicationWindow $publicationWindow): FaqEntity
     {
-        $this->validFrom = $validFrom;
-        return $this;
-    }
-
-    public function getValidTo(): DateTime
-    {
-        if ($this->validTo instanceof DateTime) {
-            return $this->validTo;
-        }
-
-        return $this->validTo = new DateTime('99991231235959');
-    }
-
-    public function setValidTo(DateTime $dateTime): FaqEntity
-    {
-        $this->validTo = $dateTime;
+        $this->publicationWindow = $publicationWindow;
         return $this;
     }
 

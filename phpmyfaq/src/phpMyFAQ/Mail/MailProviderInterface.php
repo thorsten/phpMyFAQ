@@ -23,6 +23,8 @@ interface MailProviderInterface
 {
     /**
      * @param array<string, int|string|null> $headers
+     * @param string $body Plain text: the whole message, or the alternative of an HTML message
+     * @param string $htmlBody HTML message, empty for a plain text mail that is sent as text/plain only
      */
-    public function send(string $recipients, array $headers, string $body): int;
+    public function send(string $recipients, array $headers, string $body, string $htmlBody = ''): int;
 }

@@ -98,6 +98,17 @@ final class AdminLogRepositoryTest extends TestCase
         $this->assertTrue($entries[1]->verifyIntegrity());
     }
 
+    public function testGetLastHashOlderThanReturnsTheNewestEntryBeforeTheTimestamp(): void
+    {
+        $this->repository->add($this->user, 'first', $this->createRequest(1_700_000_000));
+        $this->repository->add($this->user, 'second', $this->createRequest(1_700_000_001));
+        $secondHash = $this->repository->getLastHash();
+        $this->repository->add($this->user, 'third', $this->createRequest(1_700_000_002));
+
+        $this->assertSame($secondHash, $this->repository->getLastHashOlderThan(1_700_000_002));
+        $this->assertNull($this->repository->getLastHashOlderThan(1_700_000_000));
+    }
+
     public function testControlCharactersCannotForgeAdditionalLines(): void
     {
         $this->repository->add($this->user, "Login failed for user\r\nadmin\tlogin ok\x00", $this->createRequest(1_700_000_000));

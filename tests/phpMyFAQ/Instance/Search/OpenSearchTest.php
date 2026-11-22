@@ -418,6 +418,48 @@ class OpenSearchTest extends TestCase
         $this->assertSame(['error' => 'Connection refused'], $result);
     }
 
+    public function testBulkIndexReturnsErrorWhenOpenSearchIsUnreachable(): void
+    {
+        $this->clientMock->method('bulk')->willThrowException($this->networkException());
+
+        $result = $this->openSearch->bulkIndex([
+            ['status' => 'published', 'solution_id' => '1', 'id' => '1', 'lang' => 'en', 'title' => 'FAQ'],
+        ]);
+
+        $this->assertSame(['error' => 'Connection refused'], $result);
+    }
+
+    public function testBulkIndexCustomPagesReturnsErrorWhenOpenSearchIsUnreachable(): void
+    {
+        $this->clientMock->method('bulk')->willThrowException($this->networkException());
+
+        $result = $this->openSearch->bulkIndexCustomPages([
+            ['id' => 5, 'lang' => 'en', 'page_title' => 'Imprint', 'content' => 'Text', 'active' => 'y'],
+        ]);
+
+        $this->assertSame(['error' => 'Connection refused'], $result);
+    }
+
+    public function testCreateIndexThrowsTheProjectExceptionWhenOpenSearchIsUnreachable(): void
+    {
+        $this->indicesMock->method('exists')->willThrowException($this->networkException());
+
+        $this->expectException(\phpMyFAQ\Core\Exception::class);
+        $this->expectExceptionMessage('Connection refused');
+        $this->openSearch->createIndex();
+    }
+
+    public function testDropIndexThrowsTheProjectExceptionWhenTheIndexIsMissing(): void
+    {
+        $this->indicesMock
+            ->method('delete')
+            ->willThrowException(new NotFoundHttpException('no such index [phpmyfaq_os_test]'));
+
+        $this->expectException(\phpMyFAQ\Core\Exception::class);
+        $this->expectExceptionMessage('no such index [phpmyfaq_os_test]');
+        $this->openSearch->dropIndex();
+    }
+
     /**
      * @return array<string, int|string|null>
      */
@@ -909,5 +951,20 @@ class OpenSearchTest extends TestCase
             ->invoke($this->openSearch);
 
         $this->assertSame('english', $params['body']['settings']['analysis']['filter']['Language_stemmer']['name']);
+    }
+
+    public function testWithLongRunningClientReturnsAnInstanceWithItsOwnClient(): void
+    {
+        $this->osConfigMock->method('getHosts')->willReturn(['http://localhost:9201']);
+        $openSearch = new OpenSearch($this->configMock);
+
+        $longRunning = $openSearch->withLongRunningClient();
+
+        $ref = new ReflectionClass(OpenSearch::class);
+        $this->assertNotSame($openSearch, $longRunning);
+        $this->assertSame($this->clientMock, $ref->getProperty('client')->getValue($openSearch));
+        $this->assertInstanceOf(Client::class, $ref->getProperty('client')->getValue($longRunning));
+        $this->assertNotSame($this->clientMock, $ref->getProperty('client')->getValue($longRunning));
+        $this->assertSame($this->configMock, $ref->getProperty('configuration')->getValue($longRunning));
     }
 }

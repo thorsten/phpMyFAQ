@@ -51,6 +51,8 @@
 
         <div class="row mb-2">
           <div class="offset-lg-2 col-lg-4">
+            <input type="hidden" name="pmf-csrf-token-translate" id="pmf-csrf-token-translate"
+                   value="{{ csrfTokenTranslate | default('') }}">
             <button type="button" class="btn btn-info" id="btn-translate-category-ai">
               <i class="bi bi-translate"></i> {{ 'msgTranslateWithAI' | translate }}
             </button>

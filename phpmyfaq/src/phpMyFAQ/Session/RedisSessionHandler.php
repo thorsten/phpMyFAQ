@@ -71,7 +71,10 @@ class RedisSessionHandler
         $response = fgets($connection, length: 128);
         fclose($connection);
 
-        if ($response === false || !str_starts_with(trim($response), '+PONG')) {
+        // A server that demands authentication answers the bare PING with -NOAUTH: it is
+        // reachable and speaks Redis, and the session handler signs in with the DSN itself.
+        $reply = $response === false ? '' : trim($response);
+        if (!str_starts_with($reply, '+PONG') && !str_starts_with($reply, '-NOAUTH')) {
             throw new RuntimeException(sprintf('Redis connection failed for %s.', $displayTarget));
         }
     }

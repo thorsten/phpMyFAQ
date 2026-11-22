@@ -28,6 +28,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Permission\RightGrant;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -36,6 +37,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+/* @mago-expect lint:cyclomatic-complexity - each endpoint validates its payload and the acting user's scope inline; split planned with the admin API rework */
 /* @mago-expect lint:kan-defect - permission-level guards on every endpoint raise the score; split planned with the admin API rework */
 final class GroupController extends AbstractAdministrationApiController
 {
@@ -234,8 +236,35 @@ final class GroupController extends AbstractAdministrationApiController
         // by every member, so without this an administrator could grant the group category
         // access they do not possess (privilege escalation), including via an empty
         // "unrestricted" list.
-        if (!$this->mayAssignScope($rightId, $categoryIds, $permission->getLanguageRestrictions($groupId, $rightId))) {
-            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        //
+        // A right the group already holds is judged by what the save changes instead: the
+        // categories added and removed must lie within the acting user's scope, and the rest of
+        // the group's restriction, which may exceed that scope, is submitted back unchanged.
+        $languages = $permission->getLanguageRestrictions($groupId, $rightId);
+        $storedCategoryIds = $permission->getCategoryRestrictions($groupId, $rightId);
+        $groupHoldsRight = in_array($rightId, $permission->getGroupRights($groupId), strict: true);
+
+        $maySave = $groupHoldsRight
+            ? $this->mayChangeGrant(
+                $rightId,
+                RightGrant::fromRestrictions($storedCategoryIds, $languages),
+                RightGrant::fromRestrictions($categoryIds, $languages),
+            )
+            : $this->mayAssignScope($rightId, $categoryIds, $languages);
+
+        if (!$maySave && $categoryIds === [] && $storedCategoryIds !== []) {
+            return $this->storedRestrictionsStay(
+                'ad_category_restrictions_kept',
+                $permission,
+                $rightId,
+                $this->categoryNames($storedCategoryIds),
+            );
+        }
+
+        if (!$maySave) {
+            return $this->json([
+                'error' => Translation::get(key: $groupHoldsRight ? 'ad_permission_scope_exceeded' : 'msgNoPermission'),
+            ], Response::HTTP_FORBIDDEN);
         }
 
         $success = $permission->setCategoryRestrictions($groupId, $rightId, $categoryIds);
@@ -330,8 +359,35 @@ final class GroupController extends AbstractAdministrationApiController
         // the categories the group's right applies to. Group rights are inherited by every
         // member, so without this an administrator could grant the group language access they
         // do not possess (privilege escalation), including via an empty "unrestricted" list.
-        if (!$this->mayAssignScope($rightId, $permission->getCategoryRestrictions($groupId, $rightId), $languages)) {
-            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_FORBIDDEN);
+        //
+        // A right the group already holds is judged by what the save changes instead: the
+        // languages added and removed must lie within the acting user's scope, and the rest of
+        // the group's restriction, which may exceed that scope, is submitted back unchanged.
+        $categoryIds = $permission->getCategoryRestrictions($groupId, $rightId);
+        $storedLanguages = $permission->getLanguageRestrictions($groupId, $rightId);
+        $groupHoldsRight = in_array($rightId, $permission->getGroupRights($groupId), strict: true);
+
+        $maySave = $groupHoldsRight
+            ? $this->mayChangeGrant(
+                $rightId,
+                RightGrant::fromRestrictions($categoryIds, $storedLanguages),
+                RightGrant::fromRestrictions($categoryIds, $languages),
+            )
+            : $this->mayAssignScope($rightId, $categoryIds, $languages);
+
+        if (!$maySave && $languages === [] && $storedLanguages !== []) {
+            return $this->storedRestrictionsStay(
+                'ad_language_restrictions_kept',
+                $permission,
+                $rightId,
+                $this->languageNames($storedLanguages),
+            );
+        }
+
+        if (!$maySave) {
+            return $this->json([
+                'error' => Translation::get(key: $groupHoldsRight ? 'ad_permission_scope_exceeded' : 'msgNoPermission'),
+            ], Response::HTTP_FORBIDDEN);
         }
 
         $success = $permission->setLanguageRestrictions($groupId, $rightId, $languages);
@@ -555,10 +611,18 @@ final class GroupController extends AbstractAdministrationApiController
         // not be granted to the group in a wider scope, or the acting user could widen their own
         // scope by joining the group. The acting user's scope per right is captured here, before
         // any write, because it may itself derive from the group being edited.
+        //
+        // A right the group already holds is not granted again: it stays in the scope the group
+        // holds it in, so only the rights this save adds are measured against that scope.
+        $actingPermission = $this->currentUser->perm;
+        $heldRightIds = $actingPermission instanceof MediumPermission
+            ? $actingPermission->getGroupRights($groupId)
+            : [];
+
         $ownScopes = [];
         if (!$this->currentUser->isSuperAdmin()) {
             $actingUserId = $this->currentUser->getUserId();
-            foreach ($rightIds as $rightId) {
+            foreach (array_diff($rightIds, $heldRightIds) as $rightId) {
                 if (!$this->currentUser->perm->hasPermission($actingUserId, $rightId)) {
                     return $this->json(['error' => 'Cannot grant a right you do not hold.'], Response::HTTP_FORBIDDEN);
                 }
@@ -597,11 +661,7 @@ final class GroupController extends AbstractAdministrationApiController
         // submitted list would let an administrator holding the delegable GROUP_EDIT right wipe
         // rights they do not hold themselves - with an empty list, nothing would be checked at all.
         // Mirrors deleteGroup(), which destroys the same rights.
-        $denied = $this->denyUnlessGroupRightsHeld(
-            $groupId,
-            'Cannot change group permissions without group permission support.',
-            'Cannot change the permissions of a group whose rights you do not hold.',
-        );
+        $denied = $this->denyUnlessGroupRightsMayBeReplaced($groupId, $heldRightIds, $rightIds);
         if ($denied instanceof JsonResponse) {
             return $denied;
         }
@@ -611,26 +671,35 @@ final class GroupController extends AbstractAdministrationApiController
             return $this->json(['error' => 'Group permissions are not enabled.'], Response::HTTP_BAD_REQUEST);
         }
 
+        // refuseAllGroupRights() drops the per-right language restriction rows along with the
+        // rights, and a missing restriction row means "all languages". Capture the group's
+        // restrictions first so a right that survives the save keeps its scope.
+        $existingLanguages = $currentUser->perm->getAllLanguageRestrictions($groupId);
+        $keptRightIds = array_intersect($rightIds, $heldRightIds);
+
         if (!$currentUser->perm->refuseAllGroupRights($groupId)) {
             return $this->json(['error' => Translation::get('ad_msg_mysqlerr')], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $failed = false;
         foreach ($rightIds as $rightId) {
+            // A right the group keeps stays in the scope it is held in: its language restriction
+            // is put back as it was and its category restriction is not touched, whether it is
+            // narrower or wider than the acting user's own scope.
+            [$ownLanguages, $ownCategories] = in_array($rightId, $keptRightIds, strict: true)
+                ? [null, null]
+                : $ownScopes[$rightId] ?? [null, null];
+
             // Restrict first, grant second: if restricting fails, the right stays ungranted (fail closed).
-            $ownScope = $ownScopes[$rightId] ?? null;
-            if ($ownScope !== null) {
-                [$ownLanguages, $ownCategories] = $ownScope;
-                if (!$this->restrictGroupRightToScope(
-                    $currentUser->perm,
-                    $groupId,
-                    $rightId,
-                    $ownLanguages,
-                    $ownCategories,
-                )) {
-                    $failed = true;
-                    continue;
-                }
+            if (!$this->restrictGroupRightToScope(
+                $currentUser->perm,
+                $groupId,
+                $rightId,
+                $this->languageScopeForRegrant($existingLanguages[$rightId] ?? [], $ownLanguages),
+                $ownCategories,
+            )) {
+                $failed = true;
+                continue;
             }
 
             if ($currentUser->perm->grantGroupRight($groupId, $rightId)) {
@@ -654,6 +723,116 @@ final class GroupController extends AbstractAdministrationApiController
                 Translation::getString('ad_msg_savedsuc_2'),
             ),
         ], Response::HTTP_OK);
+    }
+
+    /**
+     * Denies replacing the group's rights unless the acting user may, and returns null when the
+     * save may proceed.
+     *
+     * A non-SuperAdmin may only edit a group whose rights they all hold themselves. The scope is
+     * judged per right: one the group keeps is left as it is, so it may exceed the acting user's
+     * scope, while one the save takes away must be held in at least the language and category
+     * scope the group holds it in - nobody revokes what they could not grant.
+     *
+     * @param array<int> $heldRightIds  the rights the group holds now
+     * @param array<int> $rightIds      the rights the group is to hold
+     * @throws Exception
+     */
+    private function denyUnlessGroupRightsMayBeReplaced(
+        int $groupId,
+        array $heldRightIds,
+        array $rightIds,
+    ): ?JsonResponse {
+        if ($this->currentUser->isSuperAdmin()) {
+            return null;
+        }
+
+        // Fail closed: if the permission backend cannot enumerate group rights, we cannot prove
+        // the acting user holds them, so the operation must be denied rather than allowed.
+        $actingPermission = $this->currentUser->perm;
+        if (!$actingPermission instanceof MediumPermission) {
+            return $this->json([
+                'error' => 'Cannot change group permissions without group permission support.',
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        $actingUserId = $this->currentUser->getUserId();
+        foreach ($heldRightIds as $heldRightId) {
+            if (!$actingPermission->hasPermission($actingUserId, $heldRightId)) {
+                return $this->json([
+                    'error' => 'Cannot change the permissions of a group whose rights you do not hold.',
+                ], Response::HTTP_FORBIDDEN);
+            }
+        }
+
+        foreach (array_diff($heldRightIds, $rightIds) as $revokedRightId) {
+            if (!$this->holdsGroupRightInFullScope($actingPermission, $groupId, $revokedRightId)) {
+                return $this->json([
+                    'error' => Translation::get(key: 'ad_permission_scope_exceeded'),
+                ], Response::HTTP_FORBIDDEN);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Names the categories in the language of the administration; a category without a
+     * translation in that language is named by its ID.
+     *
+     * @param array<int> $categoryIds
+     * @return array<string>
+     */
+    private function categoryNames(array $categoryIds): array
+    {
+        $category = new Category($this->configuration);
+        $category->setLanguage($this->configuration->getLanguage()->getLanguage());
+        $categories = $category->loadCategories();
+
+        return array_map(
+            static fn(int $categoryId): string => (string) ($categories[$categoryId]['name'] ?? '#' . $categoryId),
+            $categoryIds,
+        );
+    }
+
+    /**
+     * Whether the acting user may replace the grant a group holds a right in by another one:
+     * everything the change adds or takes away must lie within their own scope.
+     *
+     * @throws Exception
+     */
+    private function mayChangeGrant(int $rightId, RightGrant $held, RightGrant $submitted): bool
+    {
+        return (
+            $this->currentUser->isSuperAdmin()
+            || $this->currentUser
+                ->perm
+                ->getScopeForRight($this->currentUser->getUserId(), $rightId)
+                ->coversChange($held, $submitted)
+        );
+    }
+
+    /**
+     * Returns the languages a newly granted group right must be restricted to, null meaning
+     * unrestricted, and the languages a right the group keeps is put back with. Restriction rows
+     * that exist are kept. A non-SuperAdmin whose own grant is restricted (a non-null scope) can
+     * only hand a right out within that scope: the stored restriction is narrowed to the
+     * languages they hold, and an unrestricted or disjoint restriction becomes exactly their
+     * own scope. An empty own scope stays empty, so the right is not granted at all.
+     *
+     * @param array<string> $existingLanguages
+     * @param array<string>|null $ownLanguages
+     * @return array<string>|null
+     */
+    private function languageScopeForRegrant(array $existingLanguages, ?array $ownLanguages): ?array
+    {
+        if ($ownLanguages === null) {
+            return $existingLanguages === [] ? null : $existingLanguages;
+        }
+
+        $languages = array_values(array_intersect($existingLanguages, $ownLanguages));
+
+        return $languages === [] ? $ownLanguages : $languages;
     }
 
     /**

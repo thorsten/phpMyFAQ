@@ -184,8 +184,18 @@ final class UnauthorizedUserController
         $userId = (int) Filter::filterVar($data->u ?? null, FILTER_VALIDATE_INT);
         $expires = (int) Filter::filterVar($data->exp ?? null, FILTER_VALIDATE_INT);
         $signature = (string) Filter::filterVar($data->sig ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        $newPassword = is_string($data->password ?? null) ? $data->password : '';
-        $repeatPassword = is_string($data->password_repeat ?? null) ? $data->password_repeat : '';
+        // The login form verifies the sanitised form of the typed password, so the new password
+        // has to be stored in that same form.
+        $newPassword = Filter::filterVar(
+            is_string($data->password ?? null) ? $data->password : '',
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            default: '',
+        );
+        $repeatPassword = Filter::filterVar(
+            is_string($data->password_repeat ?? null) ? $data->password_repeat : '',
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            default: '',
+        );
 
         if ($userId <= 0 || $expires <= 0 || $signature === '') {
             return $this->json(['error' => Translation::get('resetpwd_err_invalid')], Response::HTTP_BAD_REQUEST);

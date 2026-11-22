@@ -79,9 +79,10 @@ final class CategoryController extends AbstractAdministrationApiController
 
         $this->categoryImage->setFileName($category->getCategoryData($categoryId)->getImage() ?? '');
 
-        $this->categoryOrder->remove($categoryId);
-
+        // Permissions, image and position belong to the category, not to one translation:
+        // they only go when its last translation is deleted.
         if (count($category->getCategoryLanguagesTranslated($categoryId)) === 1) {
+            $this->categoryOrder->remove($categoryId);
             $this->categoryPermission->delete(Permission::USER, [$categoryId]);
             $this->categoryPermission->delete(Permission::GROUP, [$categoryId]);
             $this->categoryImage->delete();

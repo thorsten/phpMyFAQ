@@ -42,7 +42,7 @@ final class GlossaryController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'glossary', name: 'admin.api.glossary', methods: ['GET'])]
+    #[Route(path: 'glossary/{glossaryId}/{glossaryLanguage}', name: 'admin.api.glossary', methods: ['GET'])]
     public function fetch(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::GLOSSARY_EDIT);

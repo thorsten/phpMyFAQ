@@ -70,6 +70,7 @@ readonly class Relation
                 'fd.lang' => $this->configuration->getLanguage()->getLanguage(),
             ])
             ->setMatchingColumns(['fd.keywords', 'fd.thema', 'fd.content'])
+            ->restrictToPublicationWindow('fd')
             ->disableRelevance();
 
         $result = $searchDatabase->search($terms);

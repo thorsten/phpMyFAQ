@@ -17,7 +17,7 @@ import { fetchJson } from './fetch-wrapper';
 import { ApiResponse, TagResponse } from '../interfaces';
 
 export const fetchTags = async (searchString: string): Promise<TagResponse[]> => {
-  return await fetchJson<TagResponse[]>(`./api/content/tags?search=${searchString}`, {
+  return await fetchJson<TagResponse[]>(`./api/content/tags?search=${encodeURIComponent(searchString)}`, {
     method: 'GET',
     cache: 'no-cache',
     headers: {

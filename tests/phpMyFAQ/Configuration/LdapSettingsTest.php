@@ -7,6 +7,7 @@ namespace phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
@@ -155,6 +156,55 @@ final class LdapSettingsTest extends TestCase
             ],
             $settings->getLdapGroupConfig(),
         );
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: list<string>}>
+     */
+    public static function allowedGroupsProvider(): array
+    {
+        return [
+            'group names' => ['Domain Admins, Editors', ['Domain Admins', 'Editors']],
+            'one full DN stays in one piece' => [
+                'CN=Admins,CN=Users,DC=example,DC=com',
+                ['CN=Admins,CN=Users,DC=example,DC=com'],
+            ],
+            'two full DNs' => [
+                'CN=Admins,CN=Users,DC=example,DC=com, CN=Editors,OU=Staff,DC=example,DC=com',
+                ['CN=Admins,CN=Users,DC=example,DC=com', 'CN=Editors,OU=Staff,DC=example,DC=com'],
+            ],
+            'full DN between group names' => [
+                'Editors,cn=Admins, ou=Groups, dc=example, dc=com,Support',
+                ['Editors', 'cn=Admins,ou=Groups,dc=example,dc=com', 'Support'],
+            ],
+            'leading RDNs without domain components are separate groups' => [
+                'CN=Admins, CN=Editors',
+                ['CN=Admins', 'CN=Editors'],
+            ],
+            'escaped comma belongs to the value' => [
+                'CN=Admins\\, Global,OU=Groups,DC=example,DC=com',
+                ['CN=Admins\\, Global,OU=Groups,DC=example,DC=com'],
+            ],
+            'empty entries are dropped' => ['Admins,, ,Editors,', ['Admins', 'Editors']],
+        ];
+    }
+
+    /**
+     * @param list<string> $expectedGroups
+     */
+    #[DataProvider('allowedGroupsProvider')]
+    public function testGetLdapGroupConfigKeepsDistinguishedNamesInOnePiece(
+        string $allowedGroups,
+        array $expectedGroups,
+    ): void {
+        $configuration = $this->createConfigurationStub([
+            'ldap.ldap_use_group_restriction' => true,
+            'ldap.ldap_group_allowed_groups' => $allowedGroups,
+            'ldap.ldap_group_auto_assign' => false,
+            'ldap.ldap_group_mapping' => '',
+        ]);
+
+        self::assertSame($expectedGroups, new LdapSettings($configuration)->getLdapGroupConfig()['allowed_groups']);
     }
 
     private function createConfigurationStub(array $values): Configuration

@@ -656,6 +656,31 @@ describe('handleVerificationModal', () => {
     expect(spinner.classList.contains('d-none')).toBe(true);
   });
 
+  it('shows the failure and hides the spinner when the hashes cannot be fetched', async () => {
+    document.body.innerHTML = `
+      <div id="verificationModal" data-pmf-current-version="4.2.0">
+        <div id="pmf-verification-spinner" class="d-none"></div>
+        <div id="pmf-verification-updates"></div>
+      </div>
+    `;
+
+    vi.mocked(getRemoteHashes).mockRejectedValue(new TypeError('Failed to fetch'));
+
+    await handleVerificationModal();
+
+    (document.getElementById('verificationModal') as HTMLElement).dispatchEvent(new Event('show.bs.modal'));
+
+    const updates = document.getElementById('pmf-verification-updates') as HTMLElement;
+    await vi.waitFor(() => {
+      expect(updates.innerText).toBe('Failed to fetch');
+    });
+
+    expect(verifyHashes).not.toHaveBeenCalled();
+    expect((document.getElementById('pmf-verification-spinner') as HTMLElement).classList.contains('d-none')).toBe(
+      true
+    );
+  });
+
   it('shows spinner during verification', async () => {
     document.body.innerHTML = `
       <div id="verificationModal" data-pmf-current-version="4.2.0">

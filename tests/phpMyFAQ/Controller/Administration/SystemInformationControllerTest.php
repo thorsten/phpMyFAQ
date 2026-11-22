@@ -175,6 +175,27 @@ final class SystemInformationControllerTest extends TestCase
     }
 
     /**
+     * An unreachable OpenSearch node used to turn the whole system information page into a 500.
+     *
+     * @throws \Exception
+     */
+    public function testIndexFallsBackWhenOpenSearchCannotBeReached(): void
+    {
+        $client = $this->createStub(\OpenSearch\Client::class);
+        $client->method('info')->willThrowException(new \RuntimeException('No alive nodes found in your cluster'));
+        $this->configuration->setOpenSearch($client);
+        self::assertTrue($this->configuration->set('search.enableOpenSearch', true));
+
+        $response = $this->createSystemInformationController()->index($this->createSystemRequest());
+
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        self::assertSame('n/a', $this->readSystemInformationValue(
+            (string) $response->getContent(),
+            'OpenSearch Version',
+        ));
+    }
+
+    /**
      * @throws \Exception
      */
     public function testIndexFallsBackWhenOpenSearchReportsNoVersion(): void

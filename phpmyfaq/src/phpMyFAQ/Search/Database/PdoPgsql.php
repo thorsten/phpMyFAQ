@@ -67,6 +67,10 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
         $columns .= $enableRelevance ? $this->getMatchingColumnsAsResult() : '';
         $orderBy = $enableRelevance ? 'ORDER BY ' . $this->getMatchingOrder() : '';
 
+        // With relevance enabled the match is "(tsvector @@ query) OR (columns) ILIKE ...". The
+        // conditions appended with AND bind tighter than that OR, so the whole match is wrapped
+        // in parentheses; otherwise every full-text hit would bypass status, language and
+        // category conditions.
         $query = sprintf(
             "
                 SELECT
@@ -74,7 +78,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
                 FROM
                     %s %s %s %s
                 WHERE
-                    (%s) ILIKE ('%%%s%%') ESCAPE '%s'
+                    ((%s) ILIKE ('%%%s%%') ESCAPE '%s')
                     %s
                     %s",
             $columns,

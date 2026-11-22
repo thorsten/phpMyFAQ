@@ -51,9 +51,13 @@ final class CustomPageController extends AbstractFrontController
         $slug = (string) $request->attributes->get('slug', '');
 
         if ($slug === '') {
-            return $this->render('404.twig', [
-                ...$this->getHeader($request),
-            ]);
+            return $this->render(
+                '404.twig',
+                [
+                    ...$this->getHeader($request),
+                ],
+                new Response(status: Response::HTTP_NOT_FOUND),
+            );
         }
 
         $language = $this->configuration->getLanguage()->getLanguage();
@@ -63,9 +67,13 @@ final class CustomPageController extends AbstractFrontController
 
         // If not found or not active, show 404
         if ($pageEntity === null || !$pageEntity->isActive()) {
-            return $this->render('404.twig', [
-                ...$this->getHeader($request),
-            ]);
+            return $this->render(
+                '404.twig',
+                [
+                    ...$this->getHeader($request),
+                ],
+                new Response(status: Response::HTTP_NOT_FOUND),
+            );
         }
 
         // Get SEO metadata

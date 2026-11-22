@@ -22,7 +22,7 @@ export class TranslationApi {
   private readonly apiUrl: string;
 
   constructor() {
-    this.apiUrl = '/admin/api/translation/translate';
+    this.apiUrl = './api/translation/translate';
   }
 
   /**

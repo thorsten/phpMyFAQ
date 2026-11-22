@@ -78,6 +78,26 @@ final class MetaDataTest extends TestCase
         $this->assertSame(1, (int) $visits[0]['visits']);
     }
 
+    /**
+     * The request language is English, the FAQ is German: the visit counter belongs to the FAQ.
+     */
+    public function testSaveStartsTheVisitCounterInTheLanguageOfTheFaq(): void
+    {
+        new MetaData($this->configuration)
+            ->setFaqId(11)
+            ->setFaqLanguage('de')
+            ->setCategories([1])
+            ->save();
+
+        $visits = array_values(array_filter(
+            new Visits($this->configuration)->getAllData(),
+            static fn(array $row): bool => (int) $row['id'] === 11,
+        ));
+        $this->assertCount(1, $visits);
+        $this->assertSame('de', $visits[0]['lang']);
+        $this->assertSame(1, (int) $visits[0]['visits']);
+    }
+
     public function testSaveCopiesUserAndGroupPermissionsFromTheCategories(): void
     {
         $categoryPermission = new CategoryPermission($this->configuration);

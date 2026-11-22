@@ -158,7 +158,7 @@ class MigrationRegistry
      * Returns migrations that need to be applied based on what's already tracked.
      *
      * @param string[] $appliedVersions
-     * @return MigrationInterface[]
+     * @return array<string, MigrationInterface>
      */
     public function getUnappliedMigrations(array $appliedVersions): array
     {
@@ -173,6 +173,34 @@ class MigrationRegistry
         }
 
         return $unapplied;
+    }
+
+    /**
+     * Returns back-ported migrations at or below $currentVersion that the tracker does not
+     * list. A back-port enters the registry after releases with a higher version shipped, so
+     * an installation that was already past its version never gets it from the version
+     * comparison in getPendingMigrations().
+     *
+     * An installation without any tracking record comes straight from a release line whose
+     * own updater applied these steps, or is a new installation that does not need them; its
+     * upgrade path stays purely version-based.
+     *
+     * @param string[] $appliedVersions
+     * @return array<string, MigrationInterface>
+     */
+    public function getMissedBackports(string $currentVersion, array $appliedVersions): array
+    {
+        if ($appliedVersions === []) {
+            return [];
+        }
+
+        return array_filter(
+            $this->getUnappliedMigrations($appliedVersions),
+            static fn(MigrationInterface $migration, string $version): bool => $migration instanceof AbstractMigration
+            && $migration->isBackport()
+            && version_compare(version1: $version, version2: $currentVersion, operator: '<='),
+            ARRAY_FILTER_USE_BOTH,
+        );
     }
 
     /**

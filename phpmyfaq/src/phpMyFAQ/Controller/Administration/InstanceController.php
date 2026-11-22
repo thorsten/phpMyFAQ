@@ -105,7 +105,7 @@ final class InstanceController extends AbstractAdministrationController
             throw new UnauthorizedHttpException('Invalid CSRF token');
         }
 
-        $instanceId = (int) Filter::filterVar($request->attributes->get('id'), FILTER_VALIDATE_INT);
+        $instanceId = (int) Filter::filterVar($request->request->get('id'), FILTER_VALIDATE_INT);
 
         $fileSystem = new Filesystem((string) PMF_ROOT_DIR);
         $currentClient = clone $this->instanceClient;
@@ -118,15 +118,15 @@ final class InstanceController extends AbstractAdministrationController
 
         // Collect updated data for database
         $instanceEntity = new InstanceEntity();
-        $instanceUrl = Filter::filterVar($request->attributes->get('url'), FILTER_VALIDATE_URL);
+        $instanceUrl = Filter::filterVar($request->request->get('url'), FILTER_VALIDATE_URL);
         $instanceEntity->setUrl(is_string($instanceUrl) ? $instanceUrl : '');
         $instanceEntity->setInstance(Filter::filterVar(
-            $request->attributes->get('instance'),
+            $request->request->get('instance'),
             FILTER_SANITIZE_SPECIAL_CHARS,
             '',
         ));
         $instanceEntity->setComment(Filter::filterVar(
-            $request->attributes->get('comment'),
+            $request->request->get('comment'),
             FILTER_SANITIZE_SPECIAL_CHARS,
             '',
         ));
@@ -159,7 +159,9 @@ final class InstanceController extends AbstractAdministrationController
             $result = ['updateError' => Translation::get(key: 'ad_msg_mysqlerr')];
         }
 
-        if ($updatedClient->update($instanceId, $instanceEntity)) {
+        $isUpdated = $updatedClient->update($instanceId, $instanceEntity);
+
+        if ($isUpdated) {
             if ($moveInstance) {
                 $updatedClient->moveClientFolder((string) $originalData->url, $instanceEntity->getUrl());
                 $updatedClient->deleteClientFolder((string) $originalData->url);
@@ -168,7 +170,7 @@ final class InstanceController extends AbstractAdministrationController
             $result = ['updateSuccess' => Translation::get(key: 'ad_config_saved')];
         }
 
-        if (!$updatedClient->update($instanceId, $instanceEntity)) {
+        if (!$isUpdated) {
             $this->configuration->getLogger()->error('Failed to update instance', [
                 'instanceId' => $instanceId,
                 'sqlError' => $this->configuration->getDb()->error(),

@@ -198,7 +198,7 @@ class QuestionControllerTest extends TestCase
      * @throws Exception
      * @throws \JsonException
      */
-    public function testCreateWithCategoryThrowsException(): void
+    public function testCreateWithCategoryButWithoutCsrfTokenThrowsException(): void
     {
         $requestData = json_encode([
             'name' => 'Test User',
@@ -212,6 +212,7 @@ class QuestionControllerTest extends TestCase
         $controller = $this->createController();
 
         $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Missing CSRF token');
         $controller->create($request);
     }
 

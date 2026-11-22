@@ -204,6 +204,11 @@ class FaqHelper extends AbstractHelper
      * - http://<url>/index.php?action=faq&cat=<category id>&id=<id>
      * - http://<url>/index.php?action=faq&cat=<category id>&id=<id>&artlang=<language>
      * - supports also HTML encoded parameter (&#61; instead of =, & instead of &)
+     * - relative links in an attribute value ("index.php?...", "./index.php?...", "/<base path>/index.php?...")
+     *
+     * Only links to this installation are converted: relative ones and absolute ones whose host and
+     * base path match the configured default URL, whatever the scheme. Links with the same query shape
+     * that point to another site are left untouched.
      *
      * to the new URL structure:
      * https://<url>/content/<category id>/<id>/<language>/<the question with underscores as spaces>.html
@@ -220,7 +225,7 @@ class FaqHelper extends AbstractHelper
         $eq = '(?:=|&#61;)';
         $amp = '(?:&|&amp;)';
         $pattern =
-            '~(https?://[^/]+)/index\.php\?action'
+            '~(https?://[^\s"\'<>?#]+?/|(?<=["\'])/(?:[^\s"\'<>?#]*?/)?|(?<=["\'])(?:\./)?)index\.php\?action'
             . $eq
             . '(artikel|faq)'
             . $amp
@@ -241,6 +246,10 @@ class FaqHelper extends AbstractHelper
             $pattern,
             function (array $matches) use ($question, $link): string {
                 $baseUrl = $this->configuration->getDefaultUrl();
+                if (!$this->pointsToThisInstallation($matches[1], $baseUrl)) {
+                    return $matches[0];
+                }
+
                 $categoryId = (int) $matches[3];
                 $faqId = (int) $matches[4];
                 $language = $matches[5] ?? $this->configuration->getLanguage()->getLanguage();
@@ -259,5 +268,43 @@ class FaqHelper extends AbstractHelper
             },
             $answer,
         ) ?? $answer;
+    }
+
+    /**
+     * Decides whether the part of a legacy link in front of "index.php" addresses this installation.
+     *
+     * @param string $linkPrefix "" or "./" (relative), "/<path>/" (path-absolute) or "http(s)://<host>/<path>/"
+     */
+    private function pointsToThisInstallation(string $linkPrefix, string $defaultUrl): bool
+    {
+        if ($linkPrefix === '' || $linkPrefix === './') {
+            return true;
+        }
+
+        $installation = $this->withoutSchemeAndDefaultPort($defaultUrl);
+
+        if (str_starts_with($linkPrefix, '/')) {
+            $pathStart = strpos($installation, needle: '/');
+
+            return $pathStart !== false && $linkPrefix === substr($installation, $pathStart);
+        }
+
+        return $this->withoutSchemeAndDefaultPort($linkPrefix) === $installation;
+    }
+
+    /**
+     * Reduces an absolute URL to "<lower-case host>[:<port>]/<path>/", so that http and https
+     * addresses of the same installation compare equal.
+     */
+    private function withoutSchemeAndDefaultPort(string $url): string
+    {
+        $withoutScheme = preg_replace('~^https?://~i', replacement: '', subject: $url) ?? '';
+        $pathStart = strpos($withoutScheme, needle: '/');
+        $host = $pathStart === false ? $withoutScheme : substr($withoutScheme, offset: 0, length: $pathStart);
+        $path = $pathStart === false ? '' : substr($withoutScheme, $pathStart);
+
+        $host = preg_replace('~:(?:80|443)$~', replacement: '', subject: strtolower($host)) ?? '';
+
+        return $host . rtrim($path, characters: '/') . '/';
     }
 }

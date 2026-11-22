@@ -730,11 +730,48 @@ class BuiltinCaptchaTest extends TestCase
 
         $code = $method->invoke($captcha, 6);
 
-        // every attempt appends another six characters to the code
-        self::assertSame(18, strlen($code));
-        self::assertMatchesRegularExpression('/^[A-Z0-9]{18}$/', $code);
+        // every attempt starts a new code instead of appending to the rejected one
+        self::assertSame(6, strlen($code));
+        self::assertMatchesRegularExpression('/^[A-Z0-9]{6}$/', $code);
         self::assertSame(3, $selects);
         self::assertSame(1, $inserts);
+    }
+
+    /**
+     * A lookup that never succeeds (e.g. a missing table) ends with an error, not an endless retry.
+     */
+    public function testGenerateCaptchaCodeGivesUpWhenTheCodeCanNeverBeStored(): void
+    {
+        $selects = 0;
+        $db = $this->createStub(DatabaseDriver::class);
+        $db->method('escape')->willReturnCallback(static fn(mixed $value): string => (string) $value);
+        $db->method('query')->willReturnCallback(static function (string $query) use (&$selects): bool {
+            if (str_starts_with(trim($query), 'SELECT')) {
+                ++$selects;
+                return false;
+            }
+
+            return true;
+        });
+
+        $language = $this->createStub(Language::class);
+        $language->method('getLanguage')->willReturn('en');
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDb')->willReturn($db);
+        $configuration->method('getLanguage')->willReturn($language);
+
+        $captcha = new BuiltinCaptcha($configuration);
+        $method = new ReflectionClass($captcha)->getMethod('generateCaptchaCode');
+
+        try {
+            $method->invoke($captcha, 6);
+            self::fail('Expected the code generation to give up.');
+        } catch (Exception $exception) {
+            self::assertStringContainsString('could not be stored after 10 attempts', $exception->getMessage());
+        }
+
+        self::assertSame(10, $selects);
     }
 
     /**

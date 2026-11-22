@@ -184,6 +184,27 @@ describe('faqs.editor', () => {
       expect(pushNotification).toHaveBeenCalledWith('FAQ updated');
     });
 
+    it('should submit the publication window, an emptied field included', async () => {
+      // An empty field has to reach the server as an empty string: that is what removes a
+      // stored limit, while a missing field keeps the stored window.
+      document.body.innerHTML = `
+        <form id="faqEditor">
+          <input name="faqId" value="10" />
+          <input type="datetime-local" name="dateStart" value="2026-03-04T10:00" />
+          <input type="datetime-local" name="dateEnd" value="" />
+        </form>
+        <input id="faqId" value="10" />
+        <input id="revisionId" value="1" />
+        <button id="faqEditorSubmit">Save</button>
+      `;
+
+      (update as Mock).mockResolvedValue({ success: 'FAQ updated', data: '{}' });
+
+      await saveFaq();
+
+      expect(update).toHaveBeenCalledWith(expect.objectContaining({ dateStart: '2026-03-04T10:00', dateEnd: '' }));
+    });
+
     it('should show error notification on error response', async () => {
       document.body.innerHTML = `
         <form id="faqEditor">

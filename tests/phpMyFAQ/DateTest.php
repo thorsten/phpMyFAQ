@@ -165,7 +165,27 @@ class DateTest extends TestCase
     {
         $result = $this->dateInstance->getTrackingFileDateStart('tracking25012026');
 
-        $this->assertSame(gmmktime(0, 0, 0, 1, 25, 2026), $result);
+        $this->assertSame(mktime(0, 0, 0, 1, 25, 2026), $result);
+    }
+
+    public function testTrackingFileDatesAreLocalDaysLikeTheFileNames(): void
+    {
+        $previousTimezone = date_default_timezone_get();
+
+        try {
+            foreach (['America/Los_Angeles', 'Pacific/Auckland'] as $timezone) {
+                date_default_timezone_set($timezone);
+
+                // Tracking and StatisticsHelper build the file name with date('dmY')
+                $start = $this->dateInstance->getTrackingFileDateStart('tracking25012026');
+                $end = $this->dateInstance->getTrackingFileDateEnd('tracking25012026');
+
+                $this->assertSame('25012026 00:00:00', date('dmY H:i:s', $start), $timezone);
+                $this->assertSame('25012026 23:59:59', date('dmY H:i:s', $end), $timezone);
+            }
+        } finally {
+            date_default_timezone_set($previousTimezone);
+        }
     }
 
     public function testGetTrackingFileDateStartReturnsMinusOneForShortFilename(): void
@@ -179,7 +199,7 @@ class DateTest extends TestCase
     {
         $result = $this->dateInstance->getTrackingFileDateEnd('tracking25012026');
 
-        $this->assertSame(gmmktime(23, 59, 59, 1, 25, 2026), $result);
+        $this->assertSame(mktime(23, 59, 59, 1, 25, 2026), $result);
     }
 
     public function testGetTrackingFileDateEndReturnsMinusOneForShortFilename(): void

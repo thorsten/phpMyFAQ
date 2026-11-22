@@ -12,6 +12,7 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
+use Symfony\Component\HttpFoundation\Request;
 
 #[AllowMockObjectsWithoutExpectations]
 class CurrentUserTest extends TestCase
@@ -609,6 +610,38 @@ class CurrentUserTest extends TestCase
         $this->assertSame(['ldap', 'sso', 'local'], array_keys($sorted));
     }
 
+    public function testRememberMeCookieExpiresTwoWeeksAfterTheRequest(): void
+    {
+        $request = Request::create(
+            '/',
+            'GET',
+            [],
+            [],
+            [],
+            ['REQUEST_TIME' => 1_700_000_000, 'SCRIPT_NAME' => '/index.php'],
+        );
+        $cookies = [];
+        $userSession = new UserSession($this->configuration, $request, null, static function (
+            string $name,
+            string $value,
+            array $options,
+        ) use (&$cookies): void {
+            $cookies[$name] = ['value' => $value, 'expires' => $options['expires']];
+        });
+
+        $reflection = new \ReflectionClass(CurrentUser::class);
+        $currentUser = $reflection->newInstanceWithoutConstructor();
+        $reflection->getProperty('configuration')->setValue($currentUser, $this->configuration);
+        $reflection->getProperty('userSession')->setValue($currentUser, $userSession);
+        new ReflectionProperty(\phpMyFAQ\User::class, 'userId')->setValue($currentUser, 1);
+
+        $currentUser->issueRememberMeCookie();
+
+        $this->assertArrayHasKey(UserSession::COOKIE_NAME_REMEMBER_ME, $cookies);
+        $this->assertSame(1_700_000_000 + 1_209_600, $cookies[UserSession::COOKIE_NAME_REMEMBER_ME]['expires']);
+        $this->assertSame(64, strlen($cookies[UserSession::COOKIE_NAME_REMEMBER_ME]['value']));
+    }
+
     public function testLoginAcceptsTheEmailAddressWhenEnabled(): void
     {
         $this->assertTrue($this->configuration->set('security.loginWithEmailAddress', 'true'));
@@ -618,6 +651,18 @@ class CurrentUserTest extends TestCase
         $this->assertTrue($this->currentUser->login('admin@example.org', 'password'));
         $this->assertSame('admin', $this->currentUser->getLogin());
         $this->assertTrue($this->currentUser->isLoggedIn());
+    }
+
+    public function testLoginWithAnEmailAddressAndAWrongPasswordReportsThePassword(): void
+    {
+        $this->assertTrue($this->configuration->set('security.loginWithEmailAddress', 'true'));
+        $db = $this->configuration->getDb();
+        $db->query("UPDATE faquserdata SET email = 'admin@example.org' WHERE user_id = 1");
+
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage(\phpMyFAQ\User::ERROR_USER_INCORRECT_PASSWORD);
+
+        $this->currentUser->login('admin@example.org', 'wrong-password');
     }
 
     public function testLoginRequiresAnEmailAddressWhenEmailLoginIsEnabled(): void
@@ -654,6 +699,50 @@ class CurrentUserTest extends TestCase
         $this->assertTrue($this->currentUser->login('EXAMPLE\\admin', 'password'));
         $this->assertSame('admin', $this->currentUser->getLogin());
         $this->assertTrue($this->currentUser->isLoggedIn());
+    }
+
+    /**
+     * The lockout has to be keyed on the account the password is verified for. With the
+     * domain prefix still attached, "EXAMPLE\admin" matched no account, so neither the
+     * lock check nor the failed-attempt counter ever applied to "admin".
+     */
+    public function testRepeatedFailuresWithADomainPrefixLockTheAccount(): void
+    {
+        $this->resetLockoutState();
+        $this->assertTrue($this->configuration->set('ldap.ldapSupport', 'true'));
+        $this->assertTrue($this->configuration->set('ldap.ldap_use_domain_prefix', 'true'));
+
+        for ($attempt = 0; $attempt <= 5; ++$attempt) {
+            try {
+                $this->currentUser->login('EXAMPLE\\admin', 'wrong-password');
+            } catch (Exception) {
+                // Expected: the credentials are deliberately wrong.
+            }
+        }
+
+        $row = $this->configuration
+            ->getDb()
+            ->fetchObject(
+                $this->configuration
+                    ->getDb()
+                    ->query(sprintf(
+                        'SELECT login_attempts FROM %sfaquser WHERE user_id = 1',
+                        Database::getTablePrefix(),
+                    )),
+            );
+        $this->assertSame(6, (int) $row->login_attempts);
+
+        $caught = null;
+        try {
+            // Even the correct password must now be refused, with or without the prefix.
+            $this->currentUser->login('EXAMPLE\\admin', 'password');
+        } catch (Exception $exception) {
+            $caught = $exception;
+        }
+
+        $this->assertNotNull($caught);
+        $this->assertSame(CurrentUser::ERROR_USER_TOO_MANY_FAILED_LOGINS, $caught->getMessage());
+        $this->assertFalse($this->currentUser->isLoggedIn());
     }
 
     public function testLoginFailsWhenTheAuthSourceCannotBeStored(): void

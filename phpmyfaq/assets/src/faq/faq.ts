@@ -54,12 +54,12 @@ export const handleAddFaq = () => {
               addElement('div', { classList: 'alert alert-danger', innerText: response.error })
             );
           }
-        } catch {
+        } catch (error) {
           loader.classList.add('d-none');
           const message = document.getElementById('pmf-add-faq-response') as HTMLElement;
           message.insertAdjacentElement(
             'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: 'An unexpected error occurred.' })
+            addElement('div', { classList: 'alert alert-danger', innerText: (error as Error).message })
           );
         }
       }
@@ -78,36 +78,40 @@ export const handleShowFaq = () => {
       if (!csrfToken || !id) {
         return;
       }
-      if (bookmarkToggle.getAttribute('data-pmf-action') === 'remove') {
-        const response = await deleteBookmark(id, csrfToken);
-        if (response.success) {
-          pushNotification(response.success);
-          const bookmarkIcon = document.getElementById('pmf-bookmark-icon');
-          if (bookmarkIcon) {
-            bookmarkIcon.classList.remove('bi-bookmark-fill');
-            bookmarkIcon.classList.add('bi-bookmark');
+      try {
+        if (bookmarkToggle.getAttribute('data-pmf-action') === 'remove') {
+          const response = await deleteBookmark(id, csrfToken);
+          if (response.success) {
+            pushNotification(response.success);
+            const bookmarkIcon = document.getElementById('pmf-bookmark-icon');
+            if (bookmarkIcon) {
+              bookmarkIcon.classList.remove('bi-bookmark-fill');
+              bookmarkIcon.classList.add('bi-bookmark');
+            }
+            bookmarkToggle.innerText = response.linkText ?? '';
+            bookmarkToggle.setAttribute('data-pmf-action', 'add');
+            bookmarkToggle.setAttribute('data-pmf-csrf', response.csrfToken ?? '');
+          } else {
+            pushErrorNotification(response.error ?? 'Unknown error');
           }
-          bookmarkToggle.innerText = response.linkText ?? '';
-          bookmarkToggle.setAttribute('data-pmf-action', 'add');
-          bookmarkToggle.setAttribute('data-pmf-csrf', response.csrfToken ?? '');
         } else {
-          pushErrorNotification(response.error ?? 'Unknown error');
-        }
-      } else {
-        const response = await createBookmark(id, csrfToken);
-        if (response.success) {
-          pushNotification(response.success);
-          const bookmarkIcon = document.getElementById('pmf-bookmark-icon');
-          if (bookmarkIcon) {
-            bookmarkIcon.classList.remove('bi-bookmark');
-            bookmarkIcon.classList.add('bi-bookmark-fill');
+          const response = await createBookmark(id, csrfToken);
+          if (response.success) {
+            pushNotification(response.success);
+            const bookmarkIcon = document.getElementById('pmf-bookmark-icon');
+            if (bookmarkIcon) {
+              bookmarkIcon.classList.remove('bi-bookmark');
+              bookmarkIcon.classList.add('bi-bookmark-fill');
+            }
+            bookmarkToggle.innerText = response.linkText ?? '';
+            bookmarkToggle.setAttribute('data-pmf-action', 'remove');
+            bookmarkToggle.setAttribute('data-pmf-csrf', response.csrfToken ?? '');
+          } else {
+            pushErrorNotification(response.error ?? 'Unknown error');
           }
-          bookmarkToggle.innerText = response.linkText ?? '';
-          bookmarkToggle.setAttribute('data-pmf-action', 'remove');
-          bookmarkToggle.setAttribute('data-pmf-csrf', response.csrfToken ?? '');
-        } else {
-          pushErrorNotification(response.error ?? 'Unknown error');
         }
+      } catch (error) {
+        pushErrorNotification((error as Error).message);
       }
     });
   }

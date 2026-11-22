@@ -318,10 +318,12 @@ export const handleTranslatePage = (): void => {
       const response = await addPage(data);
       if (typeof response.success === 'string') {
         pushNotification(response.success);
+        setTimeout(() => {
+          window.location.href = './pages';
+        }, 2000);
+      } else {
+        pushErrorNotification(response.error || 'An error occurred');
       }
-      setTimeout(() => {
-        window.location.href = './pages';
-      }, 2000);
     });
   }
 };
@@ -395,10 +397,12 @@ export const handleEditPage = (): void => {
       const response = await updatePage(data);
       if (typeof response.success === 'string') {
         pushNotification(response.success);
+        setTimeout(() => {
+          window.location.href = './pages';
+        }, 2000);
+      } else {
+        pushErrorNotification(response.error || 'An error occurred');
       }
-      setTimeout(() => {
-        window.location.href = './pages';
-      }, 2000);
     });
   }
 };
@@ -434,10 +438,12 @@ export const handlePages = (): void => {
         const response = await deletePage(csrfToken, pageId, pageLang);
         if (typeof response.success === 'string') {
           pushNotification(response.success);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } else {
+          pushErrorNotification(response.error || 'An error occurred');
         }
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
       });
     }
   }

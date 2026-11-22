@@ -18,7 +18,7 @@ import { fetchWrapper, fetchJson } from './fetch-wrapper';
 
 export const fetchOpenSearchAction = async (action: string, csrfToken: string): Promise<ApiResponse> => {
   return await fetchJson<ApiResponse>(`./api/opensearch/${action}`, {
-    method: 'POST',
+    method: action === 'drop' ? 'DELETE' : 'POST',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json',

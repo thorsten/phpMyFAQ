@@ -109,6 +109,10 @@ describe('FAQ Overview Functions', () => {
       `;
 
       (deleteFaq as Mock).mockRejectedValue(new Error('Network error'));
+      (document.getElementById('confirmDeleteFaqButton') as HTMLElement).setAttribute(
+        'data-pmf-msg-delete-error',
+        'The FAQ could not be deleted.'
+      );
 
       handleDeleteFaqModal();
 
@@ -124,7 +128,32 @@ describe('FAQ Overview Functions', () => {
 
       await flushPromises();
 
-      expect(pushErrorNotification).toHaveBeenCalledWith('Fehler beim Löschen der FAQ');
+      expect(pushErrorNotification).toHaveBeenCalledWith('The FAQ could not be deleted.');
+    });
+
+    it('should show the server error and keep the row when the deletion is refused', async () => {
+      document.body.innerHTML = `
+        <div id="deleteFaqConfirmModal"></div>
+        <button id="confirmDeleteFaqButton">Confirm</button>
+        <table><tr id="faq_42_en"><td>
+          <button class="pmf-button-delete-faq" data-pmf-id="42" data-pmf-language="en" data-pmf-token="csrf-abc">
+            Delete
+          </button>
+        </td></tr></table>
+      `;
+
+      (deleteFaq as Mock).mockResolvedValue({ error: 'No permission' });
+
+      handleDeleteFaqModal();
+
+      (document.querySelector('.pmf-button-delete-faq') as HTMLElement).click();
+      await flushPromises();
+
+      (document.getElementById('confirmDeleteFaqButton') as HTMLButtonElement).click();
+      await flushPromises();
+
+      expect(pushErrorNotification).toHaveBeenCalledWith('No permission');
+      expect(document.getElementById('faq_42_en')).not.toBeNull();
     });
 
     it('should do nothing when currentFaqId, language, and token are empty', async () => {

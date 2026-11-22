@@ -24,7 +24,8 @@ use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq\Permission as FaqPermission;
-use phpMyFAQ\Visits;
+use phpMyFAQ\Visits\VisitsRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class FaqMetaData
@@ -82,9 +83,7 @@ class MetaData
         $categoryRelation = new Relation($this->configuration, new Category($this->configuration));
         $categoryRelation->add($categories, $faqId, $faqLanguage);
 
-        // Activate visits
-        $visits = new Visits($this->configuration);
-        $visits->logViews($faqId);
+        $this->logFirstView($faqId, $faqLanguage);
 
         // Set permissions: derive from category permissions and apply to both FAQ record and categories
         $faqPermission = new FaqPermission($this->configuration);
@@ -101,5 +100,25 @@ class MetaData
             $faqPermission->add(FaqPermission::GROUP, $faqId, $groupPermissions);
             $categoryPermission->add(CategoryPermission::GROUP, $categories, $groupPermissions);
         }
+    }
+
+    /**
+     * Activates the visit counter in the language of the FAQ. Visits::logViews() counts in the
+     * language of the current request, which is another one when a FAQ is imported or submitted
+     * in a different language; statistics and exports join the counter by FAQ language and
+     * would miss such a FAQ.
+     */
+    private function logFirstView(int $faqId, string $faqLanguage): void
+    {
+        $visitsRepository = new VisitsRepository($this->configuration);
+        $requestTime = Request::createFromGlobals()->server->getInt(key: 'REQUEST_TIME');
+        $timestamp = $requestTime > 0 ? $requestTime : time();
+
+        if ($visitsRepository->exists($faqId, $faqLanguage)) {
+            $visitsRepository->update($faqId, $faqLanguage, $timestamp);
+            return;
+        }
+
+        $visitsRepository->insert($faqId, $faqLanguage, $timestamp);
     }
 }

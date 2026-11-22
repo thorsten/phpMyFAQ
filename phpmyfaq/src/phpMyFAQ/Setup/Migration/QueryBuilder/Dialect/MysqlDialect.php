@@ -22,6 +22,7 @@ namespace phpMyFAQ\Setup\Migration\QueryBuilder\Dialect;
 use phpMyFAQ\Setup\Migration\QueryBuilder\DialectInterface;
 use RuntimeException;
 
+/* @mago-expect lint:too-many-methods - one method per SQL construct that differs between the databases */
 class MysqlDialect implements DialectInterface
 {
     public function getType(): string
@@ -135,6 +136,28 @@ class MysqlDialect implements DialectInterface
 
         $columnList = implode(', ', $columns);
         return "CREATE INDEX {$indexName} ON {$tableName} ({$columnList})";
+    }
+
+    /**
+     * @param string[] $columns
+     * @param string[] $nullableColumns
+     */
+    public function createUniqueIndex(
+        string $indexName,
+        string $tableName,
+        array $columns,
+        array $nullableColumns = [],
+        bool $ifNotExists = false,
+    ): string {
+        if ($ifNotExists) {
+            throw new RuntimeException(
+                'MySQL/MariaDB does not support IF NOT EXISTS for CREATE INDEX. '
+                . 'Check for index existence manually before creating it.',
+            );
+        }
+
+        $columnList = implode(', ', $columns);
+        return "CREATE UNIQUE INDEX {$indexName} ON {$tableName} ({$columnList})";
     }
 
     public function dropIndex(string $indexName, string $tableName): string

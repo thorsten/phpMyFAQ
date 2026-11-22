@@ -70,13 +70,52 @@ class SmtpTest extends TestCase
                     $email->getSubject() === 'Test Subject'
                     && count($email->getTo()) === 1
                     && $email->getTextBody() === 'This is a test email body.'
-                    && $email->getHtmlBody() === 'This is a test email body.'
+                    && $email->getHtmlBody() === null
                 );
             }));
 
         $result = $this->smtp->send($recipients, $headers, $body);
 
         $this->assertEquals(1, $result);
+    }
+
+    public function testSendBuildsTextOnlyMessageForPlainTextMail(): void
+    {
+        $this->mockMailer
+            ->expects($this->once())
+            ->method('send')
+            ->with($this->callback(static function (Email $email): bool {
+                return (
+                    $email->getTextBody() === "Line one\nLine two"
+                    && $email->getHtmlBody() === null
+                    && $email->getBody()->getMediaType() === 'text'
+                    && $email->getBody()->getMediaSubtype() === 'plain'
+                );
+            }));
+
+        $this->assertSame(1, $this->smtp->send('test@example.com', ['Subject' => 'Plain'], "Line one\nLine two"));
+    }
+
+    public function testSendBuildsAlternativeMessageForHtmlMail(): void
+    {
+        $this->mockMailer
+            ->expects($this->once())
+            ->method('send')
+            ->with($this->callback(static function (Email $email): bool {
+                return (
+                    $email->getTextBody() === 'Hello World'
+                    && $email->getHtmlBody() === '<p>Hello <b>World</b></p>'
+                    && $email->getBody()->getMediaType() === 'multipart'
+                    && $email->getBody()->getMediaSubtype() === 'alternative'
+                );
+            }));
+
+        $this->assertSame(1, $this->smtp->send(
+            'test@example.com',
+            ['Subject' => 'HTML'],
+            'Hello World',
+            '<p>Hello <b>World</b></p>',
+        ));
     }
 
     public function testSendEmailWithReturnPath(): void
@@ -120,7 +159,7 @@ class SmtpTest extends TestCase
                 return (
                     $email->getSubject() === 'Test Subject'
                     && $email->getTextBody() === 'Test body'
-                    && $email->getHtmlBody() === 'Test body'
+                    && $email->getHtmlBody() === null
                     && count($cc) === 1
                     && $cc[0]->getAddress() === 'cc@example.com'
                     && count($bcc) === 1
@@ -131,6 +170,32 @@ class SmtpTest extends TestCase
         $result = $this->smtp->send($recipients, $headers, $body);
 
         $this->assertEquals(1, $result);
+    }
+
+    public function testSendEmailDeliversEveryAddressOfCcAndBccListsBuiltByMail(): void
+    {
+        $headers = [
+            'Subject' => 'Test Subject',
+            'CC' => 'First Copy <first-copy@example.com>,<second-copy@example.com>',
+            'BCC' => 'First Blind <first-blind@example.com>,<second-blind@example.com>',
+        ];
+
+        $this->mockMailer
+            ->expects($this->once())
+            ->method('send')
+            ->with($this->callback(static function (Email $email): bool {
+                $addresses = static fn(array $list): array => array_map(
+                    static fn($address): string => $address->getAddress(),
+                    $list,
+                );
+
+                return (
+                    $addresses($email->getCc()) === ['first-copy@example.com', 'second-copy@example.com']
+                    && $addresses($email->getBcc()) === ['first-blind@example.com', 'second-blind@example.com']
+                );
+            }));
+
+        $this->assertEquals(1, $this->smtp->send('test@example.com', $headers, 'Test body'));
     }
 
     public function testSendEmailWithReplyTo(): void
@@ -179,7 +244,7 @@ class SmtpTest extends TestCase
                 return (
                     $email->getSubject() === 'Complete Test'
                     && $email->getTextBody() === 'Complete test body'
-                    && $email->getHtmlBody() === 'Complete test body'
+                    && $email->getHtmlBody() === null
                     && count($from) === 1
                     && $from[0]->getAddress() === 'bounce@example.com'
                     && count($cc) === 1
@@ -305,6 +370,36 @@ class SmtpTest extends TestCase
         $this->assertEquals(1, $result);
     }
 
+    public function testSendEmailKeepsTheFromNameAndDecodesDisplayNames(): void
+    {
+        $headers = [
+            'Subject' => 'Names',
+            'From' => '"My FAQ" <faq@example.com>',
+            'Return-Path' => '<bounce@example.com>',
+            'Reply-To' => '=?UTF-8?B?SsO8cmdlbiBNw7xsbGVy?= <juergen@example.com>',
+        ];
+
+        $this->mockMailer
+            ->expects($this->once())
+            ->method('send')
+            ->with($this->callback(static function (Email $email): bool {
+                $from = $email->getFrom()[0];
+                $to = $email->getTo()[0];
+                $replyTo = $email->getReplyTo()[0];
+
+                return (
+                    $from->getAddress() === 'faq@example.com'
+                    && $from->getName() === 'My FAQ'
+                    && $email->getReturnPath()?->getAddress() === 'bounce@example.com'
+                    && $to->getAddress() === 'juergen@example.com'
+                    && $to->getName() === 'Jürgen Müller'
+                    && $replyTo->getName() === 'Jürgen Müller'
+                );
+            }));
+
+        $this->smtp->send('=?UTF-8?B?SsO8cmdlbiBNw7xsbGVy?= <juergen@example.com>', $headers, 'Test body');
+    }
+
     public function testImplementsMailUserAgentInterface(): void
     {
         $this->assertInstanceOf(\phpMyFAQ\Mail\MailUserAgentInterface::class, $this->smtp);
@@ -325,7 +420,8 @@ class SmtpTest extends TestCase
         $reflection = new \ReflectionMethod($this->smtp, 'send');
 
         $this->assertEquals('send', $reflection->getName());
-        $this->assertEquals(3, $reflection->getNumberOfParameters());
+        $this->assertEquals(4, $reflection->getNumberOfParameters());
+        $this->assertEquals(3, $reflection->getNumberOfRequiredParameters());
         $this->assertEquals('int', $reflection->getReturnType()?->getName());
     }
 }

@@ -157,20 +157,30 @@ class RegistrationControllerTest extends TestCase
     /**
      * @throws \JsonException
      */
-    public function testCreateWithIsVisibleParameterThrowsException(): void
+    public function testCreateWithIsVisibleParameterIsNotRejected(): void
     {
-        $requestData = json_encode([
+        $this->configuration->set('spam.enableCaptchaCode', 'true');
+
+        $request = new Request([], [], [], [], [], [], json_encode([
             'realname' => 'Test User',
             'name' => 'testuser',
             'email' => 'test@example.com',
-            'isVisible' => true,
-        ]);
+            'isVisible' => 'on',
+            'captcha' => 'x',
+        ], JSON_THROW_ON_ERROR));
 
-        $request = new Request([], [], [], [], [], [], $requestData);
         $controller = new RegistrationController();
 
-        $this->expectException(\Exception::class);
-        $controller->create($request);
+        try {
+            $response = $controller->create($request);
+        } finally {
+            $this->configuration->set('spam.enableCaptchaCode', 'false');
+        }
+
+        // The payload passes validation and is only stopped by the captcha check that follows it
+        $payload = json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(Translation::get('msgCaptcha'), $payload['error']);
     }
 
     /**

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { handleFormEdit, handleFormTranslations } from './forms';
+import { pushErrorNotification } from '../../../../assets/src/utils';
 import {
   fetchActivateInput,
   fetchAddTranslation,
@@ -34,6 +35,48 @@ describe('Form Functions', () => {
       checkbox.dispatchEvent(new Event('change'));
 
       expect(fetchActivateInput).toHaveBeenCalledWith('csrf', 'form1', 'input1', true);
+    });
+
+    it('should revert the checkbox and show the error when activating is refused', async () => {
+      document.body.innerHTML = `
+        <div id="forms">
+          <input type="checkbox" id="active" data-pmf-csrf-token="csrf" data-pmf-inputid="input1" data-pmf-formid="form1" />
+        </div>
+      `;
+
+      (fetchActivateInput as Mock).mockResolvedValue({ error: 'No permission' });
+
+      handleFormEdit();
+
+      const checkbox = document.querySelector('#active') as HTMLInputElement;
+      checkbox.checked = true;
+      checkbox.dispatchEvent(new Event('change'));
+
+      await vi.waitFor(() => {
+        expect(pushErrorNotification).toHaveBeenCalledWith('No permission');
+      });
+      expect(checkbox.checked).toBe(false);
+    });
+
+    it('should revert the checkbox and show the error when marking as required is refused', async () => {
+      document.body.innerHTML = `
+        <div id="forms">
+          <input type="checkbox" id="required" checked data-pmf-csrf-token="csrf" data-pmf-inputid="input1" data-pmf-formid="form1" />
+        </div>
+      `;
+
+      (fetchSetInputAsRequired as Mock).mockResolvedValue({ error: 'No permission' });
+
+      handleFormEdit();
+
+      const checkbox = document.querySelector('#required') as HTMLInputElement;
+      checkbox.checked = false;
+      checkbox.dispatchEvent(new Event('change'));
+
+      await vi.waitFor(() => {
+        expect(pushErrorNotification).toHaveBeenCalledWith('No permission');
+      });
+      expect(checkbox.checked).toBe(true);
     });
 
     it('should handle required checkboxes', async () => {
@@ -110,7 +153,8 @@ describe('Form Functions', () => {
       editButton.click();
       expect(input.disabled).toBe(true);
 
-      expect(fetchEditTranslation).toHaveBeenCalledWith('csrf', 'form1', 'input1', 'en', 'Updated');
+      // Signature: (csrf, formId, inputId, label, lang)
+      expect(fetchEditTranslation).toHaveBeenCalledWith('csrf', 'form1', 'input1', 'Updated', 'en');
     });
 
     it('should handle delete translation', async () => {
@@ -130,6 +174,27 @@ describe('Form Functions', () => {
       deleteButton.click();
 
       expect(fetchDeleteTranslation).toHaveBeenCalledWith('csrf', 'form1', 'input1', 'en');
+    });
+
+    it('should show the error when deleting a translation is refused', async () => {
+      document.body.innerHTML = `
+        <table id="formTranslations">
+          <tr id="item_en"><td>
+            <button id="deleteTranslation" data-pmf-csrf="csrf" data-pmf-formId="form1" data-pmf-inputId="input1" data-pmf-lang="en"></button>
+          </td></tr>
+        </table>
+      `;
+
+      (fetchDeleteTranslation as Mock).mockResolvedValue({ error: 'No permission' });
+
+      handleFormTranslations();
+
+      (document.getElementById('deleteTranslation') as HTMLElement).click();
+
+      await vi.waitFor(() => {
+        expect(pushErrorNotification).toHaveBeenCalledWith('No permission');
+      });
+      expect(document.getElementById('item_en')).not.toBeNull();
     });
 
     it('should handle add translation', async () => {

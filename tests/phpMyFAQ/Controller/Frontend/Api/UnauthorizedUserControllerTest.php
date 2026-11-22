@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend\Api;
 
+use phpMyFAQ\Auth\AuthDatabase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\AuthenticationSourceType;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Http\RateLimiter;
 use phpMyFAQ\Kernel;
 use phpMyFAQ\Mail;
@@ -116,7 +118,7 @@ class UnauthorizedUserControllerTest extends TestCase
      */
     private function outstandingToken(?int $expires = null): array
     {
-        return ['expires' => $expires ?? time() + 600, 'signature' => bin2hex(random_bytes(32))];
+        return ['expires' => $expires ?? (time() + 600), 'signature' => bin2hex(random_bytes(32))];
     }
 
     /**
@@ -750,5 +752,48 @@ class UnauthorizedUserControllerTest extends TestCase
         $expires = time() + 600;
 
         return ['expires' => $expires, 'signature' => hash_hmac('sha256', $userId . '|' . $expires, $storedHash)];
+    }
+
+    /**
+     * The login forms sanitise the typed password before verifying it. The reset used to store
+     * the password as typed, so one containing a quote or a tag-like part could never log in.
+     *
+     * @throws Exception
+     */
+    public function testResetStoresAPasswordWithQuotesAndTagsSoThatItLogsIn(): void
+    {
+        $typedPassword = 'Pa\'ss"<b>word</b>123';
+
+        $account = new CurrentUser($this->configuration);
+        $this->assertTrue($account->createUser('local-carol', 'OldSecret123'));
+        $this->assertTrue($account->setUserData(['email' => 'carol@example.com']));
+
+        $capturedMessage = null;
+        $mail = $this->createMock(Mail::class);
+        $mail
+            ->expects($this->once())
+            ->method('send')
+            ->willReturnCallback(function () use ($mail, &$capturedMessage): int {
+                $capturedMessage = $mail->message;
+                return 1;
+            });
+
+        $controller = $this->makeController(new CurrentUser($this->configuration), $mail);
+        $controller->requestReset($this->jsonRequest(['username' => 'local-carol', 'email' => 'carol@example.com']));
+        $this->assertNotNull($capturedMessage);
+        $this->assertSame(1, preg_match('/[?&]exp=(\d+)&sig=([0-9a-f]{64})/', $capturedMessage, $link));
+
+        $response = $controller->reset($this->jsonRequest([
+            'u' => $account->getUserId(),
+            'exp' => (int) $link[1],
+            'sig' => $link[2],
+            'password' => $typedPassword,
+            'password_repeat' => $typedPassword,
+        ]));
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        // What both login forms do with the typed password before they verify it.
+        $loginPassword = Filter::filterVar($typedPassword, FILTER_SANITIZE_SPECIAL_CHARS, '');
+        $this->assertTrue(new AuthDatabase($this->configuration)->checkCredentials('local-carol', $loginPassword));
     }
 }

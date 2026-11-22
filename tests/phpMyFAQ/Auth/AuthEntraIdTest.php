@@ -180,6 +180,83 @@ class AuthEntraIdTest extends TestCase
         $this->assertSame(0, $auth->getAuthenticatedUserId());
     }
 
+    public function testCheckCredentialsLinksAnAccountProvisionedByEntraIdBeforeLinkingOnItsFirstLogin(): void
+    {
+        $this->oAuthMock->method('getMail')->willReturn('john@example.com');
+        $this->oAuthMock->method('getObjectId')->willReturn('oid-123');
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserIdByEntraOid')->willReturn(0);
+        $user->expects($this->once())->method('getUserByLogin')->with('john@example.com', false)->willReturn(true);
+        $user->method('getUserAuthSource')->willReturn(AuthenticationSourceType::AUTH_AZURE->value);
+        $user->method('getUserData')->willReturnMap([['entra_oid', '']]);
+        $user->method('getStatus')->willReturn('active');
+        $user->method('getUserId')->willReturn(7);
+        $user->expects($this->once())->method('setUserData')->with(['entra_oid' => 'oid-123'])->willReturn(true);
+        $user->expects($this->never())->method('createUser');
+        $user->expects($this->never())->method('setStatus');
+        $user->expects($this->never())->method('setAuthSource');
+
+        $auth = $this->createAuthWithUser($user);
+
+        $this->assertTrue($auth->checkCredentials('john@example.com', ''));
+        $this->assertSame(7, $auth->getAuthenticatedUserId());
+    }
+
+    #[DataProvider('unclaimableAccountProvider')]
+    public function testCheckCredentialsNeverLinksAnAccountItMustNotClaim(
+        string $authSource,
+        string $linkedObjectId,
+        string $status,
+        bool $linkIsAttempted,
+    ): void {
+        $this->oAuthMock->method('getMail')->willReturn('admin@example.com');
+        $this->oAuthMock->method('getObjectId')->willReturn('oid-attacker');
+
+        $user = $this->createMock(User::class);
+        $user->method('getUserIdByEntraOid')->willReturn(0);
+        $user->method('getUserByLogin')->willReturn(true);
+        $user->method('getUserAuthSource')->willReturn($authSource);
+        $user->method('getUserData')->willReturnMap([['entra_oid', $linkedObjectId]]);
+        $user->method('getStatus')->willReturn($status);
+        $user->method('getUserId')->willReturn(7);
+        $user
+            ->expects($linkIsAttempted ? $this->once() : $this->never())
+            ->method('setUserData')
+            ->with(['entra_oid' => 'oid-attacker'])
+            ->willReturn(false);
+        $user->expects($this->never())->method('createUser');
+        $user->expects($this->never())->method('setStatus');
+        $user->expects($this->never())->method('setAuthSource');
+
+        $auth = $this->createAuthWithUser($user);
+
+        $this->assertFalse($auth->checkCredentials('admin@example.com', ''));
+        $this->assertSame(0, $auth->getAuthenticatedUserId());
+    }
+
+    /**
+     * @return array<string, array{string, string, string, bool}>
+     */
+    public static function unclaimableAccountProvider(): array
+    {
+        $entraId = AuthenticationSourceType::AUTH_AZURE->value;
+
+        return [
+            'local account' => [AuthenticationSourceType::AUTH_LOCAL->value, '', 'active', false],
+            'account without an authentication source' => ['', '', 'active', false],
+            'account of another identity provider' => [
+                AuthenticationSourceType::AUTH_KEYCLOAK->value,
+                '',
+                'active',
+                false,
+            ],
+            'account linked to another object identifier' => [$entraId, 'oid-owner', 'active', false],
+            'blocked account' => [$entraId, '', 'blocked', false],
+            'account whose link cannot be stored' => [$entraId, '', 'active', true],
+        ];
+    }
+
     public function testCheckCredentialsProvisionsAnAccountForAnUnknownLogin(): void
     {
         $this->oAuthMock->method('getName')->willReturn('Jane Doe');

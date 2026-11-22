@@ -107,6 +107,7 @@ final class PageController extends AbstractAdministrationController
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
         return $this->render('@admin/content/page.add.twig', [
+            'csrfTokenEditor' => Token::getInstance($this->session)->getTokenString('pmf-csrf-token'),
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
@@ -150,6 +151,7 @@ final class PageController extends AbstractAdministrationController
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
         return $this->render('@admin/content/page.translate.twig', [
+            'csrfTokenEditor' => Token::getInstance($this->session)->getTokenString('pmf-csrf-token'),
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),
@@ -202,6 +204,7 @@ final class PageController extends AbstractAdministrationController
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
         return $this->render('@admin/content/page.edit.twig', [
+            'csrfTokenEditor' => Token::getInstance($this->session)->getTokenString('pmf-csrf-token'),
             ...$this->getHeader($request),
             ...$this->getFooter(),
             ...$this->getBaseTemplateVars(),

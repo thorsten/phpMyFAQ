@@ -41,7 +41,7 @@ abstract class AbstractSetup
      */
     public function checkMinimumPhpVersion(): bool
     {
-        return version_compare(version1: PHP_VERSION, version2: System::VERSION_MINIMUM_PHP) > 0;
+        return version_compare(version1: PHP_VERSION, version2: System::VERSION_MINIMUM_PHP) >= 0;
     }
 
     public function checkMinimumUpdateVersion(string $version): bool

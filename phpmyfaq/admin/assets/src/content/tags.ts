@@ -14,7 +14,7 @@
  */
 
 import autocomplete, { AutocompleteItem } from 'autocompleter';
-import { addElement, pushNotification } from '../../../../assets/src/utils';
+import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { deleteTag, fetchTags } from '../api';
 import { fetchJson } from '../api/fetch-wrapper';
 import { TagResponse } from '../interfaces';
@@ -50,7 +50,7 @@ export const handleTags = (): void => {
           const input = document.querySelector(`input[id="tag-id-${tagId}"]`) as HTMLInputElement;
           input.replaceWith(
             addElement('span', {
-              innerHTML: input.value.replace(/\//g, '&#x2F;'),
+              textContent: input.value,
               id: `tag-id-${tagId}`,
             })
           );
@@ -61,9 +61,9 @@ export const handleTags = (): void => {
 
   if (deleteButtons) {
     deleteButtons.forEach((element) => {
-      element.addEventListener('click', async (event: Event) => {
-        const target = event.target as HTMLElement;
-        const tagId = target.getAttribute('data-pmf-id') as string;
+      element.addEventListener('click', async () => {
+        // The button wraps an icon: a click on it must still read the id from the button.
+        const tagId = element.getAttribute('data-pmf-id') as string;
         const csrfToken = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
 
         const response = await deleteTag(tagId, csrfToken);
@@ -72,7 +72,7 @@ export const handleTags = (): void => {
           const row = document.getElementById(`pmf-row-tag-id-${tagId}`) as HTMLElement;
           row.remove();
         } else if (response.error) {
-          console.error('Network response was not ok:', response.error);
+          pushErrorNotification(response.error);
         }
       });
     });
@@ -95,7 +95,7 @@ export const handleTags = (): void => {
       const csrf = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
 
       try {
-        await fetchJson('./api/content/tag', {
+        const response = await fetchJson<{ updated?: string; error?: string }>('./api/content/tag', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -107,11 +107,15 @@ export const handleTags = (): void => {
           }),
         });
 
+        if (response.error) {
+          throw new Error(response.error);
+        }
+
         input.replaceWith(
           addElement(
             'span',
             {
-              innerHTML: input.value.replace(/\//g, '&#x2F;'),
+              textContent: input.value,
               id: `tag-id-${tagId}`,
             },
             [

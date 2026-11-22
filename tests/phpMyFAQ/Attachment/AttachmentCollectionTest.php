@@ -78,6 +78,19 @@ class AttachmentCollectionTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
+    public function testGetBreadcrumbsJoinsTheFaqOfTheAttachmentLanguageOnly(): void
+    {
+        // Joining on the id alone lists an attachment once per translation of its FAQ
+        $this->mockDatabase
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->matchesRegularExpression('/fa\.record_id = fd\.id AND fa\.record_lang = fd\.lang/'))
+            ->willReturn('mock_result');
+        $this->mockDatabase->method('fetchAll')->willReturn([]);
+
+        $this->assertSame([], $this->attachmentCollection->getBreadcrumbs());
+    }
+
     public function testGetBreadcrumbsReturnsEmptyArrayWhenQueryFails(): void
     {
         // Mock the query method to return false (indicating a failure)

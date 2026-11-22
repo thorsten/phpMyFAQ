@@ -29,7 +29,7 @@ describe('fetchActivateInput', () => {
 
     expect(result).toEqual(mockResponse);
     expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/forms/activate', {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -71,7 +71,7 @@ describe('fetchSetInputAsRequired', () => {
 
     expect(result).toEqual(mockResponse);
     expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/forms/required', {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -116,7 +116,7 @@ describe('fetchEditTranslation', () => {
 
     expect(result).toEqual(mockResponse);
     expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/forms/translation-edit', {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -162,7 +162,7 @@ describe('fetchDeleteTranslation', () => {
 
     expect(result).toEqual(mockResponse);
     expect(fetchWrapperModule.fetchJson).toHaveBeenCalledWith('api/forms/translation-delete', {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },

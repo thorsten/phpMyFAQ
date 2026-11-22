@@ -31,6 +31,13 @@ use Symfony\Component\HttpFoundation\Request;
  */
 readonly class AdminLog
 {
+    /**
+     * Configuration key of the chain anchor: the hash of the newest entry delete() has pruned.
+     * The oldest entry left has to point to it, so removing entries from the start of the log
+     * breaks the chain like removing them from the middle does.
+     */
+    private const string ANCHOR_HASH_KEY = 'security.adminLogAnchorHash';
+
     private AdminLogRepository $adminLogRepository;
 
     /**
@@ -73,8 +80,8 @@ readonly class AdminLog
 
         $request = Request::createFromGlobals();
 
-        // Get the hash of the last log entry for chaining
-        $previousHash = $this->adminLogRepository->getLastHash();
+        // Get the hash of the last log entry for chaining; a log pruned empty continues at its anchor
+        $previousHash = $this->adminLogRepository->getLastHash() ?? $this->anchorHash();
 
         return $this->adminLogRepository->add($user, $logText, $request, $previousHash);
     }
@@ -85,7 +92,37 @@ readonly class AdminLog
     public function delete(): bool
     {
         $timestamp = (int) Request::createFromGlobals()->server->get(key: 'REQUEST_TIME') - (30 * 86_400);
-        return $this->adminLogRepository->deleteOlderThan($timestamp);
+        $newestPrunedHash = $this->adminLogRepository->getLastHashOlderThan($timestamp);
+
+        if (!$this->adminLogRepository->deleteOlderThan($timestamp)) {
+            return false;
+        }
+
+        // Nothing pruned: the anchor stays, so entries removed by other means are still noticed
+        if ($newestPrunedHash === null) {
+            return true;
+        }
+
+        return $this->storeAnchorHash($newestPrunedHash);
+    }
+
+    /**
+     * Returns null for a log that was never pruned, or last pruned by a release without the anchor.
+     */
+    private function anchorHash(): ?string
+    {
+        $anchorHash = (string) $this->configuration->get(self::ANCHOR_HASH_KEY);
+
+        return $anchorHash === '' ? null : $anchorHash;
+    }
+
+    private function storeAnchorHash(string $anchorHash): bool
+    {
+        // add() only inserts a missing key, set() only updates an existing one
+        return (
+            $this->configuration->add(self::ANCHOR_HASH_KEY, $anchorHash)
+            && $this->configuration->set(self::ANCHOR_HASH_KEY, $anchorHash)
+        );
     }
 
     /**
@@ -108,34 +145,49 @@ readonly class AdminLog
             ];
         }
 
+        // delete() prunes entries older than 30 days, so the oldest entry left may point to an
+        // entry that no longer exists: it has to point to the anchor delete() stored. Without an
+        // anchor the chain is verified from the first surviving entry on.
+        $anchorHash = $this->anchorHash();
         $previousHash = null;
+        $isFirstEntry = true;
 
         foreach ($logs as $log) {
+            $expectedPreviousHash = $previousHash;
+            $chainStartsHere = $isFirstEntry;
+
+            // Keep chaining after an error, so one bad entry is not reported for every later one
+            $previousHash = $log->getHash();
+            $isFirstEntry = false;
+
             // Verify the hash matches the stored hash
             if (!$log->verifyIntegrity()) {
                 $errors[] = sprintf('Log ID %d: Hash verification failed - data has been tampered', $log->getId());
                 continue;
             }
 
-            // Verify the chain (previous hash matches)
-            if ($previousHash !== null && $log->getPreviousHash() !== $previousHash) {
+            if ($chainStartsHere && $anchorHash !== null && $log->getPreviousHash() !== $anchorHash) {
                 $errors[] = sprintf(
-                    'Log ID %d: Chain broken - previous hash mismatch (expected: %s, got: %s)',
+                    'Log ID %d: Chain broken - entries before it were removed (expected: %s, got: %s)',
                     $log->getId(),
-                    substr(string: $previousHash, offset: 0, length: 8) . '...',
+                    substr(string: $anchorHash, offset: 0, length: 8) . '...',
                     substr(string: $log->getPreviousHash() ?? 'NULL', offset: 0, length: 8) . '...',
                 );
                 continue;
             }
 
-            // The first entry should have null previous hash
-            if ($previousHash === null && $log->getPreviousHash() !== null) {
-                $errors[] = sprintf('Log ID %d: First entry should have null previous hash', $log->getId());
+            // Verify the chain (previous hash matches)
+            if (!$chainStartsHere && $log->getPreviousHash() !== $expectedPreviousHash) {
+                $errors[] = sprintf(
+                    'Log ID %d: Chain broken - previous hash mismatch (expected: %s, got: %s)',
+                    $log->getId(),
+                    substr(string: $expectedPreviousHash ?? 'NULL', offset: 0, length: 8) . '...',
+                    substr(string: $log->getPreviousHash() ?? 'NULL', offset: 0, length: 8) . '...',
+                );
                 continue;
             }
 
             $verified++;
-            $previousHash = $log->getHash();
         }
 
         return [

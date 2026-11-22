@@ -46,4 +46,10 @@ class TitleSlugifierTest extends TestCase
         $this->assertSame('l_intention-de-faire', TitleSlugifier::slug('L&#039;intention de faire'));
         $this->assertSame('l_intention-de-faire', TitleSlugifier::slug('L&#39;intention de faire'));
     }
+
+    public function testRemovesCharactersThatBreakTheUrlPath(): void
+    {
+        $this->assertSame('how-do-i-use-c-in-ctempfoo', TitleSlugifier::slug('How do I use C# in C:\\temp\\foo?'));
+        $this->assertSame('it_s-fine', TitleSlugifier::slug('It&#39;s fine'));
+    }
 }

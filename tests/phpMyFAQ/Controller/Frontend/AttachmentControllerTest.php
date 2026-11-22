@@ -227,13 +227,14 @@ final class AttachmentControllerTest extends TestCase
 
         ob_start();
         $response = $controller->index(new Request([], [], ['attachmentId' => (string) $attachmentId]));
-        ob_end_clean();
+        $outputWhileHandling = (string) ob_get_clean();
 
+        // The controller hands the download to the kernel instead of sending it itself and
+        // returning an HTML page that would be appended to the file.
+        self::assertSame('', $outputWhileHandling);
+        self::assertInstanceOf(\Symfony\Component\HttpFoundation\StreamedResponse::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringNotContainsString(
-            Translation::get(key: 'msgAttachmentInvalid'),
-            (string) $response->getContent(),
-        );
+        self::assertStringStartsWith('inline;', (string) $response->headers->get('Content-Disposition'));
     }
 
     /**
@@ -258,13 +259,14 @@ final class AttachmentControllerTest extends TestCase
 
         ob_start();
         $response = $controller->index(new Request([], [], ['attachmentId' => (string) $attachmentId]));
-        ob_end_clean();
+        $outputWhileHandling = (string) ob_get_clean();
 
+        // The controller hands the download to the kernel instead of sending it itself and
+        // returning an HTML page that would be appended to the file.
+        self::assertSame('', $outputWhileHandling);
+        self::assertInstanceOf(\Symfony\Component\HttpFoundation\StreamedResponse::class, $response);
         self::assertSame(Response::HTTP_OK, $response->getStatusCode());
-        self::assertStringNotContainsString(
-            Translation::get(key: 'msgAttachmentInvalid'),
-            (string) $response->getContent(),
-        );
+        self::assertStringStartsWith('attachment;', (string) $response->headers->get('Content-Disposition'));
     }
 
     /**
@@ -307,16 +309,17 @@ final class AttachmentControllerTest extends TestCase
 
         $controller = $this->createController();
 
-        ob_start();
         $response = $controller->index(new Request([], [], ['attachmentId' => (string) $attachmentId]));
+
+        self::assertInstanceOf(\Symfony\Component\HttpFoundation\StreamedResponse::class, $response);
+        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        ob_start();
+        $response->sendContent();
         $streamedOutput = (string) ob_get_clean();
 
-        self::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        // Exactly the file: no HTML page after it.
         self::assertSame('PMF-PUBLISHED-CANARY', $streamedOutput);
-        self::assertStringNotContainsString(
-            Translation::get(key: 'msgAttachmentInvalid'),
-            (string) $response->getContent(),
-        );
     }
 
     /**

@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Setup\Migration\QueryBuilder;
 
+/* @mago-expect lint:too-many-methods - one method per SQL construct that differs between the databases */
 interface DialectInterface
 {
     /**
@@ -125,6 +126,21 @@ interface DialectInterface
         string $indexName,
         string $tableName,
         array $columns,
+        bool $ifNotExists = false,
+    ): string;
+
+    /**
+     * Returns the CREATE UNIQUE INDEX syntax. Rows that hold NULL in one of the
+     * nullable columns must never collide with each other.
+     *
+     * @param string[] $columns
+     * @param string[] $nullableColumns Indexed columns that accept NULL
+     */
+    public function createUniqueIndex(
+        string $indexName,
+        string $tableName,
+        array $columns,
+        array $nullableColumns = [],
         bool $ifNotExists = false,
     ): string;
 

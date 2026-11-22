@@ -25,6 +25,7 @@ use phpMyFAQ\Database;
 class TableBuilder
 {
     private string $tableName = '';
+    private string $tablePrefix = '';
     private bool $ifNotExists = false;
     private DialectInterface $dialect;
 
@@ -50,7 +51,8 @@ class TableBuilder
      */
     public function table(string $name, bool $withPrefix = true): self
     {
-        $this->tableName = $withPrefix ? Database::getTablePrefix() . $name : $name;
+        $this->tablePrefix = $withPrefix ? Database::getTablePrefix() : '';
+        $this->tableName = $this->tablePrefix . $name;
         return $this;
     }
 
@@ -247,6 +249,16 @@ class TableBuilder
     }
 
     /**
+     * Returns the indexes of the table by the name the schema gives them, without table prefix.
+     *
+     * @return array<string, array{columns: string[], unique: bool}>
+     */
+    public function getIndexes(): array
+    {
+        return $this->indexes;
+    }
+
+    /**
      * Builds the CREATE TABLE statement.
      */
     public function build(): string
@@ -370,7 +382,7 @@ class TableBuilder
     }
 
     /**
-     * Returns separate CREATE INDEX statements.
+     * Returns separate CREATE INDEX and CREATE UNIQUE INDEX statements.
      * For MySQL, returns empty array since indexes are inlined in CREATE TABLE.
      *
      * @return string[]
@@ -388,7 +400,20 @@ class TableBuilder
         }
 
         $statements = [];
-        foreach ($this->indexes as $indexName => $indexDef) {
+        foreach ($this->indexes as $name => $indexDef) {
+            $indexName = IndexName::forTablePrefix($name, $this->dialect->getType(), $this->tablePrefix);
+
+            if ($indexDef['unique']) {
+                $statements[] = $this->dialect->createUniqueIndex(
+                    $indexName,
+                    $this->tableName,
+                    $indexDef['columns'],
+                    $this->nullableColumns($indexDef['columns']),
+                    $this->ifNotExists,
+                );
+                continue;
+            }
+
             $statements[] = $this->dialect->createIndex(
                 $indexName,
                 $this->tableName,
@@ -397,6 +422,18 @@ class TableBuilder
             );
         }
         return $statements;
+    }
+
+    /**
+     * @param string[] $columns
+     * @return string[]
+     */
+    private function nullableColumns(array $columns): array
+    {
+        return array_values(array_filter(
+            $columns,
+            fn(string $column): bool => $this->columns[$column]['nullable'] ?? false,
+        ));
     }
 
     private function addColumn(

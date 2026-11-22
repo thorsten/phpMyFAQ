@@ -14,7 +14,7 @@
  */
 
 import { createGlossary, deleteGlossary, getGlossary, updateGlossary } from '../api';
-import { addElement, pushNotification } from '../../../../assets/src/utils';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { Modal } from 'bootstrap';
 
 export const handleDeleteGlossary = (): void => {
@@ -34,6 +34,8 @@ export const handleDeleteGlossary = (): void => {
         if (response.success) {
           (button.closest('tr') as HTMLElement).remove();
           pushNotification(response.success);
+        } else {
+          pushErrorNotification(response.error ?? 'An error occurred');
         }
       });
     });
@@ -66,40 +68,15 @@ export const handleAddGlossary = (): void => {
           (document.getElementById('definition') as HTMLInputElement).value = '';
         }
 
-        const tableBody = document.querySelector('#pmf-admin-glossary-table tbody') as HTMLElement;
-        const row = addElement('tr', {}, [
-          addElement('td', { innerText: glossaryItem }),
-          addElement('td', { innerText: glossaryDefinition }),
-          addElement('td', { classList: 'text-end text-nowrap' }, [
-            addElement(
-              'button',
-              {
-                classList: 'btn btn-primary btn-sm me-1',
-                'data-bs-toggle': 'modal',
-                'data-bs-target': '#updateGlossaryModal',
-                'data-pmf-glossary-id': glossaryItem,
-                'data-pmf-glossary-language': glossaryLanguage,
-                type: 'button',
-                title: 'Edit',
-              },
-              [addElement('i', { classList: 'bi bi-pencil' })]
-            ),
-            addElement(
-              'button',
-              {
-                classList: 'btn btn-danger btn-sm pmf-admin-delete-glossary',
-                'data-pmf-glossary-id': glossaryItem,
-                'data-pmf-csrf-token': '',
-                'data-pmf-glossary-language': glossaryLanguage,
-                type: 'button',
-                title: 'Delete',
-              },
-              [addElement('i', { classList: 'bi bi-trash' })]
-            ),
-          ]),
-        ]);
-        tableBody.appendChild(row);
         pushNotification(response.success);
+
+        // The create endpoint returns no id, and the edit and delete buttons of a row need it together
+        // with the delete token: the server renders the new row.
+        setTimeout((): void => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        pushErrorNotification(response.error ?? 'An error occurred');
       }
     });
   }
@@ -180,6 +157,8 @@ export const handleUpdateGlossary = (): void => {
         }
 
         pushNotification(response.success);
+      } else {
+        pushErrorNotification(response.error ?? 'An error occurred');
       }
     });
   }

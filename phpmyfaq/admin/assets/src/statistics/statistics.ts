@@ -41,9 +41,7 @@ export const handleStatistics = (): void => {
 
             if (response.ok) {
               const jsonResponse = await response.json();
-              const row = document.getElementById(`row-search-id-${jsonResponse.deleted}`) as HTMLElement;
-              row.addEventListener('click', () => (row.style.opacity = '0'));
-              row.addEventListener('transitionend', () => row.remove());
+              document.getElementById(`row-search-id-${jsonResponse.deleted}`)?.remove();
             } else {
               const errorMessage = await response.json();
               throw new Error(`Network response was not ok: ${errorMessage.error}`);

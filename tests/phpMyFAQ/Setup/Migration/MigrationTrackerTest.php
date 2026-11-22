@@ -327,7 +327,7 @@ class MigrationTrackerTest extends TestCase
     {
         $expectations = [
             'mysqli' => 'SHOW TABLES LIKE',
-            'pgsql' => 'pg_catalog.pg_tables',
+            'pgsql' => 'pg_catalog.pg_tables WHERE schemaname = current_schema() AND tablename',
             'sqlsrv' => 'FROM sysobjects',
         ];
 
@@ -350,6 +350,46 @@ class MigrationTrackerTest extends TestCase
             }
         } finally {
             $this->setDatabaseType($previousDbType);
+        }
+    }
+
+    /**
+     * The tracking table is created without a quoted name, so PostgreSQL stores it in lower
+     * case. PostgreSQL was not available to run against: the test checks the catalog query.
+     */
+    public function testTableExistsLooksUpTheLowerCaseNameOfAMixedCasePrefixOnPostgreSql(): void
+    {
+        $queries = [];
+        $this->database
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries): stdClass {
+                $queries[] = $query;
+                return new stdClass();
+            });
+        $this->database->method('numRows')->willReturn(1);
+
+        $previousDbType = $this->setDatabaseType('sqlite3');
+        $previousPrefix = \phpMyFAQ\Database::getTablePrefix();
+        \phpMyFAQ\Database::setTablePrefix('PMF_');
+
+        try {
+            foreach (['pgsql', 'pdo_pgsql'] as $dbType) {
+                $this->setDatabaseType($dbType);
+                $this->tracker->tableExists();
+                $this->assertSame(
+                    'SELECT tablename FROM pg_catalog.pg_tables '
+                    . "WHERE schemaname = current_schema() AND tablename = 'pmf_faqmigrations'",
+                    end($queries),
+                    $dbType,
+                );
+            }
+
+            $this->setDatabaseType('mysqli');
+            $this->tracker->tableExists();
+            $this->assertSame("SHOW TABLES LIKE 'PMF_faqmigrations'", end($queries));
+        } finally {
+            $this->setDatabaseType($previousDbType);
+            \phpMyFAQ\Database::setTablePrefix($previousPrefix);
         }
     }
 

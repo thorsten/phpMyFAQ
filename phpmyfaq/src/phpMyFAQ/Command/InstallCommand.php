@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\Command;
 
 use phpMyFAQ\Database;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Setup\Installer;
 use phpMyFAQ\System;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -134,7 +135,13 @@ class InstallCommand extends Command
         $dbType = (string) $input->getOption('db-type');
         $isSqlite = System::isSqlite($dbType);
 
-        $adminPassword = (string) $input->getOption('admin-password');
+        // The login form verifies the sanitised form of the typed password, and the web installer
+        // stores that form, so the password given on the command line is stored the same way.
+        $adminPassword = Filter::filterVar(
+            (string) $input->getOption('admin-password'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            default: '',
+        );
         if (strlen($adminPassword) < 8) {
             $io->error(
                 'The admin password must be at least 8 characters. Pass --admin-password or set PMF_ADMIN_PASSWORD.',
@@ -162,9 +169,16 @@ class InstallCommand extends Command
 
         $baseUrl = (string) $input->getOption('base-url');
 
+        // Nothing has been written while the pre-checks run. When they fail, most notably because
+        // phpMyFAQ is already installed, the existing configuration files must stay untouched.
         try {
             $installer = new Installer($this->system);
             $installer->checkBasicStuff();
+        } catch (Throwable $throwable) {
+            return $this->reportFailure($io, $output, $throwable);
+        }
+
+        try {
             $installer->startInstall($setup);
 
             // When installing headlessly there is no HTTP host to derive the public
@@ -188,13 +202,9 @@ class InstallCommand extends Command
                 ));
             }
         } catch (Throwable $throwable) {
-            Installer::cleanFailedInstallationFiles();
-            $io->error('Installation failed: ' . strip_tags($throwable->getMessage()));
-            if ($output->isVerbose()) {
-                $io->writeln($throwable->getTraceAsString());
-            }
+            $this->removeFilesOfFailedInstallation();
 
-            return Command::FAILURE;
+            return $this->reportFailure($io, $output, $throwable);
         }
 
         $io->success(sprintf(
@@ -204,6 +214,24 @@ class InstallCommand extends Command
         ));
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Removes the config files this run wrote before it failed.
+     */
+    protected function removeFilesOfFailedInstallation(): void
+    {
+        Installer::cleanFailedInstallationFiles();
+    }
+
+    private function reportFailure(SymfonyStyle $io, OutputInterface $output, Throwable $throwable): int
+    {
+        $io->error('Installation failed: ' . strip_tags($throwable->getMessage()));
+        if ($output->isVerbose()) {
+            $io->writeln($throwable->getTraceAsString());
+        }
+
+        return Command::FAILURE;
     }
 
     private function env(string $name, string $default): string

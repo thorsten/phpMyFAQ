@@ -258,6 +258,57 @@ describe('handleStickyFaqs', () => {
     expect(pushErrorNotification).toHaveBeenCalledWith('API failure');
   });
 
+  it('should keep the row and show the server error when removing is refused', async () => {
+    (removeStickyFaq as ReturnType<typeof vi.fn>).mockResolvedValue({ error: 'No permission' });
+
+    document.body.innerHTML = `
+      <div id="stickyFAQs" data-lang-confirm="Remove?" data-lang-success="Removed!" data-csrf="csrf-token">
+        <div class="list-group-item" data-pmf-faqid="1">
+          <button class="js-unstick-button"
+                  data-pmf-faq-id="1"
+                  data-pmf-category-id="10"
+                  data-pmf-csrf="token123"
+                  data-pmf-lang="en">Unstick</button>
+        </div>
+      </div>
+      <div id="confirmUnstickyModal"></div>
+      <div id="confirmUnstickyModalBody"></div>
+      <button id="confirmUnstickyModalConfirm"></button>
+    `;
+
+    handleStickyFaqs();
+
+    (document.querySelector('.js-unstick-button') as HTMLButtonElement).click();
+    await vi.advanceTimersByTimeAsync(0);
+
+    (document.getElementById('confirmUnstickyModalConfirm') as HTMLElement).click();
+    await vi.advanceTimersByTimeAsync(1000);
+
+    expect(pushErrorNotification).toHaveBeenCalledWith('No permission');
+    expect(pushNotification).not.toHaveBeenCalled();
+    expect(document.querySelector('.list-group-item')).not.toBeNull();
+  });
+
+  it('should show the server error when saving the order is refused', async () => {
+    (updateStickyFaqsOrder as ReturnType<typeof vi.fn>).mockResolvedValue({ error: 'No permission' });
+
+    document.body.innerHTML = `
+      <div id="stickyFAQs" data-csrf="csrf-token">
+        <div class="list-group-item" data-pmf-faqid="1">Item 1</div>
+      </div>
+    `;
+
+    handleStickyFaqs();
+
+    const options = (Sortable.create as ReturnType<typeof vi.fn>).mock.calls[0][1] as Record<string, unknown>;
+    const onEnd = options.onEnd as (event: { from: HTMLElement }) => Promise<void>;
+
+    await onEnd({ from: document.getElementById('stickyFAQs') as HTMLElement });
+
+    expect(pushErrorNotification).toHaveBeenCalledWith('No permission');
+    expect(pushNotification).not.toHaveBeenCalled();
+  });
+
   it('should call updateStickyFaqsOrder on Sortable onEnd callback', async () => {
     (updateStickyFaqsOrder as ReturnType<typeof vi.fn>).mockResolvedValue({ success: 'Order updated' });
 

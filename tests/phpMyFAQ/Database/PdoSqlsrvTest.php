@@ -472,14 +472,20 @@ class PdoSqlsrvTest extends TestCase
     {
         $tableNames = $this->pdoSqlsrv->getTableNames('pmf_');
 
-        $this->assertCount(43, $tableNames);
-        $this->assertSame('pmf_faqadminlog', $tableNames[0]);
-        $this->assertSame('pmf_faqvoting', $tableNames[42]);
+        $this->assertCount(56, $tableNames);
+        $this->assertSame('pmf_faqadmindashboard', $tableNames[0]);
+        $this->assertSame('pmf_faqvoting', $tableNames[55]);
     }
 
     public function testQueryPrepareExecuteAndVersionsWorkWithInjectedPdo(): void
     {
-        $pdo = new PDO('sqlite::memory:');
+        // SQLite stands in for SQL Server here and has no scrollable cursors
+        $pdo = new class('sqlite::memory:') extends PDO {
+            public function prepare(string $query, array $options = []): PDOStatement|false
+            {
+                return parent::prepare($query);
+            }
+        };
         $pdo->exec('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
         $pdo->exec("INSERT INTO items (name) VALUES ('one'), ('two')");
         $this->setPdo($pdo);
@@ -542,6 +548,123 @@ class PdoSqlsrvTest extends TestCase
         $this->assertCount($tableCount, $status);
         $this->assertSame('9', $status['pmf_faqadminlog']);
         $this->assertSame('9', $status['pmf_faqvoting']);
+    }
+
+    /**
+     * pdo_sqlsrv reports -1 from rowCount() for a result set read with the default
+     * forward-only cursor; only a scrollable cursor makes numRows() count the rows.
+     */
+    public function testQueryOpensResultSetsWithAScrollableCursor(): void
+    {
+        $statement = $this->createMock(PDOStatement::class);
+        $statement->expects($this->exactly(3))->method('execute')->willReturn(true);
+        $statement->method('rowCount')->willReturn(2);
+
+        $prepared = [];
+        $pdo = $this->createMock(PDO::class);
+        $pdo->expects($this->never())->method('query');
+        $pdo
+            ->expects($this->exactly(3))
+            ->method('prepare')
+            ->willReturnCallback(static function (string $query, array $options = []) use (
+                &$prepared,
+                $statement,
+            ): PDOStatement {
+                $prepared[] = [$query, $options];
+
+                return $statement;
+            });
+        $this->setPdo($pdo);
+
+        $scrollable = [PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL];
+
+        $result = $this->pdoSqlsrv->query('SELECT id FROM faqvoting WHERE artikel = 1');
+        $this->pdoSqlsrv->query('  (select id FROM faqdata) UNION (SELECT id FROM faqnews)');
+        $this->pdoSqlsrv->query('SELECT id FROM faqdata ORDER BY id', 10, 5);
+
+        $this->assertSame($statement, $result);
+        $this->assertSame(2, $this->pdoSqlsrv->numRows($result));
+        $this->assertSame(
+            [
+                ['SELECT id FROM faqvoting WHERE artikel = 1',                               $scrollable],
+                ['  (select id FROM faqdata) UNION (SELECT id FROM faqnews)',                $scrollable],
+                ['SELECT id FROM faqdata ORDER BY id OFFSET 10 ROWS FETCH NEXT 5 ROWS ONLY', $scrollable],
+            ],
+            $prepared,
+        );
+    }
+
+    public function testQueryRunsDataModifyingStatementsWithTheDefaultCursor(): void
+    {
+        $statement = $this->createMock(PDOStatement::class);
+        $statement->method('rowCount')->willReturn(4);
+
+        $queries = [];
+        $pdo = $this->createMock(PDO::class);
+        $pdo->expects($this->never())->method('prepare');
+        $pdo
+            ->expects($this->exactly(4))
+            ->method('query')
+            ->willReturnCallback(static function (string $query) use (&$queries, $statement): PDOStatement {
+                $queries[] = $query;
+
+                return $statement;
+            });
+        $this->setPdo($pdo);
+
+        $statements = [
+            'UPDATE faqvoting SET usr = usr + 1 WHERE artikel = 1',
+            "insert into faqjobs (queue) VALUES ('default')",
+            'DELETE FROM faqsessions WHERE time < 1',
+            "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_hash') CREATE INDEX idx_hash ON faqadminlog (hash)",
+        ];
+        foreach ($statements as $query) {
+            $this->pdoSqlsrv->query($query);
+        }
+
+        $this->assertSame($statements, $queries);
+        $this->assertSame(4, $this->pdoSqlsrv->affectedRows());
+    }
+
+    public function testQueryPreparedUsesAScrollableCursorOnlyForResultSets(): void
+    {
+        $statement = $this->createMock(PDOStatement::class);
+        $statement->method('execute')->willReturn(true);
+
+        $options = [];
+        $pdo = $this->createMock(PDO::class);
+        $pdo
+            ->expects($this->exactly(2))
+            ->method('prepare')
+            ->willReturnCallback(static function (string $query, array $driverOptions = []) use (
+                &$options,
+                $statement,
+            ): PDOStatement {
+                $options[] = $driverOptions;
+
+                return $statement;
+            });
+        $this->setPdo($pdo);
+
+        $this->pdoSqlsrv->queryPrepared('SELECT login FROM faquser WHERE login = ?', ['admin']);
+        $this->pdoSqlsrv->queryPrepared('UPDATE faquser SET login = ? WHERE user_id = ?', ['admin', 1]);
+
+        $this->assertSame([[PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL], []], $options);
+    }
+
+    public function testQueryReturnsFalseWhenAResultSetCannotBeExecuted(): void
+    {
+        $statement = $this->createMock(PDOStatement::class);
+        $statement->method('execute')->willReturn(false);
+
+        $pdo = $this->createMock(PDO::class);
+        $pdo->method('prepare')->willReturn($statement);
+        $pdo->method('errorCode')->willReturn('42S02');
+        $pdo->method('errorInfo')->willReturn(['42S02', 208, 'Invalid object name']);
+        $this->setPdo($pdo);
+
+        $this->assertFalse($this->pdoSqlsrv->query('SELECT id FROM missing'));
+        $this->assertStringContainsString('Invalid object name', $this->pdoSqlsrv->log());
     }
 
     private function setPdo(PDO $pdo): void

@@ -4,6 +4,7 @@ namespace phpMyFAQ\Entity;
 
 use DateTime;
 use phpMyFAQ\Enums\FaqStatus;
+use phpMyFAQ\Faq\PublicationWindow;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -203,46 +204,24 @@ class FaqEntityTest extends TestCase
     }
 
     /**
-     * Test validFrom getter and setter
+     * Test publicationWindow getter and setter
      */
-    public function testValidFromGetterAndSetter(): void
+    public function testPublicationWindowGetterAndSetter(): void
     {
-        $dateTime = new DateTime('2026-01-01 00:00:00');
-        $result = $this->faqEntity->setValidFrom($dateTime);
+        $publicationWindow = PublicationWindow::fromInput('2026-01-01T00:00', '2026-12-31T23:59:59');
+        $result = $this->faqEntity->setPublicationWindow($publicationWindow);
 
         $this->assertInstanceOf(FaqEntity::class, $result); // Test fluent interface
-        $this->assertSame($dateTime, $this->faqEntity->getValidFrom());
+        $this->assertSame($publicationWindow, $this->faqEntity->getPublicationWindow());
     }
 
     /**
-     * Test validFrom returns a DateTime even when not set
+     * An entity nobody gave a window to must not invent one: the former defaults ("from now on",
+     * "until 9999") were written back on every save and reset the stored window.
      */
-    public function testValidFromDefaultsToNow(): void
+    public function testPublicationWindowIsUndecidedWhenNotSet(): void
     {
-        $this->assertInstanceOf(DateTime::class, $this->faqEntity->getValidFrom());
-    }
-
-    /**
-     * Test validTo getter and setter
-     */
-    public function testValidToGetterAndSetter(): void
-    {
-        $dateTime = new DateTime('2026-12-31 23:59:59');
-        $result = $this->faqEntity->setValidTo($dateTime);
-
-        $this->assertInstanceOf(FaqEntity::class, $result); // Test fluent interface
-        $this->assertSame($dateTime, $this->faqEntity->getValidTo());
-    }
-
-    /**
-     * Test validTo returns the far-future default when not set
-     */
-    public function testValidToDefaultsToFarFuture(): void
-    {
-        $validTo = $this->faqEntity->getValidTo();
-
-        $this->assertInstanceOf(DateTime::class, $validTo);
-        $this->assertEquals('9999', $validTo->format('Y'));
+        $this->assertNull($this->faqEntity->getPublicationWindow());
     }
 
     /**
@@ -290,8 +269,7 @@ class FaqEntityTest extends TestCase
      */
     public function testFluentInterface(): void
     {
-        $validFrom = new DateTime('2026-01-01 00:00:00');
-        $validTo = new DateTime('2026-12-31 23:59:59');
+        $publicationWindow = PublicationWindow::fromInput('2026-01-01T00:00', '2026-12-31T23:59:59');
         $createdDate = new DateTime('2026-06-28 12:00:00');
         $updatedDate = new DateTime('2026-06-28 13:00:00');
 
@@ -309,8 +287,7 @@ class FaqEntityTest extends TestCase
             ->setEmail('author@example.com')
             ->setComment(true)
             ->setNotes('Notes')
-            ->setValidFrom($validFrom)
-            ->setValidTo($validTo)
+            ->setPublicationWindow($publicationWindow)
             ->setCreatedDate($createdDate)
             ->setUpdatedDate($updatedDate);
 
@@ -328,8 +305,7 @@ class FaqEntityTest extends TestCase
         $this->assertEquals('author@example.com', $this->faqEntity->getEmail());
         $this->assertTrue($this->faqEntity->isComment());
         $this->assertEquals('Notes', $this->faqEntity->getNotes());
-        $this->assertSame($validFrom, $this->faqEntity->getValidFrom());
-        $this->assertSame($validTo, $this->faqEntity->getValidTo());
+        $this->assertSame($publicationWindow, $this->faqEntity->getPublicationWindow());
         $this->assertSame($createdDate, $this->faqEntity->getCreatedDate());
         $this->assertSame($updatedDate, $this->faqEntity->getUpdatedDate());
     }

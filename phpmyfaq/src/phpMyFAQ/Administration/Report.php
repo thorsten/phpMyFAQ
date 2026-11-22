@@ -50,12 +50,11 @@ readonly class Report
         $report = [];
         $rows = $this->reportRepository->fetchAllReportData();
 
-        $lastId = 0;
+        // A FAQ has one row per language, category and changelog entry: count its languages
+        $languages = [];
         foreach ($rows as $row) {
             $rowId = (int) $row->id;
-            if ($rowId === $lastId) {
-                ++$report[$rowId]['faq_translations'];
-            }
+            $languages[$rowId][(string) $row->lang] = true;
 
             $report[$rowId] = [
                 'faq_id' => (int) $row->id,
@@ -63,7 +62,7 @@ readonly class Report
                 'category_id' => $row->category_id === null ? null : (int) $row->category_id,
                 'category_parent' => $row->parent_id === null ? null : (int) $row->parent_id,
                 'category_name' => $row->category_name === null ? null : (string) $row->category_name,
-                'faq_translations' => 0,
+                'faq_translations' => count($languages[$rowId]) - 1,
                 'faq_sticky' => (int) $row->sticky,
                 'faq_question' => (string) $row->question,
                 'faq_org_author' => (string) $row->original_author,
@@ -71,8 +70,6 @@ readonly class Report
                 'faq_visits' => $row->visits === null ? null : (int) $row->visits,
                 'faq_last_author' => $row->last_author === null ? null : (string) $row->last_author,
             ];
-
-            $lastId = $rowId;
         }
 
         return $report;

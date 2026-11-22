@@ -34,6 +34,11 @@ readonly class Migration419 extends AbstractMigration
         return ['4.1.8'];
     }
 
+    public function isBackport(): bool
+    {
+        return true;
+    }
+
     public function getDescription(): string
     {
         return 'Widen the faqvisits.visits counter for upgraded installations';

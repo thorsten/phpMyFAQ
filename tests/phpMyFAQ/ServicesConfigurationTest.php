@@ -4,12 +4,20 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Queue\Worker;
+use phpMyFAQ\Scheduler\TaskScheduler;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 #[AllowMockObjectsWithoutExpectations]
 class ServicesConfigurationTest extends TestCase
 {
+    use TestDatabaseTrait;
+
     /** @var string */
     private string $servicesFile;
 
@@ -22,6 +30,70 @@ class ServicesConfigurationTest extends TestCase
         if (is_file($composerAutoload)) {
             require_once $composerAutoload;
         }
+    }
+
+    /**
+     * @return array<string, array{string, class-string}>
+     */
+    public static function commandLineEntryPointServiceProvider(): array
+    {
+        return [
+            'bin/worker.php' => ['phpmyfaq.queue.worker', Worker::class],
+            'bin/scheduler.php' => ['phpmyfaq.scheduler.task-scheduler', TaskScheduler::class],
+        ];
+    }
+
+    /**
+     * bin/worker.php and bin/scheduler.php compile a plain ContainerBuilder and fetch their
+     * service from it. Compiling removes every private service, so these have to be public.
+     *
+     * @param class-string $expectedClass
+     */
+    #[DataProvider('commandLineEntryPointServiceProvider')]
+    public function test_command_line_entry_point_service_survives_container_compilation(
+        string $serviceId,
+        string $expectedClass,
+    ): void {
+        $this->createTestConfiguration();
+
+        $container = new ContainerBuilder();
+        $loader = new PhpFileLoader($container, new FileLocator(dirname($this->servicesFile)));
+        $loader->load(basename($this->servicesFile));
+        $container->compile();
+
+        $this->assertInstanceOf($expectedClass, $container->get($serviceId));
+    }
+
+    /**
+     * PHP silently drops surplus constructor arguments, so a service wired with more arguments
+     * than its constructor takes looks fine until someone relies on the dropped one.
+     */
+    public function test_no_service_gets_more_arguments_than_its_constructor_takes(): void
+    {
+        $container = new ContainerBuilder();
+        $loader = new PhpFileLoader($container, new FileLocator(dirname($this->servicesFile)));
+        $loader->load(basename($this->servicesFile));
+
+        $surplus = [];
+        foreach ($container->getDefinitions() as $serviceId => $definition) {
+            $class = $definition->getClass();
+            if ($definition->getFactory() !== null || $class === null || !class_exists($class)) {
+                continue;
+            }
+
+            $constructor = new \ReflectionClass($class)->getConstructor();
+            if ($constructor?->isVariadic() === true) {
+                continue;
+            }
+
+            $accepted = $constructor?->getNumberOfParameters() ?? 0;
+            $given = count($definition->getArguments());
+            if ($given > $accepted) {
+                $surplus[] = sprintf('%s (%s): %d given, %d accepted', $serviceId, $class, $given, $accepted);
+            }
+        }
+
+        $this->assertSame([], $surplus);
     }
 
     public function test_service_configuration_classes_exist_and_factories_are_callable(): void

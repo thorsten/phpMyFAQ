@@ -17,7 +17,7 @@ import { fetchJson } from './fetch-wrapper';
 import { ApiResponse, StopWord } from '../interfaces';
 
 export const fetchByLanguage = async (language: string): Promise<StopWord[]> => {
-  return await fetchJson<StopWord[]>(`./api/stopwords?language=${language}`, {
+  return await fetchJson<StopWord[]>(`./api/stopwords?language=${encodeURIComponent(language)}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

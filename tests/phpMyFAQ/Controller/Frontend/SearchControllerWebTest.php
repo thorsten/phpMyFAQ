@@ -78,7 +78,10 @@ final class SearchControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/tags/12/example-tag.html');
 
         self::assertResponseStatusCodeSame(302, $response);
-        self::assertSame('/search.html?tagging_id=12', $response->headers->get('Location'));
+        self::assertSame(
+            $this->getConfiguration()->getDefaultUrl() . 'search.html?tagging_id=12',
+            $response->headers->get('Location'),
+        );
     }
 
     public function testTagRouteFallsBackToZeroForInvalidTagId(): void
@@ -86,7 +89,10 @@ final class SearchControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/tags/not-a-number/example-tag.html');
 
         self::assertResponseStatusCodeSame(302, $response);
-        self::assertSame('/search.html?tagging_id=0', $response->headers->get('Location'));
+        self::assertSame(
+            $this->getConfiguration()->getDefaultUrl() . 'search.html?tagging_id=0',
+            $response->headers->get('Location'),
+        );
     }
 
     public function testPaginatedTagRouteRedirectsToSearchWithPage(): void
@@ -94,7 +100,10 @@ final class SearchControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/tags/12/3/example-tag.html');
 
         self::assertResponseStatusCodeSame(302, $response);
-        self::assertSame('/search.html?tagging_id=12&seite=3', $response->headers->get('Location'));
+        self::assertSame(
+            $this->getConfiguration()->getDefaultUrl() . 'search.html?tagging_id=12&seite=3',
+            $response->headers->get('Location'),
+        );
     }
 
     public function testPaginatedTagRouteFallsBackToFirstPageForInvalidPage(): void
@@ -102,7 +111,10 @@ final class SearchControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/tags/12/not-a-number/example-tag.html');
 
         self::assertResponseStatusCodeSame(302, $response);
-        self::assertSame('/search.html?tagging_id=12&seite=1', $response->headers->get('Location'));
+        self::assertSame(
+            $this->getConfiguration()->getDefaultUrl() . 'search.html?tagging_id=12&seite=1',
+            $response->headers->get('Location'),
+        );
     }
 
     public function testPaginatedTagRouteFallsBackForInvalidTagAndPage(): void
@@ -110,6 +122,9 @@ final class SearchControllerWebTest extends ControllerWebTestCase
         $response = $this->requestPublic('GET', '/tags/not-a-number/not-a-number/example-tag.html');
 
         self::assertResponseStatusCodeSame(302, $response);
-        self::assertSame('/search.html?tagging_id=0&seite=1', $response->headers->get('Location'));
+        self::assertSame(
+            $this->getConfiguration()->getDefaultUrl() . 'search.html?tagging_id=0&seite=1',
+            $response->headers->get('Location'),
+        );
     }
 }

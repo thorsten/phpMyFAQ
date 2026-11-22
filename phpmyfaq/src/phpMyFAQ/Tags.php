@@ -161,7 +161,7 @@ class Tags
      */
     public function create(int $recordId, array $tags): bool
     {
-        $currentTags = $this->getAllTags();
+        $existingTagIds = $this->fetchTagIdsByLowercaseName();
         $registeredTags = [];
 
         // Delete all tag references for the faq record
@@ -172,13 +172,10 @@ class Tags
         // Store tags and references for the faq record
         foreach ($tags as $tag) {
             $tag = trim($tag);
-            if (Strings::strlen($tag) > 0 && !in_array($tag, $registeredTags, strict: true)) {
+            $tagKey = Strings::strtolower($tag);
+            if (Strings::strlen($tag) > 0 && !in_array($tagKey, $registeredTags, strict: true)) {
                 $query = '';
-                $existingTagId = array_search(
-                    Strings::strtolower($tag),
-                    array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags),
-                    strict: true,
-                );
+                $existingTagId = $existingTagIds[$tagKey] ?? false;
 
                 if ($existingTagId === false) {
                     // Create the new tag
@@ -193,6 +190,7 @@ class Tags
                         $this->configuration->getDb()->escape($tag),
                     );
                     $this->configuration->getDb()->query($query);
+                    $existingTagIds[$tagKey] = $newTagId;
 
                     // Add the tag reference for the faq record
                     $query = sprintf(
@@ -217,11 +215,47 @@ class Tags
                     $this->configuration->getDb()->query($query);
                 }
 
-                $registeredTags[] = $tag;
+                $registeredTags[] = $tagKey;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Maps the lower-cased name of every stored tag to its ID, straight from the tag table.
+     *
+     * Saving tags must find a tag whatever FAQs use it: getAllTags() only lists the tags of
+     * published FAQs the current user may read and stops after the tag cloud size, so tags of
+     * drafts or tags beyond that size would be created a second time.
+     *
+     * @return array<string, int>
+     */
+    private function fetchTagIdsByLowercaseName(): array
+    {
+        $tagIds = [];
+
+        $query = sprintf(
+            'SELECT tagging_id, tagging_name FROM %sfaqtags ORDER BY tagging_id DESC',
+            Database::getTablePrefix(),
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        if (!$result) {
+            return $tagIds;
+        }
+
+        while (true) {
+            $row = $this->configuration->getDb()->fetchObject($result);
+            if (!$row instanceof \stdClass) {
+                break;
+            }
+
+            // Descending order: of already duplicated names the lowest ID wins.
+            $tagIds[Strings::strtolower((string) $row->tagging_name)] = (int) $row->tagging_id;
+        }
+
+        return $tagIds;
     }
 
     /**
@@ -240,7 +274,7 @@ class Tags
         $allTags = [];
 
         $like = match (Database::getType()) {
-            'pgsql' => 'ILIKE',
+            'pgsql', 'pdo_pgsql' => 'ILIKE',
             default => 'LIKE',
         };
 
@@ -283,7 +317,7 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $showInactive ? '' : StatusScope::publishedOnly()->toSqlFragment('d'),
+            $showInactive ? '' : $this->statusScope()->toSqlFragment('d'),
             $search !== null && $search !== ''
                 ? 'AND tagging_name '
                 . $like
@@ -382,6 +416,7 @@ class Tags
                 (t.tagging_name IN ('%s'))
             AND
                 (d.lang = '%s')
+                %s
             GROUP BY
                 td.record_id
             HAVING
@@ -391,6 +426,7 @@ class Tags
             Database::getTablePrefix(),
             implode("', '", $escapedTags),
             $db->escape($this->configuration->getLanguage()->getLanguage()),
+            StatusScope::visibleToReaders()->toSqlFragment('d'),
             count($arrayOfTags),
         );
 
@@ -418,17 +454,26 @@ class Tags
      */
     public function getFaqsByTagId(int $tagId): array
     {
-        $query = sprintf('
+        // The IDs are handed to readers (public API), so a tag must not reveal that a draft,
+        // scheduled or expired FAQ carries it.
+        $query = sprintf(
+            '
             SELECT
-                d.record_id AS record_id
+                dt.record_id AS record_id
             FROM
-                %sfaqdata_tags d, %sfaqtags t
+                %sfaqdata_tags dt
+            JOIN
+                %sfaqdata d ON d.id = dt.record_id
             WHERE
-                t.tagging_id = d.tagging_id
-            AND
-                t.tagging_id = %d
+                dt.tagging_id = %d
+                %s
             GROUP BY
-                record_id', Database::getTablePrefix(), Database::getTablePrefix(), $tagId);
+                dt.record_id',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $tagId,
+            StatusScope::visibleToReaders()->toSqlFragment('d'),
+        );
 
         $records = [];
         $result = $this->configuration->getDb()->query($query);
@@ -480,7 +525,7 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            StatusScope::publishedOnly()->toSqlFragment('d'),
+            StatusScope::visibleToReaders()->toSqlFragment('d'),
             $permissionCheck,
         );
 
@@ -543,6 +588,16 @@ class Tags
         }
 
         return $data;
+    }
+
+    /**
+     * Readers only get the tags of FAQs they can open: published and inside the publication
+     * window. The administration (permission check bypassed) keeps listing the tags of every
+     * published FAQ, so the tag of a scheduled or expired FAQ stays manageable.
+     */
+    private function statusScope(): StatusScope
+    {
+        return $this->bypassPermissionCheck ? StatusScope::publishedOnly() : StatusScope::visibleToReaders();
     }
 
     /**

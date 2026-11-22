@@ -35,6 +35,11 @@ readonly class Migration418 extends AbstractMigration
         return ['4.1.3'];
     }
 
+    public function isBackport(): bool
+    {
+        return true;
+    }
+
     public function getDescription(): string
     {
         return 'Restore the add_faq permission for upgraded installations';
