@@ -51,4 +51,30 @@ final class MultisiteInstancesTest extends TestCase
     {
         $this->assertFalse(new MultisiteInstances($this->multisiteDirectory . '/missing')->exist());
     }
+
+    public function testConfigDirectoriesListEveryInstanceDirectory(): void
+    {
+        touch($this->multisiteDirectory . '/multisite.php');
+        mkdir($this->multisiteDirectory . '/one.example.org');
+
+        $this->assertSame(
+            [$this->multisiteDirectory . '/one.example.org'],
+            new MultisiteInstances($this->multisiteDirectory)->configDirectories(),
+        );
+    }
+
+    public function testConfigDirectoriesAreListedWithoutTheMultisiteScript(): void
+    {
+        mkdir($this->multisiteDirectory . '/one.example.org');
+
+        $this->assertSame(
+            [$this->multisiteDirectory . '/one.example.org'],
+            new MultisiteInstances($this->multisiteDirectory)->configDirectories(),
+        );
+    }
+
+    public function testConfigDirectoriesAreEmptyWhenTheMultisiteDirectoryIsMissing(): void
+    {
+        $this->assertSame([], new MultisiteInstances($this->multisiteDirectory . '/missing')->configDirectories());
+    }
 }

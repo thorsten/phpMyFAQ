@@ -23,6 +23,7 @@ use DateTime;
 use DirectoryIterator;
 use Exception;
 use FilesystemIterator;
+use phpMyFAQ\Bootstrap\MultisiteInstances;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Twig\TwigWrapper;
 use RecursiveDirectoryIterator;
@@ -484,7 +485,21 @@ class System
                 : (string) PMF_ROOT_DIR . '/config';
         }
 
-        return !self::hasDatabaseConfigFile($configDir, $legacyConfigDir);
+        if (self::hasDatabaseConfigFile($configDir, $legacyConfigDir)) {
+            return false;
+        }
+
+        // Multisite instances boot from their own config directory, which is resolved per
+        // host. All of them are checked, whatever host was requested: otherwise a deployment
+        // without a master configuration could be installed again by an unauthenticated request.
+        $multisiteInstances = new MultisiteInstances((string) PMF_ROOT_DIR . '/multisite');
+        foreach ($multisiteInstances->configDirectories() as $instanceConfigDir) {
+            if (self::hasDatabaseConfigFile($instanceConfigDir, legacyConfigDir: null)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

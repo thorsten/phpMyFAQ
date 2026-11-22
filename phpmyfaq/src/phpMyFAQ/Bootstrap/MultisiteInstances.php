@@ -40,21 +40,37 @@ final readonly class MultisiteInstances
             return false;
         }
 
-        $entries = scandir($this->multisiteDirectory);
-        if ($entries === false) {
-            return false;
+        return $this->configDirectories() !== [];
+    }
+
+    /**
+     * The config directory of every instance, whether or not the instance is installed yet.
+     *
+     * @return list<string>
+     */
+    public function configDirectories(): array
+    {
+        if (!is_dir($this->multisiteDirectory)) {
+            return [];
         }
 
+        $entries = scandir($this->multisiteDirectory);
+        if ($entries === false) {
+            return [];
+        }
+
+        $configDirectories = [];
         foreach ($entries as $entry) {
             if ($entry === '.' || $entry === '..') {
                 continue;
             }
 
-            if (is_dir($this->multisiteDirectory . '/' . $entry)) {
-                return true;
+            $configDirectory = $this->multisiteDirectory . '/' . $entry;
+            if (is_dir($configDirectory)) {
+                $configDirectories[] = $configDirectory;
             }
         }
 
-        return false;
+        return $configDirectories;
     }
 }
