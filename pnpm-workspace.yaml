@@ -1,0 +1,13 @@
+allowBuilds:
+  '@parcel/watcher': false
+
+supportedArchitectures:
+  os:
+    - darwin
+    - linux
+  cpu:
+    - current
+    - arm64
+  libc:
+    - glibc
+    - musl

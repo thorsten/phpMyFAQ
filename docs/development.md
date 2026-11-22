@@ -307,8 +307,8 @@ Before working on phpMyFAQ, set up a local environment with the following softwa
 - Git
 - PHP 8.4 or later
 - Composer (installs PHPUnit 13, Mago, and Rector into `phpmyfaq/src/libs/bin/`)
-- Node.js 24+
-- PNPM (installs TypeScript, Vitest, oxlint, oxfmt, and Stylelint)
+- Node.js 26+
+- PNPM 12 (installs TypeScript, Vitest, oxlint, oxfmt, and Stylelint)
 - Docker with Docker Compose
 
 ### 12.6.3 Configure your Git installation

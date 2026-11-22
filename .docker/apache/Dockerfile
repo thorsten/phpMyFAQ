@@ -6,7 +6,7 @@
 #####################################
 #=== Unique stage without payload ===
 #####################################
-FROM php:8.5-apache
+FROM php:8.5.13-apache
 
 #=== Install gd PHP dependencie ===
 RUN set -x \
@@ -58,7 +58,7 @@ RUN set -ex \
  && rm -rf /var/lib/apt/lists/*
 
 #=== Install xdebug PHP dependencies ===
-RUN pecl install xdebug-3.5.0  \
+RUN pecl install xdebug-3.5.3  \
 && docker-php-ext-enable xdebug
 
 #=== Install redis PHP extension ===

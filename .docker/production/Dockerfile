@@ -13,14 +13,14 @@
 #
 # See docs/deployment.md and docker-compose.prod.yml for how to run it.
 
-ARG PHP_VERSION=8.4
-ARG NODE_VERSION=24
-ARG FRANKENPHP_VERSION=1
+ARG PHP_VERSION=8.4.28
+ARG NODE_VERSION=26.13.1
+ARG FRANKENPHP_VERSION=1.14.0
 
 # ---------------------------------------------------------------------------
 # PHP dependencies (vendor dir is phpmyfaq/src/libs, see composer.json)
 # ---------------------------------------------------------------------------
-FROM composer:2 AS php-deps
+FROM composer:2.11.2 AS php-deps
 
 WORKDIR /app
 COPY composer.json composer.lock ./
@@ -40,8 +40,8 @@ FROM node:${NODE_VERSION}-alpine AS frontend
 
 ENV HUSKY=0
 WORKDIR /app
-RUN npm install -g pnpm@8.15.5
-COPY package.json pnpm-lock.yaml ./
+RUN npm install -g pnpm@12.21.0
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
     pnpm install --frozen-lockfile
 COPY vite.config.ts tsconfig.json ./
@@ -52,7 +52,7 @@ RUN pnpm build:prod \
 # ---------------------------------------------------------------------------
 # Assemble the payload once for all runtime variants
 # ---------------------------------------------------------------------------
-FROM alpine:3.21 AS payload
+FROM alpine:3.21.10 AS payload
 
 WORKDIR /payload
 COPY --from=frontend /app/phpmyfaq ./phpmyfaq
@@ -92,7 +92,7 @@ RUN set -eu \
 # ---------------------------------------------------------------------------
 FROM php:${PHP_VERSION}-apache AS apache
 
-COPY --from=mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:2.13.2 /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions gd intl ldap mysqli pdo_mysql pdo_pgsql pgsql zip bz2 opcache redis \
     && a2enmod rewrite headers expires deflate \
     && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \

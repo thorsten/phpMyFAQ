@@ -6,7 +6,7 @@
 # clashing with a running `bin/dev` development stack.
 services:
   e2e-db:
-    image: mariadb:11
+    image: mariadb:11.8.9
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=phpmyfaq

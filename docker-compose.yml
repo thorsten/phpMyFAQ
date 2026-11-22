@@ -4,7 +4,7 @@ services:
 
   mariadb:
     profiles: ['mariadb']
-    image: mariadb:11
+    image: mariadb:11.8.9
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=iop
@@ -29,7 +29,7 @@ services:
 
   postgres:
     profiles: ['postgres']
-    image: postgres:17
+    image: postgres:17.12
     restart: always
     environment:
       - POSTGRES_DB=phpmyfaq
@@ -48,7 +48,7 @@ services:
 
   redis:
     profiles: ['redis']
-    image: redis:8-alpine
+    image: redis:8.10.3-alpine
     restart: always
     command: redis-server --appendonly yes
     healthcheck:
@@ -120,7 +120,7 @@ services:
 
   nginx:
     profiles: ['nginx']
-    image: nginx:1.31
+    image: nginx:1.31.9
     restart: always
     depends_on:
       - php-fpm
@@ -228,12 +228,11 @@ services:
 
   pnpm:
     profiles: ['build']
-    image: node:24-alpine
+    image: node:26.13.1-alpine
     restart: 'no'
-    command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm build"
+    command: sh -c "npm install -g pnpm@12.21.0 && pnpm install && pnpm build"
     working_dir: /app
     environment:
-      - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
       - CI=true
     stdin_open: true
     tty: true
@@ -244,7 +243,7 @@ services:
 
   composer:
     profiles: ['build']
-    image: composer:2
+    image: composer:2.11.2
     restart: 'no'
     command: composer install --verbose --ignore-platform-reqs
     stdin_open: true
@@ -254,7 +253,7 @@ services:
 
   phpmyadmin:
     profiles: ['phpmyadmin', 'tools']
-    image: phpmyadmin:5
+    image: phpmyadmin:5.2.3
     restart: always
     environment:
       PMA_HOST: db
@@ -270,7 +269,7 @@ services:
 
   pgadmin:
     profiles: ['pgadmin', 'tools']
-    image: dpage/pgadmin4:8
+    image: dpage/pgadmin4:8.14.0
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: postgres@phpmyfaq.de

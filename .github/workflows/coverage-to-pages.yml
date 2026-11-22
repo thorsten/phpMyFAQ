@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v7.0.1
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.40.0
         with:
           php-version: '8.5'
           extensions: mbstring, xml, dom, gd, curl, zip, sqlite3, bcmath
@@ -57,20 +57,20 @@ jobs:
             --coverage-clover build/coverage/clover.xml
 
       - name: Setup Pages
-        uses: actions/configure-pages@v6
+        uses: actions/configure-pages@v6.0.0
 
       # A re-run of a failed job keeps the artifact of the previous attempt in the
       # same workflow run, and deploy-pages refuses to pick between two artifacts
       # with the same name. A per-attempt name keeps every attempt unambiguous.
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@v5.0.0
         with:
           name: github-pages-${{ github.run_attempt }}
           path: build/coverage
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v5.0.1
         with:
           artifact_name: github-pages-${{ github.run_attempt }}
 

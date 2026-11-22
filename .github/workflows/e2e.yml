@@ -43,7 +43,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.40.0
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, curl, fileinfo, filter, gd, json, zip, xml, sqlite3, pdo_sqlite, intl
@@ -66,12 +66,12 @@ jobs:
         uses: actions/setup-node@v7.1.0
         with:
           package-manager-cache: false
-          node-version: 24.x
+          node-version: 26.x
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6.1.1
         with:
-          version: 8.15.5
+          version: 12.21.0
           run_install: false
 
       - name: Install JS dependencies
@@ -88,7 +88,7 @@ jobs:
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: playwright-report-php${{ matrix.php-versions }}
           path: playwright-report/
@@ -96,7 +96,7 @@ jobs:
 
       - name: Upload test results (traces, screenshots, videos)
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: playwright-test-results-php${{ matrix.php-versions }}
           path: test-results/

@@ -6,7 +6,7 @@
 #####################################
 #=== Unique stage without payload ===
 #####################################
-FROM dunglas/frankenphp:latest
+FROM dunglas/frankenphp:1.14.0-php8.5.13
 
 #=== Install system dependencies ===
 RUN apt-get update && apt-get install -y \
@@ -38,11 +38,11 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         sodium
 
 #=== Install xdebug for development ===
- RUN pecl install xdebug \
+ RUN pecl install xdebug-3.5.3 \
      && docker-php-ext-enable xdebug
 
 #=== Install redis PHP extension ===
-RUN pecl install redis \
+RUN pecl install redis-6.3.0 \
     && docker-php-ext-enable redis
 
 #=== Environment variables ===

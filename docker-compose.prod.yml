@@ -123,7 +123,7 @@ services:
 
   mariadb:
     profiles: ['mariadb']
-    image: mariadb:11.8
+    image: mariadb:11.8.9
     container_name: phpmyfaq-mariadb
     restart: unless-stopped
     environment:
@@ -151,7 +151,7 @@ services:
 
   postgres:
     profiles: ['postgres']
-    image: postgres:17-alpine
+    image: postgres:17.12-alpine
     container_name: phpmyfaq-postgres
     restart: unless-stopped
     environment:

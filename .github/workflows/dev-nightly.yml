@@ -30,14 +30,14 @@ jobs:
 
       - name: Bump version and push tag
         id: tag_version
-        uses: mathieudutour/github-tag-action@v7
+        uses: mathieudutour/github-tag-action@v7.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_prefix: development-
           custom_tag: ${{ env.release_name }}
 
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@2.40.0
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, curl, fileinfo, filter, gd, json, zip, xml, sqlite3, bcmath, xdebug, pcov
@@ -61,13 +61,13 @@ jobs:
         uses: actions/setup-node@v7.1.0
         with:
           package-manager-cache: false
-          node-version: 24.x
+          node-version: 26.x
 
       - uses: pnpm/action-setup@v6.1.1
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 8.15.5
+          version: 12.21.0
           run_install: false
 
       - name: Get pnpm store directory
