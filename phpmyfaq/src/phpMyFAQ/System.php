@@ -442,7 +442,30 @@ class System
             $configDirs[] = (string) PMF_LEGACY_CONFIG_DIR;
         }
 
+        // Multisite instances boot from their own configuration directory, which is
+        // resolved per host. The installer has to check all of them, independent of
+        // the requested host, otherwise a deployment without a master configuration
+        // could be installed again by an unauthenticated request.
+        $configDirs = [...$configDirs, ...self::getMultisiteConfigDirs(PMF_ROOT_DIR . '/multisite')];
+
         return !self::hasDatabaseConfiguration($configDirs);
+    }
+
+    /**
+     * Returns the configuration directories of all multisite instances, i.e.
+     * all subdirectories of the given multisite directory.
+     *
+     * @return string[]
+     */
+    public static function getMultisiteConfigDirs(string $multisiteDir): array
+    {
+        if (!is_dir($multisiteDir)) {
+            return [];
+        }
+
+        $configDirs = glob(rtrim($multisiteDir, characters: '/\\') . '/*', GLOB_ONLYDIR);
+
+        return $configDirs === false ? [] : $configDirs;
     }
 
     /**

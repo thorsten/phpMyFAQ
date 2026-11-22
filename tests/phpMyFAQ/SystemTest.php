@@ -59,6 +59,40 @@ class SystemTest extends TestCase
         }
     }
 
+    public function testGetMultisiteConfigDirsBlocksInstallerForTenantConfigurations(): void
+    {
+        $root = sys_get_temp_dir() . '/pmf-multisite-check-' . uniqid('', true);
+        $multisiteDir = $root . '/multisite';
+        mkdir($multisiteDir . '/tenant.example.org', 0o777, true);
+        mkdir($multisiteDir . '/empty.example.org', 0o777, true);
+        file_put_contents($multisiteDir . '/multisite.php', '<?php');
+
+        try {
+            // No multisite directory at all
+            $this->assertSame([], System::getMultisiteConfigDirs($root . '/does-not-exist'));
+
+            // Tenant directories without a database.php do not block the installer
+            $configDirs = System::getMultisiteConfigDirs($multisiteDir);
+            sort($configDirs);
+            $this->assertSame(
+                [$multisiteDir . '/empty.example.org', $multisiteDir . '/tenant.example.org'],
+                $configDirs,
+            );
+            $this->assertFalse(System::hasDatabaseConfiguration($configDirs));
+
+            // Multisite deployment without a master configuration: installer must refuse
+            file_put_contents($multisiteDir . '/tenant.example.org/database.php', '<?php');
+            $this->assertTrue(System::hasDatabaseConfiguration(System::getMultisiteConfigDirs($multisiteDir)));
+        } finally {
+            @unlink($multisiteDir . '/tenant.example.org/database.php');
+            @unlink($multisiteDir . '/multisite.php');
+            rmdir($multisiteDir . '/tenant.example.org');
+            rmdir($multisiteDir . '/empty.example.org');
+            rmdir($multisiteDir);
+            rmdir($root);
+        }
+    }
+
     public function testIsSqlite(): void
     {
         $this->assertTrue(System::isSqlite('sqlite3'));
