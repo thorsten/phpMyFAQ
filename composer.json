@@ -48,7 +48,7 @@
     "guzzlehttp/guzzle": "~7.16.0",
     "league/commonmark": "~2.10.0",
     "league/oauth2-server": "~9.4.0",
-    "mcp/sdk": "~0.9.0",
+    "mcp/sdk": "~0.10.0",
     "minishlink/web-push": "~11.0.0",
     "monolog/monolog": "~3.12.0",
     "myclabs/deep-copy": "~1.14.0",
