@@ -2,7 +2,7 @@
 
 namespace phpMyFAQ\Service\McpServer;
 
-use Mcp\Server;
+use Mcp\Server\Server;
 use Mcp\Server\Transport\InMemoryTransport;
 use Monolog\Logger;
 use phpMyFAQ\Configuration;
@@ -83,7 +83,7 @@ class McpSdkRuntimeTest extends TestCase
         $method = new ReflectionMethod($runtime, 'buildServer');
         $server = $method->invoke($runtime);
 
-        $this->assertInstanceOf(\Mcp\Server::class, $server);
+        $this->assertInstanceOf(Server::class, $server);
     }
 
     public function testRunConsoleMethodAcceptsConsoleInterfaces(): void

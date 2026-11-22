@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Service\McpServer;
 
-use Mcp\Server;
+use Mcp\Server\Server;
 use Mcp\Server\Transport\StdioTransport;
 use phpMyFAQ\Core\Json;
 use Symfony\Component\Console\Input\InputInterface;
