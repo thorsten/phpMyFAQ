@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace phpMyFAQ;
 
 use phpMyFAQ\Entity\Tag;
+use phpMyFAQ\Faq\QueryHelper;
 
 /**
  * Class Tags
@@ -267,7 +268,7 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $showInactive ? '' : "AND d.active = 'yes'",
+            $showInactive ? '' : 'AND ' . QueryHelper::queryPublished(alias: 'd'),
             isset($search) && $search !== ''
                 ? 'AND tagging_name ' . $like . " '" . $this->configuration->getDb()->escape($search) . "%'"
                 : '',
@@ -433,7 +434,7 @@ class Tags
                 %sfaqdata_group fdg ON d.id = fdg.record_id
             WHERE
                 d.lang = '%s'
-                AND d.active = 'yes'
+                AND %s
                 %s
             GROUP BY dt.tagging_id
             ORDER BY freq DESC",
@@ -442,6 +443,7 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->configuration->getLanguage()->getLanguage(),
+            QueryHelper::queryPublished(alias: 'd'),
             $permissionCheck,
         );
 

@@ -243,4 +243,20 @@ class SearchDatabaseTest extends TestCase
             $this->searchDatabase->getMatchClause("O'Brien%"),
         );
     }
+
+    public function testGetConditionsSupportsRangeOperators()
+    {
+        $this->searchDatabase->setConditions([
+            'fd.active' => 'yes',
+            'fd.date_start <=' => '20260101000000',
+            'fd.date_end >=' => '20260101000000',
+            'fd.id; DROP TABLE faqdata --' => 'x',
+            'fd.id <>' => '1',
+        ]);
+
+        $this->assertEquals(
+            " AND fd.active = 'yes' AND fd.date_start <= '20260101000000' AND fd.date_end >= '20260101000000'",
+            $this->searchDatabase->getConditions(),
+        );
+    }
 }

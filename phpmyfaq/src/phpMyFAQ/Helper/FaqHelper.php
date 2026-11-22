@@ -129,7 +129,7 @@ class FaqHelper extends AbstractHelper
         $category->transform(0);
 
         // Get all FAQs
-        $faq->getAllFaqs(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language, 'active' => 'yes']);
+        $faq->getAllFaqs(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language], onlyPublished: true);
 
         return $faq->faqRecords;
     }

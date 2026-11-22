@@ -249,7 +249,17 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
         $db = $this->configuration->getDb();
 
         foreach ($this->conditions as $column => $value) {
-            if (!is_string($column) || !preg_match('/^[A-Za-z_][A-Za-z0-9_.]*$/', $column)) {
+            // A column may carry a range operator, e.g. 'fd.date_start <=' => '20260101000000'
+            if (!is_string($column) || !preg_match('/^([A-Za-z_][A-Za-z0-9_.]*)(?: (<=|>=))?$/', $column, $parts)) {
+                continue;
+            }
+
+            if (isset($parts[2])) {
+                if (is_array($value)) {
+                    continue;
+                }
+
+                $conditions .= ' AND ' . $parts[1] . ' ' . $parts[2] . " '" . $db->escape((string) $value) . "'";
                 continue;
             }
 

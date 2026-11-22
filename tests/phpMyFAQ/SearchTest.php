@@ -282,4 +282,68 @@ class SearchTest extends TestCase
 
         $this->assertEquals($categoryMock, $this->search->getCategory());
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchDatabaseOnlyFindsFaqsInsideTheirPublicationWindow(): void
+    {
+        $dbHandle = $this->getMockBuilder(Sqlite3::class)
+            ->onlyMethods(['query', 'escape', 'numRows', 'fetchAll'])
+            ->getMock();
+        $dbHandle->method('escape')->willReturnCallback(static fn(string $value): string => $value);
+        $dbHandle
+            ->expects($this->once())
+            ->method('query')
+            ->with($this->callback(static function (string $query): bool {
+                return (
+                    str_contains($query, "fd.active = 'yes'")
+                    && preg_match("/fd\.date_start <= '\d{14}'/", $query) === 1
+                    && preg_match("/fd\.date_end >= '\d{14}'/", $query) === 1
+                );
+            }))
+            ->willReturn(true);
+        $dbHandle->method('numRows')->willReturn(0);
+
+        $search = new Search(new Configuration($dbHandle));
+
+        $this->assertSame([], $search->searchDatabase('embargo'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchFiltersUnpublishedFaqsFromElasticsearchResults(): void
+    {
+        $this->dbHandle->query(
+            'INSERT INTO faqdata '
+            . '(id, lang, solution_id, sticky, thema, content, keywords, active, author, email, updated, date_start, date_end) VALUES '
+            . "(9201, 'en', 9201, 0, 'Visible', 'a', '', 'yes', 'Author', 'test@example.org', 'date', '00000000000000', '99991231235959'), "
+            . "(9202, 'en', 9202, 0, 'Future', 'a', '', 'yes', 'Author', 'test@example.org', 'date', '99990101000000', '99991231235959'), "
+            . "(9203, 'en', 9203, 0, 'Expired', 'a', '', 'yes', 'Author', 'test@example.org', 'date', '00000000000000', '20200101000000'), "
+            . "(9204, 'en', 9204, 0, 'Draft', 'a', '', 'no', 'Author', 'test@example.org', 'date', '00000000000000', '99991231235959')",
+        );
+
+        $this->search = $this
+            ->getMockBuilder(Search::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['searchElasticsearch'])
+            ->getMock();
+        $this->search
+            ->method('searchElasticsearch')
+            ->willReturn(array_map(
+                static fn(int $id): \stdClass => (object) ['id' => $id, 'lang' => 'en'],
+                [9201, 9202, 9203, 9204],
+            ));
+
+        $this->setConfigValue('search.enableElasticsearch', true);
+
+        try {
+            $results = $this->search->search('a');
+        } finally {
+            $this->dbHandle->query('DELETE FROM faqdata WHERE id IN (9201, 9202, 9203, 9204)');
+        }
+
+        $this->assertSame([9201], array_column($results, 'id'));
+    }
 }

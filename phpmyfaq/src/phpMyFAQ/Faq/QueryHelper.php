@@ -48,6 +48,28 @@ readonly class QueryHelper
         $this->configuration = Configuration::getConfigurationInstance();
     }
 
+    /**
+     * Returns the SQL condition every public read path has to apply: the FAQ is active and the
+     * current time is inside its publication window (date_start / date_end). The condition has
+     * no leading "AND", so it can be used anywhere in a WHERE clause.
+     *
+     * @param string $alias Alias of the faqdata table in the query
+     */
+    public static function queryPublished(string $alias = 'fd'): string
+    {
+        $now = date(format: 'YmdHis');
+
+        return sprintf(
+            "%s.active = '%s' AND %s.date_start <= '%s' AND %s.date_end >= '%s'",
+            $alias,
+            self::FAQ_SQL_ACTIVE_YES,
+            $alias,
+            $now,
+            $alias,
+            $now,
+        );
+    }
+
     public function queryPermission(bool $hasGroupSupport = false): string
     {
         $groupList = $this->normalizeIdList($this->groups);

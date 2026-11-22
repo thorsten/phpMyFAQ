@@ -593,6 +593,87 @@ class FaqTest extends TestCase
         $this->assertFalse($this->faq->isFaqRecordVisible());
     }
 
+    public function testGetAllFaqsOnlyPublishedHidesScheduledAndExpiredFaqs(): void
+    {
+        $visible = $this->createPublicFaqWithWindow('00000000000000', '99991231235959');
+        $scheduled = $this->createPublicFaqWithWindow('99990101000000', '99991231235959');
+        $expired = $this->createPublicFaqWithWindow('00000000000000', '20200101000000');
+
+        $this->faq->getAllFaqs(FAQ_SORTING_TYPE_FAQID, ['fd.lang' => 'en'], 'ASC', onlyPublished: true);
+        $ids = array_map(intval(...), array_column($this->faq->faqRecords, 'id'));
+
+        $this->assertContains($visible->getId(), $ids);
+        $this->assertNotContains($scheduled->getId(), $ids);
+        $this->assertNotContains($expired->getId(), $ids);
+    }
+
+    public function testGetAllFaqsOnlyPublishedWorksWithEmptyCondition(): void
+    {
+        $visible = $this->createPublicFaqWithWindow('00000000000000', '99991231235959');
+        $scheduled = $this->createPublicFaqWithWindow('99990101000000', '99991231235959');
+
+        $this->faq->getAllFaqs(FAQ_SORTING_TYPE_FAQID, [], 'ASC', onlyPublished: true);
+        $ids = array_map(intval(...), array_column($this->faq->faqRecords, 'id'));
+
+        $this->assertContains($visible->getId(), $ids);
+        $this->assertNotContains($scheduled->getId(), $ids);
+    }
+
+    public function testGetAllFaqsMasksAnswerOfNotYetPublishedFaq(): void
+    {
+        $scheduled = $this->createPublicFaqWithWindow('99990101000000', '99991231235959');
+
+        $this->faq->getAllFaqs(FAQ_SORTING_TYPE_FAQID, ['fd.lang' => 'en']);
+
+        $records = array_values(array_filter(
+            $this->faq->faqRecords,
+            static fn(array $record): bool => (int) $record['id'] === $scheduled->getId(),
+        ));
+
+        $this->assertCount(1, $records);
+        $this->assertSame(Translation::get(key: 'err_inactiveArticle'), $records[0]['content']);
+    }
+
+    public function testGetStickyFaqsDataHidesScheduledAndExpiredFaqs(): void
+    {
+        $this->configuration->set('main.referenceURL', 'https://example.com/');
+
+        $visible = $this->createPublicFaqWithWindow('00000000000000', '99991231235959');
+        $scheduled = $this->createPublicFaqWithWindow('99990101000000', '99991231235959');
+        $expired = $this->createPublicFaqWithWindow('00000000000000', '20200101000000');
+
+        $db = $this->configuration->getDb();
+        foreach ([$visible, $scheduled, $expired] as $faqEntity) {
+            $db->query(sprintf('DELETE FROM faqvisits WHERE id = %d', $faqEntity->getId()));
+            $db->query(sprintf(
+                "INSERT INTO faqvisits (id, lang, visits, last_visit) VALUES (%d, 'en', 1, %d)",
+                $faqEntity->getId(),
+                time(),
+            ));
+        }
+
+        $ids = array_map(intval(...), array_column($this->faq->getStickyFaqsData(), 'id'));
+
+        foreach ([$visible, $scheduled, $expired] as $faqEntity) {
+            $db->query(sprintf('DELETE FROM faqvisits WHERE id = %d', $faqEntity->getId()));
+        }
+
+        $this->assertContains($visible->getId(), $ids);
+        $this->assertNotContains($scheduled->getId(), $ids);
+        $this->assertNotContains($expired->getId(), $ids);
+    }
+
+    private function createPublicFaqWithWindow(string $dateStart, string $dateEnd): FaqEntity
+    {
+        $faqEntity = $this->getFaqEntity();
+        $faqEntity->setId($this->createTrackedFaq($faqEntity)->getId());
+        $this->addCategoryRelation($faqEntity);
+        $this->grantPublicAccess($faqEntity);
+        $this->setPublicationWindow($faqEntity, $dateStart, $dateEnd);
+
+        return $faqEntity;
+    }
+
     private function setPublicationWindow(FaqEntity $faqEntity, string $dateStart, string $dateEnd): void
     {
         $this->configuration
@@ -653,7 +734,7 @@ class FaqTest extends TestCase
             return;
         }
 
-        $this->createdFaqs[$faqEntity->getId()] = [
+        $this->createdFaqs[$faqEntity->getId() . ':' . $faqEntity->getLanguage()] = [
             'id' => $faqEntity->getId(),
             'lang' => $faqEntity->getLanguage(),
         ];

@@ -23,6 +23,7 @@ namespace phpMyFAQ;
 
 use DateTime;
 use Exception;
+use phpMyFAQ\Faq\QueryHelper;
 use phpMyFAQ\Search\Elasticsearch;
 use phpMyFAQ\Search\OpenSearch;
 use phpMyFAQ\Search\SearchFactory;
@@ -86,11 +87,11 @@ class Search
         }
 
         if ($this->configuration->get(item: 'search.enableElasticsearch')) {
-            return $this->searchElasticsearch($searchTerm, $allLanguages);
+            return $this->filterPublished($this->searchElasticsearch($searchTerm, $allLanguages));
         }
 
         if ($this->configuration->get(item: 'search.enableOpenSearch')) {
-            return $this->searchOpenSearch($searchTerm, $allLanguages);
+            return $this->filterPublished($this->searchOpenSearch($searchTerm, $allLanguages));
         }
 
         return $this->searchDatabase($searchTerm, $allLanguages);
@@ -111,7 +112,7 @@ class Search
             $elasticsearch->setCategoryIds($allCategories);
             $elasticsearch->setLanguage($this->configuration->getLanguage()->getLanguage());
 
-            return $elasticsearch->autoComplete($searchTerm);
+            return $this->filterPublished($elasticsearch->autoComplete($searchTerm));
         }
 
         if ($this->configuration->get(item: 'search.enableOpenSearch')) {
@@ -121,10 +122,52 @@ class Search
             $opensearch->setCategoryIds($allCategories);
             $opensearch->setLanguage($this->configuration->getLanguage()->getLanguage());
 
-            return $opensearch->autoComplete($searchTerm);
+            return $this->filterPublished($opensearch->autoComplete($searchTerm));
         }
 
         return $this->searchDatabase($searchTerm, false);
+    }
+
+    /**
+     * Removes all FAQs from a search engine result that are not active or outside their
+     * publication window. The Elasticsearch and OpenSearch indexes do not know the publication
+     * state, so it is checked against the database.
+     *
+     * @param stdClass[] $results
+     * @return stdClass[]
+     */
+    private function filterPublished(array $results): array
+    {
+        $faqIds = [];
+        foreach ($results as $result) {
+            if (isset($result->id)) {
+                $faqIds[(int) $result->id] = (int) $result->id;
+            }
+        }
+
+        if ($faqIds === []) {
+            return $results;
+        }
+
+        $query = sprintf(
+            'SELECT fd.id AS id, fd.lang AS lang FROM %sfaqdata fd WHERE fd.id IN (%s) AND %s',
+            Database::getTablePrefix(),
+            implode(', ', $faqIds),
+            QueryHelper::queryPublished(),
+        );
+
+        $published = [];
+        $rows = $this->configuration->getDb()->query($query);
+        while ($rows && ($row = $this->configuration->getDb()->fetchObject($rows))) {
+            $published[(int) $row->id . ':' . $row->lang] = true;
+        }
+
+        return array_values(array_filter(
+            $results,
+            static fn(stdClass $result): bool => (
+                isset($result->id, $result->lang) && isset($published[(int) $result->id . ':' . $result->lang])
+            ),
+        ));
     }
 
     /**
@@ -179,7 +222,12 @@ class Search
     {
         $fdTable = Database::getTablePrefix() . 'faqdata AS fd';
         $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
-        $condition = ['fd.active' => 'yes'];
+        $now = date(format: 'YmdHis');
+        $condition = [
+            'fd.active' => 'yes',
+            'fd.date_start <=' => $now,
+            'fd.date_end >=' => $now,
+        ];
         $searchDatabase = SearchFactory::create($this->configuration, ['database' => Database::getType()]);
 
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {

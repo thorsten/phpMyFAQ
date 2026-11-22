@@ -89,4 +89,34 @@ class SitemapTest extends TestCase
         $this->assertStringContainsString('fdg.group_id IN (-1, 2)', $this->db->log());
         $this->assertStringNotContainsString('OR 1=1', $this->db->log());
     }
+
+    public function testSitemapHidesScheduledAndExpiredFaqs(): void
+    {
+        $this->db->query(
+            'INSERT INTO faqdata '
+            . '(id, lang, solution_id, sticky, thema, content, keywords, active, author, email, updated, date_start, date_end) VALUES '
+            . "(9101, 'en', 9101, 0, 'Future question', 'embargoed answer', '', 'yes', 'Author', 'test@example.org', 'date', '99990101000000', '99991231235959'), "
+            . "(9102, 'en', 9102, 0, 'Expired question', 'withdrawn answer', '', 'yes', 'Author', 'test@example.org', 'date', '00000000000000', '20200101000000')",
+        );
+        $this->db->query('INSERT INTO faqdata_group (record_id, group_id) VALUES (9101,-1), (9102,-1)');
+        $this->db->query('INSERT INTO faqdata_user (record_id, user_id) VALUES (9101,-1), (9102,-1)');
+        $this->db->query(
+            "INSERT INTO faqcategoryrelations (category_id, category_lang, record_id, record_lang) VALUES (1, 'en', 9101, 'en'), (1, 'en', 9102, 'en')",
+        );
+
+        try {
+            $letters = array_map(static fn(stdClass $letter): string => $letter->letter, $this->sitemap->getAllFirstLetters());
+            $future = $this->sitemap->getFaqsFromLetter('F');
+            $expired = $this->sitemap->getFaqsFromLetter('E');
+        } finally {
+            $this->db->query('DELETE FROM faqdata WHERE id IN (9101, 9102)');
+            $this->db->query('DELETE FROM faqdata_group WHERE record_id IN (9101, 9102)');
+            $this->db->query('DELETE FROM faqdata_user WHERE record_id IN (9101, 9102)');
+            $this->db->query('DELETE FROM faqcategoryrelations WHERE record_id IN (9101, 9102)');
+        }
+
+        $this->assertSame(['S'], $letters);
+        $this->assertSame([], $future);
+        $this->assertSame([], $expired);
+    }
 }

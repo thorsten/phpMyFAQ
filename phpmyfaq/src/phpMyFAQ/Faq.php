@@ -1513,11 +1513,14 @@ class Faq
      * @param int        $sortType  Sorting type
      * @param array|null $condition Condition
      * @param ?string    $sortOrder Sorting order
+     * @param bool       $onlyPublished Only active FAQs inside their publication window, has to
+     *                                  be true for every public read path
      */
     public function getAllFaqs(
         int $sortType = FAQ_SORTING_TYPE_CATID_FAQID,
         ?array $condition = null,
         ?string $sortOrder = 'ASC',
+        bool $onlyPublished = false,
     ): void {
         $where = '';
         if (!is_null($condition)) {
@@ -1547,6 +1550,14 @@ class Faq
                     $where .= ' AND ';
                 }
             }
+        }
+
+        if ($onlyPublished) {
+            $where =
+                match ($where) {
+                    '', 'WHERE ' => 'WHERE ',
+                    default => $where . ' AND ',
+                } . QueryHelper::queryPublished();
         }
 
         $sortDirection = $this->normalizeSortDirection((string) $sortOrder);
@@ -1622,8 +1633,9 @@ class Faq
             $content = $row->content;
             $active = 'yes' == $row->active;
             $expired = date(format: 'YmdHis') > $row->date_end;
+            $notYetPublished = date(format: 'YmdHis') < $row->date_start;
 
-            if (!$active) {
+            if (!$active || $notYetPublished) {
                 $content = Translation::get(key: 'err_inactiveArticle');
             }
 
@@ -1797,7 +1809,7 @@ class Faq
             WHERE
                 fd.lang = '%s'
             AND 
-                fd.active = 'yes'
+                %s
             AND 
                 fd.sticky = 1
             AND
@@ -1815,6 +1827,7 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->getEscapedCurrentLanguage(),
+            QueryHelper::queryPublished(),
             $queryHelper->queryPermission($this->groupSupport),
         );
 

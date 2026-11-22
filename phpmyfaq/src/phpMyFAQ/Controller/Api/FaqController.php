@@ -476,10 +476,14 @@ final class FaqController extends AbstractController
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $faq->getAllFaqs(FAQ_SORTING_TYPE_CATID_FAQID, [
-            'lang' => $this->configuration->getLanguage()->getLanguage(),
-            'fcr.category_id' => 'IS NOT NULL',
-        ]);
+        $faq->getAllFaqs(
+            FAQ_SORTING_TYPE_CATID_FAQID,
+            [
+                'lang' => $this->configuration->getLanguage()->getLanguage(),
+                'fcr.category_id' => 'IS NOT NULL',
+            ],
+            onlyPublished: true,
+        );
         $result = array_map($this->sanitizePublicRecord(...), $faq->faqRecords);
 
         if ($result === []) {

@@ -23,6 +23,7 @@ use Exception;
 use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Faq\QueryHelper;
 use stdClass;
 
 /**
@@ -112,7 +113,7 @@ class Sitemap
             WHERE
                 fd.lang = '%s'
             AND
-                fd.active = 'yes'
+                %s
             AND
                 %s
             ORDER BY
@@ -122,6 +123,7 @@ class Sitemap
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
+            QueryHelper::queryPublished(),
             $permPart,
         );
 
@@ -201,7 +203,7 @@ class Sitemap
                     AND
                         fd.lang = '%s'
                     AND
-                        fd.active = 'yes'
+                        %s
                     AND
                         %s",
             Database::getTablePrefix(),
@@ -210,6 +212,7 @@ class Sitemap
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($letter),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
+            QueryHelper::queryPublished(),
             $permPart,
         );
 

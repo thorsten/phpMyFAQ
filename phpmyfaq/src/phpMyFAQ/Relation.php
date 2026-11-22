@@ -65,6 +65,8 @@ readonly class Relation
             ])
             ->setConditions([
                 'fd.active' => 'yes',
+                'fd.date_start <=' => date(format: 'YmdHis'),
+                'fd.date_end >=' => date(format: 'YmdHis'),
                 'fd.lang' => $this->configuration->getLanguage()->getLanguage(),
             ])
             ->setMatchingColumns(['fd.keywords', 'fd.thema', 'fd.content'])
