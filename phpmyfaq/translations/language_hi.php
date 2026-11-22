@@ -447,8 +447,6 @@ $PMF_LANG["msgVisits"] = "दर्शन";
 $PMF_LANG["ad_start_articles"] = "लेख";
 $PMF_LANG["msgComments"] = "टिका-टिप्पणी";
 
-$PMF_LANG["ad_user_chpw"] = "आप केवल मौजूदा प्रयोगकर्ता का संकेतक शब्द बदल सकते हैं \"" . $PMF_LANG["ad_menu_passwd"] . "\".";
-
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "चिपकाएँ (paste)";
 $PMF_LANG["ad_categ_cut"] = "काटें (cut)";
