@@ -95,7 +95,7 @@
     "jsdom": "31.0.0",
     "oxfmt": "0.78.0",
     "oxlint": "1.93.0",
-    "postcss": "8.5.32",
+    "postcss": "8.5.33",
     "sass": "1.108.2",
     "stylelint": "17.16.0",
     "stylelint-config-standard-scss": "17.0.0",
