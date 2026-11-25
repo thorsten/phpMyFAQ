@@ -93,6 +93,20 @@ class UtilsTest extends TestCase
         $this->assertEquals('Word', $result);
     }
 
+    public function testChopStringWithMultipleSpaces(): void
+    {
+        $text = 'Text    with     multiple   spaces    between   words';
+        $result = Utils::chopString($text, 4);
+        $this->assertEquals('Text with multiple spaces ', $result);
+    }
+
+    public function testChopStringWithLineBreaks(): void
+    {
+        $text = "Download\nUnpack\nConfigure\nInstall\nVerify";
+        $result = Utils::chopString($text, 3);
+        $this->assertEquals('Download Unpack Configure ', $result);
+    }
+
     public function testResolveMarkersWithSitename(): void
     {
         $this->mockConfiguration->method('getTitle')->willReturn('My FAQ Site');

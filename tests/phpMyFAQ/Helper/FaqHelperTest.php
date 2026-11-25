@@ -347,6 +347,21 @@ class FaqHelperTest extends TestCase
         $this->assertEquals('Hello, World!', trim($result));
     }
 
+    /**
+     * @throws CommonMarkException
+     */
+    public function testRenderAnswerPreviewWithLineBreaksInAnswer(): void
+    {
+        $this->configuration->set('main.enableMarkdownEditor', false);
+        $answer = "<ul>\n<li>Download</li>\n<li>Unpack</li>\n<li>Configure</li>\n" .
+            "<li>Install</li>\n<li>Verify</li>\n</ul>";
+        $wordCount = 3;
+
+        $result = $this->faqHelper->renderAnswerPreview($answer, $wordCount);
+
+        $this->assertEquals('Download Unpack Configure', trim($result));
+    }
+
     public function testConvertOldInternalLinks(): void
     {
         // Test questions for slug generation
