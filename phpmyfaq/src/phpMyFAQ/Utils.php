@@ -106,6 +106,8 @@ class Utils
     public static function chopString(string $string, int $words): string
     {
         $str = '';
+        $condensed = Strings::preg_replace(pattern: '/\s+/u', replacement: ' ', subject: $string);
+        $string = trim(is_string($condensed) ? $condensed : $string);
         $pieces = explode(separator: ' ', string: $string);
         $num = count($pieces);
         if ($words > $num) {
