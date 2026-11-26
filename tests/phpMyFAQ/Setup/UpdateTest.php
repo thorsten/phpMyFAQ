@@ -5,6 +5,7 @@ namespace phpMyFAQ\Setup;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\System;
 use phpMyFAQ\User;
@@ -429,6 +430,37 @@ class UpdateTest extends TestCase
 
         $update = new Update(new System(), $configuration);
         $queries = $this->collectQueriesFor('mysqli', 'applyUpdates4111', '4.1.11', '', $update);
+
+        $this->assertSame([], $queries);
+    }
+
+    /**
+     * OPTIMIZE TABLE rebuilds every InnoDB table and VACUUM ANALYZE scans the whole
+     * database. On large installations that outlasts the web server timeout, the
+     * browser reports a network error and the update never finishes, although e.g.
+     * 4.1.11 to 4.1.12 changes no schema at all.
+     */
+    public function testApplyUpdatesDoesNotVacuumPostgresDatabase(): void
+    {
+        $update = new Update(new System(), $this->createMock(Configuration::class));
+
+        $queries = $this->collectQueriesFor('pgsql', 'applyUpdates', '4.1.11', '', $update);
+
+        $this->assertSame([], $queries);
+    }
+
+    public function testApplyUpdatesDoesNotOptimizeMysqlTables(): void
+    {
+        $database = $this->createMock(DatabaseDriver::class);
+        $database->expects($this->never())->method('getTableNames');
+        $database->expects($this->never())->method('query');
+
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('getDb')->willReturn($database);
+
+        $update = new Update(new System(), $configuration);
+
+        $queries = $this->collectQueriesFor('mysqli', 'applyUpdates', '4.1.11', '', $update);
 
         $this->assertSame([], $queries);
     }

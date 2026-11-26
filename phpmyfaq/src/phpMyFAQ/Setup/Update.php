@@ -194,9 +194,6 @@ class Update extends AbstractSetup
         $this->applyUpdates419();
         $this->applyUpdates4111();
 
-        // Optimize the tables
-        $this->optimizeTables();
-
         // Execute queries
         $this->executeQueries();
 
@@ -204,22 +201,6 @@ class Update extends AbstractSetup
         $this->updateVersion();
 
         return true;
-    }
-
-    public function optimizeTables(): void
-    {
-        switch (Database::getType()) {
-            case 'mysqli':
-                $this->configuration->getDb()->getTableNames(Database::getTablePrefix());
-                foreach ($this->configuration->getDb()->tableNames as $tableName) {
-                    $this->queries[] = 'OPTIMIZE TABLE ' . $tableName;
-                }
-
-                break;
-            case 'pgsql':
-                $this->queries[] = 'VACUUM ANALYZE;';
-                break;
-        }
     }
 
     public function setDryRun(bool $dryRun): void
