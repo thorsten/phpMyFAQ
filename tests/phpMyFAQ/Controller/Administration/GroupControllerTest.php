@@ -172,6 +172,42 @@ class GroupControllerTest extends TestCase
         $controller->updatePermissions($request);
     }
 
+    public function testUpdateNonSuperAdminCannotEnableAutoJoinOnGroupWithRightTheyDoNotHold(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        // The target group holds right id 42, which the acting user does NOT hold. Enabling
+        // auto-join would add every newly created account to that group, so the acting user could
+        // register a fresh account and inherit the right. The request must be refused before
+        // changeGroup() is reached.
+        $perm = $this->createMock(MediumPermission::class);
+        $perm->method('getGroupRights')->willReturn([42]);
+        $perm->method('hasPermission')->willReturnCallback(
+            static fn(int $userId, mixed $right): bool => is_string($right),
+        );
+        $perm->expects($this->never())->method('changeGroup');
+
+        $actingUser = $this->createMock(CurrentUser::class);
+        $actingUser->perm = $perm;
+        $actingUser->method('isLoggedIn')->willReturn(true);
+        $actingUser->method('getUserId')->willReturn(5);
+        $actingUser->method('isSuperAdmin')->willReturn(false);
+
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-group');
+
+        $request = new Request(request: [
+            'pmf-csrf-token' => $csrf,
+            'group_id' => '2',
+            'name' => 'Administrators',
+            'description' => 'Full admin group',
+            'auto_join' => '1',
+        ]);
+
+        $this->expectException(ForbiddenException::class);
+        $controller->update($request);
+    }
+
     private function buildNonSuperAdminLackingGroupRight(): CurrentUser
     {
         // The target group holds right id 42, which the acting user does NOT hold.

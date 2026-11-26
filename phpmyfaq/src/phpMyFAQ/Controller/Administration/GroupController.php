@@ -209,6 +209,12 @@ final class GroupController extends AbstractAdministrationController
 
         $groupId = (int) Filter::filterVar($request->request->get('group_id'), FILTER_VALIDATE_INT);
 
+        // A non-SuperAdmin may only edit a group whose rights they fully hold themselves. Otherwise
+        // an administrator with the delegable GROUP_EDIT right could enable auto-join on a
+        // privileged group, register a fresh account, and inherit rights they do not possess
+        // (privilege escalation via auto-join group membership).
+        $this->assertActorHoldsAllGroupRights($groupId);
+
         $groupData = [];
         $dataFields = ['name', 'description', 'auto_join'];
         foreach ($dataFields as $dataField) {
