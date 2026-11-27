@@ -92,6 +92,8 @@ class SeedTestDataCommandTest extends TestCase
 
     private string $previousEnvironment;
 
+    private ?Configuration $previousConfiguration = null;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -113,6 +115,7 @@ class SeedTestDataCommandTest extends TestCase
         // becomes the one SeedTestDataCommand uses via getConfigurationInstance().
         $reflection = new ReflectionClass(Configuration::class);
         $property = $reflection->getProperty('configuration');
+        $this->previousConfiguration = $property->getValue();
         $property->setValue(null, null);
 
         $dbHandle = new Sqlite3();
@@ -134,11 +137,12 @@ class SeedTestDataCommandTest extends TestCase
             @unlink($this->databasePath);
         }
 
-        // Clear the Configuration singleton to avoid leaking our (now invalid)
-        // DB handle into subsequent tests.
+        // Put back the Configuration singleton that was there before the test, so neither our
+        // (now invalid) DB handle nor an empty singleton leaks into subsequent tests.
         $reflection = new ReflectionClass(Configuration::class);
         $property = $reflection->getProperty('configuration');
-        $property->setValue(null, null);
+        $property->setValue(null, $this->previousConfiguration);
+        $this->previousConfiguration = null;
 
         // Restore the previous APP_ENV value.
         $environmentReflection = new ReflectionClass(Environment::class);
