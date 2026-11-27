@@ -200,8 +200,8 @@ importers:
         specifier: 11.12.0
         version: 11.12.0
       jodit:
-        specifier: 4.20.3
-        version: 4.20.3
+        specifier: 4.20.4
+        version: 4.20.4
       masonry-layout:
         specifier: 4.2.2
         version: 4.2.2
@@ -1847,8 +1847,8 @@ packages:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
 
-  jodit@4.20.3:
-    resolution: {integrity: sha512-CYRZqqbZZeUgVgAq2PK5HMqTprn3AlFdK2hsLoVsl+Mvn7rPglnVOmRjXbNWbmNML2HPsmWSMOqScjq7YQc5NA==}
+  jodit@4.20.4:
+    resolution: {integrity: sha512-tjQFZAzb7BTR2ti7Q2mq9zJdq+qe9JU239IaxXTnB1MmMfWUNbzZcuJT+ai2VxH3W9HV4ozS6eCcQfoPspP3BA==}
 
   js-tokens@10.0.1:
     resolution: {integrity: sha512-XMt+uh+yEs6srFvEb/pEe4IMvbtoXVdNxF7lZFU+I9sdWI641L97L+gXQMTGm1x3RjPUVizNVjHueclXr0U7sw==}
@@ -3866,7 +3866,7 @@ snapshots:
 
   jiti@2.7.0: {}
 
-  jodit@4.20.3: {}
+  jodit@4.20.4: {}
 
   js-tokens@10.0.1: {}
 
