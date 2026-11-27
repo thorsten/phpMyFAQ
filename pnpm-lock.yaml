@@ -246,8 +246,8 @@ importers:
         specifier: 5.0.5
         version: 5.0.5(vitest@5.0.5)
       autoprefixer:
-        specifier: 10.6.2
-        version: 10.6.2(postcss@8.5.33)
+        specifier: 10.7.0
+        version: 10.7.0(postcss@8.5.33)
       husky:
         specifier: 9.1.7
         version: 9.1.7
@@ -1299,8 +1299,8 @@ packages:
   autocompleter@10.1.0:
     resolution: {integrity: sha512-Y4YDXucUdyAJtSV5qSxN9nXaZZbKcUc3OP3cSLnk/gu3xxKTt1p7HHCYR/EMYkomD4cw/4wsr1dmk48J6HSNpA==}
 
-  autoprefixer@10.6.2:
-    resolution: {integrity: sha512-VOw9/yGTGwPPgzFcODtcv6zhEPIeIWkRSe10L2ri2f5vZ7ID7lCt6jZzRF5/ubgOZ+szYydmEF5AYsA5jxX1tA==}
+  autoprefixer@10.7.0:
+    resolution: {integrity: sha512-M4rWhYFPp8YSAfqLDT/wRN9trfe/Z/aZLPxrLQJUQRTPrChss2T+hmgaV5770J52bLuGOMzt6Hjl8tEb6YWv5Q==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
@@ -3368,7 +3368,7 @@ snapshots:
 
   autocompleter@10.1.0: {}
 
-  autoprefixer@10.6.2(postcss@8.5.33):
+  autoprefixer@10.7.0(postcss@8.5.33):
     dependencies:
       browserslist: 4.29.6
       caniuse-lite: 1.0.30001826
