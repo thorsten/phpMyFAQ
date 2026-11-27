@@ -45,9 +45,11 @@ readonly class Import
      * Imports a record with the given record data.
      *
      * @param array $record Record data
+     * @param bool $canPublish Whether the importing user may publish FAQs ("approve FAQ" right);
+     *                         without it, every record is stored as inactive
      * @throws Exception
      */
-    public function import(array $record): bool
+    public function import(array $record, bool $canPublish = false): bool
     {
         $user = CurrentUser::getCurrentUser($this->configuration);
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($user);
@@ -74,7 +76,7 @@ readonly class Import
         }
 
         $categories = [$categoryId];
-        $isActive = !is_null($isActive);
+        $isActive = $canPublish && !is_null($isActive);
         $isSticky = !is_null($isSticky);
 
         $faqEntity = new FaqEntity();

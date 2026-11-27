@@ -730,4 +730,62 @@ class ImportTest extends TestCase
         $result = $this->faqImport->import($recordWithQuotes);
         $this->assertTrue($result);
     }
+
+    /**
+     * Returns the stored "active" flag of the imported FAQ and removes the record again, other
+     * tests rely on fixed FAQ IDs in the shared test database.
+     */
+    private function storedActiveFlag(string $question): ?string
+    {
+        $database = new \SQLite3(PMF_TEST_DIR . '/test.db');
+        $row = $database->querySingle(
+            sprintf(
+                "SELECT id, active FROM faqdata WHERE thema = '%s' ORDER BY id DESC",
+                \SQLite3::escapeString($question),
+            ),
+            entireRow: true,
+        );
+
+        if (!is_array($row) || $row === []) {
+            $database->close();
+            return null;
+        }
+
+        $database->exec(sprintf('DELETE FROM faqcategoryrelations WHERE record_id = %d', $row['id']));
+        $database->exec(sprintf('DELETE FROM faqdata WHERE id = %d', $row['id']));
+        $database->close();
+
+        return $row['active'];
+    }
+
+    /**
+     * Security regression: a CSV row flagged as active must not be published unless the
+     * importing user holds the "approve FAQ" right.
+     */
+    public function testImportStoresActiveRowAsInactiveWithoutPublishRight(): void
+    {
+        $question = 'Unapproved CSV question ' . uniqid();
+        $record = [1, $question, 'Answer', 'keyword', 'en', 'Author', 'author@example.com', 'true', 'false'];
+
+        $this->assertTrue($this->faqImport->import($record));
+        $this->assertSame('no', $this->storedActiveFlag($question));
+    }
+
+    public function testImportPublishesActiveRowWithPublishRight(): void
+    {
+        $question = 'Approved CSV question ' . uniqid();
+        $record = [1, $question, 'Answer', 'keyword', 'en', 'Author', 'author@example.com', 'true', 'false'];
+
+        $this->assertTrue($this->faqImport->import($record, canPublish: true));
+        $this->assertSame('yes', $this->storedActiveFlag($question));
+    }
+
+    public function testImportKeepsInactiveRowInactiveWithPublishRight(): void
+    {
+        $question = 'Draft CSV question ' . uniqid();
+        $record = [1, $question, 'Answer', 'keyword', 'en', 'Author', 'author@example.com', 'false', 'false'];
+
+        $this->assertTrue($this->faqImport->import($record, canPublish: true));
+        $this->assertSame('no', $this->storedActiveFlag($question));
+    }
 }

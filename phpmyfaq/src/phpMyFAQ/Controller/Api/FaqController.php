@@ -633,6 +633,11 @@ final class FaqController extends AbstractController
 
         $categories = [$categoryId];
         $isActive = !is_null($isActive);
+        if ($isActive) {
+            // Publishing is reserved for users holding the "approve FAQ" right.
+            $this->userHasPermission(PermissionType::FAQ_APPROVE);
+        }
+
         $isSticky = !is_null($isSticky);
 
         $faqData = new FaqEntity();
@@ -785,6 +790,11 @@ final class FaqController extends AbstractController
         }
 
         $isActive = !is_null($isActive);
+        if ($isActive) {
+            // Publishing is reserved for users holding the "approve FAQ" right.
+            $this->userHasPermission(PermissionType::FAQ_APPROVE);
+        }
+
         $isSticky = !is_null($isSticky);
 
         $faqEntity = new FaqEntity();

@@ -56,6 +56,25 @@ use Symfony\Component\Routing\Annotation\Route;
 final class FaqController extends AbstractController
 {
     /**
+     * Publishing is reserved for users holding the "approve FAQ" right. The editor only hides the
+     * active/inactive toggle for everybody else, so the submitted value must not be trusted:
+     * without that right the record is always stored as inactive and waits for approval.
+     */
+    private function resolveActiveState(mixed $active): string
+    {
+        if ($active !== 'yes') {
+            return 'no';
+        }
+
+        $canApprove = $this->currentUser->perm->hasPermission(
+            $this->currentUser->getUserId(),
+            PermissionType::FAQ_APPROVE->value,
+        );
+
+        return $canApprove ? 'yes' : 'no';
+    }
+
+    /**
      * @throws \phpMyFAQ\Core\Exception
      * @throws Exception
      */
@@ -101,7 +120,7 @@ final class FaqController extends AbstractController
 
         $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
-        $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
+        $active = $this->resolveActiveState(Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS));
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -314,7 +333,7 @@ final class FaqController extends AbstractController
 
         $faqLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
-        $active = Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
+        $active = $this->resolveActiveState(Filter::filterVar($data->active ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS));
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -752,6 +771,12 @@ final class FaqController extends AbstractController
 
         $faqImport = new Import($this->configuration);
 
+        // Rows flagged as active are only published for users holding the "approve FAQ" right.
+        $canPublish = $this->currentUser->perm->hasPermission(
+            $this->currentUser->getUserId(),
+            PermissionType::FAQ_APPROVE->value,
+        );
+
         $errors = [];
 
         if (0 === $file->getError() && $faqImport->isCSVFile($file)) {
@@ -768,7 +793,7 @@ final class FaqController extends AbstractController
 
             foreach ($csvData as $index => $record) {
                 try {
-                    if (!$faqImport->import($record)) {
+                    if (!$faqImport->import($record, $canPublish)) {
                         $errors[] = sprintf('Row %d: import failed.', $index + 1);
                     }
                 } catch (\Throwable $throwable) {

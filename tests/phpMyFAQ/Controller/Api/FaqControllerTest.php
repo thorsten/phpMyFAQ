@@ -3,12 +3,15 @@
 namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -37,7 +40,7 @@ class FaqControllerTest extends TestCase
         parent::tearDown();
     }
 
-    private function buildController(Faq $faq, bool $authorVisible = true): FaqController
+    private function buildController(Faq $faq, bool $authorVisible = true, bool $canApprove = true): FaqController
     {
         $reflection = new ReflectionClass(FaqController::class);
         $controller = $reflection->newInstanceWithoutConstructor();
@@ -56,7 +59,11 @@ class FaqControllerTest extends TestCase
 
         // An authenticated editor holding the global "edit FAQ" right.
         $permission = $this->createMock(BasicPermission::class);
-        $permission->method('hasPermission')->willReturn(true);
+        $permission
+            ->method('hasPermission')
+            ->willReturnCallback(
+                static fn(int $userId, mixed $right) => $canApprove || $right !== PermissionType::FAQ_APPROVE->value,
+            );
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method('getUserId')->willReturn(self::EDITOR_ID);
@@ -79,7 +86,7 @@ class FaqControllerTest extends TestCase
         return $controller;
     }
 
-    private function updateRequest(int $faqId): Request
+    private function updateRequest(int $faqId, bool $isActive = false): Request
     {
         return Request::create('/api/v3.1/faq/update', 'PUT', [], [], [], [], json_encode([
             'faq-id' => $faqId,
@@ -89,9 +96,91 @@ class FaqControllerTest extends TestCase
             'keywords' => '',
             'author' => 'Attacker',
             'email' => 'attacker@evil.test',
-            'is-active' => false,
+            'is-active' => $isActive,
             'is-sticky' => false,
         ]));
+    }
+
+    private function createRequest(bool $isActive): Request
+    {
+        return Request::create('/api/v3.1/faq/create', 'POST', [], [], [], [], json_encode([
+            'language' => 'en',
+            'category-id' => 1,
+            'question' => 'Unapproved question',
+            'answer' => '<p>Unapproved answer</p>',
+            'keywords' => '',
+            'author' => 'Contributor',
+            'email' => 'contributor@example.org',
+            'is-active' => $isActive,
+            'is-sticky' => false,
+        ]));
+    }
+
+    private function writableFaq(): Faq&MockObject
+    {
+        $faq = $this->createMock(Faq::class);
+        $faq->method('setUser')->willReturnSelf();
+        $faq->method('setGroups')->willReturnSelf();
+        $faq->method('hasTitleAHash')->willReturn(false);
+        $faq->method('isFaqEditableForUser')->willReturn(true);
+
+        return $faq;
+    }
+
+    /**
+     * Security regression: the "add FAQ" right alone must not be sufficient to publish a FAQ,
+     * publishing requires the "approve FAQ" right.
+     */
+    public function testCreateRejectsActiveFaqWithoutApprovePermission(): void
+    {
+        $faq = $this->writableFaq();
+        $faq->expects($this->never())->method('create');
+
+        $this->expectException(ForbiddenException::class);
+
+        $this->buildController($faq, canApprove: false)->create($this->createRequest(isActive: true));
+    }
+
+    /**
+     * Security regression: the "edit FAQ" right alone must not be sufficient to publish a FAQ,
+     * publishing requires the "approve FAQ" right.
+     */
+    public function testUpdateRejectsActiveFaqWithoutApprovePermission(): void
+    {
+        $faq = $this->writableFaq();
+        $faq->expects($this->never())->method('update');
+
+        $this->expectException(ForbiddenException::class);
+
+        $this->buildController($faq, canApprove: false)->update($this->updateRequest(1, isActive: true));
+    }
+
+    public function testUpdateStoresInactiveFaqWithoutApprovePermission(): void
+    {
+        $faq = $this->writableFaq();
+        $faq
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->callback(static fn(FaqEntity $entity) => $entity->isActive() === false))
+            ->willReturnArgument(0);
+
+        $response = $this->buildController($faq, canApprove: false)->update($this->updateRequest(1));
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testUpdatePublishesFaqWithApprovePermission(): void
+    {
+        $faq = $this->writableFaq();
+        $faq
+            ->expects($this->once())
+            ->method('update')
+            ->with($this->callback(static fn(FaqEntity $entity) => $entity->isActive() === true))
+            ->willReturnArgument(0);
+
+        $response = $this->buildController($faq)->update($this->updateRequest(1, isActive: true));
+
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     /**
