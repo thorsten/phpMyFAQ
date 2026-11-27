@@ -383,6 +383,11 @@ final class FaqController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
+        // Copying pre-fills the editor with the full source record, including drafts and the
+        // private editor notes, so the caller needs the same right on the source as edit() demands.
+        // FAQ_ADD alone only covers the copy that will be created.
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
+
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, $currentAdminGroups, true);

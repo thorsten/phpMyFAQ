@@ -162,6 +162,60 @@ class FaqControllerTest extends TestCase
     }
 
     /**
+     * Copying pre-fills the editor with the full source record, including inactive drafts,
+     * restricted records and the private editor notes. FAQ_ADD only covers the copy that will be
+     * created, so reading the source must require the same right as the edit page: FAQ_EDIT.
+     */
+    public function testCopyRejectsUserHoldingOnlyFaqAddPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->buildController($session, $this->userHolding([PermissionType::FAQ_ADD]));
+
+        $request = new Request();
+        $request->attributes->set('faqId', '1');
+        $request->attributes->set('faqLanguage', 'en');
+
+        $this->expectException(ForbiddenException::class);
+        $controller->copy($request);
+    }
+
+    public function testCopyRejectsUserHoldingOnlyFaqEditPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->buildController($session, $this->userHolding([PermissionType::FAQ_EDIT]));
+
+        $request = new Request();
+        $request->attributes->set('faqId', '1');
+        $request->attributes->set('faqLanguage', 'en');
+
+        $this->expectException(ForbiddenException::class);
+        $controller->copy($request);
+    }
+
+    public function testCopyAllowsUserHoldingFaqAddAndFaqEditPermission(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $controller = $this->buildController(
+            $session,
+            $this->userHolding([PermissionType::FAQ_ADD, PermissionType::FAQ_EDIT]),
+        );
+
+        $request = new Request();
+        $request->attributes->set('faqId', '1');
+        $request->attributes->set('faqLanguage', 'en');
+
+        try {
+            $controller->copy($request);
+        } catch (ForbiddenException) {
+            $this->fail('A user holding FAQ_ADD and FAQ_EDIT must pass the permission gate of the copy page.');
+        } catch (\Throwable) {
+            // Only the permission gate is under test; the rendering dependencies are not wired up.
+        }
+
+        $this->addToAssertionCount(1);
+    }
+
+    /**
      * The editor template renders the "allow comments" checkbox from the truthiness of
      * faqData['comment']. The database stores the flag as 'y'/'n' and the string 'n' is truthy
      * in Twig, so the raw record showed the checkbox as checked for every FAQ when editing,
