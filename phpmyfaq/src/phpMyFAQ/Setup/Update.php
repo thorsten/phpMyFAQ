@@ -251,7 +251,6 @@ class Update extends AbstractSetup
         // Special handling for migrations that require immediate execution
         $this->runPostMigrationTasks();
         $this->createMissingTables();
-        $this->optimizeTables();
         $this->executeQueries();
         $this->updateVersion();
 
@@ -389,22 +388,6 @@ class Update extends AbstractSetup
         } catch (\Exception) {
             // Form inputs may already exist
             return;
-        }
-    }
-
-    public function optimizeTables(): void
-    {
-        switch (Database::getType()) {
-            case 'mysqli':
-                $tableNames = $this->configuration->getDb()->getTableNames(Database::getTablePrefix());
-                foreach ($tableNames as $tableName) {
-                    $this->queries[] = 'OPTIMIZE TABLE ' . $tableName;
-                }
-
-                break;
-            case 'pgsql':
-                $this->queries[] = 'VACUUM ANALYZE;';
-                break;
         }
     }
 

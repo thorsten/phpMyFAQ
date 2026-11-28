@@ -366,29 +366,15 @@ class UpdateTest extends TestCase
         return $queries;
     }
 
-    public function testOptimizeTablesQueuesTheDialectSpecificStatements(): void
+    /**
+     * OPTIMIZE TABLE rebuilds every InnoDB table and VACUUM ANALYZE scans the whole
+     * database. On large installations that outlasts the web server timeout, the
+     * browser reports a network error and the update never finishes, so the update
+     * must not offer or queue any table optimisation.
+     */
+    public function testUpdateDoesNotOptimizeTables(): void
     {
-        $dbTypeProperty = new \ReflectionProperty(Database::class, 'dbType');
-
-        try {
-            $dbTypeProperty->setValue(null, 'pgsql');
-            $this->update->optimizeTables();
-            $this->assertSame(['VACUUM ANALYZE;'], $this->queuedQueries());
-
-            $dbTypeProperty->setValue(null, 'mysqli');
-            $this->update->optimizeTables();
-            $queries = $this->queuedQueries();
-            $this->assertContains('OPTIMIZE TABLE faqconfig', $queries);
-            $this->assertContains('OPTIMIZE TABLE faqdata', $queries);
-            $this->assertGreaterThan(20, count($queries));
-
-            $before = count($queries);
-            $dbTypeProperty->setValue(null, 'sqlite3');
-            $this->update->optimizeTables();
-            $this->assertCount($before, $this->queuedQueries(), 'SQLite needs no table optimisation.');
-        } finally {
-            $dbTypeProperty->setValue(null, 'sqlite3');
-        }
+        $this->assertFalse(method_exists(Update::class, 'optimizeTables'));
     }
 
     public function testInsertFormInputsReplacesTheDefaultFormDefinitions(): void
