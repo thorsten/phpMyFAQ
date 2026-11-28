@@ -709,6 +709,10 @@ final class UserController extends AbstractController
      * "only rights you hold" rule that updateUserRights() applies to rights being granted, and
      * applies it to rights being taken away as well.
      *
+     * Whether the acting user holds every right the target user holds, directly or via their
+     * groups. Group rights must be counted: with permLevel "medium" administrators usually get
+     * their rights through groups, and they would otherwise look like accounts without rights.
+     *
      * @throws \Exception
      */
     private function actingUserHoldsAllRightsOf(User $user): bool
@@ -718,7 +722,7 @@ final class UserController extends AbstractController
         }
 
         $actingUserId = $this->currentUser->getUserId();
-        foreach ($user->perm->getUserRights($user->getUserId()) as $userRight) {
+        foreach ($user->perm->getAllUserRights($user->getUserId()) as $userRight) {
             if (!$this->currentUser->perm->hasPermission($actingUserId, (int) $userRight)) {
                 return false;
             }

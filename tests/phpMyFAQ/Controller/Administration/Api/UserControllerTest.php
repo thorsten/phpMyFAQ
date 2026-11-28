@@ -643,24 +643,38 @@ class UserControllerTest extends TestCase
     }
 
     /**
-     * Stubs a database in which the target user owns the single user-right id 42 and is neither
-     * a SuperAdmin nor protected. All executed queries are recorded in $executed.
+     * Stubs a database in which the target user owns the single right id 42 and is neither
+     * a SuperAdmin nor protected. The right is held through $rightsTable only: 'faquser_right'
+     * makes it a direct user right, 'faqgroup_right' a right inherited from a group. All executed
+     * queries are recorded in $executed.
      *
      * @param string[] $executed
      */
-    private function buildConfigurationWithTargetHoldingRight(int $targetUserId, array &$executed): Configuration
-    {
+    private function buildConfigurationWithTargetHoldingRight(
+        int $targetUserId,
+        array &$executed,
+        string $permLevel = 'basic',
+        string $rightsTable = 'faquser_right',
+    ): Configuration {
         $lastQuery = '';
         $rightsRows = [];
+        $rowServed = false;
 
         $database = $this->createStub(Sqlite3::class);
         $database
             ->method('query')
-            ->willReturnCallback(static function (string $query) use (&$executed, &$lastQuery, &$rightsRows): bool {
+            ->willReturnCallback(static function (string $query) use (
+                &$executed,
+                &$lastQuery,
+                &$rightsRows,
+                &$rowServed,
+                $rightsTable,
+            ): bool {
                 $executed[] = $query;
                 $lastQuery = $query;
-                if (str_contains($query, 'faquser_right')) {
-                    $rightsRows = [['right_id' => 42]];
+                $rowServed = false;
+                if (str_contains($query, 'faqright')) {
+                    $rightsRows = str_contains($query, $rightsTable) ? [['right_id' => 42]] : [];
                 }
 
                 return true;
@@ -668,10 +682,22 @@ class UserControllerTest extends TestCase
         $database->method('numRows')->willReturn(1);
         $database
             ->method('fetchArray')
-            ->willReturnCallback(static function () use (&$lastQuery, &$rightsRows, $targetUserId): ?array {
-                if (str_contains($lastQuery, 'faquser_right')) {
+            ->willReturnCallback(static function () use (
+                &$lastQuery,
+                &$rightsRows,
+                &$rowServed,
+                $targetUserId,
+            ): ?array {
+                if (str_contains($lastQuery, 'faqright')) {
                     return array_shift($rightsRows);
                 }
+
+                // One row per query, so result loops terminate when a request is not refused.
+                if ($rowServed) {
+                    return null;
+                }
+
+                $rowServed = true;
 
                 return [
                     'user_id' => $targetUserId,
@@ -690,7 +716,7 @@ class UserControllerTest extends TestCase
         $configuration
             ->method('get')
             ->willReturnMap([
-                ['security.permLevel', 'basic'],
+                ['security.permLevel', $permLevel],
             ]);
 
         return $configuration;
@@ -805,6 +831,87 @@ class UserControllerTest extends TestCase
                 'UPDATE',
                 $query,
                 'Nothing may be changed when the request is refused.',
+            );
+        }
+    }
+
+    /**
+     * With permLevel "medium" rights are usually inherited from groups. The "only rights you hold"
+     * rule must count those as well, otherwise USER_EDIT alone allows taking over an administrator
+     * whose rights come from a group membership.
+     */
+    public function testEditUserNonSuperAdminCannotEditAccountHoldingRightsViaGroup(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildNonSuperAdminHoldingNoRightIds(userId: 5);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'update-user-data');
+
+        $executed = [];
+        $parent = (new ReflectionClass(UserController::class))->getParentClass();
+        $parent->getProperty('configuration')->setValue($controller, $this->buildConfigurationWithTargetHoldingRight(
+            7,
+            $executed,
+            permLevel: 'medium',
+            rightsTable: 'faqgroup_right',
+        ));
+
+        $request = $this->jsonRequest([
+            'userId' => 7,
+            'csrfToken' => $csrf,
+            'display_name' => 'Group Admin',
+            'email' => 'attacker@example.org',
+            'last_modified' => '20261128000000',
+            'user_status' => 'active',
+            'is_superadmin' => false,
+            'overwrite_twofactor' => 'on',
+        ]);
+
+        $response = $controller->editUser($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        foreach ($executed as $query) {
+            $this->assertStringNotContainsString(
+                'UPDATE',
+                $query,
+                'Nothing may be changed when the request is refused.',
+            );
+        }
+    }
+
+    /**
+     * Deleting an account whose rights come from a group membership destroys privileges the
+     * acting user does not hold, exactly like deleting one that holds them directly.
+     */
+    public function testDeleteUserNonSuperAdminCannotDeleteAccountHoldingRightsViaGroup(): void
+    {
+        $session = new Session(new MockArraySessionStorage());
+        $actingUser = $this->buildNonSuperAdminHoldingNoRightIds(userId: 5);
+        $controller = $this->buildController($session, $actingUser);
+        $csrf = $this->primeCsrf($session, 'delete-user');
+
+        $executed = [];
+        $parent = (new ReflectionClass(UserController::class))->getParentClass();
+        $parent->getProperty('configuration')->setValue($controller, $this->buildConfigurationWithTargetHoldingRight(
+            7,
+            $executed,
+            permLevel: 'medium',
+            rightsTable: 'faqgroup_right',
+        ));
+
+        $request = $this->jsonRequest([
+            'userId' => 7,
+            'csrfToken' => $csrf,
+        ]);
+
+        $response = $controller->deleteUser($request);
+
+        $this->assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        foreach ($executed as $query) {
+            $this->assertStringNotContainsString(
+                'DELETE FROM',
+                $query,
+                'Nothing may be deleted when the request is refused.',
             );
         }
     }
